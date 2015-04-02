@@ -1,0 +1,28 @@
+{
+  "name": "v-chart",
+  "version": "3.0.0.alpha1",
+  "description": "Vaadin Charts Web Components",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "vaadin",
+    "charts",
+    "highcharts"
+  ],
+  "main": "v-chart.html",
+  "license": "CVAL 3",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.9.0"
+  },
+  "devDependencies": {
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^0.9.2"
+  }
+}

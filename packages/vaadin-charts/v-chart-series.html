@@ -1,0 +1,47 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+    ChartSeries = Polymer({
+        is: "v-chart-series",
+        properties: {
+
+            /**
+             * Values for the series, in JSON format.
+             * Example: <code>values="[[Title1, 1.2], [Title2, 3.2]]"</<code>
+             */
+            values: {
+                type: String
+            },
+
+            /**
+             * Series name
+             */
+            name: {
+                type: String
+            },
+
+            /**
+             * Series type.
+             */
+            type: {
+                type: String
+            }
+        },
+
+        _parentChart: function () {
+            var parent = Polymer.dom(this.root).parentNode;
+            while (parent._addSeries == undefined) {
+                parent = parent.parentNode;
+            }
+            return parent;
+        },
+
+        ready: function () {
+            this._parentChart()._addSeries({
+                name: this.name,
+                data: JSON.parse(this.values)
+            });
+        }
+
+    });
+</script>

@@ -1,0 +1,132 @@
+<script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+<script src="http://code.highcharts.com/highcharts.src.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.src.js"></script>
+
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="v-chart-series.html">
+<link rel="import" href="valo-theme.html">
+
+<dom-module id="v-chart">
+    <template>
+        <div id="chartContainer"></div>
+    </template>
+    <script>
+        Polymer({
+            is: 'v-chart',
+
+            behaviors: [ValoThemeBehavior],
+
+            properties: {
+
+                /**
+                 * The type of the chart. Defaults to 'line'
+                 **/
+                type: {
+                    type: String,
+                    value: 'line'
+                }
+            },
+
+            /**
+             * Highcharts JS object. Use this to configure the chart after creation.
+             **/
+            chart: {},
+
+            /* ----------- internal ----------- */
+
+            /**
+             * Initial chart configuration before initial rendering.
+             **/
+            _chartConf: {
+                chart: {
+                }
+            },
+
+            /**
+             * Dynamically add a new Series to this chart
+             **/
+            _addSeries: function(newSeries) {
+                if (this._chartConf.series == undefined) {
+                    this._chartConf.series = [];
+                }
+                this._chartConf.series.push(newSeries);
+            },
+
+            /**
+             * Transform the given string to camel-case
+             *
+             * @param {string} str
+             **/
+            _toCamelCase: function(str) {
+                var out = "";
+                str.split("-").forEach(function (word, idx) {
+                    var add = word.toLowerCase();
+                    out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
+                });
+                return out;
+            },
+
+            /**
+             * Read configuration from one element and its attributes
+             *
+             * @param {object} dest the chart configuration object
+             * @param {node} parent the node that is parsed for configuration
+             **/
+            _loadFromNode: function(dest, node) {
+                for(var i in node.attributes) {
+                    var attr = node.attributes[i].name;
+                    if (attr != undefined) {
+                        var val = node.getAttribute(attr);
+                        var res;
+                        try {
+                            res = JSON.parse(node.getAttribute(attr));
+                        } catch(e) {
+                            var arr = val.split(/\s*,\s*/);
+                            res = arr.length > 1 ? arr : arr[0];
+                        }
+                        dest[this._toCamelCase(attr)] = res;
+                    }
+                }
+                if (node.innerHTML != undefined && node.innerHTML != "") {
+                    dest.text = node.innerHTML;
+                }
+            },
+
+            /**
+             * Recursively load the configuration from the light-DOM elements.
+             *
+             * @param {object} dest the chart configuration object
+             * @param {node} parent the node that contains the configuration elements
+             **/
+            _loadConfiguration: function(dest, parent) {
+                for(var n=0; n<parent.childNodes.length; n++) {
+                    var node = parent.childNodes[n];
+                    var name = node.nodeName.toLowerCase();
+                    var camelName = this._toCamelCase(name);
+                    if (dest[camelName] == undefined) {
+                        dest[camelName] = {};
+                    }
+                    this._loadFromNode(dest[camelName], node);
+                    this._loadConfiguration(dest[camelName], node);
+                }
+            },
+
+            /* ----------- lifecycle ----------- */
+
+            ready: function() {
+                this.async(function() {
+                    this._loadConfiguration(this._chartConf, Polymer.dom(this));
+                    this._chartConf.chart.type = this.type;
+                    this._chartConf.chart.renderTo = this.$.chartContainer;
+
+                    if(this._loadTheme) {
+                        this._loadTheme();
+                    }
+
+                    this.chart = new Highcharts.Chart(this._chartConf);
+                }, 1);
+            }
+        });
+    </script>
+</dom-module>
