@@ -1,3 +1,15 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
 <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
 <script src="http://code.highcharts.com/highcharts.src.js"></script>
 <script src="http://code.highcharts.com/highcharts-more.src.js"></script>
@@ -7,6 +19,17 @@
 <link rel="import" href="v-chart-series.html">
 <link rel="import" href="valo-theme.html">
 
+<!--
+An element that provides a WebComponent interface for <a href="http://www.highcharts.com/">HighCharts</a>
+
+Example:
+
+    <v-chart>
+        <title>Example</title>
+        <v-chart-series name="Example" values="[[&quot;Example1&quot;, 45.0], [&quot;Example2&quot;, 26.8],">
+        </v-chart-series>
+    </v-chart>
+-->
 <dom-module id="v-chart">
     <template>
         <div id="chartContainer"></div>
