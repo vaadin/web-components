@@ -1,7 +1,10 @@
 {
-  "name": "v-chart",
+  "name": "vaadin-charts",
   "version": "3.0.0.alpha1",
   "description": "Vaadin Charts Web Components",
+  "authors": [
+    "Vaadin Ltd"
+  ],
   "keywords": [
     "web-component",
     "web-components",
@@ -11,8 +14,11 @@
     "highcharts"
   ],
   "main": "v-chart.html",
-  "license": "CVAL 3",
-  "private": true,
+  "license": "https://github.com/vaadin/charts-component/LICENSE.md",
+  "repository" : {
+    "type": "git",
+    "url": "git@github.com:vaadin/charts-component.git"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
