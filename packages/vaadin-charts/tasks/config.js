@@ -9,5 +9,5 @@ module.exports = {
         demo: "demo/pie.html"
     },
 
-    version: "3.0.0.alpha1"
+    version: "3.0.0-alpha1"
 };

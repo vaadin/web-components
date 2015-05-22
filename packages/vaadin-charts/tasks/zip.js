@@ -10,7 +10,7 @@ var deleteLines = require('gulp-delete-lines');
 var zipDest = config.dest + '/zip/';
 var zipTemp = config.temp + '/zip/';
 
-gulp.task('zip:stage', ['zip:vulcanize-sources', 'zip:copy-sources','zip:copy-demo']);
+gulp.task('zip:stage', ['zip:vulcanize-sources', 'zip:copy-sources','zip:copy-demo','zip:copy-doc']);
 
 gulp.task('zip:vulcanize-sources', ['zip:copy-sources-temp', 'zip:install-dependencies-temp'], function () {
     return gulp.src(zipTemp + '/v-chart.html')
