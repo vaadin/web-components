@@ -1,0 +1,17 @@
+{
+  "name": "vaadin-charts",
+  "version": "3.0.0-alpha1",
+  "repository": "vaadin/charts-component",
+  "dependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.8.11",
+    "gulp-bower": "0.0.10",
+    "gulp-delete-lines": "0.0.7",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.3",
+    "gulp-rsync": "0.0.5",
+    "gulp-vulcanize": "^6.0.0",
+    "lodash": "^3.9.1",
+    "yargs": "^3.9.1"
+  }
+}
