@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="pieWithSeries" type="pie">
+    <v-chart-series name="Browser share" values="[[&quot;Firefox&quot;,   45.0],
+                        [&quot;IE&quot;,       26.8],
+                        [&quot;Chrome&quot;, 12.8],
+                        [&quot;Safari&quot;,    8.5],
+                        [&quot;Opera&quot;,     6.2],
+                        [&quot;Others&quot;,   0.7]]">
+    </v-chart-series>
+</v-chart>
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('config with series', function () {
+            var chartwc = document.querySelector('#pieWithSeries');
+            var conf = chartwc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>

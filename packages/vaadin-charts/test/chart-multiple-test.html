@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="emptyPie" type="pie">
+</v-chart>
+<v-chart id="pieWithSeries" type="pie">
+    <v-chart-series name="Browser share" values="[[&quot;Firefox&quot;,   45.0],
+                        [&quot;IE&quot;,       26.8],
+                        [&quot;Chrome&quot;, 12.8],
+                        [&quot;Safari&quot;,    8.5],
+                        [&quot;Opera&quot;,     6.2],
+                        [&quot;Others&quot;,   0.7]]">
+    </v-chart-series>
+</v-chart>
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('different amount of series', function () {
+            var emptyChart = document.querySelector('#emptyPie');
+            var nonEmptyChart = document.querySelector('#pieWithSeries');
+
+            expect(emptyChart._chartConf.series).to.be.undefined;
+            expect(nonEmptyChart._chartConf.series).to.exist;
+            expect(nonEmptyChart._chartConf.series).not.to.be.empty;
+
+
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>
