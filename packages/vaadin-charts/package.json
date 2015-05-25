@@ -3,6 +3,7 @@
   "version": "3.0.0-alpha1",
   "repository": "vaadin/charts-component",
   "dependencies": {
+    "bower": "^1.4.1",
     "del": "^1.2.0",
     "gulp": "^3.8.11",
     "gulp-bower": "0.0.10",
