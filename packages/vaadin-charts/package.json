@@ -4,6 +4,7 @@
   "repository": "vaadin/charts-component",
   "dependencies": {
     "bower": "^1.4.1",
+    "config": "^1.13.0",
     "del": "^1.2.0",
     "gulp": "^3.8.11",
     "gulp-bower": "0.0.10",
@@ -11,6 +12,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.3",
     "gulp-rsync": "0.0.5",
+    "gulp-util": "^3.0.4",
     "gulp-vulcanize": "^6.0.0",
     "lodash": "^3.9.1",
     "yargs": "^3.9.1"

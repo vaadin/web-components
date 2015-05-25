@@ -1,0 +1,7 @@
+{
+  "cdn": {
+    "username": "username",
+    "host": "some.host.com",
+    "destination": "/some/path/on/cdn/server/"
+  }
+}

@@ -1,6 +1,6 @@
 'use strict';
 var gulp = require('gulp');
-var config = require('./tasks/config.js');
+var config = require('config');
 require('./tasks/cdn.js');
 require('./tasks/zip.js');
 var del = require('del');
