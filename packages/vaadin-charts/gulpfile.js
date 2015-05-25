@@ -6,7 +6,7 @@ require('./tasks/zip.js');
 var del = require('del');
 
 gulp.task('default', function() {
-    console.log('\n  Use:\n    gulp <clean | stage>\n');
+    console.log('\n  Usage:\n    gulp <clean | [cdn:zip:]stage | [cdn:]deploy>\n');
 });
 
 gulp.task('clean', ['clean:staging']);
@@ -16,3 +16,5 @@ gulp.task('clean:staging', function(done){
 });
 
 gulp.task('stage', ['cdn:stage', 'zip:stage']);
+
+gulp.task('deploy', ['cdn:deploy']);
