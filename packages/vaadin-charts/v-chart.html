@@ -65,6 +65,10 @@ Example:
                 chart: {}
             },
 
+            _ignoredNodes: ["#text","vChartSeries"],
+
+            _multivaluedAttributes: ["xAxis","yAxis","plotBands"],
+
             /**
              * Dynamically add a new Series to this chart
              **/
@@ -110,11 +114,18 @@ Example:
                         dest[this._toCamelCase(attr)] = res;
                     }
                 }
-                //TODO: externalize condition
-                //nodeType is TEXT_NODE and content is not empty
-                if (node.hasChildNodes() && node.childNodes.length == 1 && node.childNodes[0].nodeType == 3 && node.textContent.trim() != "") {
+                if (this._hasOnlyTextContent(node)) {
                     dest.text = node.textContent;
                 }
+            },
+
+            /**
+             * Return true if node has a single child with nodeType TEXT_NODE (3) and non-empty value.
+             *
+             * @param {node} the node to check
+             **/
+            _hasOnlyTextContent: function (node) {
+                return node.hasChildNodes() && node.childNodes.length == 1 && node.childNodes[0].nodeType == 3 && node.textContent.trim() != "";
             },
 
             /**
@@ -128,14 +139,12 @@ Example:
                     var node = parent.childNodes[n];
                     var name = node.nodeName.toLowerCase();
                     var camelName = this._toCamelCase(name);
-                    //TODO: use helper for this constants
-                    if (camelName !== '#text' && camelName !== 'vChartSeries') {
+                    if (this._ignoredNodes.indexOf(camelName)===-1) {
                         if (dest[camelName] == undefined) {
                             dest[camelName] = {};
                             this._loadFromNode(dest[camelName], node);
                             this._loadConfiguration(dest[camelName], node);
-                            //TODO: use helper for this constants
-                        } else if (camelName === 'xAxis' || camelName === 'yAxis' || camelName === 'plotBands') {
+                        } else if (this._multivaluedAttributes.indexOf(camelName)!==-1) {
                             if (dest[camelName].constructor === Array) {
                                 dest[camelName].push({});
                             } else {
