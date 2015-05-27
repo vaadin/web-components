@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="pieWithSeries" type="pie">
+    <title>Browser market shares at a specific website, 2014</title>
+    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+    </tooltip>
+    <plot-options>
+        <pie start-angle="45" end-angle="180" cursor="pointer">
+            <data-labels enabled="true" format="<b>{point.name}</b>: {point.percentage:.1f} %">
+            </data-labels>
+        </pie>
+    </plot-options>
+    <v-chart-series size="80%" inner-size="50%" name="Browser share" values="[[&quot;Firefox&quot;,   45.0],
+                        [&quot;IE&quot;,       26.8],
+                        [&quot;Chrome&quot;, 12.8],
+                        [&quot;Safari&quot;,    8.5],
+                        [&quot;Opera&quot;,     6.2],
+                        [&quot;Others&quot;,   0.7]]">
+    </v-chart-series>
+</v-chart>
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('config with series', function () {
+            var chartwc = document.querySelector('#pieWithSeries');
+            var conf = chartwc._chartConf;
+            expect(conf.plotOptions).to.exist;
+            expect(conf.plotOptions.pie).to.exist;
+            expect(conf.plotOptions.pie.startAngle).to.equal(45);
+            expect(conf.plotOptions.pie.endAngle).to.equal(180);
+            expect(conf.plotOptions.pie.cursor).to.equal("pointer");
+            expect(conf.plotOptions.pie.dataLabels).to.exist;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].size).to.equal("80%");
+            expect(conf.series[0].name).to.equal("Browser share");
+            expect(conf.series[0].innerSize).to.equal("50%");
+
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -37,6 +37,34 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             type: {
                 type: String
+            },
+
+            /**
+             * Series yAxis ID.
+             */
+            yAxis: {
+                type: String
+            },
+
+            /**
+             * Series size.
+             */
+            size: {
+                type: String
+            },
+
+            /**
+             * Series innerSize.
+             */
+            innerSize: {
+                type: String
+            },
+
+            /**
+             * Series dashStyle.
+             */
+            dashStyle: {
+                type: String
             }
         },
 
@@ -51,7 +79,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         ready: function () {
             this._parentChart()._addSeries({
                 name: this.name,
-                data: JSON.parse(this.values)
+                data: JSON.parse(this.values),
+                type: this.type,
+                yAxis: this.yAxis,
+                size: this.size,
+                innerSize: this.innerSize,
+                dashStyle: this.dashStyle
             });
         }
 
