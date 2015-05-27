@@ -48,26 +48,34 @@ Example:
                 type: {
                     type: String,
                     value: 'line'
+                },
+
+                /**
+                 * Highcharts JS object. Use this to configure the chart after creation.
+                 **/
+                chart: {
+                    type: Object,
+                    value: function () {
+                        return {};
+                    }
+                },
+
+                /* ----------- internal ----------- */
+
+                /**
+                 * Initial chart configuration before initial rendering.
+                 **/
+                _chartConf: {
+                    type: Object,
+                    value: function () {
+                        return {chart: {}};
+                    }
                 }
             },
 
-            /**
-             * Highcharts JS object. Use this to configure the chart after creation.
-             **/
-            chart: {},
+            _ignoredNodes: ["#text", "vChartSeries"],
 
-            /* ----------- internal ----------- */
-
-            /**
-             * Initial chart configuration before initial rendering.
-             **/
-            _chartConf: {
-                chart: {}
-            },
-
-            _ignoredNodes: ["#text","vChartSeries"],
-
-            _multivaluedAttributes: ["xAxis","yAxis","plotBands"],
+            _multivaluedAttributes: ["xAxis", "yAxis", "plotBands"],
 
             /**
              * Dynamically add a new Series to this chart
@@ -139,12 +147,12 @@ Example:
                     var node = parent.childNodes[n];
                     var name = node.nodeName.toLowerCase();
                     var camelName = this._toCamelCase(name);
-                    if (this._ignoredNodes.indexOf(camelName)===-1) {
+                    if (this._ignoredNodes.indexOf(camelName) === -1) {
                         if (dest[camelName] == undefined) {
                             dest[camelName] = {};
                             this._loadFromNode(dest[camelName], node);
                             this._loadConfiguration(dest[camelName], node);
-                        } else if (this._multivaluedAttributes.indexOf(camelName)!==-1) {
+                        } else if (this._multivaluedAttributes.indexOf(camelName) !== -1) {
                             if (dest[camelName].constructor === Array) {
                                 dest[camelName].push({});
                             } else {
@@ -160,6 +168,7 @@ Example:
 
             /* ----------- lifecycle ----------- */
             created: function () {
+                //Workaround to prevent _chartConf from being undefined when calling _addSeries from child component in FF
                 this._chartConf = {
                     chart: {}
                 };
