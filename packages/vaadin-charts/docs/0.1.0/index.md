@@ -2,6 +2,7 @@
 
 ## Overview
 Vaadin Charts is a feature-rich interactive charting library for Web Components developers. It provides a Chart Web Component. The Chart can visualize one- and two-dimensional numeric data in many available chart types. The charts allow flexible configuration of all the chart elements as well as the visual style. The library includes a built-in visual theme, which you can extend further. 
+Vaadin Charts is based on Highcharts JS, a charting library written in JavaScript.
 
 <figure>
     <img src="images/vaadin-charts.png" alt="Vaadin Charts Web Component Example.">
@@ -41,8 +42,6 @@ In the following basic example, we demonstrate how to display one-dimensional da
     <figcaption>Simple Pie Example</figcaption>
 </figure>
 
-Vaadin Charts is based on Highcharts JS, a charting library written in JavaScript.
-
 ## Getting Vaadin Charts
 
 ### Bower
@@ -59,9 +58,11 @@ You can use Vaadin Components from CDN using the following URL:
 
     https://cdn.vaadin.com/vaadin-charts/3.0.0-alpha1/v-chart.html
 
+    <link rel="import" href="https://cdn.vaadin.com/vaadin-charts/3.0.0-alpha1/v-chart.html">
+
 ### Download ZIP
 
-Download the latest 3.* ZIP archive from [vaadin.com/directory](https://vaadin.com/directory#!addon/vaadin-charts)
+Download the latest 3.x ZIP archive from [vaadin.com/directory](https://vaadin.com/directory#!addon/vaadin-charts)
 
 ## Licensing
 Vaadin Charts is a commercial product licensed under the CVAL License (Commercial Vaadin Add-On License). A license needs to be purchased for all use, including web deployments as well as intranet use. Using Vaadin Charts does not require purchasing a separate Highcharts JS license.

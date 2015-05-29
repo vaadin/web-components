@@ -1,7 +1,7 @@
 # v-chart element
 
 ## Basic Use
-v-chart element is the Web Component used to declare a chart. 
+`v-chart` element is the Web Component used to declare a chart. 
 
 It has a type property used to determine the chart type to be displayed, valid values are: 
 
@@ -29,7 +29,7 @@ It has a type property used to determine the chart type to be displayed, valid v
 *   treemap
 *   waterfall
 
-Current version only guarantees support for "pie" type related configuration, but most configuration will work with other chart types too.
+Current version only guarantees support for `pie` type related configuration, but most configuration will work with other chart types too.
 
 ## v-chart configuration
 
@@ -44,7 +44,7 @@ Is equivalent to:
 
     <title text="This will be the chart title"></title>
 ### subtitle
-Defines the Chart's subtitle content and style. 
+Defines the Chart's `subtitle` content and style. 
 Content can be set as the inner text of the element or using the text attribute.
     
     <subtitle>This will be the chart subtitle</subtitle>
@@ -52,7 +52,7 @@ Is equivalent to:
 
     <subtitle text="This will be the chart subtitle"></subtitle>
 ### tooltip
-Defines options for the tooltip that appears when the user hovers over a series or point
+Defines options for the `tooltip` that appears when the user hovers over a series or point
 
     <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
     </tooltip>
@@ -66,7 +66,7 @@ Important attributes:
 *   value-suffix: A string to append to each series' y value. 
 
 ### legend
-The legend is a box containing a symbol and name for each series item or point item in the chart.
+The `legend` is a box containing a symbol and name for each series item or point item in the chart.
     <legend enabled="false"></legend>
 
 Important attributes:
@@ -76,10 +76,10 @@ Important attributes:
 *   vertical-align: The vertical alignment of the legend box. Can be one of "top", "middle" or "bottom". Vertical position can be further determined by the y option. Defaults to bottom.
 
 ### plot-options
-The plot-options element is a wrapper object for config objects for each series type.
+The `plot-options` element is a wrapper object for config objects for each series type.
 
 ### plot-options pie
-Specific pie element inside a plot-options element will enable specific configurations for pie charts
+Specific `pie` element inside a plot-options element will enable specific configurations for pie charts
 
     <plot-options>
         <pie allow-point-select="true" cursor="pointer">
@@ -101,7 +101,7 @@ Important attributes:
 Important sub-elements:
 
 #### data-labels
-A data-labels element allows to define content and style for labels created for each point
+A `data-labels` element allows to define content and style for labels created for each point
 
     <data-labels enabled="true" format="<b>{point.name}</b>: {point.percentage:.1f} %">
     </data-labels>
@@ -114,10 +114,10 @@ Important attributes:
 
 
 # v-chart-series element
-v-chart-series is the element used to add a single or multiple series of data to a chart.
+`v-chart-series` is the element used to add a single or multiple series of data to a chart.
 
 ## Basic Use
-values is the main attribute of the series since it will allow defining the chart data.
+`values` is the main attribute of the series since it will allow defining the chart data.
 
     <v-chart-series name="Browser share" values="[[&quot;Chrome&quot;,   49.19],
         [&quot;IE&quot;,       18.06],
