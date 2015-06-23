@@ -18,13 +18,14 @@
             </data-labels>
         </pie>
     </plot-options>
-    <v-chart-series size="80%" inner-size="50%" name="Browser share" values="[[&quot;Firefox&quot;,   45.0],
-                        [&quot;IE&quot;,       26.8],
-                        [&quot;Chrome&quot;, 12.8],
-                        [&quot;Safari&quot;,    8.5],
-                        [&quot;Opera&quot;,     6.2],
-                        [&quot;Others&quot;,   0.7]]">
-    </v-chart-series>
+    <v-series size="80%" inner-size="50%" name="Browser share">
+        <data>["Firefox",   45.0],
+            ["IE",       26.8],
+            ["Chrome", 12.8],
+            ["Safari",    8.5],
+            ["Opera",     6.2],
+            ["Others",   0.7]</data>
+    </v-series>
 </v-chart>
 <script>
 
@@ -41,6 +42,8 @@
             expect(conf.plotOptions.pie.dataLabels).to.exist;
             expect(conf.series).to.exist;
             expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
             expect(conf.series[0].size).to.equal("80%");
             expect(conf.series[0].name).to.equal("Browser share");
             expect(conf.series[0].innerSize).to.equal("50%");
