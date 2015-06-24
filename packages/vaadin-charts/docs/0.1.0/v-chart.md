@@ -113,19 +113,22 @@ Important attributes:
 *   connector-color: The color of the line connecting the data label to the pie slice. The default color is the same as the point's color. Defaults to {point.color}.
 
 
-# v-chart-series element
-`v-chart-series` is the element used to add a single or multiple series of data to a chart.
+# v-series element
+`v-series` is the element used to add a single or multiple series of data to a chart.
 
 ## Basic Use
-`values` is the main attribute of the series since it will allow defining the chart data.
+`data` is the main element of the series since it will allow defining the chart data.
 
-    <v-chart-series name="Browser share" values="[[&quot;Chrome&quot;,   49.19],
-        [&quot;IE&quot;,       18.06],
-        [&quot;Firefox&quot;, 16.96],
-        [&quot;Safari&quot;,    10.4],
-        [&quot;Opera&quot;,     1.65],
-        [&quot;Others&quot;,   3.74]]">
-    </v-chart-series>
+    <v-series name="Browser share">
+        <data>
+            [&quot;Chrome&quot;,   49.19],
+            [&quot;IE&quot;,       18.06],
+            [&quot;Firefox&quot;, 16.96],
+            [&quot;Safari&quot;,    10.4],
+            [&quot;Opera&quot;,     1.65],
+            [&quot;Others&quot;,   3.74]
+        </data>
+    </v-series>
 
 Other important attributes:
 
