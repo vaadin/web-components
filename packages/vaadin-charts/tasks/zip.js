@@ -36,7 +36,6 @@ gulp.task('zip:install-dependencies-temp', function () {
 
 gulp.task('zip:copy-demo', function () {
     return gulp.src(config.files.demo)
-        /*.pipe(replace('../', ''))*/
         .pipe(deleteLines({
             'filters': [
                 /<script\s+src=["']/i
