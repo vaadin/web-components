@@ -112,7 +112,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                     if (camelName === 'data') {
                         value = '[' + value + ']';
                     }
-                    this._setProperty(camelName,value);
+                    this._setProperty(camelName, value);
 
                 }
             }
@@ -121,10 +121,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Load the configuration from the element attributes.
          **/
-        _loadPropertiesFromAttributes: function(){
+        _loadPropertiesFromAttributes: function () {
             for (var property in this.properties) {
-                if (this.properties.hasOwnProperty(property) && property.indexOf('_')!==0){
-                    this._setProperty(property,this[property]);
+                if (this.properties.hasOwnProperty(property) && property.indexOf('_') !== 0) {
+                    this._setProperty(property, this[property]);
                 }
             }
         },
@@ -135,13 +135,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * @param {object} value to be set
          **/
         _setProperty: function (name, value) {
-            if (undefined != value){
-                try{
+            //value might be undefined because all properties are iterated in _loadPropertiesFromAttributes
+            //in such case it shouldn't be set to keep _seriesConf minimal
+            if (undefined != value) {
+                try {
+                    //try to parse as simple JSON
                     this._seriesConf[name] = JSON.parse(value);
-                }catch(e){
-                    try{
+                } catch (e) {
+                    try {
+                        //try to parse as JSON with js code for instance Date.UTC(...)
                         this._seriesConf[name] = eval(value);
-                    }catch(e){
+                    } catch (e) {
                         this._seriesConf[name] = value;
                     }
                 }
