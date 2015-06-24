@@ -5,7 +5,7 @@ A Web Component for high quality charts. Uses the [Highcharts](http://www.highch
 ## Overview of the repository
 
  - The main component is **v-chart.html**.
- - Series component is **v-chart-series**.
+ - Series component is **v-series**.
  - Valo theme for Charts is **valo-theme.html**.
  - Demos are inside **demo**.
 

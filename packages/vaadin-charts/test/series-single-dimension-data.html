@@ -8,29 +8,28 @@
     <link rel="import" href="../v-chart.html">
 </head>
 <body>
-<v-chart id="pieWithSeries" type="pie">
-    <v-series name="Browser share">
-        <data>["Firefox",   45.0],
-            ["IE",       26.8],
-            ["Chrome", 12.8],
-            ["Safari",    8.5],
-            ["Opera",     6.2],
-            ["Others",   0.7]</data>
+<v-chart id="chartId">
+    <v-series id="seriesId">
+        <data>
+            1,2,3,4,5
+        </data>
     </v-series>
 </v-chart>
 <script>
 
-    suite('<v-chart>', function () {
+    suite('<v-series>', function () {
 
-        test('config with series', function () {
-            var chartwc = document.querySelector('#pieWithSeries');
-            var conf = chartwc._chartConf;
+        test('series config parsed', function () {
+            var chartswc = document.querySelector('#chartId');
+            var conf = chartswc._chartConf;
             expect(conf.series).to.exist;
             expect(conf.series).not.to.be.empty;
             expect(conf.series[0].data).to.exist;
             expect(conf.series[0].data).not.to.be.empty;
-        });
+            expect(conf.series[0].data).to.have.length(5);
+            expect(conf.series[0].data[0]).to.equal(1);
 
+        });
 
     });
 

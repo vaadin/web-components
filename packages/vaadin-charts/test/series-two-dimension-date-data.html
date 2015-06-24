@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="chartId">
+    <v-series id="seriesId">
+        <data>
+            [Date.UTC(2014, 12, 2), 5],
+            [Date.UTC(2014, 3, 3), 3]
+        </data>
+    </v-series>
+</v-chart>
+<script>
+
+    suite('<v-series>', function () {
+
+        test('series config parsed', function () {
+            var chartswc = document.querySelector('#chartId');
+            var conf = chartswc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
+            expect(conf.series[0].data).to.have.length(2);
+            expect(conf.series[0].data[0]).to.be.instanceof(Array);
+            expect(conf.series[0].data[0][0]).to.equal(Date.UTC(2014, 12, 2));
+            expect(conf.series[0].data[0][1]).to.equal(5);
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

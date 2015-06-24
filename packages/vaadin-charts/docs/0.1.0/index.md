@@ -26,13 +26,16 @@ In the following basic example, we demonstrate how to display one-dimensional da
                 <title>Browser market shares at a specific website, March 2015</title>
     
                 <!-- Declare the series element by its tag. -->
-                <v-chart-series name="Browser share" values="[[&quot;Chrome&quot;,   49.19],
-                    [&quot;IE&quot;,       18.06],
-                    [&quot;Firefox&quot;, 16.96],
-                    [&quot;Safari&quot;,    10.4],
-                    [&quot;Opera&quot;,     1.65],
-                    [&quot;Others&quot;,   3.74]]">
-                </v-chart-series>
+                <v-series name="Browser share">
+                    <data>
+                        ["Chrome",   49.19],
+                        ["IE",       18.06],
+                        ["Firefox", 16.96],
+                        ["Safari",    10.4],
+                        ["Opera",     1.65],
+                        ["Others",   3.74]
+                    </data>
+                </v-series>
             </v-chart>
         </body>
     </html>

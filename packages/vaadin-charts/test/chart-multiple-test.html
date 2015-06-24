@@ -11,13 +11,16 @@
 <v-chart id="emptyPie" type="pie">
 </v-chart>
 <v-chart id="pieWithSeries" type="pie">
-    <v-chart-series name="Browser share" values="[[&quot;Firefox&quot;,   45.0],
-                        [&quot;IE&quot;,       26.8],
-                        [&quot;Chrome&quot;, 12.8],
-                        [&quot;Safari&quot;,    8.5],
-                        [&quot;Opera&quot;,     6.2],
-                        [&quot;Others&quot;,   0.7]]">
-    </v-chart-series>
+    <v-series name="Browser share">
+        <data>
+            ["Firefox",   45.0],
+            ["IE",       26.8],
+            ["Chrome", 12.8],
+            ["Safari",    8.5],
+            ["Opera",     6.2],
+            ["Others",   0.7]
+        </data>
+    </v-series>
 </v-chart>
 <script>
 
@@ -30,8 +33,8 @@
             expect(emptyChart._chartConf.series).to.be.undefined;
             expect(nonEmptyChart._chartConf.series).to.exist;
             expect(nonEmptyChart._chartConf.series).not.to.be.empty;
-
-
+            expect(nonEmptyChart._chartConf.series[0].data).to.exist;
+            expect(nonEmptyChart._chartConf.series[0].data).not.to.be.empty;
         });
 
 
