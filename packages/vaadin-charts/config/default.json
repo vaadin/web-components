@@ -8,7 +8,7 @@
       "valo-theme.html"
     ],
     "doc": "*.md",
-    "demo": "demo/pie.html"
+    "demo": "demo/*"
   },
   "version": "3.0.0-alpha1"
 }
