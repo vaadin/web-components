@@ -35,7 +35,7 @@ In the following basic example, we demonstrate how to display one-dimensional da
                         [&quot;Opera&quot;,     1.65],
                         [&quot;Others&quot;,   3.74]
                     </data>
-                </v-chart-series>
+                </v-series>
             </v-chart>
         </body>
     </html>
