@@ -2,11 +2,12 @@
 var gulp = require('gulp');
 var config = require('config');
 require('./tasks/cdn.js');
+require('./tasks/demo.js');
 require('./tasks/zip.js');
 var del = require('del');
 
 gulp.task('default', function() {
-    console.log('\n  Usage:\n    gulp <clean | [cdn:zip:]stage | [cdn:]deploy>\n');
+    console.log('\n  Usage:\n    gulp <clean | [cdn:demo:zip:]stage | [cdn:demo:]deploy>\n');
 });
 
 gulp.task('clean', ['clean:staging']);

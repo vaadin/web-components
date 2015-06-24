@@ -3,5 +3,10 @@
     "username": "username",
     "host": "some.host.com",
     "destination": "/some/path/on/cdn/server/"
-  }
+  },
+  "demo": {
+    "username": "username",
+    "host": "some.host.com",
+    "destination": "/some/path/on/demo/server/"
+    }
 }
