@@ -121,12 +121,12 @@ Important attributes:
 
     <v-series name="Browser share">
         <data>
-            [&quot;Chrome&quot;,   49.19],
-            [&quot;IE&quot;,       18.06],
-            [&quot;Firefox&quot;, 16.96],
-            [&quot;Safari&quot;,    10.4],
-            [&quot;Opera&quot;,     1.65],
-            [&quot;Others&quot;,   3.74]
+            ["Chrome",   49.19],
+            ["IE",       18.06],
+            ["Firefox", 16.96],
+            ["Safari",    10.4],
+            ["Opera",     1.65],
+            ["Others",   3.74]
         </data>
     </v-series>
 
