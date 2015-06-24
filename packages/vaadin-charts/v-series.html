@@ -123,7 +123,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _loadPropertiesFromAttributes: function(){
             for (var property in this.properties) {
-                if (this.properties.hasOwnProperty(property) && property.indexOf('_')!==0){//} && property.indexOf('#')!==0) {
+                if (this.properties.hasOwnProperty(property) && property.indexOf('_')!==0){
                     this._setProperty(property,this[property]);
                 }
             }
