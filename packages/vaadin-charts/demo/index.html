@@ -1,12 +1,157 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<ul>
-    <li><a href="pie.html">Pie chart</a></li>
-</ul>
-</body>
+	<head lang="en">
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="themes/valo/styles.css">
+		<title>Vaadin Charts Demo</title>
+
+		<style>
+.chartsdemo .sidebar {
+	background-color: #2D343B; 
+	background-image: linear-gradient(to left, #2D343B 0px, #38414A 9px); 
+	color: #C5CACF;
+}
+
+.chartsdemo .logo {
+ 	color: white;
+	font-weight: 400;
+	text-align: center;
+	background: transparent url("img/vaadin-charts-logo.svg") no-repeat 50% 10px;
+	background-size: 70px 67px;
+	padding-top: 85px;
+	margin-bottom: 4px;
+}
+
+.chartsdemo .v-tree {
+	font-weight: 400;
+	color: #96A0AA;
+}
+
+.chartsdemo .chartarea #chartFrame {
+	margin: 0;
+	padding-top: 0;
+	border: none;
+	background: white;
+}
+
+.chartsdemo .chartarea #sourceArea {
+	background: white;
+}
+
+.chartsdemo .source {
+	cursor: text;
+	font-size: 0.8em;
+	padding-left: 10px;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
+}
+		</style>
+
+		<script language="JavaScript" type="text/javascript">
+function loadExample(src) {
+	var ifrm = document.getElementById("chartFrame");
+	ifrm.setAttribute("src", src);
+
+	document.getElementById("chartButton").style.display = "inline-block";
+	document.getElementById("sourceButton").style.display = "inline-block";
+
+	showChart();
+}
+
+function showChart() {
+	var sourceframe = document.getElementById("sourceFrame");
+	sourceframe.style.display = "none";
+
+	var ifrm = document.getElementById("chartFrame");
+	ifrm.style.display = "block";
+	ifrm.style.width = "100%";
+	ifrm.style.height = "100%";
+
+	document.getElementById("chartButton").className = "v-link v-disabled";
+	document.getElementById("sourceButton").className = "v-link";
+}
+
+function showSource() {
+	var ifrm = document.getElementById("chartFrame");
+	ifrm.style.display = "none";
+
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", ifrm.getAttribute("src"), false);
+	xmlhttp.send();
+	sourceframe = document.getElementById("sourceFrame");
+	text = document.createTextNode(xmlhttp.responseText);
+	sourceframe.innerHTML = "";
+	sourceframe.appendChild(text);
+	sourceframe.style.display = "block";
+
+	document.getElementById("chartButton").className = "v-link";
+	document.getElementById("sourceButton").className = "v-link v-disabled";
+}
+		</script> 
+	</head>
+
+	<body style="margin:0; padding:0;">
+		<div class="valo v-app chartsdemo" style="top:0; right:0; bottom:0; left:0; width:100%; height:100%; background-color:white;">
+			<div style="width:100%; height:100%">
+				<div class="sidebar" style="width:300px; height:100%; position:absolute">
+					<div class="h3 v-label-h3 logo" style="width:100%">Vaadin Charts</div>
+					<div class="v-label-tiny" style="width:100%; text-align:center; color:white">Web Components</div>
+					<div style="height:30px"></div>
+					<div role="tree">
+						<div role="treeitem" class="v-tree-node v-tree-node-expanded v-tree-node-root">
+							<div class="v-tree-node-caption">
+								<div>
+									<span style="cursor:default">Pie</span>
+								</div>
+							</div>
+							<div role="group" class="v-tree-node-children v-tree-node-children-root">
+								<div role="treeitem" class="v-tree-node v-tree-node-leaf">
+									<div class="v-tree-node-caption" onclick='loadExample("PieChart.html")'>
+										<div >
+											<span>Pie Chart</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div role="group" class="v-tree-node-children v-tree-node-children-root">
+								<div role="treeitem" class="v-tree-node v-tree-node-leaf">
+									<div class="v-tree-node-caption" onclick='loadExample("PieChartWithCredits.html")'>
+										<div >
+											<span>Pie Chart with Credits</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div role="group" class="v-tree-node-children v-tree-node-children-root">
+								<div role="treeitem" class="v-tree-node v-tree-node-leaf">
+									<div class="v-tree-node-caption" onclick='loadExample("PieWithLegend.html")'>
+										<div >
+											<span>Pie with Legend</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tabarea" style="top:0px; left:300px; right:0; height:100%; position:absolute">
+					<div id="chartButton" style="display:none; margin-left:10px" class="v-link" onclick="showChart()">	
+						<div class="v-button-caption">
+							<span>Example</span>
+						</div>
+					</div>
+					<div id="sourceButton" style="display:none; margin-left:10px" class="v-link" onclick="showSource()">	
+						<div class="v-button-caption">
+							<span>Source</span>
+						</div>
+					</div>
+				</div>
+				<div class="chartarea" style="top:50px; left:300px; bottom:0; right:0; position:absolute; overflow:hidden">
+					<iframe id="chartFrame" style="display:none"></iframe>
+					<pre id="sourceFrame" class="source" style="display:none; width:100%; height:100%; overflow:scroll"></pre>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
