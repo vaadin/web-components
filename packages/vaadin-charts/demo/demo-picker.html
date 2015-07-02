@@ -1,0 +1,87 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<link rel="import" href="sourcing-component.html">
+<link rel="import" href="demo-menu.html">
+
+<link rel="import" href="demo-piechart.html">
+<link rel="import" href="demo-piechart-credits.html">
+<link rel="import" href="demo-piechart-legend.html">
+
+<dom-module id="demo-picker">
+
+  <style>
+    :host .sidebar {
+       background-color: #2D343B; 
+       background-image: linear-gradient(to left, #2D343B 0px, #38414A 9px); 
+       color: #C5CACF;
+    }
+    :host .logo {
+       color: white;
+       font-weight: 400;
+       text-align: center;
+       background: transparent url("img/vaadin-charts-logo.svg") no-repeat 50% 10px;
+       background-size: 70px 67px;
+       padding-top: 85px;
+       margin-bottom: 4px;
+}
+  </style>
+
+  <template>
+    <div style="width:100%; height:100%;">
+      <div  class="sidebar" style="position:absolute; top:0px; width:250px; height:100%; float:left;">
+        <div class="h3 v-label-h3 logo">Vaadin Charts</div>
+        <div class="v-label-tiny" style="width:100%; text-align:center; color:white">Web Components</div>
+        <div style="height:30px"></div>
+        <demo-menu id="menu" selected="{{selectedIndex}}">
+        </demo-menu>
+      </div>
+      <div style="position:absolute; top:0px; left:250px; bottom:0; right:0;">
+        <sourcing-component id="sourcing" ></sourcing-component>
+      </div>
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+(function() {
+  Polymer({
+
+    is: 'demo-picker',
+
+    properties: {
+      demos: {
+        type: Array,
+        value: [
+          {component: "demo-piechart", caption: "Pie chart"},
+          {component: "demo-piechart-credits", caption: "Pie chart with Credits"},
+          {component: "demo-piechart-legend", caption: "Pie with Legend"}
+        ]
+      },
+      selectedIndex: {
+        type: Number,
+        value: 0,
+        observer: '_selectedIndexChanged'
+      }
+    },
+
+     attached: function () {
+        var n  = this.demos.length
+        for (var i=0; i<n; i++) {
+          var newElem = document.createElement("div");
+          newElem.appendChild(document.createTextNode(this.demos[i].caption));
+          Polymer.dom(this.$.menu).appendChild(newElem);
+        }
+     },
+
+    _selectedIndexChanged: function(newIndex, oldIndex) {
+      if (typeof newIndex === 'number') {
+          Polymer.dom(this.$.sourcing).setAttribute("source",this.demos[newIndex].component)
+      }
+    }
+  });
+})();
+
+</script>
