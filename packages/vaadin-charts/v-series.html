@@ -18,6 +18,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         properties: {
 
             /**
+             * Series id
+             */
+            id: {
+                type: String
+            },
+
+            /**
+             * Is drilldown series
+             */
+            drilldown: {
+                type: Boolean,
+                value: false
+            },
+
+            /**
              * Series name
              */
             name: {
@@ -103,6 +118,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _loadConfiguration: function () {
             this._loadPropertiesFromAttributes();
             var element = Polymer.dom(this);
+            this._cleanNode(element);
             for (var n = 0; n < element.childNodes.length; n++) {
                 var node = element.childNodes[n];
                 var name = node.nodeName.toLowerCase();
@@ -110,10 +126,57 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                     var camelName = this._toCamelCase(name);
                     var value = node.textContent;
                     if (camelName === 'data') {
-                        value = '[' + value + ']';
+                        if (this._hasPointNodes(node)) {
+                            value = [];
+                            for (var n = 0; n < node.childNodes.length; n++) {
+                                value.push(this._parsePoint(node.childNodes[n]));
+                            }
+                        } else {
+                            value = '[' + value + ']';
+                        }
                     }
                     this._setProperty(camelName, value);
+                }
+            }
+        },
 
+        /**
+         * Creates a point object from a point node.
+         **/
+        _parsePoint: function(pointNode){
+            var result = {};
+            for (var n = 0; n < pointNode.childNodes.length; n++) {
+                var node = pointNode.childNodes[n];
+                var camelName = this._toCamelCase(node.nodeName.toLowerCase());
+                if (result[camelName] == undefined) {
+                    try {
+                        result[camelName] = JSON.parse(node.textContent);
+                    } catch (e) {
+                        result[camelName] = node.textContent;
+                    }
+                }
+            }
+            return result;
+        },
+
+        /**
+         * Checks if nodes has child nodes that correspond to points.
+         **/
+        _hasPointNodes: function (node) {
+            return node.childNodes.length > 0 && 'point' === node.childNodes[0].nodeName.toLowerCase();
+        },
+
+        /**
+         * Removes all empty text and comment nodes.
+         **/
+        _cleanNode: function (node) {
+            for (var n = 0; n < node.childNodes.length; n++) {
+                var child = node.childNodes[n];
+                if (child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
+                    node.removeChild(child);
+                    n--;
+                } else if (child.nodeType === 1) {
+                    this._cleanNode(child);
                 }
             }
         },
@@ -154,7 +217,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         ready: function () {
             this._loadConfiguration();
-            this._parentChart()._addSeries(this._seriesConf);
+            if(this.drilldown){
+                this._parentChart()._addDrilldownSeries(this._seriesConf);
+            }else{
+                this._parentChart()._addSeries(this._seriesConf);
+            }
         }
 
     });
