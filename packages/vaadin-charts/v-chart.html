@@ -13,6 +13,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/modules/heatmap.js"></script>
+<script src="http://code.highcharts.com/modules/treemap.js"></script>
+<script src="http://code.highcharts.com/modules/drilldown.js"></script>
+<script src="http://code.highcharts.com/modules/data.js"></script>
 
 <link rel="import" href="../polymer/polymer.html">
 
@@ -86,6 +90,19 @@ Example:
                     this._chartConf.series = [];
                 }
                 this._chartConf.series.push(newSeries);
+            },
+
+            /**
+             * Dynamically add a new Series to this chart's Drilldown configuration
+             **/
+            _addDrilldownSeries: function (newSeries) {
+                if (!this._chartConf.drilldown) {
+                    this._chartConf.drilldown = {};
+                }
+                if (!this._chartConf.drilldown.series) {
+                    this._chartConf.drilldown.series = [];
+                }
+                this._chartConf.drilldown.series.push(newSeries);
             },
 
             /**

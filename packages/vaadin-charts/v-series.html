@@ -18,6 +18,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         properties: {
 
             /**
+             * Series id
+             */
+            id: {
+                type: String
+            },
+
+            /**
+             * Is drilldown series
+             */
+            drilldown: {
+                type: Boolean,
+                value: false
+            },
+
+            /**
              * Series name
              */
             name: {
@@ -202,7 +217,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         ready: function () {
             this._loadConfiguration();
-            this._parentChart()._addSeries(this._seriesConf);
+            if(this.drilldown){
+                this._parentChart()._addDrilldownSeries(this._seriesConf);
+            }else{
+                this._parentChart()._addSeries(this._seriesConf);
+            }
         }
 
     });
