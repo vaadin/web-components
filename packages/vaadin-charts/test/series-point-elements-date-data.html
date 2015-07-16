@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="chartId" type="scatter">
+    <x-axis type="datetime">
+    </x-axis>
+    <v-series id="seriesId">
+        <data>
+            <point>
+                <date>2014-12-3</date>
+                <y>2</y>
+                <name>Foobar</name>
+                <color>#00FF00</color>
+            </point>
+            <point>
+                <date>2014-12-10</date>
+                <y>5</y>
+                <name>Barfoo</name>
+            </point>
+            <point>
+                <date>2014-123-17</date>
+                <y>6</y>
+                <name>Foobar</name>
+                <color>#00FFFF</color>
+            </point>
+            <point>
+                <date>2014-12-24</date>
+                <y>4</y>
+                <name>Barfoo2</name>
+            </point>
+            <point>
+                <date>2014-12-31</date>
+                <y>7</y>
+            </point>
+        </data>
+    </v-series>
+</v-chart>
+<script>
+
+    suite('<v-series>', function () {
+
+        test('series config parsed', function () {
+            var chartswc = document.querySelector('#chartId');
+            var conf = chartswc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
+            expect(conf.series[0].data).to.have.length(5);
+            expect(conf.series[0].data[1].x).to.equal(Date.UTC(2014, 11, 10));
+            expect(conf.series[0].data[1].y).to.equal(5);
+            expect(conf.series[0].data[2].x).to.be.undefined;
+            expect(conf.series[0].data[3].x).to.equal(Date.UTC(2014, 11, 24));
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

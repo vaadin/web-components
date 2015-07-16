@@ -106,7 +106,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         _parentChart: function () {
             var parent = Polymer.dom(this.root).parentNode;
-            while (parent._addSeries == undefined) {
+            while (parent._addSeries === undefined) {
                 parent = parent.parentNode;
             }
             return parent;
@@ -143,20 +143,55 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Creates a point object from a point node.
          **/
-        _parsePoint: function(pointNode){
+        _parsePoint: function (pointNode) {
             var result = {};
             for (var n = 0; n < pointNode.childNodes.length; n++) {
                 var node = pointNode.childNodes[n];
                 var camelName = this._toCamelCase(node.nodeName.toLowerCase());
-                if (result[camelName] == undefined) {
+                if ('date' === camelName) {
+                    if (result['x'] === undefined) {
+                        var parsedDate = this._parseDate(node.textContent);
+                        if (parsedDate !== undefined) {
+                            result['x'] = parsedDate;
+                        } else {
+                            console.log('Unable to parse date: ' + node.textContent);
+                        }
+                    } else {
+                        console.log('X value is already defined for this point, \'' +
+                                node.textContent + '\' couldn\'t be set');
+                    }
+                } else if (result[camelName] === undefined) {
                     try {
                         result[camelName] = JSON.parse(node.textContent);
                     } catch (e) {
                         result[camelName] = node.textContent;
                     }
+                } else {
+                    console.log(camelName + ' value is already defined for this point\'' +
+                            node.textContent + '\' couldn\'t be set');
                 }
             }
             return result;
+        },
+
+        _parseDate: function (dateString) {
+            if (this._isValidDate(dateString)) {
+                try {
+                    var tokens = dateString.split('-');
+                    //Date.UTC has 0 indexed month
+                    tokens[1] = tokens[1] - 1;
+                    return Date.UTC.apply(this, tokens);
+                } catch (e) {
+
+                }
+            }
+        },
+
+        _isValidDate: function (dateString) {
+            var date = new Date(dateString);
+            if (Object.prototype.toString.call(date) !== "[object Date]")
+                return false;
+            return !isNaN(date.getTime());
         },
 
         /**
@@ -200,7 +235,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _setProperty: function (name, value) {
             //value might be undefined because all properties are iterated in _loadPropertiesFromAttributes
             //in such case it shouldn't be set to keep _seriesConf minimal
-            if (undefined != value) {
+            if (undefined !== value) {
                 try {
                     //try to parse as simple JSON
                     this._seriesConf[name] = JSON.parse(value);
@@ -217,9 +252,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         ready: function () {
             this._loadConfiguration();
-            if(this.drilldown){
+            if (this.drilldown) {
                 this._parentChart()._addDrilldownSeries(this._seriesConf);
-            }else{
+            } else {
                 this._parentChart()._addSeries(this._seriesConf);
             }
         }
