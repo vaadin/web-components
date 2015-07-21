@@ -86,7 +86,7 @@ Example:
              * Dynamically add a new Series to this chart
              **/
             _addSeries: function (newSeries) {
-                if (this._chartConf.series == undefined) {
+                if (this._chartConf.series === undefined) {
                     this._chartConf.series = [];
                 }
                 this._chartConf.series.push(newSeries);
@@ -128,7 +128,7 @@ Example:
             _loadFromNode: function (dest, node) {
                 for (var i in node.attributes) {
                     var attr = node.attributes[i].name;
-                    if (attr != undefined) {
+                    if (attr !== undefined) {
                         var val = node.getAttribute(attr);
                         var res;
                         try {
@@ -166,7 +166,7 @@ Example:
                     var name = node.nodeName.toLowerCase();
                     var camelName = this._toCamelCase(name);
                     if (this._ignoredNodes.indexOf(camelName) === -1) {
-                        if (dest[camelName] == undefined) {
+                        if (dest[camelName] === undefined) {
                             dest[camelName] = {};
                             this._loadFromNode(dest[camelName], node);
                             this._loadConfiguration(dest[camelName], node);
