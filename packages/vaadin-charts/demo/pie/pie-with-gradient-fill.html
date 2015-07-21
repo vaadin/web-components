@@ -1,0 +1,86 @@
+<v-chart id="pie-with-gradient-fill" type="pie">
+    <title>Browser market shares at a specific website, 2014</title>
+    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+    </tooltip>
+    <plot-options>
+        <pie allow-point-select="true" cursor="pointer">
+            <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
+            </data-labels>
+        </pie>
+    </plot-options>
+
+    <v-series name="Browser share">
+        <data>
+            <point>
+                <y>55.11</y>
+                <name>IE</name>
+                <color>
+                    {
+                    "stops":[[0.0,"#FF8000"],[1.0,"#804000"]],
+                    "radialGradient":{
+                    "cx":0.5,
+                    "cy":0.3,
+                    "r":0.7
+                    }
+                    }
+                </color>
+            </point>
+            <point>
+                <y>21.63</y>
+                <name>Firefox</name>
+                <color>
+                    {
+                    "stops":[[0.0,"#00FFFF"],[1.0,"#008080"]],
+                    "radialGradient":{
+                    "cx":0.5,
+                    "cy":0.3,
+                    "r":0.7
+                    }
+                    }
+                </color>
+            </point>
+            <point>
+                <y>11.94</y>
+                <name>Chrome</name>
+                <color>
+                    {
+                    "stops":[[0.0,"#FFFF00"],[1.0,"#808000"]],
+                    "radialGradient":{
+                    "cx":0.5,
+                    "cy":0.3,
+                    "r":0.7
+                    }
+                    }
+                </color>
+            </point>
+            <point>
+                <y>7.15</y>
+                <name>Safari</name>
+                <color>
+                    {
+                    "stops":[[0.0,"#0080FF"],[1.0,"#004080"]],
+                    "radialGradient":{
+                    "cx":0.5,
+                    "cy":0.3,
+                    "r":0.7
+                    }
+                    }
+                </color>
+            </point>
+            <point>
+                <y>2.14</y>
+                <name>Opera</name>
+                <color>
+                    {
+                    "stops":[[0.0, "#FF0000"],[1.0, "#800000"]],
+                    "radialGradient":{
+                    "cx":0.5,
+                    "cy":0.3,
+                    "r":0.7
+                    }
+                    }
+                </color>
+            </point>
+        </data>
+    </v-series>
+</v-chart>

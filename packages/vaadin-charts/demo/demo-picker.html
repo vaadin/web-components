@@ -105,6 +105,35 @@
                                     caption: "Stacked Percentage Column"
                                 }
                             ]
+                        },{
+                            name: "pie",
+                            caption: "Pie",
+                            demos: [
+                                {
+                                    component: "donut",
+                                    caption: "Donut"
+                                },
+                                {
+                                    component: "pie",
+                                    caption: "Pie"
+                                },
+                                {
+                                    component: "pie-with-credits",
+                                    caption: "Pie with Credits"
+                                },
+                                {
+                                    component: "pie-with-gradient-fill",
+                                    caption: "Pie with Gradient Fill"
+                                },
+                                {
+                                    component: "pie-with-legend",
+                                    caption: "Pie with Legend"
+                                },
+                                {
+                                    component: "pie-with-start-and-end-angle",
+                                    caption: "Pie with Start and End Angle"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -136,6 +165,7 @@
                             var demo = category.demos[newIndex];
                             var src = category.name + '/' + demo.component;
                             Polymer.dom(this.$.sourcing).setAttribute("source", src)
+                            return;
                         }
                     }
                 }
