@@ -157,7 +157,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                             console.log('Unable to parse date: ' + node.textContent);
                         }
                     } else {
-                        console.log('X value is already defined for this point, \'' +
+                        console.log('x value is already defined for this point, \'' +
                                 node.textContent + '\' couldn\'t be set');
                     }
                 } else if (result[camelName] === undefined) {
@@ -167,7 +167,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                         result[camelName] = node.textContent;
                     }
                 } else {
-                    console.log(camelName + ' value is already defined for this point\'' +
+                    console.log(camelName + ' value is already defined for this point, \'' +
                             node.textContent + '\' couldn\'t be set');
                 }
             }
@@ -189,9 +189,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         _isValidDate: function (dateString) {
             var date = new Date(dateString);
-            if (Object.prototype.toString.call(date) !== "[object Date]")
-                return false;
-            return !isNaN(date.getTime());
+            //Date constructor accepts ISO Dates, if dateString is invalid getTime is NaN
+            return Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date.getTime());
         },
 
         /**

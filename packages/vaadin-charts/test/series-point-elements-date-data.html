@@ -14,12 +14,13 @@
     <v-series id="seriesId">
         <data>
             <point>
-                <date>2014-12-3</date>
+                <date>2014-12-03</date>
                 <y>2</y>
                 <name>Foobar</name>
                 <color>#00FF00</color>
             </point>
             <point>
+                <x>1418515200000</x>
                 <date>2014-12-10</date>
                 <y>5</y>
                 <name>Barfoo</name>
@@ -37,6 +38,7 @@
             </point>
             <point>
                 <date>2014-12-31</date>
+                <x>1418428800000</x>
                 <y>7</y>
             </point>
         </data>
@@ -54,11 +56,14 @@
             expect(conf.series[0].data).to.exist;
             expect(conf.series[0].data).not.to.be.empty;
             expect(conf.series[0].data).to.have.length(5);
-            expect(conf.series[0].data[1].x).to.equal(Date.UTC(2014, 11, 10));
+            expect(conf.series[0].data[0].x).to.equal(Date.UTC(2014, 11, 3));
+            //2014-12-10 is not set because x is already defined as 1418515200000
+            expect(conf.series[0].data[1].x).to.equal(1418515200000);
             expect(conf.series[0].data[1].y).to.equal(5);
             expect(conf.series[0].data[2].x).to.be.undefined;
             expect(conf.series[0].data[3].x).to.equal(Date.UTC(2014, 11, 24));
-
+            //1418428800000 is not set because x is already defined as 2014-12-31
+            expect(conf.series[0].data[4].x).to.equal(Date.UTC(2014, 11, 31));
         });
 
     });
