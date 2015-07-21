@@ -1,0 +1,27 @@
+<v-chart id="stacked-column" type="column">
+    <title>Stacked column chart</title>
+    <x-axis categories="Apples, Oranges, Pears, Grapes, Bananas">
+    </x-axis>
+    <y-axis allow-decimals="false" min="0">
+        <title>Number of fruits</title>
+        <stack-labels enabled="true"></stack-labels>
+    </y-axis>
+    <tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></tooltip>
+    <plot-options>
+        <column stacking="normal">
+            <data-labels enabled="true" color="white"></data-labels>
+        </column>
+    </plot-options>
+    <legend align="right" x="-100" vertical-align="top" y="20" floating="true">
+
+    </legend>
+    <v-series name="John">
+        <data>5, 3, 4, 7, 2</data>
+    </v-series>
+    <v-series name="Jane">
+        <data>2, 2, 3, 2, 1</data>
+    </v-series>
+    <v-series name="Joe">
+        <data>3, 4, 4, 2, 5</data>
+    </v-series>
+</v-chart>

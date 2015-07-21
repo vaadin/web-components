@@ -1,0 +1,29 @@
+<v-chart id="stacked-and-grouped-column" type="column">
+    <title>Total fruit consumption, grouped by gender</title>
+    <x-axis categories="Apples, Oranges, Pears, Grapes, Bananas">
+    </x-axis>
+    <y-axis allow-decimals="false" min="0">
+        <title>Number of fruits</title>
+    </y-axis>
+    <tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></tooltip>
+    <plot-options>
+        <column stacking="normal">
+        </column>
+    </plot-options>
+    <v-series name="John">
+        <stack>male</stack>
+        <data>5, 3, 4, 7, 2</data>
+    </v-series>
+    <v-series name="Joe">
+        <stack>male</stack>
+        <data>3, 4, 4, 2, 5</data>
+    </v-series>
+    <v-series name="Jane">
+        <stack>female</stack>
+        <data>2, 5, 6, 2, 1</data>
+    </v-series>
+    <v-series name="Janet">
+        <stack>female</stack>
+        <data>3, 0, 4, 4, 3</data>
+    </v-series>
+</v-chart>
