@@ -48,14 +48,6 @@ Example:
             properties: {
 
                 /**
-                 * The type of the chart. Defaults to 'line'
-                 **/
-                type: {
-                    type: String,
-                    value: 'line'
-                },
-
-                /**
                  * Highcharts JS object. Use this to configure the chart after creation.
                  **/
                 chart: {
@@ -132,10 +124,18 @@ Example:
                         var val = node.getAttribute(attr);
                         var res;
                         try {
-                            res = JSON.parse(node.getAttribute(attr));
+                            res = JSON.parse(val);
                         } catch (e) {
-                            var arr = val.split(/\s*,\s*/);
-                            res = arr.length > 1 ? arr : arr[0];
+                            if (val.indexOf('function') === 0) {
+                                try {
+                                    //if it's a function eval
+                                    res = eval('(' + val + ')');
+                                } catch (e) {
+                                }
+                            } else {
+                                var arr = val.split(/\s*,\s*/);
+                                res = arr.length > 1 ? arr : arr[0];
+                            }
                         }
                         dest[this._toCamelCase(attr)] = res;
                     }
@@ -194,9 +194,9 @@ Example:
 
             ready: function () {
                 this.async(function () {
+                    this._loadFromNode(this._chartConf.chart, Polymer.dom(this).node);
 
                     this._loadConfiguration(this._chartConf, Polymer.dom(this));
-                    this._chartConf.chart.type = this.type;
                     this._chartConf.chart.renderTo = this.$.chartContainer;
 
                     if (this._loadTheme) {
