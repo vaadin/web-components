@@ -1,9 +1,9 @@
-<v-chart id="demo-piechart-legend" type="pie">
+<v-chart id="pie-with-start-and-end-angle" type="pie">
     <title>Browser market shares at a specific website, 2014</title>
     <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
     </tooltip>
     <plot-options>
-        <pie allow-point-select="true" show-in-legend="true" cursor="pointer">
+        <pie allow-point-select="true" cursor="pointer" start-angle="45" end-angle="180">
             <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
             </data-labels>
         </pie>
@@ -20,4 +20,3 @@
         </data>
     </v-series>
 </v-chart>
- 

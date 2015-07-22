@@ -1,10 +1,10 @@
-<v-chart id="demo-piechart-credits" type="pie">
+<v-chart id="pie-with-credits" type="pie">
     <title>Browser market shares at a specific website, 2014</title>
     <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>"></tooltip>
     <credits text="Custom credit">
         <position x="200" align="left"></position>
     </credits>
-     <plot-options>
+    <plot-options>
         <pie allow-point-select="true" cursor="pointer">
             <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
             </data-labels>

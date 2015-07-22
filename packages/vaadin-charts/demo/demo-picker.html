@@ -3,10 +3,6 @@
 <link rel="import" href="sourcing-component.html">
 <link rel="import" href="demo-menu.html">
 
-<link rel="import" href="demo-piechart.html">
-<link rel="import" href="demo-piechart-credits.html">
-<link rel="import" href="demo-piechart-legend.html">
-
 <dom-module id="demo-picker">
 
     <style>
@@ -105,6 +101,44 @@
                                     caption: "Stacked Percentage Column"
                                 }
                             ]
+                        },{
+                            name: "pie",
+                            caption: "Pie",
+                            demos: [
+                                {
+                                    component: "donut",
+                                    caption: "Donut"
+                                },
+                                {
+                                    component: "pie",
+                                    caption: "Pie"
+                                },
+                                {
+                                    component: "pie-with-credits",
+                                    caption: "Pie with Credits"
+                                },
+                                {
+                                    component: "pie-with-gradient-fill",
+                                    caption: "Pie with Gradient Fill"
+                                },
+                                {
+                                    component: "pie-with-legend",
+                                    caption: "Pie with Legend"
+                                },
+                                {
+                                    component: "pie-with-start-and-end-angle",
+                                    caption: "Pie with Start and End Angle"
+                                }
+                            ]
+                        },{
+                            name: "other",
+                            caption: "Other",
+                            demos: [
+                                {
+                                    component: "treemap-with-color-axis",
+                                    caption: "Tree Map with Color Axis"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -136,6 +170,7 @@
                             var demo = category.demos[newIndex];
                             var src = category.name + '/' + demo.component;
                             Polymer.dom(this.$.sourcing).setAttribute("source", src)
+                            return;
                         }
                     }
                 }
