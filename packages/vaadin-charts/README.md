@@ -14,7 +14,7 @@ A Web Component for high quality charts. Uses the [Highcharts](http://www.highch
 1. Clone the repo.
 2. Run `npm install` & `bower install` to install all tools and dependencies.
 3. Serve the files with [Polyserve](https://github.com/PolymerLabs/polyserve).
-4. Go to http://localhost:8080/components/vaadin-charts/demo/pie.html to view the demo.
+4. Go to [http://localhost:8080/components/vaadin-charts/demo/index.html](http://localhost:8080/components/vaadin-charts/demo/index.html) to view the demo.
 
 ## Development
 
