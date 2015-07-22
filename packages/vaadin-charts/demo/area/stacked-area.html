@@ -1,0 +1,32 @@
+<v-chart id="stacked-area" type="area">
+    <title>Historic and Estimated Worldwide Population Growth by Region</title>
+    <subtitle>Source: Wikipedia.org</subtitle>
+    <x-axis categories="1750, 1800, 1850, 1900, 1950, 1999, 2050" tickmark-placement="on">
+        <title enabled="false"></title>
+    </x-axis>
+    <y-axis min="0">
+        <title>Billions</title>
+        <labels formatter="function () { return this.value / 1000; }"></labels>
+    </y-axis>
+    <tooltip shared="true"
+             pointFormat='<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.0f} millions)<br/>'></tooltip>
+    <plot-options>
+        <series stacking="normal" line-width="1">
+        </series>
+    </plot-options>
+    <v-series name="Asia">
+        <data>502, 635, 809, 947, 1402, 3634, 5268</data>
+    </v-series>
+    <v-series name="Africa">
+        <data>106, 107, 111, 133, 221, 767, 1766</data>
+    </v-series>
+    <v-series name="Europe">
+        <data>163, 203, 276, 408, 547, 729, 628</data>
+    </v-series>
+    <v-series name="America">
+        <data>18, 31, 54, 156, 339, 818, 1201</data>
+    </v-series>
+    <v-series name="Oceania">
+        <data>2, 2, 2, 6, 13, 30, 46</data>
+    </v-series>
+</v-chart>
