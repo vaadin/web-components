@@ -1,0 +1,82 @@
+<v-chart id="treemap-with-levels" type="treemap">
+    <title>Fruit consumption</title>
+    <plot-options>
+        <treemap layout-algorithm="stripes" alternate-starting-direction="true">
+            <levels level="1" layout-algorithm="sliceAndDice">
+                <data-labels enabled="true" align="left" vertical-align="top">
+                    <style font-size="15px" fornt-weight="bold"></style>
+                </data-labels>
+            </levels>
+        </treemap>
+    </plot-options>
+    <v-series>
+        <data>
+            <point>
+                <id>A</id>
+                <name>Apples</name>
+                <color>#EC2500</color>
+            </point>
+            <point>
+                <id>B</id>
+                <name>Bananas</name>
+                <color>#ECE100</color>
+            </point>
+            <point>
+                <id>O</id>
+                <name>Oranges</name>
+                <color>#EC9800</color>
+            </point>
+            <point>
+                <name>Anne</name>
+                <parent>A</parent>
+                <value>5</value>
+            </point>
+            <point>
+                <name>Rick</name>
+                <parent>A</parent>
+                <value>3</value>
+            </point>
+            <point>
+                <name>Peter</name>
+                <parent>A</parent>
+                <value>4</value>
+            </point>
+            <point>
+                <name>Anne</name>
+                <parent>B</parent>
+                <value>4</value>
+            </point>
+            <point>
+                <name>Rick</name>
+                <parent>B</parent>
+                <value>10</value>
+            </point>
+            <point>
+                <name>Peter</name>
+                <parent>B</parent>
+                <value>1</value>
+            </point>
+            <point>
+                <name>Anne</name>
+                <parent>O</parent>
+                <value>1</value>
+            </point>
+            <point>
+                <name>Rick</name>
+                <parent>O</parent>
+                <value>3</value>
+            </point>
+            <point>
+                <name>Peter</name>
+                <parent>O</parent>
+                <value>3</value>
+            </point>
+            <point>
+                <name>Susanne</name>
+                <parent>Kiwi</parent>
+                <value>2</value>
+                <color>#9EDE00</color>
+            </point>
+        </data>
+    </v-series>
+</v-chart>

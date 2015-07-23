@@ -1,0 +1,55 @@
+<v-chart id="clock" type="gauge" plot-background-color="null" plot-background-image="null" plot-border-width="0"
+         plot-shadow="false">
+    <title>Vaadin Charts Clock</title>
+    <pane>
+        <background>
+        </background>
+        <background border-width="0" border-radius="109%">
+            <background-color stops='[[0.5, "rgba(255, 255, 255, 0.2)"],[0.5, "rgba(200, 200, 200, 0.2)"]]'>
+                <radial-gradient cx="0.5" cy="-0.4" r="1.9">
+                </radial-gradient>
+            </background-color>
+        </background>
+    </pane>
+    <y-axis min="0" max="12" grid-line-width="0" line-width="0" show-first-label="false"
+            minor-tick-interval="0.166666" minor-tick-width="1" minor-tick-lenght="5" minor-tick-position="inside"
+            minor-grid-line-width="0" minor-tick-color="#666"
+            tick-interval="1" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666">
+        <labels distance="-20"></labels>
+    </y-axis>
+    <tooltip enabled="false"></tooltip>
+    <plot-options>
+        <gauge>
+            <data-labels enabled="false"></data-labels>
+        </gauge>
+    </plot-options>
+    <v-series>
+        <data>
+            {
+            id: 'hour',
+            y: new Date().getHours() + new Date().getMinutes() / 60,
+            dial: {
+            radius: '60%',
+            baseWidth: 4,
+            baseLength: '95%',
+            rearLength: 0
+            }
+            }, {
+            id: 'minute',
+            y: new Date().getMinutes() * 12 / 60 + new Date().getSeconds() * 12 / 3600,
+            dial: {
+            baseLength: '95%',
+            rearLength: 0
+            }
+            }, {
+            id: 'second',
+            y: new Date().getSeconds() * 12 / 60,
+            dial: {
+            radius: '100%',
+            baseWidth: 1,
+            rearLength: '20%'
+            }
+            }
+        </data>
+    </v-series>
+</v-chart>

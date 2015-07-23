@@ -18,6 +18,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="http://code.highcharts.com/modules/treemap.js"></script>
 <script src="http://code.highcharts.com/modules/drilldown.js"></script>
 <script src="http://code.highcharts.com/modules/data.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://code.highcharts.com/modules/funnel.js"></script>
+<script src="http://code.highcharts.com/modules/solid-gauge.js"></script>
 
 <link rel="import" href="../polymer/polymer.html">
 
@@ -85,7 +88,7 @@ Example:
              * Elements that should be mapped in to an array, e.g. two x-axis elements would be mapped to the same
              * array
              **/
-            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops"],
+            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops", "levels", "pane"],
 
             /**
              * List of words that will always be uppercased, instead of camel-cased

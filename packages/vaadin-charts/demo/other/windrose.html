@@ -1,0 +1,50 @@
+<v-chart id="windrose" type="column" polar="true">
+    <title>Wind rose for South Shore Met Station, Oregon</title>
+    <subtitle>Source: or.water.usgs.gov</subtitle>
+    <pane size="85%"></pane>
+    <legend align="right" vertical-align="top" y="100" layout="vertical">
+    </legend>
+    <x-axis tickmark-placement="on" categories="N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW"></x-axis>
+    <y-axis min="0" end-on-tick="false" show-last-label="true" reversed-stacks="false">
+        <title>Frequency (%)</title>
+        <labels formatter="function () {return this.value + '%';}"></labels>
+    </y-axis>
+    <tooltip value-suffix="%"></tooltip>
+    <plot-options>
+        <series stacking="normal" shadow="false" group-padding="0" point-placement="on"></series>
+    </plot-options>
+    <v-series name="< 0.5 m/s">
+        <data>
+            1.81, 0.62, 0.82, 0.59, 0.62, 1.22, 1.61, 2.04, 2.66, 2.96, 2.53, 1.97, 1.64, 1.32, 1.58, 1.51
+        </data>
+    </v-series>
+    <v-series name="0.5-2 m/s">
+        <data>
+            1.78, 1.09, 0.82, 1.22, 2.20, 2.01, 3.06, 3.42, 4.74, 4.14, 4.01, 2.66, 1.71, 2.40, 4.28, 5.00
+        </data>
+    </v-series>
+    <v-series name="2-4 m/s">
+        <data>
+            0.16, 0.00, 0.07, 0.07, 0.49, 1.55, 2.37, 1.97, 0.43, 0.26, 1.22, 1.97, 0.92, 0.99, 1.28, 1.32
+        </data>
+    </v-series>
+    <v-series name="4-6 m/s">
+        <data>
+            0.00, 0.00, 0.00, 0.00, 0.00, 0.30, 2.14, 0.86, 0.00, 0.00, 0.49, 0.79, 1.45, 1.61, 0.76, 0.13
+        </data>
+    </v-series>
+    <v-series name="6-8 m/s">
+        <data>
+            0.00, 0.00, 0.00, 0.00, 0.00, 0.13, 1.74, 0.53, 0.00, 0.00, 0.13, 0.30, 0.26, 0.33, 0.66, 0.23
+        </data>
+    </v-series>
+    <v-series name="8-10 m/s">
+        <data>
+            0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.39, 0.49, 0.00, 0.00, 0.00, 0.00, 0.10, 0.00, 0.69, 0.13
+    </v-series>
+    <v-series name="> 10 m/s">
+        <data>
+            0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.13, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.03, 0.07
+        </data>
+    </v-series>
+</v-chart>
