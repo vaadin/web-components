@@ -1,0 +1,45 @@
+<v-chart id="column-line-pie" type="column">
+    <title>Combination chart</title>
+    <x-axis categories="Apples, Oranges, Pears, Bananas, Plums">
+    </x-axis>
+    <labels>
+        <items html="Total fruit consumption" left="50px" top="18px"></items>
+    </labels>
+    <plot-options>
+        <series>
+            <data-labels enabled="false"></data-labels>
+        </series>
+    </plot-options>
+    <v-series name="Jane">
+        <data>3, 2, 1, 3, 4</data>
+    </v-series>
+    <v-series name="John">
+        <data>2, 3, 5, 7, 6</data>
+    </v-series>
+    <v-series name="Joe">
+        <data>4, 3, 3, 9, 0</data>
+    </v-series>
+    <v-series name="Average" type="spline">
+        <data>3, 2.67, 3, 6.33, 3.33</data>
+    </v-series>
+    <v-series name="Total consumption" type="pie">
+        <center>[100,80]</center>
+        <size>100</size>
+        <show-in-legend>false</show-in-legend>
+        <data>
+            <point>
+                <name>Jane</name>
+                <y>13</y>
+            </point>
+            <point>
+                <name>John</name>
+                <y>23</y>
+            </point>
+            <point>
+                <name>Joe</name>
+                <y>19</y>
+            </point>
+
+        </data>
+    </v-series>
+</v-chart>

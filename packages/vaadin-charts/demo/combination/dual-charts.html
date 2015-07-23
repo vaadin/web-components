@@ -1,0 +1,39 @@
+<div style=" width: 50%; float: left;">
+    <v-chart id="stacked-bar" type="bar">
+        <title>Stacked bar chart</title>
+        <x-axis categories="Apples, Oranges, Pears, Grapes, Bananas">
+        </x-axis>
+        <y-axis min="0">
+            <title>Total fruit consumption</title>
+        </y-axis>
+        <legend reversed="true"></legend>
+        <tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></tooltip>
+        <plot-options>
+            <series stacking="normal">
+            </series>
+        </plot-options>
+        <v-series name="John">
+            <data>5, 3, 4, 7, 2</data>
+        </v-series>
+        <v-series name="Jane">
+            <data>2, 2, 3, 2, 1</data>
+        </v-series>
+        <v-series name="Joe">
+            <data>3, 4, 4, 2, 5</data>
+        </v-series>
+    </v-chart>
+</div>
+<div style=" width: 50%; float: left;">
+    <v-chart id="pieWithSeries" type="pie">
+        <v-series name="Browser share">
+            <data>
+                ["Firefox", 45.0],
+                ["IE", 26.8],
+                ["Chrome", 12.8],
+                ["Safari", 8.5],
+                ["Opera", 6.2],
+                ["Others", 0.7]
+            </data>
+        </v-series>
+    </v-chart>
+</div>

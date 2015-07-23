@@ -1,0 +1,38 @@
+<v-chart id="multiple-axes" type="column">
+    <title>Average Monthly Weather Data for Tokyo</title>
+    <subtitle>Source: WorldClimate.com</subtitle>
+
+    <x-axis categories="Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec" ></x-axis>
+
+    <y-axis opposite="true" grid-line-width="0">
+        <labels format="{value}°C">
+            <style color="#98DF58"></style>
+        </labels>
+        <title color="#98DF58">Temperature</title>
+    </y-axis>
+    <y-axis opposite="true" id="id2" grid-line-width="0">
+        <labels format="{value} mb">
+            <style color="#3090F0"></style>
+        </labels>
+        <title color="#3090F0">Sea-Level Pressure</title>
+    </y-axis>
+    <y-axis id="id1">
+        <labels format="{value} mm">
+            <style color="#EC6464"></style>
+        </labels>
+        <title color="#EC6464">Rainfall</title>
+    </y-axis>
+    <tooltip shared="true">
+    </tooltip>
+    <legend layout="vertical" align="left" x="120" vertical-align="top" y="100" floating="true">
+    </legend>
+    <v-series dash-style="shortdot" type="spline" name="Sea-Level Pressure" y-axis="id2">
+        <data>1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1, 1016.9, 1018.2, 1016.7</data>
+    </v-series>
+    <v-series name="Rainfall" y-axis="id1">
+        <data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</data>
+    </v-series>
+    <v-series type="line" name="Temperature">
+        <data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</data>
+    </v-series>
+</v-chart>
