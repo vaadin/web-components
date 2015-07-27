@@ -175,22 +175,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         _parseDate: function (dateString) {
-            if (this._isValidDate(dateString)) {
-                try {
-                    var tokens = dateString.split('-');
-                    //Date.UTC has 0 indexed month
-                    tokens[1] = tokens[1] - 1;
-                    return Date.UTC.apply(this, tokens);
-                } catch (e) {
-
-                }
+            var dateValue = new Date(dateString);
+            if (this._isValidDate(dateValue)) {
+                return dateValue.getTime();
             }
         },
 
-        _isValidDate: function (dateString) {
-            var date = new Date(dateString);
-            //Date constructor accepts ISO Dates, if dateString is invalid getTime is NaN
-            return Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date.getTime());
+        _isValidDate: function (dateValue) {
+            //If dateValue is invalid getTime is NaN
+            return Object.prototype.toString.call(dateValue) === "[object Date]" && !isNaN(dateValue.getTime());
         },
 
         /**
