@@ -72,7 +72,11 @@ Example:
 
             _ignoredNodes: ["#text", "vSeries"],
 
-            _multivaluedAttributes: ["xAxis", "yAxis", "plotBands", "plotLines", "labels", "background"],
+            _multivaluedAttributes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs"],
+
+            _uppercaseWords: ["html"],
+
+            _arrayAttributes: ["categories"],
 
             /**
              * Dynamically add a new Series to this chart
@@ -106,8 +110,12 @@ Example:
                 var out = "";
                 str.split("-").forEach(function (word, idx) {
                     var add = word.toLowerCase();
-                    out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
-                });
+                    if (this._uppercaseWords.indexOf(add) === -1) {
+                        out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
+                    } else {
+                        out += word.toUpperCase();
+                    }
+                }, this);
                 return out;
             },
 
@@ -132,9 +140,13 @@ Example:
                                     res = eval('(' + val + ')');
                                 } catch (e) {
                                 }
-                            } else {
+
+                            } else if(this._arrayAttributes.indexOf(attr) != -1){
                                 var arr = val.split(/\s*,\s*/);
                                 res = arr.length > 1 ? arr : arr[0];
+
+                            }else {
+                                res = val;
                             }
                         }
                         dest[this._toCamelCase(attr)] = res;
@@ -166,19 +178,18 @@ Example:
                     var name = node.nodeName.toLowerCase();
                     var camelName = this._toCamelCase(name);
                     if (this._ignoredNodes.indexOf(camelName) === -1) {
-                        if (dest[camelName] === undefined) {
-                            dest[camelName] = {};
-                            this._loadFromNode(dest[camelName], node);
-                            this._loadConfiguration(dest[camelName], node);
-                        } else if (this._multivaluedAttributes.indexOf(camelName) !== -1) {
-                            if (dest[camelName].constructor === Array) {
-                                dest[camelName].push({});
+                        if (this._multivaluedAttributes.indexOf(camelName) !== -1) {
+                            if (dest[camelName] === undefined) {
+                                dest[camelName] = [{}];
                             } else {
-                                var currentVal = dest[camelName];
-                                dest[camelName] = [currentVal, {}];
+                                dest[camelName].push({});
                             }
                             this._loadFromNode(dest[camelName][dest[camelName].length - 1], node);
                             this._loadConfiguration(dest[camelName][dest[camelName].length - 1], node);
+                        }else if (dest[camelName] === undefined) {
+                            dest[camelName] = {};
+                            this._loadFromNode(dest[camelName], node);
+                            this._loadConfiguration(dest[camelName], node);
                         }
                     }
                 }
