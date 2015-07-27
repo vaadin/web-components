@@ -11,12 +11,12 @@
 <v-chart id="chartWithSeriesMarker">
     <v-series>
         <marker symbol="square"></marker>
-        <data>
-            <point>
-                <x>4</x>
-                <y>2</y>
-                <name>Foobar</name>
-            </point>
+        <data>25.2, {
+            y: 26.5,
+            marker: {
+            symbol: 'url(http://www.highcharts.com/demo/gfx/sun.png)'
+            }
+            }, 9.6
         </data>
     </v-series>
 </v-chart>
@@ -37,6 +37,13 @@
             expect(series.marker).to.exist;
             expect(series.marker.symbol).to.exist;
             expect(series.marker.symbol).to.equal("square");
+
+            expect(series.data[1]).to.exist;
+
+            var valueWithMarker = series.data[1];
+
+            expect(valueWithMarker.marker.symbol).to.equal('url(http://www.highcharts.com/demo/gfx/sun.png)');
+            expect(valueWithMarker.y).to.equal(26.5);
 
         });
 

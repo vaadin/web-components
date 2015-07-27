@@ -2,7 +2,8 @@
     <title>Average Monthly Temperature and Rainfall in Tokyo</title>
     <subtitle>Source: WorldClimate.com</subtitle>
 
-    <x-axis categories="Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec">
+    <x-axis>
+        <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
     </x-axis>
 
     <!-- TODO finalize when events are working -->
@@ -18,7 +19,8 @@
         <title style="color: #EC6464;">Rainfall</title>
     </y-axis>
 
-    <tooltip formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></tooltip>
+    <tooltip
+            formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></tooltip>
 
     <legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
             background-color="#FFFFFF"></legend>
