@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="chartWithSeriesMarker">
+    <v-series>
+        <marker symbol="square"></marker>
+        <data>
+            <point>
+                <x>4</x>
+                <y>2</y>
+                <name>Foobar</name>
+            </point>
+        </data>
+    </v-series>
+</v-chart>
+<script>
+
+    suite('<v-series>', function () {
+
+        test('series marker defined', function () {
+            var chartswc = document.querySelector('#chartWithSeriesMarker');
+            var conf = chartswc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
+
+            var series = conf.series[0];
+
+            expect(series.marker).to.exist;
+            expect(series.marker.symbol).to.exist;
+            expect(series.marker.symbol).to.equal("square");
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>
