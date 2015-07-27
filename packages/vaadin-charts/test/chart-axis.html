@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="xAxisWithCategories" type="line">
+    <x-axis categories="Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec"></x-axis>
+</v-chart>
+
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('chart with x-axis categories', function () {
+            var chartwc = document.querySelector('#xAxisWithCategories');
+            var conf = chartwc._chartConf;
+            expect(conf.xAxis[0].categories).to.eql(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
+        });
+    });
+
+</script>
+
+</body>
+</html>
