@@ -88,7 +88,7 @@ Example:
              * Elements that should be mapped in to an array, e.g. two x-axis elements would be mapped to the same
              * array
              **/
-            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops", "levels", "pane"],
+            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops", "levels", "pane", "items"],
 
             /**
              * List of words that will always be uppercased, instead of camel-cased
@@ -137,7 +137,8 @@ Example:
                 var out = "";
                 str.split("-").forEach(function (word, idx) {
                     var add = word.toLowerCase();
-                    if (this._uppercaseWords.indexOf(add) === -1) {
+                    //first word always goes in lower case, the rest go with camelCase, except for _uppercaseWords
+                    if (idx === 0 || this._uppercaseWords.indexOf(add) === -1) {
                         out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
                     } else {
                         out += word.toUpperCase();
@@ -186,7 +187,7 @@ Example:
              * Try JSON.parse, then eval if it's function, or return original value
              *
              **/
-            _parseAttribute: function (val){
+            _parseAttribute: function (val) {
                 var res;
                 try {
                     res = JSON.parse(val);
@@ -235,7 +236,7 @@ Example:
                             if (this._hasOnlyTextContent(node)) {
                                 node.textContent.split(/\s*,\s*/).forEach(function (word) {
                                     result.push(this._parseAttribute(word));
-                                },this);
+                                }, this);
                             } else {
                                 for (var i = 0; i < node.childNodes.length; i++) {
                                     var child = node.childNodes[i];
