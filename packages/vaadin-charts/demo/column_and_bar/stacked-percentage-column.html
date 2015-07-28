@@ -1,12 +1,15 @@
 <v-chart id="stacked-percentage-column" type="column">
     <title>Stacked column chart</title>
-    <x-axis categories="Apples, Oranges, Pears, Grapes, Bananas">
+    <x-axis>
+        <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
     </x-axis>
     <y-axis allow-decimals="false" min="0">
         <title>Number of fruits</title>
         <stack-labels enabled="true"></stack-labels>
     </y-axis>
-    <tooltip point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>' shared="true"></tooltip>
+    <tooltip
+            point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>'
+            shared="true"></tooltip>
     <plot-options>
         <column stacking="percent">
             <data-labels enabled="true" color="white"></data-labels>

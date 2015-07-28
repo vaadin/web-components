@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="tooltipWithComplexPointFormat" type="line">
+    <tooltip point-format="x = {point.x}, y = {point.y}"></tooltip>
+</v-chart>
+
+<v-chart id="tooltipWithHtmlSet" type="line">
+    <tooltip use-html="true"></tooltip>
+</v-chart>
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('tooltip with complex format', function () {
+            var chartwc = document.querySelector('#tooltipWithComplexPointFormat');
+            var conf = chartwc._chartConf;
+            expect(conf.tooltip.pointFormat).to.equal("x = {point.x}, y = {point.y}");
+        });
+
+        test('tooltip with HTML enabled', function () {
+            var chartwc = document.querySelector('#tooltipWithHtmlSet');
+            var conf = chartwc._chartConf;
+            expect(conf.tooltip.useHTML).to.be.true;
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>
