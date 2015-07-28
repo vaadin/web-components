@@ -57,6 +57,11 @@ Example:
                     }
                 },
 
+                type: {
+                    type: String,
+                    value: 'line'
+                },
+
                 /* ----------- internal ----------- */
 
                 /**
@@ -72,7 +77,7 @@ Example:
 
             _ignoredNodes: ["#text", "vSeries"],
 
-            _multivaluedAttributes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops"],
+            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops"],
 
             _uppercaseWords: ["html"],
 
@@ -181,14 +186,14 @@ Example:
                             var arr = node.textContent.split(/\s*,\s*/);
                             result = arr.length > 1 ? arr : arr[0];
 
-                        } else if (this._multivaluedAttributes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
+                        } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                             result = {};
                             this._loadFromNode(result, node);
                             this._loadConfiguration(result, node);
                         }
 
                         //put result in to the correct place
-                        if (this._multivaluedAttributes.indexOf(camelName) !== -1) {
+                        if (this._multivaluedNodes.indexOf(camelName) !== -1) {
                             if (dest[camelName] === undefined) {
                                 dest[camelName] = [result];
                             } else {
@@ -205,16 +210,18 @@ Example:
             /* ----------- lifecycle ----------- */
             created: function () {
                 //Workaround to prevent _chartConf from being undefined when calling _addSeries from child component in FF
-                this._chartConf = {
-                    chart: {}
-                };
+                this._chartConf = {};
             },
 
             ready: function () {
                 this.async(function () {
-                    this._loadFromNode(this._chartConf.chart, Polymer.dom(this).node);
-
                     this._loadConfiguration(this._chartConf, Polymer.dom(this));
+
+                    if (!this._chartConf.chart) {
+                        this._chartConf.chart = {};
+                    }
+
+                    this._chartConf.chart.type = this.type;
                     this._chartConf.chart.renderTo = this.$.chartContainer;
 
                     if (this._loadTheme) {
