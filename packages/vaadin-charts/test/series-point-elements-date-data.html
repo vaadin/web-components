@@ -8,7 +8,7 @@
     <link rel="import" href="../v-chart.html">
 </head>
 <body>
-<v-chart id="chartId" type="scatter">
+<v-chart id="chartWithValidDates" type="scatter">
     <x-axis type="datetime">
     </x-axis>
     <v-series id="seriesId">
@@ -26,12 +26,6 @@
                 <name>Barfoo</name>
             </point>
             <point>
-                <date>2014-123-17</date>
-                <y>6</y>
-                <name>Foobar</name>
-                <color>#00FFFF</color>
-            </point>
-            <point>
                 <date>2014-12-24</date>
                 <y>4</y>
                 <name>Barfoo2</name>
@@ -44,26 +38,58 @@
         </data>
     </v-series>
 </v-chart>
+
+<v-chart id="chartWithInvalidDates" type="scatter">
+    <x-axis type="datetime">
+    </x-axis>
+    <v-series id="seriesId">
+        <data>
+            <point>
+                <date>2014-123-17</date>
+                <y>6</y>
+                <name>Foobar</name>
+                <color>#00FFFF</color>
+            </point>
+            <point>
+                <date>2014-12-1</date>
+                <y>6</y>
+                <name>Foobar</name>
+                <color>#00FFFF</color>
+            </point>
+        </data>
+    </v-series>
+</v-chart>
 <script>
 
     suite('<v-series>', function () {
 
-        test('series config parsed', function () {
-            var chartswc = document.querySelector('#chartId');
+        test('valid date values parsed', function () {
+            var chartswc = document.querySelector('#chartWithValidDates');
             var conf = chartswc._chartConf;
             expect(conf.series).to.exist;
             expect(conf.series).not.to.be.empty;
             expect(conf.series[0].data).to.exist;
             expect(conf.series[0].data).not.to.be.empty;
-            expect(conf.series[0].data).to.have.length(5);
+            expect(conf.series[0].data).to.have.length(4);
             expect(conf.series[0].data[0].x).to.equal(Date.UTC(2014, 11, 3));
             //2014-12-10 is not set because x is already defined as 1418515200000
             expect(conf.series[0].data[1].x).to.equal(1418515200000);
             expect(conf.series[0].data[1].y).to.equal(5);
-            expect(conf.series[0].data[2].x).to.be.undefined;
-            expect(conf.series[0].data[3].x).to.equal(Date.UTC(2014, 11, 24));
+            expect(conf.series[0].data[2].x).to.equal(Date.UTC(2014, 11, 24));
             //1418428800000 is not set because x is already defined as 2014-12-31
-            expect(conf.series[0].data[4].x).to.equal(Date.UTC(2014, 11, 31));
+            expect(conf.series[0].data[3].x).to.equal(Date.UTC(2014, 11, 31));
+        });
+
+        test('invalid date values not parsed', function () {
+            var chartswc = document.querySelector('#chartWithInvalidDates');
+            var conf = chartswc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
+            expect(conf.series[0].data).to.have.length(2);
+            expect(conf.series[0].data[0].x).to.be.undefined;
+            expect(conf.series[0].data[1].x).to.be.undefined;
         });
 
     });

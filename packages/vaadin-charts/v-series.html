@@ -175,15 +175,22 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         _parseDate: function (dateString) {
-            var dateValue = new Date(dateString);
-            if (this._isValidDate(dateValue)) {
-                return dateValue.getTime();
+            if (this._isValidDate(dateString)) {
+                return Date.parse(dateString);
             }
         },
 
-        _isValidDate: function (dateValue) {
-            //If dateValue is invalid getTime is NaN
-            return Object.prototype.toString.call(dateValue) === "[object Date]" && !isNaN(dateValue.getTime());
+        _isValidDate: function (dateString) {
+            try {
+                var dateValue = new Date(dateString);
+                //If dateValue is invalid getTime is NaN
+                return (dateValue.toISOString().startsWith(dateString)) &&
+                        Object.prototype.toString.call(dateValue) === "[object Date]" && !isNaN(dateValue.getTime());
+            } catch (e) {
+
+            }
+
+            return false;
         },
 
         /**

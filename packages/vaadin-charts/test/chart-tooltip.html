@@ -9,7 +9,7 @@
 </head>
 <body>
 <v-chart id="tooltipWithComplexPointFormat" type="line">
-    <tooltip point-format="x = {point.x}, y = {point.x}"></tooltip>
+    <tooltip point-format="x = {point.x}, y = {point.y}"></tooltip>
 </v-chart>
 
 <v-chart id="tooltipWithHtmlSet" type="line">
@@ -22,7 +22,7 @@
         test('tooltip with complex format', function () {
             var chartwc = document.querySelector('#tooltipWithComplexPointFormat');
             var conf = chartwc._chartConf;
-            expect(conf.tooltip.pointFormat).to.equal("x = {point.x}, y = {point.x}");
+            expect(conf.tooltip.pointFormat).to.equal("x = {point.x}, y = {point.y}");
         });
 
         test('tooltip with HTML enabled', function () {
