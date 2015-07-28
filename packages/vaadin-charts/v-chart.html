@@ -13,6 +13,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/highcharts-3d.js"></script>
 <script src="http://code.highcharts.com/modules/heatmap.js"></script>
 <script src="http://code.highcharts.com/modules/treemap.js"></script>
 <script src="http://code.highcharts.com/modules/drilldown.js"></script>
@@ -57,6 +58,11 @@ Example:
                     }
                 },
 
+                type: {
+                    type: String,
+                    value: 'line'
+                },
+
                 /* ----------- internal ----------- */
 
                 /**
@@ -70,13 +76,31 @@ Example:
                 }
             },
 
+            /**
+             * Elements that should be ignored when mapping
+             **/
             _ignoredNodes: ["#text", "vSeries"],
 
-            _multivaluedAttributes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops"],
+            /**
+             * Elements that should be mapped in to an array, e.g. two x-axis elements would be mapped to the same
+             * array
+             **/
+            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops"],
 
+            /**
+             * List of words that will always be uppercased, instead of camel-cased
+             **/
             _uppercaseWords: ["html"],
 
+            /**
+             * Elements that contain an array of values, either as a comma-separated list or multiple elements
+             **/
             _arrayNodes: ["categories", "stops"],
+
+            /**
+             * Mapping of element names to Highcharts names. Used when the original name cannot be used.
+             **/
+            _nodeNameMap: {'frame3d': 'frame'},
 
             /**
              * Dynamically add a new Series to this chart
@@ -172,6 +196,7 @@ Example:
                     var node = parent.childNodes[n];
                     var name = node.nodeName.toLowerCase();
                     var camelName = this._toCamelCase(name);
+                    var targetName = this._nodeNameMap[camelName] === undefined ? camelName : this._nodeNameMap[camelName];
 
                     if (this._ignoredNodes.indexOf(camelName) === -1) {
                         var result;
@@ -181,22 +206,22 @@ Example:
                             var arr = node.textContent.split(/\s*,\s*/);
                             result = arr.length > 1 ? arr : arr[0];
 
-                        } else if (this._multivaluedAttributes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
+                        } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                             result = {};
                             this._loadFromNode(result, node);
                             this._loadConfiguration(result, node);
                         }
 
                         //put result in to the correct place
-                        if (this._multivaluedAttributes.indexOf(camelName) !== -1) {
-                            if (dest[camelName] === undefined) {
-                                dest[camelName] = [result];
+                        if (this._multivaluedNodes.indexOf(camelName) !== -1) {
+                            if (dest[targetName] === undefined) {
+                                dest[targetName] = [result];
                             } else {
-                                dest[camelName].push(result);
+                                dest[targetName].push(result);
                             }
 
-                        } else if (dest[camelName] === undefined) {
-                            dest[camelName] = result;
+                        } else if (dest[targetName] === undefined) {
+                            dest[targetName] = result;
                         }
                     }
                 }
@@ -205,16 +230,18 @@ Example:
             /* ----------- lifecycle ----------- */
             created: function () {
                 //Workaround to prevent _chartConf from being undefined when calling _addSeries from child component in FF
-                this._chartConf = {
-                    chart: {}
-                };
+                this._chartConf = {};
             },
 
             ready: function () {
                 this.async(function () {
-                    this._loadFromNode(this._chartConf.chart, Polymer.dom(this).node);
-
                     this._loadConfiguration(this._chartConf, Polymer.dom(this));
+
+                    if (!this._chartConf.chart) {
+                        this._chartConf.chart = {};
+                    }
+
+                    this._chartConf.chart.type = this.type;
                     this._chartConf.chart.renderTo = this.$.chartContainer;
 
                     if (this._loadTheme) {
