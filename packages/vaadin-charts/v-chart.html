@@ -157,26 +157,51 @@ Example:
                     var attr = node.attributes[i].name;
                     if (attr !== undefined) {
                         var val = node.getAttribute(attr);
-                        var res;
-                        try {
-                            res = JSON.parse(val);
-                        } catch (e) {
-                            if (val.indexOf('function') === 0) {
-                                try {
-                                    //if it's a function eval
-                                    res = eval('(' + val + ')');
-                                } catch (e) {
-                                }
-                            } else {
-                                res = val;
-                            }
-                        }
+                        var res = this._parseAttribute(val);
                         dest[this._toCamelCase(attr)] = res;
                     }
                 }
                 if (this._hasOnlyTextContent(node)) {
                     dest.text = node.textContent;
                 }
+            },
+
+            /**
+             * Removes all empty text and comment nodes.
+             **/
+            _cleanNode: function (node) {
+                for (var n = 0; n < node.childNodes.length; n++) {
+                    var child = node.childNodes[n];
+                    if (child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
+                        node.removeChild(child);
+                        n--;
+                    } else if (child.nodeType === 1) {
+                        this._cleanNode(child);
+                    }
+                }
+            },
+
+            /**
+             * Parse String attribute to most specific type possible.
+             * Try JSON.parse, then eval if it's function, or return original value
+             *
+             **/
+            _parseAttribute: function (val){
+                var res;
+                try {
+                    res = JSON.parse(val);
+                } catch (e) {
+                    if (val.indexOf('function') === 0) {
+                        try {
+                            //if it's a function eval
+                            res = eval('(' + val + ')');
+                        } catch (e) {
+                        }
+                    } else {
+                        res = val;
+                    }
+                }
+                return res;
             },
 
             /**
@@ -206,8 +231,18 @@ Example:
 
                         //read configuration into result
                         if (this._arrayNodes.indexOf(camelName) !== -1) {
-                            var arr = node.textContent.split(/\s*,\s*/);
-                            result = arr.length > 1 ? arr : arr[0];
+                            result = [];
+                            if (this._hasOnlyTextContent(node)) {
+                                node.textContent.split(/\s*,\s*/).forEach(function (word) {
+                                    result.push(this._parseAttribute(word));
+                                },this);
+                            } else {
+                                for (var i = 0; i < node.childNodes.length; i++) {
+                                    var child = node.childNodes[i];
+                                    result.push(this._parseAttribute(child.textContent));
+                                }
+                            }
+                            result = result.length > 1 ? result : result[0];
 
                         } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                             result = {};
@@ -238,6 +273,7 @@ Example:
 
             ready: function () {
                 this.async(function () {
+                    this._cleanNode(Polymer.dom(this));
                     this._loadConfiguration(this._chartConf, Polymer.dom(this));
 
                     if (!this._chartConf.chart) {

@@ -1,8 +1,9 @@
 <v-chart id="spiderweb" type="line" polar="true">
     <title x="-80">Budget vs spending</title>
     <pane size="80%"></pane>
-    <x-axis tickmark-placement="on" line-width="0" categories="Sales, Marketing, Development, Customer Support,
-                    Information Technology, Administration"></x-axis>
+    <x-axis tickmark-placement="on" line-width="0">
+        <categories>Sales, Marketing, Development, Customer Support, Information Technology, Administration</categories>
+    </x-axis>
     <y-axis grid-line-interpolation="polygon" line-width="0" min="0"></y-axis>
     <tooltip shared="true"></tooltip>
     <legend align="right" vertical-align="top" y="70" layout="vertical"></legend>

@@ -1,25 +1,32 @@
-<v-chart id="angular-gauge" type="gauge" plot-background-color="null" plot-background-image="null" plot-border-width="0" plot-shadow="false">
+<v-chart id="angular-gauge" type="gauge" plot-background-color="null" plot-background-image="null" plot-border-width="0"
+         plot-shadow="false">
     <title>Speedometer</title>
     <pane start-angle="-150" end-angle="150">
         <background border-width="0" border-radius="109%">
-            <background-color stops='[[0, "#FFF"],[1, "#333"]]'>
+            <background-color>
                 <linear-gradient x1="0" y1="0" x2="0" y2="1">
                 </linear-gradient>
+                <stops>0, #ffffff</stops>
+                <stops>1, #333333</stops>
             </background-color>
         </background>
-        <background border-width="0" border-radius="107%">
-            <background-color stops='[[0, "#FFF"],[1, "#333"]]'>
-                <linear-gradient x1="0" y1="1" x2="0" y2="1">
+        <background border-width="1" border-radius="107%">
+            <background-color>
+                <linear-gradient x1="0" y1="0" x2="0" y2="1">
                 </linear-gradient>
+                <stops>0, #ffffff</stops>
+                <stops>1, #333333</stops>
             </background-color>
         </background>
-        <background >
+        <background>
         </background>
         <background background-color="#DDD" border-width="0" outer-radius="105%" inner-radius="103%">
         </background>
     </pane>
-    <y-axis min="0" max="200" minor-tick-interval="auto" minor-tick-width="1" minor-tick-lenght="10" minor-tick-position="inside"
-            tick-pixel-interval="30" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666" grid-line-width="0">
+    <y-axis min="0" max="200" minor-tick-interval="auto" minor-tick-width="1" minor-tick-lenght="10"
+            minor-tick-position="inside"
+            tick-pixel-interval="30" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666"
+            grid-line-width="0">
         <labels step="2" rotation="auto"></labels>
         <title>km/h</title>gridLineWidth
         <plot-bands from="0" to="120" color="#55BF3B"></plot-bands>

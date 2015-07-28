@@ -17,9 +17,11 @@
         <gauge>
             <data-labels
                     formatter="function () { return this.y + ' km/h<br/>' + Math.round(this.y * 0.621) + ' mph'; }">
-                <background-color stops='[[0, "#DDD"],[1, "#FFF"]]'>
+                <background-color>
                     <linear-gradient x1="0" y1="0" x2="0" y2="1">
                     </linear-gradient>
+                    <stops>0, #DDD</stops>
+                    <stops>1, #FFF</stops>
                 </background-color>
             </data-labels>
         </gauge>

@@ -1,11 +1,15 @@
 <v-chart id="heat-map" type="heatmap">
     <title>Sales per employee per weekday</title>
-    <x-axis categories="Alexander, Marie, Maximilian, Sophia, Lukas, Maria, Leon, Anna, Tim, Laura"></x-axis>
-    <y-axis categories="Monday, Tuesday, Wednesday, Thursday, Friday" title=""></y-axis>
+    <x-axis>
+        <categories>Alexander, Marie, Maximilian, Sophia, Lukas, Maria, Leon, Anna, Tim, Laura</categories>
+    </x-axis>
+    <y-axis title="">
+        <categories>Monday, Tuesday, Wednesday, Thursday, Friday</categories>
+    </y-axis>
     <color-axis min="0" min-color="#FFFFFF" max-color="#3090F0"></color-axis>
     <legend align="right" layout="vertical" margin="0" vertical-align="top" y="25" symbol-height="280"></legend>
     <plot-options>
-        <heatmap >
+        <heatmap>
             <data-labels enabled="true" color="#000000"></data-labels>
         </heatmap>
     </plot-options>

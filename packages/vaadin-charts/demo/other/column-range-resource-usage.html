@@ -1,11 +1,15 @@
 <v-chart id="column-range-resource-usage" type="columnrange" inverted="true">
     <title>Resource usage</title>
-    <x-axis categories="Printer, Coffee machine"></x-axis>
+    <x-axis>
+        <categories>Printer, Coffee machine</categories>
+    </x-axis>
     <y-axis type="datetime"><title>Time</title></y-axis>
-    <tooltip formatter="function () {return this.series.name +': '+ Highcharts.dateFormat('%H:%M', this.point.low) + ' - ' + Highcharts.dateFormat('%H:%M', this.point.high)}"></tooltip>
+    <tooltip
+            formatter="function () {return this.series.name +': '+ Highcharts.dateFormat('%H:%M', this.point.low) + ' - ' + Highcharts.dateFormat('%H:%M', this.point.high)}"></tooltip>
     <plot-options>
         <columnrange grouping="false">
-            <data-labels enabled="true" inside="true" color="white" formatter="function () {return this.y == this.point.low ? '' : this.series.name;}"></data-labels>
+            <data-labels enabled="true" inside="true" color="white"
+                         formatter="function () {return this.y == this.point.low ? '' : this.series.name;}"></data-labels>
 
         </columnrange>
     </plot-options>

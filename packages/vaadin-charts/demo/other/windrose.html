@@ -4,7 +4,9 @@
     <pane size="85%"></pane>
     <legend align="right" vertical-align="top" y="100" layout="vertical">
     </legend>
-    <x-axis tickmark-placement="on" categories="N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW"></x-axis>
+    <x-axis tickmark-placement="on">
+        <categories>N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW
+    </x-axis>
     <y-axis min="0" end-on-tick="false" show-last-label="true" reversed-stacks="false">
         <title>Frequency (%)</title>
         <labels formatter="function () {return this.value + '%';}"></labels>
@@ -41,6 +43,7 @@
     <v-series name="8-10 m/s">
         <data>
             0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.39, 0.49, 0.00, 0.00, 0.00, 0.00, 0.10, 0.00, 0.69, 0.13
+        </data>
     </v-series>
     <v-series name="> 10 m/s">
         <data>
