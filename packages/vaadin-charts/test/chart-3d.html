@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+<v-chart id="options3d" type="scatter">
+    <chart margin="100">
+        <options3d enabled="true"
+                   alpha="60">
+            <frame3d>
+                <bottom size="1" color="rgba(0,0,0,0.02)"></bottom>
+                <back size="1" color="rgba(0,0,0,0.04)"></back>
+                <side size="1" color="rgba(0,0,0,0.06)"></side>
+            </frame3d>
+        </options3d>
+    </chart>
+</v-chart>
+
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('chart 3d options', function () {
+            var chartwc = document.querySelector('#options3d');
+            var conf = chartwc._chartConf;
+            expect(conf.chart.margin).to.equal(100);
+            expect(conf.chart.options3d).to.exist;
+            expect(conf.chart.options3d.enabled).to.equal(true);
+            expect(conf.chart.options3d.frame).to.exist;
+            expect(conf.chart.options3d.frame.bottom.size).to.equal(1);
+            expect(conf.chart.options3d.frame.bottom.color).to.equal('rgba(0,0,0,0.02)');
+
+        });
+    });
+
+</script>
+
+</body>
+</html>

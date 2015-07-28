@@ -13,6 +13,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/highcharts-3d.js"></script>
 <script src="http://code.highcharts.com/modules/heatmap.js"></script>
 <script src="http://code.highcharts.com/modules/treemap.js"></script>
 <script src="http://code.highcharts.com/modules/drilldown.js"></script>
@@ -75,13 +76,31 @@ Example:
                 }
             },
 
+            /**
+             * Elements that should be ignored when mapping
+             **/
             _ignoredNodes: ["#text", "vSeries"],
 
+            /**
+             * Elements that should be mapped in to an array, e.g. two x-axis elements would be mapped to the same
+             * array
+             **/
             _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops"],
 
+            /**
+             * List of words that will always be uppercased, instead of camel-cased
+             **/
             _uppercaseWords: ["html"],
 
+            /**
+             * Elements that contain an array of values, either as a comma-separated list or multiple elements
+             **/
             _arrayNodes: ["categories", "stops"],
+
+            /**
+             * Mapping of element names to Highcharts names. Used when the original name cannot be used.
+             **/
+            _nodeNameMap: {'frame3d': 'frame'},
 
             /**
              * Dynamically add a new Series to this chart
@@ -177,6 +196,7 @@ Example:
                     var node = parent.childNodes[n];
                     var name = node.nodeName.toLowerCase();
                     var camelName = this._toCamelCase(name);
+                    var targetName = this._nodeNameMap[camelName] === undefined ? camelName : this._nodeNameMap[camelName];
 
                     if (this._ignoredNodes.indexOf(camelName) === -1) {
                         var result;
@@ -194,14 +214,14 @@ Example:
 
                         //put result in to the correct place
                         if (this._multivaluedNodes.indexOf(camelName) !== -1) {
-                            if (dest[camelName] === undefined) {
-                                dest[camelName] = [result];
+                            if (dest[targetName] === undefined) {
+                                dest[targetName] = [result];
                             } else {
-                                dest[camelName].push(result);
+                                dest[targetName].push(result);
                             }
 
-                        } else if (dest[camelName] === undefined) {
-                            dest[camelName] = result;
+                        } else if (dest[targetName] === undefined) {
+                            dest[targetName] = result;
                         }
                     }
                 }

@@ -1,0 +1,51 @@
+<v-chart id="basic-3d-pie" type="pie">
+    <title>Browser market shares at a specific website, 2014</title>
+
+    <plot-options>
+        <pie cursor="pointer"
+             depth="45"
+             allow-point-select="true">
+            <data-labels enabled="true"
+                         formatter="function() {return this.point.name +': '+ this.percentage +' %';}"></data-labels>
+        </pie>
+    </plot-options>
+
+    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>"></tooltip>
+
+    <chart>
+        <options3d enabled="true"
+                   alpha="60">
+        </options3d>
+    </chart>
+
+    <v-series name="Browser share">
+        <data>
+            <point>
+                <name>Firefox</name>
+                <y>45</y>
+            </point>
+            <point>
+                <name>IE</name>
+                <y>26.8</y>
+            </point>
+            <point>
+                <name>Chrome</name>
+                <y>12.8</y>
+                <sliced>true</sliced>
+                <selected>true</selected>
+            </point>
+            <point>
+                <name>Safari</name>
+                <y>8.5</y>
+            </point>
+            <point>
+                <name>Opera</name>
+                <y>6.2</y>
+            </point>
+            <point>
+                <name>Others</name>
+                <y>0.7</y>
+            </point>
+        </data>
+    </v-series>
+</v-chart>
