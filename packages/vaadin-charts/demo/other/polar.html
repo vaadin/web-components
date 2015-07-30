@@ -1,0 +1,32 @@
+<v-chart id="polar" type="area">
+    <chart polar="true"></chart>
+    <title>Vaadin Charts Polar Chart</title>
+    <pane start-angle="0" end-angle="360">
+    </pane>
+    <x-axis tick-interval="45" min="0" max="360" grid-line-width="0">
+        <labels formatter="function () {return this.value + '°';}"></labels>
+    </x-axis>
+    <y-axis min="0">
+        <labels enabled="false"></labels>
+
+    </y-axis>
+    <plot-options>
+        <series point-start="0" point-interval="45"></series>
+        <column point-padding="0" group-padding="0" point-placement="between"></column>
+    </plot-options>
+    <v-series type="column" name="Column">
+        <data>
+            8, 7, 6, 5, 4, 3, 2, 1
+        </data>
+    </v-series>
+    <v-series type="line" name="Line">
+        <data>
+            1, 2, 3, 4, 5, 6, 7, 8
+        </data>
+    </v-series>
+    <v-series type="area" name="Area">
+        <data>
+            1, 8, 2, 7, 3, 6, 4, 5
+        </data>
+    </v-series>
+</v-chart>

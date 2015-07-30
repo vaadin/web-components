@@ -1,7 +1,7 @@
 <v-chart id="basic-column" type="column">
     <title>Monthly Average Rainfall</title>
     <subtitle>Source: WorldClimate.com</subtitle>
-    <x-axis>
+    <x-axis crosshair="true">
         <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
     </x-axis>
     <y-axis min="0">
@@ -11,7 +11,7 @@
             background-color="#FFFFFF" shadow="true"></legend>
     <tooltip header-format="<span style='font-size:10px'>{point.key}</span><table>"
              point-format="<tr><td style='color:{series.color};padding:0'>{series.name}: </td>  <td style='padding:0'><b>{point.y:.1f} mm</b></td>    </tr>"
-             footer-format="</table>" shared="true" use-H-T-M-L="true"></tooltip>
+             footer-format="</table>" shared="true" use-html="true"></tooltip>
     <plot-options>
         <column point-padding="0.2">
         </column>

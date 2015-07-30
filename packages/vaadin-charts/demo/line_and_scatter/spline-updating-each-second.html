@@ -1,8 +1,7 @@
-<v-chart id="spline-updating-each-second" type="spline" animation="true" margin-right="10">
-    <title>Live random data</title>
-
-    <!-- TODO -->
-    <events load="function () {
+<v-chart id="spline-updating-each-second" type="spline">
+    <chart animation="true" margin-right="10">
+        <!-- TODO -->
+        <events load="function () {
                         var series = this.series[0];
                         setInterval(function () {
                             var x = (new Date()).getTime(), // current time
@@ -10,6 +9,10 @@
                             series.addPoint([x, y], true, true);
                         }, 1000);
                     }"></events>
+    </chart>
+    <title>Live random data</title>
+
+
 
     <x-axis type="datetime"
             tick-pixel-interval="150">
@@ -17,7 +20,7 @@
 
     <y-axis>
         <title>Value</title>
-        <plot-lines value="0" widht="1" color="#808080"></plot-lines>
+        <plot-lines value="0" width="1" color="#808080"></plot-lines>
     </y-axis>
 
     <tooltip formatter="function () {

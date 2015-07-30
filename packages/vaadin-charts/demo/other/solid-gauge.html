@@ -1,0 +1,22 @@
+<v-chart id="solid-gauge" type="solidgauge">
+    <title text=""></title>
+    <pane start-angle="-90" end-angle="90">
+        <background background-color="#EEE" inner-radius="60%" outer-radius="100%" shape="arc"></background>
+    </pane>
+    <tooltip enabled="false"></tooltip>
+    <y-axis min="0" max="200" line-width="0" minor-tick-width="0" tick-width="0">
+        <stops>0.1, #55BF3B</stops>
+        <stops>0.5, #DDDF0D</stops>
+        <stops>0.9, #DF5353</stops>
+        <title y="-100">Speed</title>
+        <labels enabled="false"></labels>
+    </y-axis>
+    <plot-options>
+        <solidgauge>
+            <data-labels y="5" border-width="0"></data-labels>
+        </solidgauge>
+    </plot-options>
+    <v-series name="Speed">
+        <data>80</data>
+    </v-series>
+</v-chart>
