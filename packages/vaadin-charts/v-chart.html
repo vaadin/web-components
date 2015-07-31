@@ -41,7 +41,7 @@ Example:
 -->
 <dom-module id="v-chart">
     <template>
-        <div id="chartContainer"></div>
+        <div id="chartContainer" style="height:100%; width:100%;"></div>
     </template>
     <script>
         Polymer({
@@ -98,7 +98,7 @@ Example:
             /**
              * Elements that contain an array of values, either as a comma-separated list or multiple elements
              **/
-            _arrayNodes: ["categories", "stops"],
+            _arrayNodes: ["categories", "stops", "margin"],
 
             /**
              * Mapping of element names to Highcharts names. Used when the original name cannot be used.

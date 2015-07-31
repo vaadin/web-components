@@ -2,8 +2,62 @@
     <title>Date axis and click events</title>
 
     <x-axis type="datetime"></x-axis>
+    <legend enabled="false"></legend>
 
-    <!-- TODO click listeners -->
+    <chart>
+        <events click="function(event) {
+            var xValue = event.xAxis[0].value,
+                yValue = event.yAxis[0].value,
+                xPixels = event.xAxis[0].axis.toPixels(xValue),
+                yPixels = event.yAxis[0].axis.toPixels(yValue),
+                dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S',xValue);
+                yFormatted = Highcharts.numberFormat(yValue, 2);
+            var label = this.renderer.label('Chart click: x: ' + dateFormatted + ', y: ' + yFormatted, xPixels, yPixels)
+                .attr({
+                    fill: Highcharts.getOptions().colors[1],
+                    padding: 10,
+                    r: 5,
+                    zIndex: 8
+                })
+                .css({
+                    color: '#FFFFFF'
+                })
+                .add();
+
+            setTimeout(function () {
+                label.fadeOut();
+            }, 1000);
+        }">
+
+        </events>
+    </chart>
+
+    <plot-options>
+        <series>
+            <point>
+                <events click="function(event) {
+                    var xPixels = event.chartX,
+                        yPixels = event.chartY,
+                        dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S',this.x);
+                    var label = this.series.chart.renderer.label('Point click: x: ' + dateFormatted + ', y: ' + this.y, xPixels, yPixels)
+                        .attr({
+                            fill: Highcharts.getOptions().colors[1],
+                            padding: 10,
+                            r: 5,
+                            zIndex: 8
+                        })
+                        .css({
+                            color: '#FFFFFF'
+                        })
+                        .add();
+
+                    setTimeout(function () {
+                        label.fadeOut();
+                    }, 1000);
+                }"></events>
+            </point>
+        </series>
+    </plot-options>
 
     <v-series>
         <data>

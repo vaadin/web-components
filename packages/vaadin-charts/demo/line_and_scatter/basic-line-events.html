@@ -6,10 +6,33 @@
         <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
     </x-axis>
 
-    <!-- TODO finalize when events are working -->
-    <events click="function(e) {;}">
+    <chart>
+        <events click="function(event) {
+            var xValue = event.xAxis[0].value,
+                yValue = event.yAxis[0].value,
+                xPixels = event.xAxis[0].axis.toPixels(xValue),
+                yPixels = event.yAxis[0].axis.toPixels(yValue),
+                xFormatted = Highcharts.numberFormat(xValue, 2),
+                yFormatted = Highcharts.numberFormat(yValue, 2);
+            var label = this.renderer.label('Chart click: x: ' + xFormatted + ', y: ' + yFormatted, xPixels, yPixels)
+                .attr({
+                    fill: Highcharts.getOptions().colors[2],
+                    padding: 10,
+                    r: 5,
+                    zIndex: 8
+                })
+                .css({
+                    color: '#FFFFFF'
+                })
+                .add();
 
-    </events>
+            setTimeout(function () {
+                label.fadeOut();
+            }, 1000);
+        }">
+
+        </events>
+    </chart>
 
     <y-axis>
         <title style="{color: #3090F0;}">Temperature</title>
@@ -25,8 +48,32 @@
     <legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
             background-color="#FFFFFF"></legend>
 
+    <plot-options>
+        <series>
+            <point>
+                <events click="function(event) {
+                    var xPixels = event.chartX,
+                        yPixels = event.chartY;
+                    var label = this.series.chart.renderer.label('Point click: Categoy: ' + this.category + ', y: ' + this.y, xPixels, yPixels)
+                        .attr({
+                            fill: Highcharts.getOptions().colors[2],
+                            padding: 10,
+                            r: 5,
+                            zIndex: 8
+                        })
+                        .css({
+                            color: '#FFFFFF'
+                        })
+                        .add();
 
-    <!--TODO series click event -->
+                    setTimeout(function () {
+                        label.fadeOut();
+                    }, 1000);
+                }"></events>
+            </point>
+        </series>
+    </plot-options>
+
     <v-series name="Rainfall" y-axis="1" type="column">
         <data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</data>
     </v-series>

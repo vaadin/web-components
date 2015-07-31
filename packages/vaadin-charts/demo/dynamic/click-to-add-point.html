@@ -1,0 +1,39 @@
+<v-chart id="click-to-add-point" type="scatter">
+    <chart>
+        <margin>70, 50, 60, 80</margin>
+        <events click="function (e) {
+            // find the clicked values and the series
+            var x = e.xAxis[0].value,
+            y = e.yAxis[0].value,
+            series = this.series[0];
+            // Add it
+            series.addPoint([x, y]);
+        }"></events>
+    </chart>
+    <title>User supplied data</title>
+    <subtitle>Click the plot area to add a point. Click a point to remove it.</subtitle>
+    <x-axis grid-line-width="1" min-padding="0.2" max-padding="0.2" max-zoom="60">
+    </x-axis>
+    <y-axis min-padding="0.2" max-padding="0.2" max-zoom="60">
+        <title>Value</title>
+        <plot-lines value="0" width="1" color="#808080">
+
+        </plot-lines>
+    </y-axis>
+    <legend enabled="false"></legend>
+    <exporting enabled="false"></exporting>
+    <plot-options>
+        <series line-width="1">
+            <point>
+                <events click="function () {
+                    if (this.series.data.length > 1) {
+                        this.remove();
+                    }
+                    }"></events>
+            </point>
+        </series>
+    </plot-options>
+    <v-series>
+        <data>[20, 20], [80, 80]</data>
+    </v-series>
+</v-chart>

@@ -1,14 +1,14 @@
 <v-chart id="spline-updating-each-second" type="spline">
     <chart animation="true" margin-right="10">
-        <!-- TODO -->
         <events load="function () {
-                        var series = this.series[0];
-                        setInterval(function () {
-                            var x = (new Date()).getTime(), // current time
-                                y = Math.random();
-                            series.addPoint([x, y], true, true);
-                        }, 1000);
-                    }"></events>
+            // set up the updating of the chart each second
+            var series = this.series[0];
+            setInterval(function () {
+                var x = (new Date()).getTime(), // current time
+                    y = Math.random();
+                series.addPoint([x, y], true, true);
+            }, 1000);
+        }"></events>
     </chart>
     <title>Live random data</title>
 
@@ -35,7 +35,27 @@
     <exporting enabled="false"></exporting>
 
     <v-series name="Random data">
-        <!-- TODO -->
+        <data>
+            [(new Date()).getTime()-18000,Math.random()],
+            [(new Date()).getTime()-17000,Math.random()],
+            [(new Date()).getTime()-16000,Math.random()],
+            [(new Date()).getTime()-15000,Math.random()],
+            [(new Date()).getTime()-14000,Math.random()],
+            [(new Date()).getTime()-13000,Math.random()],
+            [(new Date()).getTime()-12000,Math.random()],
+            [(new Date()).getTime()-11000,Math.random()],
+            [(new Date()).getTime()-10000,Math.random()],
+            [(new Date()).getTime()-9000,Math.random()],
+            [(new Date()).getTime()-8000,Math.random()],
+            [(new Date()).getTime()-7000,Math.random()],
+            [(new Date()).getTime()-6000,Math.random()],
+            [(new Date()).getTime()-5000,Math.random()],
+            [(new Date()).getTime()-4000,Math.random()],
+            [(new Date()).getTime()-3000,Math.random()],
+            [(new Date()).getTime()-2000,Math.random()],
+            [(new Date()).getTime()-1000,Math.random()],
+            [(new Date()).getTime(),Math.random()]
+        </data>
     </v-series>
 
 </v-chart>
