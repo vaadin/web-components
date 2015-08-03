@@ -184,7 +184,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             try {
                 var dateValue = new Date(dateString);
                 //If dateValue is invalid getTime is NaN
-                return (dateValue.toISOString().startsWith(dateString)) &&
+                return (dateValue.toISOString().indexOf(dateString) === 0 ) &&
                         Object.prototype.toString.call(dateValue) === "[object Date]" && !isNaN(dateValue.getTime());
             } catch (e) {
 
@@ -232,21 +232,39 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * @param {object} value to be set
          **/
         _setProperty: function (name, value) {
+            var parsedValue = this._parseProperty(value);
+
             //value might be undefined because all properties are iterated in _loadPropertiesFromAttributes
             //in such case it shouldn't be set to keep _seriesConf minimal
+            if (undefined !== parsedValue) {
+                if (undefined === this._seriesConf[name]) {
+                    this._seriesConf[name] = parsedValue;
+                } else if (name === 'data') {
+                    Array.prototype.push.apply( this._seriesConf[name], parsedValue );
+                }
+            }
+        },
+
+        /**
+         * Parse property value into most appropriate type.
+         * @param {object} value to be set
+         **/
+        _parseProperty: function (value) {
+            var result;
             if (undefined !== value) {
                 try {
                     //try to parse as simple JSON
-                    this._seriesConf[name] = JSON.parse(value);
+                    result = JSON.parse(value);
                 } catch (e) {
                     try {
                         //try to parse as JSON with js code for instance Date.UTC(...)
-                        this._seriesConf[name] = eval(value);
+                        result = eval(value);
                     } catch (e) {
-                        this._seriesConf[name] = value;
+                        result = value;
                     }
                 }
             }
+            return result;
         },
 
         ready: function () {
