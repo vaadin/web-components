@@ -245,7 +245,10 @@ Example:
                             }
                             result = result.length > 1 ? result : result[0];
 
-                        } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
+                        } else if('table' === name){
+                            dest['table'] = node;
+
+                        }else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                             result = {};
                             this._loadFromNode(result, node);
                             this._loadConfiguration(result, node);
@@ -275,7 +278,7 @@ Example:
             attached: function () {
                 this.async(function () {
                     this.chart = new Highcharts.Chart(this._chartConf);
-                });
+                }, 1);
             },
 
             ready: function () {
