@@ -272,24 +272,26 @@ Example:
                 this._chartConf = {};
             },
 
-            ready: function () {
+            attached: function () {
                 this.async(function () {
-                    this._cleanNode(Polymer.dom(this));
-                    this._loadConfiguration(this._chartConf, Polymer.dom(this));
-
-                    if (!this._chartConf.chart) {
-                        this._chartConf.chart = {};
-                    }
-
-                    this._chartConf.chart.type = this.type;
-                    this._chartConf.chart.renderTo = this.$.chartContainer;
-
-                    if (this._loadTheme) {
-                        this._loadTheme();
-                    }
-
                     this.chart = new Highcharts.Chart(this._chartConf);
-                }, 1);
+                });
+            },
+
+            ready: function () {
+                this._cleanNode(Polymer.dom(this));
+                this._loadConfiguration(this._chartConf, Polymer.dom(this));
+
+                if (!this._chartConf.chart) {
+                    this._chartConf.chart = {};
+                }
+
+                this._chartConf.chart.type = this.type;
+                this._chartConf.chart.renderTo = this.$.chartContainer;
+
+                if (this._loadTheme) {
+                    this._loadTheme();
+                }
             }
         });
     </script>
