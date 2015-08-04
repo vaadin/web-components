@@ -26,6 +26,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <link rel="import" href="v-series.html">
 <link rel="import" href="valo-theme.html">
+<link rel="import" href="configuration-reader.html">
 
 <!--
 An element that provides a WebComponent interface for <a href="http://www.highcharts.com/">HighCharts</a>
@@ -47,7 +48,7 @@ Example:
         Polymer({
             is: 'v-chart',
 
-            behaviors: [ValoThemeBehavior],
+            behaviors: [ValoThemeBehavior,ConfigurationReaderBehavior],
 
             properties: {
 
@@ -61,7 +62,7 @@ Example:
                     }
                 },
 
-                type: {
+                vcType: {
                     type: String,
                     value: 'line'
                 },
@@ -79,31 +80,6 @@ Example:
                 }
             },
 
-            /**
-             * Elements that should be ignored when mapping
-             **/
-            _ignoredNodes: ["#text", "vSeries"],
-
-            /**
-             * Elements that should be mapped in to an array, e.g. two x-axis elements would be mapped to the same
-             * array
-             **/
-            _multivaluedNodes: ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops", "levels", "pane", "items"],
-
-            /**
-             * List of words that will always be uppercased, instead of camel-cased
-             **/
-            _uppercaseWords: ["html"],
-
-            /**
-             * Elements that contain an array of values, either as a comma-separated list or multiple elements
-             **/
-            _arrayNodes: ["categories", "stops", "margin"],
-
-            /**
-             * Mapping of element names to Highcharts names. Used when the original name cannot be used.
-             **/
-            _nodeNameMap: {'frame3d': 'frame'},
 
             /**
              * Dynamically add a new Series to this chart
@@ -128,147 +104,6 @@ Example:
                 this._chartConf.drilldown.series.push(newSeries);
             },
 
-            /**
-             * Transform the given string to camel-case
-             *
-             * @param {string} str
-             **/
-            _toCamelCase: function (str) {
-                var out = "";
-                str.split("-").forEach(function (word, idx) {
-                    var add = word.toLowerCase();
-                    //first word always goes in lower case, the rest go with camelCase, except for _uppercaseWords
-                    if (idx === 0 || this._uppercaseWords.indexOf(add) === -1) {
-                        out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
-                    } else {
-                        out += word.toUpperCase();
-                    }
-                }, this);
-                return out;
-            },
-
-            /**
-             * Read configuration from one element and its attributes
-             *
-             * @param {object} dest the chart configuration object
-             * @param {node} parent the node that is parsed for configuration
-             **/
-            _loadFromNode: function (dest, node) {
-                for (var i in node.attributes) {
-                    var attr = node.attributes[i].name;
-                    if (attr !== undefined) {
-                        var val = node.getAttribute(attr);
-                        var res = this._parseAttribute(val);
-                        dest[this._toCamelCase(attr)] = res;
-                    }
-                }
-                if (this._hasOnlyTextContent(node)) {
-                    dest.text = node.textContent;
-                }
-            },
-
-            /**
-             * Removes all empty text and comment nodes.
-             **/
-            _cleanNode: function (node) {
-                for (var n = 0; n < node.childNodes.length; n++) {
-                    var child = node.childNodes[n];
-                    if (child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
-                        node.removeChild(child);
-                        n--;
-                    } else if (child.nodeType === 1) {
-                        this._cleanNode(child);
-                    }
-                }
-            },
-
-            /**
-             * Parse String attribute to most specific type possible.
-             * Try JSON.parse, then eval if it's function, or return original value
-             *
-             **/
-            _parseAttribute: function (val) {
-                var res;
-                try {
-                    res = JSON.parse(val);
-                } catch (e) {
-                    if (val.indexOf('function') === 0) {
-                        try {
-                            //if it's a function eval
-                            res = eval('(' + val + ')');
-                        } catch (e) {
-                        }
-                    } else {
-                        res = val;
-                    }
-                }
-                return res;
-            },
-
-            /**
-             * Return true if node has a single child with nodeType TEXT_NODE (3) and non-empty value.
-             *
-             * @param {node} the node to check
-             **/
-            _hasOnlyTextContent: function (node) {
-                return node.hasChildNodes() && node.childNodes.length == 1 && node.childNodes[0].nodeType == 3 && node.textContent.trim() != "";
-            },
-
-            /**
-             * Recursively load the configuration from the light-DOM elements.
-             *
-             * @param {object} dest the chart configuration object
-             * @param {node} parent the node that contains the configuration elements
-             **/
-            _loadConfiguration: function (dest, parent) {
-                for (var n = 0; n < parent.childNodes.length; n++) {
-                    var node = parent.childNodes[n];
-                    var name = node.nodeName.toLowerCase();
-                    var camelName = this._toCamelCase(name);
-                    var targetName = this._nodeNameMap[camelName] === undefined ? camelName : this._nodeNameMap[camelName];
-
-                    if (this._ignoredNodes.indexOf(camelName) === -1) {
-                        var result;
-
-                        //read configuration into result
-                        if (this._arrayNodes.indexOf(camelName) !== -1) {
-                            result = [];
-                            if (this._hasOnlyTextContent(node)) {
-                                node.textContent.split(/\s*,\s*/).forEach(function (word) {
-                                    result.push(this._parseAttribute(word));
-                                }, this);
-                            } else {
-                                for (var i = 0; i < node.childNodes.length; i++) {
-                                    var child = node.childNodes[i];
-                                    result.push(this._parseAttribute(child.textContent));
-                                }
-                            }
-                            result = result.length > 1 ? result : result[0];
-
-                        } else if ('table' === name) {
-                            dest['table'] = node;
-
-                        } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
-                            result = {};
-                            this._loadFromNode(result, node);
-                            this._loadConfiguration(result, node);
-                        }
-
-                        //put result in to the correct place
-                        if (this._multivaluedNodes.indexOf(camelName) !== -1) {
-                            if (dest[targetName] === undefined) {
-                                dest[targetName] = [result];
-                            } else {
-                                dest[targetName].push(result);
-                            }
-
-                        } else if (dest[targetName] === undefined) {
-                            dest[targetName] = result;
-                        }
-                    }
-                }
-            },
-
             /* ----------- lifecycle ----------- */
             created: function () {
                 //Workaround to prevent _chartConf from being undefined when calling _addSeries from child component in FF
@@ -289,7 +124,7 @@ Example:
                     this._chartConf.chart = {};
                 }
 
-                this._chartConf.chart.type = this.type;
+                this._chartConf.chart.type = this.vcType;
                 this._chartConf.chart.renderTo = this.$.chartContainer;
 
                 if (this._loadTheme) {
