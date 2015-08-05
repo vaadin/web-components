@@ -1,6 +1,6 @@
-<v-chart id="spline-updating-each-second" type="spline">
-    <chart animation="true" margin-right="10">
-        <events load="function () {
+<v-chart id="spline-updating-each-second" vc-type="spline">
+    <vc-chart vc-animation="true" vc-margin-right="10">
+        <vc-events vc-load="function () {
             // set up the updating of the chart each second
             var series = this.series[0];
             setInterval(function () {
@@ -8,34 +8,34 @@
                     y = Math.random();
                 series.addPoint([x, y], true, true);
             }, 1000);
-        }"></events>
-    </chart>
-    <title>Live random data</title>
+        }"></vc-events>
+    </vc-chart>
+    <vc-title>Live random data</vc-title>
 
 
 
-    <x-axis type="datetime"
-            tick-pixel-interval="150">
-    </x-axis>
+    <vc-x-axis vc-type="datetime"
+            vc-tick-pixel-interval="150">
+    </vc-x-axis>
 
-    <y-axis>
-        <title>Value</title>
-        <plot-lines value="0" width="1" color="#808080"></plot-lines>
-    </y-axis>
+    <vc-y-axis>
+        <vc-title>Value</vc-title>
+        <vc-plot-lines vc-value="0" vc-width="1" vc-color="#808080"></vc-plot-lines>
+    </vc-y-axis>
 
-    <tooltip formatter="function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+    <vc-tooltip vc-formatter="function () {
+                    return '<vc-b>' + this.series.name + '</vc-b><vc-br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<vc-br/>' +
                         Highcharts.numberFormat(this.y, 2);}">
 
-    </tooltip>
+    </vc-tooltip>
 
-    <legend enabled="false"></legend>
+    <vc-legend vc-enabled="false"></vc-legend>
 
-    <exporting enabled="false"></exporting>
+    <vc-exporting vc-enabled="false"></vc-exporting>
 
-    <v-series name="Random data">
-        <data>
+    <v-series vc-name="Random data">
+        <vc-data>
             [(new Date()).getTime()-18000,Math.random()],
             [(new Date()).getTime()-17000,Math.random()],
             [(new Date()).getTime()-16000,Math.random()],
@@ -55,7 +55,7 @@
             [(new Date()).getTime()-2000,Math.random()],
             [(new Date()).getTime()-1000,Math.random()],
             [(new Date()).getTime(),Math.random()]
-        </data>
+        </vc-data>
     </v-series>
 
 </v-chart>

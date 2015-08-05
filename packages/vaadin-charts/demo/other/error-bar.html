@@ -1,56 +1,54 @@
-<v-chart id="error-bar" type="errorbar">
-    <title>Temperature vs Rainfall</title>
-    <x-axis>
-        <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-    </x-axis>
-    <y-axis>
-        <labels format="{value} °C">
-            <style color="#EC6464"></style>
-        </labels>
-        <title text="Temperature">
-            <style color="#EC6464"></style>
-        </title>
-    </y-axis>
-    <y-axis opposite="true">
-        <labels format="{value} mm">
-            <style color="#3090F0"></style>
-        </labels>
-        <title text="Rainfall">
-            <style color="#3090F0"></style>
-        </title>
-    </y-axis>
-    <tooltip shared="true"></tooltip>
-    <plot-options>
-        <column>
-            <tooltip
-                    point-format="<span style='font-weight: bold; color: {series.color}'>{series.name}</span>: <b>{point.y:.1f} mm</b>"></tooltip>
-        </column>
-        <errorbar>
-            <tooltip point-format=" (error range: {point.low}-{point.high} mm)<br/>"></tooltip>
-        </errorbar>
-        <spline>
-            <tooltip
-                    point-format="<span style='font-weight: bold; color: {series.color}'>{series.name}</span>: <b>{point.y:.1f}°C</b>"></tooltip>
-        </spline>
-    </plot-options>
-    <v-series name="Rainfall" type="column">
-        <y-axis>1</y-axis>
-        <data>
+<v-chart id="error-bar" vc-type="errorbar">
+    <vc-title>Temperature vs Rainfall</vc-title>
+    <vc-x-axis>
+        <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
+    </vc-x-axis>
+    <vc-y-axis>
+        <vc-labels vc-format="{value} °C">
+            <vc-style vc-color="#EC6464"></vc-style>
+        </vc-labels>
+        <vc-title vc-text="Temperature">
+            <vc-style vc-color="#EC6464"></vc-style>
+        </vc-title>
+    </vc-y-axis>
+    <vc-y-axis vc-opposite="true">
+        <vc-labels vc-format="{value} mm">
+            <vc-style vc-color="#3090F0"></vc-style>
+        </vc-labels>
+        <vc-title vc-text="Rainfall">
+            <vc-style vc-color="#3090F0"></vc-style>
+        </vc-title>
+    </vc-y-axis>
+    <vc-tooltip vc-shared="true"></vc-tooltip>
+    <vc-plot-options>
+        <vc-column>
+            <vc-tooltip
+                    vc-point-format="<vc-span vc-style='font-weight: bold; color: {series.color}'>{series.name}</vc-span>: <vc-b>{point.y:.1f} mm</vc-b>"></vc-tooltip>
+        </vc-column>
+        <vc-errorbar>
+            <vc-tooltip vc-point-format=" (error range: {point.low}-{point.high} mm)<vc-br/>"></vc-tooltip>
+        </vc-errorbar>
+        <vc-spline>
+            <vc-tooltip
+                    vc-point-format="<vc-span vc-style='font-weight: bold; color: {series.color}'>{series.name}</vc-span>: <vc-b>{point.y:.1f}°C</vc-b>"></vc-tooltip>
+        </vc-spline>
+    </vc-plot-options>
+    <v-series vc-name="Rainfall" vc-type="column" vc-y-axis="1">
+        <vc-data>
             49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4
-        </data>
+        </vc-data>
     </v-series>
 
-    <v-series name="Rainfall error">
-        <y-axis>1</y-axis>
-        <data>
+    <v-series vc-name="Rainfall error" vc-y-axis="1">
+        <vc-data>
             [48, 51], [68, 73], [92, 110], [128, 136], [140, 150], [171, 179], [135, 143], [142, 149], [204, 220], [189,
             199], [95, 110], [52, 56]
-        </data>
+        </vc-data>
     </v-series>
 
-    <v-series name="Temperature" type="spline">
-        <data>
+    <v-series vc-name="Temperature" vc-type="spline">
+        <vc-data>
             7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6
-        </data>
+        </vc-data>
     </v-series>
 </v-chart>

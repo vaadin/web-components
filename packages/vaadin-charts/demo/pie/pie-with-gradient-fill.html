@@ -1,20 +1,20 @@
-<v-chart id="pie-with-gradient-fill" type="pie">
-    <title>Browser market shares at a specific website, 2014</title>
-    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
-    </tooltip>
-    <plot-options>
-        <pie allow-point-select="true" cursor="pointer">
-            <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
-            </data-labels>
-        </pie>
-    </plot-options>
+<v-chart id="pie-with-gradient-fill" vc-type="pie">
+    <vc-title>Browser market shares at a specific website, 2014</vc-title>
+    <vc-tooltip vc-point-format="{series.name}: <vc-b>{point.percentage:.1f}%</vc-b>">
+    </vc-tooltip>
+    <vc-plot-options>
+        <vc-pie vc-allow-point-select="true" vc-cursor="pointer">
+            <vc-data-labels vc-enabled="true" vc-format="<vc-b>{point.name}</vc-b>:    {point.percentage:.1f} %">
+            </vc-data-labels>
+        </vc-pie>
+    </vc-plot-options>
 
-    <v-series name="Browser share">
-        <data>
-            <point>
-                <y>55.11</y>
-                <name>IE</name>
-                <color>
+    <v-series vc-name="Browser share">
+        <vc-data>
+            <vc-point>
+                <vc-y>55.11</vc-y>
+                <vc-name>IE</vc-name>
+                <vc-color>
                     {
                     "stops":[[0.0,"#FF8000"],[1.0,"#804000"]],
                     "radialGradient":{
@@ -23,12 +23,12 @@
                     "r":0.7
                     }
                     }
-                </color>
-            </point>
-            <point>
-                <y>21.63</y>
-                <name>Firefox</name>
-                <color>
+                </vc-color>
+            </vc-point>
+            <vc-point>
+                <vc-y>21.63</vc-y>
+                <vc-name>Firefox</vc-name>
+                <vc-color>
                     {
                     "stops":[[0.0,"#00FFFF"],[1.0,"#008080"]],
                     "radialGradient":{
@@ -37,12 +37,12 @@
                     "r":0.7
                     }
                     }
-                </color>
-            </point>
-            <point>
-                <y>11.94</y>
-                <name>Chrome</name>
-                <color>
+                </vc-color>
+            </vc-point>
+            <vc-point>
+                <vc-y>11.94</vc-y>
+                <vc-name>Chrome</vc-name>
+                <vc-color>
                     {
                     "stops":[[0.0,"#FFFF00"],[1.0,"#808000"]],
                     "radialGradient":{
@@ -51,12 +51,12 @@
                     "r":0.7
                     }
                     }
-                </color>
-            </point>
-            <point>
-                <y>7.15</y>
-                <name>Safari</name>
-                <color>
+                </vc-color>
+            </vc-point>
+            <vc-point>
+                <vc-y>7.15</vc-y>
+                <vc-name>Safari</vc-name>
+                <vc-color>
                     {
                     "stops":[[0.0,"#0080FF"],[1.0,"#004080"]],
                     "radialGradient":{
@@ -65,12 +65,12 @@
                     "r":0.7
                     }
                     }
-                </color>
-            </point>
-            <point>
-                <y>2.14</y>
-                <name>Opera</name>
-                <color>
+                </vc-color>
+            </vc-point>
+            <vc-point>
+                <vc-y>2.14</vc-y>
+                <vc-name>Opera</vc-name>
+                <vc-color>
                     {
                     "stops":[[0.0, "#FF0000"],[1.0, "#800000"]],
                     "radialGradient":{
@@ -79,8 +79,8 @@
                     "r":0.7
                     }
                     }
-                </color>
-            </point>
-        </data>
+                </vc-color>
+            </vc-point>
+        </vc-data>
     </v-series>
 </v-chart>

@@ -1,16 +1,16 @@
-<v-chart id="logarithmic-axis" type="line">
-    <title>Logarithmic axis demo</title>
+<v-chart id="logarithmic-axis" vc-type="line">
+    <vc-title>Logarithmic axis demo</vc-title>
 
-    <y-axis type="logarithmic" minor-tick-interval="0.1"></y-axis>
+    <vc-y-axis vc-type="logarithmic" vc-minor-tick-interval="0.1"></vc-y-axis>
 
-    <tooltip header-format="<b>{series.name}</b><br/>"
-             point-format="x = {point.x}, y = {point.y}"></tooltip>
+    <vc-tooltip vc-header-format="<vc-b>{series.name}</vc-b><vc-br/>"
+             vc-point-format="x = {point.x}, y = {point.y}"></vc-tooltip>
 
-    <plot-options>
-        <line point-start="1"></line>
-    </plot-options>
+    <vc-plot-options>
+        <vc-line vc-point-start="1"></vc-line>
+    </vc-plot-options>
 
     <v-series>
-        <data>1, 2, 4, 8, 16, 32, 64, 128, 256, 512</data>
+        <vc-data>1, 2, 4, 8, 16, 32, 64, 128, 256, 512</vc-data>
     </v-series>
 </v-chart>

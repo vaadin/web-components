@@ -39,7 +39,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Elements that contain an array of values, either as a comma-separated list or multiple elements
          **/
-        _arrayNodes: ["categories", "stops", "margin"],
+        _arrayNodes: ["categories", "stops", "margin", "center"],
+
+        /**
+         * Elements whose text content should be set as text property value
+         **/
+        _textContentNodes: ["subtitle", "title"],
+
+        /**
+         * Elements where the whole node is going to be used as value, their name is always valid
+         **/
+        _nodeValueAttributes: ["table"],
+
+        _vaadinChartsPrefix: "vc-",
+
+        _isVaadinChartsAttribute: function (attName) {
+            return attName.indexOf(this._vaadinChartsPrefix) === 0 || this._nodeValueAttributes.indexOf(attName) !== -1;
+        },
 
         /**
          * Transform the given string to camel-case
@@ -48,8 +64,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _toCamelCase: function (str) {
             var out = "";
-            if (str.indexOf('vc-') === 0) {
-                str = str.substring(3);
+            if (this._nodeValueAttributes.indexOf(str) !== -1) {
+                out = str;
+            } else {
+                str = str.substring(this._vaadinChartsPrefix.length);
                 str.split("-").forEach(function (word, idx) {
                     var add = word.toLowerCase();
                     //first word always goes in lower case, the rest go with camelCase, except for _uppercaseWords
@@ -59,8 +77,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                         out += word.toUpperCase();
                     }
                 }, this);
-            }else{
-                //TODO how is this going to be handled
             }
             return out;
         },
@@ -73,11 +89,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _loadFromNode: function (dest, node) {
             for (var i in node.attributes) {
-                var attr = node.attributes[i].name;
-                if (attr !== undefined) {
-                    var val = node.getAttribute(attr);
-                    var res = this._parseAttribute(val);
-                    dest[this._toCamelCase(attr)] = res;
+                if (node.attributes.hasOwnProperty(i)) {
+                    var attr = node.attributes[i].name;
+                    if (this._isVaadinChartsAttribute(attr)) {
+                        if (attr !== undefined) {
+                            var val = node.getAttribute(attr);
+                            var res = this._parseAttribute(val);
+                            dest[this._toCamelCase(attr)] = res;
+                        }
+                    }
                 }
             }
             if (this._hasOnlyTextContent(node)) {
@@ -110,7 +130,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             try {
                 res = JSON.parse(val);
             } catch (e) {
-                if(this._evalJavascript(val)){
+                if (this._evalJavascript(val)) {
                     try {
                         res = eval('(' + val + ')');
                     } catch (e) {
@@ -121,9 +141,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 }
             }
             return res;
-        },
+        }
+        ,
 
-        _evalJavascript: function(val) {
+        _evalJavascript: function (val) {
             //if it's a function eval
             return val.indexOf('function') === 0;
         },
@@ -148,48 +169,49 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < parent.childNodes.length; n++) {
                 var node = parent.childNodes[n];
                 var name = node.nodeName.toLowerCase();
-                var camelName = this._toCamelCase(name);
+                if (this._isVaadinChartsAttribute(name)) {
+                    var camelName = this._toCamelCase(name);
+                    if (this._ignoredNodes.indexOf(name) === -1) {
+                        var result;
 
-                if (this._ignoredNodes.indexOf(name) === -1) {
-                    var result;
+                        //read configuration into result
+                        if (this._arrayNodes.indexOf(camelName) !== -1) {
+                            result = [];
+                            if (this._hasOnlyTextContent(node)) {
+                                node.textContent.split(/\s*,\s*/).forEach(function (word) {
+                                    result.push(this._parseAttribute(word));
+                                }, this);
+                            } else {
+                                for (var i = 0; i < node.childNodes.length; i++) {
+                                    var child = node.childNodes[i];
+                                    result.push(this._parseAttribute(child.textContent));
+                                }
+                            }
+                            result = result.length > 1 ? result : result[0];
 
-                    //read configuration into result
-                    if (this._arrayNodes.indexOf(camelName) !== -1) {
-                        result = [];
-                        if (this._hasOnlyTextContent(node)) {
-                            node.textContent.split(/\s*,\s*/).forEach(function (word) {
-                                result.push(this._parseAttribute(word));
-                            }, this);
-                        } else {
-                            for (var i = 0; i < node.childNodes.length; i++) {
-                                var child = node.childNodes[i];
-                                result.push(this._parseAttribute(child.textContent));
+                        } else if (this._nodeValueAttributes.indexOf(camelName) !== -1) {
+                            result = node;
+                        } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
+                            if (this._textContentNodes.indexOf(camelName) === -1 && this._hasOnlyTextContent(node)) {
+                                result = node.textContent;
+                            } else {
+                                result = {};
+                                this._loadFromNode(result, node);
+                                this._loadConfiguration(result, node);
                             }
                         }
-                        result = result.length > 1 ? result : result[0];
 
-                    } else if ('table' === name) {
-                        result = node;
-                    } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
-                        if ('title' !== camelName && this._hasOnlyTextContent(node)) {
-                            result = node.textContent;
-                        } else {
-                            result = {};
-                            this._loadFromNode(result, node);
-                            this._loadConfiguration(result, node);
+                        //put result in to the correct place
+                        if (this._multivaluedNodes.indexOf(camelName) !== -1) {
+                            if (dest[camelName] === undefined) {
+                                dest[camelName] = [result];
+                            } else {
+                                dest[camelName].push(result);
+                            }
+
+                        } else if (dest[camelName] === undefined) {
+                            dest[camelName] = result;
                         }
-                    }
-
-                    //put result in to the correct place
-                    if (this._multivaluedNodes.indexOf(camelName) !== -1) {
-                        if (dest[camelName] === undefined) {
-                            dest[camelName] = [result];
-                        } else {
-                            dest[camelName].push(result);
-                        }
-
-                    } else if (dest[camelName] === undefined) {
-                        dest[camelName] = result;
                     }
                 }
             }

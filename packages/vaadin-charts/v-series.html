@@ -172,7 +172,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._loadFromNode(this._seriesConf, element.node);
             this._loadConfiguration(this._seriesConf, element);
             this._loadData();
-            if (this.drilldown) {
+            if (this.vcDrilldown) {
                 this._parentChart()._addDrilldownSeries(this._seriesConf);
             } else {
                 this._parentChart()._addSeries(this._seriesConf);

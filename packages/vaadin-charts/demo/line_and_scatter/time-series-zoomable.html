@@ -1,36 +1,36 @@
-<v-chart id="time-series-zoomable" type="area">
-    <chart zoom-type="x"></chart>
-    <title>USD to EUR exchange rate over time</title>
-    <subtitle>Click and drag in the plot area to zoom in</subtitle>
+<v-chart id="time-series-zoomable" vc-type="area">
+    <vc-chart vc-zoom-type="x"></vc-chart>
+    <vc-title>USD to EUR exchange rate over time</vc-title>
+    <vc-subtitle>Click and drag in the plot area to zoom in</vc-subtitle>
 
-    <x-axis type="datetime"></x-axis>
+    <vc-x-axis vc-type="datetime"></vc-x-axis>
 
-    <y-axis>
-        <title>Exchange rate</title>
-    </y-axis>
+    <vc-y-axis>
+        <vc-title>Exchange rate</vc-title>
+    </vc-y-axis>
 
-    <legend enabled="false"></legend>
+    <vc-legend vc-enabled="false"></vc-legend>
 
-    <plot-options line-width="1">
-        <series threshold="null">
-            <fill-color>
-                <linear-gradient x1="0"
-                                 y1="0"
-                                 x2="0"
-                                 y2="1">
-                </linear-gradient>
-                <stops>0, #3090F0</stops>
-                <stops>1, #336190</stops>
-            </fill-color>
-            <marker radius="2"></marker>
-            <states>
-                <hover line-width="1"></hover>
-            </states>
-        </series>
-    </plot-options>
+    <vc-plot-options vc-line-width="1">
+        <vc-series vc-threshold="null">
+            <vc-fill-color>
+                <vc-linear-gradient vc-x1="0"
+                                    vc-y1="0"
+                                    vc-x2="0"
+                                    vc-y2="1">
+                </vc-linear-gradient>
+                <vc-stops>0, #3090F0</vc-stops>
+                <vc-stops>1, #336190</vc-stops>
+            </vc-fill-color>
+            <vc-marker vc-radius="2"></vc-marker>
+            <vc-states>
+                <vc-hover vc-line-width="1"></vc-hover>
+            </vc-states>
+        </vc-series>
+    </vc-plot-options>
 
-    <v-series name="USD to EUR" type="area">
-        <data>
+    <v-series vc-name="USD to EUR" vc-type="area">
+        <vc-data>
             [Date.UTC(2013,5,2),0.7695],
             [Date.UTC(2013,5,3),0.7648],
             [Date.UTC(2013,5,4),0.7645],
@@ -682,6 +682,6 @@
             [Date.UTC(2015,5,28),0.9113],
             [Date.UTC(2015,5,29),0.8900],
             [Date.UTC(2015,5,30),0.8950]
-        </data>
+        </vc-data>
     </v-series>
 </v-chart>

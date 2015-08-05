@@ -1,11 +1,11 @@
-<v-chart id="date-axis-and-click-event" type="spline">
-    <title>Date axis and click events</title>
+<v-chart id="date-axis-and-click-event" vc-type="spline">
+    <vc-title>Date axis and click events</vc-title>
 
-    <x-axis type="datetime"></x-axis>
-    <legend enabled="false"></legend>
+    <vc-x-axis vc-type="datetime"></vc-x-axis>
+    <vc-legend vc-enabled="false"></vc-legend>
 
-    <chart>
-        <events click="function(event) {
+    <vc-chart>
+        <vc-events vc-click="function(event) {
             var xValue = event.xAxis[0].value,
                 yValue = event.yAxis[0].value,
                 xPixels = event.xAxis[0].axis.toPixels(xValue),
@@ -29,13 +29,13 @@
             }, 1000);
         }">
 
-        </events>
-    </chart>
+        </vc-events>
+    </vc-chart>
 
-    <plot-options>
-        <series>
-            <point>
-                <events click="function(event) {
+    <vc-plot-options>
+        <vc-series>
+            <vc-point>
+                <vc-events vc-click="function(event) {
                     var xPixels = event.chartX,
                         yPixels = event.chartY,
                         dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S',this.x);
@@ -54,25 +54,25 @@
                     setTimeout(function () {
                         label.fadeOut();
                     }, 1000);
-                }"></events>
-            </point>
-        </series>
-    </plot-options>
+                }"></vc-events>
+            </vc-point>
+        </vc-series>
+    </vc-plot-options>
 
     <v-series>
-        <data>
-            <point>
-                <date>2013-02-11T12:00</date>
-                <y>71.5</y>
-            </point>
-            <point>
-                <date>2013-02-11T12:05</date>
-                <y>29.9</y>
-            </point>
-            <point>
-                <date>2013-02-11T12:10</date>
-                <y>106.4</y>
-            </point>
-        </data>
+        <vc-data>
+            <vc-point>
+                <vc-date>2013-02-11T12:00</vc-date>
+                <vc-y>71.5</vc-y>
+            </vc-point>
+            <vc-point>
+                <vc-date>2013-02-11T12:05</vc-date>
+                <vc-y>29.9</vc-y>
+            </vc-point>
+            <vc-point>
+                <vc-date>2013-02-11T12:10</vc-date>
+                <vc-y>106.4</vc-y>
+            </vc-point>
+        </vc-data>
     </v-series>
 </v-chart>

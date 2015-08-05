@@ -1,388 +1,388 @@
-<v-chart id="column-with-multi-level-drilldown" type="column">
-    <title>Global happiness index</title>
-    <subtitle>Source: www.happyplanetindex.org</subtitle>
-    <x-axis type="category"></x-axis>
-    <legend enabled="false"></legend>
-    <plot-options>
-        <column cursor="pointer">
-        </column>
-    </plot-options>
+<v-chart id="column-with-multi-level-drilldown" vc-type="column">
+    <vc-title>Global happiness index</vc-title>
+    <vc-subtitle>Source: www.happyplanetindex.org</vc-subtitle>
+    <vc-x-axis vc-type="category"></vc-x-axis>
+    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-plot-options>
+        <vc-column vc-cursor="pointer">
+        </vc-column>
+    </vc-plot-options>
     <v-series>
-        <name>Regions</name>
-        <color-by-point>true</color-by-point>
-        <data>
-            <point>
-                <name>Latin America and Caribbean</name>
-                <y>60</y>
-                <drilldown>Latin America and Caribbean Countries</drilldown>
-            </point>
-            <point>
-                <name>Western Nations</name>
-                <y>50</y>
-                <drilldown>Western Nations Countries</drilldown>
-            </point>
-            <point>
-                <name>Middle East and North Africa</name>
-                <y>53</y>
-                <drilldown>Middle East and North Africa Countries</drilldown>
-            </point>
-            <point>
-                <name>Sub-Saharan Africa</name>
-                <y>42</y>
-                <drilldown>Sub-Saharan Africa Countries</drilldown>
-            </point>
-            <point>
-                <name>South Asia</name>
-                <y>53</y>
-                <drilldown>South Asia Countries</drilldown>
-            </point>
-            <point>
-                <name>East Asia</name>
-                <y>55</y>
-                <drilldown>East Asia Countries</drilldown>
-            </point>
-        </data>
+        <vc-name>Regions</vc-name>
+        <vc-color-by-point>true</vc-color-by-point>
+        <vc-data>
+            <vc-point>
+                <vc-name>Latin America and Caribbean</vc-name>
+                <vc-y>60</vc-y>
+                <vc-drilldown>Latin America and Caribbean Countries</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Western Nations</vc-name>
+                <vc-y>50</vc-y>
+                <vc-drilldown>Western Nations Countries</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Middle East and North Africa</vc-name>
+                <vc-y>53</vc-y>
+                <vc-drilldown>Middle East and North Africa Countries</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Sub-Saharan Africa</vc-name>
+                <vc-y>42</vc-y>
+                <vc-drilldown>Sub-Saharan Africa Countries</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>South Asia</vc-name>
+                <vc-y>53</vc-y>
+                <vc-drilldown>South Asia Countries</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>East Asia</vc-name>
+                <vc-y>55</vc-y>
+                <vc-drilldown>East Asia Countries</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="Latin America and Caribbean Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Costa Rica</name>
-                <y>64</y>
-                <drilldown>Costa Rica Details</drilldown>
-            </point>
-            <point>
-                <name>Colombia</name>
-                <y>59.8</y>
-                <drilldown>Colombia Details</drilldown>
-            </point>
-            <point>
-                <name>Belize</name>
-                <y>59.3</y>
-                <drilldown>Belize Details</drilldown>
-            </point>
-            <point>
-                <name>El Salvador</name>
-                <y>58.9</y>
-                <drilldown>El Salvador Details</drilldown>
-            </point>
-        </data>
+    <v-series vc-id="Latin America and Caribbean Countries" vc-drilldown="true">
+        <vc-name>Countries</vc-name>
+        <vc-data>
+            <vc-point>
+                <vc-name>Costa Rica</vc-name>
+                <vc-y>64</vc-y>
+                <vc-drilldown>Costa Rica Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Colombia</vc-name>
+                <vc-y>59.8</vc-y>
+                <vc-drilldown>Colombia Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Belize</vc-name>
+                <vc-y>59.3</vc-y>
+                <vc-drilldown>Belize Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>El Salvador</vc-name>
+                <vc-y>58.9</vc-y>
+                <vc-drilldown>El Salvador Details</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="Costa Rica Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Costa Rica Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 79.3 ],
             [ "Well-being (0-10)", 7.3],
             [ "Footprint (gha/capita)", 2.5 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Colombia Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Colombia Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 73.7 ],
             [ "Well-being (0-10)", 6.4],
             [ "Footprint (gha/capita)", 1.8 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Belize Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Belize Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 76.1 ],
             [ "Well-being (0-10)", 6.5],
             [ "Footprint (gha/capita)", 2.1 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="El Salvador" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="El Salvador" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 72.2 ],
             [ "Well-being (0-10)", 6.7],
             [ "Footprint (gha/capita)", 2.0 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Western Nations Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>New Zealand</name>
-                <y>51.6</y>
-                <drilldown>New Zealand Details</drilldown>
-            </point>
-            <point>
-                <name>Norway</name>
-                <y>51.4</y>
-                <drilldown>Norway Details</drilldown>
-            </point>
-            <point>
-                <name>Switzerland</name>
-                <y>50.3</y>
-                <drilldown>Switzerland Details</drilldown>
-            </point>
-            <point>
-                <name>United Kingdom</name>
-                <y>47.9</y>
-                <drilldown>United Kingdom Details</drilldown>
-            </point>
-        </data>
+    <v-series vc-id="Western Nations Countries" vc-drilldown="true">
+        <vc-name>Countries</vc-name>
+        <vc-data>
+            <vc-point>
+                <vc-name>New Zealand</vc-name>
+                <vc-y>51.6</vc-y>
+                <vc-drilldown>New Zealand Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Norway</vc-name>
+                <vc-y>51.4</vc-y>
+                <vc-drilldown>Norway Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Switzerland</vc-name>
+                <vc-y>50.3</vc-y>
+                <vc-drilldown>Switzerland Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>United Kingdom</vc-name>
+                <vc-y>47.9</vc-y>
+                <vc-drilldown>United Kingdom Details</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="New Zealand Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="New Zealand Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 80.7 ],
             [ "Well-being (0-10)", 7.2],
             [ "Footprint (gha/capita)", 4.3 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Norway Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Norway Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 81.1 ],
             [ "Well-being (0-10)", 7.6],
             [ "Footprint (gha/capita)", 4.8 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Switzerland Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Switzerland Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 82.3 ],
             [ "Well-being (0-10)", 7.5],
             [ "Footprint (gha/capita)", 5.0 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="United Kingdom Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="United Kingdom Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 80.2 ],
             [ "Well-being (0-10)", 7.0],
             [ "Footprint (gha/capita)", 4.7 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Middle East and North Africa Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Israel</name>
-                <y>55.2</y>
-                <drilldown>Israel Details</drilldown>
-            </point>
-            <point>
-                <name>Algeria</name>
-                <y>52.2</y>
-                <drilldown>Algeria Details</drilldown>
-            </point>
-            <point>
-                <name>Jordan</name>
-                <y>51.7</y>
-                <drilldown>Jordan Details</drilldown>
-            </point>
-            <point>
-                <name>Palestine</name>
-                <y>51.2</y>
-                <drilldown>Palestine Details</drilldown>
-            </point>
-        </data>
+    <v-series vc-id="Middle East and North Africa Countries" vc-drilldown="true">
+        <vc-name>Countries</vc-name>
+        <vc-data>
+            <vc-point>
+                <vc-name>Israel</vc-name>
+                <vc-y>55.2</vc-y>
+                <vc-drilldown>Israel Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Algeria</vc-name>
+                <vc-y>52.2</vc-y>
+                <vc-drilldown>Algeria Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Jordan</vc-name>
+                <vc-y>51.7</vc-y>
+                <vc-drilldown>Jordan Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Palestine</vc-name>
+                <vc-y>51.2</vc-y>
+                <vc-drilldown>Palestine Details</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="Israel Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Israel Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 81.6 ],
             [ "Well-being (0-10)",7.4],
             [ "Footprint (gha/capita)", 4.0 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Algeria Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Algeria Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 73.1 ],
             [ "Well-being (0-10)", 5.2],
             [ "Footprint (gha/capita)", 1.6 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Jordan Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Jordan Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 73.4 ],
             [ "Well-being (0-10)", 5.7],
             [ "Footprint (gha/capita)", 2.1 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Palestine Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Palestine Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 72.8 ],
             [ "Well-being (0-10)", 4.8],
             [ "Footprint (gha/capita)", 1.4 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Sub-Saharan Africa Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Madagascar</name>
-                <y>51.6</y>
-                <drilldown>Madagascar Details</drilldown>
-            </point>
-            <point>
-                <name>Malawi</name>
-                <y>42.5</y>
-                <drilldown>Malawi Details</drilldown>
-            </point>
-            <point>
-                <name>Ghana</name>
-                <y>40.3</y>
-                <drilldown>Ghana Details</drilldown>
-            </point>
-            <point>
-                <name>Ethiopia</name>
-                <y>39.2</y>
-                <drilldown>Ethiopia Details</drilldown>
-            </point>
-        </data>
+    <v-series vc-id="Sub-Saharan Africa Countries" vc-drilldown="true">
+        <vc-name>Countries</vc-name>
+        <vc-data>
+            <vc-point>
+                <vc-name>Madagascar</vc-name>
+                <vc-y>51.6</vc-y>
+                <vc-drilldown>Madagascar Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Malawi</vc-name>
+                <vc-y>42.5</vc-y>
+                <vc-drilldown>Malawi Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Ghana</vc-name>
+                <vc-y>40.3</vc-y>
+                <vc-drilldown>Ghana Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Ethiopia</vc-name>
+                <vc-y>39.2</vc-y>
+                <vc-drilldown>Ethiopia Details</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="Madagascar Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Madagascar Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 66.7 ],
             [ "Well-being (0-10)",4.6],
             [ "Footprint (gha/capita)", 1.2 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Malawi Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Malawi Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 54.2 ],
             [ "Well-being (0-10)", 5.1],
             [ "Footprint (gha/capita)", 0.8 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Ghana Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Ghana Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 64.2 ],
             [ "Well-being (0-10)", 4.6],
             [ "Footprint (gha/capita)", 1.7 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Ethiopia Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Ethiopia Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 59.3 ],
             [ "Well-being (0-10)", 4.4 ],
             [ "Footprint (gha/capita)", 1.1 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="South Asia Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Bangladesh</name>
-                <y>56.3</y>
-                <drilldown>Bangladesh Details</drilldown>
-            </point>
-            <point>
-                <name>Pakistan</name>
-                <y>54.1</y>
-                <drilldown>Pakistan Details</drilldown>
-            </point>
-            <point>
-                <name>India</name>
-                <y>50.9</y>
-                <drilldown>India Details</drilldown>
-            </point>
-            <point>
-                <name>Sri Lanka</name>
-                <y>51.2</y>
-                <drilldown>Sri Lanka Details</drilldown>
-            </point>
-        </data>
+    <v-series vc-id="South Asia Countries" vc-drilldown="true">
+        <vc-name>Countries</vc-name>
+        <vc-data>
+            <vc-point>
+                <vc-name>Bangladesh</vc-name>
+                <vc-y>56.3</vc-y>
+                <vc-drilldown>Bangladesh Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Pakistan</vc-name>
+                <vc-y>54.1</vc-y>
+                <vc-drilldown>Pakistan Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>India</vc-name>
+                <vc-y>50.9</vc-y>
+                <vc-drilldown>India Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Sri Lanka</vc-name>
+                <vc-y>51.2</vc-y>
+                <vc-drilldown>Sri Lanka Details</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="Bangladesh Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Bangladesh Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 68.9 ],
             [ "Well-being (0-10)", 5.0],
             [ "Footprint (gha/capita)", 0.7]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Pakistan Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Pakistan Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 65.4 ],
             [ "Well-being (0-10)", 5.3],
             [ "Footprint (gha/capita)", 0.8]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="India Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="India Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 65.4],
             [ "Well-being (0-10)", 5.0],
             [ "Footprint (gha/capita)", 0.9 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Sri Lanka Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Sri Lanka Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 74.9 ],
             [ "Well-being (0-10)", 4.2 ],
             [ "Footprint (gha/capita)", 1.2 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="East Asia Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Vietnam</name>
-                <y>60.4</y>
-                <drilldown>Vietnam Details</drilldown>
-            </point>
-            <point>
-                <name>Indonesia</name>
-                <y>55.5</y>
-                <drilldown>Indonesia Details</drilldown>
-            </point>
-            <point>
-                <name>Thailand</name>
-                <y>53.5</y>
-                <drilldown>Thailand Details</drilldown>
-            </point>
-            <point>
-                <name>Philippines</name>
-                <y>52.4</y>
-                <drilldown>Philippines Details</drilldown>
-            </point>
-        </data>
+    <v-series vc-id="East Asia Countries" vc-drilldown="true">
+        <vc-name>Countries</vc-name>
+        <vc-data>
+            <vc-point>
+                <vc-name>Vietnam</vc-name>
+                <vc-y>60.4</vc-y>
+                <vc-drilldown>Vietnam Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Indonesia</vc-name>
+                <vc-y>55.5</vc-y>
+                <vc-drilldown>Indonesia Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Thailand</vc-name>
+                <vc-y>53.5</vc-y>
+                <vc-drilldown>Thailand Details</vc-drilldown>
+            </vc-point>
+            <vc-point>
+                <vc-name>Philippines</vc-name>
+                <vc-y>52.4</vc-y>
+                <vc-drilldown>Philippines Details</vc-drilldown>
+            </vc-point>
+        </vc-data>
     </v-series>
-    <v-series id="Vietnam Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Vietnam Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy",75.2],
             [ "Well-being (0-10)",5.8],
             [ "Footprint (gha/capita)", 1.4]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Indonesia Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Indonesia Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 69.4 ],
             [ "Well-being (0-10)", 5.5],
             [ "Footprint (gha/capita)", 1.1]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Thailand Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Thailand Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 74.1 ],
             [ "Well-being (0-10)", 6.2],
             [ "Footprint (gha/capita)", 2.4 ]
-        </data>
+        </vc-data>
     </v-series>
-    <v-series id="Philippines Details" drilldown="true">
-        <name>Details</name>
-        <data>
+    <v-series vc-id="Philippines Details" vc-drilldown="true">
+        <vc-name>Details</vc-name>
+        <vc-data>
             [ "Life Expectancy", 68.7 ],
             [ "Well-being (0-10)", 4.9 ],
             [ "Footprint (gha/capita)", 1.0 ]
-        </data>
+        </vc-data>
     </v-series>
 </v-chart>

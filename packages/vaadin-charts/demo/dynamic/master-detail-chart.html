@@ -1,39 +1,39 @@
 <div style="height: 300px; width: 100%;">
-    <v-chart id="detailchart" type="line">
-        <chart margin-left="50" margin-right="20">
+    <v-chart id="detailchart" vc-type="line">
+        <vc-chart vc-margin-left="50" vc-margin-right="20">
 
-        </chart>
-        <title>Historical USD to EUR Exchange Rate</title>
-        <subtitle>Select an area by dragging across the lower chart</subtitle>
-        <x-axis type="datetime"></x-axis>
-        <y-axis max-zoom="0.1"><title text=""></title></y-axis>
-        <tooltip shared="true" formatter="function () {
+        </vc-chart>
+        <vc-title>Historical USD to EUR Exchange Rate</vc-title>
+        <vc-subtitle>Select an area by dragging across the lower chart</vc-subtitle>
+        <vc-x-axis vc-type="datetime"></vc-x-axis>
+        <vc-y-axis vc-max-zoom="0.1"><vc-title vc-text=""></vc-title></vc-y-axis>
+        <vc-tooltip vc-shared="true" vc-formatter="function () {
                 var point = this.points[0];
                 return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +'1 USD = ' + Highcharts.numberFormat(point.y, 2) + ' EUR';
-        }"></tooltip>
-        <legend enabled="false"></legend>
-        <plot-options>
-            <series turbo-threshold="0">
-                <marker enabled="false">
-                    <states>
-                        <hover enabled="true" radius="3"></hover>
-                    </states>
-                </marker>
-            </series>
-        </plot-options>
-        <exporting enabled="false"></exporting>
-        <v-series name="USD to EUR">
-            <point-interval>24 * 3600 * 1000</point-interval>
-            <point-start>Date.UTC(2013,5,2)</point-start>
+        }"></vc-tooltip>
+        <vc-legend vc-enabled="false"></vc-legend>
+        <vc-plot-options>
+            <vc-series vc-turbo-threshold="0">
+                <vc-marker vc-enabled="false">
+                    <vc-states>
+                        <vc-hover vc-enabled="true" vc-radius="3"></vc-hover>
+                    </vc-states>
+                </vc-marker>
+            </vc-series>
+        </vc-plot-options>
+        <vc-exporting vc-enabled="false"></vc-exporting>
+        <v-series vc-name="USD to EUR">
+            <vc-point-interval>24 * 3600 * 1000</vc-point-interval>
+            <vc-point-start>Date.UTC(2013,5,2)</vc-point-start>
         </v-series>
     </v-chart>
 </div>
 <div style="position:relative; height: 100px; width: 100%;">
-    <v-chart id="masterchart" type="area" style=" ">
-        <chart border-width="0" background-color="null" margin-left="50" margin-right="20"
-               zoom-type="x">
-            <events
-                    load="function() {
+    <v-chart id="masterchart" vc-type="area" vc-style=" ">
+        <vc-chart vc-border-width="0" vc-background-color="null" vc-margin-left="50" vc-margin-right="20"
+                  vc-zoom-type="x">
+            <vc-events
+                    vc-load="function() {
                         var detailComponent = document.querySelector('#detailchart');
                         if(detailComponent!==null && this.series[0]){
                             var detailData = [],
@@ -54,7 +54,7 @@
                             detailChart.series[0].setData(detailData);
                         }
                     }"
-                    selection="function(event) {
+                    vc-selection="function(event) {
                         var extremesObject = event.xAxis[0],
                             min = extremesObject.min,
                             max = extremesObject.max,
@@ -88,49 +88,49 @@
 
                         detailChart.series[0].setData(detailData);
                         return false;
-        }"></events>
-        </chart>
+        }"></vc-events>
+        </vc-chart>
 
-        <title text=""></title>
-        <x-axis type="datetime" show-last-tick-label="true">
-            <title text=""></title>
-        </x-axis>
-        <y-axis grid-line-width="0" min="0.6" show-first-label="false">
-            <labels enabled="false">
-            </labels>
+        <vc-title vc-text=""></vc-title>
+        <vc-x-axis vc-type="datetime" vc-show-last-tick-label="true">
+            <vc-title vc-text=""></vc-title>
+        </vc-x-axis>
+        <vc-y-axis vc-grid-line-width="0" vc-min="0.6" vc-show-first-label="false">
+            <vc-labels vc-enabled="false">
+            </vc-labels>
 
-            <title text=""></title>
-            <tooltip formatter="function () {
+            <vc-title vc-text=""></vc-title>
+            <vc-tooltip vc-formatter="function () {
             return false;
-        }"></tooltip>
-        </y-axis>
+        }"></vc-tooltip>
+        </vc-y-axis>
 
-        <legend enabled="false"></legend>
-        <exporting enabled="false"></exporting>
-        <plot-options>
-            <series line-width="1" shadow="false" enable-mouse-tracking="false" turbo-threshold="0">
-                <fill-color>
-                    <linear-gradient x1="0" y1="0" x2="0" y2="1"></linear-gradient>
-                    <stops>
-                        <position>0</position>
-                        <color>rgba(69, 114, 167, 1)</color>
-                    </stops>
-                    <stops>
-                        <position>1</position>
-                        <color>rgba(69, 114, 167, 0.5)</color>
-                    </stops>
-                </fill-color>
-                <marker enabled="false"></marker>
-                <states>
-                    <hover line-width="1"></hover>
-                </states>
-            </series>
-        </plot-options>
-        <v-series name="USD to EUR">
-            <point-interval>24 * 3600 * 1000</point-interval>
-            <point-start>Date.UTC(2013,5,2)</point-start>
+        <vc-legend vc-enabled="false"></vc-legend>
+        <vc-exporting vc-enabled="false"></vc-exporting>
+        <vc-plot-options>
+            <vc-series vc-line-width="1" vc-shadow="false" vc-enable-mouse-tracking="false" vc-turbo-threshold="0">
+                <vc-fill-color>
+                    <vc-linear-gradient vc-x1="0" vc-y1="0" vc-x2="0" vc-y2="1"></vc-linear-gradient>
+                    <vc-stops>
+                        <vc-position>0</vc-position>
+                        <vc-color>rgba(69, 114, 167, 1)</vc-color>
+                    </vc-stops>
+                    <vc-stops>
+                        <vc-position>1</vc-position>
+                        <vc-color>rgba(69, 114, 167, 0.5)</vc-color>
+                    </vc-stops>
+                </vc-fill-color>
+                <vc-marker vc-enabled="false"></vc-marker>
+                <vc-states>
+                    <vc-hover vc-line-width="1"></vc-hover>
+                </vc-states>
+            </vc-series>
+        </vc-plot-options>
+        <v-series vc-name="USD to EUR">
+            <vc-point-interval>24 * 3600 * 1000</vc-point-interval>
+            <vc-point-start>Date.UTC(2013,5,2)</vc-point-start>
 
-            <data>[Date.UTC(2013,5,2),0.7695],
+            <vc-data>[Date.UTC(2013,5,2),0.7695],
                 [Date.UTC(2013,5,3),0.7648],
                 [Date.UTC(2013,5,4),0.7645],
                 [Date.UTC(2013,5,5),0.7638],
@@ -781,7 +781,7 @@
                 [Date.UTC(2015,5,28),0.9113],
                 [Date.UTC(2015,5,29),0.8900],
                 [Date.UTC(2015,5,30),0.8950]
-            </data>
+            </vc-data>
         </v-series>
     </v-chart>
 </div>
