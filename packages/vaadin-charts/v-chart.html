@@ -21,7 +21,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script src="http://code.highcharts.com/modules/funnel.js"></script>
 <script src="http://code.highcharts.com/modules/solid-gauge.js"></script>
-
+<script src="http://code.highcharts.com/modules/data.js"></script>
 <link rel="import" href="../polymer/polymer.html">
 
 <link rel="import" href="v-series.html">
@@ -245,6 +245,9 @@ Example:
                             }
                             result = result.length > 1 ? result : result[0];
 
+                        } else if ('table' === name) {
+                            dest['table'] = node;
+
                         } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                             result = {};
                             this._loadFromNode(result, node);
@@ -272,24 +275,26 @@ Example:
                 this._chartConf = {};
             },
 
-            ready: function () {
+            attached: function () {
                 this.async(function () {
-                    this._cleanNode(Polymer.dom(this));
-                    this._loadConfiguration(this._chartConf, Polymer.dom(this));
-
-                    if (!this._chartConf.chart) {
-                        this._chartConf.chart = {};
-                    }
-
-                    this._chartConf.chart.type = this.type;
-                    this._chartConf.chart.renderTo = this.$.chartContainer;
-
-                    if (this._loadTheme) {
-                        this._loadTheme();
-                    }
-
                     this.chart = new Highcharts.Chart(this._chartConf);
                 }, 1);
+            },
+
+            ready: function () {
+                this._cleanNode(Polymer.dom(this));
+                this._loadConfiguration(this._chartConf, Polymer.dom(this));
+
+                if (!this._chartConf.chart) {
+                    this._chartConf.chart = {};
+                }
+
+                this._chartConf.chart.type = this.type;
+                this._chartConf.chart.renderTo = this.$.chartContainer;
+
+                if (this._loadTheme) {
+                    this._loadTheme();
+                }
             }
         });
     </script>
