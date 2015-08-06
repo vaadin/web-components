@@ -1,6 +1,6 @@
 {
   "name": "vaadin-charts",
-  "version": "3.0.0-alpha1",
+  "version": "3.0.0-alpha3",
   "repository": "vaadin/charts-component",
   "dependencies": {
     "bower": "^1.4.1",
