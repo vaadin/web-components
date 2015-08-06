@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - '0.12'
+before_install:
+- "bower install"
 env:
   global:
     - secure: Hr2scSdbSFmunFcZa3MLgZMINoNGm6gecC9hGXUOXwBx2IQjTP6bRmYcEyhPUXIjo1xns+YnHUo8YTOdTLnOc3tIjJ+mMsewQRheK/U1BrQVQFgZTwchngvM/aFSGt8UJ3+PH+aWqQ6LGH2za1dAgAo3XgFE/FN079lo0SxY/U+1MhN1BBq/n50ItPmOIqVtwGJO4D++qRnYOGZte4F2oglsntOMuYAV99/zQskiy6ZufAhOsrGNgNzPNj6+UdD5xYBi56gFjhlnSRCvKOwUbQcDZa9Kag2PiX7tMj5GkCveiDWX7IZJmJXvddtd3DKpeHdSasConVXDP2WSZiZV0l701vsqJw/NYL7sAKmoUw5fO6b++tHkocMwnES3bStIm4MtAFU6I60mcNT25fsE1845RDaWYlBHpfd9eat7crOFZCuAckPajGpKSjA/Pj9J+wTDdO3irHKkOqN8gKaUR/5xwJ9hJI6aIdeAz8XX+UrJhMia04trdqKyT/HgzNVL+FD3JiG/Z91OI//XYvpaYi0R4ol1WJUhypO21nDbAuhQt062wWy8DSJkfCSSO1WO0z3/wyxVJ+9IprgSreYxWDL68k89bGsp572hyFBCBma89G6k6yQF8q2gsaX0AyPye6Bgm+clfL65ZgJxgU7eaOuUmnIvKci0C5Tt1E7MvLI=
