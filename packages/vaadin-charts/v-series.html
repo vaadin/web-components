@@ -11,72 +11,22 @@ See the file LICENSE.md distributed with this software for more information abou
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="configuration-reader.html">
 
 <script>
     ChartSeries = Polymer({
         is: "v-series",
-        properties: {
+        behaviors: [ConfigurationReaderBehavior],
 
-            /**
-             * Series id
-             */
-            id: {
-                type: String
-            },
+        properties: {
 
             /**
              * Is drilldown series
              */
-            drilldown: {
+            vcDrilldown: {
                 type: Boolean,
                 value: false
             },
-
-            /**
-             * Series name
-             */
-            name: {
-                type: String
-            },
-
-            /**
-             * Series type.
-             */
-            type: {
-                type: String
-            },
-
-            /**
-             * Series yAxis ID.
-             */
-            yAxis: {
-                type: String
-            },
-
-            /**
-             * Series size.
-             */
-            size: {
-                type: String
-            },
-
-            /**
-             * Series innerSize.
-             */
-            innerSize: {
-                type: String
-            },
-
-            /**
-             * Series dashStyle.
-             */
-            dashStyle: {
-                type: String
-            },
-
-            color: String,
-
-            negativeColor: String,
 
             /* ----------- internal ----------- */
 
@@ -92,20 +42,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         },
 
-        _ignoredNodes: ["#text", "#comment"],
+        _ignoredNodes: ["#text", "#comment", "vc-data"],
 
         /**
-         * Transform the given string to camel-case
-         *
-         * @param {string} str
+         * Overrides behavior, for v-series all values should be evaluated as javascript
          **/
-        _toCamelCase: function (str) {
-            var out = "";
-            str.split("-").forEach(function (word, idx) {
-                var add = word.toLowerCase();
-                out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
-            });
-            return out;
+        _evalJavascript: function (val) {
+            //always eval
+            return true;
         },
 
         _parentChart: function () {
@@ -119,27 +63,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Load the configuration from the element attributes and the light-DOM elements.
          **/
-        _loadConfiguration: function () {
-            this._loadPropertiesFromAttributes();
+        _loadData: function () {
             var element = Polymer.dom(this);
-            this._cleanNode(element);
+
             for (var n = 0; n < element.childNodes.length; n++) {
                 var node = element.childNodes[n];
                 var name = node.nodeName.toLowerCase();
-                if (this._ignoredNodes.indexOf(name) === -1) {
-                    var camelName = this._toCamelCase(name);
-                    var value = node.textContent;
-                    if (camelName === 'data') {
-                        if (this._hasPointNodes(node)) {
-                            value = [];
-                            for (var n = 0; n < node.childNodes.length; n++) {
-                                value.push(this._parsePoint(node.childNodes[n]));
-                            }
-                        } else {
-                            value = '[' + value + ']';
+                var camelName = this._toCamelCase(name);
+                if (camelName === 'data') {
+                    var value;
+                    if (this._hasPointNodes(node)) {
+                        value = [];
+                        for (var o = 0; o < node.childNodes.length; o++) {
+                            value.push(this._parsePoint(node.childNodes[o]));
                         }
+                    } else {
+                        value = '[' + node.textContent + ']';
                     }
                     this._setProperty(camelName, value);
+
                 }
             }
         },
@@ -149,32 +91,33 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _parsePoint: function (pointNode) {
             var result = {};
+
             for (var n = 0; n < pointNode.childNodes.length; n++) {
                 var node = pointNode.childNodes[n];
-                var camelName = this._toCamelCase(node.nodeName.toLowerCase());
-                if ('date' === camelName) {
-                    if (result['x'] === undefined) {
-                        var parsedDate = this._parseDate(node.textContent);
-                        if (parsedDate !== undefined) {
-                            result['x'] = parsedDate;
+                if (this._hasOnlyTextContent(node)) {
+                    var camelName = this._toCamelCase(node.nodeName.toLowerCase());
+                    if ('date' === camelName) {
+                        if (result['x'] === undefined) {
+                            var parsedDate = this._parseDate(node.textContent);
+                            if (parsedDate !== undefined) {
+                                result['x'] = parsedDate;
+                            } else {
+                                console.log('Unable to parse date: ' + node.textContent);
+                            }
                         } else {
-                            console.log('Unable to parse date: ' + node.textContent);
+                            console.log('x value is already defined for this point, \'' +
+                                    node.textContent + '\' couldn\'t be set');
                         }
+                    } else if (result[camelName] === undefined) {
+                        result[camelName] = this._parseAttribute(node.textContent);
                     } else {
-                        console.log('x value is already defined for this point, \'' +
+                        console.log(camelName + ' value is already defined for this point, \'' +
                                 node.textContent + '\' couldn\'t be set');
                     }
-                } else if (result[camelName] === undefined) {
-                    try {
-                        result[camelName] = JSON.parse(node.textContent);
-                    } catch (e) {
-                        result[camelName] = node.textContent;
-                    }
-                } else {
-                    console.log(camelName + ' value is already defined for this point, \'' +
-                            node.textContent + '\' couldn\'t be set');
                 }
             }
+            this._loadConfiguration(result, pointNode);
+
             return result;
         },
 
@@ -201,34 +144,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Checks if nodes has child nodes that correspond to points.
          **/
         _hasPointNodes: function (node) {
-            return node.childNodes.length > 0 && 'point' === node.childNodes[0].nodeName.toLowerCase();
+            return node.childNodes.length > 0 && 'vc-point' === node.childNodes[0].nodeName.toLowerCase();
         },
 
-        /**
-         * Removes all empty text and comment nodes.
-         **/
-        _cleanNode: function (node) {
-            for (var n = 0; n < node.childNodes.length; n++) {
-                var child = node.childNodes[n];
-                if (child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
-                    node.removeChild(child);
-                    n--;
-                } else if (child.nodeType === 1) {
-                    this._cleanNode(child);
-                }
-            }
-        },
-
-        /**
-         * Load the configuration from the element attributes.
-         **/
-        _loadPropertiesFromAttributes: function () {
-            for (var property in this.properties) {
-                if (this.properties.hasOwnProperty(property) && property.indexOf('_') !== 0) {
-                    this._setProperty(property, this[property]);
-                }
-            }
-        },
 
         /**
          * Set single property in series configuration.
@@ -236,44 +154,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * @param {object} value to be set
          **/
         _setProperty: function (name, value) {
-            var parsedValue = this._parseProperty(value);
-
-            //value might be undefined because all properties are iterated in _loadPropertiesFromAttributes
-            //in such case it shouldn't be set to keep _seriesConf minimal
+            var parsedValue = this._parseAttribute(value);
+            //if value is undefined it shouldn't be set to keep _seriesConf minimal
             if (undefined !== parsedValue) {
                 if (undefined === this._seriesConf[name]) {
                     this._seriesConf[name] = parsedValue;
                 } else if (name === 'data') {
-                    Array.prototype.push.apply( this._seriesConf[name], parsedValue );
+                    Array.prototype.push.apply(this._seriesConf[name], parsedValue);
                 }
             }
         },
 
-        /**
-         * Parse property value into most appropriate type.
-         * @param {object} value to be set
-         **/
-        _parseProperty: function (value) {
-            var result;
-            if (undefined !== value) {
-                try {
-                    //try to parse as simple JSON
-                    result = JSON.parse(value);
-                } catch (e) {
-                    try {
-                        //try to parse as JSON with js code for instance Date.UTC(...)
-                        result = eval(value);
-                    } catch (e) {
-                        result = value;
-                    }
-                }
-            }
-            return result;
-        },
 
         ready: function () {
-            this._loadConfiguration();
-            if (this.drilldown) {
+            var element = Polymer.dom(this);
+            this._cleanNode(element);
+            this._loadFromNode(this._seriesConf, element.node);
+            this._loadConfiguration(this._seriesConf, element);
+            this._loadData();
+            if (this.vcDrilldown) {
                 this._parentChart()._addDrilldownSeries(this._seriesConf);
             } else {
                 this._parentChart()._addSeries(this._seriesConf);

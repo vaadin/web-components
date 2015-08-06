@@ -1,47 +1,47 @@
-<v-chart id="basic-3d-scatter" type="scatter">
-    <title>Scatterbox</title>
+<v-chart id="basic-3d-scatter" vc-type="scatter">
+    <vc-title>Scatterbox</vc-title>
 
-    <chart margin="100">
-        <options3d enabled="true"
-                   alpha="10"
-                   beta="30"
-                   depth="250"
-                   view-distance="5">
-            <frame3d>
-                <bottom size="1" color="rgba(0,0,0,0.02)"></bottom>
-                <back size="1" color="rgba(0,0,0,0.04)"></back>
-                <side size="1" color="rgba(0,0,0,0.06)"></side>
-            </frame3d>
-        </options3d>
-    </chart>
+    <vc-chart vc-margin="100">
+        <vc-options3d vc-enabled="true"
+                   vc-alpha="10"
+                   vc-beta="30"
+                   vc-depth="250"
+                   vc-view-distance="5">
+            <vc-frame>
+                <vc-bottom vc-size="1" vc-color="rgba(0,0,0,0.02)"></vc-bottom>
+                <vc-back vc-size="1" vc-color="rgba(0,0,0,0.04)"></vc-back>
+                <vc-side vc-size="1" vc-color="rgba(0,0,0,0.06)"></vc-side>
+            </vc-frame>
+        </vc-options3d>
+    </vc-chart>
 
-    <plot-options>
-        <scatter width="10"
-                 height="10"
-                 depth="10"
-                 color-by-point="true">
-        </scatter>
-    </plot-options>
+    <vc-plot-options>
+        <vc-scatter vc-width="10"
+                 vc-height="10"
+                 vc-depth="10"
+                 vc-color-by-point="true">
+        </vc-scatter>
+    </vc-plot-options>
 
-    <y-axis min="0"
-            max="10"
-            title="null">
-    </y-axis>
+    <vc-y-axis vc-min="0"
+            vc-max="10"
+            vc-title="null">
+    </vc-y-axis>
 
-    <x-axis min="0"
-            max="10"
-            grid-line-width="1">
-    </x-axis>
+    <vc-x-axis vc-min="0"
+            vc-max="10"
+            vc-grid-line-width="1">
+    </vc-x-axis>
 
-    <z-axis min="0"
-            max="10"
-            show-first-label="false">
-    </z-axis>
+    <vc-z-axis vc-min="0"
+            vc-max="10"
+            vc-show-first-label="false">
+    </vc-z-axis>
 
-    <legend enabled="false"></legend>
+    <vc-legend vc-enabled="false"></vc-legend>
 
-    <v-series name="Reading">
-        <data>[1, 6, 5], [8, 7, 9], [1, 3, 4], [4, 6, 8], [5, 7, 7], [6, 9, 6], [7, 0, 5], [2, 3, 3], [3, 9, 8], [3, 6,
+    <v-series vc-name="Reading">
+        <vc-data>[1, 6, 5], [8, 7, 9], [1, 3, 4], [4, 6, 8], [5, 7, 7], [6, 9, 6], [7, 0, 5], [2, 3, 3], [3, 9, 8], [3, 6,
             5], [4, 9, 4], [2, 3, 3], [6, 9, 9], [0, 7, 0], [7, 7, 9], [7, 2, 9], [0, 6, 2], [4, 6, 7], [3, 7, 7], [0,
             1, 7], [2, 8, 6], [2, 3, 7], [6, 4, 8], [3, 5, 9], [7, 9, 5], [3, 1, 7], [4, 4, 2], [3, 6, 2], [3, 1, 6],
             [6, 8, 5], [6, 6, 7], [4, 1, 1], [7, 2, 7], [7, 7, 0], [8, 8, 9], [9, 4, 1], [8, 3, 4], [9, 8, 9], [3, 5,
@@ -52,7 +52,7 @@
             9, 9], [5, 4, 2], [6, 1, 3], [6, 9, 5], [4, 8, 2], [9, 7, 4], [5, 4, 2], [9, 6, 1], [2, 7, 3], [4, 5, 4],
             [6, 8, 1], [3, 4, 0], [2, 2, 6], [5, 1, 2], [9, 9, 7], [6, 9, 9], [8, 4, 3], [4, 1, 7], [6, 2, 5], [0, 4,
             9], [3, 5, 9], [6, 9, 1], [1, 9, 2]
-        </data>
+        </vc-data>
     </v-series>
 
 </v-chart>

@@ -8,20 +8,20 @@
     <link rel="import" href="../v-chart.html">
 </head>
 <body>
-<v-chart id="plotOptionsWithFillColorStops" type="line">
-    <plot-options line-width="1">
+<v-chart id="plotOptionsWithFillColorStops" vc-type="line">
+    <vc-plot-options vc-line-width="1">
         <!-- TODO should be area-->
-        <series>
-            <fill-color>
-                <stops>0, #3090F0</stops>
-                <stops>0.5, #FF7D42</stops>
-                <stops>
-                    <position>1</position>
-                    <color>rgba(200, 200, 200, 0.2)</color>
-                </stops>
-            </fill-color>
-        </series>
-    </plot-options>
+        <vc-series>
+            <vc-fill-color>
+                <vc-stops>0, #3090F0</vc-stops>
+                <vc-stops>0.5, #FF7D42</vc-stops>
+                <vc-stops>
+                    <vc-position>1</vc-position>
+                    <vc-color>rgba(200, 200, 200, 0.2)</vc-color>
+                </vc-stops>
+            </vc-fill-color>
+        </vc-series>
+    </vc-plot-options>
 </v-chart>
 
 <script>

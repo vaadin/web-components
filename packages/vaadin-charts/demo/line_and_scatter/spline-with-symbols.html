@@ -1,53 +1,53 @@
-<v-chart id="spline-with-symbols" type="spline">
-    <title>Monthly Average Temperature</title>
-    <subtitle>Source: WorldClimate.com</subtitle>
+<v-chart id="spline-with-symbols" vc-type="spline">
+    <vc-title>Monthly Average Temperature</vc-title>
+    <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
-    <x-axis>
-        <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-    </x-axis>
+    <vc-x-axis>
+        <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
+    </vc-x-axis>
 
-    <y-axis>
-        <title align="high">Temperature</title>
-        <labels formatter="function () {
+    <vc-y-axis>
+        <vc-title vc-align="high">Temperature</vc-title>
+        <vc-labels vc-formatter="function () {
                     return this.value + '°';
                 }">
-        </labels>
-    </y-axis>
+        </vc-labels>
+    </vc-y-axis>
 
-    <tooltip crosshairs="true" shared="true"></tooltip>
+    <vc-tooltip vc-crosshairs="true" vc-shared="true"></vc-tooltip>
 
-    <plot-options>
-        <spline>
-            <marker radius="4"
-                    line-color="#666666"
-                    line-width="1"></marker>
-        </spline>
-    </plot-options>
+    <vc-plot-options>
+        <vc-spline>
+            <vc-marker vc-radius="4"
+                    vc-line-color="#666666"
+                    vc-line-width="1"></vc-marker>
+        </vc-spline>
+    </vc-plot-options>
 
-    <v-series name="Tokyo">
-        <marker symbol="square"></marker>
-        <data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2</data>
-        <data>
+    <v-series vc-name="Tokyo">
+        <vc-marker vc-symbol="square"></vc-marker>
+        <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2</vc-data>
+        <vc-data>
             {
             y: 26.5,
             marker: {
             symbol: 'url(http://www.highcharts.com/demo/gfx/sun.png)'
             }
             }
-        </data>
-        <data>23.3, 18.3, 13.9, 9.6</data>
+        </vc-data>
+        <vc-data>23.3, 18.3, 13.9, 9.6</vc-data>
     </v-series>
 
-    <v-series name="London">
-        <marker symbol="diamond"></marker>
-        <data>{
+    <v-series vc-name="London">
+        <vc-marker vc-symbol="diamond"></vc-marker>
+        <vc-data>{
             y: 3.9,
             marker: {
             symbol: 'url(http://www.highcharts.com/demo/gfx/snow.png)'
             }
             }
-        </data>
-        <data>4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8</data>
+        </vc-data>
+        <vc-data>4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8</vc-data>
     </v-series>
 
 </v-chart>

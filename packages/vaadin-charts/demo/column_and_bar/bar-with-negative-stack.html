@@ -1,38 +1,38 @@
-<v-chart id="bar-with-negative-stack" type="bar">
-    <title>Population pyramid for Germany, midyear 2010</title>
-    <subtitle>Source: www.census.gov</subtitle>
+<v-chart id="bar-with-negative-stack" vc-type="bar">
+    <vc-title>Population pyramid for Germany, midyear 2010</vc-title>
+    <vc-subtitle>Source: www.census.gov</vc-subtitle>
 
-    <x-axis reversed="false">
-        <categories>0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-64, 65-69, 70-74,
+    <vc-x-axis vc-reversed="false">
+        <vc-categories>0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-64, 65-69, 70-74,
             75-79, 80-84, 85-89, 90-94, 95-99, 100 +
-        </categories>
-        <labels step="1"/>
-    </x-axis>
-    <x-axis opposite="true" reversed="false" linked-to="0">
-        <categories>0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-64, 65-69, 70-74,
+        </vc-categories>
+        <vc-labels vc-step="1"/>
+    </vc-x-axis>
+    <vc-x-axis vc-opposite="true" vc-reversed="false" vc-linked-to="0">
+        <vc-categories>0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-64, 65-69, 70-74,
             75-79, 80-84, 85-89, 90-94, 95-99, 100 +
-        </categories>
-        <labels step="1"/>
-    </x-axis>
-    <y-axis>
-        <title text=""></title>
-        <labels formatter="function () { return Math.abs(this.value) + '%'; }"></labels>
-    </y-axis>
-    <plot-options>
-        <series stacking="normal"/>
-    </plot-options>
-    <tooltip
-            formatter="function () { return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' + 'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0) + '%'; }"></tooltip>
-    <v-series name="Male">
-        <data>-2.2, -2.2, -2.3, -2.5, -2.7, -3.1, -3.2,
+        </vc-categories>
+        <vc-labels vc-step="1"/>
+    </vc-x-axis>
+    <vc-y-axis>
+        <vc-title vc-text=""></vc-title>
+        <vc-labels vc-formatter="function () { return Math.abs(this.value) + '%'; }"></vc-labels>
+    </vc-y-axis>
+    <vc-plot-options>
+        <vc-series vc-stacking="normal"/>
+    </vc-plot-options>
+    <vc-tooltip
+            vc-formatter="function () { return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' + 'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0) + '%'; }"></vc-tooltip>
+    <v-series vc-name="Male">
+        <vc-data>-2.2, -2.2, -2.3, -2.5, -2.7, -3.1, -3.2,
             -3.0, -3.2, -4.3, -4.4, -3.6, -3.1, -2.4,
             -2.5, -2.3, -1.2, -0.6, -0.2, -0.0, -0.0
-        </data>
+        </vc-data>
     </v-series>
-    <v-series name="Female">
-        <data>2.1, 2.0, 2.2, 2.4, 2.6, 3.0, 3.1, 2.9,
+    <v-series vc-name="Female">
+        <vc-data>2.1, 2.0, 2.2, 2.4, 2.6, 3.0, 3.1, 2.9,
             3.1, 4.1, 4.3, 3.6, 3.4, 2.6, 2.9, 2.9,
             1.8, 1.2, 0.6, 0.1, 0.0
-        </data>
+        </vc-data>
     </v-series>
 </v-chart>

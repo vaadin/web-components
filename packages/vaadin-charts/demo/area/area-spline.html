@@ -1,29 +1,29 @@
-<v-chart id="area-spline" type="areaspline">
-    <title>Average fruit consumption during one week</title>
+<v-chart id="area-spline" vc-type="areaspline">
+    <vc-title>Average fruit consumption during one week</vc-title>
 
-    <legend layout="vertical" align="left" vertical-align="top" x="150" y="100" floating="true">
-    </legend>
+    <vc-legend vc-layout="vertical" vc-align="left" vc-vertical-align="top" vc-x="150" vc-y="100" vc-floating="true">
+    </vc-legend>
 
-    <x-axis>
-        <categories>Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</categories>
-        <plot-bands from="4.5" to="6.5" color="rgba(68, 170, 213, .2)">
-        </plot-bands>
-    </x-axis>
-    <y-axis>
-        <title>Fruit units</title>
-    </y-axis>
+    <vc-x-axis>
+        <vc-categories>Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</vc-categories>
+        <vc-plot-bands vc-from="4.5" vc-to="6.5" vc-color="rgba(68, 170, 213, .2)">
+        </vc-plot-bands>
+    </vc-x-axis>
+    <vc-y-axis>
+        <vc-title>Fruit units</vc-title>
+    </vc-y-axis>
 
-    <tooltip shared="true" value-suffix="units">
-    </tooltip>
-    <plot-options>
-        <areaspline fillOpacity="0.5">
-        </areaspline>
-    </plot-options>
+    <vc-tooltip vc-shared="true" vc-value-suffix="units">
+    </vc-tooltip>
+    <vc-plot-options>
+        <vc-areaspline vc-fillOpacity="0.5">
+        </vc-areaspline>
+    </vc-plot-options>
 
-    <v-series name="John">
-        <data>3, 4, 3, 5, 4, 10, 12</data>
+    <v-series vc-name="John">
+        <vc-data>3, 4, 3, 5, 4, 10, 12</vc-data>
     </v-series>
-    <v-series name="Jane">
-        <data>1, 3, 4, 3, 3, 5, 4</data>
+    <v-series vc-name="Jane">
+        <vc-data>1, 3, 4, 3, 3, 5, 4</vc-data>
     </v-series>
 </v-chart>

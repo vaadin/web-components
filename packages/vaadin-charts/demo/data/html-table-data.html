@@ -1,19 +1,19 @@
-<v-chart id="html-table-data" type="column">
-    <data table="datatable">
+<v-chart id="html-table-data" vc-type="column">
+    <vc-data vc-table="datatable">
 
-    </data>
+    </vc-data>
 
-    <title> Data extracted from a HTML table in the page</title>
+    <vc-title> Data extracted from a HTML table in the page</vc-title>
 
-    <y-axis allow-decimals="false">
-        <title>Units</title>
-    </y-axis>
+    <vc-y-axis vc-allow-decimals="false">
+        <vc-title>Units</vc-title>
+    </vc-y-axis>
 
-    <tooltip formatter="function () {
+    <vc-tooltip vc-formatter="function () {
                 return '<b>' + this.series.name + '</b><br/>' +
                     this.point.y + ' ' + this.point.name.toLowerCase();
             }">
-    </tooltip>
+    </vc-tooltip>
 
 </v-chart>
 

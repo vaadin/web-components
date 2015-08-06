@@ -8,55 +8,55 @@
     <link rel="import" href="../v-chart.html">
 </head>
 <body>
-<v-chart id="chartWithValidDates" type="scatter">
-    <x-axis type="datetime">
-    </x-axis>
+<v-chart id="chartWithValidDates" vc-type="scatter">
+    <vc-x-axis vc-type="datetime">
+    </vc-x-axis>
     <v-series id="seriesId">
-        <data>
-            <point>
-                <date>2014-12-03</date>
-                <y>2</y>
-                <name>Foobar</name>
-                <color>#00FF00</color>
-            </point>
-            <point>
-                <x>1418515200000</x>
-                <date>2014-12-10</date>
-                <y>5</y>
-                <name>Barfoo</name>
-            </point>
-            <point>
-                <date>2014-12-24</date>
-                <y>4</y>
-                <name>Barfoo2</name>
-            </point>
-            <point>
-                <date>2014-12-31</date>
-                <x>1418428800000</x>
-                <y>7</y>
-            </point>
-        </data>
+        <vc-data>
+            <vc-point>
+                <vc-date>2014-12-03</vc-date>
+                <vc-y>2</vc-y>
+                <vc-name>Foobar</vc-name>
+                <vc-color>#00FF00</vc-color>
+            </vc-point>
+            <vc-point>
+                <vc-x>1418515200000</vc-x>
+                <vc-date>2014-12-10</vc-date>
+                <vc-y>5</vc-y>
+                <vc-name>Barfoo</vc-name>
+            </vc-point>
+            <vc-point>
+                <vc-date>2014-12-24</vc-date>
+                <vc-y>4</vc-y>
+                <vc-name>Barfoo2</vc-name>
+            </vc-point>
+            <vc-point>
+                <vc-date>2014-12-31</vc-date>
+                <vc-x>1418428800000</vc-x>
+                <vc-y>7</vc-y>
+            </vc-point>
+        </vc-data>
     </v-series>
 </v-chart>
 
-<v-chart id="chartWithInvalidDates" type="scatter">
-    <x-axis type="datetime">
-    </x-axis>
+<v-chart id="chartWithInvalidDates" vc-type="scatter">
+    <vc-x-axis vc-type="datetime">
+    </vc-x-axis>
     <v-series id="seriesId">
-        <data>
-            <point>
-                <date>2014-123-17</date>
-                <y>6</y>
-                <name>Foobar</name>
-                <color>#00FFFF</color>
-            </point>
-            <point>
-                <date>2014-12-1</date>
-                <y>6</y>
-                <name>Foobar</name>
-                <color>#00FFFF</color>
-            </point>
-        </data>
+        <vc-data>
+            <vc-point>
+                <vc-date>2014-123-17</vc-date>
+                <vc-y>6</vc-y>
+                <vc-name>Foobar</vc-name>
+                <vc-color>#00FFFF</vc-color>
+            </vc-point>
+            <vc-point>
+                <vc-date>2014-12-1</vc-date>
+                <vc-y>6</vc-y>
+                <vc-name>Foobar</vc-name>
+                <vc-color>#00FFFF</vc-color>
+            </vc-point>
+        </vc-data>
     </v-series>
 </v-chart>
 <script>

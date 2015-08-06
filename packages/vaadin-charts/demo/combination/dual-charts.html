@@ -1,40 +1,40 @@
 <div style=" width: 50%; float: left;">
-    <v-chart id="stacked-bar" type="bar">
-        <title>Stacked bar chart</title>
-        <x-axis>
-            <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
-        </x-axis>
-        <y-axis min="0">
-            <title>Total fruit consumption</title>
-        </y-axis>
-        <legend reversed="true"></legend>
-        <tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></tooltip>
-        <plot-options>
-            <series stacking="normal">
-            </series>
-        </plot-options>
-        <v-series name="John">
-            <data>5, 3, 4, 7, 2</data>
+    <v-chart id="stacked-bar" vc-type="bar">
+        <vc-title>Stacked bar chart</vc-title>
+        <vc-x-axis>
+            <vc-categories>Apples, Oranges, Pears, Grapes, Bananas</vc-categories>
+        </vc-x-axis>
+        <vc-y-axis vc-min="0">
+            <vc-title>Total fruit consumption</vc-title>
+        </vc-y-axis>
+        <vc-legend vc-reversed="true"></vc-legend>
+        <vc-tooltip vc-point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></vc-tooltip>
+        <vc-plot-options>
+            <vc-series vc-stacking="normal">
+            </vc-series>
+        </vc-plot-options>
+        <v-series vc-name="John">
+            <vc-data>5, 3, 4, 7, 2</vc-data>
         </v-series>
-        <v-series name="Jane">
-            <data>2, 2, 3, 2, 1</data>
+        <v-series vc-name="Jane">
+            <vc-data>2, 2, 3, 2, 1</vc-data>
         </v-series>
-        <v-series name="Joe">
-            <data>3, 4, 4, 2, 5</data>
+        <v-series vc-name="Joe">
+            <vc-data>3, 4, 4, 2, 5</vc-data>
         </v-series>
     </v-chart>
 </div>
 <div style=" width: 50%; float: left;">
-    <v-chart id="pieWithSeries" type="pie">
-        <v-series name="Browser share">
-            <data>
+    <v-chart id="pieWithSeries" vc-type="pie">
+        <v-series vc-name="Browser share">
+            <vc-data>
                 ["Firefox", 45.0],
                 ["IE", 26.8],
                 ["Chrome", 12.8],
                 ["Safari", 8.5],
                 ["Opera", 6.2],
                 ["Others", 0.7]
-            </data>
+            </vc-data>
         </v-series>
     </v-chart>
 </div>

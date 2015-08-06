@@ -1,28 +1,28 @@
-<v-chart id="stacked-column" type="column">
-    <title>Stacked column chart</title>
-    <x-axis>
-        <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
-    </x-axis>
-    <y-axis allow-decimals="false" min="0">
-        <title>Number of fruits</title>
-        <stack-labels enabled="true"></stack-labels>
-    </y-axis>
-    <tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></tooltip>
-    <plot-options>
-        <column stacking="normal">
-            <data-labels enabled="true" color="white"></data-labels>
-        </column>
-    </plot-options>
-    <legend align="right" x="-100" vertical-align="top" y="20" floating="true">
+<v-chart id="stacked-column" vc-type="column">
+    <vc-title>Stacked column chart</vc-title>
+    <vc-x-axis>
+        <vc-categories>Apples, Oranges, Pears, Grapes, Bananas</vc-categories>
+    </vc-x-axis>
+    <vc-y-axis vc-allow-decimals="false" vc-min="0">
+        <vc-title>Number of fruits</vc-title>
+        <vc-stack-labels vc-enabled="true"></vc-stack-labels>
+    </vc-y-axis>
+    <vc-tooltip vc-point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></vc-tooltip>
+    <vc-plot-options>
+        <vc-column vc-stacking="normal">
+            <vc-data-labels vc-enabled="true" vc-color="white"></vc-data-labels>
+        </vc-column>
+    </vc-plot-options>
+    <vc-legend vc-align="right" vc-x="-100" vc-vertical-align="top" vc-y="20" vc-floating="true">
 
-    </legend>
-    <v-series name="John">
-        <data>5, 3, 4, 7, 2</data>
+    </vc-legend>
+    <v-series vc-name="John">
+        <vc-data>5, 3, 4, 7, 2</vc-data>
     </v-series>
-    <v-series name="Jane">
-        <data>2, 2, 3, 2, 1</data>
+    <v-series vc-name="Jane">
+        <vc-data>2, 2, 3, 2, 1</vc-data>
     </v-series>
-    <v-series name="Joe">
-        <data>3, 4, 4, 2, 5</data>
+    <v-series vc-name="Joe">
+        <vc-data>3, 4, 4, 2, 5</vc-data>
     </v-series>
 </v-chart>

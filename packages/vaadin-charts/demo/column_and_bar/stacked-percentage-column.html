@@ -1,27 +1,27 @@
-<v-chart id="stacked-percentage-column" type="column">
-    <title>Stacked column chart</title>
-    <x-axis>
-        <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
-    </x-axis>
-    <y-axis allow-decimals="false" min="0">
-        <title>Number of fruits</title>
-        <stack-labels enabled="true"></stack-labels>
-    </y-axis>
-    <tooltip
-            point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>'
-            shared="true"></tooltip>
-    <plot-options>
-        <column stacking="percent">
-            <data-labels enabled="true" color="white"></data-labels>
-        </column>
-    </plot-options>
-    <v-series name="John">
-        <data>5, 3, 4, 7, 2</data>
+<v-chart id="stacked-percentage-column" vc-type="column">
+    <vc-title>Stacked column chart</vc-title>
+    <vc-x-axis>
+        <vc-categories>Apples, Oranges, Pears, Grapes, Bananas</vc-categories>
+    </vc-x-axis>
+    <vc-y-axis vc-allow-decimals="false" vc-min="0">
+        <vc-title>Number of fruits</vc-title>
+        <vc-stack-labels vc-enabled="true"></vc-stack-labels>
+    </vc-y-axis>
+    <vc-tooltip
+            vc-point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>'
+            vc-shared="true"></vc-tooltip>
+    <vc-plot-options>
+        <vc-column vc-stacking="percent">
+            <vc-data-labels vc-enabled="true" vc-color="white"></vc-data-labels>
+        </vc-column>
+    </vc-plot-options>
+    <v-series vc-name="John">
+        <vc-data>5, 3, 4, 7, 2</vc-data>
     </v-series>
-    <v-series name="Jane">
-        <data>2, 2, 3, 2, 1</data>
+    <v-series vc-name="Jane">
+        <vc-data>2, 2, 3, 2, 1</vc-data>
     </v-series>
-    <v-series name="Joe">
-        <data>3, 4, 4, 2, 5</data>
+    <v-series vc-name="Joe">
+        <vc-data>3, 4, 4, 2, 5</vc-data>
     </v-series>
 </v-chart>

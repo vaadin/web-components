@@ -1,13 +1,13 @@
-<v-chart id="basic-line-events" type="line">
-    <title>Average Monthly Temperature and Rainfall in Tokyo</title>
-    <subtitle>Source: WorldClimate.com</subtitle>
+<v-chart id="basic-line-events" vc-type="line">
+    <vc-title>Average Monthly Temperature and Rainfall in Tokyo</vc-title>
+    <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
-    <x-axis>
-        <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-    </x-axis>
+    <vc-x-axis>
+        <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
+    </vc-x-axis>
 
-    <chart>
-        <events click="function(event) {
+    <vc-chart>
+        <vc-events vc-click="function(event) {
             var xValue = event.xAxis[0].value,
                 yValue = event.yAxis[0].value,
                 xPixels = event.xAxis[0].axis.toPixels(xValue),
@@ -31,27 +31,27 @@
             }, 1000);
         }">
 
-        </events>
-    </chart>
+        </vc-events>
+    </vc-chart>
 
-    <y-axis>
-        <title style="{color: #3090F0;}">Temperature</title>
-    </y-axis>
+    <vc-y-axis>
+        <vc-title vc-style="{color: #3090F0;}">Temperature</vc-title>
+    </vc-y-axis>
 
-    <y-axis opposite="true">
-        <title style="color: #EC6464;">Rainfall</title>
-    </y-axis>
+    <vc-y-axis vc-opposite="true">
+        <vc-title vc-style="color: #EC6464;">Rainfall</vc-title>
+    </vc-y-axis>
 
-    <tooltip
-            formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></tooltip>
+    <vc-tooltip
+            vc-formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></vc-tooltip>
 
-    <legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
-            background-color="#FFFFFF"></legend>
+    <vc-legend vc-layout="vertical" vc-align="left" vc-vertical-align="top" vc-x="120" vc-y="100" vc-floating="true"
+            vc-background-color="#FFFFFF"></vc-legend>
 
-    <plot-options>
-        <series>
-            <point>
-                <events click="function(event) {
+    <vc-plot-options>
+        <vc-series>
+            <vc-point>
+                <vc-events vc-click="function(event) {
                     var xPixels = event.chartX,
                         yPixels = event.chartY;
                     var label = this.series.chart.renderer.label('Point click: Categoy: ' + this.category + ', y: ' + this.y, xPixels, yPixels)
@@ -69,15 +69,15 @@
                     setTimeout(function () {
                         label.fadeOut();
                     }, 1000);
-                }"></events>
-            </point>
-        </series>
-    </plot-options>
+                }"></vc-events>
+            </vc-point>
+        </vc-series>
+    </vc-plot-options>
 
-    <v-series name="Rainfall" y-axis="1" type="column">
-        <data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</data>
+    <v-series vc-name="Rainfall" vc-y-axis="1" vc-type="column">
+        <vc-data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
     </v-series>
-    <v-series name="Temperature" y-axis="0">
-        <data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</data>
+    <v-series vc-name="Temperature" vc-y-axis="0">
+        <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</vc-data>
     </v-series>
 </v-chart>

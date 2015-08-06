@@ -8,18 +8,18 @@
     <link rel="import" href="../v-chart.html">
 </head>
 <body>
-<v-chart id="emptyPie" type="pie">
+<v-chart id="emptyPie" vc-type="pie">
 </v-chart>
-<v-chart id="pieWithSeries" type="pie">
-    <v-series name="Browser share">
-        <data>
+<v-chart id="pieWithSeries" vc-type="pie">
+    <v-series vc-name="Browser share">
+        <vc-data>
             ["Firefox",   45.0],
             ["IE",       26.8],
             ["Chrome", 12.8],
             ["Safari",    8.5],
             ["Opera",     6.2],
             ["Others",   0.7]
-        </data>
+        </vc-data>
     </v-series>
 </v-chart>
 <script>

@@ -1,5 +1,5 @@
-<v-chart id="html-table-data-inlined" type="column">
-    <data>
+<v-chart id="html-table-data-inlined" vc-type="column">
+    <vc-data>
         <table>
             <thead>
             <tr>
@@ -36,18 +36,18 @@
             </tr>
             </tbody>
         </table>
-    </data>
+    </vc-data>
 
-    <title> Data extracted from a HTML table inside v-chart</title>
+    <vc-title> Data extracted from a HTML table inside v-chart</vc-title>
 
-    <y-axis allow-decimals="false">
-        <title>Units</title>
-    </y-axis>
+    <vc-y-axis vc-allow-decimals="false">
+        <vc-title>Units</vc-title>
+    </vc-y-axis>
 
-    <tooltip formatter="function () {
+    <vc-tooltip vc-formatter="function () {
                 return '<b>' + this.series.name + '</b><br/>' +
                     this.point.y + ' ' + this.point.name.toLowerCase();
             }">
-    </tooltip>
+    </vc-tooltip>
 
 </v-chart>

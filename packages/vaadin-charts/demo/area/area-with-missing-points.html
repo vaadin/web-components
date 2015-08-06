@@ -1,18 +1,18 @@
-<v-chart id="area-with-missing-points" type="area">
-    <title>Fruit consumption *</title>
-    <subtitle floating="true" y="10" align="right" vertical-align="bottom">* Jane's banana consumption is unknown
-    </subtitle>
-    <x-axis>
-        <categories>Apples, Pears, Oranges, Bananas, Grapes, Plums, Strawberries, Raspberries</categories>
-    </x-axis>
-    <legend layout="vertical" align="left" floating="true" vertical-align="top" x="150" y="100" border-width="1"
-            background-color="#ffffff"></legend>
-    <tooltip enabled="true" shared="true">
-    </tooltip>
-    <v-series name="John">
-        <data>0, 1, 4, 4, 5, 2, 3, 7</data>
+<v-chart id="area-with-missing-points" vc-type="area">
+    <vc-title>Fruit consumption *</vc-title>
+    <vc-subtitle vc-floating="true" vc-y="10" vc-align="right" vc-vertical-align="bottom">* Jane's banana consumption is unknown
+    </vc-subtitle>
+    <vc-x-axis>
+        <vc-categories>Apples, Pears, Oranges, Bananas, Grapes, Plums, Strawberries, Raspberries</vc-categories>
+    </vc-x-axis>
+    <vc-legend vc-layout="vertical" vc-align="left" vc-floating="true" vc-vertical-align="top" vc-x="150" vc-y="100" vc-border-width="1"
+            vc-background-color="#ffffff"></vc-legend>
+    <vc-tooltip vc-enabled="true" vc-shared="true">
+    </vc-tooltip>
+    <v-series vc-name="John">
+        <vc-data>0, 1, 4, 4, 5, 2, 3, 7</vc-data>
     </v-series>
-    <v-series name="Jane">
-        <data>1, 0, 3, null, 3, 1, 2, 1</data>
+    <v-series vc-name="Jane">
+        <vc-data>1, 0, 3, null, 3, 1, 2, 1</vc-data>
     </v-series>
 </v-chart>

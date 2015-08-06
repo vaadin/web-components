@@ -1,21 +1,21 @@
 <v-chart id="csv-data">
-    <title>Global temperature change</title>
-    <subtitle>Data input from CSV</subtitle>
+    <vc-title>Global temperature change</vc-title>
+    <vc-subtitle>Data input from CSV</vc-subtitle>
 
-    <plot-options>
-        <series>
-            <marker enabled="false"></marker>
-        </series>
-    </plot-options>
+    <vc-plot-options>
+        <vc-series>
+            <vc-marker vc-enabled="false"></vc-marker>
+        </vc-series>
+    </vc-plot-options>
 
-    <v-series line-width="1"></v-series>
-    <v-series type="areaspline"
-              color="#c4392d"
-              negative-color="#5679c4"
-              fill-opacity="0.5">
+    <v-series vc-line-width="1"></v-series>
+    <v-series vc-type="areaspline"
+              vc-color="#c4392d"
+              vc-negative-color="#5679c4"
+              vc-fill-opacity="0.5">
     </v-series>
 
-    <data csv="Year,Annual mean,5 year mean
+    <vc-data vc-csv="Year,Annual mean,5 year mean
 1880,-0.31,
 1881,-0.22,
 1882,-0.28,-0.29
@@ -149,5 +149,5 @@
 2010,0.64,0.54
 2011,0.52,
 2012,0.52,">
-    </data>
+    </vc-data>
 </v-chart>
