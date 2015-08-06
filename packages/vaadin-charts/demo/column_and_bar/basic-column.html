@@ -9,9 +9,9 @@
     </vc-y-axis>
     <vc-legend vc-layout="vertical" vc-align="left" vc-vertical-align="top" vc-x="100" vc-y="70" vc-floating="true" vc-border-width="1"
             vc-background-color="#FFFFFF" vc-shadow="true"></vc-legend>
-    <vc-tooltip vc-header-format="<vc-span vc-style='font-size:10px'>{point.key}</vc-span><vc-table>"
-             vc-point-format="<vc-tr><vc-td vc-style='color:{series.color};padding:0'>{series.name}: </vc-td>  <vc-td vc-style='padding:0'><vc-b>{point.y:.1f} mm</vc-b></vc-td>    </vc-tr>"
-             vc-footer-format="</vc-table>" vc-shared="true" vc-use-html="true"></vc-tooltip>
+    <vc-tooltip vc-header-format="<span style='font-size:10px'>{point.key}</span><table>"
+             vc-point-format="<tr><td style='color:{series.color};padding:0'>{series.name}: </td>  <td style='padding:0'><b>{point.y:.1f} mm</b></td>    </tr>"
+             vc-footer-format="</table>" vc-shared="true" vc-use-html="true"></vc-tooltip>
     <vc-plot-options>
         <vc-column vc-point-padding="0.2">
         </vc-column>

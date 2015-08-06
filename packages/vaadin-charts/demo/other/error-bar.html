@@ -23,14 +23,14 @@
     <vc-plot-options>
         <vc-column>
             <vc-tooltip
-                    vc-point-format="<vc-span vc-style='font-weight: bold; color: {series.color}'>{series.name}</vc-span>: <vc-b>{point.y:.1f} mm</vc-b>"></vc-tooltip>
+                    vc-point-format="<span style='font-weight: bold; color: {series.color}'>{series.name}</span>: <b>{point.y:.1f} mm</b>"></vc-tooltip>
         </vc-column>
         <vc-errorbar>
-            <vc-tooltip vc-point-format=" (error range: {point.low}-{point.high} mm)<vc-br/>"></vc-tooltip>
+            <vc-tooltip vc-point-format=" (error range: {point.low}-{point.high} mm)<br/>"></vc-tooltip>
         </vc-errorbar>
         <vc-spline>
             <vc-tooltip
-                    vc-point-format="<vc-span vc-style='font-weight: bold; color: {series.color}'>{series.name}</vc-span>: <vc-b>{point.y:.1f}°C</vc-b>"></vc-tooltip>
+                    vc-point-format="<span style='font-weight: bold; color: {series.color}'>{series.name}</span>: <b>{point.y:.1f}°C</b>"></vc-tooltip>
         </vc-spline>
     </vc-plot-options>
     <v-series vc-name="Rainfall" vc-type="column" vc-y-axis="1">

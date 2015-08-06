@@ -1,10 +1,10 @@
 <v-chart id="pie-with-start-and-end-angle" vc-type="pie">
     <vc-title>Browser market shares at a specific website, 2014</vc-title>
-    <vc-tooltip vc-point-format="{series.name}: <vc-b>{point.percentage:.1f}%</vc-b>">
+    <vc-tooltip vc-point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
     </vc-tooltip>
     <vc-plot-options>
         <vc-pie vc-allow-point-select="true" vc-cursor="pointer" vc-start-angle="45" vc-end-angle="180">
-            <vc-data-labels vc-enabled="true" vc-format="<vc-b>{point.name}</vc-b>:    {point.percentage:.1f} %">
+            <vc-data-labels vc-enabled="true" vc-format="<b>{point.name}</b>:    {point.percentage:.1f} %">
             </vc-data-labels>
         </vc-pie>
     </vc-plot-options>

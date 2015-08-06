@@ -24,8 +24,8 @@
     </vc-y-axis>
 
     <vc-tooltip vc-formatter="function () {
-                    return '<vc-b>' + this.series.name + '</vc-b><vc-br/>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<vc-br/>' +
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
                         Highcharts.numberFormat(this.y, 2);}">
 
     </vc-tooltip>

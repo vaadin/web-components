@@ -52,42 +52,42 @@
 
 <v-chart id="data-table-node" vc-type="column">
     <vc-data>
-        <vc-table>
-            <vc-thead>
-            <vc-tr>
-                <vc-th></vc-th>
-                <vc-th>Jane</vc-th>
-                <vc-th>John</vc-th>
-            </vc-tr>
-            </vc-thead>
-            <vc-tbody>
-            <vc-tr>
-                <vc-th>Apples</vc-th>
-                <vc-td>3</vc-td>
-                <vc-td>4</vc-td>
-            </vc-tr>
-            <vc-tr>
-                <vc-th>Pears</vc-th>
-                <vc-td>2</vc-td>
-                <vc-td>0</vc-td>
-            </vc-tr>
-            <vc-tr>
-                <vc-th>Plums</vc-th>
-                <vc-td>5</vc-td>
-                <vc-td>11</vc-td>
-            </vc-tr>
-            <vc-tr>
-                <vc-th>Bananas</vc-th>
-                <vc-td>1</vc-td>
-                <vc-td>1</vc-td>
-            </vc-tr>
-            <vc-tr>
-                <vc-th>Oranges</vc-th>
-                <vc-td>2</vc-td>
-                <vc-td>4</vc-td>
-            </vc-tr>
-            </vc-tbody>
-        </vc-table>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th>Jane</th>
+                <th>John</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Apples</th>
+                <td>3</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <th>Pears</th>
+                <td>2</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>Plums</th>
+                <td>5</td>
+                <td>11</td>
+            </tr>
+            <tr>
+                <th>Bananas</th>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <th>Oranges</th>
+                <td>2</td>
+                <td>4</td>
+            </tr>
+            </tbody>
+        </table>
     </vc-data>
 </v-chart>
 
@@ -248,7 +248,7 @@
             var tmp = document.createElement("div");
             tmp.appendChild(conf.data.table);
 
-            expect(tmp.innerHTML).to.equal('<vc-table><vc-thead><vc-tr><vc-th></vc-th><vc-th>Jane</vc-th><vc-th>John</vc-th></vc-tr></vc-thead><vc-tbody><vc-tr><vc-th>Apples</vc-th><vc-td>3</vc-td><vc-td>4</vc-td></vc-tr><vc-tr><vc-th>Pears</vc-th><vc-td>2</vc-td><vc-td>0</vc-td></vc-tr><vc-tr><vc-th>Plums</vc-th><vc-td>5</vc-td><vc-td>11</vc-td></vc-tr><vc-tr><vc-th>Bananas</vc-th><vc-td>1</vc-td><vc-td>1</vc-td></vc-tr><vc-tr><vc-th>Oranges</vc-th><vc-td>2</vc-td><vc-td>4</vc-td></vc-tr></vc-tbody></vc-table>');
+            expect(tmp.innerHTML).to.equal('<table><thead><tr><th></th><th>Jane</th><th>John</th></tr></thead><tbody><tr><th>Apples</th><td>3</td><td>4</td></tr><tr><th>Pears</th><td>2</td><td>0</td></tr><tr><th>Plums</th><td>5</td><td>11</td></tr><tr><th>Bananas</th><td>1</td><td>1</td></tr><tr><th>Oranges</th><td>2</td><td>4</td></tr></tbody></table>');
         });
 
         test('data with CSV', function () {

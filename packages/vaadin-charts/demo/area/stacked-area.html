@@ -10,7 +10,7 @@
         <vc-labels vc-formatter="function () { return this.value / 1000; }"></vc-labels>
     </vc-y-axis>
     <vc-tooltip vc-shared="true"
-             vc-pointFormat='<vc-span vc-style="color:{series.color}">{series.name}</vc-span>: <vc-b>{point.percentage:.1f}%</vc-b> ({point.y:.0f} millions)<vc-br/>'></vc-tooltip>
+             vc-pointFormat='<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.0f} millions)<br/>'></vc-tooltip>
     <vc-plot-options>
         <vc-series vc-stacking="normal" vc-line-width="1">
         </vc-series>

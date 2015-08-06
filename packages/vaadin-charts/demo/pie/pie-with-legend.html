@@ -1,10 +1,10 @@
 <v-chart id="pie-with-legend" vc-type="pie">
     <vc-title>Browser market shares at a specific website, 2014</vc-title>
-    <vc-tooltip vc-value-decimals="1" vc-point-format="{series.name}: <vc-b>{point.percentage:.1f}%</vc-b>">
+    <vc-tooltip vc-value-decimals="1" vc-point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
     </vc-tooltip>
     <vc-plot-options>
         <vc-pie vc-allow-point-select="true" vc-show-in-legend="true" vc-cursor="pointer">
-            <vc-data-labels vc-enabled="true" vc-format="<vc-b>{point.name}</vc-b>:    {point.percentage} %">
+            <vc-data-labels vc-enabled="true" vc-format="<b>{point.name}</b>:    {point.percentage} %">
             </vc-data-labels>
         </vc-pie>
     </vc-plot-options>
