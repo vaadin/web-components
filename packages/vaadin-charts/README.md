@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/vaadin/charts-component.svg?branch=master)](https://api.travis-ci.org/vaadin/charts-component)
+[![Build Status](https://api.travis-ci.org/vaadin/charts-component.svg?branch=master)](https://travis-ci.org/vaadin/charts-component)
 
 
 # Vaadin Charts Web Component
