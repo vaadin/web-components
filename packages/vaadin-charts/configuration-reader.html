@@ -51,8 +51,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         _vaadinChartsPrefix: "vc-",
 
+        /**
+         * Check if the given attribute is valid as a Vaadin Charts configuration attribute
+         **/
         _isVaadinChartsAttribute: function (attName) {
-            return attName.indexOf(this._vaadinChartsPrefix) === 0 || this._nodeValueAttributes.indexOf(attName) !== -1;
+            return attName != undefined &&
+                    (attName.indexOf(this._vaadinChartsPrefix) === 0 || this._nodeValueAttributes.indexOf(attName) !== -1);
         },
 
         /**
