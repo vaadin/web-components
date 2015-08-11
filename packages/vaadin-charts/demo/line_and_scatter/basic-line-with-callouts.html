@@ -16,27 +16,25 @@
     </vc-plot-options>
 
     <v-series vc-name="Tokyo">
-        <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, {
-            y: 21.5,
-            dataLabels: {
-            enabled: true,
-            backgroundColor: '#FFEBCD',
-            shape: 'callout',
-            y: -12
-            }
-            }, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6
+        <vc-data>7.0, 6.9, 9.5, 14.5, 18.2 </vc-data>
+        <vc-data>
+          <vc-point>
+            <vc-y>21.5</vc-y>
+            <vc-data-labels vc-shape="callout" vc-enabled="true" vc-y="-12" vc-background-color="#FFEBCD" />
+          </vc-point>
+        </vc-data>
+        <vc-data>
+            25.2, 26.5, 23.3, 18.3, 13.9, 9.6
         </vc-data>
     </v-series>
     <v-series vc-name="London">
-        <vc-data>3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, {
-            y: 16.6,
-            dataLabels: {
-            enabled: true,
-            backgroundColor: '#FFEBCD',
-            shape: 'callout',
-            y: -12
-            }
-            }, 14.2, 10.3, 6.6, 4.8
+        <vc-data>3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0</vc-data>
+        <vc-data>
+          <vc-point>
+            <vc-y>16.6</vc-y>
+            <vc-data-labels vc-shape="callout" vc-enabled="true" vc-y="-12" vc-background-color="#FFEBCD" />
+          </vc-point>
         </vc-data>
+        <vc-data>14.2, 10.3, 6.6, 4.8</vc-data>
     </v-series>
 </v-chart>

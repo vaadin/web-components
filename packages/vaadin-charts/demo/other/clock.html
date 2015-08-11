@@ -33,31 +33,21 @@
     </vc-plot-options>
     <v-series>
         <vc-data>
-            {
-            id: 'hour',
-            y: new Date().getHours() + new Date().getMinutes() / 60,
-            dial: {
-            radius: '60%',
-            baseWidth: 4,
-            baseLength: '95%',
-            rearLength: 0
-            }
-            }, {
-            id: 'minute',
-            y: new Date().getMinutes() * 12 / 60 + new Date().getSeconds() * 12 / 3600,
-            dial: {
-            baseLength: '95%',
-            rearLength: 0
-            }
-            }, {
-            id: 'second',
-            y: new Date().getSeconds() * 12 / 60,
-            dial: {
-            radius: '100%',
-            baseWidth: 1,
-            rearLength: '20%'
-            }
-            }
+          <vc-point>
+            <vc-id>hour</vc-id>
+            <vc-y>new Date().getHours() + new Date().getMinutes() / 60</vc-y>
+            <vc-dial vc-radius="60%" vc-base-width="4" vc-base-length="95%" vc-rear-length="0"></vc-dial>
+          </vc-point>
+          <vc-point>
+            <vc-id>minute</vc-id>
+            <vc-y>new Date().getMinutes() * 12 / 60 + new Date().getSeconds() * 12 / 3600</vc-y>
+            <vc-dial vc-radius="95%" vc-rear-length="0"></vc-dial>
+          </vc-point>
+          <vc-point>
+            <vc-id>second</vc-id>
+            <vc-y>new Date().getSeconds() * 12 / 60</vc-y>
+            <vc-dial vc-radius="100%" vc-base-width="1" vc-rear-length="20%"></vc-dial>
+          </vc-point>
         </vc-data>
     </v-series>
 </v-chart>
