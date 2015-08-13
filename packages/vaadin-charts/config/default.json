@@ -9,7 +9,18 @@
       "configuration-reader.html"
     ],
     "doc": "*.md",
-    "demo": "demo/**/*"
+    "demo": "demo/**/*",
+    "test": "test/**/*",
+    "all": [
+      "v-chart.html",
+      "v-series.html",
+      "valo-theme.html",
+      "configuration-reader.html",
+      "demo/**/*",
+      "test/**/*",
+      "!/**/valo/**/*",
+      "!/**/base/**/*"
+    ]
   },
   "version": "3.0.0-alpha3"
 }
