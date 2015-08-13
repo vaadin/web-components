@@ -1,0 +1,65 @@
+<!--This example defines a Web Component that uses an ajax request fetch data that is processed and set to the series-->
+<dom-module id="rest-series-parse-data">
+    <template>
+        <iron-ajax
+                id="dataFetcher"
+                url="sample_data/unformatted_data"
+                handle-as="text"
+                last-response="{{textData}}"
+                debounce-duration="300"></iron-ajax>
+        <v-chart id="chart">
+            <vc-title>Global temperature change</vc-title>
+
+            <vc-plot-options>
+                <vc-series>
+                </vc-series>
+            </vc-plot-options>
+            <vc-x-axis vc-type="datetime"></vc-x-axis>
+            <v-series id="my-series-id" vc-data="[[seriesData]]"></v-series>
+
+        </v-chart>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'rest-series-parse-data',
+                properties: {
+                    seriesData: Object,
+                    textData: {
+                        type: String,
+                        observer: '_textDataChanged'
+                    }
+                },
+                _textDataChanged: function (newValue) {
+                    var lines=newValue.split("\n");
+
+                    var result = [];
+
+                    for(var i=0;i<lines.length;i++){
+                        var tokens = lines[i].split(",");
+                        tokens=tokens.map(function (x) {
+                            return parseFloat(x);
+                        });
+
+                        result.push(tokens);
+                    }
+
+                    this.seriesData= result;
+                },
+
+                ready: function () {
+                    this.async(function () {
+                        console.log('wc-data-example attached');
+//                        this.seriesData = ;
+                        this.$.dataFetcher.generateRequest();
+                    }, 2);
+                }
+            });
+        })();
+    </script>
+
+</dom-module>
+
+<rest-series-parse-data>
+
+</rest-series-parse-data>

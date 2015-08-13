@@ -1,0 +1,55 @@
+<!--This example defines a Web Component that uses an ajax request to define series simple data-->
+<dom-module id="rest-series-data">
+    <template>
+        <iron-ajax
+                id="dataFetcher"
+                url="sample_data/simple_data"
+                handle-as="json"
+                last-response="{{seriesData}}"
+                debounce-duration="300"></iron-ajax>
+        <v-chart id="chart">
+            <vc-title>Monthly Average Temperature</vc-title>
+            <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
+
+            <vc-x-axis>
+                <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
+            </vc-x-axis>
+
+            <vc-y-axis>
+                <vc-title vc-align="high">Temperature (°C)</vc-title>
+            </vc-y-axis>
+
+            <vc-tooltip vc-enabled="true" vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
+
+            <vc-plot-options>
+                <vc-line >
+                    <vc-data-labels vc-enabled="true"></vc-data-labels>
+                </vc-line>
+            </vc-plot-options>
+            <v-series vc-name="Tokyo" vc-data="[[seriesData]]"></v-series>
+
+        </v-chart>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'rest-series-data',
+                properties: {
+                    seriesData: Object
+                },
+                ready: function () {
+                    this.async(function () {
+                        console.log('wc-data-example attached');
+//                        this.seriesData = ;
+                        this.$.dataFetcher.generateRequest();
+                    }, 2);
+                }
+            });
+        })();
+    </script>
+
+</dom-module>
+
+<rest-series-data>
+
+</rest-series-data>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="components/binding-chart.html">
+
+</head>
+<body>
+
+<binding-chart id="test-component">
+
+</binding-chart>
+
+<script>
+
+    suite('<v-chart>', function () {
+
+        test('data property binding', function () {
+            var chartwc = document.querySelector('#chart-with-binding');
+            var conf = chartwc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
+            expect(conf.series[0].data).to.have.length(7);
+            expect(conf.series[0].data[1][0]).to.equal(1184025600000);
+            expect(conf.series[0].data[1][1]).to.equal(40.38);
+
+        });
+    });
+
+</script>
+
+</body>
+</html>

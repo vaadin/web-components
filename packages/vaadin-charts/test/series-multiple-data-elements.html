@@ -36,8 +36,8 @@
             expect(conf.series[0].data[3].y).to.equal(4);
             expect(conf.series[0].data[3].dataLabels).to.exist;
             //enable following steps after CHARS-182
-            //expect(conf.series[0].data[3].dataLabels.shape).to.exist();
-            //expect(conf.series[0].data[3].dataLabels.shape).to.equal('callout');
+            expect(conf.series[0].data[3].dataLabels.shape).to.exist;
+            expect(conf.series[0].data[3].dataLabels.shape).to.equal('callout');
             expect(conf.series[0].data[7]).to.equal(8);
         });
 

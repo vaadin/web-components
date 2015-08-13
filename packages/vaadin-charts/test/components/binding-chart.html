@@ -1,0 +1,39 @@
+<link rel="import" href="../../v-chart.html">
+<dom-module id="binding-chart">
+    <template>
+        <v-chart id="chart-with-binding">
+            <vc-title>Global temperature change</vc-title>
+            <vc-subtitle>Data input from CSV</vc-subtitle>
+
+            <vc-plot-options>
+                <vc-series>
+                    <vc-marker vc-enabled="false"></vc-marker>
+                </vc-series>
+            </vc-plot-options>
+            <vc-x-axis vc-type="datetime"></vc-x-axis>
+            <v-series id="my-series-id" vc-data="[[seriesData]]" vc-line-width="1"></v-series>
+
+        </v-chart>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'binding-chart',
+                properties: {
+                    seriesData: {
+                        type: Array,
+                        value : [
+                            [1183939200000, 40.71],
+                            [1184025600000, 40.38],
+                            [1184112000000, 40.82],
+                            [1184198400000, 47.55],
+                            [1184284800000, 41.18],
+                            [1184544000000, 41.06],
+                            [1184630400000, 41.47]]
+                    }
+                }
+            });
+        })();
+    </script>
+
+</dom-module>

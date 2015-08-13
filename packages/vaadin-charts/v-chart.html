@@ -89,6 +89,7 @@ Example:
                     this._chartConf.series = [];
                 }
                 this._chartConf.series.push(newSeries);
+                return this._chartConf.series.length - 1;
             },
 
             /**
@@ -102,6 +103,7 @@ Example:
                     this._chartConf.drilldown.series = [];
                 }
                 this._chartConf.drilldown.series.push(newSeries);
+                return this._chartConf.drilldown.series.length - 1;
             },
 
             /* ----------- lifecycle ----------- */
