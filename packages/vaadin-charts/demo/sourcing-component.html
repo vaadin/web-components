@@ -70,6 +70,9 @@ This component allows viewing demo HTML files, so that the actual demo and the s
                     // Add the DOM from cache
                     pageNode.appendChild(demoId2dom[demoId]);
 
+                    // Force layout update; should be done in a better way
+                    pageNode.innerHTML = "".concat(pageNode.innerHTML);
+
                     // Load source code into tab two
                     this.$.sourceFetcher.url = demoId + ".html";
                     this.$.sourceFetcher.generateRequest();
