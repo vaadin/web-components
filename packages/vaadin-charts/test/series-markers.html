@@ -11,13 +11,14 @@
 <v-chart id="chartWithSeriesMarker">
     <v-series>
         <vc-marker vc-symbol="square"></vc-marker>
-        <vc-data>25.2, {
-            y: 26.5,
-            marker: {
-            symbol: 'url(http://www.highcharts.com/demo/gfx/sun.png)'
-            }
-            }, 9.6
+        <vc-data>25.2</vc-data>
+        <vc-data>
+            <vc-point>
+              <vc-y>26.5</vc-y>
+              <vc-marker vc-symbol="url(http://www.highcharts.com/demo/gfx/sun.png)"></vc-marker>
+            </vc-point>
         </vc-data>
+        <vc-data>9.6</vc-data>
     </v-series>
 </v-chart>
 <script>
