@@ -11,19 +11,18 @@
 <body>
 <dom-module id="binding-chart">
     <template>
-        <v-chart id="chart-with-binding">
+        <v-chart id="chartId">
             <vc-title>Global temperature change</vc-title>
             <vc-subtitle>Data input from CSV</vc-subtitle>
-
             <vc-plot-options>
                 <vc-series>
                     <vc-marker vc-enabled="false"></vc-marker>
                 </vc-series>
             </vc-plot-options>
             <vc-x-axis vc-type="datetime"></vc-x-axis>
-            <v-series id="my-series-id" vc-data="[[seriesData]]" vc-line-width="1"></v-series>
-
+            <v-series id="seriesId" vc-data="[[seriesData]]" vc-line-width="1"></v-series>
         </v-chart>
+        <button id="myBtn" on-click="_addSeriesPoint">Add series point</button>
     </template>
     <script>
         (function () {
@@ -42,6 +41,11 @@
                                 [1184544000000, 41.06],
                                 [1184630400000, 41.47]]
                         }
+                    },
+                    _addSeriesPoint: function () {
+                        var x = (new Date()).getTime(),
+                                y = Math.random();
+                        this.push('seriesData', [x, y]);
                     }
                 });
             });
@@ -56,9 +60,16 @@
 <script>
 
     suite('<v-chart>', function () {
-
+        var el;
+        setup(function () {
+            el = document.createElement('binding-chart');
+            document.body.appendChild(el);
+        });
+        teardown(function () {
+            document.body.removeChild(el);
+        });
         test('data property binding', function () {
-            var chartwc = document.querySelector('#chart-with-binding');
+            var chartwc = el.$.chartId;
             var conf = chartwc._chartConf;
             expect(conf.series).to.exist;
             expect(conf.series).not.to.be.empty;
@@ -68,6 +79,19 @@
             expect(conf.series[0].data[1][0]).to.equal(1184025600000);
             expect(conf.series[0].data[1][1]).to.equal(40.38);
 
+        });
+
+        test('data added after attached', function () {
+            var serieswc = el.$.seriesId;
+            var conf = serieswc._seriesConf;
+            expect(conf.data).to.exist;
+            expect(conf.data).not.to.be.empty;
+            expect(conf.data).to.have.length(7);
+
+            var button = el.$.myBtn;
+            button.click();
+
+            expect(conf.data).to.have.length(8);
         });
     });
 
