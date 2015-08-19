@@ -2,7 +2,7 @@
 <dom-module id="rest-series-data">
     <template>
         <iron-ajax
-                id="dataFetcher"
+                id="firstSeriesFetcher"
                 url="sample_data/simple_data"
                 handle-as="json"
                 last-response="{{seriesData}}"
@@ -39,9 +39,7 @@
                 },
                 ready: function () {
                     this.async(function () {
-                        console.log('wc-data-example attached');
-//                        this.seriesData = ;
-                        this.$.dataFetcher.generateRequest();
+                        this.$.firstSeriesFetcher.generateRequest();
                     }, 2);
                 }
             });

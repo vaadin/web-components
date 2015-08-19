@@ -1,0 +1,44 @@
+<!--This example defines a Web Component that binds a property to series data and pushes new points-->
+<dom-module id="wc-data-button">
+    <template>
+        <v-chart id="wcDataExample">
+            <vc-title>Click button to add point</vc-title>
+
+            <vc-tooltip vc-enabled="false"></vc-tooltip>
+            <vc-plot-options>
+                <vc-series>
+                </vc-series>
+            </vc-plot-options>
+            <vc-x-axis vc-type="datetime"></vc-x-axis>
+            <v-series id="mySeriesId" vc-data="[[mySeriesData]]">
+            </v-series>
+        </v-chart>
+        <button id="myBtn" on-click="_addSeriesPoint">Add series point</button>
+    </template>
+
+    <script>
+        (function () {
+            Polymer({
+                is: 'wc-data-button',
+                properties: {
+                    mySeriesData: {
+                        type: Array,
+                        notify: true,
+                        value: [[(new Date()).getTime() - 1000, Math.random()],
+                            [(new Date()).getTime(), Math.random()]]
+                    }
+                },
+                _addSeriesPoint: function () {
+                    var x = (new Date()).getTime(),
+                            y = Math.random();
+                    this.push('mySeriesData', [x, y]);
+                }
+            });
+        })();
+    </script>
+
+</dom-module>
+
+<wc-data-button>
+
+</wc-data-button>

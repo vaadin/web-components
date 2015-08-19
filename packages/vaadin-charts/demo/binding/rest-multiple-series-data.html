@@ -2,13 +2,13 @@
 <dom-module id="rest-multiple-series-data">
     <template>
         <iron-ajax
-                id="dataFetcher"
+                id="firstSeriesFetcher"
                 url="sample_data/simple_data"
                 handle-as="json"
                 last-response="{{seriesData}}"
                 debounce-duration="300"></iron-ajax>
         <iron-ajax
-                id="dataFetcher2"
+                id="secondSeriesFetcher"
                 url="sample_data/simple_data2"
                 handle-as="json"
                 last-response="{{series2Data}}"
@@ -48,10 +48,8 @@
                 },
                 ready: function () {
                     this.async(function () {
-                        console.log('wc-data-example attached');
-//                        this.seriesData = ;
-                        this.$.dataFetcher.generateRequest();
-                        this.$.dataFetcher2.generateRequest();
+                        this.$.firstSeriesFetcher.generateRequest();
+                        this.$.secondSeriesFetcher.generateRequest();
                     }, 2);
                 }
             });

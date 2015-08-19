@@ -34,8 +34,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             _seriesIndex: Number,
 
             vcData: {
-                type: Object,
-                observer: '_dataChanged'
+                type: Array
             },
 
             /* ----------- internal ----------- */
@@ -52,18 +51,22 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         },
 
-        _dataChanged: function (newValue) {
+        observers: [
+            '_dataChanged(vcData.splices)'
+        ],
+
+        _dataChanged: function () {
             if (this._seriesIndex != undefined) {
                 this.async(function () {
                     if (this.vcDrilldown) {
-                        this._parentChart().chart.drilldown.series[this._seriesIndex].setData(newValue);
+                        this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.vcData);
                     } else {
-                        this._parentChart().chart.series[this._seriesIndex].setData(newValue);
+                        this._parentChart().chart.series[this._seriesIndex].setData(this.vcData);
                     }
 
                 }, 1);
             } else {
-                this._seriesConf['data'] = newValue;
+                this._seriesConf['data'] = this.vcData;
             }
         },
 
