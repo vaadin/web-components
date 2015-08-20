@@ -1,0 +1,46 @@
+<!--This example defines a Web Component that binds a property to series data and pushes new points-->
+<dom-module id="wc-data-button">
+    <template>
+        <v-chart id="wcDataExample">
+            <vc-title>Click button to add point</vc-title>
+
+            <vc-tooltip vc-enabled="false"></vc-tooltip>
+            <vc-plot-options>
+                <vc-series>
+                </vc-series>
+            </vc-plot-options>
+            <vc-x-axis vc-type="datetime"></vc-x-axis>
+            <v-series id="mySeriesId" vc-data="[[mySeriesData]]">
+            </v-series>
+        </v-chart>
+        <button on-click="_addSeriesPoint">Add series point</button>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'wc-data-button',
+            properties: {
+                mySeriesData: {
+                    type: Array,
+                    value: [[(new Date()).getTime() - 1000, Math.random()],
+                        [(new Date()).getTime(), Math.random()]]
+                }
+            },
+            _addSeriesPoint: function () {
+                var x = (new Date()).getTime(),
+                        y = Math.random();
+                /**
+                 * Mutations to array properties (push, pop, splice, shift, unshift) must be performed using
+                 * methods provided on Polymer elements, such that the changes are observable to any elements bound to
+                 * the same array
+                 */
+                this.push('mySeriesData', [x, y]);
+            }
+        });
+    </script>
+
+</dom-module>
+
+<wc-data-button>
+
+</wc-data-button>

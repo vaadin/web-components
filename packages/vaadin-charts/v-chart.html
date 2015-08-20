@@ -83,16 +83,19 @@ Example:
 
             /**
              * Dynamically add a new Series to this chart
+             * Returns the index of the added series in the series array
              **/
             _addSeries: function (newSeries) {
                 if (this._chartConf.series === undefined) {
                     this._chartConf.series = [];
                 }
                 this._chartConf.series.push(newSeries);
+                return this._chartConf.series.length - 1;
             },
 
             /**
              * Dynamically add a new Series to this chart's Drilldown configuration
+             * Returns the index of the added series in the drilldown series array
              **/
             _addDrilldownSeries: function (newSeries) {
                 if (!this._chartConf.drilldown) {
@@ -102,6 +105,7 @@ Example:
                     this._chartConf.drilldown.series = [];
                 }
                 this._chartConf.drilldown.series.push(newSeries);
+                return this._chartConf.drilldown.series.length - 1;
             },
 
             /* ----------- lifecycle ----------- */

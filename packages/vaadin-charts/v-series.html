@@ -28,6 +28,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 value: false
             },
 
+            vcData: {
+                type: Array
+            },
+
             /* ----------- internal ----------- */
 
             /**
@@ -38,8 +42,36 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 value: function () {
                     return {};
                 }
-            }
+            },
 
+            /**
+             * Index the series was given in the chart series array
+             */
+            _seriesIndex: Number
+
+        },
+
+        observers: [
+            //Observer called when vcData array is changed
+            '_dataChanged(vcData.splices)'
+        ],
+
+        /**
+         * Updates chart data when series data changes
+         */
+        _dataChanged: function () {
+            if (this._seriesIndex != undefined) {
+                this.async(function () {
+                    if (this.vcDrilldown) {
+                        this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.vcData);
+                    } else {
+                        this._parentChart().chart.series[this._seriesIndex].setData(this.vcData);
+                    }
+
+                }, 1);
+            } else {
+                this._seriesConf['data'] = this.vcData;
+            }
         },
 
         _ignoredNodes: ["#text", "#comment", "vc-data"],
@@ -173,9 +205,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._loadConfiguration(this._seriesConf, element);
             this._loadData();
             if (this.vcDrilldown) {
-                this._parentChart()._addDrilldownSeries(this._seriesConf);
+                this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
             } else {
-                this._parentChart()._addSeries(this._seriesConf);
+                this._seriesIndex = this._parentChart()._addSeries(this._seriesConf);
             }
         }
 

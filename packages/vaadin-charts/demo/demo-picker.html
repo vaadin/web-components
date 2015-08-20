@@ -43,415 +43,441 @@
 
 <script>
 
-    (function () {
-        Polymer({
+    Polymer({
 
-            is: 'demo-picker',
+        is: 'demo-picker',
 
-            properties: {
-                categories: {
-                    type: Array,
-                    value: [
-                        {
-                            name: "column_and_bar",
-                            caption: "Column and Bar",
-                            demos: [
-                                {
-                                    component: "bar-with-negative-stack",
-                                    caption: "Bar with negative stack"
-                                },
-                                {
-                                    component: "basic-bar",
-                                    caption: "Basic Bar"
-                                },
-                                {
-                                    component: "basic-column",
-                                    caption: "Basic Column"
-                                },
-                                {
-                                    component: "column-with-multi-level-drilldown",
-                                    caption: "Column with multi level drilldown"
-                                },
-                                {
-                                    component: "column-with-native-drilldown",
-                                    caption: "Column with native drilldown"
-                                },
-                                {
-                                    component: "column-with-negative-values",
-                                    caption: "Column with negative values"
-                                },
-                                {
-                                    component: "column-with-rotated-labels",
-                                    caption: "Column with rotated labels"
-                                },
-                                {
-                                    component: "dual-axes-line-and-column",
-                                    caption: "Dual Axes Line and Column"
-                                },
-                                {
-                                    component: "stacked-and-grouped-column",
-                                    caption: "Stacked and Grouped Column"
-                                },
-                                {
-                                    component: "stacked-bar",
-                                    caption: "Stacked Bar"
-                                },
-                                {
-                                    component: "stacked-column",
-                                    caption: "Stacked  Column"
-                                },
-                                {
-                                    component: "stacked-percentage-column",
-                                    caption: "Stacked Percentage Column"
-                                }
-                            ]
-                        },
-                        {
-                            name: "pie",
-                            caption: "Pie",
-                            demos: [
-                                {
-                                    component: "donut",
-                                    caption: "Donut"
-                                },
-                                {
-                                    component: "pie",
-                                    caption: "Pie"
-                                },
-                                {
-                                    component: "pie-with-credits",
-                                    caption: "Pie with Credits"
-                                },
-                                {
-                                    component: "pie-with-gradient-fill",
-                                    caption: "Pie with Gradient Fill"
-                                },
-                                {
-                                    component: "pie-with-legend",
-                                    caption: "Pie with Legend"
-                                },
-                                {
-                                    component: "pie-with-start-and-end-angle",
-                                    caption: "Pie with Start and End Angle"
-                                }
-                            ]
-                        },
-                        {
-                            name: "area",
-                            caption: "Area",
-                            demos: [
-                                {
-                                    component: "area-spline",
-                                    caption: "Area Spline"
-                                },
-                                {
-                                    component: "area-with-missing-points",
-                                    caption: "Area with Missing Points"
-                                },
-                                {
-                                    component: "area-with-negative-values",
-                                    caption: "Area with Negative Values"
-                                },
-                                {
-                                    component: "basic-area",
-                                    caption: "Basic Area"
-                                },
-                                {
-                                    component: "inverted-axes",
-                                    caption: "Inverted Axes"
-                                },
-                                {
-                                    component: "percentage-area",
-                                    caption: "Percentage Area"
-                                },
-                                {
-                                    component: "stacked-area",
-                                    caption: "Stacked Area"
-                                }
-                            ]
-                        },
-                        {
-                            name: "line_and_scatter",
-                            caption: "Line and Scatter",
-                            demos: [
-                                {
-                                    component: "basic-line",
-                                    caption: "Basic Line"
-                                },
-                                {
-                                    component: "basic-line-events",
-                                    caption: "Basic Line with Mouse Events"
-                                },
-                                {
-                                    component: "basic-line-with-callouts",
-                                    caption: "Basic Line with Callouts"
-                                },
-                                {
-                                    component: "basic-line-with-custom-crosshairs",
-                                    caption: "Basic Line with Custom Crosshairs"
-                                },
-                                {
-                                    component: "basic-line-with-data-labels",
-                                    caption: "Basic Line with Data Labels"
-                                },
-                                {
-                                    component: "date-axis-and-click-event",
-                                    caption: "Date Axis and Click Event"
-                                },
-                                {
-                                    component: "line-with-dash-selector",
-                                    caption: "Line with Dash Selector"
-                                },
-                                {
-                                    component: "lines-with-complex-html-tooltip",
-                                    caption: "Lines with Complex HTML tooltip"
-                                },
-                                {
-                                    component: "logarithmic-axis",
-                                    caption: "Logarithmic axis"
-                                },
-                                {
-                                    component: "spline-inverted",
-                                    caption: "Spline Inverted"
-                                },
-                                {
-                                    component: "spline-updating-each-second",
-                                    caption: "Spline updating each second"
-                                },
-                                {
-                                    component: "spline-with-plot-bands",
-                                    caption: "Spline with Plot Bands"
-                                },
-                                {
-                                    component: "spline-with-symbols",
-                                    caption: "Spline with Symbols"
-                                },
-                                {
-                                    component: "step-lines",
-                                    caption: "Step Lines"
-                                },
-                                {
-                                    component: "time-data-with-irregular-intervals",
-                                    caption: "Time Data with Irregular Intervals"
-                                },
-                                {
-                                    component: "time-series-zoomable",
-                                    caption: "Time Series Zoomable"
-                                }
-                            ]
-                        },
-                        {
-                            name: "dynamic",
-                            caption: "Dynamic",
-                            demos: [
-                                {
-                                    component: "click-to-add-point",
-                                    caption: "Click to Add Point"
-                                },
-                                {
-                                    component: "events",
-                                    caption: "Events"
-                                },
-                                {
-                                    component: "xy-chart-selection",
-                                    caption: "XY Chart Selection"
-                                },
-                                {
-                                    component: "master-detail-chart",
-                                    caption: "MasterDetailChart"
-                                }
-                            ]
-                        },
-                        {
-                            name: "combination",
-                            caption: "Combination",
-                            demos: [
-                                {
-                                    component: "column-line-pie",
-                                    caption: "Column Line and Pie"
-                                },
-                                {
-                                    component: "dual-charts",
-                                    caption: "Dual Charts"
-                                },
-                                {
-                                    component: "multiple-axes",
-                                    caption: "Multiple Axes"
-                                },
-                                {
-                                    component: "scatter-and-polygon",
-                                    caption: "Scatter and Polygon"
-                                },
-                                {
-                                    component: "scatter-with-regression-lines",
-                                    caption: "Scatter with Regression Lines"
-                                }
-                            ]
-                        },
-                        {
-                            name: "other",
-                            caption: "Other",
-                            demos: [
-                                {
-                                    component: "angular-gauge",
-                                    caption: "Angular Gauge"
-                                },
-                                {
-                                    component: "area-range",
-                                    caption: "Area Range"
-                                },
-                                {
-                                    component: "box-plot",
-                                    caption: "Box Plot Example"
-                                },
-                                {
-                                    component: "bubble-chart",
-                                    caption: "Bubble Chart Example"
-                                },
-                                {
-                                    component: "clock",
-                                    caption: "Clock"
-                                },
-                                {
-                                    component: "color-threshold",
-                                    caption: "Color Threshold"
-                                },
-                                {
-                                    component: "column-range",
-                                    caption: "Column Range"
-                                },
-                                {
-                                    component: "column-range-resource-usage",
-                                    caption: "Column Range Resource Usage"
-                                },
-                                {
-                                    component: "error-bar",
-                                    caption: "Error Bar Example"
-                                },
-                                {
-                                    component: "exporting",
-                                    caption: "Exporting"
-                                },
-                                {
-                                    component: "funnel",
-                                    caption: "Funnel Chart Example"
-                                },
-                                {
-                                    component: "gauge-with-dual-axes",
-                                    caption: "Gauge with Dual Axes"
-                                },
-                                {
-                                    component: "heat-map",
-                                    caption: "Heat Map Example"
-                                },
-                                {
-                                    component: "polar",
-                                    caption: "Polar Chart Example"
-                                },
-                                {
-                                    component: "pyramid",
-                                    caption: "Pyramid Chart Example"
-                                },
-                                {
-                                    component: "solid-gauge",
-                                    caption: "Solid Gauge"
-                                },
-                                {
-                                    component: "spiderweb",
-                                    caption: "Spiderweb"
-                                },
-                                {
-                                    component: "treemap-with-color-axis",
-                                    caption: "Tree Map with Color Axis"
-                                },
-                                {
-                                    component: "treemap-with-levels",
-                                    caption: "Tree Map with Levels"
-                                },
-                                {
-                                    component: "vu-meter",
-                                    caption: "VU Meter"
-                                },
-                                {
-                                    component: "waterfall",
-                                    caption: "Waterfall Chart Example"
-                                },
-                                {
-                                    component: "windrose",
-                                    caption: "Wind Rose"
-                                }
-                            ]
-                        },
-                        {
-                            name: "3d",
-                            caption: "3D",
-                            demos: [
-                                {
-                                    component: "basic-3d-column",
-                                    caption: "Basic 3D Column"
-                                },
-                                {
-                                    component: "basic-3d-pie",
-                                    caption: "Basic 3D Pie"
-                                },
-                                {
-                                    component: "basic-3d-scatter",
-                                    caption: "Basic 3D Scatter"
-                                }
-                            ]
-                        },
-                        {
-                            name: "data",
-                            caption: "Data",
-                            demos: [
-                                {
-                                    component: "html-table-data",
-                                    caption: "HTML table as a data source"
-                                }, {
-                                    component: "html-table-data-inlined",
-                                    caption: "Inlined HTML table as a data source"
-                                }, {
-                                    component: "csv-data",
-                                    caption: "CSV as a data source"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                selectedIndex: {
-                    type: Number,
-                    value: 0,
-                    observer: '_selectedIndexChanged'
-                }
-            },
-
-            attached: function () {
-                for (var i = 0; i < this.categories.length; i++) {
-                    //TODO add category
-                    for (var j = 0; j < this.categories[i].demos.length; j++) {
-                        var newElem = document.createElement("div");
-                        newElem.appendChild(document.createTextNode(this.categories[i].demos[j].caption));
-                        Polymer.dom(this.$.menu).appendChild(newElem);
+        properties: {
+            categories: {
+                type: Array,
+                value: [
+                    {
+                        name: "column_and_bar",
+                        caption: "Column and Bar",
+                        demos: [
+                            {
+                                component: "bar-with-negative-stack",
+                                caption: "Bar with negative stack"
+                            },
+                            {
+                                component: "basic-bar",
+                                caption: "Basic Bar"
+                            },
+                            {
+                                component: "basic-column",
+                                caption: "Basic Column"
+                            },
+                            {
+                                component: "column-with-multi-level-drilldown",
+                                caption: "Column with multi level drilldown"
+                            },
+                            {
+                                component: "column-with-native-drilldown",
+                                caption: "Column with native drilldown"
+                            },
+                            {
+                                component: "column-with-negative-values",
+                                caption: "Column with negative values"
+                            },
+                            {
+                                component: "column-with-rotated-labels",
+                                caption: "Column with rotated labels"
+                            },
+                            {
+                                component: "dual-axes-line-and-column",
+                                caption: "Dual Axes Line and Column"
+                            },
+                            {
+                                component: "stacked-and-grouped-column",
+                                caption: "Stacked and Grouped Column"
+                            },
+                            {
+                                component: "stacked-bar",
+                                caption: "Stacked Bar"
+                            },
+                            {
+                                component: "stacked-column",
+                                caption: "Stacked  Column"
+                            },
+                            {
+                                component: "stacked-percentage-column",
+                                caption: "Stacked Percentage Column"
+                            }
+                        ]
+                    },
+                    {
+                        name: "pie",
+                        caption: "Pie",
+                        demos: [
+                            {
+                                component: "donut",
+                                caption: "Donut"
+                            },
+                            {
+                                component: "pie",
+                                caption: "Pie"
+                            },
+                            {
+                                component: "pie-with-credits",
+                                caption: "Pie with Credits"
+                            },
+                            {
+                                component: "pie-with-gradient-fill",
+                                caption: "Pie with Gradient Fill"
+                            },
+                            {
+                                component: "pie-with-legend",
+                                caption: "Pie with Legend"
+                            },
+                            {
+                                component: "pie-with-start-and-end-angle",
+                                caption: "Pie with Start and End Angle"
+                            }
+                        ]
+                    },
+                    {
+                        name: "area",
+                        caption: "Area",
+                        demos: [
+                            {
+                                component: "area-spline",
+                                caption: "Area Spline"
+                            },
+                            {
+                                component: "area-with-missing-points",
+                                caption: "Area with Missing Points"
+                            },
+                            {
+                                component: "area-with-negative-values",
+                                caption: "Area with Negative Values"
+                            },
+                            {
+                                component: "basic-area",
+                                caption: "Basic Area"
+                            },
+                            {
+                                component: "inverted-axes",
+                                caption: "Inverted Axes"
+                            },
+                            {
+                                component: "percentage-area",
+                                caption: "Percentage Area"
+                            },
+                            {
+                                component: "stacked-area",
+                                caption: "Stacked Area"
+                            }
+                        ]
+                    },
+                    {
+                        name: "line_and_scatter",
+                        caption: "Line and Scatter",
+                        demos: [
+                            {
+                                component: "basic-line",
+                                caption: "Basic Line"
+                            },
+                            {
+                                component: "basic-line-events",
+                                caption: "Basic Line with Mouse Events"
+                            },
+                            {
+                                component: "basic-line-with-callouts",
+                                caption: "Basic Line with Callouts"
+                            },
+                            {
+                                component: "basic-line-with-custom-crosshairs",
+                                caption: "Basic Line with Custom Crosshairs"
+                            },
+                            {
+                                component: "basic-line-with-data-labels",
+                                caption: "Basic Line with Data Labels"
+                            },
+                            {
+                                component: "date-axis-and-click-event",
+                                caption: "Date Axis and Click Event"
+                            },
+                            {
+                                component: "line-with-dash-selector",
+                                caption: "Line with Dash Selector"
+                            },
+                            {
+                                component: "lines-with-complex-html-tooltip",
+                                caption: "Lines with Complex HTML tooltip"
+                            },
+                            {
+                                component: "logarithmic-axis",
+                                caption: "Logarithmic axis"
+                            },
+                            {
+                                component: "spline-inverted",
+                                caption: "Spline Inverted"
+                            },
+                            {
+                                component: "spline-updating-each-second",
+                                caption: "Spline updating each second"
+                            },
+                            {
+                                component: "spline-with-plot-bands",
+                                caption: "Spline with Plot Bands"
+                            },
+                            {
+                                component: "spline-with-symbols",
+                                caption: "Spline with Symbols"
+                            },
+                            {
+                                component: "step-lines",
+                                caption: "Step Lines"
+                            },
+                            {
+                                component: "time-data-with-irregular-intervals",
+                                caption: "Time Data with Irregular Intervals"
+                            },
+                            {
+                                component: "time-series-zoomable",
+                                caption: "Time Series Zoomable"
+                            }
+                        ]
+                    },
+                    {
+                        name: "dynamic",
+                        caption: "Dynamic",
+                        demos: [
+                            {
+                                component: "click-to-add-point",
+                                caption: "Click to Add Point"
+                            },
+                            {
+                                component: "events",
+                                caption: "Events"
+                            },
+                            {
+                                component: "xy-chart-selection",
+                                caption: "XY Chart Selection"
+                            },
+                            {
+                                component: "master-detail-chart",
+                                caption: "MasterDetailChart"
+                            }
+                        ]
+                    },
+                    {
+                        name: "combination",
+                        caption: "Combination",
+                        demos: [
+                            {
+                                component: "column-line-pie",
+                                caption: "Column Line and Pie"
+                            },
+                            {
+                                component: "dual-charts",
+                                caption: "Dual Charts"
+                            },
+                            {
+                                component: "multiple-axes",
+                                caption: "Multiple Axes"
+                            },
+                            {
+                                component: "scatter-and-polygon",
+                                caption: "Scatter and Polygon"
+                            },
+                            {
+                                component: "scatter-with-regression-lines",
+                                caption: "Scatter with Regression Lines"
+                            }
+                        ]
+                    },
+                    {
+                        name: "other",
+                        caption: "Other",
+                        demos: [
+                            {
+                                component: "angular-gauge",
+                                caption: "Angular Gauge"
+                            },
+                            {
+                                component: "area-range",
+                                caption: "Area Range"
+                            },
+                            {
+                                component: "box-plot",
+                                caption: "Box Plot Example"
+                            },
+                            {
+                                component: "bubble-chart",
+                                caption: "Bubble Chart Example"
+                            },
+                            {
+                                component: "clock",
+                                caption: "Clock"
+                            },
+                            {
+                                component: "color-threshold",
+                                caption: "Color Threshold"
+                            },
+                            {
+                                component: "column-range",
+                                caption: "Column Range"
+                            },
+                            {
+                                component: "column-range-resource-usage",
+                                caption: "Column Range Resource Usage"
+                            },
+                            {
+                                component: "error-bar",
+                                caption: "Error Bar Example"
+                            },
+                            {
+                                component: "exporting",
+                                caption: "Exporting"
+                            },
+                            {
+                                component: "funnel",
+                                caption: "Funnel Chart Example"
+                            },
+                            {
+                                component: "gauge-with-dual-axes",
+                                caption: "Gauge with Dual Axes"
+                            },
+                            {
+                                component: "heat-map",
+                                caption: "Heat Map Example"
+                            },
+                            {
+                                component: "polar",
+                                caption: "Polar Chart Example"
+                            },
+                            {
+                                component: "pyramid",
+                                caption: "Pyramid Chart Example"
+                            },
+                            {
+                                component: "solid-gauge",
+                                caption: "Solid Gauge"
+                            },
+                            {
+                                component: "spiderweb",
+                                caption: "Spiderweb"
+                            },
+                            {
+                                component: "treemap-with-color-axis",
+                                caption: "Tree Map with Color Axis"
+                            },
+                            {
+                                component: "treemap-with-levels",
+                                caption: "Tree Map with Levels"
+                            },
+                            {
+                                component: "vu-meter",
+                                caption: "VU Meter"
+                            },
+                            {
+                                component: "waterfall",
+                                caption: "Waterfall Chart Example"
+                            },
+                            {
+                                component: "windrose",
+                                caption: "Wind Rose"
+                            }
+                        ]
+                    },
+                    {
+                        name: "3d",
+                        caption: "3D",
+                        demos: [
+                            {
+                                component: "basic-3d-column",
+                                caption: "Basic 3D Column"
+                            },
+                            {
+                                component: "basic-3d-pie",
+                                caption: "Basic 3D Pie"
+                            },
+                            {
+                                component: "basic-3d-scatter",
+                                caption: "Basic 3D Scatter"
+                            }
+                        ]
+                    },
+                    {
+                        name: "data",
+                        caption: "Data",
+                        demos: [
+                            {
+                                component: "html-table-data",
+                                caption: "HTML table as a data source"
+                            },
+                            {
+                                component: "html-table-data-inlined",
+                                caption: "Inlined HTML table as a data source"
+                            },
+                            {
+                                component: "csv-data",
+                                caption: "CSV as a data source"
+                            }
+                        ]
+                    },
+                    {
+                        name: "binding",
+                        caption: "Data Binding",
+                        demos: [
+                            {
+                                component: "wc-data-button",
+                                caption: "Add point on button click"
+                            },
+                            {
+                                component: "wc-data-example",
+                                caption: "Set data using JS API"
+                            },
+                            {
+                                component: "bind-series-data",
+                                caption: "Bind data to property"
+                            },
+                            {
+                                component: "rest-multiple-series-data",
+                                caption: "REST multiple series example"
+                            },
+                            {
+                                component: "rest-series-parse-data",
+                                caption: "Transform REST data for series"
+                            }
+                        ]
                     }
-                }
+                ]
             },
+            selectedIndex: {
+                type: Number,
+                value: 0,
+                observer: '_selectedIndexChanged'
+            }
+        },
 
-            _selectedIndexChanged: function (newIndex, oldIndex) {
-                if (typeof newIndex === 'number') {
-                    for (var i = 0; i < this.categories.length; i++) {
-                        var category = this.categories[i];
-                        if (category.demos.length <= newIndex) {
-                            newIndex -= this.categories[i].demos.length;
-                        } else {
-                            var demo = category.demos[newIndex];
-                            var src = category.name + '/' + demo.component;
-                            Polymer.dom(this.$.sourcing).setAttribute("source", src)
-                            return;
-                        }
+        attached: function () {
+            for (var i = 0; i < this.categories.length; i++) {
+                //TODO add category
+                for (var j = 0; j < this.categories[i].demos.length; j++) {
+                    var newElem = document.createElement("div");
+                    newElem.appendChild(document.createTextNode(this.categories[i].demos[j].caption));
+                    Polymer.dom(this.$.menu).appendChild(newElem);
+                }
+            }
+        },
+
+        _selectedIndexChanged: function (newIndex, oldIndex) {
+            if (typeof newIndex === 'number') {
+                for (var i = 0; i < this.categories.length; i++) {
+                    var category = this.categories[i];
+                    if (category.demos.length <= newIndex) {
+                        newIndex -= this.categories[i].demos.length;
+                    } else {
+                        var demo = category.demos[newIndex];
+                        var src = category.name + '/' + demo.component;
+                        Polymer.dom(this.$.sourcing).setAttribute("source", src)
+                        return;
                     }
                 }
             }
-        });
-    })();
+        }
+    });
 
 </script>
