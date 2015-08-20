@@ -26,34 +26,33 @@
                 <vc-title vc-align="high">Temperature (°C)</vc-title>
             </vc-y-axis>
 
-            <vc-tooltip vc-enabled="true" vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
+            <vc-tooltip vc-enabled="true"
+                        vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
 
             <vc-plot-options>
-                <vc-line >
+                <vc-line>
                     <vc-data-labels vc-enabled="true"></vc-data-labels>
                 </vc-line>
             </vc-plot-options>
-            <v-series vc-name="Tokyo"  vc-data="[[seriesData]]"></v-series>
-            <v-series vc-name="London"  vc-data="[[series2Data]]"></v-series>
+            <v-series vc-name="Tokyo" vc-data="[[seriesData]]"></v-series>
+            <v-series vc-name="London" vc-data="[[series2Data]]"></v-series>
 
         </v-chart>
     </template>
     <script>
-        (function () {
-            Polymer({
-                is: 'rest-multiple-series-data',
-                properties: {
-                    seriesData: Object,
-                    series2Data: Object
-                },
-                ready: function () {
-                    this.async(function () {
-                        this.$.firstSeriesFetcher.generateRequest();
-                        this.$.secondSeriesFetcher.generateRequest();
-                    }, 2);
-                }
-            });
-        })();
+        Polymer({
+            is: 'rest-multiple-series-data',
+            properties: {
+                seriesData: Object,
+                series2Data: Object
+            },
+            ready: function () {
+                this.async(function () {
+                    this.$.firstSeriesFetcher.generateRequest();
+                    this.$.secondSeriesFetcher.generateRequest();
+                }, 2);
+            }
+        });
     </script>
 
 </dom-module>

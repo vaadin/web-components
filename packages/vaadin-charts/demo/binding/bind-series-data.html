@@ -13,29 +13,28 @@
                 <vc-title vc-align="high">Temperature (°C)</vc-title>
             </vc-y-axis>
 
-            <vc-tooltip vc-enabled="true" vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
+            <vc-tooltip vc-enabled="true"
+                        vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
 
             <vc-plot-options>
-                <vc-line >
+                <vc-line>
                     <vc-data-labels vc-enabled="true"></vc-data-labels>
                 </vc-line>
             </vc-plot-options>
-            <v-series vc-name="Tokyo" vc-data="[[seriesData]]" ></v-series>
+            <v-series vc-name="Tokyo" vc-data="[[seriesData]]"></v-series>
 
         </v-chart>
     </template>
     <script>
-        (function () {
-            Polymer({
-                is: 'bind-series-data',
-                properties: {
-                    seriesData: {
-                        type: Array,
-                        value : [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-                    }
+        Polymer({
+            is: 'bind-series-data',
+            properties: {
+                seriesData: {
+                    type: Array,
+                    value: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
                 }
-            });
-        })();
+            }
+        });
     </script>
 
 </dom-module>

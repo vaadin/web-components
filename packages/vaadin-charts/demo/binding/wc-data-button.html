@@ -13,28 +13,30 @@
             <v-series id="mySeriesId" vc-data="[[mySeriesData]]">
             </v-series>
         </v-chart>
-        <button id="myBtn" on-click="_addSeriesPoint">Add series point</button>
+        <button on-click="_addSeriesPoint">Add series point</button>
     </template>
 
     <script>
-        (function () {
-            Polymer({
-                is: 'wc-data-button',
-                properties: {
-                    mySeriesData: {
-                        type: Array,
-                        notify: true,
-                        value: [[(new Date()).getTime() - 1000, Math.random()],
-                            [(new Date()).getTime(), Math.random()]]
-                    }
-                },
-                _addSeriesPoint: function () {
-                    var x = (new Date()).getTime(),
-                            y = Math.random();
-                    this.push('mySeriesData', [x, y]);
+        Polymer({
+            is: 'wc-data-button',
+            properties: {
+                mySeriesData: {
+                    type: Array,
+                    value: [[(new Date()).getTime() - 1000, Math.random()],
+                        [(new Date()).getTime(), Math.random()]]
                 }
-            });
-        })();
+            },
+            _addSeriesPoint: function () {
+                var x = (new Date()).getTime(),
+                        y = Math.random();
+                /**
+                 * Mutations to array properties (push, pop, splice, shift, unshift) must be performed using
+                 * methods provided on Polymer elements, such that the changes are observable to any elements bound to
+                 * the same array
+                 */
+                this.push('mySeriesData', [x, y]);
+            }
+        });
     </script>
 
 </dom-module>

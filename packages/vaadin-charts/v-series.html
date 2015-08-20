@@ -28,11 +28,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 value: false
             },
 
-            /**
-             * Index the series was given in the chart series array
-             */
-            _seriesIndex: Number,
-
             vcData: {
                 type: Array
             },
@@ -47,14 +42,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 value: function () {
                     return {};
                 }
-            }
+            },
+
+            /**
+             * Index the series was given in the chart series array
+             */
+            _seriesIndex: Number
 
         },
 
         observers: [
+            //Observer called when vcData array is changed
             '_dataChanged(vcData.splices)'
         ],
 
+        /**
+         * Updates chart data when series data changes
+         */
         _dataChanged: function () {
             if (this._seriesIndex != undefined) {
                 this.async(function () {

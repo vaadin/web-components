@@ -20,40 +20,34 @@
         </v-chart>
     </template>
     <script>
-        (function () {
-            Polymer({
-                is: 'rest-series-parse-data',
-                properties: {
-                    seriesData: Object,
-                    textData: {
-                        type: String,
-                        observer: '_textDataChanged'
-                    }
-                },
-                _textDataChanged: function (newValue) {
-                    var lines=newValue.split("\n");
-
-                    var result = [];
-
-                    for(var i=0;i<lines.length;i++){
-                        var tokens = lines[i].split(",");
-                        tokens=tokens.map(function (x) {
-                            return parseFloat(x);
-                        });
-
-                        result.push(tokens);
-                    }
-
-                    this.seriesData= result;
-                },
-
-                ready: function () {
-                    this.async(function () {
-                        this.$.dataFetcher.generateRequest();
-                    }, 2);
+        Polymer({
+            is: 'rest-series-parse-data',
+            properties: {
+                seriesData: Object,
+                textData: {
+                    type: String,
+                    observer: '_textDataChanged'
                 }
-            });
-        })();
+            },
+            _textDataChanged: function (newValue) {
+                var lines = newValue.split("\n");
+                var result = [];
+
+                for (var i = 0; i < lines.length; i++) {
+                    var tokens = lines[i].split(",");
+                    tokens = tokens.map(function (x) {
+                        return parseFloat(x);
+                    });
+                    result.push(tokens);
+                }
+
+                this.seriesData = result;
+            },
+
+            ready: function () {
+                this.$.dataFetcher.generateRequest();
+            }
+        });
     </script>
 
 </dom-module>
