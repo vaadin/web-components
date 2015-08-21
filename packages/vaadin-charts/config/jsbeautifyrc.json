@@ -1,0 +1,6 @@
+{
+	"indentChar": " ",
+	"indentSize": 4,
+	"breakChainedMethods": false,
+	"wrapLineLength": 80
+}

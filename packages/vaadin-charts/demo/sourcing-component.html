@@ -1,46 +1,46 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="v-cval-check.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../paper-tabs/paper-tabs.html">
 <link rel="import" href="../../iron-ajax/iron-ajax.html">
 <link rel="import" href="../v-chart.html">
+<link rel="import" href="prettify-element.html">
+"
 
 <!--
-This component allows viewing demo HTML files, so that the actual demo and the source are shown different pages. The file name, without the ".html" suffix, should be passed to the "source" property. The loaded DOM is inserted directly into the demo page, while the HTML text is loaded into the source page (using iron-ajax). 
+This component allows viewing demo HTML files, so that the actual demo and the source are shown different pages. The file name, without the ".html" suffix, should be passed to the "source" property. The loaded DOM is inserted directly into the demo page, while the HTML text is loaded into the source page (using iron-ajax).
 -->
 
 <dom-module id="sourcing-component">
     <style>
         :host .sourcecode {
-           cursor: text;
-           padding-left: 20px;
-           -moz-user-select: text;
-           -webkit-user-select: text;
-           -ms-user-select: text;
+            cursor: text;
+            padding-left: 20px;
+            -moz-user-select: text;
+            -webkit-user-select: text;
+            -ms-user-select: text;
         }
     </style>
     <template>
         <iron-ajax
                 id="sourceFetcher"
-                auto
                 handle-as="text"
                 last-response="{{htmlValue}}"
                 debounce-duration="300"></iron-ajax>
 
-        <paper-tabs id="tabs" selected="{{selected}}">
+        <paper-tabs id="tabs" selected="{{selected}}" noink>
             <paper-tab>Example</paper-tab>
             <paper-tab>Source</paper-tab>
         </paper-tabs>
 
-        <iron-pages id="pages"selected="{{selected}}">
+        <iron-pages id="pages" selected="{{selected}}">
             <div id="page1"></div>
-            <pre id="page2" class="sourcecode">{{htmlValue}}</pre>
+            <prettify-element text="{{htmlValue}}"></prettify-element>
         </iron-pages>
     </template>
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         var demoId2dom = {};
         Polymer({
             is: "sourcing-component",
@@ -59,12 +59,12 @@ This component allows viewing demo HTML files, so that the actual demo and the s
                 htmlValue: String
             },
 
-            updateDemo: function(demoId) {
+            updateDemo: function (demoId) {
                 if (demoId2dom[demoId]) {
                     // Clear example tab
                     var pageNode = Polymer.dom(this.$.page1)
                     while (pageNode.firstChild) {
-                       pageNode.removeChild(pageNode.firstChild);
+                        pageNode.removeChild(pageNode.firstChild);
                     }
 
                     // Add the DOM from cache
@@ -75,14 +75,17 @@ This component allows viewing demo HTML files, so that the actual demo and the s
 
                     // Load source code into tab two
                     this.$.sourceFetcher.url = demoId + ".html";
+                    this.$.sourceFetcher.generateRequest();
                 }
             },
 
-            _sourceChanged: function(newValue, oldValue) {
+            _sourceChanged: function (newValue, oldValue) {
+                //Always show chart tab when changing demo
+                this.$.pages.select('0');
+
                 if (demoId2dom[newValue]) {
                     this.updateDemo(newValue);
-                }
-                else {
+                } else {
                     this.importHref(newValue + ".html", function (result) {
                         demoId2dom[newValue] = result.target.import.body;
                         this.updateDemo(newValue);

@@ -10,6 +10,7 @@
             background-color: #2D343B;
             background-image: linear-gradient(to left, #2D343B 0px, #38414A 9px);
             color: #C5CACF;
+            overflow: scroll;
         }
 
         :host .logo {
@@ -20,6 +21,15 @@
             background-size: 70px 67px;
             padding-top: 85px;
             margin-bottom: 4px;
+        }
+
+        :host #main-content {
+            position: absolute;
+            top: 0px;
+            left: 250px;
+            bottom: 0;
+            right: 0;
+            overflow: scroll;
         }
     </style>
 
@@ -32,7 +42,7 @@
                 <demo-menu id="menu" selected="{{selectedIndex}}">
                 </demo-menu>
             </div>
-            <div style="position:absolute; top:0px; left:250px; bottom:0; right:0;">
+            <div id="main-content">
                 <sourcing-component id="sourcing"></sourcing-component>
             </div>
         </div>

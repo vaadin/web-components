@@ -9,7 +9,8 @@
       "configuration-reader.html"
     ],
     "doc": "*.md",
-    "demo": "demo/**/*"
+    "demo": "demo/**/*",
+    "test": "test/**/*"
   },
   "version": "3.0.0-alpha3"
 }

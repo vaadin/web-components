@@ -12,6 +12,7 @@
     "gulp": "^3.8.11",
     "gulp-bower": "0.0.10",
     "gulp-delete-lines": "0.0.7",
+    "gulp-jsbeautifier": "^1.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.3",
     "gulp-rsync": "0.0.5",
