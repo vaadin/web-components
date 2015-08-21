@@ -4,12 +4,10 @@
 <link rel="import" href="../../iron-ajax/iron-ajax.html">
 <link rel="import" href="../v-chart.html">
 <link rel="import" href="prettify-element.html">
-"
 
 <!--
 This component allows viewing demo HTML files, so that the actual demo and the source are shown different pages. The file name, without the ".html" suffix, should be passed to the "source" property. The loaded DOM is inserted directly into the demo page, while the HTML text is loaded into the source page (using iron-ajax).
 -->
-
 <dom-module id="sourcing-component">
     <style>
         :host .sourcecode {
@@ -69,9 +67,6 @@ This component allows viewing demo HTML files, so that the actual demo and the s
 
                     // Add the DOM from cache
                     pageNode.appendChild(demoId2dom[demoId]);
-
-                    // Force layout update; should be done in a better way
-                    pageNode.innerHTML = "".concat(pageNode.innerHTML);
 
                     // Load source code into tab two
                     this.$.sourceFetcher.url = demoId + ".html";

@@ -29,7 +29,7 @@
         Polymer({
             is: 'wc-data-example',
             properties: {},
-            ready: function () {
+            attached: function () {
                 this.async(function () {
                     var chartWC = this.$.chart;
                     if (chartWC) {
