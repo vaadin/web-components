@@ -80,10 +80,12 @@ This component allows viewing demo HTML files, so that the actual demo and the s
             },
 
             _sourceChanged: function (newValue, oldValue) {
+                //Always show chart tab when changing demo
+                this.$.pages.select('0');
+
                 if (demoId2dom[newValue]) {
                     this.updateDemo(newValue);
-                }
-                else {
+                } else {
                     this.importHref(newValue + ".html", function (result) {
                         demoId2dom[newValue] = result.target.import.body;
                         this.updateDemo(newValue);
