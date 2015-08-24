@@ -46,7 +46,7 @@
                 seriesData: Object,
                 series2Data: Object
             },
-            ready: function () {
+            attached: function () {
                 this.async(function () {
                     this.$.firstSeriesFetcher.generateRequest();
                     this.$.secondSeriesFetcher.generateRequest();
