@@ -6,7 +6,9 @@
         <vc-title>Historical USD to EUR Exchange Rate</vc-title>
         <vc-subtitle>Select an area by dragging across the lower chart</vc-subtitle>
         <vc-x-axis vc-type="datetime"></vc-x-axis>
-        <vc-y-axis vc-max-zoom="0.1"><vc-title vc-text=""></vc-title></vc-y-axis>
+        <vc-y-axis vc-max-zoom="0.1">
+            <vc-title vc-text=""></vc-title>
+        </vc-y-axis>
         <vc-tooltip vc-shared="true" vc-formatter="function () {
                 var point = this.points[0];
                 return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +'1 USD = ' + Highcharts.numberFormat(point.y, 2) + ' EUR';
