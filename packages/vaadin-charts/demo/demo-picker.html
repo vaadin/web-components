@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 
 <link rel="import" href="sourcing-component.html">
-<link rel="import" href="demo-menu.html">
+<link rel="import" href="menu-tree.html">
 
 <dom-module id="demo-picker">
 
@@ -39,8 +39,7 @@
                 <div class="h3 v-label-h3 logo">Vaadin Charts</div>
                 <div class="v-label-tiny" style="width:100%; text-align:center; color:white">Web Components</div>
                 <div style="height:30px"></div>
-                <demo-menu id="menu" selected="{{selectedIndex}}">
-                </demo-menu>
+                <menu-tree id="menu" categories="[[categories]]" selected-item="{{selected}}"></menu-tree>
             </div>
             <div id="main-content">
                 <sourcing-component id="sourcing"></sourcing-component>
@@ -455,38 +454,16 @@
                     }
                 ]
             },
-            selectedIndex: {
-                type: Number,
-                value: 0,
-                observer: '_selectedIndexChanged'
+            selected: {
+                type: String,
+                value: 'bar-with-negative-stack',
+                observer: '_selectedChanged'
             }
         },
 
-        attached: function () {
-            for (var i = 0; i < this.categories.length; i++) {
-                //TODO add category
-                for (var j = 0; j < this.categories[i].demos.length; j++) {
-                    var newElem = document.createElement("div");
-                    newElem.appendChild(document.createTextNode(this.categories[i].demos[j].caption));
-                    Polymer.dom(this.$.menu).appendChild(newElem);
-                }
-            }
-        },
-
-        _selectedIndexChanged: function (newIndex, oldIndex) {
-            if (typeof newIndex === 'number') {
-                for (var i = 0; i < this.categories.length; i++) {
-                    var category = this.categories[i];
-                    if (category.demos.length <= newIndex) {
-                        newIndex -= this.categories[i].demos.length;
-                    } else {
-                        var demo = category.demos[newIndex];
-                        var src = category.name + '/' + demo.component;
-                        Polymer.dom(this.$.sourcing).setAttribute("source", src)
-                        return;
-                    }
-                }
-            }
+        _selectedChanged: function (demo) {
+            var src = this.$.menu.selectedCategory+ '/' + demo;
+            Polymer.dom(this.$.sourcing).setAttribute("source", src)
         }
     });
 

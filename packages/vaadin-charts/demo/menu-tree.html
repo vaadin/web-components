@@ -1,0 +1,152 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-menu-behavior/iron-menu-behavior.html">
+
+<!--
+A tree menu for selecting categories and demos.
+-->
+<dom-module id="menu-tree">
+
+    <style>
+
+        .category-items {
+            /* Approximation of the max height needed */
+            max-height: 500px;
+
+            -webkit-transition: max-height 0.3s;
+            -moz-transition: max-height 0.3s;
+            -ms-transition: max-height 0.3s;
+            -o-transition: max-height 0.3s;
+            transition: max-height 0.3s;
+
+            overflow: hidden;
+        }
+
+        .category.closed .category-items {
+            max-height: 0px;
+        }
+
+        .category.open .tree-arrow-closed {
+            display: none;
+        }
+
+        .category.closed .tree-arrow-open {
+            display: none;
+        }
+
+        .category-item {
+            padding-left: 30px;
+        }
+
+        .category-item.selected {
+            color: white;
+            background-color: black;
+        }
+
+
+    </style>
+
+    <template>
+        <template is="dom-repeat" id="categories" items="[[categories]]" as="category">
+            <div id="[[category.name]]" class="category closed" on-click="_categoryClicked">
+                <i class="icon tree-arrow-closed">&#xe7be;</i>
+                <i class="icon tree-arrow-open">&#xe7bc;</i>
+                <span class="category-caption">[[category.caption]]</span>
+
+                <div class="category-items">
+                    <template is="dom-repeat" items="[[category.demos]]" as="demo">
+                        <div id="[[demo.component]]" class="category-item" on-click="_itemClicked">
+                            <span class="category-item-caption">[[demo.caption]]</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'menu-tree',
+
+            properties: {
+                selectedCategory: String,
+
+                selectedItem: {
+                    type: String,
+                    notify: true,
+                    observer: '_selectedItemChanged'
+                },
+
+                categories: Array
+            },
+
+            _categoryClicked: function (event, detail, sender) {
+                var selectedCategory = this._getElementForId(event.model.category.name);
+
+                if (selectedCategory.classList.contains("closed")) {
+                    selectedCategory.classList.remove("closed");
+                    selectedCategory.classList.add("open");
+                } else {
+                    selectedCategory.classList.add("closed");
+                    selectedCategory.classList.remove("open");
+                }
+            },
+
+            _itemClicked: function (event, detail, sender) {
+                event.stopPropagation();
+                this.selectedCategory = this.$.categories.modelForElement(event.target).category.name;
+                this.selectedItem = event.model.demo.component;
+
+                var selectedItem = this._getElementForId(event.model.demo.component);
+            },
+
+            _selectedItemChanged: function (newValue, oldValue) {
+                var categoryName = this._getCategoryForItem(newValue);
+                this.selectedCategory = categoryName;
+
+                this.async(function () {
+                    //delayed DOM manipulation
+                    this._openCategoryForItem(this.selectedCategory);
+
+                    var selectedItemElement = this._getElementForId(newValue)
+                    var selectedCategoryElement = this._getElementForId(categoryName);
+
+                    var oldSelectedItemElement = this._getElementForId(oldValue)
+                    if (oldSelectedItemElement !== undefined && oldSelectedItemElement !== null) {
+                        oldSelectedItemElement.classList.remove("selected");
+                    }
+
+                    selectedItemElement.classList.add("selected");
+                }, 1);
+
+            },
+
+            _getCategoryForItem: function (newItem) {
+                if (typeof newItem !== 'undefined' && newItem !== null) {
+                    for (var i = 0; i < this.categories.length; i++) {
+                        var category = this.categories[i];
+                        for (var j = 0; j < category.demos.length; j++) {
+                            var demo = category.demos[j];
+                            if (demo.component === newItem) {
+                                return category.name;
+
+                            }
+                        }
+                    }
+                }
+                console.log('Category not found for item: ' + newItem);
+                this.selectedItem = undefined;
+            },
+
+            _openCategoryForItem: function (categoryName) {
+                var categoryElement = this._getElementForId(categoryName);
+                categoryElement.classList.remove("closed");
+                categoryElement.classList.add("open");
+            },
+
+            _getElementForId: function (id) {
+                //so that we can accept numeric ids, like 3d
+                return this.querySelector("[id='"+ id +"']");
+            }
+        });
+    </script>
+</dom-module>

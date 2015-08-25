@@ -81,7 +81,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _evalJavascript: function (val) {
             //always eval
-            return true;
+            /*return true;*/
+            return val.indexOf('function') === 0
+                    || val.indexOf('Date.UTC') === 0
+                    || val.indexOf('[') === 0;
         },
 
         _parentChart: function () {
