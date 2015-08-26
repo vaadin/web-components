@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo basic tests</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+
+  <test-fixture id="SimpleVaadinComboBox">
+    <template>
+      <vaadin-combo-box></vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+
+  <script>
+    describe('properties', function() {
+      var vComboBox;
+
+      beforeEach(function() {
+        vComboBox = fixture('SimpleVaadinComboBox');
+      });
+
+      it('should have the correct is property', function() {
+        expect(vComboBox.is).to.equal("vaadin-combo-box");
+      });
+    });
+  </script>
+
+</body>
+
+</html>
