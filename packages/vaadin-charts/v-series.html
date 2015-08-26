@@ -57,15 +57,31 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         ],
 
         /**
+         * Reloads the series with the original configuration defined in elements and its attributes.
+         */
+        _reloadConfiguration: function () {
+            this._seriesConf = {};
+            this._initConfiguration();
+            if (!this._seriesConf.hasOwnProperty('data') && this.vcData) {
+                this._seriesConf.data = this.vcData;
+            }
+            if (this.vcDrilldown) {
+                this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
+            } else {
+                this._seriesIndex = this._parentChart()._addSeries(this._seriesConf);
+            }
+        },
+
+        /**
          * Updates chart data when series data changes
          */
         _dataChanged: function () {
             if (this._seriesIndex != undefined) {
-                    if (this.vcDrilldown) {
-                        this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.vcData);
-                    } else {
-                        this._parentChart().chart.series[this._seriesIndex].setData(this.vcData);
-                    }
+                if (this.vcDrilldown) {
+                    this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.vcData);
+                } else {
+                    this._parentChart().chart.series[this._seriesIndex].setData(this.vcData);
+                }
             } else {
                 this._seriesConf['data'] = this.vcData;
             }
@@ -199,16 +215,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 
         ready: function () {
-            var element = Polymer.dom(this);
-            this._cleanNode(element);
-            this._loadFromNode(this._seriesConf, element.node);
-            this._loadConfiguration(this._seriesConf, element);
-            this._loadData();
+            this._initConfiguration();
             if (this.vcDrilldown) {
                 this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
             } else {
                 this._seriesIndex = this._parentChart()._addSeries(this._seriesConf);
             }
+        },
+
+        /**
+         * Initializes the series json configuration.
+         */
+        _initConfiguration: function () {
+            var element = Polymer.dom(this);
+            this._cleanNode(element);
+            this._loadFromNode(this._seriesConf, element.node);
+            this._loadConfiguration(this._seriesConf, element);
+            this._loadData();
         }
 
     });

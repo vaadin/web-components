@@ -53,21 +53,13 @@
     </script>
 
 </dom-module>
-<binding-chart id="test-component">
-
-</binding-chart>
+<binding-chart></binding-chart>
 
 <script>
 
     suite('<v-chart>', function () {
-        var el;
-        setup(function () {
-            el = document.createElement('binding-chart');
-            document.body.appendChild(el);
-        });
-        teardown(function () {
-            document.body.removeChild(el);
-        });
+        var el = document.querySelector("binding-chart");
+
         test('data property binding', function () {
             var chartwc = el.$.chartId;
             var conf = chartwc._chartConf;

@@ -88,8 +88,30 @@ Example:
 
 
             /**
+             * Reloads the chart with the original configuration defined in elements and its attributes.
+             */
+            reloadConfiguration: function () {
+                this._chartConf = {chart: {}};
+                this._initConfiguration();
+                this.chart.destroy();
+                this.chart = {};
+                this._reloadSeries();
+                this._initChart();
+            },
+
+            /**
+             * Reload all the chart's series
+             */
+            _reloadSeries: function () {
+                var series = Polymer.dom(this).querySelectorAll('v-series');
+                for (var i = 0; i < series.length; i++) {
+                    series[i]._reloadConfiguration();
+                }
+            },
+
+            /**
              * Dynamically add a new Series to this chart
-             * Returns the index of the added series in the series array
+             * @return The index of the added series in the series array
              **/
             _addSeries: function (newSeries) {
                 if (this._chartConf.series === undefined) {
@@ -101,7 +123,7 @@ Example:
 
             /**
              * Dynamically add a new Series to this chart's Drilldown configuration
-             * Returns the index of the added series in the drilldown series array
+             * @return The index of the added series in the drilldown series array
              **/
             _addDrilldownSeries: function (newSeries) {
                 if (!this._chartConf.drilldown) {
@@ -121,6 +143,13 @@ Example:
             },
 
             attached: function () {
+                this._initChart();
+            },
+
+            /**
+             * Initializes the chart property using the json configuration.
+             */
+            _initChart: function () {
                 //Only initialize once
                 if (Object.keys(this.chart).length === 0) {
                     this.chart = new Highcharts.Chart(this._chartConf);
@@ -129,6 +158,17 @@ Example:
             },
 
             ready: function () {
+                this._initConfiguration();
+
+                if (this._loadTheme) {
+                    this._loadTheme();
+                }
+            },
+
+            /**
+             * Initializes the chart json configuration.
+             */
+            _initConfiguration: function () {
                 this._cleanNode(Polymer.dom(this));
                 this._loadConfiguration(this._chartConf, Polymer.dom(this));
 
@@ -138,10 +178,6 @@ Example:
 
                 this._chartConf.chart.type = this.vcType;
                 this._chartConf.chart.renderTo = this.$.chartContainer;
-
-                if (this._loadTheme) {
-                    this._loadTheme();
-                }
             }
         });
     </script>
