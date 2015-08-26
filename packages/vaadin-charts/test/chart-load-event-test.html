@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+
+<dom-module id="eventful-pie-declarative-attribute">
+
+    <template>
+        <v-chart on-chart-loaded="chartLoaded"></v-chart>
+    </template>
+
+    <script>
+        (function () {
+            HTMLImports.whenReady(function () {
+                Polymer({
+                    is: 'eventful-pie-declarative-attribute',
+
+                    properties: {
+                        loaded: {
+                            type: Boolean,
+                            value: false
+                        }
+                    },
+
+                    chartLoaded: function () {
+                        this.loaded = true;
+                    }
+                });
+            });
+        })();
+    </script>
+</dom-module>
+
+<eventful-pie-declarative-attribute></eventful-pie-declarative-attribute>
+
+<dom-module id="eventful-pie-declarative-mapping">
+
+    <template>
+        <v-chart></v-chart>
+    </template>
+
+    <script>
+        (function () {
+            HTMLImports.whenReady(function () {
+                Polymer({
+                    is: 'eventful-pie-declarative-mapping',
+
+                    properties: {
+                        loaded: {
+                            type: Boolean,
+                            value: false
+                        }
+                    },
+
+                    listeners: {
+                        'chart-loaded': 'chartLoaded'
+                    },
+
+                    chartLoaded: function () {
+                        this.loaded = true;
+                    }
+                });
+            });
+        })();
+    </script>
+</dom-module>
+
+<eventful-pie-declarative-mapping></eventful-pie-declarative-mapping>
+
+<script>
+    suite('<v-chart>', function () {
+
+        test('chart on-load event, programmatically added', function (done) {
+            var element = document.createElement('v-chart');
+            element.addEventListener("chart-loaded", function () {
+                expect(element.chart.redraw).to.exist;
+                document.body.removeChild(element);
+                done();
+
+            });
+            document.body.appendChild(element);
+        });
+
+        test('chart on-load event, declarative on-event', function () {
+            var element = document.querySelector("eventful-pie-declarative-attribute");
+
+            expect(element.loaded).to.be.true;
+
+            var elementChart = document.querySelector("eventful-pie-declarative-attribute v-chart");
+
+            expect(elementChart.chart.redraw).to.exist;
+        });
+
+        test('chart on-load event, declarative listener mapping', function () {
+            var element = document.querySelector("eventful-pie-declarative-mapping");
+
+            expect(element.loaded).to.be.true;
+
+            var elementChart = document.querySelector("eventful-pie-declarative-mapping v-chart");
+
+            expect(elementChart.chart.redraw).to.exist;
+        });
+
+    });
+
+</script>
+
+</body>
+</html>
