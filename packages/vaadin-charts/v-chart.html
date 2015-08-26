@@ -121,13 +121,11 @@ Example:
             },
 
             attached: function () {
-                this.async(function () {
-                    //Only initialize once
-                    if (Object.keys(this.chart).length === 0) {
-                        this.chart = new Highcharts.Chart(this._chartConf);
-                        this.fire("chart-loaded");
-                    }
-                }, 1);
+                //Only initialize once
+                if (Object.keys(this.chart).length === 0) {
+                    this.chart = new Highcharts.Chart(this._chartConf);
+                    this.fire("chart-loaded");
+                }
             },
 
             ready: function () {
