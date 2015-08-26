@@ -80,8 +80,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Overrides behavior, for v-series all values should be evaluated as javascript
          **/
         _evalJavascript: function (val) {
-            //always eval
-            /*return true;*/
+            // only eval when needed
+            // functions, dates and arrays
             return val.indexOf('function') === 0
                     || val.indexOf('Date.UTC') === 0
                     || val.indexOf('[') === 0;

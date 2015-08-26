@@ -95,8 +95,6 @@ A tree menu for selecting categories and demos.
                 event.stopPropagation();
                 this.selectedCategory = this.$.categories.modelForElement(event.target).category.name;
                 this.selectedItem = event.model.demo.component;
-
-                var selectedItem = this._getElementForId(event.model.demo.component);
             },
 
             _selectedItemChanged: function (newValue, oldValue) {
@@ -108,7 +106,6 @@ A tree menu for selecting categories and demos.
                     this._openCategoryForItem(this.selectedCategory);
 
                     var selectedItemElement = this._getElementForId(newValue)
-                    var selectedCategoryElement = this._getElementForId(categoryName);
 
                     var oldSelectedItemElement = this._getElementForId(oldValue)
                     if (oldSelectedItemElement !== undefined && oldSelectedItemElement !== null) {
@@ -145,7 +142,7 @@ A tree menu for selecting categories and demos.
 
             _getElementForId: function (id) {
                 //so that we can accept numeric ids, like 3d
-                return this.querySelector("[id='"+ id +"']");
+                return this.querySelector("[id='" + id + "']");
             }
         });
     </script>
