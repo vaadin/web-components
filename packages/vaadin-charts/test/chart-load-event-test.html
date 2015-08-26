@@ -79,6 +79,7 @@
         test('chart on-load event, programmatically added', function (done) {
             var element = document.createElement('v-chart');
             element.addEventListener("chart-loaded", function () {
+                expect(element.chart.redraw).to.exist;
                 document.body.removeChild(element);
                 done();
 
@@ -90,12 +91,20 @@
             var element = document.querySelector("eventful-pie-declarative-attribute");
 
             expect(element.loaded).to.be.true;
+
+            var elementChart = document.querySelector("eventful-pie-declarative-attribute v-chart");
+
+            expect(elementChart.chart.redraw).to.exist;
         });
 
         test('chart on-load event, declarative listener mapping', function () {
             var element = document.querySelector("eventful-pie-declarative-mapping");
 
             expect(element.loaded).to.be.true;
+
+            var elementChart = document.querySelector("eventful-pie-declarative-mapping v-chart");
+
+            expect(elementChart.chart.redraw).to.exist;
         });
 
     });
