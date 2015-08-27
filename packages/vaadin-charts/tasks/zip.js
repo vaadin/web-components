@@ -10,7 +10,7 @@ var deleteLines = require('gulp-delete-lines');
 var zipDest = config.dest + '/zip/';
 var zipTemp = config.temp + '/zip/';
 
-gulp.task('zip:stage', ['zip:vulcanize-sources', 'zip:copy-sources','zip:copy-demo','zip:copy-doc']);
+gulp.task('zip:stage', ['zip:vulcanize-sources', 'zip:copy-sources', 'zip:copy-demo', 'zip:copy-doc']);
 
 gulp.task('zip:vulcanize-sources', ['zip:copy-sources-temp', 'zip:install-dependencies-temp'], function () {
     return gulp.src(zipTemp + '/v-chart.html')
@@ -36,11 +36,12 @@ gulp.task('zip:install-dependencies-temp', function () {
 
 gulp.task('zip:copy-demo', function () {
     return gulp.src(config.files.demo)
-        .pipe(replace('../', '../src/'))
+        .pipe(replace('../../', '../', {skipBinary: true}))
+        .pipe(replace('../', '../src/', {skipBinary: true}))
         .pipe(gulp.dest(zipDest + 'demo'));
 });
 
-gulp.task('zip:copy-doc', function() {
+gulp.task('zip:copy-doc', function () {
     return gulp.src(config.files.doc)
         .pipe(gulp.dest(zipDest))
 });
