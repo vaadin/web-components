@@ -28,7 +28,8 @@
     "index.html"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "highcharts":"highslide-software/highcharts-release#v4.1.8"
   },
   "devDependencies": {
     "google-code-prettify": "*",
