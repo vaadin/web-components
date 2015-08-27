@@ -10,6 +10,9 @@
 <body>
 <script>
 
+    // increase the default load page time out
+    WCT._ChildRunner.loadTimeout = 60000 * 3;
+
     WCT.loadSuites([
         'binding-test.html',
         'chart-3d.html',
