@@ -3,13 +3,97 @@
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
+<link rel='import' href='vaadin-overlay-combo-box.html'>
+<link rel='import' href='../iron-input/iron-input.html'>
 
 <dom-module id="vaadin-combo-box">
   <template>
     <style>
+      :host {
+        font-family: Arial;
+        -webkit-box-align: stretch;
+        -moz-box-align: stretch;
+        box-align: stretch;
+        -webkit-align-items: stretch;
+        -moz-align-items: stretch;
+        -ms-align-items: stretch;
+        -o-align-items: stretch;
+        align-items: stretch;
+        -ms-flex-align: stretch;
+        display: -webkit-box;
+        display: -moz-box;
+        display: box;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-transition: all 0.1s ease-in;
+        -moz-transition: all 0.1s ease-in;
+        transition: all 0.1s ease-in;
+        border-radius: 3px;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+        box-sizing: border-box;
+        height: 34px;
+        width: 240px;
+      }
 
+      input {
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        box-flex: 1;
+        -webkit-flex: 1;
+        -moz-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        box-shadow: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .button {
+        -webkit-box-align: center;
+        -moz-box-align: center;
+        box-align: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        -o-align-items: center;
+        align-items: center;
+        -ms-flex-align: center;
+        display: -webkit-box;
+        display: -moz-box;
+        display: box;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-shrink: 0;
+        -moz-flex-shrink: 0;
+        flex-shrink: 0;
+        -ms-flex-negative: 0;
+        -webkit-box-pack: center;
+        -moz-box-pack: center;
+        box-pack: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        -o-justify-content: center;
+        justify-content: center;
+        -ms-flex-pack: center;
+        background-color: #ededed;
+        border-top-right-radius: inherit;
+        border-bottom-right-radius: inherit;
+        cursor: pointer;
+        font-family: FontAwesome;
+        width: 34px;
+      }
     </style>
-    Vaadin combo box
+
+    <input is="iron-input" on-focus=showDropdown bind-value="{{value}}">
+    <div class="button" on-click=showDropdown>:)</div>
+
+    <vaadin-overlay-combo-box initial-value=[[value]] selected={{value}} id="overlay">
+    </vaadin-overlay-combo-box>
   </template>
 </dom-module>
 
@@ -19,8 +103,18 @@
     is: "vaadin-combo-box",
 
     properties: {
+      value: {
+        notify: true,
+        value: "Finland"
+      }
+    },
 
+    behaviors: [
+
+    ],
+
+    showDropdown: function() {
+      this.$.overlay.openAndFocus();
     }
-
   }); // End Polymer prototype
 </script>

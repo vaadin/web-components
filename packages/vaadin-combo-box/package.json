@@ -1,0 +1,14 @@
+{
+  "name": "vaadin-combo-box",
+  "version": "1.0.0",
+  "author": "Vaadin Ltd",
+  "license": "Apache License 2.0",
+  "devDependencies": {
+    "bower": "latest",
+    "gulp": "latest",
+    "browser-sync": "latest"
+  },
+  "scripts": {
+    "install": "node_modules/.bin/bower install --allow-root"
+  }
+}
