@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+
+<dom-module id="reload-chart">
+    <template>
+        <v-chart id="chartWithBinding">
+            <vc-title>Global temperature change</vc-title>
+            <vc-subtitle>Data input from CSV</vc-subtitle>
+            <vc-plot-options>
+                <vc-series>
+                    <vc-marker vc-enabled="false"></vc-marker>
+                </vc-series>
+            </vc-plot-options>
+            <vc-x-axis vc-type="datetime"></vc-x-axis>
+            <v-series id="seriesId" vc-data="[[seriesData]]" vc-line-width="1" vc-name="Global"></v-series>
+        </v-chart>
+        <button id="pointBtn" on-click="_addSeriesPoint">Add series point</button>
+        <button id="titleBtn" on-click="_changeTitle">Change title</button>
+        <button id="nameBtn" on-click="_changeName">Change series name</button>
+        <button id="reloadBtn" on-click="_reload">Reload</button>
+
+    </template>
+    <script>
+        (function () {
+            HTMLImports.whenReady(function () {
+                Polymer({
+                    is: 'reload-chart',
+                    properties: {
+                        seriesData: {
+                            type: Array,
+                            value: [
+                                [1183939200000, 40.71],
+                                [1184025600000, 40.38],
+                                [1184112000000, 40.82],
+                                [1184198400000, 47.55],
+                                [1184284800000, 41.18],
+                                [1184544000000, 41.06],
+                                [1184630400000, 41.47]]
+                        }
+                    },
+                    _addSeriesPoint: function () {
+                        var x = (new Date()).getTime(),
+                                y = Math.random();
+                        this.push('seriesData', [x, y]);
+                    },
+                    _changeTitle: function () {
+                        this.$.chartWithBinding.chart.setTitle({text: 'New title'});
+                    },
+                    _changeName: function () {
+                        this.$.chartWithBinding.chart.series[0].name = 'New name';
+                    },
+                    _reload: function () {
+                        this.$.chartWithBinding.reloadConfiguration();
+                    }
+                });
+            });
+        })();
+    </script>
+
+</dom-module>
+<reload-chart></reload-chart>
+<script>
+
+    suite('<v-chart>', function () {
+        var el;
+        var chartwc;
+
+        setup(function () {
+            el = document.querySelector("reload-chart");
+            chartwc = el.$.chartWithBinding;
+        });
+
+        test('chart configuration change', function () {
+            expect(chartwc.chart.title.textStr).to.equal("Global temperature change");
+
+            el.$.titleBtn.click();
+            expect(chartwc.chart.title.textStr).to.equal("New title");
+
+            chartwc.reloadConfiguration();
+            expect(chartwc.chart.title.textStr).to.equal("Global temperature change");
+        });
+
+        test('series configuration change', function () {
+            expect(chartwc.chart.series[0].name).to.equal("Global");
+
+            el.$.nameBtn.click();
+            expect(chartwc.chart.series[0].name).to.equal("New name");
+
+            chartwc.reloadConfiguration();
+            expect(chartwc.chart.series[0].name).to.equal("Global");
+        });
+
+        test('series binding maintained', function () {
+            expect(chartwc.chart.series[0].data).to.have.length(7);
+
+            el.$.pointBtn.click();
+            expect(chartwc.chart.series[0].data).to.have.length(8);
+
+            el.$.reloadBtn.click();
+            expect(chartwc.chart.series[0].data).to.have.length(8);
+        });
+    });
+
+</script>
+
+</body>
+</html>
