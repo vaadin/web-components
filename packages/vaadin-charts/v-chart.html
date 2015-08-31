@@ -33,7 +33,7 @@ An element that provides a WebComponent interface for <a href="http://www.highch
 
 Example:
 
-    <v-chart vc-type="line">
+    <v-chart type="line">
         <vc-title>Example</vc-title>
         <v-series name="Example">
             <vc-data>["Example1", 45.0], ["Example2", 26.8]</vc-data>
@@ -68,7 +68,7 @@ Example:
                     }
                 },
 
-                vcType: {
+                type: {
                     type: String,
                     value: 'line'
                 },
@@ -176,7 +176,7 @@ Example:
                     this._chartConf.chart = {};
                 }
 
-                this._chartConf.chart.type = this.vcType;
+                this._chartConf.chart.type = this.type;
                 this._chartConf.chart.renderTo = this.$.chartContainer;
             }
         });

@@ -64,12 +64,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *
          * @param {string} str
          **/
-        _toCamelCase: function (str) {
+        _toCamelCase: function (str, isNode) {
             var out = "";
             if (this._nodeValueAttributes.indexOf(str) !== -1) {
                 out = str;
             } else {
-                str = str.substring(this._vaadinChartsPrefix.length);
+                if (isNode) {
+                    str = str.substring(this._vaadinChartsPrefix.length);
+                }
                 str.split("-").forEach(function (word, idx) {
                     var add = word.toLowerCase();
                     //first word always goes in lower case, the rest go with camelCase, except for _uppercaseWords
@@ -93,12 +95,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var i in node.attributes) {
                 if (node.attributes.hasOwnProperty(i)) {
                     var attr = node.attributes[i].name;
-                    if (this._isVaadinChartsAttribute(attr)) {
-                        if (attr !== undefined) {
-                            var val = node.getAttribute(attr);
-                            var res = this._parseAttribute(val);
-                            dest[this._toCamelCase(attr)] = res;
-                        }
+                    if (attr !== undefined) {
+                        var val = node.getAttribute(attr);
+                        var res = this._parseAttribute(val);
+                        dest[this._toCamelCase(attr)] = res;
                     }
                 }
             }
@@ -172,7 +172,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 var node = parent.childNodes[n];
                 var name = node.nodeName.toLowerCase();
                 if (this._isVaadinChartsAttribute(name)) {
-                    var camelName = this._toCamelCase(name);
+                    var camelName = this._toCamelCase(name, true);
                     if (this._ignoredNodes.indexOf(name) === -1) {
                         var result;
 

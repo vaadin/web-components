@@ -23,12 +23,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Is drilldown series
              */
-            vcDrilldown: {
+            drilldown: {
                 type: Boolean,
                 value: false
             },
 
-            vcData: {
+            data: {
                 type: Array
             },
 
@@ -52,8 +52,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         observers: [
-            //Observer called when vcData array is changed
-            '_dataChanged(vcData.splices)'
+            //Observer called when data array is changed
+            '_dataChanged(data.splices)'
         ],
 
         /**
@@ -62,10 +62,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _reloadConfiguration: function () {
             this._seriesConf = {};
             this._initConfiguration();
-            if (!this._seriesConf.hasOwnProperty('data') && this.vcData) {
-                this._seriesConf.data = this.vcData;
+            if (!this._seriesConf.hasOwnProperty('data') && this.data) {
+                this._seriesConf.data = this.data;
             }
-            if (this.vcDrilldown) {
+            if (this.drilldown) {
                 this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
             } else {
                 this._seriesIndex = this._parentChart()._addSeries(this._seriesConf);
@@ -77,13 +77,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          */
         _dataChanged: function () {
             if (this._seriesIndex != undefined) {
-                if (this.vcDrilldown) {
-                    this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.vcData);
+                if (this.drilldown) {
+                    this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.data);
                 } else {
-                    this._parentChart().chart.series[this._seriesIndex].setData(this.vcData);
+                    this._parentChart().chart.series[this._seriesIndex].setData(this.data);
                 }
             } else {
-                this._seriesConf['data'] = this.vcData;
+                this._seriesConf['data'] = this.data;
             }
         },
 
@@ -117,7 +117,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < element.childNodes.length; n++) {
                 var node = element.childNodes[n];
                 var name = node.nodeName.toLowerCase();
-                var camelName = this._toCamelCase(name);
+                var camelName = this._toCamelCase(name, true);
                 if (camelName === 'data') {
                     var value;
                     if (this._hasPointNodes(node)) {
@@ -143,7 +143,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < pointNode.childNodes.length; n++) {
                 var node = pointNode.childNodes[n];
                 if (this._hasOnlyTextContent(node)) {
-                    var camelName = this._toCamelCase(node.nodeName.toLowerCase());
+                    var camelName = this._toCamelCase(node.nodeName.toLowerCase(), true);
                     if ('date' === camelName) {
                         if (result['x'] === undefined) {
                             var parsedDate = this._parseDate(node.textContent);
@@ -216,7 +216,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         ready: function () {
             this._initConfiguration();
-            if (this.vcDrilldown) {
+            if (this.drilldown) {
                 this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
             } else {
                 this._seriesIndex = this._parentChart()._addSeries(this._seriesConf);
