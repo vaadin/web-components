@@ -1,4 +1,4 @@
-<v-chart id="basic-3d-column" vc-type="column">
+<v-chart id="basic-3d-column" type="column">
     <vc-title>Monthly Average Rainfall</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
@@ -6,38 +6,38 @@
         <vc-categories>Jan, Feb, Mar, Apr</vc-categories>
     </vc-x-axis>
 
-    <vc-y-axis vc-min="0">
+    <vc-y-axis min="0">
         <vc-title>Rainfall (mm)</vc-title>
     </vc-y-axis>
 
-    <vc-tooltip vc-formatter="function() {return this.x +': ' + this.y + ' mm';}"></vc-tooltip>
+    <vc-tooltip formatter="function() {return this.x +': ' + this.y + ' mm';}"></vc-tooltip>
 
     <vc-plot-options>
-        <vc-column vc-point-padding="0.2"
-                vc-border-width="0"
-                vc-group-z-padding="10">
+        <vc-column point-padding="0.2"
+                border-width="0"
+                group-z-padding="10">
         </vc-column>
     </vc-plot-options>
 
     <vc-chart>
-        <vc-options3d vc-enabled="true"
-                   vc-alpha="5"
-                   vc-beta="30"
-                   vc-depth="100"
-                   vc-view-distance="200">
+        <vc-options3d enabled="true"
+                   alpha="5"
+                   beta="30"
+                   depth="100"
+                   view-distance="200">
         </vc-options3d>
     </vc-chart>
 
-    <v-series vc-name="Tokyo">
+    <v-series name="Tokyo">
         <vc-data>49.9, 71.5, 106.4, 129.2</vc-data>
     </v-series>
-    <v-series vc-name="New York">
+    <v-series name="New York">
         <vc-data>83.6, 78.8, 98.5, 93.4</vc-data>
     </v-series>
-    <v-series vc-name="London">
+    <v-series name="London">
         <vc-data>48.9, 38.8, 39.3, 41.4</vc-data>
     </v-series>
-    <v-series vc-name="Berlin">
+    <v-series name="Berlin">
         <vc-data>42.4, 33.2, 34.5, 39.7</vc-data>
     </v-series>
 </v-chart>

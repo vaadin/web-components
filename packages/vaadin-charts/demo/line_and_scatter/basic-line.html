@@ -1,4 +1,4 @@
-<v-chart id="basic-line" vc-type="line">
+<v-chart id="basic-line" type="line">
     <vc-title>Monthly Average Temperature</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
@@ -6,30 +6,30 @@
         <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
     </vc-x-axis>
 
-    <vc-y-axis vc-min="-5">
-        <vc-title vc-align="high">Temperature (°C)</vc-title>
+    <vc-y-axis min="-5">
+        <vc-title align="high">Temperature (°C)</vc-title>
     </vc-y-axis>
 
-    <vc-tooltip vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
+    <vc-tooltip formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
 
     <vc-plot-options>
         <vc-line>
-            <vc-data-labels vc-enabled="true"></vc-data-labels>
+            <vc-data-labels enabled="true"></vc-data-labels>
         </vc-line>
     </vc-plot-options>
 
-    <vc-legend vc-layout="vertical" vc-align="right" vc-vertical-align="top" vc-x="-10" vc-y="100" vc-border-width="0"></vc-legend>
+    <vc-legend layout="vertical" align="right" vertical-align="top" x="-10" y="100" border-width="0"></vc-legend>
 
-    <v-series vc-name="Tokyo">
+    <v-series name="Tokyo">
         <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</vc-data>
     </v-series>
-    <v-series vc-name="New York">
+    <v-series name="New York">
         <vc-data>-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5</vc-data>
     </v-series>
-    <v-series vc-name="Berlin">
+    <v-series name="Berlin">
         <vc-data>-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0</vc-data>
     </v-series>
-    <v-series vc-name="London">
+    <v-series name="London">
         <vc-data>3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8</vc-data>
     </v-series>
 </v-chart>

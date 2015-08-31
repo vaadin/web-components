@@ -1,4 +1,4 @@
-<v-chart id="basic-line-events" vc-type="line">
+<v-chart id="basic-line-events" type="line">
     <vc-title>Average Monthly Temperature and Rainfall in Tokyo</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
@@ -7,7 +7,7 @@
     </vc-x-axis>
 
     <vc-chart>
-        <vc-events vc-click="function(event) {
+        <vc-events click="function(event) {
             var xValue = event.xAxis[0].value,
                 yValue = event.yAxis[0].value,
                 xPixels = event.xAxis[0].axis.toPixels(xValue),
@@ -35,23 +35,29 @@
     </vc-chart>
 
     <vc-y-axis>
-        <vc-title vc-style="{color: #3090F0;}">Temperature</vc-title>
+        <vc-title>
+            <vc-text>Temperature</vc-text>
+            <vc-style color="#EC6464"></vc-style>
+        </vc-title>
     </vc-y-axis>
 
-    <vc-y-axis vc-opposite="true">
-        <vc-title vc-style="color: #EC6464;">Rainfall</vc-title>
+    <vc-y-axis opposite="true">
+        <vc-title>
+            <vc-text>Rainfall</vc-text>
+            <vc-style color="#3090F0"></vc-style>
+        </vc-title>
     </vc-y-axis>
 
     <vc-tooltip
-            vc-formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></vc-tooltip>
+            formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></vc-tooltip>
 
-    <vc-legend vc-layout="vertical" vc-align="left" vc-vertical-align="top" vc-x="120" vc-y="100" vc-floating="true"
-            vc-background-color="#FFFFFF"></vc-legend>
+    <vc-legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
+            background-color="#FFFFFF"></vc-legend>
 
     <vc-plot-options>
         <vc-series>
             <vc-point>
-                <vc-events vc-click="function(event) {
+                <vc-events click="function(event) {
                     var xPixels = event.chartX,
                         yPixels = event.chartY;
                     var label = this.series.chart.renderer.label('Point click: Categoy: ' + this.category + ', y: ' + this.y, xPixels, yPixels)
@@ -74,10 +80,10 @@
         </vc-series>
     </vc-plot-options>
 
-    <v-series vc-name="Rainfall" vc-y-axis="1" vc-type="column">
+    <v-series name="Rainfall" y-axis="1" type="column">
         <vc-data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
     </v-series>
-    <v-series vc-name="Temperature" vc-y-axis="0">
+    <v-series name="Temperature" y-axis="0">
         <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</vc-data>
     </v-series>
 </v-chart>

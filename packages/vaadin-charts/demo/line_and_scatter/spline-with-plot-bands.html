@@ -1,95 +1,95 @@
-<v-chart id="spline-with-plot-bands" vc-type="spline">
-    <vc-chart vc-animation="true" vc-margin-right="10">
+<v-chart id="spline-with-plot-bands" type="spline">
+    <vc-chart animation="true" margin-right="10">
     </vc-chart>
     <vc-title>Wind speed during two days</vc-title>
     <vc-subtitle>May 31 and and June 1, 2015 at two locations in Vik i Sogn, Norway</vc-subtitle>
 
-    <vc-x-axis vc-type="datetime">
-        <vc-labels vc-overflow="justify"></vc-labels>
+    <vc-x-axis type="datetime">
+        <vc-labels overflow="justify"></vc-labels>
     </vc-x-axis>
 
-    <vc-y-axis vc-min="0" vc-minor-grid-line-width="0" vc-grid-line-width="0" vc-alternate-grid-color="null">
+    <vc-y-axis min="0" minor-grid-line-width="0" grid-line-width="0" alternate-grid-color="null">
         <vc-title>Wind speed (m/s)</vc-title>
 
-        <vc-plot-bands vc-from="0.3"
-                    vc-to="1.5"
-                    vc-color="rgba(68, 170, 213, 0.1)">
-            <vc-label vc-text="Light air">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="0.3"
+                    to="1.5"
+                    color="rgba(68, 170, 213, 0.1)">
+            <vc-label text="Light air">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
 
-        <vc-plot-bands vc-from="1.5"
-                    vc-to="3.3"
-                    vc-color="rgba(0,0,0,0)">
-            <vc-label vc-text="Light breeze">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="1.5"
+                    to="3.3"
+                    color="rgba(0,0,0,0)">
+            <vc-label text="Light breeze">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
 
-        <vc-plot-bands vc-from="3.3"
-                    vc-to="5.5"
-                    vc-color="rgba(68, 170, 213, 0.1)">>
-            <vc-label vc-text="Gentle breeze">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="3.3"
+                    to="5.5"
+                    color="rgba(68, 170, 213, 0.1)">>
+            <vc-label text="Gentle breeze">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
 
-        <vc-plot-bands vc-from="5.5"
-                    vc-to="8"
-                    vc-color="rgba(0,0,0,0)">
-            <vc-label vc-text="Moderate breeze">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="5.5"
+                    to="8"
+                    color="rgba(0,0,0,0)">
+            <vc-label text="Moderate breeze">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
 
-        <vc-plot-bands vc-from="8"
-                    vc-to="11"
-                    vc-color="rgba(68, 170, 213, 0.1)">>
-            <vc-label vc-text="Fresh breeze">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="8"
+                    to="11"
+                    color="rgba(68, 170, 213, 0.1)">>
+            <vc-label text="Fresh breeze">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
 
-        <vc-plot-bands vc-from="11"
-                    vc-to="14"
-                    vc-color="rgba(0,0,0,0)">
-            <vc-label vc-text="Strong breeze">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="11"
+                    to="14"
+                    color="rgba(0,0,0,0)">
+            <vc-label text="Strong breeze">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
 
-        <vc-plot-bands vc-from="14"
-                    vc-to="15"
-                    vc-color="rgba(68, 170, 213, 0.1)">>
-            <vc-label vc-text="High wind">
-                <vc-style vc-color="#606060"></vc-style>
+        <vc-plot-bands from="14"
+                    to="15"
+                    color="rgba(68, 170, 213, 0.1)">>
+            <vc-label text="High wind">
+                <vc-style color="#606060"></vc-style>
             </vc-label>
         </vc-plot-bands>
     </vc-y-axis>
 
-    <vc-tooltip vc-value-suffix=" m/s"></vc-tooltip>
+    <vc-tooltip value-suffix=" m/s"></vc-tooltip>
 
     <vc-plot-options>
-        <vc-spline vc-line-width="4"
-                vc-point-interval="3600000"
-                vc-point-start="1433030400000">
+        <vc-spline line-width="4"
+                point-interval="3600000"
+                point-start="1433030400000">
             <vc-states>
-                <vc-hover vc-line-width="5"></vc-hover>
+                <vc-hover line-width="5"></vc-hover>
             </vc-states>
-            <vc-marker vc-enabled="false"></vc-marker>
+            <vc-marker enabled="false"></vc-marker>
         </vc-spline>
     </vc-plot-options>
 
 
-    <v-series vc-name="Hestavollane">
+    <v-series name="Hestavollane">
         <vc-data>0.2, 0.8, 0.8, 0.8, 1, 1.3, 1.5, 2.9, 1.9, 2.6, 1.6, 3, 4, 3.6, 4.5, 4.2, 4.5, 4.5, 4, 3.1, 2.7, 4, 2.7,
             2.3, 2.3, 4.1, 7.7, 7.1, 5.6, 6.1, 5.8, 8.6, 7.2, 9, 10.9, 11.5, 11.6, 11.1, 12, 12.3, 10.7, 9.4, 9.8, 9.6,
             9.8, 9.5, 8.5, 7.4, 7.6
         </vc-data>
     </v-series>
 
-    <v-series vc-name="Vik">
+    <v-series name="Vik">
         <vc-data>0, 0, 0.6, 0.9, 0.8, 0.2, 0, 0, 0, 0.1, 0.6, 0.7, 0.8, 0.6, 0.2, 0, 0.1, 0.3, 0.3, 0, 0.1, 0, 0, 0, 0.2,
             0.1, 0, 0.3, 0, 0.1, 0.2, 0.1, 0.3, 0.3, 0, 3.1, 3.1, 2.5, 1.5, 1.9, 2.1, 1, 2.3, 1.9, 1.2, 0.7, 1.3, 0.4,
             0.3

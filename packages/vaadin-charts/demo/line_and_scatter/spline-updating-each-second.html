@@ -1,6 +1,6 @@
-<v-chart id="spline-updating-each-second" vc-type="spline">
-    <vc-chart vc-animation="true" vc-margin-right="10">
-        <vc-events vc-load="function () {
+<v-chart id="spline-updating-each-second" type="spline">
+    <vc-chart animation="true" margin-right="10">
+        <vc-events load="function () {
             // set up the updating of the chart each second
             var series = this.series[0];
             setInterval(function () {
@@ -14,27 +14,27 @@
 
 
 
-    <vc-x-axis vc-type="datetime"
-            vc-tick-pixel-interval="150">
+    <vc-x-axis type="datetime"
+            tick-pixel-interval="150">
     </vc-x-axis>
 
     <vc-y-axis>
         <vc-title>Value</vc-title>
-        <vc-plot-lines vc-value="0" vc-width="1" vc-color="#808080"></vc-plot-lines>
+        <vc-plot-lines value="0" width="1" color="#808080"></vc-plot-lines>
     </vc-y-axis>
 
-    <vc-tooltip vc-formatter="function () {
+    <vc-tooltip formatter="function () {
                     return '<b>' + this.series.name + '</b><br/>' +
                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
                         Highcharts.numberFormat(this.y, 2);}">
 
     </vc-tooltip>
 
-    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-legend enabled="false"></vc-legend>
 
-    <vc-exporting vc-enabled="false"></vc-exporting>
+    <vc-exporting enabled="false"></vc-exporting>
 
-    <v-series vc-name="Random data">
+    <v-series name="Random data">
         <vc-data>
             [(new Date()).getTime()-18000,Math.random()],
             [(new Date()).getTime()-17000,Math.random()],

@@ -1,17 +1,17 @@
-<v-chart id="pie-with-credits" vc-type="pie">
+<v-chart id="pie-with-credits" type="pie">
     <vc-title>Browser market shares at a specific website, 2014</vc-title>
-    <vc-tooltip vc-point-format="{series.name}: <b>{point.percentage:.1f}%</b>"></vc-tooltip>
-    <vc-credits vc-text="Custom credit">
-        <vc-position vc-x="200" vc-align="left"></vc-position>
+    <vc-tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>"></vc-tooltip>
+    <vc-credits text="Custom credit">
+        <vc-position x="200" align="left"></vc-position>
     </vc-credits>
     <vc-plot-options>
-        <vc-pie vc-allow-point-select="true" vc-cursor="pointer">
-            <vc-data-labels vc-enabled="true" vc-format="<b>{point.name}</b>:    {point.percentage:.1f} %">
+        <vc-pie allow-point-select="true" cursor="pointer">
+            <vc-data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
             </vc-data-labels>
         </vc-pie>
     </vc-plot-options>
 
-    <v-series vc-name="Browser share">
+    <v-series name="Browser share">
         <vc-data>
             ["Firefox",   45.0],
             ["IE",       26.8],

@@ -54,7 +54,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Check if the given attribute is valid as a Vaadin Charts configuration attribute
          **/
-        _isVaadinChartsAttribute: function (attName) {
+        _isVaadinChartsProperty: function (attName) {
             return attName != undefined &&
                     (attName.indexOf(this._vaadinChartsPrefix) === 0 || this._nodeValueAttributes.indexOf(attName) !== -1);
         },
@@ -64,12 +64,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *
          * @param {string} str
          **/
-        _toCamelCase: function (str, isNode) {
+        _toCamelCase: function (str, isElement) {
             var out = "";
             if (this._nodeValueAttributes.indexOf(str) !== -1) {
                 out = str;
             } else {
-                if (isNode) {
+                if (isElement) {
                     str = str.substring(this._vaadinChartsPrefix.length);
                 }
                 str.split("-").forEach(function (word, idx) {
@@ -171,7 +171,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < parent.childNodes.length; n++) {
                 var node = parent.childNodes[n];
                 var name = node.nodeName.toLowerCase();
-                if (this._isVaadinChartsAttribute(name)) {
+                if (this._isVaadinChartsProperty(name)) {
                     var camelName = this._toCamelCase(name, true);
                     if (this._ignoredNodes.indexOf(name) === -1) {
                         var result;

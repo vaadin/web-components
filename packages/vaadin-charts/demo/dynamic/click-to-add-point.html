@@ -1,7 +1,7 @@
-<v-chart id="click-to-add-point" vc-type="scatter">
+<v-chart id="click-to-add-point" type="scatter">
     <vc-chart>
         <vc-margin>70, 50, 60, 80</vc-margin>
-        <vc-events vc-click="function (e) {
+        <vc-events click="function (e) {
             // find the clicked values and the series
             var x = e.xAxis[0].value,
             y = e.yAxis[0].value,
@@ -12,20 +12,20 @@
     </vc-chart>
     <vc-title>User supplied data</vc-title>
     <vc-subtitle>Click the plot area to add a point. Click a point to remove it.</vc-subtitle>
-    <vc-x-axis vc-grid-line-width="1" vc-min-padding="0.2" vc-max-padding="0.2" vc-max-zoom="60">
+    <vc-x-axis grid-line-width="1" min-padding="0.2" max-padding="0.2" max-zoom="60">
     </vc-x-axis>
-    <vc-y-axis vc-min-padding="0.2" vc-max-padding="0.2" vc-max-zoom="60">
+    <vc-y-axis min-padding="0.2" max-padding="0.2" max-zoom="60">
         <vc-title>Value</vc-title>
-        <vc-plot-lines vc-value="0" vc-width="1" vc-color="#808080">
+        <vc-plot-lines value="0" width="1" color="#808080">
 
         </vc-plot-lines>
     </vc-y-axis>
-    <vc-legend vc-enabled="false"></vc-legend>
-    <vc-exporting vc-enabled="false"></vc-exporting>
+    <vc-legend enabled="false"></vc-legend>
+    <vc-exporting enabled="false"></vc-exporting>
     <vc-plot-options>
-        <vc-series vc-line-width="1">
+        <vc-series line-width="1">
             <vc-point>
-                <vc-events vc-click="function () {
+                <vc-events click="function () {
                     if (this.series.data.length > 1) {
                         this.remove();
                     }

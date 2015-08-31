@@ -1,24 +1,24 @@
-<v-chart id="basic-3d-pie" vc-type="pie">
+<v-chart id="basic-3d-pie" type="pie">
     <vc-title>Browser market shares at a specific website, 2014</vc-title>
 
     <vc-plot-options>
-        <vc-pie vc-cursor="pointer"
-             vc-depth="45"
-             vc-allow-point-select="true">
-            <vc-data-labels vc-enabled="true"
-                         vc-formatter="function() {return this.point.name +': '+ this.percentage +' %';}"></vc-data-labels>
+        <vc-pie cursor="pointer"
+             depth="45"
+             allow-point-select="true">
+            <vc-data-labels enabled="true"
+                         formatter="function() {return this.point.name +': '+ this.percentage +' %';}"></vc-data-labels>
         </vc-pie>
     </vc-plot-options>
 
-    <vc-tooltip vc-point-format="{series.name}: <vc-b>{point.percentage:.1f}%</vc-b>"></vc-tooltip>
+    <vc-tooltip point-format="{series.name}: <vc-b>{point.percentage:.1f}%</vc-b>"></vc-tooltip>
 
     <vc-chart>
-        <vc-options3d vc-enabled="true"
-                   vc-alpha="60">
+        <vc-options3d enabled="true"
+                   alpha="60">
         </vc-options3d>
     </vc-chart>
 
-    <v-series vc-name="Browser share">
+    <v-series name="Browser share">
         <vc-data>
             <vc-point>
                 <vc-name>Firefox</vc-name>

@@ -1,4 +1,4 @@
-<v-chart id="basic-line-with-callouts" vc-type="line">
+<v-chart id="basic-line-with-callouts" type="line">
     <vc-title>Callout: Monthly Average Temperature</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
@@ -11,28 +11,28 @@
     </vc-y-axis>
 
     <vc-plot-options>
-        <vc-line vc-enable-mouse-tracking="false">
+        <vc-line enable-mouse-tracking="false">
         </vc-line>
     </vc-plot-options>
 
-    <v-series vc-name="Tokyo">
+    <v-series name="Tokyo">
         <vc-data>7.0, 6.9, 9.5, 14.5, 18.2 </vc-data>
         <vc-data>
           <vc-point>
             <vc-y>21.5</vc-y>
-            <vc-data-labels vc-shape="callout" vc-enabled="true" vc-y="-12" vc-background-color="#FFEBCD" />
+            <vc-data-labels shape="callout" enabled="true" y="-12" background-color="#FFEBCD" />
           </vc-point>
         </vc-data>
         <vc-data>
             25.2, 26.5, 23.3, 18.3, 13.9, 9.6
         </vc-data>
     </v-series>
-    <v-series vc-name="London">
+    <v-series name="London">
         <vc-data>3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0</vc-data>
         <vc-data>
           <vc-point>
             <vc-y>16.6</vc-y>
-            <vc-data-labels vc-shape="callout" vc-enabled="true" vc-y="-12" vc-background-color="#FFEBCD" />
+            <vc-data-labels shape="callout" enabled="true" y="-12" background-color="#FFEBCD" />
           </vc-point>
         </vc-data>
         <vc-data>14.2, 10.3, 6.6, 4.8</vc-data>

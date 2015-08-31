@@ -1,36 +1,36 @@
-<v-chart id="spline-inverted" vc-type="spline">
-    <vc-chart vc-inverted="true">
+<v-chart id="spline-inverted" type="spline">
+    <vc-chart inverted="true">
     </vc-chart>
     <vc-title>Atmosphere Temperature by Altitude</vc-title>
     <vc-subtitle>According to the Standard Atmosphere Model</vc-subtitle>
 
-    <vc-x-axis vc-reversed="false"
-            vc-max-padding="0.05"
-            vc-show-last-label="true">
+    <vc-x-axis reversed="false"
+            max-padding="0.05"
+            show-last-label="true">
         <vc-title>Altitude</vc-title>
-        <vc-labels vc-enabled="true"
-                vc-formatter="function() {return this.value + 'km';}">
+        <vc-labels enabled="true"
+                formatter="function() {return this.value + 'km';}">
         </vc-labels>
     </vc-x-axis>
 
-    <vc-y-axis vc-line-width="2">
-        <vc-title vc-align="high">Temperature</vc-title>
-        <vc-labels vc-enabled="true"
-                vc-formatter="function() {return this.value + '°';}">
+    <vc-y-axis line-width="2">
+        <vc-title align="high">Temperature</vc-title>
+        <vc-labels enabled="true"
+                formatter="function() {return this.value + '°';}">
         </vc-labels>
     </vc-y-axis>
 
-    <vc-tooltip vc-formatter="function() {return this.x +' km: '+this.y +'°C';}"></vc-tooltip>
+    <vc-tooltip formatter="function() {return this.x +' km: '+this.y +'°C';}"></vc-tooltip>
 
     <vc-plot-options>
         <vc-spline>
-            <vc-marker vc-enabled="true"></vc-marker>
+            <vc-marker enabled="true"></vc-marker>
         </vc-spline>
     </vc-plot-options>
 
-    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-legend enabled="false"></vc-legend>
 
-    <v-series vc-name="Temperature">
+    <v-series name="Temperature">
         <vc-data>[ 0, 15 ], [ 10, -50 ], [ 20, -56.5 ],
             [ 30, -46.5 ], [ 40, -22.1 ], [ 50, -2.5 ], [ 60, -27.7 ],
             [ 70, -55.7 ], [ 80, -76.5 ]

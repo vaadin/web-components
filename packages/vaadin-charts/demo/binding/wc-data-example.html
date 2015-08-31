@@ -10,18 +10,18 @@
             </vc-x-axis>
 
             <vc-y-axis>
-                <vc-title vc-align="high">Temperature (°C)</vc-title>
+                <vc-title align="high">Temperature (°C)</vc-title>
             </vc-y-axis>
 
-            <vc-tooltip vc-enabled="true"
-                        vc-formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
+            <vc-tooltip enabled="true"
+                        formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
 
             <vc-plot-options>
                 <vc-line>
-                    <vc-data-labels vc-enabled="true"></vc-data-labels>
+                    <vc-data-labels enabled="true"></vc-data-labels>
                 </vc-line>
             </vc-plot-options>
-            <v-series vc-name="Tokyo"></v-series>
+            <v-series name="Tokyo"></v-series>
 
         </v-chart>
     </template>

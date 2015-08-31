@@ -1,22 +1,22 @@
-<v-chart id="solid-gauge" vc-type="solidgauge">
-    <vc-title vc-text=""></vc-title>
-    <vc-pane vc-start-angle="-90" vc-end-angle="90">
-        <vc-background vc-background-color="#EEE" vc-inner-radius="60%" vc-outer-radius="100%" vc-shape="arc"></vc-background>
+<v-chart id="solid-gauge" type="solidgauge">
+    <vc-title text=""></vc-title>
+    <vc-pane start-angle="-90" end-angle="90">
+        <vc-background background-color="#EEE" inner-radius="60%" outer-radius="100%" shape="arc"></vc-background>
     </vc-pane>
-    <vc-tooltip vc-enabled="false"></vc-tooltip>
-    <vc-y-axis vc-min="0" vc-max="200" vc-line-width="0" vc-minor-tick-width="0" vc-tick-width="0">
+    <vc-tooltip enabled="false"></vc-tooltip>
+    <vc-y-axis min="0" max="200" line-width="0" minor-tick-width="0" tick-width="0">
         <vc-stops>0.1, #55BF3B</vc-stops>
         <vc-stops>0.5, #DDDF0D</vc-stops>
         <vc-stops>0.9, #DF5353</vc-stops>
-        <vc-title vc-y="-100">Speed</vc-title>
-        <vc-labels vc-enabled="false"></vc-labels>
+        <vc-title y="-100">Speed</vc-title>
+        <vc-labels enabled="false"></vc-labels>
     </vc-y-axis>
     <vc-plot-options>
         <vc-solidgauge>
-            <vc-data-labels vc-y="5" vc-border-width="0"></vc-data-labels>
+            <vc-data-labels y="5" border-width="0"></vc-data-labels>
         </vc-solidgauge>
     </vc-plot-options>
-    <v-series vc-name="Speed">
+    <v-series name="Speed">
         <vc-data>80</vc-data>
     </v-series>
 </v-chart>

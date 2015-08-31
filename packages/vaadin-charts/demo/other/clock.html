@@ -1,53 +1,130 @@
-<v-chart id="clock" vc-type="gauge">
-    <vc-chart vc-plot-background-color="null" vc-plot-background-image="null" vc-plot-border-width="0" vc-plot-shadow="false"></vc-chart>
-    <vc-title>Vaadin Charts Clock</vc-title>
-    <vc-pane>
-        <vc-background>
-        </vc-background>
-        <vc-background vc-border-width="0" vc-border-radius="109%">
-            <vc-background-color>
-                <vc-radial-gradient vc-cx="0.5" vc-cy="-0.4" vc-r="1.9">
-                </vc-radial-gradient>
-                <vc-stops>
-                    <vc-position>0.5</vc-position>
-                    <vc-color>rgba(255, 255, 255, 0.2)</vc-color>
-                </vc-stops>
-                <vc-stops>
-                    <vc-position>0.5</vc-position>
-                    <vc-color>rgba(200, 200, 200, 0.2)</vc-color>
-                </vc-stops>
-            </vc-background-color>
-        </vc-background>
-    </vc-pane>
-    <vc-y-axis vc-min="0" vc-max="12" vc-grid-line-width="0" vc-line-width="0" vc-show-first-label="false"
-            vc-minor-tick-interval="0.166666" vc-minor-tick-width="1" vc-minor-tick-lenght="5" vc-minor-tick-position="inside"
-            vc-minor-grid-line-width="0" vc-minor-tick-color="#666"
-            vc-tick-interval="1" vc-tick-width="2" vc-tick-position="inside" vc-tick-length="10" vc-tick-color="#666">
-        <vc-labels vc-distance="-20"></vc-labels>
-    </vc-y-axis>
-    <vc-tooltip vc-enabled="false"></vc-tooltip>
-    <vc-plot-options>
-        <vc-gauge>
-            <vc-data-labels vc-enabled="false"></vc-data-labels>
-        </vc-gauge>
-    </vc-plot-options>
-    <v-series>
-        <vc-data>
-          <vc-point>
-            <vc-id>hour</vc-id>
-            <vc-y>new Date().getHours() + new Date().getMinutes() / 60</vc-y>
-            <vc-dial vc-radius="60%" vc-base-width="4" vc-base-length="95%" vc-rear-length="0"></vc-dial>
-          </vc-point>
-          <vc-point>
-            <vc-id>minute</vc-id>
-            <vc-y>new Date().getMinutes() * 12 / 60 + new Date().getSeconds() * 12 / 3600</vc-y>
-            <vc-dial vc-base-length="95%" vc-rear-length="0"></vc-dial>
-          </vc-point>
-          <vc-point>
-            <vc-id>second</vc-id>
-            <vc-y>new Date().getSeconds() * 12 / 60</vc-y>
-            <vc-dial vc-radius="100%" vc-base-width="1" vc-rear-length="20%"></vc-dial>
-          </vc-point>
-        </vc-data>
-    </v-series>
-</v-chart>
+<dom-module id="clock-example">
+
+    <template>
+        <div style="height: 300px; width: 100%;">
+            <v-chart id="clock" type="gauge" on-chart-loaded="clockLoadListener">
+                <vc-chart plot-background-color="null" plot-background-image="null" plot-border-width="0"
+                          plot-shadow="false" animation="false"></vc-chart>
+                <vc-title>Vaadin Charts Clock</vc-title>
+                <vc-pane>
+                    <vc-background>
+                    </vc-background>
+                    <vc-background border-width="0" border-radius="109%">
+                        <vc-background-color>
+                            <vc-radial-gradient cx="0.5" cy="-0.4" r="1.9">
+                            </vc-radial-gradient>
+                            <vc-stops>
+                                <vc-position>0.5</vc-position>
+                                <vc-color>rgba(255, 255, 255, 0.2)</vc-color>
+                            </vc-stops>
+                            <vc-stops>
+                                <vc-position>0.5</vc-position>
+                                <vc-color>rgba(200, 200, 200, 0.2)</vc-color>
+                            </vc-stops>
+                        </vc-background-color>
+                    </vc-background>
+                </vc-pane>
+                <vc-y-axis min="0" max="12" grid-line-width="0" line-width="0" show-first-label="false"
+                           minor-tick-interval="0.166666" minor-tick-width="1" minor-tick-lenght="5"
+                           minor-tick-position="inside"
+                           minor-grid-line-width="0" minor-tick-color="#666"
+                           tick-interval="1" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666">
+                    <vc-labels distance="-20"></vc-labels>
+                </vc-y-axis>
+                <vc-tooltip enabled="false"></vc-tooltip>
+                <vc-plot-options>
+                    <vc-gauge>
+                        <vc-data-labels enabled="false"></vc-data-labels>
+                    </vc-gauge>
+                </vc-plot-options>
+                <v-series>
+                    <vc-data>
+                        <vc-point>
+                            <vc-id>hour</vc-id>
+                            <vc-y>0</vc-y>
+                            <vc-dial radius="60%" base-width="4" base-length="95%" rear-length="0"></vc-dial>
+                        </vc-point>
+                        <vc-point>
+                            <vc-id>minute</vc-id>
+                            <vc-y>0</vc-y>
+                            <vc-dial base-length="95%" rear-length="0"></vc-dial>
+                        </vc-point>
+                        <vc-point>
+                            <vc-id>second</vc-id>
+                            <vc-y>0</vc-y>
+                            <vc-dial radius="100%" base-width="1" rear-length="20%"></vc-dial>
+                        </vc-point>
+                    </vc-data>
+                </v-series>
+            </v-chart>
+        </div>
+    </template>
+
+
+    <script>
+        Polymer({
+            is: 'clock-example',
+
+            properties: {
+                isAttached: Boolean,
+                isChartReady: Boolean
+            },
+
+            clockLoadListener: function () {
+                this.isChartReady = true;
+                this.updateTime();
+            },
+
+            updateTime: function () {
+                if (this.isAttached && this.isChartReady) {
+                    console.log('update time');
+                    var chart = this.$.clock.chart;
+
+                    now = this.getNow();
+
+                    var hour = chart.get('hour'),
+                            minute = chart.get('minute'),
+                            second = chart.get('second');
+
+                    // Cache the tooltip text
+                    chart.tooltipText =
+                            this.pad(Math.floor(now.hours), 2) + ':' +
+                            this.pad(Math.floor(now.minutes * 5), 2) + ':' +
+                            this.pad(now.seconds * 5, 2);
+
+                    hour.update(now.hours);
+                    minute.update(now.minutes);
+                    second.update(now.seconds);
+
+                    this.async(this.updateTime, 1000);
+                }
+            },
+
+            getNow: function () {
+                var now = new Date();
+
+                return {
+                    hours: now.getHours() + now.getMinutes() / 60,
+                    minutes: now.getMinutes() * 12 / 60 + now.getSeconds() * 12 / 3600,
+                    seconds: now.getSeconds() * 12 / 60
+                };
+            },
+
+            pad: function (number, length) {
+                // Create an array of the remaining length + 1 and join it with 0's
+                return new Array((length || 2) + 1 - String(number).length).join(0) + number;
+            },
+
+            attached: function () {
+                this.isAttached = true;
+                this.updateTime();
+            },
+
+            detached: function () {
+                this.isAttached = false;
+            }
+        });
+    </script>
+</dom-module>
+
+<clock-example></clock-example>

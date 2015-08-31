@@ -1,4 +1,4 @@
-<v-chart id="spline-with-symbols" vc-type="spline">
+<v-chart id="spline-with-symbols" type="spline">
     <vc-title>Monthly Average Temperature</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
@@ -7,41 +7,41 @@
     </vc-x-axis>
 
     <vc-y-axis>
-        <vc-title vc-align="high">Temperature</vc-title>
-        <vc-labels vc-formatter="function () {
+        <vc-title align="high">Temperature</vc-title>
+        <vc-labels formatter="function () {
                     return this.value + '°';
                 }">
         </vc-labels>
     </vc-y-axis>
 
-    <vc-tooltip vc-crosshairs="true" vc-shared="true"></vc-tooltip>
+    <vc-tooltip crosshairs="true" shared="true"></vc-tooltip>
 
     <vc-plot-options>
         <vc-spline>
-            <vc-marker vc-radius="4"
-                    vc-line-color="#666666"
-                    vc-line-width="1"></vc-marker>
+            <vc-marker radius="4"
+                    line-color="#666666"
+                    line-width="1"></vc-marker>
         </vc-spline>
     </vc-plot-options>
 
-    <v-series vc-name="Tokyo">
-        <vc-marker vc-symbol="square"></vc-marker>
+    <v-series name="Tokyo">
+        <vc-marker symbol="square"></vc-marker>
         <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2</vc-data>
         <vc-data>
           <vc-point>
             <vc-y>26.5</vc-y>
-            <vc-marker vc-symbol="url(http://www.highcharts.com/demo/gfx/sun.png)"></vc-marker>
+            <vc-marker symbol="url(http://www.highcharts.com/demo/gfx/sun.png)"></vc-marker>
           </vc-point>
         </vc-data>
         <vc-data>23.3, 18.3, 13.9, 9.6</vc-data>
     </v-series>
 
-    <v-series vc-name="London">
-        <vc-marker vc-symbol="diamond"></vc-marker>
+    <v-series name="London">
+        <vc-marker symbol="diamond"></vc-marker>
         <vc-data>
             <vc-point>
               <vc-y>3.9</vc-y>
-              <vc-marker vc-symbol="url(http://www.highcharts.com/demo/gfx/snow.png)"></vc-marker>
+              <vc-marker symbol="url(http://www.highcharts.com/demo/gfx/snow.png)"></vc-marker>
             </vc-point>
         </vc-data>
         <vc-data>4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8</vc-data>

@@ -1,35 +1,35 @@
-<v-chart id="time-series-zoomable" vc-type="area">
-    <vc-chart vc-zoom-type="x"></vc-chart>
+<v-chart id="time-series-zoomable" type="area">
+    <vc-chart zoom-type="x"></vc-chart>
     <vc-title>USD to EUR exchange rate over time</vc-title>
     <vc-subtitle>Click and drag in the plot area to zoom in</vc-subtitle>
 
-    <vc-x-axis vc-type="datetime"></vc-x-axis>
+    <vc-x-axis type="datetime"></vc-x-axis>
 
     <vc-y-axis>
         <vc-title>Exchange rate</vc-title>
     </vc-y-axis>
 
-    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-legend enabled="false"></vc-legend>
 
-    <vc-plot-options vc-line-width="1">
-        <vc-series vc-threshold="null">
+    <vc-plot-options line-width="1">
+        <vc-series threshold="null">
             <vc-fill-color>
-                <vc-linear-gradient vc-x1="0"
-                                    vc-y1="0"
-                                    vc-x2="0"
-                                    vc-y2="1">
+                <vc-linear-gradient x1="0"
+                                    y1="0"
+                                    x2="0"
+                                    y2="1">
                 </vc-linear-gradient>
                 <vc-stops>0, #3090F0</vc-stops>
                 <vc-stops>1, #336190</vc-stops>
             </vc-fill-color>
-            <vc-marker vc-radius="2"></vc-marker>
+            <vc-marker radius="2"></vc-marker>
             <vc-states>
-                <vc-hover vc-line-width="1"></vc-hover>
+                <vc-hover line-width="1"></vc-hover>
             </vc-states>
         </vc-series>
     </vc-plot-options>
 
-    <v-series vc-name="USD to EUR" vc-type="area">
+    <v-series name="USD to EUR" type="area">
         <vc-data>
             [Date.UTC(2013,5,2),0.7695],
             [Date.UTC(2013,5,3),0.7648],

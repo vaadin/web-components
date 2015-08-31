@@ -1,15 +1,15 @@
-<v-chart id="html-table-data" vc-type="column">
-    <vc-data vc-table="datatable">
+<v-chart id="html-table-data" type="column">
+    <vc-data table="datatable">
 
     </vc-data>
 
     <vc-title> Data extracted from a HTML table in the page</vc-title>
 
-    <vc-y-axis vc-allow-decimals="false">
+    <vc-y-axis allow-decimals="false">
         <vc-title>Units</vc-title>
     </vc-y-axis>
 
-    <vc-tooltip vc-formatter="function () {
+    <vc-tooltip formatter="function () {
                 return '<b>' + this.series.name + '</b><br/>' +
                     this.point.y + ' ' + this.point.name.toLowerCase();
             }">

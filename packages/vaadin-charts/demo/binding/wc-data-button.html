@@ -4,13 +4,13 @@
         <v-chart id="wcDataExample">
             <vc-title>Click button to add point</vc-title>
 
-            <vc-tooltip vc-enabled="false"></vc-tooltip>
+            <vc-tooltip enabled="false"></vc-tooltip>
             <vc-plot-options>
                 <vc-series>
                 </vc-series>
             </vc-plot-options>
-            <vc-x-axis vc-type="datetime"></vc-x-axis>
-            <v-series id="mySeriesId" vc-data="[[mySeriesData]]">
+            <vc-x-axis type="datetime"></vc-x-axis>
+            <v-series id="mySeriesId" data="[[mySeriesData]]">
             </v-series>
         </v-chart>
         <button on-click="_addSeriesPoint">Add series point</button>

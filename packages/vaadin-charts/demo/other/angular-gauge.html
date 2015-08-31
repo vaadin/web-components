@@ -1,18 +1,18 @@
-<v-chart id="angular-gauge" vc-type="gauge">
-    <vc-chart vc-plot-background-color="null" vc-plot-background-image="null" vc-plot-border-width="0" vc-plot-shadow="false"></vc-chart>
+<v-chart id="angular-gauge" type="gauge">
+    <vc-chart plot-background-color="null" plot-background-image="null" plot-border-width="0" plot-shadow="false"></vc-chart>
     <vc-title>Speedometer</vc-title>
-    <vc-pane vc-start-angle="-150" vc-end-angle="150">
-        <vc-background vc-border-width="0" vc-border-radius="109%">
+    <vc-pane start-angle="-150" end-angle="150">
+        <vc-background border-width="0" border-radius="109%">
             <vc-background-color>
-                <vc-linear-gradient vc-x1="0" vc-y1="0" vc-x2="0" vc-y2="1">
+                <vc-linear-gradient x1="0" y1="0" x2="0" y2="1">
                 </vc-linear-gradient>
                 <vc-stops>0, #ffffff</vc-stops>
                 <vc-stops>1, #333333</vc-stops>
             </vc-background-color>
         </vc-background>
-        <vc-background vc-border-width="1" vc-border-radius="107%">
+        <vc-background border-width="1" border-radius="107%">
             <vc-background-color>
-                <vc-linear-gradient vc-x1="0" vc-y1="0" vc-x2="0" vc-y2="1">
+                <vc-linear-gradient x1="0" y1="0" x2="0" y2="1">
                 </vc-linear-gradient>
                 <vc-stops>0, #ffffff</vc-stops>
                 <vc-stops>1, #333333</vc-stops>
@@ -20,20 +20,20 @@
         </vc-background>
         <vc-background>
         </vc-background>
-        <vc-background vc-background-color="#DDD" vc-border-width="0" vc-outer-radius="105%" vc-inner-radius="103%">
+        <vc-background background-color="#DDD" border-width="0" outer-radius="105%" inner-radius="103%">
         </vc-background>
     </vc-pane>
-    <vc-y-axis vc-min="0" vc-max="200" vc-minor-tick-interval="auto" vc-minor-tick-width="1" vc-minor-tick-lenght="10"
-            vc-minor-tick-position="inside"
-            vc-tick-pixel-interval="30" vc-tick-width="2" vc-tick-position="inside" vc-tick-length="10" vc-tick-color="#666"
-            vc-grid-line-width="0">
-        <vc-labels vc-step="2" vc-rotation="auto"></vc-labels>
+    <vc-y-axis min="0" max="200" minor-tick-interval="auto" minor-tick-width="1" minor-tick-lenght="10"
+            minor-tick-position="inside"
+            tick-pixel-interval="30" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666"
+            grid-line-width="0">
+        <vc-labels step="2" rotation="auto"></vc-labels>
         <vc-title>km/h</vc-title>
-        <vc-plot-bands vc-from="0" vc-to="120" vc-color="#55BF3B"></vc-plot-bands>
-        <vc-plot-bands vc-from="120" vc-to="160" vc-color="#DDDF0D"></vc-plot-bands>
-        <vc-plot-bands vc-from="160" vc-to="200" vc-color="#DF5353"></vc-plot-bands>
+        <vc-plot-bands from="0" to="120" color="#55BF3B"></vc-plot-bands>
+        <vc-plot-bands from="120" to="160" color="#DDDF0D"></vc-plot-bands>
+        <vc-plot-bands from="160" to="200" color="#DF5353"></vc-plot-bands>
     </vc-y-axis>
-    <v-series vc-name="Speed">
+    <v-series name="Speed">
         <vc-data>
             80
         </vc-data>

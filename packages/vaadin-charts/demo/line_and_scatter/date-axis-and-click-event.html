@@ -1,11 +1,11 @@
-<v-chart id="date-axis-and-click-event" vc-type="spline">
+<v-chart id="date-axis-and-click-event" type="spline">
     <vc-title>Date axis and click events</vc-title>
 
-    <vc-x-axis vc-type="datetime"></vc-x-axis>
-    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-x-axis type="datetime"></vc-x-axis>
+    <vc-legend enabled="false"></vc-legend>
 
     <vc-chart>
-        <vc-events vc-click="function(event) {
+        <vc-events click="function(event) {
             var xValue = event.xAxis[0].value,
                 yValue = event.yAxis[0].value,
                 xPixels = event.xAxis[0].axis.toPixels(xValue),
@@ -35,7 +35,7 @@
     <vc-plot-options>
         <vc-series>
             <vc-point>
-                <vc-events vc-click="function(event) {
+                <vc-events click="function(event) {
                     var xPixels = event.chartX,
                         yPixels = event.chartY,
                         dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S',this.x);

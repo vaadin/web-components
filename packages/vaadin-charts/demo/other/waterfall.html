@@ -1,13 +1,13 @@
-<v-chart id="waterfall" vc-type="waterfall">
+<v-chart id="waterfall" type="waterfall">
     <vc-title>Vaadin Charts Waterfall</vc-title>
-    <vc-x-axis vc-type="category"></vc-x-axis>
+    <vc-x-axis type="category"></vc-x-axis>
     <vc-y-axis><vc-title>USD</vc-title></vc-y-axis>
-    <vc-legend vc-enabled="false"></vc-legend>
-    <vc-tooltip vc-point-format="<b>${point.y:.2f}</b> USD"></vc-tooltip>
+    <vc-legend enabled="false"></vc-legend>
+    <vc-tooltip point-format="<b>${point.y:.2f}</b> USD"></vc-tooltip>
     <vc-plot-options>
         <vc-series>
-            <vc-data-labels vc-enabled="true" vc-y="-30" vc-vertical-align="top"
-                         vc-formatter="function () { return Highcharts.numberFormat(this.y / 1000, 0, ',') + 'k';}">
+            <vc-data-labels enabled="true" y="-30" vertical-align="top"
+                         formatter="function () { return Highcharts.numberFormat(this.y / 1000, 0, ',') + 'k';}">
             </vc-data-labels>
         </vc-series>
     </vc-plot-options>
