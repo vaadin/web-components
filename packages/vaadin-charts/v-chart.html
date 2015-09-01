@@ -109,6 +109,11 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
                     value: 'line'
                 },
 
+                initialized: {
+                    type: Boolean,
+                    value: false
+                },
+
                 /* ----------- internal ----------- */
 
                 /**
@@ -227,6 +232,7 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
                 //Only initialize once
                 if (Object.keys(this.chart).length === 0) {
                     this.chart = new Highcharts.Chart(this._chartConf);
+                    this.initialized = true;
                     this.fire("chart-loaded");
                 }
             },
