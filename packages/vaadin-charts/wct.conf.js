@@ -5,9 +5,10 @@ module.exports = {
         sauce: {
             disabled: true,
             browsers: [
-                "Windows 8.1/internet explorer",
-                "Windows 8.1/chrome",
-                "Windows 8.1/firefox",
+                "Windows 10/microsoftedge",
+                "Windows 10/internet explorer",
+                "Windows 10/chrome",
+                "Windows 10/firefox",
                 "OS X 10.10/safari"
             ]
         }
