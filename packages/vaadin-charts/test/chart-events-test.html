@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../v-chart.html">
+</head>
+<body>
+
+<dom-module id="eventful-chart-declarative-attribute">
+
+    <template>
+        <v-chart on-add-series="handle"
+                 on-after-print="handle"
+                 on-before-print="handle"
+                 on-chart-click="handle"
+                 on-drilldown="handle"
+                 on-drillup="handle"
+                 on-redraw="handle"
+                 on-selection="handle"></v-chart>
+    </template>
+
+    <script>
+        (function () {
+            HTMLImports.whenReady(function () {
+                Polymer({
+                    is: 'eventful-chart-declarative-attribute',
+
+                    properties: {
+                        eventCount: {
+                            type: Object,
+                            value: function () {
+                                return {};
+                            }
+                        }
+                    },
+
+                    handle: function (e) {
+                        if (!this.eventCount[e.type]) {
+                            this.eventCount[e.type] = 0;
+                        }
+                        this.eventCount[e.type]++;
+                    }
+                });
+            });
+        })();
+    </script>
+</dom-module>
+
+<eventful-chart-declarative-attribute></eventful-chart-declarative-attribute>
+
+<dom-module id="programmatically-added-listeners">
+
+    <template>
+        <v-chart></v-chart>
+    </template>
+
+    <script>
+        (function () {
+            HTMLImports.whenReady(function () {
+                Polymer({
+                    is: 'programmatically-added-listeners',
+
+                    properties: {
+                        eventCount: {
+                            type: Object,
+                            value: function () {
+                                return {};
+                            }
+                        }
+                    },
+
+                    handle: function (e) {
+                        if (!this.eventCount[e.type]) {
+                            this.eventCount[e.type] = 0;
+                        }
+                        this.eventCount[e.type]++;
+                    }
+                });
+            });
+        })();
+    </script>
+</dom-module>
+
+<programmatically-added-listeners></programmatically-added-listeners>
+<script>
+    suite('<v-chart>', function () {
+
+        var eventNames = {
+            addSeries: "add-series",
+            afterPrint: "after-print",
+            beforePrint: "before-print",
+            click: "chart-click",
+            drilldown: "drilldown",
+            drillup: "drillup",
+            redraw: "redraw",
+            selection: "selection"
+        };
+
+
+        test('all chart events, declarative listeners', function () {
+            var element = document.querySelector("eventful-chart-declarative-attribute");
+            var elementChart = document.querySelector("eventful-chart-declarative-attribute v-chart");
+
+            //trigger all highcharts events
+            for (var key in eventNames) {
+                elementChart.chart.trigger(key, {});
+            }
+            //verify all event handled
+            for (var key in eventNames) {
+                expect(element.eventCount[eventNames[key]]).to.equal(1);
+            }
+        });
+
+        test('all chart events, programmatically added listeners', function () {
+            var element = document.querySelector("programmatically-added-listeners");
+            var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+
+            //add all listeners
+            for (var key in eventNames) {
+                element.listen(element, eventNames[key], "handle");
+            }
+            //trigger all highcharts events
+            for (var key in eventNames) {
+                elementChart.chart.trigger(key, {});
+            }
+            //verify all event handled
+            for (var key in eventNames) {
+                expect(element.eventCount[eventNames[key]]).to.equal(1);
+            }
+        });
+
+        test('chart-click event, event info is correct', function (done) {
+            var element = document.createElement('v-chart');
+
+            element.addEventListener("chart-loaded", function () {
+                //trigger cllick event on chart load
+                element.chart.trigger("click", {});
+            });
+
+            element.addEventListener("chart-click", function (e) {
+                //event target should be v-chart element
+                expect(e.target).to.equal(element);
+                //event detail should contain original event info
+                expect(e.detail.originalEvent).to.exist;
+                expect(e.detail.originalEvent.type).to.equal("click");
+
+                document.body.removeChild(element);
+                done();
+
+            });
+
+            document.body.appendChild(element);
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

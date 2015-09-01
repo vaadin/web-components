@@ -86,6 +86,20 @@ Example:
                 }
             },
 
+            /**
+             *  Name of the events to add to the configuration it's corresponding event for v-chart
+             **/
+            _eventNames: {
+                addSeries: "add-series",
+                afterPrint: "after-print",
+                beforePrint: "before-print",
+                click: "chart-click",
+                drilldown: "drilldown",
+                drillup: "drillup",
+                redraw: "redraw",
+                selection: "selection"
+            },
+
 
             /**
              * Reloads the chart with the original configuration defined in elements and its attributes.
@@ -176,8 +190,26 @@ Example:
                     this._chartConf.chart = {};
                 }
 
+                this._initEventListeners();
                 this._chartConf.chart.type = this.type;
                 this._chartConf.chart.renderTo = this.$.chartContainer;
+            },
+
+            _initEventListeners: function () {
+                this._chartConf.chart.events = {};
+
+                for (var key in this._eventNames) {
+                    if (this._eventNames.hasOwnProperty(key)) {
+                        this._addEvent(key, this._eventNames[key]);
+                    }
+                }
+            }
+            ,
+
+            _addEvent: function (highchartsName, vaadinChartsName) {
+                this._chartConf.chart.events[highchartsName] = function (e) {
+                    this.fire(vaadinChartsName, {originalEvent: e});
+                }.bind(this);
             }
         });
     </script>
