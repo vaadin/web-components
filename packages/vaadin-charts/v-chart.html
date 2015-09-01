@@ -22,7 +22,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="../highcharts/modules/funnel.js"></script>
 <script src="../highcharts/modules/solid-gauge.js"></script>
 <script src="../highcharts/modules/data.js"></script>
+
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
 
 <link rel="import" href="v-series.html">
 <link rel="import" href="valo-theme.html">
@@ -43,6 +45,11 @@ Example:
 <dom-module id="v-chart">
     <template>
         <div id="chartContainer" style="height:100%; width:100%;"></div>
+        <vaadin-license-checker product-name="vaadin-charts"
+                                product-version="3"
+                                product-caption="Vaadin Charts">
+
+        </vaadin-license-checker>
     </template>
     <script>
         Polymer({

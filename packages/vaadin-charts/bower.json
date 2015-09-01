@@ -29,7 +29,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "highcharts":"highslide-software/highcharts-release#v4.1.8"
+    "highcharts": "highslide-software/highcharts-release#v4.1.8",
+    "vaadin-license-checker": "vaadin/license-checker#0.9"
   },
   "devDependencies": {
     "google-code-prettify": "*",
