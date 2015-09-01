@@ -34,44 +34,10 @@
             </v-chart>
         </div>
         <div style="position:relative; height: 100px; width: 100%;">
-            <v-chart id="masterchart" type="area" on-chart-loaded="masterChartLoadListener">
+            <v-chart id="masterchart" type="area" on-chart-loaded="masterChartLoadListener"
+                     on-selection="selectionListener">
                 <vc-chart border-width="0" background-color="null" margin-left="50" margin-right="20"
                           zoom-type="x">
-                    <vc-events selection="function(event) {
-                        var extremesObject = event.xAxis[0],
-                            min = extremesObject.min,
-                            max = extremesObject.max,
-                            detailData = [],
-                            masterData= this.series[0].data,
-                            xAxis = this.xAxis[0],
-                            detailChart = document.querySelector('#detailchart').chart;
-
-                        // reverse engineer the last part of the data
-                        masterData.forEach(function (point, idx) {
-                            if (point.x > min && point.x < max) {
-                                detailData.push([point.x, point.y]);
-                            }
-                        }, this);
-
-                        // move the plot bands to reflect the new detail span
-                        xAxis.removePlotBand('mask-before');
-                        xAxis.addPlotBand({
-                            id: 'mask-before',
-                            from: masterData[0].x,
-                            to: min,
-                            color: 'rgba(0, 0, 0, 0.2)'
-                        });
-                        xAxis.removePlotBand('mask-after');
-                        xAxis.addPlotBand({
-                            id: 'mask-after',
-                            from: max,
-                            to: masterData[masterData.length - 1].x,
-                            color: 'rgba(0, 0, 0, 0.2)'
-                        });
-
-                        detailChart.series[0].setData(detailData);
-                        return false;
-        }"></vc-events>
                 </vc-chart>
 
                 <vc-title text=""></vc-title>
@@ -784,6 +750,47 @@
             masterChartLoadListener: function () {
                 this.masterChartLoaded = true;
                 this._afterLoad();
+            },
+
+            selectionListener: function (e) {
+                //get highcharts event
+                var originalEvent = e.detail.originalEvent
+
+                var masterChart = this.$.masterchart.chart,
+                        detailChart = this.$.detailchart.chart,
+                        extremesObject = originalEvent.xAxis[0],
+                        min = extremesObject.min,
+                        max = extremesObject.max,
+                        detailData = [],
+                        masterData = masterChart.series[0].data,
+                        xAxis = masterChart.xAxis[0];
+
+                // reverse engineer the last part of the data
+                masterData.forEach(function (point, idx) {
+                    if (point.x > min && point.x < max) {
+                        detailData.push([point.x, point.y]);
+                    }
+                }, this);
+
+                // move the plot bands to reflect the new detail span
+                xAxis.removePlotBand('mask-before');
+                xAxis.addPlotBand({
+                    id: 'mask-before',
+                    from: masterData[0].x,
+                    to: min,
+                    color: 'rgba(0, 0, 0, 0.2)'
+                });
+                xAxis.removePlotBand('mask-after');
+                xAxis.addPlotBand({
+                    id: 'mask-after',
+                    from: max,
+                    to: masterData[masterData.length - 1].x,
+                    color: 'rgba(0, 0, 0, 0.2)'
+                });
+
+                detailChart.series[0].setData(detailData);
+                originalEvent.preventDefault();
+
             },
 
             detailChartLoadListener: function () {
