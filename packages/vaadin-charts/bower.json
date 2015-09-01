@@ -28,11 +28,12 @@
     "index.html"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
     "highcharts": "highslide-software/highcharts-release#v4.1.8",
-    "vaadin-license-checker": "vaadin/license-checker#0.9"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "vaadin-license-checker": "vaadin/license-checker#0.9.0"
   },
   "devDependencies": {
+    "vaadin-components": "^0.3.0",
     "google-code-prettify": "*",
     "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
     "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.0",
