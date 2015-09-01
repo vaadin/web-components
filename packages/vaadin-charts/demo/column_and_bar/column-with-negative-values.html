@@ -1,21 +1,21 @@
-<v-chart id="column-with-negative-values" vc-type="column">
+<v-chart id="column-with-negative-values" type="column">
     <vc-title>Column chart with negative values</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
     <vc-x-axis>
         <vc-categories>Apples, Oranges, Pears, Grapes, Bananas</vc-categories>
     </vc-x-axis>
-    <vc-tooltip vc-point-format="{series.name}: {point.y}"></vc-tooltip>
+    <vc-tooltip point-format="{series.name}: {point.y}"></vc-tooltip>
     <vc-plot-options>
-        <vc-column vc-min-point-lenght="3">
+        <vc-column min-point-lenght="3">
         </vc-column>
     </vc-plot-options>
-    <v-series vc-name="John">
+    <v-series name="John">
         <vc-data> 5, 0.1, 4, 7, 2</vc-data>
     </v-series>
-    <v-series vc-name="Jane">
+    <v-series name="Jane">
         <vc-data>2, -2, -0.1, 2, 1</vc-data>
     </v-series>
-    <v-series vc-name="Joe">
+    <v-series name="Joe">
         <vc-data>3, 4, 4, -2, 5</vc-data>
     </v-series>
 </v-chart>

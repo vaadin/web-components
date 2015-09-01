@@ -1,19 +1,19 @@
-<v-chart id="spiderweb" vc-type="line">
-    <vc-chart vc-polar="true"></vc-chart>
-    <vc-title vc-x="-80">Budget vs spending</vc-title>
-    <vc-pane vc-size="80%"></vc-pane>
-    <vc-x-axis vc-tickmark-placement="on" vc-line-width="0">
+<v-chart id="spiderweb" type="line">
+    <vc-chart polar="true"></vc-chart>
+    <vc-title x="-80">Budget vs spending</vc-title>
+    <vc-pane size="80%"></vc-pane>
+    <vc-x-axis tickmark-placement="on" line-width="0">
         <vc-categories>Sales, Marketing, Development, Customer Support, Information Technology, Administration</vc-categories>
     </vc-x-axis>
-    <vc-y-axis vc-grid-line-interpolation="polygon" vc-line-width="0" vc-min="0"></vc-y-axis>
-    <vc-tooltip vc-shared="true"></vc-tooltip>
-    <vc-legend vc-align="right" vc-vertical-align="top" vc-y="70" vc-layout="vertical"></vc-legend>
-    <v-series vc-name="Allocated Budget">
+    <vc-y-axis grid-line-interpolation="polygon" line-width="0" min="0"></vc-y-axis>
+    <vc-tooltip shared="true"></vc-tooltip>
+    <vc-legend align="right" vertical-align="top" y="70" layout="vertical"></vc-legend>
+    <v-series name="Allocated Budget">
         <vc-data>
             43000, 19000, 60000, 35000, 17000, 10000
         </vc-data>
     </v-series>
-    <v-series vc-name="Actual Spending">
+    <v-series name="Actual Spending">
         <vc-data>
             50000, 39000, 42000, 31000, 26000, 14000
         </vc-data>

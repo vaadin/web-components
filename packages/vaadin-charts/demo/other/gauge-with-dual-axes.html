@@ -1,25 +1,25 @@
-<v-chart id="gauge-with-dual-axes" vc-type="gauge">
-    <vc-chart vc-align-ticks="false" vc-plot-background-color="null"
-           vc-plot-background-image="null" vc-plot-border-width="0" vc-plot-shadow="false"></vc-chart>
+<v-chart id="gauge-with-dual-axes" type="gauge">
+    <vc-chart align-ticks="false" plot-background-color="null"
+           plot-background-image="null" plot-border-width="0" plot-shadow="false"></vc-chart>
     <vc-title>Speedometer with dual axes</vc-title>
-    <vc-pane vc-start-angle="-150" vc-end-angle="150"></vc-pane>
-    <vc-y-axis vc-min="0" vc-max="200" vc-line-color="#339" vc-tick-color="#339" vc-minor-tick-color="#339" vc-offset="-25" vc-line-width="2"
-            vc-tick-length="5"
-            vc-minor-tick-length="5" vc-end-on-tick="false">
-        <vc-labels vc-distance="-20" vc-rotation="auto"></vc-labels>
+    <vc-pane start-angle="-150" end-angle="150"></vc-pane>
+    <vc-y-axis min="0" max="200" line-color="#339" tick-color="#339" minor-tick-color="#339" offset="-25" line-width="2"
+            tick-length="5"
+            minor-tick-length="5" end-on-tick="false">
+        <vc-labels distance="-20" rotation="auto"></vc-labels>
     </vc-y-axis>
-    <vc-y-axis vc-min="0" vc-max="124" vc-tick-position="outside" vc-line-color="#933" vc-line-width="2" vc-minor-tick-position="outside"
-            vc-tick-color="#933" vc-minor-tick-color="#933" vc-tick-length="5" vc-minor-tick-length="5" vc-offset="-20"
-            vc-end-on-tick="false">
-        <vc-labels vc-distance="12" vc-rotation="auto"></vc-labels>
+    <vc-y-axis min="0" max="124" tick-position="outside" line-color="#933" line-width="2" minor-tick-position="outside"
+            tick-color="#933" minor-tick-color="#933" tick-length="5" minor-tick-length="5" offset="-20"
+            end-on-tick="false">
+        <vc-labels distance="12" rotation="auto"></vc-labels>
     </vc-y-axis>
-    <vc-tooltip vc-enabled="false"></vc-tooltip>
+    <vc-tooltip enabled="false"></vc-tooltip>
     <vc-plot-options>
         <vc-gauge>
             <vc-data-labels
-                    vc-formatter="function () { return this.y + ' km/h<br/>' + Math.round(this.y * 0.621) + ' mph'; }">
+                    formatter="function () { return this.y + ' km/h<br/>' + Math.round(this.y * 0.621) + ' mph'; }">
                 <vc-background-color>
-                    <vc-linear-gradient vc-x1="0" vc-y1="0" vc-x2="0" vc-y2="1">
+                    <vc-linear-gradient x1="0" y1="0" x2="0" y2="1">
                     </vc-linear-gradient>
                     <vc-stops>0, #DDD</vc-stops>
                     <vc-stops>1, #FFF</vc-stops>

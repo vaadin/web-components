@@ -1,7 +1,7 @@
-<v-chart id="xy-chart-selection" vc-type="scatter">
-    <vc-chart vc-zoom-type="xy">
+<v-chart id="xy-chart-selection" type="scatter">
+    <vc-chart zoom-type="xy">
         <vc-margin>70, 50, 60, 80</vc-margin>
-        <vc-events vc-selection="function (e) {
+        <vc-events selection="function (e) {
             // find the clicked values and the series
             var x1 = e.xAxis[0].min,
             x2 = e.xAxis[0].max,
@@ -19,13 +19,13 @@
     </vc-chart>
     <vc-title>Selections as area ranges</vc-title>
     <vc-subtitle>Drag with mouse to make selections. Click the legend items to toggle visibility.</vc-subtitle>
-    <vc-tooltip vc-enabled="false"></vc-tooltip>
-    <vc-exporting vc-enabled="false"></vc-exporting>
+    <vc-tooltip enabled="false"></vc-tooltip>
+    <vc-exporting enabled="false"></vc-exporting>
     <vc-plot-options>
-        <vc-series vc-animation="false" vc-point-start="1">
+        <vc-series animation="false" point-start="1">
         </vc-series>
     </vc-plot-options>
-    <v-series vc-name="Original">
+    <v-series name="Original">
         <vc-data>[20, 10], [35, 20], [25, 5], [15, 45], [10, 10], [25, 80], [30, 35]</vc-data>
     </v-series>
 </v-chart>

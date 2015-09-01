@@ -1,29 +1,29 @@
-<v-chart id="box-plot" vc-type="boxplot">
+<v-chart id="box-plot" type="boxplot">
     <vc-title>Vaadin Charts Box Plot Example</vc-title>
-    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-legend enabled="false"></vc-legend>
     <vc-x-axis>
         <vc-categories>1,2,3,4,5</vc-categories>
         <vc-title>Experiment No.</vc-title>
     </vc-x-axis>
     <vc-y-axis>
         <vc-title>Observations</vc-title>
-        <vc-plot-lines vc-value="932" vc-color="red" vc-width="1">
-            <vc-label vc-align="center" vc-text="Theoretical mean: 932'">
-                <vc-style vc-color="gray"></vc-style>
+        <vc-plot-lines value="932" color="red" width="1">
+            <vc-label align="center" text="Theoretical mean: 932'">
+                <vc-style color="gray"></vc-style>
             </vc-label>
         </vc-plot-lines>
     </vc-y-axis>
 
     <vc-plot-options>
         <vc-boxplot>
-            <vc-tooltip vc-header-format="<em>Experiment No {point.key}</em><br/>"></vc-tooltip>
+            <vc-tooltip header-format="<em>Experiment No {point.key}</em><br/>"></vc-tooltip>
         </vc-boxplot>
         <vc-scatter>
-            <vc-marker vc-fill-color="white" vc-line-width="1" vc-line-color="#3090F0"></vc-marker>
-            <vc-tooltip vc-point-format="Observation: {point.y}"></vc-tooltip>
+            <vc-marker fill-color="white" line-width="1" line-color="#3090F0"></vc-marker>
+            <vc-tooltip point-format="Observation: {point.y}"></vc-tooltip>
         </vc-scatter>
     </vc-plot-options>
-    <v-series vc-name="Observations">
+    <v-series name="Observations">
         <vc-data>
             [760, 801, 848, 895, 965],
             [733, 853, 939, 980, 1080],
@@ -32,7 +32,7 @@
             [834, 836, 864, 882, 910]
         </vc-data>
     </v-series>
-    <v-series vc-name="Outlier" vc-type="scatter">
+    <v-series name="Outlier" type="scatter">
         <vc-color>#3090F0</vc-color>
         <vc-data>
             [0, 644],

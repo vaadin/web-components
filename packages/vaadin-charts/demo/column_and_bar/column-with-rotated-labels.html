@@ -1,27 +1,27 @@
-<v-chart id="column-with-rotated-labels" vc-type="column">
+<v-chart id="column-with-rotated-labels" type="column">
     <vc-title>World's largest cities per 2008</vc-title>
     <vc-subtitle>Source: Wikipedia</vc-subtitle>
     <vc-x-axis>
         <vc-categories>Tokyo, Jakarta, New York, Seoul, Manila, Mumbai, Sao Paulo, Mexico City, Dehli, Osaka, Cairo,
             Kolkata, Los Angeles, Shanghai, Moscow, Beijing, Buenos Aires, Guangzhou, Shenzhen, Istanbul
         </vc-categories>
-        <vc-labels vc-rotation="-45" vc-align="right">
-            <vc-style vc-font-size="13px" vc-font-family="Verdana, sans-serif"></vc-style>
+        <vc-labels rotation="-45" align="right">
+            <vc-style font-size="13px" font-family="Verdana, sans-serif"></vc-style>
         </vc-labels>
     </vc-x-axis>
     <vc-y-axis>
         <vc-title>Population (millions)</vc-title>
     </vc-y-axis>
-    <vc-legend vc-enabled="false"></vc-legend>
-    <vc-tooltip vc-header-format=""
-             vc-point-format="{point.category} Population in 2008: {series.name}: {point.y:.0f}  millions"></vc-tooltip>
+    <vc-legend enabled="false"></vc-legend>
+    <vc-tooltip header-format=""
+             point-format="{point.category} Population in 2008: {series.name}: {point.y:.0f}  millions"></vc-tooltip>
     <vc-plot-options>
         <vc-column>
-            <vc-data-labels vc-rotation="-90" vc-align="right" vc-color="#ffffff" vc-enabled="true" vc-y="4" vc-point-format="{point.y}">
+            <vc-data-labels rotation="-90" align="right" color="#ffffff" enabled="true" y="4" point-format="{point.y}">
             </vc-data-labels>
         </vc-column>
     </vc-plot-options>
-    <v-series vc-name="Population">
+    <v-series name="Population">
         <vc-data> 34.4, 21.8, 20.1, 20, 19.6, 19.5, 19.1, 18.4, 18, 17.3, 16.8, 15, 14.7, 14.5, 13.3, 12.8, 12.4, 11.8,
             11.7, 11.2
         </vc-data>

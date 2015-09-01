@@ -1,29 +1,29 @@
-<v-chart id="stacked-and-grouped-column" vc-type="column">
+<v-chart id="stacked-and-grouped-column" type="column">
     <vc-title>Total fruit consumption, grouped by gender</vc-title>
     <vc-x-axis>
         <vc-categories>Apples, Oranges, Pears, Grapes, Bananas</vc-categories>
     </vc-x-axis>
-    <vc-y-axis vc-allow-decimals="false" vc-min="0">
+    <vc-y-axis allow-decimals="false" min="0">
         <vc-title>Number of fruits</vc-title>
     </vc-y-axis>
-    <vc-tooltip vc-point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></vc-tooltip>
+    <vc-tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></vc-tooltip>
     <vc-plot-options>
-        <vc-column vc-stacking="normal">
+        <vc-column stacking="normal">
         </vc-column>
     </vc-plot-options>
-    <v-series vc-name="John">
+    <v-series name="John">
         <vc-stack>male</vc-stack>
         <vc-data>5, 3, 4, 7, 2</vc-data>
     </v-series>
-    <v-series vc-name="Joe">
+    <v-series name="Joe">
         <vc-stack>male</vc-stack>
         <vc-data>3, 4, 4, 2, 5</vc-data>
     </v-series>
-    <v-series vc-name="Jane">
+    <v-series name="Jane">
         <vc-stack>female</vc-stack>
         <vc-data>2, 5, 6, 2, 1</vc-data>
     </v-series>
-    <v-series vc-name="Janet">
+    <v-series name="Janet">
         <vc-stack>female</vc-stack>
         <vc-data>3, 0, 4, 4, 3</vc-data>
     </v-series>

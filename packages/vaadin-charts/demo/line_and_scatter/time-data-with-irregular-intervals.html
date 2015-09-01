@@ -1,28 +1,28 @@
-<v-chart id="time-data-with-irregular-intervals" vc-type="spline">
+<v-chart id="time-data-with-irregular-intervals" type="spline">
     <vc-title>Snow depth at Vikjafjellet, Norway</vc-title>
 
-    <vc-x-axis vc-type="datetime">
-        <vc-date-time-label-formats vc-month="%e. %b"
-                                 vc-year="%b">
+    <vc-x-axis type="datetime">
+        <vc-date-time-label-formats month="%e. %b"
+                                 year="%b">
         </vc-date-time-label-formats>
         <vc-title>Date</vc-title>
     </vc-x-axis>
 
-    <vc-y-axis vc-min="0">
+    <vc-y-axis min="0">
         <vc-title>Snow depth (m)</vc-title>
     </vc-y-axis>
 
-    <vc-tooltip vc-header-format="<b>{series.name}</b><br>"
-             vc-point-format="{point.x:%e. %b}: {point.y:2f} m">
+    <vc-tooltip header-format="<b>{series.name}</b><br>"
+             point-format="{point.x:%e. %b}: {point.y:2f} m">
     </vc-tooltip>
 
     <vc-plot-options>
         <vc-spline>
-            <vc-marker vc-enabled="true"></vc-marker>
+            <vc-marker enabled="true"></vc-marker>
         </vc-spline>
     </vc-plot-options>
 
-    <v-series vc-name="Winter 2012-2013">
+    <v-series name="Winter 2012-2013">
         <vc-data>
             <vc-point>
                 <vc-date>1970-10-21</vc-date>
@@ -99,7 +99,7 @@
         </vc-data>
     </v-series>
 
-    <v-series vc-name="Winter 2013-2014">
+    <v-series name="Winter 2013-2014">
         <vc-data>[Date.UTC(1970, 9, 29), 0],
             [Date.UTC(1970, 10, 9), 0.4],
             [Date.UTC(1970, 11, 1), 0.25],
@@ -115,7 +115,7 @@
         </vc-data>
     </v-series>
 
-    <v-series vc-name="Winter 2014-2015">
+    <v-series name="Winter 2014-2015">
         <vc-data> [Date.UTC(1970, 10, 25), 0],
             [Date.UTC(1970, 11, 6), 0.25],
             [Date.UTC(1970, 11, 20), 1.41],

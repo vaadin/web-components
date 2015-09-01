@@ -1,31 +1,31 @@
-<v-chart id="column-line-pie" vc-type="column">
+<v-chart id="column-line-pie" type="column">
     <vc-title>Combination chart</vc-title>
     <vc-x-axis>
         <vc-categories>Apples, Oranges, Pears, Bananas, Plums</vc-categories>
     </vc-x-axis>
     <vc-labels>
-        <vc-items vc-html="Total fruit consumption">
-            <vc-style vc-left="50px" vc-top="18px" vc-color="black"></vc-style>
+        <vc-items html="Total fruit consumption">
+            <vc-style left="50px" top="18px" color="black"></vc-style>
         </vc-items>
     </vc-labels>
     <vc-plot-options>
         <vc-series>
-            <vc-data-labels vc-enabled="false"></vc-data-labels>
+            <vc-data-labels enabled="false"></vc-data-labels>
         </vc-series>
     </vc-plot-options>
-    <v-series vc-name="Jane">
+    <v-series name="Jane">
         <vc-data>3, 2, 1, 3, 4</vc-data>
     </v-series>
-    <v-series vc-name="John">
+    <v-series name="John">
         <vc-data>2, 3, 5, 7, 6</vc-data>
     </v-series>
-    <v-series vc-name="Joe">
+    <v-series name="Joe">
         <vc-data>4, 3, 3, 9, 0</vc-data>
     </v-series>
-    <v-series vc-name="Average" vc-type="spline">
+    <v-series name="Average" type="spline">
         <vc-data>3, 2.67, 3, 6.33, 3.33</vc-data>
     </v-series>
-    <v-series vc-name="Total consumption" vc-type="pie">
+    <v-series name="Total consumption" type="pie">
         <vc-center>100,80</vc-center>
         <vc-size>100</vc-size>
         <vc-show-in-legend>false</vc-show-in-legend>

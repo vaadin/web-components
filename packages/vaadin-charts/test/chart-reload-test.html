@@ -16,11 +16,11 @@
             <vc-subtitle>Data input from CSV</vc-subtitle>
             <vc-plot-options>
                 <vc-series>
-                    <vc-marker vc-enabled="false"></vc-marker>
+                    <vc-marker enabled="false"></vc-marker>
                 </vc-series>
             </vc-plot-options>
-            <vc-x-axis vc-type="datetime"></vc-x-axis>
-            <v-series id="seriesId" vc-data="[[seriesData]]" vc-line-width="1" vc-name="Global"></v-series>
+            <vc-x-axis type="datetime"></vc-x-axis>
+            <v-series id="seriesId" data="[[seriesData]]" line-width="1" name="Global"></v-series>
         </v-chart>
         <button id="pointBtn" on-click="_addSeriesPoint">Add series point</button>
         <button id="titleBtn" on-click="_changeTitle">Change title</button>

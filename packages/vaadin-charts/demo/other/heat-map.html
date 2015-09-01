@@ -1,19 +1,19 @@
-<v-chart id="heat-map" vc-type="heatmap">
+<v-chart id="heat-map" type="heatmap">
     <vc-title>Sales per employee per weekday</vc-title>
     <vc-x-axis>
         <vc-categories>Alexander, Marie, Maximilian, Sophia, Lukas, Maria, Leon, Anna, Tim, Laura</vc-categories>
     </vc-x-axis>
-    <vc-y-axis vc-title="">
+    <vc-y-axis title="">
         <vc-categories>Monday, Tuesday, Wednesday, Thursday, Friday</vc-categories>
     </vc-y-axis>
-    <vc-color-axis vc-min="0" vc-min-color="#FFFFFF" vc-max-color="#3090F0"></vc-color-axis>
-    <vc-legend vc-align="right" vc-layout="vertical" vc-margin="0" vc-vertical-align="top" vc-y="25" vc-symbol-height="280"></vc-legend>
+    <vc-color-axis min="0" min-color="#FFFFFF" max-color="#3090F0"></vc-color-axis>
+    <vc-legend align="right" layout="vertical" margin="0" vertical-align="top" y="25" symbol-height="280"></vc-legend>
     <vc-plot-options>
         <vc-heatmap>
-            <vc-data-labels vc-enabled="true" vc-color="#000000"></vc-data-labels>
+            <vc-data-labels enabled="true" color="#000000"></vc-data-labels>
         </vc-heatmap>
     </vc-plot-options>
-    <v-series vc-name="Sales per employee">
+    <v-series name="Sales per employee">
         <vc-data>
             [0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117],
             [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2,

@@ -1,14 +1,14 @@
-<v-chart id="pyramid" vc-type="pyramid">
+<v-chart id="pyramid" type="pyramid">
     <vc-title>Sales pyramid</vc-title>
     <vc-plot-options>
         <vc-series>
-            <vc-data-labels vc-enabled="true" vc-format="<vc-b>{point.name}</vc-b> ({point.y:.0f})" vc-color="black"
-                         vc-soft-connector="true">
+            <vc-data-labels enabled="true" format="<vc-b>{point.name}</vc-b> ({point.y:.0f})" color="black"
+                         soft-connector="true">
             </vc-data-labels>
         </vc-series>
     </vc-plot-options>
-    <vc-legend vc-enabled="false"></vc-legend>
-    <v-series vc-name="Unique users">
+    <vc-legend enabled="false"></vc-legend>
+    <v-series name="Unique users">
         <vc-data>
             ['Website visits',   15654],
             ['Downloads',       4064],

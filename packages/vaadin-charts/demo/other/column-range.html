@@ -1,5 +1,5 @@
-<v-chart id="column-range" vc-type="columnrange">
-    <vc-chart vc-inverted="true"></vc-chart>
+<v-chart id="column-range" type="columnrange">
+    <vc-chart inverted="true"></vc-chart>
     <vc-title>Temperature variation by month</vc-title>
     <vc-subtitle>Observed in Vik i Sogn, Norway</vc-subtitle>
     <vc-x-axis>
@@ -8,14 +8,14 @@
     <vc-y-axis>
         <vc-title>Temperature ( °C )</vc-title>
     </vc-y-axis>
-    <vc-tooltip vc-value-suffix="°C"></vc-tooltip>
+    <vc-tooltip value-suffix="°C"></vc-tooltip>
     <vc-plot-options>
         <vc-columnrange>
-            <vc-data-labels vc-enabled="true" vc-formatter="function () {return this.y + '°C';}"></vc-data-labels>
+            <vc-data-labels enabled="true" formatter="function () {return this.y + '°C';}"></vc-data-labels>
         </vc-columnrange>
     </vc-plot-options>
-    <vc-legend vc-enabled="false"></vc-legend>
-    <v-series vc-name="Temperatures">
+    <vc-legend enabled="false"></vc-legend>
+    <v-series name="Temperatures">
         <vc-data>
             [-9.7, 9.4],
             [-8.7, 6.5],

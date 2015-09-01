@@ -1,32 +1,32 @@
 <div style=" width: 50%; float: left;">
-    <v-chart id="stacked-bar" vc-type="bar">
+    <v-chart id="stacked-bar" type="bar">
         <vc-title>Stacked bar chart</vc-title>
         <vc-x-axis>
             <vc-categories>Apples, Oranges, Pears, Grapes, Bananas</vc-categories>
         </vc-x-axis>
-        <vc-y-axis vc-min="0">
+        <vc-y-axis min="0">
             <vc-title>Total fruit consumption</vc-title>
         </vc-y-axis>
-        <vc-legend vc-reversed="true"></vc-legend>
-        <vc-tooltip vc-point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></vc-tooltip>
+        <vc-legend reversed="true"></vc-legend>
+        <vc-tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></vc-tooltip>
         <vc-plot-options>
-            <vc-series vc-stacking="normal">
+            <vc-series stacking="normal">
             </vc-series>
         </vc-plot-options>
-        <v-series vc-name="John">
+        <v-series name="John">
             <vc-data>5, 3, 4, 7, 2</vc-data>
         </v-series>
-        <v-series vc-name="Jane">
+        <v-series name="Jane">
             <vc-data>2, 2, 3, 2, 1</vc-data>
         </v-series>
-        <v-series vc-name="Joe">
+        <v-series name="Joe">
             <vc-data>3, 4, 4, 2, 5</vc-data>
         </v-series>
     </v-chart>
 </div>
 <div style=" width: 50%; float: left;">
-    <v-chart id="pieWithSeries" vc-type="pie">
-        <v-series vc-name="Browser share">
+    <v-chart id="pieWithSeries" type="pie">
+        <v-series name="Browser share">
             <vc-data>
                 ["Firefox", 45.0],
                 ["IE", 26.8],

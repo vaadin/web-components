@@ -1,30 +1,30 @@
-<v-chart id="polar" vc-type="area">
-    <vc-chart vc-polar="true"></vc-chart>
+<v-chart id="polar" type="area">
+    <vc-chart polar="true"></vc-chart>
     <vc-title>Vaadin Charts Polar Chart</vc-title>
-    <vc-pane vc-start-angle="0" vc-end-angle="360">
+    <vc-pane start-angle="0" end-angle="360">
     </vc-pane>
-    <vc-x-axis vc-tick-interval="45" vc-min="0" vc-max="360" vc-grid-line-width="0">
-        <vc-labels vc-formatter="function () {return this.value + '°';}"></vc-labels>
+    <vc-x-axis tick-interval="45" min="0" max="360" grid-line-width="0">
+        <vc-labels formatter="function () {return this.value + '°';}"></vc-labels>
     </vc-x-axis>
-    <vc-y-axis vc-min="0">
-        <vc-labels vc-enabled="false"></vc-labels>
+    <vc-y-axis min="0">
+        <vc-labels enabled="false"></vc-labels>
 
     </vc-y-axis>
     <vc-plot-options>
-        <vc-series vc-point-start="0" vc-point-interval="45"></vc-series>
-        <vc-column vc-point-padding="0" vc-group-padding="0" vc-point-placement="between"></vc-column>
+        <vc-series point-start="0" point-interval="45"></vc-series>
+        <vc-column point-padding="0" group-padding="0" point-placement="between"></vc-column>
     </vc-plot-options>
-    <v-series vc-type="column" vc-name="Column">
+    <v-series type="column" name="Column">
         <vc-data>
             8, 7, 6, 5, 4, 3, 2, 1
         </vc-data>
     </v-series>
-    <v-series vc-type="line" vc-name="Line">
+    <v-series type="line" name="Line">
         <vc-data>
             1, 2, 3, 4, 5, 6, 7, 8
         </vc-data>
     </v-series>
-    <v-series vc-type="area" vc-name="Area">
+    <v-series type="area" name="Area">
         <vc-data>
             1, 8, 2, 7, 3, 6, 4, 5
         </vc-data>

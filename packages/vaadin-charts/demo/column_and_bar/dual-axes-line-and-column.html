@@ -1,29 +1,29 @@
-<v-chart id="dual-axes-line-and-column" vc-type="column">
+<v-chart id="dual-axes-line-and-column" type="column">
     <vc-title>Average Monthly Temperature and Rainfall in Tokyo</vc-title>
     <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
     <vc-x-axis>
         <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
     </vc-x-axis>
     <vc-y-axis>
-        <vc-labels vc-format="{value}°C">
-            <vc-style vc-color="Highcharts.getOptions().colors[1]"></vc-style>
+        <vc-labels format="{value}°C">
+            <vc-style color="Highcharts.getOptions().colors[1]"></vc-style>
         </vc-labels>
-        <vc-title vc-color="Highcharts.getOptions().colors[1]">Temperature</vc-title>
+        <vc-title color="Highcharts.getOptions().colors[1]">Temperature</vc-title>
     </vc-y-axis>
-    <vc-y-axis vc-opposite="true" vc-id="id1">
-        <vc-labels vc-format="{value} mm">
-            <vc-style vc-color="Highcharts.getOptions().colors[0]"></vc-style>
+    <vc-y-axis opposite="true" id="id1">
+        <vc-labels format="{value} mm">
+            <vc-style color="Highcharts.getOptions().colors[0]"></vc-style>
         </vc-labels>
-        <vc-title vc-color="Highcharts.getOptions().colors[0]">Rainfall</vc-title>
+        <vc-title color="Highcharts.getOptions().colors[0]">Rainfall</vc-title>
     </vc-y-axis>
-    <vc-tooltip vc-shared="true">
+    <vc-tooltip shared="true">
     </vc-tooltip>
-    <vc-legend vc-layout="vertical" vc-align="left" vc-x="120" vc-vertical-align="top" vc-y="100" vc-floating="true">
+    <vc-legend layout="vertical" align="left" x="120" vertical-align="top" y="100" floating="true">
     </vc-legend>
-    <v-series vc-name="Rainfall" vc-y-axis="id1">
+    <v-series name="Rainfall" y-axis="id1">
         <vc-data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
     </v-series>
-    <v-series vc-type="line" vc-name="Temperature">
+    <v-series type="line" name="Temperature">
         <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</vc-data>
     </v-series>
 </v-chart>

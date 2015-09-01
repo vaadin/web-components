@@ -1,46 +1,46 @@
-<v-chart id="basic-3d-scatter" vc-type="scatter">
+<v-chart id="basic-3d-scatter" type="scatter">
     <vc-title>Scatterbox</vc-title>
 
-    <vc-chart vc-margin="100">
-        <vc-options3d vc-enabled="true"
-                   vc-alpha="10"
-                   vc-beta="30"
-                   vc-depth="250"
-                   vc-view-distance="5">
+    <vc-chart margin="100">
+        <vc-options3d enabled="true"
+                   alpha="10"
+                   beta="30"
+                   depth="250"
+                   view-distance="5">
             <vc-frame>
-                <vc-bottom vc-size="1" vc-color="rgba(0,0,0,0.02)"></vc-bottom>
-                <vc-back vc-size="1" vc-color="rgba(0,0,0,0.04)"></vc-back>
-                <vc-side vc-size="1" vc-color="rgba(0,0,0,0.06)"></vc-side>
+                <vc-bottom size="1" color="rgba(0,0,0,0.02)"></vc-bottom>
+                <vc-back size="1" color="rgba(0,0,0,0.04)"></vc-back>
+                <vc-side size="1" color="rgba(0,0,0,0.06)"></vc-side>
             </vc-frame>
         </vc-options3d>
     </vc-chart>
 
     <vc-plot-options>
-        <vc-scatter vc-width="10"
-                 vc-height="10"
-                 vc-depth="10"
-                 vc-color-by-point="true">
+        <vc-scatter width="10"
+                 height="10"
+                 depth="10"
+                 color-by-point="true">
         </vc-scatter>
     </vc-plot-options>
 
-    <vc-y-axis vc-min="0"
-            vc-max="10"
-            vc-title="null">
+    <vc-y-axis min="0"
+            max="10"
+            title="null">
     </vc-y-axis>
 
-    <vc-x-axis vc-min="0"
-            vc-max="10"
-            vc-grid-line-width="1">
+    <vc-x-axis min="0"
+            max="10"
+            grid-line-width="1">
     </vc-x-axis>
 
-    <vc-z-axis vc-min="0"
-            vc-max="10"
-            vc-show-first-label="false">
+    <vc-z-axis min="0"
+            max="10"
+            show-first-label="false">
     </vc-z-axis>
 
-    <vc-legend vc-enabled="false"></vc-legend>
+    <vc-legend enabled="false"></vc-legend>
 
-    <v-series vc-name="Reading">
+    <v-series name="Reading">
         <vc-data>[1, 6, 5], [8, 7, 9], [1, 3, 4], [4, 6, 8], [5, 7, 7], [6, 9, 6], [7, 0, 5], [2, 3, 3], [3, 9, 8], [3, 6,
             5], [4, 9, 4], [2, 3, 3], [6, 9, 9], [0, 7, 0], [7, 7, 9], [7, 2, 9], [0, 6, 2], [4, 6, 7], [3, 7, 7], [0,
             1, 7], [2, 8, 6], [2, 3, 7], [6, 4, 8], [3, 5, 9], [7, 9, 5], [3, 1, 7], [4, 4, 2], [3, 6, 2], [3, 1, 6],
