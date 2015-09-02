@@ -76,7 +76,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Updates chart data when series data changes
          */
         _dataChanged: function () {
-            if (this._seriesIndex != undefined) {
+            if (this._seriesIndex != undefined && this._parentChart().initialized) {
                 if (this.drilldown) {
                     this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.data);
                 } else {

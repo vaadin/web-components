@@ -1,0 +1,76 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="v-chart.html">
+
+<dom-module id="vaadin-sparkline">
+
+    <template>
+        <v-chart id="chart" type="line">
+            <vc-title text="null"></vc-title>
+
+            <vc-chart margin="0" spacing="0" background-color="null">
+            </vc-chart>
+
+            <vc-exporting enabled="false"></vc-exporting>
+
+            <vc-plot-options>
+                <vc-line enable-mouse-tracking="false"
+                         show-in-legend="false"
+                         animation="false"
+                         shadow="false">
+                    <vc-marker enabled="false"></vc-marker>
+                </vc-line>
+            </vc-plot-options>
+
+            <vc-x-axis line-width="0"
+                       minor-grid-line-width="0"
+                       minor-tick-length="0"
+                       minor-tick-width="0"
+                       grid-line-width="0"
+                       title="null"
+                       max-padding="0"
+                       min-padding="0"
+                       start-on-tick="false"
+                       end-on-tick="false">
+                <vc-labels enabled="false"></vc-labels>
+            </vc-x-axis>
+
+            <vc-y-axis line-width="0"
+                       minor-grid-line-width="0"
+                       minor-tick-length="0"
+                       minor-tick-width="0"
+                       grid-line-width="0"
+                       title="null"
+                       max-padding="0.1"
+                       min-padding="0.1"
+                       start-on-tick="false"
+                       end-on-tick="false">
+                <vc-labels enabled="false"></vc-labels>
+            </vc-y-axis>
+
+            <v-series type="line" data="[[arrayData]]"></v-series>
+        </v-chart>
+
+    </template>
+
+
+    <script>
+        VaadinSparkline = Polymer({
+            is: 'vaadin-sparkline',
+
+            properties: {
+                data: String,
+                arrayData: {
+                    type: Array,
+                    computed: '_arrayFromData(data)'
+                }
+            },
+
+            _arrayFromData: function (data) {
+                return JSON.parse('[' + data + ']');
+            }
+        });
+
+
+    </script>
+
+</dom-module>
