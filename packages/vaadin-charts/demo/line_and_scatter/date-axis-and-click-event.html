@@ -1,37 +1,11 @@
 <dom-module id="date-axis-and-click-event-example">
     <template>
-        <v-chart id="date-axis-and-click-event" type="spline" on-chart-click="clickListener">
+        <v-chart id="dateAxisAndClickEvent" type="spline" on-chart-click="chartClickListener"
+                 on-point-click="pointClickListener">
             <vc-title>Date axis and click events</vc-title>
 
             <vc-x-axis type="datetime"></vc-x-axis>
             <vc-legend enabled="false"></vc-legend>
-
-            <vc-plot-options>
-                <vc-series>
-                    <vc-point>
-                        <vc-events click="function(event) {
-                    var xPixels = event.chartX,
-                        yPixels = event.chartY,
-                        dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S',this.x);
-                    var label = this.series.chart.renderer.label('Point click: x: ' + dateFormatted + ', y: ' + this.y, xPixels, yPixels)
-                        .attr({
-                            fill: Highcharts.getOptions().colors[1],
-                            padding: 10,
-                            r: 5,
-                            zIndex: 8
-                        })
-                        .css({
-                            color: '#FFFFFF'
-                        })
-                        .add();
-
-                    setTimeout(function () {
-                        label.fadeOut();
-                    }, 1000);
-                }"></vc-events>
-                    </vc-point>
-                </vc-series>
-            </vc-plot-options>
 
             <v-series>
                 <vc-data>
@@ -52,12 +26,11 @@
         </v-chart>
     </template>
 
-
     <script>
         Polymer({
             is: 'date-axis-and-click-event-example',
 
-            clickListener: function (e) {
+            chartClickListener: function (e) {
                 //get the Highcharts event with chart specific details
                 var originalEvent = e.detail.originalEvent;
 
@@ -67,7 +40,23 @@
                         yPixels = originalEvent.yAxis[0].axis.toPixels(yValue),
                         dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', xValue),
                         yFormatted = Highcharts.numberFormat(yValue, 2);
-                var label = e.target.chart.renderer.label('Chart click: x: ' + dateFormatted + ', y: ' + yFormatted, xPixels, yPixels)
+                this.showLabel('Chart click: x: ' + dateFormatted + ', y: ' + yFormatted, xPixels, yPixels);
+            },
+
+            pointClickListener: function (e) {
+                //get the Highcharts event with chart specific details
+                var originalEvent = e.detail.originalEvent;
+                var point = e.detail.point;
+
+                var xPixels = originalEvent.chartX,
+                        yPixels = originalEvent.chartY,
+                        dateFormatted = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', point.x);
+                this.showLabel('Point click: x: ' + dateFormatted + ', y: ' + point.y, xPixels, yPixels);
+
+            },
+
+            showLabel: function (message, xPixels, yPixels) {
+                var label = this.$.dateAxisAndClickEvent.chart.renderer.label(message, xPixels, yPixels)
                         .attr({
                             fill: Highcharts.getOptions().colors[2],
                             padding: 10,
@@ -78,11 +67,11 @@
                             color: '#FFFFFF'
                         })
                         .add();
-
                 this.async(function () {
                     label.fadeOut();
                 }, 1000);
             }
+
         });
     </script>
 </dom-module>

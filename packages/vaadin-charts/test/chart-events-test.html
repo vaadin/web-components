@@ -54,7 +54,7 @@
 <dom-module id="programmatically-added-listeners">
 
     <template>
-        <v-chart></v-chart>
+        <v-chart><v-series><vc-data>1,2</vc-data></v-series></v-chart>
     </template>
 
     <script>
@@ -77,6 +77,10 @@
                             this.eventCount[e.type] = 0;
                         }
                         this.eventCount[e.type]++;
+                    },
+
+                    cleanCount: function(){
+                        this.eventCount = {};
                     }
                 });
             });
@@ -88,21 +92,10 @@
 <script>
     suite('<v-chart>', function () {
 
-        var eventNames = {
-            addSeries: "add-series",
-            afterPrint: "after-print",
-            beforePrint: "before-print",
-            click: "chart-click",
-            drilldown: "drilldown",
-            drillup: "drillup",
-            redraw: "redraw",
-            selection: "selection"
-        };
-
-
         test('all chart events, declarative listeners', function () {
             var element = document.querySelector("eventful-chart-declarative-attribute");
             var elementChart = document.querySelector("eventful-chart-declarative-attribute v-chart");
+            var eventNames = elementChart._chartEventNames;
 
             //trigger all highcharts events
             for (var key in eventNames) {
@@ -117,6 +110,7 @@
         test('all chart events, programmatically added listeners', function () {
             var element = document.querySelector("programmatically-added-listeners");
             var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+            var eventNames = elementChart._chartEventNames;
 
             //add all listeners
             for (var key in eventNames) {
@@ -132,11 +126,51 @@
             }
         });
 
+        test('all series events, programmatically added listeners', function () {
+            var element = document.querySelector("programmatically-added-listeners");
+            element.cleanCount();
+            var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+            var eventNames = elementChart._seriesEventNames;
+
+            //add all listeners
+            for (var key in eventNames) {
+                element.listen(element, eventNames[key], "handle");
+            }
+            //trigger all highcharts events
+            for (var key in eventNames) {
+                elementChart.chart.series[0].trigger(key, {});
+            }
+            //verify all event handled
+            for (var key in eventNames) {
+                expect(element.eventCount[eventNames[key]]).to.equal(1);
+            }
+        });
+
+        test('all point events, programmatically added listeners', function () {
+            var element = document.querySelector("programmatically-added-listeners");
+            element.cleanCount();
+            var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+            var eventNames = elementChart._pointEventNames;
+
+            //add all listeners
+            for (var key in eventNames) {
+                element.listen(element, eventNames[key], "handle");
+            }
+            //trigger all highcharts events
+            for (var key in eventNames) {
+                elementChart.chart.series[0].data[0].firePointEvent(key);
+            }
+            //verify all event handled
+            for (var key in eventNames) {
+                expect(element.eventCount[eventNames[key]]).to.equal(1);
+            }
+        });
+
         test('chart-click event, event info is correct', function (done) {
             var element = document.createElement('v-chart');
 
             element.addEventListener("chart-loaded", function () {
-                //trigger cllick event on chart load
+                //trigger chart click event on chart load
                 element.chart.trigger("click", {});
             });
 
@@ -146,12 +180,57 @@
                 //event detail should contain original event info
                 expect(e.detail.originalEvent).to.exist;
                 expect(e.detail.originalEvent.type).to.equal("click");
+                expect(e.detail.chart).to.exist;
 
                 document.body.removeChild(element);
                 done();
+            });
+            document.body.appendChild(element);
+        });
 
+        test('series-click event, event info is correct', function (done) {
+            var element = document.createElement('v-chart');
+
+            element.addEventListener("chart-loaded", function () {
+                element.chart.addSeries({data:[1,2]})
+                //trigger series click event on chart load
+                element.chart.series[0].trigger("click", {});
             });
 
+            element.addEventListener("series-click", function (e) {
+                //event target should be v-chart element
+                expect(e.target).to.equal(element);
+                //event detail should contain original event info
+                expect(e.detail.originalEvent).to.exist;
+                expect(e.detail.originalEvent.type).to.equal("click");
+                expect(e.detail.series).to.exist;
+
+                document.body.removeChild(element);
+                done();
+            });
+            document.body.appendChild(element);
+        });
+
+        test('point-click event, event info is correct', function (done) {
+            var element = document.createElement('v-chart');
+
+            element.addEventListener("chart-loaded", function () {
+                element.chart.addSeries({data:[1,2]})
+                //trigger point click event on chart load
+                element.chart.series[0].data[0].firePointEvent("click");
+            });
+
+            element.addEventListener("point-click", function (e) {
+                //event target should be v-chart element
+                expect(e.target).to.equal(element);
+                //event detail should contain original event info
+                expect(e.detail.originalEvent).to.exist;
+                expect(e.detail.originalEvent.type).to.equal("click");
+                expect(e.detail.point).to.exist;
+
+                document.body.removeChild(element);
+                done();
+            });
             document.body.appendChild(element);
         });
 

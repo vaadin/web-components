@@ -1,6 +1,7 @@
 <dom-module id="basic-line-events-example">
     <template>
-        <v-chart id="basic-line-events" type="line" on-chart-click="clickListener">
+        <v-chart id="basicLineEvents" type="line" on-chart-click="chartClickListener"
+                 on-point-click="pointClickListener">
             <vc-title>Average Monthly Temperature and Rainfall in Tokyo</vc-title>
             <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
@@ -28,32 +29,6 @@
             <vc-legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
                        background-color="#FFFFFF"></vc-legend>
 
-            <vc-plot-options>
-                <vc-series>
-                    <vc-point>
-                        <vc-events click="function(event) {
-                    var xPixels = event.chartX,
-                        yPixels = event.chartY;
-                    var label = this.series.chart.renderer.label('Point click: Categoy: ' + this.category + ', y: ' + this.y, xPixels, yPixels)
-                        .attr({
-                            fill: Highcharts.getOptions().colors[2],
-                            padding: 10,
-                            r: 5,
-                            zIndex: 8
-                        })
-                        .css({
-                            color: '#FFFFFF'
-                        })
-                        .add();
-
-                    setTimeout(function () {
-                        label.fadeOut();
-                    }, 1000);
-                }"></vc-events>
-                    </vc-point>
-                </vc-series>
-            </vc-plot-options>
-
             <v-series name="Rainfall" y-axis="1" type="column">
                 <vc-data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
             </v-series>
@@ -68,7 +43,7 @@
         Polymer({
             is: 'basic-line-events-example',
 
-            clickListener: function (e) {
+            chartClickListener: function (e) {
                 //get the Highcharts event with chart specific details
                 var originalEvent = e.detail.originalEvent;
 
@@ -78,7 +53,21 @@
                         yPixels = originalEvent.yAxis[0].axis.toPixels(yValue),
                         xFormatted = Highcharts.numberFormat(xValue, 2),
                         yFormatted = Highcharts.numberFormat(yValue, 2);
-                var label = e.target.chart.renderer.label('Chart click: x: ' + xFormatted + ', y: ' + yFormatted, xPixels, yPixels)
+                this.showLabel('Chart click: x: ' + xFormatted + ', y: ' + yFormatted, xPixels, yPixels);
+            },
+
+            pointClickListener: function (e) {
+                //get the Highcharts event with chart specific details
+                var originalEvent = e.detail.originalEvent,
+                        point = e.detail.point;
+
+                var xPixels = originalEvent.chartX,
+                        yPixels = originalEvent.chartY;
+                this.showLabel('Point click: Categoy: ' + point.category + ', y: ' + point.y, xPixels, yPixels, '#FFFFFF');
+            },
+
+            showLabel: function (message, xPixels, yPixels) {
+                var label = this.$.basicLineEvents.chart.renderer.label(message, xPixels, yPixels)
                         .attr({
                             fill: Highcharts.getOptions().colors[2],
                             padding: 10,
@@ -89,7 +78,6 @@
                             color: '#FFFFFF'
                         })
                         .add();
-
                 this.async(function () {
                     label.fadeOut();
                 }, 1000);

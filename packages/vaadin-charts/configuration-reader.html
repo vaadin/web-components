@@ -217,6 +217,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                     }
                 }
             }
+        },
+
+        /**
+         * Creates the missing objects to ensure the path exists
+         **/
+        _ensureObjectStructure: function (obj, path) {
+            var parts = path.split(".");
+            for (var i = 0; i < parts.length; i++) {
+                if (!obj[parts[i]]) obj[parts[i]] = {};
+                obj = obj[parts[i]];
+            }
         }
     }
 </script>
