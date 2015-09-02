@@ -9,7 +9,7 @@
 </head>
 <body>
 <v-chart id="chartWithSeriesMarker">
-    <v-series>
+    <data-series>
         <vc-marker symbol="square"></vc-marker>
         <vc-data>25.2</vc-data>
         <vc-data>
@@ -19,11 +19,11 @@
             </vc-point>
         </vc-data>
         <vc-data>9.6</vc-data>
-    </v-series>
+    </data-series>
 </v-chart>
 <script>
 
-    suite('<v-series>', function () {
+    suite('<data-series>', function () {
 
         test('series marker defined', function () {
             var chartswc = document.querySelector('#chartWithSeriesMarker');

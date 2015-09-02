@@ -11,7 +11,7 @@
 <v-chart id="chartWithValidDates" type="scatter">
     <vc-x-axis type="datetime">
     </vc-x-axis>
-    <v-series id="seriesId">
+    <data-series id="seriesId">
         <vc-data>
             <vc-point>
                 <vc-date>2014-12-03</vc-date>
@@ -36,13 +36,13 @@
                 <vc-y>7</vc-y>
             </vc-point>
         </vc-data>
-    </v-series>
+    </data-series>
 </v-chart>
 
 <v-chart id="chartWithInvalidDates" type="scatter">
     <vc-x-axis type="datetime">
     </vc-x-axis>
-    <v-series id="seriesId">
+    <data-series id="seriesId">
         <vc-data>
             <vc-point>
                 <vc-date>2014-123-17</vc-date>
@@ -57,11 +57,11 @@
                 <vc-color>#00FFFF</vc-color>
             </vc-point>
         </vc-data>
-    </v-series>
+    </data-series>
 </v-chart>
 <script>
 
-    suite('<v-series>', function () {
+    suite('<data-series>', function () {
 
         test('valid date values parsed', function () {
             var chartswc = document.querySelector('#chartWithValidDates');
