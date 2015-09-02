@@ -41,6 +41,35 @@ Example:
             <vc-data>["Example1", 45.0], ["Example2", 26.8]</vc-data>
         </v-series>
     </v-chart>
+
+Highcharts' Chart, Series and Point events are wrapped and thrown, event info is contained in details of CustomEvent
+Event names can be checked in _chartEventNames, _seriesEventNames and _pointEventNames
+
+<dom-module id="chart-click-listener">
+    <template>
+        <v-chart on-chart-click="clickListener">
+            <vc-title>User supplied data</vc-title>
+            <v-series>
+                <vc-data>[20, 20], [80, 80]</vc-data>
+            </v-series>
+        </v-chart>
+    </template>
+    <script>
+        Polymer({
+            is: 'chart-click-listener',
+            clickListener: function (e) {
+                //get the Highcharts event with chart specific details
+                var originalEvent = e.detail.originalEvent;
+                // find the clicked values and the series
+                var x = originalEvent.xAxis[0].value,
+                    y = originalEvent.yAxis[0].value,
+                    series = e.detail.chart.series[0];
+                // Add it
+                series.addPoint([x, y]);
+            }
+        });
+    </script>
+</dom-module>
 -->
 <dom-module id="v-chart">
     <template>
@@ -93,6 +122,44 @@ Example:
                 }
             },
 
+            /**
+             *  Name of the chart events to add to the configuration and its corresponding event for v-chart
+             **/
+            _chartEventNames: {
+                addSeries: "add-series",
+                afterPrint: "after-print",
+                beforePrint: "before-print",
+                click: "chart-click",
+                drilldown: "drilldown",
+                drillup: "drillup",
+                redraw: "redraw",
+                selection: "selection"
+            },
+            /**
+             *  Name of the series events to add to the configuration and its corresponding event for v-chart
+             **/
+            _seriesEventNames: {
+                afterAnimate: "series-after-animate",
+                checkboxClick: "series-checkbox-click",
+                click: "series-click",
+                hide: "series-hide",
+                legendItemClick: "series-legend-item-click",
+                mouseOut: "series-mouse-out",
+                mouseOver: "series-mouse-over",
+                show: "series-show"
+            },
+            /**
+             *  Name of the point events to add to the configuration and its corresponding event for v-chart
+             **/
+            _pointEventNames: {
+                click: "point-click",
+                mouseOut: "point-mouse-out",
+                mouseOver: "point-mouse-over",
+                remove: "point-remove",
+                select: "point-select",
+                unselect: "point-unselect",
+                update: "point-update"
+            },
 
             /**
              * Reloads the chart with the original configuration defined in elements and its attributes.
@@ -183,9 +250,57 @@ Example:
                     this._chartConf.chart = {};
                 }
 
+                this._initEventListeners();
                 this._chartConf.chart.type = this.type;
                 this._chartConf.chart.renderTo = this.$.chartContainer;
+            },
+
+            _initEventListeners: function () {
+                this._chartConf.chart.events = {};
+                for (var key in this._chartEventNames) {
+                    if (this._chartEventNames.hasOwnProperty(key)) {
+                        this._addChartEvent(key, this._chartEventNames[key]);
+                    }
+                }
+
+                this._ensureObjectStructure(this._chartConf, "plotOptions.series");
+                this._chartConf.plotOptions.series.events = {};
+                for (var key in this._seriesEventNames) {
+                    if (this._seriesEventNames.hasOwnProperty(key)) {
+                        this._addSeriesEvent(key, this._seriesEventNames[key]);
+                    }
+                }
+
+                this._ensureObjectStructure(this._chartConf, "plotOptions.series.point");
+                this._chartConf.plotOptions.series.point.events = {};
+                for (var key in this._pointEventNames) {
+                    if (this._pointEventNames.hasOwnProperty(key)) {
+                        this._addPointEvent(key, this._pointEventNames[key]);
+                    }
+                }
+            },
+
+            _addChartEvent: function (highchartsName, vaadinChartsName) {
+                var self = this;
+                this._chartConf.chart.events[highchartsName] = function (e) {
+                    self.fire(vaadinChartsName, {originalEvent: e, chart: this});
+                };
+            },
+
+            _addSeriesEvent: function (highchartsName, vaadinChartsName) {
+                var self = this;
+                this._chartConf.plotOptions.series.events[highchartsName] = function (e) {
+                    self.fire(vaadinChartsName, {originalEvent: e, series: this});
+                };
+            },
+
+            _addPointEvent: function (highchartsName, vaadinChartsName) {
+                var self = this;
+                this._chartConf.plotOptions.series.point.events[highchartsName] = function (e) {
+                    self.fire(vaadinChartsName, {originalEvent: e, point: this});
+                };
             }
+
         });
     </script>
 </dom-module>

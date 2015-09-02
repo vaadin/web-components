@@ -1,61 +1,94 @@
-<v-chart id="spline-updating-each-second" type="spline">
-    <vc-chart animation="true" margin-right="10">
-        <vc-events load="function () {
-            // set up the updating of the chart each second
-            var series = this.series[0];
-            setInterval(function () {
-                var x = (new Date()).getTime(), // current time
-                    y = Math.random();
-                series.addPoint([x, y], true, true);
-            }, 1000);
-        }"></vc-events>
-    </vc-chart>
-    <vc-title>Live random data</vc-title>
+<dom-module id="spline-updating-each-second-example">
+    <template>
+        <v-chart id="updatingSpline" type="spline" on-chart-loaded="loadListener">
+            <vc-chart animation="true" margin-right="10">
+            </vc-chart>
+            <vc-title>Live random data</vc-title>
 
 
+            <vc-x-axis type="datetime"
+                       tick-pixel-interval="150">
+            </vc-x-axis>
 
-    <vc-x-axis type="datetime"
-            tick-pixel-interval="150">
-    </vc-x-axis>
+            <vc-y-axis>
+                <vc-title>Value</vc-title>
+                <vc-plot-lines value="0" width="1" color="#808080"></vc-plot-lines>
+            </vc-y-axis>
 
-    <vc-y-axis>
-        <vc-title>Value</vc-title>
-        <vc-plot-lines value="0" width="1" color="#808080"></vc-plot-lines>
-    </vc-y-axis>
-
-    <vc-tooltip formatter="function () {
+            <vc-tooltip formatter="function () {
                     return '<b>' + this.series.name + '</b><br/>' +
                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
                         Highcharts.numberFormat(this.y, 2);}">
 
-    </vc-tooltip>
+            </vc-tooltip>
 
-    <vc-legend enabled="false"></vc-legend>
+            <vc-legend enabled="false"></vc-legend>
 
-    <vc-exporting enabled="false"></vc-exporting>
+            <vc-exporting enabled="false"></vc-exporting>
 
-    <v-series name="Random data">
-        <vc-data>
-            [(new Date()).getTime()-18000,Math.random()],
-            [(new Date()).getTime()-17000,Math.random()],
-            [(new Date()).getTime()-16000,Math.random()],
-            [(new Date()).getTime()-15000,Math.random()],
-            [(new Date()).getTime()-14000,Math.random()],
-            [(new Date()).getTime()-13000,Math.random()],
-            [(new Date()).getTime()-12000,Math.random()],
-            [(new Date()).getTime()-11000,Math.random()],
-            [(new Date()).getTime()-10000,Math.random()],
-            [(new Date()).getTime()-9000,Math.random()],
-            [(new Date()).getTime()-8000,Math.random()],
-            [(new Date()).getTime()-7000,Math.random()],
-            [(new Date()).getTime()-6000,Math.random()],
-            [(new Date()).getTime()-5000,Math.random()],
-            [(new Date()).getTime()-4000,Math.random()],
-            [(new Date()).getTime()-3000,Math.random()],
-            [(new Date()).getTime()-2000,Math.random()],
-            [(new Date()).getTime()-1000,Math.random()],
-            [(new Date()).getTime(),Math.random()]
-        </vc-data>
-    </v-series>
+            <v-series name="Random data">
+                <vc-data>
+                    [(new Date()).getTime()-18000,Math.random()],
+                    [(new Date()).getTime()-17000,Math.random()],
+                    [(new Date()).getTime()-16000,Math.random()],
+                    [(new Date()).getTime()-15000,Math.random()],
+                    [(new Date()).getTime()-14000,Math.random()],
+                    [(new Date()).getTime()-13000,Math.random()],
+                    [(new Date()).getTime()-12000,Math.random()],
+                    [(new Date()).getTime()-11000,Math.random()],
+                    [(new Date()).getTime()-10000,Math.random()],
+                    [(new Date()).getTime()-9000,Math.random()],
+                    [(new Date()).getTime()-8000,Math.random()],
+                    [(new Date()).getTime()-7000,Math.random()],
+                    [(new Date()).getTime()-6000,Math.random()],
+                    [(new Date()).getTime()-5000,Math.random()],
+                    [(new Date()).getTime()-4000,Math.random()],
+                    [(new Date()).getTime()-3000,Math.random()],
+                    [(new Date()).getTime()-2000,Math.random()],
+                    [(new Date()).getTime()-1000,Math.random()],
+                    [(new Date()).getTime(),Math.random()]
+                </vc-data>
+            </v-series>
 
-</v-chart>
+        </v-chart>
+    </template>
+
+
+    <script>
+        Polymer({
+            is: 'spline-updating-each-second-example',
+
+            properties: {
+                isAttached: Boolean,
+                isChartReady: Boolean
+            },
+
+            attached: function () {
+                this.isAttached = true;
+                this.updateChart();
+            },
+
+            detached: function () {
+                this.isAttached = false;
+            },
+
+            loadListener: function (e) {
+                this.isChartReady = true;
+                this.updateChart();
+            },
+
+            updateChart: function () {
+                if (this.isAttached && this.isChartReady) {
+                    var chart = this.$.updatingSpline.chart;
+                    var series = chart.series[0];
+                    var x = (new Date()).getTime(), // current time
+                            y = Math.random();
+                    series.addPoint([x, y], true, true);
+
+                    this.async(this.updateChart, 1000);
+                }
+            }
+        });
+    </script>
+</dom-module>
+<spline-updating-each-second-example></spline-updating-each-second-example>

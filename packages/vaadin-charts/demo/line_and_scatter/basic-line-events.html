@@ -1,66 +1,73 @@
-<v-chart id="basic-line-events" type="line">
-    <vc-title>Average Monthly Temperature and Rainfall in Tokyo</vc-title>
-    <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
+<dom-module id="basic-line-events-example">
+    <template>
+        <v-chart id="basicLineEvents" type="line" on-chart-click="chartClickListener"
+                 on-point-click="pointClickListener">
+            <vc-title>Average Monthly Temperature and Rainfall in Tokyo</vc-title>
+            <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
 
-    <vc-x-axis>
-        <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
-    </vc-x-axis>
+            <vc-x-axis>
+                <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
+            </vc-x-axis>
 
-    <vc-chart>
-        <vc-events click="function(event) {
-            var xValue = event.xAxis[0].value,
-                yValue = event.yAxis[0].value,
-                xPixels = event.xAxis[0].axis.toPixels(xValue),
-                yPixels = event.yAxis[0].axis.toPixels(yValue),
-                xFormatted = Highcharts.numberFormat(xValue, 2),
-                yFormatted = Highcharts.numberFormat(yValue, 2);
-            var label = this.renderer.label('Chart click: x: ' + xFormatted + ', y: ' + yFormatted, xPixels, yPixels)
-                .attr({
-                    fill: Highcharts.getOptions().colors[2],
-                    padding: 10,
-                    r: 5,
-                    zIndex: 8
-                })
-                .css({
-                    color: '#FFFFFF'
-                })
-                .add();
+            <vc-y-axis>
+                <vc-title>
+                    <vc-text>Temperature</vc-text>
+                    <vc-style color="#EC6464"></vc-style>
+                </vc-title>
+            </vc-y-axis>
 
-            setTimeout(function () {
-                label.fadeOut();
-            }, 1000);
-        }">
+            <vc-y-axis opposite="true">
+                <vc-title>
+                    <vc-text>Rainfall</vc-text>
+                    <vc-style color="#3090F0"></vc-style>
+                </vc-title>
+            </vc-y-axis>
 
-        </vc-events>
-    </vc-chart>
+            <vc-tooltip
+                    formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></vc-tooltip>
 
-    <vc-y-axis>
-        <vc-title>
-            <vc-text>Temperature</vc-text>
-            <vc-style color="#EC6464"></vc-style>
-        </vc-title>
-    </vc-y-axis>
+            <vc-legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
+                       background-color="#FFFFFF"></vc-legend>
 
-    <vc-y-axis opposite="true">
-        <vc-title>
-            <vc-text>Rainfall</vc-text>
-            <vc-style color="#3090F0"></vc-style>
-        </vc-title>
-    </vc-y-axis>
+            <v-series name="Rainfall" y-axis="1" type="column">
+                <vc-data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
+            </v-series>
+            <v-series name="Temperature" y-axis="0">
+                <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</vc-data>
+            </v-series>
+        </v-chart>
+    </template>
 
-    <vc-tooltip
-            formatter="function() {return this.x +': '+ this.y + (this.series.name == 'Rainfall' ? ' mm' : '°C');}"></vc-tooltip>
 
-    <vc-legend layout="vertical" align="left" vertical-align="top" x="120" y="100" floating="true"
-            background-color="#FFFFFF"></vc-legend>
+    <script>
+        Polymer({
+            is: 'basic-line-events-example',
 
-    <vc-plot-options>
-        <vc-series>
-            <vc-point>
-                <vc-events click="function(event) {
-                    var xPixels = event.chartX,
-                        yPixels = event.chartY;
-                    var label = this.series.chart.renderer.label('Point click: Categoy: ' + this.category + ', y: ' + this.y, xPixels, yPixels)
+            chartClickListener: function (e) {
+                //get the Highcharts event with chart specific details
+                var originalEvent = e.detail.originalEvent;
+
+                var xValue = originalEvent.xAxis[0].value,
+                        yValue = originalEvent.yAxis[0].value,
+                        xPixels = originalEvent.xAxis[0].axis.toPixels(xValue),
+                        yPixels = originalEvent.yAxis[0].axis.toPixels(yValue),
+                        xFormatted = Highcharts.numberFormat(xValue, 2),
+                        yFormatted = Highcharts.numberFormat(yValue, 2);
+                this.showLabel('Chart click: x: ' + xFormatted + ', y: ' + yFormatted, xPixels, yPixels);
+            },
+
+            pointClickListener: function (e) {
+                //get the Highcharts event with chart specific details
+                var originalEvent = e.detail.originalEvent,
+                        point = e.detail.point;
+
+                var xPixels = originalEvent.chartX,
+                        yPixels = originalEvent.chartY;
+                this.showLabel('Point click: Categoy: ' + point.category + ', y: ' + point.y, xPixels, yPixels, '#FFFFFF');
+            },
+
+            showLabel: function (message, xPixels, yPixels) {
+                var label = this.$.basicLineEvents.chart.renderer.label(message, xPixels, yPixels)
                         .attr({
                             fill: Highcharts.getOptions().colors[2],
                             padding: 10,
@@ -71,19 +78,11 @@
                             color: '#FFFFFF'
                         })
                         .add();
-
-                    setTimeout(function () {
-                        label.fadeOut();
-                    }, 1000);
-                }"></vc-events>
-            </vc-point>
-        </vc-series>
-    </vc-plot-options>
-
-    <v-series name="Rainfall" y-axis="1" type="column">
-        <vc-data>49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
-    </v-series>
-    <v-series name="Temperature" y-axis="0">
-        <vc-data>7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6</vc-data>
-    </v-series>
-</v-chart>
+                this.async(function () {
+                    label.fadeOut();
+                }, 1000);
+            }
+        });
+    </script>
+</dom-module>
+<basic-line-events-example></basic-line-events-example>

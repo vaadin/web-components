@@ -1,39 +1,54 @@
-<v-chart id="click-to-add-point" type="scatter">
-    <vc-chart>
-        <vc-margin>70, 50, 60, 80</vc-margin>
-        <vc-events click="function (e) {
-            // find the clicked values and the series
-            var x = e.xAxis[0].value,
-            y = e.yAxis[0].value,
-            series = this.series[0];
-            // Add it
-            series.addPoint([x, y]);
-        }"></vc-events>
-    </vc-chart>
-    <vc-title>User supplied data</vc-title>
-    <vc-subtitle>Click the plot area to add a point. Click a point to remove it.</vc-subtitle>
-    <vc-x-axis grid-line-width="1" min-padding="0.2" max-padding="0.2" max-zoom="60">
-    </vc-x-axis>
-    <vc-y-axis min-padding="0.2" max-padding="0.2" max-zoom="60">
-        <vc-title>Value</vc-title>
-        <vc-plot-lines value="0" width="1" color="#808080">
+<dom-module id="click-to-add-point-example">
+    <template>
+        <v-chart id="click-to-add-point" type="scatter" on-chart-click="chartClickListener"
+                 on-point-click="pointClickListener">
+            <vc-chart>
+                <vc-margin>70, 50, 60, 80</vc-margin>
+            </vc-chart>
+            <vc-title>User supplied data</vc-title>
+            <vc-subtitle>Click the plot area to add a point. Click a point to remove it.</vc-subtitle>
+            <vc-x-axis grid-line-width="1" min-padding="0.2" max-padding="0.2" max-zoom="60">
+            </vc-x-axis>
+            <vc-y-axis min-padding="0.2" max-padding="0.2" max-zoom="60">
+                <vc-title>Value</vc-title>
+                <vc-plot-lines value="0" width="1" color="#808080">
 
-        </vc-plot-lines>
-    </vc-y-axis>
-    <vc-legend enabled="false"></vc-legend>
-    <vc-exporting enabled="false"></vc-exporting>
-    <vc-plot-options>
-        <vc-series line-width="1">
-            <vc-point>
-                <vc-events click="function () {
-                    if (this.series.data.length > 1) {
-                        this.remove();
-                    }
-                    }"></vc-events>
-            </vc-point>
-        </vc-series>
-    </vc-plot-options>
-    <v-series>
-        <vc-data>[20, 20], [80, 80]</vc-data>
-    </v-series>
-</v-chart>
+                </vc-plot-lines>
+            </vc-y-axis>
+            <vc-legend enabled="false"></vc-legend>
+            <vc-exporting enabled="false"></vc-exporting>
+            <vc-plot-options>
+                <vc-series line-width="1">
+                </vc-series>
+            </vc-plot-options>
+            <v-series>
+                <vc-data>[20, 20], [80, 80]</vc-data>
+            </v-series>
+        </v-chart>
+    </template>
+
+
+    <script>
+        Polymer({
+            is: 'click-to-add-point-example',
+
+            pointClickListener: function (e) {
+                if (e.detail.point.series.data.length > 1) {
+                    e.detail.point.remove();
+                }
+            },
+
+            chartClickListener: function (e) {
+                //get the Highcharts event with chart specific details
+                var originalEvent = e.detail.originalEvent;
+                // find the clicked values and the series
+                var x = originalEvent.xAxis[0].value,
+                        y = originalEvent.yAxis[0].value,
+                        series = e.target.chart.series[0];
+                // Add it
+                series.addPoint([x, y]);
+            }
+        });
+    </script>
+</dom-module>
+<click-to-add-point-example></click-to-add-point-example>
