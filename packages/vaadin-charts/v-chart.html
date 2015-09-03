@@ -26,7 +26,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
 
-<link rel="import" href="v-series.html">
+<link rel="import" href="data-series.html">
 <link rel="import" href="valo-theme.html">
 <link rel="import" href="configuration-reader.html">
 
@@ -37,9 +37,9 @@ Example:
 
     <v-chart type="line">
         <vc-title>Example</vc-title>
-        <v-series name="Example">
+        <data-series name="Example">
             <vc-data>["Example1", 45.0], ["Example2", 26.8]</vc-data>
-        </v-series>
+        </data-series>
     </v-chart>
 
 Highcharts' Chart, Series and Point events are wrapped and thrown, event info is contained in details of CustomEvent
@@ -49,9 +49,9 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
     <template>
         <v-chart on-chart-click="clickListener">
             <vc-title>User supplied data</vc-title>
-            <v-series>
+            <data-series>
                 <vc-data>[20, 20], [80, 80]</vc-data>
-            </v-series>
+            </data-series>
         </v-chart>
     </template>
     <script>
@@ -182,7 +182,7 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
              * Reload all the chart's series
              */
             _reloadSeries: function () {
-                var series = Polymer.dom(this).querySelectorAll('v-series');
+                var series = Polymer.dom(this).querySelectorAll('data-series');
                 for (var i = 0; i < series.length; i++) {
                     series[i]._reloadConfiguration();
                 }

@@ -23,7 +23,7 @@
             <vc-tooltip point-format="Observation: {point.y}"></vc-tooltip>
         </vc-scatter>
     </vc-plot-options>
-    <v-series name="Observations">
+    <data-series name="Observations">
         <vc-data>
             [760, 801, 848, 895, 965],
             [733, 853, 939, 980, 1080],
@@ -31,8 +31,8 @@
             [724, 802, 806, 871, 950],
             [834, 836, 864, 882, 910]
         </vc-data>
-    </v-series>
-    <v-series name="Outlier" type="scatter">
+    </data-series>
+    <data-series name="Outlier" type="scatter">
         <vc-color>#3090F0</vc-color>
         <vc-data>
             [0, 644],
@@ -40,5 +40,5 @@
             [4, 951],
             [4, 969]
         </vc-data>
-    </v-series>
+    </data-series>
 </v-chart>

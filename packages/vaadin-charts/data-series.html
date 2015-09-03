@@ -14,8 +14,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="configuration-reader.html">
 
 <script>
-    ChartSeries = Polymer({
-        is: "v-series",
+    DataSeries = Polymer({
+        is: "data-series",
         behaviors: [ConfigurationReaderBehavior],
 
         properties: {
@@ -90,7 +90,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _ignoredNodes: ["#text", "#comment", "vc-data"],
 
         /**
-         * Overrides behavior, for v-series all values should be evaluated as javascript
+         * Overrides behavior, for data-series all values should be evaluated as javascript
          **/
         _evalJavascript: function (val) {
             // only eval when needed

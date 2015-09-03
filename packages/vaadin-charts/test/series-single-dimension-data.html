@@ -9,15 +9,15 @@
 </head>
 <body>
 <v-chart id="chartId">
-    <v-series id="seriesId">
+    <data-series id="seriesId">
         <vc-data>
             1,2,3,4,5
         </vc-data>
-    </v-series>
+    </data-series>
 </v-chart>
 <script>
 
-    suite('<v-series>', function () {
+    suite('<data-series>', function () {
 
         test('series config parsed', function () {
             var chartswc = document.querySelector('#chartId');
