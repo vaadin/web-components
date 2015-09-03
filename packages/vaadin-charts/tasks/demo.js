@@ -23,7 +23,7 @@ gulp.task('demo:copy-sources', function() {
 
 gulp.task('demo:copy-demo', function () {
     return gulp.src(config.files.demo)
-        .pipe(replace('../', ''))
+        .pipe(replace('../', '', {skipBinary: true}))
         .pipe(gulp.dest(demoPath));
 });
 
