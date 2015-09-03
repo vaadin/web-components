@@ -6,7 +6,8 @@
       "v-chart.html",
       "data-series.html",
       "valo-theme.html",
-      "configuration-reader.html"
+      "configuration-reader.html",
+      "vaadin-sparkline.html"
     ],
     "doc": "*.md",
     "demo": "demo/**/*",
