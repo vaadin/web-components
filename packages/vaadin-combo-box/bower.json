@@ -22,7 +22,12 @@
     "polymer": "Polymer/polymer#^1.1.0",
     "iron-list": "polymerelements/iron-list#~1.0.3",
     "iron-overlay-behavior": "polymerelements/iron-overlay-behavior#~1.0.5",
-    "iron-input": "polymerelements/iron-input#~1.0.5"
+    "iron-input": "polymerelements/iron-input#~1.0.5",
+    "vaadin-components": "0.3.0-beta6",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#~1.0.3",
+    "paper-input": "PolymerElements/paper-input#~1.0.12",
+    "iron-icon": "PolymerElements/iron-icon#~1.0.4",
+    "iron-icons": "PolymerElements/iron-icons#~1.0.3"
   },
   "devDependencies": {
     "web-component-tester": "*",
