@@ -22,12 +22,7 @@
 
     <template is="dom-bind">
       <paper-input label="Name"></paper-input>
-
-      <paper-input-container>
-        <label>Country</label>
-        <vaadin-combo-box data-source=[[countrySource]] id="input" class="paper-input-input" />
-      </paper-input-container>
-
+      <vaadin-combo-box data-source=[[countrySource]] label="Country"/>
     </template>
   </div>
 

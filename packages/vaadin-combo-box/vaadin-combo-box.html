@@ -3,10 +3,11 @@
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
-<link rel='import' href='vaadin-overlay-combo-box.html'>
+<link rel='import' href='vaadin-combo-box-overlay.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel='import' href='../iron-icon/iron-icon.html'>
+<link rel='import' href='../paper-input/paper-input.html'>
 
 <dom-module id="vaadin-combo-box">
   <template>
@@ -17,11 +18,21 @@
       }
     </style>
 
-    <input is="iron-input" on-focus="showDropdown" bind-value="{{value}}">
-    <iron-icon icon="arrow-drop-down" suffix on-click="showDropdown"></iron-icon>
+   <template is="dom-if" if="[[!standalone]]">
+      <paper-input-container>
+        <label>[[label]]</label>
+        <input is="iron-input" on-focus="showDropdown" bind-value="{{value}}" class="paper-input-input">
+        <iron-icon icon="arrow-drop-down" suffix on-click="showDropdown"></iron-icon>
+      </paper-input-container>
+    </template>
 
-    <vaadin-overlay-combo-box data-source={{dataSource}} selected={{value}} id="overlay">
-    </vaadin-overlay-combo-box>
+    <template is="dom-if" if="[[standalone]]">
+      <input is="iron-input" on-focus="showDropdown" bind-value="{{value}}">
+      <iron-icon icon="arrow-drop-down" suffix on-click="showDropdown"></iron-icon>
+    </template>
+
+    <vaadin-combo-box-overlay data-source={{dataSource}} selected={{value}} id="overlay">
+    </vaadin-combo-box-overlay>
   </template>
 </dom-module>
 
@@ -32,12 +43,22 @@
 
     properties: {
       value: {
-        notify: true
+        notify: true,
+        observer: "valueChanged"
+      },
+      standalone: {
+        value: false
       }
     },
 
     showDropdown: function() {
       this.$.overlay.openAndFocus();
+    },
+
+    valueChanged() {
+      this.$.overlay.close();
     }
+
+
   }); // End Polymer prototype
 </script>

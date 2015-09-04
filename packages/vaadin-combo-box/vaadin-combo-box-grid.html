@@ -1,15 +1,23 @@
 <!--
-@element vaadin-grid-template
+@element vaadin-combo-box-grid
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../vaadin-components/vaadin-grid/vaadin-grid.html'>
 
-<dom-module id="vaadin-grid-template">
+<dom-module id="vaadin-combo-box-grid">
   <template>
+    <style>
+      :host ::content .v-grid-cell.v-grid.selected {
+        background: #ddd;
+      }
+    </style>
     <v-grid id="grid">
       <table>
         <col>
+        <thead hidden>
+          <tr></tr>
+        </thead>
       </table>
     </v-grid>
     <div id="templateWrapper" style="display: none">
@@ -21,14 +29,11 @@
 <script>
   Polymer({
 
-    is: "vaadin-grid-template",
+    is: "vaadin-combo-box-grid",
 
     properties: {
       selectedItem: {
         notify: true
-      },
-      template: {
-        type: Object
       },
       filter: {
         type: String,
@@ -37,13 +42,11 @@
 
     },
 
+    listeners: {
+      "grid.select" : "onSelection"
+    },
 
     ready() {
-       this.$.grid.header.hidden = true;
-
-       // Not cool if I have to use bind
-       this.$.grid.addEventListener("select", this.onSelection.bind(this));
-
        this.template = this.$.templateWrapper.querySelector("template");
        if (this.template) {
          this.$.grid.columns[0].renderer = this.renderer.bind(this);
@@ -57,9 +60,9 @@
 
      renderer(cell) {
        this.template.item = cell.data;
-       var result = this.$.templateWrapper.firstElementChild.cloneNode(true);
-       cell.element.innerHTML = "";
-       cell.element.appendChild(result);
+       cell.element.innerHTML = this.$.templateWrapper.innerHTML;
+       //TODO: Also needed for non-templated renderer
+       this.toggleClass('selected', cell.data == this.selectedItem, cell.element);
      },
 
      filterChanged() {
@@ -68,10 +71,14 @@
 
      onSelection() {
        var selectedIndex = this.$.grid.selection.selected()[0];
-       // Not cool if I have to use bind
-       this.$.grid.data.getItem(selectedIndex, function(err, item) {
-         this.selectedItem = item;
-       }.bind(this));
+
+       if (selectedIndex !== undefined) {
+         this.$.grid.selection.deselect(selectedIndex);
+         this.$.grid.data.getItem(selectedIndex, function(err, item) {
+           this.selectedItem = item;
+           this.fire("selected");
+         }.bind(this));
+       }
      },
 
   }); // End Polymer prototype

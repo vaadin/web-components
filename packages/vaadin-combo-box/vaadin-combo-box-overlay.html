@@ -5,9 +5,9 @@
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../iron-overlay-behavior/iron-overlay-behavior.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
-<link rel='import' href='vaadin-grid-template.html'>
+<link rel='import' href='vaadin-combo-box-grid.html'>
 
-<dom-module id="vaadin-overlay-combo-box">
+<dom-module id="vaadin-combo-box-overlay">
   <template>
     <style>
       :host {
@@ -25,34 +25,26 @@
 
     </style>
     <div id="input-layout">
-      <input on-keyup="filterItems" is="iron-input" id="input" bind-value="[[initialValue]]">
-      <iron-icon on-click="clear" icon="clear" suffix on-click="showDropdown"></iron-icon>
+      <input id="input" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
+      <iron-icon on-click="clear" icon="clear"></iron-icon>
     </div>
 
-    <vaadin-grid-template data-source={{dataSource}} id="list" selected-item="{{selectedItem}}" items=[[items]] filter=[[filter]]>
+    <vaadin-combo-box-grid id="grid" data-source={{dataSource}} selected-item="{{selected}}" filter=[[filter]]>
       <template is="dom-bind">
         <span>[[item]]</span>
       </template>
-    </vaadin-grid-template>
+    </vaadin-combo-box-grid>
   </template>
 </dom-module>
 
 <script>
   Polymer({
 
-    is: "vaadin-overlay-combo-box",
+    is: "vaadin-combo-box-overlay",
 
     behaviors: [
       Polymer.IronOverlayBehavior
     ],
-
-    itemSelected: function(newValue) {
-      if (newValue !== undefined && newValue !== null) {
-        this.selected = this.selectedItem;
-        this.close();
-      }
-      this.selectedItem = undefined;
-    },
 
     filterItems() {
       this.filter = this.$.input.value;
@@ -79,17 +71,17 @@
       });
     },
 
+    listeners: {
+      "grid.selected": "close"
+    },
+
     properties: {
-      selectedItem: {
-        observer: "itemSelected"
-      },
       selected: {
         notify: true
       },
       withBackdrop: {
         value: true
       }
-
     }
 
 
