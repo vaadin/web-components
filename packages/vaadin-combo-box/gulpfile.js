@@ -7,6 +7,7 @@ var reload = browserSync.reload;
 gulp.task('demo', function () {
   browserSync({
     port: 5000,
+    ghostMode: false,
 
     server: {
       baseDir: ['.','demo'],

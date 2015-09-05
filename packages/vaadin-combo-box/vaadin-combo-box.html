@@ -7,7 +7,8 @@
 <link rel='import' href='../iron-input/iron-input.html'>
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel='import' href='../iron-icon/iron-icon.html'>
-<link rel='import' href='../paper-input/paper-input.html'>
+<link rel='import' href='../paper-input/paper-input-container.html'>
+<link rel='import' href='../iron-media-query/iron-media-query.html'>
 
 <dom-module id="vaadin-combo-box">
   <template>
@@ -15,24 +16,33 @@
       :host {
         /* layout properties for the host element */
         @apply(--layout-horizontal);
+        position: relative;
+      }
+
+      #container {
+        width: 100%;
       }
     </style>
 
-   <template is="dom-if" if="[[!standalone]]">
-      <paper-input-container>
+    <template is="dom-if" if="[[!standalone]]">
+      <paper-input-container id="container">
         <label>[[label]]</label>
-        <input is="iron-input" on-focus="showDropdown" bind-value="{{value}}" class="paper-input-input">
+        <input id="input" is="iron-input" on-click="showDropdown" bind-value="{{value}}">
         <iron-icon icon="arrow-drop-down" suffix on-click="showDropdown"></iron-icon>
       </paper-input-container>
     </template>
 
+    <!-- How to avoid repetition? -->
     <template is="dom-if" if="[[standalone]]">
-      <input is="iron-input" on-focus="showDropdown" bind-value="{{value}}">
+      <input id="input" is="iron-input" on-click="showDropdown" bind-value="{{value}}">
       <iron-icon icon="arrow-drop-down" suffix on-click="showDropdown"></iron-icon>
     </template>
 
-    <vaadin-combo-box-overlay data-source={{dataSource}} selected={{value}} id="overlay">
+    <vaadin-combo-box-overlay mobile="[[mobile]]" filter="[[value]]" data-source={{dataSource}} selected={{value}} id="overlay">
     </vaadin-combo-box-overlay>
+
+    <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
+
   </template>
 </dom-module>
 
@@ -43,21 +53,30 @@
 
     properties: {
       value: {
-        notify: true,
-        observer: "valueChanged"
+        notify: true
       },
       standalone: {
         value: false
+      },
+      _isMobile: {
+        observer: '_isMobileChanged'
+      }
+    },
+
+    _isMobileChanged: function() {
+      if (this.mobile == undefined) {
+        this.mobile = this._isMobile;
+        this.$.overlay.fitInto = this.mobile ? window : this;
       }
     },
 
     showDropdown: function() {
-      this.$.overlay.openAndFocus();
-    },
+      this.$.overlay.open();
 
-    valueChanged() {
-      this.$.overlay.close();
-    }
+      var input = (this.mobile ? this.$.overlay : this).$$("#input");
+      input.focus();
+      input.setSelectionRange(0, input.value.length);
+    },
 
 
   }); // End Polymer prototype

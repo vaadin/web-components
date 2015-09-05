@@ -3,37 +3,58 @@
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
-<link rel='import' href='../iron-overlay-behavior/iron-overlay-behavior.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
 <link rel='import' href='vaadin-combo-box-grid.html'>
+<link rel='import' href='../iron-dropdown/iron-dropdown.html'>
 
 <dom-module id="vaadin-combo-box-overlay">
   <template>
     <style>
       :host {
         @apply(--layout-vertical);
-        max-width: none !important;
         width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+
+      :host[mobile] iron-dropdown {
         top: 0 !important;
-        overflow: hidden;
-        background: #fff;
+        left: 0 !important;
+        width: 100%;
+      }
+
+      :host:not([mobile]) #input-layout {
+        display: none;
       }
 
       #input-layout {
         @apply(--layout-horizontal);
+        background: #fff;
       }
 
-    </style>
-    <div id="input-layout">
-      <input id="input" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
-      <iron-icon on-click="clear" icon="clear"></iron-icon>
-    </div>
+      #input {
+        width: 100%;
+      }
 
-    <vaadin-combo-box-grid id="grid" data-source={{dataSource}} selected-item="{{selected}}" filter=[[filter]]>
-      <template is="dom-bind">
-        <span>[[item]]</span>
-      </template>
-    </vaadin-combo-box-grid>
+      :host:not([mobile]) .dropdown-content {
+        width: 10000px;
+      }
+    </style>
+    <iron-dropdown fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]] id="dropdown">
+      <div class="dropdown-content">
+        <div id="input-layout">
+          <input id="input" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
+          <iron-icon on-click="clear" icon="clear"></iron-icon>
+        </div>
+
+        <vaadin-combo-box-grid id="grid" data-source={{dataSource}} selected-item="{{selected}}" filter=[[filter]]>
+          <template is="dom-bind">
+            <span>[[item]]</span>
+          </template>
+        </vaadin-combo-box-grid>
+      </div>
+      <iron-dropdown>
   </template>
 </dom-module>
 
@@ -42,15 +63,11 @@
 
     is: "vaadin-combo-box-overlay",
 
-    behaviors: [
-      Polymer.IronOverlayBehavior
-    ],
-
-    filterItems() {
+    filterItems: function() {
       this.filter = this.$.input.value;
     },
 
-    clear() {
+    clear: function() {
       if (this.$.input.value) {
         this.filter = "";
         this.$.input.value = "";
@@ -60,15 +77,18 @@
       }
     },
 
-    openAndFocus: function() {
+    ready: function() {
+      this.$.dropdown.focusTarget = this.$.input;
+    },
+
+    open: function() {
       this.filter = "";
       this.$.input.value = this.selected;
-      this.open();
+      this.$.dropdown.open();
+    },
 
-      this.async(function() {
-        this.$.input.focus();
-        this.$.input.setSelectionRange(0, this.$.input.value.length)
-      });
+    close: function() {
+      this.$.dropdown.close();
     },
 
     listeners: {
@@ -79,11 +99,10 @@
       selected: {
         notify: true
       },
-      withBackdrop: {
-        value: true
+      mobile: {
+        reflectToAttribute: true
       }
     }
-
 
   });
 </script>
