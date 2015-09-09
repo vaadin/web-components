@@ -95,7 +95,28 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
             properties: {
 
                 /**
-                 * Highcharts JS object. Use this to configure the chart after creation.
+                 * Highcharts JS object created from the HTML configuration.
+                 *
+                 * @type {chart: object
+                 *        colors: array
+                 *        credits: object
+                 *        data: object
+                 *        drilldown: object
+                 *        exporting: object
+                 *        labels: object
+                 *        legend: object
+                 *        loading: object
+                 *        navigation: object
+                 *        noData: object
+                 *        pane: object
+                 *        plotOptions: object
+                 *        series: array
+                 *        subtitle: object
+                 *        title: object
+                 *        tooltip: object
+                 *        xAxis: object
+                 *        yAxis: object
+                 *       }
                  **/
                 chart: {
                     type: Object,
@@ -104,17 +125,21 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
                     }
                 },
 
+                /**
+                 * The default series type for the chart. Can be any of the valid chart types. Defaults to line.
+                 **/
                 type: {
                     type: String,
                     value: 'line'
                 },
 
+                /**
+                 * Flag to indicate when this component has initialized itself for the first time.
+                 **/
                 initialized: {
                     type: Boolean,
                     value: false
                 },
-
-                /* ----------- internal ----------- */
 
                 /**
                  * Initial chart configuration before initial rendering.
