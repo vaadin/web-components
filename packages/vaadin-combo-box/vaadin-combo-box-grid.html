@@ -20,9 +20,6 @@
           </thead>
       </table>
     </v-grid>
-    <div id="templateWrapper" style="display: none">
-      <content>
-    </div>
   </template>
 </dom-module>
 
@@ -42,12 +39,16 @@
 
     },
 
+    behaviors: [Polymer.Templatizer],
+
     listeners: {
       "grid.select": "onSelection"
     },
 
     ready: function() {
-      this.template = this.$.templateWrapper.querySelector("template");
+      this.template = Polymer.dom(this).querySelector('template');
+      this.templatize(this.template);
+
       if (this.template) {
         this.$.grid.columns[0].renderer = this.renderer.bind(this);
       }
@@ -59,8 +60,10 @@
     },
 
     renderer: function(cell) {
-      this.template.item = cell.data;
-      cell.element.innerHTML = this.$.templateWrapper.innerHTML;
+      var instance = this.stamp();
+      instance.item = cell.data;
+      cell.element.innerHTML = "";
+      Polymer.dom(cell.element).appendChild(instance.root);
       //TODO: Also needed for non-templated renderer
       this.toggleClass('selected', cell.data == this.selectedItem, cell.element);
     },
