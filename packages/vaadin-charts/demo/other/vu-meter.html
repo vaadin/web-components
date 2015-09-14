@@ -1,29 +1,29 @@
 <v-chart id="vu-meter" type="gauge">
-    <vc-chart plot-border-width="1" height="200" plot-background-color="#FFF4C6"></vc-chart>
-    <vc-title>VU meter</vc-title>
-    <vc-pane start-angle="-45" end-angle="45" center='["25%", "145%"]' size="300" background="null"></vc-pane>
-    <vc-pane start-angle="-45" end-angle="45" center='["75%", "145%"]' size="300" background="null"></vc-pane>
-    <vc-y-axis min="-20" max="6" minor-tick-position="outside" tick-position="outside" pane="0">
-        <vc-labels rotation="auto" distance="20"></vc-labels>
-        <vc-plot-bands from="0" to="6" color="#C02316" inner-radius="100%" outer-radius="105%" pane="0"></vc-plot-bands>
-        <vc-title y="-40">Channel A</vc-title>
-    </vc-y-axis>
-    <vc-y-axis min="-20" max="6" minor-tick-position="outside" tick-position="outside" pane="1">
-        <vc-labels rotation="auto" distance="20"></vc-labels>
-        <vc-plot-bands from="0" to="6" color="#C02316" inner-radius="100%" outer-radius="105%" pane="1"></vc-plot-bands>
-        <vc-title y="-40">Channel B</vc-title>
-    </vc-y-axis>
-    <vc-plot-options>
-        <vc-gauge>
-            <vc-data-labels enabled="false"></vc-data-labels>
-            <vc-dial radius="100%"></vc-dial>
-        </vc-gauge>
-    </vc-plot-options>
-    <vc-tooltip enabled="false"></vc-tooltip>
+    <chart plot-border-width="1" height="200" plot-background-color="#FFF4C6"></chart>
+    <title>VU meter</title>
+    <pane start-angle="-45" end-angle="45" center='["25%", "145%"]' size="300" background="null"></pane>
+    <pane start-angle="-45" end-angle="45" center='["75%", "145%"]' size="300" background="null"></pane>
+    <y-axis min="-20" max="6" minor-tick-position="outside" tick-position="outside" pane="0">
+        <labels rotation="auto" distance="20"></labels>
+        <plot-bands from="0" to="6" color="#C02316" inner-radius="100%" outer-radius="105%" pane="0"></plot-bands>
+        <title y="-40">Channel A</title>
+    </y-axis>
+    <y-axis min="-20" max="6" minor-tick-position="outside" tick-position="outside" pane="1">
+        <labels rotation="auto" distance="20"></labels>
+        <plot-bands from="0" to="6" color="#C02316" inner-radius="100%" outer-radius="105%" pane="1"></plot-bands>
+        <title y="-40">Channel B</title>
+    </y-axis>
+    <plot-options>
+        <gauge>
+            <data-labels enabled="false"></data-labels>
+            <dial radius="100%"></dial>
+        </gauge>
+    </plot-options>
+    <tooltip enabled="false"></tooltip>
     <data-series y-axis="0">
-        <vc-data>-3</vc-data>
+        <data>-3</data>
     </data-series>
     <data-series y-axis="1">
-        <vc-data>-3</vc-data>
+        <data>-3</data>
     </data-series>
 </v-chart>

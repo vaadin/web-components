@@ -1,20 +1,20 @@
 <v-chart id="pyramid" type="pyramid">
-    <vc-title>Sales pyramid</vc-title>
-    <vc-plot-options>
-        <vc-series>
-            <vc-data-labels enabled="true" format="<vc-b>{point.name}</vc-b> ({point.y:.0f})" color="black"
+    <title>Sales pyramid</title>
+    <plot-options>
+        <series>
+            <data-labels enabled="true" format="<b>{point.name}</b> ({point.y:.0f})" color="black"
                          soft-connector="true">
-            </vc-data-labels>
-        </vc-series>
-    </vc-plot-options>
-    <vc-legend enabled="false"></vc-legend>
+            </data-labels>
+        </series>
+    </plot-options>
+    <legend enabled="false"></legend>
     <data-series name="Unique users">
-        <vc-data>
+        <data>
             ['Website visits',   15654],
             ['Downloads',       4064],
             ['Requested price list', 1987],
             ['Invoice sent',    976],
             ['Finalized',    846]
-        </vc-data>
+        </data>
     </data-series>
 </v-chart>

@@ -1,40 +1,40 @@
 <v-chart id="spline-inverted" type="spline">
-    <vc-chart inverted="true">
-    </vc-chart>
-    <vc-title>Atmosphere Temperature by Altitude</vc-title>
-    <vc-subtitle>According to the Standard Atmosphere Model</vc-subtitle>
+    <chart inverted="true">
+    </chart>
+    <title>Atmosphere Temperature by Altitude</title>
+    <subtitle>According to the Standard Atmosphere Model</subtitle>
 
-    <vc-x-axis reversed="false"
+    <x-axis reversed="false"
             max-padding="0.05"
             show-last-label="true">
-        <vc-title>Altitude</vc-title>
-        <vc-labels enabled="true"
+        <title>Altitude</title>
+        <labels enabled="true"
                 formatter="function() {return this.value + 'km';}">
-        </vc-labels>
-    </vc-x-axis>
+        </labels>
+    </x-axis>
 
-    <vc-y-axis line-width="2">
-        <vc-title align="high">Temperature</vc-title>
-        <vc-labels enabled="true"
+    <y-axis line-width="2">
+        <title align="high">Temperature</title>
+        <labels enabled="true"
                 formatter="function() {return this.value + '°';}">
-        </vc-labels>
-    </vc-y-axis>
+        </labels>
+    </y-axis>
 
-    <vc-tooltip formatter="function() {return this.x +' km: '+this.y +'°C';}"></vc-tooltip>
+    <tooltip formatter="function() {return this.x +' km: '+this.y +'°C';}"></tooltip>
 
-    <vc-plot-options>
-        <vc-spline>
-            <vc-marker enabled="true"></vc-marker>
-        </vc-spline>
-    </vc-plot-options>
+    <plot-options>
+        <spline>
+            <marker enabled="true"></marker>
+        </spline>
+    </plot-options>
 
-    <vc-legend enabled="false"></vc-legend>
+    <legend enabled="false"></legend>
 
     <data-series name="Temperature">
-        <vc-data>[ 0, 15 ], [ 10, -50 ], [ 20, -56.5 ],
+        <data>[ 0, 15 ], [ 10, -50 ], [ 20, -56.5 ],
             [ 30, -46.5 ], [ 40, -22.1 ], [ 50, -2.5 ], [ 60, -27.7 ],
             [ 70, -55.7 ], [ 80, -76.5 ]
-        </vc-data>
+        </data>
     </data-series>
 
 </v-chart>

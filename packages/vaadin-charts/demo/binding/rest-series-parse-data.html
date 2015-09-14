@@ -8,13 +8,13 @@
                 last-response="{{textData}}"
                 debounce-duration="300"></iron-ajax>
         <v-chart id="chart">
-            <vc-title>Global temperature change</vc-title>
+            <title>Global temperature change</title>
 
-            <vc-plot-options>
-                <vc-series>
-                </vc-series>
-            </vc-plot-options>
-            <vc-x-axis type="datetime"></vc-x-axis>
+            <plot-options>
+                <series>
+                </series>
+            </plot-options>
+            <x-axis type="datetime"></x-axis>
             <data-series id="my-series-id" data="[[seriesData]]"></data-series>
 
         </v-chart>

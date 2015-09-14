@@ -1,106 +1,106 @@
 <v-chart id="time-data-with-irregular-intervals" type="spline">
-    <vc-title>Snow depth at Vikjafjellet, Norway</vc-title>
+    <title>Snow depth at Vikjafjellet, Norway</title>
 
-    <vc-x-axis type="datetime">
-        <vc-date-time-label-formats month="%e. %b"
+    <x-axis type="datetime">
+        <date-time-label-formats month="%e. %b"
                                  year="%b">
-        </vc-date-time-label-formats>
-        <vc-title>Date</vc-title>
-    </vc-x-axis>
+        </date-time-label-formats>
+        <title>Date</title>
+    </x-axis>
 
-    <vc-y-axis min="0">
-        <vc-title>Snow depth (m)</vc-title>
-    </vc-y-axis>
+    <y-axis min="0">
+        <title>Snow depth (m)</title>
+    </y-axis>
 
-    <vc-tooltip header-format="<b>{series.name}</b><br>"
+    <tooltip header-format="<b>{series.name}</b><br>"
              point-format="{point.x:%e. %b}: {point.y:2f} m">
-    </vc-tooltip>
+    </tooltip>
 
-    <vc-plot-options>
-        <vc-spline>
-            <vc-marker enabled="true"></vc-marker>
-        </vc-spline>
-    </vc-plot-options>
+    <plot-options>
+        <spline>
+            <marker enabled="true"></marker>
+        </spline>
+    </plot-options>
 
     <data-series name="Winter 2012-2013">
-        <vc-data>
-            <vc-point>
-                <vc-date>1970-10-21</vc-date>
-                <vc-y>0</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1970-11-04</vc-date>
-                <vc-y>0.28</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1970-11-09</vc-date>
-                <vc-y>0.25</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1970-11-27</vc-date>
-                <vc-y>0.2</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1970-12-02</vc-date>
-                <vc-y>0.28</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1970-12-26</vc-date>
-                <vc-y>0.28</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1970-12-29</vc-date>
-                <vc-y>0.47</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-01-11</vc-date>
-                <vc-y>0.79</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-01-26</vc-date>
-                <vc-y>0.72</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-02-03</vc-date>
-                <vc-y>1.02</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-02-11</vc-date>
-                <vc-y>1.12</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-02-25</vc-date>
-                <vc-y>1.2</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-03-11</vc-date>
-                <vc-y>1.18</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-04-11</vc-date>
-                <vc-y>1.19</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-05-01</vc-date>
-                <vc-y>1.85</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-05-05</vc-date>
-                <vc-y>2.22</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-05-19</vc-date>
-                <vc-y>1.15</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-date>1971-06-03</vc-date>
-                <vc-y>0</vc-y>
-            </vc-point>
-        </vc-data>
+        <data>
+            <point>
+                <date>1970-10-21</date>
+                <y>0</y>
+            </point>
+            <point>
+                <date>1970-11-04</date>
+                <y>0.28</y>
+            </point>
+            <point>
+                <date>1970-11-09</date>
+                <y>0.25</y>
+            </point>
+            <point>
+                <date>1970-11-27</date>
+                <y>0.2</y>
+            </point>
+            <point>
+                <date>1970-12-02</date>
+                <y>0.28</y>
+            </point>
+            <point>
+                <date>1970-12-26</date>
+                <y>0.28</y>
+            </point>
+            <point>
+                <date>1970-12-29</date>
+                <y>0.47</y>
+            </point>
+            <point>
+                <date>1971-01-11</date>
+                <y>0.79</y>
+            </point>
+            <point>
+                <date>1971-01-26</date>
+                <y>0.72</y>
+            </point>
+            <point>
+                <date>1971-02-03</date>
+                <y>1.02</y>
+            </point>
+            <point>
+                <date>1971-02-11</date>
+                <y>1.12</y>
+            </point>
+            <point>
+                <date>1971-02-25</date>
+                <y>1.2</y>
+            </point>
+            <point>
+                <date>1971-03-11</date>
+                <y>1.18</y>
+            </point>
+            <point>
+                <date>1971-04-11</date>
+                <y>1.19</y>
+            </point>
+            <point>
+                <date>1971-05-01</date>
+                <y>1.85</y>
+            </point>
+            <point>
+                <date>1971-05-05</date>
+                <y>2.22</y>
+            </point>
+            <point>
+                <date>1971-05-19</date>
+                <y>1.15</y>
+            </point>
+            <point>
+                <date>1971-06-03</date>
+                <y>0</y>
+            </point>
+        </data>
     </data-series>
 
     <data-series name="Winter 2013-2014">
-        <vc-data>[Date.UTC(1970, 9, 29), 0],
+        <data>[Date.UTC(1970, 9, 29), 0],
             [Date.UTC(1970, 10, 9), 0.4],
             [Date.UTC(1970, 11, 1), 0.25],
             [Date.UTC(1971, 0, 1), 1.66],
@@ -112,11 +112,11 @@
             [Date.UTC(1971, 4, 14), 1.7],
             [Date.UTC(1971, 4, 24), 1.1],
             [Date.UTC(1971, 5, 10), 0]
-        </vc-data>
+        </data>
     </data-series>
 
     <data-series name="Winter 2014-2015">
-        <vc-data> [Date.UTC(1970, 10, 25), 0],
+        <data> [Date.UTC(1970, 10, 25), 0],
             [Date.UTC(1970, 11, 6), 0.25],
             [Date.UTC(1970, 11, 20), 1.41],
             [Date.UTC(1970, 11, 25), 1.64],
@@ -139,6 +139,6 @@
             [Date.UTC(1971, 5, 10), 1.85],
             [Date.UTC(1971, 5, 15), 1.49],
             [Date.UTC(1971, 5, 23), 1.08]
-        </vc-data>
+        </data>
     </data-series>
 </v-chart>

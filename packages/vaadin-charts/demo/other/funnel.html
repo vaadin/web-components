@@ -1,19 +1,19 @@
 <v-chart id="funnel" type="funnel">
-    <vc-title>Sales funnel</vc-title>
-    <vc-plot-options>
-        <vc-series neck-width="30%" neck-height="25%">
-            <vc-data-labels enabled="true" format="<vc-b>{point.name}</vc-b> ({point.y:.0f})" color="black"
-                         soft-connector="true"></vc-data-labels>
-        </vc-series>
-    </vc-plot-options>
-    <vc-legend enabled="false"></vc-legend>
+    <title>Sales funnel</title>
+    <plot-options>
+        <series neck-width="30%" neck-height="25%">
+            <data-labels enabled="true" format="<b>{point.name}</b> ({point.y:.0f})" color="black"
+                         soft-connector="true"></data-labels>
+        </series>
+    </plot-options>
+    <legend enabled="false"></legend>
     <data-series name="Unique users">
-        <vc-data>
+        <data>
             ['Website visits', 15654],
             ['Downloads', 4064],
             ['Requested price list', 1987],
             ['Invoice sent', 976],
             ['Finalized', 846]
-        </vc-data>
+        </data>
     </data-series>
 </v-chart>

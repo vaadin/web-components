@@ -2,26 +2,26 @@
     <template>
         <v-chart id="click-to-add-point" type="scatter" on-chart-click="chartClickListener"
                  on-point-click="pointClickListener">
-            <vc-chart>
-                <vc-margin>70, 50, 60, 80</vc-margin>
-            </vc-chart>
-            <vc-title>User supplied data</vc-title>
-            <vc-subtitle>Click the plot area to add a point. Click a point to remove it.</vc-subtitle>
-            <vc-x-axis grid-line-width="1" min-padding="0.2" max-padding="0.2" max-zoom="60">
-            </vc-x-axis>
-            <vc-y-axis min-padding="0.2" max-padding="0.2" max-zoom="60">
-                <vc-title>Value</vc-title>
-                <vc-plot-lines value="0" width="1" color="#808080">
-                </vc-plot-lines>
-            </vc-y-axis>
-            <vc-legend enabled="false"></vc-legend>
-            <vc-exporting enabled="false"></vc-exporting>
-            <vc-plot-options>
-                <vc-series line-width="1">
-                </vc-series>
-            </vc-plot-options>
+            <chart>
+                <margin>70, 50, 60, 80</margin>
+            </chart>
+            <title>User supplied data</title>
+            <subtitle>Click the plot area to add a point. Click a point to remove it.</subtitle>
+            <x-axis grid-line-width="1" min-padding="0.2" max-padding="0.2" max-zoom="60">
+            </x-axis>
+            <y-axis min-padding="0.2" max-padding="0.2" max-zoom="60">
+                <title>Value</title>
+                <plot-lines value="0" width="1" color="#808080">
+                </plot-lines>
+            </y-axis>
+            <legend enabled="false"></legend>
+            <exporting enabled="false"></exporting>
+            <plot-options>
+                <series line-width="1">
+                </series>
+            </plot-options>
             <data-series>
-                <vc-data>[20, 20], [80, 80]</vc-data>
+                <data>[20, 20], [80, 80]</data>
             </data-series>
         </v-chart>
     </template>

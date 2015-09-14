@@ -12,14 +12,14 @@
 <dom-module id="binding-chart">
     <template>
         <v-chart id="chartId">
-            <vc-title>Global temperature change</vc-title>
-            <vc-subtitle>Data input from CSV</vc-subtitle>
-            <vc-plot-options>
-                <vc-series>
-                    <vc-marker enabled="false"></vc-marker>
-                </vc-series>
-            </vc-plot-options>
-            <vc-x-axis type="datetime"></vc-x-axis>
+            <title>Global temperature change</title>
+            <subtitle>Data input from CSV</subtitle>
+            <plot-options>
+                <series>
+                    <marker enabled="false"></marker>
+                </series>
+            </plot-options>
+            <x-axis type="datetime"></x-axis>
             <data-series id="seriesId" data="[[seriesData]]" line-width="1"></data-series>
         </v-chart>
         <button id="myBtn" on-click="_addSeriesPoint">Add series point</button>

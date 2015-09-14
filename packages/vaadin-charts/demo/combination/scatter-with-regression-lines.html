@@ -1,19 +1,18 @@
 <v-chart id="scatter-with-regression-lines" type="line">
-    <vc-title>Scatter plot with regression line</vc-title>
-    <vc-x-axis min="-0.5" max="5.5">
-    </vc-x-axis>
-    <vc-y-axis min="0">
-    </vc-y-axis>
-    <vc-plot-options>
-        <vc-line>
-            <vc-marker enabled="false"></vc-marker>
-        </vc-line>
-    </vc-plot-options>
-    <data-series name="Regression Line">
-        <vc-enable-mouse-tracking>false</vc-enable-mouse-tracking>
-        <vc-data>[0, 1.11], [5, 4.51]</vc-data>
+    <title>Scatter plot with regression line</title>
+    <x-axis min="-0.5" max="5.5">
+    </x-axis>
+    <y-axis min="0">
+    </y-axis>
+    <plot-options>
+        <line>
+            <marker enabled="false"></marker>
+        </line>
+    </plot-options>
+    <data-series name="Regression Line" enable-mouse-tracking="false">
+        <data>[0, 1.11], [5, 4.51]</data>
     </data-series>
     <data-series name="Observations" type="scatter">
-        <vc-data>1, 1.5, 2.8, 3.5, 3.9, 4.2</vc-data>
+        <data>1, 1.5, 2.8, 3.5, 3.9, 4.2</data>
     </data-series>
 </v-chart>

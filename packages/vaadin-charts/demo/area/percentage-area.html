@@ -1,34 +1,34 @@
 <v-chart id="percentage-area" type="area">
-    <vc-title>Historic World Population by Region</vc-title>
-    <vc-subtitle>Source: Wikipedia.org</vc-subtitle>
-    <vc-x-axis tickmark-placement="on">
-        <vc-categories>1750, 1800, 1850, 1900, 1950, 1999, 2050</vc-categories>
-        <vc-title enabled="false"></vc-title>
-    </vc-x-axis>
-    <vc-y-axis min="0">
-        <vc-title>Percent</vc-title>
-    </vc-y-axis>
-    <vc-tooltip shared="true"
-             point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.0f} millions)<br/>'></vc-tooltip>
-    <vc-plot-options>
-        <vc-series stacking="percent" line-width="1">
-        </vc-series>
-    </vc-plot-options>
-    <vc-legend layout="vertical" align="right" vertical-align="top" x="-40" y="80" floating="true" border-width="1"
-            background-color="#FFFFFF" shadow="true"></vc-legend>
+    <title>Historic World Population by Region</title>
+    <subtitle>Source: Wikipedia.org</subtitle>
+    <x-axis tickmark-placement="on">
+        <categories>1750, 1800, 1850, 1900, 1950, 1999, 2050</categories>
+        <title enabled="false"></title>
+    </x-axis>
+    <y-axis min="0">
+        <title>Percent</title>
+    </y-axis>
+    <tooltip shared="true"
+             point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.0f} millions)<br/>'></tooltip>
+    <plot-options>
+        <series stacking="percent" line-width="1">
+        </series>
+    </plot-options>
+    <legend layout="vertical" align="right" vertical-align="top" x="-40" y="80" floating="true" border-width="1"
+            background-color="#FFFFFF" shadow="true"></legend>
     <data-series name="Asia">
-        <vc-data>502, 635, 809, 947, 1402, 3634, 5268</vc-data>
+        <data>502, 635, 809, 947, 1402, 3634, 5268</data>
     </data-series>
     <data-series name="Africa">
-        <vc-data>106, 107, 111, 133, 221, 767, 1766</vc-data>
+        <data>106, 107, 111, 133, 221, 767, 1766</data>
     </data-series>
     <data-series name="Europe">
-        <vc-data>163, 203, 276, 408, 547, 729, 628</vc-data>
+        <data>163, 203, 276, 408, 547, 729, 628</data>
     </data-series>
     <data-series name="America">
-        <vc-data>18, 31, 54, 156, 339, 818, 1201</vc-data>
+        <data>18, 31, 54, 156, 339, 818, 1201</data>
     </data-series>
     <data-series name="Oceania">
-        <vc-data>2, 2, 2, 6, 13, 30, 46</vc-data>
+        <data>2, 2, 2, 6, 13, 30, 46</data>
     </data-series>
 </v-chart>
