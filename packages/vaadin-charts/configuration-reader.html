@@ -51,14 +51,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _nodeValueAttributes: ["table"],
 
-        _vaadinChartsPrefix: "vc-",
-
         /**
-         * Check if the given attribute is valid as a Vaadin Charts configuration attribute
+         *  Name of the elements of the light DOM that need to be mapped when creating the JSON configuration
          **/
-        _isVaadinChartsProperty: function (attName) {
-            return attName != undefined &&
-                    (attName.indexOf(this._vaadinChartsPrefix) === 0 || this._nodeValueAttributes.indexOf(attName) !== -1);
+        _mappedKeywords: {
+            "area-chart": "area",
+            frame3d: "frame"
         },
 
         /**
@@ -66,14 +64,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *
          * @param {string} str
          **/
-        _toCamelCase: function (str, isElement) {
+        _toCamelCase: function (str) {
             var out = "";
-            if (this._nodeValueAttributes.indexOf(str) !== -1) {
+            if (this._mappedKeywords.hasOwnProperty(str)) {
+                out = this._mappedKeywords[str];
+            } else if (this._nodeValueAttributes.indexOf(str) !== -1) {
                 out = str;
             } else {
-                if (isElement) {
-                    str = str.substring(this._vaadinChartsPrefix.length);
-                }
                 str.split("-").forEach(function (word, idx) {
                     var add = word.toLowerCase();
                     //first word always goes in lower case, the rest go with camelCase, except for _uppercaseWords
@@ -173,49 +170,47 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < parent.childNodes.length; n++) {
                 var node = parent.childNodes[n];
                 var name = node.nodeName.toLowerCase();
-                if (this._isVaadinChartsProperty(name)) {
-                    var camelName = this._toCamelCase(name, true);
-                    if (this._ignoredNodes.indexOf(name) === -1) {
-                        var result;
+                var camelName = this._toCamelCase(name);
+                if (this._ignoredNodes.indexOf(name) === -1) {
+                    var result;
 
-                        //read configuration into result
-                        if (this._arrayNodes.indexOf(camelName) !== -1) {
-                            result = [];
-                            if (this._hasOnlyTextContent(node)) {
-                                node.textContent.split(/\s*,\s*/).forEach(function (word) {
-                                    result.push(this._parseAttribute(word));
-                                }, this);
-                            } else {
-                                for (var i = 0; i < node.childNodes.length; i++) {
-                                    var child = node.childNodes[i];
-                                    result.push(this._parseAttribute(child.textContent));
-                                }
-                            }
-                            result = result.length > 1 ? result : result[0];
-
-                        } else if (this._nodeValueAttributes.indexOf(name) !== -1) {
-                            result = node;
-                        } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
-                            if (this._textContentNodes.indexOf(camelName) === -1 && this._hasOnlyTextContent(node)) {
-                                result = node.textContent;
-                            } else {
-                                result = {};
-                                this._loadFromNode(result, node);
-                                this._loadConfiguration(result, node);
+                    //read configuration into result
+                    if (this._arrayNodes.indexOf(camelName) !== -1) {
+                        result = [];
+                        if (this._hasOnlyTextContent(node)) {
+                            node.textContent.split(/\s*,\s*/).forEach(function (word) {
+                                result.push(this._parseAttribute(word));
+                            }, this);
+                        } else {
+                            for (var i = 0; i < node.childNodes.length; i++) {
+                                var child = node.childNodes[i];
+                                result.push(this._parseAttribute(child.textContent));
                             }
                         }
+                        result = result.length > 1 ? result : result[0];
 
-                        //put result in to the correct place
-                        if (this._multivaluedNodes.indexOf(camelName) !== -1) {
-                            if (dest[camelName] === undefined) {
-                                dest[camelName] = [result];
-                            } else {
-                                dest[camelName].push(result);
-                            }
-
-                        } else if (dest[camelName] === undefined) {
-                            dest[camelName] = result;
+                    } else if (this._nodeValueAttributes.indexOf(name) !== -1) {
+                        result = node;
+                    } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
+                        if (this._textContentNodes.indexOf(camelName) === -1 && this._hasOnlyTextContent(node)) {
+                            result = node.textContent;
+                        } else {
+                            result = {};
+                            this._loadFromNode(result, node);
+                            this._loadConfiguration(result, node);
                         }
+                    }
+
+                    //put result in to the correct place
+                    if (this._multivaluedNodes.indexOf(camelName) !== -1) {
+                        if (dest[camelName] === undefined) {
+                            dest[camelName] = [result];
+                        } else {
+                            dest[camelName].push(result);
+                        }
+
+                    } else if (dest[camelName] === undefined) {
+                        dest[camelName] = result;
                     }
                 }
             }
