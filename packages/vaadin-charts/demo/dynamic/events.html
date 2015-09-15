@@ -1,18 +1,18 @@
 <dom-module id="events-example">
     <template>
         <v-chart id="events" type="spline" on-chart-click="clickListener">
-            <vc-chart>
-                <vc-margin>70, 50, 60, 80</vc-margin>
-            </vc-chart>
-            <vc-title>Click to add point</vc-title>
-            <vc-legend enabled="false"></vc-legend>
-            <vc-exporting enabled="false"></vc-exporting>
-            <vc-plot-options>
-                <vc-series line-width="1">
-                </vc-series>
-            </vc-plot-options>
+            <chart>
+                <margin>70, 50, 60, 80</margin>
+            </chart>
+            <title>Click to add point</title>
+            <legend enabled="false"></legend>
+            <exporting enabled="false"></exporting>
+            <plot-options>
+                <series line-width="1">
+                </series>
+            </plot-options>
             <data-series>
-                <vc-data>29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</vc-data>
+                <data>29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</data>
             </data-series>
         </v-chart>
     </template>

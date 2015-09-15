@@ -36,9 +36,9 @@ An element that provides a WebComponent interface for <a href="http://www.highch
 Example:
 
     <v-chart type="line">
-        <vc-title>Example</vc-title>
+        <title>Example</title>
         <data-series name="Example">
-            <vc-data>["Example1", 45.0], ["Example2", 26.8]</vc-data>
+            <data>["Example1", 45.0], ["Example2", 26.8]</data>
         </data-series>
     </v-chart>
 
@@ -48,9 +48,9 @@ Event names can be checked in _chartEventNames, _seriesEventNames and _pointEven
 <dom-module id="chart-click-listener">
     <template>
         <v-chart on-chart-click="clickListener">
-            <vc-title>User supplied data</vc-title>
+            <title>User supplied data</title>
             <data-series>
-                <vc-data>[20, 20], [80, 80]</vc-data>
+                <data>[20, 20], [80, 80]</data>
             </data-series>
         </v-chart>
     </template>

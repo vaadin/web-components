@@ -5,23 +5,23 @@
 
     <template>
         <v-chart id="chart" type="line">
-            <vc-title text="null"></vc-title>
+            <title text="null"></title>
 
-            <vc-chart margin="0" spacing="0" background-color="null">
-            </vc-chart>
+            <chart margin="0" spacing="0" background-color="null">
+            </chart>
 
-            <vc-exporting enabled="false"></vc-exporting>
+            <exporting enabled="false"></exporting>
 
-            <vc-plot-options>
-                <vc-line enable-mouse-tracking="false"
+            <plot-options>
+                <line enable-mouse-tracking="false"
                          show-in-legend="false"
                          animation="false"
                          shadow="false">
-                    <vc-marker enabled="false"></vc-marker>
-                </vc-line>
-            </vc-plot-options>
+                    <marker enabled="false"></marker>
+                </line>
+            </plot-options>
 
-            <vc-x-axis line-width="0"
+            <x-axis line-width="0"
                        minor-grid-line-width="0"
                        minor-tick-length="0"
                        minor-tick-width="0"
@@ -31,10 +31,10 @@
                        min-padding="0"
                        start-on-tick="false"
                        end-on-tick="false">
-                <vc-labels enabled="false"></vc-labels>
-            </vc-x-axis>
+                <labels enabled="false"></labels>
+            </x-axis>
 
-            <vc-y-axis line-width="0"
+            <y-axis line-width="0"
                        minor-grid-line-width="0"
                        minor-tick-length="0"
                        minor-tick-width="0"
@@ -44,8 +44,8 @@
                        min-padding="0.1"
                        start-on-tick="false"
                        end-on-tick="false">
-                <vc-labels enabled="false"></vc-labels>
-            </vc-y-axis>
+                <labels enabled="false"></labels>
+            </y-axis>
 
             <data-series type="line" data="[[arrayData]]"></data-series>
         </v-chart>

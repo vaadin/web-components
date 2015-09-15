@@ -1,22 +1,22 @@
 <v-chart id="pie" type="pie">
-    <vc-title>Browser market shares at a specific website, 2010</vc-title>
-    <vc-tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
-    </vc-tooltip>
-    <vc-plot-options>
-        <vc-pie allow-point-select="true" cursor="pointer">
-            <vc-data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
-            </vc-data-labels>
-        </vc-pie>
-    </vc-plot-options>
+    <title>Browser market shares at a specific website, 2010</title>
+    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+    </tooltip>
+    <plot-options>
+        <pie allow-point-select="true" cursor="pointer">
+            <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
+            </data-labels>
+        </pie>
+    </plot-options>
 
     <data-series name="Browser share">
-        <vc-data>
+        <data>
             ["Firefox",   45.0],
             ["IE",       26.8],
             ["Chrome", 12.8],
             ["Safari",    8.5],
             ["Opera",     6.2],
             ["Others",   0.7]
-        </vc-data>
+        </data>
     </data-series>
 </v-chart>

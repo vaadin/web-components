@@ -1,91 +1,91 @@
 <v-chart id="pie-with-gradient-fill" type="pie">
-    <vc-title>Browser market shares at a specific website, 2014</vc-title>
-    <vc-tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
-    </vc-tooltip>
-    <vc-plot-options>
-        <vc-pie allow-point-select="true" cursor="pointer">
-            <vc-data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
-            </vc-data-labels>
-        </vc-pie>
-    </vc-plot-options>
+    <title>Browser market shares at a specific website, 2014</title>
+    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+    </tooltip>
+    <plot-options>
+        <pie allow-point-select="true" cursor="pointer">
+            <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
+            </data-labels>
+        </pie>
+    </plot-options>
 
     <data-series name="Browser share">
-        <vc-data>
-            <vc-point>
-                <vc-y>55.11</vc-y>
-                <vc-name>IE</vc-name>
-                <vc-color>
-                  <vc-stops>
-                    <vc-position>0.0</vc-position>
-                    <vc-color>#FF8000</vc-color>
-                  </vc-stops>
-                  <vc-stops>
-                    <vc-position>1.0</vc-position>
-                    <vc-color>#804000</vc-color>
-                  </vc-stops>
-                  <vc-radial-gradient cx="0.5" cy="0.3" r="0.7"></vc-radial-gradient>
-                </vc-color>
-            </vc-point>
-            <vc-point>
-                <vc-y>21.63</vc-y>
-                <vc-name>Firefox</vc-name>
-                <vc-color>
-                  <vc-stops>
-                    <vc-position>0.0</vc-position>
-                    <vc-color>#00FFFF</vc-color>
-                  </vc-stops>
-                  <vc-stops>
-                    <vc-position>1.0</vc-position>
-                    <vc-color>#008080</vc-color>
-                  </vc-stops>
-                  <vc-radial-gradient cx="0.5" cy="0.3" r="0.7"></vc-radial-gradient>
-                </vc-color>
-            </vc-point>
-            <vc-point>
-                <vc-y>11.94</vc-y>
-                <vc-name>Chrome</vc-name>
-                <vc-color>
-                  <vc-stops>
-                    <vc-position>0.0</vc-position>
-                    <vc-color>#FFFF00</vc-color>
-                  </vc-stops>
-                  <vc-stops>
-                    <vc-position>1.0</vc-position>
-                    <vc-color>#808000</vc-color>
-                  </vc-stops>
-                  <vc-radial-gradient cx="0.5" cy="0.3" r="0.7"></vc-radial-gradient>
-                </vc-color>
-            </vc-point>
-            <vc-point>
-                <vc-y>7.15</vc-y>
-                <vc-name>Safari</vc-name>
-                <vc-color>
-                  <vc-stops>
-                    <vc-position>0.0</vc-position>
-                    <vc-color>#0080FF</vc-color>
-                  </vc-stops>
-                  <vc-stops>
-                    <vc-position>1.0</vc-position>
-                    <vc-color>#004080</vc-color>
-                  </vc-stops>
-                  <vc-radial-gradient cx="0.5" cy="0.3" r="0.7"></vc-radial-gradient>
-                </vc-color>
-            </vc-point>
-            <vc-point>
-                <vc-y>2.14</vc-y>
-                <vc-name>Opera</vc-name>
-                <vc-color>
-                  <vc-stops>
-                    <vc-position>0.0</vc-position>
-                    <vc-color>#FF0000</vc-color>
-                  </vc-stops>
-                  <vc-stops>
-                    <vc-position>1.0</vc-position>
-                    <vc-color>#800000</vc-color>
-                  </vc-stops>
-                  <vc-radial-gradient cx="0.5" cy="0.3" r="0.7"></vc-radial-gradient>
-                </vc-color>
-            </vc-point>
-        </vc-data>
+        <data>
+            <point>
+                <y>55.11</y>
+                <name>IE</name>
+                <color>
+                  <stops>
+                    <position>0.0</position>
+                    <color>#FF8000</color>
+                  </stops>
+                  <stops>
+                    <position>1.0</position>
+                    <color>#804000</color>
+                  </stops>
+                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+                </color>
+            </point>
+            <point>
+                <y>21.63</y>
+                <name>Firefox</name>
+                <color>
+                  <stops>
+                    <position>0.0</position>
+                    <color>#00FFFF</color>
+                  </stops>
+                  <stops>
+                    <position>1.0</position>
+                    <color>#008080</color>
+                  </stops>
+                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+                </color>
+            </point>
+            <point>
+                <y>11.94</y>
+                <name>Chrome</name>
+                <color>
+                  <stops>
+                    <position>0.0</position>
+                    <color>#FFFF00</color>
+                  </stops>
+                  <stops>
+                    <position>1.0</position>
+                    <color>#808000</color>
+                  </stops>
+                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+                </color>
+            </point>
+            <point>
+                <y>7.15</y>
+                <name>Safari</name>
+                <color>
+                  <stops>
+                    <position>0.0</position>
+                    <color>#0080FF</color>
+                  </stops>
+                  <stops>
+                    <position>1.0</position>
+                    <color>#004080</color>
+                  </stops>
+                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+                </color>
+            </point>
+            <point>
+                <y>2.14</y>
+                <name>Opera</name>
+                <color>
+                  <stops>
+                    <position>0.0</position>
+                    <color>#FF0000</color>
+                  </stops>
+                  <stops>
+                    <position>1.0</position>
+                    <color>#800000</color>
+                  </stops>
+                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+                </color>
+            </point>
+        </data>
     </data-series>
 </v-chart>

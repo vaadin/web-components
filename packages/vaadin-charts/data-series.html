@@ -97,7 +97,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
         },
 
-        _ignoredNodes: ["#text", "#comment", "vc-data"],
+        _ignoredNodes: ["#text", "#comment", "data"],
 
         /**
          * Overrides behavior, for data-series all values should be evaluated as javascript
@@ -127,7 +127,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < element.childNodes.length; n++) {
                 var node = element.childNodes[n];
                 var name = node.nodeName.toLowerCase();
-                var camelName = this._toCamelCase(name, true);
+                var camelName = this._toCamelCase(name);
                 if (camelName === 'data') {
                     var value;
                     if (this._hasPointNodes(node)) {
@@ -153,7 +153,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             for (var n = 0; n < pointNode.childNodes.length; n++) {
                 var node = pointNode.childNodes[n];
                 if (this._hasOnlyTextContent(node)) {
-                    var camelName = this._toCamelCase(node.nodeName.toLowerCase(), true);
+                    var camelName = this._toCamelCase(node.nodeName.toLowerCase());
                     if ('date' === camelName) {
                         if (result['x'] === undefined) {
                             var parsedDate = this._parseDate(node.textContent);
@@ -202,7 +202,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Checks if nodes has child nodes that correspond to points.
          **/
         _hasPointNodes: function (node) {
-            return node.childNodes.length > 0 && 'vc-point' === node.childNodes[0].nodeName.toLowerCase();
+            return node.childNodes.length > 0 && 'point' === node.childNodes[0].nodeName.toLowerCase();
         },
 
 

@@ -2,25 +2,25 @@
 <dom-module id="wc-data-example">
     <template>
         <v-chart id="chart">
-            <vc-title>Monthly Average Temperature</vc-title>
-            <vc-subtitle>Source: WorldClimate.com</vc-subtitle>
+            <title>Monthly Average Temperature</title>
+            <subtitle>Source: WorldClimate.com</subtitle>
 
-            <vc-x-axis>
-                <vc-categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</vc-categories>
-            </vc-x-axis>
+            <x-axis>
+                <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
+            </x-axis>
 
-            <vc-y-axis>
-                <vc-title align="high">Temperature (°C)</vc-title>
-            </vc-y-axis>
+            <y-axis>
+                <title align="high">Temperature (°C)</title>
+            </y-axis>
 
-            <vc-tooltip enabled="true"
-                        formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></vc-tooltip>
+            <tooltip enabled="true"
+                        formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></tooltip>
 
-            <vc-plot-options>
-                <vc-line>
-                    <vc-data-labels enabled="true"></vc-data-labels>
-                </vc-line>
-            </vc-plot-options>
+            <plot-options>
+                <line>
+                    <data-labels enabled="true"></data-labels>
+                </line>
+            </plot-options>
             <data-series name="Tokyo"></data-series>
 
         </v-chart>

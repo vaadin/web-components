@@ -1,19 +1,19 @@
 <dom-module id="xy-chart-selection-example">
     <template>
         <v-chart id="xy-chart-selection" type="scatter" on-selection="selectionListener">
-            <vc-chart zoom-type="xy">
-                <vc-margin>70, 50, 60, 80</vc-margin>
-            </vc-chart>
-            <vc-title>Selections as area ranges</vc-title>
-            <vc-subtitle>Drag with mouse to make selections. Click the legend items to toggle visibility.</vc-subtitle>
-            <vc-tooltip enabled="false"></vc-tooltip>
-            <vc-exporting enabled="false"></vc-exporting>
-            <vc-plot-options>
-                <vc-series animation="false" point-start="1">
-                </vc-series>
-            </vc-plot-options>
+            <chart zoom-type="xy">
+                <margin>70, 50, 60, 80</margin>
+            </chart>
+            <title>Selections as area ranges</title>
+            <subtitle>Drag with mouse to make selections. Click the legend items to toggle visibility.</subtitle>
+            <tooltip enabled="false"></tooltip>
+            <exporting enabled="false"></exporting>
+            <plot-options>
+                <series animation="false" point-start="1">
+                </series>
+            </plot-options>
             <data-series name="Original">
-                <vc-data>[20, 10], [35, 20], [25, 5], [15, 45], [10, 10], [25, 80], [30, 35]</vc-data>
+                <data>[20, 10], [35, 20], [25, 5], [15, 45], [10, 10], [25, 80], [30, 35]</data>
             </data-series>
         </v-chart>
     </template>

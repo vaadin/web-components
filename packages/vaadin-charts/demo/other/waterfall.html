@@ -1,50 +1,50 @@
 <v-chart id="waterfall" type="waterfall">
-    <vc-title>Vaadin Charts Waterfall</vc-title>
-    <vc-x-axis type="category"></vc-x-axis>
-    <vc-y-axis><vc-title>USD</vc-title></vc-y-axis>
-    <vc-legend enabled="false"></vc-legend>
-    <vc-tooltip point-format="<b>${point.y:.2f}</b> USD"></vc-tooltip>
-    <vc-plot-options>
-        <vc-series>
-            <vc-data-labels enabled="true" y="-30" vertical-align="top"
+    <title>Vaadin Charts Waterfall</title>
+    <x-axis type="category"></x-axis>
+    <y-axis><title>USD</title></y-axis>
+    <legend enabled="false"></legend>
+    <tooltip point-format="<b>${point.y:.2f}</b> USD"></tooltip>
+    <plot-options>
+        <series>
+            <data-labels enabled="true" y="-30" vertical-align="top"
                          formatter="function () { return Highcharts.numberFormat(this.y / 1000, 0, ',') + 'k';}">
-            </vc-data-labels>
-        </vc-series>
-    </vc-plot-options>
+            </data-labels>
+        </series>
+    </plot-options>
     <data-series>
-        <vc-up-color>#EC6464</vc-up-color>
-        <vc-color>#98DF58</vc-color>
-        <vc-data>
-            <vc-point>
-                <vc-name>Start</vc-name>
-                <vc-y>120000</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Product Revenue</vc-name>
-                <vc-y>569000</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Service Revenue</vc-name>
-                <vc-y>231000</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Positive Balance</vc-name>
-                <vc-is-intermediate-sum>true</vc-is-intermediate-sum>
-                <vc-color>#3090F0</vc-color>
-            </vc-point>
-            <vc-point>
-                <vc-name>Fixed Costs</vc-name>
-                <vc-y>-342000</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Variable Costs</vc-name>
-                <vc-y>-233000</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Balance</vc-name>
-                <vc-is-sum>true</vc-is-sum>
-                <vc-color>#3090F0</vc-color>
-            </vc-point>
-        </vc-data>
+        <up-color>#EC6464</up-color>
+        <color>#98DF58</color>
+        <data>
+            <point>
+                <name>Start</name>
+                <y>120000</y>
+            </point>
+            <point>
+                <name>Product Revenue</name>
+                <y>569000</y>
+            </point>
+            <point>
+                <name>Service Revenue</name>
+                <y>231000</y>
+            </point>
+            <point>
+                <name>Positive Balance</name>
+                <is-intermediate-sum>true</is-intermediate-sum>
+                <color>#3090F0</color>
+            </point>
+            <point>
+                <name>Fixed Costs</name>
+                <y>-342000</y>
+            </point>
+            <point>
+                <name>Variable Costs</name>
+                <y>-233000</y>
+            </point>
+            <point>
+                <name>Balance</name>
+                <is-sum>true</is-sum>
+                <color>#3090F0</color>
+            </point>
+        </data>
     </data-series>
 </v-chart>

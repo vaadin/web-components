@@ -2,14 +2,14 @@
 <dom-module id="wc-data-button">
     <template>
         <v-chart id="wcDataExample">
-            <vc-title>Click button to add point</vc-title>
+            <title>Click button to add point</title>
 
-            <vc-tooltip enabled="false"></vc-tooltip>
-            <vc-plot-options>
-                <vc-series>
-                </vc-series>
-            </vc-plot-options>
-            <vc-x-axis type="datetime"></vc-x-axis>
+            <tooltip enabled="false"></tooltip>
+            <plot-options>
+                <series>
+                </series>
+            </plot-options>
+            <x-axis type="datetime"></x-axis>
             <data-series id="mySeriesId" data="[[mySeriesData]]">
             </data-series>
         </v-chart>

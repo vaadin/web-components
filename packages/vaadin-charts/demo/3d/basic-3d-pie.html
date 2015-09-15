@@ -1,51 +1,51 @@
 <v-chart id="basic-3d-pie" type="pie">
-    <vc-title>Browser market shares at a specific website, 2014</vc-title>
+    <title>Browser market shares at a specific website, 2014</title>
 
-    <vc-plot-options>
-        <vc-pie cursor="pointer"
+    <plot-options>
+        <pie cursor="pointer"
              depth="45"
              allow-point-select="true">
-            <vc-data-labels enabled="true"
-                         formatter="function() {return this.point.name +': '+ this.percentage +' %';}"></vc-data-labels>
-        </vc-pie>
-    </vc-plot-options>
+            <data-labels enabled="true"
+                         formatter="function() {return this.point.name +': '+ this.percentage +' %';}"></data-labels>
+        </pie>
+    </plot-options>
 
-    <vc-tooltip point-format="{series.name}: <vc-b>{point.percentage:.1f}%</vc-b>"></vc-tooltip>
+    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>"></tooltip>
 
-    <vc-chart>
-        <vc-options3d enabled="true"
+    <chart>
+        <options3d enabled="true"
                    alpha="60">
-        </vc-options3d>
-    </vc-chart>
+        </options3d>
+    </chart>
 
     <data-series name="Browser share">
-        <vc-data>
-            <vc-point>
-                <vc-name>Firefox</vc-name>
-                <vc-y>45</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>IE</vc-name>
-                <vc-y>26.8</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Chrome</vc-name>
-                <vc-y>12.8</vc-y>
-                <vc-sliced>true</vc-sliced>
-                <vc-selected>true</vc-selected>
-            </vc-point>
-            <vc-point>
-                <vc-name>Safari</vc-name>
-                <vc-y>8.5</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Opera</vc-name>
-                <vc-y>6.2</vc-y>
-            </vc-point>
-            <vc-point>
-                <vc-name>Others</vc-name>
-                <vc-y>0.7</vc-y>
-            </vc-point>
-        </vc-data>
+        <data>
+            <point>
+                <name>Firefox</name>
+                <y>45</y>
+            </point>
+            <point>
+                <name>IE</name>
+                <y>26.8</y>
+            </point>
+            <point>
+                <name>Chrome</name>
+                <y>12.8</y>
+                <sliced>true</sliced>
+                <selected>true</selected>
+            </point>
+            <point>
+                <name>Safari</name>
+                <y>8.5</y>
+            </point>
+            <point>
+                <name>Opera</name>
+                <y>6.2</y>
+            </point>
+            <point>
+                <name>Others</name>
+                <y>0.7</y>
+            </point>
+        </data>
     </data-series>
 </v-chart>

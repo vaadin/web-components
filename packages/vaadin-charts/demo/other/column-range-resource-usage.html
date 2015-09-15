@@ -1,32 +1,32 @@
 <v-chart id="column-range-resource-usage" type="columnrange">
-    <vc-chart inverted="true"></vc-chart>
-    <vc-title>Resource usage</vc-title>
-    <vc-x-axis>
-        <vc-categories>Printer, Coffee machine</vc-categories>
-    </vc-x-axis>
-    <vc-y-axis type="datetime"><vc-title>Time</vc-title></vc-y-axis>
-    <vc-tooltip
-            formatter="function () {return this.series.name +': '+ Highcharts.dateFormat('%H:%M', this.point.low) + ' - ' + Highcharts.dateFormat('%H:%M', this.point.high)}"></vc-tooltip>
-    <vc-plot-options>
-        <vc-columnrange grouping="false">
-            <vc-data-labels enabled="true" inside="true" color="white"
-                         formatter="function () {return this.y == this.point.low ? '' : this.series.name;}"></vc-data-labels>
+    <chart inverted="true"></chart>
+    <title>Resource usage</title>
+    <x-axis>
+        <categories>Printer, Coffee machine</categories>
+    </x-axis>
+    <y-axis type="datetime"><title>Time</title></y-axis>
+    <tooltip
+            formatter="function () {return this.series.name +': '+ Highcharts.dateFormat('%H:%M', this.point.low) + ' - ' + Highcharts.dateFormat('%H:%M', this.point.high)}"></tooltip>
+    <plot-options>
+        <columnrange grouping="false">
+            <data-labels enabled="true" inside="true" color="white"
+                         formatter="function () {return this.y == this.point.low ? '' : this.series.name;}"></data-labels>
 
-        </vc-columnrange>
-    </vc-plot-options>
+        </columnrange>
+    </plot-options>
     <data-series name="Team Alpha">
-        <vc-color>rgba(255, 60, 125, 0.8)</vc-color>
-        <vc-data>
+        <color>rgba(255, 60, 125, 0.8)</color>
+        <data>
             [Date.UTC(2013,05,07,12,00,00),Date.UTC(2013,05,07,15,00,00)],
             [Date.UTC(2013,05,07,13,00,00),Date.UTC(2013,05,07,17,00,00)]
-        </vc-data>
+        </data>
     </data-series>
     <data-series name="Team Beta">
-        <vc-color>rgba(60, 125, 255, 0.8)</vc-color>
-        <vc-data>
+        <color>rgba(60, 125, 255, 0.8)</color>
+        <data>
             [Date.UTC(2013,05,07,16,00,00),Date.UTC(2013,05,07,17,00,00)],
             [Date.UTC(2013,05,07,12,00,00),Date.UTC(2013,05,07,14,00,00)]
-        </vc-data>
+        </data>
     </data-series>
 
 </v-chart>

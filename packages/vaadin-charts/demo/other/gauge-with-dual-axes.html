@@ -1,34 +1,34 @@
 <v-chart id="gauge-with-dual-axes" type="gauge">
-    <vc-chart align-ticks="false" plot-background-color="null"
-           plot-background-image="null" plot-border-width="0" plot-shadow="false"></vc-chart>
-    <vc-title>Speedometer with dual axes</vc-title>
-    <vc-pane start-angle="-150" end-angle="150"></vc-pane>
-    <vc-y-axis min="0" max="200" line-color="#339" tick-color="#339" minor-tick-color="#339" offset="-25" line-width="2"
+    <chart align-ticks="false" plot-background-color="null"
+           plot-background-image="null" plot-border-width="0" plot-shadow="false"></chart>
+    <title>Speedometer with dual axes</title>
+    <pane start-angle="-150" end-angle="150"></pane>
+    <y-axis min="0" max="200" line-color="#339" tick-color="#339" minor-tick-color="#339" offset="-25" line-width="2"
             tick-length="5"
             minor-tick-length="5" end-on-tick="false">
-        <vc-labels distance="-20" rotation="auto"></vc-labels>
-    </vc-y-axis>
-    <vc-y-axis min="0" max="124" tick-position="outside" line-color="#933" line-width="2" minor-tick-position="outside"
+        <labels distance="-20" rotation="auto"></labels>
+    </y-axis>
+    <y-axis min="0" max="124" tick-position="outside" line-color="#933" line-width="2" minor-tick-position="outside"
             tick-color="#933" minor-tick-color="#933" tick-length="5" minor-tick-length="5" offset="-20"
             end-on-tick="false">
-        <vc-labels distance="12" rotation="auto"></vc-labels>
-    </vc-y-axis>
-    <vc-tooltip enabled="false"></vc-tooltip>
-    <vc-plot-options>
-        <vc-gauge>
-            <vc-data-labels
+        <labels distance="12" rotation="auto"></labels>
+    </y-axis>
+    <tooltip enabled="false"></tooltip>
+    <plot-options>
+        <gauge>
+            <data-labels
                     formatter="function () { return this.y + ' km/h<br/>' + Math.round(this.y * 0.621) + ' mph'; }">
-                <vc-background-color>
-                    <vc-linear-gradient x1="0" y1="0" x2="0" y2="1">
-                    </vc-linear-gradient>
-                    <vc-stops>0, #DDD</vc-stops>
-                    <vc-stops>1, #FFF</vc-stops>
-                </vc-background-color>
-            </vc-data-labels>
-        </vc-gauge>
-    </vc-plot-options>
+                <background-color>
+                    <linear-gradient x1="0" y1="0" x2="0" y2="1">
+                    </linear-gradient>
+                    <stops>0, #DDD</stops>
+                    <stops>1, #FFF</stops>
+                </background-color>
+            </data-labels>
+        </gauge>
+    </plot-options>
     <data-series>
-        <vc-name>Speed</vc-name>
-        <vc-data>80</vc-data>
+        <name>Speed</name>
+        <data>80</data>
     </data-series>
 </v-chart>
