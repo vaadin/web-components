@@ -18,42 +18,76 @@
 <body unresolved>
 
 
-  <div style="width: 200px">
+  <div style="width: 250px">
+
 
     <template is="dom-bind">
       <paper-input label="Name"></paper-input>
-      <vaadin-combo-box data-source=[[countrySource]] label="Country"/>
+
+      <vaadin-combo-box items=[[fruits]] label="Fruit"></vaadin-combo-box>
+
+      <vaadin-combo-box items=[[managers]] label="Manager">
+
+        <template class="cell-template">
+          <span>[[item.firstname]]</span>&nbsp;
+          <span>[[item.lastname]]</span>
+        </template>
+        <template class="cell-template">
+          <img src$="[[item.thumbnail]]" style="width: 20px;">
+        </template>
+
+        <template class="selected-template">
+          <span>[[item.lastname]]</span>
+        </template>
+
+      </vaadin-combo-box>
+
+      <!-- Should this be supported? Similar api as the <table> api in vaadin-grid
+      <vaadin-combo-box label="Number">
+        <select>
+          <option>One</option>
+          <option>Two</option>
+          <option>Three</option>
+        </select>
+      </vaadin-combo-box>
+      -->
     </template>
   </div>
 
   <script>
-  HTMLImports.whenReady(function(){
-    var template = document.querySelector("template");
+    HTMLImports.whenReady(function() {
+      var template = document.querySelector("template");
 
-    var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua & Deps", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",
-      "Bhutan", "Bolivia", "Bosnia Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Rep", "Chad", "Chile", "China", "Colombia", "Comoros",
-      "Congo", "Congo {Democratic Rep}", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea",
-      "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India",
-      "Indonesia", "Iran", "Iraq", "Ireland {Republic}", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea North", "Korea South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia",
-      "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia",
-      "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar, {Burma}", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palau", "Panama",
-      "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russian Federation", "Rwanda", "St Kitts & Nevis", "St Lucia", "Saint Vincent & the Grenadines", "Samoa", "San Marino",
-      "Sao Tome & Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname",
-      "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
-      "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-    ];
+      var managers = [{
+        "firstname": "raul",
+        "lastname": "diez",
+        "thumbnail": "http://api.randomuser.me/portraits/thumb/men/39.jpg"
+      }, {
+        "firstname": "sonia",
+        "lastname": "benitez",
+        "thumbnail": "http://api.randomuser.me/portraits/thumb/women/91.jpg"
+      }, {
+        "firstname": "luis",
+        "lastname": "torres",
+        "thumbnail": "http://api.randomuser.me/portraits/thumb/men/11.jpg"
+      }, ];
 
-    template.countrySource = function(req) {
-      var filtered = countries.filter(function(item) {
-        return req.filter == undefined || item.toLowerCase().indexOf(req.filter.toLowerCase()) != -1;
-      });
-      req.success(filtered.slice(req.index, req.index + req.count), filtered.length);
-    };
+      template.managers = function(req) {
+        var filtered = managers.filter(function(item) {
+          return (item.firstname + item.lastname).toLowerCase().indexOf(req.filter.toLowerCase()) != -1;
+        });
+        // Developer needs to be careful here not to return the total length
+        // of the results, but that of the _filtered results_
+        req.success(filtered.slice(req.index, req.index + req.count), filtered.length);
+      };
+
+      template.fruits = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
 
 
 
 
-  });
+
+    });
   </script>
 
 </body>

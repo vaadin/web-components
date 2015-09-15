@@ -12,12 +12,10 @@
         background: #ddd;
       }
     </style>
+
     <vaadin-grid id="grid">
       <table>
         <col>
-          <thead hidden>
-            <tr></tr>
-          </thead>
       </table>
     </vaadin-grid>
   </template>
@@ -35,7 +33,14 @@
       filter: {
         type: String,
         observer: "filterChanged"
+      },
+      dataSource: {
+        observer: "_dataSourceChanged"
+      },
+      cellTemplates: {
+        observer: "_cellTemplatesChanged"
       }
+
 
     },
 
@@ -46,22 +51,46 @@
     },
 
     ready: function() {
-      this.template = Polymer.dom(this).querySelector('template');
-      this.templatize(this.template);
-
-      if (this.template) {
-        this.$.grid.columns[0].renderer = this.renderer.bind(this);
-      }
-
-      this.$.grid.data.source = function(req) {
-        req.filter = this.filter;
-        this.dataSource(req);
-      }.bind(this);
+      this.$.grid.header.hidden = true;
     },
 
-    renderer: function(cell) {
+    _filterDataSource: function(req) {
+      if (Array.isArray(this.dataSource)){
+        var filtered = this.dataSource.filter(function(item) {
+          return item.toString().toLowerCase().indexOf(this.filter.toLowerCase()) != -1;
+        }.bind(this));
+        var array = filtered.slice(req.index, req.index + req.count);
+        req.success(array, filtered.length);
+      } else {
+        req.filter = this.filter;
+        if (req.filter === undefined){
+          req.filter = "";
+        }
+        this.dataSource(req);
+      }
+    },
+
+    _dataSourceChanged: function() {
+      this.$.grid.data.source = this._filterDataSource.bind(this);
+    },
+
+    _cellTemplatesChanged: function(templates) {
+      if (templates.length > 0) {
+        this.$.grid.columns = templates.map(function(template, index) {
+          return {
+            renderer: this.templateRenderer.bind(this),
+            template: template,
+            name: "column" + index
+          };
+        }.bind(this));
+      }
+    },
+
+    templateRenderer: function(cell) {
+      // TODO: Templatizing this on every render might be heavy. Any other options?
+      this.templatize(this.$.grid.columns[cell.index].template);
       var instance = this.stamp();
-      instance.item = cell.data;
+      instance.item = cell.row.data;
       cell.element.innerHTML = "";
       Polymer.dom(cell.element).appendChild(instance.root);
       //TODO: Also needed for non-templated renderer
@@ -69,7 +98,10 @@
     },
 
     filterChanged: function() {
-      this.$.grid.data.clearCache();
+      if (this.$.grid.data.source) {
+        var size = this.filter === "" ? 1000 : undefined;
+        this.$.grid.data.clearCache(size);
+      }
     },
 
     onSelection: function() {
