@@ -1,10 +1,10 @@
 <!--
-@element vaadin-combo-box
+@element vaadin-combo-box-overlay
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
-<link rel='import' href='vaadin-combo-box-grid.html'>
+<link rel='import' href='vaadin-grid-tmp.html'>
 <link rel='import' href='../iron-dropdown/iron-dropdown.html'>
 
 <dom-module id="vaadin-combo-box-overlay">
@@ -40,6 +40,10 @@
       :host:not([mobile]) .dropdown-content {
         width: 10000px;
       }
+
+      :host::content .v-grid-cell.v-grid.selected {
+        background: #ddd;
+      }
     </style>
     <iron-dropdown opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]] id="dropdown">
       <div class="dropdown-content">
@@ -48,8 +52,11 @@
           <iron-icon on-click="clear" icon="clear"></iron-icon>
         </div>
 
-        <vaadin-combo-box-grid id="grid" data-source=[[items]] selected-item="{{selected}}" filter=[[filter]] cell-templates=[[cellTemplates]]>
-        </vaadin-combo-box-grid>
+        <template is="dom-if" if="[[_useDefaultSelector]]">
+          <vaadin-grid-tmp class="vaadin-combo-box-selector"></vaadin-grid-tmp>
+        </template>
+        <content id="contentselector" select=".vaadin-combo-box-selector">
+
       </div>
       <iron-dropdown>
   </template>
@@ -76,6 +83,28 @@
 
     ready: function() {
       this.$.dropdown.focusTarget = this.$.filterinput;
+      this._rebindSelector();
+    },
+
+    _rebindSelector() {
+      this.selector = Polymer.dom(this.$.contentselector).getDistributedNodes()[0];
+
+      this._useDefaultSelector = !this.selector.classList || !this.selector.classList.contains("vaadin-combo-box-selector");
+
+      this.async(function(){
+        if (this._useDefaultSelector) {
+          this.selector = this.$$(".vaadin-combo-box-selector");
+        }
+        this.selector.addEventListener("select", this._itemSelected.bind(this));
+        if (this.items) {
+          this.selector.items = this.items;
+        }
+      });
+    },
+
+    _itemSelected: function() {
+      this.selected = this.selector.selectedItem;
+      this.close();
     },
 
     open: function() {
@@ -87,8 +116,10 @@
       this.$.dropdown.close();
     },
 
-    listeners: {
-      "grid.selected": "close"
+    _filterChanged: function(){
+      if (this.selector) {
+        this.selector.filter = this.filter;
+      }
     },
 
     properties: {
@@ -97,9 +128,16 @@
       },
       mobile: {
         reflectToAttribute: true
+      },
+      _useDefaultSelector: {
+        value: false
+      },
+      filter: {
+        observer: "_filterChanged"
       }
 
     }
+
 
   });
 </script>

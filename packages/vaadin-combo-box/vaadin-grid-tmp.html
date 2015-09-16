@@ -1,18 +1,12 @@
 <!--
-@element vaadin-combo-box-grid
+This is a temporary component providing some still missing api on top of basic vaadin-grid.
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../vaadin-grid/vaadin-grid.html'>
 
-<dom-module id="vaadin-combo-box-grid">
+<dom-module id="vaadin-grid-tmp">
   <template>
-    <style>
-      :host::content .v-grid-cell.v-grid.selected {
-        background: #ddd;
-      }
-    </style>
-
     <vaadin-grid id="grid">
       <table>
         <col>
@@ -24,7 +18,7 @@
 <script>
   Polymer({
 
-    is: "vaadin-combo-box-grid",
+    is: "vaadin-grid-tmp",
 
     properties: {
       selectedItem: {
@@ -32,16 +26,12 @@
       },
       filter: {
         type: String,
+        value: "",
         observer: "filterChanged"
       },
-      dataSource: {
-        observer: "_dataSourceChanged"
-      },
-      cellTemplates: {
-        observer: "_cellTemplatesChanged"
+      items: {
+        observer: "_itemsChanged"
       }
-
-
     },
 
     behaviors: [Polymer.Templatizer],
@@ -52,11 +42,12 @@
 
     ready: function() {
       this.$.grid.header.hidden = true;
+      this.updateCellTemplates();
     },
 
     _filterDataSource: function(req) {
-      if (Array.isArray(this.dataSource)){
-        var filtered = this.dataSource.filter(function(item) {
+      if (Array.isArray(this.items)){
+        var filtered = this.items.filter(function(item) {
           return item.toString().toLowerCase().indexOf(this.filter.toLowerCase()) != -1;
         }.bind(this));
         var array = filtered.slice(req.index, req.index + req.count);
@@ -66,15 +57,16 @@
         if (req.filter === undefined){
           req.filter = "";
         }
-        this.dataSource(req);
+        this.items(req);
       }
     },
 
-    _dataSourceChanged: function() {
+    _itemsChanged: function() {
       this.$.grid.data.source = this._filterDataSource.bind(this);
     },
 
-    _cellTemplatesChanged: function(templates) {
+    updateCellTemplates: function(templates) {
+      var templates = Polymer.dom(this).querySelectorAll("template");
       if (templates.length > 0) {
         this.$.grid.columns = templates.map(function(template, index) {
           return {
@@ -113,7 +105,7 @@
 
           this.$.grid.then(function() {
             this.selectedItem = item;
-            this.fire("selected");
+            this.fire("select");
           }.bind(this));
 
         }.bind(this));
