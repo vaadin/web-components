@@ -13,12 +13,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../polymer/polymer.html">
 
 <script>
+    var VaadinCharts = VaadinCharts || {};
+
     /**
      * Behavior that provides functions to load JSON config from the node hierarchical structure.
      *
      * @polymerBehavior
      */
-    ConfigurationReaderBehavior = {
+    VaadinCharts.ConfigurationReaderBehavior = {
 
         /**
          * Elements that should be ignored when mapping
