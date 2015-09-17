@@ -13,7 +13,7 @@
     "charts",
     "highcharts"
   ],
-  "main": "v-chart.html",
+  "main": "charts-component.html",
   "license": "https://github.com/vaadin/charts-component/LICENSE.md",
   "repository": {
     "type": "git",

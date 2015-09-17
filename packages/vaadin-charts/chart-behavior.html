@@ -1,3 +1,15 @@
+<script src="../highcharts/adapters/standalone-framework.js"></script>
+<script src="../highcharts/highcharts.js"></script>
+<script src="../highcharts/highcharts-more.js"></script>
+<script src="../highcharts/highcharts-3d.js"></script>
+<script src="../highcharts/modules/heatmap.js"></script>
+<script src="../highcharts/modules/treemap.js"></script>
+<script src="../highcharts/modules/drilldown.js"></script>
+<script src="../highcharts/modules/data.js"></script>
+<script src="../highcharts/modules/exporting.js"></script>
+<script src="../highcharts/modules/funnel.js"></script>
+<script src="../highcharts/modules/solid-gauge.js"></script>
+<script src="../highcharts/modules/data.js"></script>
 <!--
 @license
 Vaadin Charts
@@ -81,7 +93,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         /**
-         *  Name of the chart events to add to the configuration and its corresponding event for v-chart
+         *  Name of the chart events to add to the configuration and its corresponding event for the chart component
          **/
         _chartEventNames: {
             addSeries: "add-series",
@@ -94,7 +106,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             selection: "selection"
         },
         /**
-         *  Name of the series events to add to the configuration and its corresponding event for v-chart
+         *  Name of the series events to add to the configuration and its corresponding event for the chart component
          **/
         _seriesEventNames: {
             afterAnimate: "series-after-animate",
@@ -107,7 +119,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             show: "series-show"
         },
         /**
-         *  Name of the point events to add to the configuration and its corresponding event for v-chart
+         *  Name of the point events to add to the configuration and its corresponding event for the chart component
          **/
         _pointEventNames: {
             click: "point-click",

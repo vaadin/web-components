@@ -1,0 +1,51 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
+<link rel="import" href="data-series.html">
+<link rel="import" href="valo-theme.html">
+<link rel="import" href="chart-behavior.html">
+
+<!--
+An element that provides a WebComponent interface for <a href="http://www.highcharts.com/">HighCharts</a>
+
+Example:
+
+    <vaadin-polygon-chart>
+        <title>Example</title>
+        <data-series name="Target">
+            <data>[153, 42], [149, 46], [149, 55], [152, 60], [159, 70], [170, 77], [180, 70],
+                [180, 60], [173, 52], [166, 45]</data>
+        </data-series>
+        <data-series name="Observations" type="scatter">
+            <data>[161.2, 51.6], [167.5, 59.0], [159.5, 49.2], [157.0, 63.0], [155.8, 53.6]</data>
+        </data-series>
+    </vaadin-polygon-chart>
+-->
+<dom-module id="vaadin-polygon-chart">
+    <template>
+    </template>
+    <script>
+        Polymer({
+            is: 'vaadin-polygon-chart',
+
+            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+
+            _getType: function () {
+                return 'polygon';
+            }
+
+        });
+    </script>
+</dom-module>

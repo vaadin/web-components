@@ -1,0 +1,53 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
+<link rel="import" href="data-series.html">
+<link rel="import" href="valo-theme.html">
+<link rel="import" href="chart-behavior.html">
+
+<!--
+An element that provides a WebComponent interface for <a href="http://www.highcharts.com/">HighCharts</a>
+
+Example:
+
+    <vaadin-bubble-chart>
+        <title>Example</title>
+        <data-series>
+            <data>
+                [97, 36, 79], [94, 74, 60],
+                [68, 76, 58], [64, 87, 56],
+                [68, 27, 73], [74, 99, 42],
+                [7, 93, 87], [51, 69, 40],
+                [38, 23, 33], [57, 86, 31]
+            </data>
+        </data-series>
+    </vaadin-bubble-chart>
+-->
+<dom-module id="vaadin-bubble-chart">
+    <template>
+    </template>
+    <script>
+        Polymer({
+            is: 'vaadin-bubble-chart',
+
+            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+
+            _getType: function () {
+                return 'bubble';
+            }
+
+        });
+    </script>
+</dom-module>

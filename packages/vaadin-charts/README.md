@@ -7,8 +7,31 @@ A Web Component for high quality charts. Uses the [Highcharts](http://www.highch
 
 ## Overview of the repository
 
- - The main component is **v-chart.html**.
- - Series component is **v-series**.
+- The main components are:
+    - **vaadin-area-chart**
+    - **vaadin-arearange-chart**
+    - **vaadin-areaspline-chart**
+    - **vaadin-areasplinerange-chart**
+    - **vaadin-bar-chart**
+    - **vaadin-boxplot-chart**
+    - **vaadin-bubble-chart**
+    - **vaadin-column-chart**
+    - **vaadin-columnrange-chart**
+    - **vaadin-errorbar-chart**
+    - **vaadin-funnel-chart**
+    - **vaadin-gauge-chart**
+    - **vaadin-heatmap-chart**
+    - **vaadin-line-chart**
+    - **vaadin-pie-chart**
+    - **vaadin-polygon-chart**
+    - **vaadin-pyramid-chart**
+    - **vaadin-scatter-chart**
+    - **vaadin-solidgauge-chart**
+    - **vaadin-sparkline**
+    - **vaadin-spline-chart**
+    - **vaadin-treemap-chart**
+    - **vaadin-waterfall-chart**.
+ - Series component is **data-series**.
  - Valo theme for Charts is **valo-theme.html**.
  - Demos are inside **demo**.
 

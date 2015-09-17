@@ -1,0 +1,50 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
+<link rel="import" href="data-series.html">
+<link rel="import" href="valo-theme.html">
+<link rel="import" href="chart-behavior.html">
+
+<!--
+An element that provides a WebComponent interface for <a href="http://www.highcharts.com/">HighCharts</a>
+
+Example:
+
+    <vaadin-solidgauge-chart id="solid-gauge">
+        <title>Example</title>
+        <pane start-angle="-90" end-angle="90">
+            <background background-color="#EEE" inner-radius="60%" outer-radius="100%" shape="arc"></background>
+        </pane>
+        <data-series name="Speed">
+            <data>80</data>
+        </data-series>
+    </vaadin-solidgauge-chart>
+-->
+<dom-module id="vaadin-solidgauge-chart">
+    <template>
+    </template>
+    <script>
+        Polymer({
+            is: 'vaadin-solidgauge-chart',
+
+            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+
+            _getType: function () {
+                return 'solidgauge';
+            }
+
+        });
+    </script>
+</dom-module>
