@@ -5,19 +5,19 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-line-chart.html">
 </head>
 <body>
-<v-chart id="tooltipWithComplexPointFormat" type="line">
+<vaadin-line-chart id="tooltipWithComplexPointFormat">
     <tooltip point-format="x = {point.x}, y = {point.y}"></tooltip>
-</v-chart>
+</vaadin-line-chart>
 
-<v-chart id="tooltipWithHtmlSet" type="line">
+<vaadin-line-chart id="tooltipWithHtmlSet">
     <tooltip use-html="true"></tooltip>
-</v-chart>
+</vaadin-line-chart>
 <script>
 
-    suite('<v-chart>', function () {
+    suite('<vaadin-_-chart>', function () {
 
         test('tooltip with complex format', function () {
             var chartwc = document.querySelector('#tooltipWithComplexPointFormat');

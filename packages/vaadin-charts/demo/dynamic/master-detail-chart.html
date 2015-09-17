@@ -2,7 +2,7 @@
 
     <template>
         <div style="height: 300px; width: 100%;">
-            <v-chart id="detailchart" type="line" on-chart-loaded="detailChartLoadListener">
+            <vaadin-line-chart id="detailchart" on-chart-loaded="detailChartLoadListener">
                 <chart margin-left="50" margin-right="20">
 
                 </chart>
@@ -31,10 +31,10 @@
                     <point-interval>24 * 3600 * 1000</point-interval>
                     <point-start>Date.UTC(2013,5,2)</point-start>
                 </data-series>
-            </v-chart>
+            </vaadin-line-chart>
         </div>
         <div style="position:relative; height: 100px; width: 100%;">
-            <v-chart id="masterchart" type="area" on-chart-loaded="masterChartLoadListener"
+            <vaadin-area-chart id="masterchart" on-chart-loaded="masterChartLoadListener"
                      on-selection="selectionListener">
                 <chart border-width="0" background-color="null" margin-left="50" margin-right="20"
                           zoom-type="x">
@@ -733,7 +733,7 @@
                         [Date.UTC(2015,5,30),0.8950]
                     </data>
                 </data-series>
-            </v-chart>
+            </vaadin-area-chart>
         </div>
     </template>
 

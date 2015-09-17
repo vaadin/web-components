@@ -5,10 +5,10 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-line-chart.html">
 </head>
 <body>
-<v-chart id="plotOptionsWithFillColorStops" type="line">
+<vaadin-line-chart id="plotOptionsWithFillColorStops">
     <plot-options line-width="1">
         <!-- TODO should be area-->
         <series>
@@ -22,11 +22,11 @@
             </fill-color>
         </series>
     </plot-options>
-</v-chart>
+</vaadin-line-chart>
 
 <script>
 
-    suite('<v-chart>', function () {
+    suite('<vaadin-_-chart>', function () {
 
         test('chart fill color and stops', function () {
             var chartwc = document.querySelector('#plotOptionsWithFillColorStops');

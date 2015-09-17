@@ -1,5 +1,5 @@
 <div style=" width: 50%; float: left;">
-    <v-chart id="stacked-bar" type="bar">
+    <vaadin-bar-chart id="stacked-bar">
         <title>Stacked bar chart</title>
         <x-axis>
             <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
@@ -22,10 +22,10 @@
         <data-series name="Joe">
             <data>3, 4, 4, 2, 5</data>
         </data-series>
-    </v-chart>
+    </vaadin-bar-chart>
 </div>
 <div style=" width: 50%; float: left;">
-    <v-chart id="pieWithSeries" type="pie">
+    <vaadin-pie-chart id="pieWithSeries">
         <data-series name="Browser share">
             <data>
                 ["Firefox", 45.0],
@@ -36,5 +36,5 @@
                 ["Others", 0.7]
             </data>
         </data-series>
-    </v-chart>
+    </vaadin-pie-chart>
 </div>

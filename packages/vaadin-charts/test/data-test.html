@@ -5,7 +5,8 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-column-chart.html">
+    <link rel="import" href="../vaadin-areaspline-chart.html">
 </head>
 <body>
 
@@ -46,11 +47,11 @@
     </tbody>
 </table>
 
-<v-chart id="data-table-id" type="column">
+<vaadin-column-chart id="data-table-id">
     <data table="datatable"></data>
-</v-chart>
+</vaadin-column-chart>
 
-<v-chart id="data-table-node" type="column">
+<vaadin-column-chart id="data-table-node">
     <data>
         <table>
             <thead>
@@ -89,9 +90,9 @@
             </tbody>
         </table>
     </data>
-</v-chart>
+</vaadin-column-chart>
 
-<v-chart id="data-csv" type="areaspline">
+<vaadin-areaspline-chart id="data-csv" type="areaspline">
     <data csv="Year,Annual mean,5 year mean
 1880,-0.31,
 1881,-0.22,
@@ -226,10 +227,10 @@
 2010,0.64,0.54
 2011,0.52,
 2012,0.52,"></data>
-</v-chart>
+</vaadin-areaspline-chart>
 <script>
 
-    suite('<v-chart>', function () {
+    suite('<vaadin-_-chart>', function () {
 
         test('data with table id', function () {
             var chartwc = document.querySelector('#data-table-id');

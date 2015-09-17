@@ -5,10 +5,10 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-scatter-chart.html">
 </head>
 <body>
-<v-chart id="chartWithValidDates" type="scatter">
+<vaadin-scatter-chart id="chartWithValidDates">
     <x-axis type="datetime">
     </x-axis>
     <data-series id="seriesId">
@@ -37,9 +37,9 @@
             </point>
         </data>
     </data-series>
-</v-chart>
+</vaadin-scatter-chart>
 
-<v-chart id="chartWithInvalidDates" type="scatter">
+<vaadin-scatter-chart id="chartWithInvalidDates">
     <x-axis type="datetime">
     </x-axis>
     <data-series id="seriesId">
@@ -58,7 +58,7 @@
             </point>
         </data>
     </data-series>
-</v-chart>
+</vaadin-scatter-chart>
 <script>
 
     suite('<data-series>', function () {

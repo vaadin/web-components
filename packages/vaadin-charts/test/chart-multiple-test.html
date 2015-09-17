@@ -5,12 +5,12 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-pie-chart.html">
 </head>
 <body>
-<v-chart id="emptyPie" type="pie">
-</v-chart>
-<v-chart id="pieWithSeries" type="pie">
+<vaadin-pie-chart id="emptyPie">
+</vaadin-pie-chart>
+<vaadin-pie-chart id="pieWithSeries">
     <data-series name="Browser share">
         <data>
             ["Firefox",   45.0],
@@ -21,10 +21,10 @@
             ["Others",   0.7]
         </data>
     </data-series>
-</v-chart>
+</vaadin-pie-chart>
 <script>
 
-    suite('<v-chart>', function () {
+    suite('<vaadin-_-chart>', function () {
 
         test('different amount of series', function () {
             var emptyChart = document.querySelector('#emptyPie');

@@ -14,7 +14,7 @@
                 last-response="{{series2Data}}"
                 debounce-duration="300"></iron-ajax>
 
-        <v-chart id="chart">
+        <vaadin-line-chart id="chart">
             <title>Monthly Average Temperature</title>
             <subtitle>Source: WorldClimate.com</subtitle>
 
@@ -37,7 +37,7 @@
             <data-series name="Tokyo" data="[[seriesData]]"></data-series>
             <data-series name="London" data="[[series2Data]]"></data-series>
 
-        </v-chart>
+        </vaadin-line-chart>
     </template>
     <script>
         Polymer({
