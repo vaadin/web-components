@@ -104,6 +104,15 @@
 
     _itemSelected: function() {
       this.selected = this.selector.selectedItem;
+      // temporary hack if actual vaadin-grid element is used
+      if (!this.selector.hasOwnProperty("selectedItem")) {
+        var selectedIndex = this.selector.selection.selected()[0];
+        if (selectedIndex !== undefined){
+          this.selector.data.getItem(selectedIndex, function(e, i){
+            this.selected = i;
+          }.bind(this));
+        }
+      }
       this.close();
     },
 

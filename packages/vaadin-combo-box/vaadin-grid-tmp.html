@@ -46,7 +46,7 @@ This is a temporary component providing some still missing api on top of basic v
     },
 
     _filterDataSource: function(req) {
-      if (Array.isArray(this.items)){
+      if (Array.isArray(this.items)) {
         var filtered = this.items.filter(function(item) {
           return item.toString().toLowerCase().indexOf(this.filter.toLowerCase()) != -1;
         }.bind(this));

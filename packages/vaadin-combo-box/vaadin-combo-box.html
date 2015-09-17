@@ -27,9 +27,7 @@
         display: none;
       }
 
-      #filterinput {
-        width: auto;
-      }
+
 
       ::content .paper-input-container {
         white-space: nowrap;
@@ -162,7 +160,7 @@
 
       var input = (this.mobile ? this.$.overlay : this).$$("#filterinput");
       input.focus();
-      input.setSelectionRange(0, input.value.length);
+      //input.setSelectionRange(0, input.value.length);
     },
 
     clear: function() {
