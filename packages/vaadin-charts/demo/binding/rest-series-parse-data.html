@@ -7,7 +7,7 @@
                 handle-as="text"
                 last-response="{{textData}}"
                 debounce-duration="300"></iron-ajax>
-        <v-chart id="chart">
+        <vaadin-line-chart id="chart">
             <title>Global temperature change</title>
 
             <plot-options>
@@ -17,7 +17,7 @@
             <x-axis type="datetime"></x-axis>
             <data-series id="my-series-id" data="[[seriesData]]"></data-series>
 
-        </v-chart>
+        </vaadin-line-chart>
     </template>
     <script>
         Polymer({

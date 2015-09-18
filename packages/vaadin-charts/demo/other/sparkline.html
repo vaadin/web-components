@@ -41,8 +41,8 @@
                         } else {
                             sparkline = document.createElement('vaadin-sparkline');
                             //TODO fix when styling has been fixed
-                            sparkline.$.chart.$.chartContainer.style.width = "150px";
-                            sparkline.$.chart.$.chartContainer.style.height = "48px";
+                            sparkline.querySelector("#chartContainer").style.width = "150px";
+                            sparkline.querySelector("#chartContainer").style.height = "48px";
 
                             sparkline.setAttribute('data', cell.data);
 

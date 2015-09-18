@@ -1,0 +1,47 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
+<link rel="import" href="data-series.html">
+<link rel="import" href="valo-theme.html">
+<link rel="import" href="chart-behavior.html">
+
+<!--
+An element that provides a WebComponent interface for <a href="http://www.highcharts.com/">HighCharts</a>
+
+Example:
+
+    <vaadin-areaspline-chart>
+        <title>Example</title>
+        <data-series name="Jane">
+            <data>1, 3, 4, 3, 3, 5, 4</data>
+        </data-series>
+    </vaadin-areaspline-chart>
+-->
+<dom-module id="vaadin-areaspline-chart">
+    <template>
+    </template>
+    <script>
+        Polymer({
+            is: 'vaadin-areaspline-chart',
+
+            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+
+            _getType: function () {
+                return 'areaspline';
+            }
+
+        });
+    </script>
+</dom-module>

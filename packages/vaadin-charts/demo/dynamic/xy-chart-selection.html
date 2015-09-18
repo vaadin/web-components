@@ -1,6 +1,6 @@
 <dom-module id="xy-chart-selection-example">
     <template>
-        <v-chart id="xy-chart-selection" type="scatter" on-selection="selectionListener">
+        <vaadin-scatter-chart id="xy-chart-selection" on-selection="selectionListener">
             <chart zoom-type="xy">
                 <margin>70, 50, 60, 80</margin>
             </chart>
@@ -15,7 +15,7 @@
             <data-series name="Original">
                 <data>[20, 10], [35, 20], [25, 5], [15, 45], [10, 10], [25, 80], [30, 35]</data>
             </data-series>
-        </v-chart>
+        </vaadin-scatter-chart>
     </template>
 
     <script>

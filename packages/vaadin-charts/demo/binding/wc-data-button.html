@@ -1,7 +1,7 @@
 <!--This example defines a Web Component that binds a property to series data and pushes new points-->
 <dom-module id="wc-data-button">
     <template>
-        <v-chart id="wcDataExample">
+        <vaadin-line-chart id="wcDataExample">
             <title>Click button to add point</title>
 
             <tooltip enabled="false"></tooltip>
@@ -12,7 +12,7 @@
             <x-axis type="datetime"></x-axis>
             <data-series id="mySeriesId" data="[[mySeriesData]]">
             </data-series>
-        </v-chart>
+        </vaadin-line-chart>
         <button on-click="_addSeriesPoint">Add series point</button>
     </template>
 

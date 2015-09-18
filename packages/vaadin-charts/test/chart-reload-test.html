@@ -5,13 +5,13 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-line-chart.html">
 </head>
 <body>
 
 <dom-module id="reload-chart">
     <template>
-        <v-chart id="chartWithBinding">
+        <vaadin-line-chart id="chartWithBinding">
             <title>Global temperature change</title>
             <subtitle>Data input from CSV</subtitle>
             <plot-options>
@@ -21,7 +21,7 @@
             </plot-options>
             <x-axis type="datetime"></x-axis>
             <data-series id="seriesId" data="[[seriesData]]" line-width="1" name="Global"></data-series>
-        </v-chart>
+        </vaadin-line-chart>
         <button id="pointBtn" on-click="_addSeriesPoint">Add series point</button>
         <button id="titleBtn" on-click="_changeTitle">Change title</button>
         <button id="nameBtn" on-click="_changeName">Change series name</button>
@@ -69,7 +69,7 @@
 <reload-chart></reload-chart>
 <script>
 
-    suite('<v-chart>', function () {
+    suite('<vaadin-_-chart>', function () {
         var el;
         var chartwc;
 

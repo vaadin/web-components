@@ -14,7 +14,7 @@
     suite('<vaadin-sparkline>', function () {
 
         test('sparkline generates correct config for charts', function () {
-            var chart = document.querySelector('vaadin-sparkline v-chart');
+            var chart = document.querySelector('vaadin-sparkline vaadin-line-chart);
             var conf = chart._chartConf;
 
             expect(conf.chart.type).to.equal('line');

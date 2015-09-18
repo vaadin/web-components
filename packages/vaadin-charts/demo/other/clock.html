@@ -2,7 +2,7 @@
 
     <template>
         <div style="height: 300px; width: 100%;">
-            <v-chart id="clock" type="gauge" on-chart-loaded="clockLoadListener">
+            <vaadin-gauge-chart id="clock" on-chart-loaded="clockLoadListener">
                 <chart plot-background-color="null" plot-background-image="null" plot-border-width="0"
                           plot-shadow="false" animation="false"></chart>
                 <title>Vaadin Charts Clock</title>
@@ -56,7 +56,7 @@
                         </point>
                     </data>
                 </data-series>
-            </v-chart>
+            </vaadin-gauge-chart>
         </div>
     </template>
 

@@ -5,21 +5,21 @@
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../v-chart.html">
+    <link rel="import" href="../vaadin-line-chart.html">
 </head>
 <body>
 
 <dom-module id="eventful-chart-declarative-attribute">
 
     <template>
-        <v-chart on-add-series="handle"
+        <vaadin-line-chart on-add-series="handle"
                  on-after-print="handle"
                  on-before-print="handle"
                  on-chart-click="handle"
                  on-drilldown="handle"
                  on-drillup="handle"
                  on-redraw="handle"
-                 on-selection="handle"></v-chart>
+                 on-selection="handle"></vaadin-line-chart>
     </template>
 
     <script>
@@ -54,7 +54,7 @@
 <dom-module id="programmatically-added-listeners">
 
     <template>
-        <v-chart><data-series><data>1,2</data></data-series></v-chart>
+        <vaadin-line-chart><data-series><data>1,2</data></data-series></vaadin-line-chart>
     </template>
 
     <script>
@@ -90,11 +90,11 @@
 
 <programmatically-added-listeners></programmatically-added-listeners>
 <script>
-    suite('<v-chart>', function () {
+    suite('<vaadin-_-chart>', function () {
 
         test('all chart events, declarative listeners', function () {
             var element = document.querySelector("eventful-chart-declarative-attribute");
-            var elementChart = document.querySelector("eventful-chart-declarative-attribute v-chart");
+            var elementChart = document.querySelector("eventful-chart-declarative-attribute vaadin-line-chart");
             var eventNames = elementChart._chartEventNames;
 
             //trigger all highcharts events
@@ -109,7 +109,7 @@
 
         test('all chart events, programmatically added listeners', function () {
             var element = document.querySelector("programmatically-added-listeners");
-            var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
             var eventNames = elementChart._chartEventNames;
 
             //add all listeners
@@ -129,7 +129,7 @@
         test('all series events, programmatically added listeners', function () {
             var element = document.querySelector("programmatically-added-listeners");
             element.cleanCount();
-            var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
             var eventNames = elementChart._seriesEventNames;
 
             //add all listeners
@@ -149,7 +149,7 @@
         test('all point events, programmatically added listeners', function () {
             var element = document.querySelector("programmatically-added-listeners");
             element.cleanCount();
-            var elementChart = document.querySelector("programmatically-added-listeners v-chart");
+            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
             var eventNames = elementChart._pointEventNames;
 
             //add all listeners
@@ -167,7 +167,7 @@
         });
 
         test('chart-click event, event info is correct', function (done) {
-            var element = document.createElement('v-chart');
+            var element = document.createElement('vaadin-line-chart');
 
             element.addEventListener("chart-loaded", function () {
                 //trigger chart click event on chart load
@@ -175,7 +175,7 @@
             });
 
             element.addEventListener("chart-click", function (e) {
-                //event target should be v-chart element
+                //event target should be chart element
                 expect(e.target).to.equal(element);
                 //event detail should contain original event info
                 expect(e.detail.originalEvent).to.exist;
@@ -189,7 +189,7 @@
         });
 
         test('series-click event, event info is correct', function (done) {
-            var element = document.createElement('v-chart');
+            var element = document.createElement('vaadin-line-chart');
 
             element.addEventListener("chart-loaded", function () {
                 element.chart.addSeries({data:[1,2]})
@@ -198,7 +198,7 @@
             });
 
             element.addEventListener("series-click", function (e) {
-                //event target should be v-chart element
+                //event target should be chart element
                 expect(e.target).to.equal(element);
                 //event detail should contain original event info
                 expect(e.detail.originalEvent).to.exist;
@@ -212,7 +212,7 @@
         });
 
         test('point-click event, event info is correct', function (done) {
-            var element = document.createElement('v-chart');
+            var element = document.createElement('vaadin-line-chart');
 
             element.addEventListener("chart-loaded", function () {
                 element.chart.addSeries({data:[1,2]})
@@ -221,7 +221,7 @@
             });
 
             element.addEventListener("point-click", function (e) {
-                //event target should be v-chart element
+                //event target should be chart element
                 expect(e.target).to.equal(element);
                 //event detail should contain original event info
                 expect(e.detail.originalEvent).to.exist;

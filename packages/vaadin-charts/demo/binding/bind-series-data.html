@@ -1,7 +1,7 @@
 <!--This example defines a Web Component that directly binds and initializes the series data property-->
 <dom-module id="bind-series-data">
     <template>
-        <v-chart id="chart">
+        <vaadin-line-chart id="chart">
             <title>Monthly Average Temperature</title>
             <subtitle>Source: WorldClimate.com</subtitle>
 
@@ -23,7 +23,7 @@
             </plot-options>
             <data-series name="Tokyo" data="[[seriesData]]"></data-series>
 
-        </v-chart>
+        </vaadin-line-chart>
     </template>
     <script>
         Polymer({
