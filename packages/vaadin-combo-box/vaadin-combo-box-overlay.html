@@ -4,7 +4,7 @@
 
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
-<link rel='import' href='vaadin-grid-tmp.html'>
+<link rel='import' href='vaadin-grid-ext.html'>
 <link rel='import' href='../iron-dropdown/iron-dropdown.html'>
 
 <dom-module id="vaadin-combo-box-overlay">
@@ -53,7 +53,7 @@
         </div>
 
         <template is="dom-if" if="[[_useDefaultSelector]]">
-          <vaadin-grid-tmp class="vaadin-combo-box-selector"></vaadin-grid-tmp>
+          <vaadin-grid-ext class="vaadin-combo-box-selector"></vaadin-grid-ext>
         </template>
         <content id="contentselector" select=".vaadin-combo-box-selector">
 
@@ -105,7 +105,7 @@
     _itemSelected: function() {
       this.selected = this.selector.selectedItem;
       // temporary hack if actual vaadin-grid element is used
-      if (!this.selector.hasOwnProperty("selectedItem")) {
+      if (!("selectedItem" in this.selector)) {
         var selectedIndex = this.selector.selection.selected()[0];
         if (selectedIndex !== undefined){
           this.selector.data.getItem(selectedIndex, function(e, i){
