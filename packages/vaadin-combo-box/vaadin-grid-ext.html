@@ -12,6 +12,7 @@ This is a temporary component providing some still missing api on top of basic v
         <col>
       </table>
     </vaadin-grid>
+    <content id="templates">
   </template>
 </dom-module>
 
@@ -66,7 +67,9 @@ This is a temporary component providing some still missing api on top of basic v
     },
 
     updateCellTemplates: function(templates) {
-      var templates = Polymer.dom(this).querySelectorAll("template");
+      var templates = Polymer.dom(this.$.templates).getDistributedNodes().filter(
+        function (node) {return node.tagName === "TEMPLATE"}
+      )
       if (templates.length > 0) {
         this.$.grid.columns = templates.map(function(template, index) {
           return {

@@ -45,20 +45,18 @@
         background: #ddd;
       }
     </style>
-    <iron-dropdown opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]] id="dropdown">
+    <iron-dropdown id="dropdown" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
       <div class="dropdown-content">
         <div id="input-layout">
           <input id="filterinput" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
           <iron-icon on-click="clear" icon="clear"></iron-icon>
         </div>
 
-        <template is="dom-if" if="[[_useDefaultSelector]]">
-          <vaadin-grid-ext class="vaadin-combo-box-selector"></vaadin-grid-ext>
-        </template>
-        <content id="contentselector" select=".vaadin-combo-box-selector">
-
+        <vaadin-grid-ext items=[[items]] selected-item="{{selected}}" filter=[[filter]]>
+          <content>
+        </vaadin-grid-ext>
       </div>
-      <iron-dropdown>
+    </iron-dropdown>
   </template>
 </dom-module>
 
@@ -83,37 +81,6 @@
 
     ready: function() {
       this.$.dropdown.focusTarget = this.$.filterinput;
-      this._rebindSelector();
-    },
-
-    _rebindSelector() {
-      this.selector = Polymer.dom(this.$.contentselector).getDistributedNodes()[0];
-
-      this._useDefaultSelector = !this.selector.classList || !this.selector.classList.contains("vaadin-combo-box-selector");
-
-      this.async(function(){
-        if (this._useDefaultSelector) {
-          this.selector = this.$$(".vaadin-combo-box-selector");
-        }
-        this.selector.addEventListener("select", this._itemSelected.bind(this));
-        if (this.items) {
-          this.selector.items = this.items;
-        }
-      });
-    },
-
-    _itemSelected: function() {
-      this.selected = this.selector.selectedItem;
-      // temporary hack if actual vaadin-grid element is used
-      if (!("selectedItem" in this.selector)) {
-        var selectedIndex = this.selector.selection.selected()[0];
-        if (selectedIndex !== undefined){
-          this.selector.data.getItem(selectedIndex, function(e, i){
-            this.selected = i;
-          }.bind(this));
-        }
-      }
-      this.close();
     },
 
     open: function() {

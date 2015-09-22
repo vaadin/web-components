@@ -9,10 +9,9 @@
   <title>vaadin-combo-box demo</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../polymer/polymer.html">
-  <link rel="import" href="../paper-input/paper-input.html">
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
   <link rel="import" href="../vaadin-combo-box.html">
-  <link rel='import' href='vaadin-grid-ext.html'>
 
 </head>
 
@@ -26,28 +25,8 @@
     </style>
 
     <div class="horizontal">
-      <vaadin-combo-box style="width: 60%" label="To" items="[[addressSource]]" multi-select></vaadin-combo-box>
-      <vaadin-combo-box style="width: 40%" label="Priority">
-        <vaadin-grid class="vaadin-combo-box-selector">
-          <table>
-            <col>
-              <thead hidden=true>
-                <tr></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>High</td>
-                </tr>
-                <tr>
-                  <td>Medium</td>
-                </tr>
-                <tr>
-                  <td>Low</td>
-                </tr>
-              </tbody>
-          </table>
-        </vaadin-grid>
-      </vaadin-combo-box>
+      <vaadin-combo-box style="width: 60%" label="To" items="[[addresses]]"></vaadin-combo-box>
+      <vaadin-combo-box style="width: 40%" label="Priority" items="[[priorities]]"></vaadin-combo-box>
     </div>
 
 
@@ -60,7 +39,9 @@
     HTMLImports.whenReady(function() {
       var template = document.querySelector("template");
 
-      template.addressSource = function(req) {
+      template.priorities = ["High", "Medium", "Low"];
+
+      template.addresses = function(req) {
         var filtered = [];
         if (req.filter) {
           ["@vaadin.com", "@gmail.com", "@yahoo.com"].forEach(function(suffix) {
@@ -74,7 +55,6 @@
             }
           });
         }
-
 
         req.success(filtered.slice(req.index, req.index + req.count), filtered.length);
       };

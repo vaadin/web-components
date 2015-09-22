@@ -22,6 +22,7 @@
         width: 100%;
       }
 
+
       #selected {
         padding-right: 5px;
         display: none;
@@ -58,8 +59,8 @@
 
     <!-- TODO: standalone combo-box -->
 
-    <vaadin-combo-box-overlay selector="[[selector]]" mobile="[[mobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
-      <content select=".vaadin-combo-box-selector">
+    <vaadin-combo-box-overlay mobile="[[mobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
+      <content select="template:not(.selected-template)">
     </vaadin-combo-box-overlay>
 
     <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
@@ -91,20 +92,12 @@
       },
       _selectedTemplate: {
         value: function() {
-          // Filter out all but direct sibling templates
-          return Polymer.dom(this).querySelectorAll("template").filter(function(template) {
-            return template.parentNode.is === this.is;
-          }.bind(this))[0];
+          return Polymer.dom(this).querySelector("template.selected-template");
         },
         observer: "_selectedTemplateChanged"
       },
       fieldPopulated: {
         value: false
-      },
-      selector: {
-        value: function() {
-          return Polymer.dom(this).querySelector(".vaadin-combo-box-selector");
-        }
       }
     },
 
@@ -133,6 +126,7 @@
 
       this.filter = "";
       this._updateFieldPopulated();
+      this.$.overlay.close();
     },
 
     _filterChanged: function(filter) {

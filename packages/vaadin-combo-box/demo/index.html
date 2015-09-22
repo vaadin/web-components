@@ -26,70 +26,21 @@
       <!-- 1. Which vaadin-grid properties should be included in cb api directly?-->
       <vaadin-combo-box items=[[fruits]] label="Fruit" selection-mode="multi"></vaadin-combo-box>
 
-      <!-- 2. A vaadin-grid placed inside the cb -->
       <vaadin-combo-box items=[[managers]] label="Manager">
-
-        <vaadin-grid-ext class="vaadin-combo-box-selector">
-          <!-- 2.1. Templates for column renderers, to be added to vaadin-grid api -->
-          <template>
-            <span>[[item.firstname]]</span>&nbsp;
-            <span>[[item.lastname]]</span>
-          </template>
-          <template>
-            <img src$="[[item.thumbnail]]" style="width: 20px;">
-          </template>
-        </vaadin-grid-ext>
-
-        <!-- 2.2. Template for selected item, to be added to vaadin-combo-box api -->
         <template>
+          <span>[[item.firstname]]</span>&nbsp;
           <span>[[item.lastname]]</span>
         </template>
+        <template>
+          <img src$="[[item.thumbnail]]" style="width: 20px;">
+        </template>
 
+        <template class="selected-template">
+          <span>[[item.lastname]]</span>
+        </template>
       </vaadin-combo-box>
 
-      <!-- 3. Items defined declaratively -->
-      <vaadin-combo-box label="Number">
-        <vaadin-grid-ext class="vaadin-combo-box-selector" selection-mode="multi" frozen-columns="1">
-          <table>
-            <colgroup>
-              <col header-text="Name">
-              <col header-text="Value">
-              <col header-text="Progress">
-            </colgroup>
-            <tbody>
-              <tr>
-                <td>Project A</td><td>10000</td><td>0.8</td>
-              </tr>
-              <tr>
-                <td>Project B</td><td>999999</td><td>0.8</td>
-              </tr>
-            </tbody>
-          </table>
-        </vaadin-grid-ext>
-      </vaadin-combo-box>
-
-      <!-- 4. How about allowing a variety of selectables to be placed inside. Would this get too generic? -->
-      <!-- 4.1. Iron-list as the selector -->
-      <vaadin-combo-box label="Number">
-        <iron-list items="[[data]]" as="item" class="vaadin-combo-box-selector">
-          <template>
-            <div>
-              Name: <span>[[item.name]]</span>
-            </div>
-          </template>
-        </iron-list>
-      </vaadin-combo-box>
-
-      <!-- 4.2. Iron-selector as the selector -->
-      <vaadin-combo-box label="Number">
-        <iron-selector selected="0" class="vaadin-combo-box-selector">
-          <div>Item 1</div>
-          <div>Item 2</div>
-          <div>Item 3</div>
-        </iron-selector>
-      </vaadin-combo-box>
     </template>
-
 
   </div>
 
