@@ -7,9 +7,15 @@ This is a temporary component providing some still missing api on top of basic v
 
 <dom-module id="vaadin-grid-ext">
   <template>
-    <vaadin-grid id="grid">
+    <style>
+      ::content vaadin-grid tbody tr.selected td.vaadin-grid {
+        background-color: #ddd;
+      }
+    </style>
+    <vaadin-grid id="grid" on-select="onSelect">
       <table>
         <col>
+        <thead hidden><tr></tr></thead>
       </table>
     </vaadin-grid>
     <content id="templates">
@@ -23,7 +29,8 @@ This is a temporary component providing some still missing api on top of basic v
 
     properties: {
       selectedItem: {
-        notify: true
+        notify: true,
+        observer: "_selectedItemChanged"
       },
       filter: {
         type: String,
@@ -33,17 +40,24 @@ This is a temporary component providing some still missing api on top of basic v
       items: {
         observer: "_itemsChanged"
       }
+
     },
 
     behaviors: [Polymer.Templatizer],
 
-    listeners: {
-      "grid.select": "onSelection"
+    ready: function() {
+      this.updateCellTemplates();
+      this.$.grid.rowClassGenerator = this._rowClassGenerator.bind(this);
     },
 
-    ready: function() {
-      this.$.grid.header.hidden = true;
-      this.updateCellTemplates();
+    _rowClassGenerator: function(row) {
+      // There seems to be a bug in row.data so need to use getItem api here for now
+      var element = row.element;
+      this.$.grid.data.getItem(row.index, function(e, i) {
+        this.async(function(){
+          this.toggleClass("selected", i === this.selectedItem, element);
+        });
+      }.bind(this));
     },
 
     _filterDataSource: function(req) {
@@ -62,8 +76,15 @@ This is a temporary component providing some still missing api on top of basic v
       }
     },
 
+
+
     _itemsChanged: function() {
       this.$.grid.data.source = this._filterDataSource.bind(this);
+    },
+
+    _selectedItemChanged: function(){
+      // Need to make the grid re-render somehow
+      this._itemsChanged();
     },
 
     updateCellTemplates: function(templates) {
@@ -88,8 +109,6 @@ This is a temporary component providing some still missing api on top of basic v
       instance.item = cell.row.data;
       cell.element.innerHTML = "";
       Polymer.dom(cell.element).appendChild(instance.root);
-      //TODO: Also needed for non-templated renderer
-      this.toggleClass('selected', cell.data == this.selectedItem, cell.element);
     },
 
     filterChanged: function() {
@@ -99,7 +118,7 @@ This is a temporary component providing some still missing api on top of basic v
       }
     },
 
-    onSelection: function() {
+    onSelect: function() {
       var selectedIndex = this.$.grid.selection.selected()[0];
 
       if (selectedIndex !== undefined) {
