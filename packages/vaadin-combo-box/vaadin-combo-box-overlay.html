@@ -44,6 +44,10 @@
       :host::content .v-grid-cell.v-grid.selected {
         background: #ddd;
       }
+
+      #dropdown:not([aria-hidden]) .dropdown-content {
+        overflow: hidden;
+      }
     </style>
     <iron-dropdown id="dropdown" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
       <div class="dropdown-content">
