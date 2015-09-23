@@ -67,15 +67,20 @@
 
       template.addresses = function(req) {
         var filtered = [];
+
+        //History
+        ["jouni@vaadin.com", "virkki@vaadin.com", "tepi@vaadin.com", "tuomas@vaadin.com"].forEach(function(addr) {
+          if (addr.indexOf(req.filter) === 0 || !req.filter) {
+            filtered.push(addr);
+          }
+        });
+
         if (req.filter) {
-          ["@vaadin.com", "@gmail.com", "@yahoo.com"].forEach(function(suffix) {
-            filtered.push(req.filter + suffix);
-          });
-          //History
-          ["jouni@vaadin.com", "virkki@vaadin.com", "tepi@vaadin.com", "tuomas@vaadin.com"].forEach(function(addr) {
+          ["@vaadin.com", "@gmail.com"].forEach(function(suffix) {
+            var addr = req.filter + suffix;
             var alreadyContains = filtered.filter(function(val){return val == addr}).length > 0;
-            if (!alreadyContains && addr.indexOf(req.filter) === 0) {
-              filtered.push(addr);
+            if (!alreadyContains) {
+              filtered.push(req.filter + suffix);
             }
           });
         }
