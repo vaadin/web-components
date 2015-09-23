@@ -22,8 +22,7 @@
 
 
     <template is="dom-bind">
-      <!-- 1. Which vaadin-grid properties should be included in cb api directly?-->
-      <vaadin-combo-box items=[[fruits]] label="Fruit" selection-mode="multi"></vaadin-combo-box>
+      <vaadin-combo-box items=[[fruits]] label="Fruit"></vaadin-combo-box>
 
       <vaadin-combo-box items=[[managers]] label="Manager">
         <template>
@@ -38,6 +37,8 @@
           <span>[[item.lastname]]</span>
         </template>
       </vaadin-combo-box>
+
+      <vaadin-combo-box items=[[numbers]] label="Number"></vaadin-combo-box>
 
     </template>
 
@@ -73,7 +74,7 @@
       template.fruits = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
 
 
-
+      template.numbers = Array.apply(null, {length: 1000}).map(Number.call, Number);
 
 
     });

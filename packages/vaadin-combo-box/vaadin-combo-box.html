@@ -25,6 +25,14 @@
       #selected {
         padding-right: 5px;
         display: none;
+
+        /* Prefix styles */
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
       }
 
       ::content .paper-input-container {
@@ -56,7 +64,7 @@
 
     <!-- TODO: standalone combo-box -->
 
-    <vaadin-combo-box-overlay mobile="[[mobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
+    <vaadin-combo-box-overlay on-iron-overlay-closed="_clearFilter" mobile="[[mobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
       <content select="template:not(.selected-template)">
     </vaadin-combo-box-overlay>
 
@@ -98,6 +106,10 @@
       }
     },
 
+    _clearFilter: function(){
+      this.filter = "";
+    },
+
     _selectedTemplateChanged: function(template) {
       this.templatize(template);
     },
@@ -121,7 +133,7 @@
       var hasValue = value !== undefined && value.toString().trim().length > 0;
       selected.style.display = hasValue ? "inline-block" : "none";
 
-      this.filter = "";
+      this._clearFilter();
       this._updateFieldPopulated();
       this.$.overlay.close();
     },
@@ -156,7 +168,7 @@
 
     clear: function() {
       this.value = undefined;
-      this.filter = "";
+      this._clearFilter();
     }
 
 

@@ -49,7 +49,7 @@
         overflow: hidden;
       }
     </style>
-    <iron-dropdown id="dropdown" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
+    <iron-dropdown id="dropdown" on-iron-overlay-closed="_closed" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
       <div class="dropdown-content">
         <div id="input-layout">
           <input id="filterinput" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
@@ -96,10 +96,8 @@
       this.$.dropdown.close();
     },
 
-    _filterChanged: function(){
-      if (this.selector) {
-        this.selector.filter = this.filter;
-      }
+    _closed: function() {
+      this.fire("iron-overlay-closed");
     },
 
     properties: {
@@ -111,9 +109,6 @@
       },
       _useDefaultSelector: {
         value: false
-      },
-      filter: {
-        observer: "_filterChanged"
       }
 
     }

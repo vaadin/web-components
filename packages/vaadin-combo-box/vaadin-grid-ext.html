@@ -12,7 +12,7 @@ This is a temporary component providing some still missing api on top of basic v
         background-color: #ddd;
       }
     </style>
-    <vaadin-grid id="grid" on-select="onSelect">
+    <vaadin-grid id="grid" on-select="_onSelect">
       <table>
         <col>
         <thead hidden><tr></tr></thead>
@@ -30,12 +30,13 @@ This is a temporary component providing some still missing api on top of basic v
     properties: {
       selectedItem: {
         notify: true,
-        observer: "_selectedItemChanged"
+        // Need to make the grid re-render somehow on select
+        observer: "_bindRowClassGenerator"
       },
       filter: {
         type: String,
         value: "",
-        observer: "filterChanged"
+        observer: "_filterChanged"
       },
       items: {
         observer: "_itemsChanged"
@@ -46,17 +47,15 @@ This is a temporary component providing some still missing api on top of basic v
     behaviors: [Polymer.Templatizer],
 
     ready: function() {
-      this.updateCellTemplates();
-      this.$.grid.rowClassGenerator = this._rowClassGenerator.bind(this);
+      this._updateCellTemplates();
+      this._bindRowClassGenerator();
     },
 
     _rowClassGenerator: function(row) {
       // There seems to be a bug in row.data so need to use getItem api here for now
       var element = row.element;
       this.$.grid.data.getItem(row.index, function(e, i) {
-        this.async(function(){
-          this.toggleClass("selected", i === this.selectedItem, element);
-        });
+        this.toggleClass("selected", i === this.selectedItem, element);
       }.bind(this));
     },
 
@@ -76,25 +75,22 @@ This is a temporary component providing some still missing api on top of basic v
       }
     },
 
-
-
     _itemsChanged: function() {
       this.$.grid.data.source = this._filterDataSource.bind(this);
     },
 
-    _selectedItemChanged: function(){
-      // Need to make the grid re-render somehow
-      this._itemsChanged();
+    _bindRowClassGenerator: function(){
+      this.$.grid.rowClassGenerator = this._rowClassGenerator.bind(this);
     },
 
-    updateCellTemplates: function(templates) {
+    _updateCellTemplates: function(templates) {
       var templates = Polymer.dom(this.$.templates).getDistributedNodes().filter(
         function (node) {return node.tagName === "TEMPLATE"}
       )
       if (templates.length > 0) {
         this.$.grid.columns = templates.map(function(template, index) {
           return {
-            renderer: this.templateRenderer.bind(this),
+            renderer: this._templateRenderer.bind(this),
             template: template,
             name: "column" + index
           };
@@ -102,7 +98,7 @@ This is a temporary component providing some still missing api on top of basic v
       }
     },
 
-    templateRenderer: function(cell) {
+    _templateRenderer: function(cell) {
       // TODO: Templatizing this on every render might be heavy. Any other options?
       this.templatize(this.$.grid.columns[cell.index].template);
       var instance = this.stamp();
@@ -111,14 +107,14 @@ This is a temporary component providing some still missing api on top of basic v
       Polymer.dom(cell.element).appendChild(instance.root);
     },
 
-    filterChanged: function() {
+    _filterChanged: function() {
       if (this.$.grid.data.source) {
         var size = this.filter === "" ? 1000 : undefined;
         this.$.grid.data.clearCache(size);
       }
     },
 
-    onSelect: function() {
+    _onSelect: function() {
       var selectedIndex = this.$.grid.selection.selected()[0];
 
       if (selectedIndex !== undefined) {
