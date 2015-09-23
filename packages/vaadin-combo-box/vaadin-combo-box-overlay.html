@@ -6,6 +6,7 @@
 <link rel='import' href='../iron-input/iron-input.html'>
 <link rel='import' href='vaadin-grid-ext.html'>
 <link rel='import' href='../iron-dropdown/iron-dropdown.html'>
+<link rel='import' href='../paper-input/paper-input-container.html'>
 
 <dom-module id="vaadin-combo-box-overlay">
   <template>
@@ -24,13 +25,12 @@
         width: 100%;
       }
 
-      :host:not([mobile]) #input-layout {
+      :host:not([mobile]) paper-input-container {
         display: none;
       }
 
-      #input-layout {
-        @apply(--layout-horizontal);
-        background: #fff;
+      paper-input-container {
+        background-color: #fff;
       }
 
       #filterinput {
@@ -51,12 +51,14 @@
     </style>
     <iron-dropdown id="dropdown" on-iron-overlay-closed="_closed" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
       <div class="dropdown-content">
-        <div id="input-layout">
-          <input id="filterinput" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
-          <iron-icon on-click="clear" icon="clear"></iron-icon>
-        </div>
 
-        <vaadin-grid-ext items=[[items]] selected-item="{{selected}}" filter=[[filter]]>
+        <paper-input-container always-float-label>
+          <label>[[label]]</label>
+          <input id="filterinput" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
+          <iron-icon on-click="clear" suffix icon="clear"></iron-icon>
+        </paper-input-container>
+
+        <vaadin-grid-ext on-select="close" items=[[items]] selected-item="{{selected}}" filter=[[filter]]>
           <content>
         </vaadin-grid-ext>
       </div>
