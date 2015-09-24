@@ -149,6 +149,7 @@
         if (this._isIOS) {
           // Cache scrollTop
           this._scrollTop = document.body.scrollTop;
+          document.body.scrollTop = 0;
         }
       }
 
