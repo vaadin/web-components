@@ -8,7 +8,6 @@
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel='import' href='../iron-icon/iron-icon.html'>
 <link rel='import' href='../paper-input/paper-input-container.html'>
-<link rel='import' href='../iron-media-query/iron-media-query.html'>
 
 <dom-module id="vaadin-combo-box">
   <template>
@@ -25,7 +24,6 @@
       #selected {
         padding-right: 5px;
         display: none;
-
         /* Prefix styles */
         font-family: 'Roboto', 'Noto', sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -57,18 +55,16 @@
         <label>[[label]]</label>
         <span id="selected" on-click="clear"></span>
         <input style="display: none" id="valueinput" is="iron-input" bind-value="[[fieldPopulated]]">
-        <input id="filterinput" is="iron-input" on-click="showDropdown" bind-value="{{filter}}">
-        <iron-icon icon="arrow-drop-down" suffix on-click="showDropdown"></iron-icon>
+        <input id="filterinput" is="iron-input" on-click="open" bind-value="{{filter}}">
+        <iron-icon icon="arrow-drop-down" suffix on-click="open"></iron-icon>
       </paper-input-container>
     </template>
 
     <!-- TODO: standalone combo-box -->
 
-    <vaadin-combo-box-overlay label="[[label]]" on-iron-overlay-closed="_clearFilter" mobile="[[mobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
+    <vaadin-combo-box-overlay label="[[label]]" on-iron-overlay-closed="_clearFilter" mobile="[[_isMobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
       <content select="template:not(.selected-template)">
     </vaadin-combo-box-overlay>
-
-    <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
 
   </template>
 </dom-module>
@@ -93,7 +89,15 @@
         value: false
       },
       _isMobile: {
-        observer: '_isMobileChanged'
+        observer: '_isMobileChanged',
+        value: function() {
+          try {
+            document.createEvent("TouchEvent");
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
       },
       _selectedTemplate: {
         value: function() {
@@ -106,7 +110,7 @@
       }
     },
 
-    _clearFilter: function(){
+    _clearFilter: function() {
       this.filter = "";
     },
 
@@ -141,7 +145,7 @@
     _filterChanged: function(filter) {
       if (this.filter !== undefined && this.filter.trim().length > 0) {
         if (!this.$.overlay.opened) {
-          this.showDropdown();
+          this.open();
         }
       }
       this._updateFieldPopulated();
@@ -152,18 +156,19 @@
     },
 
     _isMobileChanged: function() {
-      if (this.mobile == undefined) {
-        this.mobile = this._isMobile;
-        this.$.overlay.fitInto = this.mobile ? window : this;
-      }
+      this.$.overlay.fitInto = this._isMobile ? window : this;
     },
 
-    showDropdown: function() {
+    open: function() {
       this.$.overlay.open();
 
-      var input = (this.mobile ? this.$.overlay : this).$$("#filterinput");
+      var input = (this._isMobile ? this.$.overlay : this).$$("#filterinput");
       input.focus();
       //input.setSelectionRange(0, input.value.length);
+    },
+
+    close: function() {
+      this.$.overlay.close();
     },
 
     clear: function() {

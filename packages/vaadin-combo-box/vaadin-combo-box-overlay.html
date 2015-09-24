@@ -25,6 +25,19 @@
         width: 100%;
       }
 
+      :host[mobile] iron-dropdown,
+      :host[mobile]::content #contentWrapper,
+      :host[mobile] .dropdown-content,
+      :host[mobile] vaadin-grid-ext,
+      :host[mobile]::content vaadin-grid {
+        height: 100%;
+      }
+
+      :host[mobile] vaadin-grid-ext {
+        padding-bottom: 60px;
+        box-sizing: border-box;
+      }
+
       :host:not([mobile]) paper-input-container {
         display: none;
       }
@@ -41,6 +54,11 @@
         width: 10000px;
       }
 
+      :host[mobile] .dropdown-content {
+        max-width: 100%;
+        @apply(--layout-vertical);
+      }
+
       :host::content .v-grid-cell.v-grid.selected {
         background: #ddd;
       }
@@ -52,13 +70,13 @@
     <iron-dropdown id="dropdown" on-iron-overlay-closed="_closed" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
       <div class="dropdown-content">
 
-        <paper-input-container always-float-label>
+        <paper-input-container id="inputcontainer" always-float-label>
           <label>[[label]]</label>
           <input id="filterinput" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
           <iron-icon on-click="clear" suffix icon="clear"></iron-icon>
         </paper-input-container>
 
-        <vaadin-grid-ext on-select="close" items=[[items]] selected-item="{{selected}}" filter=[[filter]]>
+        <vaadin-grid-ext id="grid" on-select="close" items=[[items]] selected-item="{{selected}}" filter=[[filter]]>
           <content>
         </vaadin-grid-ext>
       </div>
@@ -85,13 +103,55 @@
       }
     },
 
+    _viewport: function() {
+      var viewport = document.querySelector('meta[name="viewport"]');
+      if (!viewport) {
+        viewport = document.createElement("meta");
+        viewport.setAttribute("name", "viewport");
+        document.querySelector('head').appendChild(viewport);
+      }
+      viewport._originalContent = viewport.content;
+      return viewport;
+    }(),
+
+    changeViewPort: function(key, val) {
+      var reg = new RegExp(key, "i"),
+        oldval = this._viewport.content;
+      var newval = reg.test(oldval) ? oldval.split(/,\s*/).map(function(v) {
+        return reg.test(v) ? key + "=" + val : v;
+      }).join(", ") : oldval += ", " + key + "=" + val;
+      this._viewport.content = newval;
+    },
+
     ready: function() {
       this.$.dropdown.focusTarget = this.$.filterinput;
+
+      // Disable scrolling the body while dropdown open (iOS)
+      this.addEventListener("touchmove", function(e) {
+        e.preventDefault();
+      });
+      // On iOs we'll need to handle available viewport height (while virtual keyboard open) somehow else
+      if (this._isIOS) {
+        // Temporary
+        this.$.grid.$.grid.style.maxHeight = "170px";
+      }
     },
 
     open: function() {
       this.filter = "";
       this.$.dropdown.open();
+
+      if (this.mobile) {
+        // Alter viewport
+        this.changeViewPort("maximum-scale", "1");
+        this.changeViewPort("width", "device-width");
+
+        if (this._isIOS) {
+          // Cache scrollTop
+          this._scrollTop = document.body.scrollTop;
+        }
+      }
+
     },
 
     close: function() {
@@ -100,6 +160,16 @@
 
     _closed: function() {
       this.fire("iron-overlay-closed");
+
+      if (this.mobile) {
+        // Restore original viewport content
+        this._viewport.content = this._viewport._originalContent;
+
+        if (this._isIOS) {
+          // Restore scrollTop
+          document.body.scrollTop = this._scrollTop;
+        }
+      }
     },
 
     properties: {
@@ -111,6 +181,9 @@
       },
       _useDefaultSelector: {
         value: false
+      },
+      _isIOS: {
+        value: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
       }
 
     }
