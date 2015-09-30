@@ -5,8 +5,7 @@
   "license": "Apache License 2.0",
   "devDependencies": {
     "bower": "latest",
-    "gulp": "latest",
-    "browser-sync": "latest"
+    "gulp": "latest"
   },
   "scripts": {
     "install": "node_modules/.bin/bower install --allow-root"

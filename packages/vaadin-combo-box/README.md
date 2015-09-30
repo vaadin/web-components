@@ -2,7 +2,7 @@ vaadin-combo-box
 ============
 To run the demo:
 ```shell
-$ npm install && gulp demo
+$ npm install && polyserve
 ```
 
 To run the tests:
