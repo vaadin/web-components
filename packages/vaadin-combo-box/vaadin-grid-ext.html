@@ -11,6 +11,17 @@ This is a temporary component providing some still missing api on top of basic v
       ::content vaadin-grid tbody tr.selected td.vaadin-grid {
         background-color: #ddd;
       }
+
+
+      ::content vaadin-grid tbody .vaadin-grid-row:after {
+        display: none !important;
+      }
+      ::content vaadin-grid tbody tr.selection-disabled td {
+        cursor: default;
+      }
+      ::content vaadin-grid tbody tr.selection-disabled td.vaadin-grid * {
+        opacity: 0.5 !important;
+      }
     </style>
     <vaadin-grid id="grid" on-select="_onSelect">
       <table>
@@ -56,6 +67,7 @@ This is a temporary component providing some still missing api on top of basic v
       var element = row.element;
       this.$.grid.data.getItem(row.index, function(e, i) {
         this.toggleClass("selected", i === this.selectedItem, element);
+        this.toggleClass("selection-disabled", i.selectionDisabled, element);
       }.bind(this));
     },
 
@@ -122,8 +134,10 @@ This is a temporary component providing some still missing api on top of basic v
         this.$.grid.data.getItem(selectedIndex, function(err, item) {
 
           this.$.grid.then(function() {
-            this.selectedItem = item;
-            this.fire("select");
+            if (!item.selectionDisabled) {
+              this.selectedItem = item;
+              this.fire("select");
+            }
           }.bind(this));
 
         }.bind(this));
