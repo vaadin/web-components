@@ -38,10 +38,27 @@
       #result {
         margin-top: 100px;
       }
+
+      span[suggestion] {
+        font-style: italic;
+      }
     </style>
 
     <div class="horizontal">
-      <vaadin-combo-box style="width: 60%" label="To" value={{email}} items="[[addresses]]"></vaadin-combo-box>
+      <vaadin-combo-box style="width: 60%" label="To" value={{email}} items="[[addresses]]">
+        <template>
+          <template is="dom-if" if=[[item.suggestion]]>
+            <span suggestion>[[item.value]]</span>
+          </template>
+          <template is="dom-if" if=[[!item.suggestion]]>
+            <span>[[item.value]]</span>
+          </template>
+        </template>
+
+        <template class="selected-template">
+          <span>[[item.value]]</span>
+        </template>
+      </vaadin-combo-box>
       <vaadin-combo-box style="width: 40%" label="Priority" value={{priority}} items="[[priorities]]"></vaadin-combo-box>
     </div>
 
@@ -71,7 +88,7 @@
         //History
         ["jouni@vaadin.com", "virkki@vaadin.com", "tepi@vaadin.com", "tuomas@vaadin.com"].forEach(function(addr) {
           if (addr.indexOf(req.filter) === 0 || !req.filter) {
-            filtered.push(addr);
+            filtered.push({value: addr});
           }
         });
 
@@ -80,7 +97,7 @@
             var addr = req.filter + suffix;
             var alreadyContains = filtered.filter(function(val){return val == addr}).length > 0;
             if (!alreadyContains) {
-              filtered.push(req.filter + suffix);
+              filtered.push({value : req.filter + suffix, suggestion: true});
             }
           });
         }
