@@ -47,12 +47,7 @@
     <div class="horizontal">
       <vaadin-combo-box style="width: 60%" label="To" value={{email}} items="[[addresses]]">
         <template>
-          <template is="dom-if" if=[[item.suggestion]]>
-            <span suggestion>[[item.value]]</span>
-          </template>
-          <template is="dom-if" if=[[!item.suggestion]]>
-            <span>[[item.value]]</span>
-          </template>
+          <span suggestion$=[[item.suggestion]]>[[item.value]]</span>
         </template>
 
         <template class="selected-template">
@@ -67,7 +62,7 @@
     <paper-button raised on-click="send">Send</paper-button>
 
     <div id="result">
-      <div><b>To:</b>&nbsp;<span>[[email]]</span></div>
+      <div><b>To:</b>&nbsp;<span>[[email.value]]</span></div>
       <div><b>Priority:</b>&nbsp;<span>[[priority]]</span></div>
       <div><b>Subject:</b>&nbsp;<span>[[subject]]</span></div>
       <div><b>Body:</b>&nbsp;<span>[[mailbody]]</span></div>
@@ -86,9 +81,13 @@
         var filtered = [];
 
         //History
-        ["jouni@vaadin.com", "virkki@vaadin.com", "tepi@vaadin.com", "tuomas@vaadin.com"].forEach(function(addr) {
-          if (addr.indexOf(req.filter) === 0 || !req.filter) {
-            filtered.push({value: addr});
+        [{value: "jouni@vaadin.com"},
+        {value: "virkki@vaadin.com", selectionDisabled: true },
+        {value:"tepi@vaadin.com", selectionDisabled: true},
+        {value:"tuomas@vaadin.com"}]
+        .forEach(function(addr) {
+          if (addr.value.indexOf(req.filter) === 0 || !req.filter) {
+            filtered.push(addr);
           }
         });
 
