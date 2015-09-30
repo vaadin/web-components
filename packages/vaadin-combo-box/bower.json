@@ -30,7 +30,8 @@
     "paper-input": "PolymerElements/paper-input#~1.0.12",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
     "polymer": "Polymer/polymer#^1.1.0",
-    "vaadin-grid": "0.9.0-beta2"
+    "vaadin-grid": "0.9.0-beta2",
+    "components-demo-resources": "vaadin/components-demo-resources#master"
   },
   "devDependencies": {
     "web-component-tester": "*",

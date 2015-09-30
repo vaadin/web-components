@@ -1,30 +1,54 @@
 <!doctype html>
 <html>
-
 <head>
+  <title>vaadin-combo-box Code Examples - basic</title>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-
-  <title>vaadin-combo-box demo</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
-  <link rel="import" href="../vaadin-combo-box.html">
-
+  <link rel="import" href="common.html">
 </head>
 
 <body unresolved>
+  <section>
+    <h1>vaadin-combo-box
+      <span>Basic</span>
+    </h1>
+    <table-of-contents select="h3" class="toc"></table-of-contents>
+  </section>
 
+  <section>
+    <h3>Basic use</h3>
+    <p>Description</p>
+    <code-example source>
+      <vaadin-combo-box label="Fruit" demo></vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
+      </code>
+    </code-example>
+  </section>
 
-  <div style="width: 250px">
+  <section>
+    <h3>Selection template</h3>
+    <p>Description</p>
+    <code-example source>
+      <vaadin-combo-box label="Fruit" demo>
+       <template class="selected-template">
+         <span>[[item]]</span>s I love
+       </template>
+      </vaadin-combo-box>
+      <code demo-var="combobox" hidden>
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
+      </code>
+    </code-example>
+  </section>
 
-
-    <template is="dom-bind">
-      <vaadin-combo-box items=[[fruits]] label="Fruit"></vaadin-combo-box>
-
-      <vaadin-combo-box items=[[managers]] label="Manager">
+  <section>
+    <h3>Multiple columns with item templates</h3>
+    <p>Description</p>
+    <code-example source>
+      <vaadin-combo-box label="Manager" demo>
         <template>
           <span>[[item.firstname]]</span>&nbsp;
           <span>[[item.lastname]]</span>
@@ -37,50 +61,91 @@
           <span>[[item.lastname]]</span>
         </template>
       </vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = [{
+          "firstname": "raul",
+          "lastname": "diez",
+          "thumbnail": "http://api.randomuser.me/portraits/thumb/men/39.jpg"
+        }, {
+          "firstname": "sonia",
+          "lastname": "benitez",
+          "thumbnail": "http://api.randomuser.me/portraits/thumb/women/91.jpg"
+        }, {
+          "firstname": "luis",
+          "lastname": "torres",
+          "thumbnail": "http://api.randomuser.me/portraits/thumb/men/11.jpg"
+        }, ];
+      </code>
+    </code-example>
+  </section>
 
-      <vaadin-combo-box items=[[numbers]] label="Number"></vaadin-combo-box>
+  <section>
+    <h3>Disabled items</h3>
+    <p>Description</p>
+    <code-example source>
+      <vaadin-combo-box label="Fruit" demo>
+        <template>
+          <span>[[item.name]]</span>
+        </template>
+        <template class="selected-template">
+          <span>[[item.name]]</span>
+        </template>
+      </vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = [{name: 'Apple'}, {name: 'Orange', selectionDisabled: true}, {name: 'Banana'}];
+      </code>
+    </code-example>
+  </section>
+
+  <section>
+    <h3>Custom filtering</h3>
+    <p>Description</p>
+    <code-example source>
+      <vaadin-combo-box label="Email" demo>
+        <template>
+          <span suggestion$=[[item.suggestion]]>[[item.value]]</span>
+        </template>
+
+        <template class="selected-template">
+          <span>[[item.value]]</span>
+        </template>
+      </vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = function(req) {
+          var filtered = [];
+
+          //History
+          [{value: "jouni@vaadin.com"},
+          {value: "virkki@vaadin.com"},
+          {value:"tepi@vaadin.com"},
+          {value:"tuomas@vaadin.com"}]
+          .forEach(function(addr) {
+            if (addr.value.indexOf(req.filter) === 0 || !req.filter) {
+              filtered.push(addr);
+            }
+          });
+
+          if (req.filter) {
+            ["@vaadin.com", "@gmail.com"].forEach(function(suffix) {
+              var addr = req.filter + suffix;
+              var alreadyContains = filtered.filter(function(email){return email.value == addr}).length > 0;
+              if (!alreadyContains) {
+                filtered.push({value : req.filter + suffix, suggestion: true});
+              }
+            });
+          }
+
+          req.success(filtered.slice(req.index, req.index + req.count), filtered.length);
+        };
+      </code>
+    </code-example>
+  </section>
 
 
 
-    </template>
-
-  </div>
-
-  <script>
-    HTMLImports.whenReady(function() {
-      var template = document.querySelector("template");
-
-      var managers = [{
-        "firstname": "raul",
-        "lastname": "diez",
-        "thumbnail": "http://api.randomuser.me/portraits/thumb/men/39.jpg"
-      }, {
-        "firstname": "sonia",
-        "lastname": "benitez",
-        "thumbnail": "http://api.randomuser.me/portraits/thumb/women/91.jpg"
-      }, {
-        "firstname": "luis",
-        "lastname": "torres",
-        "thumbnail": "http://api.randomuser.me/portraits/thumb/men/11.jpg"
-      }, ];
-
-      template.managers = function(req) {
-        var filtered = managers.filter(function(item) {
-          return (item.firstname + item.lastname).toLowerCase().indexOf(req.filter.toLowerCase()) != -1;
-        });
-        // Developer needs to be careful here not to return the total length
-        // of the results, but that of the _filtered results_
-        req.success(filtered.slice(req.index, req.index + req.count), filtered.length);
-      };
-
-      template.fruits = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
-
-
-      template.numbers = Array.apply(null, {length: 100}).map(Number.call, Number);
-
-
-    });
-  </script>
 
 </body>
 
