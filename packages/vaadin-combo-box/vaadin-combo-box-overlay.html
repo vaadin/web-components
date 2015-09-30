@@ -73,7 +73,7 @@
         <paper-input-container id="inputcontainer" always-float-label>
           <label>[[label]]</label>
           <input id="filterinput" on-keyup="filterItems" is="iron-input" bind-value="[[filter]]">
-          <iron-icon on-click="clear" suffix icon="clear"></iron-icon>
+          <iron-icon on-tap="clear" suffix icon="clear"></iron-icon>
         </paper-input-container>
 
         <vaadin-grid-ext id="grid" on-select="close" items=[[items]] selected-item="{{selected}}" filter=[[filter]]>

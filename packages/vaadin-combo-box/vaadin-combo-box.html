@@ -53,10 +53,10 @@
     <template is="dom-if" if="[[!standalone]]">
       <paper-input-container id="container">
         <label>[[label]]</label>
-        <span id="selected" on-click="clear"></span>
+        <span id="selected" on-tap="clear" on-touchend="_preventDefault"></span>
         <input style="display: none" id="valueinput" is="iron-input" bind-value="[[fieldPopulated]]">
-        <input id="filterinput" is="iron-input" on-click="open" bind-value="{{filter}}">
-        <iron-icon icon="arrow-drop-down" suffix on-click="open"></iron-icon>
+        <input id="filterinput" is="iron-input" on-touchend="_preventDefault" on-tap="open" bind-value="{{filter}}">
+        <iron-icon icon="arrow-drop-down" suffix on-touchend="_preventDefault" on-tap="open"></iron-icon>
       </paper-input-container>
     </template>
 
@@ -174,7 +174,11 @@
     clear: function() {
       this.value = undefined;
       this._clearFilter();
-    }
+    },
+
+    _preventDefault: function(e) {
+      e.preventDefault();
+    },
 
 
   }); // End Polymer prototype
