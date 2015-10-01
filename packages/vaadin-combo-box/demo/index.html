@@ -103,6 +103,11 @@
     <h3>Custom filtering</h3>
     <p>Description</p>
     <code-example source>
+      <style>
+        span[suggestion] {
+          font-style: italic;
+        }
+      </style>
       <vaadin-combo-box label="Email" demo>
         <template>
           <span suggestion$=[[item.suggestion]]>[[item.value]]</span>

@@ -111,17 +111,10 @@
         document.querySelector('head').appendChild(viewport);
       }
       viewport._originalContent = viewport.content;
+      viewport._vaadincomboboxContent =
+        "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
       return viewport;
     }(),
-
-    changeViewPort: function(key, val) {
-      var reg = new RegExp(key, "i"),
-        oldval = this._viewport.content;
-      var newval = reg.test(oldval) ? oldval.split(/,\s*/).map(function(v) {
-        return reg.test(v) ? key + "=" + val : v;
-      }).join(", ") : oldval += ", " + key + "=" + val;
-      this._viewport.content = newval;
-    },
 
     ready: function() {
       this.$.dropdown.focusTarget = this.$.filterinput;
@@ -142,9 +135,7 @@
       this.$.dropdown.open();
 
       if (this.mobile) {
-        // Alter viewport
-        this.changeViewPort("maximum-scale", "1");
-        this.changeViewPort("width", "device-width");
+        this._viewport.content = this._viewport._vaadincomboboxContent
 
         if (this._isIOS) {
           // Cache scrollTop
@@ -152,7 +143,6 @@
           document.body.scrollTop = 0;
         }
       }
-
     },
 
     close: function() {
