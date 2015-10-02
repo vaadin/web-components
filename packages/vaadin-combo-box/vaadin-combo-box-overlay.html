@@ -65,6 +65,7 @@
 
       #dropdown:not([aria-hidden]) .dropdown-content {
         overflow: hidden;
+        min-width: 150px;
       }
     </style>
     <iron-dropdown id="dropdown" on-iron-overlay-closed="_closed" opened={{opened}} focus-target=[[input]] fit-into="[[fitInto]]" vertical-align="top" with-backdrop=[[mobile]]>
@@ -141,6 +142,7 @@
           // Cache scrollTop
           this._scrollTop = document.body.scrollTop;
           document.body.scrollTop = 0;
+          document.body.scrollLeft = 0;
         }
       }
     },
