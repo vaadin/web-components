@@ -163,6 +163,22 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         /**
+         * Returns a boolean value if text content is 'true' or 'false'. Otherwise, the return value is the text content itself.
+         *
+         * @param {node} the node to parse the text content
+         **/
+        _parseTextContent: function (node) {
+            var content = node.textContent;
+            if ("true" == content) {
+                return true;
+            }
+            if ("false" == content) {
+                return false;
+            }
+            return content;
+        },
+
+        /**
          * Recursively load the configuration from the light-DOM elements.
          *
          * @param {object} dest the chart configuration object
@@ -195,7 +211,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                         result = node;
                     } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                         if (this._textContentNodes.indexOf(camelName) === -1 && this._hasOnlyTextContent(node)) {
-                            result = node.textContent;
+                            result = this._parseTextContent(node);
                         } else {
                             result = {};
                             this._loadFromNode(result, node);
