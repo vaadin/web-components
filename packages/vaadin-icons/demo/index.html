@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>vaadin-icons</title>
+
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../vaadin-icons.html" />
+
+        <style>
+            .icon {
+                display: inline-block;
+                margin: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <template is="dom-bind">
+            <iron-meta type="iconset" list="{{iconsets}}"></iron-meta>
+            <template is="dom-repeat" items="{{iconsets}}">
+                <template is="dom-repeat" items="{{getIconNames(item)}}">
+                    <div class="icon">
+                        <iron-icon icon="[[item]]"></icon-icon>
+                        <span>{{item}}</span>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <script>
+            document.querySelector('[is=dom-bind]').getIconNames = function(iconset) {
+                return iconset.getIconNames();
+            };
+        </script>
+    </body>
+</html>
