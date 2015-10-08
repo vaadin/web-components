@@ -1,0 +1,30 @@
+{
+  "name": "vaadin-icons",
+  "version": "0.0.0",
+  "homepage": "https://github.com/vaadin/vaadin-icons",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "vaadin",
+    "icons",
+    "vaadin-icons"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.1"
+  }
+}
