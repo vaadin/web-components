@@ -7,7 +7,7 @@ git clone https://github.com/vaadin/vaadin-icons-files.git
 cat > vaadin-icons.html <<'ENDL'
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
-<iron-iconset-svg name="vaadin-icons" size="24">
+<iron-iconset-svg name="vaadin-icons" size="64">
 <svg><defs>
 ENDL
 
