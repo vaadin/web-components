@@ -10,7 +10,15 @@
         <style>
             .icon {
                 display: inline-block;
-                margin: 8px;
+                vertical-align: top;
+                margin: 8px 8px 16px 8px;
+                text-align: center;
+                width: 95px;
+            }
+            .icon span {
+                font-family: sans-serif;
+                font-size: 10px;
+                display: block;
             }
         </style>
     </head>
@@ -20,7 +28,7 @@
             <template is="dom-repeat" items="{{iconsets}}">
                 <template is="dom-repeat" items="{{getIconNames(item)}}">
                     <div class="icon">
-                        <iron-icon icon="[[item]]"></icon-icon>
+                        <iron-icon icon="[[item]]"></iron-icon>
                         <span>{{item}}</span>
                     </div>
                 </template>
