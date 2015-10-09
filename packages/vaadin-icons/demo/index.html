@@ -14,11 +14,26 @@
                 margin: 8px 8px 16px 8px;
                 text-align: center;
                 width: 95px;
+                cursor: default;
             }
             .icon span {
                 font-family: sans-serif;
                 font-size: 10px;
                 display: block;
+                color: #616161;
+                -webkit-transition: all 600ms;
+                transition: all 600ms;
+            }
+            .icon:hover span {
+                color: #00b4f0;
+            }
+            iron-icon {
+                fill: #616161;
+                -webkit-transition: all 200ms;
+                transition: all 200ms;
+            }
+            .icon:hover iron-icon {
+                fill: #00b4f0;
             }
         </style>
     </head>
