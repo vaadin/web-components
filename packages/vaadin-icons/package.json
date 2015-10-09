@@ -1,7 +1,5 @@
 {
   "name": "vaadin-icons",
-  "version": "0.0.0",
-  "description": "",
   "author": "Vaadin Ltd",
   "devDependencies": {
     "cheerio": "^0.19.0"
