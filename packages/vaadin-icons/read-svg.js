@@ -4,7 +4,10 @@ var file = process.argv[2];
 var id = file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.svg'));
 
 var svgContent = fs.readFileSync(file, 'utf8');
-var svg = cheerio.load(svgContent, { xmlMode: true });
+var svg = cheerio.load(svgContent, { xmlMode: true })('svg');
 
-var meat = cheerio.xml(svg('svg').children());
-console.log('<g id="' + id + '">' + meat + '</g>');
+// Remove fill attributes.
+svg.children('[fill]').removeAttr('fill');
+
+// Output the "meat" of the SVG as group element.
+console.log('<g id="' + id + '">' + svg.children() + '</g>');
