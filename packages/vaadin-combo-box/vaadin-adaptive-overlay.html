@@ -7,7 +7,7 @@
 
 <dom-module id="vaadin-adaptive-overlay">
   <style>
-    #dropdown {
+    #dropdown[fullscreen] {
       width: 100%;
       height: 100%;
     }
@@ -15,6 +15,10 @@
     #dropdown[fullscreen]::content #contentWrapper,
     #dropdown[fullscreen] .dropdown-content {
       height: 100%;
+    }
+
+    :host .dropdown-content {
+      width: 100vw;
     }
   </style>
 
