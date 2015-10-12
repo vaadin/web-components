@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo basic tests</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+
+<test-fixture id="combobox">
+  <template>
+    <vaadin-combo-box></vaadin-combo-box>
+  </template>
+</test-fixture>
+
+
+<script>
+  describe('toggling the dropdown', function() {
+    var combobox;
+
+    beforeEach(function() {
+      combobox = fixture('combobox');
+    });
+
+    describe('opening', function() {
+      it('should open on click', function() {
+        MockInteractions.tap(combobox.$$('iron-icon'));
+
+        expect(combobox.opened).to.be.true;
+      });
+
+      it('should open on function call', function() {
+        combobox.open();
+
+        expect(combobox.opened).to.be.true;
+      });
+    });
+  });
+</script>
+
+</body>
+
+</html>

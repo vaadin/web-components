@@ -1,0 +1,37 @@
+<!--
+@element vaadin-adaptive-overlay
+-->
+
+<link rel='import' href='../polymer/polymer.html'>
+<link rel='import' href='../iron-dropdown/iron-dropdown.html'>
+
+<dom-module id="vaadin-adaptive-overlay">
+  <template>
+    <iron-dropdown id="dropdown" opened={{opened}}>
+      <div class="dropdown-content">
+        <content>
+      </div>
+    </iron-dropdown>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "vaadin-adaptive-overlay",
+
+    properties: {
+      /**
+       * True if the overlay is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        notify: true,
+        value: false
+      }
+    },
+
+    open: function() {
+      this.$.dropdown.open();
+    }
+  });
+</script>
