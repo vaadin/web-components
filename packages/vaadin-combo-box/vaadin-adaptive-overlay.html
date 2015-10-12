@@ -6,8 +6,20 @@
 <link rel='import' href='../iron-dropdown/iron-dropdown.html'>
 
 <dom-module id="vaadin-adaptive-overlay">
+  <style>
+    #dropdown {
+      width: 100%;
+      height: 100%;
+    }
+
+    #dropdown[fullscreen]::content #contentWrapper,
+    #dropdown[fullscreen] .dropdown-content {
+      height: 100%;
+    }
+  </style>
+
   <template>
-    <iron-dropdown id="dropdown" opened={{opened}}>
+    <iron-dropdown id="dropdown" opened={{opened}} fullscreen$=[[_fullScreen]]>
       <div class="dropdown-content">
         <content>
       </div>
@@ -27,7 +39,43 @@
         type: Boolean,
         notify: true,
         value: false
-      }
+      },
+
+      _fullScreen: {
+        type: Boolean,
+        observer: '_fullScreenChanged',
+        value: function() {
+          try {
+            document.createEvent("TouchEvent");
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      },
+    },
+
+    _fullScreenChanged: function() {
+      this.$.dropdown.fitInto = this._fullScreen ? document.documentElement : this.parentElement;
+      this.$.dropdown.positionTarget = this._fullScreen ? document.documentElement : this;
+    },
+
+    _patchIronFitBehavior: function() {
+      // Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
+      var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
+      this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
+        sd(extent === "Width" ? {
+          left: 0
+        } : rect, positionedBy, start, end, extent);
+      };
+    },
+
+    ready: function() {
+      this._patchIronFitBehavior();
+    },
+
+    attached: function() {
+      this._fullScreenChanged();
     },
 
     open: function() {
