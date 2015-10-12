@@ -1,0 +1,69 @@
+var args = require('yargs').argv;
+var chalk = require('chalk');
+var wct = require('web-component-tester').test;
+var gulp = require('gulp')
+
+function cleanDone(done) {
+  return function(error) {
+    if (error) {
+      // Pretty error for gulp.
+      error = new Error(chalk.red(error.message || error));
+      error.showStack = false;
+    }
+    done(error);
+  };
+}
+
+function localAddress() {
+  var ip, tun, ifaces = require('os').networkInterfaces();
+  Object.keys(ifaces).forEach(function (ifname) {
+    ifaces[ifname].forEach(function (iface) {
+      if ('IPv4' == iface.family && !iface.internal) {
+        if (!ip) ip = iface.address;
+        if (/tun/.test(ifname)) tun = iface.address;
+      }
+    });
+  });
+  return tun || ip;
+}
+
+function test(options, done) {
+  wct(options, cleanDone(done));
+}
+
+function testSauce(browsers, done) {
+  test(
+    {
+      browserOptions: {
+        name: localAddress() + ' / ' + new Date(),
+        build: 'vaadin-combo-box'
+      },
+      plugins: {
+        sauce: {
+          username: args.sauceUsername,
+          accessKey: args.sauceAccessKey,
+          browsers: browsers
+        }
+      },
+      root: '.',
+      webserver: {
+        port: 2000,
+        hostname: localAddress()
+      }
+    }, done);
+};
+
+gulp.task('test:desktop', function(done) {
+  testSauce([
+    'Windows 10/chrome',
+    'Windows 10/firefox',
+    'Windows 10/microsoftedge',
+    'Windows 10/internet explorer',
+    'OS X 10.11/safari'], done);
+});
+
+gulp.task('test:mobile', function(done) {
+  testSauce([
+    'OS X 10.11/iphone@9.0',
+    'Linux/android@5.1'], done);
+});

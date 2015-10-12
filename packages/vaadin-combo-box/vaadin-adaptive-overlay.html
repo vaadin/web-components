@@ -55,21 +55,27 @@
       },
     },
 
-    _fullScreenChanged: function(fullScreen) {
-      this.$.dropdown.fitInto = fullScreen ? document.documentElement : this.parentElement;
-      this.$.dropdown.positionTarget = fullScreen ? document.documentElement : this;
+    _fullScreenChanged: function() {
+      this.$.dropdown.fitInto = this._fullScreen ? document.documentElement : this.parentElement;
+      this.$.dropdown.positionTarget = this._fullScreen ? document.documentElement : this;
+    },
+
+    _patchIronFitBehavior: function() {
+      // Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
+      var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
+      this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
+        sd(extent === "Width" ? {
+          left: 0
+        } : rect, positionedBy, start, end, extent);
+      };
     },
 
     ready: function() {
-      if (!this.mobile) {
-        // Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
-        var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
-        this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
-          sd(extent === "Width" ? {
-            left: 0
-          } : rect, positionedBy, start, end, extent);
-        };
-      }
+      this._patchIronFitBehavior();
+    },
+
+    attached: function() {
+      this._fullScreenChanged();
     },
 
     open: function() {
