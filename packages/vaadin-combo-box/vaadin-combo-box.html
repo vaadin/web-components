@@ -11,9 +11,9 @@
 
 <dom-module id="vaadin-combo-box">
   <template>
-    <paper-input-container>
+    <paper-input-container on-tap='open'>
       <input is="iron-input">
-      <iron-icon icon="arrow-drop-down" suffix on-tap='open'></iron-icon>
+      <iron-icon icon="arrow-drop-down" suffix></iron-icon>
     </paper-input-container>
 
     <vaadin-adaptive-overlay id="overlay" opened={{opened}}>
