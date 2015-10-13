@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <title>vaadin-combo-box Code Examples - basic</title>
   <meta charset="UTF-8">
@@ -16,138 +17,40 @@
     <table-of-contents select="h3" class="toc"></table-of-contents>
   </section>
 
-  <section>
-    <h3>Basic use</h3>
-    <p>Description</p>
-    <code-example source>
-      <vaadin-combo-box label="Fruit" demo></vaadin-combo-box>
-      <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
-        combobox.items = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
-      </code>
-    </code-example>
-  </section>
 
   <section>
-    <h3>Selection template</h3>
-    <p>Description</p>
-    <code-example source>
-      <vaadin-combo-box label="Fruit" demo>
-       <template class="selected-template">
-         <span>[[item]]</span>s I love
-       </template>
-      </vaadin-combo-box>
-      <code demo-var="combobox" hidden>
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
-        combobox.items = ['Apple', 'Orange', 'Banana', 'Pear', 'Lemon'];
-      </code>
-    </code-example>
-  </section>
+    <h3>Opening and closing</h3>
+    <p><code>vaadin-combo-box</code> dropdown list can be opened by cliking/tapping the element
+    or programmatically with the <code>open()</code> method</p>
+    <p>Clicking outside the dropdown or tapping the close icon on fullscreen mode closes it.
+    <code>vaadin-combo-box</code> also has an explicit <code>close()</code> method.</p>
 
-  <section>
-    <h3>Multiple columns with item templates</h3>
-    <p>Description</p>
     <code-example source>
-      <vaadin-combo-box label="Manager" demo>
-        <template>
-          <span>[[item.firstname]]</span>&nbsp;
-          <span>[[item.lastname]]</span>
-        </template>
-        <template>
-          <img src$="[[item.thumbnail]]" style="width: 20px;">
-        </template>
-
-        <template class="selected-template">
-          <span>[[item.lastname]]</span>
-        </template>
-      </vaadin-combo-box>
-      <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
-        combobox.items = [{
-          "firstname": "raul",
-          "lastname": "diez",
-          "thumbnail": "http://api.randomuser.me/portraits/thumb/men/39.jpg"
-        }, {
-          "firstname": "sonia",
-          "lastname": "benitez",
-          "thumbnail": "http://api.randomuser.me/portraits/thumb/women/91.jpg"
-        }, {
-          "firstname": "luis",
-          "lastname": "torres",
-          "thumbnail": "http://api.randomuser.me/portraits/thumb/men/11.jpg"
-        }, ];
-      </code>
-    </code-example>
-  </section>
-
-  <section>
-    <h3>Disabled items</h3>
-    <p>Description</p>
-    <code-example source>
-      <vaadin-combo-box label="Fruit" demo>
-        <template>
-          <span>[[item.name]]</span>
-        </template>
-        <template class="selected-template">
-          <span>[[item.name]]</span>
-        </template>
-      </vaadin-combo-box>
-      <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
-        combobox.items = [{name: 'Apple'}, {name: 'Orange', selectionDisabled: true}, {name: 'Banana'}];
-      </code>
-    </code-example>
-  </section>
-
-  <section>
-    <h3>Custom filtering</h3>
-    <p>Description</p>
-    <code-example source>
+      <button id="togglebutton">Toggle dropdown</button>
       <style>
-        span[suggestion] {
-          font-style: italic;
+        #dropdown {
+          /* Temporary style */
+          background: #eee;
         }
       </style>
-      <vaadin-combo-box label="Email" demo>
-        <template>
-          <span suggestion$=[[item.suggestion]]>[[item.value]]</span>
-        </template>
+      <vaadin-combo-box demo></vaadin-combo-box>
 
-        <template class="selected-template">
-          <span>[[item.value]]</span>
-        </template>
-      </vaadin-combo-box>
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector("vaadin-combo-box");
-        combobox.items = function(req) {
-          var filtered = [];
+        combobox.items = ['foo', 'bar', 'baz'];
 
-          //History
-          [{value: "jouni@vaadin.com"},
-          {value: "virkki@vaadin.com"},
-          {value:"tepi@vaadin.com"},
-          {value:"tuomas@vaadin.com"}]
-          .forEach(function(addr) {
-            if (addr.value.indexOf(req.filter) === 0 || !req.filter) {
-              filtered.push(addr);
-            }
-          });
-
-          if (req.filter) {
-            ["@vaadin.com", "@gmail.com"].forEach(function(suffix) {
-              var addr = req.filter + suffix;
-              var alreadyContains = filtered.filter(function(email){return email.value == addr}).length > 0;
-              if (!alreadyContains) {
-                filtered.push({value : req.filter + suffix, suggestion: true});
-              }
-            });
+        var togglebutton = document.querySelector("#togglebutton");
+        togglebutton.addEventListener('click', function() {
+          if (combobox.opened) {
+            combobox.close();
+          } else {
+            combobox.open();
           }
-
-          req.success(filtered.slice(req.index, req.index + req.count), filtered.length);
-        };
+        });
       </code>
     </code-example>
   </section>
+
 
 
 
