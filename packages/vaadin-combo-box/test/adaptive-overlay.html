@@ -48,21 +48,18 @@
           });
         });
 
-        afterEach(function(done) {
-          overlay.close();
-          Polymer.Base.async(function() {
-            done();
-          });
-        });
-
-        it('should have correct target elements', function() {
+        it('should have correct target elements', function(done) {
           expect(overlay.$.dropdown.fitInto).to.be.equal(document.documentElement);
           expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
+          overlay.close();
+          Polymer.Base.async(done);
         });
 
-        it('should have correct dimensions', function() {
+        it('should have correct dimensions', function(done) {
           expect(dropdownContent.clientWidth).to.equal(document.documentElement.clientWidth);
           expect(dropdownContent.clientHeight).to.equal(document.documentElement.clientHeight);
+          overlay.close();
+          Polymer.Base.async(done);
         });
 
         it('should alter the viewport info', function(done) {
