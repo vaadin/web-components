@@ -215,7 +215,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             if (!this.initialized) {
                 var chartContainer = document.createElement('div');
                 chartContainer.id = "chartContainer";
-                chartContainer.setAttribute("style","height:100%; width:100%;");
+                chartContainer.setAttribute("style", "height:100%; width:100%;");
                 Polymer.dom(this.root).appendChild(chartContainer);
 
                 var licenseChecker = document.createElement('vaadin-license-checker');
@@ -289,6 +289,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
     }
 
+    /**
+     * @polymerBehavior
+     */
     VaadinCharts.ChartBehavior = [VaadinCharts.ConfigurationReaderBehavior, VaadinCharts.ChartCommonBehavior]
 
 </script>
