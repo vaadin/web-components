@@ -43,6 +43,9 @@
         observer: '_openedChanged'
       },
 
+      /**
+       * True if the overlay works in full screen mode (e.g. on mobile devices).
+       */
       _fullScreen: {
         type: Boolean,
         observer: '_fullScreenChanged',
@@ -56,6 +59,9 @@
         }
       },
 
+      /**
+       * Current viewport config
+       */
       _viewportInfo: {
         readOnly: true,
         value: function() {
@@ -69,7 +75,7 @@
           viewport._fullScreenContent =
             "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
           return viewport;
-        },
+        }
       }
     },
 
@@ -86,14 +92,21 @@
       }
     },
 
-    _fullScreenChanged: function() {
+    /**
+     * Called when the value of `_fullScreen` changes.
+     *
+     * @param {boolean} _fullScreen True if the overlay works in full screen mode (e.g. on mobile devices).
+     */
+    _fullScreenChanged: function(_fullScreen) {
       var parent = this.domHost || this.parentElement;
       this.$.dropdown.fitInto = this._fullScreen ? document.documentElement : parent;
       this.$.dropdown.positionTarget = this._fullScreen ? document.documentElement : this;
     },
 
+    /**
+     * Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
+     */
     _patchIronFitBehavior: function() {
-      // Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
       var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
         sd(extent === "Width" ? {
@@ -110,20 +123,32 @@
       this._fullScreenChanged();
     },
 
+    /**
+     * Open the overlay.
+     */
     open: function() {
       this.$.dropdown.open();
     },
 
+    /**
+     * Close the overlay.
+     */
     close: function() {
       this.$.dropdown.close();
     },
 
+    /**
+     * Called when an `iron-overlay-opened` event fires.
+     */
     _opened: function() {
       if (this._fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
       }
     },
 
+    /**
+     * Called when an `iron-overlay-closed` event fires.
+     */
     _closed: function() {
       if (this._fullScreen) {
         this._viewportInfo.content = this._viewportInfo._originalContent;
