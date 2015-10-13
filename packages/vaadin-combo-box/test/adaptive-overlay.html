@@ -27,9 +27,12 @@
 <script>
   describe('overlay modes', function() {
     var overlay;
-
+    var content;
+    var dropdownContent;
     beforeEach(function() {
       overlay = fixture('overlay').firstElementChild;
+      content = Polymer.dom(overlay).querySelector('.content');
+      dropdownContent = Polymer.dom(overlay.root).querySelector('.dropdown-content');
     });
 
     describe('fullscreen', function() {
@@ -48,8 +51,8 @@
       });
 
       it('should have correct dimensions', function() {
-        expect(overlay.$.dropdown.clientWidth).to.equal(document.documentElement.clientWidth);
-        expect(overlay.$.dropdown.clientHeight).to.equal(document.documentElement.clientHeight);
+        expect(dropdownContent.clientWidth).to.equal(document.documentElement.clientWidth);
+        expect(dropdownContent.clientHeight).to.equal(document.documentElement.clientHeight);
       });
 
     });
@@ -74,7 +77,7 @@
       });
 
       it('should have have the height as content has', function() {
-        expect(overlay.$.dropdown.clientHeight).to.equal(overlay.querySelector('div.content').clientHeight);
+        expect(overlay.$.dropdown.clientHeight).to.equal(content.clientHeight);
       });
 
     });
