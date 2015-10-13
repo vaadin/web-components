@@ -20,7 +20,7 @@
   </style>
 
   <template>
-    <iron-dropdown id="dropdown" opened={{opened}} fullscreen$=[[_fullScreen]]>
+    <iron-dropdown id="dropdown" opened={{opened}} fullscreen$=[[_fullScreen]] on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened">
       <div class="dropdown-content">
         <content>
       </div>
@@ -54,6 +54,22 @@
           }
         }
       },
+
+      _viewportInfo: {
+        readOnly: true,
+        value: function() {
+          var viewport = document.querySelector('meta[name="viewport"]');
+          if (!viewport) {
+            viewport = document.createElement("meta");
+            viewport.setAttribute("name", "viewport");
+            document.querySelector('head').appendChild(viewport);
+          }
+          viewport._originalContent = viewport.content;
+          viewport._fullScreenContent =
+            "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
+          return viewport;
+        },
+      }
     },
 
     _fullScreenChanged: function() {
@@ -82,6 +98,23 @@
 
     open: function() {
       this.$.dropdown.open();
+    },
+
+    close: function() {
+      this.$.dropdown.close();
+    },
+
+    _opened: function() {
+      if (this._fullScreen) {
+        this._viewportInfo.content = this._viewportInfo._fullScreenContent;
+      }
+    },
+
+    _closed: function() {
+      if (this._fullScreen) {
+        this._viewportInfo.content = this._viewportInfo._originalContent;
+      }
     }
+
   });
 </script>
