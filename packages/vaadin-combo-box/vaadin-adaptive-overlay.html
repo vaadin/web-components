@@ -39,7 +39,8 @@
       opened: {
         type: Boolean,
         notify: true,
-        value: false
+        value: false,
+        observer: '_openedChanged'
       },
 
       _fullScreen: {
@@ -69,6 +70,19 @@
             "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
           return viewport;
         },
+      }
+    },
+
+    /**
+     * Called when the value of `opened` changes.
+     *
+     * @param {boolean} opened True if the overlay is opened.
+     */
+    _openedChanged: function(opened) {
+      if (opened) {
+        this.open();
+      } else {
+        this.close();
       }
     },
 
