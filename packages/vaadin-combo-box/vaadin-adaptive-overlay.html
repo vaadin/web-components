@@ -10,7 +10,7 @@
     #dropdown[fullscreen],
     #dropdown[fullscreen]::content #contentWrapper,
     #dropdown[fullscreen] .dropdown-content {
-      height: 100%;
+      height: 100vh;
     }
 
     :host .dropdown-content {
@@ -56,7 +56,7 @@
     },
 
     _fullScreenChanged: function() {
-      this.$.dropdown.fitInto = this._fullScreen ? document.documentElement : this.parentElement;
+      this.$.dropdown.fitInto = this._fullScreen ? document.documentElement : Polymer.dom(this).parentNode.host;
       this.$.dropdown.positionTarget = this._fullScreen ? document.documentElement : this;
     },
 
