@@ -30,7 +30,7 @@
 
     describe('opening', function() {
       it('should open on click', function() {
-        MockInteractions.tap(combobox.$$('iron-icon'));
+        combobox.$$('paper-input-container').fire('tap')
 
         expect(combobox.opened).to.be.true;
       });
