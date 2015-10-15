@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo basic tests</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+
+  <test-fixture id="overlay">
+    <template>
+      <div style="width: 100px; height: 100px;">
+        <vaadin-adaptive-overlay>
+          <div class="content">content</div>
+        </vaadin-adaptive-overlay>
+      </div>
+    </template>
+  </test-fixture>
+
+
+  <script>
+    describe('overlay modes', function() {
+      var overlay;
+      var content;
+      var dropdownContent;
+      var viewportInfo;
+
+      beforeEach(function() {
+        overlay = fixture('overlay').firstElementChild;
+        content = Polymer.dom(overlay).querySelector('.content');
+        dropdownContent = Polymer.dom(overlay.root).querySelector('.dropdown-content');
+        viewportInfo = document.querySelector("meta[name='viewport']");
+      });
+
+      describe('fullscreen', function() {
+
+        beforeEach(function(done) {
+          overlay._fullScreen = true;
+          overlay.open();
+          Polymer.Base.async(function() {
+            done();
+          });
+        });
+
+        it('should have correct target elements', function(done) {
+          expect(overlay.$.dropdown.fitInto).to.be.equal(document.documentElement);
+          expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
+          overlay.close();
+          Polymer.Base.async(done);
+        });
+
+        it('should have correct dimensions', function(done) {
+          expect(dropdownContent.clientWidth).to.equal(document.documentElement.clientWidth);
+          expect(dropdownContent.clientHeight).to.equal(document.documentElement.clientHeight);
+          overlay.close();
+          Polymer.Base.async(done);
+        });
+
+        it('should alter the viewport info', function(done) {
+          expect(viewportInfo.content).to.equal(overlay._viewportInfo._fullScreenContent);
+          overlay.close();
+          Polymer.Base.async(function() {
+            expect(viewportInfo.content).not.to.equal(overlay._viewportInfo._fullScreenContent);
+            done();
+          });
+        });
+
+      });
+
+      describe('non-fullscreen', function() {
+
+        beforeEach(function(done) {
+          overlay._fullScreen = false;
+          overlay.open();
+          Polymer.Base.async(function() {
+            done();
+          });
+        });
+
+        it('should have correct target elements', function() {
+          expect(overlay.$.dropdown.fitInto).to.equal(overlay.parentElement);
+          expect(overlay.$.dropdown.positionTarget).to.equal(overlay);
+        });
+
+        it('should have the same width as container has', function() {
+          expect(overlay.$.dropdown.clientWidth).to.equal(100);
+        });
+
+        it('should have have the height as content has', function() {
+          expect(overlay.$.dropdown.clientHeight).to.equal(content.clientHeight);
+        });
+
+        it('should not alter the viewport info', function() {
+          expect(viewportInfo.content).not.to.equal(overlay._viewportInfo._fullScreenContent);
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

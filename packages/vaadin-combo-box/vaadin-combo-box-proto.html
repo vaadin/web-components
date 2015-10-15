@@ -1,0 +1,186 @@
+<!--
+@element vaadin-combo-box
+-->
+
+<link rel='import' href='../polymer/polymer.html'>
+<link rel='import' href='vaadin-combo-box-overlay.html'>
+<link rel='import' href='../iron-input/iron-input.html'>
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel='import' href='../iron-icon/iron-icon.html'>
+<link rel='import' href='../paper-input/paper-input-container.html'>
+
+<dom-module id="vaadin-combo-box">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-horizontal);
+        position: relative;
+      }
+
+      #container {
+        width: 100%;
+        overflow: hidden;
+      }
+
+      #selected {
+        padding-right: 5px;
+        display: none;
+        /* Prefix styles */
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+
+      ::content .paper-input-container {
+        white-space: nowrap;
+      }
+
+      .selected-wrapper {
+        color: #fff;
+        background-color: rgb(0, 125, 217);
+        padding: 2px;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+
+      .selected-wrapper:after {
+        content: " x";
+      }
+    </style>
+
+    <template is="dom-if" if="[[!standalone]]">
+      <paper-input-container id="container">
+        <label>[[label]]</label>
+        <span id="selected" on-tap="clear" on-touchend="_preventDefault"></span>
+        <input style="display: none" id="valueinput" is="iron-input" bind-value="[[fieldPopulated]]">
+        <input id="filterinput" is="iron-input" on-touchend="_preventDefault" on-tap="open" bind-value="{{filter}}">
+        <iron-icon icon="arrow-drop-down" suffix on-touchend="_preventDefault" on-tap="open"></iron-icon>
+      </paper-input-container>
+    </template>
+
+    <!-- TODO: standalone combo-box -->
+
+    <vaadin-combo-box-overlay label="[[label]]" on-iron-overlay-closed="_clearFilter" mobile="[[_isMobile]]" filter="[[filter]]" items=[[items]] selected={{value}} id="overlay">
+      <content select="template:not(.selected-template)">
+    </vaadin-combo-box-overlay>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: "vaadin-combo-box",
+
+    behaviors: [Polymer.Templatizer],
+
+    properties: {
+      value: {
+        notify: true,
+        observer: "_valueChanged"
+      },
+      filter: {
+        value: "",
+        observer: "_filterChanged"
+      },
+      standalone: {
+        value: false
+      },
+      _isMobile: {
+        observer: '_isMobileChanged',
+        value: function() {
+          try {
+            document.createEvent("TouchEvent");
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      },
+      _selectedTemplate: {
+        value: function() {
+          return Polymer.dom(this).querySelector("template.selected-template");
+        },
+        observer: "_selectedTemplateChanged"
+      },
+      fieldPopulated: {
+        value: false
+      }
+    },
+
+    _clearFilter: function() {
+      this.filter = "";
+    },
+
+    _selectedTemplateChanged: function(template) {
+      this.templatize(template);
+    },
+
+    _valueChanged: function(value) {
+      var selected = this.$$("#selected");
+      var elem = document.createElement("span");
+      elem.setAttribute("class", "selected-wrapper");
+      selected.innerHTML = "";
+      Polymer.dom(selected).appendChild(elem);
+
+
+      if (this._selectedTemplate) {
+        var instance = this.stamp();
+        instance.item = value;
+        Polymer.dom(elem).appendChild(instance.root);
+      } else {
+        Polymer.dom(elem).textContent = value;
+      }
+
+      var hasValue = value !== undefined && value.toString().trim().length > 0;
+      selected.style.display = hasValue ? "inline-block" : "none";
+
+      this._clearFilter();
+      this._updateFieldPopulated();
+      this.$.overlay.close();
+    },
+
+    _filterChanged: function(filter) {
+      if (this.filter !== undefined && this.filter.trim().length > 0) {
+        if (!this.$.overlay.opened) {
+          this.open();
+        }
+      }
+      this._updateFieldPopulated();
+    },
+
+    _updateFieldPopulated: function() {
+      this.fieldPopulated = (this.filter !== undefined && this.filter.trim().length > 0) || this.value !== undefined;
+    },
+
+    _isMobileChanged: function() {
+      this.$.overlay.fitInto = this._isMobile ? window : this;
+    },
+
+    open: function() {
+      this.$.overlay.open();
+
+      var input = (this._isMobile ? this.$.overlay : this).$$("#filterinput");
+      input.focus();
+      //input.setSelectionRange(0, input.value.length);
+    },
+
+    close: function() {
+      this.$.overlay.close();
+    },
+
+    clear: function() {
+      this.value = undefined;
+      this._clearFilter();
+    },
+
+    _preventDefault: function(e) {
+      e.preventDefault();
+    },
+
+
+  }); // End Polymer prototype
+</script>

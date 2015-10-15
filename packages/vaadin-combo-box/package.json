@@ -5,7 +5,10 @@
   "license": "Apache License 2.0",
   "devDependencies": {
     "bower": "latest",
-    "gulp": "latest"
+    "chalk": "^1.1.1",
+    "gulp": "latest",
+    "web-component-tester": "^3.3.25",
+    "yargs": "^3.27.0"
   },
   "scripts": {
     "install": "node_modules/.bin/bower install --allow-root"
