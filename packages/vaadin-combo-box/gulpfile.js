@@ -55,11 +55,11 @@ function testSauce(browsers, done) {
 
 gulp.task('test:desktop', function(done) {
   testSauce([
-    'Windows 10/chrome',
-    'Windows 10/firefox',
-    'Windows 10/microsoftedge',
-    'Windows 10/internet explorer',
-    'OS X 10.11/safari'], done);
+    'Windows 10/chrome@45',
+    'Windows 10/firefox@41',
+    'Windows 10/microsoftedge@20',
+    'Windows 10/internet explorer@11',
+    'OS X 10.11/safari@8.1'], done);
 });
 
 gulp.task('test:mobile', function(done) {
