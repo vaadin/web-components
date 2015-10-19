@@ -27,12 +27,6 @@
 
     <code-example source>
       <button id="togglebutton">Toggle dropdown</button>
-      <style>
-        #dropdown {
-          /* Temporary style */
-          background: #eee;
-        }
-      </style>
       <vaadin-combo-box demo></vaadin-combo-box>
 
       <code demo-var="combobox">
@@ -46,6 +40,27 @@
           } else {
             combobox.open();
           }
+        });
+      </code>
+    </code-example>
+  </section>
+
+  <section>
+    <h3>Selecting a value</h3>
+    <p>Selecting a value from the dropdown list or typing a value to the textfield
+    changes <code>vaadin-combo-box's</code> value property and fires a <code>value-changed</code> event.</p>
+    <p>Changing the value property explicitly also updates the visible fields.</p>
+
+    <code-example source>
+      <vaadin-combo-box demo></vaadin-combo-box>
+
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = ['foo', 'bar', 'baz'];
+
+        combobox.value = 'bar';
+        combobox.addEventListener('value-changed', function() {
+          console.log("New value: " + combobox.value);
         });
       </code>
     </code-example>

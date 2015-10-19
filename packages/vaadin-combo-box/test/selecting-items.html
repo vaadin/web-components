@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo basic tests</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+
+<test-fixture id="combobox">
+  <template>
+    <vaadin-combo-box></vaadin-combo-box>
+  </template>
+</test-fixture>
+
+
+<script>
+  describe('selecting a value', function() {
+    var combobox;
+    var input;
+    var selector;
+
+    beforeEach(function() {
+      combobox = fixture('combobox');
+      input = combobox.$$("input");
+      selector = combobox.$.selector;
+    });
+
+    it('should select by using the text input', function() {
+      input.bindValue = "foo";
+      expect(combobox.value).to.equal("foo");
+      expect(selector.selected).to.equal("foo");
+    });
+
+    it('should select by using the selector', function() {
+      selector.selected = "foo";
+      expect(combobox.value).to.equal("foo");
+      expect(input.bindValue).to.equal("foo");
+    });
+
+    it('should select by using JS api', function() {
+      combobox.value = "foo";
+      expect(selector.selected).to.equal("foo");
+      expect(input.bindValue).to.equal("foo");
+    });
+
+    it('should close the dropdown on selection', function() {
+      combobox.open();
+      combobox.value = "foo";
+      expect(combobox.opened).to.equal(false);
+    });
+
+  });
+</script>
+
+</body>
+
+</html>
