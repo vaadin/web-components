@@ -65,5 +65,6 @@ gulp.task('test:desktop', function(done) {
 gulp.task('test:mobile', function(done) {
   testSauce([
     'OS X 10.11/iphone@9.0',
+    'OS X 10.11/ipad@9.0',
     'Linux/android@5.1'], done);
 });
