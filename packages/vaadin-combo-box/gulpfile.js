@@ -45,6 +45,7 @@ function testSauce(browsers, done) {
           browsers: browsers
         }
       },
+      extraScripts: args.dom === 'shadow' ? ['test/enable-shadow-dom.js'] : [],
       root: '.',
       webserver: {
         port: 2000,
@@ -68,3 +69,10 @@ gulp.task('test:mobile', function(done) {
     'OS X 10.11/ipad@9.0',
     'Linux/android@5.1'], done);
 });
+
+gulp.task('test:shadow', function(done) {
+  args.dom = 'shadow';
+
+  testSauce([
+    'Windows 10/chrome@45'], done);
+})
