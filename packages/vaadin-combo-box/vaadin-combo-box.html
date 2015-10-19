@@ -7,21 +7,32 @@
 <link rel='import' href='../iron-input/iron-input.html'>
 <link rel='import' href="../iron-icons/iron-icons.html">
 <link rel='import' href='../iron-icon/iron-icon.html'>
+<link rel='import' href='../iron-selector/iron-selector.html'>
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
 <dom-module id="vaadin-combo-box">
+  <style>
+    /* Temporary styles */
+    #selector div {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    #selector div.iron-selected {
+      background: rgba(0, 0, 0, 0.4);
+    }
+  </style>
+
   <template>
     <paper-input-container on-tap='open'>
-      <input is="iron-input">
+      <input is="iron-input" bind-value={{value}}>
       <iron-icon icon="arrow-drop-down" suffix></iron-icon>
     </paper-input-container>
 
     <vaadin-adaptive-overlay id="overlay" opened={{opened}}>
-      <ul>
-        <li>Foo</li>
-        <li>Bar</li>
-        <li>Baz</li>
-      </ul>
+      <iron-selector id='selector' selected={{value}} attr-for-selected='val'>
+        <div val="foo">foo</div>
+        <div val="bar">bar</div>
+        <div val="baz">baz</div>
+      </iron-selector>
     </vaadin-adaptive-overlay>
   </template>
 </dom-module>
@@ -38,6 +49,15 @@
         type: Boolean,
         notify: true,
         value: false
+      },
+
+      /**
+       * The value for this element.
+       */
+      value: {
+        type: String,
+        notify: true,
+        observer: 'close'
       }
     },
 
