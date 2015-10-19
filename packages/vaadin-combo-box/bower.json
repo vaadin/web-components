@@ -22,6 +22,8 @@
     "components-demo-resources": "vaadin/components-demo-resources#master",
     "iron-dropdown": "polymerelements/iron-dropdown#~1.0.5",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#~1.0.3",
+    "iron-form": "polymerelements/iron-form#~1.0.10",
+    "iron-form-element-behavior": "polymerelements/iron-form-element-behavior#~1.0.4",
     "iron-icon": "PolymerElements/iron-icon#~1.0.4",
     "iron-icons": "PolymerElements/iron-icons#~1.0.3",
     "iron-input": "polymerelements/iron-input#~1.0.5",

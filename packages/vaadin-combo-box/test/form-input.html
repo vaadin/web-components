@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>vaadin-combo basic tests</title>
+  <script src='../bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+  <script src='../bower_components/web-component-tester/browser.js'></script>
+  <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
+
+  <link rel='import' href='common.html'>
+</head>
+
+<body>
+
+  <test-fixture id='combobox'>
+    <template is='dom-template'>
+      <vaadin-combo-box name=[[name]] required=[[required]]></vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+
+  <script>
+    describe('using as a field in html form', function() {
+
+      it('should have the given name', function() {
+        var comboBox = fixture('combobox', {
+          name: 'foo'
+        });
+        expect(comboBox.$$('input').getAttribute('name')).to.equal('foo');
+      });
+
+      it('should have no name', function() {
+        var comboBox = fixture('combobox');
+        expect(comboBox.$$('input').getAttribute('name')).to.equal(null);
+      });
+
+      it('should be required', function() {
+        var comboBox = fixture('combobox', {
+          required: true
+        });
+        expect(comboBox.$$('input').getAttribute('required')).to.equal('');
+      });
+
+      it('should not be required', function() {
+        var comboBox = fixture('combobox');
+        expect(comboBox.$$('input').getAttribute('required')).to.equal(null);
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

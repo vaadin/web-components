@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="common.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
 </head>
 
 <body unresolved>
@@ -66,8 +67,29 @@
     </code-example>
   </section>
 
+  <section>
+    <h3>Using as a form field</h3>
+    <p><code>vaadin-combo-box</code> is extended with <code>IronFormElementBehavior</code> so it can
+    be used as a field in an <code>iron-form</code> or a plain HTML form element.</p>
 
+    <code-example source>
+      <form is="iron-form" method="get" demo>
+        <vaadin-combo-box name='name' required></vaadin-combo-box>
+        <button>Submit</button>
+      </form>
+      <code demo-var="form">
+        var form = form || document.querySelector('form');
+        var combobox = form.querySelector('vaadin-combo-box')
+        combobox.items = ['foo', 'bar', 'baz'];
 
+        // Overriding form.onsubmit to prevent it actually being submitted
+        form.onsubmit = function() {
+          alert('Form submitted with name: ' + form.serialize().name);
+          return false;
+        }
+      </code>
+    </code-example>
+  </section>
 
 
 </body>
