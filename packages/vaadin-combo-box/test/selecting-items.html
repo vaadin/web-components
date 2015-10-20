@@ -35,18 +35,18 @@
     it('should select by using the text input', function() {
       input.bindValue = "foo";
       expect(combobox.value).to.equal("foo");
-      expect(selector.selected).to.equal("foo");
+      expect(selector.selectedItem).to.equal("foo");
     });
 
     it('should select by using the selector', function() {
-      selector.selected = "foo";
+      selector.selectedItem = "foo";
       expect(combobox.value).to.equal("foo");
       expect(input.bindValue).to.equal("foo");
     });
 
     it('should select by using JS api', function() {
       combobox.value = "foo";
-      expect(selector.selected).to.equal("foo");
+      expect(selector.selectedItem).to.equal("foo");
       expect(input.bindValue).to.equal("foo");
     });
 

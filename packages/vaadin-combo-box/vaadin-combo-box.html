@@ -7,21 +7,31 @@
 <link rel='import' href='../iron-input/iron-input.html'>
 <link rel='import' href='../iron-icons/iron-icons.html'>
 <link rel='import' href='../iron-icon/iron-icon.html'>
-<link rel='import' href='../iron-selector/iron-selector.html'>
 <link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
 <link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
+<link rel="import" href="../iron-list/iron-list.html">
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
 <dom-module id='vaadin-combo-box'>
   <style>
     /* Temporary styles */
 
-    #selector div {
-      background: rgba(0, 0, 0, 0.2);
+    #selector {
+      background: #FFF;
     }
 
-    #selector div.iron-selected {
-      background: rgba(0, 0, 0, 0.4);
+    .item {
+      cursor: pointer;
+      padding: 16px 22px;
+      border-bottom: 1px solid #DDD;
+    }
+
+    .item:hover {
+      background: #EEE;
+    }
+
+    .item[selected] {
+      background-color: var(--google-grey-100);
     }
   </style>
 
@@ -32,11 +42,11 @@
     </paper-input-container>
 
     <vaadin-adaptive-overlay id='overlay' opened={{opened}}>
-      <iron-selector id='selector' selected={{value}} attr-for-selected='val'>
-        <div val='foo'>foo</div>
-        <div val='bar'>bar</div>
-        <div val='baz'>baz</div>
-      </iron-selector>
+      <iron-list id="selector" items="[[items]]" selected-item="{{value}}" selection-enabled>
+        <template>
+          <div selected$=[[selected]] class="item">[[item]]</div>
+        </template>
+      </iron-list>
     </vaadin-adaptive-overlay>
   </template>
 </dom-module>

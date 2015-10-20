@@ -12,7 +12,7 @@
 
 <body>
 
-  <test-fixture id="SimpleVaadinComboBox">
+  <test-fixture id="combobox">
     <template>
       <vaadin-combo-box></vaadin-combo-box>
     </template>
@@ -21,14 +21,22 @@
 
   <script>
     describe('properties', function() {
-      var vComboBox;
+      var comboBox;
 
       beforeEach(function() {
-        vComboBox = fixture('SimpleVaadinComboBox');
+        comboBox = fixture('combobox');
       });
 
-      it('should have the correct is property', function() {
-        expect(vComboBox.is).to.equal("vaadin-combo-box");
+      describe('items property', function() {
+        it('should have undefined by default', function() {
+          expect(comboBox.items).to.be.undefined;
+        });
+
+        it('should be bound to items list', function() {
+          comboBox.items = ['qux'];
+
+          expect(comboBox.$.selector.items).to.eql(['qux']);
+        });
       });
     });
   </script>
