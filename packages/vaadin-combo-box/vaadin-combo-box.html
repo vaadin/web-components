@@ -5,17 +5,20 @@
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../paper-input/paper-input-container.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
-<link rel='import' href="../iron-icons/iron-icons.html">
+<link rel='import' href='../iron-icons/iron-icons.html'>
 <link rel='import' href='../iron-icon/iron-icon.html'>
 <link rel='import' href='../iron-selector/iron-selector.html'>
+<link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
-<dom-module id="vaadin-combo-box">
+<dom-module id='vaadin-combo-box'>
   <style>
     /* Temporary styles */
+
     #selector div {
       background: rgba(0, 0, 0, 0.2);
     }
+
     #selector div.iron-selected {
       background: rgba(0, 0, 0, 0.4);
     }
@@ -23,15 +26,15 @@
 
   <template>
     <paper-input-container on-tap='open'>
-      <input is="iron-input" bind-value={{value}}>
-      <iron-icon icon="arrow-drop-down" suffix></iron-icon>
+      <input is='iron-input' bind-value={{value}} name$='[[name]]' type='text' required$="[[required]]">
+      <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
-    <vaadin-adaptive-overlay id="overlay" opened={{opened}}>
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}}>
       <iron-selector id='selector' selected={{value}} attr-for-selected='val'>
-        <div val="foo">foo</div>
-        <div val="bar">bar</div>
-        <div val="baz">baz</div>
+        <div val='foo'>foo</div>
+        <div val='bar'>bar</div>
+        <div val='baz'>baz</div>
       </iron-selector>
     </vaadin-adaptive-overlay>
   </template>
@@ -39,7 +42,11 @@
 
 <script>
   Polymer({
-    is: "vaadin-combo-box",
+    is: 'vaadin-combo-box',
+
+    behaviors: [
+      Polymer.IronFormElementBehavior
+    ],
 
     properties: {
       /**
