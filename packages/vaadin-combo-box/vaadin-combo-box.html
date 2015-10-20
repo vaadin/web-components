@@ -37,7 +37,7 @@
 
   <template>
     <paper-input-container on-tap='open'>
-      <input id='input' is='iron-input' bind-value={{value}} name$='[[name]]' type='text' required$="[[required]]">
+      <input id='input' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]">
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
@@ -54,12 +54,10 @@
 <script>
   Polymer({
     is: 'vaadin-combo-box',
-
     behaviors: [
       Polymer.IronFormElementBehavior,
       Polymer.IronValidatableBehavior
     ],
-
     properties: {
       /**
        * True if the dropdown is open, false otherwise.
@@ -67,9 +65,9 @@
       opened: {
         type: Boolean,
         notify: true,
-        value: false
+        value: false,
+        observer: '_openedChanged'
       },
-
       /**
        * The value for this element.
        */
@@ -79,12 +77,17 @@
         observer: 'close'
       }
     },
-
     /**
      * Open the overlay.
      */
     open: function() {
       this.$.overlay.open();
+    },
+
+    _openedChanged: function() {
+      if(!this.opened) {
+        this.$.input.bindValue = this.value;
+      }
     },
 
     /**
