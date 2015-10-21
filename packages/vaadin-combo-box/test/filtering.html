@@ -30,7 +30,11 @@
     };
 
     function getInput() {
-      return comboBox.$$('input');
+      if(comboBox.$.overlay._fullScreen) {
+        return comboBox.$.fullScreenInput;
+      }
+
+      return comboBox.$.input;
     }
 
     function setInputValue(value) {
@@ -45,6 +49,7 @@
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
+
 
     describe('setting the input field value', function() {
       it('should open the popup if closed', function() {
@@ -73,6 +78,39 @@
         setInputValue('bar');
         comboBox.$.overlay.$.dropdown.cancel();
         expect(getInputValue()).to.equal('foo');
+      });
+    });
+
+    describe('fullscreen behaviour', function() {
+      beforeEach(function() {
+        comboBox.$.overlay._fullScreen = true;
+      });
+
+      describe('input field', function() {
+        it('should be bound to combobox value', function() {
+          comboBox.value = 'bar';
+
+          comboBox.open();
+
+          expect(getInputValue()).to.equal('bar');
+        });
+
+        it('should filter items', function() {
+          setInputValue('foo')
+
+          expect(getFilteredItems()).to.include('foo');
+          expect(getFilteredItems()).to.have.length(1);
+        });
+
+        it('should be visible only in fullscreen mode', function() {
+          var inputContainer = Polymer.dom(comboBox.$.overlay).querySelector('paper-input-container');
+
+          expect(window.getComputedStyle(inputContainer).display).to.equal('block');
+
+          comboBox.$.overlay._fullScreen = false;
+
+          expect(window.getComputedStyle(inputContainer).display).to.equal('none');
+        });
       });
     });
 
