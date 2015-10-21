@@ -25,8 +25,7 @@
     var comboBox;
 
     function getFilteredItems() {
-      //TODO: _.filteredItems is a temporary property.
-      return comboBox._filteredItems;
+      return comboBox.$.selector.items;
     };
 
     function getInput() {
@@ -79,6 +78,16 @@
         comboBox.$.overlay.$.dropdown.cancel();
         expect(getInputValue()).to.equal('foo');
       });
+
+      it('should be reverted to the combobox value when reopening the overlay', function() {
+        comboBox.value = 'foo';
+
+        setInputValue('bar');
+        comboBox.close();
+        comboBox.open();
+
+        expect(getInputValue()).to.equal('foo');
+      });
     });
 
     describe('fullscreen behaviour', function() {
@@ -98,8 +107,7 @@
         it('should filter items', function() {
           setInputValue('foo')
 
-          expect(getFilteredItems()).to.include('foo');
-          expect(getFilteredItems()).to.have.length(1);
+          expect(getFilteredItems()).to.eql(['foo']);
         });
 
         it('should be visible only in fullscreen mode', function() {
@@ -118,14 +126,22 @@
       it('should filter items using contains', function() {
         setInputValue('a');
 
-        expect(getFilteredItems()).not.to.include('foo');
-        expect(getFilteredItems()).to.include('bar', 'baz');
+        expect(getFilteredItems()).to.eql(['bar', 'baz']);
       });
 
       it('should filter out all items with a invalid filter', function() {
         setInputValue('qux');
 
         expect(getFilteredItems()).to.be.empty;
+      });
+
+      it('should be reset after reopening the overlay', function() {
+        setInputValue('foo');
+
+        comboBox.close();
+        comboBox.open();
+
+        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
       });
     });
   });

@@ -50,9 +50,9 @@
         <input id='fullScreenInput' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
       </paper-input-container>
-      <iron-list id="selector" items="[[items]]" selected-item="{{value}}" selection-enabled>
+      <iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
-          <div selected$=[[selected]] class="item">[[item]]</div>
+          <div selected$=[[selected]] class='item'>[[item]]</div>
         </template>
       </iron-list>
     </vaadin-adaptive-overlay>
@@ -62,10 +62,12 @@
 <script>
   Polymer({
     is: 'vaadin-combo-box',
+
     behaviors: [
       Polymer.IronFormElementBehavior,
       Polymer.IronValidatableBehavior
     ],
+
     properties: {
       /**
        * True if the dropdown is open, false otherwise.
@@ -83,12 +85,6 @@
         type: String,
         notify: true,
         observer: 'close'
-      },
-
-      //TODO: Temporary property
-      items: {
-        type: Array,
-        value: []
       }
     },
 
@@ -109,9 +105,9 @@
           this.open();
         }
 
-        //TODO: set filtered items to the dynamic list.
         if(this.items) {
-          this._filteredItems = this._filter(this.items);
+          this.$.selector.items = this._filter(this.items);
+          this.$.selector.selectedItem = this.value;
         }
       }
     },
@@ -123,8 +119,17 @@
       }.bind(this));
     },
 
+    _selectedItemChanged: function() {
+      var _val = this.$.selector.selectedItem;
+      if (_val !== null) {
+        this.value = _val;
+      }
+    },
+
     _openedChanged: function() {
-      if(!this.opened) {
+      if (this.opened) {
+        this.$.selector.items = this.items;
+      } else {
         this.$.input.bindValue = this.value;
       }
     },
