@@ -30,6 +30,7 @@
     "iron-list": "polymerelements/iron-list#~1.0.3",
     "iron-overlay-behavior": "polymerelements/iron-overlay-behavior#~1.0.5",
     "iron-selector": "polymerelements/iron-selector#1.0.2",
+    "iron-validatable-behavior": "polymerelements/iron-validatable-behavior#~1.0.5",
     "paper-button": "polymerelements/paper-button#~1.0.6",
     "paper-input": "PolymerElements/paper-input#~1.0.12",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",

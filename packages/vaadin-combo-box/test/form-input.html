@@ -9,6 +9,7 @@
   <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
 
   <link rel='import' href='common.html'>
+  <link rel='import' href='../../iron-form/iron-form.html'>
 </head>
 
 <body>
@@ -19,6 +20,13 @@
     </template>
   </test-fixture>
 
+  <test-fixture id='combobox-in-form'>
+    <template is='dom-template'>
+      <form is="iron-form">
+        <vaadin-combo-box name=[[name]] required=[[required]]></vaadin-combo-box>
+      </form>
+    </template>
+  </test-fixture>
 
   <script>
     describe('using as a field in html form', function() {
@@ -45,6 +53,30 @@
       it('should not be required', function() {
         var comboBox = fixture('combobox');
         expect(comboBox.$$('input').getAttribute('required')).to.equal(null);
+      });
+
+      it('should validate correctly', function() {
+        var comboBox = fixture('combobox', {name: 'foo', required: true});
+        expect(comboBox.validate()).to.equal(false);
+        expect(comboBox.invalid).to.be.equal(true);
+        comboBox.value = 'foo';
+        expect(comboBox.validate()).to.equal(true);
+        expect(comboBox.invalid).to.be.equal(false);
+      });
+
+      it('should serialize correctly', function() {
+        var form = fixture('combobox-in-form', {name: 'foo'});
+        var comboBox = form.querySelector('vaadin-combo-box');
+        comboBox.value = 'bar';
+        expect(form.serialize().foo).to.equal('bar');
+      });
+
+      it('should not-submit iron-form with invalid value', function() {
+        var form = fixture('combobox-in-form', {name: 'foo', required: true});
+        var spy = sinon.spy();
+        form.addEventListener('iron-form-invalid', spy);
+        form.submit();
+        expect(spy).to.have.been.called;
       });
 
     });
