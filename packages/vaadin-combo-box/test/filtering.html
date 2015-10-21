@@ -80,7 +80,8 @@
       it('should filter items using contains', function() {
         setInputValue('a');
 
-        expect(getFilteredItems()).to.include('foo');
+        expect(getFilteredItems()).not.to.include('foo');
+        expect(getFilteredItems()).to.include('bar', 'baz');
       });
 
       it('should filter out all items with a invalid filter', function() {

@@ -37,7 +37,7 @@
 
   <template>
     <paper-input-container on-tap='open'>
-      <input id='input' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]">
+      <input id='input' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged'>
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
@@ -75,11 +75,13 @@
         type: String,
         notify: true,
         observer: 'close'
-      }
-    },
+      },
 
-    listeners: {
-      'input.bind-value-changed':'_inputValueChanged'
+      //TODO: Temporary property
+      items: {
+        type: Array,
+        value: []
+      }
     },
 
     /**
@@ -89,6 +91,14 @@
       this.$.overlay.open();
     },
 
+    _inputValue: function(value) {
+      if(value) {
+        this.$.input.bindValue = value;
+      }
+
+      return this.$.input.bindValue;
+    },
+
     _inputValueChanged: function() {
       if(this._isFiltering()) {
         if(!this.opened) {
@@ -96,22 +106,27 @@
         }
 
         //TODO: set filtered items to the dynamic list.
-        this._filteredItems = [];
-
-        for(var i=0;i<this.items.length;i++) {
-          this._filteredItems.push(this.items[i]);
+        if(this.items) {
+          this._filteredItems = this._filter(this.items);
         }
       }
     },
 
+    _filter: function(arr) {
+      return arr.filter(function(item) {
+        // Check if item contains input value.
+        return item.indexOf(this._inputValue()) > -1;
+      }.bind(this));
+    },
+
     _openedChanged: function() {
       if(!this.opened) {
-        this.$.input.bindValue = this.value;
+        this._inputValue(this.value);
       }
     },
 
     _isFiltering: function() {
-      return this.$.input.bindValue != this.value;
+      return this._inputValue() != this.value;
     },
 
     /**
