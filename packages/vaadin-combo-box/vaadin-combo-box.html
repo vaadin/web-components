@@ -9,6 +9,7 @@
 <link rel='import' href='../iron-icon/iron-icon.html'>
 <link rel='import' href='../iron-selector/iron-selector.html'>
 <link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
+<link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
 <dom-module id='vaadin-combo-box'>
@@ -26,7 +27,7 @@
 
   <template>
     <paper-input-container on-tap='open'>
-      <input is='iron-input' bind-value={{value}} name$='[[name]]' type='text' required$="[[required]]">
+      <input id='input' is='iron-input' bind-value={{value}} name$='[[name]]' type='text' required$="[[required]]">
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
@@ -45,7 +46,8 @@
     is: 'vaadin-combo-box',
 
     behaviors: [
-      Polymer.IronFormElementBehavior
+      Polymer.IronFormElementBehavior,
+      Polymer.IronValidatableBehavior
     ],
 
     properties: {
@@ -80,6 +82,16 @@
      */
     close: function() {
       this.$.overlay.close();
+    },
+
+    /**
+    * Validates the input element and sets an error style if needed.
+    *
+    * @return {boolean}
+    */
+    _getValidity: function(){
+      return this.$.input.validate();
     }
+
   });
 </script>
