@@ -1,6 +1,6 @@
 language: node_js
-install: npm install
+install: travis_retry npm install
 script:
-  - gulp test:mobile
-  - gulp test:desktop
-  - gulp test:shadow
+  - travis_retry gulp test:mobile
+  - travis_retry gulp test:desktop
+  - travis_retry gulp test:shadow
