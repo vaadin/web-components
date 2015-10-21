@@ -32,12 +32,6 @@
       selector = combobox.$.selector;
     });
 
-    it('should select by using the text input', function() {
-      input.bindValue = "foo";
-      expect(combobox.value).to.equal("foo");
-      expect(selector.selectedItem).to.equal("foo");
-    });
-
     it('should select by using the selector', function() {
       selector.selectedItem = "foo";
       expect(combobox.value).to.equal("foo");

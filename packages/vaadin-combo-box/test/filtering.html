@@ -23,36 +23,51 @@
 <script>
   describe('filtering items', function() {
     var comboBox;
+
     function getFilteredItems() {
+      //TODO: _.filteredItems is a temporary property.
       return comboBox._filteredItems;
     };
+
     function getInput() {
       return comboBox.$$('input');
     }
+
     function setInputValue(value) {
-      //TODO: This can be removed after comboBox opens automatically when typed in.
-      comboBox.open();
       getInput().bindValue = value;
     };
+
     function getInputValue(value) {
       return getInput().bindValue;
     };
+
     beforeEach(function() {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
-    describe('input field value', function() {
+
+    describe('setting the input field value', function() {
+      it('should open the popup if closed', function() {
+        comboBox.close();
+
+        setInputValue('foo');
+
+        expect(comboBox.opened).to.equal(true);
+      });
+
       it('should not change the value of the combobox', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
         expect(comboBox.value).to.equal('foo');
       });
+
       it('should be reverted to the combobox value when closing', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
         comboBox.close();
         expect(getInputValue()).to.equal('foo');
       });
+
       it('should be reverted to the combobox value when overlay is cancelled', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
@@ -60,13 +75,17 @@
         expect(getInputValue()).to.equal('foo');
       });
     });
-    describe.skip('filter behaviour', function() {
+
+    describe('filtering items', function() {
       it('should filter items using contains', function() {
         setInputValue('a');
+
         expect(getFilteredItems()).to.include('foo');
       });
+
       it('should filter out all items with a invalid filter', function() {
         setInputValue('qux');
+
         expect(getFilteredItems()).to.be.empty;
       });
     });
