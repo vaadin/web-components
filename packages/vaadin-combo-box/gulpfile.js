@@ -60,7 +60,7 @@ gulp.task('test:desktop', function(done) {
     'Windows 10/firefox@41',
     'Windows 10/microsoftedge@20',
     'Windows 10/internet explorer@11',
-    'OS X 10.11/safari@8.1'], done);
+    'OS X 10.11/safari@9.0'], done);
 });
 
 gulp.task('test:mobile', function(done) {
