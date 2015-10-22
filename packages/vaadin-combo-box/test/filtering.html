@@ -49,75 +49,54 @@
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
+    [false, true].forEach(function(isFullScreen) {
+      describe('setting the input field value in ' + (isFullScreen === true ? 'fullscreen' : 'desktop'), function() {
+        beforeEach(function() {
+          comboBox._fullScreen = isFullScreen;
+        });
 
-    describe('setting the input field value', function() {
-      it('should open the popup if closed', function() {
-        comboBox.close();
+        it('should open the popup if closed', function() {
+          comboBox.close();
 
-        setInputValue('foo');
+          setInputValue('foo');
 
-        expect(comboBox.opened).to.equal(true);
-      });
+          expect(comboBox.opened).to.equal(true);
+        });
 
-      it('should not change the value of the combobox', function() {
-        comboBox.value = 'foo';
-        setInputValue('bar');
-        expect(comboBox.value).to.equal('foo');
-      });
+        it('should not change the value of the combobox', function() {
+          comboBox.value = 'foo';
+          setInputValue('bar');
+          expect(comboBox.value).to.equal('foo');
+        });
 
-      it('should be reverted to the combobox value when closing', function() {
-        comboBox.value = 'foo';
-        setInputValue('bar');
-        comboBox.close();
-        expect(getInputValue()).to.equal('foo');
-      });
+        it('should be reverted to the combobox value when closing', function() {
+          comboBox.value = 'foo';
+          setInputValue('bar');
+          comboBox.close();
+          expect(getInputValue()).to.equal('foo');
+        });
 
-      it('should be reverted to the combobox value when overlay is cancelled', function() {
-        comboBox.value = 'foo';
-        setInputValue('bar');
-        comboBox.$.overlay.$.dropdown.cancel();
-        expect(getInputValue()).to.equal('foo');
-      });
+        it('should be reverted to the combobox value when overlay is cancelled', function() {
+          comboBox.value = 'foo';
+          setInputValue('bar');
+          comboBox.$.overlay.$.dropdown.cancel();
+          expect(getInputValue()).to.equal('foo');
+        });
 
-      it('should be reverted to the combobox value when reopening the overlay', function() {
-        comboBox.value = 'foo';
+        it('should be reverted to the combobox value when reopening the overlay', function() {
+          comboBox.value = 'foo';
 
-        setInputValue('bar');
-        comboBox.close();
-        comboBox.open();
-
-        expect(getInputValue()).to.equal('foo');
-      });
-    });
-
-    describe('fullscreen behaviour', function() {
-      beforeEach(function() {
-        comboBox._fullScreen = true;
-      });
-
-      describe('input field', function() {
-        it('should be bound to combobox value', function() {
-          comboBox.value = 'bar';
-
+          setInputValue('bar');
+          comboBox.close();
           comboBox.open();
 
-          expect(getInputValue()).to.equal('bar');
+          expect(getInputValue()).to.equal('foo');
         });
 
-        it('should filter items', function() {
-          setInputValue('foo')
-
-          expect(getFilteredItems()).to.eql(['foo']);
-        });
-
-        it('should be visible only in fullscreen mode', function() {
+        it('should have a second input visible only in fullscreen mode', function() {
           var inputContainer = Polymer.dom(comboBox.$.overlay).querySelector('paper-input-container');
 
-          expect(window.getComputedStyle(inputContainer).display).to.equal('block');
-
-          comboBox._fullScreen = false;
-
-          expect(window.getComputedStyle(inputContainer).display).to.equal('none');
+          expect(window.getComputedStyle(inputContainer).display).to.equal(isFullScreen === true ? 'block' : 'none');
         });
       });
     });
