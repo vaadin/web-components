@@ -45,13 +45,13 @@
 
   <template>
     <paper-input-container on-tap='open' on-touchend='_preventDefault'>
-      <input id='input' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged'>
+      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged'>
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
     <vaadin-adaptive-overlay id='overlay' opened={{opened}} full-screen={{_fullScreen}} fullscreen$={{_fullScreen}}>
       <paper-input-container>
-        <input id='fullScreenInput' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
+        <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
       </paper-input-container>
       <iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
