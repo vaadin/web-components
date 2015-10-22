@@ -153,6 +153,25 @@
         expect(comboBox.$.selector.selectedItems).to.contain('foo');
       });
 
+      it('should ignore case', function() {
+        setInputValue('FOO');
+
+        expect(getFilteredItems()).to.eql(['foo']);
+      });
+
+      it('should not filter with a null filter', function() {
+        setInputValue(null);
+
+        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
+      });
+
+      it('should not throw an error when items arent set', function() {
+        comboBox.items = null;
+
+        setInputValue('foo');
+
+        expect(getFilteredItems()).to.be.null;
+      });
     });
   });
 </script>

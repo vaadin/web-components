@@ -121,8 +121,11 @@
 
     _filter: function(arr, filter) {
       return arr.filter(function(item) {
+        filter = filter || '';
+
         // Check if item contains input value.
-        return item.toString().indexOf(filter) > -1;
+        return item.toString().toLowerCase()
+                .indexOf(filter.toString().toLowerCase()) > -1;
       }.bind(this));
     },
 
