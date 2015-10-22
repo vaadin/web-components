@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>vaadin-combo basic tests</title>
+  <script src='../bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+  <script src='../bower_components/web-component-tester/browser.js'></script>
+  <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
+
+  <link rel='import' href='common.html'>
+</head>
+
+<body>
+
+<test-fixture id='combobox'>
+  <template>
+    <vaadin-combo-box></vaadin-combo-box>
+  </template>
+</test-fixture>
+
+
+<script>
+  
+  describe('pushing key', function() {
+    var comboBox;
+
+    function getInput() {
+      return comboBox.$.input;
+    }
+    function getSelector() {
+      return comboBox.$.selector;
+    }
+    function setCursorPos(p) {
+      getInput().setSelectionRange(p, p);
+    }
+    function getCursorPos() {
+      return getInput().selectionStart;
+    }
+
+    beforeEach(function() {
+      comboBox = fixture('combobox');
+      comboBox.items = ['foo', 'bar', 'baz'];
+      comboBox.close();
+    });
+
+    describe('arrowdown first time', function() {
+      it('should open the popup and not select any item', function() {
+        MockInteractions.keyDownOn(comboBox, 40)
+        expect(comboBox.opened).to.equal(true);
+        expect(getSelector().selectedItem).to.equal(null);
+      });
+    });
+
+    describe('arrowdown first time and value is set ', function() {
+      it('should set selected item matching current value', function() {
+        expect(getSelector().selectedItem).to.equal(null);
+        comboBox.value = 'bar';
+        MockInteractions.keyDownOn(comboBox, 40);
+        expect(getSelector().selectedItem).to.equal('bar');
+      });
+    });
+
+    describe('arrowdown twice', function() {
+      it('should open the popup and select first item', function() {
+        MockInteractions.keyDownOn(comboBox, 40);
+        expect(getSelector().selectedItem).to.equal(null);
+        MockInteractions.keyDownOn(comboBox, 40);
+        expect(getSelector().selectedItem).to.equal('foo');
+      });
+    });
+
+    describe('arrowdown', function() {
+      it('should select next selected item', function() {
+        comboBox.open();
+        comboBox._selectItem('bar')
+        MockInteractions.keyDownOn(comboBox, 40);
+        expect(getSelector().selectedItem).to.equal('baz');
+      });
+    });
+
+    describe('arrowdown first time', function() {
+      it('should open the popup and not select any item', function() {
+        MockInteractions.keyDownOn(comboBox, 38)
+        expect(comboBox.opened).to.equal(true);
+        expect(getSelector().selectedItem).to.equal(null);
+      });
+    });
+
+    describe('arrowup', function() {
+      it('should select next previous item', function() {
+        comboBox.open();
+        comboBox._selectItem('bar')
+        MockInteractions.keyDownOn(comboBox, 38);
+        expect(getSelector().selectedItem).to.equal('foo');
+      });
+    });
+
+    describe('enter', function() {
+      it('should set input value of the selected item and close popup', function() {
+        comboBox.open();
+        expect(comboBox.value).to.equal(undefined);
+        comboBox._selectItem('baz')
+        MockInteractions.keyDownOn(comboBox, 13);
+        expect(comboBox.opened).to.equal(false);
+        expect(comboBox.value).to.equal('baz');
+      });
+    });
+
+    describe('arrowleft', function() {
+      it('should move cursor left', function() {
+        comboBox.value = 'bar';
+        getInput().focus();
+        setCursorPos(3, 3);
+        expect(getCursorPos()).to.equal(3);
+        MockInteractions.keyDownOn(comboBox, 37);
+        expect(getCursorPos()).to.equal(2);
+        MockInteractions.keyDownOn(comboBox, 37);
+        expect(getCursorPos()).to.equal(1);
+        MockInteractions.keyDownOn(comboBox, 37);
+        expect(getCursorPos()).to.equal(0);
+        MockInteractions.keyDownOn(comboBox, 37);
+        expect(getCursorPos()).to.equal(0);
+      });
+    });
+
+    describe('arrowright', function() {
+      it('should move cursor right', function() {
+        comboBox.value = 'bar';
+        getInput().focus();
+        setCursorPos(0, 0);
+        expect(getCursorPos()).to.equal(0);
+        MockInteractions.keyDownOn(comboBox, 39);
+        expect(getCursorPos()).to.equal(1);
+        MockInteractions.keyDownOn(comboBox, 39);
+        expect(getCursorPos()).to.equal(2);
+        MockInteractions.keyDownOn(comboBox, 39);
+        expect(getCursorPos()).to.equal(3);
+        MockInteractions.keyDownOn(comboBox, 39);
+        expect(getCursorPos()).to.equal(3);
+      });
+    });
+    
+    describe('escape', function() {
+      it('should close popup', function() {
+        comboBox.open();
+        expect(comboBox.opened).to.equal(true);
+        MockInteractions.keyDownOn(comboBox, 27);
+        expect(comboBox.opened).to.equal(true);
+      });
+    });
+
+  });
+</script>
+
+</body>
+
+</html>
