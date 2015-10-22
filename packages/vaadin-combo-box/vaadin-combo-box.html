@@ -104,22 +104,20 @@
     },
 
     _inputValueChanged: function() {
-      if(this._isFiltering()) {
-        if(!this.opened) {
+      if(!this.opened && this._isFiltering()) {
           this.open();
-        }
+      }
 
-        if(this.items) {
-          this.$.selector.items = this._filter(this.items);
-          this.$.selector.selectedItem = this.value;
-        }
+      if(this.items) {
+        this.$.selector.items = this._filter(this.items, this.$.input.bindValue);
+        this.$.selector.selectedItem = this.value;
       }
     },
 
-    _filter: function(arr) {
+    _filter: function(arr, filter) {
       return arr.filter(function(item) {
         // Check if item contains input value.
-        return item.indexOf(this.$.input.bindValue) > -1;
+        return item.indexOf(filter) > -1;
       }.bind(this));
     },
 
