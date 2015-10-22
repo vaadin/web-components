@@ -110,7 +110,13 @@
 
       if(this.items) {
         this.$.selector.items = this._filter(this.items, this.$.input.bindValue);
-        this.$.selector.selectedItem = this.value;
+        this._restoreSelectorValue();
+      }
+    },
+
+    _restoreSelectorValue() {
+      if (this.$.selector.items && this.$.selector.items.indexOf(this.value) > -1) {
+        this.$.selector.selectItem(this.value);
       }
     },
 
@@ -131,6 +137,7 @@
     _openedChanged: function() {
       if (this.opened) {
         this.$.selector.items = this.items;
+        this._restoreSelectorValue();
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
