@@ -41,7 +41,7 @@
       describe('fullscreen', function() {
 
         beforeEach(function(done) {
-          overlay._fullScreen = true;
+          overlay.fullScreen = true;
           overlay.open();
           Polymer.Base.async(function() {
             done();
@@ -76,7 +76,7 @@
       describe('non-fullscreen', function() {
 
         beforeEach(function(done) {
-          overlay._fullScreen = false;
+          overlay.fullScreen = false;
           overlay.open();
           Polymer.Base.async(function() {
             done();

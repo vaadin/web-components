@@ -29,7 +29,7 @@
     };
 
     function getInput() {
-      if(comboBox.$.overlay._fullScreen) {
+      if(comboBox._fullScreen) {
         return comboBox.$.fullScreenInput;
       }
 
@@ -92,7 +92,7 @@
 
     describe('fullscreen behaviour', function() {
       beforeEach(function() {
-        comboBox.$.overlay._fullScreen = true;
+        comboBox._fullScreen = true;
       });
 
       describe('input field', function() {
@@ -115,7 +115,7 @@
 
           expect(window.getComputedStyle(inputContainer).display).to.equal('block');
 
-          comboBox.$.overlay._fullScreen = false;
+          comboBox._fullScreen = false;
 
           expect(window.getComputedStyle(inputContainer).display).to.equal('none');
         });

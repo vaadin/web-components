@@ -20,7 +20,7 @@
   </style>
 
   <template>
-    <iron-dropdown id="dropdown" opened={{opened}} fullscreen$=[[_fullScreen]] on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened">
+    <iron-dropdown id="dropdown" opened={{opened}} fullscreen$=[[fullScreen]] on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened">
       <div class="dropdown-content">
         <content>
       </div>
@@ -45,9 +45,10 @@
       /**
        * True if the overlay works in full screen mode (e.g. on mobile devices).
        */
-      _fullScreen: {
+      fullScreen: {
         type: Boolean,
         observer: '_fullScreenChanged',
+        notify: true,
         value: function() {
           try {
             document.createEvent("TouchEvent");
@@ -79,14 +80,13 @@
     },
 
     /**
-     * Called when the value of `_fullScreen` changes.
+     * Called when the value of `fullScreen` changes.
      *
-     * @param {boolean} _fullScreen True if the overlay works in full screen mode (e.g. on mobile devices).
      */
-    _fullScreenChanged: function(_fullScreen) {
+    _fullScreenChanged: function() {
       var parent = this.domHost || this.parentElement;
-      this.$.dropdown.fitInto = this._fullScreen ? document.documentElement : parent;
-      this.$.dropdown.positionTarget = this._fullScreen ? document.documentElement : this;
+      this.$.dropdown.fitInto = this.fullScreen ? document.documentElement : parent;
+      this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this;
     },
 
     /**
@@ -127,7 +127,7 @@
      * Called when an `iron-overlay-opened` event fires.
      */
     _opened: function() {
-      if (this._fullScreen) {
+      if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
       }
     },
@@ -136,7 +136,7 @@
      * Called when an `iron-overlay-closed` event fires.
      */
     _closed: function() {
-      if (this._fullScreen) {
+      if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._originalContent;
       }
     }

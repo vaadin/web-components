@@ -34,7 +34,7 @@
       background-color: var(--google-grey-100);
     }
 
-    :host ::content #dropdown:not([fullscreen]) paper-input-container {
+    :host #overlay:not([fullscreen]) paper-input-container {
       display: none;
     }
   </style>
@@ -45,7 +45,7 @@
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}}>
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}} full-screen={{_fullScreen}} fullscreen$={{_fullScreen}}>
       <paper-input-container>
         <input id='fullScreenInput' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
@@ -85,6 +85,10 @@
         type: String,
         notify: true,
         observer: 'close'
+      },
+
+      _fullScreen: {
+        type: Boolean
       }
     },
 
