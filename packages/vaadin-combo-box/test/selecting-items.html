@@ -50,6 +50,13 @@
       expect(combobox.opened).to.equal(false);
     });
 
+    it('should fire exactly one value change event', function() {
+      var spy = sinon.spy();
+      combobox.addEventListener('value-changed', spy);
+      combobox.value = "foo";
+      expect(spy.callCount).to.equal(1);
+    });
+
   });
 </script>
 
