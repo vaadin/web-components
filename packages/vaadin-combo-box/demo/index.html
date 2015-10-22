@@ -48,8 +48,8 @@
 
   <section>
     <h3>Selecting a value</h3>
-    <p>Selecting a value from the dropdown list or typing a value to the textfield
-    changes <code>vaadin-combo-box's</code> value property and fires a <code>value-changed</code> event.</p>
+    <p>Selecting a value from the dropdown list changes <code>vaadin-combo-box's</code>
+    value property and fires a <code>value-changed</code> event.</p>
     <p>Changing the value property explicitly also updates the visible fields.</p>
 
     <code-example source>
@@ -90,7 +90,20 @@
     </code-example>
   </section>
 
-
+  <section>
+    <h3>Filtering</h3>
+    <p>Typing text into the <code>vaadin-combo-box's</code> input field will filter
+      values defined in the <code>items</code> property and show only items that
+      <code>contain</code> the value in the input field.
+    </p>
+    <code-example source>
+      <vaadin-combo-box demo></vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = ['foo', 'bar', 'baz'];
+      </code>
+    </code-example>
+  </section>
 </body>
 
 </html>
