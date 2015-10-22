@@ -122,6 +122,22 @@
 
         expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
       });
+
+      it('should filter integers', function() {
+        comboBox.items = [0, 1, 2, 3];
+
+        setInputValue(1);
+
+        expect(getFilteredItems()).to.eql([1]);
+      });
+
+      it('should filter boolean', function() {
+        comboBox.items = [true, false];
+
+        setInputValue('t');
+
+        expect(getFilteredItems()).to.eql([true]);
+      });
     });
   });
 </script>

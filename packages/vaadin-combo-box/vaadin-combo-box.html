@@ -117,7 +117,7 @@
     _filter: function(arr, filter) {
       return arr.filter(function(item) {
         // Check if item contains input value.
-        return item.indexOf(filter) > -1;
+        return item.toString().indexOf(filter) > -1;
       }.bind(this));
     },
 
