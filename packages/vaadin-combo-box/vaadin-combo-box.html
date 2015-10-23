@@ -33,18 +33,30 @@
     .item[selected] {
       background-color: var(--google-grey-100);
     }
+
+    :host #overlay {
+      background-color: #FFF;
+    }
+
+    :host #overlay:not([full-screen]) paper-input-container {
+      display: none;
+    }
   </style>
 
   <template>
-    <paper-input-container on-tap='open'>
-      <input id='input' is='iron-input' bind-value={{value}} name$='[[name]]' type='text' required$="[[required]]">
+    <paper-input-container on-tap='open' on-touchend='_preventDefault'>
+      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged'>
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
     <vaadin-adaptive-overlay id='overlay' opened={{opened}}>
-      <iron-list id="selector" items="[[items]]" selected-item="{{value}}" selection-enabled>
+      <paper-input-container>
+        <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
+        <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
+      </paper-input-container>
+      <iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
-          <div selected$=[[selected]] class="item">[[item]]</div>
+          <div selected$=[[selected]] class='item'>[[item]]</div>
         </template>
       </iron-list>
     </vaadin-adaptive-overlay>
@@ -67,15 +79,14 @@
       opened: {
         type: Boolean,
         notify: true,
-        value: false
+        value: false,
+        observer: '_openedChanged'
       },
-
       /**
        * The value for this element.
        */
       value: {
         type: String,
-        notify: true,
         observer: 'close'
       }
     },
@@ -85,6 +96,62 @@
      */
     open: function() {
       this.$.overlay.open();
+    },
+
+    _fullScreenInputValueChanged: function(event) {
+      this.$.input.bindValue = event.detail.value;
+    },
+
+    _inputValueChanged: function() {
+      if(!this.opened && this._isFiltering()) {
+          this.open();
+      }
+
+      if(this.items) {
+        this.$.selector.items = this._filter(this.items, this.$.input.bindValue);
+        this._restoreSelectorValue();
+      }
+    },
+
+    _restoreSelectorValue: function() {
+      if (this.$.selector.items && this.$.selector.items.indexOf(this.value) > -1) {
+        this.$.selector.selectItem(this.value);
+      }
+    },
+
+    _filter: function(arr, filter) {
+      return arr.filter(function(item) {
+        filter = filter || '';
+
+        // Check if item contains input value.
+        return item.toString().toLowerCase()
+                .indexOf(filter.toString().toLowerCase()) > -1;
+      }.bind(this));
+    },
+
+    _selectedItemChanged: function() {
+      var _val = this.$.selector.selectedItem;
+      if (_val !== null) {
+        this.value = _val;
+      }
+    },
+
+    _openedChanged: function() {
+      if (this.opened) {
+        this.$.selector.items = this.items;
+        this._restoreSelectorValue();
+      } else {
+        this.$.input.bindValue = this.value;
+        this.$.fullScreenInput.bindValue = this.value;
+      }
+    },
+
+    _isFiltering: function() {
+      return this.$.input.bindValue !== '' && this.$.input.bindValue !== this.value;
+    },
+
+    _preventDefault: function(e) {
+      e.preventDefault();
     },
 
     /**

@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>vaadin-combo basic tests</title>
+  <script src='../bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+  <script src='../bower_components/web-component-tester/browser.js'></script>
+  <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
+
+  <link rel='import' href='common.html'>
+</head>
+
+<body>
+
+<test-fixture id='combobox'>
+  <template>
+    <vaadin-combo-box></vaadin-combo-box>
+  </template>
+</test-fixture>
+
+
+<script>
+  describe('filtering items', function() {
+    var comboBox;
+
+    function getFilteredItems() {
+      return comboBox.$.selector.items;
+    };
+
+    function getInput() {
+      if(comboBox.$.overlay.fullScreen) {
+        return comboBox.$.fullScreenInput;
+      }
+
+      return comboBox.$.input;
+    }
+
+    function setInputValue(value) {
+      getInput().bindValue = value;
+    };
+
+    function getInputValue(value) {
+      return getInput().bindValue;
+    };
+
+    beforeEach(function() {
+      comboBox = fixture('combobox');
+      comboBox.items = ['foo', 'bar', 'baz'];
+    });
+
+    [false, true].forEach(function(isFullScreen) {
+      describe('setting the input field value in ' + (isFullScreen === true ? 'fullscreen' : 'desktop'), function() {
+        beforeEach(function() {
+          comboBox.$.overlay.fullScreen = isFullScreen;
+        });
+
+        it('should open the popup if closed', function() {
+          comboBox.close();
+
+          setInputValue('foo');
+
+          expect(comboBox.opened).to.equal(true);
+        });
+
+        it('should not change the value of the combobox', function() {
+          comboBox.value = 'foo';
+          setInputValue('bar');
+          expect(comboBox.value).to.equal('foo');
+        });
+
+        it('should be reverted to the combobox value when closing', function() {
+          comboBox.value = 'foo';
+          setInputValue('bar');
+          comboBox.close();
+          expect(getInputValue()).to.equal('foo');
+        });
+
+        it('should be reverted to the combobox value when overlay is cancelled', function() {
+          comboBox.value = 'foo';
+          setInputValue('bar');
+          comboBox.$.overlay.$.dropdown.cancel();
+          expect(getInputValue()).to.equal('foo');
+        });
+
+        it('should be reverted to the combobox value when reopening the overlay', function() {
+          comboBox.value = 'foo';
+
+          setInputValue('bar');
+          comboBox.close();
+          comboBox.open();
+
+          expect(getInputValue()).to.equal('foo');
+        });
+
+        it('should have a second input visible only in fullscreen mode', function() {
+          var inputContainer = Polymer.dom(comboBox.$.overlay).querySelector('paper-input-container');
+
+          expect(window.getComputedStyle(inputContainer).display).to.equal(isFullScreen === true ? 'block' : 'none');
+        });
+      });
+    });
+
+    describe('filtering items', function() {
+      it('should filter items using contains', function() {
+        setInputValue('a');
+
+        expect(getFilteredItems()).to.eql(['bar', 'baz']);
+      });
+
+      it('should filter out all items with a invalid filter', function() {
+        setInputValue('qux');
+
+        expect(getFilteredItems()).to.be.empty;
+      });
+
+      it('should be reset after reopening the overlay', function() {
+        setInputValue('foo');
+
+        comboBox.close();
+        comboBox.open();
+
+        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
+      });
+
+      it('should filter integers', function() {
+        comboBox.items = [0, 1, 2, 3];
+
+        setInputValue(1);
+
+        expect(getFilteredItems()).to.eql([1]);
+      });
+
+      it('should filter boolean', function() {
+        comboBox.items = [true, false];
+
+        setInputValue('t');
+
+        expect(getFilteredItems()).to.eql([true]);
+      });
+
+      it('should show initial selection', function() {
+        comboBox.value = 'foo';
+        comboBox.open();
+        expect(comboBox.$.selector.selectedItems).to.contain('foo');
+      });
+
+      it('should not lose the selected value', function() {
+        comboBox.value = 'foo';
+        setInputValue('bar');
+        expect(comboBox.$.selector.selectedItems).not.to.contain('foo');
+        setInputValue('');
+        expect(comboBox.$.selector.selectedItems).to.contain('foo');
+      });
+
+      it('should ignore case', function() {
+        setInputValue('FOO');
+
+        expect(getFilteredItems()).to.eql(['foo']);
+      });
+
+      it('should not filter with a null filter', function() {
+        setInputValue(null);
+
+        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
+      });
+
+      it('should not throw an error when items arent set', function() {
+        comboBox.items = null;
+
+        setInputValue('foo');
+
+        expect(getFilteredItems()).to.be.null;
+      });
+    });
+  });
+</script>
+
+</body>
+
+</html>
