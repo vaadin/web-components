@@ -49,6 +49,7 @@
         type: Boolean,
         observer: '_fullScreenChanged',
         notify: true,
+        reflectToAttribute: true,
         value: function() {
           try {
             document.createEvent("TouchEvent");

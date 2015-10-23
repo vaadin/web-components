@@ -29,7 +29,7 @@
     };
 
     function getInput() {
-      if(comboBox._fullScreen) {
+      if(comboBox.$.overlay.fullScreen) {
         return comboBox.$.fullScreenInput;
       }
 
@@ -52,7 +52,7 @@
     [false, true].forEach(function(isFullScreen) {
       describe('setting the input field value in ' + (isFullScreen === true ? 'fullscreen' : 'desktop'), function() {
         beforeEach(function() {
-          comboBox._fullScreen = isFullScreen;
+          comboBox.$.overlay.fullScreen = isFullScreen;
         });
 
         it('should open the popup if closed', function() {
