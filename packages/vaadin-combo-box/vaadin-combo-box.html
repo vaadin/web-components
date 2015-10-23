@@ -17,28 +17,29 @@
     /* Temporary styles */
 
     #selector {
-      background: #FFF;
+      background: #fff;
     }
 
     .item {
       cursor: pointer;
       padding: 16px 22px;
-      border-bottom: 1px solid #DDD;
+      border-bottom: 1px solid #ddd;
+      background-color: #fff;
     }
 
     .item:hover {
-      background: #EEE;
+      background: #eee;
     }
 
     .item[selected] {
       background-color: var(--google-grey-100);
     }
 
-    :host #overlay {
-      background-color: #FFF;
+    #overlay paper-input-container {
+      background-color: #fff;
     }
 
-    :host #overlay:not([full-screen]) paper-input-container {
+    #overlay:not([full-screen]) paper-input-container {
       display: none;
     }
   </style>
