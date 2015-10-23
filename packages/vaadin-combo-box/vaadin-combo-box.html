@@ -147,7 +147,7 @@
     },
 
     _isFiltering: function() {
-      return this.$.input.bindValue != this.value;
+      return this.$.input.bindValue !== '' && this.$.input.bindValue !== this.value;
     },
 
     _preventDefault: function(e) {
