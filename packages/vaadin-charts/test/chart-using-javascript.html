@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Charts are awesome</title>
+  <link rel="import" href="vaadin-column-chart.html">
+  <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+  
+  <script>
+  	HTMLImports.whenReady(function() {
+  	var chart = document.createElement("vaadin-column-chart");
+  	var t = document.createElement("title");
+  	var ds = document.createElement("data-series");
+  	t.textContent = "Foobar title";
+  	ds.setAttribute("name","foobars");
+  	var data = document.createElement("data");
+  	data.textContent="10,20,30,10,20,30";
+  	Polymer.dom(ds).appendChild(data);
+  	Polymer.dom(chart).appendChild(t);
+  	Polymer.dom(chart).appendChild(ds);
+  	document.body.appendChild(chart);
+  	});
+  </script>
+</head>
+<body>
+</body>
+</html>
