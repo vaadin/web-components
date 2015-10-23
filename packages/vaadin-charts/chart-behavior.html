@@ -187,7 +187,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         attached: function () {
-            this._initChart();
+          this._initLocalDom();
+          this._initConfiguration();
+
+          Polymer.dom(this).querySelectorAll("data-series").forEach(function(ds) {
+              ds.initialize();
+          });
+          if (this._loadTheme) {
+              this._loadTheme();
+          }
+          this._initChart();
         },
 
         /**
@@ -203,12 +212,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         ready: function () {
-            this._initLocalDom();
-            this._initConfiguration();
 
-            if (this._loadTheme) {
-                this._loadTheme();
-            }
         },
 
         _initLocalDom: function () {

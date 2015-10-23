@@ -224,7 +224,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
 
-        ready: function () {
+        // Kind of attached but attached is not called then the element is only in the light DOM
+        initialize: function () {
             this._initConfiguration();
             if (this.drilldown) {
                 this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
