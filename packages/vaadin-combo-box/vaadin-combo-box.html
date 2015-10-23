@@ -10,6 +10,7 @@
 <link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
 <link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
 <link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
 <dom-module id='vaadin-combo-box'>
@@ -35,6 +36,10 @@
       background-color: var(--google-grey-100);
     }
 
+    .item[focused] {
+      background-color: #ddd;
+    }
+
     #overlay paper-input-container {
       background-color: #fff;
     }
@@ -42,11 +47,13 @@
     #overlay:not([full-screen]) paper-input-container {
       display: none;
     }
+
+
   </style>
 
   <template>
     <paper-input-container on-tap='open' on-touchend='_preventDefault'>
-      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged'>
+      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged' key-event-target>
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
@@ -57,7 +64,7 @@
       </paper-input-container>
       <iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
-          <div selected$=[[selected]] class='item'>[[item]]</div>
+          <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
         </template>
       </iron-list>
     </vaadin-adaptive-overlay>
@@ -70,7 +77,8 @@
 
     behaviors: [
       Polymer.IronFormElementBehavior,
-      Polymer.IronValidatableBehavior
+      Polymer.IronValidatableBehavior,
+      Polymer.IronA11yKeysBehavior
     ],
 
     properties: {
@@ -89,7 +97,33 @@
       value: {
         type: String,
         observer: 'close'
+      },
+
+      _focusedIndex: {
+        type: Number,
+        value: -1
       }
+    },
+
+    keyBindings: {
+      'down': '_onArrowDown',
+      'up': '_onArrowUp',
+      'enter': '_onEnter'
+    },
+
+    ready: function() {
+
+      //iron-dropdown prevents all scrolling related keypresses (such as up,down,left,right)
+      //from elements that are outside the overlay. We need to allow keypresses that are
+      //targeted to our input field.
+      var isScrollingKeypress = Polymer.IronDropdownScrollManager._isScrollingKeypress.bind(this.$.dropdown);
+      Polymer.IronDropdownScrollManager._isScrollingKeypress = function(event) {
+        if(event.target === this.$.input) {
+          return false;
+        }
+
+        return isScrollingKeypress(event);
+      }.bind(this);
     },
 
     /**
@@ -97,6 +131,34 @@
      */
     open: function() {
       this.$.overlay.open();
+    },
+
+    _onArrowDown: function() {
+      if(!this.opened) {
+        this.open();
+      }
+
+      if(this._focusedIndex < this.$.selector.items.length - 1) {
+        this._focusedIndex += 1;
+      }
+    },
+
+    _onArrowUp: function() {
+      if(!this.opened) {
+        this.open();
+      }
+
+      if(this._focusedIndex > -1) {
+        this._focusedIndex -= 1;
+      }
+    },
+
+    _onEnter: function() {
+      console.log('enter');
+    },
+
+    _isItemFocused: function(focusedIndex, itemIndex) {
+      return (focusedIndex === itemIndex);
     },
 
     _fullScreenInputValueChanged: function(event) {
@@ -111,6 +173,7 @@
       if(this.items) {
         this.$.selector.items = this._filter(this.items, this.$.input.bindValue);
         this._restoreSelectorValue();
+        this._focusedIndex = -1;
       }
     },
 
@@ -139,6 +202,7 @@
 
     _openedChanged: function() {
       if (this.opened) {
+        this._focusedIndex = -1;
         this.$.selector.items = this.items;
         this._restoreSelectorValue();
       } else {

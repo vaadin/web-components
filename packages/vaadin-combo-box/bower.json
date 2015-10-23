@@ -33,7 +33,8 @@
     "paper-button": "polymerelements/paper-button#~1.0.6",
     "paper-input": "PolymerElements/paper-input#~1.0.12",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
-    "polymer": "Polymer/polymer#^1.1.3"
+    "polymer": "Polymer/polymer#^1.1.3",
+    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#~1.0.7"
   },
   "devDependencies": {
     "web-component-tester": "*",
