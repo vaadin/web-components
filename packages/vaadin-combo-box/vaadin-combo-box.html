@@ -146,7 +146,7 @@
 
     _onArrowUp: function() {
       if(this.opened) {
-        if(this._focusedIndex > -1) {
+        if(this._focusedIndex > 0) {
           this._focusedIndex -= 1;
         }
       } else {
@@ -156,16 +156,10 @@
 
     _onEnter: function() {
       if(this.opened) {
-        // If there is an focused item, select that
-        if(this._focusedIndex >= 0) {
+        if(this._focusedIndex > -1) {
           this.close();
           this.$.selector.selectItem(this._focusedIndex);
-        // If user has typed a valid value to the input, select that
-        } else if(this.$.selector.items.indexOf(this.$.input.bindValue) >= 0) {
-          this.close();
-          this.$.selector.selectItem(this.$.input.bindValue);
-        // If user has cleared the input, clear selection
-      } else if(this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
+        } else if(this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.close();
           this.value = undefined;
         }

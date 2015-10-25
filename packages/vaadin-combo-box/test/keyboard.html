@@ -118,6 +118,14 @@
         expect(getFocusedIndex()).to.equal(2);
       });
 
+      it('should not remove focus', function() {
+        arrowDown();
+
+        arrowUp();
+
+        expect(getFocusedIndex()).to.equal(0);
+      });
+
       it('should focus only on filtered items', function() {
         getInput().bindValue = 'foo';
         arrowDown();
@@ -192,7 +200,7 @@
         enter();
 
         expect(comboBox.value).to.equal('baz');
-      })
+      });
     });
   });
 </script>
