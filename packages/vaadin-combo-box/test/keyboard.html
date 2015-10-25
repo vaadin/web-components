@@ -50,13 +50,17 @@
       MockInteractions.keyDownOn(comboBox, 38);
     }
 
+    function enter() {
+      MockInteractions.pressEnter(comboBox);
+    }
+
     beforeEach(function() {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
     describe('opening the overlay', function() {
-      it('should open the popup with arrow down and not focus any item', function() {
+      it('should open the overlay with arrow down and not focus any item', function() {
         arrowDown();
 
         expect(comboBox.opened).to.equal(true);
@@ -64,12 +68,20 @@
         expect(getFocusedIndex()).to.equal(-1);
       });
 
-      it('should open the popup with arrow up and not focus any item', function() {
+      it('should open the overlay with arrow up and not focus any item', function() {
         arrowDown();
 
         expect(comboBox.opened).to.equal(true);
 
         expect(getFocusedIndex()).to.equal(-1);
+      });
+
+      it('should have focus on the selected item after opened', function() {
+        comboBox.value = 'foo';
+
+        arrowDown();
+
+        expect(getFocusedIndex()).to.equal(0);
       });
     });
 
@@ -123,60 +135,63 @@
       });
     });
 
-    describe.skip('enter', function() {
-      it('should set input value of the selected item and close popup', function() {
-        comboBox.open();
-        expect(comboBox.value).to.equal(undefined);
-        comboBox._selectItem('baz')
-        MockInteractions.keyDownOn(comboBox, 13);
-        expect(comboBox.opened).to.equal(false);
+    describe('selecting items', function() {
+      beforeEach(function() {
+        comboBox.value = 'bar';
+        arrowDown();
+      });
+
+      it('should select focused item with enter', function() {
+        arrowDown();
+
+        enter();
+
         expect(comboBox.value).to.equal('baz');
       });
-    });
 
-    describe.skip('arrowleft', function() {
-      it('should move cursor left', function() {
-        comboBox.value = 'bar';
-        getInput().focus();
-        setCursorPos(3, 3);
-        expect(getCursorPos()).to.equal(3);
-        MockInteractions.keyDownOn(comboBox, 37);
-        expect(getCursorPos()).to.equal(2);
-        MockInteractions.keyDownOn(comboBox, 37);
-        expect(getCursorPos()).to.equal(1);
-        MockInteractions.keyDownOn(comboBox, 37);
-        expect(getCursorPos()).to.equal(0);
-        MockInteractions.keyDownOn(comboBox, 37);
-        expect(getCursorPos()).to.equal(0);
+      it('should clear the selection with enter when input is cleared', function() {
+        getInput().bindValue = '';
+        enter();
+
+        expect(comboBox.value).to.be.undefined;
       });
-    });
 
-    describe.skip('arrowright', function() {
-      it('should move cursor right', function() {
-        comboBox.value = 'bar';
-        getInput().focus();
-        setCursorPos(0, 0);
-        expect(getCursorPos()).to.equal(0);
-        MockInteractions.keyDownOn(comboBox, 39);
-        expect(getCursorPos()).to.equal(1);
-        MockInteractions.keyDownOn(comboBox, 39);
-        expect(getCursorPos()).to.equal(2);
-        MockInteractions.keyDownOn(comboBox, 39);
-        expect(getCursorPos()).to.equal(3);
-        MockInteractions.keyDownOn(comboBox, 39);
-        expect(getCursorPos()).to.equal(3);
+      it('should clear the selection with enter when input is undefined', function() {
+        getInput().bindValue = undefined;
+        enter();
+
+        expect(comboBox.value).to.be.undefined;
       });
-    });
 
-    describe.skip('escape', function() {
-      it('should close popup', function() {
-        comboBox.open();
+      it('should not close the overlay with enter when input has invalid value', function() {
+        getInput().bindValue = 'foobar';
+        enter();
+
+        expect(comboBox.value).to.equal('bar');
         expect(comboBox.opened).to.equal(true);
+      });
+
+      it('should close the overlay with enter', function() {
+        enter();
+
+        expect(comboBox.opened).to.equal(false);
+      });
+
+      //TODO: MockInteractions doesn't seem to fire escape event properly.
+      it.skip('should close the overlay with escape', function(done) {
         MockInteractions.keyDownOn(comboBox, 27);
-        expect(comboBox.opened).to.equal(true);
-      });
-    });
 
+        expect(comboBox.opened).to.equal(false);
+      });
+
+      it('should select typed item', function() {
+        getInput().bindValue = 'baz';
+
+        enter();
+
+        expect(comboBox.value).to.equal('baz');
+      })
+    });
   });
 </script>
 

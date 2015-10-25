@@ -37,7 +37,7 @@
     }
 
     .item[focused] {
-      background-color: #ddd;
+      background-color: #ddd !important;
     }
 
     #overlay paper-input-container {
@@ -154,7 +154,21 @@
     },
 
     _onEnter: function() {
-      console.log('enter');
+      if(this.opened) {
+        // If there is an focused item, select that
+        if(this._focusedIndex >= 0) {
+          this.close();
+          this.$.selector.selectItem(this._focusedIndex);
+        // If user has typed a valid value to the input, select that
+        } else if(this.$.selector.items.indexOf(this.$.input.bindValue) >= 0) {
+          this.close();
+          this.$.selector.selectItem(this.$.input.bindValue);
+        // If user has cleared the input, clear selection
+      } else if(this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
+          this.close();
+          this.value = undefined;
+        }
+      }
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
@@ -170,16 +184,20 @@
           this.open();
       }
 
-      if(this.items) {
-        this.$.selector.items = this._filter(this.items, this.$.input.bindValue);
-        this._restoreSelectorValue();
-        this._focusedIndex = -1;
+      if(this.opened && this.items) {
+        this._setItems(this._filter(this.items, this.$.input.bindValue));
       }
     },
 
-    _restoreSelectorValue: function() {
+    _setItems: function(items) {
+      this.$.selector.items = items;
+
       if (this.$.selector.items && this.$.selector.items.indexOf(this.value) > -1) {
         this.$.selector.selectItem(this.value);
+      }
+
+      if(this.$.selector.items) {
+        this._focusedIndex = this.$.selector.items.indexOf(this.$.input.bindValue);
       }
     },
 
@@ -202,9 +220,7 @@
 
     _openedChanged: function() {
       if (this.opened) {
-        this._focusedIndex = -1;
-        this.$.selector.items = this.items;
-        this._restoreSelectorValue();
+        this._setItems(this.items);
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
