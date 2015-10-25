@@ -134,22 +134,22 @@
     },
 
     _onArrowDown: function() {
-      if(!this.opened) {
+      if(this.opened) {
+        if(this._focusedIndex < this.$.selector.items.length - 1) {
+          this._focusedIndex += 1;
+        }
+      } else {
         this.open();
-      }
-
-      if(this._focusedIndex < this.$.selector.items.length - 1) {
-        this._focusedIndex += 1;
       }
     },
 
     _onArrowUp: function() {
-      if(!this.opened) {
+      if(this.opened) {
+        if(this._focusedIndex > -1) {
+          this._focusedIndex -= 1;
+        }
+      } else {
         this.open();
-      }
-
-      if(this._focusedIndex > -1) {
-        this._focusedIndex -= 1;
       }
     },
 
