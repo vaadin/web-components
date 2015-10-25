@@ -28,15 +28,6 @@
     function getInput() {
       return comboBox.$.input;
     }
-    function getSelector() {
-      return comboBox.$.selector;
-    }
-    function setCursorPos(p) {
-      getInput().setSelectionRange(p, p);
-    }
-    function getCursorPos() {
-      return getInput().selectionStart;
-    }
 
     function getFocusedIndex() {
       return comboBox._focusedIndex;
@@ -52,6 +43,10 @@
 
     function enter() {
       MockInteractions.pressEnter(comboBox);
+    }
+
+    function esc() {
+      MockInteractions.keyDownOn(comboBox, 27);
     }
 
     beforeEach(function() {
@@ -177,12 +172,19 @@
         expect(comboBox.opened).to.equal(false);
       });
 
-      //TODO: MockInteractions doesn't seem to fire escape event properly.
-      it.skip('should close the overlay with escape', function(done) {
-        MockInteractions.keyDownOn(comboBox, 27);
+      it('should close the overlay with escape', function() {
+        esc();
 
         expect(comboBox.opened).to.equal(false);
       });
+
+      it('should cancel typing with escape', function() {
+        getInput().bindValue = 'baz';
+
+        esc();
+
+        expect(comboBox.value).to.equal('bar');
+      })
 
       it('should select typed item', function() {
         getInput().bindValue = 'baz';

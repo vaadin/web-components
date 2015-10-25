@@ -108,7 +108,8 @@
     keyBindings: {
       'down': '_onArrowDown',
       'up': '_onArrowUp',
-      'enter': '_onEnter'
+      'enter': '_onEnter',
+      'esc' : '_onEscape'
     },
 
     ready: function() {
@@ -169,6 +170,10 @@
           this.value = undefined;
         }
       }
+    },
+
+    _onEscape: function() {
+      this.close();
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
