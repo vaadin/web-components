@@ -189,6 +189,10 @@
      */
     open: function() {
       this.$.overlay.open();
+
+      this.async(function() {
+        this.$.fullScreenInput.focus();
+      });
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
@@ -248,6 +252,7 @@
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
+        this.$.fullScreenInput.blur();
       }
     },
 
