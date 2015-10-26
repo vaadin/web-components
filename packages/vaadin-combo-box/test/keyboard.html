@@ -19,7 +19,6 @@
   </template>
 </test-fixture>
 
-
 <script>
 
   describe('keyboard navigation', function() {
@@ -64,7 +63,7 @@
       });
 
       it('should open the overlay with arrow up and not focus any item', function() {
-        arrowDown();
+        arrowUp();
 
         expect(comboBox.opened).to.equal(true);
 
@@ -180,10 +179,13 @@
         expect(comboBox.opened).to.equal(false);
       });
 
-      it('should close the overlay with escape', function() {
+      it('should close the overlay with escape', function(done) {
         esc();
 
-        expect(comboBox.opened).to.equal(false);
+        Polymer.Base.async(function() {
+          expect(comboBox.opened).to.equal(false);
+          done();
+        });
       });
 
       it('should cancel typing with escape', function() {

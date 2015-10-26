@@ -57,7 +57,7 @@
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
-    <!-- For some reason adding spaces between  vaadin-adaptive-overlay paper-input-container iron-list tags makes &dom=shadow tests fail randomly -->
+    <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. -->
     <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
