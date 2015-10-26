@@ -19,6 +19,7 @@
 
     #selector {
       background: #fff;
+      height: 100%;
     }
 
     .item {
@@ -44,11 +45,19 @@
       background-color: #fff;
     }
 
+    #overlay::content .dropdown-content {
+      @apply(--layout-vertical);
+    }
+
     #overlay:not([full-screen]) paper-input-container {
       display: none;
     }
 
-
+    /* Remove once #21 is implemented */
+    #overlay:not([full-screen])::content .dropdown-content {
+      max-height: 400px;
+    }
+    /* END - Remove once #21 is implemented */
   </style>
 
   <template>
