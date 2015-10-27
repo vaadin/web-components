@@ -57,7 +57,7 @@
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
-    <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. -->
+    <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
     <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
