@@ -10,6 +10,7 @@
 <link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
 <link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
 <link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
 <dom-module id='vaadin-combo-box'>
@@ -35,6 +36,10 @@
       background-color: var(--google-grey-100);
     }
 
+    .item[focused] {
+      background-color: #ddd !important;
+    }
+
     #overlay paper-input-container {
       background-color: #fff;
     }
@@ -42,25 +47,25 @@
     #overlay:not([full-screen]) paper-input-container {
       display: none;
     }
+
+
   </style>
 
   <template>
     <paper-input-container on-tap='open' on-touchend='_preventDefault'>
-      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged'>
+      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged' key-event-target>
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}}>
-      <paper-input-container>
+    <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. -->
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
-      </paper-input-container>
-      <iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
+      </paper-input-container><iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
-          <div selected$=[[selected]] class='item'>[[item]]</div>
+          <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
         </template>
-      </iron-list>
-    </vaadin-adaptive-overlay>
+      </iron-list></vaadin-adaptive-overlay>
   </template>
 </dom-module>
 
@@ -70,7 +75,8 @@
 
     behaviors: [
       Polymer.IronFormElementBehavior,
-      Polymer.IronValidatableBehavior
+      Polymer.IronValidatableBehavior,
+      Polymer.IronA11yKeysBehavior
     ],
 
     properties: {
@@ -89,7 +95,81 @@
       value: {
         type: String,
         observer: 'close'
+      },
+
+      _focusedIndex: {
+        type: Number,
+        value: -1
       }
+    },
+
+    ready: function() {
+      this._addKeyEventListeners();
+    },
+
+    /**
+     * Keyboard navigation
+     */
+
+    // iron-dropdown locks scrolling outside the overlay and prevents all scrolling
+    // related events from propagating. So, we needed to either hack into the
+    // iron-dropdown or provide custom event handling.
+    _addKeyEventListeners: function() {
+      document.addEventListener('keydown', function(e) {
+         if (this._isEventKey(e, 'left right')) {
+           e.stopImmediatePropagation();
+         }
+      }.bind(this), true);
+
+      this.$.input.addEventListener('keydown', function(e) {
+        if (this._isEventKey(e, 'down')) {
+          this._onArrowDown();
+        } else if (this._isEventKey(e, 'up')) {
+          this._onArrowUp();
+        } else if (this._isEventKey(e, 'enter')) {
+          this._onEnter();
+        } else if (this._isEventKey(e, 'esc')) {
+          this._onEscape();
+        }
+      }.bind(this));
+    },
+
+    _isEventKey: function(e, k) {
+      return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
+    },
+
+    _onArrowDown: function() {
+      if(this.opened) {
+        this._focusedIndex = Math.min(this.$.selector.items.length - 1, this._focusedIndex + 1);
+      } else {
+        this.open();
+      }
+    },
+
+    _onArrowUp: function() {
+      if(this.opened) {
+        if(this._focusedIndex > -1) {
+          this._focusedIndex = Math.max(0, this._focusedIndex - 1);
+        }
+      } else {
+        this.open();
+      }
+    },
+
+    _onEnter: function() {
+      if(this.opened) {
+        if(this._focusedIndex > -1) {
+          this.close();
+          this.$.selector.selectItem(this._focusedIndex);
+        } else if(this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
+          this.close();
+          this.value = undefined;
+        }
+      }
+    },
+
+    _onEscape: function() {
+      this.close();
     },
 
     /**
@@ -97,6 +177,10 @@
      */
     open: function() {
       this.$.overlay.open();
+    },
+
+    _isItemFocused: function(focusedIndex, itemIndex) {
+      return (focusedIndex === itemIndex);
     },
 
     _fullScreenInputValueChanged: function(event) {
@@ -108,15 +192,20 @@
           this.open();
       }
 
-      if(this.items) {
-        this.$.selector.items = this._filter(this.items, this.$.input.bindValue);
-        this._restoreSelectorValue();
+      if(this.opened && this.items) {
+        this._setItems(this._filter(this.items, this.$.input.bindValue));
       }
     },
 
-    _restoreSelectorValue: function() {
+    _setItems: function(items) {
+      this.$.selector.items = items;
+
       if (this.$.selector.items && this.$.selector.items.indexOf(this.value) > -1) {
         this.$.selector.selectItem(this.value);
+      }
+
+      if(this.$.selector.items) {
+        this._focusedIndex = this.$.selector.items.indexOf(this.$.input.bindValue);
       }
     },
 
@@ -139,8 +228,7 @@
 
     _openedChanged: function() {
       if (this.opened) {
-        this.$.selector.items = this.items;
-        this._restoreSelectorValue();
+        this._setItems(this.items);
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
