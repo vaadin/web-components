@@ -16,6 +16,9 @@
 <dom-module id='vaadin-combo-box'>
   <style>
     /* Temporary styles */
+    :host {
+       display: block;
+    }
 
     #selector {
       background: #fff;
@@ -56,15 +59,10 @@
       display: none;
     }
 
-    /* Remove once #21 is implemented */
-    #selector {
-      max-height: 400px;
-    }
-    /* END - Remove once #21 is implemented */
   </style>
 
   <template>
-    <paper-input-container on-tap='open' on-touchend='_preventDefault'>
+    <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault'>
       <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged' key-event-target>
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
@@ -121,6 +119,10 @@
 
     _getFocusTarget: function() {
       return this.$.overlay.fullScreen ? this.$.fullScreenInput : this.$.input;
+    },
+
+    attached: function() {
+      this.$.overlay.alignmentTarget = this.$.inputContainer;
     },
 
     /**
@@ -284,6 +286,5 @@
     _getValidity: function(){
       return this.$.input.validate();
     }
-
   });
 </script>

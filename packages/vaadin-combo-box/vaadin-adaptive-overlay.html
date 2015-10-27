@@ -20,8 +20,10 @@
   </style>
 
   <template>
-    <iron-dropdown id="dropdown" focus-target=[[focusTarget]] opened={{opened}} fullscreen$=[[fullScreen]] on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened" with-backdrop=[[fullScreen]]>
-      <div class="dropdown-content">
+    <iron-dropdown id="dropdown" focus-target=[[focusTarget]] opened={{opened}} fullscreen$=[[fullScreen]] with-backdrop=[[fullScreen]]
+                   on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened"
+                   vertical-align="[[verticalAlign]]" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]">
+      <div id='dropdownContent' class="dropdown-content">
         <content>
       </div>
     </iron-dropdown>
@@ -77,6 +79,24 @@
             "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
           return viewport;
         }
+      },
+
+      alignmentTarget: {
+        type: Object
+      },
+
+      /**
+       * A pixel value that will be compared with with the input bottom offset.
+       * If the offset less then this value then the over will be shown above the input.
+       */
+      alignThreshold: {
+        type: Number,
+        value: 200
+      },
+
+      _alignedToBottom: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -85,8 +105,9 @@
      *
      */
     _fullScreenChanged: function() {
-      var parent = this.domHost || this.parentElement;
-      this.$.dropdown.fitInto = this.fullScreen ? document.documentElement : parent;
+      if (this.fullScreen) {
+        this.$.dropdown.fitInto = document.documentElement;
+      }
       this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this;
     },
 
@@ -96,10 +117,17 @@
     _patchIronFitBehavior: function() {
       var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
-        sd(extent === "Width" ? {
-          left: 0
-        } : rect, positionedBy, start, end, extent);
-      };
+        if(extent === "Width") {
+          var parent = this.domHost || this.parentElement;
+          this.$.dropdownContent.style.maxWidth = parent.clientWidth + 'px';
+
+          // iron-dropdown should do this
+          var a = this.$.dropdown.verticalAlign === 'top' ? 'bottom' : 'top';
+          this.$.dropdown.style[a] = 'initial';
+        } else {
+          sd(rect, positionedBy, start, end, extent)
+        }
+      }.bind(this);
     },
 
     ready: function() {
@@ -108,6 +136,9 @@
 
     attached: function() {
       this._fullScreenChanged();
+      window.addEventListener('resize', this.updateOverlayAlignment.bind(this));
+      window.addEventListener('scroll', this.updateOverlayAlignment.bind(this));
+      this.updateOverlayAlignment();
     },
 
     /**
@@ -140,6 +171,30 @@
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._originalContent;
       }
+    },
+
+    updateOverlayAlignment: function() {
+      if (!this.alignmentTarget) return;
+
+      var rect = this.alignmentTarget.getBoundingClientRect();
+
+      var bottomAlign = window.innerHeight - rect.bottom < this.alignThreshold;
+      this.verticalAlign = bottomAlign ? 'bottom' : 'top';
+      this.verticalOffset = bottomAlign ? rect.height : 0;
+
+      if (bottomAlign !== this._alignedToBottom) {
+        if (this.opened) {
+          this.close();
+          // iron-dropdown should do this
+          this.$.dropdown.style[bottomAlign ? 'top' : 'bottom'] = undefined;
+
+          this.$.dropdown.resetFit();
+          Polymer.Base.async(this.open.bind(this));
+        } else {
+          this.$.dropdown.resetFit();
+        }
+      }
+      this._alignedToBottom = bottomAlign;
     }
 
   });
