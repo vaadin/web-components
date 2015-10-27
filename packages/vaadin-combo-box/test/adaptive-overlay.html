@@ -43,9 +43,7 @@
         beforeEach(function(done) {
           overlay.fullScreen = true;
           overlay.open();
-          Polymer.Base.async(function() {
-            done();
-          });
+          Polymer.Base.async(done);
         });
 
         it('should have correct target elements', function(done) {
@@ -78,9 +76,7 @@
         beforeEach(function(done) {
           overlay.fullScreen = false;
           overlay.open();
-          Polymer.Base.async(function() {
-            done();
-          });
+          Polymer.Base.async(done);
         });
 
         it('should have correct target elements', function() {

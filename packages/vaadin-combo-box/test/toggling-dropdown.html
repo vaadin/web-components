@@ -9,6 +9,7 @@
   <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -48,6 +49,21 @@
 
         expect(combobox.opened).to.be.true;
       });
+
+      describeSkipIf(!fullScreen, 'fullscreen', function() {
+
+        it('should focus input on fullscreen dropdown open', function(done) {
+          combobox.$.overlay.fullScreen = true;
+          combobox.open();
+          Polymer.Base.async(function() {
+            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
+            expect(focusedInput).to.equal(combobox.$.fullScreenInput);
+            done();
+          });
+        });
+
+      });
+
     });
   });
 </script>

@@ -73,7 +73,7 @@
     <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
-      </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-touchstart='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
+      </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
           <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
         </template>
@@ -190,9 +190,11 @@
     open: function() {
       this.$.overlay.open();
 
-      this.async(function() {
-        this.$.fullScreenInput.focus();
-      });
+      if (this.$.overlay.fullScreen) {
+        this.async(function() {
+          this.$.fullScreenInput.focus();
+        });
+      }
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
@@ -252,7 +254,9 @@
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
-        this.$.fullScreenInput.blur();
+        if (this.$.overlay.fullScreen) {
+          this.$.fullScreenInput.blur();
+        }
       }
     },
 
