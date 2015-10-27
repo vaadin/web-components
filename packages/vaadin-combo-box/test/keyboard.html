@@ -34,19 +34,19 @@
     }
 
     function arrowDown() {
-      MockInteractions.keyDownOn(comboBox, 40);
+      MockInteractions.keyDownOn(getInput(), 40);
     }
 
     function arrowUp() {
-      MockInteractions.keyDownOn(comboBox, 38);
+      MockInteractions.keyDownOn(getInput(), 38);
     }
 
     function enter() {
-      MockInteractions.pressEnter(comboBox);
+      MockInteractions.pressEnter(getInput());
     }
 
     function esc() {
-      MockInteractions.keyDownOn(comboBox, 27);
+      MockInteractions.keyDownOn(getInput(), 27);
     }
 
     beforeEach(function() {

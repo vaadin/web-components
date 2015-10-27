@@ -57,17 +57,15 @@
       <iron-icon icon='arrow-drop-down' suffix></iron-icon>
     </paper-input-container>
 
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}}>
-      <paper-input-container>
+    <!-- For some reason adding spaces between  vaadin-adaptive-overlay paper-input-container iron-list tags makes &dom=shadow tests fail randomly -->
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
-      </paper-input-container>
-      <iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
+      </paper-input-container><iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
           <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
         </template>
-      </iron-list>
-    </vaadin-adaptive-overlay>
+      </iron-list></vaadin-adaptive-overlay>
   </template>
 </dom-module>
 
@@ -105,26 +103,36 @@
       }
     },
 
-    keyBindings: {
-      'down': '_onArrowDown',
-      'up': '_onArrowUp',
-      'enter': '_onEnter',
-      'esc' : '_onEscape'
+
+    _isEventKey: function(e, k) {
+      return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
     },
 
     ready: function() {
+      // iron-dropdown locks scroll interactions with keys in document
+      document.addEventListener('keydown', function(e) {
+         if (this._isEventKey(e, 'left right')) {
+           e.stopImmediatePropagation();
+         }
+      }.bind(this), true);
+    },
 
-      //iron-dropdown prevents all scrolling related keypresses (such as up,down,left,right)
-      //from elements that are outside the overlay. We need to allow keypresses that are
-      //targeted to our input field.
-      var isScrollingKeypress = Polymer.IronDropdownScrollManager._isScrollingKeypress.bind(this.$.dropdown);
-      Polymer.IronDropdownScrollManager._isScrollingKeypress = function(event) {
-        if(event.target === this.$.input) {
-          return false;
-        }
+    // Using 'listeners' instead of a11y keyBindings because the
+    // second one does not work when iron-dropdown is modal
+    listeners: {
+      'input.keydown': '_onKeyDown'
+    },
 
-        return isScrollingKeypress(event);
-      }.bind(this);
+    _onKeyDown: function(e) {
+      if (this._isEventKey(e, 'down')) {
+        this._onArrowDown();
+      } else if (this._isEventKey(e, 'up')) {
+        this._onArrowUp();
+      } else if (this._isEventKey(e, 'enter')) {
+        this._onEnter();
+      } else if (this._isEventKey(e, 'esc')) {
+        this._onEscape();
+      }
     },
 
     /**
