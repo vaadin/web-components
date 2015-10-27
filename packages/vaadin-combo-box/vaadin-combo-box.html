@@ -70,7 +70,7 @@
     </paper-input-container>
 
     <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}} focus-target=[[_getFocusTarget()]]><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
       </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
@@ -117,6 +117,10 @@
 
     ready: function() {
       this._addKeyEventListeners();
+    },
+
+    _getFocusTarget: function() {
+      return this.$.overlay.fullScreen ? this.$.fullScreenInput : this.$.input;
     },
 
     /**
@@ -189,12 +193,6 @@
      */
     open: function() {
       this.$.overlay.open();
-
-      if (this.$.overlay.fullScreen) {
-        this.async(function() {
-          this.$.fullScreenInput.focus();
-        });
-      }
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
