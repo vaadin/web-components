@@ -103,43 +103,39 @@
       }
     },
 
-
-    _isEventKey: function(e, k) {
-      return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
+    ready: function() {
+      this._addKeyEventListeners();
     },
 
-    ready: function() {
-      // iron-dropdown locks scroll interactions with keys in document
+    /**
+     * Keyboard navigation
+     */
+
+    // iron-dropdown locks scrolling outside the overlay and prevents all scrolling
+    // related events from propagating. So, we needed to either hack into the
+    // iron-dropdown or provide custom event handling.
+    _addKeyEventListeners: function() {
       document.addEventListener('keydown', function(e) {
          if (this._isEventKey(e, 'left right')) {
            e.stopImmediatePropagation();
          }
       }.bind(this), true);
+
+      this.$.input.addEventListener('keydown', function(e) {
+        if (this._isEventKey(e, 'down')) {
+          this._onArrowDown();
+        } else if (this._isEventKey(e, 'up')) {
+          this._onArrowUp();
+        } else if (this._isEventKey(e, 'enter')) {
+          this._onEnter();
+        } else if (this._isEventKey(e, 'esc')) {
+          this._onEscape();
+        }
+      }.bind(this));
     },
 
-    // Using 'listeners' instead of a11y keyBindings because the
-    // second one does not work when iron-dropdown is modal
-    listeners: {
-      'input.keydown': '_onKeyDown'
-    },
-
-    _onKeyDown: function(e) {
-      if (this._isEventKey(e, 'down')) {
-        this._onArrowDown();
-      } else if (this._isEventKey(e, 'up')) {
-        this._onArrowUp();
-      } else if (this._isEventKey(e, 'enter')) {
-        this._onEnter();
-      } else if (this._isEventKey(e, 'esc')) {
-        this._onEscape();
-      }
-    },
-
-    /**
-     * Open the overlay.
-     */
-    open: function() {
-      this.$.overlay.open();
+    _isEventKey: function(e, k) {
+      return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
     },
 
     _onArrowDown: function() {
@@ -174,6 +170,13 @@
 
     _onEscape: function() {
       this.close();
+    },
+
+    /**
+     * Open the overlay.
+     */
+    open: function() {
+      this.$.overlay.open();
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
