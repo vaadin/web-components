@@ -21,6 +21,10 @@
       background: #fff;
     }
 
+    #overlay[full-screen] #selector {
+      height: 100%;
+    }
+
     .item {
       cursor: pointer;
       padding: 16px 22px;
@@ -44,11 +48,19 @@
       background-color: #fff;
     }
 
+    #overlay::content .dropdown-content {
+      @apply(--layout-vertical);
+    }
+
     #overlay:not([full-screen]) paper-input-container {
       display: none;
     }
 
-
+    /* Remove once #21 is implemented */
+    #overlay:not([full-screen]) #selector {
+      max-height: 300px;
+    }
+    /* END - Remove once #21 is implemented */
   </style>
 
   <template>
@@ -58,10 +70,10 @@
     </paper-input-container>
 
     <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}}><paper-input-container>
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}} focus-target=[[_getFocusTarget()]]><paper-input-container>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
-      </paper-input-container><iron-list id='selector' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
+      </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
           <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
         </template>
@@ -105,6 +117,10 @@
 
     ready: function() {
       this._addKeyEventListeners();
+    },
+
+    _getFocusTarget: function() {
+      return this.$.overlay.fullScreen ? this.$.fullScreenInput : this.$.input;
     },
 
     /**
@@ -197,6 +213,10 @@
       }
     },
 
+    _blurFullScreenInput: function() {
+      this.$.fullScreenInput.blur();
+    },
+
     _setItems: function(items) {
       this.$.selector.items = items;
 
@@ -232,6 +252,9 @@
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
+        if (this.$.overlay.fullScreen) {
+          this.$.fullScreenInput.blur();
+        }
       }
     },
 
