@@ -9,6 +9,7 @@
   <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
 
   <link rel='import' href='common.html'>
+  <script src='common.js'></script>
 </head>
 
 <body>
@@ -182,10 +183,9 @@
       it('should close the overlay with escape', function(done) {
         esc();
 
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           expect(comboBox.opened).to.equal(false);
-          done();
-        });
+        }, done);
       });
 
       it('should cancel typing with escape', function() {
@@ -194,7 +194,7 @@
         esc();
 
         expect(comboBox.value).to.equal('bar');
-      })
+      });
 
       it('should select typed item', function() {
         getInput().bindValue = 'baz';
