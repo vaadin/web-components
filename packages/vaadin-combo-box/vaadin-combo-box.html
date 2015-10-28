@@ -203,8 +203,8 @@
       this.$.input.bindValue = event.detail.value;
     },
 
-    _inputValueChanged: function(event, val) {
-      if(!this.opened && (val || typeof this.value !== 'undefined') && this._isFiltering()) {
+    _inputValueChanged: function(event) {
+      if(!this.opened && this._isFiltering(event)) {
           this.open();
       }
 
@@ -258,8 +258,11 @@
       }
     },
 
-    _isFiltering: function() {
-      return this.$.input.bindValue !== this.value;
+    _isFiltering: function(event) {
+      var filterOrValueIsSet = (event.detail.value || typeof this.value !== 'undefined');
+      var filterIsNotValue = this.$.input.bindValue !== this.value;
+
+      return filterOrValueIsSet && filterIsNotValue;
     },
 
     _preventDefault: function(e) {
