@@ -51,16 +51,28 @@
       });
 
       describeSkipIf(!fullScreen, 'fullscreen', function() {
-
-        it('should focus input on fullscreen dropdown open', function(done) {
+        beforeEach(function(done) {
           combobox.$.overlay.fullScreen = true;
           combobox.open();
-          Polymer.Base.async(function() {
-            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
-            expect(focusedInput).to.equal(combobox.$.fullScreenInput);
-            done();
-          });
+
+          Polymer.Base.async(done);
         });
+
+        it('should focus input on fullscreen dropdown open', function() {
+          var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
+
+          expect(focusedInput).to.equal(combobox.$.fullScreenInput);
+        });
+
+        it('should blur input when closing', function(done) {
+          combobox.close();
+
+          asyncDone(function() {
+            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
+
+            expect(focusedInput).to.be.undefined;
+          }, done);
+        })
 
       });
 

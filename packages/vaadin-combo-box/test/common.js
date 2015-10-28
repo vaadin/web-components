@@ -15,3 +15,14 @@ var describeSkipIf = function(bool, title, callback) {
     describe(title, callback);
   }
 };
+
+var asyncDone = function(cb, done) {
+  Polymer.Base.async(function() {
+    try {
+      cb();
+      done();
+    } catch (err) {
+      done(err);
+    }
+  });
+};
