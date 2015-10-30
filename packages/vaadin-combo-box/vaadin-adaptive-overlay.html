@@ -20,9 +20,16 @@
   </style>
 
   <template>
-    <iron-dropdown id="dropdown" focus-target=[[focusTarget]] opened={{opened}} fullscreen$=[[fullScreen]] with-backdrop=[[fullScreen]]
-                   on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened"
-                   vertical-align="[[verticalAlign]]" horizontal-align="[[horizontalAlign]]" vertical-offset="[[verticalOffset]]">
+    <iron-dropdown id="dropdown"
+      opened={{opened}}
+      focus-target=[[focusTarget]]
+      fullscreen$=[[fullScreen]]
+      with-backdrop=[[fullScreen]]
+      on-iron-overlay-closed="_closed"
+      on-iron-overlay-opened="_opened"
+      vertical-align="[[verticalAlign]]"
+      horizontal-align="[[horizontalAlign]]"
+      vertical-offset="[[verticalOffset]]">
       <div id='dropdownContent' class="dropdown-content">
         <content>
       </div>
@@ -119,11 +126,13 @@
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
         if(extent === "Width") {
           var parent = this.domHost || this.parentElement;
-          this.$.dropdownContent.style.maxWidth = parent.clientWidth + 'px';
+          if (!this.fullScreen) {
+            this.$.dropdownContent.style.maxWidth = parent.clientWidth + 'px';
+          }
 
           // iron-dropdown should do this
           var a = this.$.dropdown.verticalAlign === 'top' ? 'bottom' : 'top';
-          this.$.dropdown.style[a] = 'initial';
+          this.$.dropdown.style[a] = 'auto';
         } else {
           sd(rect, positionedBy, start, end, extent)
         }
@@ -161,6 +170,16 @@
     _opened: function() {
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
+      } else {
+        // FIXME(manolo) for some reason in tests after beforeEach has be run, if
+        // we call combobox.open() this.alignmentTarget seems undefined and we cannot
+        // call updateOverlayAlignment(). Using hack right now
+        Polymer.Base.async(function() {
+          var ev = document.createEvent('Event');
+          ev.initEvent('resize', true, true);
+          window.dispatchEvent(ev);
+        })
+        // Polymer.Base.async(this.updateOverlayAlignment)
       }
     },
 
@@ -174,7 +193,7 @@
     },
 
     updateOverlayAlignment: function() {
-      if (!this.alignmentTarget) return;
+      if (!this.alignmentTarget || this.fullScreen) return;
 
       var rect = this.alignmentTarget.getBoundingClientRect();
 
