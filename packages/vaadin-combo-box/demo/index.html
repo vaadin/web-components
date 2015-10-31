@@ -104,6 +104,35 @@
       </code>
     </code-example>
   </section>
+
+  <section>
+    <h3>Sizing</h3>
+    <p>In desktop browsers, the dropdown adapts it's size so as it does not overflow window edges and does
+       not exceed input width. It also changes it's position from bottom to top if there
+       is not enough room below the input. <br/>
+       Try to resize the window to check how the dropdown adapts its size and position.
+    </p>
+    <code-example source>
+      <div id='demo_4' demo>
+        <style>
+          #demo_4 {
+             background: rgba(0, 167, 247, 0.1);
+             width: 200px;
+          }
+          #demo_4 iron-dropdown {
+            border: solid 1px #4249B9;
+            margin: 5px 0px 5px;
+          }
+        </style>
+        <vaadin-combo-box></vaadin-combo-box>
+      </div>
+      <code demo-var="div">
+        var combobox = div.querySelector('vaadin-combo-box')
+        combobox.items = ["APACHE","AUTHORS","BSD","CHANGELOG","CHANGES","COMMIT_EDITMSG","CONTRIBUTING","CONTRIBUTORS","COPYING","ChangeLog","Client","Config","Contents","Core","Extensions","FAQ","GLOBAL","HEAD","HISTORY","Info","LICENCE","MIT","Makefile","OSX","README","SOURCES"];
+      </code>
+    </code-example>
+  </section>
+
 </body>
 
 </html>
