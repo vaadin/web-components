@@ -185,7 +185,7 @@
 
         asyncDone(function() {
           expect(comboBox.opened).to.equal(false);
-        }, done);
+        }, done, 100);
       });
 
       it('should cancel typing with escape', function() {

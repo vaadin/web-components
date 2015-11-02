@@ -85,23 +85,21 @@
       it('should match the input container width', function(done) {
         openComboboxTop()
 
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           expect(dropContentRect().width).to.equal(100);
           comboBox.close();
-          Polymer.Base.async(function() {
+          asyncDone(function() {
             expect(dropContentRect().width).to.equal(0);
-            done();
-          });
+          }, done);
         });
       });
 
       it('should be below the input box if there is enough room under it', function(done) {
         openComboboxTop()
 
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           expect(dropContentRect().top).to.be.above(inputContentRect().top)
-          done();
-        });
+        }, done);
       });
 
       it('should be above the input box if there is not enough room under it', function(done) {
@@ -109,7 +107,7 @@
 
         // TODO(manolo) for some reason if we listen to iron-overlay-opened event it fires twice
         // so we prefer a small delay here, until window.resize or animation is handled
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           // FIXME(manolo) iron-dropdown computes wrong the max-height value for the dropdownContent
           // element, and it gives all the height that the list needs (no scroll). It only happens
           // when the popup is above the input. The bottom position of the iron-dropdown element is
@@ -119,40 +117,36 @@
           }
           // In chrome difference is arownd 1px in FF about 4px
           expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
-          done();
-        }, 100);
+        }, done, 100);
       });
 
       it('when the input position moves in the view port the overlay position should change', function(done) {
         openComboboxBottom()
 
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
 
           // The ideal test would be to resize the window, but testing system disallows
           // resizing the iframe, si we move the combo-box with styles and fire the window
           // resize event
           moveComboBox(horiCenter, vertTop, 100);
-          Polymer.Base.async(function() {
+          asyncDone(function() {
             expect(dropContentRect().top).to.be.above(inputContentRect().top)
-            done();
-          }, 100);
-        }, 100);
+          }, done, 100);
+        }, null, 100);
       });
 
 
       it('when the input position width changes overlay width should change', function(done) {
         openComboboxBottom()
 
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           expect(dropContentRect().width).to.equal(100);
-
           moveComboBox(horiCenter, vertBottom, 150);
-          Polymer.Base.async(function() {
+          asyncDone(function() {
             expect(dropContentRect().width).to.equal(150);
-            done();
-          }, 100);
-        }, 100);
+          }, done, 100);
+        }, null);
       });
     });
 
@@ -160,37 +154,32 @@
       it('when window resizes popup should resize in order not overflow window edges', function(done) {
         openComboboxTop()
 
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           var top = dropContentRect().top;
           expectAlmostEqual(1, wh, top + dropContent().clientHeight);
-
           moveComboBox(horiCenter, vertTop + 40, 100);
-          Polymer.Base.async(function() {
+          asyncDone(function() {
             var newTop = dropContentRect().top;
             expect(newTop).to.be.equal(top + 40);
             expectAlmostEqual(1, wh, newTop + dropContent().clientHeight);
-            done();
-          }, 100);
-        }, 100);
+          }, done, 100);
+        }, null, 100);
       });
     });
 
     describeSkipIf(fullScreen || isFF, 'overlay resizing at top', function() {
       it('when window resizes popup should resize in order not overflow window edges', function(done) {
         openComboboxBottom()
-
-        Polymer.Base.async(function() {
+        asyncDone(function() {
           var bottom = dropContentRect().bottom;
           expectAlmostEqual(1, bottom, dropContent().clientHeight);
-
           moveComboBox(horiCenter, vertBottom - 40, 100);
-          Polymer.Base.async(function() {
+          asyncDone(function() {
             var newBottom = dropContentRect().bottom;
             expect(newBottom).to.be.equal(bottom - 40);
             expectAlmostEqual(1, newBottom, dropContent().clientHeight);
-            done();
-          }, 100);
-        }, 100);
+          }, done, 100);
+        }, null, 100);
       });
     });
 

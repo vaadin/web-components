@@ -16,15 +16,16 @@ var describeSkipIf = function(bool, title, callback) {
   }
 };
 
-var asyncDone = function(cb, done) {
+var asyncDone = function(cb, done, timeout) {
   Polymer.Base.async(function() {
     try {
       cb();
-      done();
+      if (done) done();
     } catch (err) {
-      done(err);
+      if (done) done(err);
+      else throw(err);
     }
-  });
+  }, timeout);
 };
 
 var items20 = [];
