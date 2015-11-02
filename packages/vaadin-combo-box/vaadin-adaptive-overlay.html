@@ -12,6 +12,8 @@
     #dropdown[fullscreen] .dropdown-content {
       height: 100vh;
       max-height: 100vh;
+      width: 100vw;
+      max-width: 100vw;
     }
 
     :host .dropdown-content {
@@ -93,8 +95,8 @@
       },
 
       /**
-       * A pixel value that will be compared with with the input bottom offset.
-       * If the offset less then this value then the over will be shown above the input.
+       * The pixel value that being compared with bottom offset of the input element will
+       * make the popup be shown above the input.
        */
       alignThreshold: {
         type: Number,
@@ -112,9 +114,6 @@
      *
      */
     _fullScreenChanged: function() {
-      if (this.fullScreen) {
-        this.$.dropdown.fitInto = document.documentElement;
-      }
       this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this;
     },
 
@@ -126,15 +125,13 @@
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
         if(extent === "Width") {
           var parent = this.domHost || this.parentElement;
-          if (!this.fullScreen) {
-            this.$.dropdownContent.style.maxWidth = parent.clientWidth + 'px';
-          }
+          this.$.dropdown.sizingTarget.style.maxWidth = parent.clientWidth + 'px';
 
           // iron-dropdown should do this
           var a = this.$.dropdown.verticalAlign === 'top' ? 'bottom' : 'top';
           this.$.dropdown.style[a] = 'auto';
         } else {
-          sd(rect, positionedBy, start, end, extent)
+          sd(rect, positionedBy, start, end, extent);
         }
       }.bind(this);
     },
@@ -143,17 +140,19 @@
       this._patchIronFitBehavior();
     },
 
+    _resizeHandler: undefined,
+
     attached: function() {
       this._fullScreenChanged();
-      window.addEventListener('resize', this.updateOverlayAlignment.bind(this));
-      window.addEventListener('scroll', this.updateOverlayAlignment.bind(this));
-      this.updateOverlayAlignment();
     },
 
     /**
      * Open the overlay.
      */
     open: function() {
+      this._resizeHandler = this._updateOverlayAlignment.bind(this);
+      window.addEventListener('resize', this._resizeHandler);
+      window.addEventListener('scroll', this._resizeHandler);
       this.$.dropdown.open();
     },
 
@@ -161,6 +160,10 @@
      * Close the overlay.
      */
     close: function() {
+      if (this._resizeHandler) {
+        window.removeEventListener('resize', this._resizeHandler);
+        window.removeEventListener('scroll', this._resizeHandler);
+      }
       this.$.dropdown.close();
     },
 
@@ -179,7 +182,7 @@
           ev.initEvent('resize', true, true);
           window.dispatchEvent(ev);
         })
-        // Polymer.Base.async(this.updateOverlayAlignment)
+        // Polymer.Base.async(this.updateOverlayAlignment);
       }
     },
 
@@ -192,7 +195,7 @@
       }
     },
 
-    updateOverlayAlignment: function() {
+    _updateOverlayAlignment: function() {
       if (!this.alignmentTarget || this.fullScreen) return;
 
       var rect = this.alignmentTarget.getBoundingClientRect();
@@ -204,9 +207,6 @@
       if (bottomAlign !== this._alignedToBottom) {
         if (this.opened) {
           this.close();
-          // iron-dropdown should do this
-          this.$.dropdown.style[bottomAlign ? 'top' : 'bottom'] = undefined;
-
           this.$.dropdown.resetFit();
           Polymer.Base.async(this.open.bind(this));
         } else {

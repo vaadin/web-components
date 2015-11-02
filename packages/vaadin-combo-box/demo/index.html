@@ -113,20 +113,21 @@
        Try to resize the window to check how the dropdown adapts its size and position.
     </p>
     <code-example source>
-      <div id='demo_4' demo>
+      <div class='my-demo' demo>
         <style>
-          #demo_4 {
-             background: rgba(0, 167, 247, 0.1);
-             width: 200px;
+          .my-demo {
+            background: rgba(0, 167, 247, 0.1);
+            width: 200px;
           }
-          #demo_4 iron-dropdown {
+          .my-demo iron-dropdown {
             border: solid 1px #4249B9;
             margin: 5px 0px 5px;
           }
         </style>
         <vaadin-combo-box></vaadin-combo-box>
       </div>
-      <code demo-var="div">
+      <code>
+        var div = document.querySelector('div.my-demo');
         var combobox = div.querySelector('vaadin-combo-box')
         combobox.items = ["APACHE","AUTHORS","BSD","CHANGELOG","CHANGES","COMMIT_EDITMSG","CONTRIBUTING","CONTRIBUTORS","COPYING","ChangeLog","Client","Config","Contents","Core","Extensions","FAQ","GLOBAL","HEAD","HISTORY","Info","LICENCE","MIT","Makefile","OSX","README","SOURCES"];
       </code>
