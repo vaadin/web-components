@@ -91,6 +91,22 @@
   </section>
 
   <section>
+    <h3>Automatic sizing and alignment</h3>
+    <p>In desktop browsers, the dropdown adapts its size so that it doesn't flow over the window edges and doesn't
+       exceed the width of the component. The dropdown also changes its alignment from bottom to top if there
+       isn't enough room below the component. <br/>
+       Resize the window to see how the dropdown adapts its size and alignment.
+    </p>
+    <code-example source>
+      <vaadin-combo-box demo></vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        combobox.items = ["APACHE","AUTHORS","BSD","CHANGELOG","CHANGES","COMMIT_EDITMSG","CONTRIBUTING","CONTRIBUTORS","COPYING","ChangeLog","Client","Config","Contents","Core","Extensions","FAQ","GLOBAL","HEAD","HISTORY","Info","LICENCE","MIT","Makefile","OSX","README","SOURCES"];
+      </code>
+    </code-example>
+  </section>
+
+  <section>
     <h3>Filtering</h3>
     <p>Typing text into the <code>vaadin-combo-box's</code> input field will filter
       values defined in the <code>items</code> property and show only items that
@@ -101,35 +117,6 @@
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector("vaadin-combo-box");
         combobox.items = ['foo', 'bar', 'baz'];
-      </code>
-    </code-example>
-  </section>
-
-  <section>
-    <h3>Sizing</h3>
-    <p>In desktop browsers, the dropdown adapts it's size so as it does not overflow window edges and does
-       not exceed input width. It also changes it's position from bottom to top if there
-       is not enough room below the input. <br/>
-       Try to resize the window to check how the dropdown adapts its size and position.
-    </p>
-    <code-example source>
-      <div class='my-demo' demo>
-        <style>
-          .my-demo {
-            background: rgba(0, 167, 247, 0.1);
-            width: 200px;
-          }
-          .my-demo iron-dropdown {
-            border: solid 1px #4249B9;
-            margin: 5px 0px 5px;
-          }
-        </style>
-        <vaadin-combo-box></vaadin-combo-box>
-      </div>
-      <code>
-        var div = document.querySelector('div.my-demo');
-        var combobox = div.querySelector('vaadin-combo-box')
-        combobox.items = ["APACHE","AUTHORS","BSD","CHANGELOG","CHANGES","COMMIT_EDITMSG","CONTRIBUTING","CONTRIBUTORS","COPYING","ChangeLog","Client","Config","Contents","Core","Extensions","FAQ","GLOBAL","HEAD","HISTORY","Info","LICENCE","MIT","Makefile","OSX","README","SOURCES"];
       </code>
     </code-example>
   </section>

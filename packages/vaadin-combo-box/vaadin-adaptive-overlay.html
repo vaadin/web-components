@@ -19,6 +19,14 @@
     :host .dropdown-content {
       width: 100vw;
     }
+
+    /* Override the conflicting top/bottom values not cleared by iron-dropdown */
+    #dropdown[vertical-align='top'] {
+      bottom: auto !important;
+    }
+    #dropdown[vertical-align='bottom'] {
+      top: auto !important;
+    }
   </style>
 
   <template>
@@ -28,10 +36,7 @@
       fullscreen$=[[fullScreen]]
       with-backdrop=[[fullScreen]]
       on-iron-overlay-closed="_closed"
-      on-iron-overlay-opened="_opened"
-      vertical-align="[[verticalAlign]]"
-      horizontal-align="[[horizontalAlign]]"
-      vertical-offset="[[verticalOffset]]">
+      on-iron-overlay-opened="_opened">
       <div id='dropdownContent' class="dropdown-content">
         <content>
       </div>
@@ -58,7 +63,6 @@
        */
       fullScreen: {
         type: Boolean,
-        observer: '_fullScreenChanged',
         notify: true,
         reflectToAttribute: true,
         value: function() {
@@ -90,10 +94,6 @@
         }
       },
 
-      alignmentTarget: {
-        type: Object
-      },
-
       /**
        * The pixel value that being compared with bottom offset of the input element will
        * make the popup be shown above the input.
@@ -103,33 +103,24 @@
         value: 200
       },
 
-      _alignedToBottom: {
-        type: Boolean,
-        value: false
+      _resizeHandler: {
+        value: function() {
+          return this._updateOverlayAlignment.bind(this);
+        }
       }
+
     },
 
-    /**
-     * Called when the value of `fullScreen` changes.
-     *
-     */
-    _fullScreenChanged: function() {
-      this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this;
-    },
+
 
     /**
-     * Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
+     * Need to monkeypatch _sizeDimension to fix sizingTarget width to match positionTarget width
      */
     _patchIronFitBehavior: function() {
       var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
         if(extent === "Width") {
-          var parent = this.domHost || this.parentElement;
-          this.$.dropdown.sizingTarget.style.maxWidth = parent.clientWidth + 'px';
-
-          // iron-dropdown should do this
-          var a = this.$.dropdown.verticalAlign === 'top' ? 'bottom' : 'top';
-          this.$.dropdown.style[a] = 'auto';
+          this.$.dropdown.sizingTarget.style.maxWidth = this.$.dropdown.positionTarget.clientWidth + 'px';
         } else {
           sd(rect, positionedBy, start, end, extent);
         }
@@ -138,21 +129,13 @@
 
     ready: function() {
       this._patchIronFitBehavior();
-    },
-
-    _resizeHandler: undefined,
-
-    attached: function() {
-      this._fullScreenChanged();
+      this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this.domHost || this.parentElement;
     },
 
     /**
      * Open the overlay.
      */
     open: function() {
-      this._resizeHandler = this._updateOverlayAlignment.bind(this);
-      window.addEventListener('resize', this._resizeHandler);
-      window.addEventListener('scroll', this._resizeHandler);
       this.$.dropdown.open();
     },
 
@@ -160,10 +143,6 @@
      * Close the overlay.
      */
     close: function() {
-      if (this._resizeHandler) {
-        window.removeEventListener('resize', this._resizeHandler);
-        window.removeEventListener('scroll', this._resizeHandler);
-      }
       this.$.dropdown.close();
     },
 
@@ -174,15 +153,9 @@
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
       } else {
-        // FIXME(manolo) for some reason in tests after beforeEach has be run, if
-        // we call combobox.open() this.alignmentTarget seems undefined and we cannot
-        // call updateOverlayAlignment(). Using hack right now
-        Polymer.Base.async(function() {
-          var ev = document.createEvent('Event');
-          ev.initEvent('resize', true, true);
-          window.dispatchEvent(ev);
-        })
-        // Polymer.Base.async(this.updateOverlayAlignment);
+        window.addEventListener('resize', this._resizeHandler);
+        this.$.dropdown.verticalOffset = this.$.dropdown.positionTarget.clientHeight;
+        this.async(this._updateOverlayAlignment);
       }
     },
 
@@ -192,29 +165,23 @@
     _closed: function() {
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._originalContent;
+      } else {
+        window.removeEventListener('resize', this._resizeHandler);
       }
     },
 
     _updateOverlayAlignment: function() {
-      if (!this.alignmentTarget || this.fullScreen) return;
-
-      var rect = this.alignmentTarget.getBoundingClientRect();
-
+      var rect = this.$.dropdown.positionTarget.getBoundingClientRect();
       var bottomAlign = window.innerHeight - rect.bottom < this.alignThreshold;
-      this.verticalAlign = bottomAlign ? 'bottom' : 'top';
-      this.verticalOffset = bottomAlign ? rect.height : 0;
 
       if (bottomAlign !== this._alignedToBottom) {
-        if (this.opened) {
-          this.close();
-          this.$.dropdown.resetFit();
-          Polymer.Base.async(this.open.bind(this));
-        } else {
-          this.$.dropdown.resetFit();
-        }
-      }
-      this._alignedToBottom = bottomAlign;
-    }
+        this.close();
+        this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
+        this.$.dropdown.resetFit();
+        this.async(this.open);
 
+        this._alignedToBottom = bottomAlign;
+      }
+    }
   });
 </script>
