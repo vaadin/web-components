@@ -23,12 +23,14 @@ var asyncDone = function(cb, done, timeout) {
       if (done) done();
     } catch (err) {
       if (done) done(err);
-      else throw(err);
+      else throw (err);
     }
   }, timeout);
 };
 
-var items20 = [];
-for (var i = 0; i < 20; i++) {
-  items20.push('item ' + i)
+var getItemArray = function(length) {
+  return new Array(length).join().split(',')
+    .map(function(item, index) {
+      return 'item ' + index
+    });
 }

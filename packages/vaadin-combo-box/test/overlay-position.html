@@ -77,7 +77,7 @@
   describe('overlay', function() {
     beforeEach(function() {
       comboBox = fixture('combobox');
-      comboBox.items = items20;
+      comboBox.items = getItemArray(20);
       vertBottom = wh - comboBox.$.overlay.alignThreshold + 1;
     });
 
