@@ -25,7 +25,7 @@ var asyncDone = function(cb, done, timeout) {
       if (done) done(err);
       else throw (err);
     }
-  }, timeout);
+  }, timeout || 1);
 };
 
 var getItemArray = function(length) {

@@ -117,7 +117,7 @@
           }
           // In chrome difference is arownd 1px in FF about 4px
           expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
-        }, done, 100);
+        }, done);
       });
 
       it('when the input position moves in the view port the overlay position should change', function(done) {
@@ -132,8 +132,8 @@
           moveComboBox(horiCenter, vertTop, 100);
           asyncDone(function() {
             expect(dropContentRect().top).to.be.above(inputContentRect().top)
-          }, done, 100);
-        }, null, 100);
+          }, done);
+        }, null);
       });
 
 
@@ -145,7 +145,7 @@
           moveComboBox(horiCenter, vertBottom, 150);
           asyncDone(function() {
             expect(dropContentRect().width).to.equal(150);
-          }, done, 100);
+          }, done);
         }, null);
       });
     });
@@ -162,8 +162,8 @@
             var newTop = dropContentRect().top;
             expect(newTop).to.be.equal(top + 40);
             expectAlmostEqual(1, wh, newTop + dropContent().clientHeight);
-          }, done, 100);
-        }, null, 100);
+          }, done);
+        }, null);
       });
     });
 
@@ -178,8 +178,8 @@
             var newBottom = dropContentRect().bottom;
             expect(newBottom).to.be.equal(bottom - 40);
             expectAlmostEqual(1, newBottom, dropContent().clientHeight);
-          }, done, 100);
-        }, null, 100);
+          }, done);
+        }, null);
       });
     });
 
