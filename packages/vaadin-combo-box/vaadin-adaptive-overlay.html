@@ -35,6 +35,9 @@
       focus-target=[[focusTarget]]
       fullscreen$=[[fullScreen]]
       with-backdrop=[[fullScreen]]
+      position-target=[[positionTarget]]
+      vertical-align=[[_verticalAlign]]
+      vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen)]]
       on-iron-overlay-closed="_closed"
       on-iron-overlay-opened="_opened">
       <div id='dropdownContent' class="dropdown-content">
@@ -103,15 +106,38 @@
         value: 200
       },
 
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        computed: '_computePositionTarget(fullScreen)'
+      },
+
       _resizeHandler: {
         value: function() {
           return this._updateOverlayAlignment.bind(this);
         }
+      },
+
+      _verticalAlign: {
+        observer: '_verticalAlignChanged'
       }
 
     },
 
+    _computePositionTarget: function(fullScreen) {
+      return fullScreen ? document.documentElement : this.domHost || this.parentElement;
+    },
 
+    _computeVerticalOffset: function(opened, positionTarget, fullScreen) {
+      return !fullScreen && positionTarget ? positionTarget.clientHeight : 0;
+    },
+
+    _verticalAlignChanged: function() {
+      this.close();
+      this.$.dropdown.resetFit();
+      this.async(this.open);
+    },
 
     /**
      * Need to monkeypatch _sizeDimension to fix sizingTarget width to match positionTarget width
@@ -129,7 +155,6 @@
 
     ready: function() {
       this._patchIronFitBehavior();
-      this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this.domHost || this.parentElement;
     },
 
     /**
@@ -154,7 +179,6 @@
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
       } else {
         window.addEventListener('resize', this._resizeHandler);
-        this.$.dropdown.verticalOffset = this.$.dropdown.positionTarget.clientHeight;
         this.async(this._updateOverlayAlignment);
       }
     },
@@ -172,16 +196,8 @@
 
     _updateOverlayAlignment: function() {
       var rect = this.$.dropdown.positionTarget.getBoundingClientRect();
-      var bottomAlign = window.innerHeight - rect.bottom < this.alignThreshold;
-
-      if (bottomAlign !== this._alignedToBottom) {
-        this.close();
-        this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
-        this.$.dropdown.resetFit();
-        this.async(this.open);
-
-        this._alignedToBottom = bottomAlign;
-      }
+      var alignedToBottom = window.innerHeight - rect.bottom < this.alignThreshold;
+      this._verticalAlign = alignedToBottom ? 'bottom' : 'top';
     }
   });
 </script>
