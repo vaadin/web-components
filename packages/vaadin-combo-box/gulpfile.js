@@ -1,7 +1,8 @@
+"use strict";
 var args = require('yargs').argv;
 var chalk = require('chalk');
 var wct = require('web-component-tester').test;
-var gulp = require('gulp')
+var gulp = require('gulp');
 
 function cleanDone(done) {
   return function(error) {
@@ -52,7 +53,7 @@ function testSauce(browsers, done) {
         hostname: localAddress()
       }
     }, done);
-};
+}
 
 gulp.task('test:desktop', function(done) {
   testSauce([
@@ -75,4 +76,4 @@ gulp.task('test:shadow', function(done) {
 
   testSauce([
     'Windows 10/chrome@45'], done);
-})
+});
