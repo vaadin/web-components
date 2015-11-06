@@ -23,6 +23,10 @@
     </data-series>
 
     <data-series name="Versions" size="318" inner-size="237">
+        <data-labels formatter="function() {
+                  return this.y > 1 ? ''+ this.point.name +': '+ this.y +'%' : null;
+                }">
+        </data-labels>
         <data>
             <point>
                 <name>MSIE 6.0</name>
