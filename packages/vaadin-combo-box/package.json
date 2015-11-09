@@ -7,7 +7,7 @@
     "bower": "latest",
     "chalk": "^1.1.1",
     "gulp": "latest",
-    "web-component-tester": "^3.3.25",
+    "web-component-tester": "3.3.30",
     "yargs": "^3.27.0"
   },
   "scripts": {
