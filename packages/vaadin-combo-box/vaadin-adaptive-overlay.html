@@ -196,7 +196,8 @@
 
     _updateOverlayAlignment: function() {
       var rect = this.$.dropdown.positionTarget.getBoundingClientRect();
-      var alignedToBottom = window.innerHeight - rect.bottom < this.alignThreshold;
+      var spaceBelow = window.innerHeight - rect.bottom;
+      var alignedToBottom = spaceBelow < this.alignThreshold && spaceBelow < rect.top;
       this._verticalAlign = alignedToBottom ? 'bottom' : 'top';
     }
   });

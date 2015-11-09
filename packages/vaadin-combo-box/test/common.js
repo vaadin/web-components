@@ -31,6 +31,6 @@ var asyncDone = function(cb, done, timeout) {
 var getItemArray = function(length) {
   return new Array(length).join().split(',')
     .map(function(item, index) {
-      return 'item ' + index
+      return 'item ' + index;
     });
-}
+};
