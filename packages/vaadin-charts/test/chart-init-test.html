@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../vaadin-line-chart.html">
+</head>
+<body>
+
+<script>
+    suite('<vaadin-_-chart>', function () {
+
+        test('Test that chart initialization is done only once', function (done) {
+            HTMLImports.whenReady(function () {
+
+                var chartwc = document.createElement("vaadin-line-chart");
+                chartwc.setAttribute("id","chartid");
+                var title = document.createElement("title");
+                var ds = document.createElement("data-series");
+                var axis = document.createElement("x-axis");
+                var parent = document.createElement("div");
+                var newParent = document.createElement("div");
+                var data = document.createElement("data");
+
+                data.textContent = "10,20,30,10,20,30";
+                Polymer.dom(ds).appendChild(data);
+                Polymer.dom(chartwc).appendChild(title);
+                Polymer.dom(chartwc).appendChild(axis);
+                Polymer.dom(chartwc).appendChild(ds);
+
+                document.body.appendChild(parent);
+                document.body.appendChild(newParent);
+
+                chartwc.addEventListener("chart-loaded", function () {
+                    //After deattach /attach chart to a page, the n of Series and axis
+                    //should stay the same
+                    expect(chartwc.chart.options.series.length).to.equal(1);
+                    expect(chartwc._chartConf.xAxis.length).to.equal(1);
+
+                    parent.removeChild(chartwc);
+                    newParent.appendChild(chartwc);
+                    expect(chartwc.chart.options.series.length).to.equal(1);
+                    expect(chartwc._chartConf.xAxis.length).to.equal(1);
+                    done();
+
+                });
+
+                Polymer.dom(parent).appendChild(chartwc);
+
+            });
+        });
+    });
+
+</script>
+
+</body>
+</html>

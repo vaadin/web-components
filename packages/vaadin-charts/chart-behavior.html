@@ -74,14 +74,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
-             * Flag to indicate when this component has initialized itself for the first time.
-             **/
-            initialized: {
-                type: Boolean,
-                value: false
-            },
-
-            /**
              * Initial chart configuration before initial rendering.
              **/
             _chartConf: {
@@ -90,6 +82,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                     return {chart: {}};
                 }
             }
+        },
+
+        /**
+         * Tells that the component has been initialized.
+         **/
+        isInitialized: function() {
+          return Object.keys(this.chart).length !== 0;
         },
 
         /**
@@ -187,28 +186,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         attached: function () {
-          this._initLocalDom();
-          this._initConfiguration();
-
-          Polymer.dom(this).querySelectorAll("data-series").forEach(function(ds) {
-              ds.initialize();
-          });
-          if (this._loadTheme) {
-              this._loadTheme();
-          }
-          this._initChart();
+            if (!this.isInitialized()) {
+                this._initLocalDom();
+                this._initConfiguration();
+                Polymer.dom(this).querySelectorAll("data-series").forEach(function(ds) {
+                    ds.initialize();
+                });
+                if (this._loadTheme) {
+                    this._loadTheme();
+                }
+                this._initChart();
+            }
         },
 
         /**
          * Initializes the chart property using the json configuration.
          */
         _initChart: function () {
-            //Only initialize once
-            if (Object.keys(this.chart).length === 0) {
-                this.chart = new Highcharts.Chart(this._chartConf);
-                this.initialized = true;
-                this.fire("chart-loaded");
-            }
+            this.chart = new Highcharts.Chart(this._chartConf);
+            this.fire("chart-loaded");
         },
 
         ready: function () {
@@ -216,18 +212,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         _initLocalDom: function () {
-            if (!this.initialized) {
-                var chartContainer = document.createElement('div');
-                chartContainer.id = "chartContainer";
-                chartContainer.setAttribute("style", "height:100%; width:100%;");
-                Polymer.dom(this.root).appendChild(chartContainer);
-
-                var licenseChecker = document.createElement('vaadin-license-checker');
-                licenseChecker.productName = "vaadin-charts";
-                licenseChecker.productVersion = "3";
-                licenseChecker.productCaption = "Vaadin Charts";
-                Polymer.dom(this.root).appendChild(licenseChecker);
-            }
+            var chartContainer = document.createElement('div');
+            chartContainer.id = "chartContainer";
+            chartContainer.setAttribute("style", "height:100%; width:100%;");
+            Polymer.dom(this.root).appendChild(chartContainer);
+            var licenseChecker = document.createElement('vaadin-license-checker');
+            licenseChecker.productName = "vaadin-charts";
+            licenseChecker.productVersion = "3";
+            licenseChecker.productCaption = "Vaadin Charts";
+            Polymer.dom(this.root).appendChild(licenseChecker);
         },
 
         /**

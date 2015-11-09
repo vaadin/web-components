@@ -48,7 +48,7 @@
                     },
                     _addSeriesPoint: function () {
                         var x = (new Date()).getTime(),
-                                y = Math.random();
+                                y = Math.floor(Math.random() * 40) + 1 ;
                         this.push('seriesData', [x, y]);
                     },
                     _changeTitle: function () {
