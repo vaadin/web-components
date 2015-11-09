@@ -12,16 +12,35 @@
     #dropdown[fullscreen] .dropdown-content {
       height: 100vh;
       max-height: 100vh;
+      width: 100vw;
+      max-width: 100vw;
     }
 
     :host .dropdown-content {
       width: 100vw;
     }
+
+    /* Override the conflicting top/bottom values not cleared by iron-dropdown */
+    #dropdown[vertical-align='top'] {
+      bottom: auto !important;
+    }
+    #dropdown[vertical-align='bottom'] {
+      top: auto !important;
+    }
   </style>
 
   <template>
-    <iron-dropdown id="dropdown" focus-target=[[focusTarget]] opened={{opened}} fullscreen$=[[fullScreen]] on-iron-overlay-closed="_closed" on-iron-overlay-opened="_opened" with-backdrop=[[fullScreen]]>
-      <div class="dropdown-content">
+    <iron-dropdown id="dropdown"
+      opened={{opened}}
+      focus-target=[[focusTarget]]
+      fullscreen$=[[fullScreen]]
+      with-backdrop=[[fullScreen]]
+      position-target=[[positionTarget]]
+      vertical-align=[[_verticalAlign]]
+      vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen)]]
+      on-iron-overlay-closed="_closed"
+      on-iron-overlay-opened="_opened">
+      <div id='dropdownContent' class="dropdown-content">
         <content>
       </div>
     </iron-dropdown>
@@ -47,7 +66,6 @@
        */
       fullScreen: {
         type: Boolean,
-        observer: '_fullScreenChanged',
         notify: true,
         reflectToAttribute: true,
         value: function() {
@@ -77,37 +95,66 @@
             "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
           return viewport;
         }
+      },
+
+      /**
+       * The pixel value that being compared with bottom offset of the input element will
+       * make the popup be shown above the input.
+       */
+      alignThreshold: {
+        type: Number,
+        value: 200
+      },
+
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        computed: '_computePositionTarget(fullScreen)'
+      },
+
+      _resizeHandler: {
+        value: function() {
+          return this._updateOverlayAlignment.bind(this);
+        }
+      },
+
+      _verticalAlign: {
+        observer: '_verticalAlignChanged'
       }
+
+    },
+
+    _computePositionTarget: function(fullScreen) {
+      return fullScreen ? document.documentElement : this.domHost || this.parentElement;
+    },
+
+    _computeVerticalOffset: function(opened, positionTarget, fullScreen) {
+      return !fullScreen && positionTarget ? positionTarget.clientHeight : 0;
+    },
+
+    _verticalAlignChanged: function() {
+      this.close();
+      this.$.dropdown.resetFit();
+      this.async(this.open);
     },
 
     /**
-     * Called when the value of `fullScreen` changes.
-     *
-     */
-    _fullScreenChanged: function() {
-      var parent = this.domHost || this.parentElement;
-      this.$.dropdown.fitInto = this.fullScreen ? document.documentElement : parent;
-      this.$.dropdown.positionTarget = this.fullScreen ? document.documentElement : this;
-    },
-
-    /**
-     * Need to monkeypatch _sizeDimension to avoid a bug in iron-fit-behavior
+     * Need to monkeypatch _sizeDimension to fix sizingTarget width to match positionTarget width
      */
     _patchIronFitBehavior: function() {
       var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
-        sd(extent === "Width" ? {
-          left: 0
-        } : rect, positionedBy, start, end, extent);
-      };
+        if(extent === "Width") {
+          this.$.dropdown.sizingTarget.style.maxWidth = this.$.dropdown.positionTarget.clientWidth + 'px';
+        } else {
+          sd(rect, positionedBy, start, end, extent);
+        }
+      }.bind(this);
     },
 
     ready: function() {
       this._patchIronFitBehavior();
-    },
-
-    attached: function() {
-      this._fullScreenChanged();
     },
 
     /**
@@ -130,6 +177,9 @@
     _opened: function() {
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
+      } else {
+        window.addEventListener('resize', this._resizeHandler);
+        this.async(this._updateOverlayAlignment);
       }
     },
 
@@ -139,8 +189,16 @@
     _closed: function() {
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._originalContent;
+      } else {
+        window.removeEventListener('resize', this._resizeHandler);
       }
-    }
+    },
 
+    _updateOverlayAlignment: function() {
+      var rect = this.$.dropdown.positionTarget.getBoundingClientRect();
+      var spaceBelow = window.innerHeight - rect.bottom;
+      var alignedToBottom = spaceBelow < this.alignThreshold && spaceBelow < rect.top;
+      this._verticalAlign = alignedToBottom ? 'bottom' : 'top';
+    }
   });
 </script>

@@ -16,13 +16,21 @@ var describeSkipIf = function(bool, title, callback) {
   }
 };
 
-var asyncDone = function(cb, done) {
+var asyncDone = function(cb, done, timeout) {
   Polymer.Base.async(function() {
     try {
       cb();
-      done();
+      if (done) done();
     } catch (err) {
-      done(err);
+      if (done) done(err);
+      else throw (err);
     }
-  });
+  }, timeout || 1);
+};
+
+var getItemArray = function(length) {
+  return new Array(length).join().split(',')
+    .map(function(item, index) {
+      return 'item ' + index;
+    });
 };
