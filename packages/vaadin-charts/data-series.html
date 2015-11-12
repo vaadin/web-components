@@ -86,7 +86,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Updates chart data when series data changes
          */
         _dataChanged: function () {
-            if (this._seriesIndex != undefined && this._parentChart().initialized) {
+            if (this._seriesIndex != undefined && this._parentChart().isInitialized()) {
                 if (this.drilldown) {
                     this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.data);
                 } else {
@@ -224,7 +224,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
 
-        ready: function () {
+        // Kind of attached but attached is not called then the element is only in the light DOM
+        initialize: function () {
             this._initConfiguration();
             if (this.drilldown) {
                 this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);

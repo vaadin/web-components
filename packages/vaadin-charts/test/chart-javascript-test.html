@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../vaadin-column-chart.html">
+</head>
+<body>
+
+<script>
+    suite('<vaadin-_-chart>', function () {
+
+        test('chart and series programmatically added', function (done) {
+            HTMLImports.whenReady(function () {
+                var chartwc = document.createElement("vaadin-column-chart");
+                var title = document.createElement("title");
+                var ds = document.createElement("data-series");
+                title.textContent = "Foobar title";
+                ds.setAttribute("name", "foobars");
+                var data = document.createElement("data");
+                data.textContent = "10,20,30,10,20,30";
+                Polymer.dom(ds).appendChild(data);
+                Polymer.dom(chartwc).appendChild(title);
+                Polymer.dom(chartwc).appendChild(ds);
+                chartwc.addEventListener("chart-loaded", function () {
+                    expect(chartwc.chart.redraw).to.exist;
+                    expect(chartwc.chart.series[0].name).to.equal("foobars");
+                    expect(chartwc.chart.series[0].data.length).to.equal(6);
+                    document.body.removeChild(chartwc);
+                    done();
+                });
+                document.body.appendChild(chartwc);
+            });
+        });
+    });
+
+</script>
+
+</body>
+</html>
