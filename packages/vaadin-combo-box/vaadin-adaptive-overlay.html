@@ -9,6 +9,7 @@
   <style>
     :host {
       display: block;
+      position: relative;
     }
 
     #dropdown[fullscreen],
@@ -29,6 +30,10 @@
       @apply(--dropdown-content-bottom-align);
     }
 
+    #dropdown[ios][fullscreen] {
+      position: absolute;
+    }
+
     /* Override the conflicting top/bottom values not cleared by iron-dropdown */
     #dropdown[vertical-align='top'] {
       bottom: auto !important;
@@ -39,7 +44,7 @@
   </style>
 
   <template>
-    <iron-dropdown id="dropdown"
+    <iron-dropdown id="dropdown" ios$=[[ios]]
       opened={{opened}}
       focus-target=[[focusTarget]]
       fullscreen$=[[fullScreen]]
@@ -49,8 +54,9 @@
       vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen)]]
       on-tap="_tapped"
       on-iron-overlay-closed="_closed"
-      on-iron-overlay-opened="_opened">
-      <div id="dropdownContent" class="dropdown-content">
+      on-iron-overlay-opened="_opened"
+      on-iron-resize="_iOSRepositionAsync">
+      <div id="dropdownContent" class="dropdown-content" on-touchend="_iOSRepositionAsync">
         <content>
       </div>
     </iron-dropdown>
@@ -131,6 +137,13 @@
 
       _verticalAlign: {
         observer: '_verticalAlignChanged'
+      },
+
+      /**
+      * True if running on an iOS device
+      */
+      ios: {
+        value: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
       }
 
     },
@@ -187,9 +200,22 @@
     _opened: function() {
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
+        this._iOSOpened();
       } else {
         window.addEventListener('resize', this._resizeHandler);
         this.async(this._updateOverlayAlignment);
+      }
+    },
+
+    _iOSOpened: function() {
+      if (this.fullScreen && this.ios) {
+        this.$.dropdown.positionTarget = undefined;
+
+        var rect = this.getBoundingClientRect();
+        this.$.dropdown.style.left = -rect.left + "px";
+        this.$.dropdown.style.top = -rect.top + "px";
+
+        this._iOSReposition();
       }
     },
 
@@ -220,6 +246,34 @@
       var spaceBelow = window.innerHeight - rect.bottom;
       var alignedToBottom = spaceBelow < this.alignThreshold && spaceBelow < rect.top;
       this._verticalAlign = alignedToBottom ? 'bottom' : 'top';
+    },
+
+    _iOSRepositionAsync: function() {
+      if (this.fullScreen && this.ios && this.opened) {
+        this._iOSReposition();
+        // Also reposition asynchronously as the scroll shift might
+        // be delayed due to orientation change or focus animation.
+        this.async(this._iOSReposition, 500);
+      }
+    },
+
+    _iOSReposition: function() {
+      if (this.fullScreen && this.ios && this.opened) {
+        // Scroll back to the dropdown (scroll might have shifted due to input focus for example)
+        var rect = this.$.dropdown.getBoundingClientRect();
+        window.scrollBy(rect.left, rect.top);
+
+        // Handle backdrop position
+        this.async(function() {
+          var backdrop = this.$.dropdown.backdropElement;
+          backdrop.style.position = "absolute";
+          backdrop.style.left = "0";
+          backdrop.style.top = "0";
+          var rect = backdrop.getBoundingClientRect();
+          backdrop.style.left = -rect.left + "px";
+          backdrop.style.top = -rect.top + "px";
+        });
+      }
     }
   });
 </script>
