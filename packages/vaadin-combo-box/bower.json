@@ -34,10 +34,11 @@
     "paper-input": "PolymerElements/paper-input#~1.0.12",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
     "polymer": "Polymer/polymer#^1.1.3",
-    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#~1.0.7"
+    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#~1.0.7",
+    "paper-ripple": "polymerelements/paper-ripple#~1.0.4"
   },
   "devDependencies": {
-    "web-component-tester": "*",
+    "web-component-tester": "3.3.30",
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0"
   }

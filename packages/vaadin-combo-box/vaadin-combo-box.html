@@ -5,6 +5,7 @@
 <link rel='import' href='../polymer/polymer.html'>
 <link rel='import' href='../paper-input/paper-input-container.html'>
 <link rel='import' href='../iron-input/iron-input.html'>
+<link rel='import' href='../paper-ripple/paper-ripple.html'>
 <link rel='import' href='../iron-icons/iron-icons.html'>
 <link rel='import' href='../iron-icon/iron-icon.html'>
 <link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
@@ -15,62 +16,132 @@
 
 <dom-module id='vaadin-combo-box'>
   <style>
-    /* Temporary styles */
     :host {
        display: block;
     }
 
     #selector {
-      background: #fff;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    #overlay:not([full-screen]) {
+      --dropdown-content: {
+        @apply(--layout-vertical);
+        @apply(--shadow-elevation-2dp);
+        background: #fff;
+        border-radius: 0 0 2px 2px;
+      }
+      --dropdown-content-bottom-align: {
+        border-radius: 2px;
+      }
+    }
+
+    #overlay[full-screen] {
+      --dropdown-content: {
+        @apply(--layout-vertical);
+      }
     }
 
     #overlay[full-screen] #selector {
       max-height: 100%;
+      background: #fff;
     }
 
     .item {
       cursor: pointer;
-      padding: 16px 22px;
-      border-bottom: 1px solid #ddd;
-      background-color: #fff;
+      padding: 13px 16px;
+      color: var(--primary-text-color);
     }
 
-    .item:hover {
+    #overlay:not([full-screen]) .item:hover,
+    #overlay:not([full-screen]) .item[focused] {
       background: #eee;
     }
 
     .item[selected] {
-      background-color: var(--google-grey-100);
-    }
-
-    .item[focused] {
-      background-color: #ddd !important;
+      color: var(--default-primary-color);
     }
 
     #overlay paper-input-container {
       background-color: #fff;
     }
 
-    #overlay::content .dropdown-content {
-      @apply(--layout-vertical);
-    }
-
     #overlay:not([full-screen]) paper-input-container {
       display: none;
     }
 
+    paper-input-container {
+      position: relative;
+      padding-bottom: 0;
+      line-height: 2;
+    }
+
+    paper-input-container[opened] {
+      /* Keep the paper-input-container above the dropdown. */
+      z-index: 20;
+    }
+
+    #overlay[full-screen] {
+      /* Keep the full screen overlay always on top of other elements. */
+      position: relative;
+      z-index: 25;
+    }
+
+    paper-input-container div[suffix] {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      margin-bottom: 3px;
+    }
+
+    #overlay[full-screen] paper-input-container {
+      @apply(--shadow-elevation-2dp);
+      flex-shrink: 0;
+      padding: 0;
+    }
+
+    #overlay[full-screen] #fullScreenInput {
+      padding-left: 16px;
+      box-sizing: border-box;
+    }
+
+    #overlay[full-screen] div[suffix] {
+      margin-right: 4px;
+    }
+
+    paper-input-container iron-icon {
+      fill: rgba(0, 0, 0, .26);
+      cursor: pointer;
+      padding: 0px;
+      width: 24px;
+      height: 24px;
+      transition: all .2s;
+    }
+
+    paper-input-container paper-ripple {
+      color: rgba(0, 0, 0, .54);
+    }
+
+    paper-input-container[opened] iron-icon {
+      fill: rgba(0, 0, 0, .54);
+      transform: rotate(-180deg);
+    }
   </style>
 
   <template>
-    <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault'>
+    <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened$=[[opened]]>
       <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged' key-event-target>
-      <iron-icon icon='arrow-drop-down' suffix></iron-icon>
+      <div suffix>
+        <iron-icon icon='arrow-drop-down'></iron-icon>
+        <paper-ripple class='circle' center></paper-ripple>
+      </div>
     </paper-input-container>
 
     <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}} focus-target=[[_getFocusTarget()]]><paper-input-container>
+    <vaadin-adaptive-overlay id='overlay' opened={{opened}} focus-target=[[_getFocusTarget()]]><paper-input-container opened$=[[opened]]>
         <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
-        <iron-icon icon='arrow-drop-down' on-tap='close' suffix></iron-icon>
+        <div suffix on-tap='close'><iron-icon icon='arrow-drop-down'></iron-icon><paper-ripple class='circle' center></paper-ripple></div>
       </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
           <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>

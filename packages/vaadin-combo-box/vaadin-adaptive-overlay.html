@@ -7,6 +7,10 @@
 
 <dom-module id="vaadin-adaptive-overlay">
   <style>
+    :host {
+      display: block;
+    }
+
     #dropdown[fullscreen],
     #dropdown[fullscreen]::content #contentWrapper,
     #dropdown[fullscreen] .dropdown-content {
@@ -16,8 +20,13 @@
       max-width: 100vw;
     }
 
-    :host .dropdown-content {
+    .dropdown-content {
       width: 100vw;
+      @apply(--dropdown-content);
+    }
+
+    #dropdown[vertical-align='bottom'] .dropdown-content {
+      @apply(--dropdown-content-bottom-align);
     }
 
     /* Override the conflicting top/bottom values not cleared by iron-dropdown */
@@ -40,7 +49,7 @@
       vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen)]]
       on-iron-overlay-closed="_closed"
       on-iron-overlay-opened="_opened">
-      <div id='dropdownContent' class="dropdown-content">
+      <div id="dropdownContent" class="dropdown-content">
         <content>
       </div>
     </iron-dropdown>
