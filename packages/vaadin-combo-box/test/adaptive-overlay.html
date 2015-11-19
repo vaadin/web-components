@@ -9,6 +9,7 @@
   <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -46,13 +47,6 @@
           Polymer.Base.async(done);
         });
 
-        it('should have correct target elements', function(done) {
-          expect(overlay.$.dropdown.fitInto).to.be.equal(document.documentElement);
-          expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
-          overlay.close();
-          Polymer.Base.async(done);
-        });
-
         it('should have correct dimensions', function(done) {
           expect(dropdownContent.clientWidth).to.equal(document.documentElement.clientWidth);
           expect(dropdownContent.clientHeight).to.equal(document.documentElement.clientHeight);
@@ -69,6 +63,22 @@
           });
         });
 
+        describeIf(ios, 'fullscreen ios', function() {
+          it('should have correct target elements', function(done) {
+            expect(overlay.$.dropdown.positionTarget).to.equal(undefined);
+            overlay.close();
+            Polymer.Base.async(done);
+          });
+        });
+
+        describeSkipIf(ios, 'fullscreen not ios', function() {
+          it('should have correct target elements', function(done) {
+            expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
+            overlay.close();
+            Polymer.Base.async(done);
+          });
+        });
+
       });
 
       describe('non-fullscreen', function() {
@@ -80,7 +90,7 @@
         });
 
         it('should have correct target elements', function() {
-          expect(overlay.$.dropdown.positionTarget).to.equal(overlay);
+          expect(overlay.$.dropdown.positionTarget).to.equal(overlay.parentElement);
         });
 
         it('should have the same width as container has', function() {
