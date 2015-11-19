@@ -77,6 +77,17 @@
       });
 
     });
+
+    describe('closing', function() {
+      it('should close fullscreen popup when tapping on modal curtain', function() {
+        combobox.$.overlay.fullScreen = true;
+        combobox.open();
+
+        // Click the dropdown content (not any element inside it).
+        combobox.$.overlay.$.dropdownContent.click();
+        expect(combobox.opened).to.be.false;
+      });
+    });
   });
 </script>
 

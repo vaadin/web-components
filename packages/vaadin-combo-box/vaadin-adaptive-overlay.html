@@ -47,6 +47,7 @@
       position-target=[[positionTarget]]
       vertical-align=[[_verticalAlign]]
       vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen)]]
+      on-tap="_tapped"
       on-iron-overlay-closed="_closed"
       on-iron-overlay-opened="_opened">
       <div id="dropdownContent" class="dropdown-content">
@@ -200,6 +201,17 @@
         this._viewportInfo.content = this._viewportInfo._originalContent;
       } else {
         window.removeEventListener('resize', this._resizeHandler);
+      }
+    },
+
+    /**
+     * Called when the `iron-dropdown` is tapped.
+     */
+    _tapped: function(e) {
+      if (this.fullScreen && e.target === this.$.dropdownContent) {
+        // Tapped on the dropdown content instead of any actual element
+        // inside the dropdown -> close the overlay.
+        this.close();
       }
     },
 
