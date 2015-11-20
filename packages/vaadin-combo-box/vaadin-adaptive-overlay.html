@@ -200,11 +200,16 @@
     _opened: function() {
       if (this.fullScreen) {
         this._viewportInfo.content = this._viewportInfo._fullScreenContent;
-        this._iOSOpened();
       } else {
         window.addEventListener('resize', this._resizeHandler);
         this.async(this._updateOverlayAlignment);
       }
+
+      this._iOSOpened();
+    },
+
+    detached: function() {
+      this._closed();
     },
 
     _iOSOpened: function() {

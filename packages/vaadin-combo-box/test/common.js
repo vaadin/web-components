@@ -18,6 +18,7 @@ var describeSkipIf = function(bool, title, callback) {
 };
 
 var describeIf = function(bool, title, callback) {
+  bool = typeof bool == 'function' ? bool() : bool;
   describeSkipIf(!bool, title, callback);
 };
 

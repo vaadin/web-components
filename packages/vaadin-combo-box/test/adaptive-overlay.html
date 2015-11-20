@@ -47,11 +47,12 @@
           Polymer.Base.async(done);
         });
 
-        it('should have correct dimensions', function(done) {
+        it('should have correct dimensions', function() {
+          var rect = overlay.$.dropdown.getBoundingClientRect();
+          expect(rect.left).to.equal(0);
+          expect(rect.top).to.equal(0);
           expect(dropdownContent.clientWidth).to.equal(document.documentElement.clientWidth);
           expect(dropdownContent.clientHeight).to.equal(document.documentElement.clientHeight);
-          overlay.close();
-          Polymer.Base.async(done);
         });
 
         it('should alter the viewport info', function(done) {
@@ -64,18 +65,22 @@
         });
 
         describeIf(ios, 'fullscreen ios', function() {
-          it('should have correct target elements', function(done) {
+          it('should have correct target elements', function() {
             expect(overlay.$.dropdown.positionTarget).to.equal(undefined);
-            overlay.close();
-            Polymer.Base.async(done);
+          });
+
+          it('should have position absolute', function() {
+            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal("absolute");
           });
         });
 
         describeSkipIf(ios, 'fullscreen not ios', function() {
-          it('should have correct target elements', function(done) {
+          it('should have position fixed', function() {
+            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal("fixed");
+          });
+
+          it('should have correct target elements', function() {
             expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
-            overlay.close();
-            Polymer.Base.async(done);
           });
         });
 
@@ -97,7 +102,7 @@
           expect(overlay.$.dropdown.clientWidth).to.equal(100);
         });
 
-        it('should have have the height as content has', function() {
+        it('should have the height as content has', function() {
           expect(overlay.$.dropdown.clientHeight).to.equal(content.clientHeight);
         });
 
