@@ -38,6 +38,13 @@
       }
     }
 
+    :host(:not([label])) #overlay:not([full-screen]) {
+      --dropdown-content-bottom-align: {
+        border-radius: 2px;
+        margin-bottom: -1em;
+      }
+    }
+
     #overlay[full-screen] {
       --dropdown-content: {
         @apply(--layout-vertical);
@@ -96,6 +103,11 @@
       margin-bottom: 3px;
     }
 
+    paper-input-container label {
+      top: auto;
+      bottom: 3px;
+    }
+
     #overlay[full-screen] paper-input-container {
       @apply(--shadow-elevation-2dp);
       flex-shrink: 0;
@@ -105,6 +117,10 @@
     #overlay[full-screen] #fullScreenInput {
       padding-left: 16px;
       box-sizing: border-box;
+    }
+
+    #overlay[full-screen] label {
+      margin-left: 16px;
     }
 
     #overlay[full-screen] div[suffix] {
@@ -132,6 +148,7 @@
 
   <template>
     <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened$=[[opened]]>
+      <label>[[label]]</label>
       <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged' key-event-target>
       <div suffix>
         <iron-icon icon='arrow-drop-down'></iron-icon>
@@ -141,7 +158,7 @@
 
     <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
     <vaadin-adaptive-overlay id='overlay' opened={{opened}} focus-target=[[_getFocusTarget()]]><paper-input-container opened$=[[opened]]>
-        <input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
+        <label>[[label]]</label><input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <div suffix on-tap='close'><iron-icon icon='arrow-drop-down'></iron-icon><paper-ripple class='circle' center></paper-ripple></div>
       </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
@@ -171,12 +188,22 @@
         value: false,
         observer: '_openedChanged'
       },
+
       /**
        * The value for this element.
        */
       value: {
         type: String,
         observer: 'close'
+      },
+
+      /**
+       * The label for this element.
+       */
+      label: {
+        type: String,
+        observer: '_labelChanged',
+        reflectToAttribute: true
       },
 
       _focusedIndex: {
@@ -326,6 +353,12 @@
           this.$.fullScreenInput.blur();
         }
       }
+    },
+
+    _labelChanged: function() {
+      // We have separate style mixins for with and without a label -> we need
+      // to trigger Polymer to update custom styles when the label has changed.
+      this.$.overlay.updateStyles();
     },
 
     _isFiltering: function(event) {

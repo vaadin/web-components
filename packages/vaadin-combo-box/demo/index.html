@@ -33,10 +33,11 @@
     or programmatically with the <code>open()</code> method</p>
     <p>Clicking outside the dropdown or tapping the close icon on fullscreen mode closes it.
     <code>vaadin-combo-box</code> also has an explicit <code>close()</code> method.</p>
+    <p>Use the <code>label</code> attribute to provide a label for the element.</p>
 
     <code-example source>
       <button id="togglebutton">Toggle dropdown</button>
-      <vaadin-combo-box demo></vaadin-combo-box>
+      <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
 
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector("vaadin-combo-box");
@@ -61,7 +62,7 @@
     <p>Changing the value property explicitly also updates the visible fields.</p>
 
     <code-example source>
-      <vaadin-combo-box demo></vaadin-combo-box>
+      <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
 
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector("vaadin-combo-box");
@@ -82,7 +83,7 @@
 
     <code-example source>
       <form is="iron-form" demo>
-        <vaadin-combo-box name='name' required></vaadin-combo-box>
+        <vaadin-combo-box name='name' required label="Foo, bar or baz"></vaadin-combo-box>
         <button>Submit</button>
       </form>
       <code demo-var="form">
@@ -106,7 +107,7 @@
        Resize the window to see how the dropdown adapts its size and alignment.
     </p>
     <code-example source>
-      <vaadin-combo-box demo></vaadin-combo-box>
+      <vaadin-combo-box demo label="Favourite word"></vaadin-combo-box>
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector("vaadin-combo-box");
         combobox.items = ["APACHE","AUTHORS","BSD","CHANGELOG","CHANGES","COMMIT_EDITMSG","CONTRIBUTING","CONTRIBUTORS","COPYING","ChangeLog","Client","Config","Contents","Core","Extensions","FAQ","GLOBAL","HEAD","HISTORY","Info","LICENCE","MIT","Makefile","OSX","README","SOURCES"];
@@ -121,7 +122,7 @@
       <code>contain</code> the value in the input field.
     </p>
     <code-example source>
-      <vaadin-combo-box demo></vaadin-combo-box>
+      <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector("vaadin-combo-box");
         combobox.items = ['foo', 'bar', 'baz'];
