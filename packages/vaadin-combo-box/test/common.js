@@ -1,3 +1,4 @@
+var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var fullScreen = (function() {
   try {
     document.createEvent("TouchEvent");
@@ -14,6 +15,11 @@ var describeSkipIf = function(bool, title, callback) {
   } else {
     describe(title, callback);
   }
+};
+
+var describeIf = function(bool, title, callback) {
+  bool = typeof bool == 'function' ? bool() : bool;
+  describeSkipIf(!bool, title, callback);
 };
 
 var asyncDone = function(cb, done, timeout) {

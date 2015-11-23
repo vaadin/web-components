@@ -9,6 +9,7 @@
   <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -46,18 +47,12 @@
           Polymer.Base.async(done);
         });
 
-        it('should have correct target elements', function(done) {
-          expect(overlay.$.dropdown.fitInto).to.be.equal(document.documentElement);
-          expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
-          overlay.close();
-          Polymer.Base.async(done);
-        });
-
-        it('should have correct dimensions', function(done) {
+        it('should have correct dimensions', function() {
+          var rect = overlay.$.dropdown.getBoundingClientRect();
+          expect(rect.left).to.equal(0);
+          expect(rect.top).to.equal(0);
           expect(dropdownContent.clientWidth).to.equal(document.documentElement.clientWidth);
           expect(dropdownContent.clientHeight).to.equal(document.documentElement.clientHeight);
-          overlay.close();
-          Polymer.Base.async(done);
         });
 
         it('should alter the viewport info', function(done) {
@@ -66,6 +61,26 @@
           Polymer.Base.async(function() {
             expect(viewportInfo.content).not.to.equal(overlay._viewportInfo._fullScreenContent);
             done();
+          });
+        });
+
+        describeIf(ios, 'fullscreen ios', function() {
+          it('should have correct target elements', function() {
+            expect(overlay.$.dropdown.positionTarget).to.equal(undefined);
+          });
+
+          it('should have position absolute', function() {
+            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal("absolute");
+          });
+        });
+
+        describeSkipIf(ios, 'fullscreen not ios', function() {
+          it('should have position fixed', function() {
+            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal("fixed");
+          });
+
+          it('should have correct target elements', function() {
+            expect(overlay.$.dropdown.positionTarget).to.equal(document.documentElement);
           });
         });
 
@@ -80,14 +95,14 @@
         });
 
         it('should have correct target elements', function() {
-          expect(overlay.$.dropdown.positionTarget).to.equal(overlay);
+          expect(overlay.$.dropdown.positionTarget).to.equal(overlay.parentElement);
         });
 
         it('should have the same width as container has', function() {
           expect(overlay.$.dropdown.clientWidth).to.equal(100);
         });
 
-        it('should have have the height as content has', function() {
+        it('should have the height as content has', function() {
           expect(overlay.$.dropdown.clientHeight).to.equal(content.clientHeight);
         });
 
