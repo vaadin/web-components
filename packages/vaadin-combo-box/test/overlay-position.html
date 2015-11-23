@@ -17,7 +17,7 @@
 
 <test-fixture id='combobox'>
   <template>
-    <vaadin-combo-box></vaadin-combo-box>
+    <vaadin-combo-box label='combobox'></vaadin-combo-box>
   </template>
 </test-fixture>
 
@@ -115,7 +115,7 @@
           if (!isFF){
             expect(parseInt(dropContentRect().top)).to.equal(0);
           }
-          // In chrome difference is arownd 1px in FF about 4px
+          // In chrome difference is around 1px in FF about 4px
           expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
         }, done);
       });
