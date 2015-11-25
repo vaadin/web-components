@@ -315,6 +315,7 @@
     },
 
     _setItems: function(items) {
+      this.unlisten(this.$.selector, 'selected-item-changed', '_selectedItemChanged');
       this.$.selector.items = items;
 
       if (this.$.selector.items && this.$.selector.items.indexOf(this.value) > -1) {
@@ -324,6 +325,7 @@
       if(this.$.selector.items) {
         this._focusedIndex = this.$.selector.items.indexOf(this.$.input.bindValue);
       }
+      this.listen(this.$.selector, 'selected-item-changed', '_selectedItemChanged');
     },
 
     _filter: function(arr, filter) {
@@ -340,6 +342,8 @@
       var _val = this.$.selector.selectedItem;
       if (_val !== null) {
         this.value = _val;
+      } else if (this.opened) {
+        this.close();
       }
     },
 
