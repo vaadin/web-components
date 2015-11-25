@@ -87,9 +87,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Tells that the component has been initialized.
          **/
-        isInitialized: function() {
-          return Object.keys(this.chart).length !== 0;
+        isInitialized: function () {
+            return Object.keys(this.chart).length !== 0;
         },
+
+        /**
+         * List of properties that will always be copied from the chart element to the container div
+         **/
+        _styleProperties: ["flex", "-webkit-flex", "-ms-flex"],
 
         /**
          *  Name of the chart events to add to the configuration and its corresponding event for the chart element
@@ -189,7 +194,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             if (!this.isInitialized()) {
                 this._initLocalDom();
                 this._initConfiguration();
-                Polymer.dom(this).querySelectorAll("data-series").forEach(function(ds) {
+                Polymer.dom(this).querySelectorAll("data-series").forEach(function (ds) {
                     ds.initialize();
                 });
                 if (this._loadTheme) {
@@ -214,13 +219,43 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _initLocalDom: function () {
             var chartContainer = document.createElement('div');
             chartContainer.id = "chartContainer";
-            chartContainer.setAttribute("style", "height:100%; width:100%;");
+            this._updateStyles(chartContainer);
             Polymer.dom(this.root).appendChild(chartContainer);
             var licenseChecker = document.createElement('vaadin-license-checker');
             licenseChecker.productName = "vaadin-charts";
             licenseChecker.productVersion = "3";
             licenseChecker.productCaption = "Vaadin Charts";
             Polymer.dom(this.root).appendChild(licenseChecker);
+            Polymer.dom.flush();
+        },
+
+        /**
+         * Updates chartContainer and current chart style property depending on flex status
+         */
+        _updateStyles: function (chartContainer) {
+            var isFlex = false;
+            this._styleProperties.forEach(function (property) {
+                //Chrome returns default value if property is not set
+                //check if flex is defined for chart, and different than default value
+                if (getComputedStyle(this)[property] && getComputedStyle(this)[property] != "0 1 auto") {
+                    isFlex = true;
+                }
+            }, this);
+            //If chart element is a flexible item the chartContainer should be flex too
+            if (isFlex) {
+                chartContainer.setAttribute("style", "flex: 1; -webkit-flex: 1; -ms-flex: 1; ");
+                var style = '';
+                if (this.hasAttribute("style")) {
+                    style = this.getAttribute("style");
+                    if (style.charAt(style.length - 1) !== ';') {
+                        style += ';'
+                    }
+                }
+                style += "display: -ms-flexbox; display: -webkit-flex; display: flex;";
+                this.setAttribute("style", style);
+            } else {
+                chartContainer.setAttribute("style", "height:100%; width:100%;");
+            }
         },
 
         /**
