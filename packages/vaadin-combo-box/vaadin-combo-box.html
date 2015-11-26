@@ -240,7 +240,7 @@
         } else if (this._isEventKey(e, 'up')) {
           this._onArrowUp();
         } else if (this._isEventKey(e, 'enter')) {
-          this._onEnter();
+          this._onEnter(e);
         } else if (this._isEventKey(e, 'esc')) {
           this._onEscape();
         }
@@ -269,7 +269,7 @@
       }
     },
 
-    _onEnter: function() {
+    _onEnter: function(e) {
       if(this.opened) {
         if(this._focusedIndex > -1) {
           this.close();
@@ -278,6 +278,8 @@
           this.close();
           this.value = undefined;
         }
+        // Do not submit the surrounding form.
+        e.preventDefault();
       }
     },
 
