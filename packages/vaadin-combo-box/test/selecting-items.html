@@ -25,36 +25,52 @@
     var combobox;
     var input;
     var selector;
+    var valueChangedSpy;
 
     beforeEach(function() {
       combobox = fixture('combobox');
-      input = combobox.$$("input");
+      combobox.items = ['foo', 'bar'];
+      input = combobox.$$('input');
       selector = combobox.$.selector;
+      valueChangedSpy = sinon.spy();
+      combobox.addEventListener('value-changed', valueChangedSpy);
     });
 
     it('should select by using the selector', function() {
-      selector.selectedItem = "foo";
-      expect(combobox.value).to.equal("foo");
-      expect(input.bindValue).to.equal("foo");
+      selector.selectedItem = 'foo';
+      expect(combobox.value).to.equal('foo');
+      expect(input.bindValue).to.equal('foo');
     });
 
     it('should select by using JS api', function() {
-      combobox.value = "foo";
-      expect(selector.selectedItem).to.equal("foo");
-      expect(input.bindValue).to.equal("foo");
+      combobox.value = 'foo';
+      expect(selector.selectedItem).to.equal('foo');
+      expect(input.bindValue).to.equal('foo');
     });
 
     it('should close the dropdown on selection', function() {
       combobox.open();
-      combobox.value = "foo";
+      combobox.value = 'foo';
       expect(combobox.opened).to.equal(false);
     });
 
     it('should fire exactly one value change event', function() {
-      var spy = sinon.spy();
-      combobox.addEventListener('value-changed', spy);
-      combobox.value = "foo";
-      expect(spy.callCount).to.equal(1);
+      combobox.value = 'foo';
+      expect(valueChangedSpy.callCount).to.equal(1);
+    });
+
+    it('should close the dropdown when reselecting the current value', function() {
+      combobox.value = 'foo';
+      combobox.open();
+      combobox.$.selector.toggleSelectionForItem('foo');
+      expect(combobox.opened).to.be.false;
+    });
+
+    it('should not fire an event when reselecting the current value', function() {
+      combobox.value = 'foo';
+      valueChangedSpy.reset();
+      combobox.$.selector.toggleSelectionForItem('foo');
+      expect(valueChangedSpy.callCount).to.equal(0);
     });
 
   });
