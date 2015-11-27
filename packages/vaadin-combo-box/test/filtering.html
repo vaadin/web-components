@@ -26,10 +26,10 @@
 
     function getFilteredItems() {
       return comboBox.$.selector.items;
-    };
+    }
 
     function getInput() {
-      if(comboBox.$.overlay.fullScreen) {
+      if (comboBox.$.overlay.fullScreen) {
         return comboBox.$.fullScreenInput;
       }
 
@@ -38,11 +38,11 @@
 
     function setInputValue(value) {
       getInput().bindValue = value;
-    };
+    }
 
     function getInputValue(value) {
       return getInput().bindValue;
-    };
+    }
 
     beforeEach(function() {
       comboBox = fixture('combobox');

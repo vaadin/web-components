@@ -258,9 +258,9 @@
     // iron-dropdown or provide custom event handling.
     _addKeyEventListeners: function() {
       document.addEventListener('keydown', function(e) {
-         if (this._isEventKey(e, 'left right')) {
-           e.stopImmediatePropagation();
-         }
+        if (this._isEventKey(e, 'left right')) {
+          e.stopImmediatePropagation();
+        }
       }.bind(this), true);
 
       this.$.input.addEventListener('keydown', function(e) {
@@ -281,7 +281,7 @@
     },
 
     _onArrowDown: function() {
-      if(this.opened) {
+      if (this.opened) {
         this._focusedIndex = Math.min(this.$.selector.items.length - 1, this._focusedIndex + 1);
       } else {
         this.open();
@@ -289,8 +289,8 @@
     },
 
     _onArrowUp: function() {
-      if(this.opened) {
-        if(this._focusedIndex > -1) {
+      if (this.opened) {
+        if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
         }
       } else {
@@ -299,11 +299,11 @@
     },
 
     _onEnter: function(e) {
-      if(this.opened) {
-        if(this._focusedIndex > -1) {
+      if (this.opened) {
+        if (this._focusedIndex > -1) {
           this.close();
           this.$.selector.selectItem(this._focusedIndex);
-        } else if(this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
+        } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.close();
           this.value = undefined;
         }
@@ -335,7 +335,7 @@
     },
 
     _getAriaActiveIndex: function(focusedIndex) {
-      if(focusedIndex >= 0) {
+      if (focusedIndex >= 0) {
         return 'it' + focusedIndex;
       }
 
@@ -359,10 +359,10 @@
     },
 
     _inputValueChanged: function(event) {
-      if(!this.opened && this._isFiltering(event)) {
-          this.open();
+      if (!this.opened && this._isFiltering(event)) {
+        this.open();
       }
-      if(this.opened && this.items) {
+      if (this.opened && this.items) {
         this._setItems(this._filter(this.items, this.$.input.bindValue));
       }
     },
@@ -379,7 +379,7 @@
         this.$.selector.selectItem(this.value);
       }
 
-      if(this.$.selector.items) {
+      if (this.$.selector.items) {
         this._focusedIndex = this.$.selector.items.indexOf(this.$.input.bindValue);
       }
       this.listen(this.$.selector, 'selected-item-changed', '_selectedItemChanged');
@@ -438,7 +438,7 @@
     *
     * @return {boolean}
     */
-    _getValidity: function(){
+    _getValidity: function() {
       return this.$.input.validate();
     }
   });

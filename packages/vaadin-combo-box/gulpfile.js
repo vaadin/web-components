@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var args = require('yargs').argv;
 var chalk = require('chalk');
 var wct = require('web-component-tester').test;
@@ -17,11 +17,15 @@ function cleanDone(done) {
 
 function localAddress() {
   var ip, tun, ifaces = require('os').networkInterfaces();
-  Object.keys(ifaces).forEach(function (ifname) {
-    ifaces[ifname].forEach(function (iface) {
+  Object.keys(ifaces).forEach(function(ifname) {
+    ifaces[ifname].forEach(function(iface) {
       if ('IPv4' == iface.family && !iface.internal) {
-        if (!ip) ip = iface.address;
-        if (/tun/.test(ifname)) tun = iface.address;
+        if (!ip) {
+          ip = iface.address;
+        }
+        if (/tun/.test(ifname)) {
+          tun = iface.address;
+        }
       }
     });
   });

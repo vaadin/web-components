@@ -31,7 +31,7 @@
 
     describe('opening', function() {
       it('should open on click', function() {
-        combobox.$$('paper-input-container').fire('tap')
+        combobox.$$('paper-input-container').fire('tap');
 
         expect(combobox.opened).to.be.true;
       });
@@ -72,7 +72,7 @@
 
             expect(focusedInput).to.be.undefined;
           }, done);
-        })
+        });
 
       });
 
