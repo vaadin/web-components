@@ -13,6 +13,7 @@
 <link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel='import' href='vaadin-adaptive-overlay.html'>
 
 <dom-module id='vaadin-combo-box'>
@@ -147,22 +148,38 @@
   </style>
 
   <template>
-    <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened$=[[opened]]>
-      <label>[[label]]</label>
-      <input id='input' autocomplete='off' is='iron-input' bind-value='[[value]]' name$='[[name]]' type='text' required$="[[required]]" on-bind-value-changed='_inputValueChanged' key-event-target>
+    <paper-input-container  id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened=[[opened]]>
+      <label id='label'>[[label]]</label>
+      <input
+          is='iron-input'
+          id='input'
+          role="combobox"
+          aria-labelledby="label"
+          aria-autocomplete="list" aria-owns="overlay"
+          autocomplete='off'
+          bind-value='[[value]]'
+          name$='[[name]]'
+          type='text'
+          required$="[[required]]"
+          on-bind-value-changed='_inputValueChanged'
+          key-event-target>
       <div suffix>
-        <iron-icon icon='arrow-drop-down'></iron-icon>
+        <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
         <paper-ripple class='circle' center></paper-ripple>
       </div>
     </paper-input-container>
 
     <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
-    <vaadin-adaptive-overlay id='overlay' opened={{opened}} focus-target=[[_getFocusTarget()]]><paper-input-container opened$=[[opened]]>
+    <vaadin-adaptive-overlay id='overlay' role="listbox"
+         focus-target=[[_getFocusTarget()]] opened={{opened}}><paper-input-container opened=[[opened]]>
         <label>[[label]]</label><input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <div suffix on-tap='close'><iron-icon icon='arrow-drop-down'></iron-icon><paper-ripple class='circle' center></paper-ripple></div>
       </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
-          <div class='item' selected$=[[selected]] focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
+          <div class='item'
+          id$="it[[index]]"
+          selected$=[[selected]]
+          focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
         </template>
       </iron-list></vaadin-adaptive-overlay>
   </template>
@@ -214,6 +231,7 @@
 
     ready: function() {
       this._addKeyEventListeners();
+      Polymer.IronA11yAnnouncer.requestAvailability();
     },
 
     _getFocusTarget: function() {
@@ -292,8 +310,17 @@
       this.$.overlay.open();
     },
 
+    /**
+     * Close the overlay.
+     */
+    close: function() {
+      this.$.overlay.close();
+    },
+
     _isItemFocused: function(focusedIndex, itemIndex) {
-      return (focusedIndex === itemIndex);
+      var focused = focusedIndex == itemIndex;
+      this._setAriaOnSelectedProperties(itemIndex, focused);
+      return focused;
     },
 
     _fullScreenInputValueChanged: function(event) {
@@ -304,9 +331,14 @@
       if(!this.opened && this._isFiltering(event)) {
           this.open();
       }
-
       if(this.opened && this.items) {
         this._setItems(this._filter(this.items, this.$.input.bindValue));
+      }
+      if (this.items) {
+        var idx = this.items.indexOf(this.value)
+        if (idx >= 0) {
+          this._setAriaOnSelectedProperties(idx, true);
+        }
       }
     },
 
@@ -353,6 +385,7 @@
           this.$.fullScreenInput.blur();
         }
       }
+      this._setAriaOnOpenAttributes(this.opened);
     },
 
     _labelChanged: function() {
@@ -373,19 +406,34 @@
     },
 
     /**
-     * Close the overlay.
-     */
-    close: function() {
-      this.$.overlay.close();
-    },
-
-    /**
     * Validates the input element and sets an error style if needed.
     *
     * @return {boolean}
     */
     _getValidity: function(){
       return this.$.input.validate();
-    }
+    },
+
+    _setAriaOnSelectedProperties(itemIndex, selected) {
+      if (itemIndex >= 0) {
+        Polymer.Base.async(function() {
+          var itemId = 'it' + itemIndex;
+          var e = this.$.selector.querySelector('#' + itemId);
+          if (e) {
+            e.setAttribute('role', 'option');
+            e.setAttribute('aria-selected', ''+selected);
+            if (selected) {
+              this.$.input.setAttribute('aria-activedescendant', itemId);
+              this.$.overlay.setAttribute('data-selection', itemId);
+            }
+          }
+        }.bind(this));
+      }
+    },
+
+    _setAriaOnOpenAttributes: function(expanded) {
+      this.$.input.setAttribute("aria-expanded", ''+expanded);
+    },
+
   });
 </script>

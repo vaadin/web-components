@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>vaadin-combo basic tests</title>
+  <script src='../bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+  <script src='../bower_components/web-component-tester/browser.js'></script>
+  <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
+
+  <link rel='import' href='common.html'>
+  <script src='common.js'></script>
+</head>
+
+<body>
+
+<test-fixture id='combobox'>
+  <template>
+    <vaadin-combo-box></vaadin-combo-box>
+  </template>
+</test-fixture>
+
+<script>
+
+  describe('Accessible Rich Internet Applications (ARIA)', function() {
+    var comboBox;
+
+    function getInput() {
+      return comboBox.$.input;
+    }
+    function getLabel() {
+      return comboBox.$.label;
+    }
+    function getOverlay() {
+      return comboBox.$.overlay;
+    }
+    function getSelector() {
+      return comboBox.$.selector;
+    }
+    function getFocusedIndex() {
+      return comboBox._focusedIndex;
+    }
+    function getItemElement(i) {
+      return comboBox.$.selector.querySelectorAll('.item')[i];
+    }
+
+    function arrowDown() {
+      MockInteractions.keyDownOn(getInput(), 40);
+    }
+    function esc() {
+      MockInteractions.keyDownOn(getInput(), 27);
+    }
+
+    beforeEach(function() {
+      comboBox = fixture('combobox');
+      comboBox.items = ['foo', 'bar', 'baz'];
+    });
+
+    describe('when combo-box is attached', function() {
+      it('should contain appropriate aria attributes', function() {
+        expect(getInput().getAttribute("role")).to.equal("combobox");
+        expect(getInput().getAttribute("aria-labelledby")).to.equal("label");
+        expect(getInput().getAttribute("aria-autocomplete")).to.equal("list");
+        expect(getInput().getAttribute("aria-owns")).to.equal("overlay");
+      });
+    });
+
+    describe('when overlay opens or close', function() {
+      it('should set aria-expanded attribute when openned', function() {
+        arrowDown();
+        expect(getInput().getAttribute("aria-expanded")).to.equal("true");
+      });
+
+      it('should unset aria-expanded attribute when closed', function() {
+        esc();
+        expect(getInput().getAttribute("aria-expanded")).to.equal("false");
+      });
+    });
+
+    describe('navigating the items', function() {
+      beforeEach(function() {
+        arrowDown();
+      });
+
+      it('should set selection aria attributes when focusing an item', function(done) {
+        getSelector().selectedItem = 'foo';
+        arrowDown();
+        asyncDone(function(){
+          expect(getItemElement(0).getAttribute("role")).to.equal("option");
+          expect(getItemElement(0).getAttribute("aria-selected")).to.equal("true");
+          expect(getItemElement(1).getAttribute("aria-selected")).to.equal("false");
+          expect(getItemElement(3).getAttribute("role")).to.be.null;
+          expect(getInput().getAttribute("aria-activedescendant")).to.equal("it0");
+          expect(getOverlay().getAttribute("data-selection")).to.equal("it0");
+        }, done, 200);
+      });
+    });
+
+  });
+</script>
+
+</body>
+
+</html>
