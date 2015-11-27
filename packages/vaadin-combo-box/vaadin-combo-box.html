@@ -342,11 +342,7 @@
     },
 
     _getAriaRole: function(itemIndex) {
-      if(itemIndex !== undefined) {
-        return 'option';
-      }
-
-      return false;
+      return itemIndex !== undefined ? 'option' : false;
     },
 
     _fullScreenInputValueChanged: function(event) {
