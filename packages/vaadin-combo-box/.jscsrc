@@ -1,0 +1,7 @@
+{
+  "preset": "google",
+  "maximumLineLength": 140,
+  "disallowMultipleVarDecl": false,
+  "validateIndentation": false,
+  "disallowTrailingWhitespace": false
+}

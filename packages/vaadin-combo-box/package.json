@@ -7,6 +7,10 @@
     "bower": "latest",
     "chalk": "^1.1.1",
     "gulp": "latest",
+    "gulp-html-extract": "0.0.3",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.8.0",
     "web-component-tester": "3.3.30",
     "yargs": "^3.27.0"
   },
