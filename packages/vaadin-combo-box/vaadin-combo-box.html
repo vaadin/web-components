@@ -64,7 +64,7 @@
     }
 
     #overlay:not([full-screen]) .item:hover,
-    #overlay:not([full-screen]) .item[focused] {
+    #overlay .item[focused] {
       background: #eee;
     }
 
@@ -263,7 +263,7 @@
         }
       }.bind(this), true);
 
-      this.$.input.addEventListener('keydown', function(e) {
+      this.addEventListener('keydown', function(e) {
         if (this._isEventKey(e, 'down')) {
           this._onArrowDown();
         } else if (this._isEventKey(e, 'up')) {
