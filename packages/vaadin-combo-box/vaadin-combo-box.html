@@ -148,7 +148,7 @@
   </style>
 
   <template>
-    <paper-input-container  id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened=[[opened]]>
+    <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened$=[[opened]]>
       <label id='label'>[[label]]</label>
       <input
           is='iron-input'
