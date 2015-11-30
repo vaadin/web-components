@@ -208,6 +208,110 @@
         expect(comboBox.value).to.equal('baz');
       });
     });
+
+    // TODO: these tests are here to prevent possible regressions with using
+    // the internal properties of iron-list. These can be removed after this
+    // logic no longer is implemented in vaadin-combo-box.
+    describe('sanity checks for calculating visible item counts', function() {
+      it('should calculate items correctly when all items are visible', function(done) {
+        comboBox.items = ['foo', 'bar', 'baz', 'qux'];
+        comboBox.open();
+
+        asyncDone(function() {
+          expect(comboBox._visibleItemsCount()).to.eql(4);
+          expect(comboBox._lastVisibleIndex()).to.eql(3);
+        }, done, 100);
+      });
+
+      it('should calculate items correctly when some items are hidden', function(done) {
+        var items = [];
+        for (var i = 0; i < 100; i++) {
+          items.push(i.toString());
+        }
+
+        comboBox.items = items;
+        comboBox.open();
+
+        asyncDone(function() {
+          expect(comboBox._lastVisibleIndex()).to.eql(comboBox._visibleItemsCount() - 1);
+        }, done, 100);
+      });
+    });
+
+    describe('scrolling items', function() {
+      var selector;
+
+      beforeEach(function(done) {
+        var items = [];
+
+        for (var i = 0; i < 100; i++) {
+          items.push(i.toString());
+        }
+
+        comboBox.items = items;
+        comboBox.open();
+        selector = comboBox.$.selector;
+
+        Polymer.Base.async(done, 100);
+      });
+
+      it('should scroll down after reaching the last visible item', function() {
+        comboBox._focusedIndex = comboBox._visibleItemsCount() - 1;
+        expect(selector.firstVisibleIndex).to.eql(0);
+
+        arrowDown();
+
+        expect(selector.firstVisibleIndex).to.eql(1);
+      });
+
+      it('should scroll up after reaching the first visible item', function() {
+        comboBox._focusedIndex = 1;
+        selector.scrollToIndex(1);
+        expect(selector.firstVisibleIndex).to.eql(1);
+
+        arrowUp();
+
+        expect(selector.firstVisibleIndex).to.eql(0);
+      });
+
+      it('should scroll to first visible when navigating down above viewport', function() {
+        comboBox._focusedIndex = 5;
+        selector.scrollToIndex(50);
+
+        arrowDown();
+
+        expect(selector.firstVisibleIndex).to.eql(6);
+      });
+
+      it('should scroll to first visible when navigating up above viewport', function() {
+        comboBox._focusedIndex = 5;
+        selector.scrollToIndex(50);
+
+        arrowUp();
+
+        expect(selector.firstVisibleIndex).to.eql(4);
+      });
+
+      it('should scroll to last visible when navigating up below viewport', function() {
+        comboBox._focusedIndex = 50;
+        selector.scrollToIndex(0);
+        expect(selector.firstVisibleIndex).to.eql(0);
+
+        arrowUp();
+
+        expect(selector.firstVisibleIndex).to.eql(49 - comboBox._visibleItemsCount() + 1);
+      });
+
+      it('should scroll to last visible when navigating down below viewport', function() {
+        comboBox._focusedIndex = 50;
+        selector.scrollToIndex(0);
+        expect(selector.firstVisibleIndex).to.eql(0);
+
+        arrowDown();
+
+        expect(selector.firstVisibleIndex).to.eql(51 - comboBox._visibleItemsCount() + 1);
+      });
+    });
   });
 </script>
 

@@ -236,7 +236,8 @@
 
       _focusedIndex: {
         type: Number,
-        value: -1
+        value: -1,
+        observer: '_focusedIndexChanged'
       }
     },
 
@@ -314,6 +315,34 @@
 
     _onEscape: function() {
       this.close();
+    },
+
+    _focusedIndexChanged: function(index, prevIndex) {
+      if (index >= 0) {
+        if (index < this.$.selector.firstVisibleIndex) {
+          this.$.selector.scrollToIndex(index);
+        } else if (index > this._lastVisibleIndex()) {
+          this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
+        }
+      }
+    },
+
+    // TODO: Try to get this logic adopted into iron-list.
+    _visibleItemsCount: function() {
+      var firstItemIndex = this.$.selector._physicalStart;
+      var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
+
+      if (firstItemHeight) {
+        var visibleItems = this.$.selector._viewportSize / firstItemHeight;
+        return Math.floor(visibleItems);
+      }
+    },
+
+    // TODO: Try to get this logic adopted into iron-list.
+    _lastVisibleIndex: function() {
+      if (this._visibleItemsCount()) {
+        return this.$.selector.firstVisibleIndex + this._visibleItemsCount() - 1;
+      }
     },
 
     /**
