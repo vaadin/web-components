@@ -50,7 +50,7 @@
         expect(combobox.opened).to.be.true;
       });
 
-      describeSkipIf(!fullScreen, 'fullscreen', function() {
+      describeIf(fullScreen, 'fullscreen', function() {
         beforeEach(function(done) {
           combobox.$.overlay.fullScreen = true;
           combobox.open();
@@ -74,6 +74,10 @@
           }, done);
         });
 
+        it('should prevent focus of non-fullscreen input field', function() {
+          expect(combobox.$.input.tabIndex).to.equal(-1);
+        });
+
       });
 
     });
@@ -90,6 +94,34 @@
         });
 
         expect(combobox.opened).to.be.false;
+      });
+
+      describeIf(!fullScreen, 'on blur', function() {
+        it('should close the overlay when focus is lost', function(done) {
+          combobox.open();
+          MockInteractions.blur(combobox.$.input);
+          asyncDone(function() {
+            expect(combobox.opened).to.equal(false);
+          }, done, 100);
+        });
+      });
+
+      describeIf(fullScreen, 'on blur fullscreen', function() {
+        it('should close the overlay when focus is lost', function(done) {
+          // We need a dummy input as a focus target in fullscreen mode.
+          var dummyInput = document.createElement('input');
+          document.body.appendChild(dummyInput);
+
+          combobox.open();
+          Polymer.Base.async(function() {
+            dummyInput.focus();
+          }, 50);
+
+          asyncDone(function() {
+            expect(combobox.opened).to.equal(false);
+            document.body.removeChild(dummyInput);
+          }, done, 100);
+        });
       });
     });
   });
