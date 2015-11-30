@@ -36,7 +36,7 @@
         overlay = fixture('overlay').firstElementChild;
         content = Polymer.dom(overlay).querySelector('.content');
         dropdownContent = Polymer.dom(overlay.root).querySelector('.dropdown-content');
-        viewportInfo = document.querySelector("meta[name='viewport']");
+        viewportInfo = document.querySelector('meta[name="viewport"]');
       });
 
       describe('fullscreen', function() {
@@ -70,13 +70,13 @@
           });
 
           it('should have position absolute', function() {
-            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal("absolute");
+            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal('absolute');
           });
         });
 
         describeSkipIf(ios, 'fullscreen not ios', function() {
           it('should have position fixed', function() {
-            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal("fixed");
+            expect(window.getComputedStyle(overlay.$.dropdown, null).position).to.equal('fixed');
           });
 
           it('should have correct target elements', function() {

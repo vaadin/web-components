@@ -1,8 +1,11 @@
-"use strict";
+'use strict';
 var args = require('yargs').argv;
 var chalk = require('chalk');
 var wct = require('web-component-tester').test;
 var gulp = require('gulp');
+var jscs = require('gulp-jscs');
+var jshint = require('gulp-jshint');
+var htmlExtract = require('gulp-html-extract');
 
 function cleanDone(done) {
   return function(error) {
@@ -17,11 +20,15 @@ function cleanDone(done) {
 
 function localAddress() {
   var ip, tun, ifaces = require('os').networkInterfaces();
-  Object.keys(ifaces).forEach(function (ifname) {
-    ifaces[ifname].forEach(function (iface) {
+  Object.keys(ifaces).forEach(function(ifname) {
+    ifaces[ifname].forEach(function(iface) {
       if ('IPv4' == iface.family && !iface.internal) {
-        if (!ip) ip = iface.address;
-        if (/tun/.test(ifname)) tun = iface.address;
+        if (!ip) {
+          ip = iface.address;
+        }
+        if (/tun/.test(ifname)) {
+          tun = iface.address;
+        }
       }
     });
   });
@@ -69,6 +76,36 @@ gulp.task('test:mobile', function(done) {
     'OS X 10.11/iphone@9.0',
     'OS X 10.11/ipad@9.0',
     'Linux/android@5.1'], done);
+});
+
+gulp.task('lint:js', function() {
+  return gulp.src([
+        '*.js',
+        'test/*.js'
+      ])
+      .pipe(jshint())
+      .pipe(jshint.reporter())
+      .pipe(jshint.reporter('fail'))
+      .pipe(jscs())
+      .pipe(jscs.reporter())
+      .pipe(jscs.reporter('fail'));
+});
+
+gulp.task('lint:html', function() {
+  return gulp.src([
+        '*.html',
+        'demo/*.html',
+        'test/*.html'
+      ])
+      .pipe(htmlExtract({
+        sel: 'script, code-example code'
+      }))
+      .pipe(jshint())
+      .pipe(jshint.reporter())
+      .pipe(jshint.reporter('fail'))
+      .pipe(jscs())
+      .pipe(jscs.reporter())
+      .pipe(jscs.reporter('fail'));
 });
 
 gulp.task('test:shadow', function(done) {

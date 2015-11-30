@@ -1,7 +1,7 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var fullScreen = (function() {
   try {
-    document.createEvent("TouchEvent");
+    document.createEvent('TouchEvent');
     return true;
   } catch (e) {
     return false;
@@ -26,10 +26,15 @@ var asyncDone = function(cb, done, timeout) {
   Polymer.Base.async(function() {
     try {
       cb();
-      if (done) done();
+      if (done) {
+        done();
+      }
     } catch (err) {
-      if (done) done(err);
-      else throw (err);
+      if (done) {
+        done(err);
+      } else {
+        throw (err);
+      }
     }
   }, timeout || 1);
 };

@@ -65,7 +65,7 @@
 
 <script>
   Polymer({
-    is: "vaadin-adaptive-overlay",
+    is: 'vaadin-adaptive-overlay',
 
     properties: {
       /**
@@ -86,7 +86,7 @@
         reflectToAttribute: true,
         value: function() {
           try {
-            document.createEvent("TouchEvent");
+            document.createEvent('TouchEvent');
             return true;
           } catch (e) {
             return false;
@@ -102,13 +102,13 @@
         value: function() {
           var viewport = document.querySelector('meta[name="viewport"]');
           if (!viewport) {
-            viewport = document.createElement("meta");
-            viewport.setAttribute("name", "viewport");
+            viewport = document.createElement('meta');
+            viewport.setAttribute('name', 'viewport');
             document.querySelector('head').appendChild(viewport);
           }
           viewport._originalContent = viewport.content;
           viewport._fullScreenContent =
-            "width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no";
+            'width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1, user-scalable=no';
           return viewport;
         }
       },
@@ -168,7 +168,7 @@
     _patchIronFitBehavior: function() {
       var sd = this.$.dropdown._sizeDimension.bind(this.$.dropdown);
       this.$.dropdown._sizeDimension = function(rect, positionedBy, start, end, extent) {
-        if(extent === "Width") {
+        if (extent === 'Width') {
           this.$.dropdown.sizingTarget.style.maxWidth = this.$.dropdown.positionTarget.clientWidth + 'px';
         } else {
           sd(rect, positionedBy, start, end, extent);
@@ -217,8 +217,8 @@
         this.$.dropdown.positionTarget = undefined;
 
         var rect = this.getBoundingClientRect();
-        this.$.dropdown.style.left = -rect.left + "px";
-        this.$.dropdown.style.top = -rect.top + "px";
+        this.$.dropdown.style.left = -rect.left + 'px';
+        this.$.dropdown.style.top = -rect.top + 'px';
 
         this._iOSReposition();
       }
@@ -271,12 +271,12 @@
         // Handle backdrop position
         this.async(function() {
           var backdrop = this.$.dropdown.backdropElement;
-          backdrop.style.position = "absolute";
-          backdrop.style.left = "0";
-          backdrop.style.top = "0";
+          backdrop.style.position = 'absolute';
+          backdrop.style.left = '0';
+          backdrop.style.top = '0';
           var rect = backdrop.getBoundingClientRect();
-          backdrop.style.left = -rect.left + "px";
-          backdrop.style.top = -rect.top + "px";
+          backdrop.style.left = -rect.left + 'px';
+          backdrop.style.top = -rect.top + 'px';
         });
       }
     }

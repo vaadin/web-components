@@ -40,10 +40,10 @@
       <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
 
       <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        var combobox = combobox || document.querySelector('vaadin-combo-box');
         combobox.items = ['foo', 'bar', 'baz'];
 
-        var togglebutton = document.querySelector("#togglebutton");
+        var togglebutton = document.querySelector('#togglebutton');
         togglebutton.addEventListener('click', function() {
           if (combobox.opened) {
             combobox.close();
@@ -65,12 +65,12 @@
       <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
 
       <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        var combobox = combobox || document.querySelector('vaadin-combo-box');
         combobox.items = ['foo', 'bar', 'baz'];
 
         combobox.value = 'bar';
         combobox.addEventListener('value-changed', function() {
-          console.log("New value: " + combobox.value);
+          console.log('New value: ' + combobox.value);
         });
       </code>
     </code-example>
@@ -88,7 +88,7 @@
       </form>
       <code demo-var="form">
         var form = form || document.querySelector('form');
-        var combobox = form.querySelector('vaadin-combo-box')
+        var combobox = form.querySelector('vaadin-combo-box');
         combobox.items = ['foo', 'bar', 'baz'];
 
         form.addEventListener('iron-form-submit', function() {
@@ -109,8 +109,12 @@
     <code-example source>
       <vaadin-combo-box demo label="Favourite word"></vaadin-combo-box>
       <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
-        combobox.items = ["APACHE","AUTHORS","BSD","CHANGELOG","CHANGES","COMMIT_EDITMSG","CONTRIBUTING","CONTRIBUTORS","COPYING","ChangeLog","Client","Config","Contents","Core","Extensions","FAQ","GLOBAL","HEAD","HISTORY","Info","LICENCE","MIT","Makefile","OSX","README","SOURCES"];
+        var combobox = combobox || document.querySelector('vaadin-combo-box');
+        combobox.items = ['APACHE', 'AUTHORS', 'BSD', 'CHANGELOG', 'CHANGES',
+          'COMMIT_EDITMSG', 'CONTRIBUTING', 'CONTRIBUTORS', 'COPYING',
+          'ChangeLog', 'Client', 'Config', 'Contents', 'Core', 'Extensions',
+          'FAQ', 'GLOBAL', 'HEAD', 'HISTORY', 'Info', 'LICENCE', 'MIT',
+          'Makefile', 'OSX', 'README', 'SOURCES'];
       </code>
     </code-example>
   </section>
@@ -124,7 +128,7 @@
     <code-example source>
       <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
       <code demo-var="combobox">
-        var combobox = combobox || document.querySelector("vaadin-combo-box");
+        var combobox = combobox || document.querySelector('vaadin-combo-box');
         combobox.items = ['foo', 'bar', 'baz'];
       </code>
     </code-example>

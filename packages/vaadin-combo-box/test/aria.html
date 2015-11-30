@@ -58,10 +58,10 @@
 
     describe('when combo-box is attached', function() {
       it('should contain appropriate aria attributes', function() {
-        expect(getInput().getAttribute("role")).to.equal("combobox");
-        expect(getInput().getAttribute("aria-labelledby")).to.equal("label");
-        expect(getInput().getAttribute("aria-autocomplete")).to.equal("list");
-        expect(getInput().getAttribute("aria-owns")).to.equal("overlay");
+        expect(getInput().getAttribute('role')).to.equal('combobox');
+        expect(getInput().getAttribute('aria-labelledby')).to.equal('label');
+        expect(getInput().getAttribute('aria-autocomplete')).to.equal('list');
+        expect(getInput().getAttribute('aria-owns')).to.equal('overlay');
       });
     });
 
@@ -71,12 +71,12 @@
       });
 
       it('should set aria-expanded attribute when opened', function() {
-        expect(getInput().getAttribute("aria-expanded")).to.equal("true");
+        expect(getInput().getAttribute('aria-expanded')).to.equal('true');
       });
 
       it('should unset aria-expanded attribute when closed', function() {
         esc();
-        expect(getInput().getAttribute("aria-expanded")).to.equal("false");
+        expect(getInput().getAttribute('aria-expanded')).to.equal('false');
       });
     });
 
@@ -88,13 +88,13 @@
       it('should set selection aria attributes when focusing an item', function(done) {
         getSelector().selectedItem = 'foo';
         arrowDown();
-        asyncDone(function(){
-          expect(getItemElement(0).getAttribute("role")).to.equal("option");
-          expect(getItemElement(0).getAttribute("aria-selected")).to.equal("true");
-          expect(getItemElement(1).getAttribute("aria-selected")).to.equal("false");
-          expect(getItemElement(3).getAttribute("role")).to.be.null;
-          expect(getInput().getAttribute("aria-activedescendant")).to.equal("it0");
-          expect(getOverlay().getAttribute("data-selection")).to.equal("it0");
+        asyncDone(function() {
+          expect(getItemElement(0).getAttribute('role')).to.equal('option');
+          expect(getItemElement(0).getAttribute('aria-selected')).to.equal('true');
+          expect(getItemElement(1).getAttribute('aria-selected')).to.equal('false');
+          expect(getItemElement(3).getAttribute('role')).to.be.null;
+          expect(getInput().getAttribute('aria-activedescendant')).to.equal('it0');
+          expect(getOverlay().getAttribute('data-selection')).to.equal('it0');
         }, done);
       });
     });
