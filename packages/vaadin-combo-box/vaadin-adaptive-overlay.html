@@ -144,8 +144,27 @@
       */
       ios: {
         value: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-      }
+      },
 
+      /**
+        * Returns the scrollable element.
+        *
+        * @property scroller
+        * @type Object
+        */
+      scroller: {
+        type: Object,
+        computed: '_scroller(fullScreen)'
+      }
+    },
+
+    _scroller: function(fullScreen) {
+      // with touch scrolling, default scroller element needs to be used.
+      if (!this.fullScreen) {
+        // For <iron-list> scrollToIndex() and _viewportSize to work in IE11,
+        // we need to use #dropdownContent as scroller element.
+        return this.$.dropdownContent;
+      }
     },
 
     _computePositionTarget: function(fullScreen) {
