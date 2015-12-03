@@ -320,13 +320,17 @@
       this.close();
     },
 
-    _focusedIndexChanged: function(index, prevIndex) {
+    _focusedIndexChanged: function(index) {
       if (index >= 0) {
-        if (index <= this.$.selector.firstVisibleIndex) {
-          this.$.selector.scrollToIndex(index);
-        } else if (index > this._lastVisibleIndex()) {
-          this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
-        }
+        this._scrollIntoView(index);
+      }
+    },
+
+    _scrollIntoView: function(index) {
+      if (index <= this.$.selector.firstVisibleIndex) {
+        this.$.selector.scrollToIndex(index);
+      } else if (index > this._lastVisibleIndex()) {
+        this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
       }
     },
 
@@ -439,6 +443,12 @@
     _openedChanged: function() {
       if (this.opened) {
         this._setItems(this.items);
+
+        // TODO: needs to be async because iron-overlay-opened hasn't necessarily been fired yet.
+        this.async(function() {
+          this._scrollIntoView(this._focusedIndex);
+        }, 1);
+
       } else {
         this.$.input.bindValue = this.value;
         this.$.fullScreenInput.bindValue = this.value;
