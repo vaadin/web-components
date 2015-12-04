@@ -173,7 +173,7 @@
 
     <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
     <vaadin-adaptive-overlay id='overlay' role="listbox"
-         focus-target=[[_getFocusTarget()]] opened={{opened}} data-selection$='[[_getAriaActiveIndex(_focusedIndex)]]'><paper-input-container opened=[[opened]]>
+         focus-target=[[_getFocusTarget()]] opened={{opened}} data-selection$='[[_getAriaActiveIndex(_focusedIndex)]]'><paper-input-container opened$=[[opened]]>
         <label>[[label]]</label><input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged'>
         <div suffix on-tap='close'><iron-icon icon='arrow-drop-down'></iron-icon><paper-ripple class='circle' center></paper-ripple></div>
       </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
