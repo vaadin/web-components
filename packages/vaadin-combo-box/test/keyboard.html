@@ -332,7 +332,7 @@
         comboBox.open();
 
         asyncDone(function() {
-          expect(selector.firstVisibleIndex).to.eql(50 - comboBox._visibleItemsCount() + 1);
+          expect(selector.firstVisibleIndex).to.be.within(50 - comboBox._visibleItemsCount(), 50);
         }, done, 100);
       });
     });
