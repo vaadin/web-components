@@ -26,6 +26,21 @@
     <table-of-contents select="h3" class="toc"></table-of-contents>
   </section>
 
+  <section>
+    <h3>Setting items</h3>
+    <p>The data displayed by <code>vaadin-combo-box</code> can be set and accessed using the
+    <code>items</code> property. Only an array of <code>String</code> values is currently supported.
+
+    <code-example source>
+      <vaadin-combo-box demo items='["foo"]'></vaadin-combo-box>
+
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector('vaadin-combo-box');
+        // items can be also accessed directly
+        // combobox.items = ['foo', 'bar', 'baz'];
+      </code>
+    </code-example>
+  </section>
 
   <section>
     <h3>Opening and closing</h3>
