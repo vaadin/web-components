@@ -348,7 +348,7 @@
       }
     },
 
-    // TODO: Try to get this logic adopted into iron-list.
+    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
     _visibleItemsCount: function() {
       var firstItemIndex = this.$.selector._physicalStart;
       var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
@@ -359,7 +359,7 @@
       }
     },
 
-    // TODO: Try to get this logic adopted into iron-list.
+    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
     _lastVisibleIndex: function() {
       if (this._visibleItemsCount()) {
         return this.$.selector.firstVisibleIndex + this._visibleItemsCount() - 1;
