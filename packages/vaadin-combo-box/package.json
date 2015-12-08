@@ -2,7 +2,7 @@
   "name": "vaadin-combo-box",
   "version": "1.0.0",
   "author": "Vaadin Ltd",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "devDependencies": {
     "bower": "latest",
     "chalk": "^1.1.1",
