@@ -110,6 +110,31 @@
           expect(viewportInfo.content).not.to.equal(overlay._viewportInfo._fullScreenContent);
         });
 
+        it('should have device pixel accurate vertical coordinate for dropdown', function(done) {
+          overlay.close();
+
+          // Give offset by irrational number of pixels, that never results
+          // into interger device pixel-accurate value when rendering
+          overlay.parentElement.style.marginTop = Math.E + 'px';
+
+          overlay.parentElement.style.float = 'left'; // disables margins collapsing
+
+          overlay.open();
+
+          Polymer.Base.async(function() {
+            var target = overlay.$.dropdown._verticalAlignTargetValue;
+
+            // When multiplied by `devicePixelRatio`, target should be integer
+            expect(target * (window.devicePixelRatio || 1) % 1).to.be.equal(0);
+
+            // Cleanup the inline styles
+            overlay.parentElement.style.removeProperty('margin-top');
+            overlay.parentElement.style.removeProperty('float');
+
+            done();
+          });
+        });
+
       });
 
     });

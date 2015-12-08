@@ -52,7 +52,7 @@
       with-backdrop=[[fullScreen]]
       position-target=[[positionTarget]]
       vertical-align=[[_verticalAlign]]
-      vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen)]]
+      vertical-offset=[[_computeVerticalOffset(opened,positionTarget,fullScreen,_verticalAlign)]]
       on-tap="_tapped"
       on-iron-overlay-closed="_closed"
       on-iron-overlay-opened="_opened"
@@ -172,8 +172,45 @@
       return fullScreen ? document.documentElement : this.domHost || this.parentElement;
     },
 
-    _computeVerticalOffset: function(opened, positionTarget, fullScreen) {
-      return !fullScreen && positionTarget ? positionTarget.clientHeight : 0;
+    // Computes the vertical coordinate of positionTarget, to be used for
+    // the dropdown alignment. Made after <iron-dropdown/>’s computation in
+    // _verticalAlignTargetValue property getter.
+    _computeVerticalAlignTargetValue: function(positionTarget, _verticalAlign) {
+      var target;
+      var positionRect = positionTarget.getBoundingClientRect();
+
+      if (_verticalAlign === 'bottom') {
+        target = document.documentElement.clientHeight - positionRect.bottom;
+      } else {
+        target = positionRect.top;
+      }
+
+      return target;
+    },
+
+    _computeVerticalOffset: function(opened, positionTarget, fullScreen, _verticalAlign) {
+      var verticalOffset = 0;
+
+      if (!fullScreen && positionTarget) {
+        verticalOffset = positionTarget.clientHeight;
+
+        // In Safari, when dropdown is positioned on non-integer vertical
+        // coordinate, the items text is sometimes rendered 1 device pixel line
+        // outside the dropdown during vertical scrolling.
+        //
+        // We predict the vertical coordinate of the dropdown and shift its
+        // offset by a small error-correcting value, to make the vertical
+        // coordinate of the dropdown an integer number of device pixels.
+
+        var target = this._computeVerticalAlignTargetValue(positionTarget, _verticalAlign);
+        // We can't use the <iron-dropdown/>’s _verticalAlignTargetValue
+        // property getter instead, because it depends on the verticalOffset.
+
+        var devicePixelRatio = window.devicePixelRatio || 1;
+        verticalOffset += Math.round(target * devicePixelRatio) / devicePixelRatio - target;
+      }
+
+      return verticalOffset;
     },
 
     _verticalAlignChanged: function() {
