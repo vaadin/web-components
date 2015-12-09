@@ -39,6 +39,31 @@ var asyncDone = function(cb, done, timeout) {
   }, timeout || 1);
 };
 
+function _waitForOpened(open) {
+  if (!Promise) {
+    Promise = MakePromise(Polymer.Base.async);
+  }
+
+  return new Promise(function(resolve, reject) {
+    var handle = setInterval(function() {
+      var combobox = document.querySelector('vaadin-combo-box');
+
+      if (combobox.opened == open && !combobox.$.overlay.$.dropdown._openChangedAsync) {
+        clearInterval(handle);
+        resolve();
+      }
+    }, 10);
+  });
+}
+
+var waitForOpen = function() {
+  return _waitForOpened(true);
+};
+
+var waitForClosed = function() {
+  return _waitForOpened(false);
+};
+
 var getItemArray = function(length) {
   return new Array(length).join().split(',')
     .map(function(item, index) {
