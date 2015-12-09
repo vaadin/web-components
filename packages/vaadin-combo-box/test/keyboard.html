@@ -9,6 +9,7 @@
   <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
 
   <link rel='import' href='common.html'>
+  <script src="../bower_components/promise-polyfill/Promise.js"></script>
   <script src='common.js'></script>
 </head>
 
@@ -62,17 +63,19 @@
       it('should open the overlay with arrow down and not focus any item', function() {
         arrowDown();
 
-        expect(comboBox.opened).to.equal(true);
-
-        expect(getFocusedIndex()).to.equal(-1);
+        return waitForOpen().then(function() {
+          expect(comboBox.opened).to.equal(true);
+          expect(getFocusedIndex()).to.equal(-1);
+        });
       });
 
       it('should open the overlay with arrow up and not focus any item', function() {
         arrowUp();
 
-        expect(comboBox.opened).to.equal(true);
-
-        expect(getFocusedIndex()).to.equal(-1);
+        return waitForOpen().then(function() {
+          expect(comboBox.opened).to.equal(true);
+          expect(getFocusedIndex()).to.equal(-1);
+        });
       });
 
       it('should have focus on the selected item after opened', function() {
@@ -80,13 +83,17 @@
 
         arrowDown();
 
-        expect(getFocusedIndex()).to.equal(0);
+        return waitForOpen().then(function() {
+          expect(getFocusedIndex()).to.equal(0);
+        });
       });
     });
 
     describe('navigating the items after overlay opened', function() {
       beforeEach(function() {
         arrowDown();
+
+        return waitForOpen();
       });
 
       it('should focus on the first item with arrow down', function() {
@@ -146,6 +153,8 @@
       beforeEach(function() {
         comboBox.value = 'bar';
         arrowDown();
+
+        return waitForOpen();
       });
 
       it('should select focused item with enter', function() {
@@ -181,15 +190,17 @@
       it('should close the overlay with enter', function() {
         enter();
 
-        expect(comboBox.opened).to.equal(false);
+        return waitForClosed(function() {
+          expect(comboBox.opened).to.equal(false);
+        });
       });
 
-      it('should close the overlay with escape', function(done) {
+      it('should close the overlay with escape', function() {
         esc();
 
-        asyncDone(function() {
+        return waitForClosed(function() {
           expect(comboBox.opened).to.equal(false);
-        }, done, 100);
+        });
       });
 
       it('should cancel typing with escape', function() {
@@ -197,7 +208,9 @@
 
         esc();
 
-        expect(comboBox.value).to.equal('bar');
+        return waitForClosed(function() {
+          expect(comboBox.value).to.equal('bar');
+        });
       });
 
       it('should select typed item', function() {
@@ -205,7 +218,9 @@
 
         enter();
 
-        expect(comboBox.value).to.equal('baz');
+        return waitForClosed(function() {
+          expect(comboBox.value).to.equal('baz');
+        });
       });
     });
 
@@ -213,17 +228,18 @@
     // the internal properties of iron-list. These can be removed after this
     // logic no longer is implemented in vaadin-combo-box.
     describe('sanity checks for calculating visible item counts', function() {
-      it('should calculate items correctly when all items are visible', function(done) {
+      it('should calculate items correctly when all items are visible', function() {
         comboBox.items = ['foo', 'bar', 'baz', 'qux'];
         comboBox.open();
 
-        asyncDone(function() {
+        return waitForOpen().then(function() {
           expect(comboBox._visibleItemsCount()).to.eql(4);
           expect(comboBox._lastVisibleIndex()).to.eql(3);
-        }, done, 100);
+        });
+
       });
 
-      it('should calculate items correctly when some items are hidden', function(done) {
+      it('should calculate items correctly when some items are hidden', function() {
         var items = [];
         for (var i = 0; i < 100; i++) {
           items.push(i.toString());
@@ -233,16 +249,16 @@
 
         comboBox.open();
 
-        asyncDone(function() {
+        return waitForOpen().then(function() {
           expect(comboBox._lastVisibleIndex()).to.eql(comboBox._visibleItemsCount() - 1);
-        }, done, 100);
+        });
       });
     });
 
     describe('scrolling items', function() {
       var selector;
 
-      beforeEach(function(done) {
+      beforeEach(function() {
         var items = [];
 
         for (var i = 0; i < 100; i++) {
@@ -253,7 +269,7 @@
         comboBox.open();
         selector = comboBox.$.selector;
 
-        Polymer.Base.async(done, 100);
+        return waitForOpen();
       });
 
       it('should scroll down after reaching the last visible item', function() {
@@ -313,27 +329,27 @@
         expect(selector.firstVisibleIndex).to.eql(51 - comboBox._visibleItemsCount() + 1);
       });
 
-      it('should scroll to start if no items focused when opening overlay', function(done) {
-          selector.scrollToIndex(50);
-          comboBox.close();
+      it('should scroll to start if no items focused when opening overlay', function() {
+        selector.scrollToIndex(50);
+        comboBox.close();
 
-          comboBox.open();
+        comboBox.open();
 
-          asyncDone(function() {
-            expect(selector.firstVisibleIndex).to.eql(0);
-          }, done, 100);
+        return waitForOpen().then(function() {
+          expect(selector.firstVisibleIndex).to.eql(0);
+        });
       });
 
-      it('should scroll to focused item when opening overlay', function(done) {
+      it('should scroll to focused item when opening overlay', function() {
         selector.scrollToIndex(0);
         comboBox.close();
         comboBox.value = '50';
 
         comboBox.open();
 
-        asyncDone(function() {
+        return waitForOpen().then(function() {
           expect(selector.firstVisibleIndex).to.be.within(50 - comboBox._visibleItemsCount(), 50);
-        }, done, 100);
+        });
       });
     });
   });
