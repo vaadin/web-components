@@ -63,7 +63,7 @@
       it('should open the overlay with arrow down and not focus any item', function() {
         arrowDown();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(comboBox.opened).to.equal(true);
           expect(getFocusedIndex()).to.equal(-1);
         });
@@ -72,7 +72,7 @@
       it('should open the overlay with arrow up and not focus any item', function() {
         arrowUp();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(comboBox.opened).to.equal(true);
           expect(getFocusedIndex()).to.equal(-1);
         });
@@ -83,7 +83,7 @@
 
         arrowDown();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(getFocusedIndex()).to.equal(0);
         });
       });
@@ -93,7 +93,7 @@
       beforeEach(function() {
         arrowDown();
 
-        return waitForOpen();
+        return waitUntilOpen();
       });
 
       it('should focus on the first item with arrow down', function() {
@@ -154,7 +154,7 @@
         comboBox.value = 'bar';
         arrowDown();
 
-        return waitForOpen();
+        return waitUntilOpen();
       });
 
       it('should select focused item with enter', function() {
@@ -190,7 +190,7 @@
       it('should close the overlay with enter', function() {
         enter();
 
-        return waitForClosed(function() {
+        return waitUntilClosed(function() {
           expect(comboBox.opened).to.equal(false);
         });
       });
@@ -198,7 +198,7 @@
       it('should close the overlay with escape', function() {
         esc();
 
-        return waitForClosed(function() {
+        return waitUntilClosed(function() {
           expect(comboBox.opened).to.equal(false);
         });
       });
@@ -208,7 +208,7 @@
 
         esc();
 
-        return waitForClosed(function() {
+        return waitUntilClosed(function() {
           expect(comboBox.value).to.equal('bar');
         });
       });
@@ -218,7 +218,7 @@
 
         enter();
 
-        return waitForClosed(function() {
+        return waitUntilClosed(function() {
           expect(comboBox.value).to.equal('baz');
         });
       });
@@ -232,7 +232,7 @@
         comboBox.items = ['foo', 'bar', 'baz', 'qux'];
         comboBox.open();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(comboBox._visibleItemsCount()).to.eql(4);
           expect(comboBox._lastVisibleIndex()).to.eql(3);
         });
@@ -249,7 +249,7 @@
 
         comboBox.open();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(comboBox._lastVisibleIndex()).to.eql(comboBox._visibleItemsCount() - 1);
         });
       });
@@ -269,7 +269,7 @@
         comboBox.open();
         selector = comboBox.$.selector;
 
-        return waitForOpen();
+        return waitUntilOpen();
       });
 
       it('should scroll down after reaching the last visible item', function() {
@@ -335,7 +335,7 @@
 
         comboBox.open();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(selector.firstVisibleIndex).to.eql(0);
         });
       });
@@ -347,7 +347,7 @@
 
         comboBox.open();
 
-        return waitForOpen().then(function() {
+        return waitUntilOpen().then(function() {
           expect(selector.firstVisibleIndex).to.be.within(50 - comboBox._visibleItemsCount(), 50);
         });
       });

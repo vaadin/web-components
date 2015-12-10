@@ -39,9 +39,9 @@ var asyncDone = function(cb, done, timeout) {
   }, timeout || 1);
 };
 
-function _waitForOpened(open) {
-  if (!Promise) {
-    Promise = MakePromise(Polymer.Base.async);
+function _waitUntilOpened(open) {
+  if (!window.Promise) {
+    window.Promise = MakePromise(Polymer.Base.async);
   }
 
   return new Promise(function(resolve, reject) {
@@ -56,12 +56,12 @@ function _waitForOpened(open) {
   });
 }
 
-var waitForOpen = function() {
-  return _waitForOpened(true);
+var waitUntilOpen = function() {
+  return _waitUntilOpened(true);
 };
 
-var waitForClosed = function() {
-  return _waitForOpened(false);
+var waitUntilClosed = function() {
+  return _waitUntilOpened(false);
 };
 
 var getItemArray = function(length) {
