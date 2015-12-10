@@ -9,6 +9,7 @@
   <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
+  <script src="../bower_components/promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 </head>
 
@@ -35,18 +36,17 @@
           input = combobox.$.fullScreenInput;
         });
 
-        it('should blur fullscreen input on scroll', function(done) {
+        it('should blur fullscreen input on scroll', function() {
           combobox.open();
-          Polymer.Base.async(function() {
+
+          return waitUntilOpen().then(function() {
             selector.fire('down');
             var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
+
             expect(focusedInput).not.to.equal(combobox.$.fullScreenInput);
-            done();
           });
         });
-
       });
-
     });
   </script>
 

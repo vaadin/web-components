@@ -9,6 +9,7 @@
   <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
 
   <link rel='import' href='common.html'>
+  <script src="../bower_components/promise-polyfill/Promise.js"></script>
   <script src='common.js'></script>
 </head>
 
@@ -68,6 +69,8 @@
     describe('when overlay opens or close', function() {
       beforeEach(function() {
         arrowDown();
+
+        return waitUntilOpen();
       });
 
       it('should set aria-expanded attribute when opened', function() {
@@ -76,13 +79,18 @@
 
       it('should unset aria-expanded attribute when closed', function() {
         esc();
-        expect(getInput().getAttribute('aria-expanded')).to.equal('false');
+
+        return waitUntilClosed().then(function() {
+          expect(getInput().getAttribute('aria-expanded')).to.equal('false');
+        });
       });
     });
 
     describe('navigating the items', function() {
       beforeEach(function() {
         arrowDown();
+
+        return waitUntilOpen();
       });
 
       it('should set selection aria attributes when focusing an item', function(done) {
