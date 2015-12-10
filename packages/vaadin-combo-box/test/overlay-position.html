@@ -9,6 +9,7 @@
   <script src='../bower_components/test-fixture/test-fixture-mocha.js'></script>
 
   <link rel='import' href='common.html'>
+  <script src="../bower_components/promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 
 </head>
@@ -82,32 +83,32 @@
     });
 
     describeSkipIf(fullScreen, 'overlay position', function() {
-      it('should match the input container width', function(done) {
+      it('should match the input container width', function() {
         openComboboxTop();
 
-        asyncDone(function() {
-          expect(dropContentRect().width).to.equal(100);
-          comboBox.close();
-          asyncDone(function() {
+        return waitUntilOpen()
+          .then(function() {
+            expect(dropContentRect().width).to.equal(100);
+            comboBox.close();
+          })
+          .then(waitUntilClosed)
+          .then(function() {
             expect(dropContentRect().width).to.equal(0);
-          }, done);
+          });
+      });
+
+      it('should be below the input box if there is enough room under it', function() {
+        openComboboxTop();
+
+        return waitUntilOpen().then(function() {
+          expect(dropContentRect().top).to.be.above(inputContentRect().top);
         });
       });
 
-      it('should be below the input box if there is enough room under it', function(done) {
-        openComboboxTop();
-
-        asyncDone(function() {
-          expect(dropContentRect().top).to.be.above(inputContentRect().top);
-        }, done);
-      });
-
-      it('should be above the input box if there is not enough room under it', function(done) {
+      it('should be above the input box if there is not enough room under it', function() {
         openComboboxBottom();
 
-        // TODO(manolo) for some reason if we listen to iron-overlay-opened event it fires twice
-        // so we prefer a small delay here, until window.resize or animation is handled
-        asyncDone(function() {
+        return waitUntilOpen().then(function() {
           // FIXME(manolo) iron-dropdown computes wrong the max-height value for the dropdownContent
           // element, and it gives all the height that the list needs (no scroll). It only happens
           // when the popup is above the input. The bottom position of the iron-dropdown element is
@@ -117,7 +118,7 @@
           }
           // In chrome difference is around 1px in FF about 4px
           expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
-        }, done);
+        });
       });
 
       it('when the input position moves in the view port the overlay position should change', function(done) {
