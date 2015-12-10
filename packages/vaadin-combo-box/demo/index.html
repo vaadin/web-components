@@ -15,6 +15,29 @@
       --secondary-text-color: rgba(0,0,0,.12);
     }
   </style>
+  <script>
+    var elements = ['Actinium', 'Aluminium', 'Americium', 'Antimony', 'Argon',
+        'Arsenic', 'Astatine', 'Barium', 'Berkelium', 'Beryllium', 'Bismuth',
+        'Bohrium', 'Boron', 'Bromine', 'Cadmium', 'Caesium', 'Calcium',
+        'Californium', 'Carbon', 'Cerium', 'Chlorine', 'Chromium', 'Cobalt',
+        'Copernicium', 'Copper', 'Curium', 'Darmstadtium', 'Dubnium',
+        'Dysprosium', 'Einsteinium', 'Erbium', 'Europium', 'Fermium',
+        'Flerovium', 'Fluorine', 'Francium', 'Gadolinium', 'Gallium',
+        'Germanium', 'Gold', 'Hafnium', 'Hassium', 'Helium', 'Holmium',
+        'Hydrogen', 'Indium', 'Iodine', 'Iridium', 'Iron', 'Krypton',
+        'Lanthanum', 'Lawrencium', 'Lead', 'Lithium', 'Livermorium', 'Lutetium',
+        'Magnesium', 'Manganese', 'Meitnerium', 'Mendelevium', 'Mercury',
+        'Molybdenum', 'Neodymium', 'Neon', 'Neptunium', 'Nickel', 'Niobium',
+        'Nitrogen', 'Nobelium', 'Osmium', 'Oxygen', 'Palladium', 'Phosphorus',
+        'Platinum', 'Plutonium', 'Polonium', 'Potassium', 'Praseodymium',
+        'Promethium', 'Protactinium', 'Radium', 'Radon', 'Rhenium', 'Rhodium',
+        'Roentgenium', 'Rubidium', 'Ruthenium', 'Rutherfordium', 'Samarium',
+        'Scandium', 'Seaborgium', 'Selenium', 'Silicon', 'Silver', 'Sodium',
+        'Strontium', 'Sulfur', 'Tantalum', 'Technetium', 'Tellurium', 'Terbium',
+        'Thallium', 'Thorium', 'Thulium', 'Tin', 'Titanium', 'Tungsten',
+        'Ununoctium', 'Ununpentium', 'Ununseptium', 'Ununtrium', 'Uranium',
+        'Vanadium', 'Xenon', 'Ytterbium', 'Yttrium', 'Zinc', 'Zirconium'];
+  </script>
 
 </head>
 
@@ -27,36 +50,63 @@
   </section>
 
   <section>
-    <h3>Setting items</h3>
-    <p>The data displayed by <code>vaadin-combo-box</code> can be set and accessed using the
-    <code>items</code> property. Only an array of <code>String</code> values is currently supported.
+    <h3>Setting items and label</h3>
+    <p>
+      The data items displayed by <code>vaadin-combo-box</code> can be set and accessed using the
+      <code>items</code> property. Only an array of <code>String</code> values is currently supported.
+      The <code>items</code> may be assigned with data-binding, using an attribute or the
+      JavaScript property directly.
+    </p>
+    <p>Use the <code>label</code> attribute to provide a label for the element.</p>
 
     <code-example source>
-      <vaadin-combo-box demo items='["foo"]'></vaadin-combo-box>
+      <vaadin-combo-box demo label="Fruit"></vaadin-combo-box>
 
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector('vaadin-combo-box');
-        // items can be also accessed directly
-        // combobox.items = ['foo', 'bar', 'baz'];
+        combobox.items = ['apple', 'orange', 'banana'];
+      </code>
+    </code-example>
+  </section>
+
+  <section>
+    <h3>Filtering</h3>
+    <p>
+      Typing some text into the <code>vaadin-combo-box</code>'s input field will filter
+      the values defined in the <code>items</code> property and show only items that
+      <code>contain</code> the value in the input field.
+    </p>
+    <code-example source>
+      <vaadin-combo-box demo label="Element"></vaadin-combo-box>
+      <code demo-var="combobox">
+        var combobox = combobox || document.querySelector('vaadin-combo-box');
+        combobox.items = elements;
       </code>
     </code-example>
   </section>
 
   <section>
     <h3>Opening and closing</h3>
-    <p><code>vaadin-combo-box</code> dropdown list can be opened by clicking/tapping the element
-    or programmatically with the <code>open()</code> method</p>
-    <p>Clicking outside the dropdown or tapping the close icon on fullscreen mode closes it.
-    <code>vaadin-combo-box</code> also has an explicit <code>close()</code> method.</p>
-    <p>Use the <code>label</code> attribute to provide a label for the element.</p>
+    <p>
+      <code>vaadin-combo-box</code> dropdown list can be opened by clicking/tapping the element,
+      using up/down arrow keys or programmatically with the <code>open()</code> method.
+    </p>
+    <p>
+      Selecting a value, clicking outside the dropdown, using esc key or clicking/tapping the
+      close icon closes the dropdown.
+      <code>vaadin-combo-box</code> also has an explicit <code>close()</code> method.
+    </p>
+    <p>
+      Current state can be accessed with the <code>opened</code> property.
+    </p>
 
     <code-example source>
       <button id="togglebutton">Toggle dropdown</button>
-      <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
+      <vaadin-combo-box demo label="Element"></vaadin-combo-box>
 
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector('vaadin-combo-box');
-        combobox.items = ['foo', 'bar', 'baz'];
+        combobox.items = elements;
 
         var togglebutton = document.querySelector('#togglebutton');
         togglebutton.addEventListener('click', function() {
@@ -72,39 +122,44 @@
 
   <section>
     <h3>Selecting a value</h3>
-    <p>Selecting a value from the dropdown list changes <code>vaadin-combo-box's</code>
-    value property and fires a <code>value-changed</code> event.</p>
-    <p>Changing the value property explicitly also updates the visible fields.</p>
+    <p>
+      Selecting a value from the dropdown list changes <code>vaadin-combo-box</code>'s
+      <code>value</code> property and triggers a <code>value-changed</code> event.
+    </p>
+    <p>Changing the <code>value</code> property explicitly also updates the visible fields.</p>
 
     <code-example source>
-      <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
+      <vaadin-combo-box demo label="Element"></vaadin-combo-box>
+      <p>Selected value: <span id="selected-value"></span>.</p>
 
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector('vaadin-combo-box');
-        combobox.items = ['foo', 'bar', 'baz'];
+        combobox.items = elements;
 
-        combobox.value = 'bar';
         combobox.addEventListener('value-changed', function() {
-          console.log('New value: ' + combobox.value);
+          document.querySelector('#selected-value').innerHTML = combobox.value;
         });
+        combobox.value = 'Carbon';
       </code>
     </code-example>
   </section>
 
   <section>
     <h3>Using as a form field</h3>
-    <p><code>vaadin-combo-box</code> is extended with <code>IronFormElementBehavior</code> so it can
-    be used as a field in an <code>iron-form</code>.</p>
+    <p>
+      <code>vaadin-combo-box</code> is extended with <code>IronFormElementBehavior</code> so it can
+      be used as a field in an <code>iron-form</code>.
+    </p>
 
     <code-example source>
       <form is="iron-form" method="post" demo>
-        <vaadin-combo-box name='name' required label="Foo, bar or baz"></vaadin-combo-box>
+        <vaadin-combo-box name='name' required label="Element"></vaadin-combo-box>
         <button>Submit</button>
       </form>
       <code demo-var="form">
         var form = form || document.querySelector('form');
         var combobox = form.querySelector('vaadin-combo-box');
-        combobox.items = ['foo', 'bar', 'baz'];
+        combobox.items = elements;
 
         form.addEventListener('iron-form-submit', function() {
           alert('Form submitted with name: ' + form.serialize().name);
@@ -116,35 +171,17 @@
 
   <section>
     <h3>Automatic sizing and alignment</h3>
-    <p>In desktop browsers, the dropdown adapts its size so that it doesn't flow over the window edges and doesn't
-       exceed the width of the component. The dropdown also changes its alignment from bottom to top if there
-       isn't enough room below the component. <br/>
-       Resize the window to see how the dropdown adapts its size and alignment.
+    <p>
+      In desktop browsers, the dropdown adapts its size to the available space keeping it
+      from overflowing outside the window edges. The dropdown also changes its alignment
+      from bottom to top depending on which side has more space available.
     </p>
+    <p>Try resizing the window to see how the dropdown adapts its size and alignment.</p>
     <code-example source>
-      <vaadin-combo-box demo label="Favourite word"></vaadin-combo-box>
+      <vaadin-combo-box demo label="Element"></vaadin-combo-box>
       <code demo-var="combobox">
         var combobox = combobox || document.querySelector('vaadin-combo-box');
-        combobox.items = ['APACHE', 'AUTHORS', 'BSD', 'CHANGELOG', 'CHANGES',
-          'COMMIT_EDITMSG', 'CONTRIBUTING', 'CONTRIBUTORS', 'COPYING',
-          'ChangeLog', 'Client', 'Config', 'Contents', 'Core', 'Extensions',
-          'FAQ', 'GLOBAL', 'HEAD', 'HISTORY', 'Info', 'LICENCE', 'MIT',
-          'Makefile', 'OSX', 'README', 'SOURCES'];
-      </code>
-    </code-example>
-  </section>
-
-  <section>
-    <h3>Filtering</h3>
-    <p>Typing text into the <code>vaadin-combo-box's</code> input field will filter
-      values defined in the <code>items</code> property and show only items that
-      <code>contain</code> the value in the input field.
-    </p>
-    <code-example source>
-      <vaadin-combo-box demo label="Foo, bar or baz"></vaadin-combo-box>
-      <code demo-var="combobox">
-        var combobox = combobox || document.querySelector('vaadin-combo-box');
-        combobox.items = ['foo', 'bar', 'baz'];
+        combobox.items = elements;
       </code>
     </code-example>
   </section>
