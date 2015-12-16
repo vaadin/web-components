@@ -1,9 +1,12 @@
 [![Build Status](https://api.travis-ci.org/vaadin/charts-component.svg?branch=master)](https://travis-ci.org/vaadin/charts-component)
 
-
 # Vaadin Charts Web Component
 
-A Web Component for high quality charts. Uses the [Highcharts](http://www.highcharts.com/) JavaScript library.
+A Web Component for high quality charts.
+
+## Demo
+
+https://vaadin.com/add-ons/charts
 
 ## Overview of the repository
 
