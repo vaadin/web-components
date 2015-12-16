@@ -26,7 +26,7 @@
       "vaadin-treemap-chart.html",
       "vaadin-waterfall-chart.html",
       "vaadin-sparkline.html",
-      "charts-component.html",
+      "vaadin-charts.html",
       "data-series.html",
       "valo-theme.html",
       "chart-behavior.html",
