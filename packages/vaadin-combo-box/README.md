@@ -14,7 +14,7 @@
 input field for filtering the list of items, a part of the
 [vaadin-elements](https://github.com/vaadin/vaadin-elements) element bundle.
 
-<img src="screenshot.png" width="434" alt="Screenshot of vaadin-combo-box" />
+<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="434" alt="Screenshot of vaadin-combo-box" />
 
 **Features**
 
