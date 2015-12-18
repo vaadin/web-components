@@ -1,6 +1,6 @@
 [![Build Status](https://api.travis-ci.org/vaadin/vaadin-charts.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-charts)
 
-# Vaadin Charts Web Component
+# Vaadin Charts
 
 A Web Component for high quality charts.
 
