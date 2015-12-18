@@ -14,10 +14,10 @@
     "highcharts"
   ],
   "main": "vaadin-charts.html",
-  "license": "https://github.com/vaadin/charts-component/LICENSE.md",
+  "license": "https://github.com/vaadin/vaadin-charts/LICENSE.md",
   "repository": {
     "type": "git",
-    "url": "git@github.com:vaadin/charts-component.git"
+    "url": "git@github.com:vaadin/vaadin-charts.git"
   },
   "ignore": [
     "**/.*",
