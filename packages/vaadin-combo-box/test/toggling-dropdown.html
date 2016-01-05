@@ -57,39 +57,31 @@
         });
       });
 
-      describeIf(fullScreen, 'fullscreen', function() {
+      describe('after opening', function() {
         beforeEach(function() {
-          combobox.$.overlay.fullScreen = true;
           combobox.open();
 
           return waitUntilOpen();
         });
 
-        it('should focus input on fullscreen dropdown open', function() {
-          var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
-
-          expect(focusedInput).to.equal(combobox.$.fullScreenInput);
+        it('should focus input on dropdown open', function() {
+          var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
+          expect(focusedInput).to.equal(combobox.$.input);
         });
 
         it('should blur input when closing', function() {
           combobox.close();
 
           return waitUntilClosed().then(function() {
-            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
-
+            var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
             expect(focusedInput).to.be.undefined;
           });
-        });
-
-        it('should prevent focus of non-fullscreen input field', function() {
-          expect(combobox.$.input.tabIndex).to.equal(-1);
         });
       });
     });
 
     describe('closing', function() {
-      it('should close fullscreen popup when tapping on modal curtain', function() {
-        combobox.$.overlay.fullScreen = true;
+      it('should close popup when tapping outside overlay', function() {
         combobox.open();
 
         return waitUntilOpen()
@@ -97,7 +89,7 @@
             // Fake a tap event for the #dropdownContent.
             Polymer.Base.fire('tap', {}, {
               bubbles: true,
-              node: combobox.$.overlay.$.dropdownContent
+              node: document.body
             });
           })
           .then(waitUntilClosed)
@@ -106,24 +98,8 @@
           });
       });
 
-      describeIf(!fullScreen, 'on blur', function() {
+      describe('on blur', function() {
         it('should close the overlay when focus is lost', function() {
-          combobox.open();
-
-          return waitUntilOpen()
-            .then(function() {
-              MockInteractions.blur(combobox.$.input);
-            })
-            .then(waitUntilClosed)
-            .then(function() {
-              expect(combobox.opened).to.equal(false);
-            });
-        });
-      });
-
-      describeIf(fullScreen, 'on blur fullscreen', function() {
-        it('should close the overlay when focus is lost', function() {
-          // We need a dummy input as a focus target in fullscreen mode.
           var dummyInput = document.createElement('input');
           document.body.appendChild(dummyInput);
 

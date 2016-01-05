@@ -47,11 +47,6 @@
           comboBox.label = 'This is LABEL';
           expect(comboBox.$.inputContainer.querySelector('label').innerHTML).to.eql('This is LABEL');
         });
-
-        it('should be bound to fullscreen label element', function() {
-          comboBox.label = 'This is LABEL';
-          expect(comboBox.$.overlay.querySelector('label').innerHTML).to.eql('This is LABEL');
-        });
       });
     });
   </script>

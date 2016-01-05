@@ -1,0 +1,116 @@
+<!--
+@element vaadin-dropdown
+-->
+
+<link rel='import' href='../polymer/polymer.html'>
+<link rel='import' href='vaadin-overlay.html'>
+
+<dom-module id='vaadin-dropdown'>
+  <style>
+    :host {
+      display: block;
+      position: relative;
+    }
+
+    :host vaadin-overlay {
+      display: none;
+    }
+
+    vaadin-overlay {
+      max-height: 70vh;
+    }
+  </style>
+
+  <template>
+    <content select='.dropdown-input'></content>
+    <vaadin-overlay id='overlay' position-target='[[_positionTarget]]' scroller='[[_scroller]]'>
+      <content select='.dropdown-content'></content>
+    </vaadin-overlay>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-dropdown',
+
+    properties: {
+      /**
+       * True if the overlay is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        notify: true,
+        value: false,
+        observer: '_openedChanged'
+      },
+
+      /**
+      * Element which is focused after opening the dropdown.
+      */
+      focusTarget: {
+        type: Object,
+        value: function() {
+          return Polymer.dom(this).querySelector('.dropdown-input').querySelector('input');
+        }
+      },
+
+      _positionTarget: {
+        type: Object,
+        value: function() {
+          return this;
+        }
+      },
+
+      _scroller: {
+          type: Object,
+          value: function() {
+            return Polymer.dom(this).querySelector('.dropdown-content');
+          }
+      }
+    },
+
+    /**
+     * Fired after the `vaadin-dropdown` opens.
+     * @event vaadin-dropdown-opened
+     */
+    /**
+     * Fired after the `vaadin-dropdown` closes.
+     * @event vaadin-dropdown-closed
+     */
+
+    _openedChanged: function(opened) {
+      if(opened) {
+        this._open();
+      } else {
+        this._close();
+      }
+    },
+
+    _open: function() {
+      document.body.appendChild(this.$.overlay);
+      this.focusTarget.focus();
+
+      Polymer.Gestures.add(document, 'tap', null);
+      this.outsideTapListener = document.addEventListener('tap', function(event) {
+        var eventPath = Polymer.dom(event).path;
+        if(eventPath.indexOf(this) === -1 && eventPath.indexOf(this.$.overlay) === -1) {
+          this.opened = false;
+        }
+      }.bind(this));
+
+      this.fire('vaadin-dropdown-opened');
+    },
+
+    _close: function() {
+      if (this.$.overlay.parentElement == document.body) {
+        document.body.removeChild(this.$.overlay);
+        this.focusTarget.blur();
+
+        Polymer.Gestures.remove(document, 'tap', null);
+        document.removeEventListener('tap', this.outsideTapListener);
+
+        this.fire('vaadin-dropdown-closed');
+      }
+    }
+  });
+</script>

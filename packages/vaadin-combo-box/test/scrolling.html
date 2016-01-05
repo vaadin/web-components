@@ -25,28 +25,25 @@
   <script>
     describe('scrolling', function() {
 
-      describeSkipIf(!fullScreen, 'fullscreen', function() {
-        var combobox;
-        var input;
-        var selector;
+      var combobox;
 
-        beforeEach(function() {
-          combobox = fixture('combobox');
-          selector = combobox.$.selector;
-          input = combobox.$.fullScreenInput;
-        });
+      beforeEach(function() {
+        combobox = fixture('combobox');
+      });
 
-        it('should blur fullscreen input on scroll', function() {
-          combobox.open();
+      describeSkipIf(!touchDevice, 'touch devices', function() {
 
-          return waitUntilOpen().then(function() {
-            selector.fire('down');
-            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
+      it('should blur input on scroll', function() {
+        combobox.open();
 
-            expect(focusedInput).not.to.equal(combobox.$.fullScreenInput);
-          });
+        return waitUntilOpen().then(function() {
+          combobox.$.selector.fire('down');
+          var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
+
+          expect(focusedInput).not.to.equal(combobox.$.input);
         });
       });
+    });
     });
   </script>
 

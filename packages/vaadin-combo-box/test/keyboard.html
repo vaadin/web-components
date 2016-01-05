@@ -27,11 +27,7 @@
     var comboBox;
 
     function getInput() {
-      if (comboBox.fullscreen) {
-        return comboBox.$.fullScreenInput;
-      } else {
-        return comboBox.$.input;
-      }
+      return comboBox.$.input;
     }
 
     function getFocusedIndex() {

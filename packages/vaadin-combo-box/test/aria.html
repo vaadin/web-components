@@ -32,9 +32,6 @@
     function getLabel() {
       return comboBox.$.label;
     }
-    function getOverlay() {
-      return comboBox.$.overlay;
-    }
     function getSelector() {
       return comboBox.$.selector;
     }
@@ -73,6 +70,10 @@
         return waitUntilOpen();
       });
 
+      it('iron-list should have role listbox', function() {
+        expect(comboBox.$.selector.getAttribute('role')).to.equal('listbox');
+      });
+
       it('should set aria-expanded attribute when opened', function() {
         expect(getInput().getAttribute('aria-expanded')).to.equal('true');
       });
@@ -102,7 +103,7 @@
           expect(getItemElement(1).getAttribute('aria-selected')).to.equal('false');
           expect(getItemElement(3).getAttribute('role')).to.be.null;
           expect(getInput().getAttribute('aria-activedescendant')).to.equal('it0');
-          expect(getOverlay().getAttribute('data-selection')).to.equal('it0');
+          expect(comboBox.$.selector.getAttribute('data-selection')).to.equal('it0');
         }, done);
       });
     });

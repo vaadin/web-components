@@ -1,5 +1,5 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-var fullScreen = (function() {
+var touchDevice = (function() {
   try {
     document.createEvent('TouchEvent');
     return true;
@@ -47,8 +47,7 @@ function _waitUntilOpened(open) {
   return new Promise(function(resolve, reject) {
     var handle = setInterval(function() {
       var combobox = document.querySelector('vaadin-combo-box');
-
-      if (combobox.opened == open && !combobox.$.overlay.$.dropdown._openChangedAsync) {
+      if (combobox.opened == open) {
         clearInterval(handle);
         resolve();
       }
