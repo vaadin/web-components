@@ -66,8 +66,6 @@
     describe('when overlay opens or close', function() {
       beforeEach(function() {
         arrowDown();
-
-        return waitUntilOpen();
       });
 
       it('iron-list should have role listbox', function() {
@@ -81,30 +79,26 @@
       it('should unset aria-expanded attribute when closed', function() {
         esc();
 
-        return waitUntilClosed().then(function() {
-          expect(getInput().getAttribute('aria-expanded')).to.equal('false');
-        });
+        expect(getInput().getAttribute('aria-expanded')).to.equal('false');
       });
     });
 
     describe('navigating the items', function() {
       beforeEach(function() {
         arrowDown();
-
-        return waitUntilOpen();
       });
 
-      it('should set selection aria attributes when focusing an item', function(done) {
+      it('should set selection aria attributes when focusing an item', function() {
         getSelector().selectedItem = 'foo';
         arrowDown();
-        asyncDone(function() {
-          expect(getItemElement(0).getAttribute('role')).to.equal('option');
-          expect(getItemElement(0).getAttribute('aria-selected')).to.equal('true');
-          expect(getItemElement(1).getAttribute('aria-selected')).to.equal('false');
-          expect(getItemElement(3).getAttribute('role')).to.be.null;
-          expect(getInput().getAttribute('aria-activedescendant')).to.equal('it0');
-          expect(comboBox.$.selector.getAttribute('data-selection')).to.equal('it0');
-        }, done);
+
+        expect(getItemElement(0).getAttribute('role')).to.equal('option');
+        expect(getItemElement(0).getAttribute('aria-selected')).to.equal('true');
+        expect(getItemElement(1).getAttribute('aria-selected')).to.equal('false');
+        expect(getItemElement(3).getAttribute('role')).to.be.null;
+        expect(getInput().getAttribute('aria-activedescendant')).to.equal('it0');
+        expect(comboBox.$.selector.getAttribute('data-selection')).to.equal('it0');
+
       });
     });
 

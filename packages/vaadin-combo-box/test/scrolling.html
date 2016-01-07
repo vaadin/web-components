@@ -9,7 +9,6 @@
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
-  <script src="../../promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 </head>
 
@@ -36,12 +35,10 @@
       it('should blur input on scroll', function() {
         combobox.open();
 
-        return waitUntilOpen().then(function() {
-          combobox.$.selector.fire('down');
-          var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
+        combobox.$.selector.fire('down');
+        var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
 
-          expect(focusedInput).not.to.equal(combobox.$.input);
-        });
+        expect(focusedInput).not.to.equal(combobox.$.input);
       });
     });
     });

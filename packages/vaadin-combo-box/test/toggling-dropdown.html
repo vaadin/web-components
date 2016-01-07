@@ -9,7 +9,6 @@
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
-  <script src="../../promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 </head>
 
@@ -38,7 +37,6 @@
         it('should open by clicking label', function() {
           MockInteractions.tap(combobox.$$('paper-input-container label'));
 
-        return waitUntilOpen().then(function() {
           expect(combobox.opened).to.be.true;
         });
       }
@@ -46,42 +44,32 @@
       it('should open by clicking input', function() {
         combobox.$$('paper-input-container input').fire('tap');
 
-        return waitUntilOpen().then(function() {
-          expect(combobox.opened).to.be.true;
-        });
+        expect(combobox.opened).to.be.true;
       });
 
       it('should open by clicking icon', function() {
         combobox.$$('paper-input-container iron-icon').fire('tap');
 
-        return waitUntilOpen().then(function() {
-          expect(combobox.opened).to.be.true;
-        });
+        expect(combobox.opened).to.be.true;
       });
 
       it('should open on function call', function() {
         combobox.open();
 
-        return waitUntilOpen().then(function() {
-          expect(combobox.opened).to.be.true;
-        });
+        expect(combobox.opened).to.be.true;
       });
 
       it('should not close an open popup', function() {
         combobox.open();
 
-        return waitUntilOpen().then(function() {
-          combobox.open();
+        combobox.open();
 
-          expect(combobox.opened).to.be.true;
-        });
+        expect(combobox.opened).to.be.true;
       });
 
       describe('after opening', function() {
         beforeEach(function() {
           combobox.open();
-
-          return waitUntilOpen();
         });
 
         it('should focus input on dropdown open', function() {
@@ -92,10 +80,8 @@
         it('should blur input when closing', function() {
           combobox.close();
 
-          return waitUntilClosed().then(function() {
-            var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
-            expect(focusedInput).to.be.undefined;
-          });
+          var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
+          expect(focusedInput).to.be.undefined;
         });
       });
     });
@@ -104,18 +90,13 @@
       it('should close popup when tapping outside overlay', function() {
         combobox.open();
 
-        return waitUntilOpen()
-          .then(function() {
-            // Fake a tap event for the #dropdownContent.
-            Polymer.Base.fire('tap', {}, {
-              bubbles: true,
-              node: document.body
-            });
-          })
-          .then(waitUntilClosed)
-          .then(function() {
-            expect(combobox.opened).to.be.false;
+          // Fake a tap event for the #dropdownContent.
+          Polymer.Base.fire('tap', {}, {
+            bubbles: true,
+            node: document.body
           });
+
+          expect(combobox.opened).to.be.false;
       });
 
       it('should close on clicking icon', function() {
@@ -123,26 +104,24 @@
 
         combobox.$$('paper-input-container iron-icon').fire('tap');
 
-        return waitUntilClosed().then(function() {
-          expect(combobox.opened).to.be.false;
-        });
+        expect(combobox.opened).to.be.false;
       });
 
-      it('should close the overlay when focus is lost', function() {
+      it('should close the overlay when focus is lost', function(done) {
         var dummyInput = document.createElement('input');
         document.body.appendChild(dummyInput);
 
         combobox.open();
 
-        return waitUntilOpen()
-          .then(function() {
-            dummyInput.focus();
-          })
-          .then(waitUntilClosed)
-          .then(function() {
-            expect(combobox.opened).to.equal(false);
-            document.body.removeChild(dummyInput);
-          });
+        dummyInput.focus();
+        combobox.$.dropdown.focusTarget.fire('blur');
+
+        Polymer.Base.async(function() {
+          document.body.removeChild(dummyInput);
+
+          expect(combobox.opened).to.equal(false);
+          done();
+        }, 1);
       });
     });
   });

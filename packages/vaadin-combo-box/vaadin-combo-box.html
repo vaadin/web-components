@@ -304,11 +304,12 @@ enable usage within an `iron-form`.
     _onBlur: function() {
       // Async needed to access the new activeElement reliably.
       this.async(function() {
-        var focusInsideOverlay = this.$.dropdown.contains(document.activeElement);
+        var focusInsideDropdown = this.$.dropdown.contains(document.activeElement);
+        var focusInsideOverlay = this.$.dropdown.$.overlay.contains(document.activeElement);
 
         // When grabbing the scroll handle, the activeElement will become
         // the body on some browsers, so check for it also.
-        if (!focusInsideOverlay && document.activeElement !== document.body) {
+        if (!(focusInsideOverlay || focusInsideDropdown) && document.activeElement !== document.body) {
           this.close();
         }
       }, 1);
