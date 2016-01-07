@@ -106,7 +106,8 @@
       var target = this.positionTarget;
       var targetRect = target.getBoundingClientRect();
 
-      this.style.top = targetRect.top + (document.body.scrollTop || document.documentElement.scrollTop) + target.clientHeight + this._underlineHeight(target) + 'px';
+      this.style.top = targetRect.top + (document.body.scrollTop || document.documentElement.scrollTop) +
+                       target.clientHeight + this._underlineHeight(target) + 'px';
       this.style.left = targetRect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) + 'px';
       this._setMargins();
 

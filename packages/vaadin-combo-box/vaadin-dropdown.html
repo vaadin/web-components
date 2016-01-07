@@ -71,15 +71,35 @@
 
     /**
      * Fired after the `vaadin-dropdown` opens.
+     *
      * @event vaadin-dropdown-opened
      */
     /**
      * Fired after the `vaadin-dropdown` closes.
+     *
      * @event vaadin-dropdown-closed
      */
 
+    attached: function() {
+      Polymer.Gestures.add(document, 'tap', null);
+
+      // We need to listen for outside taps even when the dropdown is closed
+      // to blur the input.
+      this._outsideTapListener = document.addEventListener('tap', function(event) {
+        var eventPath = Polymer.dom(event).path;
+        if (eventPath.indexOf(this) === -1 && eventPath.indexOf(this.$.overlay) === -1) {
+          this.opened = false;
+          this.focusTarget.blur();
+        }
+      }.bind(this));
+    },
+
+    detached: function() {
+      document.removeEventListener('tap', this._outsideTapListener);
+    },
+
     _openedChanged: function(opened) {
-      if(opened) {
+      if (opened) {
         this._open();
       } else {
         this._close();
@@ -90,24 +110,12 @@
       document.body.appendChild(this.$.overlay);
       this.focusTarget.focus();
 
-      Polymer.Gestures.add(document, 'tap', null);
-      this.outsideTapListener = document.addEventListener('tap', function(event) {
-        var eventPath = Polymer.dom(event).path;
-        if(eventPath.indexOf(this) === -1 && eventPath.indexOf(this.$.overlay) === -1) {
-          this.opened = false;
-        }
-      }.bind(this));
-
       this.fire('vaadin-dropdown-opened');
     },
 
     _close: function() {
       if (this.$.overlay.parentElement == document.body) {
         document.body.removeChild(this.$.overlay);
-        this.focusTarget.blur();
-
-        Polymer.Gestures.remove(document, 'tap', null);
-        document.removeEventListener('tap', this.outsideTapListener);
 
         this.fire('vaadin-dropdown-closed');
       }

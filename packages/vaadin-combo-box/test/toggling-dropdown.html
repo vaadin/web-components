@@ -77,8 +77,13 @@
           expect(focusedInput).to.equal(combobox.$.input);
         });
 
-        it('should blur input when closing', function() {
-          combobox.close();
+        it('should blur input when tapping outside overlay', function() {
+          combobox.$.input.focus();
+
+          Polymer.Base.fire('tap', {}, {
+            bubbles: true,
+            node: document.body
+          });
 
           var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
           expect(focusedInput).to.be.undefined;
@@ -90,7 +95,6 @@
       it('should close popup when tapping outside overlay', function() {
         combobox.open();
 
-          // Fake a tap event for the #dropdownContent.
           Polymer.Base.fire('tap', {}, {
             bubbles: true,
             node: document.body

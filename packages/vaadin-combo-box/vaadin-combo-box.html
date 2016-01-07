@@ -229,8 +229,8 @@ enable usage within an `iron-form`.
     },
 
     listeners: {
-      'vaadin-dropdown-opened' : '_onOpened',
-      'vaadin-dropdown-closed' : '_onClosed'
+      'vaadin-dropdown-opened': '_onOpened',
+      'vaadin-dropdown-closed': '_onClosed'
     },
 
     ready: function() {
@@ -371,6 +371,9 @@ enable usage within an `iron-form`.
     toggle: function() {
       if (this.opened) {
         this.close();
+
+        // Refocus input field after clicking the toggle button.
+        this.$.dropdown.focusTarget.focus();
       } else {
         this.open();
       }
