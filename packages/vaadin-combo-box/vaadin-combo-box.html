@@ -122,8 +122,8 @@ enable usage within an `iron-form`.
 
   <template>
     <vaadin-dropdown id="dropdown" opened={{opened}}>
-    <paper-input-container class="dropdown-input" id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened$=[[opened]]>
-      <label id='label'>[[label]]</label>
+    <paper-input-container class="dropdown-input" id="inputContainer" on-touchend='_preventDefault' opened$=[[opened]]>
+      <label id='label' on-tap='open'>[[label]]</label>
       <input
           is='iron-input'
           id='input'
@@ -139,8 +139,9 @@ enable usage within an `iron-form`.
           required$="[[required]]"
           on-bind-value-changed='_inputValueChanged'
           on-blur='_onBlur'
+          on-tap='open'
           key-event-target>
-      <div suffix>
+      <div suffix on-tap='toggle'>
         <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
         <paper-ripple class='circle' center></paper-ripple>
       </div>
@@ -361,6 +362,17 @@ enable usage within an `iron-form`.
      */
     open: function() {
       this.opened = true;
+    },
+
+    /**
+     * Opens and closes the dropdown list.
+     */
+    toggle: function() {
+      if (this.opened) {
+        this.close();
+      } else {
+        this.open();
+      }
     },
 
     _onClosed: function() {
