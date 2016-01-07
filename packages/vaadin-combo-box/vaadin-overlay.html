@@ -3,7 +3,6 @@
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
-<link rel='import' href='../iron-fit-behavior/iron-fit-behavior.html'>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <dom-module id="vaadin-overlay">
@@ -28,7 +27,6 @@
     is: 'vaadin-overlay',
 
     behaviors: [
-      Polymer.IronFitBehavior,
       Polymer.IronResizableBehavior
     ],
 
@@ -74,23 +72,8 @@
       }
     },
 
-    /**
-     * Need to monkeypatch _sizeDimension to fix sizingTarget width to match positionTarget width
-     */
-    _patchIronFitBehavior: function() {
-      var sd = this._sizeDimension.bind(this);
-      this._sizeDimension = function(rect, positionedBy, start, end, extent) {
-        if (extent === 'Width') {
-          this.sizingTarget.style.width = this.positionTarget.clientWidth + 'px';
-        } else {
-          sd(rect, positionedBy, start, end, extent);
-        }
-      }.bind(this);
-    },
-
     ready: function() {
       this._patchWheelOverScrolling();
-      this._patchIronFitBehavior();
     },
 
     attached: function() {
@@ -127,7 +110,7 @@
       this.style.left = targetRect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) + 'px';
       this._setMargins();
 
-      this.fit();
+      this.style.width = this.positionTarget.clientWidth + 'px';
     }
   });
 </script>

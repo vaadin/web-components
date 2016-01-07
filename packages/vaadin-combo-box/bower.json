@@ -34,7 +34,6 @@
     "polymer": "Polymer/polymer#^1.1.3",
     "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#~1.0.7",
     "paper-ripple": "polymerelements/paper-ripple#~1.0.4",
-    "iron-fit-behavior": "polymerelements/iron-fit-behavior#~1.0.5",
     "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#~1.0.2"
   },
   "devDependencies": {
