@@ -121,33 +121,33 @@ enable usage within an `iron-form`.
   </style>
 
   <template>
-    <vaadin-dropdown id="dropdown" opened={{opened}}>
-    <paper-input-container class="dropdown-input" id="inputContainer" on-touchend='_preventDefault' opened$=[[opened]]>
-      <label id='label' on-tap='open'>[[label]]</label>
-      <input
-          is='iron-input'
-          id='input'
-          role="combobox"
-          aria-activedescendant$='[[_getAriaActiveIndex(_focusedIndex)]]'
-          aria-expanded$='[[_getAriaExpanded(opened)]]'
-          aria-labelledby="label"
-          aria-autocomplete="list" aria-owns="overlay"
-          autocomplete='off'
-          bind-value='[[value]]'
-          name$='[[name]]'
-          type='text'
-          required$="[[required]]"
-          on-bind-value-changed='_inputValueChanged'
-          on-blur='_onBlur'
-          on-tap='open'
-          key-event-target>
-      <div suffix on-tap='toggle'>
-        <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
-        <paper-ripple class='circle' center></paper-ripple>
-      </div>
-    </paper-input-container>
+    <vaadin-dropdown id="dropdown" opened={{opened}} overlay-vertical-offset='2'>
+      <paper-input-container class="dropdown-input" id="inputContainer" on-touchend='_preventDefault' opened$=[[opened]]>
+        <label id='label' on-tap='open'>[[label]]</label>
+        <input
+            is='iron-input'
+            id='input'
+            role="combobox"
+            aria-activedescendant$='[[_getAriaActiveIndex(_focusedIndex)]]'
+            aria-expanded$='[[_getAriaExpanded(opened)]]'
+            aria-labelledby="label"
+            aria-autocomplete="list" aria-owns="overlay"
+            autocomplete='off'
+            bind-value='[[value]]'
+            name$='[[name]]'
+            type='text'
+            required$="[[required]]"
+            on-bind-value-changed='_inputValueChanged'
+            on-blur='_onBlur'
+            on-tap='open'
+            key-event-target>
+        <div suffix on-tap='toggle'>
+          <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
+          <paper-ripple class='circle' center></paper-ripple>
+        </div>
+      </paper-input-container>
 
-    <iron-list class="dropdown-content" id='selector' touch-device$=[[touchDevice]] role="listbox" data-selection$='[[_getAriaActiveIndex(_focusedIndex)]]' on-touchend="_preventDefault" on-down='_blurInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
+      <iron-list class="dropdown-content" id='selector' touch-device$=[[touchDevice]] role="listbox" data-selection$='[[_getAriaActiveIndex(_focusedIndex)]]' on-touchend="_preventDefault" on-down='_blurInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
         <template>
           <div class='item'
           id$="it[[index]]"

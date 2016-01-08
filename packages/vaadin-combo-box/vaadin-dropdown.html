@@ -23,7 +23,7 @@
 
   <template>
     <content select='.dropdown-input'></content>
-    <vaadin-overlay id='overlay' position-target='[[_positionTarget]]' scroller='[[_scroller]]'>
+    <vaadin-overlay id='overlay' position-target='[[_positionTarget]]' scroller='[[_scroller]]' vertical-offset=[[overlayVerticalOffset]]>
       <content select='.dropdown-content'></content>
     </vaadin-overlay>
   </template>
@@ -52,6 +52,14 @@
         value: function() {
           return Polymer.dom(this).querySelector('.dropdown-input').querySelector('input');
         }
+      },
+
+      /**
+       * Vertical offset for the overlay position.
+       */
+      overlayVerticalOffset: {
+        type: Number,
+        value: 0
       },
 
       _positionTarget: {

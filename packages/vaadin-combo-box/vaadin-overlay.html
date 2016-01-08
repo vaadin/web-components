@@ -45,6 +45,14 @@
        */
       scroller: {
         type: Object
+      },
+
+      /**
+       * Vertical offset for the overlay position.
+       */
+      verticalOffset: {
+        type: Number,
+        value: 0
       }
     },
 
@@ -80,18 +88,6 @@
       this._setOverlayPosition();
     },
 
-    // Helper method to get the height of possible underline used in paper-input-container.
-    // The underline height is not included in the client height of the <vaadin-dropdown>.
-    _underlineHeight: function(target) {
-      var underline = target.querySelector('.underline');
-
-      if (underline) {
-        return underline.querySelector('.focused-line').clientHeight;
-      } else {
-        return 0;
-      }
-    },
-
     // If document.body doesn't have position:static, we need to deduct the body margins from
     // the overlay position. Alternatively, the margins could be added directly to top and left properties.
     _setMargins: function() {
@@ -107,7 +103,7 @@
       var targetRect = target.getBoundingClientRect();
 
       this.style.top = targetRect.top + (document.body.scrollTop || document.documentElement.scrollTop) +
-                       target.clientHeight + this._underlineHeight(target) + 'px';
+                       target.clientHeight + this.verticalOffset + 'px';
       this.style.left = targetRect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) + 'px';
       this._setMargins();
 
