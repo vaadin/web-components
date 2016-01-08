@@ -38,7 +38,7 @@
     "paper-ripple": "polymerelements/paper-ripple#~1.0.4"
   },
   "devDependencies": {
-    "web-component-tester": "3.3.30",
+    "web-component-tester": "4.0.3",
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "iron-component-page": "polymerelements/iron-component-page#~1.1.0",

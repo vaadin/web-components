@@ -11,8 +11,7 @@
     "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^2.0.0",
     "jshint": "^2.8.0",
-    "web-component-tester": "3.3.30",
-    "selenium-standalone" : "4.7.0",
+    "web-component-tester": "4.0.3",
     "yargs": "^3.27.0"
   },
   "scripts": {
