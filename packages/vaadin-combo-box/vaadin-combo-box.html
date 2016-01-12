@@ -67,6 +67,10 @@ enable usage within an `iron-form`.
       }
     }
 
+    #selector {
+      max-height: 65vh;
+    }
+
     #selector .item {
       cursor: pointer;
       padding: 13px 16px;
@@ -236,6 +240,27 @@ enable usage within an `iron-form`.
     ready: function() {
       this._addKeyEventListeners();
       Polymer.IronA11yAnnouncer.requestAvailability();
+
+      this._patchWheelOverScrolling();
+    },
+
+    /**
+     * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
+     * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
+     * scrolling the parent similarily to touch scrolling.
+     */
+    _patchWheelOverScrolling: function() {
+      var selector = this.$.selector;
+      selector.addEventListener('wheel', function(e) {
+        var scrolledToTop = selector._scroller.scrollTop === 0;
+        var scrolledToBottom = (selector._scroller.scrollHeight - selector._scroller.scrollTop - selector._scroller.clientHeight) <= 1;
+
+        if (scrolledToTop && e.deltaY < 0) {
+          e.preventDefault();
+        } else if (scrolledToBottom && e.deltaY > 0) {
+          e.preventDefault();
+        }
+      });
     },
 
     /**

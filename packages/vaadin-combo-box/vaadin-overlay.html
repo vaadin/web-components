@@ -9,16 +9,23 @@
   <style>
     :host {
       position: absolute;
-      z-index: 10000;
-      @apply(--layout-vertical);
+      z-index: 100;
       @apply(--shadow-elevation-2dp);
       background: #fff;
       border-radius: 0 0 2px 2px;
     }
+
+    /* TODO: Consider removing the scroll wrapper */
+    /* #scroller { */
+    /*   max-height: 65vh; */
+    /*   overflow: auto; */
+    /*   transform: translate3d(0, 0, 0); */
+    /* } */
   </style>
 
   <template>
-    <content></content>
+    <!-- TODO: Consider removing the scroll wrapper -->
+    <!-- <div id="scroller" scroller="[[_getScroller()]]"></div> -->
   </template>
 </dom-module>
 
@@ -37,15 +44,6 @@
       positionTarget: {
         type: Object
       },
-      /**
-       * Returns the scrollable element.
-       *
-       * @property scroller
-       * @type Object
-       */
-      scroller: {
-        type: Object
-      },
 
       /**
        * Vertical offset for the overlay position.
@@ -60,33 +58,14 @@
       'iron-resize': '_setOverlayPosition'
     },
 
-    /**
-     * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
-     * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
-     * scrolling the parent similarily to touch scrolling.
-     */
-    _patchWheelOverScrolling: function() {
-      if (this.scroller) {
-        this.addEventListener('wheel', function(e) {
-          var scrolledToTop = this.scroller.scrollTop === 0;
-          var scrolledToBottom = (this.scroller.scrollHeight - this.scroller.scrollTop - this.scroller.clientHeight) === 0;
-
-          if (scrolledToTop && e.deltaY < 0) {
-            e.preventDefault();
-          } else if (scrolledToBottom && e.deltaY > 0) {
-            e.preventDefault();
-          }
-        }.bind(this));
-      }
-    },
-
-    ready: function() {
-      this._patchWheelOverScrolling();
-    },
-
     attached: function() {
       this._setOverlayPosition();
     },
+
+    /* TODO: Consider removing the scroll wrapper */
+    // _getScroller: function() {
+    //   return this.$.scroller;
+    // },
 
     // If document.body doesn't have position:static, we need to deduct the body margins from
     // the overlay position. Alternatively, the margins could be added directly to top and left properties.

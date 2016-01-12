@@ -12,20 +12,16 @@
       position: relative;
     }
 
-    :host vaadin-overlay {
+    :host > #overlay,
+    :host ::content > .dropdown-content {
       display: none;
     }
 
-    vaadin-overlay {
-      max-height: 70vh;
-    }
   </style>
 
   <template>
     <content select='.dropdown-input'></content>
-    <vaadin-overlay id='overlay' position-target='[[_positionTarget]]' scroller='[[_scroller]]' vertical-offset=[[overlayVerticalOffset]]>
-      <content select='.dropdown-content'></content>
-    </vaadin-overlay>
+    <vaadin-overlay id='overlay' position-target='[[_positionTarget]]' vertical-offset="2"></vaadin-overlay>
   </template>
 </dom-module>
 
@@ -69,12 +65,13 @@
         }
       },
 
-      _scroller: {
-          type: Object,
-          value: function() {
-            return Polymer.dom(this).querySelector('.dropdown-content');
-          }
-      }
+      _overlayContent: Object,
+
+      _overlayContentHost: Object,
+
+      _overlayContentPosition: Object,
+
+      _overlayStyles: Array
     },
 
     /**
@@ -100,10 +97,14 @@
           this.focusTarget.blur();
         }
       }.bind(this));
+
+      this._fillOverlay();
     },
 
     detached: function() {
       document.removeEventListener('tap', this._outsideTapListener);
+
+      this._emptyOverlay();
     },
 
     _openedChanged: function(opened) {
@@ -114,8 +115,14 @@
       }
     },
 
+    ready: function() {
+    },
+
     _open: function() {
       document.body.appendChild(this.$.overlay);
+
+      this.$.overlay.notifyResize();
+
       this.focusTarget.focus();
 
       this.fire('vaadin-dropdown-opened');
@@ -124,9 +131,72 @@
     _close: function() {
       if (this.$.overlay.parentElement == document.body) {
         document.body.removeChild(this.$.overlay);
-
-        this.fire('vaadin-dropdown-closed');
       }
-    }
+
+      this.fire('vaadin-dropdown-closed');
+    },
+
+    _fillOverlay: function() {
+      var content = Polymer.dom(this).querySelector('.dropdown-content');
+      if (content === null) return;
+
+      this._overlayContent = content;
+      this._overlayContentHost = content.domHost;
+      this._overlayContentPosition = Polymer.dom(this._overlayContent).nextSibling;
+
+      var overlayShadowRoot = Polymer.dom(this.$.overlay.root);
+      /* TODO: Consider removing the scroll wrapper */
+      // overlayShadowRoot.querySelector('#scroller').appendChild(content);
+      overlayShadowRoot.appendChild(this._overlayContent);
+
+      if (Polymer.Settings.useNativeShadow) {
+        if (this._overlayStyles == null) {
+          this._overlayStyles = [];
+        }
+
+        var overlayStyles = this._overlayStyles;
+        Array.prototype.forEach.call(Polymer.dom(this._overlayContentHost.root).querySelectorAll('style'), function(domHostStyle) {
+          var style = domHostStyle.cloneNode(true);
+          overlayShadowRoot.appendChild(style);
+          overlayStyles.push(style);
+        });
+      } else if (this._overlayContentHost._encapsulateStyle) {
+        Polymer.StyleTransformer.dom(this._overlayContent, this._overlayContentHost.is, this._overlayContentHost._scopeCssViaAttr);
+      }
+
+      this._overlayContent = content;
+    },
+
+    _emptyOverlay: function() {
+      if (this._overlayContent == null) return;
+
+      var overlayShadowRoot = Polymer.dom(this.$.overlay.root);
+
+      if (Polymer.Settings.useNativeShadow) {
+        this._overlayStyles.forEach(function(style) {
+          overlayShadowRoot.removeChild(style);
+        });
+
+        this._overlayStyles = undefined;
+      } else if (this._overlayContentHost._encapsulateStyle) {
+        Polymer.StyleTransformer.dom(this._overlayContent, this._overlayContentHost.is, this._overlayContentHost._scopeCssViaAttr, true);
+      }
+
+      /* TODO: Consider removing the scroll wrapper */
+      // overlayShadowRoot.querySelector('#scroller').removeChild(this._overlayContent);
+      overlayShadowRoot.removeChild(this._overlayContent);
+      if (this._overlayContentPosition.parentNode) {
+        this._overlayContentPosition.parentNode.insertBefore(this._overlayContent, this._overlayContentPosition);
+      }
+
+      this._overlayContent = undefined;
+      this._overlayContentHost = undefined;
+      this._overlayContentPosition = undefined;
+    },
+
+    /* TODO: Consider removing the scroll wrapper */
+    // get scroller() {
+    //   return Polymer.dom(this.$.overlay.root).querySelector('#scroller');
+    // }
   });
 </script>
