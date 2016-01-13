@@ -44,6 +44,7 @@ enable usage within an `iron-form`.
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel='import' href='vaadin-overlay.html'>
+<link rel='import' href='vaadin-dropdown-behavior.html'>
 
 <dom-module id='vaadin-combo-box'>
   <style>
@@ -134,7 +135,8 @@ enable usage within an `iron-form`.
     behaviors: [
       Polymer.IronFormElementBehavior,
       Polymer.IronValidatableBehavior,
-      Polymer.IronA11yKeysBehavior
+      Polymer.IronA11yKeysBehavior,
+      VaadinDropdownBehavior
     ],
 
     properties: {
@@ -144,16 +146,6 @@ enable usage within an `iron-form`.
       items: {
         type: Array,
         observer: '_setItems'
-      },
-
-      /**
-       * True if the dropdown list is open, false otherwise.
-       */
-      opened: {
-        type: Boolean,
-        notify: true,
-        value: false,
-        observer: '_openedChanged'
       },
 
       /**
@@ -188,13 +180,6 @@ enable usage within an `iron-form`.
         }
       },
 
-      _focusTarget: {
-        type: Object,
-        value: function() {
-          return this.$.input;
-        }
-      },
-
       _positionTarget: {
         type: Object,
         value: function() {
@@ -206,6 +191,11 @@ enable usage within an `iron-form`.
         type: Number,
         value: -1
       }
+    },
+
+    listeners: {
+      'vaadin-dropdown-opened': '_onOpened',
+      'vaadin-dropdown-closed': '_onClosed'
     },
 
     ready: function() {
@@ -301,13 +291,6 @@ enable usage within an `iron-form`.
     },
 
     /**
-     * Opens the dropdown list.
-     */
-    open: function() {
-      this.opened = true;
-    },
-
-    /**
      * Opens and closes the dropdown list.
      */
     toggle: function() {
@@ -319,13 +302,6 @@ enable usage within an `iron-form`.
       } else {
         this.open();
       }
-    },
-
-    /**
-     * Closes the dropdown list.
-     */
-    close: function() {
-      this.opened = false;
     },
 
     _getAriaExpanded: function(value) {
@@ -377,55 +353,15 @@ enable usage within an `iron-form`.
       }.bind(this));
     },
 
-    _openedChanged: function() {
-      if (this.opened) {
-        this._open();
-      } else {
-        this._close();
-      }
-    },
-
-    _open: function() {
-      document.body.appendChild(this.$.overlay);
-
+    _onOpened: function() {
       this.$.overlay.notifyResize();
 
       this._setItems(this.items);
       this.$.overlay._scrollIntoView(this._focusedIndex);
-
-      this._focusTarget.focus();
-
-      this._addOutsideTapListener();
     },
 
-    _close: function() {
-      if (this.$.overlay.parentElement == document.body) {
-        document.body.removeChild(this.$.overlay);
-      }
-
+    _onClosed: function() {
       this.$.input.bindValue = this.value;
-
-      this._removeOutsideTapListener();
-    },
-
-    _addOutsideTapListener: function() {
-      Polymer.Gestures.add(document, 'tap', null);
-
-      // We need to listen for outside taps even when the dropdown is closed
-      // to blur the input.
-      this._outsideTapListener = function(event) {
-        var eventPath = Polymer.dom(event).path;
-        if (eventPath.indexOf(this) === -1 && eventPath.indexOf(this.$.overlay) === -1) {
-          this.opened = false;
-          this._focusTarget.blur();
-        }
-      }.bind(this);
-
-      document.addEventListener('tap', this._outsideTapListener);
-    },
-
-    _removeOutsideTapListener: function() {
-      document.removeEventListener('tap', this._outsideTapListener);
     },
 
     _isFiltering: function(event) {

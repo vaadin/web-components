@@ -1,0 +1,96 @@
+<script>
+  VaadinDropdownBehavior = {
+    properties: {
+      /**
+       * True if the dropdown is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        notify: true,
+        value: false,
+        observer: '_openedChanged'
+      },
+
+      // TODO: This could be a public property?
+      _focusTarget: {
+        type: Object,
+        value: function() {
+          return this.$.input;
+        }
+      },
+
+      // TODO: This could be a public property?
+      _overlay: {
+        type: Object,
+        value: function() {
+          return this.$.overlay;
+        }
+      }
+    },
+
+    /**
+     * Opens the dropdown list.
+     */
+    open: function() {
+      this.opened = true;
+    },
+
+    /**
+     * Closes the dropdown list.
+     */
+    close: function() {
+      this.opened = false;
+    },
+
+    _openedChanged: function(value, old) {
+      // Prevent _close() being called when opened is set to its default value (false).
+      if (old === undefined) return;
+
+      if (this.opened) {
+        this._open();
+      } else {
+        this._close();
+      }
+    },
+
+    _open: function() {
+      document.body.appendChild(this._overlay);
+
+      this._addOutsideTapListener();
+
+      this._focusTarget.focus();
+
+      this.fire('vaadin-dropdown-opened');
+    },
+
+    _close: function() {
+      if (this._overlay.parentElement == document.body) {
+        document.body.removeChild(this._overlay);
+      }
+
+      this._removeOutsideTapListener();
+
+      this.fire('vaadin-dropdown-closed');
+    },
+
+    _addOutsideTapListener: function() {
+      Polymer.Gestures.add(document, 'tap', null);
+
+      // We need to listen for outside taps even when the dropdown is closed
+      // to blur the input.
+      this._outsideTapListener = function(event) {
+        var eventPath = Polymer.dom(event).path;
+        if (eventPath.indexOf(this) === -1 && eventPath.indexOf(this._overlay) === -1) {
+          this.opened = false;
+          this._focusTarget.blur();
+        }
+      }.bind(this);
+
+      document.addEventListener('tap', this._outsideTapListener);
+    },
+
+    _removeOutsideTapListener: function() {
+      document.removeEventListener('tap', this._outsideTapListener);
+    }
+  }
+</script>
