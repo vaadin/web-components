@@ -33,13 +33,13 @@
       return comboBox.$.label;
     }
     function getSelector() {
-      return comboBox.$.selector;
+      return comboBox.$.dropdown.$.overlay.$.selector;
     }
     function getFocusedIndex() {
       return comboBox._focusedIndex;
     }
     function getItemElement(i) {
-      return comboBox.$.selector.querySelectorAll('.item')[i];
+      return comboBox.$.dropdown.$.overlay.$.selector.querySelectorAll('.item')[i];
     }
 
     function arrowDown() {
@@ -69,7 +69,7 @@
       });
 
       it('iron-list should have role listbox', function() {
-        expect(comboBox.$.selector.getAttribute('role')).to.equal('listbox');
+        expect(comboBox.$.dropdown.$.overlay.$.selector.getAttribute('role')).to.equal('listbox');
       });
 
       it('should set aria-expanded attribute when opened', function() {
@@ -97,7 +97,7 @@
         expect(getItemElement(1).getAttribute('aria-selected')).to.equal('false');
         expect(getItemElement(3).getAttribute('role')).to.be.null;
         expect(getInput().getAttribute('aria-activedescendant')).to.equal('it0');
-        expect(comboBox.$.selector.getAttribute('data-selection')).to.equal('it0');
+        expect(comboBox.$.dropdown.$.overlay.$.selector.getAttribute('data-selection')).to.equal('it0');
 
       });
     });
