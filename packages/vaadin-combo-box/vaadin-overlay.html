@@ -59,7 +59,12 @@
     },
 
     attached: function() {
+      window.addEventListener('scroll', this._setOverlayPosition.bind(this), true);
       this._setOverlayPosition();
+    },
+
+    detached: function() {
+      window.removeEventListener('scroll', this._setOverlayPosition.bind(this), true);
     },
 
     /* TODO: Consider removing the scroll wrapper */
