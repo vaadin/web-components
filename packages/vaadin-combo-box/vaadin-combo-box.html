@@ -43,12 +43,16 @@ enable usage within an `iron-form`.
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel='import' href='vaadin-dropdown.html'>
+<link rel='import' href='vaadin-overlay.html'>
 
 <dom-module id='vaadin-combo-box'>
   <style>
     :host {
        display: block;
+    }
+
+    :host:not([opened]) > #overlay {
+      display: none;
     }
 
     paper-input-container {
@@ -87,38 +91,39 @@ enable usage within an `iron-form`.
   </style>
 
   <template>
-    <vaadin-dropdown
-        id='dropdown'
-        opened={{opened}}
-        on-_selected-item-changed='_selectedItemChanged'
-        _focused-index='[[_focusedIndex]]'
+    <paper-input-container class="dropdown-input" id="inputContainer" on-touchend='_preventDefault' opened$=[[opened]]>
+      <label id='label' on-tap='open'>[[label]]</label>
+      <input
+          is='iron-input'
+          id='input'
+          role="combobox"
+          aria-activedescendant$='[[_ariaActiveIndex]]'
+          aria-expanded$='[[_getAriaExpanded(opened)]]'
+          aria-labelledby="label"
+          aria-autocomplete="list" aria-owns="overlay"
+          autocomplete='off'
+          bind-value='[[value]]'
+          name$='[[name]]'
+          type='text'
+          required$="[[required]]"
+          on-bind-value-changed='_inputValueChanged'
+          on-blur='_onBlur'
+          on-tap='open'
+          key-event-target>
+      <div suffix on-tap='toggle'>
+        <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
+        <paper-ripple class='circle' center></paper-ripple>
+      </div>
+    </paper-input-container>
+
+    <vaadin-overlay
+        id='overlay'
         _aria-active-index='{{_ariaActiveIndex}}'
-        overlay-vertical-offset='2'>
-      <paper-input-container class="dropdown-input" id="inputContainer" on-touchend='_preventDefault' opened$=[[opened]]>
-        <label id='label' on-tap='open'>[[label]]</label>
-        <input
-            is='iron-input'
-            id='input'
-            role="combobox"
-            aria-activedescendant$='[[_ariaActiveIndex]]'
-            aria-expanded$='[[_getAriaExpanded(opened)]]'
-            aria-labelledby="label"
-            aria-autocomplete="list" aria-owns="overlay"
-            autocomplete='off'
-            bind-value='[[value]]'
-            name$='[[name]]'
-            type='text'
-            required$="[[required]]"
-            on-bind-value-changed='_inputValueChanged'
-            on-blur='_onBlur'
-            on-tap='open'
-            key-event-target>
-        <div suffix on-tap='toggle'>
-          <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
-          <paper-ripple class='circle' center></paper-ripple>
-        </div>
-      </paper-input-container>
-    </vaadin-dropdown>
+        _selected-item='{{_selectedItem}}'
+        position-target='[[_positionTarget]]'
+        _focused-index='[[_focusedIndex]]'
+        vertical-offset="2">
+      </vaadin-overlay>
   </template>
 </dom-module>
 
@@ -147,7 +152,8 @@ enable usage within an `iron-form`.
       opened: {
         type: Boolean,
         notify: true,
-        value: false
+        value: false,
+        observer: '_openedChanged'
       },
 
       /**
@@ -182,22 +188,31 @@ enable usage within an `iron-form`.
         }
       },
 
+      _focusTarget: {
+        type: Object,
+        value: function() {
+          return this.$.input;
+        }
+      },
+
+      _positionTarget: {
+        type: Object,
+        value: function() {
+          return this.$.inputContainer;
+        }
+      },
+
       _focusedIndex: {
         type: Number,
         value: -1
       }
     },
 
-    listeners: {
-      'vaadin-dropdown-opened': '_onOpened',
-      'vaadin-dropdown-closed': '_onClosed'
-    },
-
     ready: function() {
 
       //TODO: not perfect, but blurs the input when touch scrolling.
-      Polymer.Gestures.add(this.$.dropdown.$.overlay, 'down', null);
-      this.$.dropdown.$.overlay.addEventListener('down', (function() {
+      Polymer.Gestures.add(this.$.overlay, 'down', null);
+      this.$.overlay.addEventListener('down', (function() {
         this._blurInput();
       }).bind(this));
 
@@ -238,7 +253,7 @@ enable usage within an `iron-form`.
 
     _onArrowDown: function() {
       if (this.opened) {
-        this._focusedIndex = Math.min(this.$.dropdown._items.length - 1, this._focusedIndex + 1);
+        this._focusedIndex = Math.min(this.$.overlay._items.length - 1, this._focusedIndex + 1);
       } else {
         this.open();
       }
@@ -258,7 +273,7 @@ enable usage within an `iron-form`.
       if (this.opened) {
         if (this._focusedIndex > -1) {
           this.close();
-          this.$.dropdown._selectItem(this._focusedIndex);
+          this.$.overlay._selectItem(this._focusedIndex);
         } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.close();
           this.value = undefined;
@@ -271,11 +286,11 @@ enable usage within an `iron-form`.
     _onBlur: function() {
       // Async needed to access the new activeElement reliably.
       this.async(function() {
-        var focusInsideDropdown = this.$.dropdown.contains(document.activeElement);
+        var focusInsideCombobox = this.contains(document.activeElement);
 
         // When grabbing the scroll handle, the activeElement will become
         // the body on some browsers, so check for it also.
-        if (!focusInsideDropdown && document.activeElement !== document.body) {
+        if (!focusInsideCombobox && document.activeElement !== document.body) {
           this.close();
         }
       }, 1);
@@ -283,13 +298,6 @@ enable usage within an `iron-form`.
 
     _onEscape: function() {
       this.close();
-    },
-
-    _onOpened: function() {
-      this._setItems(this.items);
-      this.$.dropdown._scrollIntoView(this._focusedIndex);
-
-      this.$.input.focus();
     },
 
     /**
@@ -307,14 +315,10 @@ enable usage within an `iron-form`.
         this.close();
 
         // Refocus input field after clicking the toggle button.
-        this.$.dropdown.focusTarget.focus();
+        this._focusTarget.focus();
       } else {
         this.open();
       }
-    },
-
-    _onClosed: function() {
-      this.$.input.bindValue = this.value;
     },
 
     /**
@@ -338,21 +342,21 @@ enable usage within an `iron-form`.
     },
 
     _blurInput: function() {
-      this.$.input.blur();
+      this._focusTarget.blur();
     },
 
     _setItems: function(items) {
-      this.unlisten(this.$.dropdown, '_selected-item-changed', '_selectedItemChanged');
-      this.$.dropdown._items = items;
+      this.unlisten(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+      this.$.overlay._items = items;
 
-      if (this.$.dropdown._items && this.$.dropdown._items.indexOf(this.value) > -1) {
-        this.$.dropdown._selectItem(this.value);
+      if (this.$.overlay._items && this.$.overlay._items.indexOf(this.value) > -1) {
+        this.$.overlay._selectItem(this.value);
       }
 
-      if (this.$.dropdown._items) {
-        this._focusedIndex = this.$.dropdown._items.indexOf(this.$.input.bindValue);
+      if (this.$.overlay._items) {
+        this._focusedIndex = this.$.overlay._items.indexOf(this.$.input.bindValue);
       }
-      this.listen(this.$.dropdown, '_selected-item-changed', '_selectedItemChanged');
+      this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
     },
 
     _selectedItemChanged: function(event, selectedItem) {
@@ -379,6 +383,49 @@ enable usage within an `iron-form`.
       } else {
         this._close();
       }
+    },
+
+    _open: function() {
+      document.body.appendChild(this.$.overlay);
+
+      this.$.overlay.notifyResize();
+
+      this._setItems(this.items);
+      this.$.overlay._scrollIntoView(this._focusedIndex);
+
+      this._focusTarget.focus();
+
+      this._addOutsideTapListener();
+    },
+
+    _close: function() {
+      if (this.$.overlay.parentElement == document.body) {
+        document.body.removeChild(this.$.overlay);
+      }
+
+      this.$.input.bindValue = this.value;
+
+      this._removeOutsideTapListener();
+    },
+
+    _addOutsideTapListener: function() {
+      Polymer.Gestures.add(document, 'tap', null);
+
+      // We need to listen for outside taps even when the dropdown is closed
+      // to blur the input.
+      this._outsideTapListener = function(event) {
+        var eventPath = Polymer.dom(event).path;
+        if (eventPath.indexOf(this) === -1 && eventPath.indexOf(this.$.overlay) === -1) {
+          this.opened = false;
+          this._focusTarget.blur();
+        }
+      }.bind(this);
+
+      document.addEventListener('tap', this._outsideTapListener);
+    },
+
+    _removeOutsideTapListener: function() {
+      document.removeEventListener('tap', this._outsideTapListener);
     },
 
     _isFiltering: function(event) {

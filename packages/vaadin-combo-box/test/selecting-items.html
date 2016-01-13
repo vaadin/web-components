@@ -31,7 +31,7 @@
       combobox = fixture('combobox');
       combobox.items = ['foo', 'bar'];
       input = combobox.$$('input');
-      selector = combobox.$.dropdown.$.overlay.$.selector;
+      selector = combobox.$.overlay.$.selector;
       valueChangedSpy = sinon.spy();
       combobox.addEventListener('value-changed', valueChangedSpy);
     });
@@ -65,14 +65,14 @@
     it('should close the dropdown when reselecting the current value', function() {
       combobox.value = 'foo';
       combobox.open();
-      combobox.$.dropdown.$.overlay.$.selector.toggleSelectionForItem('foo');
+      combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
       expect(combobox.opened).to.be.false;
     });
 
     it('should not fire an event when reselecting the current value', function() {
       combobox.value = 'foo';
       valueChangedSpy.reset();
-      combobox.$.dropdown.$.overlay.$.selector.toggleSelectionForItem('foo');
+      combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
       expect(valueChangedSpy.callCount).to.equal(0);
     });
 

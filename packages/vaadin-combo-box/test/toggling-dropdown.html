@@ -73,7 +73,7 @@
         });
 
         it('should focus input on dropdown open', function() {
-          var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
+          var focusedInput = Polymer.dom(combobox).querySelector('input:focus');
           expect(focusedInput).to.equal(combobox.$.input);
         });
 
@@ -85,7 +85,7 @@
             node: document.body
           });
 
-          var focusedInput = Polymer.dom(combobox.$.dropdown).querySelector('input:focus');
+          var focusedInput = Polymer.dom(combobox).querySelector('input:focus');
           expect(focusedInput).to.be.undefined;
         });
       });
@@ -118,7 +118,7 @@
         combobox.open();
 
         dummyInput.focus();
-        combobox.$.dropdown.focusTarget.fire('blur');
+        combobox._focusTarget.fire('blur');
 
         Polymer.Base.async(function() {
           document.body.removeChild(dummyInput);

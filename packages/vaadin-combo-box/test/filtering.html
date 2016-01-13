@@ -25,14 +25,10 @@
     var comboBox;
 
     function getFilteredItems() {
-      return comboBox.$.dropdown._items;
+      return comboBox.$.overlay._items;
     }
 
     function getInput() {
-      if (comboBox.$.dropdown.fullScreen) {
-        return comboBox.$.fullScreenInput;
-      }
-
       return comboBox.$.input;
     }
 
@@ -133,15 +129,15 @@
       it('should show initial selection', function() {
         comboBox.value = 'foo';
         comboBox.open();
-        expect(comboBox.$.dropdown.$.overlay.$.selector.selectedItems).to.contain('foo');
+        expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
       });
 
       it('should not lose the selected value', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
-        expect(comboBox.$.dropdown.$.overlay.$.selector.selectedItems).not.to.contain('foo');
+        expect(comboBox.$.overlay.$.selector.selectedItems).not.to.contain('foo');
         setInputValue('');
-        expect(comboBox.$.dropdown.$.overlay.$.selector.selectedItems).to.contain('foo');
+        expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
       });
 
       it('should ignore case', function() {

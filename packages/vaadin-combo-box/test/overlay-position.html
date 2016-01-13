@@ -49,7 +49,7 @@
   }
 
   function dropContent() {
-    return comboBox.$.dropdown.$.overlay;
+    return comboBox.$.overlay;
   }
   function dropContentRect() {
     return dropContent().getBoundingClientRect();
@@ -83,7 +83,7 @@
       it('should be below the input box', function() {
         comboBox.open();
 
-        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.dropdown.overlayVerticalOffset);
+        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
       });
 
       it('should be aligned with input container', function() {
@@ -99,7 +99,7 @@
 
         expect(dropContentRect().left).to.equal(inputContentRect().left);
 
-        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.dropdown.overlayVerticalOffset);
+        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
       });
 
       it('when the input position width changes overlay width should change', function() {
