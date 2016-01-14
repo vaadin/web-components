@@ -25,6 +25,13 @@
         value: function() {
           return this.$.overlay;
         }
+      },
+
+      _parent: {
+        type: Object,
+        value: function() {
+          return this;
+        }
       }
     },
 
@@ -60,7 +67,9 @@
 
     _openedChanged: function(value, old) {
       // Prevent _close() being called when opened is set to its default value (false).
-      if (old === undefined) return;
+      if (old === undefined) {
+        return;
+      }
 
       if (this.opened) {
         this._open();
@@ -80,11 +89,11 @@
     },
 
     _close: function() {
-      if (this._overlay.parentElement == document.body) {
-        document.body.removeChild(this._overlay);
-      }
+      this._parent.appendChild(this._overlay);
 
       this._removeOutsideClickListener();
+
+      this._focusTarget.blur();
 
       this.fire('vaadin-dropdown-closed');
     },
