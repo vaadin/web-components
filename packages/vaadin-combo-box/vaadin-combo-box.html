@@ -123,6 +123,7 @@ enable usage within an `iron-form`.
         _selected-item='{{_selectedItem}}'
         position-target='[[_positionTarget]]'
         _focused-index='[[_focusedIndex]]'
+        on-down='_blurInput'
         vertical-offset="2">
       </vaadin-combo-box-overlay>
   </template>
@@ -183,13 +184,6 @@ enable usage within an `iron-form`.
     },
 
     ready: function() {
-
-      //TODO: not perfect, but blurs the input when touch scrolling.
-      Polymer.Gestures.add(this.$.overlay, 'down', null);
-      this.$.overlay.addEventListener('down', (function() {
-        this._blurInput();
-      }).bind(this));
-
       this._addKeyEventListeners();
       Polymer.IronA11yAnnouncer.requestAvailability();
     },
