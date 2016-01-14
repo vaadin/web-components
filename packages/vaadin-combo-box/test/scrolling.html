@@ -30,17 +30,16 @@
         combobox = fixture('combobox');
       });
 
-      describeSkipIf(!touchDevice, 'touch devices', function() {
+      describeIf(touchDevice, 'touch devices', function() {
+        it('should blur input on scroll', function() {
+          combobox.open();
 
-      it('should blur input on scroll', function() {
-        combobox.open();
+          combobox.$.overlay.fire('down');
+          var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
-        combobox.$.overlay.fire('down');
-        var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
-
-        expect(focusedInput).not.to.equal(combobox.$.input);
+          expect(focusedInput).not.to.equal(combobox.$.input);
+        });
       });
-    });
     });
   </script>
 

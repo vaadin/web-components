@@ -18,13 +18,17 @@
       transform: translateZ(0);
     }
 
-    #selector {
+    #scroller {
+      overflow: auto;
       max-height: 65vh;
-      padding-top: 8px;
-      padding-bottom: 8px;
 
       /* Fixes item background from getting on top of scrollbars on Safari */
       transform: translate3d(0,0,0);
+    }
+
+    #selector {
+      padding-top: 8px;
+      padding-bottom: 8px;
     }
 
     #selector .item {
@@ -47,24 +51,26 @@
   </style>
 
   <template>
-    <iron-list
-        id='selector'
-        touch-device$=[[touchDevice]]
-        role="listbox"
-        data-selection$='[[_ariaActiveIndex]]'
-        on-touchend="_preventDefault"
-        selected-item='{{_selectedItem}}'
-        items='[[_items]]'
-        selection-enabled>
-      <template>
-        <div class='item'
-        id$="it[[index]]"
-        selected$=[[selected]]
-        role$=[[_getAriaRole(index)]]
-        aria-selected$=[[_getAriaSelected(_focusedIndex,index)]]
-        focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
-      </template>
-    </iron-list>
+    <div id="scroller" scroller='[[_getScroller()]]'>
+      <iron-list
+          id='selector'
+          touch-device$=[[touchDevice]]
+          role="listbox"
+          data-selection$='[[_ariaActiveIndex]]'
+          on-touchend="_preventDefault"
+          selected-item='{{_selectedItem}}'
+          items='[[_items]]'
+          selection-enabled>
+        <template>
+          <div class='item'
+          id$="it[[index]]"
+          selected$=[[selected]]
+          role$=[[_getAriaRole(index)]]
+          aria-selected$=[[_getAriaSelected(_focusedIndex,index)]]
+          focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
+        </template>
+      </iron-list>
+    </div>
   </template>
 </dom-module>
 
@@ -153,6 +159,10 @@
       } else if (index > this._lastVisibleIndex()) {
         this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
       }
+    },
+
+    _getScroller: function() {
+      return this.$.scroller;
     },
 
     /**
