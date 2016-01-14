@@ -3,11 +3,6 @@
 
 <script>
   VaadinOverlayBehaviorImpl = {
-
-    behaviors: [
-      Polymer.IronResizableBehavior
-    ],
-
     properties: {
       /**
        * The element to position/align the dropdown by.
@@ -62,8 +57,7 @@
       this._setMargins();
 
       this.style.width = this.positionTarget.clientWidth + 'px';
-    },
-
+    }
   };
 
   VaadinOverlayBehavior = [
