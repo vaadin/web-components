@@ -72,36 +72,61 @@
           combobox.open();
         });
 
-        it('should focus input on dropdown open', function() {
-          var focusedInput = Polymer.dom(combobox).querySelector('input:focus');
-          expect(focusedInput).to.equal(combobox.$.input);
-        });
+        if (touchDevice) {
+         it('should not refocus the input field when closed from icon', function() {
+           combobox.$$('paper-input-container iron-icon').fire('tap');
 
-        it('should blur input when tapping outside overlay', function() {
-          combobox.$.input.focus();
+           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
-          Polymer.Base.fire('tap', {}, {
-            bubbles: true,
-            node: document.body
+           expect(focusedInput).to.be.undefined;
+         });
+        } else {
+          it('should focus input on dropdown open', function() {
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            expect(focusedInput).to.equal(combobox.$.input);
           });
 
-          var focusedInput = Polymer.dom(combobox).querySelector('input:focus');
+         it('should refocus the input field when closed from icon', function() {
+           combobox.$$('paper-input-container iron-icon').fire('tap');
+
+           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+
+           expect(focusedInput).to.eql(combobox.$.input);
+         });
+        }
+
+        it('should blur input on close', function() {
+          combobox._focusTarget.focus();
+
+          combobox.close();
+
+          var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
           expect(focusedInput).to.be.undefined;
         });
       });
     });
 
     describe('closing', function() {
-      it('should close popup when tapping outside overlay', function() {
-        combobox.open();
+      if (touchDevice) {
+        it('should close popup when tapping outside overlay', function() {
+          combobox.open();
 
-          Polymer.Base.fire('tap', {}, {
-            bubbles: true,
-            node: document.body
-          });
+            Polymer.Base.fire('tap', {}, {
+              bubbles: true,
+              node: document.body
+            });
+
+            expect(combobox.opened).to.be.false;
+        });
+      } else {
+        it('should close popup when clicking outside overlay', function() {
+          combobox.open();
+
+          document.body.click();
 
           expect(combobox.opened).to.be.false;
-      });
+        });
+      }
 
       it('should close on clicking icon', function() {
         combobox.open();

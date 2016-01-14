@@ -53,6 +53,11 @@
       this.opened = false;
     },
 
+    detached: function() {
+      // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
+      this.close();
+    },
+
     _openedChanged: function(value, old) {
       // Prevent _close() being called when opened is set to its default value (false).
       if (old === undefined) return;
@@ -67,7 +72,7 @@
     _open: function() {
       document.body.appendChild(this._overlay);
 
-      this._addOutsideTapListener();
+      this._addOutsideClickListener();
 
       this._focusTarget.focus();
 
@@ -79,29 +84,41 @@
         document.body.removeChild(this._overlay);
       }
 
-      this._removeOutsideTapListener();
+      this._removeOutsideClickListener();
 
       this.fire('vaadin-dropdown-closed');
     },
 
-    _addOutsideTapListener: function() {
-      Polymer.Gestures.add(document, 'tap', null);
-
-      // We need to listen for outside taps even when the dropdown is closed
-      // to blur the input.
-      this._outsideTapListener = function(event) {
-        var eventPath = Polymer.dom(event).path;
-        if (eventPath.indexOf(this) === -1 && eventPath.indexOf(this._overlay) === -1) {
-          this.opened = false;
-          this._focusTarget.blur();
-        }
-      }.bind(this);
-
-      document.addEventListener('tap', this._outsideTapListener);
+    // We need to listen on 'click' / 'tap' event and capture it and close the overlay before
+    // propagating the event to the listener in the button. Otherwise, if the clicked button would call
+    // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+    _outsideClickListener: function(event) {
+      var eventPath = Polymer.dom(event).path;
+      if (eventPath.indexOf(this) === -1) {
+        this.opened = false;
+      }
     },
 
-    _removeOutsideTapListener: function() {
-      document.removeEventListener('tap', this._outsideTapListener);
+    _addOutsideClickListener: function() {
+      // With desktop mouse, 'click' will make Polymer to fire 'tap' event.
+      // With touch devices, 'touchend' will make Polymer to fire 'tap' event, but browser will also fire 'click'.
+      // So, 'click' and 'tap' can come in any order and we need to make sure that the first one fired will close the overlay.
+      if (this._overlay.touchDevice) {
+        Polymer.Gestures.add(document, 'tap', null);
+        document.addEventListener('tap', this._outsideClickListener.bind(this), true);
+      } else {
+        document.addEventListener('click', this._outsideClickListener.bind(this), true);
+      }
+    },
+
+    _removeOutsideClickListener: function() {
+      if (this._overlay.touchDevice) {
+       // Not sure if this is a good idea to remove this Gesture globally, but that's how the iron-overlay-behavior does it.
+       Polymer.Gestures.remove(document, 'tap', null);
+       document.removeEventListener('tap', this._outsideClickListener.bind(this), true);
+      } else {
+       document.removeEventListener('click', this._outsideClickListener.bind(this), true);
+      }
     }
-  }
+  };
 </script>

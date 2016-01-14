@@ -289,8 +289,11 @@ enable usage within an `iron-form`.
       if (this.opened) {
         this.close();
 
-        // Refocus input field after clicking the toggle button.
-        this._focusTarget.focus();
+        // Refocus input field after clicking the toggle button, but not for touch devices,
+        // because we don't want to popup the virtual keyboard.
+        if (!this.$.overlay.touchDevice) {
+          this._focusTarget.focus();
+        }
       } else {
         this.open();
       }
@@ -304,6 +307,8 @@ enable usage within an `iron-form`.
     },
 
     _onClosed: function() {
+      this._focusTarget.blur();
+
       this.$.input.bindValue = this.value;
     },
 
