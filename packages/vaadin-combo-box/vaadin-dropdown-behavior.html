@@ -83,7 +83,11 @@
 
       this._addOutsideClickListener();
 
-      this._focusTarget.focus();
+      // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
+      // is explicitly focused by the user.
+      if (!this._overlay.touchDevice) {
+        this._focusTarget.focus();
+      }
 
       this.fire('vaadin-dropdown-opened');
     },
@@ -93,7 +97,10 @@
 
       this._removeOutsideClickListener();
 
-      this._focusTarget.blur();
+      // For touch devices, we want to hide the virtual keyboard after closing the overlay.
+      if (this._overlay.touchDevice) {
+        this._focusTarget.blur();
+      }
 
       this.fire('vaadin-dropdown-closed');
     },

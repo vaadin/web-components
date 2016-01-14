@@ -92,7 +92,7 @@ enable usage within an `iron-form`.
   </style>
 
   <template>
-    <paper-input-container class="dropdown-input" id="inputContainer" on-touchend='_preventDefault' opened$=[[opened]]>
+    <paper-input-container class="dropdown-input" id="inputContainer" opened$=[[opened]]>
       <label id='label' on-tap='open'>[[label]]</label>
       <input
           is='iron-input'
@@ -111,7 +111,7 @@ enable usage within an `iron-form`.
           on-blur='_onBlur'
           on-tap='open'
           key-event-target>
-      <div suffix on-tap='toggle'>
+      <div suffix on-tap='toggle' on-touchend='_preventDefault'>
         <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
         <paper-ripple class='circle' center></paper-ripple>
       </div>

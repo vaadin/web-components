@@ -73,13 +73,27 @@
         });
 
         if (touchDevice) {
-         it('should not refocus the input field when closed from icon', function() {
+          it('should not focus input on dropdown open', function() {
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            expect(focusedInput).to.be.undefined;
+          });
+
+          it('should not refocus the input field when closed from icon', function() {
            combobox.$$('paper-input-container iron-icon').fire('tap');
 
            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
            expect(focusedInput).to.be.undefined;
-         });
+          });
+
+          it('should blur input on close', function() {
+           combobox._focusTarget.focus();
+
+           combobox.close();
+
+           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+           expect(focusedInput).to.be.undefined;
+          });
         } else {
           it('should focus input on dropdown open', function() {
             var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
@@ -94,15 +108,6 @@
            expect(focusedInput).to.eql(combobox.$.input);
          });
         }
-
-        it('should blur input on close', function() {
-          combobox._focusTarget.focus();
-
-          combobox.close();
-
-          var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
-          expect(focusedInput).to.be.undefined;
-        });
       });
     });
 
