@@ -1,0 +1,73 @@
+<link rel='import' href='../polymer/polymer.html'>
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<script>
+  VaadinOverlayBehaviorImpl = {
+
+    behaviors: [
+      Polymer.IronResizableBehavior
+    ],
+
+    properties: {
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        type: Object
+      },
+
+      /**
+       * Vertical offset for the overlay position.
+       */
+      verticalOffset: {
+        type: Number,
+        value: 0
+      }
+    },
+
+    listeners: {
+      'iron-resize': '_setOverlayPosition'
+    },
+
+    created: function() {
+      this._boundSetOverlayPosition = this._setOverlayPosition.bind(this);
+    },
+
+    attached: function() {
+      window.addEventListener('scroll', this._boundSetOverlayPosition, true);
+      this._setOverlayPosition();
+    },
+
+    detached: function() {
+      window.removeEventListener('scroll', this._boundSetOverlayPosition, true);
+    },
+
+    // If document.body doesn't have position:static, we need to deduct the body margins from
+    // the overlay position. Alternatively, the margins could be added directly to top and left properties.
+    _setMargins: function() {
+      var styles = window.getComputedStyle(document.body);
+
+      this.style.marginTop = styles.position === 'static' ? 0 : '-' + styles.marginTop;
+      this.style.marginLeft = styles.position === 'static' ? 0 : '-' + styles.marginLeft;
+    },
+
+    _setOverlayPosition: function() {
+      var bodyRect = document.body.getBoundingClientRect();
+      var target = this.positionTarget;
+      var targetRect = target.getBoundingClientRect();
+
+      this.style.top = targetRect.top + (document.body.scrollTop || document.documentElement.scrollTop) +
+                       target.clientHeight + this.verticalOffset + 'px';
+      this.style.left = targetRect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) + 'px';
+      this._setMargins();
+
+      this.style.width = this.positionTarget.clientWidth + 'px';
+    },
+
+  };
+
+  VaadinOverlayBehavior = [
+    Polymer.IronResizableBehavior,
+    VaadinOverlayBehaviorImpl
+  ];
+</script>

@@ -1,11 +1,11 @@
 <!--
-@element vaadin-overlay
+@element vaadin-combo-box-overlay
 -->
 
 <link rel='import' href='../polymer/polymer.html'>
-<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="vaadin-overlay-behavior.html">
 
-<dom-module id="vaadin-overlay">
+<dom-module id="vaadin-combo-box-overlay">
   <style>
     :host {
       position: absolute;
@@ -70,10 +70,10 @@
 
 <script>
   Polymer({
-    is: 'vaadin-overlay',
+    is: 'vaadin-combo-box-overlay',
 
     behaviors: [
-      Polymer.IronResizableBehavior
+      VaadinOverlayBehavior
     ],
 
     properties: {
@@ -92,21 +92,6 @@
             return false;
           }
         }
-      },
-
-      /**
-       * The element to position/align the dropdown by.
-       */
-      positionTarget: {
-        type: Object
-      },
-
-      /**
-       * Vertical offset for the overlay position.
-       */
-      verticalOffset: {
-        type: Number,
-        value: 0
       },
 
       _selectedItem: {
@@ -132,21 +117,8 @@
       }
     },
 
-    listeners: {
-      'iron-resize': '_setOverlayPosition'
-    },
-
-    attached: function() {
-      window.addEventListener('scroll', this._setOverlayPosition.bind(this), true);
-      this._setOverlayPosition();
-    },
-
     ready: function() {
       this._patchWheelOverScrolling();
-    },
-
-    detached: function() {
-      window.removeEventListener('scroll', this._setOverlayPosition.bind(this), true);
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
@@ -167,28 +139,6 @@
 
     _getAriaRole: function(itemIndex) {
       return itemIndex !== undefined ? 'option' : false;
-    },
-
-    // If document.body doesn't have position:static, we need to deduct the body margins from
-    // the overlay position. Alternatively, the margins could be added directly to top and left properties.
-    _setMargins: function() {
-      var styles = window.getComputedStyle(document.body);
-
-      this.style.marginTop = styles.position === 'static' ? 0 : '-' + styles.marginTop;
-      this.style.marginLeft = styles.position === 'static' ? 0 : '-' + styles.marginLeft;
-    },
-
-    _setOverlayPosition: function() {
-      var bodyRect = document.body.getBoundingClientRect();
-      var target = this.positionTarget;
-      var targetRect = target.getBoundingClientRect();
-
-      this.style.top = targetRect.top + (document.body.scrollTop || document.documentElement.scrollTop) +
-                       target.clientHeight + this.verticalOffset + 'px';
-      this.style.left = targetRect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) + 'px';
-      this._setMargins();
-
-      this.style.width = this.positionTarget.clientWidth + 'px';
     },
 
     _focusedIndexChanged: function(index) {

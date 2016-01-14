@@ -43,7 +43,7 @@ enable usage within an `iron-form`.
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel='import' href='vaadin-overlay.html'>
+<link rel='import' href='vaadin-combo-box-overlay.html'>
 <link rel='import' href='vaadin-dropdown-behavior.html'>
 
 <dom-module id='vaadin-combo-box'>
@@ -117,14 +117,14 @@ enable usage within an `iron-form`.
       </div>
     </paper-input-container>
 
-    <vaadin-overlay
+    <vaadin-combo-box-overlay
         id='overlay'
         _aria-active-index='{{_ariaActiveIndex}}'
         _selected-item='{{_selectedItem}}'
         position-target='[[_positionTarget]]'
         _focused-index='[[_focusedIndex]]'
         vertical-offset="2">
-      </vaadin-overlay>
+      </vaadin-combo-box-overlay>
   </template>
 </dom-module>
 
