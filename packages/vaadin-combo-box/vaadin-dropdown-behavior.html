@@ -93,7 +93,7 @@
     },
 
     _close: function() {
-      this._parent.appendChild(this._overlay);
+      Polymer.dom(this._parent.root).appendChild(this._overlay);
 
       this._removeOutsideClickListener();
 
