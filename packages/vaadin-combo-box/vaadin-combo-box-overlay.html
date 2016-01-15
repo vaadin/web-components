@@ -2,7 +2,7 @@
 @element vaadin-combo-box-overlay
 -->
 
-<link rel='import' href='../polymer/polymer.html'>
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-overlay-behavior.html">
 
 <dom-module id="vaadin-combo-box-overlay">
@@ -48,23 +48,25 @@
   </style>
 
   <template>
-    <div id="scroller" scroller='[[_getScroller()]]'>
+    <div id="scroller" scroller="[[_getScroller()]]">
       <iron-list
-          id='selector'
-          touch-device$=[[touchDevice]]
+          id="selector"
+          touch-device$="[[touchDevice]]"
           role="listbox"
-          data-selection$='[[_ariaActiveIndex]]'
+          data-selection$="[[_ariaActiveIndex]]"
           on-touchend="_preventDefault"
-          selected-item='{{_selectedItem}}'
-          items='[[_items]]'
+          selected-item="{{_selectedItem}}"
+          items="[[_items]]"
           selection-enabled>
         <template>
-          <div class='item'
-          id$="it[[index]]"
-          selected$=[[selected]]
-          role$=[[_getAriaRole(index)]]
-          aria-selected$=[[_getAriaSelected(_focusedIndex,index)]]
-          focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
+          <div class="item"
+              id$="it[[index]]"
+              selected$="[[selected]]"
+              role$="[[_getAriaRole(index)]]"
+              aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
+              focused$="[[_isItemFocused(_focusedIndex,index)]]">
+              [[item]]
+          </div>
         </template>
       </iron-list>
     </div>

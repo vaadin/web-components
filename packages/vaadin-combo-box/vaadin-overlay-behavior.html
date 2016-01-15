@@ -1,4 +1,3 @@
-<link rel='import' href='../polymer/polymer.html'>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <script>
@@ -45,7 +44,7 @@
       this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
         this.positionTarget.clientHeight + this.verticalOffset;
 
-      this.translate3d(this._translateX + "px", this._translateY + "px", "0");
+      this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
 
       this.style.width = this.positionTarget.clientWidth + 'px';
     }

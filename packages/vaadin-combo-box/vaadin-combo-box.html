@@ -32,21 +32,21 @@ enable usage within an `iron-form`.
 @demo demo/
 -->
 
-<link rel='import' href='../polymer/polymer.html'>
-<link rel='import' href='../paper-input/paper-input-container.html'>
-<link rel='import' href='../iron-input/iron-input.html'>
-<link rel='import' href='../paper-ripple/paper-ripple.html'>
-<link rel='import' href='../iron-icons/iron-icons.html'>
-<link rel='import' href='../iron-icon/iron-icon.html'>
-<link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
-<link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel='import' href='vaadin-combo-box-overlay.html'>
-<link rel='import' href='vaadin-dropdown-behavior.html'>
+<link rel="import" href="vaadin-combo-box-overlay.html">
+<link rel="import" href="vaadin-dropdown-behavior.html">
 
-<dom-module id='vaadin-combo-box'>
+<dom-module id="vaadin-combo-box">
   <style>
     :host {
        display: block;
@@ -92,40 +92,40 @@ enable usage within an `iron-form`.
   </style>
 
   <template>
-    <paper-input-container class="dropdown-input" id="inputContainer" opened$=[[opened]]>
-      <label id='label' on-tap='open'>[[label]]</label>
+    <paper-input-container class="dropdown-input" id="inputContainer" opened$="[[opened]]">
+      <label id="label" on-tap="open">[[label]]</label>
       <input
-          is='iron-input'
-          id='input'
+          is="iron-input"
+          id="input"
           role="combobox"
-          aria-activedescendant$='[[_ariaActiveIndex]]'
-          aria-expanded$='[[_getAriaExpanded(opened)]]'
+          aria-activedescendant$="[[_ariaActiveIndex]]"
+          aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-labelledby="label"
           aria-autocomplete="list" aria-owns="overlay"
-          autocomplete='off'
-          bind-value='[[value]]'
-          name$='[[name]]'
-          type='text'
+          autocomplete="off"
+          bind-value="[[value]]"
+          name$="[[name]]"
+          type="text"
           required$="[[required]]"
-          on-bind-value-changed='_inputValueChanged'
-          on-blur='_onBlur'
-          on-tap='open'
+          on-bind-value-changed="_inputValueChanged"
+          on-blur="_onBlur"
+          on-tap="open"
           key-event-target>
-      <div suffix on-tap='toggle' on-touchend='_preventDefault'>
-        <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
-        <paper-ripple class='circle' center></paper-ripple>
+      <div suffix on-tap="toggle" on-touchend="_preventDefault">
+        <iron-icon icon="arrow-drop-down" aria-controls="overlay"></iron-icon>
+        <paper-ripple class="circle" center></paper-ripple>
       </div>
     </paper-input-container>
 
     <vaadin-combo-box-overlay
-        id='overlay'
-        _aria-active-index='{{_ariaActiveIndex}}'
-        _selected-item='{{_selectedItem}}'
-        position-target='[[_positionTarget]]'
-        _focused-index='[[_focusedIndex]]'
-        on-down='_blurInput'
+        id="overlay"
+        _aria-active-index="{{_ariaActiveIndex}}"
+        _selected-item="{{_selectedItem}}"
+        position-target="[[_positionTarget]]"
+        _focused-index="[[_focusedIndex]]"
+        on-down="_blurInput"
         vertical-offset="2">
-      </vaadin-combo-box-overlay>
+    </vaadin-combo-box-overlay>
   </template>
 </dom-module>
 
