@@ -33,8 +33,8 @@
     attached: function() {
       if (this.parentElement === document.body) {
         window.addEventListener('scroll', this._boundSetOverlayPosition, true);
+        this._setOverlayPosition();
       }
-      this._setOverlayPosition();
     },
 
     detached: function() {
@@ -42,16 +42,18 @@
     },
 
     _setOverlayPosition: function() {
-      var overlayRect = this.getBoundingClientRect();
-      var targetRect = this.positionTarget.getBoundingClientRect();
+      if (this.parentElement === document.body) {
+        var overlayRect = this.getBoundingClientRect();
+        var targetRect = this.positionTarget.getBoundingClientRect();
 
-      this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
-      this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
-        this.positionTarget.clientHeight + this.verticalOffset;
+        this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+        this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
+          this.positionTarget.clientHeight + this.verticalOffset;
 
-      this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
+        this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
 
-      this.style.width = this.positionTarget.clientWidth + 'px';
+        this.style.width = this.positionTarget.clientWidth + 'px';
+      }
     }
   };
 
