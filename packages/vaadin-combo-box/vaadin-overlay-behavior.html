@@ -37,24 +37,15 @@
       window.removeEventListener('scroll', this._boundSetOverlayPosition, true);
     },
 
-    // If document.body doesn't have position:static, we need to deduct the body margins from
-    // the overlay position. Alternatively, the margins could be added directly to top and left properties.
-    _setMargins: function() {
-      var styles = window.getComputedStyle(document.body);
-
-      this.style.marginTop = styles.position === 'static' ? 0 : '-' + styles.marginTop;
-      this.style.marginLeft = styles.position === 'static' ? 0 : '-' + styles.marginLeft;
-    },
-
     _setOverlayPosition: function() {
-      var bodyRect = document.body.getBoundingClientRect();
-      var target = this.positionTarget;
-      var targetRect = target.getBoundingClientRect();
+      var overlayRect = this.getBoundingClientRect();
+      var targetRect = this.positionTarget.getBoundingClientRect();
 
-      this.style.top = targetRect.top + (document.body.scrollTop || document.documentElement.scrollTop) +
-                       target.clientHeight + this.verticalOffset + 'px';
-      this.style.left = targetRect.left + (document.body.scrollLeft || document.documentElement.scrollLeft) + 'px';
-      this._setMargins();
+      this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+      this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
+        this.positionTarget.clientHeight + this.verticalOffset;
+
+      this.translate3d(this._translateX + "px", this._translateY + "px", "0");
 
       this.style.width = this.positionTarget.clientWidth + 'px';
     }
