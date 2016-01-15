@@ -6,7 +6,6 @@ https://vaadin.com/font-icons
 Updating the icon set in ```vaadin.icons.html```.
 ```bash
 npm install
-./update-icons.sh
 ```
 
 Running the demo.
