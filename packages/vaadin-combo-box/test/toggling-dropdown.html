@@ -88,7 +88,7 @@
           });
 
           it('should blur input on close', function() {
-           combobox._focusTarget.focus();
+           combobox.$.input.focus();
 
            combobox.close();
 
@@ -149,7 +149,7 @@
         combobox.open();
 
         dummyInput.focus();
-        combobox._focusTarget.fire('blur');
+        combobox.$.input.fire('blur');
 
         Polymer.Base.async(function() {
           document.body.removeChild(dummyInput);

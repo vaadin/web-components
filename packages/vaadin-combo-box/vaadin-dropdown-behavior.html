@@ -9,27 +9,6 @@
         notify: true,
         value: false,
         observer: '_openedChanged'
-      },
-
-      _focusTarget: {
-        type: Object,
-        value: function() {
-          return this.$.input;
-        }
-      },
-
-      _overlay: {
-        type: Object,
-        value: function() {
-          return this.$.overlay;
-        }
-      },
-
-      _parent: {
-        type: Object,
-        value: function() {
-          return this;
-        }
       }
     },
 
@@ -77,27 +56,27 @@
     },
 
     _open: function() {
-      document.body.appendChild(this._overlay);
+      document.body.appendChild(this.$.overlay);
 
       this._addOutsideClickListener();
 
       // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
       // is explicitly focused by the user.
-      if (!this._overlay.touchDevice) {
-        this._focusTarget.focus();
+      if (!this.$.overlay.touchDevice) {
+        this.$.input.focus();
       }
 
       this.fire('vaadin-dropdown-opened');
     },
 
     _close: function() {
-      Polymer.dom(this._parent.root).appendChild(this._overlay);
+      Polymer.dom(this.root).appendChild(this.$.overlay);
 
       this._removeOutsideClickListener();
 
       // For touch devices, we want to hide the virtual keyboard after closing the overlay.
-      if (this._overlay.touchDevice) {
-        this._focusTarget.blur();
+      if (this.$.overlay.touchDevice) {
+        this.$.input.blur();
       }
 
       this.fire('vaadin-dropdown-closed');
@@ -117,7 +96,7 @@
       // With desktop mouse, 'click' will make Polymer to fire 'tap' event.
       // With touch devices, 'touchend' will make Polymer to fire 'tap' event, but browser will also fire 'click'.
       // So, 'click' and 'tap' can come in any order and we need to make sure that the first one fired will close the overlay.
-      if (this._overlay.touchDevice) {
+      if (this.$.overlay.touchDevice) {
         Polymer.Gestures.add(document, 'tap', null);
         document.addEventListener('tap', this._outsideClickListener.bind(this), true);
       } else {
@@ -126,7 +105,7 @@
     },
 
     _removeOutsideClickListener: function() {
-      if (this._overlay.touchDevice) {
+      if (this.$.overlay.touchDevice) {
        // Not sure if this is a good idea to remove this Gesture globally, but that's how the iron-overlay-behavior does it.
        Polymer.Gestures.remove(document, 'tap', null);
        document.removeEventListener('tap', this._outsideClickListener.bind(this), true);

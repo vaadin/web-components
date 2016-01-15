@@ -272,7 +272,7 @@ enable usage within an `iron-form`.
     },
 
     _blurInput: function() {
-      this._focusTarget.blur();
+      this.$.input.blur();
     },
 
     /**
@@ -285,7 +285,7 @@ enable usage within an `iron-form`.
         // Refocus input field after clicking the toggle button, but not for touch devices,
         // because we don't want to popup the virtual keyboard.
         if (!this.$.overlay.touchDevice) {
-          this._focusTarget.focus();
+          this.$.input.focus();
         }
       } else {
         this.open();
