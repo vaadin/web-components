@@ -1,5 +1,8 @@
 <script>
-  VaadinDropdownBehavior = {
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.combobox = vaadin.elements.combobox || {};
+  vaadin.elements.combobox.DropdownBehavior = {
     properties: {
       /**
        * True if the dropdown is open, false otherwise.

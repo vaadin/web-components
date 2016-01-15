@@ -1,7 +1,10 @@
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <script>
-  VaadinOverlayBehaviorImpl = {
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.combobox = vaadin.elements.combobox || {};
+  vaadin.elements.combobox.OverlayBehaviorImpl = {
     properties: {
       /**
        * The element to position/align the dropdown by.
@@ -52,8 +55,8 @@
     }
   };
 
-  VaadinOverlayBehavior = [
+  vaadin.elements.combobox.OverlayBehavior = [
     Polymer.IronResizableBehavior,
-    VaadinOverlayBehaviorImpl
+    vaadin.elements.combobox.OverlayBehaviorImpl
   ];
 </script>
