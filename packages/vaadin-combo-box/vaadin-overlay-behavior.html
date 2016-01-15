@@ -28,7 +28,9 @@
     },
 
     attached: function() {
-      window.addEventListener('scroll', this._boundSetOverlayPosition, true);
+      if (this.parentElement === document.body) {
+        window.addEventListener('scroll', this._boundSetOverlayPosition, true);
+      }
       this._setOverlayPosition();
     },
 
