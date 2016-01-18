@@ -31,16 +31,14 @@
     });
 
     describe('opening', function() {
-      if (!touchDevice) {
-        // TODO: MockInteractions tap doesn't fire touch events, and label doesn't
-        // have fire() event because its a normal element.
-        // Would need to do a PR to MockInteractions probably.
-        it('should open by clicking label', function() {
-          MockInteractions.tap(combobox.$$('paper-input-container label'));
-
-          expect(combobox.opened).to.be.true;
+      it('should open by tapping label', function() {
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: combobox.$$('paper-input-container label')
         });
-      }
+
+        expect(combobox.opened).to.be.true;
+      });
 
       it('should open by clicking input', function() {
         combobox.$$('paper-input-container input').fire('tap');
