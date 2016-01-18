@@ -4,6 +4,8 @@
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.combobox = vaadin.elements.combobox || {};
+
+  /** @polymerBehavior vaadin.elements.combobox.OverlayBehavior */
   vaadin.elements.combobox.OverlayBehaviorImpl = {
     properties: {
       /**
@@ -57,6 +59,7 @@
     }
   };
 
+  /** @polymerBehavior */
   vaadin.elements.combobox.OverlayBehavior = [
     Polymer.IronResizableBehavior,
     vaadin.elements.combobox.OverlayBehaviorImpl
