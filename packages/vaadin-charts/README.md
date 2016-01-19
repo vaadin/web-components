@@ -6,7 +6,7 @@ A Web Component for high quality charts.
 
 ## Demo
 
-https://vaadin.com/add-ons/charts
+https://vaadin.com/charts-for-polymer
 
 ## Overview of the repository
 
