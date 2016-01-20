@@ -9,7 +9,6 @@
   <script src='../../test-fixture/test-fixture-mocha.js'></script>
 
   <link rel='import' href='common.html'>
-  <script src="../../promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 
 </head>
@@ -18,14 +17,12 @@
 
 <test-fixture id='combobox'>
   <template>
-    <vaadin-combo-box label='combobox'></vaadin-combo-box>
+    <vaadin-combo-box label='combobox' style='width: 300px'></vaadin-combo-box>
   </template>
 </test-fixture>
 
 <script>
   var comboBox;
-  // Valid also for IE11
-  var isFF = navigator.userAgent.toLowerCase().indexOf('gecko') > -1;
 
   var wh = window.innerHeight;
   var ww = window.innerWidth;
@@ -51,19 +48,8 @@
     }
   }
 
-  function openComboboxTop() {
-    moveComboBox(horiCenter, vertTop, 100);
-    comboBox.open();
-  }
-
-  function openComboboxBottom() {
-    moveComboBox(horiCenter, vertBottom, 100);
-    comboBox.open();
-  }
-
   function dropContent() {
-    var overlay = comboBox.$.overlay;
-    return Polymer.dom(overlay.root).querySelector('#dropdownContent');
+    return comboBox.$.overlay;
   }
   function dropContentRect() {
     return dropContent().getBoundingClientRect();
@@ -71,115 +57,57 @@
   function inputContentRect() {
     return comboBox.$.inputContainer.getBoundingClientRect();
   }
-  function expectAlmostEqual(tolerance, a, b)  {
-    expect(tolerance).to.be.above(Math.abs(a - b));
-  }
 
   describe('overlay', function() {
-    beforeEach(function() {
+    beforeEach(function(done) {
       comboBox = fixture('combobox');
       comboBox.items = getItemArray(20);
-      vertBottom = wh - comboBox.$.overlay.alignThreshold + 1;
+
+      // <paper-input-container> adds floated-label-placeholder div asynchronously,
+      // we want to wait that out so that the dropdown clientHeight is calculated correctly.
+      return Polymer.Base.async(done);
     });
 
-    describeSkipIf(fullScreen, 'overlay position', function() {
+    afterEach(function() {
+      // clean out <vaadin-overlay> elements from body.
+      comboBox.close();
+    });
+
+    describe('overlay position', function() {
       it('should match the input container width', function() {
-        openComboboxTop();
+        comboBox.open();
 
-        return waitUntilOpen()
-          .then(function() {
-            expect(dropContentRect().width).to.equal(100);
-            comboBox.close();
-          })
-          .then(waitUntilClosed)
-          .then(function() {
-            expect(dropContentRect().width).to.equal(0);
-          });
+        expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
 
-      it('should be below the input box if there is enough room under it', function() {
-        openComboboxTop();
+      it('should be below the input box', function() {
+        comboBox.open();
 
-        return waitUntilOpen().then(function() {
-          expect(dropContentRect().top).to.be.above(inputContentRect().top);
-        });
+        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
       });
 
-      it('should be above the input box if there is not enough room under it', function() {
-        openComboboxBottom();
+      it('should be aligned with input container', function() {
+        comboBox.open();
 
-        return waitUntilOpen().then(function() {
-          // FIXME(manolo) iron-dropdown computes wrong the max-height value for the dropdownContent
-          // element, and it gives all the height that the list needs (no scroll). It only happens
-          // when the popup is above the input. The bottom position of the iron-dropdown element is
-          // well calculated.
-          if (!isFF) {
-            expect(parseInt(dropContentRect().top)).to.equal(0);
-          }
-          // In chrome difference is around 1px in FF about 4px
-          expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
-        });
+        expect(dropContentRect().left).to.equal(inputContentRect().left);
       });
 
-      it('when the input position moves in the view port the overlay position should change', function(done) {
-        openComboboxBottom();
+      it('when the input position moves in the view port the overlay position should change', function() {
+        moveComboBox(horiCenter, vertTop, 100);
 
-        asyncDone(function() {
-          expectAlmostEqual(6, dropContentRect().bottom, inputContentRect().top);
+        comboBox.open();
 
-          // The ideal test would be to resize the window, but testing system disallows
-          // resizing the iframe, si we move the combo-box with styles and fire the window
-          // resize event
-          moveComboBox(horiCenter, vertTop, 100);
-          asyncDone(function() {
-            expect(dropContentRect().top).to.be.above(inputContentRect().top);
-          }, done);
-        }, null);
+        expect(dropContentRect().left).to.equal(inputContentRect().left);
+
+        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
       });
 
-      it('when the input position width changes overlay width should change', function(done) {
-        openComboboxBottom();
+      it('when the input position width changes overlay width should change', function() {
+        moveComboBox(horiCenter, vertBottom, 150);
 
-        asyncDone(function() {
-          expect(dropContentRect().width).to.equal(100);
-          moveComboBox(horiCenter, vertBottom, 150);
-          asyncDone(function() {
-            expect(dropContentRect().width).to.equal(150);
-          }, done);
-        }, null);
-      });
-    });
+        comboBox.open();
 
-    describeSkipIf(fullScreen, 'overlay resizing at bottom', function() {
-      it('when window resizes popup should resize in order not overflow window edges', function(done) {
-        openComboboxTop();
-
-        asyncDone(function() {
-          var top = dropContentRect().top;
-          expectAlmostEqual(1, wh, top + dropContent().clientHeight);
-          moveComboBox(horiCenter, vertTop + 40, 100);
-          asyncDone(function() {
-            var newTop = dropContentRect().top;
-            expect(newTop).to.be.equal(top + 40);
-            expectAlmostEqual(1, wh, newTop + dropContent().clientHeight);
-          }, done);
-        }, null);
-      });
-    });
-
-    describeSkipIf(fullScreen || isFF, 'overlay resizing at top', function() {
-      it('when window resizes popup should resize in order not overflow window edges', function(done) {
-        openComboboxBottom();
-        asyncDone(function() {
-          var bottom = dropContentRect().bottom;
-          expectAlmostEqual(1, bottom, dropContent().clientHeight);
-          moveComboBox(horiCenter, vertBottom - 40, 100);
-          asyncDone(function() {
-            var newBottom = dropContentRect().bottom;
-            expect(newBottom).to.be.equal(bottom - 40);
-            expectAlmostEqual(1, newBottom, dropContent().clientHeight);
-          }, done);
-        }, null);
+        expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
     });
   });

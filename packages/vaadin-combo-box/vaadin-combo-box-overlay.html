@@ -1,0 +1,213 @@
+<!--
+@element vaadin-combo-box-overlay
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="vaadin-overlay-behavior.html">
+
+<dom-module id="vaadin-combo-box-overlay">
+  <style>
+    :host {
+      position: absolute;
+      z-index: 100;
+      @apply(--shadow-elevation-2dp);
+      background: #fff;
+      border-radius: 0 0 2px 2px;
+    }
+
+    #scroller {
+      overflow: auto;
+      max-height: 65vh;
+
+      /* Fixes item background from getting on top of scrollbars on Safari */
+      transform: translate3d(0,0,0);
+    }
+
+    #selector {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    #selector .item {
+      cursor: pointer;
+      padding: 13px 16px;
+      color: var(--primary-text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #selector:not([touch-device]) .item:hover,
+    #selector .item[focused] {
+      background: #eee;
+    }
+
+    #selector .item[selected] {
+      color: var(--default-primary-color);
+    }
+  </style>
+
+  <template>
+    <div id="scroller" scroller="[[_getScroller()]]">
+      <iron-list
+          id="selector"
+          touch-device$="[[touchDevice]]"
+          role="listbox"
+          data-selection$="[[_ariaActiveIndex]]"
+          on-touchend="_preventDefault"
+          selected-item="{{_selectedItem}}"
+          items="[[_items]]"
+          selection-enabled>
+        <template>
+          <div class="item"
+              id$="it[[index]]"
+              selected$="[[selected]]"
+              role$="[[_getAriaRole(index)]]"
+              aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
+              focused$="[[_isItemFocused(_focusedIndex,index)]]">
+              [[item]]
+          </div>
+        </template>
+      </iron-list>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-combo-box-overlay',
+
+    behaviors: [
+      vaadin.elements.combobox.OverlayBehavior
+    ],
+
+    properties: {
+
+      /**
+       * True if the device supports touch events.
+       */
+      touchDevice: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: function() {
+          try {
+            document.createEvent('TouchEvent');
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      },
+
+      _selectedItem: {
+        type: String,
+        notify: true
+      },
+
+      _items: {
+        type: Object
+      },
+
+      _focusedIndex: {
+        type: Number,
+        notify: true,
+        value: -1,
+        observer: '_focusedIndexChanged'
+      },
+
+      _ariaActiveIndex: {
+        type: Number,
+        notify: true,
+        computed: '_getAriaActiveIndex(_focusedIndex)'
+      }
+    },
+
+    ready: function() {
+      this._patchWheelOverScrolling();
+    },
+
+    _isItemFocused: function(focusedIndex, itemIndex) {
+      return focusedIndex == itemIndex;
+    },
+
+    _getAriaActiveIndex: function(focusedIndex) {
+      if (focusedIndex >= 0) {
+        return 'it' + focusedIndex;
+      }
+
+      return false;
+    },
+
+    _getAriaSelected: function(focusedIndex, itemIndex) {
+      return this._isItemFocused(focusedIndex, itemIndex).toString();
+    },
+
+    _getAriaRole: function(itemIndex) {
+      return itemIndex !== undefined ? 'option' : false;
+    },
+
+    _focusedIndexChanged: function(index) {
+      if (index >= 0) {
+        this._scrollIntoView(index);
+      }
+    },
+
+    _scrollIntoView: function(index) {
+      if (index <= this.$.selector.firstVisibleIndex) {
+        this.$.selector.scrollToIndex(index);
+      } else if (index > this._lastVisibleIndex()) {
+        this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
+      }
+    },
+
+    _getScroller: function() {
+      return this.$.scroller;
+    },
+
+    /**
+     * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
+     * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
+     * scrolling the parent similarily to touch scrolling.
+     */
+    _patchWheelOverScrolling: function() {
+      var selector = this.$.selector;
+      selector.addEventListener('wheel', function(e) {
+        var scrolledToTop = selector._scroller.scrollTop === 0;
+        var scrolledToBottom = (selector._scroller.scrollHeight - selector._scroller.scrollTop - selector._scroller.clientHeight) <= 1;
+
+        if (scrolledToTop && e.deltaY < 0) {
+          e.preventDefault();
+        } else if (scrolledToBottom && e.deltaY > 0) {
+          e.preventDefault();
+        }
+      });
+    },
+
+    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
+    _visibleItemsCount: function() {
+      var firstItemIndex = this.$.selector._physicalStart;
+      var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
+
+      if (firstItemHeight) {
+        var visibleItems = this.$.selector._viewportSize / firstItemHeight;
+        return Math.floor(visibleItems);
+      }
+    },
+
+    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
+    _lastVisibleIndex: function() {
+      if (this._visibleItemsCount()) {
+        return this.$.selector.firstVisibleIndex + this._visibleItemsCount() - 1;
+      }
+    },
+
+    _selectItem: function(item) {
+      this.$.selector.selectItem(item);
+    },
+
+    _preventDefault: function(e) {
+      e.preventDefault();
+    }
+  });
+</script>

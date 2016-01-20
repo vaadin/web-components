@@ -9,7 +9,6 @@
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
-  <script src="../../promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 </head>
 
@@ -25,26 +24,20 @@
   <script>
     describe('scrolling', function() {
 
-      describeSkipIf(!fullScreen, 'fullscreen', function() {
-        var combobox;
-        var input;
-        var selector;
+      var combobox;
 
-        beforeEach(function() {
-          combobox = fixture('combobox');
-          selector = combobox.$.selector;
-          input = combobox.$.fullScreenInput;
-        });
+      beforeEach(function() {
+        combobox = fixture('combobox');
+      });
 
-        it('should blur fullscreen input on scroll', function() {
+      describeIf(touchDevice, 'touch devices', function() {
+        it('should blur input on scroll', function() {
           combobox.open();
 
-          return waitUntilOpen().then(function() {
-            selector.fire('down');
-            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
+          combobox.$.overlay.fire('down');
+          var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
-            expect(focusedInput).not.to.equal(combobox.$.fullScreenInput);
-          });
+          expect(focusedInput).not.to.equal(combobox.$.input);
         });
       });
     });

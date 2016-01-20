@@ -9,7 +9,6 @@
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
-  <script src="../../promise-polyfill/Promise.js"></script>
   <script src="common.js"></script>
 </head>
 
@@ -23,6 +22,7 @@
 
 
 <script>
+  var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
   describe('toggling the dropdown', function() {
     var combobox;
 
@@ -31,114 +31,130 @@
     });
 
     describe('opening', function() {
-      it('should open on click', function() {
-        combobox.$$('paper-input-container').fire('tap');
-
-        return waitUntilOpen().then(function() {
-          expect(combobox.opened).to.be.true;
+      it('should open by tapping label', function() {
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: combobox.$$('paper-input-container label')
         });
+
+        expect(combobox.opened).to.be.true;
+      });
+
+      it('should open by clicking input', function() {
+        combobox.$$('paper-input-container input').fire('tap');
+
+        expect(combobox.opened).to.be.true;
+      });
+
+      it('should open by clicking icon', function() {
+        combobox.$$('paper-input-container iron-icon').fire('tap');
+
+        expect(combobox.opened).to.be.true;
       });
 
       it('should open on function call', function() {
         combobox.open();
 
-        return waitUntilOpen().then(function() {
-          expect(combobox.opened).to.be.true;
-        });
+        expect(combobox.opened).to.be.true;
       });
 
       it('should not close an open popup', function() {
         combobox.open();
 
-        return waitUntilOpen().then(function() {
-          combobox.open();
+        combobox.open();
 
-          expect(combobox.opened).to.be.true;
-        });
+        expect(combobox.opened).to.be.true;
       });
 
-      describeIf(fullScreen, 'fullscreen', function() {
+      describe('after opening', function() {
         beforeEach(function() {
-          combobox.$.overlay.fullScreen = true;
           combobox.open();
-
-          return waitUntilOpen();
         });
 
-        it('should focus input on fullscreen dropdown open', function() {
-          var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
-
-          expect(focusedInput).to.equal(combobox.$.fullScreenInput);
-        });
-
-        it('should blur input when closing', function() {
-          combobox.close();
-
-          return waitUntilClosed().then(function() {
-            var focusedInput = Polymer.dom(combobox.$.overlay).querySelector('input:focus');
-
+        if (touchDevice) {
+          it('should not focus input on dropdown open', function() {
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
             expect(focusedInput).to.be.undefined;
           });
-        });
 
-        it('should prevent focus of non-fullscreen input field', function() {
-          expect(combobox.$.input.tabIndex).to.equal(-1);
-        });
+          it('should not refocus the input field when closed from icon', function() {
+           combobox.$$('paper-input-container iron-icon').fire('tap');
+
+           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+
+           expect(focusedInput).to.be.undefined;
+          });
+
+          it('should blur input on close', function() {
+           combobox.$.input.focus();
+
+           combobox.close();
+
+           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+           expect(focusedInput).to.be.undefined;
+          });
+        } else if (!safari) { // TODO: Sauce Labs bug doesn't allow Safari in OS X to focus.
+          it('should focus input on dropdown open', function() {
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            expect(focusedInput).to.equal(combobox.$.input);
+          });
+
+         it('should refocus the input field when closed from icon', function() {
+           combobox.$$('paper-input-container iron-icon').fire('tap');
+
+           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+
+           expect(focusedInput).to.eql(combobox.$.input);
+         });
+        }
       });
     });
 
     describe('closing', function() {
-      it('should close fullscreen popup when tapping on modal curtain', function() {
-        combobox.$.overlay.fullScreen = true;
-        combobox.open();
+      if (touchDevice) {
+        it('should close popup when tapping outside overlay', function() {
+          combobox.open();
 
-        return waitUntilOpen()
-          .then(function() {
-            // Fake a tap event for the #dropdownContent.
             Polymer.Base.fire('tap', {}, {
               bubbles: true,
-              node: combobox.$.overlay.$.dropdownContent
+              node: document.body
             });
-          })
-          .then(waitUntilClosed)
-          .then(function() {
+
             expect(combobox.opened).to.be.false;
-          });
-      });
-
-      describeIf(!fullScreen, 'on blur', function() {
-        it('should close the overlay when focus is lost', function() {
+        });
+      } else {
+        it('should close popup when clicking outside overlay', function() {
           combobox.open();
 
-          return waitUntilOpen()
-            .then(function() {
-              MockInteractions.blur(combobox.$.input);
-            })
-            .then(waitUntilClosed)
-            .then(function() {
-              expect(combobox.opened).to.equal(false);
-            });
+          document.body.click();
+
+          expect(combobox.opened).to.be.false;
         });
+      }
+
+      it('should close on clicking icon', function() {
+        combobox.open();
+
+        combobox.$$('paper-input-container iron-icon').fire('tap');
+
+        expect(combobox.opened).to.be.false;
       });
 
-      describeIf(fullScreen, 'on blur fullscreen', function() {
-        it('should close the overlay when focus is lost', function() {
-          // We need a dummy input as a focus target in fullscreen mode.
-          var dummyInput = document.createElement('input');
-          document.body.appendChild(dummyInput);
+      it('should close the overlay when focus is lost', function(done) {
+        var dummyInput = document.createElement('input');
+        document.body.appendChild(dummyInput);
 
-          combobox.open();
+        combobox.open();
 
-          return waitUntilOpen()
-            .then(function() {
-              dummyInput.focus();
-            })
-            .then(waitUntilClosed)
-            .then(function() {
-              expect(combobox.opened).to.equal(false);
-              document.body.removeChild(dummyInput);
-            });
-        });
+        dummyInput.focus();
+        combobox.$.input.fire('blur');
+
+        Polymer.Base.async(function() {
+          document.body.removeChild(dummyInput);
+
+          expect(combobox.opened).to.equal(false);
+          done();
+        }, 1);
       });
     });
   });

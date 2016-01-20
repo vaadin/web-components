@@ -32,83 +32,26 @@ enable usage within an `iron-form`.
 @demo demo/
 -->
 
-<link rel='import' href='../polymer/polymer.html'>
-<link rel='import' href='../paper-input/paper-input-container.html'>
-<link rel='import' href='../iron-input/iron-input.html'>
-<link rel='import' href='../paper-ripple/paper-ripple.html'>
-<link rel='import' href='../iron-icons/iron-icons.html'>
-<link rel='import' href='../iron-icon/iron-icon.html'>
-<link rel='import' href='../iron-form-element-behavior/iron-form-element-behavior.html'>
-<link rel='import' href='../iron-validatable-behavior/iron-validatable-behavior.html'>
-<link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel='import' href='vaadin-adaptive-overlay.html'>
+<link rel="import" href="vaadin-combo-box-overlay.html">
+<link rel="import" href="vaadin-dropdown-behavior.html">
 
-<dom-module id='vaadin-combo-box'>
+<dom-module id="vaadin-combo-box">
   <style>
     :host {
        display: block;
     }
 
-    #selector {
-      padding-top: 8px;
-      padding-bottom: 8px;
-    }
-
-    #overlay:not([full-screen]) {
-      --dropdown-content: {
-        @apply(--layout-vertical);
-        @apply(--shadow-elevation-2dp);
-        background: #fff;
-        border-radius: 0 0 2px 2px;
-      }
-      --dropdown-content-bottom-align: {
-        border-radius: 2px;
-      }
-    }
-
-    :host(:not([label])) #overlay:not([full-screen]) {
-      --dropdown-content-bottom-align: {
-        border-radius: 2px;
-        margin-bottom: -1em;
-      }
-    }
-
-    #overlay[full-screen] {
-      --dropdown-content: {
-        @apply(--layout-vertical);
-      }
-    }
-
-    #overlay[full-screen] #selector {
-      max-height: 100%;
-      background: #fff;
-    }
-
-    .item {
-      cursor: pointer;
-      padding: 13px 16px;
-      color: var(--primary-text-color);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    #overlay:not([full-screen]) .item:hover,
-    #overlay .item[focused] {
-      background: #eee;
-    }
-
-    .item[selected] {
-      color: var(--default-primary-color);
-    }
-
-    #overlay paper-input-container {
-      background-color: #fff;
-    }
-
-    #overlay:not([full-screen]) paper-input-container {
+    :host > #overlay {
       display: none;
     }
 
@@ -122,36 +65,10 @@ enable usage within an `iron-form`.
       z-index: 20;
     }
 
-    #overlay[full-screen] {
-      /* Keep the full screen overlay always on top of other elements. */
-      position: relative;
-      z-index: 25;
-    }
-
     paper-input-container div[suffix] {
       position: relative;
       width: 24px;
       height: 24px;
-    }
-
-    #overlay[full-screen] paper-input-container {
-      @apply(--shadow-elevation-2dp);
-      flex-shrink: 0;
-      -webkit-flex-shrink: 0;
-      padding: 0;
-    }
-
-    #overlay[full-screen] #fullScreenInput {
-      padding-left: 16px;
-      box-sizing: border-box;
-    }
-
-    #overlay[full-screen] label {
-      margin-left: 16px;
-    }
-
-    #overlay[full-screen] div[suffix] {
-      margin-right: 4px;
     }
 
     paper-input-container iron-icon {
@@ -174,45 +91,40 @@ enable usage within an `iron-form`.
   </style>
 
   <template>
-    <paper-input-container id="inputContainer" on-tap='open' on-touchend='_preventDefault' opened$=[[opened]]>
-      <label id='label'>[[label]]</label>
+    <paper-input-container class="dropdown-input" id="inputContainer" opened$="[[opened]]">
+      <label id="label" on-tap="open">[[label]]</label>
       <input
-          is='iron-input'
-          id='input'
+          is="iron-input"
+          id="input"
           role="combobox"
-          aria-activedescendant$='[[_getAriaActiveIndex(_focusedIndex)]]'
-          aria-expanded$='[[_getAriaExpanded(opened)]]'
+          aria-activedescendant$="[[_ariaActiveIndex]]"
+          aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-labelledby="label"
           aria-autocomplete="list" aria-owns="overlay"
-          autocomplete='off'
-          bind-value='[[value]]'
-          name$='[[name]]'
-          type='text'
+          autocomplete="off"
+          bind-value="[[value]]"
+          name$="[[name]]"
+          type="text"
           required$="[[required]]"
-          on-bind-value-changed='_inputValueChanged'
-          on-blur='_onBlur'
+          on-bind-value-changed="_inputValueChanged"
+          on-blur="_onBlur"
+          on-tap="open"
           key-event-target>
-      <div suffix>
-        <iron-icon icon='arrow-drop-down' aria-controls='overlay'></iron-icon>
-        <paper-ripple class='circle' center></paper-ripple>
+      <div suffix on-tap="toggle" on-touchend="_preventDefault">
+        <iron-icon icon="arrow-drop-down" aria-controls="overlay"></iron-icon>
+        <paper-ripple class="circle" center></paper-ripple>
       </div>
     </paper-input-container>
 
-    <!-- Having spaces between elements inside <content> template in vaadin-adaptive-overlay causes scrolling throw errors when using Shadow DOM or IE11. See https://github.com/PolymerElements/iron-dropdown/issues/27 -->
-    <vaadin-adaptive-overlay id='overlay' role="listbox"
-         focus-target=[[_getFocusTarget()]] opened={{opened}} data-selection$='[[_getAriaActiveIndex(_focusedIndex)]]'><paper-input-container opened$=[[opened]]>
-        <label>[[label]]</label><input id='fullScreenInput' autocomplete='off' is='iron-input' bind-value='[[value]]' on-bind-value-changed='_fullScreenInputValueChanged' on-blur='_onBlur'>
-        <div suffix on-tap='close'><iron-icon icon='arrow-drop-down'></iron-icon><paper-ripple class='circle' center></paper-ripple></div>
-      </paper-input-container><iron-list id='selector' on-touchend="_preventDefault" on-down='_blurFullScreenInput' items='[[items]]' selected-item='[[value]]' on-selected-item-changed='_selectedItemChanged' selection-enabled>
-        <template>
-          <div class='item'
-          id$="it[[index]]"
-          selected$=[[selected]]
-          role$=[[_getAriaRole(index)]]
-          aria-selected$=[[_getAriaSelected(_focusedIndex,index)]]
-          focused$=[[_isItemFocused(_focusedIndex,index)]]>[[item]]</div>
-        </template>
-      </iron-list></vaadin-adaptive-overlay>
+    <vaadin-combo-box-overlay
+        id="overlay"
+        _aria-active-index="{{_ariaActiveIndex}}"
+        _selected-item="{{_selectedItem}}"
+        position-target="[[_positionTarget]]"
+        _focused-index="[[_focusedIndex]]"
+        on-down="_blurInput"
+        vertical-offset="2">
+    </vaadin-combo-box-overlay>
   </template>
 </dom-module>
 
@@ -223,7 +135,8 @@ enable usage within an `iron-form`.
     behaviors: [
       Polymer.IronFormElementBehavior,
       Polymer.IronValidatableBehavior,
-      Polymer.IronA11yKeysBehavior
+      Polymer.IronA11yKeysBehavior,
+      vaadin.elements.combobox.DropdownBehavior
     ],
 
     properties: {
@@ -231,17 +144,8 @@ enable usage within an `iron-form`.
        * An array of `String` values to be displayed as options in the dropdown.
        */
       items: {
-        type: Array
-      },
-
-      /**
-       * True if the dropdown list is open, false otherwise.
-       */
-      opened: {
-        type: Boolean,
-        notify: true,
-        value: false,
-        observer: '_openedChanged'
+        type: Array,
+        observer: '_setItems'
       },
 
       /**
@@ -257,24 +161,30 @@ enable usage within an `iron-form`.
        */
       label: {
         type: String,
-        observer: '_labelChanged',
         reflectToAttribute: true
+      },
+
+      _positionTarget: {
+        type: Object,
+        value: function() {
+          return this.$.inputContainer;
+        }
       },
 
       _focusedIndex: {
         type: Number,
-        value: -1,
-        observer: '_focusedIndexChanged'
+        value: -1
       }
+    },
+
+    listeners: {
+      'vaadin-dropdown-opened': '_onOpened',
+      'vaadin-dropdown-closed': '_onClosed'
     },
 
     ready: function() {
       this._addKeyEventListeners();
       Polymer.IronA11yAnnouncer.requestAvailability();
-    },
-
-    _getFocusTarget: function() {
-      return this.$.overlay.fullScreen ? this.$.fullScreenInput : this.$.input;
     },
 
     /**
@@ -310,7 +220,7 @@ enable usage within an `iron-form`.
 
     _onArrowDown: function() {
       if (this.opened) {
-        this._focusedIndex = Math.min(this.$.selector.items.length - 1, this._focusedIndex + 1);
+        this._focusedIndex = Math.min(this.$.overlay._items.length - 1, this._focusedIndex + 1);
       } else {
         this.open();
       }
@@ -330,7 +240,7 @@ enable usage within an `iron-form`.
       if (this.opened) {
         if (this._focusedIndex > -1) {
           this.close();
-          this.$.selector.selectItem(this._focusedIndex);
+          this.$.overlay._selectItem(this._focusedIndex);
         } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.close();
           this.value = undefined;
@@ -340,96 +250,70 @@ enable usage within an `iron-form`.
       }
     },
 
+    _onEscape: function() {
+      this.close();
+    },
+
+    /**
+     * Opening and closing related functionality
+     */
+
     _onBlur: function() {
       // Async needed to access the new activeElement reliably.
       this.async(function() {
-        var focusInsideOverlay = this.$.overlay.contains(document.activeElement);
+        var focusInsideCombobox = this.contains(document.activeElement);
 
         // When grabbing the scroll handle, the activeElement will become
         // the body on some browsers, so check for it also.
-        if (!focusInsideOverlay && document.activeElement !== document.body) {
+        if (!focusInsideCombobox && document.activeElement !== document.body) {
           this.close();
         }
       }, 1);
     },
 
-    _onEscape: function() {
-      this.close();
-    },
-
-    _focusedIndexChanged: function(index) {
-      if (index >= 0) {
-        this._scrollIntoView(index);
-      }
-    },
-
-    _scrollIntoView: function(index) {
-      if (index <= this.$.selector.firstVisibleIndex) {
-        this.$.selector.scrollToIndex(index);
-      } else if (index > this._lastVisibleIndex()) {
-        this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
-      }
-    },
-
-    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
-    _visibleItemsCount: function() {
-      var firstItemIndex = this.$.selector._physicalStart;
-      var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
-
-      if (firstItemHeight) {
-        var visibleItems = this.$.selector._viewportSize / firstItemHeight;
-        return Math.floor(visibleItems);
-      }
-    },
-
-    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
-    _lastVisibleIndex: function() {
-      if (this._visibleItemsCount()) {
-        return this.$.selector.firstVisibleIndex + this._visibleItemsCount() - 1;
-      }
+    _blurInput: function() {
+      this.$.input.blur();
     },
 
     /**
-     * Opens the dropdown list.
+     * Opens and closes the dropdown list.
      */
-    open: function() {
-      this.$.overlay.open();
+    toggle: function() {
+      if (this.opened) {
+        this.close();
+
+        // Refocus input field after clicking the toggle button, but not for touch devices,
+        // because we don't want to popup the virtual keyboard.
+        if (!this.$.overlay.touchDevice) {
+          this.$.input.focus();
+        }
+      } else {
+        this.open();
+      }
+    },
+
+    _onOpened: function() {
+      this.$.overlay.notifyResize();
+
+      this._setItems(this.items);
+      this.$.overlay._scrollIntoView(this._focusedIndex);
+    },
+
+    _onClosed: function() {
+      this.$.input.bindValue = this.value;
     },
 
     /**
-     * Closes the dropdown list.
+     * WAI-ARIA
      */
-    close: function() {
-      this.$.overlay.close();
-    },
-
-    _isItemFocused: function(focusedIndex, itemIndex) {
-      return focusedIndex == itemIndex;
-    },
-
-    _getAriaActiveIndex: function(focusedIndex) {
-      if (focusedIndex >= 0) {
-        return 'it' + focusedIndex;
-      }
-
-      return false;
-    },
-
-    _getAriaSelected: function(focusedIndex, itemIndex) {
-      return this._isItemFocused(focusedIndex, itemIndex).toString();
-    },
 
     _getAriaExpanded: function(value) {
       return value.toString();
     },
 
-    _getAriaRole: function(itemIndex) {
-      return itemIndex !== undefined ? 'option' : false;
-    },
-
-    _fullScreenInputValueChanged: function(event) {
-      this.$.input.bindValue = event.detail.value;
-    },
+    /**
+     *  Filtering and items handling
+     */
 
     _inputValueChanged: function(event) {
       if (!this.opened && this._isFiltering(event)) {
@@ -438,24 +322,6 @@ enable usage within an `iron-form`.
       if (this.opened && this.items) {
         this._setItems(this._filter(this.items, this.$.input.bindValue));
       }
-    },
-
-    _blurFullScreenInput: function() {
-      this.$.fullScreenInput.blur();
-    },
-
-    _setItems: function(items) {
-      this.unlisten(this.$.selector, 'selected-item-changed', '_selectedItemChanged');
-      this.$.selector.items = items;
-
-      if (this.$.selector.items && this.$.selector.items.indexOf(this.value) > -1) {
-        this.$.selector.selectItem(this.value);
-      }
-
-      if (this.$.selector.items) {
-        this._focusedIndex = this.$.selector.items.indexOf(this.$.input.bindValue);
-      }
-      this.listen(this.$.selector, 'selected-item-changed', '_selectedItemChanged');
     },
 
     _filter: function(arr, filter) {
@@ -468,47 +334,33 @@ enable usage within an `iron-form`.
       }.bind(this));
     },
 
-    _selectedItemChanged: function() {
-      var _val = this.$.selector.selectedItem;
-      if (_val !== null) {
-        this.value = _val;
-      } else if (this.opened) {
-        this.close();
-      }
-    },
-
-    _openedChanged: function() {
-      var fullScreen = this.$.overlay.fullScreen;
-      this.$.input.tabIndex = fullScreen && this.opened ? -1 : 0;
-
-      if (this.opened) {
-        this._setItems(this.items);
-
-        // TODO: needs to be async because iron-overlay-opened hasn't necessarily been fired yet.
-        this.async(function() {
-          this._scrollIntoView(this._focusedIndex);
-        }, 1);
-
-      } else {
-        this.$.input.bindValue = this.value;
-        this.$.fullScreenInput.bindValue = this.value;
-        if (fullScreen) {
-          this.$.fullScreenInput.blur();
-        }
-      }
-    },
-
-    _labelChanged: function() {
-      // We have separate style mixins for with and without a label -> we need
-      // to trigger Polymer to update custom styles when the label has changed.
-      this.$.overlay.updateStyles();
-    },
-
     _isFiltering: function(event) {
       var filterOrValueIsSet = (event.detail.value || typeof this.value !== 'undefined');
       var filterIsNotValue = this.$.input.bindValue !== this.value;
 
       return filterOrValueIsSet && filterIsNotValue;
+    },
+
+    _setItems: function(items) {
+      this.unlisten(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+      this.$.overlay._items = items;
+
+      if (this.$.overlay._items && this.$.overlay._items.indexOf(this.value) > -1) {
+        this.$.overlay._selectItem(this.value);
+      }
+
+      if (this.$.overlay._items) {
+        this._focusedIndex = this.$.overlay._items.indexOf(this.$.input.bindValue);
+      }
+      this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+    },
+
+    _selectedItemChanged: function(event, selectedItem) {
+      if (selectedItem.value !== null) {
+        this.value = selectedItem.value;
+      } else if (this.opened) {
+        this.close();
+      }
     },
 
     _preventDefault: function(e) {

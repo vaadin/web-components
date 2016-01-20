@@ -34,7 +34,7 @@
 
         it('should be bound to items list', function() {
           comboBox.items = ['qux'];
-          expect(comboBox.$.selector.items).to.eql(['qux']);
+          expect(comboBox.$.overlay._items).to.eql(['qux']);
         });
       });
 
@@ -46,11 +46,6 @@
         it('should be bound to label element', function() {
           comboBox.label = 'This is LABEL';
           expect(comboBox.$.inputContainer.querySelector('label').innerHTML).to.eql('This is LABEL');
-        });
-
-        it('should be bound to fullscreen label element', function() {
-          comboBox.label = 'This is LABEL';
-          expect(comboBox.$.overlay.querySelector('label').innerHTML).to.eql('This is LABEL');
         });
       });
     });

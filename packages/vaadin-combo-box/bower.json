@@ -20,7 +20,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "components-demo-resources": "vaadin/components-demo-resources#master",
-    "iron-dropdown": "polymerelements/iron-dropdown#~1.0.5",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#~1.0.3",
     "iron-form": "polymerelements/iron-form#~1.0.10",
     "iron-form-element-behavior": "polymerelements/iron-form-element-behavior#~1.0.4",
@@ -28,21 +27,20 @@
     "iron-icons": "PolymerElements/iron-icons#~1.0.3",
     "iron-input": "polymerelements/iron-input#~1.0.5",
     "iron-list": "polymerelements/iron-list#~1.0.3",
-    "iron-overlay-behavior": "polymerelements/iron-overlay-behavior#~1.0.5",
     "iron-validatable-behavior": "polymerelements/iron-validatable-behavior#~1.0.5",
     "paper-button": "polymerelements/paper-button#~1.0.6",
     "paper-input": "PolymerElements/paper-input#~1.0.12",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
     "polymer": "Polymer/polymer#^1.1.3",
     "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#~1.0.7",
-    "paper-ripple": "polymerelements/paper-ripple#~1.0.4"
+    "paper-ripple": "polymerelements/paper-ripple#~1.0.4",
+    "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#~1.0.2"
   },
   "devDependencies": {
     "web-component-tester": "4.0.3",
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "iron-component-page": "polymerelements/iron-component-page#~1.1.0",
-    "elements-demo-resources": "vaadin/elements-demo-resources#master",
-    "promise-polyfill": "polymerlabs/promise-polyfill#~1.0.0"
+    "elements-demo-resources": "vaadin/elements-demo-resources#master"
   }
 }

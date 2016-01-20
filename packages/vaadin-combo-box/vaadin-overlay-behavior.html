@@ -1,0 +1,67 @@
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.combobox = vaadin.elements.combobox || {};
+
+  /** @polymerBehavior vaadin.elements.combobox.OverlayBehavior */
+  vaadin.elements.combobox.OverlayBehaviorImpl = {
+    properties: {
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        type: Object
+      },
+
+      /**
+       * Vertical offset for the overlay position.
+       */
+      verticalOffset: {
+        type: Number,
+        value: 0
+      }
+    },
+
+    listeners: {
+      'iron-resize': '_setOverlayPosition'
+    },
+
+    created: function() {
+      this._boundSetOverlayPosition = this._setOverlayPosition.bind(this);
+    },
+
+    attached: function() {
+      if (this.parentElement === document.body) {
+        window.addEventListener('scroll', this._boundSetOverlayPosition, true);
+        this._setOverlayPosition();
+      }
+    },
+
+    detached: function() {
+      window.removeEventListener('scroll', this._boundSetOverlayPosition, true);
+    },
+
+    _setOverlayPosition: function() {
+      if (this.parentElement === document.body) {
+        var overlayRect = this.getBoundingClientRect();
+        var targetRect = this.positionTarget.getBoundingClientRect();
+
+        this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+        this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
+          this.positionTarget.clientHeight + this.verticalOffset;
+
+        this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
+
+        this.style.width = this.positionTarget.clientWidth + 'px';
+      }
+    }
+  };
+
+  /** @polymerBehavior */
+  vaadin.elements.combobox.OverlayBehavior = [
+    Polymer.IronResizableBehavior,
+    vaadin.elements.combobox.OverlayBehaviorImpl
+  ];
+</script>
