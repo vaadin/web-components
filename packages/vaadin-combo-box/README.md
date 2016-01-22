@@ -21,8 +21,6 @@ input field for filtering the list of items, a part of the
  - Displaying a list of `String` values.
  - Filtering the list.
  - Keyboard navigation.
- - Automatic resizing and alignment.
- - Separate mobile optimized view for mobile devices.
  - Material Design theme.
  - Compatible with [`iron-form`](https://github.com/PolymerElements/iron-form).
  - Simple and easy API.
