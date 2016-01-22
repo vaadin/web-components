@@ -64,8 +64,8 @@ function testSauce(browsers, done) {
 
 gulp.task('test:desktop', function(done) {
   testSauce([
-    'Windows 10/chrome@45',
-    'Windows 10/firefox@41',
+    'Windows 10/chrome@47',
+    'Windows 10/firefox@43',
     'Windows 10/microsoftedge@20',
     'Windows 10/internet explorer@11',
     'OS X 10.11/safari@9.0'], done);
@@ -73,8 +73,8 @@ gulp.task('test:desktop', function(done) {
 
 gulp.task('test:mobile', function(done) {
   testSauce([
-    'OS X 10.11/iphone@9.0',
-    'OS X 10.11/ipad@9.0',
+    'OS X 10.11/iphone@9.2',
+    'OS X 10.11/ipad@9.2',
     'Linux/android@5.1'], done);
 });
 
