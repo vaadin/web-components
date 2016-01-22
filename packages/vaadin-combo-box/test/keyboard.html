@@ -154,14 +154,14 @@
         getInput().bindValue = '';
         enter();
 
-        expect(comboBox.value).to.be.undefined;
+        expect(comboBox.value).to.eql('');
       });
 
       it('should clear the selection with enter when input is undefined', function() {
         getInput().bindValue = undefined;
         enter();
 
-        expect(comboBox.value).to.be.undefined;
+        expect(comboBox.value).to.eql('');
       });
 
       it('should not close the overlay with enter when input has invalid value', function() {

@@ -26,6 +26,13 @@
   describe('toggling the dropdown', function() {
     var combobox;
 
+    function tapToggleIcon() {
+      Polymer.Base.fire('tap', {}, {
+        bubbles: true,
+        node: combobox.$$('paper-input-container #toggleIcon')
+      });
+    }
+
     beforeEach(function() {
       combobox = fixture('combobox');
     });
@@ -47,7 +54,7 @@
       });
 
       it('should open by clicking icon', function() {
-        combobox.$$('paper-input-container iron-icon').fire('tap');
+        tapToggleIcon();
 
         expect(combobox.opened).to.be.true;
       });
@@ -78,7 +85,7 @@
           });
 
           it('should not refocus the input field when closed from icon', function() {
-           combobox.$$('paper-input-container iron-icon').fire('tap');
+           tapToggleIcon();
 
            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
@@ -100,7 +107,7 @@
           });
 
          it('should refocus the input field when closed from icon', function() {
-           combobox.$$('paper-input-container iron-icon').fire('tap');
+           tapToggleIcon();
 
            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
@@ -135,7 +142,7 @@
       it('should close on clicking icon', function() {
         combobox.open();
 
-        combobox.$$('paper-input-container iron-icon').fire('tap');
+        tapToggleIcon();
 
         expect(combobox.opened).to.be.false;
       });

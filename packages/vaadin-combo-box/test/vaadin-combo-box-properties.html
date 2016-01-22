@@ -38,6 +38,24 @@
         });
       });
 
+      describe('value property', function() {
+        it('should have empty string by default', function() {
+          expect(comboBox.value).to.eql('');
+        });
+
+        it('should default back to empty when set to undefined', function() {
+          comboBox.value = undefined;
+
+          expect(comboBox.value).to.eql('');
+        });
+
+        it('should default back to empty when set to null', function() {
+          comboBox.value = null;
+
+          expect(comboBox.value).to.eql('');
+        });
+      });
+
       describe('label property', function() {
         it('should have undefined by default', function() {
           expect(comboBox.label).to.be.undefined;

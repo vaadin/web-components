@@ -9,6 +9,7 @@
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -75,7 +76,65 @@
       combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
       expect(valueChangedSpy.callCount).to.equal(0);
     });
+  });
 
+  describe('clearing a selection', function() {
+    var combobox;
+    var clearIcon;
+    beforeEach(function() {
+      combobox = fixture('combobox');
+      combobox.items = ['foo', 'bar'];
+
+      combobox.value = 'foo';
+
+      clearIcon = combobox.$.clearIcon;
+    });
+
+    if (touchDevice) {
+      it('should not show the clearing icon for touch devices', function() {
+        combobox.open();
+
+        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
+      });
+    } else {
+      it('should show the clearing icon only when dropdown is open', function() {
+        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
+
+        combobox.open();
+
+        expect(window.getComputedStyle(clearIcon).display).to.eql('block');
+      });
+    }
+
+    it('should not show clearing icon when nothing is selected', function() {
+      combobox.open();
+
+      combobox.value = '';
+
+      expect(window.getComputedStyle(clearIcon).display).to.eql('none');
+    });
+
+    it('should clear the selection when tapping on the icon', function() {
+      combobox.open();
+
+      Polymer.Base.fire('tap', {}, {
+        bubbles: true,
+        node: clearIcon
+      });
+
+      expect(combobox.value).to.eql('');
+    });
+
+    it('should close the dropdown after clearing a selection', function() {
+      combobox.open();
+
+      Polymer.Base.fire('tap', {}, {
+        bubbles: true,
+        node: clearIcon
+      });
+
+      expect(combobox.opened).to.eql(false);
+    });
   });
 </script>
 
