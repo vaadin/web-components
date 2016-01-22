@@ -230,6 +230,8 @@ enable usage within an `iron-form`.
       if (this.opened) {
         if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
+        } else {
+          this._focusedIndex = this.$.overlay._items.length - 1;
         }
       } else {
         this.open();
