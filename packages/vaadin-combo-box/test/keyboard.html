@@ -89,10 +89,10 @@
         expect(getFocusedIndex()).to.equal(0);
       });
 
-      it('should not move up when nothing is focused', function() {
+      it('should focus on the last item with up arrow', function() {
         arrowUp();
 
-        expect(getFocusedIndex()).to.equal(-1);
+        expect(getFocusedIndex()).to.equal(2);
       });
 
       it('should focus on the previous item with arrow up', function() {
