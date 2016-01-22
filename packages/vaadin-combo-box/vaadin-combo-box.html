@@ -75,8 +75,8 @@ enable usage within an `iron-form`.
       fill: rgba(0, 0, 0, .26);
       cursor: pointer;
       padding: 0px;
-      width: 24px;
-      height: 24px;
+      --iron-icon-width: 24px;
+      --iron-icon-height: 24px;
       transition: all .2s;
     }
 
@@ -86,8 +86,19 @@ enable usage within an `iron-form`.
 
     paper-input-container[opened] iron-icon {
       fill: rgba(0, 0, 0, .54);
+    }
+
+    paper-input-container[opened] #toggleIcon iron-icon {
       transform: rotate(-180deg);
     }
+
+    #clearIcon iron-icon {
+      padding-left: 2px;
+      padding-bottom: 2px;
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+
   </style>
 
   <template>
@@ -110,7 +121,11 @@ enable usage within an `iron-form`.
           on-blur="_onBlur"
           on-tap="open"
           key-event-target>
-      <div suffix on-tap="toggle" on-touchend="_preventDefault">
+      <div suffix id="clearIcon" on-tap="clear" hidden$="[[_hideClearIcon(value, opened)]]">
+        <iron-icon icon="clear"></iron-icon>
+        <paper-ripple class="circle" center></paper-ripple>
+      </div>
+      <div suffix id="toggleIcon" on-tap="toggle" on-touchend="_preventDefault">
         <iron-icon icon="arrow-drop-down" aria-controls="overlay"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
@@ -245,8 +260,7 @@ enable usage within an `iron-form`.
           this.close();
           this.$.overlay._selectItem(this._focusedIndex);
         } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
-          this.close();
-          this.value = '';
+          this.clear();
         }
         // Do not submit the surrounding form.
         e.preventDefault();
@@ -295,6 +309,13 @@ enable usage within an `iron-form`.
       }
     },
 
+    /**
+     * Clears the current value.
+     */
+    clear: function() {
+      this.value = '';
+    },
+
     _onOpened: function() {
       this.$.overlay.notifyResize();
 
@@ -338,7 +359,7 @@ enable usage within an `iron-form`.
     },
 
     _isFiltering: function(event) {
-      var filterOrValueIsSet = (event.detail.value || this.value !== '');
+      var filterOrValueIsSet = event.detail.value || this.value !== '';
       var filterIsNotValue = this.$.input.bindValue !== this.value;
 
       return filterOrValueIsSet && filterIsNotValue;
@@ -372,6 +393,10 @@ enable usage within an `iron-form`.
       }
 
       this.close();
+    },
+
+    _hideClearIcon: function(value, opened) {
+      return this.$.overlay.touchDevice || value === '' || !opened;
     },
 
     _preventDefault: function(e) {
