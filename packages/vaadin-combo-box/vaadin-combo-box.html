@@ -153,7 +153,8 @@ enable usage within an `iron-form`.
        */
       value: {
         type: String,
-        observer: 'close'
+        observer: '_valueChanged',
+        value: ''
       },
 
       /**
@@ -245,7 +246,7 @@ enable usage within an `iron-form`.
           this.$.overlay._selectItem(this._focusedIndex);
         } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.close();
-          this.value = undefined;
+          this.value = '';
         }
         // Do not submit the surrounding form.
         e.preventDefault();
@@ -337,7 +338,7 @@ enable usage within an `iron-form`.
     },
 
     _isFiltering: function(event) {
-      var filterOrValueIsSet = (event.detail.value || typeof this.value !== 'undefined');
+      var filterOrValueIsSet = (event.detail.value || this.value !== '');
       var filterIsNotValue = this.$.input.bindValue !== this.value;
 
       return filterOrValueIsSet && filterIsNotValue;
@@ -363,6 +364,14 @@ enable usage within an `iron-form`.
       } else if (this.opened) {
         this.close();
       }
+    },
+
+    _valueChanged: function(value) {
+      if (value === undefined || value === null) {
+        this.value = '';
+      }
+
+      this.close();
     },
 
     _preventDefault: function(e) {
