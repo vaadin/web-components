@@ -12,7 +12,7 @@
 
 `vaadin-combo-box` is a combo box element combining a dropdown list with an
 input field for filtering the list of items, a part of the
-[vaadin-core-elements](https://github.com/vaadin/vaadin-core-elements) element bundle.
+[vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
 <img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="434" alt="Screenshot of vaadin-combo-box" />
 
