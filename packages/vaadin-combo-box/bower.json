@@ -29,12 +29,13 @@
     "iron-list": "polymerelements/iron-list#~1.0.3",
     "iron-validatable-behavior": "polymerelements/iron-validatable-behavior#~1.0.5",
     "paper-button": "polymerelements/paper-button#~1.0.6",
-    "paper-input": "PolymerElements/paper-input#~1.0.12",
+    "paper-input": "PolymerElements/paper-input#~1.1.3",
     "paper-toast": "polymerelements/paper-toast#~1.0.0",
     "polymer": "Polymer/polymer#^1.1.3",
     "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#~1.0.7",
     "paper-ripple": "polymerelements/paper-ripple#~1.0.4",
-    "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#~1.0.2"
+    "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#~1.0.2",
+    "paper-styles": "polymerelements/paper-styles#~1.1.2"
   },
   "devDependencies": {
     "web-component-tester": "4.0.3",
