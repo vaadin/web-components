@@ -28,7 +28,7 @@
     "index.html"
   ],
   "dependencies": {
-    "highcharts": "highslide-software/highcharts-release#v4.1.8",
+    "highcharts": "highcharts/highcharts-dist#v4.2.1",
     "polymer": "Polymer/polymer#^1.1.0",
     "vaadin-license-checker": "vaadin/license-checker#0.9.0"
   },

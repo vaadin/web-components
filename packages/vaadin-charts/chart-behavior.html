@@ -1,5 +1,5 @@
 <script src="../highcharts/adapters/standalone-framework.js"></script>
-<script src="../highcharts/highcharts.js"></script>
+<script src="../highcharts/highstock.js"></script>
 <script src="../highcharts/highcharts-more.js"></script>
 <script src="../highcharts/highcharts-3d.js"></script>
 <script src="../highcharts/modules/heatmap.js"></script>
@@ -71,6 +71,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 value: function () {
                     return {};
                 }
+            },
+
+            timeline: {
+                type: Boolean,
+                value: false,
+                observer: '_timelineChanged'
             },
 
             /**
@@ -208,7 +214,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Initializes the chart property using the json configuration.
          */
         _initChart: function () {
-            this.chart = new Highcharts.Chart(this._chartConf);
+            if (this.timeline) {
+                this.chart = new Highcharts.StockChart(this._chartConf);
+            } else {
+                this.chart = new Highcharts.Chart(this._chartConf);
+            }
             this.fire("chart-loaded");
         },
 
@@ -318,6 +328,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._chartConf.plotOptions.series.point.events[highchartsName] = function (e) {
                 self.fire(vaadinChartsName, {originalEvent: e, point: this});
             };
+        },
+
+        _timelineChanged: function (newValue, oldValue) {
+            if (this.isInitialized()) {
+                this.reloadConfiguration();
+            }
         }
     }
 

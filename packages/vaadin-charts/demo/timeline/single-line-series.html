@@ -1,0 +1,29 @@
+<dom-module id="timeline-single-line">
+    <template>
+        <iron-ajax
+                auto
+                id="dataFetcher"
+                url="sample_data/simple_data"
+                handle-as="json"
+                last-response="{{seriesData}}"></iron-ajax>
+        <vaadin-line-chart id="single-line-series" timeline>
+            <title>AAPL Stock Price</title>
+
+            <range-selector selected="1">
+            </range-selector>
+
+            <data-series name="AAPL" data="[[seriesData]]">
+                <tooltip value-decimals="2">
+
+                </tooltip>
+
+            </data-series>
+        </vaadin-line-chart>
+    </template>
+    <script>
+        Polymer({
+            is: 'timeline-single-line'
+        });
+    </script>
+</dom-module>
+<timeline-single-line></timeline-single-line>
