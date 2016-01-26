@@ -43,13 +43,17 @@ layout: page
       <p>Selected value: <span id="selected-value"></span>.</p>
 
       <code demo-var="combobox">
-        var combobox = combobox || document.querySelector('vaadin-combo-box');
-        combobox.items = elements;
+        HTMLImports.whenReady(function() {
+          // code
+          var combobox = combobox || document.querySelector('vaadin-combo-box');
+          combobox.items = elements;
 
-        combobox.addEventListener('value-changed', function() {
-          document.querySelector('#selected-value').innerHTML = combobox.value;
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#selected-value').innerHTML = combobox.value;
+          });
+          combobox.value = 'Carbon';
+          // end-code
         });
-        combobox.value = 'Carbon';
       </code>
     </code-example>
   </section>
@@ -69,13 +73,17 @@ layout: page
         <button>Submit</button>
       </form>
       <code demo-var="form">
-        var form = form || document.querySelector('form');
-        var combobox = form.querySelector('vaadin-combo-box');
-        combobox.items = elements;
+        HTMLImports.whenReady(function() {
+          // code
+          var form = form || document.querySelector('form');
+          var combobox = form.querySelector('vaadin-combo-box');
+          combobox.items = elements;
 
-        form.addEventListener('iron-form-submit', function() {
-          alert('Form submitted with name: ' + form.serialize().name);
-          return false;
+          form.addEventListener('iron-form-submit', function() {
+            alert('Form submitted with name: ' + form.serialize().name);
+            return false;
+          });
+          // end-code
         });
       </code>
     </code-example>
