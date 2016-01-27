@@ -331,6 +331,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         _timelineChanged: function (newValue, oldValue) {
+            // Observer might be called before _initChart
             if (this.isInitialized()) {
                 this.reloadConfiguration();
             }

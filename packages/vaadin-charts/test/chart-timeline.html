@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../vaadin-line-chart.html">
+</head>
+<body>
+<vaadin-line-chart id="linechartwithtimeline" timeline>
+    <title>timeline test</title>
+    <data-series>
+        <data>
+            [1233532800000,13.07],
+            [1233619200000,13.28],
+            [1233705600000,13.36],
+            [1233792000000,13.78],
+            [1233878400000,14.25],
+            [1234137600000,14.64],
+            [1234224000000,13.98],
+            [1234310400000,13.83],
+            [1234396800000,14.18],
+            [1234483200000,14.17],
+            [1234828800000,13.50],
+            [1234915200000,13.48],
+            [1235001600000,12.95],
+            [1235088000000,13.00]
+        </data>
+    </data-series>
+</vaadin-line-chart>
+<script>
+
+    suite('<vaadin-_-chart>', function () {
+
+        test('timeline property is correctly set', function () {
+            var chartwc = document.querySelector('#linechartwithtimeline');
+            expect(chartwc.timeline).to.be.true;
+        });
+
+        test('timeline chart contains range selector', function () {
+            var chartwc = document.querySelector('#linechartwithtimeline');
+            var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
+            expect(rangeSelector).to.have.length(2);
+        });
+
+        test('timeline disabled contains no range selector', function () {
+            var chartwc = document.querySelector('#linechartwithtimeline');
+            chartwc.timeline = false;
+            var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
+            expect(rangeSelector).to.have.length(0);
+        });
+
+
+    });
+
+</script>
+
+</body>
+</html>
