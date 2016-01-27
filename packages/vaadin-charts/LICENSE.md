@@ -1,7 +1,7 @@
 # Vaadin Charts Licensing
 
 **_Vaadin Charts_ is a charting tool for [Vaadin](http://vaadin.com) and a wrapper for the
-[Highcharts](http://www.highcharts.com) JavaScript library.**
+[Highstock](http://www.highcharts.com/products/highstock) JavaScript library.**
 
 _Vaadin Charts_ is distributed under the terms of
 [Commercial Vaadin Add-On License version 3.0](https://vaadin.com/license/cval-3) ("CVALv3"). A copy of the license is included as ```LICENSE.txt``` in this software package.

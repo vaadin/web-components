@@ -97,9 +97,9 @@
             var elementChart = document.querySelector("eventful-chart-declarative-attribute vaadin-line-chart");
             var eventNames = elementChart._chartEventNames;
 
-            //trigger all highcharts events
+            //fire all highcharts events
             for (var key in eventNames) {
-                elementChart.chart.trigger(key, {});
+                Highcharts.fireEvent(elementChart.chart,key,{});
             }
             //verify all event handled
             for (var key in eventNames) {
@@ -116,9 +116,9 @@
             for (var key in eventNames) {
                 element.listen(element, eventNames[key], "handle");
             }
-            //trigger all highcharts events
+            //fire all highcharts events
             for (var key in eventNames) {
-                elementChart.chart.trigger(key, {});
+                Highcharts.fireEvent(elementChart.chart,key,{});
             }
             //verify all event handled
             for (var key in eventNames) {
@@ -136,9 +136,9 @@
             for (var key in eventNames) {
                 element.listen(element, eventNames[key], "handle");
             }
-            //trigger all highcharts events
+            //fire all highcharts events
             for (var key in eventNames) {
-                elementChart.chart.series[0].trigger(key, {});
+                Highcharts.fireEvent(elementChart.chart.series[0],key,{});
             }
             //verify all event handled
             for (var key in eventNames) {
@@ -156,7 +156,7 @@
             for (var key in eventNames) {
                 element.listen(element, eventNames[key], "handle");
             }
-            //trigger all highcharts events
+            //fire all highcharts events
             for (var key in eventNames) {
                 elementChart.chart.series[0].data[0].firePointEvent(key);
             }
@@ -170,8 +170,8 @@
             var element = document.createElement('vaadin-line-chart');
 
             element.addEventListener("chart-loaded", function () {
-                //trigger chart click event on chart load
-                element.chart.trigger("click", {});
+                //fire chart click event on chart load
+                Highcharts.fireEvent(element.chart,"click",{});
             });
 
             element.addEventListener("chart-click", function (e) {
@@ -193,8 +193,8 @@
 
             element.addEventListener("chart-loaded", function () {
                 element.chart.addSeries({data:[1,2]})
-                //trigger series click event on chart load
-                element.chart.series[0].trigger("click", {});
+                //fire series click event on chart load
+                Highcharts.fireEvent(element.chart.series[0],"click",{});
             });
 
             element.addEventListener("series-click", function (e) {
@@ -216,7 +216,7 @@
 
             element.addEventListener("chart-loaded", function () {
                 element.chart.addSeries({data:[1,2]})
-                //trigger point click event on chart load
+                //fire point click event on chart load
                 element.chart.series[0].data[0].firePointEvent("click");
             });
 
