@@ -22,7 +22,7 @@ layout: page
   </style>
 </head>
 
-<body unresolved>
+<body>
   <section>
     <h1><a href="./">vaadin-combo-box</a>
       <span>Basic Usage</span>
@@ -49,10 +49,14 @@ layout: page
       <vaadin-combo-box demo label="Element"></vaadin-combo-box>
 
       <code demo-var="combobox">
-        var combobox = combobox || document.querySelector('vaadin-combo-box');
+        HTMLImports.whenReady(function() {
+          // code
+          var combobox = combobox || document.querySelector('vaadin-combo-box');
 
-        // The elements is an array of String values.
-        combobox.items = elements;
+          // The elements is an array of String values.
+          combobox.items = elements;
+          // end-code
+        });
       </code>
     </code-example>
   </section>
