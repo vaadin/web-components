@@ -100,7 +100,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * List of properties that will always be copied from the chart element to the container div
          **/
-        _styleProperties: ["flex", "-webkit-flex", "-ms-flex"],
+        _copyStyleProperties: ["flex", "-webkit-flex", "-ms-flex"],
 
         /**
          *  Name of the chart events to add to the configuration and its corresponding event for the chart element
@@ -244,7 +244,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          */
         _updateStyles: function (chartContainer) {
             var isFlex = false;
-            this._styleProperties.forEach(function (property) {
+            this._copyStyleProperties.forEach(function (property) {
                 //Chrome returns default value if property is not set
                 //check if flex is defined for chart, and different than default value
                 if (getComputedStyle(this)[property] && getComputedStyle(this)[property] != "0 1 auto") {
