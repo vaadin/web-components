@@ -1,0 +1,30 @@
+{
+  "name": "vaadin-date-picker",
+  "version": "0.0.0",
+  "description": "Vaadin Date Picker",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "Vaadin",
+    "date",
+    "picker"
+  ],
+  "main": "vaadin-date-picker.html",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vaadin/vaadin-date-picker"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.1.0",
+    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
+    "iron-component-page": "polymerelements/iron-component-page#~1.1.0"
+  }
+}

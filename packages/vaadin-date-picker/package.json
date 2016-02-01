@@ -1,0 +1,16 @@
+{
+  "name": "vaadin-date-picker",
+  "version": "0.0.0",
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chalk": "^1.1.1",
+    "gulp": "latest",
+    "gulp-html-extract": "0.0.3",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.8.0",
+    "web-component-tester": "^4.1.0",
+    "yargs": "^3.27.0"
+  }
+}
