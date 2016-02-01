@@ -220,8 +220,14 @@ enable usage within an `iron-form`.
       this.addEventListener('keydown', function(e) {
         if (this._isEventKey(e, 'down')) {
           this._onArrowDown();
+
+          // prevent caret from moving
+          e.preventDefault();
         } else if (this._isEventKey(e, 'up')) {
           this._onArrowUp();
+
+          // prevent caret from moving
+          e.preventDefault();
         } else if (this._isEventKey(e, 'enter')) {
           this._onEnter(e);
         } else if (this._isEventKey(e, 'esc')) {
