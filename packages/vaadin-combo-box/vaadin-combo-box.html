@@ -262,14 +262,10 @@ enable usage within an `iron-form`.
 
     _onEnter: function(e) {
       if (this.opened) {
-        if (this._focusedIndex === -1) {
-          this.value = this.$.input.bindValue || '';
-          this.close();
-        } else if (this._focusedIndex > -1) {
-          this.close();
-          this.$.overlay._selectItem(this._focusedIndex);
-        } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
+        if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.clear();
+        } else {
+          this.close();
         }
         // Do not submit the surrounding form.
         e.preventDefault();
@@ -341,7 +337,11 @@ enable usage within an `iron-form`.
     },
 
     _onClosed: function() {
-      this.value = this.$.input.bindValue;
+      if (this._focusedIndex > -1) {
+        this.$.overlay._selectItem(this._focusedIndex);
+      } else {
+        this.value = this.$.input.bindValue || '';
+      }
     },
 
     /**
@@ -390,10 +390,22 @@ enable usage within an `iron-form`.
         this.$.overlay._selectItem(this.value);
       }
 
-      if (this.$.overlay._items) {
-        this._focusedIndex = this.$.overlay._items.indexOf(this.$.input.bindValue);
-      }
+      this._focusedIndex = this._indexOf(this.$.input.bindValue);
+
       this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+    },
+
+    _indexOf: function(value) {
+      if (this.$.overlay._items && value) {
+        for (var i = 0; i < this.$.overlay._items.length; i++) {
+          if (this.$.overlay._items[i].toString().toLowerCase() ===
+              this.$.input.bindValue.toString().toLowerCase()) {
+            return i;
+          }
+        }
+      }
+
+      return -1;
     },
 
     _selectedItemChanged: function(event, selectedItem) {
