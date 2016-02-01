@@ -1,0 +1,39 @@
+{
+  "name": "vaadin-upload",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "Polymer Element for uploading files",
+  "main": "vaadin-upload.html",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "Vaadin",
+    "upload",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "demo"
+  ],
+  "devDependencies": {
+    "web-component-tester": "^4.0.0",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "elements-demo-resources": "Vaadin/elements-demo-resources#master"
+  },
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.4"
+  ,}
+}
