@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>vaadin-month-calendar basic tests</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+    <link rel="import" href="../vaadin-month-calendar.html">
+  </head>
+  <body>
+    <test-fixture id="vaadin-month-calendar">
+      <template>
+        <vaadin-month-calendar></vaadin-month-calendar>
+      </template>
+    </test-fixture>
+    <test-fixture id="vaadin-month-calendar-2016">
+      <template>
+        <vaadin-month-calendar month="2016-01-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-02-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-03-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-04-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-05-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-06-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-07-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-08-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-09-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-10-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-11-01"></vaadin-month-calendar>
+        <vaadin-month-calendar month="2016-12-01"></vaadin-month-calendar>
+      </template>
+    </test-fixture>
+
+    <script>
+      function tap(element) {
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: element
+        });
+      }
+
+      describe('vaadin-month-calendar', function() {
+        var monthCalendar;
+
+        beforeEach(function(done) {
+          monthCalendar = fixture('vaadin-month-calendar');
+          monthCalendar.month = new Date(2016, 1, 1); // Feb 2016
+
+          valueChangedSpy = sinon.spy();
+          monthCalendar.addEventListener('value-changed', valueChangedSpy);
+
+          // Need to wait for the templates to be rendered.
+          Polymer.Base.async(done);
+        });
+
+        it('should render correct number of days for 2016', function(done) {
+          var year2016 = fixture('vaadin-month-calendar-2016');
+          Polymer.Base.async(function() {
+            var monthLenghts = year2016.map(function(month) {
+              return month.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+            });
+            expect(monthLenghts).to.eql([31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]);
+            done();
+          });
+        });
+
+        it('should render days in correct order by default', function() {
+          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
+            return weekday.textContent;
+          });
+          expect(weekdayTitles).to.eql(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
+        });
+
+        it('should render days in correct order by first day of week', function(done) {
+          monthCalendar._firstDayOfWeek = 1; // Start from Monday.
+
+          Polymer.Base.async(function() {
+            var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+            var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
+              return weekday.textContent;
+            });
+            expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+            done();
+          });
+        });
+
+        it('should re-render after changing the month', function(done) {
+          monthCalendar.month = new Date(2000, 0, 1); // Feb 2016 -> Jan 2000
+          Polymer.Base.async(function() {
+            var days = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+            expect(days).to.equal(31);
+            expect(monthCalendar.$.title.textContent).to.equal('January');
+            done();
+          });
+        });
+
+        it('should fire value change on tap', function() {
+          var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          for (var i = 0; i < dateElements.length; i++) {
+            if (dateElements[i].date.getDate() === 10) {
+              // Tenth of February.
+              tap(dateElements[i]);
+            }
+          }
+          expect(valueChangedSpy.callCount).to.equal(1);
+        });
+
+        it('should update value on tap', function() {
+          var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          for (var i = 0; i < dateElements.length; i++) {
+            if (dateElements[i].date.getDate() === 10) {
+              // Tenth of February.
+              tap(dateElements[i]);
+            }
+          }
+          expect(monthCalendar.value.getFullYear()).to.equal(2016);
+          expect(monthCalendar.value.getMonth()).to.equal(1);
+          expect(monthCalendar.value.getDate()).to.equal(10);
+        });
+      });
+    </script>
+
+  </body>
+</html>
