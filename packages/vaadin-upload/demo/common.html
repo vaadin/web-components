@@ -1,0 +1,28 @@
+<!-- Common imports for all examples -->
+<link rel="stylesheet" href="../../components-demo-resources/demo.css">
+<script src="../../elements-demo-resources/ga.js"></script>
+
+<!-- Common JS code for all examples -->
+<script>
+  window.xCodeExampleSourceHead =
+  '  <script src="https://cdn.vaadin.com/vaadin-components/latest/webcomponentsjs/webcomponents-lite.js"><\/script>\n' +
+  '  <link href="https://cdn.vaadin.com/vaadin-components/latest/vaadin-upload/vaadin-upload.html" rel="import">\n';
+
+  var link = document.querySelector('link[href$="common.html"]');
+  var baseCommon = link.href.replace(/common.html/, '');
+  var bowerComponents = '../../';
+  var base = baseCommon + bowerComponents;
+
+  ['polymer/polymer.html',
+    'code-example/code-example.html',
+    'table-of-contents/table-of-contents.html',
+    'vaadin-upload/upload.html'
+  ].forEach(function(path) {
+    if (!document.querySelector('link[href$="' + path + '"]')) {
+      var link = document.createElement('link');
+      link.rel = 'import';
+      link.href = base + path;
+      document.head.appendChild(link);
+    }
+  });
+</script>
