@@ -70,19 +70,20 @@
         expect(comboBox.value).to.equal('foo');
       });
 
-      it('should be reverted to the combobox value when closing', function() {
+      it('should set the combobox value when closing', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
+
         comboBox.close();
-        expect(getInputValue()).to.equal('foo');
+
+        expect(comboBox.value).to.equal('bar');
       });
 
-      it('should be reverted to the combobox value when reopening the dropdown', function() {
+      it('should be reverted to the combobox value when cancelled', function() {
         comboBox.value = 'foo';
 
         setInputValue('bar');
-        comboBox.close();
-        comboBox.open();
+        comboBox.cancel();
 
         expect(getInputValue()).to.equal('foo');
       });

@@ -256,7 +256,10 @@ enable usage within an `iron-form`.
 
     _onEnter: function(e) {
       if (this.opened) {
-        if (this._focusedIndex > -1) {
+        if (this._focusedIndex === -1) {
+          this.value = this.$.input.bindValue || '';
+          this.close();
+        } else if (this._focusedIndex > -1) {
           this.close();
           this.$.overlay._selectItem(this._focusedIndex);
         } else if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
@@ -268,7 +271,7 @@ enable usage within an `iron-form`.
     },
 
     _onEscape: function() {
-      this.close();
+      this.cancel();
     },
 
     /**
@@ -316,6 +319,14 @@ enable usage within an `iron-form`.
       this.value = '';
     },
 
+    /**
+     * Reverts back to original value.
+     */
+    cancel: function() {
+      this.$.input.bindValue = this.value;
+      this.close();
+    },
+
     _onOpened: function() {
       this.$.overlay.notifyResize();
 
@@ -324,7 +335,7 @@ enable usage within an `iron-form`.
     },
 
     _onClosed: function() {
-      this.$.input.bindValue = this.value;
+      this.value = this.$.input.bindValue;
     },
 
     /**

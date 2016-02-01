@@ -164,12 +164,13 @@
         expect(comboBox.value).to.eql('');
       });
 
-      it('should not close the overlay with enter when input has invalid value', function() {
+      it('should close the overlay with enter when input has a custom value', function() {
         getInput().bindValue = 'foobar';
+
         enter();
 
-        expect(comboBox.value).to.equal('bar');
-        expect(comboBox.opened).to.equal(true);
+        expect(comboBox.value).to.equal('foobar');
+        expect(comboBox.opened).to.equal(false);
       });
 
       it('should close the overlay with enter', function() {
