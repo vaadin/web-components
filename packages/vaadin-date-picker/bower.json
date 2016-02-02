@@ -20,7 +20,13 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "iron-dropdown": "polymerelements/iron-dropdown#~1.1.0",
+    "iron-icon": "polymerelements/iron-icon#~1.0.7",
+    "iron-icons": "polymerelements/iron-icons#~1.1.2",
+    "iron-input": "polymerelements/iron-input#~1.0.8",
     "iron-list": "polymerelements/iron-list#~1.2.0",
+    "paper-input": "polymerelements/paper-input#~1.1.5",
+    "paper-ripple": "polymerelements/paper-ripple#~1.0.5",
     "polymer": "Polymer/polymer#^1.2.0"
   },
   "devDependencies": {
