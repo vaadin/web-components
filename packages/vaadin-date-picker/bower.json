@@ -20,6 +20,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "iron-list": "polymerelements/iron-list#~1.2.0",
     "polymer": "Polymer/polymer#^1.2.0"
   },
   "devDependencies": {

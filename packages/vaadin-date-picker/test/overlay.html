@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="../vaadin-date-picker-overlay.html">
+</head>
+
+<body>
+
+  <test-fixture id="overlay">
+    <template is="dom-template">
+      <vaadin-date-picker-overlay></vaadin-date-picker-overlay>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-date-picker-overlay', function() {
+      var overlay;
+
+      beforeEach(function(done) {
+        overlay = fixture('overlay');
+        overlay.async(done, 1);
+      });
+
+      function getFirstVisibleCalendar() {
+        var rect = overlay.$.scroller.getBoundingClientRect();
+        return document.elementFromPoint(rect.left + 1, rect.top + 1);
+      }
+
+      function monthsEqual(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
+      }
+
+      it('should default to current month', function() {
+        expect(monthsEqual(getFirstVisibleCalendar().month, new Date())).to.be.true;
+      });
+
+      it('should reflect the year of currently visible month on the toolbar', function(done) {
+        overlay._scrollToDate(new Date(2000, 1, 1));
+        overlay.async(function() {
+          expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
+          done();
+        }, 100);
+      });
+
+      it('should scroll to the given date', function() {
+        var date = new Date(2000, 1, 1);
+        overlay._scrollToDate(date);
+        expect(monthsEqual(getFirstVisibleCalendar().month, date)).to.be.true;
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

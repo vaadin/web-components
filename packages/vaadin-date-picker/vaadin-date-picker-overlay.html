@@ -1,0 +1,111 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-list/iron-list.html">
+
+<dom-module id="vaadin-date-picker-overlay">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      #toolbar {
+        padding: 10px;
+      }
+
+      #scroller {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #list {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        padding-right: 40px;
+        margin-right: -40px;
+        transform: none !important;
+      }
+
+      .item {
+        height: 200px;
+      }
+    </style>
+
+    <div id="toolbar">[[_yearAfterXMonths(_originDate, _visibleMonthIndex)]]</div>
+
+    <div id="scroller">
+      <iron-list id="list" items="[[_months]]" as="monthIndex" on-scroll="_onListScroll">
+        <template>
+          <div class="item" month="[[_dateAfterXMonths(_originDate, monthIndex)]]">
+            [[_dateAfterXMonths(_originDate, monthIndex)]]
+          </div>
+        </template>
+      </iron-list>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-date-picker-overlay',
+
+      properties: {
+
+        _originDate: {
+          value: new Date()
+        },
+
+        _visibleMonthIndex: Number,
+
+        _months: Array,
+
+        // As iron-list isn't two way scrollable by default, it needs to pre-scrolled
+        // to an index in the middle beforehand. This property states the index of the
+        // 'origin' position in the array and also dictates the array size at the same
+        // time.
+        _originIndex: {
+          value: 5000
+        }
+
+      },
+
+      ready: function() {
+        this.$.scroller.scroller = this.$.scroller;
+
+        var months = [];
+        for (var i = -this._originIndex; i < this._originIndex; i++) {
+          months.push(i);
+        }
+        this._months = months;
+
+        this.async(this._scrollToDate.bind(this, this._originDate), 1);
+      },
+
+      _scrollToDate: function(date) {
+        this.$.list.scrollToIndex(this._differenceInMonths(date, this._originDate) + this._originIndex);
+      },
+
+      _onListScroll: function() {
+        this._visibleMonthIndex = this.$.list.firstVisibleIndex - this._originIndex;
+      },
+
+      _yearAfterXMonths: function(date, months) {
+        return this._dateAfterXMonths(date, months).getFullYear();
+      },
+
+      _dateAfterXMonths: function(date, months) {
+        var result = new Date(date);
+        result.setMonth(months + date.getMonth());
+        return result;
+      },
+
+      _differenceInMonths: function(date1, date2) {
+        var months = (date1.getFullYear() - date2.getFullYear()) * 12;
+        return months - date2.getMonth() + date1.getMonth();
+      }
+
+    });
+  </script>
+</dom-module>
