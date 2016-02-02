@@ -179,7 +179,18 @@
         expect(comboBox.opened).to.equal(false);
       });
 
-      it('should close the overlay with escape', function() {
+      it('should remove focus with espace', function() {
+        comboBox._focusedIndex = 0;
+
+        esc();
+
+        expect(comboBox.opened).to.equal(true);
+        expect(comboBox._focusedIndex).to.eql(-1);
+      });
+
+      it('should close the overlay with escape if there is no focus', function() {
+        comboBox._focusedIndex = -1;
+
         esc();
 
         expect(comboBox.opened).to.equal(false);

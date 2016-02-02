@@ -264,16 +264,25 @@ enable usage within an `iron-form`.
       if (this.opened) {
         if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
           this.clear();
-        } else {
-          this.close();
         }
+
+        if (this._focusedIndex > -1) {
+          this.$.overlay._selectItem(this._focusedIndex);
+        }
+
+        this.close();
+
         // Do not submit the surrounding form.
         e.preventDefault();
       }
     },
 
     _onEscape: function() {
-      this.cancel();
+      if (this._focusedIndex > -1) {
+        this._focusedIndex = -1;
+      } else {
+        this.cancel();
+      }
     },
 
     /**
@@ -337,8 +346,9 @@ enable usage within an `iron-form`.
     },
 
     _onClosed: function() {
-      if (this._focusedIndex > -1) {
+      if (this._focusedIndex > -1 && this.$.overlay._items.length === 1) {
         this.$.overlay._selectItem(this._focusedIndex);
+        this.$.input.bindValue = this.value;
       } else {
         this.value = this.$.input.bindValue || '';
       }

@@ -136,6 +136,32 @@
       expect(combobox.opened).to.eql(false);
     });
   });
+
+  describe('selecting a custom value', function() {
+    var combobox;
+    beforeEach(function() {
+      combobox = fixture('combobox');
+      combobox.items = ['foo', 'bar', 'barbar'];
+
+      combobox.open();
+    });
+
+    it('should select a value when closing when having a single exact match', function() {
+      combobox.$.input.bindValue = 'barbar';
+
+      combobox.close();
+
+      expect(combobox.value).to.eql('barbar');
+    });
+
+    it('should select a custom value when closing when having multiple matches', function() {
+      combobox.$.input.bindValue = 'BAR';
+
+      combobox.close();
+
+      expect(combobox.value).to.eql('BAR');
+    });
+  });
 </script>
 
 </body>

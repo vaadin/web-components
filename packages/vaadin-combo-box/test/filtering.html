@@ -96,6 +96,15 @@
 
         expect(getInputValue()).to.equal('foo');
       });
+
+      it('should be revert to the combobox value when selecting the same value', function() {
+        comboBox.value = 'foo';
+
+        setInputValue('FOO');
+        comboBox.close();
+
+        expect(getInputValue()).to.equal('foo');
+      });
     });
 
     describe('filtering items', function() {
