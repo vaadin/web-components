@@ -21,22 +21,56 @@ Example:
 <link rel="import" href="../polymer/polymer.html">
 
 <dom-module id="vaadin-upload">
-
   <template>
-
     <style>
     </style>
-
   </template>
-
 </dom-module>
 
 <script>
 
   Polymer({
 
-    is: 'vaadin-upload'
+    is: 'vaadin-upload',
 
+    properties: {
+      target: {
+        type: String
+      },
+      method: {
+        type: String,
+        value: 'POST'
+      }
+    },
+
+    // Override for tests
+    _createXhr: function() {
+      return new XMLHttpRequest();
+    },
+
+    _uploadFile: function(file) {
+      var xhr = file.xhr = this._createXhr();
+      console.log("Uploading file: ", file.name);
+      xhr.upload.onprogress = function(e) {
+        console.log("Progress", e);
+      }.bind(this);
+
+      var url = this.target;
+      xhr.open(this.method, url, true);
+
+      xhr.onreadystatechange = function(e) {
+        // console.log(xhr.readyState, xhr.status, xhr.responseText);
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          console.log("Uploaded file: ", file.name, xhr.responseText);
+          this.fire("file-uploaded", {xhr: xhr, file: file});
+        }
+      }.bind(this);
+
+      var formData = new FormData();
+      formData.append("file", file, file.name);
+
+      xhr.send(formData);
+    }
   });
 
 </script>

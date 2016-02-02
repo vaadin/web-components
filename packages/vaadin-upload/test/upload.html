@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-upload tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+  <vaadin-upload></vaadin-upload>
+  <test-fixture id="upload">
+    <template>
+      <vaadin-upload></vaadin-upload>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('properties', function() {
+      var upload, xhr;
+      beforeEach(function() {
+        upload = fixture('upload');
+        upload.target = "http://foo.com/bar";
+      });
+
+      describe('Uploader', function() {
+        it('should upload a file', function(done) {
+          var size = 400000;
+          var file = createFile(size, "application/unknown");
+          upload._createXhr = xhrCreator({
+            size: 400000
+          });
+          upload._uploadFile(file);
+          upload.addEventListener("file-uploaded", function(){
+            done();
+          })
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>

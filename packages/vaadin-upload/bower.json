@@ -31,7 +31,8 @@
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#^1.0.0",
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "elements-demo-resources": "Vaadin/elements-demo-resources#master"
+    "elements-demo-resources": "Vaadin/elements-demo-resources#master",
+    "mock-http-request": "philikon/MockHttpRequest#master"
   },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.4"
