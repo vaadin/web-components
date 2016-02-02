@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>vaadin-upload adding files tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="common.html">
+  <script src="common.js"></script>
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+</head>
+
+<body>
+
+  <test-fixture id="upload">
+    <template>
+      <vaadin-upload></vaadin-upload>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('adding files', function() {
+      var upload;
+
+      beforeEach(function() {
+        upload = fixture('upload');
+        chai.should();
+      });
+
+      describe('with add button', function() {
+
+        it('should open file dialog by click', function(done) {
+          // This test checks if the 'click' event is sinchronously dispatched
+          // on the hidden file input when user clicks Add Files button. The
+          // file dialog is actually not getting opened during testing.
+          //
+          // The mock Add Files button click event fired by this test is not
+          // trusted and hence it should generate a non-trusted click event on
+          // the hidden file input. For security reasons browser doesn't open
+          // file dialog when file input click is non-trusted.
+
+          var clickSpy = sinon.spy();
+          upload.$.fileInput.addEventListener('click', clickSpy);
+
+          MockInteractions.downAndUp(upload.$.addFiles, function() {
+            clickSpy.should.have.been.calledOnce;
+            done();
+          });
+        });
+
+        it('should fire `file-add` event after dialog', function() {
+          var fileAddSpy = sinon.spy();
+
+          upload.addEventListener('file-add', function(event) {
+            expect(event.detail.file).to.be.an.instanceof(Blob);
+            expect(event.detail.file.name).to.be.a('string');
+            expect(event.detail.file.name).to.be.ok;
+            expect(event.detail.file.size).to.be.a('number');
+            expect(event.detail.file.size).to.be.ok;
+            fileAddSpy();
+          });
+
+          // We can't simply assign `files` property of input[type="file"].
+          // Tweaking __proto__ to make it assignable below.
+          upload.$.fileInput.__proto__ = HTMLElement.prototype;
+          upload.$.fileInput.files = createFiles(2, 1024, 'application/x-octet-stream');
+
+          var e = document.createEvent('HTMLEvents');
+          e.initEvent('change', false, true);
+          upload.$.fileInput.dispatchEvent(e);
+
+          fileAddSpy.should.have.been.calledTwice;
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

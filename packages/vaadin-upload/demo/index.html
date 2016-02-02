@@ -16,8 +16,7 @@ This program is available under Apache License Version 2.0, available at https:/
   <title>vaadin-upload Code Examples</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="../../elements-demo-resources/demo.css">
-  <script src="../../elements-demo-resources/ga.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="common.html">
 </head>
 <body>
@@ -30,6 +29,38 @@ This program is available under Apache License Version 2.0, available at https:/
   <section>
     <h3>Overview</h3>
     <p>The <code>vaadin-upload</code> is a Polymer element for uploading multiple files to server.</p>
+  </section>
+
+  <section>
+    <h3>Basic Usage</h3>
+
+    <code-example source>
+      <vaadin-upload demo></vaadin-upload>
+    </code-example>
+  </section>
+
+  <section>
+    <h3>Events</h3>
+
+    <code-example source>
+      <vaadin-upload demo></vaadin-upload>
+      <p><strong>Added files:</strong></p>
+      <ul id="added-files"></ul>
+
+      <code demo-var="upload">
+        // code
+        var upload = upload || document.querySelector('vaadin-upload');
+
+        upload.addEventListener('file-add', function(event) {
+          var file = event.detail.file;
+
+          var li = document.createElement('li');
+          li.textContent = file.name + ': ' + file.size + ' bytes';
+          document.querySelector('#added-files').appendChild(li);
+        });
+        // end-code
+      </code>
+    </code-example>
   </section>
 
 </body>

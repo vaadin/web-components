@@ -19,11 +19,35 @@ Example:
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <dom-module id="vaadin-upload">
   <template>
     <style>
+      :host {
+        @apply(--layout-vertical);
+      }
+
+      #buttons {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+
+        margin: 8px 0 0;
+      }
+
+      paper-button {
+        background-color: var(--default-primary-color, #03A9F4);
+        color: #fff;
+      }
     </style>
+
+    <div id="buttons">
+      <paper-button id="addFiles" raised on-tap="_onAddFilesClick">Add File(s)</paper-button>
+    </div>
+
+    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden multiple>
+
   </template>
 </dom-module>
 
@@ -42,6 +66,12 @@ Example:
         value: 'POST'
       }
     },
+
+    /**
+     * Fired when a file is added for uploading.
+     *
+     * @event file-add
+     */
 
     // Override for tests
     _createXhr: function() {
@@ -70,6 +100,27 @@ Example:
       formData.append("file", file, file.name);
 
       xhr.send(formData);
+    },
+
+    /**
+     * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
+     *
+     * @param {File} file File being added
+     */
+    _addFile: function(file) {
+      this.fire('file-add', {file: file});
+    },
+
+    _onAddFilesClick: function(event) {
+      if (document.createEvent) {
+        var event = document.createEvent("MouseEvents");
+        event.initEvent("click", true, false);
+        this.$.fileInput.dispatchEvent(event);
+      }
+    },
+
+    _onFileInputChange: function(event) {
+      Array.prototype.forEach.call(event.target.files, this._addFile.bind(this));
     }
   });
 

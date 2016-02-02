@@ -35,6 +35,7 @@
     "mock-http-request": "philikon/MockHttpRequest#master"
   },
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.4"
+    "polymer": "Polymer/polymer#^1.2.4",
+    "paper-button": "PolymerElements/paper-button#^1.0.0"
   }
 }

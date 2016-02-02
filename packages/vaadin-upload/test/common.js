@@ -44,7 +44,7 @@ function createFiles(arraySize, fileSize, contentType) {
   for (var i = 0; i < arraySize; i++) {
     files.push(createFile(fileSize, contentType));
   }
-  return file;
+  return files;
 }
 
 /**
