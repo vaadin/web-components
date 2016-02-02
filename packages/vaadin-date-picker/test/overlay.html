@@ -13,7 +13,7 @@
 <body>
 
   <test-fixture id="overlay">
-    <template is="dom-template">
+    <template>
       <vaadin-date-picker-overlay></vaadin-date-picker-overlay>
     </template>
   </test-fixture>
@@ -24,12 +24,22 @@
 
       beforeEach(function(done) {
         overlay = fixture('overlay');
-        overlay.async(done, 1);
+        waitUntilScrolledTo(new Date(), done);
       });
 
+      function waitUntilScrolledTo(date, callback) {
+        var monthIndex = overlay._differenceInMonths(date, new Date());
+        if (overlay._visibleMonthIndex === monthIndex) {
+          callback();
+        } else {
+          setTimeout(waitUntilScrolledTo, 10, date, callback);
+        }
+      }
+
       function getFirstVisibleCalendar() {
-        var rect = overlay.$.scroller.getBoundingClientRect();
-        return document.elementFromPoint(rect.left + 1, rect.top + 1);
+        return overlay.$.list._getModelFromItem(overlay._visibleMonthIndex)._children.filter(function(i) {
+          return i.nodeType === 1;
+        })[0];
       }
 
       function monthsEqual(date1, date2) {
@@ -41,17 +51,21 @@
       });
 
       it('should reflect the year of currently visible month on the toolbar', function(done) {
-        overlay._scrollToDate(new Date(2000, 1, 1));
-        overlay.async(function() {
-          expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
-          done();
-        }, 100);
-      });
-
-      it('should scroll to the given date', function() {
         var date = new Date(2000, 1, 1);
         overlay._scrollToDate(date);
-        expect(monthsEqual(getFirstVisibleCalendar().month, date)).to.be.true;
+        waitUntilScrolledTo(date, function() {
+          expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
+          done();
+        });
+      });
+
+      it('should scroll to the given date', function(done) {
+        var date = new Date(2000, 1, 1);
+        overlay._scrollToDate(date);
+        waitUntilScrolledTo(date, function() {
+          expect(monthsEqual(getFirstVisibleCalendar().month, date)).to.be.true;
+          done();
+        });
       });
 
     });
