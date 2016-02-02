@@ -27,6 +27,12 @@
   "devDependencies": {
     "bower": "latest",
     "chalk": "^1.1.1",
-    "web-component-tester": "^4.1.0"
+    "web-component-tester": "^4.1.0",
+    "gulp": "latest",
+    "yargs": "^3.27.0",
+    "gulp-html-extract": "^0.0.3",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.8.0"
   }
 }
