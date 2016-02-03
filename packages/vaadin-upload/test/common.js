@@ -61,6 +61,7 @@ function createFiles(arraySize, fileSize, contentType) {
  *     serverValidation: a function run once the file has been sent.
  */
  var xhrCreator = function(c) {
+   c = c || {};
    cfg = {
      size: c.size || 100,
      connectTime: c.connectTime || 10,
@@ -82,7 +83,7 @@ function createFiles(arraySize, fileSize, contentType) {
          if (error != null) {
            xhr.setResponseHeader("Content-Type", cfg.serverType);
            xhr.receive(500, {error: error});
-         } else {
+         } else if (xhr.readyState < 4) {
            xhr.setResponseHeader("Content-Type", cfg.serverType);
            xhr.receive(200, cfg.serverMessage);
          }
