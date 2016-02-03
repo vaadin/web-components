@@ -227,6 +227,7 @@
         arrowDown();
 
         expect(getInput().selectionStart).to.eql(0);
+        expect(getInput().selectionEnd).to.eql(3);
       });
 
       it('should prefill the input field when navigating up', function() {
@@ -247,6 +248,7 @@
         arrowUp();
 
         expect(getInput().selectionStart).to.eql(0);
+        expect(getInput().selectionEnd).to.eql(3);
       });
 
       it('should revert back to filter with espace', function() {
@@ -284,6 +286,7 @@
           enter();
 
           expect(getInput().selectionStart).to.eql(3);
+          expect(getInput().selectionEnd).to.eql(3);
         });
       }
     });

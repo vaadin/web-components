@@ -148,18 +148,20 @@
 
     it('should select a value when closing when having a single exact match', function() {
       combobox.$.input.bindValue = 'barbar';
+      combobox.$.input.fire('input');
 
       combobox.close();
 
       expect(combobox.value).to.eql('barbar');
     });
 
-    it('should select a custom value when closing when having multiple matches', function() {
+    it('should select a value when closing when having multiple matches', function() {
       combobox.$.input.bindValue = 'BAR';
+      combobox.$.input.fire('input');
 
       combobox.close();
 
-      expect(combobox.value).to.eql('BAR');
+      expect(combobox.value).to.eql('bar');
     });
   });
 </script>
