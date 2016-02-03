@@ -27,6 +27,17 @@ Example:
     <style>
       :host {
         @apply(--layout-vertical);
+        display: block;
+        border: 1px dashed;
+        border-color: var(--divider-color,  #666);
+        border-radius: 2px;
+        padding: 16px;
+        text-align: center;
+      }
+
+      :host[dragover] {
+        border-color: var(--primary-color, #03A9F4);
+        opacity: 0.7;
       }
 
       #buttons {
@@ -41,7 +52,9 @@ Example:
         color: #fff;
       }
     </style>
-
+    <div id="dropLabel">
+      <content>Drop files here ...</content>
+    </div>
     <div id="buttons">
       <paper-button id="addFiles" raised on-tap="_onAddFilesClick">Add File(s)</paper-button>
     </div>
@@ -84,7 +97,38 @@ Example:
       timeout: {
         type: Number,
         value: 0
+      },
+      /**
+       * It's true when the user overs the component with a set of files
+       * and becomes false when he drops the files or leave the component.
+       */
+      dragover: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
+    },
+
+    listeners: {
+      dragover: '_onDragover',
+      dragleave: '_onDragleave',
+      drop: '_onDrop'
+    },
+
+    _onDragover: function(event) {
+      event.preventDefault();
+      this.dragover = true;
+    },
+
+    _onDragleave: function(event) {
+      event.preventDefault();
+      this.dragover = false;
+    },
+
+    _onDrop: function(event) {
+      event.preventDefault();
+      this.dragover = false;
+      Array.prototype.forEach.call(event.dataTransfer.files, this._addFile.bind(this));
     },
 
     // Override for tests

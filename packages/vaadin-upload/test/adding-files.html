@@ -77,6 +77,40 @@
 
       });
 
+      describe('Dropping file', function() {
+        // Using dispatchEvent instead of fire in this cases because
+        // we have to pass the info in the dataTransfer property
+        function createDndEvent(type) {
+          var e = new Event(type);
+          e.dataTransfer = {files: createFiles(2, 512, 'application/x-bin')};
+          return e;
+        }
+
+        it('should set dragover property when overing', function() {
+          expect(upload.dragover).not.to.be.ok;
+          upload.dispatchEvent(createDndEvent('dragover'));
+          expect(upload.dragover).to.be.ok;
+        });
+
+        it('should remove dragover property when leaving', function() {
+          upload.dispatchEvent(createDndEvent('dragover'));
+          expect(upload.dragover).to.be.ok;
+          upload.dispatchEvent(createDndEvent('dragleave'));
+          expect(upload.dragover).not.to.be.ok;
+        });
+
+        it('should fire `file-add` event when dropping files', function() {
+          var fileAddSpy = sinon.spy();
+          upload.addEventListener('file-add', fileAddSpy);
+
+          var dropEvent = createDndEvent('drop');
+          upload.dispatchEvent(dropEvent);
+
+          fileAddSpy.should.have.been.calledTwice;
+        });
+
+      });
+
     });
   </script>
 
