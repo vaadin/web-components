@@ -100,7 +100,7 @@ Example:
           this.headers = undefined;
         }
       }
-      for (key in this.headers) {
+      for (var key in this.headers) {
         xhr.setRequestHeader(key, this.headers[key]);
       }
       if (this.timeout) {
@@ -119,27 +119,29 @@ Example:
 
         last = new Date().getTime();
         var ellapsed = (last - ini) / 1000;
-        var done = e.loaded, total = e.total, progress = ~~(done/total*100);
+        var done = e.loaded, total = e.total, progress = ~~(done / total * 100);
 
         file.loaded = done;
         file.progress = progress;
-        file.status = file.totalStr + " (" + file.progress + "%)" ;
+        file.status = file.totalStr + ' (' + file.progress + '%)' ;
         file.indeterminate = done <= 0 || done >= total, true;
 
         if (progress < 100) {
           file.remaining = 1 + ~~(ellapsed * (100 / progress - 1));
           file.speed = ~~(total / ellapsed / 1024);
-          file.totalStr = total > (1024*1024) ? ((~~(total/1024/1024*10)/10) + " MB") : (~~(total/1024) + " KB");
-          file.doneStr = done > (1024*1024) ? ((~~(done/1024/1024*10)/10) + " MB") : (~~(done/1024) + " KB");
-          file.status += " about " + file.remaining + " seconds remaining.";
+          file.totalStr = total > (1024 * 1024) ?
+            ((~~(total / 1024 / 1024 * 10) / 10) + ' MB') : (~~(total / 1024) + ' KB');
+          file.doneStr = done > (1024 * 1024) ?
+            ((~~(done / 1024 / 1024 * 10) / 10) + ' MB') : (~~(done / 1024) + ' KB');
+          file.status += ' about ' + file.remaining + ' seconds remaining.';
         } else {
-          file.status = "Processing file ...";
+          file.status = 'Processing file ...';
           file.uploading = false;
         }
-        this.fire("upload-progress", {file: file, xhr: xhr});
+        this.fire('upload-progress', {file: file, xhr: xhr});
 
         stalledId = setTimeout(function() {
-          file.status = "Stalled.";
+          file.status = 'Stalled.';
         }.bind(this), 2000);
 
       }.bind(this);
@@ -155,10 +157,10 @@ Example:
           }
           // Custom listener can modify the default behavior either
           // preventing default, changing the xhr, or setting the file error
-          var e = this.fire('upload-response', {file: file, xhr: xhr});
-          if (e.defaultPrevented) {
+          var evt = this.fire('upload-response', {file: file, xhr: xhr});
+          if (evt.defaultPrevented) {
             file.error = file.error || 'Unknown Error';
-          } else if (xhr.status == 0) {
+          } else if (xhr.status === 0) {
             file.error = 'Server Unavailable';
           } else if (xhr.status > 500) {
             file.error = 'Unexpected Server Error';
@@ -167,22 +169,22 @@ Example:
           }
 
           file.complete = !file.error;
-          this.fire("upload-" + (file.error ? "error" : "success"), {file: file, xhr: xhr});
+          this.fire('upload-' + (file.error ? 'error' : 'success'), {file: file, xhr: xhr});
         }
       }.bind(this);
 
-      file.status = "Connecting ...";
+      file.status = 'Connecting ...';
       file.indeterminate = true;
       file.abort = undefined;
       file.uploading = true;
       this.fire('upload-start', {file: file, xhr: xhr});
 
       var formData = new FormData();
-      formData.append("file", file, file.name);
+      formData.append('file', file, file.name);
 
-      var url = this.target.replace("<name>", file.name);
+      var url = this.target.replace('<name>', file.name);
       xhr.open(this.method, url, true);
-      this._configureXhr(xhr)
+      this._configureXhr(xhr);
       // Custom listener could modify the xhr just before sending it
       var e = this.fire('upload-request', {file: file, xhr: xhr});
       xhr.send(formData);

@@ -11,7 +11,6 @@
 </head>
 
 <body>
-  <vaadin-upload></vaadin-upload>
   <test-fixture id="upload">
     <template>
       <vaadin-upload></vaadin-upload>
@@ -23,28 +22,28 @@
       var upload, file, headers;
       beforeEach(function() {
         upload = fixture('upload');
-        upload.target = "http://foo.com/bar";
-        file = createFile(100000, "application/unknown");
+        upload.target = 'http://foo.com/bar';
+        file = createFile(100000, 'application/unknown');
       });
 
       describe('File upload', function() {
         beforeEach(function() {
-          upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50})
+          upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
         });
 
         it('should fire the upload-start event', function(done) {
-          upload.addEventListener("upload-start", function(e) {
+          upload.addEventListener('upload-start', function(e) {
             expect(e.detail.xhr).to.be.ok;
             expect(e.detail.file).to.be.ok;
             expect(e.detail.file.uploading).to.be.ok;
             done();
-          })
+          });
           upload._uploadFile(file);
         });
 
         it('should fire the upload-progress event multiple times', function(done) {
           var count = 0;
-          upload.addEventListener("upload-progress", function(e) {
+          upload.addEventListener('upload-progress', function(e) {
             var f = e.detail.file;
             expect(e.detail.xhr).to.be.ok;
             expect(f.totalStr).to.be.equal('97 KB');
@@ -75,51 +74,51 @@
                 expect(f.uploading).not.to.be.ok;
                 done();
             }
-          })
+          });
           upload._uploadFile(file);
         });
 
         it('should fire the upload-success', function(done) {
-          upload.addEventListener("upload-success", function(e) {
+          upload.addEventListener('upload-success', function(e) {
             expect(e.detail.xhr).to.be.ok;
             expect(e.detail.file).to.be.ok;
             expect(e.detail.file.uploading).not.to.be.ok;
-            expect(e.detail.xhr.status).to.be.equal(200)
+            expect(e.detail.xhr.status).to.be.equal(200);
             done();
-          })
+          });
           upload._uploadFile(file);
         });
 
         it('should fire the upload-error event on connection error', function(done) {
           // Simulate a server error when progress is 50%
-          upload.addEventListener("upload-progress", function(e) {
+          upload.addEventListener('upload-progress', function(e) {
             if (e.detail.file.progress == 50) {
               e.detail.xhr.err();
             }
           });
 
-          upload.addEventListener("upload-error", function(e) {
+          upload.addEventListener('upload-error', function(e) {
             expect(e.detail.file.uploading).not.to.be.ok;
-            expect(e.detail.file.error).to.be.equal('Server Unavailable')
-            expect(e.detail.xhr.status).not.to.be.equal(200)
+            expect(e.detail.file.error).to.be.equal('Server Unavailable');
+            expect(e.detail.xhr.status).not.to.be.equal(200);
             done();
-          })
+          });
           upload._uploadFile(file);
         });
 
         it('should fail if a `upload-response` listener sets an error', function(done) {
-          var error = "Custom Error";
-          upload.addEventListener("upload-response", function(e) {
+          var error = 'Custom Error';
+          upload.addEventListener('upload-response', function(e) {
             e.preventDefault();
             e.detail.file.error = error;
-          })
+          });
 
-          upload.addEventListener("upload-error", function(e) {
+          upload.addEventListener('upload-error', function(e) {
             expect(e.detail.file.uploading).not.to.be.ok;
-            expect(e.detail.file.error).to.be.equal(error)
-            expect(e.detail.xhr.status).to.be.equal(200)
+            expect(e.detail.file.error).to.be.equal(error);
+            expect(e.detail.xhr.status).to.be.equal(200);
             done();
-          })
+          });
           upload._uploadFile(file);
         });
       });
@@ -136,17 +135,16 @@
         });
 
         it('should be indeterminate when connecting', function(done) {
-          var f = file;
-          Polymer.Base.async(function(){
-            expect(f.indeterminate).to.be.ok;
-            expect(f.status).to.be.equal('Connecting ...');
+          Polymer.Base.async(function() {
+            expect(file.indeterminate).to.be.ok;
+            expect(file.status).to.be.equal('Connecting ...');
             done();
           }, 200);
           upload._uploadFile(file);
         });
 
         it('should not be indeterminate when progressing', function(done) {
-          upload.addEventListener("upload-progress", function(e) {
+          upload.addEventListener('upload-progress', function(e) {
             if (file.progress > 0) {
               expect(e.detail.file.indeterminate).not.to.be.ok;
               expect(e.detail.file.status).to.contain('seconds remaining');
@@ -157,15 +155,13 @@
         });
 
         it('should be indeterminate when server is processing the file', function(done) {
-          var f = file;
-          Polymer.Base.async(function(){
-            expect(f.indeterminate).to.be.ok;
-            expect(f.status).to.be.equal('Processing file ...');
+          Polymer.Base.async(function() {
+            expect(file.indeterminate).to.be.ok;
+            expect(file.status).to.be.equal('Processing file ...');
             done();
           }, 800);
           upload._uploadFile(file);
         });
-
       });
 
       describe('Upload status', function() {
@@ -178,16 +174,13 @@
         });
 
         it('should be stalled when progress is not updated for more than 2 sec.', function(done) {
-          var f = file;
-          Polymer.Base.async(function(){
-            expect(f.status).to.be.equal('Stalled.');
+          Polymer.Base.async(function() {
+            expect(file.status).to.be.equal('Stalled.');
             done();
           }, 2200);
           upload._uploadFile(file);
         });
-
       });
-
     });
   </script>
 

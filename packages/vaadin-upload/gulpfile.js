@@ -120,8 +120,8 @@ gulp.task('test', function(done) {
   args.dom = 'shadow';
   test({
       plugins: {
-        "local": {
-          "browsers": ["chrome"]
+        local: {
+          browsers: ['chrome']
         }
       }
     }, done);
