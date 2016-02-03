@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-month-calendar.html">
 
 <dom-module id="vaadin-date-picker-overlay">
@@ -9,10 +10,17 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        background: #fff;
+
+        font: inherit;
+        @apply(--paper-font-common-base);
+        @apply(--shadow-elevation-2dp);
       }
 
       #toolbar {
-        padding: 10px;
+        padding: 1em;
+        background: #eee;
+        @apply(--shadow-elevation-2dp);
       }
 
       #scroller {
@@ -31,7 +39,7 @@
       }
 
       vaadin-month-calendar {
-        height: 200px;
+        height: 16em;
       }
     </style>
 

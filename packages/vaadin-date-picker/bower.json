@@ -26,7 +26,8 @@
     "iron-input": "polymerelements/iron-input#~1.0.8",
     "iron-list": "polymerelements/iron-list#~1.2.0",
     "paper-input": "polymerelements/paper-input#~1.1.5",
-    "polymer": "Polymer/polymer#^1.2.0"
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-styles": "polymerelements/paper-styles#^1.1.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.1.0",

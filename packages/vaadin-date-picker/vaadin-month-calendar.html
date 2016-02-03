@@ -9,31 +9,65 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+
+        font: inherit;
+        @apply(--paper-font-common-base);
       }
+
       #title {
+        font-size: 120%;
         text-align: center;
+        padding: 0.4em 0;
       }
+
       #monthGrid {
         display: flex;
         flex-wrap: wrap;
       }
+
       #monthGrid div {
         text-align: center;
         width: 14.285714286%;
         box-sizing: border-box;
         cursor: pointer;
+        padding: 0.4em 0;
       }
+
       #monthGrid div.weekday {
         text-transform: uppercase;
-        font-size: 80%;
+        font-size: 70%;
         color: #999;
         cursor: default;
       }
+
       #monthGrid div[today] {
-        border: 1px solid red;
+        position: relative;
       }
+
+      #monthGrid div[today]:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border: 2px solid #03a9f4;
+        border-radius: 50%;
+        box-sizing: border-box;
+        width: 1.6em;
+        height: 1.6em;
+        margin-left: -0.8em;
+        margin-top: -0.8em;
+      }
+
+      #monthGrid div[today][selected]:before{
+        border-color: #fff;
+      }
+
       #monthGrid div[selected] {
-        color: red;
+        color: #fff;
+        background: #03a9f4;
+        box-sizing: border-box;
+        border-radius: 2px;
       }
     </style>
 
