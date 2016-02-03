@@ -40,7 +40,7 @@
     <div id="scroller">
       <iron-list id="list" items="[[_months]]" as="monthIndex" on-scroll="_onListScroll">
         <template>
-          <vaadin-month-calendar month="[[_dateAfterXMonths(_originDate, monthIndex)]]" value={{value}}></vaadin-month-calendar>
+          <vaadin-month-calendar month="[[_dateAfterXMonths(_originDate, monthIndex)]]" selected-date={{selectedDate}}></vaadin-month-calendar>
         </template>
       </iron-list>
     </div>
@@ -55,10 +55,10 @@
         /**
          * The value for this element.
          */
-        value: {
+        selectedDate: {
           type: Date,
           notify: true,
-          observer: '_valueChanged'
+          observer: '_selectedDateChanged'
         },
 
         _originDate: {
@@ -91,9 +91,9 @@
         this.async(this._scrollToDate.bind(this, this._originDate), 1);
       },
 
-      _valueChanged: function(value) {
-        if (value) {
-          this._scrollToDate(value);
+      _selectedDateChanged: function(selectedDate) {
+        if (selectedDate) {
+          this._scrollToDate(selectedDate);
         }
       },
 

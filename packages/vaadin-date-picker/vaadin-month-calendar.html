@@ -43,7 +43,7 @@
         <div class="weekday">[[item]]</div>
       </template>
       <template is="dom-repeat" items="[[_getDays(month, _firstDayOfWeek)]]">
-        <div today$="[[_isToday(item)]]" selected$="[[_isSelected(item, value)]]" date="[[item]]">[[_getDate(item)]]</div>
+        <div today$="[[_isToday(item)]]" selected$="[[_isSelected(item, selectedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
       </template>
     </div>
   </template>
@@ -65,7 +65,7 @@
         /**
          * A `Date` object for the currently selected date.
          */
-        value: {
+        selectedDate: {
           type: Date,
           notify: true
         },
@@ -113,8 +113,8 @@
         return date.getMonth() === this.month.getMonth() ? date.getDate() : '';
       },
 
-      _isSelected: function(date, value) {
-        return this._dateEquals(value, date);
+      _isSelected: function(date, selectedDate) {
+        return this._dateEquals(selectedDate, date);
       },
 
       _isToday: function(date) {
@@ -143,7 +143,7 @@
 
       _handleTap: function(e) {
         if (e.target.date) {
-          this.value = e.target.date;
+          this.selectedDate = e.target.date;
         }
       }
 

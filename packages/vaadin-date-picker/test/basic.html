@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="../vaadin-date-picker.html">
+</head>
+
+<body>
+
+  <test-fixture id="datepicker">
+    <template>
+      <vaadin-date-picker></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Basic features', function() {
+      var datepicker;
+
+      function waitUntilOpen(callback, closed) {
+        if (datepicker.$.overlay.clientHeight > 0 !== closed) {
+          callback();
+        } else {
+          setTimeout(waitUntilOpen, 10, callback, closed);
+        }
+      }
+
+      function tap(element) {
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: element
+        });
+      }
+
+      beforeEach(function() {
+        datepicker = fixture('datepicker');
+      });
+
+      it('should have default value', function() {
+        expect(datepicker.value).to.equal('');
+      });
+
+      it('should notify value change', function() {
+        var spy = sinon.spy();
+        datepicker.addEventListener('value-changed', spy);
+        datepicker.value = new Date(2000, 1, 1);
+        expect(spy.callCount).to.equal(1);
+      });
+
+      it('should open on tap', function(done) {
+        expect(datepicker.$.overlay.clientHeight).to.equal(0);
+        tap(datepicker.$.input);
+        waitUntilOpen(done);
+      });
+
+      it('should close on value change', function(done) {
+        tap(datepicker.$.input);
+        waitUntilOpen(function() {
+          datepicker.value = new Date(2000, 1, 1);
+          waitUntilOpen(done, true);
+        });
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

@@ -48,7 +48,7 @@
           monthCalendar.month = new Date(2016, 1, 1); // Feb 2016
 
           valueChangedSpy = sinon.spy();
-          monthCalendar.addEventListener('value-changed', valueChangedSpy);
+          monthCalendar.addEventListener('selected-date-changed', valueChangedSpy);
 
           // Need to wait for the templates to be rendered.
           Polymer.Base.async(done);
@@ -115,9 +115,9 @@
               tap(dateElements[i]);
             }
           }
-          expect(monthCalendar.value.getFullYear()).to.equal(2016);
-          expect(monthCalendar.value.getMonth()).to.equal(1);
-          expect(monthCalendar.value.getDate()).to.equal(10);
+          expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
+          expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
+          expect(monthCalendar.selectedDate.getDate()).to.equal(10);
         });
       });
     </script>
