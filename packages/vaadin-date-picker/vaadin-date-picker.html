@@ -18,7 +18,7 @@
       }
     </style>
 
-    <paper-input-container opened$="[[opened]]">
+    <paper-input-container>
       <label id="label" on-tap="_open">[[label]]</label>
       <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[value]]" type="text" on-tap="_open">
     </paper-input-container>
@@ -42,6 +42,13 @@
           notify: true,
           value: '',
           observer: '_valueChanged'
+        },
+
+        /**
+         * The label for this element.
+         */
+        label: {
+          type: String
         }
       },
 

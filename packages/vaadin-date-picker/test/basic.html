@@ -66,6 +66,15 @@
         });
       });
 
+      it('should not have label defined by default', function() {
+        expect(datepicker.label).to.be.undefined;
+      });
+
+      it('label should be bound to label element', function() {
+        datepicker.label = 'This is LABEL';
+        expect(datepicker.$.label.innerHTML).to.eql('This is LABEL');
+      });
+
     });
   </script>
 

@@ -40,7 +40,7 @@
     <div id="scroller">
       <iron-list id="list" items="[[_months]]" as="monthIndex" on-scroll="_onListScroll">
         <template>
-          <vaadin-month-calendar month="[[_dateAfterXMonths(_originDate, monthIndex)]]" selected-date={{selectedDate}}></vaadin-month-calendar>
+          <vaadin-month-calendar month="[[_dateAfterXMonths(_originDate, monthIndex)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
         </template>
       </iron-list>
     </div>
