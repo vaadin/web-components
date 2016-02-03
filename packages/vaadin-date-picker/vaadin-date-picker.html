@@ -23,7 +23,7 @@
       <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[value]]" type="text" on-tap="_open">
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" vertical-offset="54">
+    <iron-dropdown id="dropdown" vertical-offset="54" allow-outside-scroll>
       <vaadin-date-picker-overlay selected-date="{{value}}" class="dropdown-content" id="overlay"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
