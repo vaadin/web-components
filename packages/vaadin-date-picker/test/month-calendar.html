@@ -15,22 +15,6 @@
         <vaadin-month-calendar></vaadin-month-calendar>
       </template>
     </test-fixture>
-    <test-fixture id="vaadin-month-calendar-2016">
-      <template>
-        <vaadin-month-calendar month="2016-01-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-02-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-03-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-04-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-05-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-06-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-07-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-08-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-09-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-10-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-11-01"></vaadin-month-calendar>
-        <vaadin-month-calendar month="2016-12-01"></vaadin-month-calendar>
-      </template>
-    </test-fixture>
 
     <script>
       function tap(element) {
@@ -54,16 +38,24 @@
           Polymer.Base.async(done);
         });
 
-        it('should render correct number of days for 2016', function(done) {
-          var year2016 = fixture('vaadin-month-calendar-2016');
-          Polymer.Base.async(function() {
-            var monthLenghts = year2016.map(function(month) {
-              return month.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+        // A helper for creating async test functions for 2016 month rendering.
+        function createMonthTest(monthNumber) {
+          var expectedDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+          return function(done) {
+            monthCalendar.month = new Date(2016, monthNumber, 1);
+            Polymer.Base.async(function() {
+              var numberOfDays = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+              expect(numberOfDays).to.equal(expectedDays[monthNumber]);
+              done();
             });
-            expect(monthLenghts).to.eql([31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]);
-            done();
-          });
-        });
+          };
+        }
+
+        // Create 12 tests for each month of 2016.
+        for (var i = 0; i < 12; i++) {
+          it('should render correct number of days for 2016/' + (i + 1), createMonthTest(i));
+        }
 
         it('should render days in correct order by default', function() {
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
