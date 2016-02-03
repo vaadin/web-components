@@ -34,6 +34,7 @@
 
     function setInputValue(value) {
       getInput().bindValue = value;
+      getInput().fire('input');
     }
 
     function getInputValue(value) {
@@ -91,7 +92,7 @@
       it('should be reverted to the combobox value when cancelled', function() {
         comboBox.value = 'foo';
 
-        setInputValue('bar');
+        setInputValue('b');
         comboBox.cancel();
 
         expect(getInputValue()).to.equal('foo');
@@ -120,21 +121,12 @@
         expect(getFilteredItems()).to.be.empty;
       });
 
-      it('should be reset after reopening the dropdown', function() {
+      it('should be reset after closing the dropdown', function() {
         setInputValue('foo');
 
         comboBox.close();
-        comboBox.open();
 
-        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
-      });
-
-      it('should filter integers', function() {
-        comboBox.items = [0, 1, 2, 3];
-
-        setInputValue(1);
-
-        expect(getFilteredItems()).to.eql([1]);
+        expect(comboBox._filter).to.be.empty;
       });
 
       it('should filter boolean', function() {

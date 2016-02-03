@@ -117,7 +117,7 @@ enable usage within an `iron-form`.
           name$="[[name]]"
           type="text"
           required$="[[required]]"
-          on-bind-value-changed="_inputValueChanged"
+          on-input="_inputValueChanged"
           on-blur="_onBlur"
           on-tap="open"
           key-event-target>
@@ -190,8 +190,15 @@ enable usage within an `iron-form`.
       _focusedIndex: {
         type: Number,
         value: -1
+      },
+
+      _filter: {
+        type: String,
+        value: ''
       }
     },
+
+    observers: ['_filterChanged(_filter)'],
 
     listeners: {
       'vaadin-dropdown-opened': '_onOpened',
@@ -243,6 +250,10 @@ enable usage within an `iron-form`.
     _onArrowDown: function() {
       if (this.opened) {
         this._focusedIndex = Math.min(this.$.overlay._items.length - 1, this._focusedIndex + 1);
+        if (this._focusedIndex > -1) {
+          this.$.input.bindValue = this.$.overlay._items[this._focusedIndex];
+          this._setSelectionRange();
+        }
       } else {
         this.open();
       }
@@ -255,6 +266,11 @@ enable usage within an `iron-form`.
         } else {
           this._focusedIndex = this.$.overlay._items.length - 1;
         }
+
+        if (this._focusedIndex > -1) {
+          this.$.input.bindValue = this.$.overlay._items[this._focusedIndex];
+          this._setSelectionRange();
+        }
       } else {
         this.open();
       }
@@ -262,14 +278,6 @@ enable usage within an `iron-form`.
 
     _onEnter: function(e) {
       if (this.opened) {
-        if (this.$.input.bindValue === undefined || this.$.input.bindValue === '') {
-          this.clear();
-        }
-
-        if (this._focusedIndex > -1) {
-          this.$.overlay._selectItem(this._focusedIndex);
-        }
-
         this.close();
 
         // Do not submit the surrounding form.
@@ -278,10 +286,13 @@ enable usage within an `iron-form`.
     },
 
     _onEscape: function() {
-      if (this._focusedIndex > -1) {
-        this._focusedIndex = -1;
-      } else {
-        this.cancel();
+      if (this.opened) {
+        if (this._focusedIndex > -1) {
+          this._focusedIndex = -1;
+          this._revertInputValue();
+        } else {
+          this.cancel();
+        }
       }
     },
 
@@ -341,17 +352,22 @@ enable usage within an `iron-form`.
     _onOpened: function() {
       this.$.overlay.notifyResize();
 
-      this._setItems(this.items);
-      this.$.overlay._scrollIntoView(this._focusedIndex);
+      this.async(function() {
+        this.$.overlay._scrollIntoView(this._focusedIndex);
+      });
     },
 
     _onClosed: function() {
-      if (this._focusedIndex > -1 && this.$.overlay._items.length === 1) {
+      if (this._focusedIndex > -1) {
         this.$.overlay._selectItem(this._focusedIndex);
         this.$.input.bindValue = this.value;
       } else {
-        this.value = this.$.input.bindValue || '';
+        this.value = this.$.input.bindValue;
       }
+
+      this._clearSelectionRange();
+
+      this._filter = '';
     },
 
     /**
@@ -366,16 +382,44 @@ enable usage within an `iron-form`.
      *  Filtering and items handling
      */
 
-    _inputValueChanged: function(event) {
-      if (!this.opened && this._isFiltering(event)) {
+    _inputValueChanged: function(e) {
+      this._filter = this.$.input.bindValue;
+      this._focusedIndex = this._indexOf(this.$.input.bindValue);
+
+      if (!this.opened) {
         this.open();
-      }
-      if (this.opened && this.items) {
-        this._setItems(this._filter(this.items, this.$.input.bindValue));
       }
     },
 
-    _filter: function(arr, filter) {
+    _revertInputValue: function() {
+      if (this._filter !== '') {
+        this.$.input.bindValue = this._filter;
+      } else {
+        this.$.input.bindValue = this.value;
+      }
+
+      this._clearSelectionRange();
+    },
+
+    _setSelectionRange: function() {
+      this.$.input.setSelectionRange(0, this.$.input.bindValue.length);
+    },
+
+    _clearSelectionRange: function() {
+      // in touch devices, iOS especially, setting selection range focuses the input.
+      // however, selection range seems to be cleared natively on blur, so there's no need to clear manually.
+      if (!this.$.overlay.touchDevice) {
+        this.$.input.setSelectionRange(this.$.input.bindValue.length, this.$.input.bindValue.length);
+      }
+    },
+
+    _filterChanged: function(filter) {
+      if (this.items) {
+        this._setItems(this._filterItems(this.items, filter));
+      }
+    },
+
+    _filterItems: function(arr, filter) {
       return arr.filter(function(item) {
         filter = filter || '';
 
@@ -385,22 +429,14 @@ enable usage within an `iron-form`.
       }.bind(this));
     },
 
-    _isFiltering: function(event) {
-      var filterOrValueIsSet = event.detail.value || this.value !== '';
-      var filterIsNotValue = this.$.input.bindValue !== this.value;
-
-      return filterOrValueIsSet && filterIsNotValue;
-    },
-
     _setItems: function(items) {
       this.unlisten(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
       this.$.overlay._items = items;
 
       if (this.$.overlay._items && this.$.overlay._items.indexOf(this.value) > -1) {
         this.$.overlay._selectItem(this.value);
+        this._focusedIndex = this._indexOf(this.value);
       }
-
-      this._focusedIndex = this._indexOf(this.$.input.bindValue);
 
       this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
     },
@@ -430,6 +466,12 @@ enable usage within an `iron-form`.
       if (value === undefined || value === null) {
         this.value = '';
       }
+
+      if (this.$.overlay._items && this.$.overlay._items.indexOf(value) > -1) {
+        this.$.overlay._selectItem(value);
+      }
+
+      this._focusedIndex = this._indexOf(value);
 
       this.close();
     },
