@@ -23,7 +23,7 @@
       <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[value]]" type="text" on-tap="_open">
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" vertical-offset="54" allow-outside-scroll>
+    <iron-dropdown id="dropdown" allow-outside-scroll>
       <vaadin-date-picker-overlay selected-date="{{value}}" class="dropdown-content" id="overlay"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -47,12 +47,11 @@
         /**
          * The label for this element.
          */
-        label: {
-          type: String
-        }
+        label: String
       },
 
       _open: function() {
+        this.$.dropdown.verticalOffset = this.clientHeight;
         this.$.dropdown.open();
       },
 
