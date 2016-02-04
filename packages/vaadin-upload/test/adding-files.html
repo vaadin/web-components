@@ -65,7 +65,9 @@
 
           // We can't simply assign `files` property of input[type="file"].
           // Tweaking __proto__ to make it assignable below.
+          /* jshint ignore:start */
           upload.$.fileInput.__proto__ = HTMLElement.prototype;
+          /* jshint ignore:end */
           upload.$.fileInput.files = createFiles(2, 1024, 'application/x-octet-stream');
 
           var e = document.createEvent('HTMLEvents');

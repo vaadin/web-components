@@ -251,9 +251,9 @@ Example:
 
     _onAddFilesClick: function(event) {
       if (document.createEvent) {
-        var event = document.createEvent("MouseEvents");
-        event.initEvent("click", true, false);
-        this.$.fileInput.dispatchEvent(event);
+        var ev = document.createEvent('MouseEvents');
+        ev.initEvent('click', true, false);
+        this.$.fileInput.dispatchEvent(ev);
       }
     },
 

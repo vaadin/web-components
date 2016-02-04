@@ -139,7 +139,7 @@
             e.preventDefault();
           });
 
-          Polymer.Base.async(function(){
+          Polymer.Base.async(function() {
             expect(file.uploading).to.be.ok;
             expect(file.error).not.to.be.ok;
             done();
