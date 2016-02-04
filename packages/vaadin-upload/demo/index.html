@@ -57,6 +57,13 @@ This program is available under Apache License Version 2.0, available at https:/
           li.textContent = file.name + ': ' + file.size + ' bytes';
           document.querySelector('#added-files').appendChild(li);
         });
+
+        upload.addEventListener('upload-progress', function(e) {
+          console.log(e.detail.file.progress);
+        });
+        upload.addEventListener('upload-success', function(e) {
+          console.log(e.detail.xhr.responseText);
+        });
         // end-code
       </code>
     </code-example>

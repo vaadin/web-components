@@ -132,7 +132,7 @@ Example:
     },
 
     // Override for tests
-    _createXhr: function() {
+    _createXhr: function(file) {
       return new XMLHttpRequest();
     },
 
@@ -154,7 +154,7 @@ Example:
 
     _uploadFile: function(file) {
       var ini = new Date().getTime();
-      var xhr = file.xhr = this._createXhr();
+      var xhr = file.xhr = this._createXhr(file);
       var stalledId;
 
       // onprogress is called always after onreadystatechange
@@ -221,7 +221,7 @@ Example:
       var formData = new FormData();
       formData.append('file', file, file.name);
 
-      var url = this.target.replace('<name>', file.name);
+      var url = (this.target || '').replace('%name%', file.name);
       xhr.open(this.method, url, true);
       this._configureXhr(xhr);
 
@@ -247,6 +247,7 @@ Example:
      */
     _addFile: function(file) {
       this.fire('file-add', {file: file});
+      this._uploadFile(file);
     },
 
     _onAddFilesClick: function(event) {
