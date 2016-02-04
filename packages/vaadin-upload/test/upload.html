@@ -117,8 +117,10 @@
             e.detail.file.uploadTarget = modifiedUrl;
 
             // Monkey-patch xhr.open to check the url param passed into
+            var originalOpen = e.detail.xhr.open;
             e.detail.xhr.open = function(method, url, async) {
               expect(url).to.equal(modifiedUrl);
+              originalOpen.apply(this, arguments);
               done();
             };
           });

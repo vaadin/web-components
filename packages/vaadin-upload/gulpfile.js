@@ -116,7 +116,7 @@ gulp.task('test:shadow', function(done) {
 
 // This is equivalent to:
 //  $ node_modules/.bin/wct --dom=shadow --local=chrome
-gulp.task('test', function(done) {
+gulp.task('test', ['lint:js', 'lint:html'], function(done) {
   args.dom = 'shadow';
   test({
       plugins: {

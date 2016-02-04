@@ -233,7 +233,7 @@ Example:
 
       // Custom listener could modify the xhr just before sending it
       // preventing default
-      var evt = this.fire('upload-request', {file: file, xhr: xhr}, {cancelable: true});
+      evt = this.fire('upload-request', {file: file, xhr: xhr}, {cancelable: true});
       if (evt.defaultPrevented) {
         return;
       }
