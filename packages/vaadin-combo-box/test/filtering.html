@@ -34,6 +34,7 @@
 
     function setInputValue(value) {
       getInput().bindValue = value;
+      getInput().fire('input');
     }
 
     function getInputValue(value) {
@@ -70,19 +71,38 @@
         expect(comboBox.value).to.equal('foo');
       });
 
-      it('should be reverted to the combobox value when closing', function() {
+      it('should set the combobox value when closing', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
+
         comboBox.close();
+
+        expect(comboBox.value).to.equal('bar');
+      });
+
+      it('should set the combobox value when closing case insensitively', function() {
+        comboBox.value = 'foo';
+        setInputValue('BAR');
+
+        comboBox.close();
+
+        expect(comboBox.value).to.equal('bar');
+      });
+
+      it('should be reverted to the combobox value when cancelled', function() {
+        comboBox.value = 'foo';
+
+        setInputValue('b');
+        comboBox.cancel();
+
         expect(getInputValue()).to.equal('foo');
       });
 
-      it('should be reverted to the combobox value when reopening the dropdown', function() {
+      it('should be revert to the combobox value when selecting the same value', function() {
         comboBox.value = 'foo';
 
-        setInputValue('bar');
+        setInputValue('FOO');
         comboBox.close();
-        comboBox.open();
 
         expect(getInputValue()).to.equal('foo');
       });
@@ -101,21 +121,12 @@
         expect(getFilteredItems()).to.be.empty;
       });
 
-      it('should be reset after reopening the dropdown', function() {
+      it('should be reset after closing the dropdown', function() {
         setInputValue('foo');
 
         comboBox.close();
-        comboBox.open();
 
-        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
-      });
-
-      it('should filter integers', function() {
-        comboBox.items = [0, 1, 2, 3];
-
-        setInputValue(1);
-
-        expect(getFilteredItems()).to.eql([1]);
+        expect(comboBox._filter).to.be.empty;
       });
 
       it('should filter boolean', function() {
@@ -144,6 +155,23 @@
         setInputValue('FOO');
 
         expect(getFilteredItems()).to.eql(['foo']);
+      });
+
+      it('should focus filtered items on match case insensitively', function() {
+        setInputValue('BA');
+
+        expect(comboBox._focusedIndex).to.equal(-1);
+
+        setInputValue('BAR');
+
+        expect(comboBox._focusedIndex).to.equal(0);
+      });
+
+      it('should reset focus when filter changes', function() {
+        setInputValue('BAR');
+        setInputValue('BA');
+
+        expect(comboBox._focusedIndex).to.equal(-1);
       });
 
       it('should not filter with a null filter', function() {
