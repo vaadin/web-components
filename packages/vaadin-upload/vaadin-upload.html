@@ -157,10 +157,11 @@ Example:
           }
           // Custom listener can modify the default behavior either
           // preventing default, changing the xhr, or setting the file error
-          var evt = this.fire('upload-response', {file: file, xhr: xhr});
+          var evt = this.fire('upload-response', {file: file, xhr: xhr}, {cancelable: true});
           if (evt.defaultPrevented) {
-            file.error = file.error || 'Unknown Error';
-          } else if (xhr.status === 0) {
+            return;
+          }
+          if (xhr.status === 0) {
             file.error = 'Server Unavailable';
           } else if (xhr.status > 500) {
             file.error = 'Unexpected Server Error';
@@ -173,20 +174,25 @@ Example:
         }
       }.bind(this);
 
-      file.status = 'Connecting ...';
-      file.indeterminate = true;
-      file.abort = undefined;
-      file.uploading = true;
-      this.fire('upload-start', {file: file, xhr: xhr});
-
       var formData = new FormData();
       formData.append('file', file, file.name);
 
       var url = this.target.replace('<name>', file.name);
       xhr.open(this.method, url, true);
       this._configureXhr(xhr);
+
       // Custom listener could modify the xhr just before sending it
-      var e = this.fire('upload-request', {file: file, xhr: xhr});
+      // preventing default
+      var evt = this.fire('upload-request', {file: file, xhr: xhr}, {cancelable: true});
+      if (evt.defaultPrevented) {
+        return;
+      }
+
+      file.status = 'Connecting ...';
+      file.indeterminate = true;
+      file.abort = undefined;
+      file.uploading = true;
+      this.fire('upload-start', {file: file, xhr: xhr});
       xhr.send(formData);
     },
 
@@ -221,6 +227,8 @@ Example:
   /**
    * Fired when the XHR has been opened but not sent yet.
    * useful to change some parameters like headers, etc.
+   * If the event is preventDefault `vaadin-upload` will not send the
+   * request allowing the user to do something on his own.
    *
    * @event upload-request
    * @param {Object} detail
@@ -246,9 +254,12 @@ Example:
   /**
    * Fired when we have the actual server response, and before the component
    * analises it. It's useful for developers to make the upload fail depending
-   * on the server response. If the event is preventDefault the upload will
-   * fail. Additionally the developer could change the XHR object or set
-   * file properties like file.error.
+   * on the server response. If the event is preventDefault the vaadin-upload
+   * will return allowing the user to do something on his own like retry the
+   * upload, etc. since he has full access to the `xhr` and `file` objects.
+   * Otherwise, if the event is not prevented default `vaadin-upload` continues
+   * with the normal workflow checking the `xhr.status` and `file.error`
+   * which also might be modified by the user to force a customised response.
    *
    * @event upload-response
    * @param {Object} detail

@@ -106,10 +106,22 @@
           upload._uploadFile(file);
         });
 
+        it('should do nothing if a `upload-request` listener prevents default', function(done) {
+          upload.addEventListener('upload-request', function(e) {
+            e.preventDefault();
+          });
+
+          Polymer.Base.async(function() {
+            expect(file.uploading).not.to.be.ok;
+            expect(file.error).not.to.be.ok;
+            done();
+          }, 200);
+          upload._uploadFile(file);
+        });
+
         it('should fail if a `upload-response` listener sets an error', function(done) {
           var error = 'Custom Error';
           upload.addEventListener('upload-response', function(e) {
-            e.preventDefault();
             e.detail.file.error = error;
           });
 
@@ -121,6 +133,20 @@
           });
           upload._uploadFile(file);
         });
+
+        it('should do nothing if a `upload-response` listener prevents default', function(done) {
+          upload.addEventListener('upload-response', function(e) {
+            e.preventDefault();
+          });
+
+          Polymer.Base.async(function(){
+            expect(file.uploading).to.be.ok;
+            expect(file.error).not.to.be.ok;
+            done();
+          }, 100);
+          upload._uploadFile(file);
+        });
+
       });
 
       describe('Upload Status', function() {
