@@ -27,6 +27,9 @@
     }
   });
 
+
+  // Use MockHttpRequest in demos
+
   function mockXhrGenerator(file) {
     var xhr = new MockHttpRequest();
     xhr.upload = {};
@@ -52,9 +55,8 @@
     return xhr;
   }
 
-  HTMLImports.whenReady(function() {
-    [].forEach.call(document.querySelectorAll('vaadin-upload'), function(e) {
-      e._createXhr = mockXhrGenerator;
-    });
+  window.addEventListener('WebComponentsReady', function() {
+    // Monkey-patch vaadin-upload prototype to use MockHttpRequest
+    Object.getPrototypeOf(document.createElement('vaadin-upload'))._createXhr = mockXhrGenerator;
   });
 </script>

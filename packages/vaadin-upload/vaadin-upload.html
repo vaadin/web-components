@@ -75,7 +75,8 @@ Example:
        * Server URL.
        */
       target: {
-        type: String
+        type: String,
+        value: ''
       },
       /**
        * HTTP Method used to send the files.
@@ -221,8 +222,13 @@ Example:
       var formData = new FormData();
       formData.append('file', file, file.name);
 
-      var url = (this.target || '').replace('%name%', file.name);
-      xhr.open(this.method, url, true);
+      file.uploadTarget = this.target;
+      var evt = this.fire('upload-before', {file: file, xhr: xhr}, {cancelable: true});
+      if (evt.defaultPrevented) {
+        return;
+      }
+
+      xhr.open(this.method, file.uploadTarget, true);
       this._configureXhr(xhr);
 
       // Custom listener could modify the xhr just before sending it
@@ -270,8 +276,18 @@ Example:
    *  @param {Object} detail.file the file added
    */
   /**
+   * Fired before the XHR is opened. Could be used for changing the request
+   * URL. If the default is prevented, then XHR would not be opened.
+   *
+   * @event upload-before
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   *   @param {Object} detail.file.uploadTarget the upload request URL, initialized with the value of vaadin-upload `target` property
+   */
+  /**
    * Fired when the XHR has been opened but not sent yet.
-   * useful to change some parameters like headers, etc.
+   * Useful to change some parameters like headers, etc.
    * If the event is preventDefault `vaadin-upload` will not send the
    * request allowing the user to do something on his own.
    *

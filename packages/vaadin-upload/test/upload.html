@@ -106,6 +106,43 @@
           upload._uploadFile(file);
         });
 
+        it('should fire the upload-before with configurable request url', function(done) {
+          upload.addEventListener('upload-before', function(e) {
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.xhr.readyState).to.equal(0);
+            expect(e.detail.file.uploadTarget).to.be.ok;
+
+            var modifiedUrl = 'http://example.com/modified/url';
+            e.detail.file.uploadTarget = modifiedUrl;
+
+            // Monkey-patch xhr.open to check the url param passed into
+            e.detail.xhr.open = function(method, url, async) {
+              expect(url).to.equal(modifiedUrl);
+              done();
+            };
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should not open xhr if `upload-before` event is cancelled', function() {
+          upload.addEventListener('upload-before', function(e) {
+            e.preventDefault();
+          });
+          upload._uploadFile(file);
+          expect(file.xhr.readyState).to.equal(0);
+        });
+
+        it('should fire upload-request event', function(done) {
+          upload.addEventListener('upload-request', function(e) {
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.xhr.readyState).to.equal(1);
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
         it('should do nothing if a `upload-request` listener prevents default', function(done) {
           upload.addEventListener('upload-request', function(e) {
             e.preventDefault();
@@ -190,7 +227,7 @@
         });
       });
 
-      describe('Upload status', function() {
+      describe('Upload is Stalled', function() {
         beforeEach(function() {
           upload._createXhr = xhrCreator({
             size: file.size,

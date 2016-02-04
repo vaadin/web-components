@@ -24,9 +24,12 @@
   <script>
     describe('adding files', function() {
       var upload;
+      var testFileSize = 512;
 
       beforeEach(function() {
         upload = fixture('upload');
+        upload.target = 'http://foo.com/bar';
+        upload._createXhr = xhrCreator({size: testFileSize, uploadTime: 200, stepTime: 50});
         chai.should();
       });
 
@@ -68,7 +71,7 @@
           /* jshint ignore:start */
           upload.$.fileInput.__proto__ = HTMLElement.prototype;
           /* jshint ignore:end */
-          upload.$.fileInput.files = createFiles(2, 1024, 'application/x-octet-stream');
+          upload.$.fileInput.files = createFiles(2, testFileSize, 'application/x-octet-stream');
 
           var e = document.createEvent('HTMLEvents');
           e.initEvent('change', false, true);
@@ -84,7 +87,7 @@
         // we have to pass the info in the dataTransfer property
         function createDndEvent(type) {
           var e = new Event(type);
-          e.dataTransfer = {files: createFiles(2, 512, 'application/x-bin')};
+          e.dataTransfer = {files: createFiles(2, testFileSize, 'application/x-bin')};
           return e;
         }
 
@@ -111,6 +114,16 @@
           fileAddSpy.should.have.been.calledTwice;
         });
 
+      });
+
+      it('should automatically start upload', function() {
+        var uploadStartSpy = sinon.spy();
+        upload.addEventListener('upload-start', uploadStartSpy);
+
+        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
+        files.forEach(upload._addFile.bind(upload));
+
+        uploadStartSpy.should.have.been.calledTwice;
       });
 
     });
