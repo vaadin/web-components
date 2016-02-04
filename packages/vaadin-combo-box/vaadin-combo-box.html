@@ -430,7 +430,7 @@ enable usage within an `iron-form`.
         // Check if item contains input value.
         return item.toString().toLowerCase()
                 .indexOf(filter.toString().toLowerCase()) > -1;
-      }.bind(this));
+      });
     },
 
     _setItems: function(items) {
