@@ -35,23 +35,27 @@
 
       describe('with add button', function() {
 
-        it('should open file dialog by click', function(done) {
-          // This test checks if the 'click' event is sinchronously dispatched
-          // on the hidden file input when user clicks Add Files button. The
-          // file dialog is actually not getting opened during testing.
-          //
-          // The mock Add Files button click event fired by this test is not
-          // trusted and hence it should generate a non-trusted click event on
-          // the hidden file input. For security reasons browser doesn't open
-          // file dialog when file input click is non-trusted.
+        // Skip the file dialog open test for MSIE and MSEdge. It pops out and
+        // stops the JS execution until closed by user.
+        describeSkipIf(ieOrEdge, 'file dialog', function() {
 
-          var clickSpy = sinon.spy();
-          upload.$.fileInput.addEventListener('click', clickSpy);
+          it('should open file dialog by click', function() {
+            // This test checks if the 'click' event is sinchronously dispatched
+            // on the hidden file input when user clicks Add Files button. The
+            // file dialog is actually not getting opened during testing.
+            //
+            // The mock Add Files button click event fired by this test is not
+            // trusted and hence it should generate a non-trusted click event on
+            // the hidden file input. For security reasons non-IE browsers don't
+            // open file dialog when file input click is non-trusted.
 
-          MockInteractions.downAndUp(upload.$.addFiles, function() {
-            clickSpy.should.have.been.calledOnce;
-            done();
+            var clickSpy = sinon.spy();
+            upload.$.fileInput.addEventListener('click', clickSpy);
+
+            upload.$.addFiles.fire('tap');
+            expect(clickSpy).to.be.calledOnce;
           });
+
         });
 
         it('should fire `file-add` event after dialog', function() {
@@ -71,6 +75,9 @@
           /* jshint ignore:start */
           upload.$.fileInput.__proto__ = HTMLElement.prototype;
           /* jshint ignore:end */
+          // Replacing __proto__ is not enough for Android Chrome, deleting the
+          // files property in addition.
+          delete upload.$.fileInput.files;
           upload.$.fileInput.files = createFiles(2, testFileSize, 'application/x-octet-stream');
 
           var e = document.createEvent('HTMLEvents');
