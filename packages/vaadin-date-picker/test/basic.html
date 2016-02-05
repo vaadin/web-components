@@ -30,6 +30,18 @@
         }
       }
 
+      function getFirstVisibleCalendar() {
+        var overlay = datepicker.$.overlay;
+        var itemIndex = overlay.$.list.firstVisibleIndex - overlay._originIndex;
+        return overlay.$.list._getModelFromItem(itemIndex)._children.filter(function(i) {
+          return i.nodeType === 1;
+        })[0];
+      }
+
+      function monthsEqual(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
+      }
+
       function tap(element) {
         Polymer.Base.fire('tap', {}, {
           bubbles: true,
@@ -56,6 +68,24 @@
         expect(datepicker.$.overlay.clientHeight).to.equal(0);
         tap(datepicker.$.input);
         waitUntilOpen(done);
+      });
+
+      it('should scroll to today by default', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(monthsEqual(getFirstVisibleCalendar().month, new Date())).to.be.true;
+          done();
+        });
+        tap(datepicker.$.input);
+      });
+
+      it('should scroll to selected value by default', function(done) {
+        var value = new Date(2000, 1, 1);
+        datepicker.value = value;
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(monthsEqual(getFirstVisibleCalendar().month, value)).to.be.true;
+          done();
+        });
+        tap(datepicker.$.input);
       });
 
       it('should close on value change', function(done) {

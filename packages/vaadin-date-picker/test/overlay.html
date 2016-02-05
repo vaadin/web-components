@@ -22,9 +22,8 @@
     describe('vaadin-date-picker-overlay', function() {
       var overlay;
 
-      beforeEach(function(done) {
+      beforeEach(function() {
         overlay = fixture('overlay');
-        waitUntilScrolledTo(new Date(), done);
       });
 
       function waitUntilScrolledTo(date, callback) {
@@ -46,13 +45,9 @@
         return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
       }
 
-      it('should default to current month', function() {
-        expect(monthsEqual(getFirstVisibleCalendar().month, new Date())).to.be.true;
-      });
-
       it('should reflect the year of currently visible month on the toolbar', function(done) {
         var date = new Date(2000, 1, 1);
-        overlay._scrollToDate(date);
+        overlay.scrollToDate(date);
         waitUntilScrolledTo(date, function() {
           expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
           done();
@@ -61,7 +56,7 @@
 
       it('should scroll to the given date', function(done) {
         var date = new Date(2000, 1, 1);
-        overlay._scrollToDate(date);
+        overlay.scrollToDate(date);
         waitUntilScrolledTo(date, function() {
           expect(monthsEqual(getFirstVisibleCalendar().month, date)).to.be.true;
           done();

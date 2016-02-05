@@ -57,8 +57,7 @@
          */
         selectedDate: {
           type: Date,
-          notify: true,
-          observer: '_selectedDateChanged'
+          notify: true
         },
 
         _originDate: {
@@ -87,17 +86,9 @@
           months.push(i);
         }
         this._months = months;
-
-        this.async(this._scrollToDate.bind(this, this._originDate), 1);
       },
 
-      _selectedDateChanged: function(selectedDate) {
-        if (selectedDate) {
-          this._scrollToDate(selectedDate);
-        }
-      },
-
-      _scrollToDate: function(date) {
+      scrollToDate: function(date) {
         this.$.list.scrollToIndex(this._differenceInMonths(date, this._originDate) + this._originIndex);
       },
 
