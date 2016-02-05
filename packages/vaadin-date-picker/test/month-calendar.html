@@ -99,6 +99,12 @@
           expect(valueChangedSpy.callCount).to.equal(1);
         });
 
+        it('should not fire value change on tapping an empty cell', function() {
+          var emptyDateElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):empty');
+          tap(emptyDateElement);
+          expect(valueChangedSpy.callCount).to.equal(0);
+        });
+
         it('should update value on tap', function() {
           var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
           for (var i = 0; i < dateElements.length; i++) {

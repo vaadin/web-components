@@ -29,8 +29,11 @@
         text-align: center;
         width: 14.285714286%;
         box-sizing: border-box;
-        cursor: pointer;
         padding: 0.4em 0;
+      }
+
+      #monthGrid div:not(:empty) {
+        cursor: pointer;
       }
 
       #monthGrid div.weekday {
@@ -144,7 +147,7 @@
       },
 
       _getDate: function(date) {
-        return date.getMonth() === this.month.getMonth() ? date.getDate() : '';
+        return date ? date.getDate() : '';
       },
 
       _isSelected: function(date, selectedDate) {
@@ -166,8 +169,9 @@
 
         var days = [];
         var startMonth = date.getMonth();
-        while (date.getMonth() === this.month.getMonth() || date.getMonth() === startMonth) {
-          days.push(new Date(date));
+        var targetMonth = this.month.getMonth();
+        while (date.getMonth() === targetMonth || date.getMonth() === startMonth) {
+          days.push(date.getMonth() === targetMonth ? new Date(date) : null);
 
           // Advance to next day.
           this._dateAdd(date, 1);
