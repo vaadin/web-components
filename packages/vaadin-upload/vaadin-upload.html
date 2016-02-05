@@ -259,7 +259,7 @@ add a `<template class="file">...</template>` to the light DOM:
       var formData = new FormData();
       formData.append('file', file, file.name);
 
-      file.uploadTarget = this.target;
+      file.uploadTarget = this.target || '';
       var evt = this.fire('upload-before', {file: file, xhr: xhr}, {cancelable: true});
       if (evt.defaultPrevented) {
         return;
