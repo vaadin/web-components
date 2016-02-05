@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>vaadin-upload file list tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="common.html">
+  <script src="common.js"></script>
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+</head>
+
+<body>
+
+  <test-fixture id="upload">
+    <template>
+      <vaadin-upload></vaadin-upload>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('file list', function() {
+      var upload;
+      var testFileSize = 512;
+
+      function getFileListItems(upload) {
+        return Polymer.dom(upload.$.fileList).querySelectorAll('vaadin-upload-file');
+      }
+
+      beforeEach(function() {
+        upload = fixture('upload');
+        upload.target = 'http://foo.com/bar';
+        upload._createXhr = xhrCreator({size: testFileSize, uploadTime: 200, stepTime: 50});
+        chai.should();
+      });
+
+      it('should render files', function(done) {
+        expect(getFileListItems(upload)).to.be.empty;
+
+        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
+        files.forEach(upload._addFile.bind(upload));
+
+        Polymer.Base.async(function() {
+          var fileListItems = getFileListItems(upload);
+          expect(fileListItems).to.not.be.empty;
+          expect(fileListItems.length).to.equal(2);
+          expect(fileListItems[0]).to.be.ok;
+          expect(fileListItems[0]).to.have.property('file', files[0]);
+          expect(fileListItems[1]).to.be.ok;
+          expect(fileListItems[1]).to.have.property('file', files[1]);
+          done();
+        });
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

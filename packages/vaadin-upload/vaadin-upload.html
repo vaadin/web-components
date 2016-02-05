@@ -21,6 +21,7 @@ Example:
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="vaadin-upload-file.html">
 
 <dom-module id="vaadin-upload">
   <template>
@@ -40,6 +41,10 @@ Example:
         opacity: 0.7;
       }
 
+      #fileList {
+        text-align: left;
+      }
+
       #buttons {
         @apply(--layout-horizontal);
         @apply(--layout-center-justified);
@@ -52,13 +57,18 @@ Example:
         color: #fff;
       }
     </style>
+
+    <div id="fileList">
+      <template is="dom-repeat" items="[[files]]">
+        <vaadin-upload-file file="[[item]]"></vaadin-upload-file>
+      </template>
+    </div>
     <div id="dropLabel">
       <content>Drop files here ...</content>
     </div>
     <div id="buttons">
       <paper-button id="addFiles" raised on-tap="_onAddFilesClick">Add File(s)</paper-button>
     </div>
-
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden multiple>
 
   </template>
@@ -107,6 +117,15 @@ Example:
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      /**
+       * File list
+       */
+      files: {
+        type: Array,
+        value: function() {
+          return [];
+        }
       }
     },
 
@@ -252,6 +271,7 @@ Example:
      * @param {File} file File being added
      */
     _addFile: function(file) {
+      this.push('files', file);
       this.fire('file-add', {file: file});
       this._uploadFile(file);
     },

@@ -123,6 +123,18 @@
 
       });
 
+      it('should push files to `files` Array property', function() {
+        expect(upload).to.have.property('files')
+          .that.is.an('array')
+          .that.is.empty;
+
+        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
+        files.forEach(upload._addFile.bind(upload));
+
+        expect(upload.files[0]).to.equal(files[0]);
+        expect(upload.files[1]).to.equal(files[1]);
+      });
+
       it('should automatically start upload', function() {
         var uploadStartSpy = sinon.spy();
         upload.addEventListener('upload-start', uploadStartSpy);

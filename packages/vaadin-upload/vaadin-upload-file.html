@@ -1,0 +1,44 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
+
+@element vaadin-upload-file
+@demo demo/
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="vaadin-upload-file">
+  <template>
+    <style>
+      :host {
+      }
+    </style>
+
+    <p>
+      [[file.name]] ([[file.size]])<br />
+      [[file.doneStr]] / [[file.totalStr]]<br />
+      [[file.status]] [[file.progress]]
+    </p>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'vaadin-upload-file',
+    properties: {
+      /**
+       * File metadata, upload status and progress information.
+       */
+      file: Object
+    }
+  });
+
+</script>
