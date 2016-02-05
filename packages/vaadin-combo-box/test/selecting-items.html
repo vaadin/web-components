@@ -123,6 +123,7 @@
       });
 
       expect(combobox.value).to.eql('');
+      expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
     });
 
     it('should close the dropdown after clearing a selection', function() {
@@ -162,6 +163,17 @@
       combobox.close();
 
       expect(combobox.value).to.eql('bar');
+    });
+
+    it('should clear the selection when closing the overlay and input is cleared', function() {
+        combobox.value = 'foo';
+
+        combobox.$.input.bindValue = '';
+        combobox.$.input.fire('input');
+
+        combobox.close();
+
+        expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
     });
   });
 </script>

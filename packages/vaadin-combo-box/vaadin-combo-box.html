@@ -492,6 +492,8 @@ enable usage within an `iron-form`.
 
       if (this.$.overlay._items && this.$.overlay._items.indexOf(value) > -1) {
         this.$.overlay._selectItem(value);
+      } else {
+        this.$.overlay.$.selector.clearSelection();
       }
 
       this._focusedIndex = this._indexOf(value);
