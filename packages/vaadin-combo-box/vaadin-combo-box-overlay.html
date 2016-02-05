@@ -20,7 +20,6 @@
     #scroller {
       overflow: auto;
       max-height: 65vh;
-      outline: none;
 
       /* Fixes item background from getting on top of scrollbars on Safari */
       transform: translate3d(0,0,0);
@@ -51,7 +50,7 @@
   </style>
 
   <template>
-    <div id="scroller" scroller="[[_getScroller()]]" tabindex="-1">
+    <div id="scroller" scroller="[[_getScroller()]]">
       <iron-list
           id="selector"
           touch-device$="[[touchDevice]]"

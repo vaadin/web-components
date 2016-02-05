@@ -308,9 +308,10 @@ enable usage within an `iron-form`.
       // Async needed to access the new activeElement reliably.
       this.async(function() {
         var focusInsideCombobox = this.contains(document.activeElement);
-        var focusInsideOverlay = this.$.overlay.contains(document.activeElement);
 
-        if (!focusInsideCombobox && !focusInsideOverlay) {
+        // When grabbing the scroll handle, the activeElement will become
+        // the body on some browsers, so check for it also.
+        if (!focusInsideCombobox && document.activeElement !== document.body) {
           this.close();
         }
       }, 1);
