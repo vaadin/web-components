@@ -105,6 +105,33 @@
         expect(datepicker.$.label.innerHTML).to.eql('This is LABEL');
       });
 
+      it('should clear the value', function() {
+        datepicker.value = new Date(2000, 1, 1);
+        tap(datepicker.$.clear);
+        expect(datepicker.value).to.equal('');
+      });
+
+      it('should not show clear icon', function(done) {
+        expect(datepicker.$.clear.clientHeight).to.equal(0);
+        datepicker.value = new Date(2000, 1, 1);
+        expect(datepicker.$.clear.clientHeight).to.equal(0);
+        datepicker.value = '';
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          done();
+        });
+        datepicker._open();
+      });
+
+      it('should show clear icon', function(done) {
+        datepicker.value = new Date(2000, 1, 1);
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(datepicker.$.clear.clientHeight).not.to.equal(0);
+          done();
+        });
+        datepicker._open();
+      });
+
     });
   </script>
 
