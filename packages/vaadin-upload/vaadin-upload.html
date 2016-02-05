@@ -10,9 +10,22 @@ This program is available under Apache License Version 2.0, available at https:/
 Example:
 
 ```html
+<vaadin-upload></vaadin-upload>
+```
+
+### Custom File List Item Template
+
+In order to replace `<vaadin-upload-file>` with your file representation,
+add a `<template class="file">...</template>` to the light DOM:
+
+```html
 <vaadin-upload>
+  <template class="file">
+    [[file.name]]: [[file.status]]
+  </template>
 </vaadin-upload>
 ```
+
 
 @element vaadin-upload
 @demo demo/
@@ -58,19 +71,20 @@ Example:
       }
     </style>
 
+    <template id="defaultFileTemplate">
+      <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+    </template>
     <div id="fileList">
-      <template is="dom-repeat" items="[[files]]">
-        <vaadin-upload-file file="[[item]]"></vaadin-upload-file>
-      </template>
+      <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
     </div>
+    <content></content>
     <div id="dropLabel">
-      <content>Drop files here ...</content>
+      <content select=".drop-label">Drop files here ...</content>
     </div>
     <div id="buttons">
       <paper-button id="addFiles" raised on-tap="_onAddFilesClick">Add File(s)</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden multiple>
-
   </template>
 </dom-module>
 
@@ -133,6 +147,10 @@ Example:
       dragover: '_onDragover',
       dragleave: '_onDragleave',
       drop: '_onDrop'
+    },
+
+    attached: function() {
+      this._templatizeFileList();
     },
 
     _onDragover: function(event) {
@@ -286,6 +304,13 @@ Example:
 
     _onFileInputChange: function(event) {
       Array.prototype.forEach.call(event.target.files, this._addFile.bind(this));
+    },
+
+    _templatizeFileList: function() {
+      var template = Polymer.dom(this).querySelector('.file') || this.$.defaultFileTemplate;
+      this.$.fileListRepeater.templatize(template);
+      Polymer.Bind.prepareModel(this.$.fileListRepeater);
+      Polymer.Base.prepareModelNotifyPath(this.$.fileListRepeater);
     }
   });
   /**

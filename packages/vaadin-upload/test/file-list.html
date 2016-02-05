@@ -21,13 +21,26 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="uploadWithCustomFileTemplate">
+    <template>
+      <vaadin-upload>
+        <template class="file">
+          <div class="file">
+            <div class="name">[[file.name]]</div>
+            <div class="size">[[file.size]]</div>
+          </div>
+        </template>
+      </vaadin-upload>
+    </template>
+  </test-fixture>
+
   <script>
     describe('file list', function() {
       var upload;
       var testFileSize = 512;
 
-      function getFileListItems(upload) {
-        return Polymer.dom(upload.$.fileList).querySelectorAll('vaadin-upload-file');
+      function getFileListItems(upload, selector) {
+        return Polymer.dom(upload.$.fileList).querySelectorAll(selector || 'vaadin-upload-file');
       }
 
       beforeEach(function() {
@@ -51,6 +64,23 @@
           expect(fileListItems[0]).to.have.property('file', files[0]);
           expect(fileListItems[1]).to.be.ok;
           expect(fileListItems[1]).to.have.property('file', files[1]);
+          done();
+        });
+      });
+
+      it('should support custom file template in light DOM', function(done) {
+        var uploadWithCustomFileTemplate = fixture('uploadWithCustomFileTemplate');
+        expect(getFileListItems(uploadWithCustomFileTemplate, '.file')).to.be.empty;
+
+        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
+        files.forEach(uploadWithCustomFileTemplate._addFile.bind(uploadWithCustomFileTemplate));
+
+        Polymer.Base.async(function() {
+          var file = files[1];
+          var fileListItem = getFileListItems(uploadWithCustomFileTemplate, '.file')[1];
+          expect(fileListItem).to.be.ok;
+          expect(fileListItem.querySelector('.name').textContent).to.be.equal(file.name);
+          expect(fileListItem.querySelector('.size').textContent).to.be.equal(file.size.toString());
           done();
         });
       });
