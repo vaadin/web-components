@@ -23,8 +23,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <p>
       [[file.name]] ([[file.size]])<br />
-      [[file.doneStr]] / [[file.totalStr]]<br />
-      [[file.status]] [[file.progress]]
+      [[file.doneStr]] / [[file.totalStr]] ([[file.progress]] %)<br />
+      [[file.status]]
     </p>
   </template>
 </dom-module>
@@ -38,6 +38,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * File metadata, upload status and progress information.
        */
       file: Object
+    },
+
+    ready: function() {
+      var id = setInterval(function(){
+        if (this.file.complete) {
+          clearInterval(id);
+        }
+      }.bind(this), 100);
     }
   });
 

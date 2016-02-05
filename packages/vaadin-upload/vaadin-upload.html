@@ -217,13 +217,16 @@ add a `<template class="file">...</template>` to the light DOM:
             ((~~(done / 1024 / 1024 * 10) / 10) + ' MB') : (~~(done / 1024) + ' KB');
           file.status += ' about ' + file.remaining + ' seconds remaining.';
         } else {
+          file.doneStr = file.totalStr;
           file.status = 'Processing file ...';
           file.uploading = false;
         }
+        this._notifyFileChanges(file);
         this.fire('upload-progress', {file: file, xhr: xhr});
 
         stalledId = setTimeout(function() {
           file.status = 'Stalled.';
+          this._notifyFileChanges(file);
         }.bind(this), 2000);
 
       }.bind(this);
@@ -232,9 +235,11 @@ add a `<template class="file">...</template>` to the light DOM:
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState == 4) {
           clearTimeout(stalledId);
-          file.indeterminate = file.uploading = file.status = false;
+          file.indeterminate = file.uploading = false;
+          file.status = '';
           if (file.abort) {
             file.error = file.complete = file.progress = false;
+            this._notifyFileChanges(file);
             return;
           }
           // Custom listener can modify the default behavior either
@@ -253,6 +258,7 @@ add a `<template class="file">...</template>` to the light DOM:
 
           file.complete = !file.error;
           this.fire('upload-' + (file.error ? 'error' : 'success'), {file: file, xhr: xhr});
+          this._notifyFileChanges(file);
         }
       }.bind(this);
 
@@ -283,12 +289,22 @@ add a `<template class="file">...</template>` to the light DOM:
       xhr.send(formData);
     },
 
+    _notifyFileChanges: function(file) {
+      var p = "files." + this.files.indexOf(file) + ".";
+      for (i in file) {
+        if (file.hasOwnProperty(i)) {
+          this.notifyPath(p + i, file[i]);
+        }
+      }
+    },
+
     /**
      * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
      *
      * @param {File} file File being added
      */
     _addFile: function(file) {
+      file.loaded = 0;
       this.push('files', file);
       this.fire('file-add', {file: file});
       this._uploadFile(file);

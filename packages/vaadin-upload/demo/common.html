@@ -40,7 +40,7 @@
         xhr.upload.onprogress({total: total, loaded: done});
         if (done < total) {
           setTimeout(progress, 200);
-          done += 254000;
+          done = Math.min(total, done + 254000);
         } else {
           setTimeout(finish, 1000);
         }

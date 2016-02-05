@@ -43,7 +43,9 @@ This program is available under Apache License Version 2.0, available at https:/
     <code-example source>
       <vaadin-upload demo>
         <template class="file">
-          <div>[[file.name]]: [[file.status]]</div>
+          [[file.name]]
+          <progress value="[[file.loaded]]" max="[[file.size]]"></progress>
+          <div>[[file.status]]</div>
         </template>
       </vaadin-upload>
     </code-example>
