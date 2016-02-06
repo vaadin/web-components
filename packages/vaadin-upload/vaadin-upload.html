@@ -290,8 +290,8 @@ add a `<template class="file">...</template>` to the light DOM:
     },
 
     _notifyFileChanges: function(file) {
-      var p = "files." + this.files.indexOf(file) + ".";
-      for (i in file) {
+      var p = 'files.' + this.files.indexOf(file) + '.';
+      for (var i in file) {
         if (file.hasOwnProperty(i)) {
           this.notifyPath(p + i, file[i]);
         }

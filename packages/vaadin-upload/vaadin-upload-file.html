@@ -38,14 +38,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * File metadata, upload status and progress information.
        */
       file: Object
-    },
-
-    ready: function() {
-      var id = setInterval(function(){
-        if (this.file.complete) {
-          clearInterval(id);
-        }
-      }.bind(this), 100);
     }
   });
 

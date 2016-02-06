@@ -17,17 +17,20 @@
 
   <test-fixture id="upload">
     <template>
-      <vaadin-upload></vaadin-upload>
+      <vaadin-upload target="http://foo/bar"></vaadin-upload>
     </template>
   </test-fixture>
 
   <test-fixture id="uploadWithCustomFileTemplate">
     <template preserve-content>
-      <vaadin-upload>
+      <vaadin-upload target="http://foo/bar">
         <template class="file">
           <div class="file">
             <div class="name">[[file.name]]</div>
             <div class="size">[[file.size]]</div>
+            <div class="progress">[[file.progress]]</div>
+            <div class="upload">[[file.uploaded]]</div>
+            <div class="status">[[file.status]]</div>
           </div>
         </template>
       </vaadin-upload>
@@ -37,34 +40,34 @@
   <script>
     describe('file list', function() {
       var upload;
-      var testFileSize = 512;
 
       function getFileListItems(upload, selector) {
         return Polymer.dom(upload.$.fileList).querySelectorAll(selector || 'vaadin-upload-file');
       }
 
-      beforeEach(function() {
-        upload = fixture('upload');
-        upload.target = 'http://foo.com/bar';
-        upload._createXhr = xhrCreator({size: testFileSize, uploadTime: 200, stepTime: 50});
-        chai.should();
-      });
+      describe('with default file template', function() {
+        beforeEach(function() {
+          upload = fixture('upload');
+          upload._createXhr = xhrCreator();
+          chai.should();
+        });
 
-      it('should render files', function(done) {
-        expect(getFileListItems(upload)).to.be.empty;
+        it('should render files', function(done) {
+          expect(getFileListItems(upload)).to.be.empty;
 
-        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
-        files.forEach(upload._addFile.bind(upload));
+          var files = createFiles(2);
+          files.forEach(upload._addFile.bind(upload));
 
-        Polymer.Base.async(function() {
-          var fileListItems = getFileListItems(upload);
-          expect(fileListItems).to.not.be.empty;
-          expect(fileListItems.length).to.equal(2);
-          expect(fileListItems[0]).to.be.ok;
-          expect(fileListItems[0]).to.have.property('file', files[0]);
-          expect(fileListItems[1]).to.be.ok;
-          expect(fileListItems[1]).to.have.property('file', files[1]);
-          done();
+          Polymer.Base.async(function() {
+            var fileListItems = getFileListItems(upload);
+            expect(fileListItems).to.not.be.empty;
+            expect(fileListItems.length).to.equal(2);
+            expect(fileListItems[0]).to.be.ok;
+            expect(fileListItems[0]).to.have.property('file', files[0]);
+            expect(fileListItems[1]).to.be.ok;
+            expect(fileListItems[1]).to.have.property('file', files[1]);
+            done();
+          });
         });
       });
 
@@ -72,17 +75,16 @@
       // because of some issue with files list. The files list renders files
       // with custom template in example, but in test it doesn't work.
       // TODO: Investigate the test issue and re-enable the test.
-      describeSkipIf(ieOrEdge, 'custom file template', function() {
+      describeSkipIf(ieOrEdge, 'with custom file template', function() {
         beforeEach(function() {
           upload = fixture('uploadWithCustomFileTemplate');
-          upload.target = 'http://foo.com/bar';
-          upload._createXhr = xhrCreator({size: testFileSize, uploadTime: 200, stepTime: 50});
+          upload._createXhr = xhrCreator();
         });
 
         it('should support custom file template in light DOM', function(done) {
           expect(getFileListItems(upload, '.file')).to.be.empty;
 
-          var files = createFiles(2, testFileSize, 'application/x-octet-stream');
+          var files = createFiles(2);
           files.forEach(upload._addFile.bind(upload));
 
           Polymer.Base.async(function() {
@@ -94,6 +96,20 @@
             done();
           });
         });
+
+        it('should update bound properties when file is updated', function(done) {
+          var file = createFile();
+          upload._addFile(file);
+          upload.addEventListener('upload-progress', function(e) {
+            if (e.detail.file.progress == 50) {
+              var fileListItem = getFileListItems(upload, '.file')[0];
+              expect(fileListItem.querySelector('.progress').textContent).to.be.equal('50');
+              expect(fileListItem.querySelector('.status').textContent).to.contain('50%');
+              done();
+            }
+          });
+        });
+
       });
 
     });

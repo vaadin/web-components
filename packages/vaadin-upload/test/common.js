@@ -31,10 +31,11 @@ var describeIf = function(bool, title, callback) {
 var fileCounter = 0;
 function createFile(fileSize, contentType) {
   var array = [];
-  for (var i = 0; i < fileSize; i++) {
+  for (var i = 0; i < (fileSize || 512); i++) {
       array.push('A');
   }
-  var file = new Blob([new Uint8Array(array)], {type: contentType});
+  var file = new Blob([new Uint8Array(array)],
+     {type: contentType || 'application/x-octet-stream'});
   file.name = 'file-' + fileCounter++;
   return file;
 }
@@ -69,7 +70,7 @@ function createFiles(arraySize, fileSize, contentType) {
      size: c.size || 100,
      connectTime: c.connectTime || 10,
      uploadTime: c.uploadTime || 10,
-     stepTime: c.stepTime || 20,
+     stepTime: c.stepTime || 5,
      serverTime: c.serverTime || 10,
      serverMessage: c.message || '{"message": "ok"}',
      serverType: c.serverType || 'application/json',
