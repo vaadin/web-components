@@ -279,7 +279,10 @@
         expect(getInput().bindValue).to.eql('bar');
       });
 
-      if (!touchDevice) {
+      // Safari window doesn't have focus in SauceLabs which prevents input fields from focusing also.
+      // iPad and iPhone simulators have the same issue. As a note, touch devices seem to clear the selection
+      // natively when blurring an input.
+      if (!safari && !touchDevice) {
         it('should remove selection from the input value selecting value', function() {
           arrowDown();
 

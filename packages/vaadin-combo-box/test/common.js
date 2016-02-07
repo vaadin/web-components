@@ -1,4 +1,6 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
+
 var touchDevice = (function() {
   try {
     document.createEvent('TouchEvent');
