@@ -142,6 +142,7 @@ add a `<template class="file">...</template>` to the light DOM:
     <content></content>
     <div id="buttons">
       <paper-button id="addFiles" on-tap="_onAddFilesClick">Add File(s)</paper-button>
+      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!cancelAll]]">Cancel all</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden multiple>
   </template>
@@ -190,6 +191,13 @@ add a `<template class="file">...</template>` to the light DOM:
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      /**
+       * Specifies if the cancel-all button is visible.
+       */
+      cancelAll: {
+        type: Boolean,
+        value: false
       },
       /**
        * File list
@@ -441,6 +449,12 @@ add a `<template class="file">...</template>` to the light DOM:
     _onFileAbort: function(event) {
       this._abortFileUpload(event.detail.file);
     },
+
+    _onCancelAllClick: function(event) {
+      for (var i = this.files.length; i > 0; --i) {
+        this._abortFileUpload(this.files[i - 1]);
+      }
+    }
 
   });
   /**
