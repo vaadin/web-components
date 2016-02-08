@@ -44,11 +44,14 @@ add a `<template class="file">...</template>` to the light DOM:
         @apply(--layout-vertical);
         display: block;
         position: relative;
+        padding: 16px;
+        text-align: center;
+      }
+
+      :host:not([nodrop]) {
         border: 1px dashed;
         border-color: var(--divider-color,  #666);
         border-radius: 3px;
-        padding: 16px;
-        text-align: center;
       }
 
       :host[dragover] {
@@ -127,7 +130,7 @@ add a `<template class="file">...</template>` to the light DOM:
     </style>
 
     <paper-ripple id="dragRipple" noink></paper-ripple>
-    <div id="dropLabel">
+    <div id="dropLabel" hidden$="[[nodrop]]">
       <content select=".drop-label">
         <iron-icon icon="file-upload"></iron-icon>
         Drop files here...
@@ -155,6 +158,22 @@ add a `<template class="file">...</template>` to the light DOM:
     is: 'vaadin-upload',
 
     properties: {
+      /**
+       * Define whether the element supports drop files on it for uploading.
+       * By default it's enabled in desktop and disabled in touch devices
+       * because almost mobile devices do not support drag events.
+       */
+      nodrop: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: function() {
+          try {
+            return !!document.createEvent('TouchEvent');
+          } catch (e) {
+            return false;
+          }
+        },
+      },
       /**
        * Server URL.
        */
@@ -278,10 +297,12 @@ add a `<template class="file">...</template>` to the light DOM:
     },
 
     _onDrop: function(event) {
-      event.preventDefault();
-      this.dragover = false;
-      this._dragRippleAction('upAction', event);
-      Array.prototype.forEach.call(event.dataTransfer.files, this._addFile.bind(this));
+      if (!this.nodrop) {
+        event.preventDefault();
+        this.dragover = false;
+        this._dragRippleAction('upAction', event);
+        Array.prototype.forEach.call(event.dataTransfer.files, this._addFile.bind(this));
+      }
     },
 
     // Override for tests
