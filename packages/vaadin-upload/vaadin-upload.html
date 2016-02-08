@@ -66,11 +66,14 @@ add a `<template class="file">...</template>` to the light DOM:
       }
 
       paper-button {
-        background-color: var(--default-primary-color, #03A9F4);
+        background-color: var(--primary-color, #03A9F4);
         color: #fff;
       }
     </style>
 
+    <div id="dropLabel">
+      <content select=".drop-label">Drop files here ...</content>
+    </div>
     <template id="defaultFileTemplate">
       <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
     </template>
@@ -78,9 +81,6 @@ add a `<template class="file">...</template>` to the light DOM:
       <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
     </div>
     <content></content>
-    <div id="dropLabel">
-      <content select=".drop-label">Drop files here ...</content>
-    </div>
     <div id="buttons">
       <paper-button id="addFiles" raised on-tap="_onAddFilesClick">Add File(s)</paper-button>
     </div>
@@ -146,7 +146,9 @@ add a `<template class="file">...</template>` to the light DOM:
     listeners: {
       dragover: '_onDragover',
       dragleave: '_onDragleave',
-      drop: '_onDrop'
+      drop: '_onDrop',
+      'file-retry': '_onFileRetry',
+      'file-abort': '_onFileAbort'
     },
 
     attached: function() {
@@ -289,6 +291,24 @@ add a `<template class="file">...</template>` to the light DOM:
       xhr.send(formData);
     },
 
+    _retryFileUpload: function(file) {
+      var evt = this.fire('upload-retry', {file: file, xhr: file.xhr}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        this.async(this._uploadFile.bind(this, file));
+      }
+    },
+
+    _abortFileUpload: function(file) {
+      var evt = this.fire('upload-abort', {file: file, xhr: file.xhr}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        if (file.xhr) {
+          file.abort = true;
+          file.xhr.abort();
+        }
+        this._removeFile(file);
+      }
+    },
+
     _notifyFileChanges: function(file) {
       var p = 'files.' + this.files.indexOf(file) + '.';
       for (var i in file) {
@@ -310,6 +330,17 @@ add a `<template class="file">...</template>` to the light DOM:
       this._uploadFile(file);
     },
 
+    /**
+     * Remove file from upload list. Called internally if file upload was canceled.
+     * @param {File} file File to remove
+     */
+    _removeFile: function(file) {
+      var evt = this.fire('file-remove', {file: file}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        this.splice('files', this.files.indexOf(file), 1);
+      }
+    },
+
     _onAddFilesClick: function(event) {
       if (document.createEvent) {
         var ev = document.createEvent('MouseEvents');
@@ -327,7 +358,16 @@ add a `<template class="file">...</template>` to the light DOM:
       this.$.fileListRepeater.templatize(template);
       Polymer.Bind.prepareModel(this.$.fileListRepeater);
       Polymer.Base.prepareModelNotifyPath(this.$.fileListRepeater);
-    }
+    },
+
+    _onFileRetry: function(event) {
+      this._retryFileUpload(event.detail.file);
+    },
+
+    _onFileAbort: function(event) {
+      this._abortFileUpload(event.detail.file);
+    },
+
   });
   /**
    * Fired when a file is added for uploading.
@@ -335,6 +375,15 @@ add a `<template class="file">...</template>` to the light DOM:
    * @event file-add
    * @param {Object} detail
    *  @param {Object} detail.file the file added
+   */
+  /**
+   * Fired when a file is removed from the file list, e. g. when the file
+   * upload is aborted. If the default is prevented, then the file would not be
+   * removed from the list.
+   *
+   * @event file-remove
+   * @param {Object} detail
+   *  @param {Object} detail.file the file to be removed
    */
   /**
    * Fired before the XHR is opened. Could be used for changing the request
@@ -400,6 +449,24 @@ add a `<template class="file">...</template>` to the light DOM:
    * Fired in case the upload process failed.
    *
    * @event upload-error
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+  /**
+   * Fired when retry upload is requested. If the default is prevented, then
+   * retry would not be performed.
+   *
+   * @event upload-retry
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the previous upload xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+  /**
+   * Fired when retry abort is requested. If the default is prevented, then the
+   * file upload would not be aborted.
+   *
+   * @event upload-abort
    * @param {Object} detail
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded
