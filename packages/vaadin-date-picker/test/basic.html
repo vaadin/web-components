@@ -111,6 +111,13 @@
         expect(datepicker.value).to.equal('');
       });
 
+      it('should format value correctly', function() {
+        datepicker.value = new Date(2000, 1, 1);
+        expect(datepicker.$.input.bindValue).to.equal('2000-02-01');
+        datepicker.value = new Date(1999, 11, 31);
+        expect(datepicker.$.input.bindValue).to.equal('1999-12-31');
+      });
+
       it('should not show clear icon', function(done) {
         expect(datepicker.$.clear.clientHeight).to.equal(0);
         datepicker.value = new Date(2000, 1, 1);

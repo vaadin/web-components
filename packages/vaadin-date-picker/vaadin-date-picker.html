@@ -36,7 +36,7 @@
 
     <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(value, _opened)]]">
       <label id="label" on-tap="_open">[[label]]</label>
-      <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[value]]" type="text" on-tap="_open">
+      <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(value)]]" type="text" on-tap="_open">
       <iron-icon id="clear" suffix on-tap="_clear" icon="clear"></iron-icon>
     </paper-input-container>
 
@@ -67,6 +67,16 @@
         label: String,
 
         _opened: Boolean
+      },
+
+      _zeroPad: function(i) {
+        return i < 10 ? '0' + i : i;
+      },
+
+      _formatValue: function(value) {
+        if (value) {
+          return value.getFullYear() + '-' + this._zeroPad(value.getMonth() + 1) + '-' + this._zeroPad(value.getDate());
+        }
       },
 
       _open: function() {
