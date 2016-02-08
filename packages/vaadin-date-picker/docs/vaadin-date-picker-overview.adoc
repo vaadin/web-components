@@ -1,0 +1,19 @@
+---
+title: Overview
+order: 1
+layout: page
+---
+
+[[vaadin-date-picker.overview]]
+= Overview
+
+The [elementname]#vaadin-date-picker# element is a date selection field, which includes a scrollable month calendar view.
+The user can navigate to a month by scrolling the list of months and select a date.
+When a date is selected, the user can clear the value with a button on the right side of the selection.
+
+The current alpha version has a limited set of features.
+Future versions will address issues such as localization, easy navigation through years and keyboard input.
+
+[[figure.vaadin-date-picker.overview]]
+.A screenshot of vaadin-date-picker
+image::img/vaadin-date-picker-overview.png[]

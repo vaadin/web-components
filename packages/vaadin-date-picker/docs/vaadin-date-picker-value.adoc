@@ -1,0 +1,31 @@
+---
+title: Handling the Value
+order: 2
+layout: page
+---
+
+[[vaadin-date-picker.value]]
+= Handling Date Selection
+
+The user can select a date by clicking or tapping on it.
+Use of keyboard for navigation or for entering the date is not yet supported in the alpha version of the element.
+
+The type of the value is a JavaScript [classname]#Date# object or an empty [classname]#String# when no selection is made.
+You can set the value programmatically by assigning the [propertyname]#value# property or by using the [propertyname]#value# attribute.
+The attribute value should be a Date-parsable [classname]#String# representation.
+
+[source,html]
+----
+<vaadin-date-picker value="1999-12-31"></vaadin-date-picker>
+----
+
+In order to listen to changes in this value, you can add a `value-changed` listener to the [elementname]#vaadin-date-picker#.
+
+[source,javascript]
+----
+// Log the selected dates to console.
+// Example output: "Selected: Sun Feb 14 2016 12:00:00 GMT+0200 (EET)"
+datePicker.addEventListener('value-changed', function() {
+  console.log('Selected: ' + datePicker.value);
+});
+----
