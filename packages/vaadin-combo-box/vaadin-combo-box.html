@@ -418,13 +418,15 @@ enable usage within an `iron-form`.
       this.$.input.setSelectionRange(0, this.$.input.bindValue.length);
     },
 
-    _clearSelectionRange: function() {
-      // in touch devices, iOS especially, setting selection range focuses the input.
-      // however, selection range seems to be cleared natively on blur, so there's no need to clear manually.
+    // document.activeElement doesn't return elements from inside shadow root
+    _focusedInput: function() {
+      return Polymer.dom(this.root).querySelector('input:focus');
+    },
 
-      // parentElement is used to check that combo-box is attached to the DOM, IE11 generate errors
-      // when setting selection range while detached. (sigh)
-      if (!this.$.overlay.touchDevice && this.parentElement) {
+    _clearSelectionRange: function() {
+      // Setting selection range focuses and/or moves the caret in some browsers,
+      // and there's no need to modify the selection range if the input isn't focused anyway.
+      if (this._focusedInput() === this.$.input) {
         this.$.input.setSelectionRange(this.$.input.bindValue.length, this.$.input.bindValue.length);
       }
     },
