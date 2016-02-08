@@ -33,6 +33,10 @@ add a `<template class="file">...</template>` to the light DOM:
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="vaadin-upload-file.html">
 
@@ -42,37 +46,95 @@ add a `<template class="file">...</template>` to the light DOM:
       :host {
         @apply(--layout-vertical);
         display: block;
+        position: relative;
         border: 1px dashed;
         border-color: var(--divider-color,  #666);
-        border-radius: 2px;
+        border-radius: 3px;
         padding: 16px;
         text-align: center;
       }
 
       :host[dragover] {
         border-color: var(--primary-color, #03A9F4);
-        opacity: 0.7;
+      }
+
+      /*
+        Cover the entire element with transparent overlay when dragging files
+        over it. Helps to reduce the amount of events fired.
+      */
+      :host::before {
+        @apply(--layout-fit);
+        content: '';
+        display: none;
+        z-index: 10;
+      }
+      :host[dragover]::before {
+        display: block;
+      }
+
+      /*
+        Set position: relative for every layout element to make the drag ripple
+        to lay behind everything else.
+      */
+      :host > ::content,
+      #dropLabel,
+      #fileList,
+      #buttons {
+        position: relative;
+      }
+
+      #dragRipple {
+        color: var(--primary-color, #03A9F4);
+        @apply(--vaadin-upload-drag-ripple);
+      }
+
+      #dropLabel {
+        @apply(--paper-font-body2);
+        position: relative;
+        margin-top: 8px;
+        color: var(--disabled-text-color, #b3b3b3);
+        @apply(--vaadin-upload-drop-label);
+      }
+
+      :host[dragover] #dropLabel,
+      :host[dragover] ::content .drop-label {
+        color: var(--primary-color, #03A9F4);
+        @apply(--vaadin-upload-drop-label-dragover);
+      }
+
+      #dropLabel ::content iron-icon {
+        margin-right: .25em;
+        @apply(--vaadin-upload-drop-label-icon);
       }
 
       #fileList {
+        position: relative;
         text-align: left;
+        @apply(--vaadin-upload-file-list);
       }
 
       #buttons {
         @apply(--layout-horizontal);
         @apply(--layout-center-justified);
-
+        position: relative;
         margin: 8px 0 0;
+        @apply(--vaadin-upload-buttons);
       }
 
       paper-button {
-        background-color: var(--primary-color, #03A9F4);
-        color: #fff;
+        @apply(--paper-font-button);
+        color: var(--primary-color, #03A9F4);
+        padding: .43em .57em;
+        @apply(--vaadin-upload-button);
       }
     </style>
 
+    <paper-ripple id="dragRipple" noink></paper-ripple>
     <div id="dropLabel">
-      <content select=".drop-label">Drop files here ...</content>
+      <content select=".drop-label">
+        <iron-icon icon="file-upload"></iron-icon>
+        Drop files here...
+      </content>
     </div>
     <template id="defaultFileTemplate">
       <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
@@ -82,7 +144,7 @@ add a `<template class="file">...</template>` to the light DOM:
     </div>
     <content></content>
     <div id="buttons">
-      <paper-button id="addFiles" raised on-tap="_onAddFilesClick">Add File(s)</paper-button>
+      <paper-button id="addFiles" on-tap="_onAddFilesClick">Add File(s)</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden multiple>
   </template>
@@ -155,19 +217,34 @@ add a `<template class="file">...</template>` to the light DOM:
       this._templatizeFileList();
     },
 
+    _dragRippleAction: function(action, event) {
+      this.$.dragRipple[action]({detail: {x: event.clientX, y: event.clientY}});
+    },
+
     _onDragover: function(event) {
       event.preventDefault();
-      this.dragover = true;
+      if (!this.dragover) {
+        this.dragover = true;
+        this._dragRippleAction('downAction', event);
+      }
     },
 
     _onDragleave: function(event) {
-      event.preventDefault();
-      this.dragover = false;
+      // Dragleave sometimes fired on children, skipping them. Fixes flickeing
+      // when quickly dragging over.
+      if (Polymer.dom(event).rootTarget === this) {
+        event.preventDefault();
+        if (this.dragover) {
+          this.dragover = false;
+          this._dragRippleAction('upAction', event);
+        }
+      }
     },
 
     _onDrop: function(event) {
       event.preventDefault();
       this.dragover = false;
+      this._dragRippleAction('upAction', event);
       Array.prototype.forEach.call(event.dataTransfer.files, this._addFile.bind(this));
     },
 
@@ -220,7 +297,7 @@ add a `<template class="file">...</template>` to the light DOM:
           file.status += ' about ' + file.remaining + ' seconds remaining.';
         } else {
           file.doneStr = file.totalStr;
-          file.status = 'Processing file ...';
+          file.status = 'Processing file...';
           file.uploading = false;
         }
         this._notifyFileChanges(file);
@@ -283,7 +360,7 @@ add a `<template class="file">...</template>` to the light DOM:
         return;
       }
 
-      file.status = 'Connecting ...';
+      file.status = 'Connecting...';
       file.indeterminate = true;
       file.abort = undefined;
       file.uploading = true;

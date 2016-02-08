@@ -18,6 +18,8 @@ This program is available under Apache License Version 2.0, available at https:/
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="common.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
 </head>
 <body>
 
@@ -39,12 +41,16 @@ This program is available under Apache License Version 2.0, available at https:/
   </section>
 
   <section>
-    <h3>Custom File Template</h3>
+    <h3>Custom Drop Label and File Template</h3>
     <code-example source>
       <vaadin-upload demo>
+        <h2 class="drop-label">
+          <iron-icon icon="cloud-upload"></iron-icon>
+          Drop files here...
+        </h2>
         <template class="file">
           [[file.name]]
-          <progress value="[[file.loaded]]" max="[[file.size]]"></progress>
+          <progress value="[[file.loaded]]" max="[[file.size]]" style="width: 100%;"></progress>
           <div>[[file.status]]</div>
         </template>
       </vaadin-upload>

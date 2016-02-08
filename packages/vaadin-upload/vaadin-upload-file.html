@@ -13,6 +13,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
@@ -21,47 +22,99 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
+        @apply(--layout-vertical);
+        margin: 8px 0;
+        padding: 8px 0 0;
+        @apply(--vaadin-upload-file);
       }
 
       #row {
         @apply(--layout-horizontal);
         @apply(--layout-center);
+        @apply(--vaadin-upload-file-row);
+        height: 36px;
       }
 
       #meta {
+        @apply(--layout-vertical);
         @apply(--layout-flex);
         width: 1px;
+        @apply(--vaadin-upload-file-meta);
       }
 
       #name,
-      #error,
-      #status {
+      #status,
+      #error {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        line-height: 16px !important;
+      }
+
+      #name {
+        @apply(--paper-font-body2);
+        @apply(--vaadin-upload-file-name);
+      }
+
+      #status {
+        @apply(--paper-font-caption);
+        color: var(--disabled-text-color, gray);
+        @apply(--vaadin-upload-file-status);
+      }
+
+      #error {
+        @apply(--paper-font-caption);
+        color: var(--error-color, #f40303);
+        @apply(--vaadin-upload-file-error);
       }
 
       #commands {
+        margin-right: -4px;
+        @apply(--vaadin-upload-file-commands);
+        @apply(--layout-horizontal);
+      }
 
+      #commands [icon] {
+        margin-left: -4px;
+        margin-right: -4px;
+      }
+
+      #commands [icon="refresh"],
+      #commands [icon="clear"] {
+        color: var(--primary-color, #03A9F4);
+      }
+
+      #commands [icon="warning"] {
+        color: var(--error-color, #f40303);
       }
 
       paper-progress {
         --paper-progress-active-color: var(--primary-color, #03A9F4);
         width: 100%;
+        @apply(--vaadin-upload-file-progress);
       }
 
       paper-progress[error] {
         --paper-progress-active-color: var(--error-color, #f40303);
+        @apply(--vaadin-upload-file-progress-error);
       }
 
       paper-progress[indeterminate] {
         --paper-progress-container-color: var(--primary-color, #03A9F4);
         --paper-progress-active-color: rgba(1, 97, 155, 0.5);
+        @apply(--vaadin-upload-file-progress-indeterminate);
       }
 
       paper-progress[uploading][indeterminate] {
         --paper-progress-container-color: var(--divider-color, #e0e0e0);
         --paper-progress-active-color: var(--disabled-text-color, gray);
+        @apply(--vaadin-upload-file-progress-uploading-indeterminate);
+      }
+
+      paper-progress[complete] {
+        --paper-progress-container-color: var(--divider-color, #e0e0e0);
+        --paper-progress-active-color: var(--divider-color, #e0e0e0);
+        @apply(--vaadin-upload-file-progress-complete);
       }
 
     </style>
@@ -75,10 +128,10 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
 
       <div id="commands">
-        <paper-icon-button icon="refresh" title="Retry Upload" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
-        <paper-icon-button icon="clear" title="Abort Upload" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
         <paper-icon-button disabled icon="done" title="Complete" hidden$="[[!file.complete]]"></paper-icon-button>
         <paper-icon-button disabled icon="warning" title="Error" hidden$="[[!file.error]]"></paper-icon-button>
+        <paper-icon-button icon="refresh" title="Retry Upload" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
+        <paper-icon-button icon="clear" title="Abort Upload" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
       </div>
 
     </div>
