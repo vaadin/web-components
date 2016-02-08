@@ -22,14 +22,6 @@
     describe('Basic features', function() {
       var datepicker;
 
-      function getFirstVisibleCalendar() {
-        var overlay = datepicker.$.overlay;
-        var itemIndex = overlay.$.list.firstVisibleIndex - overlay._originIndex;
-        return overlay.$.list._getModelFromItem(itemIndex)._children.filter(function(i) {
-          return i.nodeType === 1;
-        })[0];
-      }
-
       function monthsEqual(date1, date2) {
         return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
       }
@@ -53,7 +45,7 @@
         var spy = sinon.spy();
         datepicker.addEventListener('value-changed', spy);
         datepicker.value = new Date(2000, 1, 1);
-        expect(spy.callCount).to.equal(1);
+        expect(spy.calledOnce).to.be.true;
       });
 
       it('should open on tap', function(done) {
@@ -64,21 +56,22 @@
       });
 
       it('should scroll to today by default', function(done) {
+        var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(monthsEqual(getFirstVisibleCalendar().month, new Date())).to.be.true;
+          expect(monthsEqual(spy.firstCall.args[0], new Date())).to.be.true;
           done();
         });
-        tap(datepicker.$.input);
+        datepicker._open();
       });
 
       it('should scroll to selected value by default', function(done) {
-        var value = new Date(2000, 1, 1);
-        datepicker.value = value;
+        var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+        datepicker.value = new Date(2000, 1, 1);
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(monthsEqual(getFirstVisibleCalendar().month, value)).to.be.true;
+          expect(monthsEqual(spy.firstCall.args[0], datepicker.value)).to.be.true;
           done();
         });
-        tap(datepicker.$.input);
+        datepicker._open();
       });
 
       it('should close on overlay datetap', function(done) {
