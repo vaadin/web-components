@@ -41,7 +41,7 @@
     </paper-input-container>
 
     <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
-      <vaadin-date-picker-overlay selected-date="{{value}}" class="dropdown-content" id="overlay"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" on-datetap="_close" selected-date="{{value}}" class="dropdown-content"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
   </template>
@@ -57,8 +57,7 @@
         value: {
           type: Date,
           notify: true,
-          value: '',
-          observer: '_valueChanged'
+          value: ''
         },
 
         /**
@@ -92,7 +91,7 @@
         }
       },
 
-      _valueChanged: function() {
+      _close: function() {
         this.$.dropdown.close();
       },
 

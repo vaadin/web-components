@@ -182,6 +182,7 @@
       _handleTap: function(e) {
         if (e.target.date) {
           this.selectedDate = e.target.date;
+          this.fire('datetap');
         }
       }
 

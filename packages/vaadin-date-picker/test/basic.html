@@ -22,14 +22,6 @@
     describe('Basic features', function() {
       var datepicker;
 
-      function waitUntilOpen(callback, closed) {
-        if (datepicker.$.overlay.clientHeight > 0 !== closed) {
-          callback();
-        } else {
-          setTimeout(waitUntilOpen, 10, callback, closed);
-        }
-      }
-
       function getFirstVisibleCalendar() {
         var overlay = datepicker.$.overlay;
         var itemIndex = overlay.$.list.firstVisibleIndex - overlay._originIndex;
@@ -65,9 +57,10 @@
       });
 
       it('should open on tap', function(done) {
-        expect(datepicker.$.overlay.clientHeight).to.equal(0);
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          done();
+        });
         tap(datepicker.$.input);
-        waitUntilOpen(done);
       });
 
       it('should scroll to today by default', function(done) {
@@ -88,12 +81,17 @@
         tap(datepicker.$.input);
       });
 
-      it('should close on value change', function(done) {
-        tap(datepicker.$.input);
-        waitUntilOpen(function() {
-          datepicker.value = new Date(2000, 1, 1);
-          waitUntilOpen(done, true);
+      it('should close on overlay datetap', function(done) {
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          done();
         });
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          Polymer.Base.fire('datetap', {}, {
+            bubbles: true,
+            node: datepicker.$.overlay
+          });
+        });
+        datepicker._open();
       });
 
       it('should not have label defined by default', function() {
