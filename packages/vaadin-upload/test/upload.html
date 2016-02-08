@@ -202,7 +202,7 @@
         it('should be indeterminate when connecting', function(done) {
           Polymer.Base.async(function() {
             expect(file.indeterminate).to.be.ok;
-            expect(file.status).to.be.equal('Connecting ...');
+            expect(file.status).to.be.equal('Connecting...');
             done();
           }, 200);
           upload._uploadFile(file);
@@ -222,7 +222,7 @@
         it('should be indeterminate when server is processing the file', function(done) {
           Polymer.Base.async(function() {
             expect(file.indeterminate).to.be.ok;
-            expect(file.status).to.be.equal('Processing file ...');
+            expect(file.status).to.be.equal('Processing file...');
             done();
           }, 800);
           upload._uploadFile(file);
