@@ -275,10 +275,14 @@ add a `<template class="file">...</template>` to the light DOM:
     },
 
     _uploadFile: function(file) {
+      if (file.uploading) {
+        return;
+      }
+
       var ini = new Date().getTime();
       var xhr = file.xhr = this._createXhr(file);
-      var stalledId;
 
+      var stalledId;
       // onprogress is called always after onreadystatechange
       xhr.upload.onprogress = function(e) {
         clearTimeout(stalledId);
@@ -289,30 +293,30 @@ add a `<template class="file">...</template>` to the light DOM:
 
         file.loaded = done;
         file.progress = progress;
-        file.status = file.totalStr + ' (' + file.progress + '%)' ;
         file.indeterminate = done <= 0 || done >= total, true;
-
-        if (progress < 100) {
+        if (file.error) {
+          file.indeterminate = file.status = undefined;
+        } else if (progress < 100) {
           file.remaining = 1 + ~~(ellapsed * (100 / progress - 1));
           file.speed = ~~(total / ellapsed / 1024);
           file.totalStr = total > (1024 * 1024) ?
             ((~~(total / 1024 / 1024 * 10) / 10) + ' MB') : (~~(total / 1024) + ' KB');
           file.doneStr = done > (1024 * 1024) ?
             ((~~(done / 1024 / 1024 * 10) / 10) + ' MB') : (~~(done / 1024) + ' KB');
-          file.status += ' about ' + file.remaining + ' seconds remaining.';
+          file.status = file.totalStr + ' (' + file.progress + '%) about ' + file.remaining + ' seconds remaining.';
+
+          stalledId = setTimeout(function() {
+            file.status = 'Stalled.';
+            this._notifyFileChanges(file);
+          }.bind(this), 2000);
         } else {
           file.doneStr = file.totalStr;
           file.status = 'Processing file...';
           file.uploading = false;
         }
+
         this._notifyFileChanges(file);
         this.fire('upload-progress', {file: file, xhr: xhr});
-
-        stalledId = setTimeout(function() {
-          file.status = 'Stalled.';
-          this._notifyFileChanges(file);
-        }.bind(this), 2000);
-
       }.bind(this);
 
       // More reliable than xhr.onload
@@ -366,10 +370,10 @@ add a `<template class="file">...</template>` to the light DOM:
       }
 
       file.status = 'Connecting...';
-      file.indeterminate = true;
-      file.abort = undefined;
-      file.uploading = true;
+      file.uploading = file.indeterminate = true;
+      file.abort = file.error = undefined;
       this.fire('upload-start', {file: file, xhr: xhr});
+      this._notifyFileChanges(file);
       xhr.send(formData);
     },
 
