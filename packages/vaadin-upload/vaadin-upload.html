@@ -45,6 +45,7 @@ add a `<template class="file">...</template>` to the light DOM:
         display: block;
         position: relative;
         text-align: center;
+        overflow: hidden;
       }
 
       :host:not([nodrop]) {
@@ -274,14 +275,56 @@ add a `<template class="file">...</template>` to the light DOM:
     },
 
     _dragRippleAction: function(action, event) {
-      this.$.dragRipple[action]({detail: {x: event.clientX, y: event.clientY}});
+      var rippleActionEvent = {
+        detail: {
+          x: event.clientX,
+          y: event.clientY
+        }
+      };
+
+      if (action == 'down') {
+        this.$.dragRipple.downAction(rippleActionEvent);
+
+        // paper-ripple currently has hard Ripple.MAX_RADIUS limit of 300, and
+        // doesn’t expose Ripple constructor or any other means to modify the
+        // limit. Monkey-patching the radius calculation of just added Ripple
+        // instance to disable the radius limit.
+        //
+        // Also fixes the default radius animation formula, which otherwise
+        // tends to make the duration too small for large ripples that we have.
+        //
+        // FIXME: Remove this when the paper-ripple rewrite would be merged.
+        // Issue: https://github.com/vaadin/vaadin-upload/issues/24
+        //
+        // See:
+        // - https://github.com/PolymerElements/paper-ripple/issues/27
+        // - https://github.com/PolymerElements/paper-ripple/pull/63
+        //
+        var lastRipple = this.$.dragRipple.ripples[this.$.dragRipple.ripples.length - 1];
+        if (!lastRipple.hasOwnProperty('radius')) {
+          Object.defineProperty(lastRipple, 'radius', {
+            get: function() {
+              var width2 = this.containerMetrics.width * this.containerMetrics.width;
+              var height2 = this.containerMetrics.height * this.containerMetrics.height;
+              var waveRadius = Math.sqrt(width2 + height2) * 1.1 + 5;
+
+              var duration = 0.9 + 0.2 * (waveRadius / 300);
+              var timeNow = this.mouseInteractionSeconds / duration;
+              var size = waveRadius * (1 - Math.pow(80, -timeNow));
+              return Math.abs(size);
+            }
+          });
+        }
+      } else {
+        this.$.dragRipple.upAction(rippleActionEvent);
+      }
     },
 
     _onDragover: function(event) {
       event.preventDefault();
       if (!this.dragover) {
+        this._dragRippleAction('down', event);
         this.dragover = true;
-        this._dragRippleAction('downAction', event);
       }
     },
 
@@ -291,8 +334,8 @@ add a `<template class="file">...</template>` to the light DOM:
       if (Polymer.dom(event).rootTarget === this) {
         event.preventDefault();
         if (this.dragover) {
+          this._dragRippleAction('up', event);
           this.dragover = false;
-          this._dragRippleAction('upAction', event);
         }
       }
     },
@@ -300,6 +343,7 @@ add a `<template class="file">...</template>` to the light DOM:
     _onDrop: function(event) {
       if (!this.nodrop) {
         event.preventDefault();
+        this._dragRippleAction('up', event);
         this.dragover = false;
         this._dragRippleAction('upAction', event);
         this._addFiles(event.dataTransfer.files);
