@@ -96,9 +96,9 @@
         expect(valueChangedSpy.calledOnce).to.be.true;
       });
 
-      it('should fire datetap on tap', function() {
+      it('should fire date-tap on tap', function() {
         tapSpy = sinon.spy();
-        monthCalendar.addEventListener('datetap', tapSpy);
+        monthCalendar.addEventListener('date-tap', tapSpy);
         var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
         tap(dateElements[10]);
         expect(tapSpy.calledOnce).to.be.true;

@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2015 Vaadin Ltd.
+Copyright (c) 2016 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
@@ -60,7 +60,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
     </paper-input-container>
 
     <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" on-datetap="_close" selected-date="{{value}}" class="dropdown-content"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
   </template>

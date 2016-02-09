@@ -48,11 +48,18 @@
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should open on tap', function(done) {
+      it('should open on input tap', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
           done();
         });
         tap(datepicker.$.input);
+      });
+
+      it('should open on label tap', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          done();
+        });
+        tap(datepicker.$.label);
       });
 
       it('should scroll to today by default', function(done) {
@@ -74,12 +81,12 @@
         datepicker._open();
       });
 
-      it('should close on overlay datetap', function(done) {
+      it('should close on overlay date tap', function(done) {
         datepicker.addEventListener('iron-overlay-closed', function() {
           done();
         });
         datepicker.addEventListener('iron-overlay-opened', function() {
-          Polymer.Base.fire('datetap', {}, {
+          Polymer.Base.fire('date-tap', {}, {
             bubbles: true,
             node: datepicker.$.overlay
           });

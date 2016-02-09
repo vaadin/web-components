@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/typography.html">
 
 <dom-module id="vaadin-month-calendar">
   <template>
@@ -181,7 +182,7 @@
       _handleTap: function(e) {
         if (e.target.date) {
           this.selectedDate = e.target.date;
-          this.fire('datetap');
+          this.fire('date-tap');
         }
       }
 

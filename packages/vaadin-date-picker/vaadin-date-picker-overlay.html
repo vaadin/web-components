@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-styles/shadow.html">
+<link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="vaadin-month-calendar.html">
 
 <dom-module id="vaadin-date-picker-overlay">
@@ -73,9 +74,11 @@
 
         _visibleMonthIndex: Number,
 
-        _months: Array,
+        _months: {
+          computed: '_computeMonths(_originIndex)'
+        },
 
-        // As iron-list isn't two way scrollable by default, it needs to pre-scrolled
+        // As iron-list isn't two way scrollable by default, it needs to be pre-scrolled
         // to an index in the middle beforehand. This property states the index of the
         // 'origin' position in the array and also dictates the array size at the same
         // time.
@@ -85,12 +88,12 @@
 
       },
 
-      ready: function() {
+      _computeMonths: function(_originIndex) {
         var months = [];
-        for (var i = -this._originIndex; i < this._originIndex; i++) {
-          months.push(i);
+        for (var i = -_originIndex; i < _originIndex; i++) {
+          months.push('' + i);
         }
-        this._months = months;
+        return months;
       },
 
       /**
@@ -110,7 +113,7 @@
 
       _dateAfterXMonths: function(date, months) {
         var result = new Date(date);
-        result.setMonth(months + date.getMonth());
+        result.setMonth(parseInt(months) + date.getMonth());
         return result;
       },
 
