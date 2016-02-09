@@ -174,7 +174,7 @@
         it('should reject files when maxFiles is reached', function(done) {
           upload.maxFiles = 1;
           upload.addEventListener('file-rejected', function(e) {
-            expect(event.detail.error).to.be.ok;
+            expect(e.detail.error).to.be.ok;
             done();
           });
           upload._addFiles([file, file]);
@@ -183,7 +183,7 @@
         it('should reject files with excesive size', function(done) {
           upload.maxFileSize = testFileSize - 1;
           upload.addEventListener('file-rejected', function(e) {
-            expect(event.detail.error).to.be.ok;
+            expect(e.detail.error).to.be.ok;
             done();
           });
           upload._addFiles([file]);
@@ -193,7 +193,7 @@
           upload.accept = 'image/*,video/*';
           upload.addEventListener('file-rejected', function(e) {
             expect(upload.files.lentgh == 1);
-            expect(event.detail.error).to.be.ok;
+            expect(e.detail.error).to.be.ok;
             done();
           });
           upload._addFiles([file]);

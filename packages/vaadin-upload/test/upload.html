@@ -246,6 +246,51 @@
           upload._uploadFile(file);
         });
       });
+
+      describe('Abort Files', function() {
+        var files;
+        beforeEach(function() {
+          upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
+          files = createFiles(2, 512, 'application/json');
+        });
+
+        it('should fire `upload-abort` and remove from files', function(done) {
+          upload.addEventListener('upload-progress', function(e) {
+            if (e.detail.file == files[0] && e.detail.file.progress == 50) {
+              upload._abortFileUpload(e.detail.file);
+            }
+          });
+          upload.addEventListener('upload-abort', function(e) {
+            Polymer.Base.async(function() {
+              expect(e.detail.file.abort).to.be.ok;
+              expect(e.detail.xhr.error).to.be.ok;
+              expect(e.detail.xhr.sent).to.be.ok;
+              expect(upload.files.length).to.be.equal(1);
+              done();
+            });
+          });
+          upload._addFiles(files);
+        });
+
+        it('should cancel all files ', function(done) {
+          var file2 = files[1];
+          upload.addEventListener('upload-progress', function(e) {
+            if (e.detail.file == file2 && e.detail.file.progress == 50) {
+              upload.$.cancelAll.fire('tap');
+            }
+          });
+          upload.addEventListener('upload-abort', function(e) {
+            if (e.detail.file == file2) {
+              Polymer.Base.async(function() {
+                expect(upload.files.length).to.be.empty;
+                done();
+              });
+            }
+          });
+          upload._addFiles(files);
+        });
+
+      });
     });
   </script>
 

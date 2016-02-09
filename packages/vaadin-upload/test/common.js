@@ -87,6 +87,8 @@ function createFiles(arraySize, fileSize, contentType) {
          if (error) {
            xhr.setResponseHeader('Content-Type', cfg.serverType);
            xhr.receive(500, {error: error});
+         } else if (xhr.readyState === 0) {
+           xhr.onreadystatechange();
          } else if (xhr.readyState < 4) {
            xhr.setResponseHeader('Content-Type', cfg.serverType);
            xhr.receive(200, cfg.serverMessage);
