@@ -478,6 +478,7 @@ add a `<template class="file">...</template>` to the light DOM:
         var ev = document.createEvent('MouseEvents');
         ev.initEvent('click', true, false);
         this.$.fileInput.dispatchEvent(ev);
+        this.$.fileInput.value = '';
       }
     },
 
