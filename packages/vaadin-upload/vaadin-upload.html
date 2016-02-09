@@ -496,10 +496,10 @@ add a `<template class="file">...</template>` to the light DOM:
     _onAddFilesClick: function(event) {
       if (document.createEvent) {
         this.$.fileInput.multiple = !this.nomultiple && this.maxFiles != 1;
+        this.$.fileInput.value = '';
         var ev = document.createEvent('MouseEvents');
         ev.initEvent('click', true, false);
         this.$.fileInput.dispatchEvent(ev);
-        this.$.fileInput.value = '';
       }
     },
 
