@@ -28,6 +28,10 @@
         dropdown = datepicker.$.dropdown;
       });
 
+      afterEach(function(done) {
+        datepicker.async(done, 1);
+      });
+
       describe('Sizing', function() {
 
         beforeEach(function() {
@@ -37,13 +41,15 @@
           document.getElementsByTagName('head')[0].appendChild(viewport);
         });
 
-        it('should select fullscreen/desktop mode', function() {
+        it('should select fullscreen/desktop mode', function(done) {
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var fullscreen = viewportWidth < dropdown._fullscreenThresholdWidth;
+            expect(dropdown.verticalOffset).to.equal(fullscreen ? 0 : datepicker.clientHeight);
+            expect(dropdown.positionTarget).to.equal(fullscreen ? document.documentElement : datepicker);
+            done();
+          });
           datepicker._open();
-
-          var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-          var fullscreen = viewportWidth < dropdown._fullscreenThresholdWidth;
-          expect(dropdown.verticalOffset).to.equal(fullscreen ? 0 : datepicker.clientHeight);
-          expect(dropdown.positionTarget).to.equal(fullscreen ? document.documentElement : datepicker);
         });
 
       });
@@ -54,20 +60,26 @@
           document.body.style.padding = '500px';
         });
 
-        it('should align top/left', function() {
+        it('should align top/left', function(done) {
           datepicker.style.left = '0';
           datepicker.style.top = '0';
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            expect(dropdown.verticalAlign).to.equal('top');
+            expect(dropdown.horizontalAlign).to.equal('left');
+            done();
+          });
           datepicker._open();
-          expect(dropdown.verticalAlign).to.equal('top');
-          expect(dropdown.horizontalAlign).to.equal('left');
         });
 
-        it('should align borrom/right', function() {
+        it('should align borrom/right', function(done) {
           datepicker.style.right = '0';
           datepicker.style.bottom = '0';
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            expect(datepicker.$.dropdown.verticalAlign).to.equal('bottom');
+            expect(datepicker.$.dropdown.horizontalAlign).to.equal('right');
+            done();
+          });
           datepicker._open();
-          expect(datepicker.$.dropdown.verticalAlign).to.equal('bottom');
-          expect(datepicker.$.dropdown.horizontalAlign).to.equal('right');
         });
 
       });

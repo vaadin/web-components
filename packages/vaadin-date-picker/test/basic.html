@@ -27,6 +27,10 @@
         datepicker = fixture('datepicker');
       });
 
+      afterEach(function(done) {
+        datepicker.async(done, 1);
+      });
+
       it('should have default value', function() {
         expect(datepicker.value).to.equal('');
       });

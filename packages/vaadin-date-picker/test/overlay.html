@@ -36,12 +36,6 @@
         }
       }
 
-      function getFirstVisibleCalendar() {
-        return overlay.$.list._getModelFromItem(overlay._visibleMonthIndex)._children.filter(function(i) {
-          return i.nodeType === 1;
-        })[0];
-      }
-
       it('should reflect the year of currently visible month on the toolbar', function(done) {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
@@ -55,7 +49,7 @@
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
         waitUntilScrolledTo(date, function() {
-          expect(monthsEqual(getFirstVisibleCalendar().month, date)).to.be.true;
+          expect(monthsEqual(getFirstVisibleItem(overlay.$.scroller).firstElementChild.month, date)).to.be.true;
           done();
         });
       });
