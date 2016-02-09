@@ -111,16 +111,26 @@
           expect(upload.dragover).not.to.be.ok;
         });
 
-        it('should fire `file-add` event when dropping files', function() {
-          var fileAddSpy = sinon.spy();
-          upload.addEventListener('file-add', fileAddSpy);
+        describe('nodrop flag', function() {
+          var fileAddSpy, dropEvent;
+          beforeEach(function() {
+            fileAddSpy = sinon.spy();
+            upload.addEventListener('file-add', fileAddSpy);
+            dropEvent = createDndEvent('drop');
+          });
 
-          var dropEvent = createDndEvent('drop');
-          upload.dispatchEvent(dropEvent);
+          it('should fire `file-add` event when dropping files and drop is enabled', function() {
+            upload.nodrop = false;
+            upload.dispatchEvent(dropEvent);
+            fileAddSpy.should.have.been.calledTwice;
+          });
 
-          fileAddSpy.should.have.been.calledTwice;
+          it('should not fire `file-add` event when dropping files and drop is disabled', function() {
+            upload.nodrop = true;
+            upload.dispatchEvent(dropEvent);
+            fileAddSpy.should.not.have.been.called;
+          });
         });
-
       });
 
       it('should push files to `files` Array property', function() {
