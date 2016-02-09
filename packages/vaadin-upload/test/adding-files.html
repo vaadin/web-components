@@ -23,18 +23,20 @@
 
   <script>
     describe('adding files', function() {
-      var upload;
+      var upload, file, files;
       var testFileSize = 512;
 
       beforeEach(function() {
         upload = fixture('upload');
         upload.target = 'http://foo.com/bar';
         upload._createXhr = xhrCreator({size: testFileSize, uploadTime: 200, stepTime: 50});
+
+        files = createFiles(2, testFileSize, 'application/x-octet-stream');
+        file = createFile(testFileSize, 'application/x-octet-stream');
         chai.should();
       });
 
       describe('with add button', function() {
-
         // Skip the file dialog open test for MSIE and MSEdge. It pops out and
         // stops the JS execution until closed by user.
         describeSkipIf(ieOrEdge, 'file dialog', function() {
@@ -78,7 +80,7 @@
           // Replacing __proto__ is not enough for Android Chrome, deleting the
           // files property in addition.
           delete upload.$.fileInput.files;
-          upload.$.fileInput.files = createFiles(2, testFileSize, 'application/x-octet-stream');
+          upload.$.fileInput.files = files;
 
           var e = document.createEvent('HTMLEvents');
           e.initEvent('change', false, true);
@@ -90,8 +92,9 @@
         it('should reset input.value before dialog', function() {
           var input = upload.$.fileInput;
           var button = upload.$.addFiles;
-
+          // jshint ignore:start
           input.__proto__ = HTMLElement.prototype;
+          // jshint ignore:end
           delete input.value;
           input.value = 'foo';
 
@@ -154,9 +157,7 @@
           .that.is.an('array')
           .that.is.empty;
 
-        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
         files.forEach(upload._addFile.bind(upload));
-
         expect(upload.files[0]).to.equal(files[0]);
         expect(upload.files[1]).to.equal(files[1]);
       });
@@ -165,10 +166,45 @@
         var uploadStartSpy = sinon.spy();
         upload.addEventListener('upload-start', uploadStartSpy);
 
-        var files = createFiles(2, testFileSize, 'application/x-octet-stream');
         files.forEach(upload._addFile.bind(upload));
-
         uploadStartSpy.should.have.been.calledTwice;
+      });
+
+      describe('validate files', function() {
+        it('should reject files when maxFiles is reached', function(done) {
+          upload.maxFiles = 1;
+          upload.addEventListener('file-rejected', function(e) {
+            expect(event.detail.error).to.be.ok;
+            done();
+          });
+          upload._addFiles([file, file]);
+        });
+
+        it('should reject files with excesive size', function(done) {
+          upload.maxFileSize = testFileSize - 1;
+          upload.addEventListener('file-rejected', function(e) {
+            expect(event.detail.error).to.be.ok;
+            done();
+          });
+          upload._addFiles([file]);
+        });
+
+        it('should reject files with incorrect contentType', function(done) {
+          upload.accept = 'image/*,video/*';
+          upload.addEventListener('file-rejected', function(e) {
+            expect(upload.files.lentgh == 1);
+            expect(event.detail.error).to.be.ok;
+            done();
+          });
+          upload._addFiles([file]);
+        });
+
+        it('should allow files with correct extension', function() {
+          upload.accept = 'image/*,.foo,video/*';
+          file.name = 'bar.foo';
+          upload._addFiles([file]);
+          expect(upload.files.lentgh == 1);
+        });
       });
 
     });
