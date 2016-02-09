@@ -55,7 +55,7 @@ add a `<template class="file">...</template>` to the light DOM:
       }
 
       :host[dragover] {
-        border-color: var(--primary-color, #03A9F4);
+        border-color: var(--primary-color, #00B4F0);
       }
 
       /*
@@ -84,7 +84,7 @@ add a `<template class="file">...</template>` to the light DOM:
       }
 
       #dragRipple {
-        color: var(--primary-color, #03A9F4);
+        color: var(--light-primary-color, #7CD8F7);
         @apply(--vaadin-upload-drag-ripple);
       }
 
@@ -98,7 +98,7 @@ add a `<template class="file">...</template>` to the light DOM:
 
       :host[dragover] #dropLabel,
       :host[dragover] ::content .drop-label {
-        color: var(--primary-color, #03A9F4);
+        color: var(--primary-color, #00B4F0);
         @apply(--vaadin-upload-drop-label-dragover);
       }
 
@@ -123,13 +123,12 @@ add a `<template class="file">...</template>` to the light DOM:
 
       paper-button {
         @apply(--paper-font-button);
-        color: var(--primary-color, #03A9F4);
+        color: var(--primary-color, #00B4F0);
         padding: .43em .57em;
         @apply(--vaadin-upload-button);
       }
     </style>
 
-    <paper-ripple id="dragRipple" noink></paper-ripple>
     <div id="dropLabel" hidden$="[[nodrop]]">
       <content select=".drop-label">
         <iron-icon icon="file-upload"></iron-icon>
@@ -148,6 +147,7 @@ add a `<template class="file">...</template>` to the light DOM:
       <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!cancelAll]]">Cancel all</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
+    <paper-ripple id="dragRipple" noink></paper-ripple>
   </template>
 </dom-module>
 

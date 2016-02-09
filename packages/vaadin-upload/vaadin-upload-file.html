@@ -81,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       #commands [icon="refresh"],
       #commands [icon="clear"] {
-        color: var(--primary-color, #03A9F4);
+        color: var(--primary-color, #00B4F0);
       }
 
       #commands [icon="warning"] {
@@ -89,7 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       paper-progress {
-        --paper-progress-active-color: var(--primary-color, #03A9F4);
+        --paper-progress-active-color: var(--primary-color, #00B4F0);
         width: 100%;
         @apply(--vaadin-upload-file-progress);
       }
@@ -101,7 +101,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       paper-progress[indeterminate] {
-        --paper-progress-container-color: var(--primary-color, #03A9F4);
+        --paper-progress-container-color: var(--primary-color, #00B4F0);
         --paper-progress-active-color: rgba(1, 97, 155, 0.5);
         @apply(--vaadin-upload-file-progress-indeterminate);
       }
@@ -113,8 +113,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       paper-progress[complete] {
-        --paper-progress-container-color: var(--divider-color, #e0e0e0);
-        --paper-progress-active-color: var(--divider-color, #e0e0e0);
+        --paper-progress-active-color: var(--disabled-text-color, gray);
         @apply(--vaadin-upload-file-progress-complete);
       }
 
