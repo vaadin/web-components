@@ -106,12 +106,13 @@ enable usage within an `iron-form`.
   </style>
 
   <template>
-    <paper-input-container class="dropdown-input" id="inputContainer" opened$="[[opened]]">
+    <paper-input-container disabled$="[[disabled]]" class="dropdown-input" id="inputContainer" opened$="[[opened]]">
       <label id="label" on-tap="open">[[label]]</label>
       <input
           is="iron-input"
           id="input"
           role="combobox"
+          disabled$="[[disabled]]"
           aria-activedescendant$="[[_ariaActiveIndex]]"
           aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-labelledby="label"
