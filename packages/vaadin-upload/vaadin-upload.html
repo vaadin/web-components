@@ -73,17 +73,6 @@ add a `<template class="file">...</template>` to the light DOM:
         display: block;
       }
 
-      /*
-        Set position: relative for every layout element to make the drag ripple
-        to lay behind everything else.
-      */
-      :host > ::content,
-      #dropLabel,
-      #fileList,
-      #buttons {
-        position: relative;
-      }
-
       #dragRipple {
         color: var(--light-primary-color, #7CD8F7);
         @apply(--vaadin-upload-drag-ripple);
