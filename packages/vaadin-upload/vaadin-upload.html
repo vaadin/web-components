@@ -26,6 +26,19 @@ add a `<template class="file">...</template>` to the light DOM:
 </vaadin-upload>
 ```
 
+### Styling
+
+The following custom properties are available for styling the component.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-upload-drag-ripple`|styles for the ripple animation in the drop area|`{}`
+`--vaadin-upload-drop-label`|styles for the drop label|`{}`
+`--vaadin-upload-drop-label-dragover`|styles for the drop label when overing the component with files|`{}`
+`--vaadin-upload-drop-label-icon`|styles for the drop icon|`{}`
+`--vaadin-upload-file-list`|styles for the file list|`{}`
+`--vaadin-upload-buttons`|styles for the buttons container|`{}`
+`--vaadin-upload-button`|styles for the upload button|`{}`
 
 @element vaadin-upload
 @demo demo/
@@ -134,7 +147,7 @@ add a `<template class="file">...</template>` to the light DOM:
     <content></content>
     <div id="buttons">
       <paper-button id="addFiles" on-tap="_onAddFilesClick">Add File(s)</paper-button>
-      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!cancelAll]]">Cancel all</paper-button>
+      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">Cancel all</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
     <paper-ripple id="dragRipple" noink></paper-ripple>
@@ -164,6 +177,7 @@ add a `<template class="file">...</template>` to the light DOM:
           }
         },
       },
+
       /**
        * Server URL.
        */
@@ -171,6 +185,7 @@ add a `<template class="file">...</template>` to the light DOM:
         type: String,
         value: ''
       },
+
       /**
        * HTTP Method used to send the files.
        */
@@ -178,6 +193,7 @@ add a `<template class="file">...</template>` to the light DOM:
         type: String,
         value: 'POST'
       },
+
       /**
        * Key-Value map to send to the server.
        */
@@ -185,6 +201,7 @@ add a `<template class="file">...</template>` to the light DOM:
         type: Object,
         value: {}
       },
+
       /**
        * Max time for the upload process, if exceeded XHR will be aborted.
        */
@@ -192,6 +209,7 @@ add a `<template class="file">...</template>` to the light DOM:
         type: Number,
         value: 0
       },
+
       /**
        * It's true when the user overs the component with a set of files
        * and becomes false when he drops the files or leave the component.
@@ -201,13 +219,15 @@ add a `<template class="file">...</template>` to the light DOM:
         value: false,
         reflectToAttribute: true
       },
+
       /**
        * Specifies if the cancel-all button is visible.
        */
-      cancelAll: {
+      showCancelAll: {
         type: Boolean,
         value: false
       },
+
       /**
        * File list
        */
@@ -217,6 +237,7 @@ add a `<template class="file">...</template>` to the light DOM:
           return [];
         }
       },
+
       /**
        * Specifies whether the file selection popup is configured to select
        * multiple files.
@@ -225,6 +246,7 @@ add a `<template class="file">...</template>` to the light DOM:
          type: Boolean,
          value: false
        },
+
       /**
        * Limit of files to upload, by default it is unlimited. If the value is
        * one, nomultiple is true.
@@ -233,6 +255,7 @@ add a `<template class="file">...</template>` to the light DOM:
          type: Number,
          value: 0
        },
+
       /**
        * Specifies the types of files that the server accepts.
        * Syntax: file_extension|audio/*|video/*|image/*|media_type
@@ -241,6 +264,7 @@ add a `<template class="file">...</template>` to the light DOM:
         type: String,
         value: ''
       },
+
       /**
        * Specifies the maximum file size allowed to upload. Default is
        * unlimited.
@@ -365,7 +389,7 @@ add a `<template class="file">...</template>` to the light DOM:
         return;
       }
 
-      var ini = new Date().getTime();
+      var ini = Date.now();
       var xhr = file.xhr = this._createXhr(file);
 
       var stalledId;
@@ -373,7 +397,7 @@ add a `<template class="file">...</template>` to the light DOM:
       xhr.upload.onprogress = function(e) {
         clearTimeout(stalledId);
 
-        last = new Date().getTime();
+        last = Date.now();
         var ellapsed = (last - ini) / 1000;
         var done = e.loaded, total = e.total, progress = ~~(done / total * 100);
 
@@ -427,7 +451,7 @@ add a `<template class="file">...</template>` to the light DOM:
           } else if (xhr.status > 500) {
             file.error = 'Unexpected Server Error';
           } else if (xhr.status > 400) {
-            file.error = 'Forbiden';
+            file.error = 'Forbidden';
           }
 
           file.complete = !file.error;
@@ -568,6 +592,7 @@ add a `<template class="file">...</template>` to the light DOM:
     }
 
   });
+
   /**
    * Fired when a file cannot be added to the queue due to a constrain:
    *  file-size, file-type or maxFiles
@@ -577,6 +602,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.file the file added
    *  @param {Object} detail.error the cause
    */
+
   /**
    * Fired when a file is added for uploading.
    *
@@ -584,6 +610,7 @@ add a `<template class="file">...</template>` to the light DOM:
    * @param {Object} detail
    *  @param {Object} detail.file the file added
    */
+
   /**
    * Fired when a file is removed from the file list, e. g. when the file
    * upload is aborted. If the default is prevented, then the file would not be
@@ -593,6 +620,7 @@ add a `<template class="file">...</template>` to the light DOM:
    * @param {Object} detail
    *  @param {Object} detail.file the file to be removed
    */
+
   /**
    * Fired before the XHR is opened. Could be used for changing the request
    * URL. If the default is prevented, then XHR would not be opened.
@@ -603,6 +631,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.file the file being uploaded
    *   @param {Object} detail.file.uploadTarget the upload request URL, initialized with the value of vaadin-upload `target` property
    */
+
   /**
    * Fired when the XHR has been opened but not sent yet.
    * Useful to change some parameters like headers, etc.
@@ -614,6 +643,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded
    */
+
   /**
    * Fired when the XHR is sent.
    *
@@ -622,6 +652,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded
    */
+
   /**
    * Fired as many times as the progress is updated.
    *
@@ -630,6 +661,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded with loaded info
    */
+
   /**
    * Fired when we have the actual server response, and before the component
    * analises it. It's useful for developers to make the upload fail depending
@@ -645,6 +677,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded
    */
+
   /**
    * Fired in case the upload process succeed.
    *
@@ -653,6 +686,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded with loaded info
    */
+
   /**
    * Fired in case the upload process failed.
    *
@@ -661,6 +695,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded
    */
+
   /**
    * Fired when retry upload is requested. If the default is prevented, then
    * retry would not be performed.
@@ -670,6 +705,7 @@ add a `<template class="file">...</template>` to the light DOM:
    *  @param {Object} detail.xhr the previous upload xhr
    *  @param {Object} detail.file the file being uploaded
    */
+
   /**
    * Fired when retry abort is requested. If the default is prevented, then the
    * file upload would not be aborted.

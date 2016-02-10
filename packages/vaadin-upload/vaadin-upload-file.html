@@ -7,6 +7,25 @@ This program is available under Apache License Version 2.0, available at https:/
 <!--
 `<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
 
+### Styling
+
+The following custom properties are available for styling the component.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-upload-file`|Styles for the entire host element|`{}`
+`--vaadin-upload-file-row`|Styles for the file row|`{}`
+`--vaadin-upload-file-meta`|Styles for the info container|`{}`
+`--vaadin-upload-file-name`|Styles for the file name|`{}`
+`--vaadin-upload-file-status`|Styles for the file status label|`{}`
+`--vaadin-upload-file-error`|Styles for the file error label|`{}`
+`--vaadin-upload-file-commands`|Styles for the buttons container|`{}`
+`--vaadin-upload-file-progress`|Styles for the included paper-progress|`{}`
+`--vaadin-upload-file-progress-error`|Styles for the progress bar when error is set|`{}`
+`--vaadin-upload-file-progress-indeterminate`|Styles for the progress bar when indeterminate|`{}`
+`--vaadin-upload-file-progress-uploading-indeterminate`|Styles for the progress bar when uploading and indeterminate|`{}`
+`--vaadin-upload-file-progress-complete`|Styles for the progress when file is complete|`{}`
+
 @element vaadin-upload-file
 @demo demo/
 -->
@@ -31,8 +50,8 @@ This program is available under Apache License Version 2.0, available at https:/
       #row {
         @apply(--layout-horizontal);
         @apply(--layout-center);
-        @apply(--vaadin-upload-file-row);
         height: 36px;
+        @apply(--vaadin-upload-file-row);
       }
 
       #meta {
@@ -184,6 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * @param {Object} detail
      *  @param {Object} detail.file file to retry upload of
      */
+
     /**
      * Fired when abort button pressed. Listened by `vaadin-upload`. Fire this
      * event if you want to abort the file upload and remove the file from the
