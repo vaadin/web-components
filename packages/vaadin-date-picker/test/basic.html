@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="../vaadin-date-picker.html">
+</head>
+
+<body>
+
+  <test-fixture id="datepicker">
+    <template>
+      <vaadin-date-picker></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Basic features', function() {
+      var datepicker;
+
+      function monthsEqual(date1, date2) {
+        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
+      }
+
+      function tap(element) {
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: element
+        });
+      }
+
+      beforeEach(function() {
+        datepicker = fixture('datepicker');
+      });
+
+      it('should have default value', function() {
+        expect(datepicker.value).to.equal('');
+      });
+
+      it('should notify value change', function() {
+        var spy = sinon.spy();
+        datepicker.addEventListener('value-changed', spy);
+        datepicker.value = new Date(2000, 1, 1);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should open on input tap', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          done();
+        });
+        tap(datepicker.$.input);
+      });
+
+      it('should open on label tap', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          done();
+        });
+        tap(datepicker.$.label);
+      });
+
+      it('should scroll to today by default', function(done) {
+        var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(monthsEqual(spy.firstCall.args[0], new Date())).to.be.true;
+          done();
+        });
+        datepicker._open();
+      });
+
+      it('should scroll to selected value by default', function(done) {
+        var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+        datepicker.value = new Date(2000, 1, 1);
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(monthsEqual(spy.firstCall.args[0], datepicker.value)).to.be.true;
+          done();
+        });
+        datepicker._open();
+      });
+
+      it('should close on overlay date tap', function(done) {
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          done();
+        });
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          Polymer.Base.fire('date-tap', {}, {
+            bubbles: true,
+            node: datepicker.$.overlay
+          });
+        });
+        datepicker._open();
+      });
+
+      it('should not have label defined by default', function() {
+        expect(datepicker.label).to.be.undefined;
+      });
+
+      it('label should be bound to label element', function() {
+        datepicker.label = 'This is LABEL';
+        expect(datepicker.$.label.innerHTML).to.eql('This is LABEL');
+      });
+
+      it('should clear the value', function() {
+        datepicker.value = new Date(2000, 1, 1);
+        tap(datepicker.$.clear);
+        expect(datepicker.value).to.equal('');
+      });
+
+      it('should format value correctly', function() {
+        datepicker.value = new Date(2000, 1, 1);
+        expect(datepicker.$.input.bindValue).to.equal('2000-02-01');
+        datepicker.value = new Date(1999, 11, 31);
+        expect(datepicker.$.input.bindValue).to.equal('1999-12-31');
+      });
+
+      it('should not show clear icon', function(done) {
+        expect(datepicker.$.clear.clientHeight).to.equal(0);
+        datepicker.value = new Date(2000, 1, 1);
+        expect(datepicker.$.clear.clientHeight).to.equal(0);
+        datepicker.value = '';
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          done();
+        });
+        datepicker._open();
+      });
+
+      it('should show clear icon', function(done) {
+        datepicker.value = new Date(2000, 1, 1);
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(datepicker.$.clear.clientHeight).not.to.equal(0);
+          done();
+        });
+        datepicker._open();
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

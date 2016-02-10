@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>vaadin-month-calendar basic tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="../vaadin-month-calendar.html">
+</head>
+
+<body>
+  <test-fixture id="vaadin-month-calendar">
+    <template>
+      <vaadin-month-calendar></vaadin-month-calendar>
+    </template>
+  </test-fixture>
+
+  <script>
+    function tap(element) {
+      Polymer.Base.fire('tap', {}, {
+        bubbles: true,
+        node: element
+      });
+    }
+
+    describe('vaadin-month-calendar', function() {
+      var monthCalendar;
+
+      beforeEach(function(done) {
+        monthCalendar = fixture('vaadin-month-calendar');
+        monthCalendar.month = new Date(2016, 1, 1); // Feb 2016
+
+        valueChangedSpy = sinon.spy();
+        monthCalendar.addEventListener('selected-date-changed', valueChangedSpy);
+
+        // Need to wait for the templates to be rendered.
+        Polymer.Base.async(done);
+      });
+
+      // A helper for creating async test functions for 2016 month rendering.
+      function createMonthTest(monthNumber) {
+        var expectedDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        return function(done) {
+          monthCalendar.month = new Date(2016, monthNumber, 1);
+          Polymer.Base.async(function() {
+            var numberOfDays = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+            expect(numberOfDays).to.equal(expectedDays[monthNumber]);
+            done();
+          });
+        };
+      }
+
+      // Create 12 tests for each month of 2016.
+      for (var i = 0; i < 12; i++) {
+        it('should render correct number of days for 2016/' + (i + 1), createMonthTest(i));
+      }
+
+      it('should render days in correct order by default', function() {
+        var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+        var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
+          return weekday.textContent;
+        });
+        expect(weekdayTitles).to.eql(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
+      });
+
+      it('should render days in correct order by first day of week', function(done) {
+        monthCalendar._firstDayOfWeek = 1; // Start from Monday.
+
+        Polymer.Base.async(function() {
+          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
+            return weekday.textContent;
+          });
+          expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+          done();
+        });
+      });
+
+      it('should re-render after changing the month', function(done) {
+        monthCalendar.month = new Date(2000, 0, 1); // Feb 2016 -> Jan 2000
+        Polymer.Base.async(function() {
+          var days = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+          expect(days).to.equal(31);
+          expect(monthCalendar.$.title.textContent).to.equal('January');
+          done();
+        });
+      });
+
+      it('should fire value change on tap', function() {
+        var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+        tap(dateElements[10]);
+        expect(valueChangedSpy.calledOnce).to.be.true;
+      });
+
+      it('should fire date-tap on tap', function() {
+        tapSpy = sinon.spy();
+        monthCalendar.addEventListener('date-tap', tapSpy);
+        var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+        tap(dateElements[10]);
+        expect(tapSpy.calledOnce).to.be.true;
+        tap(dateElements[10]);
+        expect(tapSpy.calledTwice).to.be.true;
+      });
+
+      it('should not fire value change on tapping an empty cell', function() {
+        var emptyDateElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):empty');
+        tap(emptyDateElement);
+        expect(valueChangedSpy.called).to.be.false;
+      });
+
+      it('should update value on tap', function() {
+        var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+        for (var i = 0; i < dateElements.length; i++) {
+          if (dateElements[i].date.getDate() === 10) {
+            // Tenth of February.
+            tap(dateElements[i]);
+          }
+        }
+        expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
+        expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
+        expect(monthCalendar.selectedDate.getDate()).to.equal(10);
+      });
+    });
+  </script>
+
+</body>
+
+</html>

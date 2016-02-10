@@ -1,0 +1,191 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/typography.html">
+
+<dom-module id="vaadin-month-calendar">
+  <template>
+    <style>
+      :host {
+        display: block;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font: inherit;
+        @apply(--paper-font-common-base);
+      }
+
+      #title {
+        font-size: 120%;
+        text-align: center;
+        padding: 0.4em 0;
+      }
+
+      #monthGrid {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #monthGrid div {
+        text-align: center;
+        width: 14.285714286%;
+        box-sizing: border-box;
+        padding: 0.4em 0;
+      }
+
+      #monthGrid div:not(:empty) {
+        cursor: pointer;
+      }
+
+      #monthGrid div.weekday {
+        text-transform: uppercase;
+        font-size: 70%;
+        color: #999;
+        cursor: default;
+      }
+
+      #monthGrid div[today] {
+        position: relative;
+      }
+
+      #monthGrid div[today]:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border: 2px solid #03a9f4;
+        border-radius: 50%;
+        box-sizing: border-box;
+        width: 1.6em;
+        height: 1.6em;
+        margin-left: -0.8em;
+        margin-top: -0.8em;
+      }
+
+      #monthGrid div[today][selected]:before {
+        border-color: #fff;
+      }
+
+      #monthGrid div[selected] {
+        color: #fff;
+        background: #03a9f4;
+        box-sizing: border-box;
+        border-radius: 2px;
+      }
+    </style>
+
+    <div id="title">[[_getTitle(month, _monthNames)]]</div>
+    <div id="monthGrid" on-tap="_handleTap">
+      <template is="dom-repeat" items="[[_getWeekDayNames(_weekDayNames, _firstDayOfWeek)]]">
+        <div class="weekday">[[item]]</div>
+      </template>
+      <template is="dom-repeat" items="[[_getDays(month, _firstDayOfWeek)]]">
+        <div today$="[[_isToday(item)]]" selected$="[[_isSelected(item, selectedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-month-calendar',
+
+      properties: {
+
+        /**
+         * A `Date` object defining the month to be displayed. Only year and
+         * month properties are actually used.
+         */
+        month: {
+          type: Date,
+          value: new Date()
+        },
+
+        /**
+         * A `Date` object for the currently selected date.
+         */
+        selectedDate: {
+          type: Date,
+          notify: true
+        },
+
+        _monthNames: {
+          value: [
+            'January', 'February', 'March', 'April', 'May', 'June', 'July',
+            'August', 'September', 'October', 'November', 'December'
+          ]
+        },
+
+        _weekDayNames: {
+          value: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        },
+
+        _firstDayOfWeek: {
+          type: Number,
+          value: 0
+        }
+      },
+
+      _getTitle: function(month) {
+        return this._monthNames[month.getMonth()];
+      },
+
+      _dateEquals: function(date1, date2) {
+        if (date1 && date2) {
+          return date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate();
+        } else {
+          return false;
+        }
+      },
+
+      _dateAdd: function(date, delta) {
+        date.setDate(date.getDate() + delta);
+      },
+
+      _getWeekDayNames: function(weekDayNames, firstDayOfWeek) {
+        return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
+      },
+
+      _getDate: function(date) {
+        return date ? date.getDate() : '';
+      },
+
+      _isSelected: function(date, selectedDate) {
+        return this._dateEquals(selectedDate, date);
+      },
+
+      _isToday: function(date) {
+        return this._dateEquals(new Date(), date);
+      },
+
+      _getDays: function() {
+        // First day of the month (at noon).
+        var date = new Date(this.month.getFullYear(), this.month.getMonth(), 1, 12, 0, 0);
+
+        // Rewind to first day of the week.
+        while (date.getDay() !== this._firstDayOfWeek) {
+          this._dateAdd(date, -1);
+        }
+
+        var days = [];
+        var startMonth = date.getMonth();
+        var targetMonth = this.month.getMonth();
+        while (date.getMonth() === targetMonth || date.getMonth() === startMonth) {
+          days.push(date.getMonth() === targetMonth ? new Date(date) : null);
+
+          // Advance to next day.
+          this._dateAdd(date, 1);
+        }
+        return days;
+      },
+
+      _handleTap: function(e) {
+        if (e.target.date) {
+          this.selectedDate = e.target.date;
+          this.fire('date-tap');
+        }
+      }
+
+    });
+  </script>
+</dom-module>

@@ -1,4 +1,30 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-date-picker>` is a date selection field which includes a scrollable
+month calendar view.
+```html
+<vaadin-date-picker label="Birthday"></vaadin-date-picker>
+```
+```js
+datePicker.value = new Date();
+```
+When the selected `value` is changed, a `value-changed` event is triggered.
+@element vaadin-date-picker
+@demo demo/
+-->
+
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="vaadin-date-picker-overlay.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -6,12 +32,96 @@
       :host {
         display: block;
       }
+
+      #overlay {
+        width: 350px;
+        height: 100vh;
+      }
+
+      #inputcontainer:not([hideclear]) #input {
+        margin-right: -24px;
+        display: block;
+      }
+
+      #clear {
+        width: 24px;
+        cursor: pointer;
+      }
+
+      [hideclear] #clear {
+        display: none;
+      }
     </style>
+
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(value, _opened)]]">
+      <label id="label" on-tap="_open">[[label]]</label>
+      <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(value)]]" type="text" on-tap="_open">
+      <iron-icon id="clear" suffix on-tap="_clear" icon="clear"></iron-icon>
+    </paper-input-container>
+
+    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
+      <vaadin-date-picker-overlay id="overlay" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content"></vaadin-date-picker-overlay>
+    </iron-dropdown>
 
   </template>
   <script>
     Polymer({
-      is: 'vaadin-date-picker'
+      is: 'vaadin-date-picker',
+
+      properties: {
+
+        /**
+         * The value for this element.
+         */
+        value: {
+          type: Date,
+          notify: true,
+          value: ''
+        },
+
+        /**
+         * The label for this element.
+         */
+        label: String,
+
+        _opened: Boolean
+      },
+
+      _zeroPad: function(i) {
+        return i < 10 ? '0' + i : i;
+      },
+
+      _formatValue: function(value) {
+        if (value) {
+          return value.getFullYear() + '-' + this._zeroPad(value.getMonth() + 1) + '-' + this._zeroPad(value.getDate());
+        }
+      },
+
+      _open: function() {
+        this.$.dropdown.verticalOffset = this.clientHeight;
+        this.$.dropdown.open();
+      },
+
+      _onOverlayOpened: function() {
+        if (this.value) {
+          this.$.overlay.scrollToDate(this.value);
+        } else {
+          this.$.overlay.scrollToDate(new Date());
+        }
+      },
+
+      _close: function() {
+        this.$.dropdown.close();
+      },
+
+      _hideClearIcon: function(value, opened) {
+        return !value || !opened;
+      },
+
+      _clear: function() {
+        this.value = '';
+      }
+
     });
   </script>
 </dom-module>
