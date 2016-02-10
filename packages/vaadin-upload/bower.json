@@ -22,8 +22,10 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests",
-    "demo"
+    "tasks",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
   ],
   "devDependencies": {
     "web-component-tester": "^4.0.0",
