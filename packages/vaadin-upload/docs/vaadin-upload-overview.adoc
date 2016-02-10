@@ -7,15 +7,19 @@ layout: page
 [[vaadin-upload.overview]]
 = Overview
 
-The [elementname]#vaadin-date-picker# is a Polymer element for uploading multiple files to server.
+The [elementname]#vaadin-date-picker# is a Polymer element for uploading multiple files to the server.
 
-It allows users to add their files by dropping them directly into the component. Also it has the “Add files” button, which opens the native browser file dialog for selecting the file or files to process.
+It allows users to upload files simply by dropping them into the component.
+It also has an [guibutton]#Add Files# button, which opens the native browser file dialog for selecting the file or files to upload.
 
-All files added by user are displayed in a file list inside the element.
+All files added by the user are displayed in a file list inside the element.
 
-The added files would be automatically uploaded to server. The uploading of multiple files is performed simultaneously. The list indicates the state and uploading progress for each file.
 
-Each file could be removed from the list by user by pressing the corresponding 'cancel/remove' button. In this case, if the file uploading is in progress, then the upload process would be aborted.
+Uploading the added files to the server starts automatically.
+Uploading of multiple files is performed simultaneously. The list indicates the state and uploading progress for each file.
+
+Each file can be removed from the list by the user by pressing the corresponding 'cancel/remove' button.
+If pressed while the file upload is in progress, the upload process would be aborted.
 
 
 [[figure.vaadin-upload.overview]]

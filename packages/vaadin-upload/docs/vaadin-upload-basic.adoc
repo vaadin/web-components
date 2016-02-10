@@ -10,23 +10,24 @@ layout: page
 
 The user can select one or more files opening the browser file selector or dropping files from the desktop to the component.
 
-The developer can customize validations using the element attributes, or programmatically using the its API.
+The developer can customize validations using element attributes, or programmatically using the JavaScript API.
 
 [source,html]
 ----
 <vaadin-upload target="http://foo.bar/upload"></vaadin-upload>
 ----
 
-
-
-[source,javascript]
-----
-<vaadin-upload target="http://foo.bar/upload"></vaadin-upload>
-----
-
 == Events
 
-There are 12 events you can use to fully control each phase of the uploading process: request, progress, abort, response etc.
+The `vaadin-upload` dispatches events when files are added, removed, rejected, as well as for every upload state change per file.
+You can use those events for either changing the behavior of the process, or preventing default actions.
+For a full list of events and descriptions, please read the API documentation.
+
+=== Event Details
+All events contains the [classname]#File# object in the `event.detail.file` property.
+Additionally upload events also have `event.detail.xhr` property with corresponding [classname]#XMLHttpRequest# instance.
+
+In this example we listen to `file-add` events, fired whenever the user adds a new file to the queue:
 
 [source,javascript]
 ----
@@ -36,7 +37,7 @@ upload.addEventListener('file-add', function(e) {
 });
 ----
 
-Also, when using inside another Polymer element, you can use declarative syntax to subscribe for an event:
+Also, when using the element inside another `Polymer` element, you can use the declarative binding syntax to subscribe for an event:
 
 [source,html]
 ----
