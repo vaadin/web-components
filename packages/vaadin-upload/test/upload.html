@@ -273,14 +273,14 @@
         });
 
         it('should cancel all files ', function(done) {
-          var file2 = files[1];
+          var lastFile = files[1];
           upload.addEventListener('upload-progress', function(e) {
-            if (e.detail.file == file2 && e.detail.file.progress == 50) {
+            if (e.detail.file == lastFile && e.detail.file.progress == 50) {
               upload.$.cancelAll.fire('tap');
             }
           });
           upload.addEventListener('upload-abort', function(e) {
-            if (e.detail.file == file2) {
+            if (e.detail.file == lastFile) {
               Polymer.Base.async(function() {
                 expect(upload.files.length).to.be.empty;
                 done();

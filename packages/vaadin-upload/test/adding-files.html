@@ -58,6 +58,21 @@
             expect(clickSpy).to.be.calledOnce;
           });
 
+          it('should reset input.value before dialog', function() {
+            var input = upload.$.fileInput;
+            // jshint ignore:start
+            input.__proto__ = HTMLElement.prototype;
+            // jshint ignore:end
+            delete input.value;
+            input.value = 'foo';
+
+            input.addEventListener('click', function(event) {
+              expect(input.value).to.be.empty;
+            });
+
+            upload.$.addFiles.fire('tap');
+          });
+
         });
 
         it('should fire `file-add` event after dialog', function() {
@@ -89,23 +104,6 @@
           fileAddSpy.should.have.been.calledTwice;
         });
 
-        it('should reset input.value before dialog', function() {
-          var input = upload.$.fileInput;
-          var button = upload.$.addFiles;
-          // jshint ignore:start
-          input.__proto__ = HTMLElement.prototype;
-          // jshint ignore:end
-          delete input.value;
-          input.value = 'foo';
-
-          input.addEventListener('click', function(event) {
-            expect(input.value).to.be.empty;
-          });
-
-          var ev = document.createEvent('HTMLEvents');
-          ev.initEvent('click', false, true);
-          button.dispatchEvent(ev);
-        });
       });
 
       describe('Dropping file', function() {
@@ -180,7 +178,7 @@
           upload._addFiles([file, file]);
         });
 
-        it('should reject files with excesive size', function(done) {
+        it('should reject files with excessive size', function(done) {
           upload.maxFileSize = testFileSize - 1;
           upload.addEventListener('file-rejected', function(e) {
             expect(e.detail.error).to.be.ok;
