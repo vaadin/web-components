@@ -2,6 +2,8 @@
 
 `<vaadin-date-picker>` is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
+This element is still in alpha stage. For a list of planned features, see [#30](https://github.com/vaadin/vaadin-date-picker/issues/30).
+
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="443" alt="Screenshot of vaadin-date-picker" />](https://vaadin.com/elements)
 
 ## Developing
