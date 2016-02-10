@@ -15,7 +15,7 @@ All files added by user are displayed in a file list inside the element.
 
 The added files would be automatically uploaded to server. The uploading of multiple files is performed simultaneously. The list indicates the state and uploading progress for each file.
 
-Each file could be removed from the list by user by pressing the corresponding “×” icon. In this case, if the file uploading has been in progress, then the upload process would be aborted.
+Each file could be removed from the list by user by pressing the corresponding 'cancel/remove' button. In this case, if the file uploading is in progress, then the upload process would be aborted.
 
 
 [[figure.vaadin-upload.overview]]
