@@ -1,0 +1,56 @@
+---
+title: Basic Usage
+order: 2
+layout: page
+---
+
+
+[[vaadin-upload.example]]
+= Basic Usage
+
+The user can select one or more files opening the browser file selector or dropping files from the desktop to the component.
+
+The developer can customize validations using the element attributes, or programmatically using the its API.
+
+[source,html]
+----
+<vaadin-upload target="http://foo.bar/upload"></vaadin-upload>
+----
+
+
+
+[source,javascript]
+----
+<vaadin-upload target="http://foo.bar/upload"></vaadin-upload>
+----
+
+== Events
+
+There are 12 events you can use to fully control each phase of the uploading process: request, progress, abort, response etc.
+
+[source,javascript]
+----
+var upload = document.querySelector('vaadin-upload');
+upload.addEventListener('file-add', function(e) {
+  alert(event.detail.file.name + ' was added');
+});
+----
+
+Also, when using inside another Polymer element, you can use declarative syntax to subscribe for an event:
+
+[source,html]
+----
+<dom-module id="my-element">
+  <template>
+    <vaadin-upload on-file-add="fileAdded"></vaadin-upload>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'my-element',
+    fileAdded: function(event) {
+      alert(event.detail.file.name + ' was added');
+    }
+  });
+</script>
+----
