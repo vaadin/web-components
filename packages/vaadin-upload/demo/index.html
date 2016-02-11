@@ -13,80 +13,112 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 <html>
 <head>
-  <title>vaadin-upload Code Examples</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-upload Basic Examples</title>
+
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="common.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../paper-toast/paper-toast.html">
 </head>
-<body>
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><b>Basic Examples</b></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+      </ul>
+    </nav>
 
-  <section>
-    <h1>vaadin-upload <span>Code Examples</span></h1>
-    <table-of-contents class="toc" select="h3"></table-of-contents>
-  </section>
-
-  <section>
-    <h3>Overview</h3>
-    <p>The <code>vaadin-upload</code> is a Polymer element for uploading multiple files to server.</p>
-  </section>
-
-  <section>
     <h3>Basic Usage</h3>
-    <code-example source>
-      <vaadin-upload demo></vaadin-upload>
-    </code-example>
-  </section>
+    <demo-snippet>
+      <template>
+        <vaadin-upload></vaadin-upload>
+      </template>
+    </demo-snippet>
 
-  <section>
-    <h3>Custom Drop Label and File Template</h3>
-    <code-example source>
-      <vaadin-upload demo>
-        <h2 class="drop-label">
-          <iron-icon icon="cloud-upload"></iron-icon>
-          Drop files here...
-        </h2>
-        <template class="file">
-          [[file.name]]
-          <progress value="[[file.loaded]]" max="[[file.size]]" style="width: 100%;"></progress>
-          <div>[[file.status]]</div>
-        </template>
-      </vaadin-upload>
-    </code-example>
-  </section>
+    <h3>Upload Request Properties</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload
+            target="serverUrl"
+            method="POST"
+            timeout="300000"
+            headers="{'X-Custom-Header': 'value'}">
+        </vaadin-upload>
+      </template>
+    </demo-snippet>
 
-  <section>
-    <h3>Events</h3>
+    <h3>Disabling Drag & Drop and Picking Multiple Files in the File Dialog</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload nodrop nomultiple></vaadin-upload>
+      </template>
+    </demo-snippet>
 
-    <code-example source>
-      <vaadin-upload demo></vaadin-upload>
-      <p><strong>Added files:</strong></p>
-      <ul id="added-files"></ul>
+    <h3>Custom Color Scheme and Container Styles</h3>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          vaadin-upload.thick-border {
+            --primary-color: #396;
+            --dark-primary-color: #063;
+            --light-primary-color: #6c9;
+            --error-color: darkred;
 
-      <code demo-var="upload">
-        // code
-        var upload = upload || document.querySelector('vaadin-upload');
+            border: 2px solid #ccc;
+            background: #eee;
+            border-radius: 0;
+          }
 
-        upload.addEventListener('file-add', function(event) {
-          var file = event.detail.file;
+          vaadin-upload.thick-border[dragover] {
+            border-color: #396;
+          }
+        </style>
 
-          var li = document.createElement('li');
-          li.textContent = file.name + ': ' + file.size + ' bytes';
-          document.querySelector('#added-files').appendChild(li);
-        });
+        <vaadin-upload class="thick-border"></vaadin-upload>
+      </template>
+    </demo-snippet>
 
-        upload.addEventListener('upload-progress', function(e) {
-          console.log(e.detail.file.progress);
-        });
-        upload.addEventListener('upload-success', function(e) {
-          console.log(e.detail.xhr.responseText);
-        });
-        // end-code
-      </code>
-    </code-example>
-  </section>
+    <h3>Custom Drop Label</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload>
+          <h2 class="drop-label">
+            <iron-icon icon="cloud-upload"></iron-icon>
+            Drop files here...
+          </h2>
+        </vaadin-upload>
+      </template>
+    </demo-snippet>
 
+    <h3>Files Count, Type and Size Limits, Reject File Event</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload id="rejectEventDemo" max-files="3" accept=".pdf" max-file-size="1000000">
+          <div class="drop-label">
+            <iron-icon icon="file-upload"></iron-icon>
+            Accepts up to 3 PDF files, up to 1MB each
+          </div>
+        </vaadin-upload>
+
+        <paper-toast id="rejectToast"></paper-toast>
+
+        <script>
+          var upload = document.querySelector('vaadin-upload#rejectEventDemo');
+          var toast = document.querySelector('paper-toast#rejectToast');
+
+          upload.addEventListener('file-reject', function(event) {
+            toast.text = event.detail.file.name + ' error: ' + event.detail.error
+            toast.open();
+          });
+        </script>
+      </template>
+    </demo-snippet>
+  </div>
 </body>
 </html>

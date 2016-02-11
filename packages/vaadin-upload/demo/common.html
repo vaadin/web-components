@@ -1,52 +1,63 @@
 <!-- Common imports for all examples -->
+<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+<link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../paper-styles/default-theme.html">
-<link rel="stylesheet" href="../../elements-demo-resources/demo.css">
+<!-- <link rel="stylesheet" href="../../elements&#45;demo&#45;resources/demo.css"> -->
 <script src="../../elements-demo-resources/ga.js"></script>
 <script src="../../mock-http-request/lib/mock.js"></script>
+<link rel="import" href="../vaadin-upload.html">
 
 <!-- Common styles for all examples -->
-<style is="custom-style">
-  body {
-    font-family: 'Roboto', 'Noto', sans-serif;
-    font-size: 14px;
-    line-height: 24px;
-    margin: 0;
-    padding: 24px;
-    background-color: var(--paper-grey-50);
-  }
-
+<style is="custom-style" include="demo-pages-shared-styles">
   :root {
     --primary-color: #00B4F0;
     --light-primary-color: #7CD8F7;
     --dark-primary-color: #0078A0;
     --error-color: #E61E6E;
   }
+
+  nav {
+    display: block;
+  }
+
+  nav.vertical-section {
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 8px;
+    padding-bottom: 0;
+  }
+
+  nav > ul {
+    padding: 0;
+  }
+
+  nav > ul > li {
+    padding: 0 24px 8px 0;
+    list-style: none;
+  }
+
+  nav a, nav b {
+    @apply(--paper-font-button);
+  }
+
+  nav a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  nav b {
+    color: var(--secondary-text-color);
+  }
+
+  .centered {
+    max-width: 800px;
+  }
 </style>
+
 
 <!-- Common JS code for all examples -->
 <script>
-  window.xCodeExampleSourceHead =
-  '  <script src="https://cdn.vaadin.com/vaadin-components/latest/webcomponentsjs/webcomponents-lite.js"><\/script>\n' +
-  '  <link href="https://cdn.vaadin.com/vaadin-components/latest/vaadin-upload/vaadin-upload.html" rel="import">\n';
-
-  var link = document.querySelector('link[href$="common.html"]');
-  var baseCommon = link.href.replace(/common.html/, '');
-  var bowerComponents = '../../';
-  var base = baseCommon + bowerComponents;
-
-  ['polymer/polymer.html',
-    'code-example/code-example.html',
-    'table-of-contents/table-of-contents.html',
-    'vaadin-upload/vaadin-upload.html'
-  ].forEach(function(path) {
-    if (!document.querySelector('link[href$="' + path + '"]')) {
-      var link = document.createElement('link');
-      link.rel = 'import';
-      link.href = base + path;
-      document.head.appendChild(link);
-    }
-  });
-
   // Use MockHttpRequest in demos
   function mockXhrGenerator(file) {
     var xhr = new MockHttpRequest();

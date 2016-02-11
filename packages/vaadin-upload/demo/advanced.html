@@ -1,0 +1,147 @@
+<!doctype html>
+
+<!--
+title: Examples
+order: 0
+layout: page
+-->
+
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-upload Advanced Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+</head>
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="../demo/">Basic Examples</a></li>
+        <li><b>Advanced Usage</b></li>
+      </ul>
+    </nav>
+
+    <h3>File List and File State Change Events</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload id="fileEventsDemo" class="flex"></vaadin-upload>
+        <h4>Files List</h4>
+        <ul id="customFilesList"></ul>
+
+        <script>
+          var upload = document.querySelector('vaadin-upload#fileEventsDemo');
+          var customFilesList = document.querySelector('#customFilesList');
+
+          function updateListItem(event) {
+            var file = event.detail.file;
+
+            if (file.listItem) {
+              file.listItem.querySelector('strong').textContent = file.name;
+              var status = file.listItem.querySelector('span');
+
+              switch (event.type) {
+                case 'upload-success':
+                  status.textContent = 'Uploaded.'
+                  break;
+                case 'upload-error':
+                  status.textContent = file.error;
+                  break;
+                default:
+                  status.textContent = file.status;
+                  break;
+              }
+            }
+          }
+
+          // When file is added to upload, add it to the custom file list
+          upload.addEventListener('file-add', function(event) {
+            var file = event.detail.file;
+            var li = document.createElement('li');
+            li.innerHTML = '<strong></strong><br/> <span></span>';
+            file.listItem = li;
+            customFilesList.appendChild(li);
+            updateListItem(event);
+          });
+
+          // When file is removed from the upload, remove it from the custom file list
+          upload.addEventListener('file-remove', function(event) {
+            var file = event.detail.file;
+            if (file.listItem) {
+              customFilesList.removeChild(file.listItem);
+            }
+          });
+
+          // Update the custom file list item on any file state change
+          upload.addEventListener('upload-start', updateListItem);
+          upload.addEventListener('upload-progress', updateListItem);
+          upload.addEventListener('upload-success', updateListItem);
+          upload.addEventListener('upload-error', updateListItem);
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Customizing the Upload Request</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload id="requestDemo"></vaadin-upload>
+
+        <script>
+          var upload = document.querySelector('vaadin-upload#requestDemo');
+
+          upload.addEventListener('upload-before', function(event) {
+            console.log('upload xhr before open: ', event.detail.xhr);
+
+            // Prevent the upload request:
+            // event.preventDefault();
+
+            // Custom upload request url for file
+            var file = event.detail.file;
+            file.uploadTarget = upload.target + '/' + file.name;
+          });
+
+          upload.addEventListener('upload-request', function(event) {
+            console.log('upload xhr after open: ', event.detail.xhr);
+
+            event.detail.xhr.setRequestHeader('X-File-Name', event.detail.file.name);
+          });
+
+          upload.addEventListener('upload-start', function(event) {
+            console.log('upload xhr after send: ', event.detail.xhr);
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Custom Reaction on Server Response</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload id="responseDemo"></vaadin-upload>
+
+        <script>
+          var upload = document.querySelector('vaadin-upload#responseDemo');
+
+          upload.addEventListener('upload-response', function(event) {
+            console.log('upload xhr after server response: ', event.detail.xhr);
+            event.detail.file.error = 'Custom server error message.';
+
+            // Interpret any server response as success:
+            // event.detail.xhr.status = 200;
+          });
+        </script>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+</html>
