@@ -58,7 +58,12 @@ Custom property | Description | Default
         @apply(--layout-vertical);
         @apply(--layout-flex);
         width: 1px;
+        color: var(--disabled-text-color, gray);
         @apply(--vaadin-upload-file-meta);
+      }
+
+      #meta[complete] {
+        color: var(--primary-text-color, #000);
       }
 
       #name,
@@ -96,6 +101,7 @@ Custom property | Description | Default
       #commands [icon] {
         margin-left: -4px;
         margin-right: -4px;
+        color: var(--primary-text-color, #000);
       }
 
       #commands [icon="refresh"],
@@ -132,7 +138,7 @@ Custom property | Description | Default
       }
 
       paper-progress[complete] {
-        --paper-progress-active-color: var(--disabled-text-color, gray);
+        /* --paper-progress-active-color: var(--light-primary-color, #7CD8F7); */
         @apply(--vaadin-upload-file-progress-complete);
       }
 
@@ -140,7 +146,7 @@ Custom property | Description | Default
 
     <div id="row">
 
-      <div id="meta">
+      <div id="meta" complete$="[[file.complete]]">
         <div id="name">[[file.name]]</div>
         <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
         <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
