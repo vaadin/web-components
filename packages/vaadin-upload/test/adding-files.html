@@ -171,7 +171,7 @@
       describe('validate files', function() {
         it('should reject files when maxFiles is reached', function(done) {
           upload.maxFiles = 1;
-          upload.addEventListener('file-rejected', function(e) {
+          upload.addEventListener('file-reject', function(e) {
             expect(e.detail.error).to.be.ok;
             done();
           });
@@ -180,7 +180,7 @@
 
         it('should reject files with excessive size', function(done) {
           upload.maxFileSize = testFileSize - 1;
-          upload.addEventListener('file-rejected', function(e) {
+          upload.addEventListener('file-reject', function(e) {
             expect(e.detail.error).to.be.ok;
             done();
           });
@@ -189,7 +189,7 @@
 
         it('should reject files with incorrect contentType', function(done) {
           upload.accept = 'image/*,video/*';
-          upload.addEventListener('file-rejected', function(e) {
+          upload.addEventListener('file-reject', function(e) {
             expect(upload.files.lentgh == 1);
             expect(e.detail.error).to.be.ok;
             done();

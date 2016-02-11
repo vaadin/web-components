@@ -525,18 +525,18 @@ Custom property | Description | Default
      */
     _addFile: function(file) {
       if (this.maxFiles && this.files.length >= this.maxFiles) {
-        this.fire('file-rejected', {file: file, error: 'Too many files.'});
+        this.fire('file-reject', {file: file, error: 'Too many files.'});
         return;
       }
       if (this.maxFileSize && file.size > this.maxFileSize) {
-        this.fire('file-rejected', {file: file, error: 'File is too big.'});
+        this.fire('file-reject', {file: file, error: 'File is too big.'});
         return;
       }
       var mimeType = file.type ? file.type.match(/^[^\/]*\//)[0] : null;
       var fileType = file.name.match(/\.[^\.]*$|$/)[0];
       var re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace('/*', '/.*') + ')$');
       if (this.accept && !(re.test(mimeType) || re.test(fileType))) {
-        this.fire('file-rejected', {file: file, error: 'Incorrect file type.'});
+        this.fire('file-reject', {file: file, error: 'Incorrect file type.'});
         return;
       }
       file.loaded = 0;
@@ -595,7 +595,7 @@ Custom property | Description | Default
    * Fired when a file cannot be added to the queue due to a constrain:
    *  file-size, file-type or maxFiles
    *
-   * @event file-rejected
+   * @event file-reject
    * @param {Object} detail
    *  @param {Object} detail.file the file added
    *  @param {Object} detail.error the cause
