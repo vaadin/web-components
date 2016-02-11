@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-upload tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+  <test-fixture id="upload">
+    <template>
+      <vaadin-upload></vaadin-upload>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Uploader', function() {
+      var upload, file, headers;
+      beforeEach(function() {
+        upload = fixture('upload');
+        upload.target = 'http://foo.com/bar';
+        file = createFile(100000, 'application/unknown');
+      });
+
+      describe('File upload', function() {
+        beforeEach(function() {
+          upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
+        });
+
+        it('should fire the upload-start event', function(done) {
+          upload.addEventListener('upload-start', function(e) {
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.file.uploading).to.be.ok;
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should fire the upload-progress event multiple times', function(done) {
+          var count = 0;
+          upload.addEventListener('upload-progress', function(e) {
+            var f = e.detail.file;
+            expect(e.detail.xhr).to.be.ok;
+            expect(f.totalStr).to.be.equal('97 KB');
+            switch (count++) {
+              case 0:
+                expect(f.progress).to.be.equal(0);
+                expect(f.loaded).to.be.equal(0);
+                expect(f.size).to.be.equal(100000);
+                expect(f.uploading).to.be.ok;
+                break;
+              case 1:
+                expect(f.progress).to.be.equal(25);
+                expect(f.loaded).to.be.equal(25000);
+                expect(f.size).to.be.equal(100000);
+                break;
+              case 2:
+                expect(f.progress).to.be.equal(50);
+                expect(f.loaded).to.be.equal(50000);
+                expect(f.size).to.be.equal(100000);
+                expect(f.doneStr).to.be.equal('48 KB');
+                expect(f.uploading).to.be.ok;
+                break;
+              case 4:
+                expect(f.progress).to.be.equal(100);
+                expect(f.loaded).to.be.equal(100000);
+                expect(f.size).to.be.equal(100000);
+                expect(f.speed).to.be.gt(100);
+                expect(f.uploading).not.to.be.ok;
+                done();
+            }
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should fire the upload-success', function(done) {
+          upload.addEventListener('upload-success', function(e) {
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.file.uploading).not.to.be.ok;
+            expect(e.detail.xhr.status).to.be.equal(200);
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should fire the upload-error event on connection error', function(done) {
+          // Simulate a server error when progress is 50%
+          upload.addEventListener('upload-progress', function(e) {
+            if (e.detail.file.progress == 50) {
+              e.detail.xhr.err();
+            }
+          });
+
+          upload.addEventListener('upload-error', function(e) {
+            expect(e.detail.file.uploading).not.to.be.ok;
+            expect(e.detail.file.error).to.be.equal('Server Unavailable');
+            expect(e.detail.xhr.status).not.to.be.equal(200);
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should fire the upload-before with configurable request url', function(done) {
+          upload.addEventListener('upload-before', function(e) {
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.xhr.readyState).to.equal(0);
+            expect(e.detail.file.uploadTarget).to.be.ok;
+
+            var modifiedUrl = 'http://example.com/modified/url';
+            e.detail.file.uploadTarget = modifiedUrl;
+
+            // Monkey-patch xhr.open to check the url param passed into
+            var originalOpen = e.detail.xhr.open;
+            e.detail.xhr.open = function(method, url, async) {
+              expect(url).to.equal(modifiedUrl);
+              originalOpen.apply(this, arguments);
+              done();
+            };
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should not open xhr if `upload-before` event is cancelled', function() {
+          upload.addEventListener('upload-before', function(e) {
+            e.preventDefault();
+          });
+          upload._uploadFile(file);
+          expect(file.xhr.readyState).to.equal(0);
+        });
+
+        it('should fire upload-request event', function(done) {
+          upload.addEventListener('upload-request', function(e) {
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.xhr.readyState).to.equal(1);
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should do nothing if a `upload-request` listener prevents default', function(done) {
+          upload.addEventListener('upload-request', function(e) {
+            e.preventDefault();
+          });
+
+          Polymer.Base.async(function() {
+            expect(file.uploading).not.to.be.ok;
+            expect(file.error).not.to.be.ok;
+            done();
+          }, 200);
+          upload._uploadFile(file);
+        });
+
+        it('should fail if a `upload-response` listener sets an error', function(done) {
+          var error = 'Custom Error';
+          upload.addEventListener('upload-response', function(e) {
+            e.detail.file.error = error;
+          });
+
+          upload.addEventListener('upload-error', function(e) {
+            expect(e.detail.file.uploading).not.to.be.ok;
+            expect(e.detail.file.error).to.be.equal(error);
+            expect(e.detail.xhr.status).to.be.equal(200);
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should do nothing if a `upload-response` listener prevents default', function(done) {
+          upload.addEventListener('upload-response', function(e) {
+            e.preventDefault();
+          });
+
+          Polymer.Base.async(function() {
+            expect(file.uploading).to.be.ok;
+            expect(file.error).not.to.be.ok;
+            done();
+          }, 100);
+          upload._uploadFile(file);
+        });
+
+      });
+
+      describe('Upload Status', function() {
+        beforeEach(function() {
+          upload._createXhr = xhrCreator({
+            size: file.size,
+            connectTime: 500,
+            uploadTime: 200,
+            stepTime: 100,
+            serverTime: 500
+          });
+        });
+
+        it('should be indeterminate when connecting', function(done) {
+          Polymer.Base.async(function() {
+            expect(file.indeterminate).to.be.ok;
+            expect(file.status).to.be.equal('Connecting...');
+            done();
+          }, 200);
+          upload._uploadFile(file);
+        });
+
+        it('should not be indeterminate when progressing', function(done) {
+          upload.addEventListener('upload-progress', function(e) {
+            if (file.progress > 0) {
+              expect(e.detail.file.indeterminate).not.to.be.ok;
+              expect(e.detail.file.status).to.contain('seconds remaining');
+              done();
+            }
+          });
+          upload._uploadFile(file);
+        });
+
+        it('should be indeterminate when server is processing the file', function(done) {
+          Polymer.Base.async(function() {
+            expect(file.indeterminate).to.be.ok;
+            expect(file.status).to.be.equal('Processing file...');
+            done();
+          }, 800);
+          upload._uploadFile(file);
+        });
+      });
+
+      describe('Upload is Stalled', function() {
+        beforeEach(function() {
+          upload._createXhr = xhrCreator({
+            size: file.size,
+            uploadTime: 2500,
+            stepTime: 2500
+          });
+        });
+
+        it('should be stalled when progress is not updated for more than 2 sec.', function(done) {
+          Polymer.Base.async(function() {
+            expect(file.status).to.be.equal('Stalled.');
+            done();
+          }, 2200);
+          upload._uploadFile(file);
+        });
+      });
+
+      describe('Abort Files', function() {
+        var files;
+        beforeEach(function() {
+          upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
+          files = createFiles(2, 512, 'application/json');
+        });
+
+        it('should fire `upload-abort` and remove from files', function(done) {
+          upload.addEventListener('upload-progress', function(e) {
+            if (e.detail.file == files[0] && e.detail.file.progress == 50) {
+              upload._abortFileUpload(e.detail.file);
+            }
+          });
+          upload.addEventListener('upload-abort', function(e) {
+            Polymer.Base.async(function() {
+              expect(e.detail.file.abort).to.be.ok;
+              expect(e.detail.xhr.error).to.be.ok;
+              expect(e.detail.xhr.sent).to.be.ok;
+              expect(upload.files.length).to.be.equal(1);
+              done();
+            });
+          });
+          upload._addFiles(files);
+        });
+
+        it('should cancel all files ', function(done) {
+          var lastFile = files[1];
+          upload.addEventListener('upload-progress', function(e) {
+            if (e.detail.file == lastFile && e.detail.file.progress == 50) {
+              upload.$.cancelAll.fire('tap');
+            }
+          });
+          upload.addEventListener('upload-abort', function(e) {
+            if (e.detail.file == lastFile) {
+              Polymer.Base.async(function() {
+                expect(upload.files.length).to.be.empty;
+                done();
+              });
+            }
+          });
+          upload._addFiles(files);
+        });
+
+      });
+    });
+  </script>
+
+</body>
+
+</html>

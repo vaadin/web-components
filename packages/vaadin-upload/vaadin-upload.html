@@ -1,0 +1,718 @@
+<!-- 
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-upload>` is a Polymer element for uploading multiple files with drag and drop support.
+
+Example:
+
+```html
+<vaadin-upload></vaadin-upload>
+```
+
+### Custom File List Item Template
+
+In order to replace `<vaadin-upload-file>` with your file representation,
+add a `<template class="file">...</template>` to the light DOM:
+
+```html
+<vaadin-upload>
+  <template class="file">
+    [[file.name]]: [[file.status]]
+  </template>
+</vaadin-upload>
+```
+
+### Styling
+
+The following custom properties are available for styling the component.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-upload-drag-ripple`|styles for the ripple animation in the drop area|`{}`
+`--vaadin-upload-drop-label`|styles for the drop label|`{}`
+`--vaadin-upload-drop-label-dragover`|styles for the drop label when overing the component with files|`{}`
+`--vaadin-upload-drop-label-icon`|styles for the drop icon|`{}`
+`--vaadin-upload-file-list`|styles for the file list|`{}`
+`--vaadin-upload-buttons`|styles for the buttons container|`{}`
+`--vaadin-upload-button`|styles for the upload button|`{}`
+
+@element vaadin-upload
+@demo demo/ Basic Examples
+@demo demo/advanced.html Advanced Usage
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="vaadin-upload-file.html">
+
+<dom-module id="vaadin-upload">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-vertical);
+        display: block;
+        position: relative;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      :host:not([nodrop]) {
+        border: 1px dashed;
+        border-color: var(--divider-color,  #666);
+        border-radius: 3px;
+        padding: 16px;
+      }
+
+      :host[dragover] {
+        border-color: var(--primary-color, #00B4F0);
+      }
+
+      /*
+        Cover the entire element with transparent overlay when dragging files
+        over it. Helps to reduce the amount of events fired.
+      */
+      :host::before {
+        @apply(--layout-fit);
+        content: '';
+        display: none;
+        z-index: 10;
+      }
+      :host[dragover]::before {
+        display: block;
+      }
+
+      #dragRipple {
+        color: var(--light-primary-color, #7CD8F7);
+        @apply(--vaadin-upload-drag-ripple);
+      }
+
+      #dropLabel {
+        @apply(--paper-font-body2);
+        position: relative;
+        margin-top: 8px;
+        color: var(--disabled-text-color, #b3b3b3);
+        @apply(--vaadin-upload-drop-label);
+      }
+
+      :host[dragover] #dropLabel,
+      :host[dragover] ::content .drop-label {
+        color: var(--primary-color, #00B4F0);
+        @apply(--vaadin-upload-drop-label-dragover);
+      }
+
+      #dropLabel ::content iron-icon {
+        margin-right: .25em;
+        @apply(--vaadin-upload-drop-label-icon);
+      }
+
+      #fileList {
+        position: relative;
+        text-align: left;
+        @apply(--vaadin-upload-file-list);
+      }
+
+      #buttons {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+        position: relative;
+        margin: 8px 0 0;
+        @apply(--vaadin-upload-buttons);
+      }
+
+      paper-button {
+        @apply(--paper-font-button);
+        color: var(--primary-color, #00B4F0);
+        padding: .43em .57em;
+        @apply(--vaadin-upload-button);
+      }
+    </style>
+
+    <div id="dropLabel" hidden$="[[nodrop]]">
+      <content select=".drop-label">
+        <iron-icon icon="file-upload"></iron-icon>
+        Drop files here...
+      </content>
+    </div>
+    <template id="defaultFileTemplate">
+      <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+    </template>
+    <div id="fileList">
+      <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
+    </div>
+    <content></content>
+    <div id="buttons">
+      <paper-button id="addFiles" on-tap="_onAddFilesClick">Add File(s)</paper-button>
+      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">Cancel all</paper-button>
+    </div>
+    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
+    <paper-ripple id="dragRipple" noink></paper-ripple>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'vaadin-upload',
+
+    properties: {
+      /**
+       * Define whether the element supports drop files on it for uploading.
+       * By default it's enabled in desktop and disabled in touch devices
+       * because almost mobile devices do not support drag events.
+       */
+      nodrop: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: function() {
+          try {
+            return !!document.createEvent('TouchEvent');
+          } catch (e) {
+            return false;
+          }
+        },
+      },
+
+      /**
+       * Server URL.
+       */
+      target: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * HTTP Method used to send the files.
+       */
+      method: {
+        type: String,
+        value: 'POST'
+      },
+
+      /**
+       * Key-Value map to send to the server.
+       */
+      headers: {
+        type: Object,
+        value: {}
+      },
+
+      /**
+       * Max time for the upload process, if exceeded XHR will be aborted.
+       */
+      timeout: {
+        type: Number,
+        value: 0
+      },
+
+      // TODO: don't expose this property, toggleAttribute instead.
+      dragover: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
+      /**
+       * Specifies if the cancel-all button is visible.
+       */
+      showCancelAll: {
+        type: Boolean,
+        value: false
+      },
+
+      // TODO: make this private in a separate PR, we dont want users modifying the array.
+      files: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+
+      /**
+       * Specifies whether the file selection popup is configured to select
+       * multiple files.
+       */
+       nomultiple: {
+         type: Boolean,
+         value: false
+       },
+
+      /**
+       * Limit of files to upload, by default it is unlimited. If the value is
+       * one, nomultiple is true.
+       */
+       maxFiles: {
+         type: Number,
+         value: 0
+       },
+
+      /**
+       * Specifies the types of files that the server accepts.
+       * Syntax: file_extension|audio/*|video/*|image/*|media_type
+       */
+      accept: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * Specifies the maximum file size allowed to upload. Default is
+       * unlimited.
+       */
+      maxFileSize: {
+        type: Number,
+        value: 0
+      },
+    },
+
+    listeners: {
+      dragover: '_onDragover',
+      dragleave: '_onDragleave',
+      drop: '_onDrop',
+      'file-retry': '_onFileRetry',
+      'file-abort': '_onFileAbort'
+    },
+
+    attached: function() {
+      this._templatizeFileList();
+    },
+
+    _dragRippleAction: function(action, event) {
+      var rippleActionEvent = {
+        detail: {
+          x: event.clientX,
+          y: event.clientY
+        }
+      };
+
+      if (action == 'down') {
+        this.$.dragRipple.downAction(rippleActionEvent);
+
+        // paper-ripple currently has hard Ripple.MAX_RADIUS limit of 300, and
+        // doesn’t expose Ripple constructor or any other means to modify the
+        // limit. Monkey-patching the radius calculation of just added Ripple
+        // instance to disable the radius limit.
+        //
+        // Also fixes the default radius animation formula, which otherwise
+        // tends to make the duration too small for large ripples that we have.
+        //
+        // FIXME: Remove this when the paper-ripple rewrite would be merged.
+        // Issue: https://github.com/vaadin/vaadin-upload/issues/24
+        //
+        // See:
+        // - https://github.com/PolymerElements/paper-ripple/issues/27
+        // - https://github.com/PolymerElements/paper-ripple/pull/63
+        //
+        var lastRipple = this.$.dragRipple.ripples[this.$.dragRipple.ripples.length - 1];
+        if (!lastRipple.hasOwnProperty('radius')) {
+          Object.defineProperty(lastRipple, 'radius', {
+            get: function() {
+              var width2 = this.containerMetrics.width * this.containerMetrics.width;
+              var height2 = this.containerMetrics.height * this.containerMetrics.height;
+              var waveRadius = Math.sqrt(width2 + height2) * 1.1 + 5;
+
+              var duration = 0.9 + 0.2 * (waveRadius / 300);
+              var timeNow = this.mouseInteractionSeconds / duration;
+              var size = waveRadius * (1 - Math.pow(80, -timeNow));
+              return Math.abs(size);
+            }
+          });
+        }
+      } else {
+        this.$.dragRipple.upAction(rippleActionEvent);
+      }
+    },
+
+    _onDragover: function(event) {
+      event.preventDefault();
+      if (!this.dragover) {
+        this._dragRippleAction('down', event);
+        this.dragover = true;
+      }
+    },
+
+    _onDragleave: function(event) {
+      // Dragleave sometimes fired on children, skipping them. Fixes flickeing
+      // when quickly dragging over.
+      if (Polymer.dom(event).rootTarget === this) {
+        event.preventDefault();
+        if (this.dragover) {
+          this._dragRippleAction('up', event);
+          this.dragover = false;
+        }
+      }
+    },
+
+    _onDrop: function(event) {
+      if (!this.nodrop) {
+        event.preventDefault();
+        this._dragRippleAction('up', event);
+        this.dragover = false;
+        this._dragRippleAction('upAction', event);
+        this._addFiles(event.dataTransfer.files);
+      }
+    },
+
+    // Override for tests
+    _createXhr: function(file) {
+      return new XMLHttpRequest();
+    },
+
+    _configureXhr: function(xhr) {
+      if (typeof this.headers == 'string') {
+        try {
+          this.headers = JSON.parse(this.headers);
+        } catch (e) {
+          this.headers = undefined;
+        }
+      }
+      for (var key in this.headers) {
+        xhr.setRequestHeader(key, this.headers[key]);
+      }
+      if (this.timeout) {
+        xhr.timeout = this.timeout;
+      }
+    },
+
+    _setStatus: function(file, total, done, elapsed, progress) {
+      file.remaining = 1 + ~~(elapsed * (100 / progress - 1));
+      file.speed = ~~(total / elapsed / 1024);
+      file.totalStr = total > (1024 * 1024) ?
+        ((~~(total / 1024 / 1024 * 10) / 10) + ' MB') : (~~(total / 1024) + ' KB');
+      file.doneStr = done > (1024 * 1024) ?
+        ((~~(done / 1024 / 1024 * 10) / 10) + ' MB') : (~~(done / 1024) + ' KB');
+      file.status = file.totalStr + ' (' + file.progress + '%) about ' + file.remaining + ' seconds remaining.';
+    },
+
+    _uploadFile: function(file) {
+      if (file.uploading) {
+        return;
+      }
+
+      var ini = Date.now();
+      var xhr = file.xhr = this._createXhr(file);
+
+      var stalledId, last;
+      // onprogress is called always after onreadystatechange
+      xhr.upload.onprogress = function(e) {
+        clearTimeout(stalledId);
+
+        last = Date.now();
+        var elapsed = (last - ini) / 1000;
+        var done = e.loaded, total = e.total, progress = ~~(done / total * 100);
+
+        file.loaded = done;
+        file.progress = progress;
+        file.indeterminate = done <= 0 || done >= total, true;
+        if (file.error) {
+          file.indeterminate = file.status = undefined;
+        } else if (progress < 100) {
+          this._setStatus(file, total, done, elapsed, progress);
+          stalledId = setTimeout(function() {
+            file.status = 'Stalled.';
+            this._notifyFileChanges(file);
+          }.bind(this), 2000);
+        } else {
+          file.doneStr = file.totalStr;
+          file.status = 'Processing file...';
+          file.uploading = false;
+        }
+
+        this._notifyFileChanges(file);
+        this.fire('upload-progress', {file: file, xhr: xhr});
+      }.bind(this);
+
+      // More reliable than xhr.onload
+      xhr.onreadystatechange = function(e) {
+        if (xhr.readyState == 4) {
+          clearTimeout(stalledId);
+          file.indeterminate = file.uploading = false;
+          file.status = '';
+          if (file.abort) {
+            file.error = file.complete = file.progress = file.status = false;
+            this._notifyFileChanges(file);
+            return;
+          }
+          // Custom listener can modify the default behavior either
+          // preventing default, changing the xhr, or setting the file error
+          var evt = this.fire('upload-response', {file: file, xhr: xhr}, {cancelable: true});
+          if (evt.defaultPrevented) {
+            return;
+          }
+          if (xhr.status === 0) {
+            file.error = 'Server Unavailable';
+          } else if (xhr.status > 500) {
+            file.error = 'Unexpected Server Error';
+          } else if (xhr.status > 400) {
+            file.error = 'Forbidden';
+          }
+
+          file.complete = !file.error;
+          this.fire('upload-' + (file.error ? 'error' : 'success'), {file: file, xhr: xhr});
+          this._notifyFileChanges(file);
+        }
+      }.bind(this);
+
+      var formData = new FormData();
+      formData.append('file', file, file.name);
+
+      file.uploadTarget = this.target || '';
+      var evt = this.fire('upload-before', {file: file, xhr: xhr}, {cancelable: true});
+      if (evt.defaultPrevented) {
+        return;
+      }
+
+      xhr.open(this.method, file.uploadTarget, true);
+      this._configureXhr(xhr);
+
+      // Custom listener could modify the xhr just before sending it
+      // preventing default
+      evt = this.fire('upload-request', {file: file, xhr: xhr}, {cancelable: true});
+      if (evt.defaultPrevented) {
+        return;
+      }
+
+      file.status = 'Connecting...';
+      file.uploading = file.indeterminate = true;
+      file.abort = file.error = undefined;
+      this.fire('upload-start', {file: file, xhr: xhr});
+      this._notifyFileChanges(file);
+      xhr.send(formData);
+    },
+
+    _retryFileUpload: function(file) {
+      var evt = this.fire('upload-retry', {file: file, xhr: file.xhr}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        this.async(this._uploadFile.bind(this, file));
+      }
+    },
+
+    _abortFileUpload: function(file) {
+       var evt = this.fire('upload-abort', {file: file, xhr: file.xhr}, {cancelable: true});
+       if (!evt.defaultPrevented) {
+         if (file.xhr) {
+           file.abort = true;
+           file.xhr.abort();
+         }
+         this._removeFile(file);
+       }
+     },
+
+    _notifyFileChanges: function(file) {
+      var p = 'files.' + this.files.indexOf(file) + '.';
+      for (var i in file) {
+        if (file.hasOwnProperty(i)) {
+          this.notifyPath(p + i, file[i]);
+        }
+      }
+    },
+
+    _addFiles: function(files) {
+      Array.prototype.forEach.call(files, this._addFile.bind(this));
+    },
+
+    /**
+     * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
+     *
+     * @param {File} file File being added
+     */
+    _addFile: function(file) {
+      if (this.maxFiles && this.files.length >= this.maxFiles) {
+        this.fire('file-reject', {file: file, error: 'Too many files.'});
+        return;
+      }
+      if (this.maxFileSize && file.size > this.maxFileSize) {
+        this.fire('file-reject', {file: file, error: 'File is too big.'});
+        return;
+      }
+      var mimeType = file.type ? file.type.match(/^[^\/]*\//)[0] : null;
+      var fileType = file.name.match(/\.[^\.]*$|$/)[0];
+      var re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace('/*', '/.*') + ')$');
+      if (this.accept && !(re.test(mimeType) || re.test(fileType))) {
+        this.fire('file-reject', {file: file, error: 'Incorrect file type.'});
+        return;
+      }
+      file.loaded = 0;
+      this.push('files', file);
+      this.fire('file-add', {file: file});
+      this._uploadFile(file);
+    },
+
+    /**
+     * Remove file from upload list. Called internally if file upload was canceled.
+     * @param {File} file File to remove
+     */
+    _removeFile: function(file) {
+      var evt = this.fire('file-remove', {file: file}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        this.splice('files', this.files.indexOf(file), 1);
+      }
+    },
+
+    _onAddFilesClick: function(event) {
+      if (document.createEvent) {
+        this.$.fileInput.multiple = !this.nomultiple && this.maxFiles != 1;
+        this.$.fileInput.value = '';
+        this.$.fileInput.click();
+      }
+    },
+
+    _onFileInputChange: function(event) {
+      this._addFiles(event.target.files);
+    },
+
+    _templatizeFileList: function() {
+      var template = Polymer.dom(this).querySelector('.file') || this.$.defaultFileTemplate;
+      this.$.fileListRepeater.templatize(template);
+      Polymer.Bind.prepareModel(this.$.fileListRepeater);
+      Polymer.Base.prepareModelNotifyPath(this.$.fileListRepeater);
+    },
+
+    _onFileRetry: function(event) {
+      this._retryFileUpload(event.detail.file);
+    },
+
+    _onFileAbort: function(event) {
+      this._abortFileUpload(event.detail.file);
+    },
+
+    _onCancelAllClick: function(event) {
+      for (var i = this.files.length; i > 0; --i) {
+        this._abortFileUpload(this.files[i - 1]);
+      }
+    }
+
+  });
+
+  /**
+   * Fired when a file cannot be added to the queue due to a constrain:
+   *  file-size, file-type or maxFiles
+   *
+   * @event file-reject
+   * @param {Object} detail
+   *  @param {Object} detail.file the file added
+   *  @param {Object} detail.error the cause
+   */
+
+  /**
+   * Fired when a file is added for uploading.
+   *
+   * @event file-add
+   * @param {Object} detail
+   *  @param {Object} detail.file the file added
+   */
+
+  /**
+   * Fired when a file is removed from the file list, e. g. when the file
+   * upload is aborted. If the default is prevented, then the file would not be
+   * removed from the list.
+   *
+   * @event file-remove
+   * @param {Object} detail
+   *  @param {Object} detail.file the file to be removed
+   */
+
+  /**
+   * Fired before the XHR is opened. Could be used for changing the request
+   * URL. If the default is prevented, then XHR would not be opened.
+   *
+   * @event upload-before
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   *   @param {Object} detail.file.uploadTarget the upload request URL, initialized with the value of vaadin-upload `target` property
+   */
+
+  /**
+   * Fired when the XHR has been opened but not sent yet.
+   * Useful to change some parameters like headers, etc.
+   * If the event is preventDefault `vaadin-upload` will not send the
+   * request allowing the user to do something on his own.
+   *
+   * @event upload-request
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+
+  /**
+   * Fired when the XHR is sent.
+   *
+   * @event upload-start
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+
+  /**
+   * Fired as many times as the progress is updated.
+   *
+   * @event upload-progress
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded with loaded info
+   */
+
+  /**
+   * Fired when we have the actual server response, and before the component
+   * analises it. It's useful for developers to make the upload fail depending
+   * on the server response. If the event is preventDefault the vaadin-upload
+   * will return allowing the user to do something on his own like retry the
+   * upload, etc. since he has full access to the `xhr` and `file` objects.
+   * Otherwise, if the event is not prevented default `vaadin-upload` continues
+   * with the normal workflow checking the `xhr.status` and `file.error`
+   * which also might be modified by the user to force a customised response.
+   *
+   * @event upload-response
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+
+  /**
+   * Fired in case the upload process succeed.
+   *
+   * @event upload-success
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded with loaded info
+   */
+
+  /**
+   * Fired in case the upload process failed.
+   *
+   * @event upload-error
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+
+  /**
+   * Fired when retry upload is requested. If the default is prevented, then
+   * retry would not be performed.
+   *
+   * @event upload-retry
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the previous upload xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+
+  /**
+   * Fired when retry abort is requested. If the default is prevented, then the
+   * file upload would not be aborted.
+   *
+   * @event upload-abort
+   * @param {Object} detail
+   *  @param {Object} detail.xhr the xhr
+   *  @param {Object} detail.file the file being uploaded
+   */
+
+</script>

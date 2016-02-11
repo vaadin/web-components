@@ -1,0 +1,38 @@
+{
+  "name": "vaadin-upload",
+  "version": "1.0.0",
+  "description": "Polymer Element for uploading files",
+  "main": "vaadin-upload.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaadin/vaadin-upload.git"
+  },
+  "keywords": [
+    "Vaadin",
+    "upload",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-upload/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct",
+    "install": "node_modules/.bin/bower install --allow-root"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "chalk": "^1.1.1",
+    "web-component-tester": "^4.1.0",
+    "gulp": "latest",
+    "yargs": "^3.27.0",
+    "gulp-html-extract": "^0.0.3",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.8.0"
+  }
+}
