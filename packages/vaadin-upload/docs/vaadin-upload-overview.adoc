@@ -1,0 +1,28 @@
+---
+title: Overview
+order: 1
+layout: page
+---
+
+[[vaadin-upload.overview]]
+= Overview
+
+The [elementname]#vaadin-upload# is a Polymer element for uploading multiple files to the server.
+
+It allows users to upload files simply by dropping them into the component.
+It also has an [guibutton]#Add Files# button, which opens the native browser file dialog for selecting a file or files to upload.
+
+All files added by the user are displayed in a file list inside the element.
+
+Uploading the added files to the server starts automatically.
+Uploading of multiple files is performed simultaneously. The list indicates the state and uploading progress for each file.
+
+The user can cancel the upload of a file and remove it from the list by pressing the cancel button for the particular file.
+If the button is pressed while the file upload is in progress, the upload process will be aborted.
+
+If something was wrong with the upload, an error message and a retry button are displayed for each file.
+By clicking on this button the user can restart the upload process.
+
+[[figure.vaadin-upload.overview]]
+.A screenshot of the [vaadinelement]#vaadin-upload# element
+image::img/vaadin-upload-overview.png[]
