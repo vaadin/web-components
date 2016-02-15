@@ -8,8 +8,10 @@ layout: page
 [[vaadin-combo-box.example]]
 = Basic Usage
 
-You provide the set of Elements which the user can select, via the [propertyname]#items# property.
-Changing the  [propertyname]#value# property explicitly also updates the visible fields.
+You need to provide the set of items which the user can select with the [propertyname]#items# property.
+Current selection is indicated by the [propertyname]#value# property.
+You can set or change the selection programmatically by setting the property value.
+Doing so also updates the visible fields."
 
 [source,html]
 ----
@@ -20,12 +22,13 @@ Changing the  [propertyname]#value# property explicitly also updates the visible
 ----
 var combobox = document.querySelector('vaadin-combo-box');
 combobox.items = ['Bohrium', 'Boron', 'Bromine', 'Cadmium', 'Caesium', 'Calcium'];
+combobox.value = 'Bromine';
 ----
 
 == Events
 
 The [vaadinelement]#vaadin-combo-box# element dispatches events when the value changes.
-The event contain the [propertyname]#value# property in the [classname]#event.detail# object.
+An event contains the [propertyname]#value# property in the [propertyname]#event.detail# object.
 
 
 [source,javascript]
@@ -57,7 +60,7 @@ When using the element inside another Polymer element, you can use the declarati
 
 == Forms
 
-The [vaadinelement]#vaadin-combo-box# element is also extended with [classname]#IronFormElementBehavior#, so it can be used as a field in an iron-form.
+In addition to other features mentioned earlier, the [vaadinelement]#vaadin-combo-box# implements the [classname]#IronFormElementBehavior#, so it can be used as a field in an [elementname]#iron-form#.
 
 [source,html]
 ----
