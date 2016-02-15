@@ -7,7 +7,8 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
-
+  <script src="common.js"></script>
+  
   <link rel="import" href="../vaadin-month-calendar.html">
 </head>
 
@@ -19,13 +20,6 @@
   </test-fixture>
 
   <script>
-    function tap(element) {
-      Polymer.Base.fire('tap', {}, {
-        bubbles: true,
-        node: element
-      });
-    }
-
     describe('vaadin-month-calendar', function() {
       var monthCalendar;
 
@@ -76,6 +70,26 @@
             return weekday.textContent;
           });
           expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+          done();
+        });
+      });
+
+      it('should render days in correct locale', function(done) {
+        monthCalendar.locale = 'fi'; // Start from Monday with Finnish day names.
+        waitUntilLocaleAvailable('fi', function() {
+          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
+            return weekday.textContent;
+          });
+          expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
+          done();
+        });
+      });
+
+      it('should render month name in correct locale', function(done) {
+        monthCalendar.locale = 'fi';
+        waitUntilLocaleAvailable('fi', function() {
+          expect(monthCalendar.$.title.textContent).to.equal('helmikuu');
           done();
         });
       });

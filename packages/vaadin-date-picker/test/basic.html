@@ -6,6 +6,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <script src="common.js"></script>
 
   <link rel="import" href="../vaadin-date-picker.html">
 </head>
@@ -21,17 +22,6 @@
   <script>
     describe('Basic features', function() {
       var datepicker;
-
-      function monthsEqual(date1, date2) {
-        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
-      }
-
-      function tap(element) {
-        Polymer.Base.fire('tap', {}, {
-          bubbles: true,
-          node: element
-        });
-      }
 
       beforeEach(function() {
         datepicker = fixture('datepicker');
@@ -111,9 +101,9 @@
 
       it('should format value correctly', function() {
         datepicker.value = new Date(2000, 1, 1);
-        expect(datepicker.$.input.bindValue).to.equal('2000-02-01');
+        expect(datepicker.$.input.bindValue).to.equal('02/01/2000');
         datepicker.value = new Date(1999, 11, 31);
-        expect(datepicker.$.input.bindValue).to.equal('1999-12-31');
+        expect(datepicker.$.input.bindValue).to.equal('12/31/1999');
       });
 
       it('should not show clear icon', function(done) {
@@ -137,6 +127,14 @@
         datepicker._open();
       });
 
+      it('should update displayed value format according to locale', function(done) {
+        datepicker.value = new Date(2000, 1, 1);
+        datepicker.locale = 'fi';
+        waitUntilLocaleAvailable('fi', function() {
+          expect(datepicker.$.input.bindValue).to.equal('01.02.2000');
+          done();
+        });
+      });
     });
   </script>
 
