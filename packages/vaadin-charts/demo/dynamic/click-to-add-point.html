@@ -38,7 +38,7 @@
             },
 
             chartClickListener: function (e) {
-                //get the Highcharts event with chart specific details
+                //get the underlying event with chart specific details
                 var originalEvent = e.detail.originalEvent;
                 // find the clicked values and the series
                 var x = originalEvent.xAxis[0].value,
