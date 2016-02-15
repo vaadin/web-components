@@ -1,0 +1,69 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
+<link rel="import" href="data-series.html">
+<link rel="import" href="valo-theme.html">
+<link rel="import" href="chart-behavior.html">
+
+<!--
+An element that provides a WebComponent interface for <a href="http://vaadin.com/charts“>Vaadin Charts</a>
+
+Example:
+
+<vaadin-flags-chart id="flags-placement">
+    <title>Chart title</title>
+    <x-axis type="datetime"></x-axis>
+    <data-series shape="squarepin">
+        <data>
+            <point>
+                <x>1370217600000</x>
+                <title>On axis</title>
+            </point>
+            <point>
+                <x>1370476800000</x>
+                <title>On axis</title>
+            </point>
+        </data>
+    </data-series>
+    <data-series type="line">
+        <tooltip value-decimals="4">
+        </tooltip>
+        <data>
+            [Date.UTC(2013,5,2),0.7695],
+            [Date.UTC(2013,5,3),0.7648],
+            [Date.UTC(2013,5,4),0.7645],
+            [Date.UTC(2013,5,5),0.7638],
+            [Date.UTC(2013,5,6),0.7549],
+            [Date.UTC(2013,5,7),0.7562]
+        </data>
+    </data-series>
+</vaadin-flags-chart>
+-->
+<dom-module id="vaadin-flags-chart">
+    <template>
+    </template>
+    <script>
+        Polymer({
+            is: 'vaadin-flags-chart',
+
+            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+
+            _getType: function () {
+                return 'flags';
+            }
+
+        });
+    </script>
+</dom-module>
