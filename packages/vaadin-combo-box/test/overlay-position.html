@@ -120,6 +120,54 @@
         expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
     });
+
+    describeSkipIf(ios, 'overlay alignment', function() {
+      it('should be above input', function(done) {
+        moveComboBox(horiCenter, vertBottom, 300);
+
+        comboBox.open();
+
+        Polymer.Base.async(function() {
+          expect(dropContent()._alignedAbove).to.be.true;
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 0.1);
+          done();
+        }, 1);
+      });
+
+      it('should reposition after filtering', function(done) {
+        moveComboBox(horiCenter, vertBottom, 300);
+
+        comboBox.$.input.bindValue = 'item 1';
+        comboBox.$.input.fire('input');
+
+        Polymer.Base.async(function() {
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 0.1);
+          done();
+        }, 1);
+      });
+    });
+
+    describe('overlay resizing', function() {
+      var minHeight = 116;
+      var inputUnderline = 2;
+
+      it('should resize to bottom of the screen', function() {
+        comboBox.open();
+
+        moveComboBox(horiCenter, vertBottom - minHeight - inputContentRect().height - inputUnderline, 300);
+
+        expect(dropContentRect().bottom).to.be.at.most(window.innerHeight);
+      });
+
+      it('should resize to top of the screen', function() {
+        moveComboBox(horiCenter, vertBottom, 300);
+        comboBox.open();
+
+        moveComboBox(horiCenter, minHeight + inputUnderline, 300);
+
+        expect(dropContentRect().top).to.be.at.least(0);
+      });
+    });
   });
 
   describe('overlay with fixed position target', function() {

@@ -21,27 +21,43 @@
       verticalOffset: {
         type: Number,
         value: 0
+      },
+
+      /**
+       * If `true`, overlay is aligned above the `positionTarget`
+       */
+      _alignedAbove: {
+        type: Boolean,
+        value: false
       }
     },
 
     listeners: {
-      'iron-resize': '_setOverlayPosition'
+      'iron-resize': '_setPosition'
     },
 
     created: function() {
-      this._boundSetOverlayPosition = this._setOverlayPosition.bind(this);
+      this._boundSetPosition = this._setPosition.bind(this);
     },
 
     attached: function() {
       if (this.parentElement === document.body) {
         this.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
-        window.addEventListener('scroll', this._boundSetOverlayPosition, true);
-        this._setOverlayPosition();
+        window.addEventListener('scroll', this._boundSetPosition, true);
+        this._setPosition();
       }
     },
 
     detached: function() {
-      window.removeEventListener('scroll', this._boundSetOverlayPosition, true);
+      window.removeEventListener('scroll', this._boundSetPosition, true);
+    },
+
+    _verticalOffset: function(overlayRect, targetRect) {
+      if (this._alignedAbove) {
+        return -overlayRect.height;
+      } else {
+        return targetRect.height + this.verticalOffset;
+      }
     },
 
     _isPositionFixed: function(element) {
@@ -50,19 +66,45 @@
         (parentElement && this._isPositionFixed(parentElement));
     },
 
-    _setOverlayPosition: function() {
+    _maxHeight: function(targetRect) {
+      var margin = 8;
+      var minHeight = 116; // Height of two items in combo-box
+      var bottom = Math.min(window.innerHeight, document.body.getBoundingClientRect().bottom);
+
+      if (this._alignedAbove) {
+        return Math.max(targetRect.top - margin, minHeight) + 'px';
+      } else {
+        return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
+      }
+    },
+
+    _setPosition: function() {
       if (this.parentElement === document.body) {
-        var overlayRect = this.getBoundingClientRect();
         var targetRect = this.positionTarget.getBoundingClientRect();
+        this._alignedAbove = this._shouldAlignAbove();
+
+        // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
+        this.style.maxHeight = this._maxHeight(targetRect);
+
+        // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
+        this.$.selector.style.maxHeight = this._maxHeight(targetRect);
+
+        var overlayRect = this.getBoundingClientRect();
 
         this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
         this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
-          this.positionTarget.clientHeight + this.verticalOffset;
+          this._verticalOffset(overlayRect, targetRect);
 
         this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
 
         this.style.width = this.positionTarget.clientWidth + 'px';
       }
+    },
+
+    _shouldAlignAbove: function() {
+      var spaceBelow = (window.innerHeight - this.positionTarget.getBoundingClientRect().bottom) / window.innerHeight;
+
+      return spaceBelow < 0.30;
     }
   };
 
