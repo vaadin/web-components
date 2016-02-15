@@ -1,0 +1,77 @@
+---
+title: Basic Usage
+order: 2
+layout: page
+---
+
+
+[[vaadin-combo-box.example]]
+= Basic Usage
+
+You provide the set of Elements which the user can select, via the [propertyname]#items# property.
+Changing the  [propertyname]#value# property explicitly also updates the visible fields.
+
+[source,html]
+----
+<vaadin-combo-box label='Element'></vaadin-combo-box>
+----
+
+[source,javascript]
+----
+var combobox = document.querySelector('vaadin-combo-box');
+combobox.items = ['Bohrium', 'Boron', 'Bromine', 'Cadmium', 'Caesium', 'Calcium'];
+----
+
+== Events
+
+The [vaadinelement]#vaadin-combo-box# element dispatches events when the value changes.
+The event contain the [propertyname]#value# property in the [classname]#event.detail# object.
+
+
+[source,javascript]
+----
+var combobox = document.querySelector('vaadin-combo-box');
+combobox.addEventListener('value-changed', function(event) {
+  console.log(event.detail.value);
+});
+----
+
+When using the element inside another Polymer element, you can use the declarative binding syntax to subscribe for an event:
+
+[source,html]
+----
+<dom-module id="my-element">
+  <template>
+    <vaadin-combo-box on-value-change="valueChanged"></vaadin-combo-box>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'my-element',
+    valueChanged: function(event) {
+      alert(event.detail.value);
+    }
+  });
+</script>
+----
+
+== Forms
+
+The [vaadinelement]#vaadin-combo-box# element is also extended with [classname]#IronFormElementBehavior#, so it can be used as a field in an iron-form.
+
+[source,html]
+----
+<form is="iron-form" method="post">
+  <vaadin-combo-box name="name" label="Element"></vaadin-combo-box>
+  <button>Submit</button>
+</form>
+<script>
+  var form = document.querySelector('form');
+  var combobox = document.querySelector('vaadin-combo-box');
+
+  form.addEventListener('iron-form-submit', function() {
+    alert('Form submitted with name: ' + form.serialize().name);
+    return false;
+  });
+</script>
+----
