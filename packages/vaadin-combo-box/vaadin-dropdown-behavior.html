@@ -14,12 +14,7 @@
         notify: true,
         value: false,
         observer: '_openedChanged'
-      },
-
-      disabled: {
-        type: Boolean,
-        value: false
-      },
+      }
     },
 
     /**
@@ -37,7 +32,10 @@
      * Opens the dropdown list.
      */
     open: function() {
-      this.opened = true;
+      // Prevent _open() being called when input is disabled or read-only
+      if (!this.disabled && !this.readonly) {
+        this.opened = true;
+      }
     },
 
     /**

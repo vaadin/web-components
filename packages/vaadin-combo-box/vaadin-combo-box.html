@@ -113,6 +113,7 @@ enable usage within an `iron-form`.
           id="input"
           role="combobox"
           disabled$="[[disabled]]"
+          readonly$="[[readonly]]"
           aria-activedescendant$="[[_ariaActiveIndex]]"
           aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-labelledby="label"
@@ -130,7 +131,7 @@ enable usage within an `iron-form`.
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
-      <div suffix id="toggleIcon" on-tap="_toggle" on-touchend="_preventDefault">
+      <div suffix id="toggleIcon" on-tap="_toggle" on-touchend="_preventDefault" hidden$="[[_hideToggleIcon(disabled, readonly)]]">
         <iron-icon icon="arrow-drop-down" aria-controls="overlay"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
@@ -200,6 +201,22 @@ enable usage within an `iron-form`.
       _filter: {
         type: String,
         value: ''
+      },
+
+      /**
+       * Set to true to disable this element.
+       */
+      disabled: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * When present, it specifies that the element field is read-only.
+       */
+      readonly: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -506,6 +523,10 @@ enable usage within an `iron-form`.
 
     _hideClearIcon: function(value, opened) {
       return this.$.overlay.touchDevice || value === '' || !opened;
+    },
+
+    _hideToggleIcon: function(disabled, readonly) {
+      return readonly || disabled;
     },
 
     _preventDefault: function(e) {
