@@ -14,14 +14,14 @@
 
 <body>
 
-  <test-fixture id='combobox'>
-    <template is='dom-template'>
-      <vaadin-combo-box name=[[name]] required=[[required]]></vaadin-combo-box>
+  <test-fixture id="combobox">
+    <template>
+      <vaadin-combo-box></vaadin-combo-box>
     </template>
   </test-fixture>
 
-  <test-fixture id='combobox-in-form'>
-    <template is='dom-template'>
+  <test-fixture id="combobox-in-form">
+    <template is="dom-template">
       <form is="iron-form">
         <vaadin-combo-box name=[[name]] required=[[required]]></vaadin-combo-box>
       </form>
@@ -30,33 +30,48 @@
 
   <script>
     describe('using as a field in html form', function() {
+      var comboBox;
+
+      beforeEach(function() {
+        comboBox = fixture('combobox');
+      });
 
       it('should have the given name', function() {
-        var comboBox = fixture('combobox', {
-          name: 'foo'
-        });
+        comboBox.name = 'foo';
         expect(comboBox.$$('input').getAttribute('name')).to.equal('foo');
       });
 
       it('should have no name', function() {
-        var comboBox = fixture('combobox');
         expect(comboBox.$$('input').getAttribute('name')).to.equal(null);
       });
 
       it('should be required', function() {
-        var comboBox = fixture('combobox', {
-          required: true
-        });
+        comboBox.required = true;
         expect(comboBox.$$('input').getAttribute('required')).to.equal('');
       });
 
       it('should not be required', function() {
-        var comboBox = fixture('combobox');
         expect(comboBox.$$('input').getAttribute('required')).to.equal(null);
       });
 
+      it('should be disabled', function() {
+        comboBox.disabled = true;
+        expect(comboBox.$$('input').getAttribute('disabled')).to.equal('');
+      });
+
+      it('should have disabled paper-input-container', function() {
+        comboBox.disabled = true;
+        expect(comboBox.$$('paper-input-container').getAttribute('disabled')).to.equal('');
+      });
+
+      it('should be read-only', function() {
+        comboBox.readonly = true;
+        expect(comboBox.$$('input').getAttribute('readonly')).to.equal('');
+      });
+
       it('should validate correctly', function() {
-        var comboBox = fixture('combobox', {name: 'foo', required: true});
+        comboBox.name = 'foo';
+        comboBox.required = true;
         expect(comboBox.validate()).to.equal(false);
         expect(comboBox.invalid).to.be.equal(true);
         comboBox.value = 'foo';
@@ -66,7 +81,7 @@
 
       it('should serialize correctly', function() {
         var form = fixture('combobox-in-form', {name: 'foo'});
-        var comboBox = form.querySelector('vaadin-combo-box');
+        comboBox = form.querySelector('vaadin-combo-box');
         comboBox.value = 'bar';
         expect(form.serialize().foo).to.equal('bar');
       });

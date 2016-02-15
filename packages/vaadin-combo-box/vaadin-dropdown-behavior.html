@@ -16,10 +16,21 @@
         observer: '_openedChanged'
       },
 
+      /**
+       * Set to true to disable this element.
+       */
       disabled: {
         type: Boolean,
         value: false
       },
+
+      /**
+       * When present, it specifies that the element field is read-only.
+       */
+      readonly: {
+        type: Boolean,
+        value: false
+      }
     },
 
     /**
@@ -37,7 +48,10 @@
      * Opens the dropdown list.
      */
     open: function() {
-      this.opened = true;
+      // Prevent _open() being called when input is disabled or read-only
+      if (!this.disabled && !this.readonly) {
+        this.opened = true;
+      }
     },
 
     /**
