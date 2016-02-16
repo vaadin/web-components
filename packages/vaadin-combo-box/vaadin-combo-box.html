@@ -360,6 +360,7 @@ enable usage within an `iron-form`.
       this.$.overlay.notifyResize();
 
       this.async(function() {
+        this.$.overlay.hidden = (this.items === undefined || this.items === null);
         this.$.overlay._scrollIntoView(this._focusedIndex);
       });
     },
@@ -462,6 +463,9 @@ enable usage within an `iron-form`.
         this.$.overlay._selectItem(this.value);
         this._focusedIndex = this._indexOf(this.value);
       }
+
+      this.$.overlay.hidden = (items === undefined || items === null || items.length === 0);
+      this.$.overlay.notifyResize();
 
       this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
     },

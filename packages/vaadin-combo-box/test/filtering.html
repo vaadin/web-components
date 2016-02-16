@@ -187,6 +187,12 @@
 
         expect(getFilteredItems()).to.be.null;
       });
+
+      it('should hide overlay when filtered items length is 0', function() {
+        setInputValue('THIS IS NOT FOUND');
+
+        expect(comboBox.opened && comboBox.$.overlay.hidden).to.be.true;
+      });
     });
   });
 </script>
