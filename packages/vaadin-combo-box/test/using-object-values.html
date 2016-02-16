@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo basic tests</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+
+  <test-fixture id="combobox">
+    <template>
+      <vaadin-combo-box></vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+
+  <script>
+    describe('using object values', function() {
+      var combobox;
+
+      function inputValue() {
+        return combobox.$.input.bindValue;
+      }
+
+      beforeEach(function() {
+        combobox = fixture('combobox');
+
+        combobox.items = [{
+          label: 'foo',
+          custom: 'bazs',
+          value: 'bar'
+        }, {
+          label: 'baz',
+          custom: 'bashcsdfsa',
+          value: 'qux'
+        }];
+      });
+
+      it('should use the default label property on input field', function() {
+        combobox.open();
+
+        combobox.$.overlay.$.selector.selectItem(0);
+
+        expect(inputValue()).to.eql('foo');
+      });
+
+      it('should use the default label property in overlay items', function(done) {
+        combobox.open();
+
+        Polymer.Base.async(function() {
+          expect(combobox.$.overlay.$.selector.querySelector('.item').textContent).to.contain('foo');
+          done();
+        });
+      });
+
+      it('should use the provided label property', function() {
+        combobox.itemLabelPath = 'custom';
+
+        combobox.value = 'bar';
+
+        expect(inputValue()).to.eql('bazs');
+      });
+
+      it('should use the default value property', function() {
+        combobox.open();
+
+        combobox.$.overlay.$.selector.selectItem(0);
+
+        expect(combobox.value).to.eql('bar');
+
+      });
+
+      it('should use the provided value property', function() {
+        combobox.itemValuePath = 'custom';
+        combobox.open();
+
+        combobox.$.overlay.$.selector.selectItem(1);
+
+        expect(combobox.value).to.eql('bashcsdfsa');
+      });
+
+      it('should use toString if provided label and value paths are not found', function() {
+        combobox.itemValuePath = 'not.found';
+        combobox.itemLabelPath = 'not.found';
+        combobox.items[0].toString = function() {
+          return 'default';
+        };
+
+        combobox.$.overlay.$.selector.selectItem(0);
+
+        expect(combobox.$.input.bindValue).to.eql('default');
+        expect(combobox.value).to.eql('default');
+      });
+
+      it('should use toString if default label and value paths are not found', function() {
+        combobox.items = [{}, {}];
+        combobox.items[0].toString = function() {
+          return 'default';
+        };
+
+        combobox.$.overlay.$.selector.selectItem(0);
+
+        expect(combobox.$.input.bindValue).to.eql('default');
+        expect(combobox.value).to.eql('default');
+      });
+
+      it('should set the selected item', function() {
+        combobox.value = 'bar';
+
+        expect(combobox.selectedItem).to.eql(combobox.items[0]);
+        expect(combobox.$.input.bindValue).to.eql('foo');
+      });
+
+      it('should set the value', function() {
+        combobox.$.overlay.$.selector.selectItem(0);
+
+        expect(combobox.$.input.bindValue).to.eql('foo');
+        expect(combobox.value).to.eql('bar');
+      });
+
+      it('should set the input value from item label if item is found', function() {
+        combobox.value = 'bar';
+
+        expect(combobox.$.input.bindValue).to.eql('foo');
+      });
+
+      describe('when custom values are not allowed', function() {
+        beforeEach(function() {
+          combobox.allowCustomValue = false;
+        });
+
+        it('should clear the input value if item is not found', function() {
+          combobox.value = 'bar';
+
+          combobox.value = 'not found';
+
+          expect(combobox.$.input.bindValue).to.empty;
+        });
+      });
+
+      describe('when custom values are allowed', function() {
+        beforeEach(function() {
+          combobox.allowCustomValue = true;
+        });
+
+        it('should set the value as bind value if item is not found', function() {
+          combobox.value = 'not found';
+
+          expect(combobox.$.input.bindValue).to.eql('not found');
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
