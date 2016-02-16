@@ -1,0 +1,80 @@
+---
+title: Basic Usage
+order: 2
+layout: page
+---
+
+
+[[vaadin-combo-box.example]]
+= Basic Usage
+
+You need to provide the set of items which the user can select with the [propertyname]#items# property.
+Current selection is indicated by the [propertyname]#value# property.
+You can set or change the selection programmatically by setting the property value.
+Doing so also updates the visible fields."
+
+[source,html]
+----
+<vaadin-combo-box label='Element'></vaadin-combo-box>
+----
+
+[source,javascript]
+----
+var combobox = document.querySelector('vaadin-combo-box');
+combobox.items = ['Bohrium', 'Boron', 'Bromine', 'Cadmium', 'Caesium', 'Calcium'];
+combobox.value = 'Bromine';
+----
+
+== Events
+
+The [vaadinelement]#vaadin-combo-box# element dispatches events when the value changes.
+An event contains the [propertyname]#value# property in the [propertyname]#event.detail# object.
+
+
+[source,javascript]
+----
+var combobox = document.querySelector('vaadin-combo-box');
+combobox.addEventListener('value-changed', function(event) {
+  console.log(event.detail.value);
+});
+----
+
+When using the element inside another Polymer element, you can use the declarative binding syntax to subscribe for an event:
+
+[source,html]
+----
+<dom-module id="my-element">
+  <template>
+    <vaadin-combo-box on-value-change="valueChanged"></vaadin-combo-box>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'my-element',
+    valueChanged: function(event) {
+      alert(event.detail.value);
+    }
+  });
+</script>
+----
+
+== Forms
+
+In addition to other features mentioned earlier, the [vaadinelement]#vaadin-combo-box# implements the [classname]#IronFormElementBehavior#, so it can be used as a field in an [elementname]#iron-form#.
+
+[source,html]
+----
+<form is="iron-form" method="post">
+  <vaadin-combo-box name="name" label="Element"></vaadin-combo-box>
+  <button>Submit</button>
+</form>
+<script>
+  var form = document.querySelector('form');
+  var combobox = document.querySelector('vaadin-combo-box');
+
+  form.addEventListener('iron-form-submit', function() {
+    alert('Form submitted with name: ' + form.serialize().name);
+    return false;
+  });
+</script>
+----
