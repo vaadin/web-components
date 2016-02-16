@@ -97,7 +97,7 @@
             var elementChart = document.querySelector("eventful-chart-declarative-attribute vaadin-line-chart");
             var eventNames = elementChart._chartEventNames;
 
-            //fire all highcharts events
+            //fire all the events
             for (var key in eventNames) {
                 Highcharts.fireEvent(elementChart.chart,key,{});
             }
@@ -116,7 +116,7 @@
             for (var key in eventNames) {
                 element.listen(element, eventNames[key], "handle");
             }
-            //fire all highcharts events
+            //fire all the events
             for (var key in eventNames) {
                 Highcharts.fireEvent(elementChart.chart,key,{});
             }
@@ -136,7 +136,7 @@
             for (var key in eventNames) {
                 element.listen(element, eventNames[key], "handle");
             }
-            //fire all highcharts events
+            //fire all the events
             for (var key in eventNames) {
                 Highcharts.fireEvent(elementChart.chart.series[0],key,{});
             }
@@ -156,7 +156,7 @@
             for (var key in eventNames) {
                 element.listen(element, eventNames[key], "handle");
             }
-            //fire all highcharts events
+            //fire all the events
             for (var key in eventNames) {
                 elementChart.chart.series[0].data[0].firePointEvent(key);
             }

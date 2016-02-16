@@ -31,7 +31,7 @@
             is: 'date-axis-and-click-event-example',
 
             chartClickListener: function (e) {
-                //get the Highcharts event with chart specific details
+                //get the underlying event with chart specific details
                 var originalEvent = e.detail.originalEvent;
 
                 var xValue = originalEvent.xAxis[0].value,
@@ -44,7 +44,7 @@
             },
 
             pointClickListener: function (e) {
-                //get the Highcharts event with chart specific details
+                //get the underlying event with chart specific details
                 var originalEvent = e.detail.originalEvent;
                 var point = e.detail.point;
 

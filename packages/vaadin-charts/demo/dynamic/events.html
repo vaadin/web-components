@@ -22,7 +22,7 @@
             is: 'events-example',
 
             clickListener: function (e) {
-                //get the Highcharts event with chart specific details
+                //get the underlying event with chart specific details
                 var originalEvent = e.detail.originalEvent;
                 // find the clicked values and the series
                 var y = originalEvent.yAxis[0].value,
