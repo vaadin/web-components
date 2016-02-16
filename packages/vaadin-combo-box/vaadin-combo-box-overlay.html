@@ -11,10 +11,15 @@
   <style>
     :host {
       position: absolute;
-      z-index: 100;
       @apply(--shadow-elevation-2dp);
       background: #fff;
       border-radius: 0 0 2px 2px;
+
+      /**
+      * Keep the vaadin-combo-box-overlay above paper-dialogs.
+      * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
+      */
+      z-index: 200;
     }
 
     #scroller {
