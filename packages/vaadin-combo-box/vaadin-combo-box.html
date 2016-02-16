@@ -268,10 +268,12 @@ enable usage within an `iron-form`.
 
     _onArrowDown: function() {
       if (this.opened) {
-        this._focusedIndex = Math.min(this.$.overlay._items.length - 1, this._focusedIndex + 1);
-        if (this._focusedIndex > -1) {
-          this.$.input.bindValue = this.$.overlay._items[this._focusedIndex];
-          this._setSelectionRange();
+        if (this.$.overlay._items) {
+          this._focusedIndex = Math.min(this.$.overlay._items.length - 1, this._focusedIndex + 1);
+          if (this._focusedIndex > -1) {
+            this.$.input.bindValue = this.$.overlay._items[this._focusedIndex];
+            this._setSelectionRange();
+          }
         }
       } else {
         this.open();
@@ -283,7 +285,9 @@ enable usage within an `iron-form`.
         if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
         } else {
-          this._focusedIndex = this.$.overlay._items.length - 1;
+          if (this.$.overlay._items) {
+            this._focusedIndex = this.$.overlay._items.length - 1;
+          }
         }
 
         if (this._focusedIndex > -1) {
