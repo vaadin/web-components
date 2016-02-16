@@ -1,4 +1,4 @@
-<vaadin-line-chart id="flags-placement" timeline>
+<vaadin-flags-chart id="flags-placement" timeline>
     <title>USD to EUR exchange rate</title>
 
     <range-selector selected="1">
@@ -7,7 +7,7 @@
     <y-axis><title>Exchange rate</title></y-axis>
 
 
-    <data-series type="flags" name="Flags on series" on-series="dataseries" shape="squarepin">
+    <data-series name="Flags on series" on-series="dataseries" shape="squarepin">
         <data>
             <point>
                 <x>1430438400000</x>
@@ -19,7 +19,7 @@
             </point>
         </data>
     </data-series>
-    <data-series type="flags" name="Flags on axis" shape="squarepin">
+    <data-series name="Flags on axis" shape="squarepin">
         <data>
             <point>
                 <x>1431734400000</x>
@@ -31,7 +31,7 @@
             </point>
         </data>
     </data-series>
-    <data-series name="USD to EUR" id="dataseries">
+    <data-series type="line" name="USD to EUR" id="dataseries">
         <tooltip value-decimals="4">
         </tooltip>
         <data>
@@ -688,4 +688,4 @@
             [Date.UTC(2015,5,30),0.8950]
         </data>
     </data-series>
-</vaadin-line-chart>
+</vaadin-flags-chart>

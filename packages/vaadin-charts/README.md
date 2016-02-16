@@ -18,13 +18,16 @@ https://vaadin.com/charts-for-polymer
     - **vaadin-bar-chart**
     - **vaadin-boxplot-chart**
     - **vaadin-bubble-chart**
+    - **vaadin-candlestick-chart**
     - **vaadin-column-chart**
     - **vaadin-columnrange-chart**
     - **vaadin-errorbar-chart**
+    - **vaadin-flags-chart**
     - **vaadin-funnel-chart**
     - **vaadin-gauge-chart**
     - **vaadin-heatmap-chart**
     - **vaadin-line-chart**
+    - **vaadin-ohlc-chart**
     - **vaadin-pie-chart**
     - **vaadin-polygon-chart**
     - **vaadin-pyramid-chart**

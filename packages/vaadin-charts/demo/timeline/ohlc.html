@@ -6,11 +6,11 @@
                 url="sample_data/ohlc_data"
                 handle-as="json"
                 last-response="{{seriesData}}"></iron-ajax>
-        <vaadin-line-chart id="ohlc-series" timeline>
+        <vaadin-ohlc-chart id="ohlc-series" timeline>
             <title>AAPL Stock Price</title>
             <range-selector selected="2">
             </range-selector>
-            <data-series name="AAPL" type="ohlc" data="[[seriesData]]">
+            <data-series name="AAPL" data="[[seriesData]]">
                 <tooltip value-decimals="2">
                 </tooltip>
                 <data-grouping>
@@ -24,7 +24,7 @@
                     </units>
                 </data-grouping>
             </data-series>
-        </vaadin-line-chart>
+        </vaadin-ohlc-chart>
     </template>
     <script>
         Polymer({
