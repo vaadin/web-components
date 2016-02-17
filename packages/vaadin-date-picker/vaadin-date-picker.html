@@ -34,7 +34,6 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       }
 
       #overlay {
-        width: 350px;
         height: 100vh;
       }
 
@@ -53,14 +52,14 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       }
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(value, _opened)]]">
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(value, _opened)]]" on-touchend="_preventDefault">
       <label id="label" on-tap="_open">[[label]]</label>
       <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(value)]]" type="text" on-tap="_open">
       <iron-icon id="clear" suffix on-tap="_clear" icon="clear"></iron-icon>
     </paper-input-container>
 
     <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content" style="width:[[_fullscreenThresholdWidth]]px"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
   </template>
@@ -84,7 +83,11 @@ When the selected `value` is changed, a `value-changed` event is triggered.
          */
         label: String,
 
-        _opened: Boolean
+        _opened: Boolean,
+
+        _fullscreenThresholdWidth: {
+          value: 420
+        }
       },
 
       _zeroPad: function(i) {
@@ -98,8 +101,23 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       },
 
       _open: function() {
-        this.$.dropdown.verticalOffset = this.clientHeight;
+        this._updateAlignmentAndPosition();
         this.$.dropdown.open();
+      },
+
+      _updateAlignmentAndPosition: function() {
+        var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        var fullscreen = viewportWidth < this._fullscreenThresholdWidth;
+        this.$.dropdown.verticalOffset = fullscreen ? 0 : this.clientHeight;
+        this.$.dropdown.positionTarget = fullscreen ? document.documentElement : this;
+
+        var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
+        var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+        this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
+        this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
+
+        this.$.dropdown.refit();
       },
 
       _onOverlayOpened: function() {
@@ -120,6 +138,10 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 
       _clear: function() {
         this.value = '';
+      },
+
+      _preventDefault: function(e) {
+        e.preventDefault();
       }
 
     });
