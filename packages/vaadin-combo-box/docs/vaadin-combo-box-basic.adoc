@@ -11,11 +11,11 @@ layout: page
 You need to provide the set of items which the user can select with the [propertyname]#items# property.
 Current selection is indicated by the [propertyname]#value# property.
 You can set or change the selection programmatically by setting the property value.
-Doing so also updates the visible fields."
+Doing so also updates the visible fields.
 
 [source,html]
 ----
-<vaadin-combo-box label='Element'></vaadin-combo-box>
+<vaadin-combo-box label="Element"></vaadin-combo-box>
 ----
 
 [source,javascript]
@@ -75,6 +75,39 @@ In addition to other features mentioned earlier, the [vaadinelement]#vaadin-comb
   form.addEventListener('iron-form-submit', function() {
     alert('Form submitted with name: ' + form.serialize().name);
     return false;
+  });
+</script>
+----
+
+== Custom Input Values
+
+Users can be allowed also to input their own custom values. By default, this feature is disabled, so it
+needs to be explicitly enabled.
+
+[source,html]
+----
+<vaadin-combo-box allow-custom-value></vaadin-combo-box>
+----
+
+When enabled, inputed custom values will be always set as the value of the [vaadinelement]#vaadin-combo-box#.
+If you need to prevent that from happening, you can provide your own handler for the custom values.
+
+[source,html]
+----
+<dom-module id="my-element">
+  <template>
+    <vaadin-combo-box id="combobox" on-custom-value="onCustomValue"></vaadin-combo-box>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'my-element',
+    onCustomValue: function(event) {
+      // Prevents the custom value to be assigned.
+      event.preventDefault();
+
+      this.$.combobox.value = 'Default Value';
+    }
   });
 </script>
 ----
