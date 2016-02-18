@@ -6,6 +6,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <script src="common.js"></script>
 
   <link rel="import" href="../vaadin-date-picker-overlay.html">
 </head>
@@ -39,10 +40,6 @@
         return overlay.$.list._getModelFromItem(overlay._visibleMonthIndex)._children.filter(function(i) {
           return i.nodeType === 1;
         })[0];
-      }
-
-      function monthsEqual(date1, date2) {
-        return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
       }
 
       it('should reflect the year of currently visible month on the toolbar', function(done) {

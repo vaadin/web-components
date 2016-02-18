@@ -48,7 +48,7 @@
     <div id="scroller">
       <iron-list id="list" items="[[_months]]" as="monthIndex" on-scroll="_onListScroll">
         <template>
-          <vaadin-month-calendar month="[[_dateAfterXMonths(_originDate, monthIndex)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
+          <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(_originDate, monthIndex)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
         </template>
       </iron-list>
     </div>
@@ -66,6 +66,15 @@
         selectedDate: {
           type: Date,
           notify: true
+        },
+
+        /**
+         * Locale of this element used for formatting and naming of months and days.
+         * Must be a locale supported by [Moment.js](http://momentjs.com/),
+         * for example `en-gb`, `fi`, `es`, etc.
+         */
+        locale: {
+          type: String
         },
 
         _originDate: {

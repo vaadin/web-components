@@ -25,6 +25,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
+<link rel="import" href="vaadin-locale-aware-behavior.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -54,18 +55,26 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 
     <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(value, _opened)]]" on-touchend="_preventDefault">
       <label id="label" on-tap="_open">[[label]]</label>
-      <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(value)]]" type="text" on-tap="_open">
+      <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(value, _readyLocale)]]" type="text" on-tap="_open">
       <iron-icon id="clear" suffix on-tap="_clear" icon="clear"></iron-icon>
     </paper-input-container>
 
     <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content" style="width:[[_fullscreenThresholdWidth]]px"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content" style="width:[[_fullscreenThresholdWidth]]px"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
   </template>
   <script>
     Polymer({
       is: 'vaadin-date-picker',
+
+      behaviors: [
+        vaadin.elements.datepicker.LocaleAwareBehavior
+      ],
+
+      listeners: {
+        'locale-ready': '_localeReady'
+      },
 
       properties: {
 
@@ -83,6 +92,9 @@ When the selected `value` is changed, a `value-changed` event is triggered.
          */
         label: String,
 
+        // Property used for data-binding a locale that is ready to be used.
+        _readyLocale: String,
+
         _opened: Boolean,
 
         _fullscreenThresholdWidth: {
@@ -90,13 +102,13 @@ When the selected `value` is changed, a `value-changed` event is triggered.
         }
       },
 
-      _zeroPad: function(i) {
-        return i < 10 ? '0' + i : i;
+      _localeReady: function(e) {
+        this._readyLocale = e.detail.locale;
       },
 
-      _formatValue: function(value) {
+      _formatValue: function(value, locale) {
         if (value) {
-          return value.getFullYear() + '-' + this._zeroPad(value.getMonth() + 1) + '-' + this._zeroPad(value.getDate());
+          return moment(value).format(moment.localeData(locale).longDateFormat('L'));
         }
       },
 
