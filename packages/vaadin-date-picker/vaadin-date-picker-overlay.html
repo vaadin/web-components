@@ -1,8 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="vaadin-month-calendar.html">
+<link rel="import" href="vaadin-infinite-scroller.html">
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -24,34 +24,17 @@
       }
 
       #scroller {
-        flex: 1;
-        overflow: hidden;
-        position: relative;
-      }
-
-      #list {
-        position: absolute;
         height: 100%;
-        width: 100%;
-        padding-right: 40px;
-        margin-right: -40px;
-        transform: none !important;
-      }
-
-      vaadin-month-calendar {
-        height: 16em;
       }
     </style>
 
-    <div id="toolbar">[[_yearAfterXMonths(_originDate, _visibleMonthIndex)]]</div>
+    <div id="toolbar">[[_yearAfterXMonths(_visibleMonthIndex)]]</div>
 
-    <div id="scroller">
-      <iron-list id="list" items="[[_months]]" as="monthIndex" on-scroll="_onListScroll">
-        <template>
-          <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(_originDate, monthIndex)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
-        </template>
-      </iron-list>
-    </div>
+    <vaadin-infinite-scroller id="scroller" on-scroll="_onListScroll" item-height="250" buffer-size="20">
+      <template>
+        <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
+      </template>
+    </vaadin-infinite-scroller>
 
   </template>
   <script>
@@ -81,48 +64,29 @@
           value: new Date()
         },
 
-        _visibleMonthIndex: Number,
+        _visibleMonthIndex: Number
 
-        _months: {
-          computed: '_computeMonths(_originIndex)'
-        },
-
-        // As iron-list isn't two way scrollable by default, it needs to be pre-scrolled
-        // to an index in the middle beforehand. This property states the index of the
-        // 'origin' position in the array and also dictates the array size at the same
-        // time.
-        _originIndex: {
-          value: 5000
-        }
-
-      },
-
-      _computeMonths: function(_originIndex) {
-        var months = [];
-        for (var i = -_originIndex; i < _originIndex; i++) {
-          months.push('' + i);
-        }
-        return months;
       },
 
       /**
        * Scrolls the list to the given Date.
        */
       scrollToDate: function(date) {
-        this.$.list.scrollToIndex(this._differenceInMonths(date, this._originDate) + this._originIndex);
+        this.$.scroller.position = this._differenceInMonths(date, this._originDate);
+        this.async(this._onListScroll, 1);
       },
 
       _onListScroll: function() {
-        this._visibleMonthIndex = this.$.list.firstVisibleIndex - this._originIndex;
+        this._visibleMonthIndex = Math.floor(this.$.scroller.position);
       },
 
-      _yearAfterXMonths: function(date, months) {
-        return this._dateAfterXMonths(date, months).getFullYear();
+      _yearAfterXMonths: function(months) {
+        return this._dateAfterXMonths(months).getFullYear();
       },
 
-      _dateAfterXMonths: function(date, months) {
-        var result = new Date(date);
-        result.setMonth(parseInt(months) + date.getMonth());
+      _dateAfterXMonths: function(months) {
+        var result = new Date(this._originDate);
+        result.setMonth(parseInt(months) + this._originDate.getMonth());
         return result;
       },
 

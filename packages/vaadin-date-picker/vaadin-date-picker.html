@@ -36,6 +36,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 
       #overlay {
         height: 100vh;
+        width: 420px;
       }
 
       #inputcontainer:not([hideclear]) #input {
@@ -60,7 +61,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
     </paper-input-container>
 
     <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content" style="width:[[_fullscreenThresholdWidth]]px"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
   </template>
