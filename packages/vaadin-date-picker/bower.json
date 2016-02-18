@@ -25,6 +25,7 @@
     "iron-icons": "polymerelements/iron-icons#~1.1.2",
     "iron-input": "polymerelements/iron-input#~1.0.8",
     "paper-input": "polymerelements/paper-input#~1.1.5",
+    "paper-button": "polymerelements/paper-button#^1.0.0",
     "polymer": "Polymer/polymer#^1.2.0",
     "paper-styles": "polymerelements/paper-styles#^1.1.3",
     "moment": "^2.11.2",
