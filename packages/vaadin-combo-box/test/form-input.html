@@ -34,6 +34,7 @@
 
       beforeEach(function() {
         comboBox = fixture('combobox');
+        comboBox.allowCustomValue = true;
       });
 
       it('should have the given name', function() {
@@ -74,6 +75,7 @@
         comboBox.required = true;
         expect(comboBox.validate()).to.equal(false);
         expect(comboBox.invalid).to.be.equal(true);
+
         comboBox.value = 'foo';
         expect(comboBox.validate()).to.equal(true);
         expect(comboBox.invalid).to.be.equal(false);

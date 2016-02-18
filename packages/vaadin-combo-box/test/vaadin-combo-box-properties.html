@@ -62,6 +62,51 @@
         });
       });
 
+      describe('allow custom value property', function() {
+        beforeEach(function() {
+          comboBox.allowCustomValue = true;
+        });
+
+        it('should set bind value after setting value property', function() {
+          comboBox.value = 'foo';
+
+          expect(comboBox.$.input.bindValue).to.eql('foo');
+        });
+
+        it('should set value after setting a custom input value', function() {
+          comboBox.open();
+          comboBox.$.input.bindValue = 'foo';
+          comboBox.close();
+
+          expect(comboBox.value).to.eql('foo');
+        });
+
+        describe('`custom-value` event', function() {
+          it('should be fired when custom value is set', function() {
+            var spy = sinon.spy();
+            comboBox.addEventListener('custom-value', spy);
+
+            comboBox.open();
+            comboBox.$.input.bindValue = 'foo';
+            comboBox.close();
+
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should be cancelable', function() {
+            comboBox.addEventListener('custom-value', function(e) {
+              e.preventDefault();
+            });
+
+            comboBox.open();
+            comboBox.$.input.bindValue = 'foo';
+            comboBox.close();
+
+            expect(combobox.value).to.be.empty;
+          });
+        });
+      });
+
       describe('label property', function() {
         it('should have undefined by default', function() {
           expect(comboBox.label).to.be.undefined;

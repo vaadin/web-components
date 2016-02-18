@@ -122,6 +122,11 @@
         observer: '_focusedIndexChanged'
       },
 
+      _focusedItem: {
+        type: String,
+        computed: '_getFocusedItem(_focusedIndex)'
+      },
+
       _ariaActiveIndex: {
         type: Number,
         notify: true,
@@ -131,6 +136,12 @@
 
     ready: function() {
       this._patchWheelOverScrolling();
+    },
+
+    _getFocusedItem: function(focusedIndex) {
+      if (focusedIndex >= 0) {
+        return this._items[focusedIndex];
+      }
     },
 
     _isItemFocused: function(focusedIndex, itemIndex) {
