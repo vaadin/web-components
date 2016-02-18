@@ -398,8 +398,8 @@ enable usage within an `iron-form`.
       } else if (this.$.input.bindValue === '') {
         this._clear();
       } else {
-        var e = this.fire('custom-value', this.$.input.bindValue, { cancelable: true });
-        if (!e.isDefaultPrevented) {
+        var e = this.fire('custom-value', this.$.input.bindValue, {cancelable: true});
+        if (!e.defaultPrevented) {
           if (this.allowCustomValue) {
             this.value = this.$.input.bindValue;
           } else {
