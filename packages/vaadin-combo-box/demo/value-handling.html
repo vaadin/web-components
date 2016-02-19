@@ -65,8 +65,9 @@ layout: page
       needs to be explicitly enabled.
     </p>
     <p>
-      When enabled, inputed custom values will be always set as the <code>value</code>.
-      If you need to prevent that from happening, you can provide your own handler for the custom values.
+      When enabled, custom input values are always accepted and used as the <code>value</code> of the combo box.
+      If you need to cancel the automatic assignment, you can provide your own listener for the <code>custom-value-set</code> event
+      that prevents the default behavior.
     </p>
     <code-example source>
         <vaadin-combo-box demo label="Element" allow-custom-value></vaadin-combo-box>
@@ -82,11 +83,11 @@ layout: page
               document.querySelector('#selected-value2').innerHTML = combobox.value;
             });
 
-            combobox.addEventListener('custom-value', function(e) {
+            combobox.addEventListener('custom-value-set', function(e) {
               // Prevents setting the value property automatically.
               e.preventDefault();
 
-              combobox.value = 'custom value "' + e.detail + '" added!';
+              combobox.value = 'custom value "' + e.detail + '" set!';
             });
 
             combobox.value = 'Carbon';

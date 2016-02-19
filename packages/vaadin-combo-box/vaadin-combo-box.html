@@ -308,6 +308,8 @@ enable usage within an `iron-form`.
     },
 
     _onEnter: function(e) {
+      // should close on enter when custom values are allowed, input field is cleared, or when an existing
+      // item is focused with keyboard.
       if (this.opened && (this.allowCustomValue || this.$.input.bindValue === '' || this._focusedIndex > -1)) {
         this.close();
 
@@ -398,13 +400,13 @@ enable usage within an `iron-form`.
       } else if (this.$.input.bindValue === '') {
         this._clear();
       } else {
-        var e = this.fire('custom-value', this.$.input.bindValue, {cancelable: true});
-        if (!e.defaultPrevented) {
-          if (this.allowCustomValue) {
+        if (this.allowCustomValue) {
+          var e = this.fire('custom-value-set', this.$.input.bindValue, {cancelable: true});
+          if (!e.defaultPrevented) {
             this.value = this.$.input.bindValue;
-          } else {
-            this.$.input.bindValue = this.value;
           }
+        } else {
+          this.$.input.bindValue = this.value;
         }
       }
 

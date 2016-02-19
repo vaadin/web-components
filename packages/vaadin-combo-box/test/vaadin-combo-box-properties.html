@@ -81,10 +81,10 @@
           expect(comboBox.value).to.eql('foo');
         });
 
-        describe('`custom-value` event', function() {
+        describe('`custom-value-set` event', function() {
           it('should be fired when custom value is set', function() {
             var spy = sinon.spy();
-            comboBox.addEventListener('custom-value', spy);
+            comboBox.addEventListener('custom-value-set', spy);
 
             comboBox.open();
             comboBox.$.input.bindValue = 'foo';
@@ -93,8 +93,21 @@
             expect(spy.callCount).to.eql(1);
           });
 
+          it('should not be fired when custom values are not allowed', function() {
+            comboBox.allowCustomValue = false;
+
+            var spy = sinon.spy();
+            comboBox.addEventListener('custom-value-set', spy);
+
+            comboBox.open();
+            comboBox.$.input.bindValue = 'foo';
+            comboBox.close();
+
+            expect(spy.callCount).to.eql(0);
+          });
+
           it('should be cancelable', function() {
-            comboBox.addEventListener('custom-value', function(e) {
+            comboBox.addEventListener('custom-value-set', function(e) {
               e.preventDefault();
             });
 

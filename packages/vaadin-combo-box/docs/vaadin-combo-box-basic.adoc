@@ -89,14 +89,15 @@ needs to be explicitly enabled.
 <vaadin-combo-box allow-custom-value></vaadin-combo-box>
 ----
 
-When enabled, inputed custom values will be always set as the value of the [vaadinelement]#vaadin-combo-box#.
-If you need to prevent that from happening, you can provide your own handler for the custom values.
+When enabled, custom input values are always accepted and used as the value of the [vaadinelement]#vaadin-combo-box#.
+If you need to cancel the automatic assignment, you can provide your own listener for the custom-value-set event
+that prevents the default behavior.
 
 [source,html]
 ----
 <dom-module id="my-element">
   <template>
-    <vaadin-combo-box id="combobox" on-custom-value="onCustomValue"></vaadin-combo-box>
+    <vaadin-combo-box id="combobox" on-custom-value-set="onCustomValue"></vaadin-combo-box>
   </template>
 </dom-module>
 <script>
