@@ -32,6 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
       width: 100%;
       box-sizing: border-box;
       padding-right: 40px;
+      @apply(--vaadin-infinite-scroller-buffer);
     }
   </style>
 
@@ -131,18 +132,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (upperThresholdReached || lowerThresholdReached) {
         this._translateBuffer(lowerThresholdReached);
-
-        // Call recursively to continue translating if necessary to make content visible.
-        this._scroll(null, true);
-      } else {
-        if (doUpdateClones) {
-          this._updateClones();
-        }
-        if (!this._preventScrollEvent) {
-          this.fire('scroll');
-        }
-        this._preventScrollEvent = false;
+        this._updateClones();
       }
+
+      if (!this._preventScrollEvent) {
+        this.fire('scroll');
+      }
+      this._preventScrollEvent = false;
     },
 
     /**
@@ -178,15 +174,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this._buffers.forEach(function(buffer) {
         Polymer.Base.transform('translate3d(0, ' + buffer.translateY + 'px, 0)', buffer);
       });
+      this._buffers[0].updated = false;
       this._buffers[1].updated = false;
       this._updateClones();
-
-      this.debounce('updateBothBuffers', function() {
-        this._buffers.forEach(function(buffer) {
-          buffer.updated = false;
-        });
-        this._updateClones();
-      }, 500);
 
       this.listen(this.$.scroller, 'scroll', '_scroll');
     },

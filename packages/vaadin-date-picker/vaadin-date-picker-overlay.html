@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 
@@ -11,6 +13,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        width: 100%;
         background: #fff;
         font: inherit;
         @apply(--paper-font-common-base);
@@ -18,23 +21,168 @@
       }
 
       #toolbar {
+        cursor: pointer;
         padding: 1em;
-        background: #eee;
+        background: #fff;
+        z-index: 2;
+        @apply(--paper-font-button);
         @apply(--shadow-elevation-2dp);
       }
 
-      #scroller {
+      #toolbar:not([desktop]) {
+        color: #03a9f4;
+      }
+
+      #toolbar iron-icon {
+        fill: #03a9f4;
+        padding: 0px;
+        position: absolute;
+        right: 1em;
+        transition: transform 200ms;
+        --iron-icon-width: 20px;
+        --iron-icon-height: 20px;
+      }
+
+      #toolbar iron-icon[rotate] {
+        transform: rotate(180deg);
+      }
+
+      #toolbar iron-icon[hidden] {
+        display: none;
+      }
+
+      #scrollers {
+        display: flex;
+        flex-direction: row;
         height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #scrollers #fade {
+        pointer-events: none;
+        display: block;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+        width: 50px;
+        position: absolute;
+        height: 100%;
+        z-index: 1;
+      }
+
+      #scrollers[desktop] #fade {
+        display: none;
+      }
+
+      #scroller,
+      #yearScroller {
+        height: 100%;
+      }
+
+      #scroller {
+        padding: 0 8px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      #scrollers[desktop] #scroller {
+        right: 50px;
+      }
+
+      #yearScroller {
+        text-align: center;
+        width: 50px;
+        background: #444;
+        color: #d2d2d2;
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        transform: translateX(100%);
+        -webkit-tap-highlight-color: transparent;
+        @apply(--paper-font-menu);
+      }
+
+      #yearScroller div {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      #scrollers[desktop] #yearScroller {
+        position: absolute;
+        transform: none !important;
+      }
+
+      #scroller {
+        /* Center the month scroller position. */
+        --vaadin-infinite-scroller-buffer: {
+          top: 50%;
+          margin-top: -125px;
+        }
+      }
+
+      #yearScroller {
+        /* Center the year scroller position. */
+        --vaadin-infinite-scroller-buffer: {
+          top: 50%;
+          margin-top: -1.6em;
+        }
+      }
+
+      #yearScroller:before {
+        content: '';
+        display: block;
+        background: transparent;
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-top: -6px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: transparent;
+        border-left-color: #fff;
+      }
+
+      #yearScroller div:after {
+        content: "• • • • • ";
+        display: block;
+        font-size: 18px;
+        line-height: 1.3em;
+        width: 0.5em;
+        margin: 0.3em auto;
+        opacity: 0.3;
+        white-space: normal;
+      }
+
+      :host(.animate) vaadin-infinite-scroller {
+        transition: all 200ms;
       }
     </style>
 
-    <div id="toolbar">[[_yearAfterXMonths(_visibleMonthIndex)]]</div>
+    <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
+      [[_yearAfterXMonths(_visibleMonthIndex)]]
+      <iron-icon hidden$="[[_desktopMode]]" rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="chevron-right"></iron-icon>
+    </div>
 
-    <vaadin-infinite-scroller id="scroller" on-scroll="_onListScroll" item-height="250" buffer-size="20">
-      <template>
-        <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
-      </template>
-    </vaadin-infinite-scroller>
+    <div id="scrollers" desktop$="[[_desktopMode]]">
+      <div id="fade"></div>
+      <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-track="_track" item-height="250" buffer-size="6">
+        <template>
+          <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
+        </template>
+      </vaadin-infinite-scroller>
+      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" item-height="150" buffer-size="50">
+        <template>
+          <div>[[_yearAfterXYears(index)]]</div>
+        </template>
+      </vaadin-infinite-scroller>
+    </div>
 
   </template>
   <script>
@@ -64,8 +212,29 @@
           value: new Date()
         },
 
-        _visibleMonthIndex: Number
+        _visibleMonthIndex: Number,
 
+        _desktopMode: {
+          type: Boolean,
+          value: function() {
+            return window.innerWidth >= 375;
+          }
+        },
+
+        _translateX: {
+          observer: '_translateXChanged'
+        },
+
+        _yearScrollerWidth: {
+          value: 50
+        }
+
+      },
+
+      attached: function() {
+        this._translateX = this._yearScrollerWidth;
+        this.toggleClass('animate', true);
+        this.setScrollDirection('y', this.$.scroller);
       },
 
       /**
@@ -73,11 +242,109 @@
        */
       scrollToDate: function(date) {
         this.$.scroller.position = this._differenceInMonths(date, this._originDate);
-        this.async(this._onListScroll, 1);
+        this.async(this._onMonthScroll, 1);
       },
 
-      _onListScroll: function() {
+      _onMonthScroll: function() {
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+        this.$.yearScroller.position = this.$.scroller.position / 12;
+      },
+
+      _onYearScroll: function() {
+        this.$.scroller.position = this.$.yearScroller.position * 12;
+        this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+      },
+
+      _onYearTap: function(e) {
+        // http://gizma.com/easing/
+        var easingFunction = function(t, b, c, d) {
+          t /= d / 2;
+          if (t < 1) {
+            return c / 2 * t * t + b;
+          }
+          t--;
+          return -c / 2 * (t * (t - 2) - 1) + b;
+        };
+
+        var scrollDelta = e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
+        var start = 0;
+        var duration = 300;
+        var initialScrollTop = this.$.yearScroller.$.scroller.scrollTop;
+        var smoothScroll = function(timestamp) {
+          start = start ||  timestamp;
+
+          var currentTime = timestamp - start;
+          var currentPos = easingFunction(currentTime, initialScrollTop, scrollDelta, duration);
+          this.$.yearScroller.$.scroller.scrollTop = currentPos;
+
+          if (currentTime < duration) {
+            window.requestAnimationFrame(smoothScroll);
+          }
+        }.bind(this);
+
+        // Start the animation.
+        window.requestAnimationFrame(smoothScroll);
+      },
+
+      _track: function(e) {
+        if (this._desktopMode) {
+          // No need to track for swipe gestures on desktop.
+          return;
+        }
+
+        switch (e.detail.state) {
+          case 'start':
+            this.toggleClass('animate', false);
+            break;
+          case 'track':
+            var newTranslateX = this._translateX + e.detail.dx / this._yearScrollerWidth * 5;
+            if (newTranslateX > this._yearScrollerWidth) {
+              this._closeYearScroller();
+            } else if (newTranslateX < 0) {
+              this._openYearScroller();
+            } else {
+              this._translateX = newTranslateX;
+            }
+            break;
+          case 'end':
+            this.toggleClass('animate', true);
+            if (this._translateX >= this._yearScrollerWidth / 2) {
+              this._closeYearScroller();
+            } else {
+              this._openYearScroller();
+            }
+            break;
+        }
+      },
+
+      _toggleYearScroller: function() {
+        this._isYearScrollerVisible() ? this._closeYearScroller() : this._openYearScroller();
+      },
+
+      _openYearScroller: function() {
+        this._translateX = 0;
+      },
+
+      _closeYearScroller: function() {
+        this._translateX = this._yearScrollerWidth;
+      },
+
+      _isYearScrollerVisible: function() {
+        return this._translateX < this._yearScrollerWidth;
+      },
+
+      _translateXChanged: function(x) {
+        if (!this._desktopMode) {
+          this.transform('translateX(' + (x - this._yearScrollerWidth) + 'px)', this.$.scroller);
+          this.transform('translateX(' + x + 'px)', this.$.yearScroller);
+          this.transform('translateX(' + -x + 'px)', this.$.fade);
+        }
+      },
+
+      _yearAfterXYears: function(index) {
+        var result = new Date(this._originDate);
+        result.setFullYear(parseInt(index) + this._originDate.getFullYear());
+        return result.getFullYear();
       },
 
       _yearAfterXMonths: function(months) {
@@ -93,8 +360,11 @@
       _differenceInMonths: function(date1, date2) {
         var months = (date1.getFullYear() - date2.getFullYear()) * 12;
         return months - date2.getMonth() + date1.getMonth();
-      }
+      },
 
+      _differenceInYears: function(date1, date2) {
+        return this._differenceInMonths(date1, date2) / 12;
+      }
     });
   </script>
 </dom-module>

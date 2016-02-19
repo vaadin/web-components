@@ -49,7 +49,9 @@
             expect(dropdown.positionTarget).to.equal(fullscreen ? document.documentElement : datepicker);
             done();
           });
-          datepicker._open();
+          Polymer.Base.async(function() {
+            datepicker._open();
+          });
         });
 
       });
