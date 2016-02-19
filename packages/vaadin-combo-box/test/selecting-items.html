@@ -142,6 +142,7 @@
     var combobox;
     beforeEach(function() {
       combobox = fixture('combobox');
+      combobox.allowCustomValue = true;
       combobox.items = ['foo', 'bar', 'barbar'];
 
       combobox.open();
