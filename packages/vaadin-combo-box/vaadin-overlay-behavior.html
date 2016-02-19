@@ -34,6 +34,7 @@
 
     attached: function() {
       if (this.parentElement === document.body) {
+        this.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
         window.addEventListener('scroll', this._boundSetOverlayPosition, true);
         this._setOverlayPosition();
       }
@@ -41,6 +42,12 @@
 
     detached: function() {
       window.removeEventListener('scroll', this._boundSetOverlayPosition, true);
+    },
+
+    _isPositionFixed: function(element) {
+      var parentElement = element.parentElement || element.domHost;
+      return window.getComputedStyle(element).position === 'fixed' ||
+        (parentElement && this._isPositionFixed(parentElement));
     },
 
     _setOverlayPosition: function() {
