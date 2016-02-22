@@ -89,6 +89,16 @@ When the selected `value` is changed, a `value-changed` event is triggered.
         },
 
         /**
+         * Date which should be visible when there is no value selected.
+         */
+        initialPosition: {
+          type: Date,
+          value: function() {
+            return new Date();
+          }
+        },
+
+        /**
          * The label for this element.
          */
         label: String,
@@ -137,7 +147,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
         if (this.value) {
           this.$.overlay.scrollToDate(this.value);
         } else {
-          this.$.overlay.scrollToDate(new Date());
+          this.$.overlay.scrollToDate(this.initialPosition);
         }
       },
 

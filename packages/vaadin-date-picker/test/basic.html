@@ -65,6 +65,17 @@
         datepicker._open();
       });
 
+      it('should scroll to initial position', function(done) {
+        datepicker.initialPosition = new Date(2016, 0, 1);
+
+        var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(spy.firstCall.args[0]).to.eql(datepicker.initialPosition);
+          done();
+        });
+        datepicker._open();
+      });
+
       it('should scroll to selected value by default', function(done) {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         datepicker.value = new Date(2000, 1, 1);
