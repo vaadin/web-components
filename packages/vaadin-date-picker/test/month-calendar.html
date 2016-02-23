@@ -8,7 +8,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../test-fixture/test-fixture-mocha.js"></script>
   <script src="common.js"></script>
-  
+
   <link rel="import" href="../vaadin-month-calendar.html">
 </head>
 
@@ -89,7 +89,7 @@
       it('should render month name in correct locale', function(done) {
         monthCalendar.locale = 'fi';
         waitUntilLocaleAvailable('fi', function() {
-          expect(monthCalendar.$.title.textContent).to.equal('helmikuu');
+          expect(monthCalendar.$.title.textContent).to.equal('helmikuu 2016');
           done();
         });
       });
@@ -99,7 +99,7 @@
         Polymer.Base.async(function() {
           var days = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
           expect(days).to.equal(31);
-          expect(monthCalendar.$.title.textContent).to.equal('January');
+          expect(monthCalendar.$.title.textContent).to.equal('January 2000');
           done();
         });
       });

@@ -52,23 +52,32 @@
         expect(scroller.$$('.buffer').children).to.have.length(80);
       });
 
-      it('should reflect currently visible item index as position', function(done) {
-        var initialScrollTop = scroller.$.scroller.scrollTop;
-        var scrollDiff = scroller.itemHeight * scroller.bufferSize * 3;
-
+      it('should reflect currently visible item index as position scrolling down', function(done) {
         function scrollDown() {
-          scroller.removeEventListener('scroll', scrollDown);
           verifyPosition();
-          if (scroller.$.scroller.scrollTop >= initialScrollTop + scrollDiff) {
+          if (scroller.position > scroller.bufferSize * 1.5) {
             done();
           } else {
             scroller.$.scroller.scrollTop += scroller.itemHeight * 3.7;
-            scroller.async(scrollDown, 1);
+            scroller.async(scrollDown, 20);
           }
         }
 
-        scroller.addEventListener('scroll', scrollDown);
-        scroller.$.scroller.scrollTop = initialScrollTop - scrollDiff;
+        scrollDown();
+      });
+
+      it('should reflect currently visible item index as position scrolling up', function(done) {
+        function scrollUp() {
+          verifyPosition();
+          if (scroller.position < -scroller.bufferSize * 1.5) {
+            done();
+          } else {
+            scroller.$.scroller.scrollTop -= scroller.itemHeight * 3.7;
+            scroller.async(scrollUp, 20);
+          }
+        }
+
+        scrollUp();
       });
 
       it('should reflect position as currently visible item index', function() {

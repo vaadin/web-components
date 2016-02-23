@@ -16,9 +16,15 @@
       }
 
       #title {
-        font-size: 120%;
         text-align: center;
-        padding: 0.4em 0;
+        padding: 0.4em 1em;
+        @apply(--paper-font-subhead);
+      }
+
+      #title span {
+        position: absolute;
+        left: 1em;
+        color: #999;
       }
 
       #monthGrid {
@@ -31,6 +37,7 @@
         width: 14.285714286%;
         box-sizing: border-box;
         padding: 0.4em 0;
+        @apply(--paper-font-body1);
       }
 
       #monthGrid div:not(:empty) {
@@ -39,28 +46,15 @@
 
       #monthGrid div.weekday {
         text-transform: uppercase;
-        font-size: 70%;
         color: #999;
         cursor: default;
+        padding: 0.7em 0;
+        @apply(--paper-font-caption);
       }
 
       #monthGrid div[today] {
         position: relative;
-      }
-
-      #monthGrid div[today]:before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        border: 2px solid #03a9f4;
-        border-radius: 50%;
-        box-sizing: border-box;
-        width: 1.6em;
-        height: 1.6em;
-        margin-left: -0.8em;
-        margin-top: -0.8em;
+        color: #03a9f4;
       }
 
       #monthGrid div[today][selected]:before {
@@ -130,8 +124,8 @@
         this._firstDayOfWeek = moment.localeData(locale)._week.dow;
       },
 
-      _getTitle: function(month) {
-        return this._monthNames[month.getMonth()];
+      _getTitle: function(month, monthNames) {
+        return monthNames[month.getMonth()] + ' ' + month.getFullYear();
       },
 
       _dateEquals: function(date1, date2) {
