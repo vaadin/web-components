@@ -154,6 +154,13 @@
           done();
         });
       });
+
+      it('should open by tapping the calendar icon', function(done) {
+        tap(datepicker.$.calendar);
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          done();
+        });
+      });
     });
   </script>
 
