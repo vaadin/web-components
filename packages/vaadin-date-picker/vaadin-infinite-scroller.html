@@ -107,7 +107,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this.templatize(template);
       this._createPool();
 
-      this.async(this._reset, 1);
+      this.async(function() {
+        this._reset();
+        this.flushDebouncer('updateAllClones');
+      }, 1);
     },
 
     _translateBuffer: function(up) {
@@ -174,9 +177,13 @@ This program is available under Apache License Version 2.0, available at https:/
       this._buffers.forEach(function(buffer) {
         Polymer.Base.transform('translate3d(0, ' + buffer.translateY + 'px, 0)', buffer);
       });
-      this._buffers[0].updated = false;
-      this._buffers[1].updated = false;
-      this._updateClones();
+      this._buffers[0].updated = this._buffers[1].updated = false;
+      this._updateClones(true);
+
+      this.debounce('updateAllClones', function() {
+        this._buffers[0].updated = this._buffers[1].updated = false;
+        this._updateClones();
+      }, 200);
 
       this.listen(this.$.scroller, 'scroll', '_scroll');
     },
@@ -194,19 +201,27 @@ This program is available under Apache License Version 2.0, available at https:/
       }, this);
     },
 
-    _updateClones: function() {
+    _updateClones: function(viewPortOnly) {
       this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
+      var scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
       this._buffers.forEach(function(buffer, bufferIndex) {
         if (!buffer.updated) {
           var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
           [].forEach.call(buffer.children, function(itemWrapper, index) {
-            itemWrapper.instance.index = firstIndex + index;
-          });
+            if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
+              itemWrapper.instance.index = firstIndex + index;
+            }
+          }.bind(this));
           buffer.updated = true;
         }
       }, this);
+    },
+
+    _isVisible: function(itemWrapper, scrollerRect) {
+      var rect = itemWrapper.getBoundingClientRect();
+      return rect.bottom > scrollerRect.top && rect.top < scrollerRect.bottom;
     },
 
     /**
