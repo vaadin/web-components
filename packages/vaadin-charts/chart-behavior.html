@@ -201,7 +201,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 this._initLocalDom();
                 this._initConfiguration();
                 Polymer.dom(this).querySelectorAll("data-series").forEach(function (ds) {
-                    ds.initialize();
+                    if(ds.initialize) {
+                        ds.initialize();
+                    }
                 });
                 if (this._loadTheme) {
                     this._loadTheme();
