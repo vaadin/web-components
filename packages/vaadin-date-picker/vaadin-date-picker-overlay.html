@@ -3,8 +3,12 @@
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
+<link rel="import" href="vaadin-locale-aware-behavior.html">
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -163,7 +167,60 @@
       :host(.animate) vaadin-infinite-scroller {
         transition: all 200ms;
       }
+
+      :host:not([fullscreen]) #header {
+        display: none;
+      }
+
+      #header {
+        background: #03a9f4;
+        padding: 0 1em;
+      }
+
+      #header paper-input {
+        --paper-input-container-color: #fff;
+        --paper-input-container-focus-color: #fff;
+        --paper-input-container-input-color: #fff;
+        --paper-input-container-underline: {
+          display: none;
+        }
+        --paper-input-container-underline-focus: {
+          display: none;
+        }
+      }
+
+      #clear {
+        color: #fff;
+        cursor: pointer;
+      }
+
+      #clear[hideclear] {
+        display: none;
+      }
+
+      #footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 1em;
+        font-size: 90%;
+        font-weight: bold;
+        background: #fff;
+        z-index: 2;
+        text-transform: uppercase;
+        box-shadow: 0 -3px 4px 0 rgba(0, 0, 0, 0.14);
+        color: #03a9f4;
+      }
+
+      #cancel {
+        cursor: pointer;
+      }
     </style>
+
+    <div id="header" on-touchend="_preventDefault">
+      <paper-input readonly="true" value="[[_formatValue(selectedDate, locale)]]" label=[[label]]>
+        <iron-icon id="clear" suffix on-tap="_clear" icon="clear" hideclear$="[[!selectedDate]]"></iron-icon>
+      </paper-input>
+    </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
       [[_yearAfterXMonths(_visibleMonthIndex)]]
@@ -184,10 +241,19 @@
       </vaadin-infinite-scroller>
     </div>
 
+    <div id="footer" on-touchend="_preventDefault">
+      <div id="todayplaceholder"></div>
+      <div id="cancel" on-tap="_cancel">cancel</div>
+    </div>
+
   </template>
   <script>
     Polymer({
       is: 'vaadin-date-picker-overlay',
+
+      behaviors: [
+        vaadin.elements.datepicker.LocaleAwareBehavior
+      ],
 
       properties: {
 
@@ -364,6 +430,19 @@
 
       _differenceInYears: function(date1, date2) {
         return this._differenceInMonths(date1, date2) / 12;
+      },
+
+      _clear: function() {
+        this.selectedDate = '';
+        this._cancel();
+      },
+
+      _cancel: function() {
+        this.fire('cancel');
+      },
+
+      _preventDefault: function(e) {
+        e.preventDefault();
       }
     });
   </script>

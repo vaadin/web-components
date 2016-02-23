@@ -39,6 +39,12 @@
         // Already ready for use.
         done();
       }
+    },
+
+    _formatValue: function(value, locale) {
+      if (value) {
+        return moment(value).format(moment.localeData(locale).longDateFormat('L'));
+      }
     }
   };
 </script>
