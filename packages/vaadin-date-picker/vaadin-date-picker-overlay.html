@@ -3,7 +3,8 @@
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="vaadin-month-calendar.html">
@@ -168,7 +169,7 @@
         transition: all 200ms;
       }
 
-      :host:not([fullscreen]) #header {
+      :host(:not([fullscreen])) #header {
         display: none;
       }
 
@@ -177,10 +178,12 @@
         padding: 0 1em;
       }
 
-      #header paper-input {
-        --paper-input-container-color: #fff;
-        --paper-input-container-focus-color: #fff;
-        --paper-input-container-input-color: #fff;
+      #header label,
+      #header input {
+        color: #fff;
+      }
+
+      #header paper-input-container {
         --paper-input-container-underline: {
           display: none;
         }
@@ -192,10 +195,11 @@
       #clear {
         color: #fff;
         cursor: pointer;
+        display: none;
       }
 
-      #clear[hideclear] {
-        display: none;
+      #clear[showclear] {
+        display: flex;
       }
 
       #footer {
@@ -217,9 +221,12 @@
     </style>
 
     <div id="header" on-touchend="_preventDefault">
-      <paper-input readonly="true" value="[[_formatValue(selectedDate, locale)]]" label=[[label]]>
-        <iron-icon id="clear" suffix on-tap="_clear" icon="clear" hideclear$="[[!selectedDate]]"></iron-icon>
-      </paper-input>
+      <paper-input-container>
+        <label>[[label]]</label>
+        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(selectedDate, locale)]]">
+        <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
+      </paper-input-container>
+
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
@@ -319,6 +326,10 @@
       _onYearScroll: function() {
         this.$.scroller.position = this.$.yearScroller.position * 12;
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+      },
+
+      _showClear: function(selectedDate) {
+        return selectedDate !== '';
       },
 
       _onYearTap: function(e) {

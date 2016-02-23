@@ -136,7 +136,11 @@
       it('should show clear icon', function(done) {
         datepicker.value = new Date(2000, 1, 1);
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(datepicker.$.clear.clientHeight).not.to.equal(0);
+          if (isFullscreen(datepicker)) {
+            expect(datepicker.$.overlay.$.clear.clientHeight).not.to.equal(0);
+          } else {
+            expect(datepicker.$.clear.clientHeight).not.to.equal(0);
+          }
           done();
         });
         datepicker._open();
