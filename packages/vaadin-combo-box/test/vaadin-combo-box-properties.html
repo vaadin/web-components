@@ -130,6 +130,33 @@
           expect(comboBox.$.inputContainer.querySelector('label').innerHTML).to.eql('This is LABEL');
         });
       });
+
+      describe('selectedItem property', function() {
+        it('should have null by default', function() {
+          expect(comboBox.selectedItem).to.be.null;
+        });
+
+        it('should default back to null when value set to undefined', function() {
+          comboBox.value = undefined;
+
+          expect(comboBox.selectedItem).to.be.null;
+        });
+
+        it('should default back to null when value is set to null', function() {
+          comboBox.value = null;
+
+          expect(comboBox.selectedItem).to.be.null;
+        });
+
+        it('should be null after clearing the value', function() {
+          comboBox.items = ['foo'];
+          comboBox.value = 'foo';
+
+          comboBox._clear();
+
+          expect(comboBox.selectedItem).to.be.null;
+        });
+      });
     });
   </script>
 
