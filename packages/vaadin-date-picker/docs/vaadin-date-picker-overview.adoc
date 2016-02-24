@@ -7,14 +7,20 @@ layout: page
 [[vaadin-date-picker.overview]]
 = Overview
 
-The [elementname]#vaadin-date-picker# element is a date selection field with a scrollable month calendar view.
-The user can navigate to a month by scrolling the list of months and select a date.
-To quickly jump to the current month, there is a 'today' button.
-When a date is selected, the user can clear the value with a button on the right side of the selection.
+The [vaadinelement]#vaadin-date-picker# element is a date selection field with a scrollable month calendar view.
+The picker opens up as a dropdown when the element gets clicked or tapped.
+It has two display modes, full-screen or desktop.
+The display mode to use is determined according to the size of the screen.
+The user can navigate to a desired month by scrolling the list of years and months and then select a date.
+
+When a date is selected, the user can clear the value with a button on the right side of the selection label.
+The dropdown footer has a today button for quickly jumping to the current month.
+It does not select a date but only scrolls the calendar view.
+A cancel button in the footer allows closing the dropdown without affecting the value.
 
 The current alpha version has a limited set of features.
-Future versions will address issues such as localization, easy navigation through years and keyboard input.
+Future versions will address issues such as date ranges and keyboard input.
 
 [[figure.vaadin-date-picker.overview]]
-.A screenshot of vaadin-date-picker
+.A screenshot of [vaadinelement]#vaadin-date-picker#
 image::img/vaadin-date-picker-overview.png[]
