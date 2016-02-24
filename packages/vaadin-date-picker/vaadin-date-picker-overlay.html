@@ -7,6 +7,7 @@
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-locale-aware-behavior.html">
@@ -73,6 +74,7 @@
         position: absolute;
         height: 100%;
         z-index: 1;
+        transform: translateX(-100%);
       }
 
       #scrollers[desktop] #fade {
@@ -95,6 +97,7 @@
 
       #scrollers[desktop] #scroller {
         right: 50px;
+        transform: none !important;
       }
 
       #yearScroller {
@@ -254,6 +257,7 @@
       <div id="cancel" on-tap="_cancel">cancel</div>
     </div>
 
+    <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
   </template>
   <script>
     Polymer({
@@ -288,12 +292,7 @@
 
         _visibleMonthIndex: Number,
 
-        _desktopMode: {
-          type: Boolean,
-          value: function() {
-            return window.innerWidth >= 375;
-          }
-        },
+        _desktopMode: Boolean,
 
         _translateX: {
           observer: '_translateXChanged'

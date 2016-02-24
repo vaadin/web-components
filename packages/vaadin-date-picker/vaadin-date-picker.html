@@ -24,6 +24,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-locale-aware-behavior.html">
 
@@ -76,6 +77,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content" on-cancel="_close"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
+    <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
   </template>
   <script>
     Polymer({
@@ -120,12 +122,13 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 
         _opened: Boolean,
 
-        _fullscreenThresholdWidth: {
-          value: 420
+        _fullscreen: {
+          value: false,
+          observer: '_updateAlignmentAndPosition'
         },
 
-        _fullscreen: {
-          value: false
+        _fullscreenMediaQuery: {
+          value: '(max-width: 420px), (orientation: landscape) and (max-width: 800px)'
         }
       },
 
@@ -134,23 +137,24 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       },
 
       _open: function() {
-        this._updateAlignmentAndPosition();
         this.$.dropdown.open();
+        this._updateAlignmentAndPosition();
       },
 
       _updateAlignmentAndPosition: function() {
-        var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        this._fullscreen = viewportWidth < this._fullscreenThresholdWidth;
-        this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight;
-        this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
+        if (this.$.dropdown.opened) {
+          var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+          this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight;
+          this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
 
-        var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
-        var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
-        this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
-        this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
+          var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+          var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
+          var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+          this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
+          this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
 
-        this.$.dropdown.refit();
+          this.$.dropdown.refit();
+        }
       },
 
       _onOverlayOpened: function() {
