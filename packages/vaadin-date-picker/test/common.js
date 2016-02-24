@@ -31,3 +31,7 @@ function getFirstVisibleItem(scroller, bufferOffset) {
     return (Math.floor(current.getBoundingClientRect().top) - Math.floor(scrollerRect.top + bufferOffset) <= 0) ? current : prev;
   });
 }
+
+function isFullscreen(datepicker) {
+  return datepicker.$.overlay.getAttribute('fullscreen') !== null;
+}
