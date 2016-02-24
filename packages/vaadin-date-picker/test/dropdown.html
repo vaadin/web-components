@@ -41,13 +41,13 @@
           viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0');
           document.getElementsByTagName('head')[0].appendChild(viewport);
 
-          datepicker._fullscreenThresholdWidth = 520;
+          datepicker._fullscreenMediaQuery = 'max-width: 520px';
         });
 
         it('should select fullscreen/desktop mode', function(done) {
           datepicker.addEventListener('iron-overlay-opened', function() {
             var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var fullscreen = viewportWidth < datepicker._fullscreenThresholdWidth;
+            var fullscreen = viewportWidth < 520;
 
             expect(isFullscreen(datepicker)).to.equal(fullscreen);
             expect(dropdown.verticalOffset).to.equal(fullscreen ? 0 : datepicker.clientHeight);
