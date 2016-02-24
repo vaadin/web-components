@@ -39,18 +39,29 @@ When the selected `value` is changed, a `value-changed` event is triggered.
         width: 420px;
       }
 
+      #inputcontainer,
+      #inputcontainer input  {
+        cursor: pointer;
+      }
+
       #inputcontainer:not([hideclear]) #input {
         margin-right: -24px;
         display: block;
       }
 
-      #clear {
+      #clear,
+      #calendar {
         width: 24px;
-        cursor: pointer;
+        fill: var(--secondary-text-color, #222);
       }
 
       [hideclear] #clear {
         display: none;
+      }
+
+      #calendar[open] {
+        /* Prevent immediate re-opening when the overlay is already open. */
+        pointer-events: none;
       }
     </style>
 
@@ -58,6 +69,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       <label id="label" on-tap="_open">[[label]]</label>
       <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(value, _readyLocale)]]" type="text" on-tap="_open">
       <iron-icon id="clear" suffix on-tap="_clear" icon="clear"></iron-icon>
+      <iron-icon id="calendar" suffix on-tap="_open" icon="event" open$="{{_opened}}"></iron-icon>
     </paper-input-container>
 
     <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
