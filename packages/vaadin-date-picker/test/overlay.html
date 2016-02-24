@@ -111,11 +111,21 @@
         it('should fire cancel on cancel click', function() {
           var spy = sinon.spy();
           overlay.addEventListener('cancel', spy);
-          tap(overlay.$.cancel);
+          tap(overlay.$.cancelButton);
           expect(spy.calledOnce).to.be.true;
         });
-      });
 
+        it('should scroll to current date when tapping on today button', function(done) {
+          var date = new Date(2000, 1, 1);
+          overlay.scrollToDate(date);
+          waitUntilScrolledTo(date, function() {
+            tap(overlay.$.todayButton);
+            waitUntilScrolledTo(new Date(), function() {
+              done();
+            });
+          });
+        });
+      });
     });
   </script>
 

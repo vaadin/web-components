@@ -5,9 +5,8 @@
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-locale-aware-behavior.html">
@@ -209,18 +208,21 @@
       #footer {
         display: flex;
         justify-content: space-between;
-        padding: 1em;
+        padding: 0.3em;
         font-size: 90%;
         font-weight: bold;
         background: #fff;
         z-index: 2;
-        text-transform: uppercase;
         box-shadow: 0 -3px 4px 0 rgba(0, 0, 0, 0.14);
         color: #03a9f4;
       }
 
-      #cancel {
-        cursor: pointer;
+      #footer paper-button {
+        padding-bottom: 1.1em;
+      }
+
+      #cancelButton {
+        padding-top: 0.9em;
       }
     </style>
 
@@ -230,7 +232,6 @@
         <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(selectedDate, locale)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
-
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
@@ -253,8 +254,13 @@
     </div>
 
     <div id="footer" on-touchend="_preventDefault">
-      <div id="todayplaceholder"></div>
-      <div id="cancel" on-tap="_cancel">cancel</div>
+      <paper-button id="todayButton" on-tap="_scrollToCurrentMonth">
+        <iron-icon icon='today'></iron-icon>
+        Today
+      </paper-button>
+      <paper-button id="cancelButton" on-tap="_cancel">
+        Cancel
+      </paper-button>
     </div>
 
     <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
@@ -268,7 +274,6 @@
       ],
 
       properties: {
-
         /**
          * The value for this element.
          */
@@ -325,7 +330,12 @@
 
       _onYearScroll: function() {
         this.$.scroller.position = this.$.yearScroller.position * 12;
+
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+      },
+
+      _scrollToCurrentMonth: function() {
+        this.scrollToDate(new Date());
       },
 
       _showClear: function(selectedDate) {
