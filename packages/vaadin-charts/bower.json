@@ -33,7 +33,7 @@
     "vaadin-license-checker": "vaadin/license-checker#0.9.1"
   },
   "devDependencies": {
-    "vaadin-components": "^0.3.0",
+    "vaadin-grid": "^1.0.0",
     "google-code-prettify": "*",
     "iron-selector": "PolymerElements/iron-selector#v1.0.7",
     "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
