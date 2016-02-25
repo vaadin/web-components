@@ -20,6 +20,10 @@ It allows users to quickly filter the list and select an item using either keybo
 - Works great on mobile and desktop
 - Material Design inspired styles to fit in with Paper Elements
 
+= Limitations
+
+- Selecting an item using the arrow keys on iOS does not work using an external keyboard (iOS limitation)
+
 
 [[figure.vaadin-combo-box.overview]]
 .A screenshot of the [vaadinelement]#vaadin-combo-box# element
