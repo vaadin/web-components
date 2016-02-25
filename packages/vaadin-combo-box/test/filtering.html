@@ -108,6 +108,25 @@
       });
     });
 
+    describe('focusing items while filtering', function() {
+      it('should focus on an exact match', function() {
+        setInputValue('bar');
+
+        expect(comboBox._focusedIndex).to.eql(0);
+      });
+
+      it('should not scroll to selected value when filtering', function() {
+        comboBox.value = 'baz';
+
+        var spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
+
+        setInputValue('ba');
+        setInputValue('b');
+
+        expect(spy.callCount).to.eql(0);
+      });
+    });
+
     describe('filtering items', function() {
       it('should filter items using contains', function() {
         setInputValue('a');
