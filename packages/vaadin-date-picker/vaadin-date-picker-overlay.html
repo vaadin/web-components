@@ -323,15 +323,20 @@
         this.async(this._onMonthScroll, 1);
       },
 
-      _onMonthScroll: function() {
+      _onMonthScroll: function(e) {
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
         this.$.yearScroller.position = this.$.scroller.position / 12;
+        if (e) {
+          e.stopPropagation();
+        }
       },
 
-      _onYearScroll: function() {
+      _onYearScroll: function(e) {
         this.$.scroller.position = this.$.yearScroller.position * 12;
-
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+        if (e) {
+          e.stopPropagation();
+        }
       },
 
       _scrollToCurrentMonth: function() {
