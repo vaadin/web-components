@@ -3,10 +3,17 @@
         <vaadin-grid id="grid">
             <table>
                 <colgroup>
-                    <col name="month" header-text="Month" width="100">
-                    <col name="data" header-text="Trend" width="200">
-                    <col name="latest" header-text="Latest value">
+                    <col name="month" width="100">
+                    <col name="data" width="200">
+                    <col name="latest">
                 </colgroup>
+                <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Trend</th>
+                    <th>Latest value</th>
+                </tr>
+                </thead>
             </table>
         </vaadin-grid>
 
@@ -40,12 +47,8 @@
 
                         } else {
                             sparkline = document.createElement('vaadin-sparkline');
-                            //TODO fix when styling has been fixed
-                            sparkline.querySelector("#chartContainer").style.width = "150px";
-                            sparkline.querySelector("#chartContainer").style.height = "48px";
-
+                            sparkline.setAttribute('style', 'width:150px; height:48px;');
                             sparkline.setAttribute('data', cell.data);
-
                             chartDataCache['' + cell.row.index + cell.index] = sparkline;
                         }
 
@@ -64,7 +67,7 @@
                 },
 
                 _dataLoaded: function (event) {
-                    this.$.grid.data.source = event.detail.response
+                    this.$.grid.items = event.detail.response;
                 }
             });
         });
