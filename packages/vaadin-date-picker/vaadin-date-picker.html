@@ -124,7 +124,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 
         _fullscreen: {
           value: false,
-          observer: '_updateAlignmentAndPosition'
+          observer: '_fullscreenChanged'
         },
 
         _fullscreenMediaQuery: {
@@ -137,23 +137,27 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       },
 
       _open: function() {
-        this.$.dropdown.open();
         this._updateAlignmentAndPosition();
+        this.$.dropdown.open();
       },
 
       _updateAlignmentAndPosition: function() {
+        var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight;
+        this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
+
+        var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
+        var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+        this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
+        this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
+
+        this.$.dropdown.refit();
+      },
+
+      _fullscreenChanged: function() {
         if (this.$.dropdown.opened) {
-          var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-          this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight;
-          this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
-
-          var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-          var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
-          var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
-          this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
-          this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
-
-          this.$.dropdown.refit();
+          this._updateAlignmentAndPosition();
         }
       },
 
