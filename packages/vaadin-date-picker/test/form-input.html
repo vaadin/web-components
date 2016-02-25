@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <script src="common.js"></script>
+
+  <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../vaadin-date-picker.html">
+</head>
+
+<body>
+
+  <test-fixture id="datepicker">
+    <template>
+      <vaadin-date-picker></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="datepicker-in-form">
+    <template is="dom-template">
+      <form is="iron-form">
+        <vaadin-date-picker name="[[name]]" required="[[required]]"></vaadin-date-picker>
+      </form>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('using as a field in html form', function() {
+      var datepicker;
+
+      beforeEach(function() {
+        datepicker = fixture('datepicker');
+      });
+
+      it('should have the given name', function() {
+        datepicker.name = 'foo';
+        expect(datepicker.$$('input').getAttribute('name')).to.equal('foo');
+      });
+
+      it('should have no name', function() {
+        expect(datepicker.$$('input').getAttribute('name')).to.equal(null);
+      });
+
+      it('should be required', function() {
+        datepicker.required = true;
+        expect(datepicker.$$('input').getAttribute('required')).to.equal('');
+      });
+
+      it('should not be required', function() {
+        expect(datepicker.$$('input').getAttribute('required')).to.equal(null);
+      });
+
+      it('should validate correctly', function() {
+        datepicker.name = 'foo';
+        datepicker.required = true;
+        expect(datepicker.validate()).to.equal(false);
+        expect(datepicker.invalid).to.be.equal(true);
+
+        datepicker.value = '2016-02-24';
+        expect(datepicker.validate()).to.equal(true);
+        expect(datepicker.invalid).to.be.equal(false);
+      });
+
+      it('should serialize correctly', function() {
+        var form = fixture('datepicker-in-form', {name: 'foo'});
+        datepicker = form.querySelector('vaadin-date-picker');
+        datepicker.value = '2016-02-24';
+        expect(form.serialize().foo).to.equal('2016-02-24');
+      });
+
+      it('should not-submit iron-form with invalid value', function() {
+        var form = fixture('datepicker-in-form', {name: 'foo', required: true});
+        var spy = sinon.spy();
+        form.addEventListener('iron-form-invalid', spy);
+        form.submit();
+        expect(spy).to.have.been.called;
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

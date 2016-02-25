@@ -159,8 +159,8 @@
       },
 
       _getDays: function() {
-        // First day of the month (at noon).
-        var date = new Date(this.month.getFullYear(), this.month.getMonth(), 1, 12, 0, 0);
+        // First day of the month (at midnight).
+        var date = new Date(this.month.getFullYear(), this.month.getMonth(), 1);
 
         // Rewind to first day of the week.
         while (date.getDay() !== this._firstDayOfWeek) {
