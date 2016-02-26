@@ -41,7 +41,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       }
 
       #inputcontainer,
-      #inputcontainer input  {
+      #inputcontainer input {
         cursor: pointer;
       }
 
@@ -73,7 +73,7 @@ When the selected `value` is changed, a `value-changed` event is triggered.
       <iron-icon id="calendar" suffix on-tap="_open" icon="event" open$="{{_opened}}"></iron-icon>
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_unlistenWindowScroll" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{value}}" class="dropdown-content" on-cancel="_close"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -167,6 +167,22 @@ When the selected `value` is changed, a `value-changed` event is triggered.
         } else {
           this.$.overlay.scrollToDate(this.initialPosition);
         }
+        this.listen(window, 'scroll', '_onWindowScroll');
+      },
+
+      _unlistenWindowScroll: function() {
+        this.unlisten(window, 'scroll', '_onWindowScroll');
+      },
+
+      detached: function() {
+        this._unlistenWindowScroll();
+      },
+
+      _onWindowScroll: function() {
+        this.$.dropdown.style.bottom = 'auto';
+        this.$.dropdown.resetFit();
+        this._updateAlignmentAndPosition();
+        this.$.dropdown.fire('iron-resize');
       },
 
       _close: function() {
