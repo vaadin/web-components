@@ -13,10 +13,18 @@ Current selection is indicated by the [propertyname]#value# and [propertyname]#s
 You can set or change the selection programmatically by setting the [propertyname]#value# property.
 Doing so also updates the visible fields.
 
+When setting the items declaratively, notice that the attribute value needs to be a valid JSON string. You need to use single quotes for the attribute value and double quotes inside the value (in the JSON string). Alternatively, you can escape the double quotes inside the value.
+
 [source,html]
 ----
-<vaadin-combo-box label="Element"></vaadin-combo-box>
+<vaadin-combo-box 
+  label="Element" 
+  items='["Bohrium", "Boron", "Bromine", "Cadmium", "Caesium", "Calcium"]' 
+  value="Bromine">
+</vaadin-combo-box>
 ----
+
+Setting the items and value programmatically:
 
 [source,javascript]
 ----
