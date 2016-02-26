@@ -19,7 +19,7 @@ The attribute value should be a Date-parsable [classname]#String# representation
 <vaadin-date-picker value="1999-12-31T00:00:00"></vaadin-date-picker>
 ----
 
-In order to listen to changes in this value, you can add a `value-changed` listener to the [elementname]#vaadin-date-picker#.
+In order to listen to changes in the value, you can add a `value-changed` listener to the [vaadinelement]#vaadin-date-picker#.
 
 [source,javascript]
 ----
