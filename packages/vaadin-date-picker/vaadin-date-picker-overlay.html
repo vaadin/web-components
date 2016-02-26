@@ -32,6 +32,7 @@
         z-index: 2;
         @apply(--paper-font-button);
         @apply(--shadow-elevation-2dp);
+        flex-shrink: 0;
       }
 
       #toolbar:not([desktop]) {
@@ -215,14 +216,16 @@
         z-index: 2;
         box-shadow: 0 -3px 4px 0 rgba(0, 0, 0, 0.14);
         color: #03a9f4;
+        flex-shrink: 0;
       }
 
       #footer paper-button {
-        padding-bottom: 1.1em;
+        display: flex;
+        align-items: center;
       }
 
-      #cancelButton {
-        padding-top: 0.9em;
+      #todayButton iron-icon {
+        padding-right: 5px;
       }
     </style>
 
