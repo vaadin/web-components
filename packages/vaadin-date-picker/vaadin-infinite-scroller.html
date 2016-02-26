@@ -23,6 +23,10 @@ This program is available under Apache License Version 2.0, available at https:/
       -ms-overflow-style: none;
     }
 
+    #scroller.notouchscroll {
+      -webkit-overflow-scrolling: auto;
+    }
+
     #scroller::-webkit-scrollbar {
       display: none;
     }
@@ -94,7 +98,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _preventScrollEvent: Boolean,
 
-      _bufferHeight: Number
+      _bufferHeight: Number,
+
+      _mayHaveMomentum: Boolean
     },
 
     ready: function() {
@@ -140,6 +146,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this._preventScrollEvent) {
         this.fire('scroll');
+        this._mayHaveMomentum = true;
       }
       this._preventScrollEvent = false;
     },
@@ -160,6 +167,18 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.scroller.scrollTop += index % 1 * this.itemHeight;
         this.listen(this.$.scroller, 'scroll', '_scroll');
       }
+
+      if (this._mayHaveMomentum) {
+        // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
+        this.$.scroller.classList.add('notouchscroll');
+        this._mayHaveMomentum = false;
+
+        this.async(function() {
+          // Restore -webkit-overflow-scrolling: touch; after a small delay.
+          this.$.scroller.classList.remove('notouchscroll');
+        }, 10);
+      }
+
     },
 
     /**
