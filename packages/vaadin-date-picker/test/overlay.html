@@ -50,8 +50,7 @@
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
         waitUntilScrolledTo(date, function() {
-          var offset = overlay.$.scroller.clientHeight / 2;
-          expect(monthsEqual(getFirstVisibleItem(overlay.$.scroller, offset).firstElementChild.month, date)).to.be.true;
+          expect(monthsEqual(getFirstVisibleItem(overlay.$.scroller, 0).firstElementChild.month, date)).to.be.true;
           done();
         });
       });
