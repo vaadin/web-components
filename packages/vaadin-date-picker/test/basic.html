@@ -38,7 +38,7 @@
       it('should notify value change', function() {
         var spy = sinon.spy();
         datepicker.addEventListener('value-changed', spy);
-        datepicker.value = new Date(2000, 1, 1);
+        datepicker.value = '2000-02-01';
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -66,11 +66,12 @@
       });
 
       it('should scroll to initial position', function(done) {
-        datepicker.initialPosition = new Date(2016, 0, 1);
+        datepicker.initialPosition = '2016-01-01';
+        var initialPositionDate = new Date(2016, 0, 1);
 
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(spy.firstCall.args[0]).to.eql(datepicker.initialPosition);
+          expect(spy.firstCall.args[0]).to.eql(initialPositionDate);
           done();
         });
         datepicker._open();
@@ -78,9 +79,9 @@
 
       it('should scroll to selected value by default', function(done) {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
-        datepicker.value = new Date(2000, 1, 1);
+        datepicker.value = '2000-02-01';
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(monthsEqual(spy.firstCall.args[0], datepicker.value)).to.be.true;
+          expect(monthsEqual(spy.firstCall.args[0], new Date(2000, 1, 1))).to.be.true;
           done();
         });
         datepicker._open();
@@ -109,21 +110,21 @@
       });
 
       it('should clear the value', function() {
-        datepicker.value = new Date(2000, 1, 1);
+        datepicker.value = '2000-02-01';
         tap(datepicker.$.clear);
         expect(datepicker.value).to.equal('');
       });
 
-      it('should format value correctly', function() {
-        datepicker.value = new Date(2000, 1, 1);
+      it('should format display correctly', function() {
+        datepicker.value = '2000-02-01';
         expect(datepicker.$.input.bindValue).to.equal('02/01/2000');
-        datepicker.value = new Date(1999, 11, 31);
+        datepicker.value = '1999-12-31';
         expect(datepicker.$.input.bindValue).to.equal('12/31/1999');
       });
 
       it('should not show clear icon', function(done) {
         expect(datepicker.$.clear.clientHeight).to.equal(0);
-        datepicker.value = new Date(2000, 1, 1);
+        datepicker.value = '2000-02-01';
         expect(datepicker.$.clear.clientHeight).to.equal(0);
         datepicker.value = '';
         datepicker.addEventListener('iron-overlay-opened', function() {
@@ -134,7 +135,7 @@
       });
 
       it('should show clear icon', function(done) {
-        datepicker.value = new Date(2000, 1, 1);
+        datepicker.value = '2000-02-01';
         datepicker.addEventListener('iron-overlay-opened', function() {
           if (isFullscreen(datepicker)) {
             expect(datepicker.$.overlay.$.clear.clientHeight).not.to.equal(0);
@@ -147,7 +148,7 @@
       });
 
       it('should update displayed value format according to locale', function(done) {
-        datepicker.value = new Date(2000, 1, 1);
+        datepicker.value = '2000-02-01';
         datepicker.locale = 'fi';
         waitUntilLocaleAvailable('fi', function() {
           expect(datepicker.$.input.bindValue).to.equal('01.02.2000');
@@ -190,6 +191,63 @@
 
       });
 
+      describe('value property formats', function() {
+
+        it('should accept ISO format', function() {
+          var date = new Date(0, 1, 3);
+
+          datepicker.value = '0000-02-03';
+          date.setFullYear(0);
+          expect(datepicker._selectedDate).to.eql(date);
+
+          datepicker.value = '+010000-02-03';
+          date.setFullYear(10000);
+          expect(datepicker._selectedDate).to.eql(date);
+
+          datepicker.value = '-010000-02-03';
+          date.setFullYear(-10000);
+          expect(datepicker._selectedDate).to.eql(date);
+        });
+
+        it('should not accept non-ISO formats', function() {
+          datepicker.value = '03/02/01';
+          expect(datepicker.value).to.equal('');
+          expect(datepicker._selectedDate).to.be.null;
+
+          datepicker.value = '2010/02/03';
+          expect(datepicker.value).to.equal('');
+          expect(datepicker._selectedDate).to.be.null;
+
+          datepicker.value = '03/02/2010';
+          expect(datepicker.value).to.equal('');
+          expect(datepicker._selectedDate).to.be.null;
+
+          datepicker.value = '3 Feb 2010';
+          expect(datepicker.value).to.equal('');
+          expect(datepicker._selectedDate).to.be.null;
+
+          datepicker.value = 'Feb 3, 2010';
+          expect(datepicker.value).to.equal('');
+          expect(datepicker._selectedDate).to.be.null;
+        });
+
+        it('should output ISO format', function() {
+          var date = new Date(0, 1, 3);
+
+          date.setFullYear(0);
+          datepicker._selectedDate = date;
+          expect(datepicker.value).to.equal('0000-02-03');
+
+          date.setFullYear(10000);
+          datepicker._selectedDate = new Date(date.getTime());
+          expect(datepicker.value).to.equal('+010000-02-03');
+
+          date.setFullYear(-10000);
+          datepicker._selectedDate = new Date(date.getTime());
+          expect(datepicker.value).to.equal('-010000-02-03');
+        });
+
+      });
     });
   </script>
 

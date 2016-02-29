@@ -41,9 +41,9 @@
       }
     },
 
-    _formatValue: function(value, locale) {
-      if (value) {
-        return moment(value).format(moment.localeData(locale).longDateFormat('L'));
+    _formatDisplayed: function(date, locale) {
+      if (date) {
+        return moment(date).format(moment.localeData(locale).longDateFormat('L'));
       }
     }
   };

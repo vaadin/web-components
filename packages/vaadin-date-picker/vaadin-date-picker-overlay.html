@@ -224,7 +224,7 @@
     <div id="header" on-touchend="_preventDefault">
       <paper-input-container>
         <label>[[label]]</label>
-        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatValue(selectedDate, locale)]]">
+        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, locale)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
     </div>
@@ -338,7 +338,7 @@
       },
 
       _showClear: function(selectedDate) {
-        return selectedDate !== '';
+        return selectedDate !== null;
       },
 
       _onYearTap: function(e) {
