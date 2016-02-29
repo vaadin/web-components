@@ -65,6 +65,7 @@ See paper-input-container documentation for styling the included input fields
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-locale-aware-behavior.html">
 
@@ -127,7 +128,7 @@ See paper-input-container documentation for styling the included input fields
       }
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="open">
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown">
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, _readyLocale)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
@@ -143,7 +144,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="close"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="close" focused-date="[[_focusedDate]]"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -172,6 +173,8 @@ See paper-input-container documentation for styling the included input fields
           notify: true,
           observer: '_selectedDateChanged'
         },
+
+        _focusedDate: Date,
 
         /**
          * The value for this element.
@@ -305,6 +308,7 @@ See paper-input-container documentation for styling the included input fields
       _onOverlayOpened: function() {
         if (this._selectedDate) {
           this.$.overlay.scrollToDate(this._selectedDate);
+          this._focusedDate = null;
         } else {
           var initialPositionDate = this._parseDate(this.initialPosition) || new Date();
           this.$.overlay.scrollToDate(initialPositionDate);
@@ -393,8 +397,66 @@ See paper-input-container documentation for styling the included input fields
 
       _preventDefault: function(e) {
         e.preventDefault();
-      }
+      },
 
+      /**
+       * Keyboard Navigation
+       */
+       _isEventKey: function(e, k) {
+        return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
+      },
+
+      _onKeydown: function(e) {
+        if (this._isEventKey(e, 'down')) {
+          this._onArrowDown();
+        } else if (this._isEventKey(e, 'up')) {
+          this._onArrowUp();
+        } else if (this._isEventKey(e, 'right')) {
+          this._onArrowRight();
+        } else if (this._isEventKey(e, 'left')) {
+          this._onArrowLeft();
+        } else if (this._isEventKey(e, 'enter')) {
+          this._onEnter();
+        }
+      },
+
+      _addToFocusedDate: function(date) {
+        var currentFocus = this._focusedDate || this._selectedDate ||
+          (this.initialPosition ? this._parseDate(this.initialPosition) : new Date());
+
+        this._focusedDate = new Date(currentFocus.getFullYear(), currentFocus.getMonth(), currentFocus.getDate() + date);
+      },
+
+      _onArrowDown: function() {
+        if (this._opened) {
+          this._addToFocusedDate(7);
+        } else {
+          this._open();
+        }
+      },
+
+      _onArrowUp: function() {
+        if (this._opened) {
+          this._addToFocusedDate(-7);
+        } else {
+          this._open();
+        }
+      },
+
+      _onArrowRight: function() {
+        this._addToFocusedDate(1);
+      },
+
+      _onArrowLeft: function() {
+        this._addToFocusedDate(-1);
+      },
+
+      _onEnter: function() {
+        if (this._focusedDate) {
+          this.set('_selectedDate', this._focusedDate);
+        }
+        this._close();
+      }
     });
   </script>
 </dom-module>

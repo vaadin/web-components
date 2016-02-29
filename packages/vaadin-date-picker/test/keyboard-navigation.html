@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+  <script src="common.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../vaadin-date-picker.html">
+</head>
+
+<body>
+
+  <test-fixture id="datepicker">
+    <template>
+      <vaadin-date-picker value="2000-01-01"></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('keyboard navigation with arrow keys', function() {
+      var datepicker;
+
+      function arrowDown() {
+        MockInteractions.keyDownOn(getInput(), 40);
+      }
+
+      function arrowRight() {
+        MockInteractions.keyDownOn(getInput(), 39);
+      }
+
+      function arrowUp() {
+        MockInteractions.keyDownOn(getInput(), 38);
+      }
+
+      function arrowLeft() {
+        MockInteractions.keyDownOn(getInput(), 37);
+      }
+
+      function enter() {
+        MockInteractions.pressEnter(getInput());
+      }
+
+      function getInput() {
+        return datepicker.$.input;
+      }
+
+      beforeEach(function() {
+        datepicker = fixture('datepicker');
+      });
+
+      it('should open overlay on down', function() {
+        arrowDown();
+
+        expect(datepicker._opened).to.be.true;
+      });
+
+      it('should open overlay on up', function() {
+        arrowUp();
+
+        expect(datepicker._opened).to.be.true;
+      });
+
+      it('should be focused on selected value when overlay is opened', function() {
+        datepicker.value = '2001-01-01';
+
+        datepicker._open();
+        arrowRight();
+
+        expect(datepicker._focusedDate).to.eql(new Date(2001, 0, 2));
+      });
+
+      it('should be focused on initial position when no value is set', function() {
+        datepicker.value = null;
+        datepicker.initialPosition = '2001-01-01';
+
+        datepicker._open();
+        arrowRight();
+
+        expect(datepicker._focusedDate).to.eql(new Date(2001, 0, 2));
+      });
+
+      it('should be focused on today if no initial position is set', function() {
+        var today = new Date();
+        datepicker.value = null;
+        datepicker.initialPosition = null;
+
+        datepicker._open();
+        arrowRight();
+
+        expect(datepicker._focusedDate).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+      });
+
+      it('should focus one week forward with arrow down', function() {
+        datepicker._open();
+
+        arrowDown();
+
+        expect(datepicker._focusedDate).to.eql(new Date(2000, 0, 8));
+      });
+
+      it('should focus one week backward with arrow up', function() {
+        datepicker._open();
+
+        arrowUp();
+
+        expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 25));
+      });
+
+      it('should focus one day forward with arrow right', function() {
+        datepicker._open();
+
+        arrowRight();
+
+        expect(datepicker._focusedDate).to.eql(new Date(2000, 0, 2));
+
+      });
+
+      it('should focus one day backward with arrow left', function() {
+        datepicker._open();
+
+        arrowLeft();
+
+        expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 31));
+      });
+
+      it('should select focused day with enter', function() {
+        datepicker._open();
+
+        arrowRight();
+        enter();
+
+        expect(datepicker.value).to.eql('2000-01-02');
+      });
+
+      it('should close overlay with enter', function() {
+        datepicker._open();
+
+        enter();
+
+        expect(datepicker._opened).to.be.false;
+      });
+
+      it('should reset focus on reopen', function() {
+        datepicker._open();
+
+        arrowDown();
+
+        expect(datepicker._selectedDate).to.eql(new Date(2000, 0, 1));
+
+        datepicker._close();
+        datepicker._open();
+      });
+
+      it('should scroll to focused month', function() {
+        datepicker._open();
+
+        var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+        arrowUp();
+
+        expect(spy.calledWith(new Date(1999, 11, 25))).to.be.true;
+      });
+    });
+  </script>
+
+</body>
+
+</html>

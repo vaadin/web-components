@@ -252,7 +252,7 @@
       <div id="fade"></div>
       <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScroll" on-track="_track" item-height="250" buffer-size="6">
         <template>
-          <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}"></vaadin-month-calendar>
+          <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[focusedDate]]"></vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScroll" item-height="150" buffer-size="10">
@@ -289,6 +289,14 @@
         selectedDate: {
           type: Date,
           notify: true
+        },
+
+        /**
+         * Date value which is focused using keyboard.
+         */
+        focusedDate: {
+          type: Date,
+          observer: '_focusedDateChanged'
         },
 
         /**
@@ -329,6 +337,12 @@
        */
       scrollToDate: function(date, animate) {
         this._scrollToPosition(this._differenceInMonths(date, this._originDate), animate);
+      },
+
+      _focusedDateChanged: function(focusedDate) {
+        if (focusedDate) {
+          this.scrollToDate(focusedDate, true);
+        }
       },
 
       _onMonthScroll: function(e) {
