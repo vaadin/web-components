@@ -10,6 +10,10 @@
 <body>
 <vaadin-line-chart id="linechartwithtimeline" timeline>
     <title>timeline test</title>
+    <range-selector>
+        <button-theme stroke-width="3">
+        </button-theme>
+    </range-selector>
     <data-series>
         <data>
             [1233532800000,13.07],
@@ -42,6 +46,12 @@
             var chartwc = document.querySelector('#linechartwithtimeline');
             var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
             expect(rangeSelector).to.have.length(2);
+        });
+
+        test('timeline button theme stroke width is correctly set', function () {
+            var chartwc = document.querySelector('#linechartwithtimeline');
+            var strokeWidth = chartwc._chartConf.rangeSelector.buttonTheme["stroke-width"];
+            expect(strokeWidth).to.equal(3);
         });
 
         test('timeline disabled contains no range selector', function () {
