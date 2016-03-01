@@ -339,9 +339,12 @@
         this._scrollToPosition(this._differenceInMonths(date, this._originDate), animate);
       },
 
-      _focusedDateChanged: function(focusedDate) {
+      _focusedDateChanged: function(focusedDate, oldFocusedDate) {
         if (focusedDate) {
-          this.scrollToDate(focusedDate, true);
+          if (!oldFocusedDate || focusedDate.getFullYear() !== oldFocusedDate.getFullYear() ||
+                                 focusedDate.getMonth() !== oldFocusedDate.getMonth()) {
+            this.scrollToDate(focusedDate, true);
+          }
         }
       },
 
