@@ -437,7 +437,6 @@ enable usage within an `iron-form`.
     },
 
     _onClosed: function() {
-      this._focusedIndex = this.$.overlay.indexOfLabel(this.$.input.bindValue);
 
       if (this._focusedIndex > -1) {
         this.$.overlay._selectItem(this._focusedIndex);
@@ -473,8 +472,15 @@ enable usage within an `iron-form`.
      */
 
     _inputValueChanged: function(e) {
-      this._filter = this.$.input.bindValue;
-      this._focusedIndex = this.$.overlay.indexOfLabel(this.$.input.bindValue);
+
+      if (this._filter === this.$.input.bindValue) {
+        // Filter and input value might get out of sync, while keyboard navigating for example.
+        // Afterwards, input value might be changed to the same value as used in filtering.
+        // In situation like these, we need to make sure all the filter changes handlers are run.
+        this._filterChanged(this._filter);
+      } else {
+        this._filter = this.$.input.bindValue;
+      }
 
       if (!this.opened) {
         this.open();
@@ -509,9 +515,17 @@ enable usage within an `iron-form`.
     },
 
     _filterChanged: function(filter) {
-      if (this.items) {
-        this._setItems(this._filterItems(this.items, filter));
-      }
+      this.unlisten(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+
+      this._setItems(this._filterItems(this.items, filter));
+      this._focusedIndex = this.$.overlay.indexOfLabel(filter);
+
+      this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+
+      // async needed to reposition correctly after filtering
+      this.async(function() {
+        this.$.overlay.notifyResize();
+      }.bind(this));
     },
 
     _itemsChanged: function(change) {
@@ -521,6 +535,10 @@ enable usage within an `iron-form`.
     },
 
     _filterItems: function(arr, filter) {
+      if (!arr) {
+        return arr;
+      }
+
       return arr.filter((function(item) {
         filter = filter.toString().toLowerCase() || '';
 
@@ -531,33 +549,25 @@ enable usage within an `iron-form`.
     },
 
     _setItems: function(items) {
-      this.unlisten(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
-
       //TODO: There is something wrong with observers and using set function
       // see here: https://github.com/Polymer/polymer/issues/3254
       //As a workaround setting/notifying the observer with the value undefined helps
       this.$.overlay.notifyPath('_items');
       this.$.overlay.set('_items', items);
 
-      if (this.$.overlay._items && this.$.overlay._items.indexOf(this.selectedItem) > -1) {
-        this.$.overlay._selectItem(this.selectedItem);
-        this._focusedIndex = -1;
+      var valueIndex = this._indexOfValue(this.value, items);
+      if (valueIndex > -1) {
+        this.$.overlay._selectItem(valueIndex);
       }
 
       this.$.overlay.hidden = (items === undefined || items === null || items.length === 0);
-
-      this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
-
-      // async needed to reposition correctly after filtering
-      this.async(function() {
-        this.$.overlay.notifyResize();
-      }.bind(this));
     },
 
-    _indexOfValue: function(value) {
-      if (this.items && value) {
-        for (var i = 0; i < this.items.length; i++) {
-          if (this._getItemValue(this.items[i]) === value) {
+    _indexOfValue: function(value, items) {
+      items = items || this.items;
+      if (items && value) {
+        for (var i = 0; i < items.length; i++) {
+          if (this._getItemValue(items[i]).toString() === value.toString()) {
             return i;
           }
         }
@@ -571,6 +581,7 @@ enable usage within an `iron-form`.
         this._setSelectedItem(detail.value);
         this.$.input.bindValue = this._getItemLabel(this.selectedItem);
         this.value = this._getItemValue(this.selectedItem);
+        this._focusedIndex = this.$.overlay._items.indexOf(detail.value);
       }
 
       if (this.opened) {
@@ -590,10 +601,9 @@ enable usage within an `iron-form`.
       } else {
         this.$.input.bindValue = this.allowCustomValue ? value : '';
         this._setSelectedItem(null);
+        this._focusedIndex = -1;
         this.$.overlay.$.selector.clearSelection();
       }
-
-      this._focusedIndex = valueIndex;
 
       this.close();
     },

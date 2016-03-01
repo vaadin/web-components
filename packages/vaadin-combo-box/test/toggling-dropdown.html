@@ -73,12 +73,22 @@
         expect(combobox.opened).to.be.true;
       });
 
-      it('should be hidden with no items', function() {
+      it('should be hidden with null items', function() {
         combobox.items = null;
 
         combobox.open();
 
-        expect(combobox.opened && combobox.$.overlay.hidden).to.be.true;
+        expect(combobox.opened);
+        expect(combobox.$.overlay.hidden).to.be.true;
+      });
+
+      it('should be hidden with no items', function() {
+        combobox.items = [];
+
+        combobox.open();
+
+        expect(combobox.opened);
+        expect(combobox.$.overlay.hidden).to.be.true;
       });
 
       describe('after opening', function() {
