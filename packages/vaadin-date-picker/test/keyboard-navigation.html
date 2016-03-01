@@ -41,8 +41,32 @@
         MockInteractions.keyDownOn(getInput(), 37);
       }
 
+      function home() {
+        MockInteractions.keyDownOn(getInput(), 36);
+      }
+
+      function end() {
+        MockInteractions.keyDownOn(getInput(), 35);
+      }
+
+      function pageDown(modifiers) {
+        MockInteractions.keyDownOn(getInput(), 34, modifiers);
+      }
+
+      function pageUp(modifiers) {
+        MockInteractions.keyDownOn(getInput(), 33, modifiers);
+      }
+
+      function ctrl() {
+        MockInteractions.keyDownOn(getInput(), 17);
+      }
+
       function enter() {
         MockInteractions.pressEnter(getInput());
+      }
+
+      function space() {
+        MockInteractions.pressSpace(getInput());
       }
 
       function getInput() {
@@ -163,6 +187,73 @@
         arrowUp();
 
         expect(spy.calledWith(new Date(1999, 11, 25))).to.be.true;
+      });
+
+      it('should select a date with space', function() {
+        datepicker._open();
+
+        arrowRight();
+        space();
+
+        expect(datepicker.value).to.eql('2000-01-02');
+      });
+
+      it('should deselect selected date with space', function() {
+        datepicker._open();
+
+        space();
+
+        expect(datepicker.value).to.be.empty;
+      });
+
+      it('should focus first day of the month with home', function() {
+        datepicker._open();
+
+        arrowLeft();
+        home();
+
+        expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 1));
+      });
+
+      it('should focus last day of the month with end', function() {
+        datepicker._open();
+
+        end();
+
+        expect(datepicker._focusedDate).to.eql(new Date(2000, 0, 31));
+      });
+
+      it('should focus next month with pagedown', function() {
+        datepicker._open();
+
+        pageDown();
+
+        expect(datepicker._focusedDate).to.eql(new Date(2000, 1, 1));
+      });
+
+      it('should focus previous month with pageup', function() {
+        datepicker._open();
+
+        pageUp();
+
+        expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 1));
+
+      });
+
+      it('should focus next year with shift and pagedown', function() {
+        datepicker._open();
+
+        pageDown('shift');
+
+        expect(datepicker._focusedDate).to.eql(new Date(2001, 0, 1));
+      });
+
+      it('should focus previous year with shift and pageup', function() {
+        datepicker._open();
+
+        pageUp('shift');
+
+        expect(datepicker._focusedDate).to.eql(new Date(1999, 0, 1));
       });
     });
   </script>

@@ -402,60 +402,84 @@ See paper-input-container documentation for styling the included input fields
       /**
        * Keyboard Navigation
        */
-       _isEventKey: function(e, k) {
-        return Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k);
+      _eventKey: function(e) {
+        var keys = ['down', 'up', 'right', 'left', 'enter', 'space', 'home', 'end', 'pageup', 'pagedown'];
+
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
+            return k;
+          }
+        }
       },
 
       _onKeydown: function(e) {
-        if (this._isEventKey(e, 'down')) {
-          this._onArrowDown();
-        } else if (this._isEventKey(e, 'up')) {
-          this._onArrowUp();
-        } else if (this._isEventKey(e, 'right')) {
-          this._onArrowRight();
-        } else if (this._isEventKey(e, 'left')) {
-          this._onArrowLeft();
-        } else if (this._isEventKey(e, 'enter')) {
-          this._onEnter();
+        var focus = this._currentlyFocusedDate();
+
+        switch (this._eventKey(e)) {
+          case 'down':
+            if (this._opened) {
+              this._moveFocusByDays(7);
+            } else {
+              this._open();
+            }
+            break;
+          case 'up':
+            if (this._opened) {
+              this._moveFocusByDays(-7);
+            } else {
+              this._open();
+            }
+            break;
+          case 'right':
+            this._moveFocusByDays(1);
+            break;
+          case 'left':
+            this._moveFocusByDays(-1);
+            break;
+          case 'enter':
+            if (this._focusedDate) {
+              this.set('_selectedDate', this._focusedDate);
+            }
+            this._close();
+            break;
+          case 'space':
+            if (this._formatISO(this._focusedDate) === this._formatISO(this._selectedDate)) {
+              this.set('_selectedDate', null);
+            } else {
+              this.set('_selectedDate', this._focusedDate);
+            }
+            break;
+          case 'home':
+            this._focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
+            break;
+          case 'end':
+            this._focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
+            break;
+          case 'pagedown':
+            this._moveFocusByMonths(e.shiftKey ? 12 : 1);
+            break;
+          case 'pageup':
+            this._moveFocusByMonths(e.shiftKey ? -12 : -1);
+            break;
         }
       },
 
-      _addToFocusedDate: function(date) {
-        var currentFocus = this._focusedDate || this._selectedDate ||
+      _currentlyFocusedDate: function() {
+        return this._focusedDate || this._selectedDate ||
           (this.initialPosition ? this._parseDate(this.initialPosition) : new Date());
-
-        this._focusedDate = new Date(currentFocus.getFullYear(), currentFocus.getMonth(), currentFocus.getDate() + date);
       },
 
-      _onArrowDown: function() {
-        if (this._opened) {
-          this._addToFocusedDate(7);
-        } else {
-          this._open();
-        }
+      _moveFocusByDays: function(days) {
+        var focus = this._currentlyFocusedDate();
+
+        this._focusedDate = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
       },
 
-      _onArrowUp: function() {
-        if (this._opened) {
-          this._addToFocusedDate(-7);
-        } else {
-          this._open();
-        }
-      },
+      _moveFocusByMonths: function(months) {
+        var focus = this._currentlyFocusedDate();
 
-      _onArrowRight: function() {
-        this._addToFocusedDate(1);
-      },
-
-      _onArrowLeft: function() {
-        this._addToFocusedDate(-1);
-      },
-
-      _onEnter: function() {
-        if (this._focusedDate) {
-          this.set('_selectedDate', this._focusedDate);
-        }
-        this._close();
+        this._focusedDate = new Date(focus.getFullYear(), focus.getMonth() + months, focus.getDate());
       }
     });
   </script>
