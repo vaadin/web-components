@@ -15,9 +15,11 @@
     body {
       background: #f9f9f9;
     }
+
     :root {
       --primary-color: #2899f2;
     }
+
     .vertical-section-container {
       max-width: 500px;
     }
@@ -72,6 +74,25 @@
           <vaadin-date-picker label="Start"></vaadin-date-picker>
           <vaadin-date-picker label="End"></vaadin-date-picker>
         </div>
+      </template>
+    </demo-snippet>
+
+    <h4>Styling</h4>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom-theme {
+            --default-primary-color: var(--dark-primary-color);
+            --vaadin-date-picker-yearscroller-background: var(--primary-background-color);
+            --vaadin-date-picker-yearscroller-color: var(--secondary-text-color);
+            --vaadin-date-picker-calendar-title-color: var(--dark-theme-text-color);
+            --vaadin-date-picker-calendar-date-cell-color: var(--dark-theme-text-color);
+            --vaadin-date-picker-weekday-cell-color: var(--dark-theme-secondary-color);
+            --vaadin-date-picker-selected-color: var(--dark-theme-text-color);
+            --vaadin-date-picker-background: var(--dark-theme-background-color);
+          }
+        </style>
+        <vaadin-date-picker class="custom-theme" label="Birthday"></vaadin-date-picker>
       </template>
     </demo-snippet>
   </div>

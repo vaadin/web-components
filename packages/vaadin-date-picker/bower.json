@@ -32,7 +32,8 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "paper-styles": "polymerelements/paper-styles#^1.1.3",
     "moment": "^2.11.2",
-    "iron-media-query": "polymerelements/iron-media-query#^1.0.8"
+    "iron-media-query": "polymerelements/iron-media-query#^1.0.8",
+    "paper-ripple": "polymerelements/paper-ripple#^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.1.0",
