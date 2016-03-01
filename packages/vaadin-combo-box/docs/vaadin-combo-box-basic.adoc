@@ -72,7 +72,7 @@ When using the element inside another Polymer element, you can use the declarati
 
 == Forms
 
-In addition to other features mentioned earlier, the [vaadinelement]#vaadin-combo-box# implements the [classname]#IronFormElementBehavior#, so it can be used as a field in an [elementname]#iron-form#.
+The [vaadinelement]#<vaadin-combo-box># element implements the link:https://elements.polymer-project.org/elements/iron-form-element-behavior[[classname]#IronFormElementBehavior#], so it can be used as a field in an link:https://elements.polymer-project.org/elements/iron-form[[elementname]#iron-form#].
 
 [source,html]
 ----
