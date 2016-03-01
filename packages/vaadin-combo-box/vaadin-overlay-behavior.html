@@ -72,7 +72,7 @@
       var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
 
       if (this._alignedAbove) {
-        return Math.max(targetRect.top - margin, minHeight) + 'px';
+        return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
       } else {
         return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
       }
@@ -102,7 +102,11 @@
     },
 
     _shouldAlignAbove: function() {
-      var spaceBelow = (window.innerHeight - this.positionTarget.getBoundingClientRect().bottom) / window.innerHeight;
+      var spaceBelow = (
+          window.innerHeight -
+          this.positionTarget.getBoundingClientRect().bottom -
+          Math.min(document.body.scrollTop, 0)
+        ) / window.innerHeight;
 
       return spaceBelow < 0.30;
     }
