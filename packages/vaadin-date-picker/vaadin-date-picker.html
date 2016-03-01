@@ -82,7 +82,7 @@ enable usage within an `iron-form`.
       <iron-icon id="calendar" suffix icon="event" on-tap="_toggle"></iron-icon>
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_unlistenWindowScroll" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="_close"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -152,7 +152,11 @@ enable usage within an `iron-form`.
 
         _fullscreenMediaQuery: {
           value: '(max-width: 420px), (max-height: 420px)'
-        }
+        },
+
+        // An array of ancestor elements whose -webkit-overflow-scrolling is forced from value
+        // 'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.
+        _touchPrevented: Array
       },
 
       _parseDate: function(str) {
@@ -236,14 +240,44 @@ enable usage within an `iron-form`.
           this.$.overlay.scrollToDate(initialPositionDate);
         }
         this.listen(window, 'scroll', '_onWindowScroll');
+
+        // Checking if the browser supports webkitOverflowScrolling
+        if (document.createElement('div').style.webkitOverflowScrolling === '') {
+          this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
+        }
       },
 
-      _unlistenWindowScroll: function() {
+      // A hack needed for iOS to prevent dropdown from being clipped in an
+      // ancestor container with -webkit-overflow-scrolling: touch;
+      _preventWebkitOverflowScrollingTouch: function(element) {
+        var result = [];
+        while (element) {
+          if (window.getComputedStyle(element).webkitOverflowScrolling === 'touch') {
+            var oldInlineValue = element.style.webkitOverflowScrolling;
+            element.style.webkitOverflowScrolling = 'auto';
+            result.push({
+              element: element,
+              oldInlineValue: oldInlineValue
+            });
+          }
+          element = element.parentElement;
+        }
+        return result;
+      },
+
+      _onOverlayClosed: function() {
         this.unlisten(window, 'scroll', '_onWindowScroll');
+
+        if (this._touchPrevented) {
+          this._touchPrevented.forEach(function(prevented) {
+            prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
+          });
+          this._touchPrevented = [];
+        }
       },
 
       detached: function() {
-        this._unlistenWindowScroll();
+        this._onOverlayClosed();
       },
 
       _onWindowScroll: function() {
