@@ -69,7 +69,7 @@
     _maxHeight: function(targetRect) {
       var margin = 8;
       var minHeight = 116; // Height of two items in combo-box
-      var bottom = Math.min(window.innerHeight, document.body.getBoundingClientRect().bottom);
+      var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
 
       if (this._alignedAbove) {
         return Math.max(targetRect.top - margin, minHeight) + 'px';
