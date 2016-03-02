@@ -251,7 +251,7 @@ Custom property | Description | Default
        */
        maxFiles: {
          type: Number,
-         value: 0
+         value: -1
        },
 
       /**
@@ -269,7 +269,7 @@ Custom property | Description | Default
        */
       maxFileSize: {
         type: Number,
-        value: 0
+        value: -1
       },
     },
 
@@ -286,7 +286,7 @@ Custom property | Description | Default
     },
 
     _maxFilesAdded: function() {
-      return this.maxFiles && this.files.length >= this.maxFiles;
+      return this.maxFiles >= 0 && this.files.length >= this.maxFiles;
     },
 
     _dragRippleAction: function(action, event) {
@@ -533,7 +533,7 @@ Custom property | Description | Default
         this.fire('file-reject', {file: file, error: 'Too many files.'});
         return;
       }
-      if (this.maxFileSize && file.size > this.maxFileSize) {
+      if (this.maxFileSize >= 0 && file.size > this.maxFileSize) {
         this.fire('file-reject', {file: file, error: 'File is too big.'});
         return;
       }
