@@ -1,20 +1,20 @@
 <vaadin-spline-chart id="spline-inverted">
     <chart inverted="true">
     </chart>
-    <title>Atmosphere Temperature by Altitude</title>
+    <chart-title>Atmosphere Temperature by Altitude</chart-title>
     <subtitle>According to the Standard Atmosphere Model</subtitle>
 
     <x-axis reversed="false"
             max-padding="0.05"
             show-last-label="true">
-        <title>Altitude</title>
+        <chart-title>Altitude</chart-title>
         <labels enabled="true"
                 formatter="function() {return this.value + 'km';}">
         </labels>
     </x-axis>
 
     <y-axis line-width="2">
-        <title align="high">Temperature</title>
+        <chart-title align="high">Temperature</chart-title>
         <labels enabled="true"
                 formatter="function() {return this.value + '°';}">
         </labels>

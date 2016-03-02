@@ -1,12 +1,12 @@
 <vaadin-area-chart id="percentage-area">
-    <title>Historic World Population by Region</title>
+    <chart-title>Historic World Population by Region</chart-title>
     <subtitle>Source: Wikipedia.org</subtitle>
     <x-axis tickmark-placement="on">
         <categories>1750, 1800, 1850, 1900, 1950, 1999, 2050</categories>
-        <title enabled="false"></title>
+        <chart-title enabled="false"></chart-title>
     </x-axis>
     <y-axis min="0">
-        <title>Percent</title>
+        <chart-title>Percent</chart-title>
     </y-axis>
     <tooltip shared="true"
              point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:.0f} millions)<br/>'></tooltip>

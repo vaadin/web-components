@@ -9,9 +9,13 @@
 </head>
 <body>
 <vaadin-line-chart id="linechartwithtimeline" timeline>
-    <title>timeline test</title>
+    <chart-title>
+        <text>timeline test</text>
+        <chart-style color="#ff0000"></chart-style>
+    </chart-title>
     <range-selector>
         <button-theme stroke-width="3">
+            <chart-style color="#ff0000"></chart-style>
         </button-theme>
     </range-selector>
     <data-series>
@@ -54,13 +58,23 @@
             expect(strokeWidth).to.equal(3);
         });
 
+        test('timeline button theme style is correctly set', function () {
+            var chartwc = document.querySelector('#linechartwithtimeline');
+            var style = chartwc._chartConf.rangeSelector.buttonTheme["style"]["color"];
+            expect(style).to.equal("#ff0000");
+        });
+
+        test('timeline title style is correctly set', function () {
+            var chartwc = document.querySelector('#linechartwithtimeline');
+            var titleColor = chartwc._chartConf.title["style"]["color"];
+            expect(titleColor).to.equal("#ff0000");
+        });
         test('timeline disabled contains no range selector', function () {
             var chartwc = document.querySelector('#linechartwithtimeline');
             chartwc.timeline = false;
             var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
             expect(rangeSelector).to.have.length(0);
         });
-
 
     });
 

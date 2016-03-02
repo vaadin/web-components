@@ -1,13 +1,13 @@
 <vaadin-area-chart id="inverted-axes">
     <chart inverted="true"></chart>
-    <title>Average fruit consumption during one week</title>
+    <chart-title>Average fruit consumption during one week</chart-title>
     <legend layout="vertical" align="right" vertical-align="top" x="-150" y="100" floating="true">
     </legend>
     <x-axis>
         <categories>Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</categories>
     </x-axis>
     <y-axis min="0">
-        <title>Number of units</title>
+        <chart-title>Number of units</chart-title>
         <labels formatter="function () { return this.value; }"></labels>
     </y-axis>
     <tooltip shared="true" value-suffix="units">

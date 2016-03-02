@@ -1,20 +1,20 @@
 <vaadin-column-chart id="dual-axes-line-and-column">
-    <title>Average Monthly Temperature and Rainfall in Tokyo</title>
+    <chart-title>Average Monthly Temperature and Rainfall in Tokyo</chart-title>
     <subtitle>Source: WorldClimate.com</subtitle>
     <x-axis>
         <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
     </x-axis>
     <y-axis>
         <labels format="{value}°C">
-            <style color="Highcharts.getOptions().colors[1]"></style>
+            <chart-style color="Highcharts.getOptions().colors[1]"></chart-style>
         </labels>
-        <title color="Highcharts.getOptions().colors[1]">Temperature</title>
+        <chart-title color="Highcharts.getOptions().colors[1]">Temperature</chart-title>
     </y-axis>
     <y-axis opposite="true" id="id1">
         <labels format="{value} mm">
-            <style color="Highcharts.getOptions().colors[0]"></style>
+            <chart-style color="Highcharts.getOptions().colors[0]"></chart-style>
         </labels>
-        <title color="Highcharts.getOptions().colors[0]">Rainfall</title>
+        <chart-title color="Highcharts.getOptions().colors[0]">Rainfall</chart-title>
     </y-axis>
     <tooltip shared="true">
     </tooltip>

@@ -1,5 +1,5 @@
 <vaadin-column-chart id="multiple-axes">
-    <title>Average Monthly Weather Data for Tokyo</title>
+    <chart-title>Average Monthly Weather Data for Tokyo</chart-title>
     <subtitle>Source: WorldClimate.com</subtitle>
 
     <x-axis>
@@ -8,21 +8,21 @@
 
     <y-axis opposite="true" grid-line-width="0">
         <labels format="{value}°C">
-            <style color="#98DF58"></style>
+            <chart-style color="#98DF58"></chart-style>
         </labels>
-        <title color="#98DF58">Temperature</title>
+        <chart-title color="#98DF58">Temperature</chart-title>
     </y-axis>
     <y-axis opposite="true" id="id2" grid-line-width="0">
         <labels format="{value} mb">
-            <style color="#3090F0"></style>
+            <chart-style color="#3090F0"></chart-style>
         </labels>
-        <title color="#3090F0">Sea-Level Pressure</title>
+        <chart-title color="#3090F0">Sea-Level Pressure</chart-title>
     </y-axis>
     <y-axis id="id1">
         <labels format="{value} mm">
-            <style color="#EC6464"></style>
+            <chart-style color="#EC6464"></chart-style>
         </labels>
-        <title color="#EC6464">Rainfall</title>
+        <chart-title color="#EC6464">Rainfall</chart-title>
     </y-axis>
     <tooltip shared="true">
     </tooltip>

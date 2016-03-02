@@ -1,10 +1,10 @@
 <vaadin-bar-chart id="stacked-bar" style=" width: 50%; float: left;">
-    <title>Stacked bar chart</title>
+    <chart-title>Stacked bar chart</chart-title>
     <x-axis>
         <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
     </x-axis>
     <y-axis min="0">
-        <title>Total fruit consumption</title>
+        <chart-title>Total fruit consumption</chart-title>
     </y-axis>
     <legend reversed="true"></legend>
     <tooltip point-format="{series.name}: {point.y}. Total: {point.stackTotal}"></tooltip>
@@ -23,6 +23,7 @@
     </data-series>
 </vaadin-bar-chart>
 <vaadin-pie-chart id="pieWithSeries" style=" width: 50%; float: left;">
+    <chart-title>Browser market shares at a specific website, 2010</chart-title>
     <data-series name="Browser share">
         <data>
             ["Firefox", 45.0],
