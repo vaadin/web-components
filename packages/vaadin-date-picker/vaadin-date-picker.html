@@ -439,15 +439,15 @@ See paper-input-container documentation for styling the included input fields
             break;
           case 'enter':
             if (this._focusedDate) {
-              this.set('_selectedDate', this._focusedDate);
+              this._selectedDate = this._focusedDate;
             }
             this._close();
             break;
           case 'space':
             if (this._formatISO(this._focusedDate) === this._formatISO(this._selectedDate)) {
-              this.set('_selectedDate', null);
+              this._selectedDate = null;
             } else {
-              this.set('_selectedDate', this._focusedDate);
+              this._selectedDate = this._focusedDate;
             }
             break;
           case 'home':

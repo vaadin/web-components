@@ -20,6 +20,22 @@ The dropdown footer has a today button for quickly jumping to the current month.
 It does not select a date but only scrolls the calendar view.
 A cancel button in the footer allows closing the dropdown without affecting the value.
 
+== Keyboard Navigation Overview
+When a date is focused using the keyboard, it can be selected or deselected using Space key. +
+With Enter key, the focused date is selected and the date picker is closed.
+
+Focus can be moved with the following keys: +
+Up: a week backward +
+Down: a week forward +
+Left: a day backward +
+Right: a day forward +
+Home: focus first day of the month +
+End: focus last day of the month +
+PageUp: a month backward +
+PageDown: a month forward +
+Shift+PageUp: a year backward +
+Shift+PageDown: a year forward
+
 The current alpha version has a limited set of features.
 Future versions will address issues such as date ranges and keyboard input.
 

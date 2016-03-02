@@ -323,8 +323,14 @@
         _yearScrollerWidth: {
           value: 50
         }
-
       },
+
+      /**
+       * Fired when the scroller reaches the target scrolling position.
+       * @event scroll-animation-finished
+       * @param {Number} detail.position new position
+       * @param {Number} detail.oldPosition old position
+       */
 
       attached: function() {
         this._translateX = this._yearScrollerWidth;
@@ -341,9 +347,16 @@
 
       _focusedDateChanged: function(focusedDate, oldFocusedDate) {
         if (focusedDate) {
-          if (!oldFocusedDate || focusedDate.getFullYear() !== oldFocusedDate.getFullYear() ||
-                                 focusedDate.getMonth() !== oldFocusedDate.getMonth()) {
-            this.scrollToDate(focusedDate, true);
+          var diff = this._differenceInMonths(focusedDate, this._originDate);
+          var scrolledAboveViewport = this.$.scroller.position > diff;
+
+          var visibleItems = Math.floor(this.$.scroller.clientHeight / this.$.scroller.itemHeight);
+          var scrolledBelowViewport = this.$.scroller.position + visibleItems - 1 < diff;
+
+          if (scrolledAboveViewport) {
+            this._scrollToPosition(diff, true);
+          } else if (scrolledBelowViewport) {
+            this._scrollToPosition(diff - visibleItems + 1, true);
           }
         }
       },
@@ -379,6 +392,13 @@
       },
 
       _scrollToPosition: function(targetPosition, animate) {
+        if (this._targetPosition) {
+          this._targetPosition = targetPosition;
+          return;
+        }
+
+        this._targetPosition = targetPosition;
+
         // http://gizma.com/easing/
         var easingFunction = function(t, b, c, d) {
           t /= d / 2;
@@ -398,11 +418,13 @@
           var currentTime = timestamp - start;
 
           if (currentTime < duration) {
-            var currentPos = easingFunction(currentTime, initialPosition, targetPosition - initialPosition, duration);
+            var currentPos = easingFunction(currentTime, initialPosition, this._targetPosition - initialPosition, duration);
             this.$.scroller.position = currentPos;
             window.requestAnimationFrame(smoothScroll);
           } else {
-            this.$.scroller.position = targetPosition;
+            this.fire('scroll-animation-finished', {position: this._targetPosition, oldPosition: initialPosition});
+            this.$.scroller.position = this._targetPosition;
+            this._targetPosition = undefined;
           }
 
           this.async(this._onMonthScroll, 1);
