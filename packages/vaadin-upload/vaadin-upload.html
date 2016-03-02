@@ -1,4 +1,4 @@
-<!-- 
+<!--
 @license
 Copyright (c) 2016 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
@@ -333,7 +333,7 @@ Custom property | Description | Default
 
     _onDragover: function(event) {
       event.preventDefault();
-      if (!this.dragover) {
+      if (!this.dragover && !this.nodrop) {
         this._dragRippleAction('down', event);
         this.dragover = true;
       }
@@ -344,7 +344,7 @@ Custom property | Description | Default
       // when quickly dragging over.
       if (Polymer.dom(event).rootTarget === this) {
         event.preventDefault();
-        if (this.dragover) {
+        if (this.dragover && !this.nodrop) {
           this._dragRippleAction('up', event);
           this.dragover = false;
         }
