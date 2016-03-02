@@ -75,6 +75,10 @@ See paper-input-container documentation for styling the included input fields
         display: block;
       }
 
+      #dropdown:not([fullscreen]) {
+        margin: 10px 0;
+      }
+
       #overlay {
         height: 100vh;
         width: 420px;
@@ -138,7 +142,7 @@ See paper-input-container documentation for styling the included input fields
       </div>
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="_close"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -270,7 +274,7 @@ See paper-input-container documentation for styling the included input fields
 
       _updateAlignmentAndPosition: function() {
         var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight;
+        this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight - 10;
         this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
 
         var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
