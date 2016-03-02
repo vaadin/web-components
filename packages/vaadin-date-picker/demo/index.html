@@ -6,22 +6,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
   <link rel="import" href="../vaadin-date-picker.html">
 
-  <style is="custom-style">
+  <style is="custom-style" include="demo-pages-shared-styles iron-flex iron-flex-alignment">
     body {
       background: #f9f9f9;
     }
-
     :root {
       --primary-color: #2899f2;
+    }
+    .vertical-section-container {
+      max-width: 500px;
     }
   </style>
 </head>
 
 <body>
-  <vaadin-date-picker label="Pick a date"></vaadin-date-picker>
-  <vaadin-date-picker label="Birthday" value="2000-01-01"></vaadin-date-picker>
+  <div class="vertical-section-container centered">
+    <h4>Plain date picker</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-date-picker></vaadin-date-picker>
+      </template>
+    </demo-snippet>
+
+    <h4>Label attribute</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-date-picker label="Pick a date">
+        </vaadin-date-picker>
+      </template>
+    </demo-snippet>
+
+    <h4>Pre-selected value</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-date-picker label="Birthday" value="1980-08-14">
+        </vaadin-date-picker>
+      </template>
+    </demo-snippet>
+
+    <h4>Changing the locale</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-date-picker label="Syntymäpäivä" locale="fi" value="1980-08-14">
+        </vaadin-date-picker>
+      </template>
+    </demo-snippet>
+
+    <h4>Initial position</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-date-picker label="Birthday" initial-position="1980-01-01">
+        </vaadin-date-picker>
+      </template>
+    </demo-snippet>
+
+    <h4>Two date pickers side-by-side</h4>
+    <demo-snippet>
+      <template>
+        <div class="layout horizontal around-justified">
+          <vaadin-date-picker label="Start"></vaadin-date-picker>
+          <vaadin-date-picker label="End"></vaadin-date-picker>
+        </div>
+      </template>
+    </demo-snippet>
+  </div>
 </body>
 
 </html>
