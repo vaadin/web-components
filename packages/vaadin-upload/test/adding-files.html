@@ -106,10 +106,13 @@
 
         it('should disable add button when max files added', function() {
           var addButton = upload.$.addFiles;
-          upload.maxFiles = 1;
 
-          // Enabled by default -> add a fake file -> should be disabled.
+          // Enabled with default maxFiles value
           expect(addButton.disabled).to.be.false;
+
+          upload.maxFiles = 1;
+          expect(addButton.disabled).to.be.false;
+
           upload._addFile(createFile(100, 'image/jpeg'));
           expect(addButton.disabled).to.be.true;
         });
