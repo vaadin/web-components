@@ -13,18 +13,15 @@
         user-select: none;
         font: inherit;
         @apply(--paper-font-common-base);
+        @apply(--vaadin-date-picker-calendar);
       }
 
       #title {
+        color: var(--vaadin-date-picker-calendar-title-color, --primary-text-color);
         text-align: center;
-        padding: 0.4em 1em;
+        padding: 6px 0;
         @apply(--paper-font-subhead);
-      }
-
-      #title span {
-        position: absolute;
-        left: 1em;
-        color: #999;
+        @apply(--vaadin-date-picker-calendar-title);
       }
 
       #monthGrid {
@@ -36,34 +33,38 @@
         text-align: center;
         width: 14.285714286%;
         box-sizing: border-box;
-        padding: 0.4em 0;
+        padding: 6px 0;
         @apply(--paper-font-body1);
+        @apply(--vaadin-date-picker-calendar-cell);
       }
 
       #monthGrid div:not(:empty) {
         cursor: pointer;
+        color: var(--vaadin-date-picker-calendar-date-cell-color, --primary-text-color);
+        @apply(--vaadin-date-picker-calendar-date-cell);
       }
 
       #monthGrid div.weekday {
         text-transform: uppercase;
-        color: #999;
+        color: var(--vaadin-date-picker-weekday-cell-color, --secondary-text-color);
         cursor: default;
-        padding: 0.7em 0;
+        padding: 8px 0;
         @apply(--paper-font-caption);
+        @apply(--vaadin-date-picker-calendar-weekday-cell);
       }
 
       #monthGrid div[today] {
         position: relative;
-        color: #03a9f4;
+        color: var(--vaadin-date-picker-today-color, --accent-color);
       }
 
-      #monthGrid div[today][selected]:before {
-        border-color: #fff;
+      #monthGrid div[today][selected] {
+        color: var(--vaadin-date-picker-today-selected-color, --light-accent-color);
       }
 
       #monthGrid div[selected] {
-        color: #fff;
-        background: #03a9f4;
+        color: var(--vaadin-date-picker-selected-color, --light-primary-color);
+        background: var(--vaadin-date-picker-selected-background, --default-primary-color);
         box-sizing: border-box;
         border-radius: 2px;
       }

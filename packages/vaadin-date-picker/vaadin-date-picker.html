@@ -11,12 +11,45 @@ month calendar view.
 <vaadin-date-picker label="Birthday"></vaadin-date-picker>
 ```
 ```js
-datePicker.value = new Date();
+datePicker.value = '2016-03-02';
 ```
 When the selected `value` is changed, a `value-changed` event is triggered.
 
 This element is also extended with the `IronFormElementBehavior` to
 enable usage within an `iron-form`.
+
+### Styling
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-date-picker-background` | Background for picker sections | `--primary-background-color`
+`--vaadin-date-picker-toolbar-color` | Text color for picker toolbar items | `--default-primary-color`
+`--vaadin-date-picker-yearscroller-background` | Background for the year scroller | `--dark-theme-background-color`
+`--vaadin-date-picker-yearscroller-color` | Text color for the year scroller | `--dark-theme-secondary-color`
+`--vaadin-date-picker-calendar-title-color` | Text color for a month calendar title | `--primary-text-color`
+`--vaadin-date-picker-calendar-date-cell-color` | Text color for a month calendar date cell | `--primary-text-color`
+`--vaadin-date-picker-weekday-cell-color` | Text color for a month calendar weekday cell | `--secondary-text-color`
+`--vaadin-date-picker-today-color` | Text color for a month calendar today cell | `--accent-color`
+`--vaadin-date-picker-selected-color` | Text color for a month calendar selected cell | `--light-primary-color`
+`--vaadin-date-picker-selected-background` | Text color for a month calendar selected cell | `--default-primary-color`
+`--vaadin-date-picker-today-selected-color` | Text color for a month calendar selected today cell | `--light-accent-color`
+`--vaadin-date-picker-header-background` | Background for the picker header | `--default-primary-color`
+`--vaadin-date-picker-footer-color` | Text color for the picker footer | `--default-primary-color`
+`--vaadin-date-picker-calendar-icon` | Mixin applied to the calendar icon | `{}`
+`--vaadin-date-picker-clear-icon` | Mixin applied to the clear icon | `{}`
+`--vaadin-date-picker-scrollers-fade` | Mixin applied to the scrollers fade element | `{}`
+`--vaadin-date-picker-yearscroller-item` | Mixin applied to a year scroller item after element | `{}`
+`--vaadin-date-picker-header` | Mixin applied to the picker header | `{}`
+`--vaadin-date-picker-toolbar` | Mixin applied to the picker toolbar | `{}`
+`--vaadin-date-picker-footer` | Mixin applied to the picker footer | `{}`
+`--vaadin-date-picker-calendar` | Mixin applied to a month calendar element | `{}`
+`--vaadin-date-picker-calendar-title` | Mixin applied to a month calendar title | `{}`
+`--vaadin-date-picker-calendar-cell` | Mixin applied to a month calendar cell | `{}`
+`--vaadin-date-picker-calendar-date-cell` | Mixin applied to a month calendar date cell | `{}`
+`--vaadin-date-picker-calendar-weekday-cell` | Mixin applied to a month calendar weekday cell | `{}`
+
+See paper-input-container documentation for styling the included input fields
 
 @element vaadin-date-picker
 @demo demo/
@@ -28,6 +61,7 @@ enable usage within an `iron-form`.
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
@@ -39,6 +73,10 @@ enable usage within an `iron-form`.
     <style>
       :host {
         display: block;
+      }
+
+      #dropdown:not([fullscreen]) {
+        margin: 10px 0;
       }
 
       #overlay {
@@ -66,8 +104,22 @@ enable usage within an `iron-form`.
 
       #clear,
       #calendar {
+        position: relative;
+      }
+
+      #clear iron-icon,
+      #calendar iron-icon {
         width: 24px;
-        fill: var(--secondary-text-color, #222);
+        height: 20px;
+        fill: var(--secondary-text-color);
+      }
+
+      #clear iron-icon {
+        @apply(--vaadin-date-picker-clear-icon);
+      }
+
+      #calendar iron-icon {
+        @apply(--vaadin-date-picker-calendar-icon);
       }
 
       [hideclear] #clear {
@@ -78,11 +130,19 @@ enable usage within an `iron-form`.
     <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="_open">
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, _readyLocale)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
-      <iron-icon id="clear" suffix on-tap="_clear" icon="clear"></iron-icon>
-      <iron-icon id="calendar" suffix icon="event" on-tap="_toggle"></iron-icon>
+
+      <div suffix id="clear" on-tap="_clear" hidden$="[[_hideClearIcon(value, opened)]]">
+        <iron-icon icon="clear"></iron-icon>
+        <paper-ripple class="circle" center></paper-ripple>
+      </div>
+
+      <div suffix id="calendar" on-tap="_toggle">
+        <iron-icon icon="event"></iron-icon>
+        <paper-ripple class="circle" center></paper-ripple>
+      </div>
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="_close"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -214,7 +274,7 @@ enable usage within an `iron-form`.
 
       _updateAlignmentAndPosition: function() {
         var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight;
+        this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight - 10;
         this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
 
         var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
