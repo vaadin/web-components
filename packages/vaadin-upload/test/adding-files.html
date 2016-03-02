@@ -104,6 +104,16 @@
           fileAddSpy.should.have.been.calledTwice;
         });
 
+        it('should disable add button when max files added', function() {
+          var addButton = upload.$.addFiles;
+          upload.maxFiles = 1;
+
+          // Enabled by default -> add a fake file -> should be disabled.
+          expect(addButton.disabled).to.be.false;
+          upload._addFile(createFile(100, 'image/jpeg'));
+          expect(addButton.disabled).to.be.true;
+        });
+
       });
 
       describe('Dropping file', function() {
@@ -126,6 +136,14 @@
           expect(upload.dragover).to.be.ok;
           upload.dispatchEvent(createDndEvent('dragleave'));
           expect(upload.dragover).not.to.be.ok;
+        });
+
+        it('should not have dragover property when max files added', function() {
+          upload.maxFiles = 1;
+          upload._addFile(createFile(100, 'image/jpeg'));
+
+          upload.dispatchEvent(createDndEvent('dragover'));
+          expect(upload.dragover).to.be.false;
         });
 
         describe('nodrop flag', function() {

@@ -149,7 +149,7 @@ Custom property | Description | Default
     </div>
     <content></content>
     <div id="buttons">
-      <paper-button id="addFiles" on-tap="_onAddFilesClick">Add File(s)</paper-button>
+      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">Add File(s)</paper-button>
       <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">Cancel all</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
@@ -285,6 +285,10 @@ Custom property | Description | Default
       this._templatizeFileList();
     },
 
+    _maxFilesAdded: function() {
+      return this.maxFiles && this.files.length >= this.maxFiles;
+    },
+
     _dragRippleAction: function(action, event) {
       var rippleActionEvent = {
         detail: {
@@ -333,7 +337,7 @@ Custom property | Description | Default
 
     _onDragover: function(event) {
       event.preventDefault();
-      if (!this.dragover) {
+      if (!this._maxFilesAdded() && !this.dragover) {
         this._dragRippleAction('down', event);
         this.dragover = true;
       }
@@ -525,7 +529,7 @@ Custom property | Description | Default
      * @param {File} file File being added
      */
     _addFile: function(file) {
-      if (this.maxFiles && this.files.length >= this.maxFiles) {
+      if (this._maxFilesAdded()) {
         this.fire('file-reject', {file: file, error: 'Too many files.'});
         return;
       }
