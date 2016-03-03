@@ -127,7 +127,7 @@ See paper-input-container documentation for styling the included input fields
       }
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="_open">
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="open">
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, _readyLocale)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
@@ -143,7 +143,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="_close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="_close"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="close"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -219,6 +219,21 @@ See paper-input-container documentation for styling the included input fields
         _touchPrevented: Array
       },
 
+      /**
+       * Opens the dropdown.
+       */
+      open: function(e) {
+        this._updateAlignmentAndPosition();
+        this.$.dropdown.open();
+      },
+
+      /**
+       * Closes the dropdown.
+       */
+      close: function() {
+        this.$.dropdown.close();
+      },
+
       _parseDate: function(str) {
         // Parsing with RegExp to ensure correct format
         var parts = /^(\d{4}|[-+]\d{6})-(\d{2})-(\d{2})$/.exec(str);
@@ -256,20 +271,15 @@ See paper-input-container documentation for styling the included input fields
         }
 
         if (!(this._selectedDate instanceof Date) ||
-            date.getFullYear() !== this._selectedDate.getFullYear() ||
-            date.getMonth() !== this._selectedDate.getMonth() ||
-            date.getDate() !== this._selectedDate.getDate()) {
+          date.getFullYear() !== this._selectedDate.getFullYear() ||
+          date.getMonth() !== this._selectedDate.getMonth() ||
+          date.getDate() !== this._selectedDate.getDate()) {
           this._selectedDate = date;
         }
       },
 
       _localeReady: function(e) {
         this._readyLocale = e.detail.locale;
-      },
-
-      _open: function(e) {
-        this._updateAlignmentAndPosition();
-        this.$.dropdown.open();
       },
 
       _updateAlignmentAndPosition: function() {
@@ -347,13 +357,9 @@ See paper-input-container documentation for styling the included input fields
         this.$.dropdown.fire('iron-resize');
       },
 
-      _close: function() {
-        this.$.dropdown.close();
-      },
-
       _toggle: function(e) {
         e.stopPropagation();
-        this[this.$.dropdown.opened ? '_close' : '_open']();
+        this[this.$.dropdown.opened ? 'close' : 'open']();
       },
 
       _preventCancelOnInputContainerTap: function(e) {
@@ -369,7 +375,7 @@ See paper-input-container documentation for styling the included input fields
       _clear: function(e) {
         e.stopPropagation();
         this.value = '';
-        this._close();
+        this.close();
       },
 
       /**
