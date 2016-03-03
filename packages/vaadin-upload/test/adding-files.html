@@ -119,7 +119,7 @@
 
       });
 
-      describe('Dropping file', function() {
+      describeIf(!touchDevice, 'Dropping file', function() {
         // Using dispatchEvent instead of fire in this cases because
         // we have to pass the info in the dataTransfer property
         function createDndEvent(type) {
