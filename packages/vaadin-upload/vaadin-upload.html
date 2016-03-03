@@ -336,6 +336,8 @@ Custom property | Description | Default
       if (!this.dragover && !this.nodrop) {
         this._dragRippleAction('down', event);
         this.dragover = true;
+      } else if (this.nodrop) {
+        event.dataTransfer.dropEffect = 'none';
       }
     },
 
