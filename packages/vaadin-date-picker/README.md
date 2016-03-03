@@ -1,3 +1,5 @@
+![Bower version](https://img.shields.io/bower/v/vaadin-date-picker.svg) [![Build Status](https://travis-ci.org/vaadin/vaadin-date-picker.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-date-picker)
+
 # &lt;vaadin-date-picker&gt;
 
 `<vaadin-date-picker>` is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
