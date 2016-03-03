@@ -27,52 +27,60 @@
       describe('keyboard navigation with arrow keys', function() {
         var datepicker;
 
-        function arrowDown() {
-          MockInteractions.keyDownOn(getInput(), 40);
+        function arrowDown(target) {
+          MockInteractions.keyDownOn(target || overlay(), 40);
         }
 
         function arrowRight() {
-          MockInteractions.keyDownOn(getInput(), 39);
+          MockInteractions.keyDownOn(overlay(), 39);
         }
 
-        function arrowUp() {
-          MockInteractions.keyDownOn(getInput(), 38);
+        function arrowUp(target) {
+          MockInteractions.keyDownOn(target || overlay(), 38);
         }
 
         function arrowLeft() {
-          MockInteractions.keyDownOn(getInput(), 37);
+          MockInteractions.keyDownOn(overlay(), 37);
         }
 
         function home() {
-          MockInteractions.keyDownOn(getInput(), 36);
+          MockInteractions.keyDownOn(overlay(), 36);
         }
 
         function end() {
-          MockInteractions.keyDownOn(getInput(), 35);
+          MockInteractions.keyDownOn(overlay(), 35);
         }
 
         function pageDown(modifiers) {
-          MockInteractions.keyDownOn(getInput(), 34, modifiers);
+          MockInteractions.keyDownOn(overlay(), 34, modifiers);
         }
 
         function pageUp(modifiers) {
-          MockInteractions.keyDownOn(getInput(), 33, modifiers);
+          MockInteractions.keyDownOn(overlay(), 33, modifiers);
         }
 
         function ctrl() {
-          MockInteractions.keyDownOn(getInput(), 17);
+          MockInteractions.keyDownOn(overlay(), 17);
         }
 
         function enter() {
-          MockInteractions.pressEnter(getInput());
+          MockInteractions.pressEnter(overlay());
         }
 
         function space() {
-          MockInteractions.pressSpace(getInput());
+          MockInteractions.pressSpace(overlay());
         }
 
-        function getInput() {
+        function input() {
           return datepicker.$.input;
+        }
+
+        function overlay() {
+          return datepicker.$.overlay;
+        }
+
+        function focusedDate() {
+          return overlay()._focusedDate;
         }
 
         beforeEach(function() {
@@ -80,13 +88,13 @@
         });
 
         it('should open overlay on down', function() {
-          arrowDown();
+          arrowDown(input());
 
           expect(datepicker._opened).to.be.true;
         });
 
         it('should open overlay on up', function() {
-          arrowUp();
+          arrowUp(input());
 
           expect(datepicker._opened).to.be.true;
         });
@@ -94,20 +102,26 @@
         it('should be focused on selected value when overlay is opened', function() {
           datepicker.value = '2001-01-01';
 
-          datepicker._open();
+          datepicker.open();
           arrowRight();
 
-          expect(datepicker._focusedDate).to.eql(new Date(2001, 0, 2));
+          expect(focusedDate()).to.eql(new Date(2001, 0, 2));
         });
 
-        it('should be focused on initial position when no value is set', function() {
+        it('should be focused on initial position when no value is set', function(done) {
           datepicker.value = null;
           datepicker.initialPosition = '2001-01-01';
 
-          datepicker._open();
-          arrowRight();
+          datepicker.open();
 
-          expect(datepicker._focusedDate).to.eql(new Date(2001, 0, 2));
+          // wait for the 'iron-overlay-opened' to be fired to that the initialPosition
+          // is set to the overlay.
+          datepicker.async(function() {
+            arrowRight();
+
+            expect(focusedDate()).to.eql(new Date(2001, 0, 2));
+            done();
+          }, 1);
         });
 
         it('should be focused on today if no initial position is set', function() {
@@ -115,15 +129,15 @@
           datepicker.value = null;
           datepicker.initialPosition = null;
 
-          datepicker._open();
+          datepicker.open();
           arrowRight();
 
-          expect(datepicker._focusedDate).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+          expect(focusedDate()).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
         });
 
         describe('focusing', function() {
           beforeEach(function(done) {
-            datepicker._open();
+            datepicker.open();
 
             datepicker.async(done, 300); // wait for the initial scroll to finish.
           });
@@ -131,26 +145,26 @@
           it('should focus one week forward with arrow down', function() {
             arrowDown();
 
-            expect(datepicker._focusedDate).to.eql(new Date(2000, 0, 8));
+            expect(focusedDate()).to.eql(new Date(2000, 0, 8));
           });
 
           it('should focus one week backward with arrow up', function() {
             arrowUp();
 
-            expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 25));
+            expect(focusedDate()).to.eql(new Date(1999, 11, 25));
           });
 
           it('should focus one day forward with arrow right', function() {
             arrowRight();
 
-            expect(datepicker._focusedDate).to.eql(new Date(2000, 0, 2));
+            expect(focusedDate()).to.eql(new Date(2000, 0, 2));
 
           });
 
           it('should focus one day backward with arrow left', function() {
             arrowLeft();
 
-            expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 31));
+            expect(focusedDate()).to.eql(new Date(1999, 11, 31));
           });
 
           it('should select focused day with enter', function() {
@@ -171,8 +185,8 @@
 
             expect(datepicker._selectedDate).to.eql(new Date(2000, 0, 1));
 
-            datepicker._close();
-            datepicker._open();
+            datepicker.close();
+            datepicker.open();
           });
 
           it('should scroll to focused month', function(done) {
@@ -201,38 +215,38 @@
             arrowLeft();
             home();
 
-            expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 1));
+            expect(focusedDate()).to.eql(new Date(1999, 11, 1));
           });
 
           it('should focus last day of the month with end', function() {
             end();
 
-            expect(datepicker._focusedDate).to.eql(new Date(2000, 0, 31));
+            expect(focusedDate()).to.eql(new Date(2000, 0, 31));
           });
 
           it('should focus next month with pagedown', function() {
             pageDown();
 
-            expect(datepicker._focusedDate).to.eql(new Date(2000, 1, 1));
+            expect(focusedDate()).to.eql(new Date(2000, 1, 1));
           });
 
           it('should focus previous month with pageup', function() {
             pageUp();
 
-            expect(datepicker._focusedDate).to.eql(new Date(1999, 11, 1));
+            expect(focusedDate()).to.eql(new Date(1999, 11, 1));
 
           });
 
           it('should focus next year with shift and pagedown', function() {
             pageDown('shift');
 
-            expect(datepicker._focusedDate).to.eql(new Date(2001, 0, 1));
+            expect(focusedDate()).to.eql(new Date(2001, 0, 1));
           });
 
           it('should focus previous year with shift and pageup', function() {
             pageUp('shift');
 
-            expect(datepicker._focusedDate).to.eql(new Date(1999, 0, 1));
+            expect(focusedDate()).to.eql(new Date(1999, 0, 1));
           });
 
           it('should scroll up when focus goes invisible', function(done) {

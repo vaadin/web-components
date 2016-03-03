@@ -33,6 +33,8 @@ Custom property | Description | Default
 `--vaadin-date-picker-today-color` | Text color for a month calendar today cell | `--accent-color`
 `--vaadin-date-picker-selected-color` | Text color for a month calendar selected cell | `--light-primary-color`
 `--vaadin-date-picker-selected-background` | Text color for a month calendar selected cell | `--default-primary-color`
+`--vaadin-date-picker-focused-color` | Text color for a month calendar focused cell | `--secondary-text-color`
+`--vaadin-date-picker-focused-background` | Text color for a month calendar focused cell | `--light-accent-color`
 `--vaadin-date-picker-today-selected-color` | Text color for a month calendar selected today cell | `--light-accent-color`
 `--vaadin-date-picker-header-background` | Background for the picker header | `--default-primary-color`
 `--vaadin-date-picker-footer-color` | Text color for the picker footer | `--default-primary-color`
@@ -144,7 +146,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="close" focused-date="[[_focusedDate]]"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -173,8 +175,6 @@ See paper-input-container documentation for styling the included input fields
           notify: true,
           observer: '_selectedDateChanged'
         },
-
-        _focusedDate: Date,
 
         /**
          * The value for this element.
@@ -306,19 +306,17 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _onOverlayOpened: function() {
-        if (this._selectedDate) {
-          this.$.overlay.scrollToDate(this._selectedDate);
-          this._focusedDate = null;
-        } else {
-          var initialPositionDate = this._parseDate(this.initialPosition) || new Date();
-          this.$.overlay.scrollToDate(initialPositionDate);
-        }
+        this.$.overlay.initialPosition = this._selectedDate || this._parseDate(this.initialPosition) || new Date();
+
         this.listen(window, 'scroll', '_onWindowScroll');
 
         // Checking if the browser supports webkitOverflowScrolling
         if (document.createElement('div').style.webkitOverflowScrolling === '') {
           this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
         }
+
+        // focus to enable keyboard navigation
+        this.$.overlay.focus();
       },
 
       // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -403,7 +401,7 @@ See paper-input-container documentation for styling the included input fields
        * Keyboard Navigation
        */
       _eventKey: function(e) {
-        var keys = ['down', 'up', 'right', 'left', 'enter', 'space', 'home', 'end', 'pageup', 'pagedown'];
+        var keys = ['down', 'up'];
 
         for (var i = 0; i < keys.length; i++) {
           var k = keys[i];
@@ -414,72 +412,17 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _onKeydown: function(e) {
-        var focus = this._currentlyFocusedDate();
-
         switch (this._eventKey(e)) {
-          case 'down':
-            if (this._opened) {
-              this._moveFocusByDays(7);
-            } else {
-              this._open();
-            }
-            break;
+          case 'down':    
           case 'up':
-            if (this._opened) {
-              this._moveFocusByDays(-7);
-            } else {
-              this._open();
+            // prevent scrolling the page with arrows
+            e.preventDefault();
+
+            if (!this._opened) {
+              this.open();
             }
-            break;
-          case 'right':
-            this._moveFocusByDays(1);
-            break;
-          case 'left':
-            this._moveFocusByDays(-1);
-            break;
-          case 'enter':
-            if (this._focusedDate) {
-              this._selectedDate = this._focusedDate;
-            }
-            this._close();
-            break;
-          case 'space':
-            if (this._formatISO(this._focusedDate) === this._formatISO(this._selectedDate)) {
-              this._selectedDate = null;
-            } else {
-              this._selectedDate = this._focusedDate;
-            }
-            break;
-          case 'home':
-            this._focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
-            break;
-          case 'end':
-            this._focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
-            break;
-          case 'pagedown':
-            this._moveFocusByMonths(e.shiftKey ? 12 : 1);
-            break;
-          case 'pageup':
-            this._moveFocusByMonths(e.shiftKey ? -12 : -1);
             break;
         }
-      },
-
-      _currentlyFocusedDate: function() {
-        return this._focusedDate || this._selectedDate ||
-          (this.initialPosition ? this._parseDate(this.initialPosition) : new Date());
-      },
-
-      _moveFocusByDays: function(days) {
-        var focus = this._currentlyFocusedDate();
-
-        this._focusedDate = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
-      },
-
-      _moveFocusByMonths: function(months) {
-        var focus = this._currentlyFocusedDate();
-
-        this._focusedDate = new Date(focus.getFullYear(), focus.getMonth() + months, focus.getDate());
       }
     });
   </script>
