@@ -42,6 +42,23 @@
         expect(spy.calledOnce).to.be.true;
       });
 
+      it('should open with open call', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          done();
+        });
+        datepicker.open();
+      });
+
+      it('should close with close call', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          datepicker.close();
+        });
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          done();
+        });
+        datepicker.open();
+      });
+
       it('should open on input tap', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
           done();
@@ -62,7 +79,7 @@
           expect(monthsEqual(spy.firstCall.args[0], new Date())).to.be.true;
           done();
         });
-        datepicker._open();
+        datepicker.open();
       });
 
       it('should scroll to initial position', function(done) {
@@ -74,7 +91,7 @@
           expect(spy.firstCall.args[0]).to.eql(initialPositionDate);
           done();
         });
-        datepicker._open();
+        datepicker.open();
       });
 
       it('should scroll to selected value by default', function(done) {
@@ -84,7 +101,7 @@
           expect(monthsEqual(spy.firstCall.args[0], new Date(2000, 1, 1))).to.be.true;
           done();
         });
-        datepicker._open();
+        datepicker.open();
       });
 
       it('should close on overlay date tap', function(done) {
@@ -97,7 +114,7 @@
             node: datepicker.$.overlay
           });
         });
-        datepicker._open();
+        datepicker.open();
       });
 
       it('should not have label defined by default', function() {
@@ -131,7 +148,7 @@
           expect(datepicker.$.clear.clientHeight).to.equal(0);
           done();
         });
-        datepicker._open();
+        datepicker.open();
       });
 
       it('should show clear icon', function(done) {
@@ -144,7 +161,7 @@
           }
           done();
         });
-        datepicker._open();
+        datepicker.open();
       });
 
       it('should update displayed value format according to locale', function(done) {
@@ -166,7 +183,7 @@
       describe('window scroll realign', function() {
 
         it('should realign on window scroll', function(done) {
-          datepicker._open();
+          datepicker.open();
           datepicker.addEventListener('iron-overlay-opened', function() {
             var spy = sinon.spy(datepicker, '_onWindowScroll');
             Polymer.Base.fire('scroll', {}, {node: window});
@@ -178,7 +195,7 @@
         });
 
         it('should not realign on year/month scroll', function(done) {
-          datepicker._open();
+          datepicker.open();
           datepicker.addEventListener('iron-overlay-opened', function() {
             var spy = sinon.spy(datepicker, '_onWindowScroll');
             datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;

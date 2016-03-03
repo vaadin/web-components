@@ -39,14 +39,14 @@
 
           datepicker.addEventListener('iron-overlay-opened', function() {
             expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('auto');
-            datepicker._close();
+            datepicker.close();
           });
 
           datepicker.addEventListener('iron-overlay-closed', function() {
             expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('touch');
             done();
           });
-          datepicker._open();
+          datepicker.open();
         });
       }
 
@@ -72,7 +72,7 @@
             done();
           });
           Polymer.Base.async(function() {
-            datepicker._open();
+            datepicker.open();
           });
         });
 
@@ -92,7 +92,7 @@
             expect(dropdown.horizontalAlign).to.equal('left');
             done();
           });
-          datepicker._open();
+          datepicker.open();
         });
 
         it('should align borrom/right', function(done) {
@@ -103,7 +103,7 @@
             expect(datepicker.$.dropdown.horizontalAlign).to.equal('right');
             done();
           });
-          datepicker._open();
+          datepicker.open();
         });
 
       });

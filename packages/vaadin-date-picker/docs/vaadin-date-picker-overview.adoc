@@ -9,6 +9,8 @@ layout: page
 
 The [vaadinelement]#vaadin-date-picker# element is a date selection field with a scrollable month calendar view.
 The picker opens up as a dropdown when the element gets clicked or tapped.
+There's also JavaScript APIs for opening and closing the picker: `datepicker.open()` and `datepicker.close()`.
+
 It has two display modes, full-screen or desktop.
 The display mode to use is determined according to the size of the screen.
 The user can navigate to a desired month by scrolling the list of years and months and then select a date.
