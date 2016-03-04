@@ -217,14 +217,29 @@ See paper-input-container documentation for styling the included input fields
         /**
          * The object used to localize this component.
          *
-         * i18n: Object
-         *  i18n.monthNames : an array with the full names of months starting with January
-         *  i18n.weekdaysShort : and array with the short names of days starting with Sunday
-         *  i18n.firstDayOfWeek : the first day of the week for the locale
-         *  i18n.today : translation of the 'Today' word
-         *  i18n.cancel : translation for the 'Cancel' word
-         *  i18n.formatDate : a function retuning the desired string representing the date.
-         *     The function receives a date as parameter
+         * `i18n.monthNames`
+         *
+         *  An array with the full names of months starting with January.
+         *
+         * `i18n.weekdays`
+         *
+         *  An array with the short names of days starting with Sunday.
+         *
+         * `i18n.firstDayOfWeek`
+         *
+         *  An integer indicating the first day of the week (0 = Sunday, 1 = Monday, etc.).
+         *
+         * `i18n.today`
+         *
+         *  Translation of the Today shortcut button text.
+         *
+         * `i18n.cancel`
+         *
+         *  Translation of the Cancel button text.
+         *
+         * `i18n.formatDate`
+         *
+         *  A function to format given `Date` object as `String`.
          */
         i18n: {
           type: Object,

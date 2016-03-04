@@ -25,10 +25,19 @@ document.getElementById('my-picker').i18n = {
                'heinäkuu','elokuu','syyskuu','lokakuu','marraskuu','joulukuu'],
   weekdaysShort: ['su','ma','ti','ke','to','pe','la'],
   formatDate: function(d) {
-      return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
+    return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
   }
 }
 ----
+
+* [propertyname]#i18n.monthNames# – An array of month names starting from January.
+* [propertyname]#i18n.weekdays# – An array of short weekday names starting from Sunday.
+* [propertyname]#i18n.firstDayOfWeek# – An integer indicating the first day of the week (0 = Sunday, 1 = Monday, etc.).
+* [propertyname]#i18n.today# – Translation of the Today shortcut button text.
+* [propertyname]#i18n.cancel# – Translation of the Cancel button text.
+* [propertyname]#i18n.formatDate# – A function to format given [classname]#Date# object as [classname]#String#.
+
+Once set, the [propertyname]#i18n# property affects how months and dates are displayed in the [vaadinelement]#vaadin-date-picker# dropdown as well as the language of the buttons in the element.
 
 
 == Initial Position
