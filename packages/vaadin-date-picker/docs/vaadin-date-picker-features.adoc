@@ -31,7 +31,7 @@ document.getElementById('my-picker').i18n = {
 ----
 
 * [propertyname]#i18n.monthNames# – An array of month names starting from January.
-* [propertyname]#i18n.weekdays# – An array of short weekday names starting from Sunday.
+* [propertyname]#i18n.weekdaysShort# – An array of short weekday names starting from Sunday.
 * [propertyname]#i18n.firstDayOfWeek# – An integer indicating the first day of the week (0 = Sunday, 1 = Monday, etc.).
 * [propertyname]#i18n.today# – Translation of the Today shortcut button text.
 * [propertyname]#i18n.cancel# – Translation of the Cancel button text.

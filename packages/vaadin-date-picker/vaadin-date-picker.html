@@ -147,7 +147,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" formatted="[[formatted]]" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -158,7 +158,7 @@ See paper-input-container documentation for styling the included input fields
 
       behaviors: [
         Polymer.IronFormElementBehavior,
-        Polymer.IronValidatableBehavior,
+        Polymer.IronValidatableBehavior
       ],
 
       properties: {
@@ -221,7 +221,7 @@ See paper-input-container documentation for styling the included input fields
          *
          *  An array with the full names of months starting with January.
          *
-         * `i18n.weekdays`
+         * `i18n.weekdaysShort`
          *
          *  An array with the short names of days starting with Sunday.
          *
@@ -251,11 +251,11 @@ See paper-input-container documentation for styling the included input fields
               today: 'today',
               cancel: 'cancel',
               formatDate: function(d) {
-                return this._formatUS(d);
+                return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
               }
             };
-         }
-       }
+          }
+        }
       },
 
       /**
@@ -287,21 +287,16 @@ See paper-input-container documentation for styling the included input fields
         return date;
       },
 
-      _formatUS: function(date) {
-        return date instanceof Date ?
-          [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('/') : '';
-      },
-
       _formatISO: function(date) {
         return date instanceof Date ?
           (new Date(date.getTime() - date.getTimezoneOffset() * 60000)).toISOString().split('T')[0] :
           '';
       },
 
-      _formatDisplayed: function(value) {
-        var fnc = this.i18n && typeof this.i18n.formatDate == 'function' ?
-          this.i18n.formatDate.bind(this) : this._formatUS;
-        return (this.formatted = fnc(typeof value == 'string' ? this._parseDate(value) : value));
+      _formatDisplayed: function(date, formatDate) {
+        if (date) {
+          return formatDate(date);
+        }
       },
 
       _selectedDateChanged: function(selectedDate) {
@@ -325,10 +320,6 @@ See paper-input-container documentation for styling the included input fields
           date.getDate() !== this._selectedDate.getDate()) {
           this._selectedDate = date;
         }
-      },
-
-      _localeReady: function(e) {
-        this._readyLocale = e.detail.locale;
       },
 
       _updateAlignmentAndPosition: function() {

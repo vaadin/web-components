@@ -78,10 +78,10 @@
 
     <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap">
-      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek, i18n)]]">
+      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek)]]">
         <div class="weekday">[[item]]</div>
       </template>
-      <template is="dom-repeat" items="[[_getDays(month, i18n.firstDayOfWeek, i18n)]]">
+      <template is="dom-repeat" items="[[_getDays(month, i18n.firstDayOfWeek)]]">
         <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
       </template>
     </div>
@@ -114,6 +114,7 @@
         focusedDate: Date,
 
         i18n: {
+          type: Object
         }
       },
 

@@ -239,7 +239,7 @@
     <div id="header" on-touchend="_preventDefault">
       <paper-input-container>
         <label>[[label]]</label>
-        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[formatted]]">
+        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
     </div>
@@ -306,15 +306,6 @@
         initialPosition: {
           type: Date,
           observer: '_initialPositionChanged'
-        },
-
-        /**
-         * Locale of this element used for formatting and naming of months and days.
-         * Must be a locale supported by [Moment.js](http://momentjs.com/),
-         * for example `en-gb`, `fi`, `es`, etc.
-         */
-        locale: {
-          type: String
         },
 
         _originDate: {
@@ -394,6 +385,12 @@
         }
       },
 
+      _formatDisplayed: function(date, formatDate) {
+        if (date) {
+          return formatDate(date);
+        }
+      },
+
       _scrollToCurrentMonth: function() {
         this._focusedDate = new Date();
         this.scrollToDate(new Date(), true);
@@ -435,7 +432,7 @@
         var initialPosition = this.$.scroller.position;
 
         var smoothScroll = function(timestamp) {
-          start = start ||  timestamp;
+          start = start || timestamp;
           var currentTime = timestamp - start;
 
           if (currentTime < duration) {
