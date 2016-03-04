@@ -81,9 +81,21 @@
     <demo-snippet>
       <template>
         <div class="layout horizontal around-justified">
-          <vaadin-date-picker label="Start"></vaadin-date-picker>
-          <vaadin-date-picker label="End"></vaadin-date-picker>
+          <vaadin-date-picker id="start" label="Start"></vaadin-date-picker>
+          <vaadin-date-picker id="end" label="End"></vaadin-date-picker>
         </div>
+        <script>
+          var start = document.querySelector('#start');
+          var end = document.querySelector('#end');
+          start.addEventListener('value-changed', function() {
+            // Open the end date picker with a delay to
+            // make it less confusing.
+            window.setTimeout(function() {
+              end.value = start.value;
+              end.open();
+            }, 500);
+          });
+        </script>
       </template>
     </demo-snippet>
 
