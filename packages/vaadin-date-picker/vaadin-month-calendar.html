@@ -62,6 +62,13 @@
         color: var(--vaadin-date-picker-today-selected-color, --light-accent-color);
       }
 
+      #monthGrid div[focused] {
+        color: var(--vaadin-date-picker-focused-color, --secondary-text-color);
+        background: var(--vaadin-date-picker-focused-background, --light-accent-color);
+        box-sizing: border-box;
+        border-radius: 2px;
+      }
+
       #monthGrid div[selected] {
         color: var(--vaadin-date-picker-selected-color, --light-primary-color);
         background: var(--vaadin-date-picker-selected-background, --default-primary-color);
@@ -76,7 +83,7 @@
         <div class="weekday">[[item]]</div>
       </template>
       <template is="dom-repeat" items="[[_getDays(month, _firstDayOfWeek)]]">
-        <div today$="[[_isToday(item)]]" selected$="[[_isSelected(item, selectedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
+        <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
       </template>
     </div>
   </template>
@@ -110,6 +117,11 @@
           type: Date,
           notify: true
         },
+
+        /**
+         * A `Date` object for the currently focused date.
+         */
+        focusedDate: Date,
 
         _monthNames: Array,
 
@@ -149,10 +161,6 @@
 
       _getDate: function(date) {
         return date ? date.getDate() : '';
-      },
-
-      _isSelected: function(date, selectedDate) {
-        return this._dateEquals(selectedDate, date);
       },
 
       _isToday: function(date) {

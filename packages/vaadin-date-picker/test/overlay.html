@@ -93,10 +93,10 @@
           expect(window.getComputedStyle(overlay.$.clear).display).to.equal('flex');
         });
 
-        it('should clear the value and fire a cancel on clear', function() {
+        it('should clear the value and fire a close on clear', function() {
           overlay.selectedDate = new Date();
           var spy = sinon.spy();
-          overlay.addEventListener('cancel', spy);
+          overlay.addEventListener('close', spy);
 
           tap(overlay.$.clear);
 
@@ -107,9 +107,9 @@
       });
 
       describe('footer', function() {
-        it('should fire cancel on cancel click', function() {
+        it('should fire close on cancel click', function() {
           var spy = sinon.spy();
-          overlay.addEventListener('cancel', spy);
+          overlay.addEventListener('close', spy);
           tap(overlay.$.cancelButton);
           expect(spy.calledOnce).to.be.true;
         });

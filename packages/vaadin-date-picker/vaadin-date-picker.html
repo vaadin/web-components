@@ -33,6 +33,8 @@ Custom property | Description | Default
 `--vaadin-date-picker-today-color` | Text color for a month calendar today cell | `--accent-color`
 `--vaadin-date-picker-selected-color` | Text color for a month calendar selected cell | `--light-primary-color`
 `--vaadin-date-picker-selected-background` | Text color for a month calendar selected cell | `--default-primary-color`
+`--vaadin-date-picker-focused-color` | Text color for a month calendar focused cell | `--secondary-text-color`
+`--vaadin-date-picker-focused-background` | Text color for a month calendar focused cell | `--light-accent-color`
 `--vaadin-date-picker-today-selected-color` | Text color for a month calendar selected today cell | `--light-accent-color`
 `--vaadin-date-picker-header-background` | Background for the picker header | `--default-primary-color`
 `--vaadin-date-picker-footer-color` | Text color for the picker footer | `--default-primary-color`
@@ -65,6 +67,7 @@ See paper-input-container documentation for styling the included input fields
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-locale-aware-behavior.html">
 
@@ -127,7 +130,7 @@ See paper-input-container documentation for styling the included input fields
       }
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="open">
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown">
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, _readyLocale)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
@@ -143,7 +146,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-cancel="close"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -303,18 +306,17 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _onOverlayOpened: function() {
-        if (this._selectedDate) {
-          this.$.overlay.scrollToDate(this._selectedDate);
-        } else {
-          var initialPositionDate = this._parseDate(this.initialPosition) || new Date();
-          this.$.overlay.scrollToDate(initialPositionDate);
-        }
+        this.$.overlay.initialPosition = this._selectedDate || this._parseDate(this.initialPosition) || new Date();
+
         this.listen(window, 'scroll', '_onWindowScroll');
 
         // Checking if the browser supports webkitOverflowScrolling
         if (document.createElement('div').style.webkitOverflowScrolling === '') {
           this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
         }
+
+        // focus to enable keyboard navigation
+        this.$.overlay.focus();
       },
 
       // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -393,8 +395,35 @@ See paper-input-container documentation for styling the included input fields
 
       _preventDefault: function(e) {
         e.preventDefault();
-      }
+      },
 
+      /**
+       * Keyboard Navigation
+       */
+      _eventKey: function(e) {
+        var keys = ['down', 'up'];
+
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
+            return k;
+          }
+        }
+      },
+
+      _onKeydown: function(e) {
+        switch (this._eventKey(e)) {
+          case 'down':    
+          case 'up':
+            // prevent scrolling the page with arrows
+            e.preventDefault();
+
+            if (!this._opened) {
+              this.open();
+            }
+            break;
+        }
+      }
     });
   </script>
 </dom-module>

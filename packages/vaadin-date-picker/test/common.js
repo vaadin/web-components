@@ -1,3 +1,5 @@
+var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
 function tap(element) {
   Polymer.Base.fire('tap', {}, {
     bubbles: true,

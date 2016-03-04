@@ -33,11 +33,12 @@
     "paper-styles": "polymerelements/paper-styles#^1.1.3",
     "moment": "^2.11.2",
     "iron-media-query": "polymerelements/iron-media-query#^1.0.8",
-    "paper-ripple": "polymerelements/paper-ripple#^1.0.5"
+    "paper-ripple": "polymerelements/paper-ripple#^1.0.5",
+    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.1.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.1.0",
-    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
+    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.1.5",
     "iron-component-page": "polymerelements/iron-component-page#~1.1.0",
     "iron-form": "PolymerElements/iron-form#^1.0.15",
     "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.1.1",
