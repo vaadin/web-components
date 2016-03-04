@@ -10,7 +10,6 @@
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
-<link rel="import" href="vaadin-locale-aware-behavior.html">
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -240,7 +239,7 @@
     <div id="header" on-touchend="_preventDefault">
       <paper-input-container>
         <label>[[label]]</label>
-        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, locale)]]">
+        <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
     </div>
@@ -254,7 +253,7 @@
       <div id="fade"></div>
       <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScroll" on-track="_track" item-height="250" buffer-size="6">
         <template>
-          <vaadin-month-calendar locale="[[locale]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[_focusedDate]]"></vaadin-month-calendar>
+          <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[_focusedDate]]"></vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScroll" item-height="150" buffer-size="10">
@@ -267,10 +266,10 @@
     <div id="footer" on-touchend="_preventDefault">
       <paper-button id="todayButton" on-tap="_scrollToCurrentMonth">
         <iron-icon icon='today'></iron-icon>
-        Today
+        [[i18n.today]]
       </paper-button>
       <paper-button id="cancelButton" on-tap="_close">
-        Cancel
+        [[i18n.cancel]]
       </paper-button>
     </div>
 
@@ -279,10 +278,6 @@
   <script>
     Polymer({
       is: 'vaadin-date-picker-overlay',
-
-      behaviors: [
-        vaadin.elements.datepicker.LocaleAwareBehavior
-      ],
 
       listeners: {
         'keydown': '_onKeydown'
@@ -313,15 +308,6 @@
           observer: '_initialPositionChanged'
         },
 
-        /**
-         * Locale of this element used for formatting and naming of months and days.
-         * Must be a locale supported by [Moment.js](http://momentjs.com/),
-         * for example `en-gb`, `fi`, `es`, etc.
-         */
-        locale: {
-          type: String
-        },
-
         _originDate: {
           value: new Date()
         },
@@ -336,6 +322,10 @@
 
         _yearScrollerWidth: {
           value: 50
+        },
+
+        i18n: {
+          type: Object
         }
       },
 
@@ -395,6 +385,12 @@
         }
       },
 
+      _formatDisplayed: function(date, formatDate) {
+        if (date) {
+          return formatDate(date);
+        }
+      },
+
       _scrollToCurrentMonth: function() {
         this._focusedDate = new Date();
         this.scrollToDate(new Date(), true);
@@ -436,7 +432,7 @@
         var initialPosition = this.$.scroller.position;
 
         var smoothScroll = function(timestamp) {
-          start = start ||  timestamp;
+          start = start || timestamp;
           var currentTime = timestamp - start;
 
           if (currentTime < duration) {

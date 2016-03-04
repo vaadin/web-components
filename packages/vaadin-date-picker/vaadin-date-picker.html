@@ -69,7 +69,6 @@ See paper-input-container documentation for styling the included input fields
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
-<link rel="import" href="vaadin-locale-aware-behavior.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -132,7 +131,9 @@ See paper-input-container documentation for styling the included input fields
 
     <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="1" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown">
       <label id="label">[[label]]</label>
-      <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, _readyLocale)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
+      <input id="input" is="iron-input" autocomplete="off"
+        bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="[[invalid]]" name$="[[name]]"
+        required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
       <div suffix id="clear" on-tap="_clear" hidden$="[[_hideClearIcon(value, opened)]]">
         <iron-icon icon="clear"></iron-icon>
@@ -146,7 +147,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" fullscreen$=[[_fullscreen]] label=[[label]] locale="[[_readyLocale]]" on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -157,13 +158,8 @@ See paper-input-container documentation for styling the included input fields
 
       behaviors: [
         Polymer.IronFormElementBehavior,
-        Polymer.IronValidatableBehavior,
-        vaadin.elements.datepicker.LocaleAwareBehavior
+        Polymer.IronValidatableBehavior
       ],
-
-      listeners: {
-        'locale-ready': '_localeReady'
-      },
 
       properties: {
 
@@ -203,9 +199,6 @@ See paper-input-container documentation for styling the included input fields
          */
         label: String,
 
-        // Property used for data-binding a locale that is ready to be used.
-        _readyLocale: String,
-
         _opened: Boolean,
 
         _fullscreen: {
@@ -219,7 +212,50 @@ See paper-input-container documentation for styling the included input fields
 
         // An array of ancestor elements whose -webkit-overflow-scrolling is forced from value
         // 'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.
-        _touchPrevented: Array
+        _touchPrevented: Array,
+
+        /**
+         * The object used to localize this component.
+         *
+         * `i18n.monthNames`
+         *
+         *  An array with the full names of months starting with January.
+         *
+         * `i18n.weekdaysShort`
+         *
+         *  An array with the short names of days starting with Sunday.
+         *
+         * `i18n.firstDayOfWeek`
+         *
+         *  An integer indicating the first day of the week (0 = Sunday, 1 = Monday, etc.).
+         *
+         * `i18n.today`
+         *
+         *  Translation of the Today shortcut button text.
+         *
+         * `i18n.cancel`
+         *
+         *  Translation of the Cancel button text.
+         *
+         * `i18n.formatDate`
+         *
+         *  A function to format given `Date` object as `String`.
+         */
+        i18n: {
+          type: Object,
+          value: function() {
+            return {
+              monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+              weekdaysShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+              firstDayOfWeek: 0,
+              today: 'today',
+              cancel: 'cancel',
+              formatDate: function(d) {
+                return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+              }
+            };
+          }
+        }
       },
 
       /**
@@ -257,6 +293,12 @@ See paper-input-container documentation for styling the included input fields
           '';
       },
 
+      _formatDisplayed: function(date, formatDate) {
+        if (date) {
+          return formatDate(date);
+        }
+      },
+
       _selectedDateChanged: function(selectedDate) {
         this.value = this._formatISO(selectedDate);
       },
@@ -272,17 +314,12 @@ See paper-input-container documentation for styling the included input fields
           this.value = oldValue;
           return;
         }
-
         if (!(this._selectedDate instanceof Date) ||
           date.getFullYear() !== this._selectedDate.getFullYear() ||
           date.getMonth() !== this._selectedDate.getMonth() ||
           date.getDate() !== this._selectedDate.getDate()) {
           this._selectedDate = date;
         }
-      },
-
-      _localeReady: function(e) {
-        this._readyLocale = e.detail.locale;
       },
 
       _updateAlignmentAndPosition: function() {
@@ -413,7 +450,7 @@ See paper-input-container documentation for styling the included input fields
 
       _onKeydown: function(e) {
         switch (this._eventKey(e)) {
-          case 'down':    
+          case 'down':
           case 'up':
             // prevent scrolling the page with arrows
             e.preventDefault();

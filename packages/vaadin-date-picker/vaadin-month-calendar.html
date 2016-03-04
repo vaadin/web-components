@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-styles/typography.html">
-<link rel="import" href="vaadin-locale-aware-behavior.html">
 
 <dom-module id="vaadin-month-calendar">
   <template>
@@ -77,12 +76,12 @@
       }
     </style>
 
-    <div id="title">[[_getTitle(month, _monthNames)]]</div>
+    <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap">
-      <template is="dom-repeat" items="[[_getWeekDayNames(_weekDayNames, _firstDayOfWeek)]]">
+      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek)]]">
         <div class="weekday">[[item]]</div>
       </template>
-      <template is="dom-repeat" items="[[_getDays(month, _firstDayOfWeek)]]">
+      <template is="dom-repeat" items="[[_getDays(month, i18n.firstDayOfWeek)]]">
         <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
       </template>
     </div>
@@ -91,16 +90,7 @@
     Polymer({
       is: 'vaadin-month-calendar',
 
-      behaviors: [
-        vaadin.elements.datepicker.LocaleAwareBehavior
-      ],
-
-      listeners: {
-        'locale-ready': '_localeReady'
-      },
-
       properties: {
-
         /**
          * A `Date` object defining the month to be displayed. Only year and
          * month properties are actually used.
@@ -123,18 +113,9 @@
          */
         focusedDate: Date,
 
-        _monthNames: Array,
-
-        _weekDayNames: Array,
-
-        _firstDayOfWeek: Number
-      },
-
-      _localeReady: function(e) {
-        var locale = e.detail.locale;
-        this._weekDayNames = moment.localeData(locale)._weekdaysShort;
-        this._monthNames = moment.localeData(locale)._months;
-        this._firstDayOfWeek = moment.localeData(locale)._week.dow;
+        i18n: {
+          type: Object
+        }
       },
 
       _getTitle: function(month, monthNames) {
@@ -172,7 +153,7 @@
         var date = new Date(this.month.getFullYear(), this.month.getMonth(), 1);
 
         // Rewind to first day of the week.
-        while (date.getDay() !== this._firstDayOfWeek) {
+        while (date.getDay() !== this.i18n.firstDayOfWeek) {
           this._dateAdd(date, -1);
         }
 
