@@ -265,6 +265,8 @@
               return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
             }
           });
+          datepicker.set('i18n.today', 'Tänään');
+          datepicker.set('i18n.cancel', 'Peruuta');
           datepicker.async(done);
         });
 
@@ -280,6 +282,11 @@
         it('should reflect value in overlay label', function() {
           datepicker.value = '2000-02-01';
           expect(datepicker.$.overlay.$.input.value).to.equal('1.2.2000');
+        });
+
+        it('should display buttons in correct locale', function() {
+          expect(datepicker.$.overlay.$.todayButton.textContent.trim()).to.equal('Tänään');
+          expect(datepicker.$.overlay.$.cancelButton.textContent.trim()).to.equal('Peruuta');
         });
       });
 
