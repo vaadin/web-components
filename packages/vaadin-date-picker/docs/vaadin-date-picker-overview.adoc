@@ -37,7 +37,7 @@ Shift+PageUp: a year backward +
 Shift+PageDown: a year forward
 
 The current alpha version has a limited set of features.
-Future versions will address issues such as date ranges and keyboard input.
+Future versions will address issues such as date ranges.
 
 [[figure.vaadin-date-picker.overview]]
 .A screenshot of [vaadinelement]#vaadin-date-picker#
