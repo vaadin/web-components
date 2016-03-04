@@ -149,7 +149,10 @@
 
       _getDays: function() {
         // First day of the month (at midnight).
-        var date = new Date(this.month.getFullYear(), this.month.getMonth(), 1);
+        var date = new Date(0, 0);
+        date.setFullYear(this.month.getFullYear());
+        date.setMonth(this.month.getMonth());
+        date.setDate(1);
 
         // Rewind to first day of the week.
         while (date.getDay() !== this.i18n.firstDayOfWeek) {
@@ -160,7 +163,7 @@
         var startMonth = date.getMonth();
         var targetMonth = this.month.getMonth();
         while (date.getMonth() === targetMonth || date.getMonth() === startMonth) {
-          days.push(date.getMonth() === targetMonth ? new Date(date) : null);
+          days.push(date.getMonth() === targetMonth ? new Date(date.getTime()) : null);
 
           // Advance to next day.
           this._dateAdd(date, 1);

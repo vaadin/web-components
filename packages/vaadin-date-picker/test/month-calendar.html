@@ -126,6 +126,17 @@
         expect(monthCalendar.selectedDate.getDate()).to.equal(10);
       });
 
+      it('should work with sub 100 years', function(done) {
+        var month = new Date(0, 0);
+        month.setFullYear(99);
+        monthCalendar.month = month;
+        monthCalendar.async(function() {
+          var date = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)').date;
+          expect(date.getFullYear()).to.equal(month.getFullYear());
+          done();
+        });
+      });
+
       describe('i18n', function() {
         beforeEach(function(done) {
           monthCalendar.i18n = {
