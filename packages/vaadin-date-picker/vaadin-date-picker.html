@@ -306,7 +306,9 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _onOverlayOpened: function() {
-        this.$.overlay.initialPosition = this._selectedDate || this._parseDate(this.initialPosition) || new Date();
+        this.$.overlay.initialPosition = this._selectedDate ||
+                                         this.$.overlay.initialPosition ||
+                                         this._parseDate(this.initialPosition) || new Date();
 
         this.listen(window, 'scroll', '_onWindowScroll');
 
@@ -413,7 +415,7 @@ See paper-input-container documentation for styling the included input fields
 
       _onKeydown: function(e) {
         switch (this._eventKey(e)) {
-          case 'down':    
+          case 'down':
           case 'up':
             // prevent scrolling the page with arrows
             e.preventDefault();

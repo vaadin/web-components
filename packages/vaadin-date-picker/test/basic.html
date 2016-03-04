@@ -94,6 +94,25 @@
         datepicker.open();
       });
 
+      it('should remember the original initial position on reopen', function(done) {
+        datepicker.initialPosition = null;
+
+        datepicker.open();
+
+        datepicker.async(function() {
+          var initialPosition = datepicker.$.overlay.initialPosition;
+
+          datepicker.close();
+          datepicker.open();
+
+          // wait needed to new Date() have a few milliseconds difference from previous open()
+          datepicker.async(function() {
+            expect(datepicker.$.overlay.initialPosition).to.eql(initialPosition);
+            done();
+          }, 1);
+        }, 1);
+      });
+
       it('should scroll to selected value by default', function(done) {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         datepicker.value = '2000-02-01';
