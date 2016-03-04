@@ -50,11 +50,11 @@
     <h4>Changing the locale</h4>
     <demo-snippet>
       <template>
-        <vaadin-date-picker label="Syntymäpäivä" locale="fi" value="1980-08-14">
+        <vaadin-date-picker label="Syntymäpäivä" id="finnish" value="1980-08-14">
         </vaadin-date-picker>
         <script>
           HTMLImports.whenReady(function() {
-            var datepicker = document.querySelector('vaadin-date-picker[locale]');
+            var datepicker = document.querySelector('vaadin-date-picker#finnish');
             datepicker.i18n = {
               today: 'tänään',
               cancel: 'peruuta',
