@@ -79,11 +79,6 @@
           expect(window.getComputedStyle(overlay.$.header).display).to.equal('none');
         });
 
-        it('should reflect value in label', function() {
-          overlay.selectedDate = new Date(2000, 1, 1);
-          expect(overlay.$.input.value).to.equal('02/01/2000');
-        });
-
         it('should not show clear button if not value is set', function() {
           expect(window.getComputedStyle(overlay.$.clear).display).to.equal('none');
         });

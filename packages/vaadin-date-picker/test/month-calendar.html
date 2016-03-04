@@ -25,6 +25,13 @@
 
       beforeEach(function(done) {
         monthCalendar = fixture('vaadin-month-calendar');
+
+        // Need to internationalise the component with default values.
+        monthCalendar.i18n = {
+          monthNames: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
+          weekdaysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+          firstDayOfWeek: 0
+        };
         monthCalendar.month = new Date(2016, 1, 1); // Feb 2016
 
         valueChangedSpy = sinon.spy();
@@ -62,7 +69,7 @@
       });
 
       it('should render days in correct order by first day of week', function(done) {
-        monthCalendar._firstDayOfWeek = 1; // Start from Monday.
+        monthCalendar.set('i18n.firstDayOfWeek', 1); // Start from Monday.
 
         Polymer.Base.async(function() {
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
@@ -70,26 +77,6 @@
             return weekday.textContent;
           });
           expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
-          done();
-        });
-      });
-
-      it('should render days in correct locale', function(done) {
-        monthCalendar.locale = 'fi'; // Start from Monday with Finnish day names.
-        waitUntilLocaleAvailable('fi', function() {
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
-          var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
-            return weekday.textContent;
-          });
-          expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
-          done();
-        });
-      });
-
-      it('should render month name in correct locale', function(done) {
-        monthCalendar.locale = 'fi';
-        waitUntilLocaleAvailable('fi', function() {
-          expect(monthCalendar.$.title.textContent).to.equal('helmikuu 2016');
           done();
         });
       });
@@ -138,6 +125,31 @@
         expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
         expect(monthCalendar.selectedDate.getDate()).to.equal(10);
       });
+
+      describe('i18n', function() {
+        beforeEach(function(done) {
+          monthCalendar.i18n = {
+            monthNames:
+              'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
+            weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
+            firstDayOfWeek: 1
+          };
+          Polymer.Base.async(done);
+        });
+
+        it('should render days in correct locale', function() {
+          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdayTitles = Array.prototype.map.call(weekdays, function(weekday) {
+            return weekday.textContent;
+          });
+          expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
+        });
+
+        it('should render month name in correct locale', function() {
+          expect(monthCalendar.$.title.textContent).to.equal('helmikuu 2016');
+        });
+      });
+
     });
   </script>
 

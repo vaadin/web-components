@@ -9,19 +9,27 @@ layout: page
 
 == Localization
 
-The [vaadinelement]#vaadin-date-picker# element has built-in support for multiple locales.
-
-You can adjust the element to a specific locale with the [propertyname]#locale# property.
-The value should be a locale identifier given in the BCP 47 format, such as `en-gb`, `fi`, or `es`.
-The date picker supports all the locales supported by the link:http://momentjs.com/[moment.js] library. Please refer to its website for the complete list of supported locales.
-
-Once set, the locale affects how months and dates are displayed in the [vaadinelement]#vaadin-date-picker# dropdown.
-
+The [vaadinelement]#vaadin-date-picker# element can be localized through the [propertyname]#i18n# object.
 
 [source,html]
 ----
-<vaadin-date-picker locale="fi"></vaadin-date-picker>
+<vaadin-date-picker id='my-picker' label="Birthday"></vaadin-date-picker>
 ----
+[source,javascript]
+----
+document.getElementById('my-picker').i18n = {
+  today: 'tänään',
+  cancel: 'peruuta',
+  firstDayOfWeek: 1,
+  monthNames: ['tammikuu','helmikuu','maaliskuu','huhtikuu','toukokuu','kesäkuu',
+               'heinäkuu','elokuu','syyskuu','lokakuu','marraskuu','joulukuu'],
+  weekdaysShort: ['su','ma','ti','ke','to','pe','la'],
+  formatDate: function(d) {
+      return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
+  }
+}
+----
+
 
 == Initial Position
 
