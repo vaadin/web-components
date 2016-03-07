@@ -333,10 +333,12 @@ Custom property | Description | Default
 
     _onDragover: function(event) {
       event.preventDefault();
-      if (!this.dragover && !this.nodrop) {
+      var validated = (this.maxFiles === 0 || this.files.length < this.maxFiles);
+      if (!this.dragover && !this.nodrop && validated) {
         this._dragRippleAction('down', event);
         this.dragover = true;
-      } else if (this.nodrop) {
+        event.dataTransfer.dropEffect = 'copy';
+      } else if (this.nodrop || !validated) {
         event.dataTransfer.dropEffect = 'none';
       }
     },
