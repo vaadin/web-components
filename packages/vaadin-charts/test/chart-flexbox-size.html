@@ -60,7 +60,7 @@
         <div class="box"
              style="background-color:#d1e87b; display: -ms-flexbox; display: -webkit-flex; display:flex; -ms-flex: 1; -webkit-flex: 1;  flex:1; ">
             <vaadin-line-chart id="line" style="-ms-flex: 1;  -webkit-flex: 1; flex:1; ">
-                <title>People rocking</title>
+                <chart-title>People rocking</chart-title>
                 <data-series name="Persons">
                     <data>20,25,30,40,50,65,80</data>
                 </data-series>
@@ -72,7 +72,7 @@
         <div class="box"
              style="background-color:#f59694;display: -ms-flexbox; display: -webkit-flex; display:flex; -ms-flex: 1; -webkit-flex: 1;  flex:1;">
             <vaadin-pie-chart id="pie" class="box">
-                <title>Browser market shares at a specific website, 2010</title>
+                <chart-title>Browser market shares at a specific website, 2010</chart-title>
                 <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
                 </tooltip>
                 <plot-options>
@@ -94,12 +94,12 @@
     <div class="box"
          style="background-color:#acf6e7; display: -ms-flexbox; display: -webkit-flex; display:flex; -ms-flex: 1; -webkit-flex: 1;  flex:1;">
         <vaadin-column-chart id="column" style="-ms-flex: 1; -webkit-flex: 1;  flex:1; ">
-            <title>Stacked column chart</title>
+            <chart-title>Stacked column chart</chart-title>
             <x-axis>
                 <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
             </x-axis>
             <y-axis allow-decimals="false" min="0">
-                <title>Number of fruits</title>
+                <chart-title>Number of fruits</chart-title>
                 <stack-labels enabled="true"></stack-labels>
             </y-axis>
             <tooltip

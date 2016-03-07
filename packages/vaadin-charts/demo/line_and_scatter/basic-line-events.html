@@ -2,7 +2,7 @@
     <template>
         <vaadin-line-chart id="basicLineEvents" on-chart-click="chartClickListener"
                  on-point-click="pointClickListener">
-            <title>Average Monthly Temperature and Rainfall in Tokyo</title>
+            <chart-title>Average Monthly Temperature and Rainfall in Tokyo</chart-title>
             <subtitle>Source: WorldClimate.com</subtitle>
 
             <x-axis>
@@ -10,17 +10,17 @@
             </x-axis>
 
             <y-axis>
-                <title>
+                <chart-title>
                     <text>Temperature</text>
-                    <style color="#EC6464"></style>
-                </title>
+                    <chart-style color="#EC6464"></chart-style>
+                </chart-title>
             </y-axis>
 
             <y-axis opposite="true">
-                <title>
+                <chart-title>
                     <text>Rainfall</text>
                     <style color="#3090F0"></style>
-                </title>
+                </chart-title>
             </y-axis>
 
             <tooltip

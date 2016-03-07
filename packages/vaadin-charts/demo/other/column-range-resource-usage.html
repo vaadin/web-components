@@ -1,10 +1,10 @@
 <vaadin-columnrange-chart id="column-range-resource-usage">
     <chart inverted="true"></chart>
-    <title>Resource usage</title>
+    <chart-title>Resource usage</chart-title>
     <x-axis>
         <categories>Printer, Coffee machine</categories>
     </x-axis>
-    <y-axis type="datetime"><title>Time</title></y-axis>
+    <y-axis type="datetime"><chart-title>Time</chart-title></y-axis>
     <tooltip
             formatter="function () {return this.series.name +': '+ Highcharts.dateFormat('%H:%M', this.point.low) + ' - ' + Highcharts.dateFormat('%H:%M', this.point.high)}"></tooltip>
     <plot-options>

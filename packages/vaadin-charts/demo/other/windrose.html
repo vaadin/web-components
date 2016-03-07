@@ -1,6 +1,6 @@
 <vaadin-column-chart id="windrose">
     <chart polar="true"></chart>
-    <title>Wind rose for South Shore Met Station, Oregon</title>
+    <chart-title>Wind rose for South Shore Met Station, Oregon</chart-title>
     <subtitle>Source: or.water.usgs.gov</subtitle>
     <pane size="85%"></pane>
     <legend align="right" vertical-align="top" y="100" layout="vertical">
@@ -9,7 +9,7 @@
         <categories>N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW</categories>
     </x-axis>
     <y-axis min="0" end-on-tick="false" show-last-label="true" reversed-stacks="false">
-        <title>Frequency (%)</title>
+        <chart-title>Frequency (%)</chart-title>
         <labels formatter="function () {return this.value + '%';}"></labels>
     </y-axis>
     <tooltip value-suffix="%"></tooltip>

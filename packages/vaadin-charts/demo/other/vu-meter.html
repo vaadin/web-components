@@ -1,17 +1,17 @@
 <vaadin-gauge-chart id="vu-meter">
     <chart plot-border-width="1" height="200" plot-background-color="#FFF4C6"></chart>
-    <title>VU meter</title>
+    <chart-title>VU meter</chart-title>
     <pane start-angle="-45" end-angle="45" center='["25%", "145%"]' size="300" background="null"></pane>
     <pane start-angle="-45" end-angle="45" center='["75%", "145%"]' size="300" background="null"></pane>
     <y-axis min="-20" max="6" minor-tick-position="outside" tick-position="outside" pane="0">
         <labels rotation="auto" distance="20"></labels>
         <plot-bands from="0" to="6" color="#C02316" inner-radius="100%" outer-radius="105%" pane="0"></plot-bands>
-        <title y="-40">Channel A</title>
+        <chart-title y="-40">Channel A</chart-title>
     </y-axis>
     <y-axis min="-20" max="6" minor-tick-position="outside" tick-position="outside" pane="1">
         <labels rotation="auto" distance="20"></labels>
         <plot-bands from="0" to="6" color="#C02316" inner-radius="100%" outer-radius="105%" pane="1"></plot-bands>
-        <title y="-40">Channel B</title>
+        <chart-title y="-40">Channel B</chart-title>
     </y-axis>
     <plot-options>
         <gauge>
