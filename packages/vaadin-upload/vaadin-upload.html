@@ -138,7 +138,7 @@ Custom property | Description | Default
     <div id="dropLabel" hidden$="[[nodrop]]">
       <content select=".drop-label">
         <iron-icon icon="file-upload"></iron-icon>
-        Drop files here...
+        [[i18n.dropFilesHere]]
       </content>
     </div>
     <template id="defaultFileTemplate">
@@ -149,8 +149,8 @@ Custom property | Description | Default
     </div>
     <content></content>
     <div id="buttons">
-      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">Add File(s)</paper-button>
-      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">Cancel all</paper-button>
+      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[i18n.addFiles]]</paper-button>
+      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
     </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
     <paper-ripple id="dragRipple" noink></paper-ripple>
@@ -280,6 +280,70 @@ Custom property | Description | Default
         value: false,
         observer: '_dragoverValidChanged'
       }
+
+      i18n: {
+        type: Object,
+        value: function() {
+          return {
+            dropFilesHere: 'Drop files here...',
+            addFile: 'Add File',
+            addFiles: 'Add Files',
+            cancel: 'Cancel',
+            cancelAll: 'Cancel All',
+            error: {
+              tooManyFiles: 'Too Many Files.',
+              fileIsTooBig: 'File is Too Big.',
+              incorrectFileType: 'Incorrect File Type.'
+            },
+            uploading: {
+              status: {
+                connecting: 'Connecting...',
+                stalled: 'Stalled.',
+                processing: 'Processing File...'
+              },
+              error: {
+                serverUnavailable: 'Server Unavailable',
+                unexpectedServerError: 'Unexpected Server Error',
+                forbidden: 'Forbidden'
+              }
+            },
+            units: {
+              size: [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ],
+              time: [
+                { one: 'second', many: 'seconds' },
+                { one: 'minute', many: 'minutes' },
+                { one: 'hour', many: 'hours' },
+                { one: 'day', many: 'days' }
+              ]
+            }
+          };
+        }
+      },
+
+      _pluralize: {
+        type: Function,
+        computed: '_getCallbackFn(i18n.*, "pluralize")'
+      },
+
+      _valueWithUnits: {
+        type: Function,
+        computed: '_getCallbackFn(i18n.*, "valueWithUnits")'
+      },
+
+      _formatSize: {
+        type: Function,
+        computed: '_getCallbackFn(i18n.*, "formatSize")'
+      },
+
+      _formatTime: {
+        type: Function,
+        computed: '_getCallbackFn(i18n.*, "formatTime")'
+      },
+
+      _formatFileProgress: {
+        type: Function,
+        computed: '_getCallbackFn(i18n.*, "formatFileProgress")'
+      }
     },
 
     listeners: {
@@ -292,6 +356,51 @@ Custom property | Description | Default
 
     attached: function() {
       this._templatizeFileList();
+    },
+
+    _getCallbackFn: function(changeRecord, callbackName) {
+      var defaultCallbackName = '_default' + callbackName.charAt(0).toUpperCase() + callbackName.slice(1);
+      return this.get(callbackName, changeRecord.base) || this[defaultCallbackName];
+    },
+
+    _defaultPluralize: function(value, units) {
+      return (value === 1) ? units.one : units.many;
+    },
+
+    _defaultValueWithUnits: function(value, units) {
+      return value + ' ' + (typeof units === 'string' ? units : this._pluralize(value, units));
+    },
+
+    _defaultFormatSize: function(bytes) {
+      var units = Math.floor(Math.round(Math.log(bytes + 1) / Math.log(10) * 1000) / 1000 / 3);
+      var divisor = Math.pow(10, units * 3);
+      var sizeInUnits = Math.round(bytes / divisor * 10) / 10;
+      return this._valueWithUnits(sizeInUnits, this.i18n.units.size[units]);
+    },
+
+    _defaultFormatTime: function(seconds) {
+      // Convert time in seconds to [S, M, H, D];
+      var time = seconds;
+      var timeValues = new Array(4);
+      timeValues[0] = time % 60; time = Math.floor(time / 60);
+      timeValues[1] = time % 60; time = Math.floor(time / 60);
+      timeValues[2] = time % 24; time = Math.floor(time / 24);
+      timeValues[3] = time;
+
+      // Iterate through [S, M, H, D] collecting non-zero values with units
+      var timeParts = [];
+      for (var i=0; i < timeValues.length; i++) {
+        if (timeValues[i]) {
+          timeParts.unshift(this._valueWithUnits(timeValues[i], this.i18n.units.time[i]))
+        }
+      }
+
+      return timeParts.join(' ');
+    },
+
+    _defaultFormatFileProgress: function(file) {
+      return file.totalStr + ': ' + file.progress + '%' +
+          (file.loaded > 0 ? ' (about ' + file.remainingStr + ' remaining)' : '');
     },
 
     _maxFilesAdded: function() {
@@ -399,14 +508,15 @@ Custom property | Description | Default
       }
     },
 
-    _setStatus: function(file, total, done, elapsed, progress) {
-      file.remaining = 1 + ~~(elapsed * (100 / progress - 1));
+    _setStatus: function(file, total, loaded, elapsed, progress) {
+      file.elapsed = elapsed;
+      file.elapsedStr = this._formatTime(file.elapsed);
+      file.remaining = Math.ceil(elapsed * ((total + 1)/ (loaded + 1) - 1));
+      file.remainingStr = this._formatTime(file.remaining);
       file.speed = ~~(total / elapsed / 1024);
-      file.totalStr = total > (1024 * 1024) ?
-        ((~~(total / 1024 / 1024 * 10) / 10) + ' MB') : (~~(total / 1024) + ' KB');
-      file.doneStr = done > (1024 * 1024) ?
-        ((~~(done / 1024 / 1024 * 10) / 10) + ' MB') : (~~(done / 1024) + ' KB');
-      file.status = file.totalStr + ' (' + file.progress + '%) about ' + file.remaining + ' seconds remaining.';
+      file.totalStr = this._formatSize(total);
+      file.loadedStr = this._formatSize(loaded);
+      file.status = this._formatFileProgress(file);
     },
 
     _uploadFile: function(file) {
@@ -424,22 +534,22 @@ Custom property | Description | Default
 
         last = Date.now();
         var elapsed = (last - ini) / 1000;
-        var done = e.loaded, total = e.total, progress = ~~(done / total * 100);
+        var loaded = e.loaded, total = e.total, progress = ~~(loaded / total * 100);
 
-        file.loaded = done;
+        file.loaded = loaded;
         file.progress = progress;
-        file.indeterminate = done <= 0 || done >= total, true;
+        file.indeterminate = loaded <= 0 || loaded >= total, true;
         if (file.error) {
           file.indeterminate = file.status = undefined;
         } else if (progress < 100) {
-          this._setStatus(file, total, done, elapsed, progress);
+          this._setStatus(file, total, loaded, elapsed, progress);
           stalledId = setTimeout(function() {
-            file.status = 'Stalled.';
+            file.status = this.i18n.uploading.status.stalled;
             this._notifyFileChanges(file);
           }.bind(this), 2000);
         } else {
-          file.doneStr = file.totalStr;
-          file.status = 'Processing file...';
+          file.loadedStr = file.totalStr;
+          file.status = this.i18n.uploading.status.processing;
           file.uploading = false;
         }
 
@@ -465,11 +575,11 @@ Custom property | Description | Default
             return;
           }
           if (xhr.status === 0) {
-            file.error = 'Server Unavailable';
+            file.error = this.i18n.uploading.error.serverUnavailable;
           } else if (xhr.status > 500) {
-            file.error = 'Unexpected Server Error';
+            file.error = this.i18n.uploading.error.unexpectedServerError;
           } else if (xhr.status > 400) {
-            file.error = 'Forbidden';
+            file.error = this.i18n.uploading.error.forbidden;
           }
 
           file.complete = !file.error;
@@ -497,7 +607,7 @@ Custom property | Description | Default
         return;
       }
 
-      file.status = 'Connecting...';
+      file.status = this.i18n.uploading.status.connecting;
       file.uploading = file.indeterminate = true;
       file.abort = file.error = undefined;
       this.fire('upload-start', {file: file, xhr: xhr});
@@ -543,18 +653,18 @@ Custom property | Description | Default
      */
     _addFile: function(file) {
       if (this._maxFilesAdded()) {
-        this.fire('file-reject', {file: file, error: 'Too many files.'});
+        this.fire('file-reject', {file: file, error: this.i18n.error.tooManyFiles});
         return;
       }
       if (this.maxFileSize >= 0 && file.size > this.maxFileSize) {
-        this.fire('file-reject', {file: file, error: 'File is too big.'});
+        this.fire('file-reject', {file: file, error: this.i18n.error.fileIsTooBig});
         return;
       }
       var mimeType = file.type ? file.type.match(/^[^\/]*\//)[0] : null;
       var fileType = file.name.match(/\.[^\.]*$|$/)[0];
       var re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace('/*', '/.*') + ')$');
       if (this.accept && !(re.test(mimeType) || re.test(fileType))) {
-        this.fire('file-reject', {file: file, error: 'Incorrect file type.'});
+        this.fire('file-reject', {file: file, error: this.i18n.error.incorrectFileType});
         return;
       }
       file.loaded = 0;
