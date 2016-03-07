@@ -17,9 +17,9 @@ When setting the items declaratively, notice that the attribute value needs to b
 
 [source,html]
 ----
-<vaadin-combo-box 
-  label="Element" 
-  items='["Bohrium", "Boron", "Bromine", "Cadmium", "Caesium", "Calcium"]' 
+<vaadin-combo-box
+  label="Element"
+  items='["Bohrium", "Boron", "Bromine", "Cadmium", "Caesium", "Calcium"]'
   value="Bromine">
 </vaadin-combo-box>
 ----
@@ -35,9 +35,14 @@ combobox.value = 'Bromine';
 
 == Events
 
-The [vaadinelement]#vaadin-combo-box# element dispatches events when the value changes.
+The [vaadinelement]#vaadin-combo-box# element dispatches events when the selection changes.
 An event contains the [propertyname]#value# property in the [propertyname]#event.detail# object.
 
+Since there are two selection properties, namely [propertyname]#value# and [propertyname]#selectedItem#,
+an event is fired for each. [propertyname]#value-changed# event contains the selection as a String value,
+whereas [propertyname]#selected-item-changed# contains the selection as an Object.
+
+Note that the order in which these two events are fired might vary depending on the situation.
 
 [source,javascript]
 ----

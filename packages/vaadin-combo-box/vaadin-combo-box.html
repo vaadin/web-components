@@ -179,6 +179,8 @@ enable usage within an `iron-form`.
       value: {
         type: String,
         observer: '_valueChanged',
+        //notify: true already set in IronFormBehavior, setting this to true will make two value-changed events(?)
+        notify: false,
         value: ''
       },
 
@@ -636,6 +638,14 @@ enable usage within an `iron-form`.
    * @event value-changed
    * @param {Object} detail
    *  @param {String} detail.value the combobox value
+   */
+
+  /**
+   * Fired when selected item changes.
+   *
+   * @event selected-item-changed
+   * @param {Object} detail
+   *  @param {Object|String} detail.value the selected item. Type is the same as the type of `items`.
    */
 
   /**
