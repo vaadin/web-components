@@ -1,4 +1,5 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
 
 function tap(element) {
   Polymer.Base.fire('tap', {}, {
@@ -28,4 +29,13 @@ function getFirstVisibleItem(scroller, bufferOffset) {
 
 function isFullscreen(datepicker) {
   return datepicker.$.overlay.getAttribute('fullscreen') !== null;
+}
+
+function describeSkipIf(bool, title, callback) {
+  bool = typeof bool == 'function' ? bool() : bool;
+  if (bool) {
+    describe.skip(title, callback);
+  } else {
+    describe(title, callback);
+  }
 }

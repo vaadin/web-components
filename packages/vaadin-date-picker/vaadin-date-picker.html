@@ -377,6 +377,7 @@ See paper-input-container documentation for styling the included input fields
 
       _onOverlayClosed: function() {
         this.unlisten(window, 'scroll', '_onWindowScroll');
+        this.$.inputcontainer.focus();
 
         if (this._touchPrevented) {
           this._touchPrevented.forEach(function(prevented) {

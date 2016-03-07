@@ -136,6 +136,21 @@
         datepicker.open();
       });
 
+      describeSkipIf(safari, 'focus', function() {
+        // TODO: Sauce Labs bug doesn't allow Safari in OS X to focus.
+        it('should focus the input on overlay close', function(done) {
+          datepicker.addEventListener('iron-overlay-closed', function() {
+            var focusedElement = Polymer.dom(datepicker.root).querySelector('#inputcontainer:focus');
+            expect(focusedElement).not.to.eql(null);
+            done();
+          });
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            datepicker.close();
+          });
+          datepicker.open();
+        });
+      });
+
       it('should not have label defined by default', function() {
         expect(datepicker.label).to.be.undefined;
       });
