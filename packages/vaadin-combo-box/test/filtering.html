@@ -165,7 +165,7 @@
       it('should not lose the selected value', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
-        expect(comboBox.$.overlay.$.selector.selectedItems).not.to.contain('foo');
+        expect(comboBox.$.overlay.$.selector.selectedItems).to.be.null;
         setInputValue('');
         expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
       });
