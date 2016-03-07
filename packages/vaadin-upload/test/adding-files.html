@@ -129,24 +129,29 @@
         }
 
         it('should set dragover property when overing', function() {
-          expect(upload.dragover).not.to.be.ok;
+          expect(upload._dragover).not.to.be.ok;
+          expect(upload.hasAttribute('dragover')).to.be.false;
           upload.dispatchEvent(createDndEvent('dragover'));
-          expect(upload.dragover).to.be.ok;
+          expect(upload._dragover).to.be.ok;
+          expect(upload.hasAttribute('dragover')).to.be.true;
         });
 
         it('should remove dragover property when leaving', function() {
           upload.dispatchEvent(createDndEvent('dragover'));
-          expect(upload.dragover).to.be.ok;
+          expect(upload._dragover).to.be.ok;
+          expect(upload.hasAttribute('dragover')).to.be.true;
           upload.dispatchEvent(createDndEvent('dragleave'));
-          expect(upload.dragover).not.to.be.ok;
+          expect(upload._dragover).not.to.be.ok;
+          expect(upload.hasAttribute('dragover')).to.be.false;
         });
 
-        it('should not have dragover property when max files added', function() {
+        it('should not have dragover property when max files added TODO', function() {
           upload.maxFiles = 1;
           upload._addFile(createFile(100, 'image/jpeg'));
 
           upload.dispatchEvent(createDndEvent('dragover'));
-          expect(upload.dragover).to.be.false;
+          expect(upload._dragover).to.be.true;
+          expect(upload._dragoverValid).to.be.false;
         });
 
         describe('nodrop flag', function() {
