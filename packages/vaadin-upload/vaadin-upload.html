@@ -340,7 +340,8 @@ Custom property | Description | Default
       if (!this._maxFilesAdded() && !this.dragover  && !this.nodrop) {
         this._dragRippleAction('down', event);
         this.dragover = true;
-      } else if (this.nodrop) {
+        event.dataTransfer.dropEffect = 'copy';
+      } else if (this.nodrop || this._maxFilesAdded()) {
         event.dataTransfer.dropEffect = 'none';
       }
     },
