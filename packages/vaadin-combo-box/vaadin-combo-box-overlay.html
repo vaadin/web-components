@@ -25,7 +25,7 @@
 
     #scroller {
       overflow: auto;
-      max-height: 65vh;
+      max-height: var(--vaadin-combo-box-overlay-max-height, 65vh);
 
       /* Fixes item background from getting on top of scrollbars on Safari */
       transform: translate3d(0,0,0);

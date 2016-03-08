@@ -156,3 +156,18 @@ You can override the default property paths by defining [propertyname]#item-labe
 var combobox = document.querySelector('vaadin-combo-box');
 combobox.items = [{ name: { first: 'John', last: 'Doe' } }];
 ----
+
+== Styling
+
+You can customize certain styles of the [vaadinelement]#vaadin-combo-box# with CSS mixins and properties.
+
+[propertyname]#vaadin-combo-box-overlay-max-height# property can be used to override the default maximum height of the overlay.
+
+[source,html]
+----
+<style is="custom-style">
+  #combobox1 {
+    --vaadin-combo-box-overlay-max-height: 100%;
+  }
+</style>
+----
