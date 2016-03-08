@@ -301,6 +301,10 @@ Custom property | Description | Default
                 stalled: 'Stalled.',
                 processing: 'Processing File...'
               },
+              remainingTime: {
+                prefix: 'remaining time: ',
+                unknown: 'unknown remaining time'
+              },
               error: {
                 serverUnavailable: 'Server Unavailable',
                 unexpectedServerError: 'Unexpected Server Error',
@@ -308,26 +312,10 @@ Custom property | Description | Default
               }
             },
             units: {
-              size: [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ],
-              time: [
-                { one: 'second', many: 'seconds' },
-                { one: 'minute', many: 'minutes' },
-                { one: 'hour', many: 'hours' },
-                { one: 'day', many: 'days' }
-              ]
+              size: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
             }
           };
         }
-      },
-
-      _pluralize: {
-        type: Function,
-        computed: '_getCallbackFn(i18n.*, "pluralize")'
-      },
-
-      _valueWithUnits: {
-        type: Function,
-        computed: '_getCallbackFn(i18n.*, "valueWithUnits")'
       },
 
       _formatSize: {
@@ -338,11 +326,6 @@ Custom property | Description | Default
       _formatTime: {
         type: Function,
         computed: '_getCallbackFn(i18n.*, "formatTime")'
-      },
-
-      _formatFileProgress: {
-        type: Function,
-        computed: '_getCallbackFn(i18n.*, "formatFileProgress")'
       }
     },
 
@@ -363,44 +346,53 @@ Custom property | Description | Default
       return this.get(callbackName, changeRecord.base) || this[defaultCallbackName];
     },
 
-    _defaultPluralize: function(value, units) {
-      return (value === 1) ? units.one : units.many;
-    },
-
-    _defaultValueWithUnits: function(value, units) {
-      return value + ' ' + (typeof units === 'string' ? units : this._pluralize(value, units));
-    },
-
     _defaultFormatSize: function(bytes) {
-      var units = Math.floor(Math.round(Math.log(bytes + 1) / Math.log(10) * 1000) / 1000 / 3);
-      var divisor = Math.pow(10, units * 3);
-      var sizeInUnits = Math.round(bytes / divisor * 10) / 10;
-      return this._valueWithUnits(sizeInUnits, this.i18n.units.size[units]);
+      var unit = Math.floor(Math.round(Math.log(bytes + 1) / Math.log(10) * 1000) / 1000 / 3);
+      var divisor = Math.pow(10, unit * 3);
+      var size = bytes / divisor;
+
+      // Rounding up to 3 digits
+      var intSize = Math.round(size);
+      size = intSize < 10 ? Math.round(size * 100) / 100 :
+          intSize < 100 ? Math.round(size * 10) / 10 :
+          intSize;
+
+      return size + ' ' + this.i18n.units.size[unit];
     },
 
-    _defaultFormatTime: function(seconds) {
-      // Convert time in seconds to [S, M, H, D];
-      var time = seconds;
-      var timeValues = new Array(4);
-      timeValues[0] = time % 60; time = Math.floor(time / 60);
-      timeValues[1] = time % 60; time = Math.floor(time / 60);
-      timeValues[2] = time % 24; time = Math.floor(time / 24);
-      timeValues[3] = time;
+    _splitTimeByUnits: function(time) {
+      var unitSizes = [60, 60, 24, Infinity];
+      var timeValues = [0];
 
-      // Iterate through [S, M, H, D] collecting non-zero values with units
-      var timeParts = [];
-      for (var i=0; i < timeValues.length; i++) {
-        if (timeValues[i]) {
-          timeParts.unshift(this._valueWithUnits(timeValues[i], this.i18n.units.time[i]))
-        }
+      for (var i = 0, unitSize; i < unitSizes.length && time > 0; i++) {
+        timeValues[i] = time % unitSizes[i];
+        time = Math.floor(time / unitSizes[i]);
       }
 
-      return timeParts.join(' ');
+      return timeValues;
     },
 
-    _defaultFormatFileProgress: function(file) {
-      return file.totalStr + ': ' + file.progress + '%' +
-          (file.loaded > 0 ? ' (about ' + file.remainingStr + ' remaining)' : '');
+    _defaultFormatTime: function(seconds, split) {
+      // Fill HH:MM:SS with leading zeros
+      while (split.length < 3) {
+        split.push(0);
+      }
+
+      return split
+          .reverse()
+          .map(function(number) {
+            return (number < 10 ? '0' : '') + number;
+          })
+          .join(':');
+    },
+
+    _formatFileProgress: function(file) {
+      return file.totalStr + ': ' +
+          file.progress + '% (' +
+          (file.loaded > 0 ?
+              this.i18n.uploading.remainingTime.prefix + file.remainingStr :
+              this.i18n.uploading.remainingTime.unknown) +
+          ')';
     },
 
     _maxFilesAdded: function() {
@@ -510,9 +502,9 @@ Custom property | Description | Default
 
     _setStatus: function(file, total, loaded, elapsed, progress) {
       file.elapsed = elapsed;
-      file.elapsedStr = this._formatTime(file.elapsed);
-      file.remaining = Math.ceil(elapsed * ((total + 1)/ (loaded + 1) - 1));
-      file.remainingStr = this._formatTime(file.remaining);
+      file.elapsedStr = this._formatTime(file.elapsed, this._splitTimeByUnits(file.elapsed));
+      file.remaining = Math.ceil(elapsed * (total / loaded - 1));
+      file.remainingStr = this._formatTime(file.remaining, this._splitTimeByUnits(file.remaining));
       file.speed = ~~(total / elapsed / 1024);
       file.totalStr = this._formatSize(total);
       file.loadedStr = this._formatSize(loaded);

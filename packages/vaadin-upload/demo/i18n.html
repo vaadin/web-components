@@ -57,6 +57,10 @@ This program is available under Apache License Version 2.0, available at https:/
                 stalled: 'Загрузка застопорилась.',
                 processing: 'Обработка файла...'
               },
+              remainingTime: {
+                prefix: 'оставшееся время: ',
+                unknown: 'оставшееся время неизвестно'
+              },
               error: {
                 serverUnavailable: 'Сервер недоступен',
                 unexpectedServerError: 'Неожиданная ошибка сервера',
@@ -64,59 +68,33 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             },
             units: {
-              size: [ 'Б', 'Кбайт', 'Мбайт', 'Гбайт', 'Тбайт', 'Пбайт', 'Эбайт', 'Збайт', 'Ибайт' ],
-              time: [
-                { one: 'секунда', few: 'секунды', many: 'секунд' },
-                { one: 'минута', few: 'минуты', many: 'минут' },
-                { one: 'час', few: 'часа', many: 'часов' },
-                { one: 'день', few: 'дня', many: 'дней' }
-              ]
-            },
-            pluralize: function(value, units) {
-              var r10 = value % 10;
-              var r100 = value % 100;
-              return r10 === 1 && r100 !== 11 ? units.one :
-                  [2, 3, 4].indexOf(r10) >= 0 && [12, 13, 14].indexOf(r100) === -1 ? units.few :
-                  units.many;
-            },
-            formatFileProgress: function(file) {
-              return file.totalStr + ': ' + file.progress + '%' +
-                  (file.loaded > 0 ? ' (оставшееся время: ' + file.remainingStr + ')' : '');
+              size: ['Б', 'Кбайт', 'Мбайт', 'Гбайт', 'Тбайт', 'Пбайт', 'Эбайт', 'Збайт', 'Ибайт']
             }
-          }
+          };
         </script>
       </template>
     </demo-snippet>
 
-    <h3>Custom progress status and remaining time format</h3>
+    <h3>Custom progress status</h3>
     <demo-snippet>
       <template>
         <vaadin-upload id="shortTime"></vaadin-upload>
         <script>
           var upload = document.querySelector('vaadin-upload#shortTime');
 
-          upload.set('i18n.formatTime', function(seconds) {
-            /**
-             * Formats time in "[DD:]HH:MM:SS"
-             */
-
-            function pad2(number) {
-              return number < 10 ? '0' + number : number.toString();
-            }
-
-            var time = seconds;
-            var timeValues = new Array(3);
-            timeValues[0] = time % 60; time = Math.floor(time / 60);
-            timeValues[1] = time % 60; time = Math.floor(time / 60);
-            timeValues[2] = time % 24; time = Math.floor(time / 24);
-            if (time) timeValues[3] = time;
-
-            return timeValues.reverse().map(pad2).join(':');
-          });
-
-          upload.set('i18n.formatFileProgress', function(file) {
-            return file.progress + '%' + ' of ' + file.totalStr +
-                ', ETA: ' + (file.loaded > 0 ? file.remainingStr : 'unknown');
+          upload.set('i18n.formatTime', function(seconds, split) {
+            return split
+              .map(function(number, i) {
+                return {number: number, unit: ['s', 'min', 'h', 'd'][i]};
+              })
+              .reverse()
+              .filter(function(value) {
+                return value.number > 0;
+              })
+              .map(function(value) {
+                return value.number + ' ' + value.unit;
+              })
+              .join(' ');
           });
         </script>
       </template>
