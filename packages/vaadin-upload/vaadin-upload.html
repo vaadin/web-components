@@ -347,7 +347,7 @@ Custom property | Description | Default
     _onDragover: function(event) {
       event.preventDefault();
       if (!this._dragover) {
-        this._validateDragOver(event.dataTransfer.items);
+        this._dragoverValid = !this._maxFilesAdded();
       }
       if (this._dragoverValid && !this._dragover && !this.nodrop) {
         this._dragRippleAction('down', event);
@@ -605,26 +605,6 @@ Custom property | Description | Default
       for (var i = this.files.length; i > 0; --i) {
         this._abortFileUpload(this.files[i - 1]);
       }
-    },
-
-    _validateDragOver: function(items) {
-      if (this._maxFilesAdded()) {
-        this._dragoverValid = false;
-        return;
-      }
-      // event.dataTransfer.items works only in Chrome and Opera12+,
-      // skip type validation if items is undefined
-      if (items === undefined || this.accept === '') {
-        this._dragoverValid = true;
-        return;
-      }
-      var re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace('/*', '/.*') + ')$');
-      Array.prototype.forEach.call(items, function(item) {
-        // Check that at least 1 file is valid
-        if (re.test(item.type)) {
-          this._dragoverValid = true;
-        }
-      }.bind(this));
     },
 
     _dragoverChanged: function(dragover) {
