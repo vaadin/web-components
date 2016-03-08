@@ -1,4 +1,4 @@
-<!-- 
+<!--
 @license
 Copyright (c) 2016 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
@@ -71,7 +71,7 @@ Custom property | Description | Default
         padding: 16px;
       }
 
-      :host[dragover] {
+      :host[dragover-valid] {
         border-color: var(--primary-color, #00B4F0);
       }
 
@@ -102,8 +102,8 @@ Custom property | Description | Default
         @apply(--vaadin-upload-drop-label);
       }
 
-      :host[dragover] #dropLabel,
-      :host[dragover] ::content .drop-label {
+      :host[dragover-valid] #dropLabel,
+      :host[dragover-valid] ::content .drop-label {
         color: var(--primary-color, #00B4F0);
         @apply(--vaadin-upload-drop-label-dragover);
       }
@@ -213,11 +213,10 @@ Custom property | Description | Default
         value: 0
       },
 
-      // TODO: don't expose this property, toggleAttribute instead.
-      dragover: {
+      _dragover: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        observer: '_dragoverChanged'
       },
 
       /**
@@ -271,6 +270,16 @@ Custom property | Description | Default
         type: Number,
         value: -1
       },
+
+      /**
+       * Specifies if the dragover is validated with maxFiles and
+       * accept properties.
+       */
+      _dragoverValid: {
+        type: Boolean,
+        value: false,
+        observer: '_dragoverValidChanged'
+      }
     },
 
     listeners: {
@@ -337,10 +346,14 @@ Custom property | Description | Default
 
     _onDragover: function(event) {
       event.preventDefault();
-      if (!this._maxFilesAdded() && !this.dragover) {
-        this._dragRippleAction('down', event);
-        this.dragover = true;
+      if (!this._dragover) {
+        this._dragoverValid = !this._maxFilesAdded();
       }
+      if (this._dragoverValid && !this._dragover && !this.nodrop) {
+        this._dragRippleAction('down', event);
+      }
+      event.dataTransfer.dropEffect = !this._dragoverValid || this.nodrop ? 'none' : 'copy';
+      this._dragover = true;
     },
 
     _onDragleave: function(event) {
@@ -348,9 +361,9 @@ Custom property | Description | Default
       // when quickly dragging over.
       if (Polymer.dom(event).rootTarget === this) {
         event.preventDefault();
-        if (this.dragover) {
+        if (this._dragover && !this.nodrop) {
           this._dragRippleAction('up', event);
-          this.dragover = false;
+          this._dragover = this._dragoverValid = false;
         }
       }
     },
@@ -359,7 +372,7 @@ Custom property | Description | Default
       if (!this.nodrop) {
         event.preventDefault();
         this._dragRippleAction('up', event);
-        this.dragover = false;
+        this._dragover = this._dragoverValid = false;
         this._dragRippleAction('upAction', event);
         this._addFiles(event.dataTransfer.files);
       }
@@ -592,8 +605,15 @@ Custom property | Description | Default
       for (var i = this.files.length; i > 0; --i) {
         this._abortFileUpload(this.files[i - 1]);
       }
-    }
+    },
 
+    _dragoverChanged: function(dragover) {
+      this.toggleAttribute('dragover', dragover);
+    },
+
+    _dragoverValidChanged: function(dragoverValid) {
+      this.toggleAttribute('dragover-valid', dragoverValid);
+    }
   });
 
   /**
