@@ -1,0 +1,97 @@
+---
+title: Server side
+order: 4
+layout: page
+---
+
+[[vaadin-upload.server]]
+
+= Server Communication
+
+== Background
+
+The [elementname]#vaadin-upload# element sends a [classname]#FormData# via [classname]#XMLHttpRequest#.
+The encoding type used is `multipart/form-data` which has been the standard way to upload files for ages, hence it is supported by almost servers.
+Since this type only can be sent using the method `POST` or `PUT`, we only support those.
+
+In order to support simultaneous uploads, instead of reusing the same `FormData` and `XHR` we create a new one for each file, so it's alright if the server only considers receiving one file per request.
+
+For the client side we use the [classname]#ProgressEvent# specification, available in all modern browsers.
+
+== Request Configuration.
+
+The communication between [elementname]#vaadin-upload# element and server side can be totally configured using  element properties or attributes, and events.
+
+=== Configuration properties
+
+[width="100%", options="header"]
+|======================
+|Property name | default value | description
+| target | '' | Server URL
+| method | POST | HTTP Method used to send the files. Only POST and PUT are allowed.
+| headers | {} | A JSON map with key/values to send to the server in the `Headers`
+| timeout | 0 | Time limit in seconds to upload the file
+|======================
+
+[source,html]
+----
+<vaadin-upload
+  target="http://127.0.0.1:8080/upload/servlet.gupld"
+  method="POST"
+  accept="image/*,video/*"
+  headers="{'Accept': 'application/json'}"
+  timeout=15000
+></vaadin-upload>
+----
+
+=== Configuring the request via Events
+
+There are certain events to modify the `XHR` before sending it, or the `response` when the request finishes.
+
+- `upload-before`: At this point the `XHR` has not been opened yet, but you can set the servlet URL changing the attribute [propertyname]#file.uploadTarget#. You could also reject the file at this point if you prevent default.
+
+[source,javascript]
+----
+  uploader.addEventListener('upload-before', function(e) {
+    e.detail.file.uploadTarget =
+      'http://127.0.0.1:8080/upload/servlet.gupld?filename=' + e.detail.file.name;
+  });
+
+  uploader.addEventListener('upload-before', function(e) {
+    if (e.detail.file.size > 10240) {
+      e.detail.file.error = 'File too big.'
+    }
+  });
+----
+
+- `upload-request`: You can change request parameters before it is sent, or prevent default to avoid the request be sent to the server.
+
+
+[source,javascript]
+----
+  uploader.addEventListener('upload-request', function(e) {
+    e.detail.xhr.setRequestHeader('Accept', 'application/json');
+  });
+----
+
+- `upload-response` can be used when the server message was received, and before the component processes it.
+  At this point, you can check the response and make the upload fail setting the [propertyname]#file.error# property.
+  Also you can prevent default so as response is not checked for errors and the UI is not updated.
+
+[source,javascript]
+----
+  uploader.addEventListener('upload-response', function(e) {
+    if (e.detail.xhr.status == 200) {
+      e.detail.file.error = JSON.parse(xhr.responseText).error;
+    }
+  });
+----
+
+== Server Processing
+
+How to write your server side code to receive the file, is out of the scope of this document.
+Nevertheless we leave here some links that you can use as reference:
+
+- `Nodejs` example: http://howtonode.org/really-simple-file-uploads
+- `PHP` example: http://www.php.net/manual/en/features.file-upload.post-method.php#example-354
+- `Java` example: http://www.codejava.net/java-ee/servlet/apache-commons-fileupload-example-with-servlet-and-jsp
