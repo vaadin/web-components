@@ -136,6 +136,19 @@
         datepicker.open();
       });
 
+      it('should focus the input on overlay close', function(done) {
+        var spy = sinon.spy(datepicker.$.inputcontainer, 'focus');
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(spy.called).to.be.true;
+          done();
+        });
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(spy.called).to.be.false;
+          datepicker.close();
+        });
+        datepicker.open();
+      });
+
       it('should not have label defined by default', function() {
         expect(datepicker.label).to.be.undefined;
       });
