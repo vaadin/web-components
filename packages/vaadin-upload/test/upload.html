@@ -291,14 +291,14 @@
       describe('maxFiles change', function() {
         it('should show `Add Files` labels in plural when maxFiles is not 1', function() {
           upload.maxFiles = 3;
-          expect(upload._addFileLabel).to.be.equal(upload.i18n.addFiles.many);
-          expect(upload._dropFileLabel).to.be.equal(upload.i18n.dropFiles.many);
+          expect(upload.$.dropLabel.textContent.indexOf(upload.i18n.dropFiles.many) >= 0).to.be.true;
+          expect(upload.$.addFiles.textContent.indexOf(upload.i18n.addFiles.many) >= 0).to.be.true;
         });
 
         it('should show `Add File` labels in singular when maxFiles is 1', function() {
           upload.maxFiles = 1;
-          expect(upload._addFileLabel).to.be.equal(upload.i18n.addFiles.one);
-          expect(upload._dropFileLabel).to.be.equal(upload.i18n.dropFiles.one);
+          expect(upload.$.dropLabel.textContent.indexOf(upload.i18n.dropFiles.one) >= 0).to.be.true;
+          expect(upload.$.addFiles.textContent.indexOf(upload.i18n.addFiles.one) >= 0).to.be.true;
         });
       });
     });

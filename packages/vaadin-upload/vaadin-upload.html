@@ -161,11 +161,11 @@ Custom property | Description | Default
     <div id="dropLabel" hidden$="[[nodrop]]">
       <content select=".drop-label">
         <iron-icon icon="file-upload"></iron-icon>
-        [[_dropFileLabel]]
+        [[_i18nPlural(maxFiles, i18n.dropFiles)]]
       </content>
     </div>
     <div id="buttons">
-      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_addFileLabel]]</paper-button>
+      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles)]]</paper-button>
       <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
     </div>
     <template id="defaultFileTemplate">
@@ -347,16 +347,8 @@ Custom property | Description | Default
             }
           };
         }
-      },
-
-      _addFileLabel: String,
-
-      _dropFileLabel: String,
+      }
     },
-
-    observers: [
-      '_setCaptions(i18n.*, maxFiles)'
-    ],
 
     listeners: {
       dragover: '_onDragover',
@@ -750,13 +742,10 @@ Custom property | Description | Default
       this.toggleAttribute('dragover-valid', dragoverValid);
     },
 
-    _setCaptions: function() {
-      if (this.i18n) {
-        var variant = this.maxFiles === 1 ? 'one' : 'many';
-        this._addFileLabel = this.i18n.addFiles[variant];
-        this._dropFileLabel = this.i18n.dropFiles[variant];
-      }
+    _i18nPlural: function(value, plural) {
+      return value == 1 ? plural.one : plural.many;
     }
+
   });
 
   /**
