@@ -38,7 +38,13 @@ Custom property | Description | Default
 `--vaadin-upload-drop-label-icon`|styles for the drop icon|`{}`
 `--vaadin-upload-file-list`|styles for the file list|`{}`
 `--vaadin-upload-buttons`|styles for the buttons container|`{}`
-`--vaadin-upload-button`|styles for the upload button|`{}`
+`--vaadin-upload-buttons-nodrop`|styles for the buttons container when `nodrop` property is `true`|`{}`
+`--vaadin-upload-button`|styles for the buttons|`{}`
+`--vaadin-upload-button-add`|styles for the upload button|`{}`
+`--vaadin-upload-button-add-nodrop`|styles for the upload button when `nodrop` property is `true`|`{}`
+`--vaadin-upload-file-canceled`|styles for the upload cancel. Use for overriding file cancel animation|`{}`
+
+
 
 @element vaadin-upload
 @demo demo/ Basic Examples
@@ -127,31 +133,48 @@ Custom property | Description | Default
         @apply(--vaadin-upload-buttons);
       }
 
+      :host[nodrop] #buttons {
+        @apply(--layout-end-justified);
+        @apply(--vaadin-upload-buttons-nodrop);
+      }
+
       paper-button {
         @apply(--paper-font-button);
         color: var(--primary-color, #00B4F0);
         padding: .43em .57em;
         @apply(--vaadin-upload-button);
       }
+
+      #addFiles {
+        margin-right: 0;
+        background: var(--primary-color, #00B4F0);
+        color: var(--primary-font-color, #FFFFFF);
+        @apply(--vaadin-upload-button-add);
+      }
+
+      :host[nodrop] #addFiles {
+        margin-right: auto;
+        @apply(--vaadin-upload-button-add-nodrop);
+      }
     </style>
 
     <div id="dropLabel" hidden$="[[nodrop]]">
       <content select=".drop-label">
         <iron-icon icon="file-upload"></iron-icon>
-        [[i18n.dropFilesHere]]
+        [[_i18nPlural(maxFiles, i18n.dropFiles)]]
       </content>
+    </div>
+    <div id="buttons">
+      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles)]]</paper-button>
+      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
     </div>
     <template id="defaultFileTemplate">
       <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
     </template>
-    <div id="fileList">
+    <div id="fileList" on-file-remove="_onFileRemove">
       <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
     </div>
     <content></content>
-    <div id="buttons">
-      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[i18n.addFiles]]</paper-button>
-      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
-    </div>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
     <paper-ripple id="dragRipple" noink></paper-ripple>
   </template>
@@ -250,7 +273,7 @@ Custom property | Description | Default
        */
        maxFiles: {
          type: Number,
-         value: -1
+         value: Infinity
        },
 
       /**
@@ -268,7 +291,7 @@ Custom property | Description | Default
        */
       maxFileSize: {
         type: Number,
-        value: -1
+        value: Infinity
       },
 
       /**
@@ -281,13 +304,21 @@ Custom property | Description | Default
         observer: '_dragoverValidChanged'
       },
 
+      /**
+       * The object used to localize this component.
+       */
       i18n: {
         type: Object,
         value: function() {
           return {
-            dropFilesHere: 'Drop files here...',
-            addFile: 'Add File',
-            addFiles: 'Add Files',
+            dropFiles: {
+              one: 'Drop file here...',
+              many: 'Drop files here...'
+            },
+            addFiles: {
+              one: 'Select File',
+              many: 'Add Files'
+            },
             cancel: 'Cancel',
             cancelAll: 'Cancel All',
             error: {
@@ -521,6 +552,8 @@ Custom property | Description | Default
         file.indeterminate = loaded <= 0 || loaded >= total, true;
         if (file.error) {
           file.indeterminate = file.status = undefined;
+        } else if (file.abort) {
+          file.status = 'Upload cancelled.';
         } else if (progress < 100) {
           this._setStatus(file, total, loaded, elapsed, progress);
           stalledId = setTimeout(function() {
@@ -605,11 +638,10 @@ Custom property | Description | Default
     _abortFileUpload: function(file) {
        var evt = this.fire('upload-abort', {file: file, xhr: file.xhr}, {cancelable: true});
        if (!evt.defaultPrevented) {
+         file.abort = true;
          if (file.xhr) {
-           file.abort = true;
            file.xhr.abort();
          }
-         this._removeFile(file);
        }
      },
 
@@ -648,7 +680,7 @@ Custom property | Description | Default
         return;
       }
       file.loaded = 0;
-      this.push('files', file);
+      this.unshift('files', file);
       this.fire('file-add', {file: file});
       this._uploadFile(file);
     },
@@ -691,6 +723,11 @@ Custom property | Description | Default
       this._abortFileUpload(event.detail.file);
     },
 
+    _onFileRemove: function(event) {
+      event.stopPropagation();
+      this._removeFile(event.detail.file);
+    },
+
     _onCancelAllClick: function(event) {
       for (var i = this.files.length; i > 0; --i) {
         this._abortFileUpload(this.files[i - 1]);
@@ -703,7 +740,12 @@ Custom property | Description | Default
 
     _dragoverValidChanged: function(dragoverValid) {
       this.toggleAttribute('dragover-valid', dragoverValid);
+    },
+
+    _i18nPlural: function(value, plural) {
+      return value == 1 ? plural.one : plural.many;
     }
+
   });
 
   /**

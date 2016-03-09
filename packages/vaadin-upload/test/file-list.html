@@ -63,9 +63,9 @@
             expect(fileListItems).to.not.be.empty;
             expect(fileListItems.length).to.equal(2);
             expect(fileListItems[0]).to.be.ok;
-            expect(fileListItems[0]).to.have.property('file', files[0]);
+            expect(fileListItems[0]).to.have.property('file', files[1]);
             expect(fileListItems[1]).to.be.ok;
-            expect(fileListItems[1]).to.have.property('file', files[1]);
+            expect(fileListItems[1]).to.have.property('file', files[0]);
             done();
           });
         });
@@ -89,7 +89,7 @@
 
           Polymer.Base.async(function() {
             var file = files[1];
-            var fileListItem = getFileListItems(upload, '.file')[1];
+            var fileListItem = getFileListItems(upload, '.file')[0];
             expect(fileListItem).to.be.ok;
             expect(fileListItem.querySelector('.name').textContent).to.be.equal(file.name);
             expect(fileListItem.querySelector('.size').textContent).to.be.equal(file.size.toString());

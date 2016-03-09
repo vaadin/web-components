@@ -142,6 +142,25 @@ Custom property | Description | Default
         @apply(--vaadin-upload-file-progress-complete);
       }
 
+      :host.fade-out {
+        animation-name: fade-out;
+        animation-duration: 1s;
+        @apply(--vaadin-upload-file-canceled);
+      }
+
+      @keyframes fade-out {
+        50%  {
+          max-height: 50px;
+          margin: 8px 0;
+          padding: 8px 0 0;
+        }
+        100% {
+          opacity: 0;
+          max-height: 0px;
+          margin: 0;
+          padding: 0;
+        }
+      }
     </style>
 
     <div id="row">
@@ -188,11 +207,26 @@ Custom property | Description | Default
     },
 
     observers: [
-      '_fileChanged(file.*)'
+      '_fileChanged(file.*)',
+      '_fileAborted(file.abort)'
     ],
 
     _fileChanged: function() {
       this.$.progress.updateStyles();
+    },
+
+    _fileAborted: function(abort) {
+      if (abort) {
+        this.toggleClass('fade-out', true);
+        var animationName = window.getComputedStyle(this).animationName;
+        if (!animationName || animationName === 'none') {
+          this.fire('file-remove', {file: this.file});
+        } else {
+          this.addEventListener('animationend', function() {
+            this.fire('file-remove', {file: this.file});
+          }.bind(this));
+        }
+      }
     },
 
     _fireFileEvent: function(e) {

@@ -72,7 +72,7 @@
         if (done < total) {
           setTimeout(progress, 200);
           done = Math.min(total, done + 254000);
-        } else {
+        } else if (!file.abort) {
           setTimeout(finish, 1000);
         }
       }

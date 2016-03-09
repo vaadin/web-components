@@ -41,9 +41,14 @@ This program is available under Apache License Version 2.0, available at https:/
         <script>
           var upload = document.querySelector('vaadin-upload#ru');
           upload.i18n = {
-            dropFilesHere: 'Перетащите файлы сюда...',
-            addFile: 'Добавить файл',
-            addFiles: 'Добавить файлы',
+            dropFiles: {
+              one: 'Перетащите файл сюда...',
+              many: 'Перетащите файлы сюда...'
+            },
+            addFiles: {
+              one: 'Выбрать файл',
+              many: 'Добавить файлы'
+            },
             cancel: 'Отменить',
             cancelAll: 'Отменить все',
             error: {
