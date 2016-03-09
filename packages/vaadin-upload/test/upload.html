@@ -259,14 +259,11 @@
               upload._abortFileUpload(e.detail.file);
             }
           });
-          upload.addEventListener('upload-abort', function(e) {
+          upload.addEventListener('file-remove', function(e) {
             Polymer.Base.async(function() {
-              expect(e.detail.file.abort).to.be.ok;
-              expect(e.detail.xhr.error).to.be.ok;
-              expect(e.detail.xhr.sent).to.be.ok;
               expect(upload.files.length).to.be.equal(1);
               done();
-            });
+            },1);
           });
           upload._addFiles(files);
         });
@@ -278,17 +275,31 @@
               upload.$.cancelAll.fire('tap');
             }
           });
-          upload.addEventListener('upload-abort', function(e) {
+          upload.addEventListener('file-remove', function(e) {
             if (e.detail.file == lastFile) {
               Polymer.Base.async(function() {
                 expect(upload.files.length).to.be.empty;
                 done();
-              });
+              },1);
             }
           });
           upload._addFiles(files);
         });
 
+      });
+
+      describe('maxFiles change', function() {
+        it('should show `Add Files` labels in plural when maxFiles is not 1', function() {
+          upload.maxFiles = 3;
+          expect(upload._addFileLabel === 'Add Files').to.be.true;
+          expect(upload._dropFileLabel === 'Drop files here...').to.be.true;
+        });
+
+        it('should show `Add File` labels in singular when maxFiles is 1', function() {
+          upload.maxFiles = 1;
+          expect(upload._addFileLabel === 'Add File').to.be.true;
+          expect(upload._dropFileLabel === 'Drop file here...').to.be.true;
+        });
       });
     });
   </script>
