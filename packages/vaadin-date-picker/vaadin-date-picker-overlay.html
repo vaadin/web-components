@@ -253,7 +253,7 @@
       <div id="fade"></div>
       <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScroll" on-track="_track" item-height="250" buffer-size="6">
         <template>
-          <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[_focusedDate]]"></vaadin-month-calendar>
+          <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[focusedDate]]"></vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScroll" item-height="150" buffer-size="10">
@@ -295,7 +295,7 @@
         /**
          * Date value which is focused using keyboard.
          */
-        _focusedDate: {
+        focusedDate: {
           type: Date,
           observer: '_focusedDateChanged'
         },
@@ -392,7 +392,7 @@
       },
 
       _scrollToCurrentMonth: function() {
-        this._focusedDate = new Date();
+        this.focusedDate = new Date();
         this.scrollToDate(new Date(), true);
 
         // focus for keyboard navigation.
@@ -578,23 +578,23 @@
             this._moveFocusByDays(-1);
             break;
           case 'enter':
-            if (this._focusedDate) {
-              this.selectedDate = this._focusedDate;
+            if (this.focusedDate) {
+              this.selectedDate = this.focusedDate;
             }
             this._close();
             break;
           case 'space':
-            if (this._dateEquals(this._focusedDate, this.selectedDate)) {
+            if (this._dateEquals(this.focusedDate, this.selectedDate)) {
               this.selectedDate = '';
             } else {
-              this.selectedDate = this._focusedDate;
+              this.selectedDate = this.focusedDate;
             }
             break;
           case 'home':
-            this._focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
+            this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
             break;
           case 'end':
-            this._focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
+            this.focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
             break;
           case 'pagedown':
             this._moveFocusByMonths(e.shiftKey ? 12 : 1);
@@ -616,19 +616,19 @@
       },
 
       _currentlyFocusedDate: function() {
-        return this._focusedDate || this.selectedDate || this.initialPosition || new Date();
+        return this.focusedDate || this.selectedDate || this.initialPosition || new Date();
       },
 
       _moveFocusByDays: function(days) {
         var focus = this._currentlyFocusedDate();
 
-        this._focusedDate = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
+        this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
       },
 
       _moveFocusByMonths: function(months) {
         var focus = this._currentlyFocusedDate();
 
-        this._focusedDate = new Date(focus.getFullYear(), focus.getMonth() + months, focus.getDate());
+        this.focusedDate = new Date(focus.getFullYear(), focus.getMonth() + months, focus.getDate());
       }
     });
   </script>
