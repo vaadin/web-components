@@ -312,7 +312,7 @@ Custom property | Description | Default
               }
             },
             units: {
-              size: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
             }
           };
         }
@@ -347,16 +347,11 @@ Custom property | Description | Default
     },
 
     _defaultFormatSize: function(bytes) {
-      var unit = Math.floor(Math.round(Math.log(bytes + 1) / Math.log(10) * 1000) / 1000 / 3);
-      var divisor = Math.pow(10, unit * 3);
-      var size = bytes / divisor;
-
-      // Rounding up to 3 digits
-      var intSize = Math.round(size);
-      size = intSize < 10 ? Math.round(size * 100) / 100 :
-          intSize < 100 ? Math.round(size * 10) / 10 :
-          intSize;
-
+      // https://wiki.ubuntu.com/UnitsPolicy
+      var base = this.i18n.units.sizeBase || 1000;
+      var unit = ~~(Math.log(bytes) / Math.log(base));
+      var dec = Math.max(0, Math.min(3, unit - 1));
+      var size = parseFloat((bytes / Math.pow(base, unit)).toFixed(dec));
       return size + ' ' + this.i18n.units.size[unit];
     },
 

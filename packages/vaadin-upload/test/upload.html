@@ -46,7 +46,7 @@
           upload.addEventListener('upload-progress', function(e) {
             var f = e.detail.file;
             expect(e.detail.xhr).to.be.ok;
-            expect(f.totalStr).to.be.equal('97 KB');
+            expect(f.totalStr).to.be.equal('100 kB');
             switch (count++) {
               case 0:
                 expect(f.progress).to.be.equal(0);
@@ -63,7 +63,6 @@
                 expect(f.progress).to.be.equal(50);
                 expect(f.loaded).to.be.equal(50000);
                 expect(f.size).to.be.equal(100000);
-                expect(f.doneStr).to.be.equal('48 KB');
                 expect(f.uploading).to.be.ok;
                 break;
               case 4:
@@ -212,7 +211,7 @@
           upload.addEventListener('upload-progress', function(e) {
             if (file.progress > 0) {
               expect(e.detail.file.indeterminate).not.to.be.ok;
-              expect(e.detail.file.status).to.contain('seconds remaining');
+              expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
               done();
             }
           });
@@ -222,7 +221,7 @@
         it('should be indeterminate when server is processing the file', function(done) {
           Polymer.Base.async(function() {
             expect(file.indeterminate).to.be.ok;
-            expect(file.status).to.be.equal('Processing file...');
+            expect(file.status).to.be.equal(upload.i18n.uploading.status.processing);
             done();
           }, 800);
           upload._uploadFile(file);
