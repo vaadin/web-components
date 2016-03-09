@@ -316,16 +316,6 @@ Custom property | Description | Default
             }
           };
         }
-      },
-
-      _formatSize: {
-        type: Function,
-        computed: '_getCallbackFn(i18n.*, "formatSize")'
-      },
-
-      _formatTime: {
-        type: Function,
-        computed: '_getCallbackFn(i18n.*, "formatTime")'
       }
     },
 
@@ -341,12 +331,11 @@ Custom property | Description | Default
       this._templatizeFileList();
     },
 
-    _getCallbackFn: function(changeRecord, callbackName) {
-      var defaultCallbackName = '_default' + callbackName.charAt(0).toUpperCase() + callbackName.slice(1);
-      return this.get(callbackName, changeRecord.base) || this[defaultCallbackName];
-    },
+    _formatSize: function(bytes) {
+      if (typeof this.i18n.formatSize === 'function') {
+        return this.i18n.formatSize(bytes);
+      }
 
-    _defaultFormatSize: function(bytes) {
       // https://wiki.ubuntu.com/UnitsPolicy
       var base = this.i18n.units.sizeBase || 1000;
       var unit = ~~(Math.log(bytes) / Math.log(base));
@@ -367,7 +356,11 @@ Custom property | Description | Default
       return timeValues;
     },
 
-    _defaultFormatTime: function(seconds, split) {
+    _formatTime: function(seconds, split) {
+      if (typeof this.i18n.formatTime === 'function') {
+        return this.i18n.formatTime(seconds, split);
+      }
+
       // Fill HH:MM:SS with leading zeros
       while (split.length < 3) {
         split.push(0);
