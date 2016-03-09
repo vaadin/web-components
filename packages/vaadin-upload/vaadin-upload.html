@@ -273,8 +273,7 @@ Custom property | Description | Default
        */
        maxFiles: {
          type: Number,
-         value: -1,
-         observer: '_setCaptions'
+         value: Infinity
        },
 
       /**
@@ -292,7 +291,7 @@ Custom property | Description | Default
        */
       maxFileSize: {
         type: Number,
-        value: -1
+        value: Infinity
       },
 
       /**
@@ -305,13 +304,21 @@ Custom property | Description | Default
         observer: '_dragoverValidChanged'
       },
 
+      /**
+       * The object used to localize this component.
+       */
       i18n: {
         type: Object,
         value: function() {
           return {
-            dropFilesHere: 'Drop files here...',
-            addFile: 'Add File',
-            addFiles: 'Add Files',
+            dropFiles: {
+              one: 'Drop file here...',
+              many: 'Drop files here...'
+            },
+            addFiles: {
+              one: 'Select File',
+              many: 'Add Files'
+            },
             cancel: 'Cancel',
             cancelAll: 'Cancel All',
             error: {
@@ -346,6 +353,10 @@ Custom property | Description | Default
 
       _dropFileLabel: String,
     },
+
+    observers: [
+      '_setCaptions(i18n.*, maxFiles)'
+    ],
 
     listeners: {
       dragover: '_onDragover',
@@ -740,13 +751,10 @@ Custom property | Description | Default
     },
 
     _setCaptions: function() {
-      // Show `Add file` or `Add files`
-      if (this.maxFiles === 1) {
-        this._addFileLabel = 'Add File';
-        this._dropFileLabel = 'Drop file here...';
-      } else {
-        this._addFileLabel = 'Add Files';
-        this._dropFileLabel = 'Drop files here...';
+      if (this.i18n) {
+        var variant = this.maxFiles === 1 ? 'one' : 'many';
+        this._addFileLabel = this.i18n.addFiles[variant];
+        this._dropFileLabel = this.i18n.dropFiles[variant];
       }
     }
   });
