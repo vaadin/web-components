@@ -209,7 +209,8 @@
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         var openTimes = 0;
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(spy.callCount).to.equal(++openTimes);
+          expect(spy.called).to.be.true;
+          spy.reset();
           if (openTimes > 2) {
             done();
           } else {
