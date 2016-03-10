@@ -20,7 +20,7 @@ For the client side we use the [classname]#ProgressEvent# specification, availab
 
 == Request Configuration.
 
-The communication between [elementname]#vaadin-upload# element and server side can be totally configured using  element properties or attributes, and events.
+The communication between [elementname]#vaadin-upload# element and server side can be totally configured using element properties or attributes, and events.
 
 === Configuration properties
 
@@ -28,7 +28,7 @@ The communication between [elementname]#vaadin-upload# element and server side c
 |======================
 |Property name | default value | description
 | target | '' | Server URL
-| method | POST | HTTP Method used to send the files. Only POST and PUT are allowed.
+| method | POST | HTTP method used to send the files. Only POST and PUT are allowed.
 | headers | {} | A JSON map with key/values to send to the server in the `Headers`
 | timeout | 0 | Time limit in seconds to upload the file
 |======================
@@ -48,7 +48,7 @@ The communication between [elementname]#vaadin-upload# element and server side c
 
 There are certain events to modify the `XHR` before sending it, or the `response` when the request finishes.
 
-- `upload-before`: At this point the `XHR` has not been opened yet, but you can set the servlet URL changing the attribute [propertyname]#file.uploadTarget#. You could also reject the file at this point if you prevent default.
+upload-before:: At this point the `XHR` has not been opened yet, but you can set the server URL changing the attribute [propertyname]#file.uploadTarget#. You could also reject the file at this point if you prevent default.
 
 [source,javascript]
 ----
@@ -64,7 +64,7 @@ There are certain events to modify the `XHR` before sending it, or the `response
   });
 ----
 
-- `upload-request`: You can change request parameters before it is sent, or prevent default to avoid the request be sent to the server.
+upload-request:: You can change request parameters before it is sent, or prevent default to avoid the request be sent to the server.
 
 
 [source,javascript]
@@ -74,7 +74,7 @@ There are certain events to modify the `XHR` before sending it, or the `response
   });
 ----
 
-- `upload-response` can be used when the server message was received, and before the component processes it.
+upload-response:: can be used when the server message was received, and before the component processes it.
   At this point, you can check the response and make the upload fail setting the [propertyname]#file.error# property.
   Also you can prevent default so as response is not checked for errors and the UI is not updated.
 
@@ -89,9 +89,9 @@ There are certain events to modify the `XHR` before sending it, or the `response
 
 == Server Processing
 
-How to write your server side code to receive the file, is out of the scope of this document.
+How to write your server-side code to receive the file is out of the scope of this document.
 Nevertheless we leave here some links that you can use as reference:
 
-- `Nodejs` example: http://howtonode.org/really-simple-file-uploads
-- `PHP` example: http://www.php.net/manual/en/features.file-upload.post-method.php#example-354
-- `Java` example: http://www.codejava.net/java-ee/servlet/apache-commons-fileupload-example-with-servlet-and-jsp
+- Node.js example: http://howtonode.org/really-simple-file-uploads
+- PHP example: http://www.php.net/manual/en/features.file-upload.post-method.php#example-354
+- Java example: http://www.codejava.net/java-ee/servlet/apache-commons-fileupload-example-with-servlet-and-jsp

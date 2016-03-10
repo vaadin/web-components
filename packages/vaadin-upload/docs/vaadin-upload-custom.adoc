@@ -57,13 +57,13 @@ The following custom properties are available for styling the component.
 [width="100%", options="header"]
 |======================
 |Property name | Description
-| --vaadin-upload-buttons | styles for the buttons container
-| --vaadin-upload-button | styles for the upload button
-| --vaadin-upload-file-list | styles for the file list
-| --vaadin-upload-drop-label | styles for the drop label
-| --vaadin-upload-drop-label-dragover | styles for the drop label when overing the component with files
-| --vaadin-upload-drop-label-icon | styles for the drop icon
-| --vaadin-upload-drag-ripple | styles for the ripple animation in the drop area
+| --vaadin-upload-buttons | Styles for the buttons container
+| --vaadin-upload-button | Styles for the upload button
+| --vaadin-upload-file-list | Styles for the file list
+| --vaadin-upload-drop-label | Styles for the drop label
+| --vaadin-upload-drop-label-dragover | Styles for the drop label when overing the component with files
+| --vaadin-upload-drop-label-icon | Styles for the drop icon
+| --vaadin-upload-drag-ripple | Styles for the ripple animation in the drop area
 |======================
 
 
@@ -88,7 +88,7 @@ The following custom properties are available for styling the component.
 
 == Modifying the content
 
-[elementname]#vaadin-upload# provides content composition through the element's light dom.
+[elementname]#vaadin-upload# provides content composition through the element's light DOM.
 
 There are two modifiable parts, the content with the drop label placed before the file list, and the part after the file list.
 The first part must be marked with the class name `drop-label`, whereas the second one is composed with the remaining element content.
