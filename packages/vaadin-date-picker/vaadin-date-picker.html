@@ -130,9 +130,7 @@ See paper-input-container documentation for styling the included input fields
 
     <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex="0" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown">
       <label id="label">[[label]]</label>
-      <input id="input" is="iron-input" autocomplete="off"
-        bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="[[invalid]]" name$="[[name]]"
-        required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
+      <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
       <div suffix id="clear" on-tap="_clear" hidden$="[[_hideClearIcon(value, opened)]]">
         <iron-icon icon="clear"></iron-icon>
@@ -146,7 +144,7 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
-      <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[_focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
     <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
@@ -244,8 +242,11 @@ See paper-input-container documentation for styling the included input fields
           type: Object,
           value: function() {
             return {
-              monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-              weekdaysShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+              monthNames: [
+                'January', 'February', 'March', 'April', 'May',
+                'June', 'July', 'August', 'September', 'October', 'November', 'December'
+              ],
+              weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
               firstDayOfWeek: 0,
               today: 'today',
               cancel: 'cancel',
@@ -343,8 +344,8 @@ See paper-input-container documentation for styling the included input fields
 
       _onOverlayOpened: function() {
         this.$.overlay.initialPosition = this._selectedDate ||
-                                         this.$.overlay.initialPosition ||
-                                         this._parseDate(this.initialPosition) || new Date();
+          this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
+        this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
 
         this.listen(window, 'scroll', '_onWindowScroll');
 
@@ -404,7 +405,7 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _preventCancelOnInputContainerTap: function(e) {
-        if (e.detail.type === 'tap' && e.detail.path.indexOf(this.$.inputcontainer) > -1) {
+        if (e.detail.type === 'tap' && e.detail.path && e.detail.path.indexOf(this.$.inputcontainer) > -1) {
           e.preventDefault();
         }
       },
