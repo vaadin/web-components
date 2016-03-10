@@ -46,5 +46,5 @@
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "paper-toast": "PolymerElements/paper-toast#^1.0.0"
   },
-  "version": "1.0.0-alpha1"
+  "version": "1.0.0-alpha2"
 }
