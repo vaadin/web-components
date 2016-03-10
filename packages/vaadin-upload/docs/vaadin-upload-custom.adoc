@@ -1,0 +1,115 @@
+---
+title: Customization
+order: 3
+layout: page
+---
+
+
+[[vaadin-upload.custom]]
+= Customization
+
+It is possible to customize the [elementname]#vaadin-upload# element in two ways: changing default styles, or providing custom content.
+
+== Styling
+
+To override default styles you should use Polymer mixins.
+
+[source,html]
+----
+<style is="custom-style">
+   vaadin-upload {
+     --primary-color: #396;
+     --vaadin-upload-file-row: {
+         background-color: rgba(183, 225, 205, 0.24);
+         padding: 5px;
+         border-radius: 4px 4px 0px 0px;
+     };
+   }
+ </style>
+ <vaadin-upload></vaadin-upload>
+----
+
+[[figure.vaadin-upload.custom1]]
+.A Custom CSS
+image::img/vaadin-upload-custom-content-1.png[]
+
+
+=== Color properties
+[elementname]#vaadin-upload# reuses certain color properties from paper styles:
+
+[width="100%", options="header"]
+|======================
+|Property name | default color
+| primary-color | #00B4F0
+| primary-text-color | #000
+| light-primary-color | #7CD8F7
+| error-color | #f40303
+| disabled-text-color | #b3b3b3 or gray
+| divider-color |  #666 or #e0e0e0
+|======================
+
+=== Custom CSS properties
+
+The following custom properties are available for styling the component.
+
+==== Styles for the [elementname]#vaadin-upload# element
+
+[width="100%", options="header"]
+|======================
+|Property name | Description
+| --vaadin-upload-buttons | Styles for the buttons container
+| --vaadin-upload-button | Styles for the upload button
+| --vaadin-upload-file-list | Styles for the file list
+| --vaadin-upload-drop-label | Styles for the drop label
+| --vaadin-upload-drop-label-dragover | Styles for the drop label when overing the component with files
+| --vaadin-upload-drop-label-icon | Styles for the drop icon
+| --vaadin-upload-drag-ripple | Styles for the ripple animation in the drop area
+|======================
+
+
+==== Styles for the [elementname]#vaadin-upload-file# element
+
+[width="100%", options="header"]
+|======================
+|Property name | Description
+| --vaadin-upload-file | Styles for the entire host element
+| --vaadin-upload-file-row | Styles for the file row
+| --vaadin-upload-file-meta | Styles for the info container
+| --vaadin-upload-file-name | Styles for the file name
+| --vaadin-upload-file-status | Styles for the file status label
+| --vaadin-upload-file-error | Styles for the file error label
+| --vaadin-upload-file-commands | Styles for the buttons container
+| --vaadin-upload-file-progress | Styles for the included paper-progress
+| --vaadin-upload-file-progress-error | Styles for the progress bar when error is set
+| --vaadin-upload-file-progress-indeterminate | Styles for the progress bar when indeterminate
+| --vaadin-upload-file-progress-uploading-indeterminate | Styles for the progress bar when uploading and indeterminate
+| --vaadin-upload-file-progress-complete | Styles for the progress when file is complete
+|======================
+
+== Modifying the content
+
+[elementname]#vaadin-upload# provides content composition through the element's light DOM.
+
+There are two modifiable parts, the content with the drop label placed before the file list, and the part after the file list.
+The first part must be marked with the class name `drop-label`, whereas the second one is composed with the remaining element content.
+Right now it's not possible to customize the file list using templates, but will be possible soon.
+
+Here you have an example of how to modify them:
+
+[source,html]
+----
+<vaadin-upload >
+  <div class="drop-label">
+    Drop your documents here.
+  </div>
+  <!-- File list is here -->
+  <div>
+    Accepts up to 3 PDF files, up to 1MB each
+  </div>
+  <!-- Buttons go here -->
+</vaadin-upload>
+----
+
+[[figure.vaadin-upload.custom2]]
+.A Custom content
+image::img/vaadin-upload-custom-content-2.png[]

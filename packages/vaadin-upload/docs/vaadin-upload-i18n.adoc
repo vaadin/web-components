@@ -1,0 +1,108 @@
+---
+title: Localization
+order: 5
+layout: page
+---
+
+[[vaadin-date-picker.i18n]]
+
+= Localization
+
+The [vaadinelement]#vaadin-upload# element can be localized through the [propertyname]#i18n# property which has the following structure and default values:
+
+[source,javascript]
+----
+  i18n: {
+  dropFiles: {
+    one: 'Drop file here...',
+    many: 'Drop files here...'
+  },
+  addFiles: {
+    one: 'Select File',
+    many: 'Add Files'
+  },
+  cancel: 'Cancel',
+  cancelAll: 'Cancel All',
+  error: {
+    tooManyFiles: 'Too Many Files.',
+    fileIsTooBig: 'File is Too Big.',
+    incorrectFileType: 'Incorrect File Type.'
+  },
+  uploading: {
+    status: {
+      connecting: 'Connecting...',
+      stalled: 'Stalled.',
+      processing: 'Processing File...'
+    },
+    remainingTime: {
+      prefix: 'remaining time: ',
+      unknown: 'unknown remaining time'
+    },
+    error: {
+      serverUnavailable: 'Server Unavailable',
+      unexpectedServerError: 'Unexpected Server Error',
+      forbidden: 'Forbidden'
+    }
+  },
+  units: {
+    size: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  },
+  formatSize: function(bytes) {...},
+  formatTime: function(seconds, [secs, mins, hours]) {...}
+}
+----
+
+
+The default implementation of the [propertyname]#i18n.formatTime# returns a 'HH:MM:SS' string and the [propertyname]#i18n.formatSize# function returns the most accurate unit for the size of the file being uploaded (ie: 11 MB).
+For computing units, we use the `1000` divisor which is the most used way nowadays. If you want to use the binary specification, set the [propertyname]#18n.units.sizeBase# to `1024`.
+
+== Example
+
+To change the default localization or any property, change the entire [propertyname]#i18n# object or just the property you want to modify.
+
+[source,html]
+----
+<vaadin-upload id="en"></vaadin-upload>
+<vaadin-upload id="ru"></vaadin-upload>
+----
+[source,javascript]
+----
+// You can change certain parts of the i18n object
+var upload_en = document.getElementById('en')
+upload_en.i18n.dropFilesHere = 'Drop your videos and images in this area';
+18n.units.sizeBase = 1024;
+
+// Or you can replace the entire i18n object.
+var upload_ru = document.getElementById('ru')
+upload_ru.i18n = {
+ dropFilesHere: 'Перетащите файлы сюда...',
+ addFile: 'Добавить файл',
+ addFiles: 'Добавить файлы',
+ cancel: 'Отменить',
+ cancelAll: 'Отменить все',
+ error: {
+   tooManyFiles: 'Слишком много файлов.',
+   fileIsTooBig: 'Слишком большой файл.',
+   incorrectFileType: 'Некорректный тип файла.'
+ },
+ uploading: {
+   status: {
+     connecting: 'Соединение...',
+     stalled: 'Загрузка застопорилась.',
+     processing: 'Обработка файла...'
+   },
+   remainingTime: {
+     prefix: 'оставшееся время: ',
+     unknown: 'оставшееся время неизвестно'
+   },
+   error: {
+     serverUnavailable: 'Сервер недоступен',
+     unexpectedServerError: 'Неожиданная ошибка сервера',
+     forbidden: 'Загрузка запрещена'
+   }
+ },
+ units: {
+   size: ['Б', 'Кбайт', 'Мбайт', 'Гбайт', 'Тбайт', 'Пбайт', 'Эбайт', 'Збайт', 'Ибайт']
+ }
+}
+----
