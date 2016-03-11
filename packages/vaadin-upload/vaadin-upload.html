@@ -70,14 +70,14 @@ Custom property | Description | Default
         overflow: hidden;
       }
 
-      :host:not([nodrop]) {
+      :host(:not([nodrop])) {
         border: 1px dashed;
         border-color: var(--divider-color,  #666);
         border-radius: 3px;
         padding: 16px;
       }
 
-      :host[dragover-valid] {
+      :host([dragover-valid]) {
         border-color: var(--primary-color, #00B4F0);
       }
 
@@ -91,7 +91,7 @@ Custom property | Description | Default
         display: none;
         z-index: 10;
       }
-      :host[dragover]::before {
+      :host([dragover])::before {
         display: block;
       }
 
@@ -108,8 +108,8 @@ Custom property | Description | Default
         @apply(--vaadin-upload-drop-label);
       }
 
-      :host[dragover-valid] #dropLabel,
-      :host[dragover-valid] ::content .drop-label {
+      :host([dragover-valid]) #dropLabel,
+      :host([dragover-valid]) ::content .drop-label {
         color: var(--primary-color, #00B4F0);
         @apply(--vaadin-upload-drop-label-dragover);
       }
@@ -133,7 +133,7 @@ Custom property | Description | Default
         @apply(--vaadin-upload-buttons);
       }
 
-      :host[nodrop] #buttons {
+      :host([nodrop]) #buttons {
         @apply(--layout-end-justified);
         @apply(--vaadin-upload-buttons-nodrop);
       }
@@ -152,7 +152,7 @@ Custom property | Description | Default
         @apply(--vaadin-upload-button-add);
       }
 
-      :host[nodrop] #addFiles {
+      :host([nodrop]) #addFiles {
         margin-right: auto;
         @apply(--vaadin-upload-button-add-nodrop);
       }
