@@ -35,17 +35,17 @@ image::img/vaadin-upload-custom-content-1.png[]
 
 
 === Color properties
-[elementname]#vaadin-upload# reuses certain color properties from paper styles:
+[elementname]#vaadin-upload# reuses certain color properties from link:https://elements.polymer-project.org/elements/paper-styles[paper-styles]:
 
 [width="100%", options="header"]
 |======================
 |Property name | default color
-| primary-color | #00B4F0
-| primary-text-color | #000
-| light-primary-color | #7CD8F7
-| error-color | #f40303
-| disabled-text-color | #b3b3b3 or gray
-| divider-color |  #666 or #e0e0e0
+| --primary-color | #00B4F0
+| --primary-text-color | #000
+| --light-primary-color | #7CD8F7
+| --error-color | #f40303
+| --disabled-text-color | #b3b3b3 or gray
+| --divider-color |  #666 or #e0e0e0
 |======================
 
 === Custom CSS properties
