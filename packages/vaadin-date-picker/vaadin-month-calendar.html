@@ -76,7 +76,7 @@
     </style>
 
     <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
-    <div id="monthGrid" on-tap="_handleTap">
+    <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault">
       <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek)]]">
         <div class="weekday">[[item]]</div>
       </template>
@@ -176,6 +176,10 @@
           this.selectedDate = e.target.date;
           this.fire('date-tap');
         }
+      },
+
+      _preventDefault: function(e) {
+        e.preventDefault();
       }
 
     });
