@@ -13,8 +13,10 @@
     <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
     </tooltip>
     <plot-options>
-        <pie start-angle="45" end-angle="180" cursor="pointer">
-            <data-labels enabled="true" format="<b>{point.name}</b>: {point.percentage:.1f} %">
+        <pie  start-angle="45" end-angle="180" cursor="pointer">
+            <data-labels  enabled="true" format="<b>{point.name}</b>: {point.percentage:.1f} %">
+                <distance>-30</distance>
+                <color>rgb(255,0,0)</color>
             </data-labels>
         </pie>
     </plot-options>
@@ -40,6 +42,7 @@
             expect(conf.plotOptions.pie.endAngle).to.equal(180);
             expect(conf.plotOptions.pie.cursor).to.equal("pointer");
             expect(conf.plotOptions.pie.dataLabels).to.exist;
+            expect(conf.plotOptions.pie.dataLabels.distance).to.equal(-30);
             expect(conf.series).to.exist;
             expect(conf.series).not.to.be.empty;
             expect(conf.series[0].data).to.exist;

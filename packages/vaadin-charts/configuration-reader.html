@@ -172,20 +172,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             return node.hasChildNodes() && node.childNodes.length == 1 && node.childNodes[0].nodeType == 3 && node.textContent.trim() != "";
         },
 
+
         /**
          * Returns a boolean value if text content is 'true' or 'false'. Otherwise, the return value is the text content itself.
          *
          * @param {node} the node to parse the text content
          **/
         _parseTextContent: function (node) {
-            var content = node.textContent;
-            if ("true" == content) {
-                return true;
+            try {
+              return JSON.parse(node.textContent);
+            } catch (e) {
+               return node.textContent;
             }
-            if ("false" == content) {
-                return false;
-            }
-            return content;
         },
 
         /**
@@ -244,7 +242,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                     } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
                         if (this._textContentNodes.indexOf(camelName) === -1 && this._hasOnlyTextContent(node)) {
                             result = this._parseTextContent(node);
-                        } else {
+                        }
+                        else {
                             result = {};
                             this._loadFromNode(result, node);
                             this._loadConfiguration(result, node);
