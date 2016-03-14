@@ -25,22 +25,21 @@
 
       beforeEach(function(done) {
         overlay = fixture('overlay');
-        waitUntilScrolledTo(new Date(), done);
+        overlay.i18n = {
+          monthNames: [
+            'January', 'February', 'March', 'April', 'May',
+            'June', 'July', 'August', 'September', 'October', 'November', 'December'
+          ],
+          weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          firstDayOfWeek: 0
+        };
+        waitUntilScrolledTo(overlay, new Date(), done);
       });
-
-      function waitUntilScrolledTo(date, callback) {
-        var monthIndex = overlay._differenceInMonths(date, new Date());
-        if (overlay._visibleMonthIndex === monthIndex) {
-          callback();
-        } else {
-          setTimeout(waitUntilScrolledTo, 10, date, callback);
-        }
-      }
 
       it('should reflect the year of currently visible month on the toolbar', function(done) {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
-        waitUntilScrolledTo(date, function() {
+        waitUntilScrolledTo(overlay, date, function() {
           expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
           done();
         });
@@ -49,7 +48,7 @@
       it('should scroll to the given date', function(done) {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
-        waitUntilScrolledTo(date, function() {
+        waitUntilScrolledTo(overlay, date, function() {
           expect(monthsEqual(getFirstVisibleItem(overlay.$.scroller, 0).firstElementChild.month, date)).to.be.true;
           done();
         });
@@ -58,7 +57,7 @@
       it('should scroll to the given year', function(done) {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
-        waitUntilScrolledTo(date, function() {
+        waitUntilScrolledTo(overlay, date, function() {
           var offset = overlay.$.yearScroller.clientHeight / 2;
           expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.equal('2000');
           done();
@@ -122,9 +121,9 @@
         it('should scroll to current date when tapping on today button', function(done) {
           var date = new Date(2000, 1, 1);
           overlay.scrollToDate(date);
-          waitUntilScrolledTo(date, function() {
+          waitUntilScrolledTo(overlay, date, function() {
             tap(overlay.$.todayButton);
-            waitUntilScrolledTo(new Date(), function() {
+            waitUntilScrolledTo(overlay, new Date(), function() {
               done();
             });
           });
