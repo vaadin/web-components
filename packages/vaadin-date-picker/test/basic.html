@@ -225,30 +225,33 @@
 
       describe('window scroll realign', function() {
 
-        it('should realign on window scroll', function(done) {
-          datepicker.open();
+        beforeEach(function(done) {
           datepicker.addEventListener('iron-overlay-opened', function() {
-            var spy = sinon.spy(datepicker, '_onWindowScroll');
-            Polymer.Base.fire('scroll', {}, {
-              node: window
-            });
-            datepicker.async(function() {
-              expect(spy.called).to.be.true;
-              done();
-            }, 100);
+            datepicker.async(done, 100);
           });
+          datepicker.async(function() {
+            datepicker.open();
+          }, 100);
+        });
+
+        it('should realign on window scroll', function(done) {
+          var spy = sinon.spy(datepicker, '_onWindowScroll');
+          Polymer.Base.fire('scroll', {}, {
+            node: window
+          });
+          datepicker.async(function() {
+            expect(spy.called).to.be.true;
+            done();
+          }, 100);
         });
 
         it('should not realign on year/month scroll', function(done) {
-          datepicker.open();
-          datepicker.addEventListener('iron-overlay-opened', function() {
-            var spy = sinon.spy(datepicker, '_onWindowScroll');
-            datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;
-            datepicker.async(function() {
-              expect(spy.called).to.be.false;
-              done();
-            }, 1);
-          });
+          var spy = sinon.spy(datepicker, '_onWindowScroll');
+          datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;
+          datepicker.async(function() {
+            expect(spy.called).to.be.false;
+            done();
+          }, 1);
         });
 
       });
