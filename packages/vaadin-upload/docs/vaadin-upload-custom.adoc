@@ -58,6 +58,8 @@ The following custom properties are available for styling the component.
 |======================
 |Property name | Description
 | --vaadin-upload-buttons | Styles for the buttons container
+| --vaadin-upload-buttons-primary | Styles for the primary buttons container (on the left side)
+| --vaadin-upload-buttons-secondary | Styles for the secondary buttons container (on the right side)
 | --vaadin-upload-button | Styles for the upload button
 | --vaadin-upload-file-list | Styles for the file list
 | --vaadin-upload-drop-label | Styles for the drop label

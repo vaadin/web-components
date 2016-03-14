@@ -72,6 +72,7 @@ This program is available under Apache License Version 2.0, available at https:/
             --error-color: darkred;
 
             border: 2px solid #ccc;
+            padding: 14px;
             background: #eee;
             border-radius: 0;
           }
@@ -89,10 +90,10 @@ This program is available under Apache License Version 2.0, available at https:/
     <demo-snippet>
       <template>
         <vaadin-upload>
-          <h2 class="drop-label">
+          <div class="drop-label">
             <iron-icon icon="cloud-upload"></iron-icon>
-            Drop files here...
-          </h2>
+            Drop files to the cloud...
+          </div>
         </vaadin-upload>
       </template>
     </demo-snippet>
@@ -110,7 +111,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <vaadin-upload id="rejectEventDemo" max-files="3" accept=".pdf" max-file-size="1000000">
           <div class="drop-label">
             <iron-icon icon="file-upload"></iron-icon>
-            Accepts up to 3 PDF files, up to 1MB each
+            Up to 3 PDF files, 1 MB each
           </div>
         </vaadin-upload>
 
