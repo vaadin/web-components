@@ -417,6 +417,13 @@
           return;
         }
 
+        if (!animate) {
+          this.$.scroller.position = targetPosition;
+          this._targetPosition = undefined;
+          this._onMonthScroll();
+          return;
+        }
+
         this._targetPosition = targetPosition;
 
         // http://gizma.com/easing/
