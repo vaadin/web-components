@@ -41,7 +41,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Elements that contain an array of values, either as a comma-separated list or multiple elements
          **/
-        _arrayNodes: ["categories", "stops", "margin", "center", "units"],
+        _arrayNodes: ["categories", "margin", "center", "units"],
+
+        /**
+         * Elements that contain two dimensional arrays. The values in value array can be specified using attributes and parser knows the correct order.
+         **/
+        _twoDimArrayNodes: {"stops": ["position", "color"] },
 
         /**
          * Elements whose text content should be set as text property value
@@ -209,7 +214,29 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                             }
                         }
                         result = result.length > 1 ? result : result[0];
-
+                    } else if (this._twoDimArrayNodes.hasOwnProperty(name)) {
+                        result = [];
+                        if (this._hasOnlyTextContent(node)) {
+                            node.textContent.split(/\s*,\s*/).forEach(function (word) {
+                                result.push(this._parseAttribute(word));
+                            }, this);
+                        } else {
+                            var values = this._twoDimArrayNodes[name];
+                            for (var i = 0; i < values.length; ++i) {
+                                var name = values[i];
+                                var attr = this._parseAttribute(node.getAttribute(name));
+                                if(attr != null) {
+                                    result.push(attr);
+                                } else {
+                                    for (var j = 0; j < node.childNodes.length; j++) {
+                                        var child = node.childNodes[j];
+                                        if (name === child.nodeName.toLowerCase()) {
+                                            result.push(this._parseAttribute(child.textContent));
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     } else if (this._nodeValueAttributes.indexOf(name) !== -1) {
                         result = node;
                     } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
