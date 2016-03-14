@@ -38,10 +38,10 @@ Custom property | Description | Default
 `--vaadin-upload-drop-label-icon`|styles for the drop icon|`{}`
 `--vaadin-upload-file-list`|styles for the file list|`{}`
 `--vaadin-upload-buttons`|styles for the buttons container|`{}`
-`--vaadin-upload-buttons-nodrop`|styles for the buttons container when `nodrop` property is `true`|`{}`
+`--vaadin-upload-buttons-primary`|styles for the primary buttons container (left side)|`{}`
+`--vaadin-upload-buttons-secondary`|styles for the secondary buttons container (right side)|`{}`
 `--vaadin-upload-button`|styles for the buttons|`{}`
 `--vaadin-upload-button-add`|styles for the upload button|`{}`
-`--vaadin-upload-button-add-nodrop`|styles for the upload button when `nodrop` property is `true`|`{}`
 `--vaadin-upload-file-canceled`|styles for the upload cancel. Use for overriding file cancel animation|`{}`
 
 
@@ -66,7 +66,7 @@ Custom property | Description | Default
         @apply(--layout-vertical);
         display: block;
         position: relative;
-        text-align: center;
+        text-align: left;
         overflow: hidden;
       }
 
@@ -101,9 +101,11 @@ Custom property | Description | Default
       }
 
       #dropLabel {
+        @apply(--layout-flex);
         @apply(--paper-font-body2);
         position: relative;
-        margin-top: 8px;
+        padding: .43em .57em;
+        margin: 0 .29em;
         color: var(--disabled-text-color, #b3b3b3);
         @apply(--vaadin-upload-drop-label);
       }
@@ -121,21 +123,29 @@ Custom property | Description | Default
 
       #fileList {
         position: relative;
-        text-align: left;
         @apply(--vaadin-upload-file-list);
       }
 
       #buttons {
         @apply(--layout-horizontal);
-        @apply(--layout-center-justified);
         position: relative;
-        margin: 8px 0 0;
         @apply(--vaadin-upload-buttons);
       }
 
-      :host([nodrop]) #buttons {
+      #buttonsPrimary {
+        @apply(--layout-horizontal);
+        @apply(--layout-flex);
+        @apply(--layout-start);
+        margin-left: -.29em;
+        @apply(--vaadin-upload-buttons-primary);
+      }
+
+      #buttonsSecondary {
+        @apply(--layout-horizontal);
         @apply(--layout-end-justified);
-        @apply(--vaadin-upload-buttons-nodrop);
+        @apply(--layout-start);
+        margin-right: -.29em;
+        @apply(--vaadin-upload-buttons-secondary);
       }
 
       paper-button {
@@ -146,27 +156,25 @@ Custom property | Description | Default
       }
 
       #addFiles {
-        margin-right: 0;
         background: var(--primary-color, #00B4F0);
         color: var(--primary-font-color, #FFFFFF);
         @apply(--vaadin-upload-button-add);
       }
-
-      :host([nodrop]) #addFiles {
-        margin-right: auto;
-        @apply(--vaadin-upload-button-add-nodrop);
-      }
     </style>
 
-    <div id="dropLabel" hidden$="[[nodrop]]">
-      <content select=".drop-label">
-        <iron-icon icon="file-upload"></iron-icon>
-        [[_i18nPlural(maxFiles, i18n.dropFiles)]]
-      </content>
-    </div>
     <div id="buttons">
-      <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles)]]</paper-button>
-      <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
+      <div id="buttonsPrimary">
+        <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles)]]</paper-button>
+        <div id="dropLabel" hidden$="[[nodrop]]">
+          <content select=".drop-label">
+            <iron-icon icon="file-upload"></iron-icon>
+            [[_i18nPlural(maxFiles, i18n.dropFiles)]]
+          </content>
+        </div>
+      </div>
+      <div id="buttonsSecondary">
+        <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
+      </div>
     </div>
     <template id="defaultFileTemplate">
       <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
@@ -317,7 +325,7 @@ Custom property | Description | Default
             },
             addFiles: {
               one: 'Select File',
-              many: 'Add Files'
+              many: 'Upload Files'
             },
             cancel: 'Cancel',
             cancelAll: 'Cancel All',
