@@ -300,6 +300,8 @@
           observer: '_focusedDateChanged'
         },
 
+        _focusedMonthDate: Number,
+
         /**
          * Date which should be visible when there is no value selected.
          */
@@ -623,12 +625,19 @@
         var focus = this._currentlyFocusedDate();
 
         this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
+        this._focusedMonthDate = this.focusedDate.getDate();
       },
 
       _moveFocusByMonths: function(months) {
         var focus = this._currentlyFocusedDate();
+        var dateToFocus = new Date(focus.getFullYear(), focus.getMonth() + months, 1);
+        var targetMonth = dateToFocus.getMonth();
 
-        this.focusedDate = new Date(focus.getFullYear(), focus.getMonth() + months, focus.getDate());
+        dateToFocus.setDate(this._focusedMonthDate || (this._focusedMonthDate = focus.getDate()));
+        if (dateToFocus.getMonth() !== targetMonth) {
+          dateToFocus.setDate(0);
+        }
+        this.focusedDate = dateToFocus;
       }
     });
   </script>
