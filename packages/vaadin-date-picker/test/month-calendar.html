@@ -126,6 +126,21 @@
         expect(monthCalendar.selectedDate.getDate()).to.equal(10);
       });
 
+      it('should prevent default on touchend', function() {
+        var preventDefaultSpy = sinon.spy();
+        var touchendEvent = new CustomEvent('touchend', {
+          bubbles: true,
+          cancelable: true
+        });
+        touchendEvent.changedTouches = [{}];
+        touchendEvent.preventDefault = preventDefaultSpy;
+
+        // Dispatch a fake touchend event from a date element.
+        var dateElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)');
+        dateElement.dispatchEvent(touchendEvent);
+        expect(preventDefaultSpy).to.have.been.called;
+      });
+
       it('should work with sub 100 years', function(done) {
         var month = new Date(0, 0);
         month.setFullYear(99);
