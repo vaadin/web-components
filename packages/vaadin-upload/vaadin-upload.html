@@ -650,6 +650,7 @@ Custom property | Description | Default
          if (file.xhr) {
            file.xhr.abort();
          }
+         this._notifyFileChanges(file);
        }
      },
 
