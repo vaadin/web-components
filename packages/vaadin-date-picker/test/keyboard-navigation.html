@@ -237,6 +237,21 @@
 
           });
 
+          it('should not skip a month', function() {
+            datepicker.value = '2000-01-31';
+            pageDown();
+
+            expect(focusedDate()).to.eql(new Date(2000, 1, 29));
+          });
+
+          it('should focus the previously focused date number if available', function() {
+            datepicker.value = '2000-01-31';
+            pageDown();
+            pageDown();
+
+            expect(focusedDate()).to.eql(new Date(2000, 2, 31));
+          });
+
           it('should focus next year with shift and pagedown', function() {
             pageDown('shift');
 
