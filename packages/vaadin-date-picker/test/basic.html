@@ -347,6 +347,38 @@
         });
       });
 
+      describe('Disabled', function() {
+
+        beforeEach(function() {
+          datepicker.disabled = true;
+        });
+
+        it('dropdown should not open', function() {
+          datepicker.open();
+          expect(datepicker.$.dropdown.opened).to.be.equal(false);
+        });
+
+        it('calendar icon should be hidden', function() {
+          expect(datepicker.$.calendar.hidden).to.be.equal(true);
+        });
+      });
+
+      describe('Readonly', function() {
+
+        beforeEach(function() {
+          datepicker.readonly = true;
+        });
+
+        it('dropdown should not open', function() {
+          datepicker.open();
+          expect(datepicker.$.dropdown.opened).to.be.equal(false);
+        });
+
+        it('calendar icon should be hidden', function() {
+          expect(datepicker.$.calendar.hidden).to.be.equal(true);
+        });
+      });
+
     });
   </script>
 
