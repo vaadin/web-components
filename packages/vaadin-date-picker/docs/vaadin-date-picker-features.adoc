@@ -39,6 +39,38 @@ document.getElementById('my-picker').i18n = {
 
 Once set, the [propertyname]#i18n# property affects how months and dates are displayed in the [vaadinelement]#vaadin-date-picker# dropdown as well as the language of the buttons in the element.
 
+=== Using Moment.js for Localization
+
+http://momentjs.com/[Moment.js] is a popular JavaScript library for handling date values.
+It comes bundled with a set of locale data, which can be utilized to provide most of the localization properties for [vaadinelement]#vaadin-date-picker#.
+You can assign the [propertyname]#monthNames#, [propertyname]#weekdaysShort#, [propertyname]#firstDayOfWeek# properties directly from Moment.js.
+For the [propertyname]#formatDate# function you can create a simple function that delegates the date value formatting.
+
+See the code example below for details.
+
+[source,html]
+----
+<!-- Import Moment.js and the locale(s) needed. -->
+<script src="bower_components/moment/min/moment.min.js"></script>
+<script src="bower_components/moment/locale/fi.js"></script>
+----
+[source,javascript]
+----
+// Set the Finnish locale.
+moment.locale('fi');
+
+// Assign the i18n property with locale data from Moment.js.
+document.querySelector('vaadin-date-picker').i18n = {
+  monthNames: moment.months(),
+  weekdaysShort: moment.weekdaysShort(),
+  firstDayOfWeek: moment.localeData().firstDayOfWeek(),
+  today: 'Tänään',
+  cancel: 'Peruuta',
+  formatDate: function(d) {
+    return moment(d).format(moment.localeData().longDateFormat('L'));
+  }
+};
+----
 
 == Initial Position
 
