@@ -43,7 +43,7 @@ Custom property | Description | Default
       :host {
         @apply(--layout-vertical);
         margin: 8px 0;
-        padding: 8px 0 0;
+        padding: 6px 0 0;
         @apply(--vaadin-upload-file);
       }
 
@@ -149,16 +149,20 @@ Custom property | Description | Default
       }
 
       @keyframes fade-out {
+        0% {
+          max-height: 38px;
+        }
         50%  {
-          max-height: 50px;
+          max-height: 38px;
           margin: 8px 0;
-          padding: 8px 0 0;
+          padding: 6px 0 0;
+          opacity: 0;
         }
         100% {
-          opacity: 0;
           max-height: 0px;
           margin: 0;
           padding: 0;
+          opacity: 0;
         }
       }
     </style>
