@@ -240,23 +240,33 @@ Custom property | Description | Default
       return this.fire(button.getAttribute('file-event'), {file: this.file});
     }
 
-    /**
-     * Fired when retry button pressed. Listened by `vaadin-upload`. Fire this
-     * event if you want to perform retry upload.
-     *
-     * @event file-retry
-     * @param {Object} detail
-     *  @param {Object} detail.file file to retry upload of
-     */
+   /**
+    * Fired when the retry button is pressed. It is listened by `vaadin-upload`
+    * which will start a new upload process of this file.
+    *
+    * @event file-retry
+    * @param {Object} detail
+    *  @param {Object} detail.file file to retry upload of
+    */
 
     /**
-     * Fired when abort button pressed. Listened by `vaadin-upload`. Fire this
-     * event if you want to abort the file upload and remove the file from the
-     * upload file list.
+     * Fired when abort button is pressed. It is listened by `vaadin-upload` which
+     * will abort the upload in progress, but will not remove the file from the list
+     * to allow the animation to hide the element to be run.
      *
      * @event file-abort
      * @param {Object} detail
      *  @param {Object} detail.file file to abort upload of
+     */
+
+    /**
+     * Fired after the animation to hide the element has finished. It is listened
+     * by `vaadin-upload` which will actually remove the file from the upload
+     * file list.
+     *
+     * @event file-remove
+     * @param {Object} detail
+     *  @param {Object} detail.file file to remove from the  upload of
      */
   });
 
