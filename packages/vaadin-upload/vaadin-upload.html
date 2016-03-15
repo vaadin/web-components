@@ -183,7 +183,7 @@ Custom property | Description | Default
       <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
     </div>
     <content></content>
-    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
+    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}" multiple="[[_isMultiple(maxFiles)]]">
     <paper-ripple id="dragRipple" noink></paper-ripple>
   </template>
 </dom-module>
@@ -293,15 +293,6 @@ Custom property | Description | Default
           return [];
         }
       },
-
-      /**
-       * Specifies whether the file selection popup is configured to select
-       * multiple files.
-       */
-       nomultiple: {
-         type: Boolean,
-         value: false
-       },
 
       /**
        * Limit of files to upload, by default it is unlimited. If the value is
@@ -735,7 +726,6 @@ Custom property | Description | Default
 
     _onAddFilesClick: function(event) {
       if (document.createEvent) {
-        this.$.fileInput.multiple = !this.nomultiple && this.maxFiles != 1;
         this.$.fileInput.value = '';
         this.$.fileInput.click();
       }
@@ -781,8 +771,11 @@ Custom property | Description | Default
 
     _i18nPlural: function(value, plural) {
       return value == 1 ? plural.one : plural.many;
-    }
+    },
 
+    _isMultiple: function() {
+      return this.maxFiles != 1;
+    }
   });
 
   /**
