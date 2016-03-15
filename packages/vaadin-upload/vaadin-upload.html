@@ -704,7 +704,6 @@ Custom property | Description | Default
       }
       file.loaded = 0;
       this.unshift('files', file);
-      this.fire('file-add', {file: file});
       this._uploadFile(file);
     },
 
@@ -743,6 +742,7 @@ Custom property | Description | Default
     },
 
     _onFileRemove: function(event) {
+      event.stopPropagation();
       this._removeFile(event.detail.file);
     },
 
@@ -777,14 +777,6 @@ Custom property | Description | Default
    * @param {Object} detail
    *  @param {Object} detail.file the file added
    *  @param {Object} detail.error the cause
-   */
-
-  /**
-   * Fired when a file is added for uploading.
-   *
-   * @event file-add
-   * @param {Object} detail
-   *  @param {Object} detail.file the file added
    */
 
   /**
