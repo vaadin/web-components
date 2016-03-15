@@ -56,6 +56,7 @@ Custom property | Description | Default
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-button/paper-button.html">
+
 <link rel="import" href="vaadin-upload-file.html">
 
 <dom-module id="vaadin-upload">
@@ -163,11 +164,11 @@ Custom property | Description | Default
 
     <div id="buttons">
       <div id="buttonsPrimary">
-        <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles)]]</paper-button>
+        <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]</paper-button>
         <div id="dropLabel" hidden$="[[nodrop]]">
           <content select=".drop-label">
             <iron-icon icon="file-upload"></iron-icon>
-            [[_i18nPlural(maxFiles, i18n.dropFiles)]]
+            [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
           </content>
         </div>
       </div>
@@ -257,9 +258,37 @@ Custom property | Description | Default
         value: false
       },
 
-      // TODO: make this private in a separate PR, we dont want users modifying the array.
+      /**
+       * It is the array of files being processed, or already uploaded. Bind to
+       * this property if you want to show some custom info in your UI, for example:
+       * ```
+       *   <template is="dom-bind">
+       *    <vaadin-upload files={{files}}></vaadin-upload>
+       *    <button disabled=[[!files.length]]>Send</button>
+       *   </template>
+       * ```
+       * Each element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)
+       * object with a number of extra properties  to track the upload process:
+       * - _file.uploadTarget_: The target URL used to upload this file.
+       * - _file.elapsed_: Elapsed time since the upload started.
+       * - _file.elapsedStr_: Human-readable elapsed time.
+       * - _file.remaining_: Number of seconds remaining for the upload to finish.
+       * - _file.remainingStr_: Human-readable remaining time for the upload to finish.
+       * - _file.progress_: Percentage of the file already uploaded.
+       * - _file.speed_: Upload speed in kB/s.
+       * - _file.size_: File size in bytes.
+       * - _file.totalStr_: Human-readable total size of the file.
+       * - _file.loaded_: Bytes transferred so far.
+       * - _file.loadedStr_: Human-readable uploaded size at the moment.
+       * - _file.status_: Status of the upload process.
+       * - _file.error_: Error message in case the upload failed.
+       * - _file.abort_: True if the file was canceled by the user.
+       * - _file.complete_: True when the file was transferred to the server.
+       * - _file.uploading_: True while trasfering data to the server.
+       */
       files: {
         type: Array,
+        notify: true,
         value: function() {
           return [];
         }
