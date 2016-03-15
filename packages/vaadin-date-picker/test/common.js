@@ -14,7 +14,7 @@ function monthsEqual(date1, date2) {
 
 function getFirstVisibleItem(scroller, bufferOffset) {
   var children = [];
-  bufferOffset = (bufferOffset || 0);
+  bufferOffset = (bufferOffset ||  0);
 
   scroller._buffers.forEach(function(buffer) {
     [].forEach.call(buffer.children, function(itemWrapper) {
@@ -37,5 +37,17 @@ function describeSkipIf(bool, title, callback) {
     describe.skip(title, callback);
   } else {
     describe(title, callback);
+  }
+}
+
+function waitUntilScrolledTo(overlay, date, callback) {
+  if (overlay.$.scroller.position) {
+    overlay._onMonthScroll();
+  }
+  var monthIndex = overlay._differenceInMonths(date, new Date());
+  if (overlay.$.scroller.position === monthIndex) {
+    callback();
+  } else {
+    setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
   }
 }
