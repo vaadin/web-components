@@ -71,7 +71,7 @@
           // No idea why but IE requires these in order to repaint the header
           overlay.$.header.setAttribute('style', '');
           overlay.$.header.removeAttribute('style');
-          expect(window.getComputedStyle(overlay.$.header).display).to.equal('block');
+          expect(window.getComputedStyle(overlay.$.header).display).to.equal('flex');
         });
 
         it('should be invisible', function() {

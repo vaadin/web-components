@@ -182,7 +182,8 @@
 
       #header {
         background: var(--vaadin-date-picker-header-background, --default-primary-color);
-        padding: 0 1em;
+        padding: 0 14px 14px;
+        display: flex;
         flex-shrink: 0;
         @apply(--paper-font-subhead);
         @apply(--shadow-elevation-2dp);
@@ -194,18 +195,31 @@
         color: var(--dark-theme-text-color);
       }
 
+      #header iron-icon {
+        color: var(--dark-theme-text-color);
+        cursor: pointer;
+      }
+
+      #toggle {
+        align-self: flex-end;
+      }
+
       #header paper-input-container {
+        flex: 1;
+        margin-right: 24px;
+        padding-bottom: 0;
         --paper-input-container-underline: {
           display: none;
         }
         --paper-input-container-underline-focus: {
-          display: none;
+          display: block;
+          background: var(--dark-theme-text-color);
+          -webkit-transform: none;
+          transform: none;
         }
       }
 
       #clear {
-        color: var(--dark-theme-text-color);
-        cursor: pointer;
         display: none;
       }
 
@@ -225,15 +239,6 @@
         flex-shrink: 0;
         @apply(--vaadin-date-picker-footer);
       }
-
-      #footer paper-button {
-        display: flex;
-        align-items: center;
-      }
-
-      #todayButton iron-icon {
-        padding-right: 5px;
-      }
     </style>
 
     <div id="header" on-touchend="_preventDefault">
@@ -242,6 +247,7 @@
         <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
+      <iron-icon id="toggle" icon="event" on-tap="_close"></iron-icon>
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
@@ -265,7 +271,6 @@
 
     <div id="footer" on-touchend="_preventDefault">
       <paper-button id="todayButton" on-tap="_scrollToCurrentMonth">
-        <iron-icon icon='today'></iron-icon>
         [[i18n.today]]
       </paper-button>
       <paper-button id="cancelButton" on-tap="_close">

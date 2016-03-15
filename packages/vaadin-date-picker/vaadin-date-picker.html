@@ -77,12 +77,16 @@ See paper-input-container documentation for styling the included input fields
       }
 
       #dropdown:not([fullscreen]) {
-        margin: 10px 0;
+        margin: 12px 0 10px 0;
       }
 
       #overlay {
         height: 100vh;
         width: 420px;
+      }
+
+      #inputcontainer {
+        padding-bottom: 0;
       }
 
       #inputcontainer,
@@ -99,20 +103,41 @@ See paper-input-container documentation for styling the included input fields
         display: block;
       }
 
-      #input {
-        pointer-events: none
-      }
-
-      #clear,
-      #calendar {
+      paper-input-container div[suffix] {
         position: relative;
+        width: 24px;
+        height: 24px;
+        text-align: center;
       }
 
-      #clear iron-icon,
-      #calendar iron-icon {
-        width: 24px;
-        height: 20px;
-        fill: var(--secondary-text-color);
+      paper-input-container iron-icon {
+        fill: rgba(0, 0, 0, .26);
+        cursor: pointer;
+        --iron-icon-width: 20px;
+        --iron-icon-height: 20px;
+        margin-top: -1px;
+        transition: fill 0.2s;
+      }
+
+      paper-input-container paper-ripple {
+        color: rgba(0, 0, 0, .54);
+      }
+
+      paper-input-container iron-icon:hover,
+      paper-input-container[opened] iron-icon {
+        fill: rgba(0, 0, 0, .54);
+      }
+
+      paper-input-container[opened] iron-icon:hover {
+        fill: rgba(0, 0, 0, .86);
+      }
+
+      #input {
+        pointer-events: none;
+      }
+
+      #clear {
+        right: 4px;
       }
 
       #clear iron-icon {
@@ -128,7 +153,7 @@ See paper-input-container documentation for styling the included input fields
       }
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex$="[[_getTabIndex(disabled, readonly)]]" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown" disabled$="[[disabled]]" readonly$="[[readonly]]">
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" tabindex$="[[_getTabIndex(disabled, readonly)]]" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown" disabled$="[[disabled]]" readonly$="[[readonly]]" opened$="[[_opened]]">
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
