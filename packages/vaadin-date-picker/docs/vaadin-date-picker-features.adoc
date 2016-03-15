@@ -83,3 +83,23 @@ When [vaadinelement]#vaadin-date-picker# already has a value selected, opening t
 ----
 <vaadin-date-picker initial-position="2020-05-01"></vaadin-date-picker>
 ----
+
+== Disabled
+
+When [vaadinelement]#vaadin-date-picker# has a [propertyname]#disabled# property, the input is disabled and the dropdown can't be opened.
+You can still set and change the value of the [vaadinelement]#vaadin-date-picker#.
+
+[source,html]
+----
+<vaadin-date-picker disabled></vaadin-date-picker>
+----
+
+== Readonly
+
+When [vaadinelement]#vaadin-date-picker# has a [propertyname]#readonly# property, the dropdown can't be opened.
+You can still set and change the value of the [vaadinelement]#vaadin-date-picker#.
+
+[source,html]
+----
+<vaadin-date-picker readonly></vaadin-date-picker>
+----

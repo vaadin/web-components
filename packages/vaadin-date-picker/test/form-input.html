@@ -80,6 +80,16 @@
         expect(spy).to.have.been.called;
       });
 
+      it('should have disabled paper-input-container', function() {
+        datepicker.disabled = true;
+        expect(datepicker.$$('paper-input-container').getAttribute('disabled')).to.equal('');
+      });
+
+      it('should have readonly paper-input-container', function() {
+        datepicker.readonly = true;
+        expect(datepicker.$$('paper-input-container').getAttribute('readonly')).to.equal('');
+      });
+
     });
   </script>
 
