@@ -1,40 +1,24 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-date-picker.svg) [![Build Status](https://travis-ci.org/vaadin/vaadin-date-picker.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-date-picker)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # &lt;vaadin-date-picker&gt;
 
-`<vaadin-date-picker>` is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-date-picker&gt;](https://vaadin.com/elements/-/element/vaadin-date-picker) is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
-This element is still in alpha stage. For a list of planned features, see [#30](https://github.com/vaadin/vaadin-date-picker/issues/30).
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="443" alt="Screenshot of vaadin-date-picker" />](https://vaadin.com/elements/-/element/vaadin-date-picker)
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="443" alt="Screenshot of vaadin-date-picker" />](https://vaadin.com/elements)
+## Getting started
 
-## Developing
+Visit https://vaadin.com/elements/-/element/vaadin-date-picker for features, demos and documentation.
 
-### Running the demos
+## Contributing
 
-Install required dependencies by running following lines in the project root.
-```shell
-$ npm install -g polyserve bower
-$ npm install
-$ bower install
-```
+See the [contribution instructions](https://github.com/vaadin/vaadin-core-elements#contributing) which apply to all Vaadin core elements.
 
-Start a local server in the project root.
-```shell
-$ polyserve
-```
+## Development
 
-After `polyserve` is running, open http://localhost:8080/components/vaadin-date-picker/demo/ in your browser.
-
-### Running the automated tests
-
-Open http://localhost:8080/components/vaadin-date-picker/test/ in your browser or
-run from the command-line:
-```shell
-$ npm install -g web-component-tester
-$ wct
-```
+See the [development instructions](https://github.com/vaadin/vaadin-core-elements#development) which apply to all Vaadin core elements.
 
 ## License
 
-`vaadin-date-picker` is licensed under the Apache License 2.0.
+Apache License 2.0
