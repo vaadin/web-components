@@ -30,7 +30,7 @@
         display: flex;
         justify-content: space-between;
         padding: 14px;
-        background: var(--vaadin-date-picker-background, --primary-background-color);
+        background: var(--vaadin-date-picker-toolbar-background, --paper-grey-200);
         z-index: 2;
         @apply(--paper-font-button);
         @apply(--shadow-elevation-2dp);
@@ -41,10 +41,6 @@
 
       #toolbar:not([desktop]) {
         cursor: pointer;
-      }
-
-      #toolbar[desktop] iron-icon {
-        visibility: hidden;
       }
 
       #toolbar iron-icon {
@@ -153,7 +149,7 @@
         border-width: 6px;
         border-style: solid;
         border-color: transparent;
-        border-left-color: var(--vaadin-date-picker-background, --primary-background-color);;
+        border-left-color: var(--vaadin-date-picker-background, --primary-background-color);
       }
 
       #yearScroller div:after {
@@ -176,7 +172,7 @@
         display: none;
       }
 
-      :host([fullscreen]) #toolbar[desktop] {
+      #toolbar[desktop] {
         display: none;
       }
 
@@ -232,7 +228,7 @@
         justify-content: space-between;
         padding: 4px;
         @apply(--paper-font-body2);
-        background: var(--vaadin-date-picker-background, --primary-background-color);;
+        background: var(--vaadin-date-picker-background, --primary-background-color);
         z-index: 2;
         box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.50);
         color: var(--vaadin-date-picker-footer-color, --default-primary-color);

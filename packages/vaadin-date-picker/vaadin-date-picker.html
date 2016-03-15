@@ -23,7 +23,8 @@ The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--vaadin-date-picker-background` | Background for picker sections | `--primary-background-color`
+`--vaadin-date-picker-background` | Background for picker content and footer | `--primary-background-color`
+`--vaadin-date-picker-toolbar-background` | Background for picker toolbar | `--paper-grey-200`
 `--vaadin-date-picker-toolbar-color` | Text color for picker toolbar items | `--default-primary-color`
 `--vaadin-date-picker-yearscroller-background` | Background for the year scroller | `--dark-theme-background-color`
 `--vaadin-date-picker-yearscroller-color` | Text color for the year scroller | `--dark-theme-secondary-color`
@@ -121,6 +122,20 @@ See paper-input-container documentation for styling the included input fields
 
       paper-input-container paper-ripple {
         color: rgba(0, 0, 0, .54);
+      }
+
+      paper-input-container {
+        --paper-input-container-underline-focus: {
+          -webkit-transform: none;
+          transform: none;
+          -webkit-transition: -webkit-transform 0.25s;
+          transition: transform 0.25s;
+        }
+      }
+
+      paper-input-container:not([opened])::content .focused-line {
+        -webkit-transform: scale3d(0, 1, 1);
+        transform: scale3d(0, 1, 1);
       }
 
       paper-input-container iron-icon:hover,
