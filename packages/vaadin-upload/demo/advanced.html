@@ -34,88 +34,21 @@ This program is available under Apache License Version 2.0, available at https:/
       </ul>
     </nav>
 
-    <h3>File List and File State Change Events</h3>
+    <h3>External List of Files</h3>
     <demo-snippet>
       <template>
-        <vaadin-upload id="fileEventsDemo"></vaadin-upload>
-        <h4>Files List</h4>
-        <ul id="customFilesList"></ul>
-
-        <script>
-          var upload = document.querySelector('vaadin-upload#fileEventsDemo');
-          var customFilesList = document.querySelector('#customFilesList');
-
-          function updateListItem(arg) {
-            var file = arg.detail && arg.detail.file || arg;
-
-            if (file.listItem) {
-              file.listItem.querySelector('strong').textContent = file.name;
-              var status = file.listItem.querySelector('span');
-
-              switch (event.type) {
-                case 'upload-success':
-                  status.textContent = 'Uploaded.';
-                  break;
-                case 'upload-error':
-                  status.textContent = file.error;
-                  break;
-                default:
-                  status.textContent = file.status;
-                  break;
-              }
-            }
-          }
-
-          // When file is added to upload, add it to the custom file list
-          // When file is removed from the upload, remove it from the custom file list
-          upload.addEventListener('files-changed', function(event) {
-            var path = event.detail.path;
-            var value = event.detail.value;
-            var file, li;
-
-            // Using Polymer notify API for getting modified array elements is
-            // a bit complex. If the full array is assigned, you have to check
-            // whether detail.path is undefined and the detail.value is the
-            // modified array. Otherwise, when the array content is modified
-            // you have to look for variable.splices path and inspect the
-            // value.indexSplices where depending on add or remove actions you
-            // have to use different ways to get the item instance.
-            if (!path) {
-              for (var i in value) {
-                file =  value[i];
-                li = document.createElement('li');
-                li.innerHTML = '<strong></strong><br/> <span></span>';
-                file.listItem = li;
-                customFilesList.appendChild(li);
-                updateListItem(event);
-              }
-            } else if (path == 'files.splices') {
-              for (var idx in value.indexSplices) {
-                var indexSplices = value.indexSplices[idx];
-                for (var removedIdx in indexSplices.removed) {
-                  file = indexSplices.removed[removedIdx];
-                  if (file.listItem) {
-                    customFilesList.removeChild(file.listItem);
-                  }
-                }
-                for (var addedIdx = indexSplices.index; addedIdx < indexSplices.index + indexSplices.addedCount; addedIdx++) {
-                  file =  indexSplices.object[addedIdx];
-                  li = document.createElement('li');
-                  li.innerHTML = '<strong></strong><br/> <span></span>';
-                  file.listItem = li;
-                  customFilesList.appendChild(li);
-                  updateListItem(event);
-                }
-              }
-            }
-          });
-
-          // Update the custom file list item on any file state change
-          upload.addEventListener('upload-start', updateListItem);
-          upload.addEventListener('upload-progress', updateListItem);
-          upload.addEventListener('upload-success', updateListItem);
-          upload.addEventListener('upload-error', updateListItem);
-        </script>
+        <template is="dom-bind">
+          <vaadin-upload id="fileEventsDemo" files="{{files}}"></vaadin-upload>
+          <h4>Files</h4>
+          <ul id="customFilesList">
+            <template is="dom-repeat" items="{{files}}" as="file">
+              <li>
+                <strong>[[file.name]]</strong>
+                [[file.status]]
+              </li>
+            </template>
+          </ul>
+        </template>
       </template>
     </demo-snippet>
 

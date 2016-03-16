@@ -599,7 +599,8 @@ Custom property | Description | Default
           file.indeterminate = file.uploading = false;
           file.status = '';
           if (file.abort) {
-            file.error = file.complete = file.progress = file.status = false;
+            file.complete = false;
+            file.error = file.progress = undefined;
             this._notifyFileChanges(file);
             return;
           }
