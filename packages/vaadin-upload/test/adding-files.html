@@ -75,24 +75,7 @@
 
         });
 
-        it('should fire `files-changed` event after dialog', function() {
-          var fileAddSpy = sinon.spy();
-          upload.addEventListener('files-changed', function(event) {
-            if (event.detail.path == 'files.splices') {
-              // Getting the added file from the details object is quite tricky
-              var indexSplices = event.detail.value.indexSplices[0];
-              if (!indexSplices.removed.length) {
-                var file = indexSplices.object[0];
-                expect(file).to.be.an.instanceof(Blob);
-                expect(file.name).to.be.a('string');
-                expect(file.name).to.be.ok;
-                expect(file.size).to.be.a('number');
-                expect(file.size).to.be.ok;
-                fileAddSpy();
-              }
-            }
-          });
-
+        it('should add files from dialog', function() {
           // We can't simply assign `files` property of input[type="file"].
           // Tweaking __proto__ to make it assignable below.
           /* jshint ignore:start */
@@ -107,37 +90,16 @@
           e.initEvent('change', false, true);
           upload.$.fileInput.dispatchEvent(e);
 
-          fileAddSpy.should.have.been.calledTwice;
+          expect(upload.files[0]).to.equal(files[1]);
+          expect(upload.files[1]).to.equal(files[0]);
         });
 
-        it('should fire `files-changed` when assigning the files array', function() {
-          var fileAddSpy = sinon.spy();
+        it('should notify files', function() {
+          var spy = sinon.spy();
           // when setting arrays Polymer mutation observer works differently
-          upload.addEventListener('files-changed', function(event) {
-            if (event.detail.path === undefined) {
-              expect(event.detail.value.length).to.be.equal(2);
-              fileAddSpy();
-            }
-          });
+          upload.addEventListener('files-changed', spy);
           upload.files = files;
-          fileAddSpy.should.have.been.calledOnce;
-        });
-
-        it('should fire `files-changed` when removing files', function() {
-          var fileAddSpy = sinon.spy();
-          upload.addEventListener('files-changed', function(event) {
-            if (event.detail.path == 'files.splices') {
-              var indexSplices = event.detail.value.indexSplices[0];
-              if (indexSplices.removed.length) {
-                var file = indexSplices.removed[0];
-                expect(file).to.be.an.instanceof(Blob);
-                fileAddSpy();
-              }
-            }
-          });
-          upload.files = files;
-          upload.pop('files');
-          fileAddSpy.should.have.been.called;
+          spy.should.have.been.calledOnce;
         });
 
         it('should disable add button when max files added', function() {
