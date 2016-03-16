@@ -309,6 +309,20 @@
 
             pageDown('shift');
           });
+
+          it('should not focus on today click if no date focused', function() {
+            overlay.focusedDate = null;
+            overlay._scrollToCurrentMonth();
+            expect(overlay.focusedDate).to.be.null;
+          });
+
+          it('should focus on today click if a date is focused', function() {
+            arrowRight();
+            overlay._scrollToCurrentMonth();
+            expect(overlay.focusedDate.getFullYear()).to.eql(new Date().getFullYear());
+            expect(overlay.focusedDate.getMonth()).to.eql(new Date().getMonth());
+            expect(overlay.focusedDate.getDate()).to.eql(new Date().getDate());
+          });
         });
       });
     }
