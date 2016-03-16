@@ -13,7 +13,7 @@ The [vaadinelement]#vaadin-date-picker# element can be localized through the [pr
 
 [source,html]
 ----
-<vaadin-date-picker id='my-picker' label="Birthday"></vaadin-date-picker>
+<vaadin-date-picker id="my-picker" label="Birthday"></vaadin-date-picker>
 ----
 [source,javascript]
 ----
