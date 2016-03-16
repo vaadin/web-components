@@ -395,7 +395,10 @@
       },
 
       _scrollToCurrentMonth: function() {
-        this.focusedDate = new Date();
+        if (this.focusedDate) {
+          this.focusedDate = new Date();
+        }
+
         this.scrollToDate(new Date(), true);
 
         // focus for keyboard navigation.
