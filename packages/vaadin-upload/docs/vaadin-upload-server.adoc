@@ -1,5 +1,5 @@
 ---
-title: Server side
+title: Server-side
 order: 4
 layout: page
 ---
@@ -10,27 +10,27 @@ layout: page
 
 == Background
 
-The [elementname]#vaadin-upload# element sends a [classname]#FormData# via [classname]#XMLHttpRequest#.
-The encoding type used is `multipart/form-data` which has been the standard way to upload files for ages, hence it is supported by almost servers.
-Since this type only can be sent using the method `POST` or `PUT`, we only support those.
+The [elementname]#vaadin-upload# element sends a [classname]#FormData# via an [classname]#XMLHttpRequest#.
+The encoding type used is `multipart/form-data`. It has been the standard way to upload files for ages, hence it is supported by almost all servers.
+Since this type can only be sent using the POST or PUT methods, we only support those.
 
-In order to support simultaneous uploads, instead of reusing the same `FormData` and `XHR` we create a new one for each file, so it's alright if the server only considers receiving one file per request.
+In order to support simultaneous uploads, instead of reusing the same [classname]#FormData# and [classname]#XMLHttpRequest#, we create a new one for each file. It is therefore alright for the server to only consider receiving one file per request.
 
-For the client side we use the [classname]#ProgressEvent# specification, available in all modern browsers.
+For the client-side, we use the [classname]#ProgressEvent# specification, available in all modern browsers.
 
 == Request Configuration.
 
-The communication between [elementname]#vaadin-upload# element and server side can be totally configured using element properties or attributes, and events.
+Communication between the [elementname]#vaadin-upload# element and the server-side can be completely configured using element properties or attributes, and events.
 
-=== Configuration properties
+=== Configuration Properties
 
 [width="100%", options="header"]
 |======================
-|Property name | default value | description
-| target | '' | Server URL
-| method | POST | HTTP method used to send the files. Only POST and PUT are allowed.
-| headers | {} | A JSON map with key/values to send to the server in the `Headers`
-| timeout | 0 | Time limit in seconds to upload the file
+|Property name | Default value | Description
+| [propertyname]#target# | `''` | Server URL
+| [propertyname]#method# | `POST` | HTTP method used to send the files. Only POST and PUT are allowed.
+| [propertyname]#headers# | `{}` | A JSON map with key/values to send to the server in the `Headers`
+| [propertyname]#timeout# | `0` | Time limit in seconds to upload the file
 |======================
 
 [source,html]
@@ -44,11 +44,12 @@ The communication between [elementname]#vaadin-upload# element and server side c
 ></vaadin-upload>
 ----
 
-=== Configuring the request via Events
+=== Configuring the Request with Events
 
-There are certain events to modify the `XHR` before sending it, or the `response` when the request finishes.
+There are certain events to modify the XHR before sending it, or the `response` when the request finishes.
 
-upload-before:: At this point the `XHR` has not been opened yet, but you can set the server URL changing the attribute [propertyname]#file.uploadTarget#. You could also reject the file at this point if you prevent default.
+`upload-before`:: At this point, the XHR has not been opened yet, but you can set the server URL by setting the [propertyname]#file.uploadTarget# attribute.
+You can also reject the file at this point by preventing the default action.
 
 [source,javascript]
 ----
@@ -64,8 +65,8 @@ upload-before:: At this point the `XHR` has not been opened yet, but you can set
   });
 ----
 
-upload-request:: You can change request parameters before it is sent, or prevent default to avoid the request be sent to the server.
-
+`upload-request`::
+You can change request parameters before it is sent, or cancel sending the request to the server by calling [methodname]#event.preventDefault()#.
 
 [source,javascript]
 ----
@@ -74,9 +75,9 @@ upload-request:: You can change request parameters before it is sent, or prevent
   });
 ----
 
-upload-response:: can be used when the server message was received, and before the component processes it.
-  At this point, you can check the response and make the upload fail setting the [propertyname]#file.error# property.
-  Also you can prevent default so as response is not checked for errors and the UI is not updated.
+`upload-response`:: The event is dispatched when the server message was received, but before the component processes it.
+  At this point, you can check the response and make the upload fail by setting the [propertyname]#file.error# property.
+  If the event is default-prevented, the response is not checked for errors and the UI is not updated.
 
 [source,javascript]
 ----
@@ -90,7 +91,7 @@ upload-response:: can be used when the server message was received, and before t
 == Server Processing
 
 How to write your server-side code to receive the file is out of the scope of this document.
-Nevertheless we leave here some links that you can use as reference:
+Nevertheless, we leave you with some links:
 
 - Node.js example: http://howtonode.org/really-simple-file-uploads
 - PHP example: http://www.php.net/manual/en/features.file-upload.post-method.php#example-354

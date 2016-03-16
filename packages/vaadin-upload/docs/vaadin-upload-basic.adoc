@@ -17,12 +17,12 @@ The user can select files to upload by using the file selector in the browser or
 
 == Validations
 
-The developer can restrict the type and size of files, and the maximum number of files to upload, by using either element attributes or the JavaScript API.
+You can restrict the type and size of files, and the maximum number of files to upload, by using either element attributes or the JavaScript API.
 
 The validation is done just before the request is sent to the server. It fails if any of the conditions don't match, in which case a notice is shown to the user.
 
 While dragging is being done, we cannot read the types, names, and sizes of the files due to security reasons.
-Only when the file is dropped into the component we can access the [propertyname]#dataTransfer.files#, and here is when we do the validation and show the notice.
+Only when the file is dropped into the component, we can access the [propertyname]#dataTransfer.files#, and here is when we do the validation and show the notice.
 
 The properties that the user can configure for validation are:
 
@@ -41,14 +41,14 @@ We rely on the [propertyname]#input.accept# specification to filter files in the
 == Events
 
 The [vaadinelement]#vaadin-upload# element dispatches events when files are added, removed, or rejected, and for every upload state change for each file.
-You can use the events for either changing the behavior of the process or for preventing default actions.
+You can use the events to change the behaviour of the upload process. Such customizations may require preventing the default actions, which you can do with [methodname]#preventDefault()#.
 
 === Event Details
-All events contain the [classname]#File# object in the [propertyname]#event.detail.file# property.
+All the events contain the [classname]#File# object in the [propertyname]#event.detail.file# property.
 The object has a number of extra properties to track the upload process:
 
 [propertyname]#file.uploadTarget#:: The target URL used to upload this file.
-[propertyname]#file.ellapsed#:: Elapsed time since the upload started.
+[propertyname]#file.elapsed#:: Elapsed time since the upload started.
 [propertyname]#file.elapsedStr#:: Human-readable elapsed time.
 [propertyname]#file.remaining#:: Number of seconds remaining for the upload to finish.
 [propertyname]#file.remainingStr#:: Human-readable remaining time for the upload to finish.
@@ -59,6 +59,9 @@ The object has a number of extra properties to track the upload process:
 [propertyname]#file.loadedStr#:: Human-readable uploaded size at the moment.
 [propertyname]#file.status#:: Status of the upload process.
 [propertyname]#file.error#:: Error message in case the upload failed.
+[propertyname]#file.progress#:: Percentage of the file already uploaded.
+[propertyname]#file.complete#:: True when the file was transferred to the server.
+[propertyname]#file.uploading#:: True while transferring data to the server.
 
 Additionally, upload events also have an [propertyname]#event.detail.xhr# property with the corresponding [classname]#XMLHttpRequest# instance.
 
@@ -95,17 +98,15 @@ When using the element inside another Polymer element, you can use the declarati
 
 The following events are fired by the component in different phases of the upload process:
 
-file-add:: Fired when a file is added to the upload list.
-file-reject:: Fired when a file cannot be added to the queue due to a validation constrain.
-file-remove:: Fired when a file is removed from the file list, e. g. when the file upload is aborted. If the default is prevented, then the file would not be removed from the list.
-upload-abort:: Fired when file abort is requested. If the default is prevented, then the file upload would not be aborted.
-upload-before:: Fired before the `XHR` is opened, is useful for changing the request URL based on the file name, etc.
-upload-error:: Fired in case the upload process failed.
-upload-progress:: Fired as many times as a file progress is updated.
-upload-request:: Fired when the request has been opened but not yet sent. Useful to change some parameters such as headers.
-  If the event is default prevented the request is not sent to the server.
-upload-response:: Fired when the server response was received but before the component processes it. It's useful for developers to make the upload fail depending on the response.
-  If the event is default prevented the vaadin-upload skips default flow allowing the developer to do something on his own such as retrying the upload, etc.
-upload-retry:: Fired when retry upload is requested. If the default is prevented, then retry would not be performed.
-upload-start:: Fired when the XHR is sent.
-upload-success:: Fired in case the upload process succeed.
+`file-reject`:: Fired when a file cannot be added to the queue due to a validation constraint.
+`upload-abort`:: Fired when file abort is requested. If the default is prevented, the file upload will not be aborted.
+`upload-before`:: Fired before the XHR is opened. It is useful for changing the request URL based on the file name, etc.
+`upload-error`:: Fired if the upload process failed.
+`upload-progress`:: Fired as many times as a file progress is updated.
+`upload-request`:: Fired when the request has been opened but not yet sent. It is useful for changing some parameters such as headers.
+  If the event is default-prevented, then the request is not sent to the server.
+`upload-response`:: Fired when the server response was received, but before the component processes it. It is useful for making the upload fail depending on the response.
+  If the event is default-prevented, the vaadin-upload skips the default flow, allowing the developer to do something on his own, such as retrying the upload.
+`upload-retry`:: Fired when the upload is retried. If the default is prevented, retry would not be performed.
+`upload-start`:: Fired when the XHR is sent.
+`upload-success`:: Fired if the upload process succeeds.
