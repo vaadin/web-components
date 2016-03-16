@@ -124,18 +124,11 @@ See paper-input-container documentation for styling the included input fields
         color: rgba(0, 0, 0, .54);
       }
 
-      paper-input-container {
+      paper-input-container[opened] {
         --paper-input-container-underline-focus: {
           -webkit-transform: none;
           transform: none;
-          -webkit-transition: -webkit-transform 0.25s;
-          transition: transform 0.25s;
         }
-      }
-
-      paper-input-container:not([opened])::content .focused-line {
-        -webkit-transform: scale3d(0, 1, 1);
-        transform: scale3d(0, 1, 1);
       }
 
       paper-input-container iron-icon:hover,
@@ -415,6 +408,8 @@ See paper-input-container documentation for styling the included input fields
 
         // focus to enable keyboard navigation
         this.$.overlay.focus();
+
+        this.updateStyles();
       },
 
       // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -445,6 +440,8 @@ See paper-input-container documentation for styling the included input fields
           });
           this._touchPrevented = [];
         }
+
+        this.updateStyles();
       },
 
       detached: function() {
