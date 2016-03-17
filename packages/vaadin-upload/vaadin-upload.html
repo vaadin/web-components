@@ -56,6 +56,7 @@ Custom property | Description | Default
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-button/paper-button.html">
+
 <link rel="import" href="vaadin-upload-file.html">
 
 <dom-module id="vaadin-upload">
@@ -163,11 +164,11 @@ Custom property | Description | Default
 
     <div id="buttons">
       <div id="buttonsPrimary">
-        <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles)]]</paper-button>
+        <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]</paper-button>
         <div id="dropLabel" hidden$="[[nodrop]]">
           <content select=".drop-label">
             <iron-icon icon="file-upload"></iron-icon>
-            [[_i18nPlural(maxFiles, i18n.dropFiles)]]
+            [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
           </content>
         </div>
       </div>
@@ -178,11 +179,11 @@ Custom property | Description | Default
     <template id="defaultFileTemplate">
       <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
     </template>
-    <div id="fileList" on-file-remove="_onFileRemove">
+    <div id="fileList">
       <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
     </div>
     <content></content>
-    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept="{{accept}}">
+    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
     <paper-ripple id="dragRipple" noink></paper-ripple>
   </template>
 </dom-module>
@@ -257,22 +258,35 @@ Custom property | Description | Default
         value: false
       },
 
-      // TODO: make this private in a separate PR, we dont want users modifying the array.
+      /**
+       * The array of files being processed, or already uploaded.
+       *
+       * Each element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)
+       * object with a number of extra properties to track the upload process:
+       * - _file.uploadTarget_: The target URL used to upload this file.
+       * - _file.elapsed_: Elapsed time since the upload started.
+       * - _file.elapsedStr_: Human-readable elapsed time.
+       * - _file.remaining_: Number of seconds remaining for the upload to finish.
+       * - _file.remainingStr_: Human-readable remaining time for the upload to finish.
+       * - _file.progress_: Percentage of the file already uploaded.
+       * - _file.speed_: Upload speed in kB/s.
+       * - _file.size_: File size in bytes.
+       * - _file.totalStr_: Human-readable total size of the file.
+       * - _file.loaded_: Bytes transferred so far.
+       * - _file.loadedStr_: Human-readable uploaded size at the moment.
+       * - _file.status_: Status of the upload process.
+       * - _file.error_: Error message in case the upload failed.
+       * - _file.abort_: True if the file was canceled by the user.
+       * - _file.complete_: True when the file was transferred to the server.
+       * - _file.uploading_: True while transferring data to the server.
+       */
       files: {
         type: Array,
+        notify: true,
         value: function() {
           return [];
         }
       },
-
-      /**
-       * Specifies whether the file selection popup is configured to select
-       * multiple files.
-       */
-       nomultiple: {
-         type: Boolean,
-         value: false
-       },
 
       /**
        * Limit of files to upload, by default it is unlimited. If the value is
@@ -362,7 +376,8 @@ Custom property | Description | Default
       dragleave: '_onDragleave',
       drop: '_onDrop',
       'file-retry': '_onFileRetry',
-      'file-abort': '_onFileAbort'
+      'file-abort': '_onFileAbort',
+      'file-remove': '_onFileRemove',
     },
 
     attached: function() {
@@ -698,15 +713,11 @@ Custom property | Description | Default
      * @param {File} file File to remove
      */
     _removeFile: function(file) {
-      var evt = this.fire('file-remove', {file: file}, {cancelable: true});
-      if (!evt.defaultPrevented) {
-        this.splice('files', this.files.indexOf(file), 1);
-      }
+      this.splice('files', this.files.indexOf(file), 1);
     },
 
     _onAddFilesClick: function(event) {
       if (document.createEvent) {
-        this.$.fileInput.multiple = !this.nomultiple && this.maxFiles != 1;
         this.$.fileInput.value = '';
         this.$.fileInput.click();
       }
@@ -732,7 +743,6 @@ Custom property | Description | Default
     },
 
     _onFileRemove: function(event) {
-      event.stopPropagation();
       this._removeFile(event.detail.file);
     },
 
@@ -752,8 +762,11 @@ Custom property | Description | Default
 
     _i18nPlural: function(value, plural) {
       return value == 1 ? plural.one : plural.many;
-    }
+    },
 
+    _isMultiple: function() {
+      return this.maxFiles != 1;
+    }
   });
 
   /**
@@ -772,16 +785,6 @@ Custom property | Description | Default
    * @event file-add
    * @param {Object} detail
    *  @param {Object} detail.file the file added
-   */
-
-  /**
-   * Fired when a file is removed from the file list, e. g. when the file
-   * upload is aborted. If the default is prevented, then the file would not be
-   * removed from the list.
-   *
-   * @event file-remove
-   * @param {Object} detail
-   *  @param {Object} detail.file the file to be removed
    */
 
   /**

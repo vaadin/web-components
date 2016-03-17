@@ -31,6 +31,16 @@
           upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
         });
 
+        describe('Multiple', function() {
+          it('should have the multiple attribute', function() {
+            expect(upload.$.fileInput.getAttribute('multiple')).not.to.be.null;
+          });
+          it('should remove multiple attribute when maxFiles = 1', function() {
+            upload.maxFiles = 1;
+            expect(upload.$.fileInput.getAttribute('multiple')).to.be.null;
+          });
+        });
+
         it('should fire the upload-start event', function(done) {
           upload.addEventListener('upload-start', function(e) {
             expect(e.detail.xhr).to.be.ok;
