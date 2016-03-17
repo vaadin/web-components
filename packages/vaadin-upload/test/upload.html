@@ -41,6 +41,16 @@
           });
         });
 
+        it('should fire the upload-start event', function(done) {
+          upload.addEventListener('upload-start', function(e) {
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.file.uploading).to.be.ok;
+            done();
+          });
+          upload._uploadFile(file);
+        });
+
         it('should fire the upload-progress event multiple times', function(done) {
           var count = 0;
           upload.addEventListener('upload-progress', function(e) {
