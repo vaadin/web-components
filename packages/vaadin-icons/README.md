@@ -1,41 +1,28 @@
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 ![Bower version](https://img.shields.io/bower/v/vaadin-icons.svg)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# vaadin-icons
+# &lt;vaadin-icons&gt;
 
-[`vaadin-icons`](https://vaadin.com/elements/-/element/vaadin-icons) is a set of 500+ icons which can be used together with Polymer's `<iron-icon>` component.
-`vaadin-icons` is a part of the [vaadin-core-elements](https://vaadin/elements) element bundle.
+[&lt;vaadin-icons&gt;](https://vaadin.com/elements/-/element/vaadin-icons) is a set of 500+ icons which can be used together with the Polymer [`<iron-icon>`](https://elements.polymer-project.org/elements/iron-icon) component.
+It is compatible with [`<iron-iconset>`](https://elements.polymer-project.org/elements/iron-iconset), as well as any other component using `<iron-icon>` and exposing the `icon` property
 
-<img src="screenshot.png" width="439" alt="Screenshot of vaadin-icons" />
+`<vaadin-icons>` is part of the [vaadin-core-elements](https://vaadin/elements) element bundle.
 
-## Features
-- Compatible with [`<iron-icon>`](https://elements.polymer-project.org/elements/iron-icon) and [`<iron-iconset>`](https://elements.polymer-project.org/elements/iron-iconset)
-- Compatible with any component using `<iron-icon>` and exposing `icon` property, e.g. [`<paper-fab>`](https://elements.polymer-project.org/elements/paper-fab)
-- [Evolving set of over 500 icons](https://vaadin.com/font-icons)
-- In addition to SVG, also PNG and font formats are available separately.
+[<img src="screenshot.png" width="439" alt="Screenshot of vaadin-icons" />](https://vaadin.com/elements/-/element/vaadin-icons)
 
-See more information at https://vaadin.com/elements/-/element/vaadin-icons.
 
 ## Getting started
-- [Demos](https://vaadin.com/elements/-/element/vaadin-icons)
-- [API Documentation](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-icons/)
 
-## Developing
-Install required dependencies by running following lines in the project root.
+Visit https://vaadin.com/elements/-/element/vaadin-icons for features, demos and documentation.
 
-```sh
-$ npm install -g polyserve
-$ npm install
-$ bower install
-```
+## Contributing
 
-### Running the demos
-Start a local server in the project root.
-```sh
-$ polyserve
-```
+See the [contribution instructions](https://github.com/vaadin/vaadin-core-elements#contributing) which apply to all Vaadin core elements.
 
-After `polyserve` is running, open http://localhost:8080/components/vaadin-icons/demo/ in your browser.
+## Development
+
+See the [development instructions](https://github.com/vaadin/vaadin-core-elements#development) which apply to all Vaadin core elements.
 
 ## License
-`vaadin-icons` is licensed under the Apache License 2.0.
+
+Apache License 2.0
