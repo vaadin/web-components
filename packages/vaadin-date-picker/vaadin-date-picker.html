@@ -486,7 +486,7 @@ See paper-input-container documentation for styling the included input fields
        * @return {boolean}
        */
       _getValidity: function() {
-        return this.disabled || !this.required || Boolean(this.value);
+        return this.disabled || !this.required || this.$.input.validate();
       },
 
       _focusInputContainer: function() {

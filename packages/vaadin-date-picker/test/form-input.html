@@ -80,6 +80,13 @@
         expect(spy).to.have.been.called;
       });
 
+      it('should show error indicator', function() {
+        var form = fixture('datepicker-in-form', {name: 'foo', required: true});
+        form.submit();
+        var undeline = form.querySelector('vaadin-date-picker').$.inputcontainer.$$('.underline');
+        expect(undeline.getAttribute('class')).to.contain('is-invalid');
+      });
+
       it('should have disabled paper-input-container', function() {
         datepicker.disabled = true;
         expect(datepicker.$$('paper-input-container').getAttribute('disabled')).to.equal('');
