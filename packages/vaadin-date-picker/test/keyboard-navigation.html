@@ -79,11 +79,15 @@
           MockInteractions.pressSpace(target);
         }
 
+        function esc() {
+          MockInteractions.keyDownOn(target, 27);
+        }
+
         function focusedDate() {
           return overlay.focusedDate;
         }
 
-        describe('keyboard navigation with arrow keys', function() {
+        describe('date-picker', function() {
           var datepicker;
 
           beforeEach(function() {
@@ -103,6 +107,13 @@
             arrowUp();
 
             expect(datepicker._opened).to.be.true;
+          });
+
+          it('should close overlay on esc', function() {
+            datepicker.open();
+            target = datepicker.$.overlay;
+            esc();
+            expect(datepicker._opened).to.be.false;
           });
 
           it('should be focused on selected value when overlay is opened', function() {
