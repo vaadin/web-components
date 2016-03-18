@@ -453,7 +453,10 @@
             this.$.scroller.position = currentPos;
             window.requestAnimationFrame(smoothScroll);
           } else {
-            this.fire('scroll-animation-finished', {position: this._targetPosition, oldPosition: initialPosition});
+            this.fire('scroll-animation-finished', {
+              position: this._targetPosition,
+              oldPosition: initialPosition
+            });
             this.$.scroller.position = this._targetPosition;
             this._targetPosition = undefined;
           }
@@ -575,46 +578,49 @@
       _onKeydown: function(e) {
         var focus = this._currentlyFocusedDate();
 
-        e.preventDefault();
+        var eventKey = this._eventKey(e);
+        if (eventKey) {
+          e.preventDefault();
 
-        switch (this._eventKey(e)) {
-          case 'down':
-            this._moveFocusByDays(7);
-            break;
-          case 'up':
-            this._moveFocusByDays(-7);
-            break;
-          case 'right':
-            this._moveFocusByDays(1);
-            break;
-          case 'left':
-            this._moveFocusByDays(-1);
-            break;
-          case 'enter':
-            if (this.focusedDate) {
-              this.selectedDate = this.focusedDate;
-            }
-            this._close();
-            break;
-          case 'space':
-            if (this._dateEquals(this.focusedDate, this.selectedDate)) {
-              this.selectedDate = '';
-            } else {
-              this.selectedDate = this.focusedDate;
-            }
-            break;
-          case 'home':
-            this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
-            break;
-          case 'end':
-            this.focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
-            break;
-          case 'pagedown':
-            this._moveFocusByMonths(e.shiftKey ? 12 : 1);
-            break;
-          case 'pageup':
-            this._moveFocusByMonths(e.shiftKey ? -12 : -1);
-            break;
+          switch (eventKey) {
+            case 'down':
+              this._moveFocusByDays(7);
+              break;
+            case 'up':
+              this._moveFocusByDays(-7);
+              break;
+            case 'right':
+              this._moveFocusByDays(1);
+              break;
+            case 'left':
+              this._moveFocusByDays(-1);
+              break;
+            case 'enter':
+              if (this.focusedDate) {
+                this.selectedDate = this.focusedDate;
+              }
+              this._close();
+              break;
+            case 'space':
+              if (this._dateEquals(this.focusedDate, this.selectedDate)) {
+                this.selectedDate = '';
+              } else {
+                this.selectedDate = this.focusedDate;
+              }
+              break;
+            case 'home':
+              this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
+              break;
+            case 'end':
+              this.focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
+              break;
+            case 'pagedown':
+              this._moveFocusByMonths(e.shiftKey ? 12 : 1);
+              break;
+            case 'pageup':
+              this._moveFocusByMonths(e.shiftKey ? -12 : -1);
+              break;
+          }
         }
       },
 
