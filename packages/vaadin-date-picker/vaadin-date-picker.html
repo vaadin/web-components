@@ -165,7 +165,7 @@ See paper-input-container documentation for styling the included input fields
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="[[invalid]]" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer">
 
-      <div suffix id="clear" on-tap="_clear" hidden$="[[_hideClearIcon(value, opened)]]">
+      <div suffix id="clear" on-tap="_clear" hidden$="[[_hideClearIcon(value, _opened)]]">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
