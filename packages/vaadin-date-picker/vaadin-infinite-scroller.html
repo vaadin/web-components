@@ -150,6 +150,13 @@ This program is available under Apache License Version 2.0, available at https:/
         this._mayHaveMomentum = true;
       }
       this._preventScrollEvent = false;
+
+      this.debounce('scrollFinish', function() {
+        var scrollerRect = this.$.scroller.getBoundingClientRect();
+        if (!this._isVisible(this._buffers[0], scrollerRect) && !this._isVisible(this._buffers[1], scrollerRect)) {
+          this.position = this.position;
+        }
+      }, 200);
     },
 
     /**
@@ -239,9 +246,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }, this);
     },
 
-    _isVisible: function(itemWrapper, scrollerRect) {
-      var rect = itemWrapper.getBoundingClientRect();
-      return rect.bottom > scrollerRect.top && rect.top < scrollerRect.bottom;
+    _isVisible: function(element, container) {
+      var rect = element.getBoundingClientRect();
+      return rect.bottom > container.top && rect.top < container.bottom;
     },
 
     /**
