@@ -42,6 +42,7 @@
     "iron-pages": "PolymerElements/iron-pages#^1.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
     "web-component-tester": "*",
-    "angular": "^1.5.1"
+    "angular": "^1.5.1",
+    "jquery": "^2.2.2"
   }
 }
