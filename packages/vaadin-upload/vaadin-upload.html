@@ -634,18 +634,18 @@ Custom property | Description | Default
         file.indeterminate = loaded <= 0 || loaded >= total, true;
         if (file.error) {
           file.indeterminate = file.status = undefined;
-        } else if (file.abort) {
-          file.status = 'Upload cancelled.';
-        } else if (progress < 100) {
-          this._setStatus(file, total, loaded, elapsed, progress);
-          stalledId = setTimeout(function() {
-            file.status = this.i18n.uploading.status.stalled;
-            this._notifyFileChanges(file);
-          }.bind(this), 2000);
-        } else {
-          file.loadedStr = file.totalStr;
-          file.status = this.i18n.uploading.status.processing;
-          file.uploading = false;
+        } else if (!file.abort) {
+          if (progress < 100) {
+            this._setStatus(file, total, loaded, elapsed, progress);
+            stalledId = setTimeout(function() {
+              file.status = this.i18n.uploading.status.stalled;
+              this._notifyFileChanges(file);
+            }.bind(this), 2000);
+          } else {
+            file.loadedStr = file.totalStr;
+            file.status = this.i18n.uploading.status.processing;
+            file.uploading = false;
+          }
         }
 
         this._notifyFileChanges(file);
@@ -657,13 +657,11 @@ Custom property | Description | Default
         if (xhr.readyState == 4) {
           clearTimeout(stalledId);
           file.indeterminate = file.uploading = false;
-          file.status = '';
           if (file.abort) {
-            file.complete = false;
-            file.error = file.progress = undefined;
             this._notifyFileChanges(file);
             return;
           }
+          file.status = '';
           // Custom listener can modify the default behavior either
           // preventing default, changing the xhr, or setting the file error
           var evt = this.fire('upload-response', {file: file, xhr: xhr}, {cancelable: true});
@@ -705,7 +703,7 @@ Custom property | Description | Default
 
       file.status = this.i18n.uploading.status.connecting;
       file.uploading = file.indeterminate = true;
-      file.abort = file.error = undefined;
+      file.complete = file.abort = file.error = false;
       this.fire('upload-start', {file: file, xhr: xhr});
       this._notifyFileChanges(file);
       xhr.send(formData);

@@ -15,7 +15,12 @@ Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-upload-file`|A mixin that is applied to the host element|`{}`
 `--vaadin-upload-file-row`|A mixin that is applied to the file row|`{}`
+`--vaadin-upload-file-status-icon`|A mixin that is applied to all file status icons. By default, file status icons are hidden until the upload process finishes.|`{}`
+`--vaadin-upload-file-status-icon-complete`|A mixin that is applied to the complete status icon when the upload process succeeds|`{}`
+`--vaadin-upload-file-status-icon-error`|A mixin that is applied to the error status icon when the upload process fails|`{}`
 `--vaadin-upload-file-meta`|A mixin that is applied to the info container|`{}`
+`--vaadin-upload-file-meta-complete`|A mixin that is applied to the info container when file upload is complete|`{}`
+`--vaadin-upload-file-meta-error`|A mixin that is applied to the info container when an error happens|`{}`
 `--vaadin-upload-file-name`|A mixin that is applied to the file name|`{}`
 `--vaadin-upload-file-status`|A mixin that is applied to the file status label|`{}`
 `--vaadin-upload-file-error`|A mixin that is applied to the file error label|`{}`
@@ -35,6 +40,8 @@ Custom property | Description | Default
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 
@@ -43,8 +50,8 @@ Custom property | Description | Default
     <style>
       :host {
         @apply(--layout-vertical);
-        margin: 8px 0;
-        padding: 6px 0 0;
+        margin: 4px 0 0;
+        padding: 6px 0 4px;
         @apply(--vaadin-upload-file);
       }
 
@@ -55,16 +62,55 @@ Custom property | Description | Default
         @apply(--vaadin-upload-file-row);
       }
 
+      iron-icon {
+        width: 24px;
+        height: 24px;
+        padding: 8px;
+        color: var(--primary-text-color, #000);
+        opacity: 0;
+        margin-right: -40px;
+        transition: margin-right 0.3s 0.1s, opacity 0.3s;
+        @apply(--vaadin-upload-file-status-icon);
+      }
+
+      iron-icon[iron="warning"] {
+        color: var(--error-color, #f40303);
+      }
+
+      iron-icon[complete],
+      iron-icon[error] {
+        margin-right: 0;
+        opacity: 1;
+        transition: margin-right 0.3s, opacity 0.3s 0.1s;
+      }
+
+      iron-icon[complete] {
+        @apply(--vaadin-upload-file-status-icon-complete);
+      }
+
+      iron-icon[error] {
+        @apply(--vaadin-upload-file-status-icon-error);
+      }
+
       #meta {
         @apply(--layout-vertical);
         @apply(--layout-flex);
+        height: 32px;
+        transition: height 0.1s;
         width: 1px;
         color: var(--disabled-text-color, gray);
         @apply(--vaadin-upload-file-meta);
       }
 
       #meta[complete] {
+        height: 16px;
         color: var(--primary-text-color, #000);
+        @apply(--vaadin-upload-file-meta-complete);
+      }
+
+      #meta[error] {
+        color: var(--error-color, #f40303);
+        @apply(--vaadin-upload-file-meta-error);
       }
 
       #name,
@@ -94,24 +140,17 @@ Custom property | Description | Default
       }
 
       #commands {
-        margin-right: -4px;
-        @apply(--vaadin-upload-file-commands);
         @apply(--layout-horizontal);
+        @apply(--vaadin-upload-file-commands);
       }
 
       #commands [icon] {
-        margin-left: -4px;
-        margin-right: -4px;
         color: var(--primary-text-color, #000);
       }
 
       #commands [icon="refresh"],
       #commands [icon="clear"] {
         color: var(--primary-color, #00B4F0);
-      }
-
-      #commands [icon="warning"] {
-        color: var(--error-color, #f40303);
       }
 
       paper-progress {
@@ -145,7 +184,7 @@ Custom property | Description | Default
 
       :host(.fade-out) {
         animation-name: fade-out;
-        animation-duration: 1s;
+        animation-duration: 0.6s;
         @apply(--vaadin-upload-file-canceled);
       }
 
@@ -153,10 +192,13 @@ Custom property | Description | Default
         0% {
           max-height: 38px;
         }
-        50%  {
+        33%  {
           max-height: 38px;
-          margin: 8px 0;
-          padding: 6px 0 0;
+          margin: 4px 0 0;
+          padding: 6px 0 4px;
+          opacity: 0.25;
+        }
+        67% {
           opacity: 0;
         }
         100% {
@@ -170,17 +212,18 @@ Custom property | Description | Default
 
     <div id="row">
 
-      <div id="meta" complete$="[[file.complete]]">
+      <iron-icon icon="done" complete$="[[file.complete]]"></iron-icon>
+      <iron-icon icon="warning" error$="[[file.error]]"></iron-icon>
+
+      <div id="meta" complete$="[[file.complete]]" error$="[[file.error]]">
         <div id="name">[[file.name]]</div>
         <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
         <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
       </div>
 
       <div id="commands">
-        <paper-icon-button disabled icon="done" title="Complete" hidden$="[[!file.complete]]"></paper-icon-button>
-        <paper-icon-button disabled icon="warning" title="Error" hidden$="[[!file.error]]"></paper-icon-button>
-        <paper-icon-button icon="refresh" title="Retry Upload" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
-        <paper-icon-button icon="clear" title="Abort Upload" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
+        <paper-icon-button icon="refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
+        <paper-icon-button icon="clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
       </div>
 
     </div>
