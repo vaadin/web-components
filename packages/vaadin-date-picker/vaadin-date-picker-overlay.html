@@ -35,7 +35,7 @@
         @apply(--paper-font-button);
         @apply(--shadow-elevation-2dp);
         flex-shrink: 0;
-        color: var(--vaadin-date-picker-toolbar-color, --default-primary-color);
+        color: var(--vaadin-date-picker-toolbar-color, --primary-color);
         @apply(--vaadin-date-picker-toolbar);
       }
 
@@ -44,7 +44,7 @@
       }
 
       #toolbar iron-icon {
-        fill: var(--vaadin-date-picker-toolbar-color, --default-primary-color);
+        fill: var(--vaadin-date-picker-toolbar-color, --primary-color);
         padding: 0px;
         transition: transform 200ms;
         --iron-icon-width: 20px;
@@ -177,7 +177,7 @@
       }
 
       #header {
-        background: var(--vaadin-date-picker-header-background, --default-primary-color);
+        background: var(--vaadin-date-picker-header-background, --primary-color);
         padding: 0 14px 14px;
         display: flex;
         flex-shrink: 0;
@@ -231,7 +231,7 @@
         background: var(--vaadin-date-picker-background, --primary-background-color);
         z-index: 2;
         box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.50);
-        color: var(--vaadin-date-picker-footer-color, --default-primary-color);
+        color: var(--vaadin-date-picker-footer-color, --primary-color);
         flex-shrink: 0;
         @apply(--vaadin-date-picker-footer);
       }
