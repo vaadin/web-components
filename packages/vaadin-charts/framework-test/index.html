@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+</head>
+<body>
+<script>
+
+    // increase the default load page time out
+    WCT._ChildRunner.loadTimeout = 60000 * 3;
+
+    WCT.loadSuites([
+        'chart-angular1-test.html',
+        'chart-jquery-test.html'
+
+    ]);
+</script>
+</body>
+</html>
