@@ -176,11 +176,10 @@ Custom property | Description | Default
         <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
       </div>
     </div>
-    <template id="defaultFileTemplate">
-      <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
-    </template>
     <div id="fileList">
-      <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file"></template>
+      <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file">
+        <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+      </template>
     </div>
     <content></content>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
@@ -441,10 +440,6 @@ Custom property | Description | Default
       'file-retry': '_onFileRetry',
       'file-abort': '_onFileAbort',
       'file-remove': '_onFileRemove',
-    },
-
-    attached: function() {
-      this._templatizeFileList();
     },
 
     _formatSize: function(bytes) {
@@ -788,13 +783,6 @@ Custom property | Description | Default
 
     _onFileInputChange: function(event) {
       this._addFiles(event.target.files);
-    },
-
-    _templatizeFileList: function() {
-      var template = Polymer.dom(this).querySelector('.file') || this.$.defaultFileTemplate;
-      this.$.fileListRepeater.templatize(template);
-      Polymer.Bind.prepareModel(this.$.fileListRepeater);
-      Polymer.Base.prepareModelNotifyPath(this.$.fileListRepeater);
     },
 
     _onFileRetry: function(event) {
