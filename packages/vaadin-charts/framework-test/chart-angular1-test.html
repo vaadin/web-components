@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../angular/angular.js"></script>
+    <link rel="import" href="../vaadin-pie-chart.html">
+</head>
+<body>
+
+<div ng-app='myApp'>
+    <div ng-controller="chartCtrl">
+        <chart-wrapper data-series="{{chartData}}"></chart-wrapper>
+    </div>
+</div>
+
+<dom-module id="chart-wrapper">
+    <template>
+        <vaadin-pie-chart>
+            <chart-title>Revenue by industry</chart-title>
+            <subtitle>2015</subtitle>
+            <tooltip point-format="<b>{point.percentage:.1f}%</b>"></tooltip>
+            <plot-options>
+                <pie allow-point-select="true" show-in-legend="true"
+                     cursor="pointer">
+                    <data-labels enabled="true"
+                                 format="{point.name}: {point.y:.1f} M€">
+                    </data-labels>
+                </pie>
+            </plot-options>
+            <data-series name="Revenue share" data="[[dataSeries]]"></data-series>
+        </vaadin-pie-chart>
+    </template>
+    <script>
+        addEventListener('WebComponentsReady', function () {
+            Polymer({
+                is: "chart-wrapper",
+                properties: {
+                    dataSeries: {
+                        type: Array
+                    }
+                }
+            });
+        });
+    </script>
+</dom-module>
+
+
+<script>
+
+    var myApp = angular.module('myApp', []);
+    myApp.controller('chartCtrl', ['$scope', function ($scope) {
+        $scope.chartData = [
+            ["Aerospace", 90.0],
+            ["Medical", 53.6],
+            ["Agriculture ", 25.6],
+            ["Automotive", 17.0],
+            ["Consumers", 12.4],
+            ["Subsidies", 1.4]
+        ];
+    }]);
+
+    suite('framework integration', function () {
+
+        test('verify angular binding works', function () {
+            var elementChart = document.querySelector("chart-wrapper vaadin-pie-chart");
+            expect(elementChart.chart.redraw).to.exist;
+
+            var chart = elementChart.chart;
+            expect(chart.series).to.exist;
+            expect(chart.series).not.to.be.empty;
+            expect(chart.series[0].data).to.exist;
+            expect(chart.series[0].data).not.to.be.empty;
+            expect(chart.series[0].data).to.have.length(6);
+
+            var chartSlices = document.querySelectorAll(".highcharts-series path");
+            expect(chartSlices).to.have.length(6);
+        });
+
+    });
+
+</script>
+
+</body>
+</html>
