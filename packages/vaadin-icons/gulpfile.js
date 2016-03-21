@@ -7,7 +7,7 @@ var modify = require('gulp-modify');
 var cheerio = require('cheerio');
 var concat = require('gulp-concat');
 
-gulp.task('download', function () {
+gulp.task('download', function() {
   // Download vaadin icon files using bower
   return bower({}, [['vaadin/vaadin-icons-files']]);
 });
@@ -39,4 +39,17 @@ gulp.task('default', ['download'], function() {
       }
     }))
     .pipe(gulp.dest('.'));
+});
+
+// Generates an AsciiDoc table of all icons from the JSON metadata.
+gulp.task('docs:table', ['download'], () => {
+  const iconData = require('./bower_components/vaadin-icons-files/vaadin-font-icons.json');
+
+  console.log('[width="100%", options="header"]');
+  console.log('|======================');
+  console.log('| Icon | Name | Ligature | Unicode | Categories | Tags');
+  iconData.forEach((icon) => {
+    console.log(`| image:img/png/${icon.name}.png[] | [propertyname]#${icon.name}# | ${icon.name} | ${icon.code} | ${icon.categories.join(', ')} | ${icon.meta.join(', ')}`);
+  });
+  console.log('|======================');
 });
