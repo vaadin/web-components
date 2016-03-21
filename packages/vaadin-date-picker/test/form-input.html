@@ -9,10 +9,24 @@
   <script src="common.js"></script>
 
   <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../../iron-meta/iron-meta.html">
   <link rel="import" href="../vaadin-date-picker.html">
 </head>
 
 <body>
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      new Polymer.IronMeta({
+        type: 'validator',
+        key: 'year-2016-validator',
+        value: {
+          validate: function(value) {
+            return new Date(value).getFullYear() === 2016;
+          }
+        }
+      });
+    });
+  </script>
 
   <test-fixture id="datepicker">
     <template>
@@ -65,6 +79,21 @@
         expect(datepicker.invalid).to.be.equal(false);
       });
 
+      it('should validate correctly with custom validator', function() {
+        // Use a custom validator registered with <iron-meta>.
+        datepicker.validator = 'year-2016-validator';
+
+        // Try invalid value.
+        datepicker.value = '2014-01-01';
+        expect(datepicker.validate()).to.equal(false);
+        expect(datepicker.invalid).to.equal(true);
+
+        // Try valid value.
+        datepicker.value = '2016-01-01';
+        expect(datepicker.validate()).to.equal(true);
+        expect(datepicker.invalid).to.equal(false);
+      });
+
       it('should serialize correctly', function() {
         var form = fixture('datepicker-in-form', {name: 'foo'});
         datepicker = form.querySelector('vaadin-date-picker');
@@ -89,12 +118,13 @@
 
       it('should have disabled paper-input-container', function() {
         datepicker.disabled = true;
-        expect(datepicker.$$('paper-input-container').getAttribute('disabled')).to.equal('');
+        expect(datepicker.$.inputcontainer.getAttribute('disabled')).to.equal('');
+        expect(datepicker.$.input.disabled).to.equal(true);
       });
 
       it('should have readonly paper-input-container', function() {
         datepicker.readonly = true;
-        expect(datepicker.$$('paper-input-container').getAttribute('readonly')).to.equal('');
+        expect(datepicker.$.input.readOnly).to.equal(true);
       });
 
     });
