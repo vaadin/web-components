@@ -176,11 +176,13 @@ Custom property | Description | Default
         <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
       </div>
     </div>
-    <div id="fileList">
-      <template id="fileListRepeater" is="dom-repeat" items="[[files]]" as="file">
-        <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
-      </template>
-    </div>
+    <content select=".file-list">
+      <div id="fileList">
+        <template is="dom-repeat" items="[[files]]" as="file">
+          <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+        </template>
+      </div>
+    </content>
     <content></content>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
     <paper-ripple id="dragRipple" noink></paper-ripple>
