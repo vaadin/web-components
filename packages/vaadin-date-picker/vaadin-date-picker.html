@@ -323,6 +323,10 @@ See paper-input-container documentation for styling the included input fields
         }
       },
 
+      created: function() {
+        this._boundOnScroll = this._onScroll.bind(this);
+      },
+
       /**
        * Opens the dropdown.
        */
@@ -415,7 +419,7 @@ See paper-input-container documentation for styling the included input fields
           this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
         this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
 
-        this.listen(window, 'scroll', '_onWindowScroll');
+        window.addEventListener('scroll', this._boundOnScroll, true);
 
         // Checking if the browser supports webkitOverflowScrolling
         if (document.createElement('div').style.webkitOverflowScrolling === '') {
@@ -447,7 +451,8 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _onOverlayClosed: function() {
-        this.unlisten(window, 'scroll', '_onWindowScroll');
+        window.removeEventListener('scroll', this._boundOnScroll, true);
+
         this.$.inputcontainer.focus();
 
         if (this._touchPrevented) {
@@ -464,11 +469,13 @@ See paper-input-container documentation for styling the included input fields
         this._onOverlayClosed();
       },
 
-      _onWindowScroll: function() {
-        this.$.dropdown.style.bottom = 'auto';
-        this.$.dropdown.resetFit();
-        this._updateAlignmentAndPosition();
-        this.$.dropdown.fire('iron-resize');
+      _onScroll: function(e) {
+        if (e.target === window || !this.$.overlay.contains(e.target)) {
+          this.$.dropdown.style.bottom = 'auto';
+          this.$.dropdown.resetFit();
+          this._updateAlignmentAndPosition();
+          this.$.dropdown.fire('iron-resize');
+        }
       },
 
       _toggle: function(e) {
