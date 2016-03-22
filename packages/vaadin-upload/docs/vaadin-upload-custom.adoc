@@ -94,9 +94,8 @@ The following custom properties are available for styling the component.
 
 The [elementname]#vaadin-upload# element provides content composition through the element's light DOM.
 
-There are two modifiable parts: the drop label content and the section after the file list.
-The first part must be marked with the class name `drop-label`, whereas the second one is composed of the remaining element content.
-Right now, it is not possible to customize the file list using templates, but it will be possible soon.
+There are three modifiable parts: the drop label content, the file list, and the section after it.
+The first part must be marked with the class name `drop-label`, the file list with `file-list`, and the third one is composed of the remaining element content.
 
 The following example shows how to modify them:
 
@@ -106,11 +105,16 @@ The following example shows how to modify them:
   <div class="drop-label">
     Drop your documents here.
   </div>
-  <!-- File list is here -->
+  <div class="file-list">
+    <ul>
+      <template is="dom-repeat" items="{{files}}" as="file">
+        <li>[[file.name]]: [[file.status]]
+      </template>
+    </ul>
+  </div>
   <div>
     Accepts up to 3 PDF files, up to 1MB each
   </div>
-  <!-- Buttons go here -->
 </vaadin-upload>
 ----
 

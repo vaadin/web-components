@@ -34,20 +34,23 @@ This program is available under Apache License Version 2.0, available at https:/
       </ul>
     </nav>
 
-    <h3>External List of Files</h3>
+    <h3>Custom File List</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <vaadin-upload id="fileEventsDemo" files="{{files}}"></vaadin-upload>
-          <h4>Files</h4>
-          <ul id="customFilesList">
-            <template is="dom-repeat" items="{{files}}" as="file">
-              <li>
-                <strong>[[file.name]]</strong>
-                [[file.status]]
-              </li>
-            </template>
-          </ul>
+          <vaadin-upload id="fileEventsDemo" files="{{files}}">
+            <div class="file-list">
+              <h4>Files</h4>
+              <ul>
+                <template is="dom-repeat" items="{{files}}" as="file">
+                  <li>
+                    <strong>[[file.name]]</strong>
+                    [[file.status]]
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </vaadin-upload>
         </template>
       </template>
     </demo-snippet>

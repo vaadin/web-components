@@ -45,7 +45,7 @@
         return Polymer.dom(upload.$.fileList).querySelectorAll(selector || 'vaadin-upload-file');
       }
 
-      describe('with default file template', function() {
+      describe('file template', function() {
         beforeEach(function() {
           upload = fixture('upload');
           upload._createXhr = xhrCreator();
@@ -69,47 +69,6 @@
             done();
           });
         });
-      });
-
-      // The test for custom file template was disabled for MSIE and MSEdge,
-      // because of some issue with files list. The files list renders files
-      // with custom template in example, but in test it doesn't work.
-      // TODO: Investigate the test issue and re-enable the test.
-      describeSkipIf(ieOrEdge, 'with custom file template', function() {
-        beforeEach(function() {
-          upload = fixture('uploadWithCustomFileTemplate');
-          upload._createXhr = xhrCreator();
-        });
-
-        it('should support custom file template in light DOM', function(done) {
-          expect(getFileListItems(upload, '.file')).to.be.empty;
-
-          var files = createFiles(2);
-          files.forEach(upload._addFile.bind(upload));
-
-          Polymer.Base.async(function() {
-            var file = files[1];
-            var fileListItem = getFileListItems(upload, '.file')[0];
-            expect(fileListItem).to.be.ok;
-            expect(fileListItem.querySelector('.name').textContent).to.be.equal(file.name);
-            expect(fileListItem.querySelector('.size').textContent).to.be.equal(file.size.toString());
-            done();
-          });
-        });
-
-        it('should update bound properties when file is updated', function(done) {
-          var file = createFile();
-          upload._addFile(file);
-          upload.addEventListener('upload-progress', function(e) {
-            if (e.detail.file.progress == 50) {
-              var fileListItem = getFileListItems(upload, '.file')[0];
-              expect(fileListItem.querySelector('.progress').textContent).to.be.equal('50');
-              expect(fileListItem.querySelector('.status').textContent).to.contain('50%');
-              done();
-            }
-          });
-        });
-
       });
 
     });
