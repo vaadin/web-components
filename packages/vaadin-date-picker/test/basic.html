@@ -19,6 +19,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="datepicker-wrapped">
+    <template>
+      <div style="height: 100px; overflow: scroll;">
+        <div style="height: 1000px">
+          <vaadin-date-picker></vaadin-date-picker>
+        </div>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Basic features', function() {
       var datepicker;
@@ -235,7 +245,7 @@
         });
 
         it('should realign on window scroll', function(done) {
-          var spy = sinon.spy(datepicker, '_onWindowScroll');
+          var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
           Polymer.Base.fire('scroll', {}, {
             node: window
           });
@@ -245,13 +255,46 @@
           }, 100);
         });
 
+        it('should realign on container scroll', function(done) {
+          datepicker.close();
+
+          var container = fixture('datepicker-wrapped');
+          var datepickerWrapped = container.querySelector('vaadin-date-picker');
+
+          datepickerWrapped.addEventListener('iron-overlay-opened', function() {
+            var spy = sinon.spy(datepickerWrapped, '_updateAlignmentAndPosition');
+            container.scrollTop += 100;
+
+            datepickerWrapped.async(function() {
+              expect(spy.called).to.be.true;
+              done();
+            }, 100);
+          });
+          datepickerWrapped.open();
+        });
+
         it('should not realign on year/month scroll', function(done) {
-          var spy = sinon.spy(datepicker, '_onWindowScroll');
+          var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
           datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;
           datepicker.async(function() {
             expect(spy.called).to.be.false;
             done();
           }, 1);
+        });
+
+        it('should not realign once closed', function(done) {
+          datepicker.close();
+          datepicker.addEventListener('iron-overlay-closed', function() {
+            var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
+            Polymer.Base.fire('scroll', {}, {
+              node: window
+            });
+            datepicker.async(function() {
+              expect(spy.called).to.be.false;
+              done();
+            }, 1);
+          });
+
         });
 
       });
