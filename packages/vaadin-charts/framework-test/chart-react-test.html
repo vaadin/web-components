@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../../react/react.js"></script>
+    <script src="../../react/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../vaadin-pie-chart.html">
+</head>
+<body>
+    <div id="chart"></div>
+</body>
+<script type="text/babel">
+    var PieWithLegend = React.createClass({
+        getDefaultProps: function() {
+            return {
+                data: []
+            };
+        },
+
+        componentDidMount: function() {
+            // The data-series configuration does not gets loaded automatically.
+            // We need to call reloadConfiguration() for this.
+            if(ReactDOM.findDOMNode(this).reloadConfiguration) {
+                ReactDOM.findDOMNode(this).reloadConfiguration();
+            }
+        },
+
+        shouldComponentUpdate: function() {
+            // This prevents React from updating the chart DOM. We should handle
+            // all the chart updates manually using charts API.
+            return false;
+        },
+
+        componentWillReceiveProps: function(newProps) {
+            // Update the series data
+            ReactDOM.findDOMNode(this).chart.series[0].setData(newProps.data);
+        },
+
+        render: function() {
+            // Note: custom non-standard HTML attributes work in React only when
+            // custom elements are used (there're hyphens in element's name), or
+            // when the "is" attribute is preset.
+            return <vaadin-pie-chart>
+            <title>Revenue by industry</title>
+            <subtitle>2015</subtitle>
+            <tooltip is="" point-format="<b>{point.percentage:.1f}%</b>">
+                    </tooltip>
+                    <plot-options>
+                    <pie is="" allow-point-select={true} show-in-legend={true}
+            cursor="pointer">
+                    <data-labels enabled={true}
+            format="{point.name}: {point.y:.1f} M€"></data-labels>
+                    </pie>
+                    </plot-options>
+                    <data-series name="Revenue share">
+                    <data>{this.props.data.map(JSON.stringify).join(',')}
+            </data>
+            </data-series>
+            </vaadin-pie-chart>;
+            }
+    });
+
+    document.addEventListener('WebComponentsReady', function() {
+                ReactDOM.render(
+                <PieWithLegend data={[ ["Aerospace", 45.0], ["Medical", 26.8],
+                        ["Agriculture ", 12.8], ["Automotive", 8.5],
+                        ["Consumers", 6.2], ["Subsidies", 0.7] ]}/>,
+            document.getElementById('chart')
+       );
+    });
+</script>
+<script>
+    suite('framework integration', function () {
+
+        test('verify react integration works', function () {
+            var elementChart = document.querySelector("vaadin-pie-chart");
+            expect(elementChart.chart.redraw).to.exist;
+
+            var chart = elementChart.chart;
+            expect(chart.series).to.exist;
+            expect(chart.series).not.to.be.empty;
+            expect(chart.series[0].data).to.exist;
+            expect(chart.series[0].data).not.to.be.empty;
+            expect(chart.series[0].data).to.have.length(6);
+
+            var chartSlices = document.querySelectorAll(".highcharts-series path");
+            expect(chartSlices).to.have.length(6);
+        });
+
+    });
+</script>
+
+</html>
