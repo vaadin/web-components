@@ -42,6 +42,7 @@ function test(options, done) {
 function testSauce(browsers, done) {
   test(
     {
+      expanded: true,
       browserOptions: {
         name: localAddress() + ' / ' + new Date(),
         build: 'vaadin-date-picker'
