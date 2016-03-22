@@ -108,9 +108,22 @@ gulp.task('lint:html', function() {
       .pipe(jscs.reporter('fail'));
 });
 
-gulp.task('test:shadow', function(done) {
+gulp.task('test:desktop:shadow', function(done) {
   args.dom = 'shadow';
 
   testSauce([
-    'Windows 10/chrome@45'], done);
+    'Windows 10/chrome@48',
+    'Windows 10/firefox@44',
+    'Windows 10/microsoftedge@13',
+    //'Windows 10/internet explorer@11', // shadow polyfill seems to have issues in IE11.
+    'OS X 10.11/safari@9.0'], done);
+});
+
+gulp.task('test:mobile:shadow', function(done) {
+  args.dom = 'shadow';
+
+  testSauce([
+    'OS X 10.11/iphone@9.2',
+    'OS X 10.11/ipad@9.2',
+    'Linux/android@5.1'], done);
 });
