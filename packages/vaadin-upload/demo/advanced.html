@@ -118,8 +118,8 @@ This program is available under Apache License Version 2.0, available at https:/
         <script>
           upload = document.querySelector('vaadin-upload#preFill');
           upload.files = [
-            {name: 'Don Quixote.pdf', progress: 100},
-            {name: 'Hamlet.pdf', progress: 100}
+            {name: 'Don Quixote.pdf', progress: 100, complete: true},
+            {name: 'Hamlet.pdf', progress: 100, complete: true}
           ];
           upload.set('i18n.addFiles.many', 'Select books');
         </script>
