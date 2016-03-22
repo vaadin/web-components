@@ -64,9 +64,9 @@ function testSauce(browsers, done) {
 
 gulp.task('test:desktop', function(done) {
   testSauce([
-    'Windows 10/chrome@47',
-    'Windows 10/firefox@43',
-    'Windows 10/microsoftedge@20',
+    'Windows 10/chrome@48',
+    'Windows 10/firefox@44',
+    'Windows 10/microsoftedge@13',
     'Windows 10/internet explorer@11',
     'OS X 10.11/safari@9.0'], done);
 });
