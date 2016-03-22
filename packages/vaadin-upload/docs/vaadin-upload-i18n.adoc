@@ -22,7 +22,6 @@ The [vaadinelement]#vaadin-upload# element can be localized through the [propert
     many: 'Add Files'
   },
   cancel: 'Cancel',
-  cancelAll: 'Cancel All',
   error: {
     tooManyFiles: 'Too Many Files.',
     fileIsTooBig: 'File is Too Big.',
@@ -79,7 +78,6 @@ upload_ru.i18n = {
  addFile: 'Добавить файл',
  addFiles: 'Добавить файлы',
  cancel: 'Отменить',
- cancelAll: 'Отменить все',
  error: {
    tooManyFiles: 'Слишком много файлов.',
    fileIsTooBig: 'Слишком большой файл.',

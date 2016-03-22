@@ -277,25 +277,6 @@
           });
           upload._addFiles(files);
         });
-
-        it('should cancel all files ', function(done) {
-          var lastFile = files[1];
-          upload.addEventListener('upload-progress', function(e) {
-            if (e.detail.file == lastFile && e.detail.file.progress == 50) {
-              upload.$.cancelAll.fire('tap');
-            }
-          });
-          upload.addEventListener('file-remove', function(e) {
-            if (e.detail.file == lastFile) {
-              Polymer.Base.async(function() {
-                expect(upload.files.length).to.be.empty;
-                done();
-              },1);
-            }
-          });
-          upload._addFiles(files);
-        });
-
       });
 
       describe('maxFiles change', function() {

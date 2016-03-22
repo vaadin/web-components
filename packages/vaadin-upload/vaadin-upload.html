@@ -140,14 +140,6 @@ Custom property | Description | Default
         @apply(--vaadin-upload-buttons-primary);
       }
 
-      #buttonsSecondary {
-        @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
-        @apply(--layout-start);
-        margin-right: -.29em;
-        @apply(--vaadin-upload-buttons-secondary);
-      }
-
       paper-button {
         @apply(--paper-font-button);
         color: var(--primary-color, #00B4F0);
@@ -171,9 +163,6 @@ Custom property | Description | Default
             [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
           </content>
         </div>
-      </div>
-      <div id="buttonsSecondary">
-        <paper-button id="cancelAll" on-tap="_onCancelAllClick" hidden$="[[!showCancelAll]]">[[i18n.cancelAll]]</paper-button>
       </div>
     </div>
     <content select=".file-list">
@@ -263,14 +252,6 @@ Custom property | Description | Default
       },
 
       /**
-       * Specifies if the cancel-all button is visible.
-       */
-      showCancelAll: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * The array of files being processed, or already uploaded.
        *
        * Each element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)
@@ -356,7 +337,6 @@ Custom property | Description | Default
        many: 'Upload Files'
       },
       cancel: 'Cancel',
-      cancelAll: 'Cancel All',
       error: {
        tooManyFiles: 'Too Many Files.',
        fileIsTooBig: 'File is Too Big.',
@@ -405,7 +385,6 @@ Custom property | Description | Default
               many: 'Upload Files'
             },
             cancel: 'Cancel',
-            cancelAll: 'Cancel All',
             error: {
               tooManyFiles: 'Too Many Files.',
               fileIsTooBig: 'File is Too Big.',
@@ -796,12 +775,6 @@ Custom property | Description | Default
     _onFileRemove: function(event) {
       event.stopPropagation();
       this._removeFile(event.detail.file);
-    },
-
-    _onCancelAllClick: function(event) {
-      for (var i = this.files.length; i > 0; --i) {
-        this._abortFileUpload(this.files[i - 1]);
-      }
     },
 
     _dragoverChanged: function(dragover) {
