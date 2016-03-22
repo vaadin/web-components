@@ -270,11 +270,11 @@ Custom property | Description | Default
 
     listeners: {
       'vaadin-dropdown-opened': '_onOpened',
-      'vaadin-dropdown-closed': '_onClosed'
+      'vaadin-dropdown-closed': '_onClosed',
+      'keydown': '_onKeyDown'
     },
 
     ready: function() {
-      this._addKeyEventListeners();
       Polymer.IronA11yAnnouncer.requestAvailability();
     },
 
@@ -282,33 +282,22 @@ Custom property | Description | Default
      * Keyboard navigation
      */
 
-    // iron-dropdown locks scrolling outside the overlay and prevents all scrolling
-    // related events from propagating. So, we needed to either hack into the
-    // iron-dropdown or provide custom event handling.
-    _addKeyEventListeners: function() {
-      document.addEventListener('keydown', function(e) {
-        if (this._isEventKey(e, 'left right')) {
-          e.stopImmediatePropagation();
-        }
-      }.bind(this), true);
+    _onKeyDown: function(e) {
+      if (this._isEventKey(e, 'down')) {
+        this._onArrowDown();
 
-      this.addEventListener('keydown', function(e) {
-        if (this._isEventKey(e, 'down')) {
-          this._onArrowDown();
+        // prevent caret from moving
+        e.preventDefault();
+      } else if (this._isEventKey(e, 'up')) {
+        this._onArrowUp();
 
-          // prevent caret from moving
-          e.preventDefault();
-        } else if (this._isEventKey(e, 'up')) {
-          this._onArrowUp();
-
-          // prevent caret from moving
-          e.preventDefault();
-        } else if (this._isEventKey(e, 'enter')) {
-          this._onEnter(e);
-        } else if (this._isEventKey(e, 'esc')) {
-          this._onEscape();
-        }
-      }.bind(this));
+        // prevent caret from moving
+        e.preventDefault();
+      } else if (this._isEventKey(e, 'enter')) {
+        this._onEnter(e);
+      } else if (this._isEventKey(e, 'esc')) {
+        this._onEscape();
+      }
     },
 
     _isEventKey: function(e, k) {
