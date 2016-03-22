@@ -132,7 +132,7 @@
         /* Center the year scroller position. */
         --vaadin-infinite-scroller-buffer: {
           top: 50%;
-          margin-top: -37px;
+          margin-top: -20px;
           width: 90px;
         }
       }
@@ -151,18 +151,6 @@
         border-style: solid;
         border-color: transparent;
         border-left-color: var(--vaadin-date-picker-background, --primary-background-color);
-      }
-
-      #yearScroller div:after {
-        content: "• • • • • ";
-        display: block;
-        font-size: 18px;
-        line-height: 23px;
-        width: 9px;
-        margin: 6px auto;
-        opacity: 0.3;
-        white-space: normal;
-        @apply(--vaadin-date-picker-yearscroller-item);
       }
 
       :host(.animate) vaadin-infinite-scroller {
@@ -259,9 +247,10 @@
           <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[focusedDate]]"></vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
-      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScroll" item-height="150" buffer-size="10">
+      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScroll" item-height="49" buffer-size="25">
         <template>
           <div>[[_yearAfterXYears(index)]]</div>
+          <div style="font-size: 18px; opacity: 0.3;">•</div>
         </template>
       </vaadin-infinite-scroller>
     </div>
