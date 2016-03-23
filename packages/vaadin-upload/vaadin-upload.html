@@ -40,8 +40,8 @@ Custom property | Description | Default
 `--vaadin-upload-buttons`|A mixin that is applied to the buttons container|`{}`
 `--vaadin-upload-buttons-primary`|A mixin that is applied to the primary buttons container (left side)|`{}`
 `--vaadin-upload-buttons-secondary`|A mixin that is applied to the secondary buttons container (right side)|`{}`
-`--vaadin-upload-button`|A mixin that is applied to all buttons|`{}`
 `--vaadin-upload-button-add`|A mixin that is applied to the upload button|`{}`
+`--vaadin-upload-button-add-disabled`|A mixin that is applied to the upload button when `maxFiles` limit is reached|`{}`
 
 
 
@@ -140,17 +140,18 @@ Custom property | Description | Default
         @apply(--vaadin-upload-buttons-primary);
       }
 
-      paper-button {
-        @apply(--paper-font-button);
-        color: var(--primary-color, #00B4F0);
-        padding: .43em .57em;
-        @apply(--vaadin-upload-button);
-      }
-
       #addFiles {
+        @apply(--paper-font-button);
+        padding: .43em .57em;
         background: var(--primary-color, #00B4F0);
         color: var(--primary-font-color, #FFFFFF);
         @apply(--vaadin-upload-button-add);
+      }
+
+      #addFiles[disabled] {
+        background: var(--divider-color, #e0e0e0);
+        color: var(--disabled-text-color, gray);
+        @apply(--vaadin-upload-button-add-disabled);
       }
     </style>
 

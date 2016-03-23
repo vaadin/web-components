@@ -60,8 +60,8 @@ The following custom properties are available for styling the component.
 | [propertyname]#--vaadin-upload-buttons# | A mixin that is applied to the buttons container
 | [propertyname]#--vaadin-upload-buttons-primary# | A mixin that is applied to the primary buttons container (on the left side)
 | [propertyname]#--vaadin-upload-buttons-secondary# | A mixin that is applied to the secondary buttons container (on the right side)
-| [propertyname]#--vaadin-upload-button# | A mixin that is applied to the upload button
 | [propertyname]#--vaadin-upload-button-add# | A mixin that is applied to the upload button
+| [propertyname]#--vaadin-upload-button-add-disabled# | A mixin that is applied to the upload button when [propertyname]#maxFiles# limit is reached
 | [propertyname]#--vaadin-upload-file-list# | A mixin that is applied to the file list
 | [propertyname]#--vaadin-upload-drop-label# | A mixin that is applied to the drop label
 | [propertyname]#--vaadin-upload-drop-label-dragover# | A mixin that is applied to the drop label when overing the component with files
