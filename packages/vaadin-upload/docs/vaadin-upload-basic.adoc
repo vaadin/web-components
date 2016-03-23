@@ -65,13 +65,13 @@ The object has a number of extra properties to track the upload process:
 
 Additionally, upload events also have an [propertyname]#event.detail.xhr# property with the corresponding [classname]#XMLHttpRequest# instance.
 
-In the following example, we listen to `file-add` events, which are fired whenever the user adds a new file to the queue:
+In the following example, we listen to `upload-start` events, which are fired when the file upload process starts.
 
 [source,javascript]
 ----
 var upload = document.querySelector('vaadin-upload');
-upload.addEventListener('file-add', function(e) {
-  alert(event.detail.file.name + ' was added');
+upload.addEventListener('upload-start', function(e) {
+  alert("Uploading " + event.detail.file.name);
 });
 ----
 
@@ -81,14 +81,14 @@ When using the element inside another Polymer element, you can use the declarati
 ----
 <dom-module id="my-element">
   <template>
-    <vaadin-upload on-file-add="fileAdded"></vaadin-upload>
+    <vaadin-upload on-upload-start="uploadStarted"></vaadin-upload>
   </template>
 </dom-module>
 <script>
   Polymer({
     is: 'my-element',
-    fileAdded: function(event) {
-      alert(event.detail.file.name + ' was added');
+    uploadStarted: function(event) {
+      alert("Uploading " + event.detail.file.name);
     }
   });
 </script>
