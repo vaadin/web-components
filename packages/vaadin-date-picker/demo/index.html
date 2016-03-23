@@ -113,16 +113,24 @@
       <template>
         <style is="custom-style">
           .custom-theme {
-            --primary-color: var(--dark-primary-color);
-            --vaadin-date-picker-yearscroller-background: var(--primary-background-color);
-            --vaadin-date-picker-yearscroller-color: var(--secondary-text-color);
-            --vaadin-date-picker-calendar-title-color: var(--dark-theme-text-color);
-            --vaadin-date-picker-calendar-date-cell-color: var(--dark-theme-text-color);
-            --vaadin-date-picker-weekday-cell-color: var(--dark-theme-secondary-color);
-            --vaadin-date-picker-selected-color: var(--dark-theme-text-color);
-            --vaadin-date-picker-background: var(--dark-theme-background-color);
-            --vaadin-date-picker-toolbar-background: var(--dark-theme-background-color);
-            --vaadin-date-picker-focused-background: var(--paper-indigo-500);
+            --primary-color: var(--paper-indigo-700);
+            --dark-theme-background-color: #fff;
+            --dark-theme-secondary-color: #737373;
+            --primary-text-color: #fff;
+            --secondary-text-color: #bcbcbc;
+            --light-primary-color: var(--paper-indigo-500);
+            --primary-background-color: var(--paper-grey-900);
+
+            --vaadin-date-picker-toolbar: {
+              background: var(--paper-grey-900);
+            }
+            --vaadin-date-picker-calendar-weekday-cell: {
+              text-transform: capitalize;
+              font-size: 14px;
+            }
+            --vaadin-date-picker-calendar-cell-selected: {
+              color: #fff;
+            }
           }
         </style>
         <vaadin-date-picker class="custom-theme" label="Birthday"></vaadin-date-picker>
