@@ -7,10 +7,10 @@ layout: page
 [[vaadin-icons.overview]]
 = Overview
 
-The [vaadinelement]#vaadin-icons# is a set of over 500 icons which can be used together with the [elementname]#iron-icon# element from Polymer Element Catalog.
-In order to use the icons, you need to provide the identifier as the [propertyname]#icon# attribute to the element.
+The [vaadinelement]#vaadin-icons# set contains over 500 icons which can be used together with the [elementname]#iron-icon# element from Polymer Element Catalog.
+In order to use the icons, you need to provide the identifier as an [propertyname]#icon# attribute to the element.
 Notice that this icon set uses the `vaadin-icons` prefix in the identifier.
-You can also use any other elements supporting the use of icons, like for example [elementname]#paper-fab#.
+You can also use any other elements that support icons, for example, [elementname]#paper-fab#.
 
 [source,html]
 ----
@@ -26,7 +26,7 @@ Please go to https://vaadin.com/icons[vaadin.com/icons] for more details.
 
 == List of Icons
 
-The following table includes a list of icons currently available in the [vaadinelement]#vaadin-icons# set.
+The following table lists the icons currently available in the [vaadinelement]#vaadin-icons# set.
 
 //////////////////////////////////////////
   MAINTENANCE NOTES!
