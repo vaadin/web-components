@@ -19,24 +19,25 @@
         flex-direction: column;
         height: 100%;
         width: 100%;
-        background: var(--vaadin-date-picker-background, --primary-background-color);
+        background: var(--primary-background-color);
         font: inherit;
         outline: none;
         @apply(--paper-font-common-base);
         @apply(--shadow-elevation-2dp);
+        @apply(--vaadin-date-picker-overlay);
       }
 
       #toolbar {
         display: flex;
         justify-content: space-between;
         padding: 14px;
-        background: var(--vaadin-date-picker-toolbar-background, --paper-grey-200);
+        background: var(--paper-grey-200);
         z-index: 2;
         @apply(--paper-font-button);
         @apply(--shadow-elevation-2dp);
         flex-shrink: 0;
         transform: translateZ(0);
-        color: var(--vaadin-date-picker-toolbar-color, --primary-color);
+        color: var(--primary-color);
         @apply(--vaadin-date-picker-toolbar);
       }
 
@@ -45,11 +46,12 @@
       }
 
       #toolbar iron-icon {
-        fill: var(--vaadin-date-picker-toolbar-color, --primary-color);
+        fill: var(--primary-color);
         padding: 0px;
         transition: transform 200ms;
         --iron-icon-width: 20px;
         --iron-icon-height: 20px;
+        @apply(--vaadin-date-picker-toolbar-icon);
       }
 
       #toolbar iron-icon[rotate] {
@@ -72,7 +74,7 @@
       #scrollers #fade {
         pointer-events: none;
         display: block;
-        background: linear-gradient(90deg, var(--vaadin-date-picker-background, --primary-background-color), rgba(255, 255, 255, 0));
+        background: linear-gradient(90deg, var(--primary-background-color), rgba(255, 255, 255, 0));
         width: 50px;
         position: absolute;
         height: 100%;
@@ -107,14 +109,15 @@
       #yearScroller {
         text-align: center;
         width: 50px;
-        background: var(--vaadin-date-picker-yearscroller-background, --dark-theme-background-color);
-        color: var(--vaadin-date-picker-yearscroller-color, --dark-theme-secondary-color);
+        background: var(--dark-theme-background-color);
+        color: var(--dark-theme-secondary-color);
         cursor: pointer;
         position: absolute;
         right: 0;
         transform: translateX(100%);
         -webkit-tap-highlight-color: transparent;
         @apply(--paper-font-menu);
+        @apply(--vaadin-date-picker-yearscroller);
       }
 
       #yearScroller div {
@@ -151,7 +154,8 @@
         border-width: 6px;
         border-style: solid;
         border-color: transparent;
-        border-left-color: var(--vaadin-date-picker-background, --primary-background-color);
+        border-left-color: var(--primary-background-color);
+        @apply(--vaadin-date-picker-yearscroller-indicator);
       }
 
       :host(.animate) vaadin-infinite-scroller {
@@ -167,7 +171,7 @@
       }
 
       #header {
-        background: var(--vaadin-date-picker-header-background, --primary-color);
+        background: var(--primary-color);
         padding: 0 14px 14px;
         display: flex;
         flex-shrink: 0;
@@ -218,10 +222,10 @@
         justify-content: space-between;
         padding: 4px;
         @apply(--paper-font-body2);
-        background: var(--vaadin-date-picker-background, --primary-background-color);
+        background: var(--primary-background-color);
         z-index: 2;
         box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.50);
-        color: var(--vaadin-date-picker-footer-color, --primary-color);
+        color: var(--primary-color);
         flex-shrink: 0;
         @apply(--vaadin-date-picker-footer);
       }
