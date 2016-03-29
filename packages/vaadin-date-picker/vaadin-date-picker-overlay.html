@@ -524,6 +524,7 @@
 
       _dateAfterXMonths: function(months) {
         var result = new Date(this._originDate);
+        result.setDate(1);
         result.setMonth(parseInt(months) + this._originDate.getMonth());
         return result;
       },
