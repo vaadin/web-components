@@ -1,6 +1,6 @@
 {
   "name": "vaadin-charts",
-  "version": "3.0.0-rc1",
+  "version": "3.0.0-rc2",
   "repository": "vaadin/vaadin-charts",
   "scripts": {
     "test": "wct --plugin sauce test/ framework-test/"
