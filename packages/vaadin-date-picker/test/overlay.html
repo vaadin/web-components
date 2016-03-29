@@ -36,6 +36,11 @@
         waitUntilScrolledTo(overlay, new Date(), done);
       });
 
+      it('should return correct month', function() {
+        overlay._originDate = new Date(2016, 2, 31);
+        expect(overlay._dateAfterXMonths(11).getMonth()).to.equal(1);
+      });
+
       it('should reflect the year of currently visible month on the toolbar', function(done) {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
