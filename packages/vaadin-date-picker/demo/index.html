@@ -72,6 +72,9 @@
             weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
             formatDate: function(d) {
               return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
+            },
+            formatTitle: function(d, monthNames) {
+              return monthNames[d.getMonth()] + ' in ' + d.getFullYear();
             }
           };
         </script>

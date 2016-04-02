@@ -267,11 +267,17 @@ See paper-input-container documentation for styling the included input fields
         // Translation of the Cancel button text.
         cancel: 'Cancel',
 
-        // A function to format given `Date` object as
+        // A function to date format given `Date` object as
         // string.
         formatDate: function(d) {
           // returns a string representation of the given
           // Date object in 'MM/DD/YYYY' -format
+        },
+
+        // A function to calendar title format given `Date`
+        // object and 'monthNames' object as string.
+        formatTitle: function(d, monthNames) {
+          return monthNames[d.getMonth()] + ' ' + d.getFullYear();
         }
       }
 
@@ -292,6 +298,9 @@ See paper-input-container documentation for styling the included input fields
               cancel: 'Cancel',
               formatDate: function(d) {
                 return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+              },
+              formatTitle: function(d, monthNames) {
+                return monthNames[d.getMonth()] + ' ' + d.getFullYear();
               }
             };
           }
