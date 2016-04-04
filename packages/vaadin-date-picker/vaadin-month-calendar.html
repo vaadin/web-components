@@ -80,7 +80,7 @@
     </style>
 
     <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
-    <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault">
+    <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
       <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek)]]">
         <div class="weekday">[[item]]</div>
       </template>
@@ -118,7 +118,14 @@
 
         i18n: {
           type: Object
-        }
+        },
+
+        /**
+         * Flag stating whether taps on the component should be ignored.
+         */
+        ignoreTaps: Boolean,
+
+        _notTapping: Boolean
       },
 
       _getTitle: function(month, monthNames) {
@@ -133,6 +140,13 @@
         } else {
           return false;
         }
+      },
+
+      _onMonthGridTouchStart: function() {
+        this._notTapping = false;
+        this.async(function() {
+          this._notTapping = true;
+        }, 300);
       },
 
       _dateAdd: function(date, delta) {
@@ -176,7 +190,7 @@
       },
 
       _handleTap: function(e) {
-        if (e.target.date) {
+        if (!this.ignoreTaps && !this._notTapping && e.target.date) {
           this.selectedDate = e.target.date;
           this.fire('date-tap');
         }
