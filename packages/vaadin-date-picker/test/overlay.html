@@ -67,6 +67,52 @@
         });
       });
 
+      describe('taps', function() {
+
+        beforeEach(function(done) {
+          // Wait for ignoreTaps to settle after initial scroll event
+          overlay.async(done, 350);
+        });
+
+        it('should set ignoreTaps to calendar on scroll', function(done) {
+          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.async(function() {
+            expect(overlay.$.scroller.$$('vaadin-month-calendar').ignoreTaps).to.be.true;
+            done();
+          }, 100);
+        });
+
+        it('should not react to year tap after scroll', function(done) {
+          var spy = sinon.spy(overlay, '_scrollToPosition');
+          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.async(function() {
+            tap(overlay.$.yearScroller);
+            expect(spy.called).to.be.false;
+            done();
+          }, 100);
+        });
+
+        it('should react to year tap after 300ms elapsed after scroll', function(done) {
+          var spy = sinon.spy(overlay, '_scrollToPosition');
+          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.async(function() {
+            tap(overlay.$.yearScroller);
+            expect(spy.called).to.be.true;
+            done();
+          }, 350);
+        });
+
+        it('should not react if the tap takes more than 300ms', function(done) {
+          var spy = sinon.spy(overlay, '_scrollToPosition');
+          overlay._onYearScrollTouchStart();
+          overlay.async(function() {
+            tap(overlay.$.yearScroller);
+            expect(spy.called).to.be.false;
+            done();
+          }, 350);
+        });
+      });
+
       describe('header', function() {
 
         it('should be visible', function() {

@@ -247,12 +247,12 @@
 
     <div id="scrollers" desktop$="[[_desktopMode]]">
       <div id="fade"></div>
-      <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScroll" on-track="_track" item-height="250" buffer-size="6">
+      <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" on-track="_track" item-height="250" buffer-size="6">
         <template>
-          <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[focusedDate]]"></vaadin-month-calendar>
+          <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[focusedDate]]" ignore-taps=[[_ignoreTaps]]></vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
-      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScroll" item-height="80" buffer-size="25">
+      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25">
         <template>
           <div>[[_yearAfterXYears(index)]]</div>
           <div style="font-size: 18px; line-height: 56px; opacity: 0.3;">•</div>
@@ -324,7 +324,11 @@
 
         i18n: {
           type: Object
-        }
+        },
+
+        _ignoreTaps: Boolean,
+
+        _notTapping: Boolean
       },
 
       /**
@@ -367,14 +371,44 @@
         this.scrollToDate(initialPosition);
       },
 
-      _onMonthScroll: function(e) {
+      _repositionYearScroller: function() {
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
         this.$.yearScroller.position = this.$.scroller.position / 12;
       },
 
-      _onYearScroll: function(e) {
+      _repositionMonthScroller: function() {
         this.$.scroller.position = this.$.yearScroller.position * 12;
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+      },
+
+      _onMonthScroll: function() {
+        this._repositionYearScroller();
+        this._doIgnoreTaps();
+      },
+
+      _onYearScroll: function() {
+        this._repositionMonthScroller();
+        this._doIgnoreTaps();
+      },
+
+      _onYearScrollTouchStart: function() {
+        this._notTapping = false;
+        this.async(function() {
+          this._notTapping = true;
+        }, 300);
+
+        this._repositionMonthScroller();
+      },
+
+      _onMonthScrollTouchStart: function() {
+        this._repositionYearScroller();
+      },
+
+      _doIgnoreTaps: function() {
+        this._ignoreTaps = true;
+        this.debounce('restore-taps', function() {
+          this._ignoreTaps = false;
+        }, 300);
       },
 
       _formatDisplayed: function(date, formatDate) {
@@ -399,9 +433,11 @@
       },
 
       _onYearTap: function(e) {
-        var scrollDelta = e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
-        var yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
-        this._scrollToPosition(this.$.scroller.position + yearDelta * 12, true);
+        if (!this._ignoreTaps && !this._notTapping) {
+          var scrollDelta = e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
+          var yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
+          this._scrollToPosition(this.$.scroller.position + yearDelta * 12, true);
+        }
       },
 
       _scrollToPosition: function(targetPosition, animate) {
@@ -413,7 +449,7 @@
         if (!animate) {
           this.$.scroller.position = targetPosition;
           this._targetPosition = undefined;
-          this._onMonthScroll();
+          this._repositionYearScroller();
           return;
         }
 
@@ -450,7 +486,7 @@
             this._targetPosition = undefined;
           }
 
-          this.async(this._onMonthScroll, 1);
+          this.async(this._repositionYearScroller, 1);
         }.bind(this);
 
         // Start the animation.

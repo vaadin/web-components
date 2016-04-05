@@ -124,6 +124,28 @@
         expect(monthCalendar.selectedDate.getDate()).to.equal(10);
       });
 
+      it('should not react if the tap takes more than 300ms', function(done) {
+        tapSpy = sinon.spy();
+        monthCalendar.addEventListener('date-tap', tapSpy);
+        var dateElement = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)')[10];
+
+        monthCalendar._onMonthGridTouchStart();
+        monthCalendar.async(function() {
+          tap(dateElement);
+          expect(tapSpy.called).to.be.false;
+          done();
+        }, 350);
+      });
+
+      it('should not react if ignoreTaps is on', function() {
+        tapSpy = sinon.spy();
+        monthCalendar.addEventListener('date-tap', tapSpy);
+        monthCalendar.ignoreTaps = true;
+        var dateElement = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)')[10];
+        tap(dateElement);
+        expect(tapSpy.called).to.be.false;
+      });
+
       it('should prevent default on touchend', function() {
         var preventDefaultSpy = sinon.spy();
         var touchendEvent = new CustomEvent('touchend', {

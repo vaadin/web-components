@@ -211,7 +211,7 @@
         });
       });
 
-      it('should scroll to a date on open', function() {
+      it('should scroll to a date on open', function(done) {
         // We must scroll to a date on every open because at least IE11 seems to reset
         // scrollTop while the dropdown is closed. This will result in all kind of problems.
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
@@ -219,11 +219,12 @@
         datepicker.addEventListener('iron-overlay-opened', function() {
           expect(spy.called).to.be.true;
           spy.reset();
-          if (openTimes > 2) {
+          if (openTimes === 2) {
             done();
-          } else {
+          } else if (openTimes < 2) {
             datepicker.close();
           }
+          openTimes++;
         });
         datepicker.addEventListener('iron-overlay-closed', function() {
           datepicker.open();
@@ -281,7 +282,6 @@
         });
 
         it('should not realign once closed', function(done) {
-          datepicker.close();
           datepicker.addEventListener('iron-overlay-closed', function() {
             var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
             Polymer.Base.fire('scroll', {}, {
@@ -292,7 +292,7 @@
               done();
             }, 1);
           });
-
+          datepicker.close();
         });
 
       });
