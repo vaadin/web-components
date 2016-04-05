@@ -128,8 +128,12 @@
         _notTapping: Boolean
       },
 
-      _getTitle: function(d, monthNames) {
-        return this.i18n.formatTitle(d, monthNames);
+      _getTitle: function(month, monthNames) {
+        if (this.i18n && typeof this.i18n.formatTitle === 'function') {
+          return this.i18n.formatTitle(month.getMonth(), month.getFullYear(), monthNames);
+        }
+        // fallback
+        return monthNames[month.getMonth()] + ' ' + month.getFullYear();
       },
 
       _dateEquals: function(date1, date2) {
