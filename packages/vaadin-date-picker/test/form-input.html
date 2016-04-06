@@ -92,6 +92,25 @@
         expect(datepicker.invalid).to.equal(false);
       });
 
+      it('should validate correctly with auto-validate', function() {
+        // Use a custom validator registered with <iron-meta>.
+        datepicker.validator = 'year-2016-validator';
+        datepicker.autoValidate = true;
+
+        // Set invalid value.
+        datepicker.value = '2014-01-01';
+        expect(datepicker.invalid).to.be.true;
+
+        // Change it to a valid value.
+        datepicker.value = '2016-01-01';
+        expect(datepicker.invalid).to.be.false;
+      });
+
+      it('should be possible to force invalid status', function() {
+        datepicker.invalid = true;
+        expect(datepicker.$.inputcontainer.invalid).to.be.true;
+      });
+
       it('should serialize correctly', function() {
         var form = fixture('datepicker-in-form', {name: 'foo'});
         datepicker = form.querySelector('vaadin-date-picker');
