@@ -219,6 +219,10 @@
       }
     },
 
+    // Note: this whole scroller thing is done to support iron lists scrollToIndex()
+    // and features that use it like keyboard navigation in IE11 for iron-list 1.0.x.
+    // Tested that iron-list 1.2.x works nicely even without the external scroller, but
+    // left these here for now for backwards compatibility.
     _getScroller: function() {
       return this.$.scroller;
     },
