@@ -1,7 +1,8 @@
-import {Directive, ElementRef, Output, HostListener, EventEmitter, Provider, forwardRef, Renderer} from 'angular2/core';
-import {NG_VALUE_ACCESSOR} from 'angular2/src/common/forms/directives/control_value_accessor';
-import {DefaultValueAccessor} from 'angular2/src/common/forms/directives/default_value_accessor';
-import {CONST_EXPR} from 'angular2/src/facade/lang';
+import { Injector, OnInit, Directive, ElementRef, Output, HostListener, EventEmitter, Provider, forwardRef, Renderer } from 'angular2/core';
+import { NgControl } from 'angular2/common';
+import { NG_VALUE_ACCESSOR } from 'angular2/src/common/forms/directives/control_value_accessor';
+import { DefaultValueAccessor } from 'angular2/src/common/forms/directives/default_value_accessor';
+import { CONST_EXPR } from 'angular2/src/facade/lang';
 declare var Polymer;
 
 const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
@@ -14,38 +15,44 @@ const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
   selector: 'vaadin-date-picker',
   providers: [VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR]
 })
-export class VaadinDatePicker extends DefaultValueAccessor {
+export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
 
-  private element;
+  private _element;
+  private _control;
+
+  ngOnInit() {
+    this._control = this._injector.getOptional(NgControl);
+  }
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter(false);
   @HostListener('value-changed', ['$event.detail.value'])
   valuechanged(value) {
     this.valueChange.emit(value);
+
     if (value) {
       // Assuming that the registered onChange function is only used
       // for the pristine/dirty status here.
       this.onChange(value);
     }
-  }
 
-  @Output() invalidChange: EventEmitter<any> = new EventEmitter(false);
-  @HostListener('invalid-changed', ['$event.detail.value'])
-  invalidchanged(value) {
-    this.invalidChange.emit(value);
+    // Pass the invalid state to our native vaadin-date-picker element if
+    // it is an ngControl.
+    if (this._control != null) {
+      this._element.invalid = !this._control.pristine && !this._control.valid;
+    }
   }
 
   onImport(e) {
-    this.element.$$('paper-input-container').addEventListener('blur', () => {
-      if (!this.element.opened && !this.element._opened) {
+    this._element.$$('paper-input-container').addEventListener('blur', () => {
+      if (!this._element.opened && !this._element._opened) {
         this.onTouched();
       }
     });
   }
 
-  constructor(renderer: Renderer, el: ElementRef) {
+  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
     super(renderer, el);
-    this.element = el.nativeElement;
+    this._element = el.nativeElement;
     Polymer.Base.importHref('bower_components/vaadin-date-picker/vaadin-date-picker.html', this.onImport.bind(this));
   }
 
