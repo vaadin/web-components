@@ -1,7 +1,16 @@
-import { Injector, OnInit, Directive, ElementRef, Output, HostListener, EventEmitter, Provider, forwardRef, Renderer } from 'angular2/core';
-import { NgControl } from 'angular2/common';
-import { NG_VALUE_ACCESSOR } from 'angular2/src/common/forms/directives/control_value_accessor';
-import { DefaultValueAccessor } from 'angular2/src/common/forms/directives/default_value_accessor';
+import {
+  Injector,
+  OnInit,
+  Directive,
+  ElementRef,
+  Output,
+  HostListener,
+  EventEmitter,
+  Provider,
+  forwardRef,
+  Renderer
+} from 'angular2/core';
+import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
 declare var Polymer;
 
