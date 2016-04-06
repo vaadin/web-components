@@ -167,7 +167,7 @@ See paper-input-container documentation for styling the included input fields
       </div>
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" on-iron-resize="_onScroll" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -386,7 +386,6 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _updateAlignmentAndPosition: function() {
-
         var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         this.$.dropdown.verticalOffset = this._fullscreen ? 0 : this.clientHeight - 10;
         this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
@@ -412,6 +411,9 @@ See paper-input-container documentation for styling the included input fields
         this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
 
         window.addEventListener('scroll', this._boundOnScroll, true);
+        // We cannot use iron-resize event because 1- we fire it, 2- it's fired
+        // many times, 3- causes heigth and scroll issues in safari.
+        window.addEventListener('resize', this._boundOnScroll, true);
 
         // Checking if the browser supports webkitOverflowScrolling
         if (document.createElement('div').style.webkitOverflowScrolling === '') {
@@ -444,6 +446,7 @@ See paper-input-container documentation for styling the included input fields
 
       _onOverlayClosed: function() {
         window.removeEventListener('scroll', this._boundOnScroll, true);
+        window.removeEventListener('resize', this._boundOnScroll, true);
 
         this.$.inputcontainer.focus();
 
@@ -466,7 +469,7 @@ See paper-input-container documentation for styling the included input fields
           this.$.dropdown.style.bottom = 'auto';
           this.$.dropdown.resetFit();
           this._updateAlignmentAndPosition();
-          this.$.dropdown._onIronResize();
+          this.$.dropdown.fire('iron-resize');
         }
       },
 
