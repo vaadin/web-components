@@ -65,7 +65,8 @@
           on-touchend="_preventDefault"
           selected-item="{{_selectedItem}}"
           items="[[_items]]"
-          selection-enabled>
+          selection-enabled
+          scroll-target="[[_getScroller()]]">
         <template>
           <div class="item"
               id$="it[[index]]"
@@ -230,8 +231,9 @@
     _patchWheelOverScrolling: function() {
       var selector = this.$.selector;
       selector.addEventListener('wheel', function(e) {
-        var scrolledToTop = selector._scroller.scrollTop === 0;
-        var scrolledToBottom = (selector._scroller.scrollHeight - selector._scroller.scrollTop - selector._scroller.clientHeight) <= 1;
+        var scroller = selector._scroller || selector.scrollTarget;
+        var scrolledToTop = scroller.scrollTop === 0;
+        var scrolledToBottom = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 1;
 
         if (scrolledToTop && e.deltaY < 0) {
           e.preventDefault();
