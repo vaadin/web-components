@@ -86,7 +86,8 @@ layout: page
               // Prevents setting the value property automatically.
               e.preventDefault();
 
-              combobox.value = 'custom value "' + e.detail + '" set!';
+              combobox.value = e.detail;
+              document.querySelector('#selected-value2').innerHTML = 'custom value "' + e.detail + '" set!';
             });
 
             combobox.value = 'Carbon';
