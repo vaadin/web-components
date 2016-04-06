@@ -429,7 +429,7 @@ Custom property | Description | Default
       this.$.overlay.notifyResize();
 
       this.async(function() {
-        this.$.overlay.hidden = (this.items === undefined || this.items === null);
+        this.$.overlay.hidden = !this._hasItems(this.items);
         this.$.overlay._scrollIntoView(this._focusedIndex);
       });
     },
@@ -558,7 +558,12 @@ Custom property | Description | Default
         this.$.overlay._selectItem(valueIndex);
       }
 
-      this.$.overlay.hidden = (items === undefined || items === null || items.length === 0);
+      this.$.overlay.hidden = !this._hasItems(items);
+      this.$.overlay.notifyResize();
+    },
+
+    _hasItems: function(array) {
+      return array && array.length;
     },
 
     _indexOfValue: function(value, items) {
