@@ -13,12 +13,17 @@ var cdnUserName = 'cdn.username';
 var cdnHost = 'cdn.host';
 var cdnDestination = 'cdn.destination';
 
-gulp.task('cdn:stage', ['cdn:copy-sources', 'cdn:install-dependencies']);
+gulp.task('cdn:stage', ['cdn:copy-sources', 'cdn:copy-directives', 'cdn:install-dependencies']);
 
 gulp.task('cdn:copy-sources', function() {
     return gulp.src(config.files.src)
         .pipe(replace('../',''))
         .pipe(gulp.dest(cdnPath));
+});
+
+gulp.task('cdn:copy-directives', function() {
+    return gulp.src(config.files.directives)
+        .pipe(gulp.dest(cdnPath+"directives"));
 });
 
 gulp.task('cdn:install-dependencies', function() {

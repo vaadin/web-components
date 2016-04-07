@@ -57,7 +57,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Index the series was given in the chart series array
              */
-            _seriesIndex: Number
+            _seriesIndex: Number,
+
+            /**
+             * MutatorObserver used to observe changes in data element
+             */
+            _observer: Object
 
         },
 
@@ -87,13 +92,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          */
         _dataChanged: function () {
             if (this._seriesIndex != undefined && this._parentChart().isInitialized()) {
-                if (this.drilldown) {
-                    this._parentChart().chart.drilldown.series[this._seriesIndex].setData(this.data);
-                } else {
-                    this._parentChart().chart.series[this._seriesIndex].setData(this.data);
-                }
+                this._updateChartData(this.data);
             } else {
                 this._seriesConf['data'] = this.data;
+            }
+        },
+
+        _updateChartData: function (newData) {
+            if (this.drilldown) {
+                this._parentChart().chart.drilldown.series[this._seriesIndex].setData(newData);
+            } else {
+                this._parentChart().chart.series[this._seriesIndex].setData(newData);
             }
         },
 
@@ -133,7 +142,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                     if (this._hasPointNodes(node)) {
                         value = [];
                         for (var o = 0; o < node.childNodes.length; o++) {
-                            value.push(this._parsePoint(node.childNodes[o]));
+                            if (this._isPointNode(node.childNodes[o])) {
+                                value.push(this._parsePoint(node.childNodes[o]));
+                            }
                         }
                     } else {
                         value = '[' + node.textContent + ']';
@@ -202,7 +213,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Checks if nodes has child nodes that correspond to points.
          **/
         _hasPointNodes: function (node) {
-            return node.childNodes.length > 0 && 'point' === node.childNodes[0].nodeName.toLowerCase();
+            var nodeChildrenArray = Array.prototype.slice.call(node.children, 0);
+            return nodeChildrenArray.length > 0 && nodeChildrenArray.filter(this._isPointNode).length > 0;
+        },
+
+        /**
+         * Checks if node is a point node.
+         **/
+        _isPointNode: function (node) {
+            return node.nodeType === 1 && 'point' === node.nodeName.toLowerCase();
         },
 
 
@@ -225,7 +244,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 
         // Kind of attached but attached is not called then the element is only in the light DOM
-        initialize: function () {
+        _initialize: function () {
             this._initConfiguration();
             if (this.drilldown) {
                 this._seriesIndex = this._parentChart()._addDrilldownSeries(this._seriesConf);
@@ -243,7 +262,32 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._loadFromNode(this._seriesConf, element.node);
             this._loadConfiguration(this._seriesConf, element);
             this._loadData();
-        }
+            this._addDataPointsObserver();
+        },
 
+        _addDataPointsObserver: function () {
+            if (MutationObserver && !this._observer) {
+                var dataElements = Polymer.dom(this).querySelectorAll('data');
+                if (dataElements && dataElements.length > 0) {
+                    this._observer = new MutationObserver(
+                            this._reloadData.bind(this));
+                    for (var n = 0; n < dataElements.length; n++) {
+                        this._observer.observe(dataElements[n], {
+                            attributes: false,
+                            childList: true,
+                            characterData: true,
+                            characterDataOldValue: false,
+                            subtree: true
+                        });
+                    }
+                }
+            }
+        },
+
+        _reloadData: function () {
+            this._seriesConf.data = [];
+            this._loadData();
+            this._updateChartData(this._seriesConf.data);
+        }
     });
 </script>

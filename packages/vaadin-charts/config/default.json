@@ -37,6 +37,12 @@
     ],
     "doc": "*.md",
     "demo": "demo/**/*",
+    "directives": [
+      "directives/vaadin-charts.js",
+      "directives/vaadin-charts.js.map",
+      "directives/vaadin-charts.ts",
+      "directives/tsconfig.json"
+    ],
     "test": "test/**/*"
   },
   "version": "3.0.0"

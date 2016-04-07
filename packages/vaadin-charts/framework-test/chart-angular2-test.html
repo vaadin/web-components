@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Web Components -->
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../vaadin-pie-chart.html">
+
+    <!-- browser tester -->
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- IE required polyfills, in this exact order -->
+    <script src="../node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="../node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+    <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="../node_modules/systemjs/dist/system.src.js"></script>
+    <script src="../node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+
+    <!-- 2. Configure SystemJS -->
+    <script>
+    document.addEventListener('WebComponentsReady', function() {
+        System.config({
+            map: {
+                'vaadin-charts': '../directives'
+            },
+            packages: {
+                app: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                'vaadin-charts': {
+                    defaultExtension: 'js',
+                    main: 'vaadin-charts.js'
+                }
+            }
+        });
+          System.import('angular2/main.js')
+              .then(null, console.error.bind(console));
+        });
+    </script>
+</head>
+
+<body>
+    <my-app>Loading...</my-app>
+
+    <script>
+        suite('framework integration', function() {
+
+            test('verify angular 2 binding works', function(done) {
+
+                var myApp = document.querySelector("my-app");
+                myApp.addEventListener('chartsReady', function() {
+                    //TODO try to get rid of setTimeout in the tests
+                    setTimeout(function() {
+                        var elementChart = document.querySelector("vaadin-pie-chart");
+                        expect(elementChart.chart.redraw).to.exist;
+
+                        var chart = elementChart.chart;
+                        expect(chart.series).to.exist;
+                        expect(chart.series).not.to.be.empty;
+                        expect(chart.series[0].data).to.exist;
+                        expect(chart.series[0].data).not.to.be.empty;
+                        expect(chart.series[0].data).to.have.length(6);
+
+                        var chartSlices = document.querySelectorAll(".highcharts-series path");
+                        expect(chartSlices).to.have.length(6);
+                        done();
+                    }, 100)
+                });
+            });
+
+            test('Verify chart has full size', function() {
+                var myApp = document.querySelector("my-app");
+                myApp.addEventListener('chartsReady', function() {
+                    setTimeout(function() {
+                        var highchartsContainer = document.querySelector(".highcharts-container");
+                        expect(highchartsContainer).to.exist;
+                        expect(highchartsContainer.offsetWidth).to.equal(window.innerWidth);
+                    }, 100)
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>
