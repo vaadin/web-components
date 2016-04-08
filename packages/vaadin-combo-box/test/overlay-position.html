@@ -96,6 +96,23 @@
         expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
       });
 
+      it('should position correctly if items are populated after opening', function(done) {
+        comboBox.items = [];
+        comboBox.addEventListener('vaadin-dropdown-opened', function() {
+          comboBox.items = [1, 2, 3];
+          expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
+          done();
+        });
+        comboBox.open();
+      });
+
+      it('should notify resize on items change', function() {
+        var spy = sinon.spy();
+        comboBox.$.overlay.addEventListener('iron-resize', spy);
+        comboBox.items = [1, 2, 3];
+        expect(spy.called).to.be.true;
+      });
+
       it('should be aligned with input container', function() {
         comboBox.open();
 
