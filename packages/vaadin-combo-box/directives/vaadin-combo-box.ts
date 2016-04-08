@@ -10,6 +10,8 @@ import {
   Provider,
   forwardRef,
   Renderer,
+  DoCheck,
+  IterableDiffers
 } from 'angular2/core';
 import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
@@ -25,13 +27,27 @@ const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
   selector: 'vaadin-combo-box',
   providers: [VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR]
 })
-export class VaadinComboBox extends DefaultValueAccessor implements OnInit {
+export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCheck {
+
+  @Input()
+  items: any[];
 
   private _element;
   private _control;
+  private _differ;
 
   ngOnInit() {
     this._control = this._injector.getOptional(NgControl);
+  }
+
+  ngDoCheck() {
+    const changes = this._differ.diff(this.items);
+    if (changes) {
+
+      // The items property must be set to a clone of the collection because of
+      // how iron-list behaves.
+      this._element.items = changes.collection.slice(0);
+    }
   }
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter(false);
@@ -58,9 +74,10 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit {
     });
   }
 
-  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
+  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector, differs: IterableDiffers) {
     super(renderer, el);
     this._element = el.nativeElement;
+    this._differ = differs.find([]).create(null);
     Polymer.Base.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html', this.onImport.bind(this));
   }
 
