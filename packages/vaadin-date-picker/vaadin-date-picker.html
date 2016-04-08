@@ -393,8 +393,9 @@ See paper-input-container documentation for styling the included input fields
         var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
         var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+
         this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
-        this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
+        this.$.dropdown.horizontalAlign = this._fullscreen ? null : rightAlign ? 'right' : 'left';
 
         this.$.dropdown.refit();
       },
