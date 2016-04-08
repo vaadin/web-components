@@ -215,6 +215,12 @@
       if (index <= this.$.selector.firstVisibleIndex) {
         this.$.selector.scrollToIndex(index);
       } else if (index > this._lastVisibleIndex()) {
+        // From iron-list 1.2.4, scrolling to an index guarantees that the item
+        // is visible into the viewport, but does not gurarantee that it is at the
+        // first position. Jumping first to the item we want to be at the bottom,
+        // fixes the problem.
+        this.$.selector.scrollToIndex(index);
+
         this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
       }
     },
