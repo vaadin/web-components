@@ -139,6 +139,12 @@
     });
 
     describeSkipIf(ios, 'overlay alignment', function() {
+      beforeEach(function() {
+        // These tests randomly fails in Edge when they are run from travis
+        // unless we reset borders.
+        comboBox.$.overlay.$.selector.$.items.style.border = 'none';
+      });
+
       it('should be above input', function(done) {
         moveComboBox(horiCenter, vertBottom, 300);
 
