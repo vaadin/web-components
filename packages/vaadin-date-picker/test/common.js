@@ -1,6 +1,25 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
 
+function getDefaultI18n() {
+  return {
+    monthNames: [
+      'January', 'February', 'March', 'April', 'May',
+      'June', 'July', 'August', 'September', 'October', 'November', 'December'
+    ],
+    weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    firstDayOfWeek: 0,
+    today: 'Today',
+    cancel: 'Cancel',
+    formatDate: function(d) {
+      return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    },
+    formatTitle: function(monthName, fullYear) {
+      return monthName + ' ' + fullYear;
+    }
+  };
+}
+
 function tap(element) {
   Polymer.Base.fire('tap', {}, {
     bubbles: true,

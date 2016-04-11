@@ -274,11 +274,10 @@ See paper-input-container documentation for styling the included input fields
           // Date object in 'MM/DD/YYYY' -format
         },
 
-        // A optional function to format given `month` and
-        // `fullYear` integers, `monthNames` object as
-        // calendar title string.
-        formatTitle: function(month, year) {
-          return monthNames[month] + ' ' + fullYear;
+        // A function to format given `monthName` and
+        // `fullYear` integer as calendar title string.
+        formatTitle: function(monthName, fullYear) {
+          return monthName + ' ' + fullYear;
         }
       }
 
@@ -300,8 +299,8 @@ See paper-input-container documentation for styling the included input fields
               formatDate: function(d) {
                 return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
               },
-              formatTitle: function(month, fullYear, monthNames) {
-                return monthNames[month] + ' ' + fullYear;
+              formatTitle: function(monthName, fullYear) {
+                return monthName + ' ' + fullYear;
               }
             };
           }
