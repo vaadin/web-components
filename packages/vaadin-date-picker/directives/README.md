@@ -5,7 +5,7 @@ Angular 2 framework.
 
 ## Installation
 
-First install the `vaadin-date-picker` through Bower and add the following
+1) First install the `vaadin-date-picker` through Bower and add the following
 configuration to your `index.html` file.
 
 ```javascript
@@ -21,6 +21,26 @@ System.config({
   }
 });
 ```
+
+2) You also need to wrap the application startup into `WebComponentsReady` event
+listener. For example as follows:
+```javascript
+window.addEventListener('WebComponentsReady', function() {
+  System.import('app/main').then(null, console.error.bind(console));
+});
+```
+
+3) Create a file called `bs-config.json` in the root of your project folder
+with the following contents:
+```json
+{
+  "snippetOptions": {
+    "ignorePaths": "bower_components/**/*.html"
+  }
+}
+```
+
+## Usage
 
 After the configuration is in place, you can import the directive into your
 own Angular 2 component as follows.
