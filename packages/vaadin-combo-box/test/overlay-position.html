@@ -84,14 +84,15 @@
     describe('overlay position', function() {
       it('should match the input container width', function() {
         comboBox.open();
-
-        expect(dropContentRect().width).to.equal(inputContentRect().width);
+        // Use floor values so that zooming in Chrome doesn't make the test fail
+        expect(~~(dropContentRect().width)).to.equal(~~(inputContentRect().width));
       });
 
       it('should be below the input box', function() {
         comboBox.open();
-
-        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
+        // Use floor values so that zooming in Chrome doesn't make the test fail
+        expect(~~(dropContentRect().top)).to.equal(
+          ~~(inputContentRect().bottom + comboBox.$.overlay.verticalOffset));
       });
 
       it('should position correctly if items are populated after opening', function(done) {
