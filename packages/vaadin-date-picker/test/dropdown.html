@@ -31,6 +31,19 @@
         datepicker.async(done, 1);
       });
 
+      it('should not close on calendar icon mousedown', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          Polymer.Base.fire('mousedown', {}, {
+            bubbles: true,
+            node: datepicker.$.calendar
+          });
+          expect(datepicker.$.dropdown.opened).to.be.true;
+
+          done();
+        });
+        datepicker.open();
+      });
+
       if (document.createElement('div').style.webkitOverflowScrolling === '') {
         it('should handle webkit-overflow-scrolling', function(done) {
           document.body.style.webkitOverflowScrolling = 'touch';

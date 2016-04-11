@@ -167,7 +167,7 @@ See paper-input-container documentation for styling the included input fields
       </div>
     </paper-input-container>
 
-    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnInputContainerTap" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnComponentAccess" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -474,8 +474,8 @@ See paper-input-container documentation for styling the included input fields
         this[this.$.dropdown.opened ? 'close' : 'open']();
       },
 
-      _preventCancelOnInputContainerTap: function(e) {
-        if (e.detail.type === 'tap' && e.detail.path && e.detail.path.indexOf(this.$.inputcontainer) > -1) {
+      _preventCancelOnComponentAccess: function(e) {
+        if (/tap|mousedown|touchstart/.test(e.detail.type) && this.contains(e.detail.target)) {
           e.preventDefault();
         }
       },
