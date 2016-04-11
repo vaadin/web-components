@@ -51,10 +51,20 @@
       // cancel each other. We need to process mutation observers synchonously after moving the overlay. :-(
       var oldParentNode = this.parentNode;
       Polymer.dom(target).appendChild(this);
+
       if (oldParentNode) {
         this._processPendingMutationObserversFor(oldParentNode);
+        if (oldParentNode.host) {
+          // When moving from local DOM, ensure to remove the old style scope
+          Polymer.StyleTransformer.dom(this, oldParentNode.host.is, this._scopeCssViaAttr, true);
+        }
       }
+
       this._processPendingMutationObserversFor(this);
+      if (target.host) {
+        // When moving to local DOM, ensure to add the new style scope
+        Polymer.StyleTransformer.dom(this, target.host.is, this._scopeCssViaAttr);
+      }
 
       if (target === document.body) {
         this.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
