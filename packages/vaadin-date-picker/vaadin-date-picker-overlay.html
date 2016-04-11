@@ -117,6 +117,7 @@
         transform: translateX(100%);
         -webkit-tap-highlight-color: transparent;
         @apply(--paper-font-menu);
+        line-height: 8px;
         @apply(--vaadin-date-picker-yearscroller);
       }
 
@@ -255,7 +256,7 @@
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25">
         <template>
           <div>[[_yearAfterXYears(index)]]</div>
-          <div style="font-size: 18px; line-height: 56px; opacity: 0.3;">•</div>
+          <div style="font-size: 18px; line-height: 72px; opacity: 0.3;">•</div>
         </template>
       </vaadin-infinite-scroller>
     </div>
