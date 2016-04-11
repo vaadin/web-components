@@ -402,6 +402,10 @@
         it('calendar icon should be hidden', function() {
           expect(datepicker.$.calendar.hidden).to.be.equal(true);
         });
+
+        it('should not be focusable', function() {
+          expect(datepicker.$.inputcontainer.tabIndex).to.equal(-1);
+        });
       });
 
       describe('Readonly', function() {
@@ -417,6 +421,10 @@
 
         it('calendar icon should be hidden', function() {
           expect(datepicker.$.calendar.hidden).to.be.equal(true);
+        });
+
+        it('should be focusable', function() {
+          expect(datepicker.$.inputcontainer.tabIndex).to.equal(0);
         });
       });
 

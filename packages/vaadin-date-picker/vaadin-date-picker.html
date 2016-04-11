@@ -152,7 +152,7 @@ See paper-input-container documentation for styling the included input fields
       }
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" invalid="[[invalid]]" tabindex$="[[_getTabIndex(disabled, readonly)]]" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown" disabled$="[[disabled]]" opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
+    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" invalid="[[invalid]]" tabindex$="[[_getTabIndex(disabled)]]" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown" disabled$="[[disabled]]" opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
       <label id="label">[[label]]</label>
       <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="{{invalid}}" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer" validator="[[validator]]" readonly$="[[readonly]]" disabled$="[[disabled]]">
 
@@ -544,9 +544,8 @@ See paper-input-container documentation for styling the included input fields
         }
       },
 
-      _getTabIndex: function(disabled, readonly) {
-        // tabindex 0 is default. tabindex -1 means that focusing with tab is not allowed.
-        return disabled || readonly ? -1 : 0;
+      _getTabIndex: function(disabled) {
+        return disabled ? -1 : 0;
       }
     });
 
