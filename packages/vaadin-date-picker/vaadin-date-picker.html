@@ -393,8 +393,9 @@ See paper-input-container documentation for styling the included input fields
         var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
         var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+
         this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
-        this.$.dropdown.horizontalAlign = rightAlign ? 'right' : 'left';
+        this.$.dropdown.horizontalAlign = this._fullscreen ? null : rightAlign ? 'right' : 'left';
 
         this.$.dropdown.refit();
       },
@@ -411,6 +412,9 @@ See paper-input-container documentation for styling the included input fields
         this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
 
         window.addEventListener('scroll', this._boundOnScroll, true);
+        // We cannot use iron-resize event because 1- we fire it, 2- it's fired
+        // many times, 3- causes heigth and scroll issues in safari.
+        window.addEventListener('resize', this._boundOnScroll, true);
 
         // Checking if the browser supports webkitOverflowScrolling
         if (document.createElement('div').style.webkitOverflowScrolling === '') {
@@ -443,6 +447,7 @@ See paper-input-container documentation for styling the included input fields
 
       _onOverlayClosed: function() {
         window.removeEventListener('scroll', this._boundOnScroll, true);
+        window.removeEventListener('resize', this._boundOnScroll, true);
 
         this.$.inputcontainer.focus();
 
