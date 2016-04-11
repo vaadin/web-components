@@ -89,6 +89,21 @@
         expect(combobox.$.overlay.hidden).to.be.true;
       });
 
+      // When using Shadow DOM polyfill, the style scope of the combobox might
+      // not get removed from the overlay after it's moved to the body. The
+      // following test ensures that the overlay doesn't keep the style scope
+      // of the combobox when moved during open.
+      it('should not leak combobox style scope to the overlay', function() {
+        // Test only when style scope classes are used
+        if (combobox.$.overlay.classList.contains('style-scope') &&
+            combobox.$.overlay.classList.contains('vaadin-combo-box')) {
+          combobox.open();
+
+          expect(combobox.$.overlay.classList.contains('style-scope')).to.be.false;
+          expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.false;
+        }
+      });
+
       describe('after opening', function() {
         beforeEach(function() {
           combobox.open();
@@ -179,6 +194,24 @@
           done();
         }, 1);
       });
+
+      // When using Shadow DOM polyfill, the style scope of the combobox might
+      // not get added to the overlay after it's moved back to the combobox.
+      // The following test ensures that the overlay doesn't keep the style
+      // scope of the combobox when moved during close.
+      it('should add combobox style scope to the overlay', function() {
+        // Test only when style scope classes are used
+        if (combobox.$.overlay.classList.contains('style-scope') &&
+            combobox.$.overlay.classList.contains('vaadin-combo-box')) {
+          combobox.open();
+
+          combobox.close();
+
+          expect(combobox.$.overlay.classList.contains('style-scope')).to.be.true;
+          expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.true;
+        }
+      });
+
     });
 
     describe('disabled', function() {
