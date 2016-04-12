@@ -25,11 +25,7 @@
         monthCalendar = fixture('vaadin-month-calendar');
 
         // Need to internationalise the component with default values.
-        monthCalendar.i18n = {
-          monthNames: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
-          weekdaysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
-          firstDayOfWeek: 0
-        };
+        monthCalendar.i18n = getDefaultI18n();
         monthCalendar.month = new Date(2016, 1, 1); // Feb 2016
 
         valueChangedSpy = sinon.spy();
@@ -178,7 +174,10 @@
             monthNames:
               'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
             weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            formatTitle: function(monthName, fullYear) {
+              return monthName + '-' + fullYear;
+            }
           };
           Polymer.Base.async(done);
         });
@@ -192,7 +191,7 @@
         });
 
         it('should render month name in correct locale', function() {
-          expect(monthCalendar.$.title.textContent).to.equal('helmikuu 2016');
+          expect(monthCalendar.$.title.textContent).to.equal('helmikuu-2016');
         });
       });
 

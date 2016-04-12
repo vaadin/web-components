@@ -158,14 +158,7 @@
 
           beforeEach(function(done) {
             overlay = fixture('overlay');
-            overlay.i18n = {
-              monthNames: [
-                'January', 'February', 'March', 'April', 'May',
-                'June', 'July', 'August', 'September', 'October', 'November', 'December'
-              ],
-              weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-              firstDayOfWeek: 0
-            };
+            overlay.i18n = getDefaultI18n();
             target = overlay;
 
             overlay.focusedDate = new Date(2000, 0, 1);
