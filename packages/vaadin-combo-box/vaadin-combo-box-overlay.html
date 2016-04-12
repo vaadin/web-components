@@ -150,6 +150,12 @@
 
     ready: function() {
       this._patchWheelOverScrolling();
+
+      // Fix for #182. Only relevant for iron-list 1.0.X and 1.1.X.
+      // 1.2.X works fine without this.
+      if (this.$.selector._scroller !== undefined) {
+        this.$.selector._scroller = this._getScroller();
+      }
     },
 
     _getFocusedItem: function(focusedIndex) {
