@@ -48,7 +48,9 @@ export class VaadinUpload extends DefaultValueAccessor implements OnInit {
 
 
   onImport(e) {
-    // TODO add blur listener?
+    this._element.$$('paper-button').addEventListener('blur', () => {
+      this.onTouched();
+    });
   }
 
   constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
