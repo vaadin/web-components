@@ -44,7 +44,7 @@ export class VaadinUpload extends DefaultValueAccessor {
     const link = document.createElement('link');
     link.rel = 'import';
     link.href = href;
-    link.onload = this.onImport.bind(this)
+    link.onload = this.onImport.bind(this);
     document.head.appendChild(link);
   }
 
