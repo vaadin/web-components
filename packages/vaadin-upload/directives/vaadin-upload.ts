@@ -46,8 +46,16 @@ export class VaadinUpload extends DefaultValueAccessor implements OnInit {
     }
   }
 
+  importHref(href) {
+    const link = document.createElement('link');
+    link.rel = 'import';
+    link.href = href;
+    link.onload = this.onImport.bind(this)
+    document.head.appendChild(link);
+  }
 
-  onImport(e) {
+
+  onImport() {
     this._element.$$('paper-button').addEventListener('blur', () => {
       this.onTouched();
     });
@@ -56,7 +64,7 @@ export class VaadinUpload extends DefaultValueAccessor implements OnInit {
   constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
     super(renderer, el);
     this._element = el.nativeElement;
-    Polymer.Base.importHref('bower_components/vaadin-upload/vaadin-upload.html', this.onImport.bind(this));
+    this.importHref('bower_components/vaadin-upload/vaadin-upload.html');
   }
 
 }
