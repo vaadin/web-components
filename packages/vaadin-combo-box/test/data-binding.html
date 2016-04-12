@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo data-binding tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body>
+
+  <dom-module id="value-null">
+    <script>
+    Polymer({
+      is: "value-null",
+      properties: {
+        value: {
+          notify: true
+        }
+      },
+    });
+    </script>
+  </dom-module>
+
+  <test-fixture id="fixturenull">
+    <template>
+      <div>
+        <template id="bind" is="dom-bind" name="{{name}}">
+          <value-null value={{name}}></value-null>
+          <vaadin-combo-box items="[[robots]]" value="{{name}}"></vaadin-combo-box>
+          <input is="iron-input" bind-value="{{name}}">
+        </template>
+      </div>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('data binding', function() {
+      var valueNull, comboBox;
+
+      beforeEach(function() {
+        var root = fixture('fixturenull');
+        valueNull = Polymer.dom(root).querySelector('value-null');
+        comboBox = Polymer.dom(root).querySelector('vaadin-combo-box');
+      });
+
+      it('should not enter in a loop when setting value to null', function(done) {
+        // monkey-patching __valueChanged to check if setting properties loops.
+        // Not using sinon.spy to break the loop before overflowing the stack.
+        comboBox.__valueChanged = comboBox._valueChanged;
+        var i = 0;
+        comboBox._valueChanged = function(value) {
+          expect(i++).to.be.below(30);
+          comboBox.__valueChanged.call(comboBox, value);
+        };
+
+        Polymer.Base.async(function() {
+          expect(i).to.be.equal(1);
+          done();
+        }, 1);
+
+        // Setting value to null makes the component enter in a loop, for instance
+        // iron-localstorage sets it to null when the key does not exist.
+        valueNull.value = null;
+      });
+
+      it('should not enter in a loop when setting value to undefined', function(done) {
+        comboBox.__valueChanged = comboBox._valueChanged;
+        var i = 0;
+        comboBox._valueChanged = function(value) {
+          expect(i++).to.be.below(30);
+          comboBox.__valueChanged.call(comboBox, value);
+        };
+
+        Polymer.Base.async(function() {
+          expect(i).to.be.equal(1);
+          done();
+        }, 1);
+
+        valueNull.value = undefined;
+      });
+    });
+  </script>
+
+</body>
+
+</html>

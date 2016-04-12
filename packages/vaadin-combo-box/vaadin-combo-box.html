@@ -593,9 +593,6 @@ Custom property | Description | Default
     },
 
     _valueChanged: function(value) {
-      if (value === undefined || value === null) {
-        this.value = '';
-      }
 
       var valueIndex = this._indexOfValue(value);
       var item = valueIndex > -1 && this.items[valueIndex];
