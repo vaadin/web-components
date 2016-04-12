@@ -8,20 +8,24 @@
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
 
   <dom-module id="value-null">
     <script>
-    Polymer({
-      is: "value-null",
-      properties: {
-        value: {
-          notify: true
-        }
-      },
-    });
+      // IE11 needs to wait for Polymer being loaded.
+      HTMLImports.whenReady(function(){
+        Polymer({
+          is: "value-null",
+          properties: {
+            value: {
+              notify: true
+            }
+          },
+        });
+      });
     </script>
   </dom-module>
 
@@ -38,7 +42,10 @@
   </test-fixture>
 
   <script>
-    describe('data binding', function() {
+  describe('data binding', function() {
+
+    describeIf(chrome, 'Chrome loops', function() {
+
       var valueNull, comboBox;
 
       beforeEach(function() {
@@ -60,7 +67,7 @@
         Polymer.Base.async(function() {
           expect(i).to.be.equal(1);
           done();
-        }, 1);
+        }, 1000);
 
         // Setting value to null makes the component enter in a loop, for instance
         // iron-localstorage sets it to null when the key does not exist.
@@ -83,6 +90,7 @@
         valueNull.value = undefined;
       });
     });
+  });
   </script>
 
 </body>
