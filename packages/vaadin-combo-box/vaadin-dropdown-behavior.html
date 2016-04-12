@@ -98,11 +98,6 @@
 
       this._removeOutsideClickListener();
 
-      // For touch devices, we want to hide the virtual keyboard after closing the overlay.
-      if (this.$.overlay.touchDevice) {
-        this.$.input.blur();
-      }
-
       this.fire('vaadin-dropdown-closed');
     },
 
