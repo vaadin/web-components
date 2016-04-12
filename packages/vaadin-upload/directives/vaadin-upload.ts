@@ -1,6 +1,5 @@
 import {
   Injector,
-  OnInit,
   Directive,
   ElementRef,
   Output,
@@ -24,14 +23,9 @@ const VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
   selector: 'vaadin-upload',
   providers: [VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR]
 })
-export class VaadinUpload extends DefaultValueAccessor implements OnInit {
+export class VaadinUpload extends DefaultValueAccessor {
 
   private _element;
-  private _control;
-
-  ngOnInit() {
-    this._control = this._injector.getOptional(NgControl);
-  }
 
   @Output() filesChange: EventEmitter<any> = new EventEmitter(false);
   @HostListener('files-changed')
