@@ -104,6 +104,16 @@
         }
       });
 
+      it('should not change combobox width', function() {
+        combobox.style.display = 'inline-block';
+        combobox.items = ['foo'];
+        combobox.value = 'foo';
+        var width = combobox.clientWidth;
+
+        combobox.open();
+        expect(combobox.clientWidth).to.equal(width);
+      });
+
       describe('after opening', function() {
         beforeEach(function() {
           combobox.open();
