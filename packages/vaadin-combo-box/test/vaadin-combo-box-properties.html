@@ -64,18 +64,6 @@
           expect(comboBox.value).to.eql('');
         });
 
-        it('should default back to empty when set to undefined', function() {
-          comboBox.value = undefined;
-
-          expect(comboBox.value).to.eql('');
-        });
-
-        it('should default back to empty when set to null', function() {
-          comboBox.value = null;
-
-          expect(comboBox.value).to.eql('');
-        });
-
         it('should be able to be set before items', function() {
           comboBox.value = 'foo';
 

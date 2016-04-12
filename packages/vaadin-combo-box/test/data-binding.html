@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo data-binding tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="common.html">
+  <script src="common.js"></script>
+</head>
+
+<body>
+
+  <dom-module id="value-null">
+    <script>
+      // IE11 needs to wait for Polymer being loaded.
+      HTMLImports.whenReady(function() {
+        Polymer({
+          is: 'value-null',
+          properties: {
+            value: {
+              notify: true
+            }
+          },
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="fixturenull">
+    <template>
+      <div>
+        <template is="dom-bind">
+          <value-null value="{{name}}"></value-null>
+          <vaadin-combo-box items="[[robots]]" value="{{name}}"></vaadin-combo-box>
+          <input is="iron-input" bind-value="{{name}}">
+        </template>
+      </div>
+    </template>
+  </test-fixture>
+
+  <script>
+  describe('data binding', function() {
+
+    // Chrome demonstrates a loop when setting value to null/undefined and value is
+    // bound in other components firing change events like in iron-input#bindValue.
+    // In other browsers these tests do not work, and the browser could freeze.
+    describeIf(chrome, 'Chrome loops', function() {
+      var valueNull, comboBox;
+
+      beforeEach(function() {
+        var root = fixture('fixturenull');
+        valueNull = Polymer.dom(root).querySelector('value-null');
+        comboBox = Polymer.dom(root).querySelector('vaadin-combo-box');
+      });
+
+      // Setting value to null/undefined makes the component enter in a loop,
+      // for instance iron-localstorage sets it to null when the key does not exist.
+      [null, undefined].forEach(function(value) {
+        it('should not enter in a loop when setting value to ' + value, function(done) {
+
+          // Not using sinon.spy, so we can break the loop before overflowing the stack.
+          var i = 0;
+          comboBox.addEventListener('value-changed', function() {
+            expect(i++).to.be.below(30);
+          });
+
+          Polymer.Base.async(function() {
+            expect(i).to.be.equal(1);
+            done();
+          }, 1);
+
+          valueNull.value = value;
+        });
+      });
+    });
+  });
+  </script>
+
+</body>
+
+</html>

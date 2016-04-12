@@ -435,7 +435,6 @@ Custom property | Description | Default
     },
 
     _onClosed: function() {
-
       if (this._focusedIndex > -1) {
         this.$.overlay._selectItem(this._focusedIndex);
         this.$.input.bindValue = this._getItemLabel(this.selectedItem);
@@ -470,7 +469,6 @@ Custom property | Description | Default
      */
 
     _inputValueChanged: function(e) {
-
       if (this._filter === this.$.input.bindValue) {
         // Filter and input value might get out of sync, while keyboard navigating for example.
         // Afterwards, input value might be changed to the same value as used in filtering.
@@ -593,10 +591,6 @@ Custom property | Description | Default
     },
 
     _valueChanged: function(value) {
-      if (value === undefined || value === null) {
-        this.value = '';
-      }
-
       var valueIndex = this._indexOfValue(value);
       var item = valueIndex > -1 && this.items[valueIndex];
       if (this.$.overlay._items && item && this.$.overlay._items.indexOf(item) > -1) {
