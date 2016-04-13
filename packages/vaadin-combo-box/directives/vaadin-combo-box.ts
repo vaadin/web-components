@@ -35,6 +35,7 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
   private _element;
   private _control;
   private _differ;
+  private _initialValueSet = false;
 
   ngOnInit() {
     this._control = this._injector.getOptional(NgControl);
@@ -55,10 +56,12 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
   valuechanged(value) {
     this.valueChange.emit(value);
 
-    if (value) {
-      // Assuming that the registered onChange function is only used
-      // for the pristine/dirty status here.
+    if (this._initialValueSet) {
+      // Do not trigger onChange when the initial (empty) value is set
+      // to keep the field as "pristine".
       this.onChange(value);
+    } else {
+      this._initialValueSet = true;
     }
 
     // Pass the invalid state to our native vaadin-date-picker element if
