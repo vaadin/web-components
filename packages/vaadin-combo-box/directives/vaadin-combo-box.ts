@@ -15,7 +15,7 @@ import {
 } from 'angular2/core';
 import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
-declare var Polymer;
+declare var HTMLImports;
 
 const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
     NG_VALUE_ACCESSOR, {
@@ -68,7 +68,17 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
     }
   }
 
-  onImport(e) {
+  importHref(href) {
+    if (!document.querySelector('head link[href="' + href + '"]')) {
+      const link = document.createElement('link');
+      link.rel = 'import';
+      link.href = href;
+      document.head.appendChild(link);
+    }
+    HTMLImports.whenReady(this.onImport.bind(this));
+  }
+
+  onImport() {
     this._element.$$('input').addEventListener('blur', () => {
       this.onTouched();
     });
@@ -78,7 +88,7 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
     super(renderer, el);
     this._element = el.nativeElement;
     this._differ = differs.find([]).create(null);
-    Polymer.Base.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html', this.onImport.bind(this));
+    this.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html');
   }
 
 }
