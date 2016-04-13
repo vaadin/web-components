@@ -11,7 +11,7 @@ import {
 } from 'angular2/core';
 import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
-declare var Polymer;
+declare var HTMLImports;
 
 const VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
     NG_VALUE_ACCESSOR, {
@@ -41,11 +41,13 @@ export class VaadinUpload extends DefaultValueAccessor {
   }
 
   importHref(href) {
-    const link = document.createElement('link');
-    link.rel = 'import';
-    link.href = href;
-    link.onload = this.onImport.bind(this);
-    document.head.appendChild(link);
+    if (!document.querySelector('head link[href="' + href + '"]')) {
+      const link = document.createElement('link');
+      link.rel = 'import';
+      link.href = href;
+      document.head.appendChild(link);
+    }
+    HTMLImports.whenReady(this.onImport.bind(this));
   }
 
 
