@@ -90,11 +90,6 @@ See paper-input-container documentation for styling the included input fields
         outline: none;
       }
 
-      #inputcontainer:not([hideclear]) #input {
-        margin-right: -24px;
-        display: block;
-      }
-
       paper-input-container div[suffix] {
         position: relative;
         width: 24px;
@@ -136,7 +131,11 @@ See paper-input-container documentation for styling the included input fields
       }
 
       #clear {
-        right: 4px;
+        position: absolute;
+        right: 28px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
       }
 
       #clear iron-icon {
@@ -150,6 +149,13 @@ See paper-input-container documentation for styling the included input fields
       [hideclear] #clear {
         display: none;
       }
+
+      #inputcontainer[opened]:not([hideclear]) #input {
+        box-sizing: border-box;
+        padding-right: 30px;
+        margin-right: -30px;
+      }
+
     </style>
 
     <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" invalid="[[invalid]]" tabindex$="[[_getTabIndex(disabled)]]" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown" disabled$="[[disabled]]" opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
