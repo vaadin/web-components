@@ -179,21 +179,12 @@
         expect(combobox.opened).to.be.false;
       });
 
-      it('should close the overlay when focus is lost', function(done) {
-        var dummyInput = document.createElement('input');
-        document.body.appendChild(dummyInput);
-
+      it('should close the overlay when focus is lost', function() {
         combobox.open();
 
-        dummyInput.focus();
         combobox.$.input.fire('blur');
 
-        Polymer.Base.async(function() {
-          document.body.removeChild(dummyInput);
-
-          expect(combobox.opened).to.equal(false);
-          done();
-        }, 1);
+        expect(combobox.opened).to.equal(false);
       });
 
       // When using Shadow DOM polyfill, the style scope of the combobox might
