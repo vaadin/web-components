@@ -50,7 +50,6 @@ export class VaadinUpload extends DefaultValueAccessor {
     HTMLImports.whenReady(this.onImport.bind(this));
   }
 
-
   onImport() {
     this._element.$$('paper-button').addEventListener('blur', () => {
       this.onTouched();
