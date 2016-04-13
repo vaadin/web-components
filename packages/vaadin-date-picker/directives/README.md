@@ -5,8 +5,19 @@ Angular 2 framework.
 
 ## Installation
 
-1) First install the `vaadin-date-picker` through Bower and add the following
-configuration to your `index.html` file.
+1) First install the `vaadin-date-picker` through Bower.
+
+```bash
+bower install --save vaadin-date-picker
+```
+
+
+2) Add the webcomponents-lite.min.js polyfill to the `<head>` section of your
+page and configure SystemJS as follows.
+
+```html
+<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+```
 
 ```javascript
 System.config({
@@ -22,16 +33,9 @@ System.config({
 });
 ```
 
-2) You also need to wrap the application startup into `WebComponentsReady` event
-listener. For example as follows:
-```javascript
-window.addEventListener('WebComponentsReady', function() {
-  System.import('app/main').then(null, console.error.bind(console));
-});
-```
+3) If you are using the `lite-server` or `browser-sync`, create a file called
+`bs-config.json` in the root of your project folder with the following contents.
 
-3) Create a file called `bs-config.json` in the root of your project folder
-with the following contents:
 ```json
 {
   "snippetOptions": {
@@ -46,11 +50,12 @@ After the configuration is in place, you can import the directive into your
 own Angular 2 component as follows.
 
 ```javascript
-import { VaadinDatePicker } from 'vaadin-date-picker';
+import { VaadinDatePicker } from '../bower_components/vaadin-date-picker/directives/vaadin-date-picker';
+
 
 @Component({
   selector: 'my-component',
-  template: '<vaadin-date-picker [(value)]="birthday"></vaadin-date-picker>',
+  template: '<vaadin-date-picker [value]="birthDay"></vaadin-date-picker>',
   directives: [VaadinDatePicker]
 })
 ```
@@ -60,6 +65,6 @@ with Angular forms.
 
 ```html
 <form>
-  <vaadin-date-picker ngControl="birthday" required></vaadin-date-picker>
+  <vaadin-date-picker ngControl="birthday" [(value)]="birthday" required></vaadin-date-picker>
 </form>
 ```
