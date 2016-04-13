@@ -99,8 +99,10 @@
         comboBox.items = [];
         comboBox.addEventListener('vaadin-dropdown-opened', function() {
           comboBox.items = [1, 2, 3];
-          expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
-          done();
+          comboBox.async(function(){
+            expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
+            done();
+          }, 1);
         });
         comboBox.open();
       });
@@ -135,6 +137,15 @@
 
         expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
+
+      it('should not translate in sub-pixels', function() {
+        comboBox.style.paddingTop = '0.75px';
+        comboBox.open();
+
+        var _devicePixelRatio = window.devicePixelRatio || 1;
+        expect(comboBox.$.overlay._translateY * _devicePixelRatio % 1).to.closeTo(0, 0.1);
+        expect(comboBox.$.overlay._translateX * _devicePixelRatio % 1).to.closeTo(0, 0.1);
+      });
     });
 
     describeSkipIf(ios, 'overlay alignment', function() {
@@ -151,7 +162,7 @@
 
         Polymer.Base.async(function() {
           expect(dropContent()._alignedAbove).to.be.true;
-          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 0.1);
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
       });
@@ -163,7 +174,7 @@
         comboBox.$.input.fire('input');
 
         Polymer.Base.async(function() {
-          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 0.1);
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
       });
