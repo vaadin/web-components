@@ -12,7 +12,7 @@ import {
 } from 'angular2/core';
 import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
-declare var Polymer;
+declare var HTMLImports;
 
 const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
     NG_VALUE_ACCESSOR, {
@@ -51,7 +51,17 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
     }
   }
 
-  onImport(e) {
+  importHref(href) {
+    if (!document.querySelector('head link[href="' + href + '"]')) {
+      const link = document.createElement('link');
+      link.rel = 'import';
+      link.href = href;
+      document.head.appendChild(link);
+    }
+    HTMLImports.whenReady(this.onImport.bind(this));
+  }
+
+  onImport() {
     this._element.$$('paper-input-container').addEventListener('blur', () => {
       if (!this._element.opened && !this._element._opened) {
         this.onTouched();
@@ -62,7 +72,7 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
   constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
     super(renderer, el);
     this._element = el.nativeElement;
-    Polymer.Base.importHref('bower_components/vaadin-date-picker/vaadin-date-picker.html', this.onImport.bind(this));
+    this.importHref('bower_components/vaadin-date-picker/vaadin-date-picker.html');
   }
 
 }
