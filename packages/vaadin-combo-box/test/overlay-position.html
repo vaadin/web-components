@@ -32,10 +32,7 @@
 <script>
   var comboBox;
 
-  var wh = window.innerHeight;
-  var ww = window.innerWidth;
-  var horiCenter =  ww * 0.5;
-  var vertTop = 0, vertBottom = wh;
+  var wh, ww, horiCenter, vertTop, vertBottom;
 
   // The ideal test would be to resize the window, but testing system disallows
   // resizing the iframe, but moving the combo-box using styles and firing
@@ -71,6 +68,12 @@
       comboBox = fixture('combobox');
       comboBox.items = getItemArray(20);
 
+      wh = window.innerHeight;
+      ww = window.innerWidth;
+      horiCenter =  ww * 0.5;
+      vertTop = 0;
+      vertBottom = wh;
+
       // <paper-input-container> adds floated-label-placeholder div asynchronously,
       // we want to wait that out so that the dropdown clientHeight is calculated correctly.
       return Polymer.Base.async(done);
@@ -99,8 +102,10 @@
         comboBox.items = [];
         comboBox.addEventListener('vaadin-dropdown-opened', function() {
           comboBox.items = [1, 2, 3];
-          expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
-          done();
+          comboBox.async(function() {
+            expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
+            done();
+          }, 1);
         });
         comboBox.open();
       });
@@ -135,6 +140,15 @@
 
         expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
+
+      it('should not translate in sub-pixels', function() {
+        comboBox.style.paddingTop = '0.75px';
+        comboBox.open();
+
+        var _devicePixelRatio = window.devicePixelRatio || 1;
+        expect(comboBox.$.overlay._translateY * _devicePixelRatio % 1).to.closeTo(0, 0.1);
+        expect(comboBox.$.overlay._translateX * _devicePixelRatio % 1).to.closeTo(0, 0.1);
+      });
     });
 
     describeSkipIf(ios, 'overlay alignment', function() {
@@ -151,7 +165,7 @@
 
         Polymer.Base.async(function() {
           expect(dropContent()._alignedAbove).to.be.true;
-          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 0.1);
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
       });
@@ -163,7 +177,7 @@
         comboBox.$.input.fire('input');
 
         Polymer.Base.async(function() {
-          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 0.1);
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
       });

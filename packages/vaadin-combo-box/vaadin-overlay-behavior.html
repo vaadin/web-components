@@ -101,8 +101,8 @@
       }
     },
 
-    _setPosition: function() {
-      if (unwrap(this.parentElement) === document.body) {
+    _setPosition: function(e) {
+      if ((!e || e.target.contains(this) || e.target.contains(this.positionTarget)) && unwrap(this.parentElement) === document.body) {
         var targetRect = this.positionTarget.getBoundingClientRect();
         this._alignedAbove = this._shouldAlignAbove();
 
@@ -113,11 +113,13 @@
         this.$.selector.style.maxHeight = this._maxHeight(targetRect);
 
         var overlayRect = this.getBoundingClientRect();
-
         this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
         this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
           this._verticalOffset(overlayRect, targetRect);
 
+        var _devicePixelRatio = window.devicePixelRatio || 1;
+        this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
+        this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
         this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
 
         this.style.width = this.positionTarget.clientWidth + 'px';

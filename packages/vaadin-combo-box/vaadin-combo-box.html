@@ -442,6 +442,7 @@ Custom property | Description | Default
 
     _onOpened: function() {
       this.$.overlay.notifyResize();
+      this.$.overlay.async(this.$.overlay._setPosition);
 
       this.async(function() {
         this.$.overlay.hidden = !this._hasItems(this.items);
