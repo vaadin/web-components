@@ -26,18 +26,21 @@ const VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
 export class VaadinUpload extends DefaultValueAccessor {
 
   private _element;
+  private _initialValueSet = false;
 
   @Output() filesChange: EventEmitter<any> = new EventEmitter(false);
   @HostListener('files-changed')
-  fileschanged(value) {
-    value = this._element.files;
-    this.filesChange.emit(value);
-
-    if (value && value.length > 0) {
-      // Assuming that the registered onChange function is only used
-      // for the pristine/dirty status here.
-      this.onChange(value);
+  fileschanged() {
+    if (!this._initialValueSet) {
+      // Do not trigger onChange when the initial (empty) value is set
+      // to keep the field as "pristine".
+      this._initialValueSet = true;
+      return;
     }
+
+    const value = this._element.files;
+    this.filesChange.emit(value);
+    this.onChange(value);
   }
 
   importHref(href) {
