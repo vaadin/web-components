@@ -1,0 +1,41 @@
+---
+title: Usage with Angular 2
+order: 5
+layout: page
+---
+
+[[vaadin-date-picker.angular2]]
+= Usage with Angular 2
+
+This chapter will briefly go through Angular 2 specific features.
+For the most part you can use the API provided by the element described in other sections of the documentation.
+Before jumping in, you should follow the common installation instructions which apply to all Vaadin Core Elements.
+
+== Data-binding
+
+In order to bind a date string to the [elementname]#vaadin-date-picker# element, you can use normal two-way data-binding syntax of Angular 2.
+
+See the example below to on how these features can be used your template.
+
+[source,html]
+----
+<vaadin-date-picker [(value)]="myDateString"></vaadin-date-picker>
+----
+
+== Integration with Forms
+
+You can also use [elementname]#vaadin-date-picker# element in https://angular.io/docs/ts/latest/guide/forms.html[Angular forms].
+In order to do that, you can normally use the [propertyname]#ngControl# attribute to track the state and validity.
+The only difference to normal input elements is the usage of `[(value)]` binding instead of using the [propertyname]#ngModel#.
+Simple validation like the [propertyname]#required# validator is supported as well as defining custom validators.
+
+See the example below on how to use [elementname]#vaadin-date-picker# as a form control.
+[source,html]
+----
+<vaadin-date-picker
+  label="My Birthday"
+  [(value)]="myBirthday"
+  ngControl="birthday"
+  required>
+</vaadin-date-picker>
+----
