@@ -1,0 +1,42 @@
+---
+title: Usage with Angular 2
+order: 6
+layout: page
+---
+
+[[vaadin-upload.angular2]]
+= Usage with Angular 2
+
+This chapter will briefly go through Angular 2 specific features.
+For the most part you can use the API provided by the element described in other sections of the documentation.
+Before jumping in, you should follow the common installation instructions which apply to all Vaadin Core Elements.
+
+== Data-binding
+
+In order to bind an array of file objects to the [elementname]#vaadin-upload# element, you can use normal data-binding syntax of Angular 2.
+The current value property can be also bound with the two-way data-binding syntax.
+
+See the example below to on how these feature can be used your template.
+
+[source,html]
+----
+<vaadin-upload [(files)]="myValue"></vaadin-upload>
+----
+
+== Integration with Forms
+
+You can also use [elementname]#vaadin-upload# element in https://angular.io/docs/ts/latest/guide/forms.html[Angular forms].
+In order to do that, you can normally use the [propertyname]#ngControl# attribute to track the state and validity.
+The only difference to normal input elements is the usage of `[(files)]` binding instead of using the [propertyname]#ngModel#.
+Simple validation like the [propertyname]#required# validator is supported as well as defining custom validators.
+
+See the example below on how to use [elementname]#vaadin-upload# as a form control.
+[source,html]
+----
+<vaadin-upload
+  label="My Upload"
+  [(files)]="myFiles"
+  ngControl="myUpload"
+  required>
+</vaadin-upload>
+----
