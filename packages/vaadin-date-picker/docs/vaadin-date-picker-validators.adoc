@@ -1,0 +1,34 @@
+---
+title: Custom Validators
+order: 5
+layout: page
+---
+
+[[vaadin-date-picker.validators]]
+= Custom Validators
+
+The [vaadinelement]#vaadin-date-picker# implements the [classname]#IronValidatableBehavior#, so it supports custom validators registered with an [elementname]#iron-meta# element.
+The validator to be used is defined using the [propertyname]#validator# property.
+Notice that it has to be registered with an [elementname]#iron-meta# element to be available.
+See the code example below for details.
+
+[source,html]
+----
+<vaadin-date-picker
+  validator="this-year-validator"
+  label="Only this year is accepted">
+</vaadin-date-picker>
+
+<script>
+  new Polymer.IronMeta({
+    type: 'validator',
+    key: 'this-year-validator',
+    value: {
+      validate: function(value) {
+        var currentYear = new Date().getFullYear();
+        return new Date(value).getFullYear() === currentYear;
+      }
+    }
+  });
+</script>
+----

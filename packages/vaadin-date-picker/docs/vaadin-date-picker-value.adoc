@@ -5,7 +5,7 @@ layout: page
 ---
 
 [[vaadin-date-picker.value]]
-= Handling Date Selection
+= Handling the Value
 
 The user can select a date by clicking or tapping on it.
 Use of keyboard for navigation or for entering the date is not yet supported in the alpha version of the element.

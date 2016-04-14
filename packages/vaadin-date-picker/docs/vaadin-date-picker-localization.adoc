@@ -1,13 +1,11 @@
 ---
-title: Other features
-order: 3
+title: Localization
+order: 4
 layout: page
 ---
 
-[[vaadin-date-picker.features]]
-= Other Features
-
-== Localization
+[[vaadin-date-picker.localization]]
+= Localization
 
 The [vaadinelement]#vaadin-date-picker# element can be localized through the [propertyname]#i18n# object.
 
@@ -77,64 +75,4 @@ document.querySelector('vaadin-date-picker').i18n = {
     return monthName + ' ' + fullYear;
   }
 };
-----
-
-== Initial Position
-
-When [vaadinelement]#vaadin-date-picker# has no selected value and the dropdown is opened, it automatically scrolls to the current month.
-You can make it scroll to another month by setting the [propertyname]#initialPosition# property to a date in that month.
-
-When [vaadinelement]#vaadin-date-picker# already has a value selected, opening the dropdown always scrolls to the month with the selected date.
-
-[source,html]
-----
-<vaadin-date-picker initial-position="2020-05-01"></vaadin-date-picker>
-----
-
-== Disabled
-
-When [vaadinelement]#vaadin-date-picker# has a [propertyname]#disabled# property, the input is disabled and the dropdown can't be opened.
-You can still set and change the value of the [vaadinelement]#vaadin-date-picker#.
-
-[source,html]
-----
-<vaadin-date-picker disabled></vaadin-date-picker>
-----
-
-== Readonly
-
-When [vaadinelement]#vaadin-date-picker# has a [propertyname]#readonly# property, the dropdown can't be opened.
-You can still set and change the value of the [vaadinelement]#vaadin-date-picker#.
-
-[source,html]
-----
-<vaadin-date-picker readonly></vaadin-date-picker>
-----
-
-== Custom Validators
-
-The [vaadinelement]#vaadin-date-picker# implements the [classname]#IronValidatableBehavior#, so it supports custom validators registered with an [elementname]#iron-meta# element.
-The validator to be used is defined using the [propertyname]#validator# property.
-Notice that it has to be registered with an [elementname]#iron-meta# element to be available.
-See the code example below for details.
-
-[source,html]
-----
-<vaadin-date-picker
-  validator="this-year-validator"
-  label="Only this year is accepted">
-</vaadin-date-picker>
-
-<script>
-  new Polymer.IronMeta({
-    type: 'validator',
-    key: 'this-year-validator',
-    value: {
-      validate: function(value) {
-        var currentYear = new Date().getFullYear();
-        return new Date(value).getFullYear() === currentYear;
-      }
-    }
-  });
-</script>
 ----
