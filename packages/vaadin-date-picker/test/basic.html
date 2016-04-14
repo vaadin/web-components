@@ -232,6 +232,16 @@
         datepicker.open();
       });
 
+      it('should not change datepicker width', function() {
+        datepicker.style.display = 'inline-block';
+
+        datepicker.value = '2000-01-01';
+        var width = datepicker.clientWidth;
+
+        datepicker.open();
+        expect(datepicker.clientWidth).to.equal(width);
+      });
+
       describe('window scroll realign', function() {
 
         beforeEach(function(done) {
