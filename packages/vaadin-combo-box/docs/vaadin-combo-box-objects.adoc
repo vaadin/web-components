@@ -1,0 +1,34 @@
+---
+title: Objects as Items
+order: 3
+layout: page
+---
+
+
+[[vaadin-combo-box.objetcs]]
+= Using Objects as Items
+
+In addition to using Strings as items, Objects can also be used. +
+When using Objects, [vaadinelement]#vaadin-combo-box# needs to know which properties are to be used as the display and string values.
+
+By default, [propertyname]#label# and [propertyname]#value# properties are used from the Object as the display value and the [vaadinelement]#vaadin-combo-box# value, respectively.
+In the absence of these properties, [propertyname]#toString()# function for the Object is used to translate it into a String.
+
+[source,javascript]
+----
+var combobox = document.querySelector('vaadin-combo-box');
+combobox.items = [{ label: 'Display Value', value: 'Actual Value' }];
+----
+
+You can override the default property paths by defining [propertyname]#item-label-path# and [propertyname]#item-value-path# properties.
+
+[source,html]
+----
+<vaadin-combo-box item-label-path="name.first" item-value-path="name.last"></vaadin-combo-box>
+----
+
+[source,javascript]
+----
+var combobox = document.querySelector('vaadin-combo-box');
+combobox.items = [{ name: { first: 'John', last: 'Doe' } }];
+----

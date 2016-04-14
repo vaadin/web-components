@@ -1,0 +1,28 @@
+---
+title: Using Inside a Form
+order: 5
+layout: page
+---
+
+
+[[vaadin-combo-box.form]]
+= Using Inside a Form
+
+The [vaadinelement]#<vaadin-combo-box># element implements the link:https://elements.polymer-project.org/elements/iron-form-element-behavior[[classname]#IronFormElementBehavior#], so it can be used as a field in an link:https://elements.polymer-project.org/elements/iron-form[[elementname]#iron-form#].
+
+[source,html]
+----
+<form is="iron-form" method="post">
+  <vaadin-combo-box name="name" label="Element"></vaadin-combo-box>
+  <button>Submit</button>
+</form>
+<script>
+  var form = document.querySelector('form');
+  var combobox = document.querySelector('vaadin-combo-box');
+
+  form.addEventListener('iron-form-submit', function() {
+    alert('Form submitted with name: ' + form.serialize().name);
+    return false;
+  });
+</script>
+----

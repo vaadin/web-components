@@ -1,0 +1,41 @@
+---
+title: Custom Input Values
+order: 4
+layout: page
+---
+
+
+[[vaadin-combo-box.customvalues]]
+= Custom Input Values
+
+Users can be allowed also to input their own custom values. By default, this feature is disabled, so it
+needs to be explicitly enabled.
+
+[source,html]
+----
+<vaadin-combo-box allow-custom-value></vaadin-combo-box>
+----
+
+When enabled, custom input values are always accepted and used as the value of the [vaadinelement]#vaadin-combo-box#.
+If you need to cancel the automatic assignment, you can provide your own listener for the custom-value-set event
+that prevents the default behavior.
+
+[source,html]
+----
+<dom-module id="my-element">
+  <template>
+    <vaadin-combo-box id="combobox" on-custom-value-set="onCustomValue"></vaadin-combo-box>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'my-element',
+    onCustomValue: function(event) {
+      // Prevents the custom value to be assigned.
+      event.preventDefault();
+
+      this.$.combobox.value = 'Default Value';
+    }
+  });
+</script>
+----
