@@ -278,7 +278,11 @@ Custom property | Description | Default
 
       /**
        * Specifies the types of files that the server accepts.
-       * Syntax: file_extension|audio/*|video/*|image/*|media_type
+       * Syntax: a comma-separated list of MIME type patterns (wildcards are
+       * allowed) or file extensions.
+       * Notice that MIME types are widely supported, while file extensions
+       * are only implemented in certain browsers, so avoid using it.
+       * Example: accept="video/*,image/tiff" or accept=".pdf,audio/mp3"
        */
       accept: {
         type: String,

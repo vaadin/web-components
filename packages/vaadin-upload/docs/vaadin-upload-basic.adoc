@@ -28,14 +28,20 @@ The properties that the user can configure for validation are:
 
 [propertyname]#maxFiles#:: Meaning the max number of files that the user can select to upload. When the list is full, the user may add new files after removing some files from the list.
 [propertyname]#maxFileSize#:: The maximum allowed file size in bytes.
-[propertyname]#accept#:: A filter for the types of files the user can upload. A filter is a list of allowed file extensions or MIME types.
-For a complete syntax reference, please visit the [propertyname]#input.accept# http://www.w3schools.com/tags/att_input_accept.asp[specification].
+[propertyname]#accept#:: A filter for the types of files the user can upload. A filter is a comma-separated list of allowed http://www.sitepoint.com/web-foundations/mime-types-complete-list/[MIME types] or file extensions.
+Browsers use this information to filter out non-conforming files when prompting the user to select files.
+Notice that although the https://www.w3.org/TR/html401/interact/forms.html#adef-accept[HTML-4.01 file upload] specification using MIME types patterns is widely supported,
+only certain browsers allow the file extension syntax introduced in the https://www.w3.org/TR/html5/forms.html#file-upload-state-%28type=file%29[HTML5] specification.
 
-We rely on the [propertyname]#input.accept# specification to filter files in the file browser selector, but depending on the browser and system it might not work. Nevertheless, the component will validate files before sending them to the server.
+Nevertheless, this component will always validate file types and extensions before sending any file to the server, despite differences in browser syntax support.
+
+You can use validation parameters as follows:
 
 [source,html]
 ----
-<vaadin-upload max-files="3" accept=".pdf" max-file-size="1000000"></vaadin-upload>
+<vaadin-upload max-files="3" max-file-size="1000000"
+               accept="application/pdf,image/*">
+</vaadin-upload>
 ----
 
 == Events
