@@ -6,6 +6,9 @@ var gulp = require('gulp');
 var jscs = require('gulp-jscs');
 var jshint = require('gulp-jshint');
 var htmlExtract = require('gulp-html-extract');
+var sourcemaps = require('gulp-sourcemaps');
+var ts = require('gulp-typescript');
+var tsProject = ts.createProject('directives/tsconfig.json');
 
 function cleanDone(done) {
   return function(error) {
@@ -138,4 +141,12 @@ gulp.task('test', ['lint:js', 'lint:html'], function(done) {
         }
       }
     }, done);
+});
+
+gulp.task('ng2', function() {
+  return gulp.src('directives/*.ts')
+    .pipe(sourcemaps.init())
+    .pipe(ts(tsProject))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('directives'));
 });

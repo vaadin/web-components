@@ -1,0 +1,96 @@
+System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
+    var __extends = (this && this.__extends) || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = (this && this.__metadata) || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, common_1, lang_1;
+    var VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR, VaadinUpload;
+    return {
+        setters:[
+            function (core_1_1) {
+                core_1 = core_1_1;
+            },
+            function (common_1_1) {
+                common_1 = common_1_1;
+            },
+            function (lang_1_1) {
+                lang_1 = lang_1_1;
+            }],
+        execute: function() {
+            VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR = lang_1.CONST_EXPR(new core_1.Provider(common_1.NG_VALUE_ACCESSOR, {
+                useExisting: core_1.forwardRef(function () { return VaadinUpload; }),
+                multi: true
+            }));
+            VaadinUpload = (function (_super) {
+                __extends(VaadinUpload, _super);
+                function VaadinUpload(renderer, el, _injector) {
+                    _super.call(this, renderer, el);
+                    this._injector = _injector;
+                    this._initialValueSet = false;
+                    this.filesChange = new core_1.EventEmitter(false);
+                    this._element = el.nativeElement;
+                    this.importHref('bower_components/vaadin-upload/vaadin-upload.html');
+                }
+                VaadinUpload.prototype.fileschanged = function () {
+                    if (!this._initialValueSet) {
+                        // Do not trigger onChange when the initial (empty) value is set
+                        // to keep the field as "pristine".
+                        this._initialValueSet = true;
+                        return;
+                    }
+                    var value = this._element.files;
+                    this.filesChange.emit(value);
+                    this.onChange(value);
+                };
+                VaadinUpload.prototype.importHref = function (href) {
+                    if (!document.querySelector('head link[href="' + href + '"]')) {
+                        var link = document.createElement('link');
+                        link.rel = 'import';
+                        link.href = href;
+                        document.head.appendChild(link);
+                    }
+                    HTMLImports.whenReady(this.onImport.bind(this));
+                };
+                VaadinUpload.prototype.onImport = function () {
+                    var _this = this;
+                    this._element.$$('paper-button').addEventListener('blur', function () {
+                        _this.onTouched();
+                    });
+                };
+                __decorate([
+                    core_1.Output(), 
+                    __metadata('design:type', core_1.EventEmitter)
+                ], VaadinUpload.prototype, "filesChange", void 0);
+                __decorate([
+                    core_1.HostListener('files-changed'), 
+                    __metadata('design:type', Function), 
+                    __metadata('design:paramtypes', []), 
+                    __metadata('design:returntype', void 0)
+                ], VaadinUpload.prototype, "fileschanged", null);
+                VaadinUpload = __decorate([
+                    core_1.Directive({
+                        selector: 'vaadin-upload',
+                        providers: [VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR]
+                    }), 
+                    __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, core_1.Injector])
+                ], VaadinUpload);
+                return VaadinUpload;
+            }(common_1.DefaultValueAccessor));
+            exports_1("VaadinUpload", VaadinUpload);
+        }
+    }
+});
+
+//# sourceMappingURL=vaadin-upload.js.map
