@@ -126,7 +126,13 @@ Custom property | Description | Default
   </style>
 
   <template>
-    <paper-input-container disabled$="[[disabled]]" class="dropdown-input" id="inputContainer" opened$="[[opened]]" hideclear$="[[_hideClearIcon(value, opened)]]">
+    <paper-input-container
+        class="dropdown-input"
+        id="inputContainer"
+        disabled$="[[disabled]]"
+        opened$="[[opened]]"
+        hideclear$="[[_hideClearIcon(value, opened)]]"
+        on-down="_preventDefault">
       <label id="label" on-tap="open">[[label]]</label>
       <input
           is="iron-input"
@@ -150,7 +156,7 @@ Custom property | Description | Default
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
-      <div suffix id="toggleIcon" on-tap="_toggle" on-touchend="_preventDefault" hidden$="[[_hideToggleIcon(disabled, readonly)]]">
+      <div suffix id="toggleIcon" on-tap="_toggle" hidden$="[[_hideToggleIcon(disabled, readonly)]]">
         <iron-icon icon="menu" aria-controls="overlay"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
@@ -162,7 +168,7 @@ Custom property | Description | Default
         position-target="[[_positionTarget]]"
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
-        on-down="_blurInput"
+        on-down="_onOverlayDown"
         vertical-offset="2">
     </vaadin-combo-box-overlay>
   </template>
@@ -392,20 +398,22 @@ Custom property | Description | Default
      */
 
     _onBlur: function() {
-      // Async needed to access the new activeElement reliably.
-      this.async(function() {
-        var focusInsideCombobox = this.contains(document.activeElement);
-
-        // When grabbing the scroll handle, the activeElement will become
-        // the body on some browsers, so check for it also.
-        if (!focusInsideCombobox && document.activeElement !== document.body) {
-          this.close();
-        }
-      }, 1);
+      if (!this._closeOnBlurIsPrevented) {
+        this.close();
+      }
     },
 
-    _blurInput: function() {
-      this.$.input.blur();
+    _onOverlayDown: function(event) {
+      // Prevent the focus transfer when user scrolls inside the overlay with mouse drag
+      event.preventDefault();
+
+      if (this.$.overlay.touchDevice && event.target !== this.$.overlay.$.scroller) {
+        // On touch devices, blur the input on touch start inside the overlay, in order to hide
+        // the virtual keyboard. But don't close the overlay on this blur.
+        this._closeOnBlurIsPrevented = true;
+        this.$.input.blur();
+        this._closeOnBlurIsPrevented = false;
+      }
     },
 
     /**
@@ -414,12 +422,6 @@ Custom property | Description | Default
     _toggle: function() {
       if (this.opened) {
         this.close();
-
-        // Refocus input field after clicking the toggle button, but not for touch devices,
-        // because we don't want to popup the virtual keyboard.
-        if (!this.$.overlay.touchDevice) {
-          this.$.input.focus();
-        }
       } else {
         this.open();
       }
