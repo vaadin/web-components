@@ -31,6 +31,9 @@
 
       /* Fixes item background from getting on top of scrollbars on Safari */
       transform: translate3d(0,0,0);
+
+      /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+      -webkit-overflow-scrolling: touch;
     }
 
     #selector {
