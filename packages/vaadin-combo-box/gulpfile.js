@@ -6,6 +6,9 @@ var gulp = require('gulp');
 var jscs = require('gulp-jscs');
 var jshint = require('gulp-jshint');
 var htmlExtract = require('gulp-html-extract');
+var sourcemaps = require('gulp-sourcemaps');
+var ts = require('gulp-typescript');
+var tsProject = ts.createProject('directives/tsconfig.json');
 
 function cleanDone(done) {
   return function(error) {
@@ -128,4 +131,12 @@ gulp.task('test:mobile:shadow', function(done) {
     'OS X 10.11/iphone@9.2',
     'OS X 10.11/ipad@9.2',
     'Linux/android@5.1'], done);
+});
+
+gulp.task('ng2', function() {
+  return gulp.src('directives/*.ts')
+    .pipe(sourcemaps.init())
+    .pipe(ts(tsProject))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('directives'));
 });
