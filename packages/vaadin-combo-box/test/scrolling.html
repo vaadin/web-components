@@ -38,6 +38,14 @@
           expect(focusedInput).not.to.equal(combobox.$.input);
         });
       });
+
+      describeIf(ios, 'iOS', function() {
+        it('should have momentum scrolling enabled', function() {
+          combobox.open();
+
+          expect(getComputedStyle(unwrap(combobox.$.overlay.$.scroller)).WebkitOverflowScrolling).to.equal('touch');
+        });
+      });
     });
   </script>
 
