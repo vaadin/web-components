@@ -9,6 +9,7 @@ var htmlExtract = require('gulp-html-extract');
 var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
 var tsProject = ts.createProject('directives/tsconfig.json');
+var typings = require('gulp-typings');
 
 function cleanDone(done) {
   return function(error) {
@@ -132,8 +133,13 @@ gulp.task('test:mobile:shadow', function(done) {
     'Linux/android@5.1'], done);
 });
 
-gulp.task('ng2', function() {
-  return gulp.src('directives/*.ts')
+gulp.task('typings', function() {
+  return gulp.src('directives/typings.json')
+    .pipe(typings());
+});
+
+gulp.task('ng2', ['typings'], function() {
+  return gulp.src(['directives/*.ts', 'directives/typings/main/**/*.d.ts'])
     .pipe(sourcemaps.init())
     .pipe(ts(tsProject))
     .pipe(sourcemaps.write('.'))
