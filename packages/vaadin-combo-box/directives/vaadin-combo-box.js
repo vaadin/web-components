@@ -36,13 +36,18 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
             VaadinComboBox = (function (_super) {
                 __extends(VaadinComboBox, _super);
                 function VaadinComboBox(renderer, el, _injector, differs) {
+                    var _this = this;
                     _super.call(this, renderer, el);
                     this._injector = _injector;
                     this._initialValueSet = false;
                     this.valueChange = new core_1.EventEmitter(false);
                     this._element = el.nativeElement;
                     this._differ = differs.find([]).create(null);
-                    this.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html');
+                    // In order to have iron-icons reliably available for vaadin-combo-box,
+                    // we need to explicitly import it before importing the combo box.
+                    this.importHref('bower_components/iron-icons/iron-icons.html', function () {
+                        _this.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html', _this.onImport.bind(_this));
+                    });
                 }
                 VaadinComboBox.prototype.ngOnInit = function () {
                     this._control = this._injector.getOptional(common_1.NgControl);
@@ -71,14 +76,17 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                         this._element.invalid = !this._control.pristine && !this._control.valid;
                     }
                 };
-                VaadinComboBox.prototype.importHref = function (href) {
+                VaadinComboBox.prototype.importHref = function (href, onload) {
                     if (!document.querySelector('head link[href="' + href + '"]')) {
                         var link = document.createElement('link');
                         link.rel = 'import';
                         link.href = href;
+                        link.onload = onload;
                         document.head.appendChild(link);
                     }
-                    HTMLImports.whenReady(this.onImport.bind(this));
+                    else {
+                        onload();
+                    }
                 };
                 VaadinComboBox.prototype.onImport = function () {
                     var _this = this;

@@ -71,14 +71,16 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
     }
   }
 
-  importHref(href) {
+  importHref(href, onload) {
     if (!document.querySelector('head link[href="' + href + '"]')) {
       const link = document.createElement('link');
       link.rel = 'import';
       link.href = href;
+      link.onload = onload;
       document.head.appendChild(link);
+    } else {
+      onload();
     }
-    HTMLImports.whenReady(this.onImport.bind(this));
   }
 
   onImport() {
@@ -91,7 +93,12 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
     super(renderer, el);
     this._element = el.nativeElement;
     this._differ = differs.find([]).create(null);
-    this.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html');
+
+    // In order to have iron-icons reliably available for vaadin-combo-box,
+    // we need to explicitly import it before importing the combo box.
+    this.importHref('bower_components/iron-icons/iron-icons.html', () => {
+      this.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html', this.onImport.bind(this));
+    });
   }
 
 }
