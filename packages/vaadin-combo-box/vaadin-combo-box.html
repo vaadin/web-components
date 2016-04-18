@@ -169,6 +169,7 @@ Custom property | Description | Default
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
         on-down="_onOverlayDown"
+        on-touchend="_preventDefault"
         vertical-offset="2">
     </vaadin-combo-box-overlay>
   </template>
@@ -443,13 +444,9 @@ Custom property | Description | Default
     },
 
     _onOpened: function() {
+      this.$.overlay.hidden = !this._hasItems(this.$.overlay._items);
       this.$.overlay.notifyResize();
-      this.$.overlay.async(this.$.overlay._setPosition);
-
-      this.async(function() {
-        this.$.overlay.hidden = !this._hasItems(this.items);
-        this.$.overlay._scrollIntoView(this._focusedIndex);
-      });
+      this.$.overlay.adjustScrollPosition();
     },
 
     _onClosed: function() {

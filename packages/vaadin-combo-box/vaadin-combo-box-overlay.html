@@ -40,7 +40,7 @@
       --iron-list-items-container: {
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
-      }
+      };
     }
 
     #selector .item {
@@ -225,16 +225,34 @@
     },
 
     _scrollIntoView: function(index) {
-      if (index <= this.$.selector.firstVisibleIndex) {
-        this.$.selector.scrollToIndex(index);
-      } else if (index > this._lastVisibleIndex()) {
+      if (this._visibleItemsCount() === undefined) {
+        // Scroller is not visible. Moving is unnecessary.
+        return;
+      }
+
+      var targetIndex = index;
+
+      if (index > this._lastVisibleIndex()) {
+        // Index is below the bottom, scrolling down. Make the item appear at the bottom.
+        targetIndex = index - this._visibleItemsCount() + 1;
+
         // From iron-list 1.2.4, scrolling to an index guarantees that the item
         // is visible into the viewport, but does not gurarantee that it is at the
         // first position. Jumping first to the item we want to be at the bottom,
         // fixes the problem.
         this.$.selector.scrollToIndex(index);
+      } else if (index > this.$.selector.firstVisibleIndex) {
+        // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
+        // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
+        targetIndex = this.$.selector.firstVisibleIndex;
+      }
 
-        this.$.selector.scrollToIndex(index - this._visibleItemsCount() + 1);
+      this.$.selector.scrollToIndex(targetIndex);
+    },
+
+    adjustScrollPosition: function() {
+      if (this._items) {
+        this._scrollIntoView(this._focusedIndex);
       }
     },
 
@@ -266,13 +284,36 @@
       });
     },
 
+    updateViewportBoundaries: function() {
+      this._cachedViewportTotalPadding = undefined;
+      this.$.selector.updateViewportBoundaries();
+    },
+
+    get _viewportTotalPadding() {
+      if (this._cachedViewportTotalPadding === undefined) {
+        var itemsStyle = window.getComputedStyle(window.unwrap(this.$.selector.$.items));
+        this._cachedViewportTotalPadding = [
+          itemsStyle.paddingTop,
+          itemsStyle.paddingBottom,
+          itemsStyle.borderTopWidth,
+          itemsStyle.borderBottomWidth
+        ].map(function(v) {
+          return parseInt(v, 10);
+        }).reduce(function(sum, v) {
+          return sum + v;
+        });
+      }
+
+      return this._cachedViewportTotalPadding;
+    },
+
     // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
     _visibleItemsCount: function() {
       var firstItemIndex = this.$.selector._physicalStart;
       var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
 
-      if (firstItemHeight) {
-        var visibleItems = this.$.selector._viewportSize / firstItemHeight;
+      if (firstItemHeight && this.$.selector._viewportSize) {
+        var visibleItems = (this.$.selector._viewportSize - this._viewportTotalPadding) / firstItemHeight;
         return Math.floor(visibleItems);
       }
     },
@@ -285,7 +326,10 @@
     },
 
     _selectItem: function(item) {
-      this.$.selector.selectItem(item);
+      item = (typeof item === 'number') ? this._items[item] : item;
+      if (this.$.selector.selectedItem !== item) {
+        this.$.selector.selectItem(item);
+      }
     },
 
     _preventDefault: function(e) {
