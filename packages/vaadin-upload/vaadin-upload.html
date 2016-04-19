@@ -639,9 +639,9 @@ Custom property | Description | Default
           }
           if (xhr.status === 0) {
             file.error = this.i18n.uploading.error.serverUnavailable;
-          } else if (xhr.status > 500) {
+          } else if (xhr.status >= 500) {
             file.error = this.i18n.uploading.error.unexpectedServerError;
-          } else if (xhr.status > 400) {
+          } else if (xhr.status >= 400) {
             file.error = this.i18n.uploading.error.forbidden;
           }
 

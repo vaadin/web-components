@@ -86,7 +86,9 @@ function createFiles(arraySize, fileSize, contentType) {
          var error = cfg.serverValidation(xhr);
          if (error) {
            xhr.setResponseHeader('Content-Type', cfg.serverType);
-           xhr.receive(500, {error: error});
+           var status = error.status || 500;
+           var statusText = error.statusText || error;
+           xhr.receive(status, {error: statusText});
          } else if (xhr.readyState === 0) {
            xhr.onreadystatechange();
          } else if (xhr.readyState < 4) {
