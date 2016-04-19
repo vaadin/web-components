@@ -148,6 +148,7 @@
             expect(e.detail.file).to.be.ok;
             expect(e.detail.xhr).to.be.ok;
             expect(e.detail.xhr.readyState).to.equal(1);
+            expect(e.detail.formData).to.be.ok;
             done();
           });
           upload._uploadFile(file);

@@ -665,7 +665,7 @@ Custom property | Description | Default
 
       // Custom listener could modify the xhr just before sending it
       // preventing default
-      evt = this.fire('upload-request', {file: file, xhr: xhr}, {cancelable: true});
+      evt = this.fire('upload-request', {file: file, xhr: xhr, formData: formData}, {cancelable: true});
       if (evt.defaultPrevented) {
         return;
       }
@@ -806,15 +806,16 @@ Custom property | Description | Default
    */
 
   /**
-   * Fired when the XHR has been opened but not sent yet.
-   * Useful to change some parameters like headers, etc.
-   * If the event is preventDefault `vaadin-upload` will not send the
-   * request allowing the user to do something on his own.
+   * Fired when the XHR has been opened but not sent yet. Useful for appending
+   * data keys to the FormData object, for changing some parameters like
+   * headers, etc. If the event is preventDefault, `vaadin-upload` will not
+   * send the request allowing the user to do something on his own.
    *
    * @event upload-request
    * @param {Object} detail
    *  @param {Object} detail.xhr the xhr
    *  @param {Object} detail.file the file being uploaded
+   *  @param {Object} detail.formData the FormData object
    */
 
   /**

@@ -66,12 +66,13 @@ You can also reject the file at this point by preventing the default action.
 ----
 
 `upload-request`::
-You can change request parameters before it is sent, or cancel sending the request to the server by calling [methodname]#event.preventDefault()#.
+You can change request parameters before it is sent, append data keys to the request, or cancel sending the request to the server by calling [methodname]#event.preventDefault()#.
 
 [source,javascript]
 ----
   uploader.addEventListener('upload-request', function(e) {
     e.detail.xhr.setRequestHeader('Accept', 'application/json');
+    e.detail.formData.append('documentId', 1234);
   });
 ----
 
