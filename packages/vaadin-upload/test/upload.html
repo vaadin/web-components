@@ -194,6 +194,37 @@
           upload._uploadFile(file);
         });
 
+        describe('Response Status', function() {
+          function expectResponseErrorForStatus(error, status, done) {
+            upload._createXhr = xhrCreator({
+              serverValidation: function() {
+                return {
+                  status: status,
+                  statusText: 'Error'
+                };
+              }
+            });
+
+            upload.addEventListener('upload-error', function(e) {
+              expect(e.detail.xhr.status).to.be.equal(status);
+              expect(e.detail.file.error).to.be.equal(error);
+              done();
+            });
+            upload._uploadFile(file);
+          }
+
+          [400, 401, 403, 404, 451].forEach(function(status) {
+            it('should fail with forbidden error for status code ' + status, function(done) {
+              expectResponseErrorForStatus(upload.i18n.uploading.error.forbidden, status, done);
+            });
+          });
+
+          [500, 501, 502, 503, 504].forEach(function(status) {
+            it('should fail with unexpected error for status code ' + status, function(done) {
+              expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status, done);
+            });
+          });
+        });
       });
 
       describe('Upload Status', function() {
