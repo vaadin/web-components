@@ -123,6 +123,8 @@
         this.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
 
         this.style.width = this.positionTarget.clientWidth + 'px';
+
+        this.updateViewportBoundaries();
       }
     },
 

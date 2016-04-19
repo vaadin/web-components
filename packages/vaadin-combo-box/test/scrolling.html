@@ -46,6 +46,60 @@
           expect(getComputedStyle(unwrap(combobox.$.overlay.$.scroller)).WebkitOverflowScrolling).to.equal('touch');
         });
       });
+
+      describe('scrolling position', function() {
+        beforeEach(function() {
+          var items = [];
+
+          for (var i = 0; i < 100; i++) {
+            items.push(i.toString());
+          }
+
+          combobox.items = items;
+        });
+
+        it('should be zero when no items are selected', function() {
+          combobox.open();
+
+          expect(combobox.$.overlay.$.scroller.scrollTop).to.equal(0);
+        });
+
+        it('should be zero when the first item is selected', function() {
+          combobox.value = combobox.items[0];
+          combobox.open();
+
+          expect(combobox.$.overlay.$.scroller.scrollTop).to.equal(0);
+        });
+
+        function expectSelectedItemPositionToBeVisible() {
+          var selectedItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('[selected]');
+          expect(selectedItem).to.be.ok;
+
+          var selectedItemRect = selectedItem.getBoundingClientRect();
+          var overlayRect = combobox.$.overlay.getBoundingClientRect();
+          expect(selectedItemRect.left).to.be.at.least(overlayRect.left);
+          expect(selectedItemRect.top).to.be.at.least(overlayRect.top);
+          expect(selectedItemRect.right).to.be.at.most(overlayRect.right);
+          expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom);
+        }
+
+        it('should make selected item visible after open', function() {
+          combobox.value = combobox.items[50];
+          combobox.open();
+
+          expectSelectedItemPositionToBeVisible();
+        });
+
+        it('should make selected item visible after reopen', function() {
+          combobox.open();
+
+          combobox.value = combobox.items[50];
+          combobox.close();
+          combobox.open();
+
+          expectSelectedItemPositionToBeVisible();
+        });
+      });
     });
   </script>
 

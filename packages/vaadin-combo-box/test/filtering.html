@@ -121,7 +121,7 @@
         setInputValue('ba');
         setInputValue('b');
 
-        expect(spy.callCount).to.eql(0);
+        expect(spy.callCount).to.eql(1); // scrolls once on open
       });
     });
 
