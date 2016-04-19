@@ -4,7 +4,7 @@ order: 3
 layout: page
 ---
 
-[[vaadin-date-picker.angular2]]
+[[vaadin-combo-box.angular2]]
 = Usage with Angular 2
 
 This chapter will briefly go through Angular 2 specific features.
