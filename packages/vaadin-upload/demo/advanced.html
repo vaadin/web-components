@@ -78,6 +78,7 @@ This program is available under Apache License Version 2.0, available at https:/
             console.log('upload xhr after open: ', event.detail.xhr);
 
             event.detail.xhr.setRequestHeader('X-File-Name', event.detail.file.name);
+            event.detail.formData.append('documentId', 1234);
           });
 
           upload.addEventListener('upload-start', function(event) {
