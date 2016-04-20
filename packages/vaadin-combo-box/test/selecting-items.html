@@ -88,21 +88,13 @@
       clearIcon = combobox.$.clearIcon;
     });
 
-    if (touchDevice) {
-      it('should not show the clearing icon for touch devices', function() {
-        combobox.open();
+    it('should show the clearing icon only when dropdown is open', function() {
+      expect(window.getComputedStyle(clearIcon).display).to.eql('none');
 
-        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
-      });
-    } else {
-      it('should show the clearing icon only when dropdown is open', function() {
-        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
+      combobox.open();
 
-        combobox.open();
-
-        expect(window.getComputedStyle(clearIcon).display).to.eql('block');
-      });
-    }
+      expect(window.getComputedStyle(clearIcon).display).to.eql('block');
+    });
 
     it('should not show clearing icon when nothing is selected', function() {
       combobox.open();

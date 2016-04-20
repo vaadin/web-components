@@ -73,9 +73,13 @@ Custom property | Description | Default
     }
 
     paper-input-container div[suffix] {
-      position: relative;
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+
       width: 24px;
       height: 24px;
+      padding: 4px;
       text-align: center;
     }
 
@@ -102,11 +106,7 @@ Custom property | Description | Default
     }
 
     #clearIcon {
-      position: absolute;
       right: 28px;
-      top: 0;
-      bottom: 0;
-      margin: auto;
     }
 
     [hideclear] #clearIcon {
@@ -117,10 +117,14 @@ Custom property | Description | Default
       display: none;
     }
 
-    #inputContainer[opened]:not([hideclear]) #input {
+    #input {
       box-sizing: border-box;
-      padding-right: 30px;
-      margin-right: -30px;
+      padding-right: 28px;
+    }
+
+    #inputContainer[opened]:not([hideclear]) #input {
+      padding-right: 60px;
+      margin-right: -32px;
     }
 
   </style>
@@ -152,11 +156,11 @@ Custom property | Description | Default
           on-blur="_onBlur"
           on-tap="open"
           key-event-target>
-      <div suffix id="clearIcon" on-tap="_clear">
+      <div suffix id="clearIcon" on-tap="_clear" on-touchend="_preventDefault">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
-      <div suffix id="toggleIcon" on-tap="_toggle" hidden$="[[_hideToggleIcon(disabled, readonly)]]">
+      <div suffix id="toggleIcon" on-tap="_toggle" hidden$="[[_hideToggleIcon(disabled, readonly)]]" on-touchend="_preventDefault">
         <iron-icon icon="menu" aria-controls="overlay"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
@@ -620,7 +624,7 @@ Custom property | Description | Default
     },
 
     _hideClearIcon: function(value, opened) {
-      return this.$.overlay.touchDevice || value === '' || !opened;
+      return value === '' || !opened;
     },
 
     _hideToggleIcon: function(disabled, readonly) {
