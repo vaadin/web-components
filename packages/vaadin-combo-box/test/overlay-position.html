@@ -87,15 +87,14 @@
     describe('overlay position', function() {
       it('should match the input container width', function() {
         comboBox.open();
-        // Use floor values so that zooming in Chrome doesn't make the test fail
-        expect(~~(dropContentRect().width)).to.equal(~~(inputContentRect().width));
+
+        expect(dropContentRect().width).to.be.closeTo(inputContentRect().width, 1);
       });
 
       it('should be below the input box', function() {
         comboBox.open();
-        // Use floor values so that zooming in Chrome doesn't make the test fail
-        expect(~~(dropContentRect().top)).to.equal(
-          ~~(inputContentRect().bottom + comboBox.$.overlay.verticalOffset));
+
+        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
 
       it('should position correctly if items are populated after opening', function(done) {
@@ -103,7 +102,7 @@
         comboBox.addEventListener('vaadin-dropdown-opened', function() {
           comboBox.items = [1, 2, 3];
           comboBox.async(function() {
-            expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
+            expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
             done();
           }, 1);
         });
@@ -130,7 +129,7 @@
 
         expect(dropContentRect().left).to.equal(inputContentRect().left);
 
-        expect(dropContentRect().top).to.equal(inputContentRect().bottom + comboBox.$.overlay.verticalOffset);
+        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
 
       it('when the input position width changes overlay width should change', function() {
