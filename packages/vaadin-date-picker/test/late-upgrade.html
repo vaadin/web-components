@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="common.js"></script>
+
+  <link rel="import" href="../../polymer/polymer.html">
+</head>
+
+<body>
+
+  <test-fixture id="datepicker">
+    <template>
+      <vaadin-date-picker></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Late upgrade', function() {
+      var datepicker;
+
+      beforeEach(function() {
+        datepicker = fixture('datepicker');
+      });
+
+      it('should have preset value from property', function(done) {
+        // Set the value before the element is upgraded.
+        datepicker.value = '2000-01-01';
+
+        expect(Polymer.isInstance(datepicker)).to.be.false;
+
+        Polymer.Base.importHref('../vaadin-date-picker.html', function() {
+          expect(datepicker.value).to.equal('2000-01-01');
+          done();
+        });
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

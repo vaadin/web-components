@@ -212,7 +212,6 @@ See paper-input-container documentation for styling the included input fields
          */
         value: {
           type: String,
-          value: '',
           observer: '_valueChanged'
         },
 
@@ -333,6 +332,14 @@ See paper-input-container documentation for styling the included input fields
 
       created: function() {
         this._boundOnScroll = this._onScroll.bind(this);
+      },
+
+      ready: function() {
+        // The value property is also defined in IronFormElementBehavior, which
+        // will mix up the default value if set in the property.
+        if (this.value === undefined) {
+          this.value = '';
+        }
       },
 
       /**
