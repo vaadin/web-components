@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="common.js"></script>
+
+  <link rel="import" href="../../polymer/polymer.html">
+</head>
+
+<body>
+
+  <test-fixture id="combobox">
+    <template>
+      <vaadin-combo-box></vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Late upgrade', function() {
+      var combobox;
+
+      beforeEach(function() {
+        combobox = fixture('combobox');
+      });
+
+      it('should have preset value from property', function(done) {
+        // Set the value before the element is upgraded.
+        combobox.items = ['foo', 'bar'];
+        combobox.value = 'bar';
+
+        expect(Polymer.isInstance(combobox)).to.be.false;
+
+        Polymer.Base.importHref('../vaadin-combo-box.html', function() {
+          expect(combobox.value).to.equal('bar');
+          done();
+        });
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

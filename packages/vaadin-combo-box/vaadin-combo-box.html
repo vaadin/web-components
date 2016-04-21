@@ -197,8 +197,7 @@ Custom property | Description | Default
        * options could be either `String` or `Object`.
        */
       items: {
-        type: Array,
-        observer: '_setItems'
+        type: Array
       },
 
       /**
@@ -214,8 +213,7 @@ Custom property | Description | Default
         type: String,
         observer: '_valueChanged',
         //notify: true already set in IronFormBehavior, setting this to true will make two value-changed events(?)
-        notify: false,
-        value: ''
+        notify: false
       },
 
       /**
@@ -291,8 +289,9 @@ Custom property | Description | Default
     },
 
     observers: [
-      '_filterChanged(_filter)',
-      '_itemsChanged(items.splices)'
+      '_filterChanged(_filter, itemValuePath, itemLabelPath)',
+      '_itemsChanged(items.splices)',
+      '_setItems(items, itemValuePath, itemLabelPath)'
     ],
 
     listeners: {
@@ -302,6 +301,11 @@ Custom property | Description | Default
     },
 
     ready: function() {
+      // The value property is also defined in IronFormElementBehavior, which
+      // will mix up the default value if set in the property.
+      if (this.value === undefined) {
+        this.value = '';
+      }
       Polymer.IronA11yAnnouncer.requestAvailability();
     },
 
