@@ -43,26 +43,17 @@ export class VaadinUpload extends DefaultValueAccessor {
     this.onChange(value);
   }
 
-  importHref(href) {
-    if (!document.querySelector('head link[href="' + href + '"]')) {
-      const link = document.createElement('link');
-      link.rel = 'import';
-      link.href = href;
-      document.head.appendChild(link);
-    }
-    HTMLImports.whenReady(this.onImport.bind(this));
-  }
+  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
+    super(renderer, el);
 
-  onImport() {
+    if (!window.Polymer || !Polymer.isInstance(el.nativeElement)) {
+      console.error("vaadin-upload has not been imported yet, please remember to import vaadin-upload.html in your main HTML page.");
+      return;
+    }
+
+    this._element = el.nativeElement;
     this._element.$$('paper-button').addEventListener('blur', () => {
       this.onTouched();
     });
   }
-
-  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
-    super(renderer, el);
-    this._element = el.nativeElement;
-    this.importHref('bower_components/vaadin-upload/vaadin-upload.html');
-  }
-
 }
