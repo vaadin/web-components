@@ -54,28 +54,19 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
     }
   }
 
-  importHref(href) {
-    if (!document.querySelector('head link[href="' + href + '"]')) {
-      const link = document.createElement('link');
-      link.rel = 'import';
-      link.href = href;
-      document.head.appendChild(link);
-    }
-    HTMLImports.whenReady(this.onImport.bind(this));
-  }
+  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
+    super(renderer, el);
 
-  onImport() {
+    if (!window.Polymer || !Polymer.isInstance(el.nativeElement)) {
+      console.error("vaadin-date-picker has not been imported yet, please remember to import vaadin-date-picker.html in your main HTML page.");
+      return;
+    }
+
+    this._element = el.nativeElement;
     this._element.$$('paper-input-container').addEventListener('blur', () => {
       if (!this._element.opened && !this._element._opened) {
         this.onTouched();
       }
     });
   }
-
-  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
-    super(renderer, el);
-    this._element = el.nativeElement;
-    this.importHref('bower_components/vaadin-date-picker/vaadin-date-picker.html');
-  }
-
 }
