@@ -71,34 +71,19 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
     }
   }
 
-  importHref(href, onload) {
-    if (!document.querySelector('head link[href="' + href + '"]')) {
-      const link = document.createElement('link');
-      link.rel = 'import';
-      link.href = href;
-      link.onload = onload;
-      document.head.appendChild(link);
-    } else {
-      onload();
-    }
-  }
+  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector, differs: IterableDiffers) {
+    super(renderer, el);
 
-  onImport() {
+    if (!window.Polymer || !Polymer.isInstance(el.nativeElement)) {
+      console.error("vaadin-combo-box has not been imported yet, please remember to import vaadin-combo-box.html in your main HTML page.");
+      return;
+    }
+
+    this._element = el.nativeElement;
+    this._differ = differs.find([]).create(null);
+
     this._element.$$('input').addEventListener('blur', () => {
       this.onTouched();
     });
   }
-
-  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector, differs: IterableDiffers) {
-    super(renderer, el);
-    this._element = el.nativeElement;
-    this._differ = differs.find([]).create(null);
-
-    // In order to have iron-icons reliably available for vaadin-combo-box,
-    // we need to explicitly import it before importing the combo box.
-    this.importHref('bower_components/iron-icons/iron-icons.html', () => {
-      this.importHref('bower_components/vaadin-combo-box/vaadin-combo-box.html', this.onImport.bind(this));
-    });
-  }
-
 }
