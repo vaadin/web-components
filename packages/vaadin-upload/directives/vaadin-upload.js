@@ -1,4 +1,6 @@
-System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang'], function(exports_1) {
+System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -61,7 +63,7 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                 };
                 __decorate([
                     core_1.Output(), 
-                    __metadata('design:type', (typeof (_a = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _a) || Object)
+                    __metadata('design:type', core_1.EventEmitter)
                 ], VaadinUpload.prototype, "filesChange", void 0);
                 __decorate([
                     core_1.HostListener('files-changed'), 
@@ -74,13 +76,13 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                         selector: 'vaadin-upload',
                         providers: [VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR]
                     }), 
-                    __metadata('design:paramtypes', [(typeof (_b = typeof core_1.Renderer !== 'undefined' && core_1.Renderer) === 'function' && _b) || Object, (typeof (_c = typeof core_1.ElementRef !== 'undefined' && core_1.ElementRef) === 'function' && _c) || Object, (typeof (_d = typeof core_1.Injector !== 'undefined' && core_1.Injector) === 'function' && _d) || Object])
+                    __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, core_1.Injector])
                 ], VaadinUpload);
                 return VaadinUpload;
-                var _a, _b, _c, _d;
-            })(common_1.DefaultValueAccessor);
+            }(common_1.DefaultValueAccessor));
             exports_1("VaadinUpload", VaadinUpload);
         }
     }
 });
+
 //# sourceMappingURL=vaadin-upload.js.map
