@@ -1,4 +1,6 @@
-System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang'], function(exports_1) {
+System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -82,7 +84,7 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                 ], VaadinComboBox.prototype, "items", void 0);
                 __decorate([
                     core_1.Output(), 
-                    __metadata('design:type', (typeof (_a = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _a) || Object)
+                    __metadata('design:type', core_1.EventEmitter)
                 ], VaadinComboBox.prototype, "valueChange", void 0);
                 __decorate([
                     core_1.HostListener('value-changed', ['$event.detail.value']), 
@@ -95,13 +97,13 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                         selector: 'vaadin-combo-box',
                         providers: [VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR]
                     }), 
-                    __metadata('design:paramtypes', [(typeof (_b = typeof core_1.Renderer !== 'undefined' && core_1.Renderer) === 'function' && _b) || Object, (typeof (_c = typeof core_1.ElementRef !== 'undefined' && core_1.ElementRef) === 'function' && _c) || Object, (typeof (_d = typeof core_1.Injector !== 'undefined' && core_1.Injector) === 'function' && _d) || Object, (typeof (_e = typeof core_1.IterableDiffers !== 'undefined' && core_1.IterableDiffers) === 'function' && _e) || Object])
+                    __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, core_1.Injector, core_1.IterableDiffers])
                 ], VaadinComboBox);
                 return VaadinComboBox;
-                var _a, _b, _c, _d, _e;
-            })(common_1.DefaultValueAccessor);
+            }(common_1.DefaultValueAccessor));
             exports_1("VaadinComboBox", VaadinComboBox);
         }
     }
 });
+
 //# sourceMappingURL=vaadin-combo-box.js.map

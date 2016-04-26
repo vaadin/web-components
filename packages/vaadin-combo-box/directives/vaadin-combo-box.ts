@@ -15,7 +15,7 @@ import {
 } from 'angular2/core';
 import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
-declare var HTMLImports;
+declare var Polymer;
 
 const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
     NG_VALUE_ACCESSOR, {
@@ -74,7 +74,7 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
   constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector, differs: IterableDiffers) {
     super(renderer, el);
 
-    if (!window.Polymer || !Polymer.isInstance(el.nativeElement)) {
+    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-combo-box has not been imported yet, please remember to import vaadin-combo-box.html in your main HTML page.");
       return;
     }
