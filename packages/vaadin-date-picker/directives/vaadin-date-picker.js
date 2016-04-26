@@ -53,7 +53,7 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                     });
                 }
                 VaadinDatePicker.prototype.ngOnInit = function () {
-                    this._control = this._injector.getOptional(common_1.NgControl);
+                    this._control = this._injector.get(common_1.NgControl, null);
                 };
                 VaadinDatePicker.prototype.valuechanged = function (value) {
                     this.valueChange.emit(value);

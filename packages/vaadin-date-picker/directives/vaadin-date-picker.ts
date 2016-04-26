@@ -31,7 +31,7 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
   private _initialValueSet = false;
 
   ngOnInit() {
-    this._control = this._injector.getOptional(NgControl);
+    this._control = this._injector.get(NgControl, null);
   }
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter(false);
