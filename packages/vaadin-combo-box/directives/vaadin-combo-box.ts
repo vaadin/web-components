@@ -38,7 +38,7 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
   private _initialValueSet = false;
 
   ngOnInit() {
-    this._control = this._injector.getOptional(NgControl);
+    this._control = this._injector.get(NgControl, null);
   }
 
   ngDoCheck() {

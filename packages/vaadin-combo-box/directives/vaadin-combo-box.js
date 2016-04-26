@@ -52,7 +52,7 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                     });
                 }
                 VaadinComboBox.prototype.ngOnInit = function () {
-                    this._control = this._injector.getOptional(common_1.NgControl);
+                    this._control = this._injector.get(common_1.NgControl, null);
                 };
                 VaadinComboBox.prototype.ngDoCheck = function () {
                     var changes = this._differ.diff(this.items);
