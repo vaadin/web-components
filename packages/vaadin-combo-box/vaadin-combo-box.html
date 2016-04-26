@@ -134,6 +134,7 @@ Custom property | Description | Default
         class="dropdown-input"
         id="inputContainer"
         disabled$="[[disabled]]"
+        invalid="[[invalid]]"
         opened$="[[opened]]"
         hideclear$="[[_hideClearIcon(value, opened)]]"
         on-down="_preventDefault">
@@ -144,6 +145,7 @@ Custom property | Description | Default
           role="combobox"
           disabled$="[[disabled]]"
           readonly$="[[readonly]]"
+          invalid="{{invalid}}"
           aria-activedescendant$="[[_ariaActiveIndex]]"
           aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-labelledby="label"
