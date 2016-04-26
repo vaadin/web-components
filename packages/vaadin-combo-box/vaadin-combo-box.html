@@ -84,12 +84,10 @@ Custom property | Description | Default
     }
 
     paper-input-container iron-icon {
-      fill: rgba(0, 0, 0, .26);
+      fill: rgba(0, 0, 0, .38);
       cursor: pointer;
-      --iron-icon-width: 20px;
-      --iron-icon-height: 20px;
       margin-top: -1px;
-      transition: fill 0.2s;
+      transition: all 0.2s;
     }
 
     paper-input-container paper-ripple {
@@ -105,8 +103,18 @@ Custom property | Description | Default
       fill: rgba(0, 0, 0, .86);
     }
 
+    paper-input-container[opened] #toggleIcon iron-icon {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+
     #clearIcon {
       right: 28px;
+    }
+
+    #clearIcon iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
     }
 
     [hideclear] #clearIcon {
@@ -161,7 +169,7 @@ Custom property | Description | Default
         <paper-ripple class="circle" center></paper-ripple>
       </div>
       <div suffix id="toggleIcon" on-tap="_toggle" hidden$="[[_hideToggleIcon(disabled, readonly)]]" on-touchend="_preventDefault">
-        <iron-icon icon="menu" aria-controls="overlay"></iron-icon>
+        <iron-icon icon="arrow-drop-down" aria-controls="overlay"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
     </paper-input-container>
