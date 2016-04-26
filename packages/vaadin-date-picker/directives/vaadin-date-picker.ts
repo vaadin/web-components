@@ -12,7 +12,7 @@ import {
 } from 'angular2/core';
 import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
 import { CONST_EXPR } from 'angular2/src/facade/lang';
-declare var HTMLImports;
+declare var Polymer;
 
 const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
     NG_VALUE_ACCESSOR, {
@@ -57,7 +57,7 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
   constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
     super(renderer, el);
 
-    if (!window.Polymer || !Polymer.isInstance(el.nativeElement)) {
+    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-date-picker has not been imported yet, please remember to import vaadin-date-picker.html in your main HTML page.");
       return;
     }
