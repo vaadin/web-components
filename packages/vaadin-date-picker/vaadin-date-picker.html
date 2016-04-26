@@ -91,9 +91,12 @@ See paper-input-container documentation for styling the included input fields
       }
 
       paper-input-container div[suffix] {
-        position: relative;
+        position: absolute;
+        right: -4px;
+        bottom: -4px;
         width: 24px;
         height: 24px;
+        padding: 4px;
         text-align: center;
       }
 
@@ -131,11 +134,7 @@ See paper-input-container documentation for styling the included input fields
       }
 
       #clear {
-        position: absolute;
         right: 28px;
-        top: 0;
-        bottom: 0;
-        margin: auto;
       }
 
       #clear iron-icon {
@@ -150,10 +149,14 @@ See paper-input-container documentation for styling the included input fields
         display: none;
       }
 
-      #inputcontainer[opened]:not([hideclear]) #input {
+      #input {
         box-sizing: border-box;
-        padding-right: 30px;
-        margin-right: -30px;
+        padding-right: 28px;
+      }
+
+      #inputcontainer[opened]:not([hideclear]) #input {
+        padding-right: 60px;
+        margin-right: -32px;
       }
 
     </style>
