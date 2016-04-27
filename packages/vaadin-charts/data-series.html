@@ -136,6 +136,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                             value.push(this._parsePoint(node.childNodes[o]));
                         }
                     } else {
+                        // Replace line breaks as empty space.
+                        node.textContent = node.textContent.replace(/(\n)/gm," ");
                         value = '[' + node.textContent + ']';
                     }
                     this._setProperty(camelName, value);
