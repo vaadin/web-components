@@ -85,7 +85,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             _chartConf: {
                 type: Object,
                 value: function () {
-                    return {chart: {}};
+                    return {};
                 }
             }
         },
@@ -145,7 +145,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Reloads the chart with the original configuration defined in elements and its attributes.
          */
         reloadConfiguration: function () {
-            this._chartConf = {chart: {}};
+            this._chartConf = {};
             this._initConfiguration();
             this.chart.destroy();
             this.chart = {};
@@ -201,8 +201,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 this._initLocalDom();
                 this._initConfiguration();
                 Polymer.dom(this).querySelectorAll("data-series").forEach(function (ds) {
-                    if(ds.initialize) {
-                        ds.initialize();
+                    if(ds._initialize) {
+                        ds._initialize();
                     }
                 });
                 if (this._loadTheme) {

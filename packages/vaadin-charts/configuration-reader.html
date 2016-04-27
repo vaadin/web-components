@@ -46,7 +46,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Elements that contain two dimensional arrays. The values in value array can be specified using attributes and parser knows the correct order.
          **/
-        _twoDimArrayNodes: {"stops": ["position", "color"] },
+        _twoDimArrayNodes: {"stops": ["position", "color"]},
 
         /**
          * Elements whose text content should be set as text property value
@@ -124,7 +124,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _cleanNode: function (node) {
             for (var n = 0; n < node.childNodes.length; n++) {
                 var child = node.childNodes[n];
-                if (child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
+                if (child.nodeType === 3 && !/\S/.test(child.nodeValue)) {
                     node.removeChild(child);
                     n--;
                 } else if (child.nodeType === 1) {
@@ -180,9 +180,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          **/
         _parseTextContent: function (node) {
             try {
-              return JSON.parse(node.textContent);
+                return JSON.parse(node.textContent);
             } catch (e) {
-               return node.textContent;
+                return node.textContent;
             }
         },
 
@@ -225,7 +225,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                             for (var i = 0; i < values.length; ++i) {
                                 var name = values[i];
                                 var attr = this._parseAttribute(node.getAttribute(name));
-                                if(attr != null) {
+                                if (attr != null) {
                                     result.push(attr);
                                 } else {
                                     for (var j = 0; j < node.childNodes.length; j++) {

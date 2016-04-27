@@ -10,7 +10,7 @@ var deleteLines = require('gulp-delete-lines');
 var zipDest = config.dest + '/zip/';
 var zipTemp = config.temp + '/zip/';
 
-gulp.task('zip:stage', ['zip:vulcanize-sources', 'zip:copy-sources', 'zip:copy-demo', 'zip:copy-doc']);
+gulp.task('zip:stage', ['zip:vulcanize-sources', 'zip:copy-sources', 'zip:copy-demo', 'zip:copy-doc', 'zip:copy-directives']);
 
 gulp.task('zip:vulcanize-sources', ['zip:copy-sources-temp', 'zip:install-dependencies-temp'], function () {
     return gulp.src(zipTemp+'vaadin-*.html')
@@ -39,6 +39,11 @@ gulp.task('zip:copy-demo', function () {
         .pipe(replace('../../', '../', {skipBinary: true}))
         .pipe(replace('../', '../src/', {skipBinary: true}))
         .pipe(gulp.dest(zipDest + 'demo'));
+});
+
+gulp.task('zip:copy-directives', function() {
+    return gulp.src(config.files.directives)
+        .pipe(gulp.dest(zipDest+"directives"));
 });
 
 gulp.task('zip:copy-doc', function () {

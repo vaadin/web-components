@@ -12,6 +12,7 @@
 <dom-module id="reload-chart">
     <template>
         <vaadin-line-chart id="chartWithBinding">
+            <chart polar="true"></chart>
             <chart-title>Global temperature change</chart-title>
             <subtitle>Data input from CSV</subtitle>
             <plot-options>
@@ -76,6 +77,12 @@
         setup(function () {
             el = document.querySelector("reload-chart");
             chartwc = el.$.chartWithBinding;
+        });
+
+        test('_chartConf.chart maintained', function () {
+            expect(chartwc._chartConf.chart.polar).to.be.true;
+            el.$.reloadBtn.click();
+            expect(chartwc._chartConf.chart.polar).to.be.true;
         });
 
         test('chart configuration change', function () {

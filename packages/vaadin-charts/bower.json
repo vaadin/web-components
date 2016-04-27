@@ -23,6 +23,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "framework-test",
     "test",
     "demo",
     "index.html"
