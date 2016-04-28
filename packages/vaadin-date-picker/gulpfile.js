@@ -146,3 +146,8 @@ gulp.task('ng2', ['typings'], function() {
       .pipe(gulp.dest(dir));
   });
 });
+
+gulp.task('ng2:watch', function() {
+  gulp.watch('directives/*.ts', ['ng2']);
+  gulp.watch('test/angular2/*.ts', ['ng2']);
+});
