@@ -150,9 +150,16 @@ gulp.task('typings', function() {
 });
 
 gulp.task('ng2', ['typings'], function() {
-  return gulp.src(['directives/*.ts', 'directives/typings/main/**/*.d.ts'])
-    .pipe(sourcemaps.init())
-    .pipe(ts(tsProject))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('directives'));
+  ['directives', 'test/angular2'].forEach(function(dir) {
+    gulp.src([dir + '/*.ts', 'directives/typings/main/**/*.d.ts'])
+      .pipe(sourcemaps.init())
+      .pipe(ts(ts.createProject('directives/tsconfig.json')))
+      .pipe(sourcemaps.write('.'))
+      .pipe(gulp.dest(dir));
+  });
+});
+
+gulp.task('ng2:watch', function() {
+  gulp.watch('directives/*.ts', ['ng2']);
+  gulp.watch('test/angular2/*.ts', ['ng2']);
 });
