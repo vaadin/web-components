@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vaadin-date-picker.html">
+  <script src="common.js"></script>
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src="../node_modules/es6-shim/es6-shim.min.js"></script>
+  <script src="../node_modules/systemjs/dist/system-polyfills.js"></script>
+  <script src="../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="../node_modules/systemjs/dist/system.src.js"></script>
+  <script src="../node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+
+  <!-- 2. Configure SystemJS -->
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      System.config({
+        map: {
+          'vaadin-date-picker': '../directives'
+        },
+        packages: {
+          app: {
+            format: 'register',
+            defaultExtension: 'js'
+          },
+          'vaadin-date-picker': {
+            defaultExtension: 'js',
+            main: 'vaadin-date-picker.js'
+          }
+        }
+      });
+
+      System.import('angular2/main.js').then(function() {
+        window._testAppImported = true;
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <test-fixture id="testapp">
+    <template>
+      <test-app>Loading...</test-app>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Angular 2', function() {
+      var datepicker;
+      var testApp;
+
+      before(function(done) {
+        function checkImport() {
+          if (window._testAppImported) {
+            done();
+          } else {
+            setTimeout(checkImport, 10);
+          }
+        }
+        checkImport();
+      });
+
+      beforeEach(function(done) {
+        var testAppElement = fixture('testapp');
+        testAppElement.addEventListener('readyForTests', function(e) {
+          testApp = e.detail;
+          datepicker = testAppElement.querySelector('vaadin-date-picker');
+          done();
+        });
+        document.body.dispatchEvent(new CustomEvent('bootstrap'));
+      });
+
+      it('should have bound value', function() {
+        expect(datepicker.value).to.equal('2000-01-01');
+      });
+
+      it('should change value on bound value change', function() {
+        testApp.date = '2001-01-01';
+        testApp.detectChanges();
+        expect(datepicker.value).to.equal('2001-01-01');
+      });
+
+
+    });
+  </script>
+
+</body>
+
+</html>
