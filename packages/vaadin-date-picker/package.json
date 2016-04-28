@@ -4,7 +4,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "devDependencies": {
-    "angular2": "^2.0.0-beta.15",
+    "angular2": "^2.0.0-beta.16",
     "chalk": "^1.1.1",
     "es6-shim": "^0.35.0",
     "gulp": "latest",
@@ -20,6 +20,6 @@
     "systemjs": "0.19.26",
     "web-component-tester": "^4.1.0",
     "yargs": "^3.27.0",
-    "zone.js": "^0.6.10"
+    "zone.js": "^0.6.12"
   }
 }
