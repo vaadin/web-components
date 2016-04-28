@@ -56,6 +56,7 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                     this._control = this._injector.get(common_1.NgControl, null);
                 };
                 VaadinDatePicker.prototype.valuechanged = function (value) {
+                    var _this = this;
                     this.valueChange.emit(value);
                     if (this._initialValueSet) {
                         // Do not trigger onChange when the initial (empty) value is set
@@ -68,7 +69,9 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                     // Pass the invalid state to our native vaadin-date-picker element if
                     // it is an ngControl.
                     if (this._control != null) {
-                        this._element.invalid = !this._control.pristine && !this._control.valid;
+                        setTimeout(function () {
+                            _this._element.invalid = !_this._control.pristine && !_this._control.valid;
+                        }, 0);
                     }
                 };
                 __decorate([

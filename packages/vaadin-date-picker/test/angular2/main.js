@@ -40,8 +40,8 @@ System.register(['angular2/platform/browser', 'angular2/core', '../../directives
                 TestApp = __decorate([
                     core_1.Component({
                         selector: 'test-app',
-                        template: "\n    <vaadin-date-picker [(value)]=\"date\"></vaadin-date-picker>\n    ",
-                        directives: [vaadin_date_picker_1.VaadinDatePicker]
+                        template: "\n    <vaadin-date-picker [(value)]=\"date\" required class=\"bound\"></vaadin-date-picker>\n\n    <form #testForm=\"ngForm\">\n      <vaadin-date-picker ngControl=\"date\" [value]=\"date\" required [_form]=\"testForm\"></vaadin-date-picker>\n    </form>\n    ",
+                        directives: [vaadin_date_picker_1.VaadinDatePicker,]
                     }), 
                     __metadata('design:paramtypes', [core_1.ElementRef, core_1.ChangeDetectorRef])
                 ], TestApp);

@@ -5,7 +5,11 @@ import {VaadinDatePicker} from '../../directives/vaadin-date-picker';
 @Component({
   selector: 'test-app',
   template: `
-    <vaadin-date-picker [(value)]="date"></vaadin-date-picker>
+    <vaadin-date-picker [(value)]="date" required class="bound"></vaadin-date-picker>
+
+    <form #testForm="ngForm">
+      <vaadin-date-picker ngControl="date" [value]="date" required [_form]="testForm"></vaadin-date-picker>
+    </form>
     `,
   directives: [VaadinDatePicker]
 })
