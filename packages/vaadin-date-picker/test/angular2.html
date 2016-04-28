@@ -58,11 +58,7 @@
 
       before(function(done) {
         function checkImport() {
-          if (window._testAppImported) {
-            done();
-          } else {
-            setTimeout(checkImport, 10);
-          }
+          window._testAppImported ? done() : setTimeout(checkImport, 10);
         }
         checkImport();
       });
