@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vaadin-date-picker.html">
+  <script src="common.js"></script>
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src="../node_modules/es6-shim/es6-shim.min.js"></script>
+  <script src="../node_modules/systemjs/dist/system-polyfills.js"></script>
+  <script src="../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="../node_modules/systemjs/dist/system.src.js"></script>
+  <script src="../node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+
+  <!-- 2. Configure SystemJS -->
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      System.config({
+        map: {
+          'vaadin-date-picker': '../directives'
+        },
+        packages: {
+          app: {
+            format: 'register',
+            defaultExtension: 'js'
+          },
+          'vaadin-date-picker': {
+            defaultExtension: 'js',
+            main: 'vaadin-date-picker.js'
+          }
+        }
+      });
+
+      System.import('angular2/main.js').then(function() {
+        window._testAppImported = true;
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <test-fixture id="testapp">
+    <template>
+      <test-app>Loading...</test-app>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Angular 2', function() {
+      var testApp;
+      var testAppElement;
+
+      before(function(done) {
+        function checkImport() {
+          window._testAppImported ? done() : setTimeout(checkImport, 10);
+        }
+        checkImport();
+      });
+
+      beforeEach(function(done) {
+        testAppElement = fixture('testapp');
+        testAppElement.addEventListener('readyForTests', function(e) {
+          testApp = e.detail;
+          setTimeout(done, 0);
+        });
+        document.body.dispatchEvent(new CustomEvent('bootstrap'));
+      });
+
+      describe('Data binding', function() {
+        var datepicker;
+
+        beforeEach(function() {
+          datepicker = testAppElement.querySelector('vaadin-date-picker.bound');
+        });
+
+        it('should have initial bound value', function() {
+          expect(datepicker.value).to.equal('2000-01-01');
+        });
+
+        it('should change value on bound value change', function() {
+          testApp.date = '2001-01-01';
+          testApp.detectChanges();
+          expect(datepicker.value).to.equal('2001-01-01');
+        });
+
+        it('should change bound value on value change', function() {
+          datepicker.value = '2001-01-01';
+          expect(testApp.date).to.equal('2001-01-01');
+        });
+
+      });
+
+      describe('Form field', function() {
+        var datepicker;
+
+        beforeEach(function() {
+          datepicker = testAppElement.querySelector('form vaadin-date-picker');
+        });
+
+        it('should be initially pristine', function() {
+          expect(datepicker.classList.contains('ng-pristine')).to.be.true;
+        });
+
+        it('should be dirty on value change', function() {
+          datepicker.value = '2001-01-01';
+          testApp.detectChanges();
+          expect(datepicker.classList.contains('ng-dirty')).to.be.true;
+        });
+
+        it('should be initially untouched', function() {
+          expect(datepicker.classList.contains('ng-untouched')).to.be.true;
+        });
+
+        it('should get touched on input blur', function() {
+          Polymer.Base.fire('blur', {}, {
+            bubbles: true,
+            node: datepicker.$.input
+          });
+          expect(datepicker.classList.contains('ng-touched')).to.be.true;
+        });
+
+        it('should be invalid', function() {
+          expect(datepicker.classList.contains('ng-invalid')).to.be.true;
+        });
+
+        it('should be an invalid form', function() {
+          expect(datepicker._form.valid).to.be.false;
+        });
+
+        it('should be a valid form', function() {
+          datepicker.value = '2001-01-01';
+          expect(datepicker._form.valid).to.be.true;
+        });
+
+        it('should have correct date value', function() {
+          datepicker.value = '2001-01-01';
+          expect(datepicker._form.value.date).to.equal('2001-01-01');
+        });
+
+        it('should not reflect invalid state to datepicker initially', function() {
+          expect(datepicker.invalid).to.be.false;
+        });
+
+        it('should reflect invalid state to datepicker when value changed', function(done) {
+          datepicker.value = '2001-01-01';
+          datepicker.value = '';
+          setTimeout(function() {
+            expect(datepicker.invalid).to.be.true;
+            done();
+          }, 0);
+        });
+
+        it('should be valid', function() {
+          datepicker.value = '2001-01-01';
+          expect(datepicker.classList.contains('ng-valid')).to.be.true;
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

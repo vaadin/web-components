@@ -50,7 +50,9 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
     // Pass the invalid state to our native vaadin-date-picker element if
     // it is an ngControl.
     if (this._control != null) {
-      this._element.invalid = !this._control.pristine && !this._control.valid;
+      setTimeout(() => {
+        this._element.invalid = !this._control.pristine && !this._control.valid;
+      }, 0);
     }
   }
 
