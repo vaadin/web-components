@@ -291,7 +291,7 @@
 
     get _viewportTotalPadding() {
       if (this._cachedViewportTotalPadding === undefined) {
-        var itemsStyle = window.getComputedStyle(window.unwrap(this.$.selector.$.items));
+        var itemsStyle = window.getComputedStyle(this._unwrapIfNeeded(this.$.selector.$.items));
         this._cachedViewportTotalPadding = [
           itemsStyle.paddingTop,
           itemsStyle.paddingBottom,

@@ -40,6 +40,11 @@
       this._boundSetPosition = this._setPosition.bind(this);
     },
 
+    _unwrapIfNeeded: function(element) {
+      var isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
+      return isWrapped ? window.unwrap(element) : element;
+    },
+
     _processPendingMutationObserversFor: function(node) {
       if (!Polymer.Settings.useNativeCustomElements) {
         CustomElements.takeRecords(node);
@@ -85,7 +90,7 @@
 
     _isPositionFixed: function(element) {
       var parentElement = element.parentElement || element.domHost;
-      return window.getComputedStyle(window.unwrap(element)).position === 'fixed' ||
+      return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
         (parentElement && this._isPositionFixed(parentElement));
     },
 
@@ -102,7 +107,8 @@
     },
 
     _setPosition: function(e) {
-      if ((!e || e.target.contains(this) || e.target.contains(this.positionTarget)) && unwrap(this.parentElement) === document.body) {
+      var parent = this._unwrapIfNeeded(this.parentElement);
+      if ((!e || e.target.contains(this) || e.target.contains(this.positionTarget)) && parent === document.body) {
         var targetRect = this.positionTarget.getBoundingClientRect();
         this._alignedAbove = this._shouldAlignAbove();
 
