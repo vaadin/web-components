@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vaadin-upload.html">
+  <script src="common.js"></script>
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src="../node_modules/es6-shim/es6-shim.min.js"></script>
+  <script src="../node_modules/systemjs/dist/system-polyfills.js"></script>
+  <script src="../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="../node_modules/systemjs/dist/system.src.js"></script>
+  <script src="../node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+
+  <!-- 2. Configure SystemJS -->
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      System.config({
+        map: {
+          'vaadin-upload': '../directives'
+        },
+        packages: {
+          app: {
+            format: 'register',
+            defaultExtension: 'js'
+          },
+          'vaadin-upload': {
+            defaultExtension: 'js',
+            main: 'vaadin-upload.js'
+          }
+        }
+      });
+
+      System.import('angular2/main.js').then(function() {
+        window._testAppImported = true;
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <test-fixture id="testapp">
+    <template>
+      <test-app>Loading...</test-app>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Angular 2', function() {
+      var upload;
+      var uploadStructural;
+      var testApp;
+      var testData = [
+        {name: 'Don Quixote.pdf', progress: 100, complete: true},
+        {name: 'Hamlet.pdf', progress: 100, complete: true}
+      ];
+
+      before(function(done) {
+        function checkImport() {
+          window._testAppImported ? done() : setTimeout(checkImport, 10);
+        }
+        checkImport();
+      });
+
+      beforeEach(function(done) {
+        var testAppElement = fixture('testapp');
+        testAppElement.addEventListener('readyForTests', function(e) {
+          testApp = e.detail;
+          upload = testAppElement.querySelector('vaadin-upload');
+          uploadStructural = testAppElement.querySelector('vaadin-upload#structural');
+          setTimeout(done, 0);
+        });
+
+        document.body.dispatchEvent(new CustomEvent('bootstrap'));
+      });
+
+      describe('Data binding', function() {
+        it('should update data-bound files property', function() {
+          testApp.files = testData;
+          testApp.detectChanges();
+          expect(upload.files.length).to.equal(2);
+        });
+      });
+
+      describe('Form integration', function() {
+        it('should be pristine initially', function() {
+          expect(upload.classList.contains('ng-pristine')).to.be.true;
+        });
+
+        it('should be dirty after value is set', function() {
+          testApp.files = testData;
+          testApp.detectChanges();
+          expect(upload.classList.contains('ng-dirty')).to.be.true;
+        });
+
+        it('should be untouched initially', function() {
+          expect(upload.classList.contains('ng-untouched')).to.be.true;
+        });
+
+        it('should be touched after visited', function() {
+          Polymer.Base.fire('blur', {}, {
+            bubbles: true,
+            node: upload.$.addFiles
+          });
+          expect(upload.classList.contains('ng-touched')).to.be.true;
+        });
+
+        it('should be invalid initially when no value is set', function() {
+          expect(upload.classList.contains('ng-invalid')).to.be.true;
+        });
+
+        it('should be valid after value is set', function() {
+          testApp.files = testData;
+          testApp.detectChanges();
+          expect(upload.classList.contains('ng-valid')).to.be.true;
+        });
+      });
+
+      describe('Light DOM', function() {
+
+        it('should react to light DOM changes (drop-label)', function(done) {
+          setTimeout(function() {
+            var dropLabel = document.createElement('div');
+            dropLabel.className = 'drop-label';
+            dropLabel.innerHTML = 'Drop stuff here';
+            upload.appendChild(dropLabel);
+
+            setTimeout(function() {
+              var content = '';
+              if (Polymer.Settings.useShadow) {
+                content = upload.$.dropLabel.querySelector('content').getDistributedNodes()[0].innerHTML;
+              } else {
+                content = upload.$.dropLabel.firstElementChild.innerHTML;
+              }
+              expect(content).to.equal('Drop stuff here');
+              done();
+            }, 0);
+          }, 0);
+        });
+
+        it('should react to light DOM changes (file-list)', function(done) {
+          setTimeout(function() {
+            var dropLabel = document.createElement('div');
+            dropLabel.className = 'file-list';
+            dropLabel.innerHTML = 'Dummy list';
+            upload.appendChild(dropLabel);
+
+            setTimeout(function() {
+              var content = '';
+              if (Polymer.Settings.useShadow) {
+                content = upload.$.buttons.nextElementSibling.getDistributedNodes()[0].innerHTML;
+              } else {
+                content = upload.$.buttons.nextElementSibling.innerHTML;
+              }
+              expect(content).to.equal('Dummy list');
+              done();
+            }, 0);
+          }, 0);
+        });
+
+        it('should react to light DOM changes (content)', function(done) {
+          setTimeout(function() {
+            var dropLabel = document.createElement('div');
+            dropLabel.innerHTML = 'Dummy content';
+            upload.appendChild(dropLabel);
+
+            setTimeout(function() {
+              var content = '';
+              if (Polymer.Settings.useShadow) {
+                content = Polymer.dom(upload.root)
+                                 .querySelector('content[select=".file-list"]')
+                                 .nextElementSibling.getDistributedNodes()[1].textContent;
+              } else {
+                content = upload.$.fileList.nextElementSibling.innerHTML;
+              }
+              expect(content).to.equal('Dummy content');
+              done();
+            }, 0);
+          }, 0);
+        });
+
+        it('should render light DOM text content correctly', function(done) {
+          setTimeout(function() {
+            setTimeout(function() {
+              var content = '';
+              if (Polymer.Settings.useShadow) {
+                content = Polymer.dom(upload.root)
+                                 .querySelector('content[select=".file-list"]')
+                                 .nextElementSibling.getDistributedNodes()[0].textContent;
+              } else {
+                content = upload.$.fileInput.previousSibling.textContent;
+              }
+              expect(content).to.equal('Text content');
+              done();
+            }, 0);
+          }, 0);
+        });
+
+        it('should react to light DOM changes triggered by ngIf (file-list)', function() {
+          // This will change the ngIf bound boolean to display the span inside file-list.
+          testApp.visible = true;
+          testApp.detectChanges();
+
+          var content = '';
+          if (Polymer.Settings.useShadow) {
+            content = uploadStructural.$.buttons.nextElementSibling.getDistributedNodes()[0].innerHTML;
+          } else {
+            content = uploadStructural.$.buttons.nextElementSibling.innerHTML;
+          }
+          expect(content.indexOf('Content for file-list')).to.not.equal(-1);
+        });
+
+        it('should react to light DOM changes triggered by ngIf (drop-label)', function() {
+          // This will change the ngIf bound boolean to display the span inside drop-label.
+          testApp.visible = true;
+          testApp.detectChanges();
+
+          var content = '';
+          if (Polymer.Settings.useShadow) {
+            content = uploadStructural.$.dropLabel.querySelector('content').getDistributedNodes()[0].innerHTML;
+          } else {
+            content = uploadStructural.$.dropLabel.innerHTML;
+          }
+          expect(content.indexOf('Content for drop-label')).to.not.equal(-1);
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
