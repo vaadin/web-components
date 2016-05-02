@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vaadin-combo-box.html">
+  <script src="common.js"></script>
+
+  <!-- IE required polyfills, in this exact order -->
+  <script src="../node_modules/es6-shim/es6-shim.min.js"></script>
+  <script src="../node_modules/systemjs/dist/system-polyfills.js"></script>
+  <script src="../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="../node_modules/systemjs/dist/system.src.js"></script>
+  <script src="../node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+
+  <!-- 2. Configure SystemJS -->
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      System.config({
+        map: {
+          'vaadin-combo-box': '../directives'
+        },
+        packages: {
+          app: {
+            format: 'register',
+            defaultExtension: 'js'
+          },
+          'vaadin-combo-box': {
+            defaultExtension: 'js',
+            main: 'vaadin-combo-box.js'
+          }
+        }
+      });
+
+      System.import('angular2/main.js').then(function() {
+        window._testAppImported = true;
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <test-fixture id="testapp">
+    <template>
+      <test-app>Loading...</test-app>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('Angular 2', function() {
+      var testApp;
+      var testAppElement;
+
+      before(function(done) {
+        function checkImport() {
+          window._testAppImported ? done() : setTimeout(checkImport, 10);
+        }
+        checkImport();
+      });
+
+      beforeEach(function(done) {
+        testAppElement = fixture('testapp');
+        testAppElement.addEventListener('readyForTests', function(e) {
+          testApp = e.detail;
+          setTimeout(done, 0);
+        });
+        document.body.dispatchEvent(new CustomEvent('bootstrap'));
+      });
+
+      describe('Data binding', function() {
+        var combobox;
+
+        beforeEach(function() {
+          combobox = testAppElement.querySelector('vaadin-combo-box.bound');
+        });
+
+        it('should have initial bound value', function() {
+          expect(combobox.value).to.equal('foo');
+        });
+
+        it('should change value on bound value change', function() {
+          testApp.selection = 'bar';
+          testApp.detectChanges();
+          expect(combobox.value).to.equal('bar');
+        });
+
+        it('should change bound value on value change', function() {
+          combobox.value = 'bar';
+          expect(testApp.selection).to.equal('bar');
+        });
+
+      });
+
+      describe('Form field', function() {
+        var combobox;
+
+        beforeEach(function() {
+          combobox = testAppElement.querySelector('form vaadin-combo-box');
+        });
+
+        it('should be initially pristine', function() {
+          expect(combobox.classList.contains('ng-pristine')).to.be.true;
+        });
+
+        it('should be dirty on value change', function() {
+          combobox.value = 'bar';
+          testApp.detectChanges();
+          expect(combobox.classList.contains('ng-dirty')).to.be.true;
+        });
+
+        it('should be initially untouched', function() {
+          expect(combobox.classList.contains('ng-untouched')).to.be.true;
+        });
+
+        it('should get touched on input blur', function() {
+          Polymer.Base.fire('blur', {}, {
+            bubbles: true,
+            node: combobox.$.input
+          });
+          expect(combobox.classList.contains('ng-touched')).to.be.true;
+        });
+
+        it('should be invalid', function() {
+          expect(combobox.classList.contains('ng-invalid')).to.be.true;
+        });
+
+        it('should be an invalid form', function() {
+          expect(combobox._form.valid).to.be.false;
+        });
+
+        it('should be a valid form', function() {
+          combobox.value = 'bar';
+          expect(combobox._form.valid).to.be.true;
+        });
+
+        it('should have correct selection value', function() {
+          combobox.value = 'bar';
+          expect(combobox._form.value.selection).to.equal('bar');
+        });
+
+        it('should not reflect invalid state to combobox initially', function() {
+          expect(combobox.invalid).to.be.false;
+        });
+
+        it('should reflect invalid state to combobox when value changed', function(done) {
+          combobox.value = 'bar';
+          combobox.value = '';
+          setTimeout(function() {
+            expect(combobox.invalid).to.be.true;
+            done();
+          }, 0);
+        });
+
+        it('should be valid', function() {
+          combobox.value = 'bar';
+          expect(combobox.classList.contains('ng-valid')).to.be.true;
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
