@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../vaadin-pyramid-chart.html">
+</head>
+
+<body>
+    <vaadin-pyramid-chart id="chartId">
+        <title>Sales pyramid</title>
+        <plot-options>
+            <series>
+                <data-labels enabled="true" format="<b>{point.name}</b> ({point.y:.0f})" color="black" soft-connector="true">
+                </data-labels>
+            </series>
+        </plot-options>
+        <legend enabled="false"></legend>
+        <data-series name="Unique users">
+            <data>
+              ['Website visits', 15654], ['Downloads', 4064], ['Requested price list', 1987], ['Invoice
+          sent', 976], ['Finalized', 846]
+            </data>
+        </data-series>
+    </vaadin-pyramid-chart>
+
+    <script>
+        suite('<data-series>', function () {
+
+            test('Series data in multiple lines parsed', function () {
+                var chartswc = document.querySelector('#chartId');
+                var conf = chartswc._chartConf;
+                expect(conf.series).to.exist;
+                expect(conf.series).not.to.be.empty;
+                expect(conf.series[0].data).to.exist;
+                expect(conf.series[0].data).not.to.be.empty;
+                expect(conf.series[0].data).to.have.length(5);
+                expect(conf.series[0].data[0]).to.be.instanceof(Array);
+                expect(conf.series[0].data[0][0]).to.equal("Website visits");
+                expect(conf.series[0].data[0][1]).to.equal(15654);
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
