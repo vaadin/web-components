@@ -5,9 +5,7 @@ import {VaadinUpload} from '../../directives/vaadin-upload';
 @Component({
   selector: 'test-app',
   template: `
-    <form>
-      <vaadin-upload [(files)]="files" ngControl="upload" required>Text content</vaadin-upload>
-    </form>
+    <vaadin-upload [(files)]="files">Text content</vaadin-upload>
     <vaadin-upload id="structural">
       <div class="drop-label">
         <span *ngIf="visible">Content for drop-label</span>

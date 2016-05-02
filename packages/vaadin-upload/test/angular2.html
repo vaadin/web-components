@@ -88,40 +88,6 @@
         });
       });
 
-      describe('Form integration', function() {
-        it('should be pristine initially', function() {
-          expect(upload.classList.contains('ng-pristine')).to.be.true;
-        });
-
-        it('should be dirty after value is set', function() {
-          testApp.files = testData;
-          testApp.detectChanges();
-          expect(upload.classList.contains('ng-dirty')).to.be.true;
-        });
-
-        it('should be untouched initially', function() {
-          expect(upload.classList.contains('ng-untouched')).to.be.true;
-        });
-
-        it('should be touched after visited', function() {
-          Polymer.Base.fire('blur', {}, {
-            bubbles: true,
-            node: upload.$.addFiles
-          });
-          expect(upload.classList.contains('ng-touched')).to.be.true;
-        });
-
-        it('should be invalid initially when no value is set', function() {
-          expect(upload.classList.contains('ng-invalid')).to.be.true;
-        });
-
-        it('should be valid after value is set', function() {
-          testApp.files = testData;
-          testApp.detectChanges();
-          expect(upload.classList.contains('ng-valid')).to.be.true;
-        });
-      });
-
       describe('Light DOM', function() {
 
         it('should react to light DOM changes (drop-label)', function(done) {
