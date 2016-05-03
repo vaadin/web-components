@@ -1,9 +1,6 @@
-System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang'], function(exports_1) {
-    var __extends = (this && this.__extends) || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
+System.register(['angular2/core'], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13,30 +10,16 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, common_1, lang_1;
-    var VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR, VaadinUpload;
+    var core_1;
+    var VaadinUpload;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
-            },
-            function (common_1_1) {
-                common_1 = common_1_1;
-            },
-            function (lang_1_1) {
-                lang_1 = lang_1_1;
             }],
         execute: function() {
-            VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR = lang_1.CONST_EXPR(new core_1.Provider(common_1.NG_VALUE_ACCESSOR, {
-                useExisting: core_1.forwardRef(function () { return VaadinUpload; }),
-                multi: true
-            }));
-            VaadinUpload = (function (_super) {
-                __extends(VaadinUpload, _super);
-                function VaadinUpload(renderer, el, _injector) {
-                    var _this = this;
-                    _super.call(this, renderer, el);
-                    this._injector = _injector;
+            VaadinUpload = (function () {
+                function VaadinUpload(el) {
                     this._initialValueSet = false;
                     this.filesChange = new core_1.EventEmitter(false);
                     if (!window.Polymer || !Polymer.isInstance(el.nativeElement)) {
@@ -44,23 +27,16 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                         return;
                     }
                     this._element = el.nativeElement;
-                    this._element.$$('paper-button').addEventListener('blur', function () {
-                        _this.onTouched();
-                    });
                     if (!Polymer.Settings.useShadow) {
                         this._element.async(this._observeMutations.bind(this));
                     }
                 }
                 VaadinUpload.prototype.fileschanged = function () {
                     if (!this._initialValueSet) {
-                        // Do not trigger onChange when the initial (empty) value is set
-                        // to keep the field as "pristine".
                         this._initialValueSet = true;
                         return;
                     }
-                    var value = this._element.files;
-                    this.filesChange.emit(value);
-                    this.onChange(value);
+                    this.filesChange.emit(this._element.files);
                 };
                 VaadinUpload.prototype._observeMutations = function () {
                     var _this = this;
@@ -108,15 +84,15 @@ System.register(['angular2/core', 'angular2/common', 'angular2/src/facade/lang']
                 ], VaadinUpload.prototype, "fileschanged", null);
                 VaadinUpload = __decorate([
                     core_1.Directive({
-                        selector: 'vaadin-upload',
-                        providers: [VAADIN_UPLOAD_CONTROL_VALUE_ACCESSOR]
+                        selector: 'vaadin-upload'
                     }), 
-                    __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, core_1.Injector])
+                    __metadata('design:paramtypes', [core_1.ElementRef])
                 ], VaadinUpload);
                 return VaadinUpload;
-            })(common_1.DefaultValueAccessor);
+            }());
             exports_1("VaadinUpload", VaadinUpload);
         }
     }
 });
+
 //# sourceMappingURL=vaadin-upload.js.map

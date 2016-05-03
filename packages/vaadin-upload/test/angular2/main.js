@@ -41,7 +41,7 @@ System.register(['angular2/platform/browser', 'angular2/core', '../../directives
                 TestApp = __decorate([
                     core_1.Component({
                         selector: 'test-app',
-                        template: "\n    <form>\n      <vaadin-upload [(files)]=\"files\" ngControl=\"upload\" required>Text content</vaadin-upload>\n    </form>\n    <vaadin-upload id=\"structural\">\n      <div class=\"drop-label\">\n        <span *ngIf=\"visible\">Content for drop-label</span>\n      </div>\n      <div class=\"file-list\">\n        <span *ngIf=\"visible\">Content for file-list</span>\n      </div>\n    </vaadin-upload>\n    ",
+                        template: "\n    <vaadin-upload [(files)]=\"files\">Text content</vaadin-upload>\n    <vaadin-upload id=\"structural\">\n      <div class=\"drop-label\">\n        <span *ngIf=\"visible\">Content for drop-label</span>\n      </div>\n      <div class=\"file-list\">\n        <span *ngIf=\"visible\">Content for file-list</span>\n      </div>\n    </vaadin-upload>\n    ",
                         directives: [vaadin_upload_1.VaadinUpload]
                     }), 
                     __metadata('design:paramtypes', [core_1.ElementRef, core_1.ChangeDetectorRef])
