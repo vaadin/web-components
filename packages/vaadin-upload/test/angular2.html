@@ -10,30 +10,37 @@
 
   <!-- IE required polyfills, in this exact order -->
   <script src="../node_modules/es6-shim/es6-shim.min.js"></script>
-  <script src="../node_modules/systemjs/dist/system-polyfills.js"></script>
-  <script src="../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
-  <script src="../node_modules/angular2/bundles/angular2-polyfills.js"></script>
   <script src="../node_modules/systemjs/dist/system.src.js"></script>
   <script src="../node_modules/rxjs/bundles/Rx.js"></script>
-  <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+  <script src="../node_modules/reflect-metadata/Reflect.js"></script>
+  <script src="../node_modules/zone.js/dist/zone.js"></script>
 
   <!-- 2. Configure SystemJS -->
   <script>
     document.addEventListener('WebComponentsReady', function() {
+      var angularPackages = ['core', 'common', 'compiler', 'platform-browser', 'platform-browser-dynamic'];
+      var packages = {};
+
+      angularPackages.forEach(function(p) {
+        packages['@angular/' + p] = {main: 'index.js'};
+      });
+
+      packages.app = {
+        format: 'register',
+        defaultExtension: 'js'
+      };
+
+      packages['vaadin-upload'] = {
+        defaultExtension: 'js',
+        main: 'vaadin-upload.js'
+      };
+
       System.config({
         map: {
-          'vaadin-upload': '../directives'
+          'vaadin-upload': '../directives',
+          '@angular': '../node_modules/@angular'
         },
-        packages: {
-          app: {
-            format: 'register',
-            defaultExtension: 'js'
-          },
-          'vaadin-upload': {
-            defaultExtension: 'js',
-            main: 'vaadin-upload.js'
-          }
-        }
+        packages: packages
       });
 
       System.import('angular2/main.js').then(function() {

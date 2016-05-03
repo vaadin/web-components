@@ -1,5 +1,5 @@
-import {bootstrap}    from 'angular2/platform/browser';
-import {Component, Output, ElementRef, ChangeDetectorRef} from 'angular2/core';
+import {bootstrap}    from '@angular/platform-browser-dynamic';
+import {Component, Output, ElementRef, ChangeDetectorRef} from '@angular/core';
 import {VaadinUpload} from '../../directives/vaadin-upload';
 
 @Component({
