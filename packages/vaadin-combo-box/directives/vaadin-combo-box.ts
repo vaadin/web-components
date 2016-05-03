@@ -12,30 +12,40 @@ import {
   Renderer,
   DoCheck,
   IterableDiffers
-} from 'angular2/core';
-import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
-import { CONST_EXPR } from 'angular2/src/facade/lang';
+} from '@angular/core';
+import { NgControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/common';
 declare var Polymer;
 
-const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
-    NG_VALUE_ACCESSOR, {
-      useExisting: forwardRef(() => VaadinComboBox),
-      multi: true
-    }));
+const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = new Provider(
+  NG_VALUE_ACCESSOR, {
+    useExisting: forwardRef(() => VaadinComboBox),
+    multi: true
+  });
 
 @Directive({
   selector: 'vaadin-combo-box',
   providers: [VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR]
 })
-export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCheck {
+export class VaadinComboBox implements ControlValueAccessor, OnInit, DoCheck {
 
   @Input()
   items: any[];
 
   private _element;
+  private _renderer;
   private _control;
   private _differ;
   private _initialValueSet = false;
+
+  onChange = (_: any) => { };
+  onTouched = () => { };
+
+  writeValue(value: any): void {
+    this._renderer.setElementProperty(this._element, 'value', value);
+  }
+
+  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 
   ngOnInit() {
     this._control = this._injector.get(NgControl, null);
@@ -73,14 +83,13 @@ export class VaadinComboBox extends DefaultValueAccessor implements OnInit, DoCh
     }
   }
 
-  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector, differs: IterableDiffers) {
-    super(renderer, el);
-
-    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
+  constructor(renderer: Renderer, el: ElementRef, private _injector: Injector, differs: IterableDiffers) {
+    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-combo-box has not been imported yet, please remember to import vaadin-combo-box.html in your main HTML page.");
       return;
     }
 
+    this._renderer = renderer;
     this._element = el.nativeElement;
     this._differ = differs.find([]).create(null);
 
