@@ -1,4 +1,4 @@
-System.register(['angular2/platform/browser', 'angular2/core', '../../directives/vaadin-upload'], function(exports_1, context_1) {
+System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../directives/vaadin-upload'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,12 +10,12 @@ System.register(['angular2/platform/browser', 'angular2/core', '../../directives
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var browser_1, core_1, vaadin_upload_1;
+    var platform_browser_dynamic_1, core_1, vaadin_upload_1;
     var TestApp;
     return {
         setters:[
-            function (browser_1_1) {
-                browser_1 = browser_1_1;
+            function (platform_browser_dynamic_1_1) {
+                platform_browser_dynamic_1 = platform_browser_dynamic_1_1;
             },
             function (core_1_1) {
                 core_1 = core_1_1;
@@ -50,7 +50,7 @@ System.register(['angular2/platform/browser', 'angular2/core', '../../directives
             }());
             exports_1("TestApp", TestApp);
             document.body.addEventListener('bootstrap', function () {
-                browser_1.bootstrap(TestApp);
+                platform_browser_dynamic_1.bootstrap(TestApp);
             });
         }
     }
