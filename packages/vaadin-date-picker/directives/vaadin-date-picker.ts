@@ -1,34 +1,46 @@
 import {
-  Injector,
-  OnInit,
-  Directive,
-  ElementRef,
-  Output,
-  HostListener,
-  EventEmitter,
-  Provider,
-  forwardRef,
-  Renderer
-} from 'angular2/core';
-import { NgControl, NG_VALUE_ACCESSOR, DefaultValueAccessor } from 'angular2/common';
-import { CONST_EXPR } from 'angular2/src/facade/lang';
+Injector,
+OnInit,
+Directive,
+ElementRef,
+Output,
+HostListener,
+EventEmitter,
+Provider,
+forwardRef,
+Renderer
+} from '@angular/core';
+import { NgControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/common';
+
 declare var Polymer;
 
-const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = CONST_EXPR(new Provider(
-    NG_VALUE_ACCESSOR, {
-      useExisting: forwardRef(() => VaadinDatePicker),
-      multi: true
-    }));
+const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = new Provider(
+  NG_VALUE_ACCESSOR, {
+    useExisting: forwardRef(() => VaadinDatePicker),
+    multi: true
+  });
 
 @Directive({
   selector: 'vaadin-date-picker',
   providers: [VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR]
 })
-export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
+export class VaadinDatePicker implements ControlValueAccessor, OnInit {
 
   private _element;
+  private _renderer;
   private _control;
   private _initialValueSet = false;
+
+  onChange = (_: any) => { };
+  onTouched = () => { };
+
+  writeValue(value: any): void {
+    this._renderer.setElementProperty(this._element, 'value', value);
+  }
+
+  registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+
 
   ngOnInit() {
     this._control = this._injector.get(NgControl, null);
@@ -56,14 +68,13 @@ export class VaadinDatePicker extends DefaultValueAccessor implements OnInit {
     }
   }
 
-  constructor(renderer: Renderer, el: ElementRef,  private _injector: Injector) {
-    super(renderer, el);
-
-    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
+  constructor(renderer: Renderer, el: ElementRef, private _injector: Injector) {
+    if (!(<any>window).Polymer ||  !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-date-picker has not been imported yet, please remember to import vaadin-date-picker.html in your main HTML page.");
       return;
     }
 
+    this._renderer = renderer;
     this._element = el.nativeElement;
     this._element.$$('paper-input-container').addEventListener('blur', () => {
       if (!this._element.opened && !this._element._opened) {
