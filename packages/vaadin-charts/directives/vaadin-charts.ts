@@ -7,7 +7,7 @@ DoCheck,
 IterableDiffers,
 NgZone
 } from '@angular/core';
-declare var Polymer;
+declare var Polymer: any;
 
 @Directive({
   selector: `
@@ -41,7 +41,7 @@ declare var Polymer;
 })
 export class VaadinCharts implements OnInit {
 
-  private _element;
+  private _element: any;
 
   constructor(private _el: ElementRef, private zone: NgZone) {
     this._element = this._el.nativeElement;
@@ -58,7 +58,7 @@ export class VaadinCharts implements OnInit {
   fixLightDom() {
     // Move all elements targeted to light dom to the actual light dom with Polymer apis
     const misplaced = this._element.querySelectorAll("*:not(.style-scope)");
-    [].forEach.call(misplaced, (e) => {
+    [].forEach.call(misplaced, (e: any) => {
       if (e.parentElement === this._element) {
         Polymer.dom(this._element).appendChild(e);
       }
@@ -80,8 +80,8 @@ export class VaadinCharts implements OnInit {
 })
 export class DataSeries implements OnInit, DoCheck {
 
-  private _element;
-  private _differ;
+  private _element: any;
+  private _differ: any;
 
   @Input()
   data: any;
