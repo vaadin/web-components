@@ -40,10 +40,9 @@
     "directives": [
       "directives/vaadin-charts.js",
       "directives/vaadin-charts.js.map",
-      "directives/vaadin-charts.ts",
-      "directives/tsconfig.json"
+      "directives/vaadin-charts.ts"
     ],
     "test": "test/**/*"
   },
-  "version": "3.1.0-beta1"
+  "version": "3.1.0-beta2"
 }
