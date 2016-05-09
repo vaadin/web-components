@@ -5,15 +5,16 @@ import {
   HostListener,
   EventEmitter
 } from '@angular/core';
-declare var Polymer;
+
+const Polymer = (<any>window).Polymer;
 
 @Directive({
   selector: 'vaadin-upload'
 })
 export class VaadinUpload {
 
-  private _element;
-  private _initialValueSet = false;
+  private _element: any;
+  private _initialValueSet: boolean = false;
 
   @Output() filesChange: EventEmitter<any> = new EventEmitter(false);
   @HostListener('files-changed')
@@ -27,7 +28,7 @@ export class VaadinUpload {
   }
 
   constructor(el: ElementRef) {
-    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
+    if (!Polymer || !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-upload has not been imported yet, please remember to import vaadin-upload.html in your main HTML page.");
       return;
     }
@@ -44,7 +45,7 @@ export class VaadinUpload {
     const observerConfig = { childList: true, subtree: true };
 
     // Move all the misplaced nodes to light dom
-    [].slice.call(this._element.childNodes, 0).forEach((child) => {
+    [].slice.call(this._element.childNodes, 0).forEach((child: HTMLElement) => {
       if (this._isLightDomChild(child)) {
         lightDom.appendChild(child);
       }
@@ -55,13 +56,13 @@ export class VaadinUpload {
       observer.disconnect();
 
       mutations.forEach((mutation) => {
-        [].forEach.call(mutation.addedNodes, (added) => {
+        [].forEach.call(mutation.addedNodes, (added: HTMLElement) => {
           if (this._isLightDomChild(added) && added.parentElement === this._element) {
             lightDom.appendChild(added);
           }
         });
 
-        [].forEach.call(mutation.removedNodes, (removed) => {
+        [].forEach.call(mutation.removedNodes, (removed: HTMLElement) => {
           if (lightDom.children.indexOf(removed) > -1) {
             lightDom.removeChild(removed);
           }
@@ -76,7 +77,7 @@ export class VaadinUpload {
     observer.observe(this._element, observerConfig);
   }
 
-  _isLightDomChild(node) {
+  _isLightDomChild(node: HTMLElement) {
     return !node.tagName || !node.classList.contains('vaadin-upload');
   }
 }
