@@ -4,9 +4,16 @@
 <head>
   <meta charset="utf-8">
   <script src="../../web-component-tester/browser.js"></script>
-
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../vaadin-date-picker.html">
   <script src="common.js"></script>
+  <script>
+    HTMLImports.whenReady(function() {
+      Polymer({
+        is: 'vaadin-date-picker-wrapper'
+      });
+    });
+  </script>
 </head>
 
 <body>
@@ -16,6 +23,18 @@
       <vaadin-date-picker style="position: fixed;"></vaadin-date-picker>
     </template>
   </test-fixture>
+
+  <test-fixture id="datepicker-wrapped">
+    <template>
+      <vaadin-date-picker-wrapper></vaadin-date-picker-wrapper>
+    </template>
+  </test-fixture>
+
+  <dom-module id="vaadin-date-picker-wrapper">
+    <template>
+      <vaadin-date-picker id="datepicker" label="foo"></vaadin-date-picker>
+    </template>
+  </dom-module>
 
   <script>
     describe('Dropdown', function() {
@@ -31,12 +50,9 @@
         datepicker.async(done, 1);
       });
 
-      it('should not close on calendar icon mousedown', function(done) {
+      it('should not close on calendar icon down', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
-          Polymer.Base.fire('mousedown', {}, {
-            bubbles: true,
-            node: datepicker.$.calendar
-          });
+          MockInteractions.down(datepicker.$.calendar);
           expect(datepicker.$.dropdown.opened).to.be.true;
 
           done();
@@ -118,6 +134,29 @@
         });
 
       });
+    });
+
+    describe('Dropdown-wrapped', function() {
+      var datepicker;
+
+      beforeEach(function() {
+        datepicker = fixture('datepicker-wrapped').$.datepicker;
+      });
+
+      afterEach(function(done) {
+        datepicker.async(done, 1);
+      });
+
+      it('should not close on calendar icon down', function(done) {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          MockInteractions.down(datepicker.$.calendar);
+          expect(datepicker.$.dropdown.opened).to.be.true;
+
+          done();
+        });
+        datepicker.open();
+      });
+
     });
   </script>
 
