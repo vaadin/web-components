@@ -504,7 +504,8 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _preventCancelOnComponentAccess: function(e) {
-        if (/tap|mousedown|touchstart/.test(e.detail.type) && this.contains(e.detail.target)) {
+        var event = Polymer.dom(e.detail);
+        if (/tap|mousedown|touchstart/.test(e.detail.type) && event.path.indexOf(this) > -1) {
           e.preventDefault();
         }
       },
