@@ -14,7 +14,7 @@
     "vaadin-icons"
   ],
   "description": "",
-  "main": "",
+  "main": "vaadin-icons.html",
   "moduleType": [],
   "license": "",
   "ignore": [
