@@ -14,7 +14,8 @@ import {
   IterableDiffers
 } from '@angular/core';
 import { NgControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/common';
-declare var Polymer;
+
+const Polymer = (<any>window).Polymer;
 
 const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = new Provider(
   NG_VALUE_ACCESSOR, {
@@ -31,10 +32,10 @@ export class VaadinComboBox implements ControlValueAccessor, OnInit, DoCheck {
   @Input()
   items: any[];
 
-  private _element;
-  private _renderer;
-  private _control;
-  private _differ;
+  private _element: any;
+  private _renderer: any;
+  private _control: any;
+  private _differ: any;
   private _initialValueSet = false;
 
   onChange = (_: any) => { };
@@ -63,7 +64,7 @@ export class VaadinComboBox implements ControlValueAccessor, OnInit, DoCheck {
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter(false);
   @HostListener('value-changed', ['$event.detail.value'])
-  valuechanged(value) {
+  valuechanged(value: any) {
     this.valueChange.emit(value);
 
     if (this._initialValueSet) {
@@ -84,7 +85,7 @@ export class VaadinComboBox implements ControlValueAccessor, OnInit, DoCheck {
   }
 
   constructor(renderer: Renderer, el: ElementRef, private _injector: Injector, differs: IterableDiffers) {
-    if (!(<any>window).Polymer || !Polymer.isInstance(el.nativeElement)) {
+    if (!Polymer || !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-combo-box has not been imported yet, please remember to import vaadin-combo-box.html in your main HTML page.");
       return;
     }
