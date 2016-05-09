@@ -12,7 +12,7 @@ Renderer
 } from '@angular/core';
 import { NgControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/common';
 
-declare var Polymer;
+const Polymer = (<any>window).Polymer;
 
 const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = new Provider(
   NG_VALUE_ACCESSOR, {
@@ -26,9 +26,9 @@ const VAADIN_DATE_PICKER_CONTROL_VALUE_ACCESSOR = new Provider(
 })
 export class VaadinDatePicker implements ControlValueAccessor, OnInit {
 
-  private _element;
-  private _renderer;
-  private _control;
+  private _element: any;
+  private _renderer: any;
+  private _control: any;
   private _initialValueSet = false;
 
   onChange = (_: any) => { };
@@ -48,7 +48,7 @@ export class VaadinDatePicker implements ControlValueAccessor, OnInit {
 
   @Output() valueChange: EventEmitter<any> = new EventEmitter(false);
   @HostListener('value-changed', ['$event.detail.value'])
-  valuechanged(value) {
+  valuechanged(value: any) {
     this.valueChange.emit(value);
 
     if (this._initialValueSet) {
@@ -69,7 +69,7 @@ export class VaadinDatePicker implements ControlValueAccessor, OnInit {
   }
 
   constructor(renderer: Renderer, el: ElementRef, private _injector: Injector) {
-    if (!(<any>window).Polymer ||  !Polymer.isInstance(el.nativeElement)) {
+    if (!Polymer ||  !Polymer.isInstance(el.nativeElement)) {
       console.error("vaadin-date-picker has not been imported yet, please remember to import vaadin-date-picker.html in your main HTML page.");
       return;
     }
