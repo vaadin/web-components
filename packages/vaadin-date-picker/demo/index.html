@@ -144,8 +144,8 @@
     <demo-snippet>
       <template>
         <vaadin-date-picker
+          id="custom-validation"
           auto-validate
-          validator="this-year-validator"
           label="Only this year is accepted">
         </vaadin-date-picker>
 
@@ -161,6 +161,7 @@
                 }
               }
             });
+            document.querySelector('#custom-validation').validator = 'this-year-validator';
           });
         </script>
     </demo-snippet>
