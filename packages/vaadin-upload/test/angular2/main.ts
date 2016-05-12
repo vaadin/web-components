@@ -1,6 +1,7 @@
 import {bootstrap}    from '@angular/platform-browser-dynamic';
-import {Component, Output, ElementRef, ChangeDetectorRef} from '@angular/core';
-import {VaadinUpload} from '../../directives/vaadin-upload';
+import {Component, Output, ElementRef, ChangeDetectorRef, enableProdMode} from '@angular/core';
+import {PolymerElement} from '@vaadin/angular2-polymer';
+enableProdMode();
 
 @Component({
   selector: 'test-app',
@@ -15,7 +16,7 @@ import {VaadinUpload} from '../../directives/vaadin-upload';
       </div>
     </vaadin-upload>
     `,
-  directives: [VaadinUpload]
+  directives: [PolymerElement('vaadin-upload')]
 })
 export class TestApp {
 

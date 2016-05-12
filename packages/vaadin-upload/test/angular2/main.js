@@ -1,16 +1,16 @@
-System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../directives/vaadin-upload'], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(['@angular/platform-browser-dynamic', '@angular/core', '@vaadin/angular2-polymer'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
+        switch (arguments.length) {
+            case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+            case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+            case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
+        }
     };
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var platform_browser_dynamic_1, core_1, vaadin_upload_1;
+    var platform_browser_dynamic_1, core_1, angular2_polymer_1;
     var TestApp;
     return {
         setters:[
@@ -20,10 +20,11 @@ System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../di
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (vaadin_upload_1_1) {
-                vaadin_upload_1 = vaadin_upload_1_1;
+            function (angular2_polymer_1_1) {
+                angular2_polymer_1 = angular2_polymer_1_1;
             }],
         execute: function() {
+            core_1.enableProdMode();
             TestApp = (function () {
                 function TestApp(e, ref) {
                     this.visible = false;
@@ -42,12 +43,12 @@ System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../di
                     core_1.Component({
                         selector: 'test-app',
                         template: "\n    <vaadin-upload [(files)]=\"files\">Text content</vaadin-upload>\n    <vaadin-upload id=\"structural\">\n      <div class=\"drop-label\">\n        <span *ngIf=\"visible\">Content for drop-label</span>\n      </div>\n      <div class=\"file-list\">\n        <span *ngIf=\"visible\">Content for file-list</span>\n      </div>\n    </vaadin-upload>\n    ",
-                        directives: [vaadin_upload_1.VaadinUpload]
+                        directives: [angular2_polymer_1.PolymerElement('vaadin-upload')]
                     }), 
                     __metadata('design:paramtypes', [core_1.ElementRef, core_1.ChangeDetectorRef])
                 ], TestApp);
                 return TestApp;
-            }());
+            })();
             exports_1("TestApp", TestApp);
             document.body.addEventListener('bootstrap', function () {
                 platform_browser_dynamic_1.bootstrap(TestApp);
@@ -55,5 +56,4 @@ System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../di
         }
     }
 });
-
 //# sourceMappingURL=main.js.map
