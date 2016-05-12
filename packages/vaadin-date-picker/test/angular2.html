@@ -30,21 +30,16 @@
         defaultExtension: 'js'
       };
 
-      packages['vaadin-date-picker'] = {
-        defaultExtension: 'js',
-        main: 'vaadin-date-picker.js'
+      packages['@vaadin/angular2-polymer'] = {
+        main: 'index.js'
       };
 
       System.config({
         map: {
-          'vaadin-date-picker': '../directives',
+          '@vaadin': '../node_modules/@vaadin',
           '@angular': '../node_modules/@angular'
         },
         packages: packages
-      });
-
-      System.import('angular2/main.js').then(function() {
-        window._testAppImported = true;
       });
     });
   </script>
@@ -63,11 +58,12 @@
       var testApp;
       var testAppElement;
 
-      before(function(done) {
-        function checkImport() {
-          window._testAppImported ? done() : setTimeout(checkImport, 10);
-        }
-        checkImport();
+      before(function() {
+        // bootstrapping the app takes some time on the slow-ass nodes they have
+        // at SauceLabs, so need to pump up the timeout.
+        this.timeout(60000);
+
+        return System.import('angular2/main.js');
       });
 
       beforeEach(function(done) {
@@ -110,18 +106,57 @@
           datepicker = testAppElement.querySelector('form vaadin-date-picker');
         });
 
-        it('should be initially pristine', function() {
-          expect(datepicker.classList.contains('ng-pristine')).to.be.true;
+        describe('initial state', function() {
+          it('should be initially pristine', function() {
+            expect(datepicker.classList.contains('ng-pristine')).to.be.true;
+          });
+
+          it('should be initially untouched', function() {
+            expect(datepicker.classList.contains('ng-untouched')).to.be.true;
+          });
+
+          it('should be invalid', function() {
+            expect(datepicker.classList.contains('ng-invalid')).to.be.true;
+          });
+
+          it('should be an invalid form', function() {
+            expect(datepicker._form.valid).to.be.false;
+          });
+
+          it('should not reflect invalid state to datepicker initially', function() {
+            expect(datepicker.invalid).to.be.false;
+          });
         });
 
-        it('should be dirty on value change', function() {
-          datepicker.value = '2001-01-01';
-          testApp.detectChanges();
-          expect(datepicker.classList.contains('ng-dirty')).to.be.true;
-        });
+        describe('after value has changed', function() {
+          beforeEach(function() {
+            datepicker.value = '2001-01-01';
+          });
 
-        it('should be initially untouched', function() {
-          expect(datepicker.classList.contains('ng-untouched')).to.be.true;
+          it('should be dirty on value change', function() {
+            expect(datepicker.classList.contains('ng-dirty')).to.be.true;
+          });
+
+          it('should be a valid form', function() {
+            expect(datepicker._form.valid).to.be.true;
+          });
+
+          it('should have correct date value', function() {
+            expect(datepicker._form.value.date).to.equal('2001-01-01');
+          });
+
+          it('should be valid', function() {
+            expect(datepicker.classList.contains('ng-valid')).to.be.true;
+          });
+
+          it('should reflect invalid state to datepicker when value changed', function(done) {
+            datepicker.value = '';
+
+            datepicker.async(function() {
+              expect(datepicker.invalid).to.be.true;
+              done();
+            }, 1);
+          });
         });
 
         it('should get touched on input blur', function() {
@@ -131,45 +166,7 @@
           });
           expect(datepicker.classList.contains('ng-touched')).to.be.true;
         });
-
-        it('should be invalid', function() {
-          expect(datepicker.classList.contains('ng-invalid')).to.be.true;
-        });
-
-        it('should be an invalid form', function() {
-          expect(datepicker._form.valid).to.be.false;
-        });
-
-        it('should be a valid form', function() {
-          datepicker.value = '2001-01-01';
-          expect(datepicker._form.valid).to.be.true;
-        });
-
-        it('should have correct date value', function() {
-          datepicker.value = '2001-01-01';
-          expect(datepicker._form.value.date).to.equal('2001-01-01');
-        });
-
-        it('should not reflect invalid state to datepicker initially', function() {
-          expect(datepicker.invalid).to.be.false;
-        });
-
-        it('should reflect invalid state to datepicker when value changed', function(done) {
-          datepicker.value = '2001-01-01';
-          datepicker.value = '';
-          setTimeout(function() {
-            expect(datepicker.invalid).to.be.true;
-            done();
-          }, 0);
-        });
-
-        it('should be valid', function() {
-          datepicker.value = '2001-01-01';
-          expect(datepicker.classList.contains('ng-valid')).to.be.true;
-        });
-
       });
-
     });
   </script>
 
