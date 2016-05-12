@@ -30,14 +30,13 @@
         defaultExtension: 'js'
       };
 
-      packages['vaadin-combo-box'] = {
-        defaultExtension: 'js',
-        main: 'vaadin-combo-box.js'
+      packages['@vaadin/angular2-polymer'] = {
+        main: 'index.js'
       };
 
       System.config({
         map: {
-          'vaadin-combo-box': '../directives',
+          '@vaadin': '../node_modules/@vaadin',
           '@angular': '../node_modules/@angular'
         },
         packages: packages
@@ -107,18 +106,57 @@
           combobox = testAppElement.querySelector('form vaadin-combo-box');
         });
 
-        it('should be initially pristine', function() {
-          expect(combobox.classList.contains('ng-pristine')).to.be.true;
+        describe('initial state', function() {
+          it('should be initially pristine', function() {
+            expect(combobox.classList.contains('ng-pristine')).to.be.true;
+          });
+
+          it('should be initially untouched', function() {
+            expect(combobox.classList.contains('ng-untouched')).to.be.true;
+          });
+
+          it('should be invalid', function() {
+            expect(combobox.classList.contains('ng-invalid')).to.be.true;
+          });
+
+          it('should be an invalid form', function() {
+            expect(combobox._form.valid).to.be.false;
+          });
+
+          it('should not reflect invalid state to combobox initially', function() {
+            expect(combobox.invalid).to.be.false;
+          });
         });
 
-        it('should be dirty on value change', function() {
-          combobox.value = 'bar';
-          testApp.detectChanges();
-          expect(combobox.classList.contains('ng-dirty')).to.be.true;
-        });
+        describe('after a value change', function() {
+          beforeEach(function() {
+            combobox.value = 'bar';
+          });
 
-        it('should be initially untouched', function() {
-          expect(combobox.classList.contains('ng-untouched')).to.be.true;
+          it('should be dirty on value change', function() {
+            expect(combobox.classList.contains('ng-dirty')).to.be.true;
+          });
+
+          it('should be valid', function() {
+            expect(combobox.classList.contains('ng-valid')).to.be.true;
+          });
+
+          it('should be a valid form', function() {
+            expect(combobox._form.valid).to.be.true;
+          });
+
+          it('should have correct selection value', function() {
+            expect(combobox._form.value.selection).to.equal('bar');
+          });
+
+          it('should reflect invalid state to combobox when value changed', function(done) {
+            combobox.value = '';
+
+            combobox.async(function() {
+              expect(combobox.invalid).to.be.true;
+              done();
+            }, 1);
+          });
         });
 
         it('should get touched on input blur', function() {
@@ -128,45 +166,7 @@
           });
           expect(combobox.classList.contains('ng-touched')).to.be.true;
         });
-
-        it('should be invalid', function() {
-          expect(combobox.classList.contains('ng-invalid')).to.be.true;
-        });
-
-        it('should be an invalid form', function() {
-          expect(combobox._form.valid).to.be.false;
-        });
-
-        it('should be a valid form', function() {
-          combobox.value = 'bar';
-          expect(combobox._form.valid).to.be.true;
-        });
-
-        it('should have correct selection value', function() {
-          combobox.value = 'bar';
-          expect(combobox._form.value.selection).to.equal('bar');
-        });
-
-        it('should not reflect invalid state to combobox initially', function() {
-          expect(combobox.invalid).to.be.false;
-        });
-
-        it('should reflect invalid state to combobox when value changed', function(done) {
-          combobox.value = 'bar';
-          combobox.value = '';
-          setTimeout(function() {
-            expect(combobox.invalid).to.be.true;
-            done();
-          }, 0);
-        });
-
-        it('should be valid', function() {
-          combobox.value = 'bar';
-          expect(combobox.classList.contains('ng-valid')).to.be.true;
-        });
-
       });
-
     });
   </script>
 

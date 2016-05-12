@@ -1,6 +1,7 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component, ElementRef, ChangeDetectorRef, enableProdMode} from '@angular/core';
-import {VaadinComboBox} from '../../directives/vaadin-combo-box';
+import {PolymerElement} from '@vaadin/angular2-polymer';
+import {enableProdMode} from '@angular/core';
 enableProdMode();
 
 @Component({
@@ -9,10 +10,10 @@ enableProdMode();
     <vaadin-combo-box [(value)]="selection" required class="bound"></vaadin-combo-box>
 
     <form #testForm="ngForm">
-      <vaadin-combo-box [items]="items" ngControl="selection" [value]="selection" required [_form]="testForm"></vaadin-combo-box>
+      <vaadin-combo-box [items]="items" ngControl="selection" required [_form]="testForm"></vaadin-combo-box>
     </form>
     `,
-  directives: [VaadinComboBox]
+  directives: [PolymerElement('vaadin-combo-box')]
 })
 export class TestApp {
 
