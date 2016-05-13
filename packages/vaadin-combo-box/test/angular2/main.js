@@ -1,6 +1,4 @@
-System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../directives/vaadin-combo-box'], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../directives/vaadin-combo-box'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,6 +22,7 @@ System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../di
                 vaadin_combo_box_1 = vaadin_combo_box_1_1;
             }],
         execute: function() {
+            core_1.enableProdMode();
             TestApp = (function () {
                 function TestApp(e, ref) {
                     this.items = ['foo', 'bar', 'baz'];
@@ -47,7 +46,7 @@ System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../di
                     __metadata('design:paramtypes', [core_1.ElementRef, core_1.ChangeDetectorRef])
                 ], TestApp);
                 return TestApp;
-            }());
+            })();
             exports_1("TestApp", TestApp);
             document.body.addEventListener('bootstrap', function () {
                 platform_browser_dynamic_1.bootstrap(TestApp);
@@ -55,5 +54,4 @@ System.register(['@angular/platform-browser-dynamic', '@angular/core', '../../di
         }
     }
 });
-
 //# sourceMappingURL=main.js.map

@@ -1,6 +1,7 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
-import {Component, ElementRef, ChangeDetectorRef} from '@angular/core';
+import {Component, ElementRef, ChangeDetectorRef, enableProdMode} from '@angular/core';
 import {VaadinComboBox} from '../../directives/vaadin-combo-box';
+enableProdMode();
 
 @Component({
   selector: 'test-app',
