@@ -1,6 +1,8 @@
 import {bootstrap}    from '@angular/platform-browser-dynamic';
 import {Component, Output, ElementRef, ChangeDetectorRef} from '@angular/core';
-import {VaadinDatePicker} from '../../directives/vaadin-date-picker';
+import {PolymerElement} from '@vaadin/angular2-polymer';
+import {enableProdMode} from '@angular/core';
+enableProdMode();
 
 @Component({
   selector: 'test-app',
@@ -8,10 +10,10 @@ import {VaadinDatePicker} from '../../directives/vaadin-date-picker';
     <vaadin-date-picker [(value)]="date" required class="bound"></vaadin-date-picker>
 
     <form #testForm="ngForm">
-      <vaadin-date-picker ngControl="date" [value]="date" required [_form]="testForm"></vaadin-date-picker>
+      <vaadin-date-picker ngControl="date" required [_form]="testForm"></vaadin-date-picker>
     </form>
     `,
-  directives: [VaadinDatePicker]
+  directives: [PolymerElement('vaadin-date-picker')]
 })
 export class TestApp {
 
