@@ -30,21 +30,16 @@
         defaultExtension: 'js'
       };
 
-      packages['vaadin-upload'] = {
-        defaultExtension: 'js',
-        main: 'vaadin-upload.js'
+      packages['@vaadin/angular2-polymer'] = {
+        main: 'index.js'
       };
 
       System.config({
         map: {
-          'vaadin-upload': '../directives',
+          '@vaadin': '../node_modules/@vaadin',
           '@angular': '../node_modules/@angular'
         },
         packages: packages
-      });
-
-      System.import('angular2/main.js').then(function() {
-        window._testAppImported = true;
       });
     });
   </script>
@@ -68,11 +63,12 @@
         {name: 'Hamlet.pdf', progress: 100, complete: true}
       ];
 
-      before(function(done) {
-        function checkImport() {
-          window._testAppImported ? done() : setTimeout(checkImport, 10);
-        }
-        checkImport();
+      before(function() {
+        // bootstrapping the app takes some time on the slow-ass nodes they have
+        // at SauceLabs, so need to pump up the timeout.
+        this.timeout(60000);
+
+        return System.import('angular2/main.js');
       });
 
       beforeEach(function(done) {
