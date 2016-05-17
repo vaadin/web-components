@@ -68,6 +68,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              **/
             chart: {
                 type: Object,
+                readOnly: true,
+                notify: true,
                 value: function () {
                     return {};
                 }
@@ -148,7 +150,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._chartConf = {};
             this._initConfiguration();
             this.chart.destroy();
-            this.chart = {};
+            this._setChart({});
             this._reloadSeries();
             this._initChart();
         },
@@ -201,7 +203,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 this._initLocalDom();
                 this._initConfiguration();
                 Polymer.dom(this).querySelectorAll("data-series").forEach(function (ds) {
-                    if(ds._initialize) {
+                    if (ds._initialize) {
                         ds._initialize();
                     }
                 });
@@ -217,9 +219,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          */
         _initChart: function () {
             if (this.timeline) {
-                this.chart = new Highcharts.StockChart(this._chartConf);
+                this._setChart(new Highcharts.StockChart(this._chartConf));
             } else {
-                this.chart = new Highcharts.Chart(this._chartConf);
+                this._setChart(new Highcharts.Chart(this._chartConf));
             }
             this.fire("chart-loaded");
         },
