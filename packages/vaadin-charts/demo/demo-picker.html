@@ -32,6 +32,63 @@
             overflow: scroll;
             background-color: white;
         }
+
+        :host .v-slot-links {
+            text-align: center;
+            width: 100%;
+            font: 300 16px/1.55 "Open Sans", sans-serif;
+        }
+
+        :host .v-link {
+            cursor: pointer;
+            color: #59ACFF;
+            text-decoration: none;
+            font-weight: inherit;
+            -webkit-transition: color 140ms;
+            -moz-transition: color 140ms;
+            transition: color 140ms;
+        }
+
+        :host .v-link:hover {
+            color: #8cc6ff;
+        }
+
+        :host .v-link.v-disabled {
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
+
+        :host .v-link a {
+            cursor: inherit;
+            color: inherit;
+            text-decoration: inherit;
+            -webkit-transition: inherit;
+            -moz-transition: inherit;
+            transition: inherit;
+        }
+
+        :host .v-link .v-icon {
+            cursor: inherit;
+        }
+
+        :host .v-slot-links {
+            text-align: center;
+        }
+
+        :host .links {
+            font-size: 12px;
+            font-weight: 400;
+            margin: 0 auto;
+        }
+
+        :host .links > .v-spacing {
+            text-align: center;
+            width: 1.6em;
+        }
+
+        :host .links > .v-spacing:before {
+            content: "\00b7";
+        }
     </style>
 
     <template>
@@ -39,7 +96,23 @@
             <div class="sidebar" style="position:absolute; top:0px; width:250px; height:100%; float:left;">
                 <div class="h3 v-label-h3 logo">Vaadin Charts</div>
                 <div class="v-label-tiny" style="width:100%; text-align:center; color:white">Web Components</div>
-                <div style="height:30px"></div>
+                <div style="height:10px"></div>
+                <div class="v-slot v-slot-links">
+                    <div class="v-horizontallayout v-layout v-horizontal v-widget links v-horizontallayout-links">
+                        <div class="v-slot">
+                            <div class="v-link v-widget"><a href="https://vaadin.com/charts"><span>Home page</span></a></div>
+                        </div>
+                        <div class="v-spacing"></div>
+                        <div class="v-slot">
+                            <div class="v-link v-widget"><a href="http://demo.vaadin.com/vaadin-charts-api"><span>API</span></a></div>
+                        </div>
+                        <div class="v-spacing"></div>
+                        <div class="v-slot">
+                            <div class="v-link v-widget"><a href="https://vaadin.com/docs/-/part/charts/webcomponents-api/charts-getting-started.html"><span>Manual</span></a></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height:10px"></div>
                 <menu-tree id="menu" categories="[[categories]]" selected-item="{{selected}}"></menu-tree>
             </div>
             <div id="main-content">
