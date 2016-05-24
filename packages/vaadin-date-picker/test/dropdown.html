@@ -94,7 +94,7 @@
             var fullscreen = viewportWidth < 520;
 
             expect(isFullscreen(datepicker)).to.equal(fullscreen);
-            expect(dropdown.verticalOffset).to.equal(fullscreen ? 0 : datepicker.clientHeight - 10);
+            expect(dropdown.style.marginTop).to.equal((fullscreen ? 0 : datepicker.clientHeight + 2) + 'px');
             expect(dropdown.positionTarget).to.equal(fullscreen ? document.documentElement : datepicker);
             done();
           });
