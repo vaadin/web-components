@@ -107,11 +107,14 @@
             expect(datepicker._opened).to.be.true;
           });
 
-          it('should close overlay on esc', function() {
+          it('should close overlay on esc', function(done) {
             datepicker.open();
             target = datepicker.$.overlay;
-            esc();
-            expect(datepicker._opened).to.be.false;
+            datepicker.async(function() {
+              esc();
+              expect(datepicker._opened).to.be.false;
+              done();
+            }, 1);
           });
 
           it('should be focused on selected value when overlay is opened', function() {
