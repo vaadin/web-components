@@ -103,18 +103,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * @param {node} parent the node that is parsed for configuration
          **/
         _loadFromNode: function (dest, node) {
-            for (var i in node.attributes) {
-                if (node.attributes.hasOwnProperty(i)) {
-                    var attr = node.attributes[i].name;
-                    if (attr !== undefined) {
-                        var val = node.getAttribute(attr);
-                        var res = this._parseAttribute(val);
-                        dest[this._toCamelCase(attr)] = res;
+            if (dest !== undefined) {
+                for (var i in node.attributes) {
+                    if (node.attributes.hasOwnProperty(i)) {
+                        var attr = node.attributes[i].name;
+                        if (attr !== undefined) {
+                            var val = node.getAttribute(attr);
+                            var res = this._parseAttribute(val);
+                            dest[this._toCamelCase(attr)] = res;
+                        }
                     }
                 }
-            }
-            if (this._hasOnlyTextContent(node)) {
-                dest.text = node.textContent;
+                if (this._hasOnlyTextContent(node)) {
+                    dest.text = node.textContent;
+                }
             }
         },
 
