@@ -49,6 +49,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              **/
             _seriesConf: {
                 type: Object,
+                reflectToAttribute:false,
                 value: function () {
                     return {};
                 }
@@ -236,6 +237,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             var parsedValue = this._parseAttribute(value);
             //if value is undefined it shouldn't be set to keep _seriesConf minimal
             if (undefined !== parsedValue) {
+                if(!this._seriesConf) {
+                    this._seriesConf={};
+                }
                 if (undefined === this._seriesConf[name]) {
                     this._seriesConf[name] = parsedValue;
                 } else if (name === 'data') {
