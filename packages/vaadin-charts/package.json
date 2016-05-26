@@ -3,12 +3,23 @@
   "version": "3.1.0-beta2",
   "repository": "vaadin/vaadin-charts",
   "scripts": {
-    "test": "wct --plugin sauce test/ framework-test/"
+    "test": " wct --plugin sauce test/ framework-test/",
+    "build-react": "browserify -t [ babelify --presets [ react ] ] framework-test/react/main.js -o framework-test/react/bundle.js"
   },
   "devDependencies": {
+    "@angular/common": "2.0.0-rc.1",
+    "@angular/compiler": "2.0.0-rc.1",
+    "@angular/core": "2.0.0-rc.1",
+    "@angular/platform-browser": "2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.1",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0",
     "bower": "^1.4.1",
+    "browserify": "^13.0.1",
     "config": "^1.13.0",
     "del": "^1.2.0",
+    "es6-shim": "^0.35.0",
+    "fbjs": "^0.8.2",
     "gulp": "^3.8.11",
     "gulp-bower": "0.0.10",
     "gulp-delete-lines": "0.0.7",
@@ -19,19 +30,15 @@
     "gulp-util": "^3.0.4",
     "gulp-vulcanize": "^6.0.0",
     "lodash": "^3.9.1",
-    "web-component-tester": "^3.3.9",
-    "yargs": "^3.9.1",
-    "systemjs": "0.19.27",
-    "es6-shim": "^0.35.0",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2",
     "reflect-metadata": "^0.1.3",
     "rxjs": "5.0.0-beta.6",
+    "systemjs": "0.19.27",
     "typescript": "^1.8.9",
     "typings": "^0.7.11",
-    "zone.js": "^0.6.12",
-    "@angular/common":  "2.0.0-rc.1",
-    "@angular/compiler":  "2.0.0-rc.1",
-    "@angular/core":  "2.0.0-rc.1",
-    "@angular/platform-browser":  "2.0.0-rc.1",
-    "@angular/platform-browser-dynamic":  "2.0.0-rc.1"
+    "web-component-tester": "^3.3.9",
+    "yargs": "^3.9.1",
+    "zone.js": "^0.6.12"
   }
 }
