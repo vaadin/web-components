@@ -31,10 +31,10 @@
     "paper-input": "PolymerElements/paper-input#^1.1.3",
     "polymer": "Polymer/polymer#^1.2.0",
     "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.0.7",
-    "paper-ripple": "polymerelements/paper-ripple#^1.0.4",
     "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#^1.0.2",
     "paper-styles": "polymerelements/paper-styles#^1.1.2",
-    "iron-a11y-announcer": "polymerelements/iron-a11y-announcer#^1.0.4"
+    "iron-a11y-announcer": "polymerelements/iron-a11y-announcer#^1.0.4",
+    "paper-icon-button": "polymerelements/paper-icon-button#^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.3",

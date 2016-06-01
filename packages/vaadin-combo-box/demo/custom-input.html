@@ -1,0 +1,113 @@
+<!doctype html>
+<!--
+title: Custom Input
+order: 4
+layout: page
+-->
+<html>
+
+<head>
+  <title>vaadin-combo-box Code Examples - Custom Input</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+  <link rel="import" href="../../iron-input/iron-input.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+
+</head>
+
+<body>
+  <section>
+    <h1><a href="./">vaadin-combo-box</a>
+      <span>Custom Input</span>
+    </h1>
+    <table-of-contents select="h3" class="toc"></table-of-contents>
+  </section>
+
+  <section>
+    <h3>Custom Icons</h3>
+    <p>
+      The most basic customization option is to replace the toggle and clear buttons.
+      You can do this by adding child elements to the <code>vaadin-combo-box</code> with class names <code>toggle-button</code> and <code>clear-button</code> respectively.
+    </p>
+
+    <code-example source>
+      <vaadin-combo-box demo label="Custom Icons" class="custom">
+        <paper-icon-button icon="remove-circle" class="clear-button"></paper-icon-button>
+        <paper-icon-button icon="search" class="toggle-button"></paper-icon-button>
+      </vaadin-combo-box>
+
+      <code demo-var="combobox">
+        HTMLImports.whenReady(function() {
+          // code
+          var combobox = combobox || document.querySelector('.custom');
+
+          // The elements is an array of String values.
+          combobox.items = elements;
+          // end-code
+        });
+      </code>
+    </code-example>
+  </section>
+  <section>
+    <h3>Iron Input</h3>
+    <p>
+      If you need more customization options, you can also replace the default input element with your own.
+      In this case you need to use <code>vaadin-combo-box-light</code> element instead of the <code>vaadin-combo-box</code>.
+      See the example below on how to replace the default input with an <a href="https://elements.polymer-project.org/elements/iron-input"><code>iron-input</code></a>.
+    </p>
+
+    <code-example source>
+      <vaadin-combo-box-light demo class="simple">
+        <input is="iron-input">
+      </vaadin-combo-box-light>
+
+      <code demo-var="combobox">
+        HTMLImports.whenReady(function() {
+          // code
+          var combobox = combobox || document.querySelector('.simple');
+
+          // The elements is an array of String values.
+          combobox.items = elements;
+          // end-code
+        });
+      </code>
+    </code-example>
+  </section>
+  <section>
+    <h3>Paper Input</h3>
+    <p>
+      To add a custom input that is a bit similar to the default one, you can for example use <a href="https://elements.polymer-project.org/elements/paper-input"><code>paper-input</code></a>.
+      See the example below, which uses also <code>prefix</code> and <code>suffix</code> attributes to help with the positioning of the custom content.
+    </p>
+
+    <code-example source>
+      <vaadin-combo-box-light demo class="advanced" attr-for-value="value">
+        <paper-input label="Elements" class="input">
+          <iron-icon icon="toll" prefix></iron-icon>
+          <paper-button suffix class="clear-button">Clear</paper-button>
+          <paper-button suffix class="toggle-button">Toggle</paper-button>
+        </paper-input>
+      </vaadin-combo-box-light>
+
+      <code demo-var="combobox">
+        HTMLImports.whenReady(function() {
+          // code
+          var combobox = combobox || document.querySelector('.advanced');
+
+          // The elements is an array of String values.
+          combobox.items = elements;
+          // end-code
+        });
+      </code>
+    </code-example>
+  </section>
+</body>
+
+</html>

@@ -89,7 +89,11 @@
     },
 
     _isPositionFixed: function(element) {
-      var parentElement = element.parentElement || element.domHost;
+      var parentElement = element.parentElement;
+      if (!parentElement || parentElement.localName === 'content') {
+        parentElement = element.domHost;
+      }
+
       return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
         (parentElement && this._isPositionFixed(parentElement));
     },
