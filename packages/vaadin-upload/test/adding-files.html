@@ -226,6 +226,18 @@
           upload._addFiles([file]);
           expect(upload.files.lentgh == 1);
         });
+
+        it('should allow files with correct mime type', function() {
+          upload.accept = 'application/x-octet-stream';
+          upload._addFiles([file]);
+          expect(upload.files.lentgh == 1);
+        });
+
+        it('should allow wildcards', function() {
+          upload.accept = 'application/*';
+          upload._addFiles([file]);
+          expect(upload.files.lentgh == 1);
+        });
       });
 
     });
