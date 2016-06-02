@@ -234,7 +234,7 @@
         });
 
         it('should allow wildcards', function() {
-          upload.accept = 'application/x-octet-stream';
+          upload.accept = 'application/*';
           upload._addFiles([file]);
           expect(upload.files.lentgh == 1);
         });
