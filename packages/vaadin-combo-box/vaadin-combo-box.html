@@ -145,7 +145,7 @@ Custom property | Description | Default
         invalid="[[invalid]]"
         opened$="[[opened]]"
         hideclear$="[[_hideClearIcon(value, opened)]]">
-      <label id="label" on-tap="open">[[label]]</label>
+      <label id="label" on-tap="_openAsync">[[label]]</label>
       <input
           is="iron-input"
           id="input"
@@ -163,7 +163,7 @@ Custom property | Description | Default
           required$="[[required]]"
           on-input="_inputValueChanged"
           on-blur="_onBlur"
-          on-tap="open"
+          on-tap="_openAsync"
           key-event-target>
       <div suffix id="clearIcon" on-tap="_clear"
            on-down="_preventDefault">
@@ -433,6 +433,15 @@ Custom property | Description | Default
         this.$.input.blur();
         this._closeOnBlurIsPrevented = false;
       }
+    },
+
+    /**
+     * Opens the dropdown list asynchronously.
+     */
+    _openAsync: function() {
+      // Needed for MS Edge. Otherwise, it does not pop the virtual keyboard up
+      // when tapping the combobox that has non-empty value.
+      this.async(this.open);
     },
 
     /**

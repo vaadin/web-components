@@ -36,19 +36,27 @@
     });
 
     describe('opening', function() {
-      it('should open by tapping label', function() {
+      it('should open asynchronously by tapping label', function(done) {
         Polymer.Base.fire('tap', {}, {
           bubbles: true,
           node: combobox.$$('paper-input-container label')
         });
 
-        expect(combobox.opened).to.be.true;
+        expect(combobox.opened).to.be.false;
+        Polymer.Base.async(function() {
+          expect(combobox.opened).to.be.true;
+          done();
+        }, 1);
       });
 
-      it('should open by clicking input', function() {
+      it('should open asynchronously by clicking input', function(done) {
         combobox.$$('paper-input-container input').fire('tap');
 
-        expect(combobox.opened).to.be.true;
+        expect(combobox.opened).to.be.false;
+        Polymer.Base.async(function() {
+          expect(combobox.opened).to.be.true;
+          done();
+        }, 1);
       });
 
       it('should open by clicking icon', function() {
