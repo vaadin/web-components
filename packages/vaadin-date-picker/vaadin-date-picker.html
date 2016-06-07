@@ -157,9 +157,24 @@ See paper-input-container documentation for styling the included input fields
 
     </style>
 
-    <paper-input-container id="inputcontainer" hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]" invalid="[[invalid]]" tabindex$="[[_getTabIndex(disabled)]]" on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown" disabled$="[[disabled]]" opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
+    <content select=".input"></content>
+
+    <paper-input-container id="inputcontainer"
+       hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]"
+       invalid="[[invalid]]" tabindex$="[[_getTabIndex(disabled)]]"
+       on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown"
+       disabled$="[[disabled]]" opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
+
       <label id="label">[[label]]</label>
-      <input id="input" is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(_selectedDate, i18n.formatDate)]]" type="text" invalid="{{invalid}}" name$="[[name]]" required$="[[required]]" tabindex="-1" on-focus="_focusInputContainer" validator="[[validator]]" readonly$="[[readonly]]" disabled$="[[disabled]]">
+
+      <input id="input"
+         is="iron-input"
+         autocomplete="off"
+         type="text" invalid="{{invalid}}" name$="[[name]]"
+         required$="[[required]]" tabindex="-1"
+         on-focus="_focusInputContainer"
+         validator="[[validator]]" readonly$="[[readonly]]" disabled$="[[disabled]]"
+         >
 
       <div suffix id="clear" on-tap="_clear">
         <iron-icon icon="clear"></iron-icon>
@@ -187,14 +202,17 @@ See paper-input-container documentation for styling the included input fields
         Polymer.IronValidatableBehavior
       ],
 
+      observers: [
+        '_selectedDateChanged(_selectedDate, i18n.formatDate)'
+      ],
+
       properties: {
 
         /**
          * The current selected date.
          */
         _selectedDate: {
-          type: Date,
-          observer: '_selectedDateChanged'
+          type: Date
         },
 
         /**
@@ -376,14 +394,11 @@ See paper-input-container documentation for styling the included input fields
           '';
       },
 
-      _formatDisplayed: function(date, formatDate) {
-        if (date) {
-          return formatDate(date);
-        }
-      },
-
       _selectedDateChanged: function(selectedDate) {
         this.value = this._formatISO(selectedDate);
+        if (selectedDate) {
+          this.$.input.bindValue = this.i18n.formatDate(selectedDate);
+        }
       },
 
       _valueChanged: function(value, oldValue) {
