@@ -132,6 +132,19 @@ gulp.task('test:mobile:shadow', function(done) {
     'Linux/android@5.1'], done);
 });
 
+// This is equivalent to:
+//  $ node_modules/.bin/wct --dom=shadow --local=chrome
+gulp.task('test', ['lint:js', 'lint:html'], function(done) {
+  args.dom = 'shadow';
+  test({
+      plugins: {
+        local: {
+          browsers: ['chrome']
+        }
+      }
+    }, done);
+});
+
 gulp.task('typings', function() {
   return gulp.src('directives/typings.json')
     .pipe(typings());
