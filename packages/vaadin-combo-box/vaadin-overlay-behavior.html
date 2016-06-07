@@ -108,7 +108,7 @@
 
     _setPosition: function(e) {
       var parent = this._unwrapIfNeeded(this.parentElement);
-      if ((!e || e.target.contains(this) || e.target.contains(this.positionTarget)) && parent === document.body) {
+      if ((!e || e.target.contains && (e.target.contains(this) || e.target.contains(this.positionTarget))) && parent === document.body) {
         var targetRect = this.positionTarget.getBoundingClientRect();
         this._alignedAbove = this._shouldAlignAbove();
 
