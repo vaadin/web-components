@@ -15,6 +15,12 @@ import {
 } from '@angular/core';
 import { NgControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/common';
 
+console.warn(
+  'The `VaadinComboBox` directive is deprecated. Please use ' +
+  '`PolymerElement(\'vaadin-combo-box\')` from the ' +
+  '`@vaadin/angular2-polymer` npm package instead.'
+);
+
 const Polymer = (<any>window).Polymer;
 
 const VAADIN_COMBO_BOX_CONTROL_VALUE_ACCESSOR = new Provider(
