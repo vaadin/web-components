@@ -6,6 +6,12 @@ import {
   EventEmitter
 } from '@angular/core';
 
+console.warn(
+  'The `VaadinUpload` directive is deprecated. Please use ' +
+  '`PolymerElement(\'vaadin-upload\')` from the `@vaadin/angular2-polymer` ' +
+  'npm package instead.'
+);
+
 const Polymer = (<any>window).Polymer;
 
 @Directive({
