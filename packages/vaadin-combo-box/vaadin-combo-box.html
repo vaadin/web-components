@@ -166,12 +166,12 @@ Custom property | Description | Default
           on-tap="open"
           key-event-target>
       <div suffix id="clearIcon" on-tap="_clear"
-           on-touchend="_preventDefault" on-down="_preventDefault">
+           on-down="_preventDefault">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
       <div suffix id="toggleIcon" on-tap="_toggle" hidden$="[[_hideToggleIcon(disabled, readonly)]]"
-           on-touchend="_preventDefault" on-down="_preventDefault">
+           on-down="_preventDefault">
         <iron-icon icon="arrow-drop-down" aria-controls="overlay"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
