@@ -157,23 +157,27 @@ See paper-input-container documentation for styling the included input fields
 
     </style>
 
-    <content select=".input"></content>
-
+    <content select=".input">
     <paper-input-container id="inputcontainer"
        hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]"
-       invalid="[[invalid]]" tabindex$="[[_getTabIndex(disabled)]]"
-       on-touchend="_preventDefault" on-tap="open" on-keydown="_onKeydown"
-       disabled$="[[disabled]]" opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
+       invalid="[[invalid]]"
+       disabled$="[[disabled]]"
+       opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
 
       <label id="label">[[label]]</label>
 
       <input id="input"
          is="iron-input"
          autocomplete="off"
-         type="text" invalid="{{invalid}}" name$="[[name]]"
-         required$="[[required]]" tabindex="-1"
+         tabindex="-1"
+         type="text"
          on-focus="_focusInputContainer"
-         validator="[[validator]]" readonly$="[[readonly]]" disabled$="[[disabled]]"
+         invalid="{{invalid}}"
+         name$="[[name]]"
+         required$="[[required]]"
+         validator="[[validator]]"
+         readonly$="[[readonly]]"
+         disabled$="[[disabled]]"
          >
 
       <div suffix id="clear" on-tap="_clear">
@@ -186,6 +190,7 @@ See paper-input-container documentation for styling the included input fields
         <paper-ripple class="circle" center></paper-ripple>
       </div>
     </paper-input-container>
+    </content>
 
     <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnComponentAccess" opened="{{_opened}}">
       <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
@@ -203,7 +208,8 @@ See paper-input-container documentation for styling the included input fields
       ],
 
       observers: [
-        '_selectedDateChanged(_selectedDate, i18n.formatDate)'
+        '_selectedDateChanged(_selectedDate, i18n.formatDate)',
+        '_setTabIndex(disabled)'
       ],
 
       properties: {
@@ -354,6 +360,10 @@ See paper-input-container documentation for styling the included input fields
         if (this.value === undefined) {
           this.value = '';
         }
+        this.listen(this._inputcontainer, 'tap', 'open');
+        this.listen(this._inputcontainer, 'touchend', '_preventDefault');
+        this.listen(this._inputcontainer, 'keydown', '_onKeydown');
+
       },
 
       /**
@@ -397,7 +407,7 @@ See paper-input-container documentation for styling the included input fields
       _selectedDateChanged: function(selectedDate) {
         this.value = this._formatISO(selectedDate);
         if (selectedDate) {
-          this.$.input.bindValue = this.i18n.formatDate(selectedDate);
+          this._input.bindValue = this.i18n.formatDate(selectedDate);
         }
       },
 
@@ -493,7 +503,7 @@ See paper-input-container documentation for styling the included input fields
         window.removeEventListener('scroll', this._boundOnScroll, true);
         window.removeEventListener('resize', this._boundOnScroll, true);
 
-        this.$.inputcontainer.focus();
+        this._focusInputContainer();
 
         if (this._touchPrevented) {
           this._touchPrevented.forEach(function(prevented) {
@@ -554,7 +564,7 @@ See paper-input-container documentation for styling the included input fields
       },
 
       _focusInputContainer: function() {
-        this.$.inputcontainer.focus();
+        this._inputcontainer.focus();
       },
 
       _preventDefault: function(e) {
@@ -589,8 +599,20 @@ See paper-input-container documentation for styling the included input fields
         }
       },
 
-      _getTabIndex: function(disabled) {
-        return disabled ? -1 : 0;
+      _setTabIndex: function(disabled) {
+        this._inputcontainer.setAttribute('tabindex', disabled ? -1 : 0);
+      },
+
+      get _customInput() {
+        return Polymer.dom(this).querySelector('.input');
+      },
+
+      get _input() {
+        return this._customInput || this.$.input;
+      },
+
+      get _inputcontainer() {
+        return this._customInput || this.$.inputcontainer;
       }
     });
 
