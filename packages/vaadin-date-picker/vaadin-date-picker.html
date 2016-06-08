@@ -160,9 +160,8 @@ See paper-input-container documentation for styling the included input fields
     <content select=".input">
     <paper-input-container id="inputcontainer"
        hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]"
-       invalid="[[invalid]]"
-       disabled$="[[disabled]]"
-       opened$="[[_opened]]" auto-validate$="[[autoValidate]]">
+       auto-validate$="[[autoValidate]]"
+       >
 
       <label id="label">[[label]]</label>
 
@@ -192,7 +191,10 @@ See paper-input-container documentation for styling the included input fields
     </paper-input-container>
     </content>
 
-    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnComponentAccess" opened="{{_opened}}">
+    <iron-dropdown id="dropdown" fullscreen$=[[_fullscreen]] allow-outside-scroll
+        on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed" on-iron-overlay-canceled="_preventCancelOnComponentAccess"
+        opened="{{_opened}}"
+        >
       <vaadin-date-picker-overlay id="overlay" i18n="[[i18n]]" fullscreen$=[[_fullscreen]] label=[[label]] on-date-tap="close" selected-date="{{_selectedDate}}" class="dropdown-content" on-close="close" focused-date="[[focusedDate]]" tabindex="-1"></vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -209,7 +211,9 @@ See paper-input-container documentation for styling the included input fields
 
       observers: [
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-        '_setTabIndex(disabled)'
+        '_setDisabled(disabled)',
+        '_setInvalid(invalid)',
+        '_setOpened(_opened)'
       ],
 
       properties: {
@@ -560,7 +564,7 @@ See paper-input-container documentation for styling the included input fields
        * @return {boolean}
        */
       _getValidity: function() {
-        return this.$.input.validate();
+        return this._input.validate();
       },
 
       _focusInputContainer: function() {
@@ -597,10 +601,24 @@ See paper-input-container documentation for styling the included input fields
             }
             break;
         }
+
       },
 
-      _setTabIndex: function(disabled) {
+      _attrBool(elm, name, value) {
+        Polymer.dom(elm)[value ? 'setAttribute' : 'removeAttribute'](name, '');
+      },
+
+      _setDisabled: function(disabled) {
         this._inputcontainer.setAttribute('tabindex', disabled ? -1 : 0);
+        this._attrBool(this._inputcontainer, 'disabled', disabled);
+      },
+
+      _setInvalid(invalid) {
+        this._inputcontainer.invalid = invalid;
+      },
+
+      _setOpened(_opened) {
+        this._attrBool(this._inputcontainer, 'opened', _opened);
       },
 
       get _customInput() {
