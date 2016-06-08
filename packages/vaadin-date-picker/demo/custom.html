@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>vaadin-date-picker Code Examples</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+  <link rel="import" href="../../iron-meta/iron-meta.html">
+  <link rel="import" href="../vaadin-date-picker.html">
+
+  <style is="custom-style" include="demo-pages-shared-styles iron-flex iron-flex-alignment">
+    body {
+      background: #f9f9f9;
+    }
+
+    .vertical-section-container {
+      max-width: 500px;
+    }
+  </style>
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <h4>Custom Input</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-date-picker id="custom-input">
+          <input is="iron-input" class="input" />
+        </vaadin-date-picker>
+    </demo-snippet>
+
+  </div>
+</body>
+</html>
