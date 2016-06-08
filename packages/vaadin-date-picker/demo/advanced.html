@@ -130,6 +130,23 @@
       </template>
     </demo-snippet>
 
+    <h4>Custom Input</h4>
+    <demo-snippet>
+      <template>
+      <style is="custom-style">
+        .input {
+          background: var(--paper-grey-100);
+          border: 2px solid var(--paper-blue-500);
+          border-radius: 4px;
+          padding: 4px;
+        }
+      </style>
+        <vaadin-date-picker>
+          <input is="iron-input" class="input" placeholder="Date" readonly>
+        </vaadin-date-picker>
+      </template>
+    </demo-snippet>
+
   </div>
 </body>
 </html>
