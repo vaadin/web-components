@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="common.js"></script>
+
+  <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../../iron-meta/iron-meta.html">
+  <link rel="import" href="../vaadin-date-picker.html">
+</head>
+
+<body>
+  <test-fixture id="custom-input-datepicker">
+    <template>
+      <vaadin-date-picker>
+        <input is="iron-input" class="input">
+      </vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('custom input', function() {
+      var datepicker;
+
+      beforeEach(function() {
+        datepicker = fixture('custom-input-datepicker');
+      });
+
+      it('should have the given name', function() {
+        datepicker.name = 'foo';
+        expect(datepicker._input.getAttribute('name')).to.equal('foo');
+      });
+
+      it('should have no name', function() {
+        expect(datepicker._input.getAttribute('name')).to.equal(null);
+      });
+
+      it('should be possible to force invalid status', function() {
+        datepicker.invalid = true;
+        expect(datepicker._inputcontainer.invalid).to.be.true;
+      });
+
+      it('should have disabled paper-input-container', function() {
+        datepicker.disabled = true;
+        expect(datepicker._inputcontainer.getAttribute('disabled')).to.equal('');
+        expect(datepicker._input.disabled).to.equal(true);
+      });
+
+      it('should open calendar on tap', function() {
+        MockInteractions.tap(datepicker._input);
+        expect(datepicker.$.dropdown.opened).to.be.true;
+      });
+    });
+  </script>
+
+</body>
+
+</html>

@@ -172,7 +172,6 @@ See paper-input-container documentation for styling the included input fields
          type="text"
          on-focus="_focusInputContainer"
          invalid="{{invalid}}"
-         name$="[[name]]"
          required$="[[required]]"
          validator="[[validator]]"
          readonly$="[[readonly]]"
@@ -213,7 +212,8 @@ See paper-input-container documentation for styling the included input fields
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_setDisabled(disabled)',
         '_setInvalid(invalid)',
-        '_setOpened(_opened)'
+        '_setOpened(_opened)',
+        '_setName(name)'
       ],
 
       properties: {
@@ -604,7 +604,7 @@ See paper-input-container documentation for styling the included input fields
 
       },
 
-      _attrBool(elm, name, value) {
+      _attrBool: function(elm, name, value) {
         Polymer.dom(elm)[value ? 'setAttribute' : 'removeAttribute'](name, '');
       },
 
@@ -613,12 +613,16 @@ See paper-input-container documentation for styling the included input fields
         this._attrBool(this._inputcontainer, 'disabled', disabled);
       },
 
-      _setInvalid(invalid) {
+      _setInvalid: function(invalid) {
         this._inputcontainer.invalid = invalid;
       },
 
-      _setOpened(_opened) {
+      _setOpened: function(_opened) {
         this._attrBool(this._inputcontainer, 'opened', _opened);
+      },
+
+      _setName: function(name) {
+        this._input.setAttribute('name', name);
       },
 
       get _customInput() {
