@@ -351,7 +351,16 @@ See paper-input-container documentation for styling the included input fields
         readonly: {
           type: Boolean,
           value: false
-        }
+        },
+
+        /**
+         * Name of the two-way data-bindable property representing the
+         * value of the custom input field.
+         */
+        attrForValue: {
+          type: String,
+          value: 'bind-value'
+        },
       },
 
       created: function() {
@@ -411,7 +420,7 @@ See paper-input-container documentation for styling the included input fields
       _selectedDateChanged: function(selectedDate) {
         this.value = this._formatISO(selectedDate);
         if (selectedDate) {
-          this._input.bindValue = this.i18n.formatDate(selectedDate);
+          this._input[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = this.i18n.formatDate(selectedDate);
         }
       },
 

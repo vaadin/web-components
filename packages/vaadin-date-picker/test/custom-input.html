@@ -49,7 +49,8 @@
         expect(datepicker._input.disabled).to.equal(true);
       });
 
-      it('should open calendar on tap', function() {
+      it('should open calendar on tap', function(done) {
+        this.timeout(800000);
         MockInteractions.tap(datepicker._input);
         expect(datepicker.$.dropdown.opened).to.be.true;
       });
