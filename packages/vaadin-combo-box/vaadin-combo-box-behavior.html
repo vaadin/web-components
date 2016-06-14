@@ -29,6 +29,22 @@
       },
 
       /**
+       * The `String` value for the selected item of the combo box. Provides
+       * the value for `iron-form`.
+       *
+       * When there’s no item selected, the value is an empty string.
+       *
+       * Use `selectedItem` property to get the raw selected item from
+       * the `items` array.
+       */
+      value: {
+        type: String,
+        observer: '_valueChanged',
+        //notify: true already set in IronFormBehavior, setting this to true will make two value-changed events(?)
+        notify: false
+      },
+
+      /**
        * A read-only property indicating whether this combo box has a value
        * selected or not. It can be used for example in styling of the component.
        */
@@ -99,8 +115,7 @@
     observers: [
       '_filterChanged(_filter, itemValuePath, itemLabelPath)',
       '_itemsChanged(items.splices)',
-      '_setItems(items, itemValuePath, itemLabelPath)',
-      '_valueChanged(value)'
+      '_setItems(items, itemValuePath, itemLabelPath)'
     ],
 
     listeners: {
