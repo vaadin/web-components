@@ -108,6 +108,12 @@ two `<paper-button>`s to act as the clear and toggle controls.
       this.listen(this.inputElement, 'blur', '_onBlur');
     },
 
+    detached: function() {
+      this.unlisten(this, 'down', '_preventDefault');
+      this.unlisten(this.inputElement, 'input', '_inputValueChanged');
+      this.unlisten(this.inputElement, 'blur', '_onBlur');
+    },
+
     get _propertyForValue() {
       return Polymer.CaseMap.dashToCamelCase(this.attrForValue);
     },
