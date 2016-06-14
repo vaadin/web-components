@@ -55,9 +55,9 @@
       expect(combobox.opened).to.equal(false);
     });
 
-    it('should fire value change event', function() {
+    it('should fire exactly one value change event', function() {
       combobox.value = 'foo';
-      expect(valueChangedSpy.callCount).to.be.at.least(1);
+      expect(valueChangedSpy.callCount).to.equal(1);
     });
 
     it('should close the dropdown when reselecting the current value', function() {
