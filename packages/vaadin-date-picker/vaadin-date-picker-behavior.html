@@ -143,15 +143,18 @@
       this._boundOnScroll = this._onScroll.bind(this);
     },
 
+    listeners: {
+      'tap': 'open',
+      'touchend': '_preventDefault',
+      'keydown': '_onKeydown'
+    },
+
     ready: function() {
       // The value property is also defined in IronFormElementBehavior, which
       // will mix up the default value if set in the property.
       if (this.value === undefined) {
         this.value = '';
       }
-      this.listen(this._inputcontainer, 'tap', 'open');
-      this.listen(this._inputcontainer, 'touchend', '_preventDefault');
-      this.listen(this._inputcontainer, 'keydown', '_onKeydown');
     },
 
     /**
@@ -159,8 +162,9 @@
      */
     open: function(e) {
       this._updateAlignmentAndPosition();
-      // Prevent dropdown.open() being called when input is disabled or read-only
-      if (!this.disabled && !this.readonly) {
+      // Prevent dropdown.open() being called when input is disabled or read-only, or tapped
+      // inside the overlay
+      if (!this.disabled && !this.readonly && (!e || Polymer.dom(e).path.indexOf(this.$.overlay) < 0)) {
         this.$.dropdown.open();
       }
     },
@@ -303,7 +307,7 @@
       window.removeEventListener('scroll', this._boundOnScroll, true);
       window.removeEventListener('resize', this._boundOnScroll, true);
 
-      this._focusInputContainer();
+      this._focus();
 
       if (this._touchPrevented) {
         this._touchPrevented.forEach(function(prevented) {
@@ -341,11 +345,11 @@
      * @return {boolean}
      */
     _getValidity: function() {
-      return this._input.validate();
+      return this.inputElement.validate();
     },
 
-    _focusInputContainer: function() {
-      this._inputcontainer.focus();
+    _focus: function() {
+      this.inputElement.focus();
     },
 
     _preventDefault: function(e) {

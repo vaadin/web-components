@@ -102,10 +102,6 @@ need to define the name of value property using the `attrForValue` property.
         return Polymer.dom(this).querySelector('[is="iron-input"]');
       },
 
-      get _inputcontainer() {
-        return this._input;
-      },
-
       set _inputValue(value) {
         if (this.inputElement) {
           this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = value;

@@ -154,6 +154,7 @@ If you want to replace the default input field with a custom implementation, you
       :host([opened]) #inputcontainer:not([hideclear]) #input {
         padding-right: 60px;
         margin-right: -32px;
+
       }
 
     </style>
@@ -170,7 +171,7 @@ If you want to replace the default input field with a custom implementation, you
           autocomplete="off"
           tabindex="-1"
           type="text"
-          on-focus="_focusInputContainer"
+          on-focus="_focus"
           invalid="{{invalid}}"
           required$="[[required]]"
           validator="[[validator]]"
@@ -271,10 +272,6 @@ If you want to replace the default input field with a custom implementation, you
 
       _input: function() {
         return this.$.input;
-      },
-
-      get _inputcontainer() {
-        return this.$.inputcontainer;
       },
 
       set _inputValue(value) {
