@@ -97,14 +97,14 @@
             target = datepicker.$.input;
             arrowDown();
 
-            expect(datepicker._opened).to.be.true;
+            expect(datepicker.opened).to.be.true;
           });
 
           it('should open overlay on up', function() {
             target = datepicker.$.input;
             arrowUp();
 
-            expect(datepicker._opened).to.be.true;
+            expect(datepicker.opened).to.be.true;
           });
 
           it('should close overlay on esc', function(done) {
@@ -112,7 +112,7 @@
             target = datepicker.$.overlay;
             datepicker.async(function() {
               esc();
-              expect(datepicker._opened).to.be.false;
+              expect(datepicker.opened).to.be.false;
               done();
             }, 1);
           });

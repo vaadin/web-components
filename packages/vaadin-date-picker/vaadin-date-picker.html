@@ -110,7 +110,7 @@ If you want to replace the default input field with a custom implementation, you
         color: rgba(0, 0, 0, .54);
       }
 
-      paper-input-container[opened] {
+      :host([opened]) paper-input-container {
         --paper-input-container-underline-focus: {
           -webkit-transform: none;
           transform: none;
@@ -118,11 +118,11 @@ If you want to replace the default input field with a custom implementation, you
       }
 
       paper-input-container iron-icon:hover,
-      paper-input-container[opened] iron-icon {
+      :host([opened]) paper-input-container iron-icon {
         fill: rgba(0, 0, 0, .54);
       }
 
-      paper-input-container[opened] iron-icon:hover {
+      :host([opened]) paper-input-container iron-icon:hover {
         fill: rgba(0, 0, 0, .86);
       }
 
@@ -151,7 +151,7 @@ If you want to replace the default input field with a custom implementation, you
         padding-right: 28px;
       }
 
-      #inputcontainer[opened]:not([hideclear]) #input {
+      :host([opened]) #inputcontainer:not([hideclear]) #input {
         padding-right: 60px;
         margin-right: -32px;
       }
@@ -159,7 +159,7 @@ If you want to replace the default input field with a custom implementation, you
     </style>
 
     <paper-input-container id="inputcontainer"
-        hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]"
+        hideclear$="[[_hideClearIcon(_selectedDate, opened, _fullscreen)]]"
         auto-validate$="[[autoValidate]]">
       <label id="label">[[label]]</label>
       <input id="input"
@@ -191,7 +191,7 @@ If you want to replace the default input field with a custom implementation, you
         on-iron-overlay-opened="_onOverlayOpened"
         on-iron-overlay-closed="_onOverlayClosed"
         on-iron-overlay-canceled="_preventCancelOnComponentAccess"
-        opened="{{_opened}}">
+        opened="{{opened}}">
       <vaadin-date-picker-overlay
           id="overlay" i18n="[[i18n]]"
           fullscreen$=[[_fullscreen]]

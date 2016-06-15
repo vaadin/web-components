@@ -11,7 +11,6 @@
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
       '_setDisabled(disabled)',
       '_setInvalid(invalid)',
-      '_setOpened(_opened)',
       '_setName(name)'
     ],
 
@@ -49,7 +48,10 @@
        */
       label: String,
 
-      _opened: Boolean,
+      opened: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
 
       _fullscreen: {
         value: false,
@@ -374,7 +376,7 @@
           // prevent scrolling the page with arrows
           e.preventDefault();
 
-          if (!this._opened) {
+          if (!this.opened) {
             this.open();
           }
           break;
@@ -392,10 +394,6 @@
 
     _setInvalid: function(invalid) {
       this._inputcontainer.invalid = invalid;
-    },
-
-    _setOpened: function(_opened) {
-      this._attrBool(this._inputcontainer, 'opened', _opened);
     },
 
     _setName: function(name) {
