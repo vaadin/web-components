@@ -29,6 +29,29 @@
   </template>
 </test-fixture>
 
+<dom-module id="x-fixed">
+  <template>
+    <div style="position:fixed">
+      <content></content>
+    </div>
+  </template>
+  <script>
+    HTMLImports.whenReady(function() {
+      Polymer({
+        is: 'x-fixed'
+      });
+    });
+  </script>
+</dom-module>
+
+<test-fixture id="fixed-component">
+  <template>
+    <x-fixed>
+      <vaadin-combo-box label='combobox' style='width: 300px'></vaadin-combo-box>
+    </x-fixed>
+  </template>
+</test-fixture>
+
 <script>
   var comboBox;
 
@@ -235,6 +258,17 @@
 
     it('should same position when parent has fixed', function(done) {
       var combobox = fixture('fixed').querySelector('vaadin-combo-box');
+
+      combobox.open();
+
+      Polymer.Base.async(function() {
+        expect(position(combobox.$.overlay)).to.eql('fixed');
+        done();
+      }, 1);
+    });
+
+    it('should same position when parent component has fixed', function(done) {
+      var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
 
       combobox.open();
 

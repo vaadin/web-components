@@ -89,13 +89,10 @@
     },
 
     _isPositionFixed: function(element) {
-      var parentElement = element.parentElement;
-      if (!parentElement || parentElement.localName === 'content') {
-        parentElement = element.domHost;
-      }
+      var offsetParent = element.offsetParent;
 
       return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
-        (parentElement && this._isPositionFixed(parentElement));
+        (offsetParent && this._isPositionFixed(offsetParent));
     },
 
     _maxHeight: function(targetRect) {

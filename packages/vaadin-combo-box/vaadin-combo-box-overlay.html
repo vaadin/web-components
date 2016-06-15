@@ -246,8 +246,7 @@
         // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
         targetIndex = this.$.selector.firstVisibleIndex;
       }
-
-      this.$.selector.scrollToIndex(targetIndex);
+      this.$.selector.scrollToIndex(Math.max(0, targetIndex));
     },
 
     adjustScrollPosition: function() {
