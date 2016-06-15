@@ -158,39 +158,31 @@ If you want to replace the default input field with a custom implementation, you
 
     </style>
 
-    <content select=".input">
     <paper-input-container id="inputcontainer"
-       hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]"
-       auto-validate$="[[autoValidate]]"
-       >
-
+        hideclear$="[[_hideClearIcon(_selectedDate, _opened, _fullscreen)]]"
+        auto-validate$="[[autoValidate]]">
       <label id="label">[[label]]</label>
-
       <input id="input"
-         is="iron-input"
-         autocomplete="off"
-         tabindex="-1"
-         type="text"
-         on-focus="_focusInputContainer"
-         invalid="{{invalid}}"
-         required$="[[required]]"
-         validator="[[validator]]"
-         readonly$="[[readonly]]"
-         disabled$="[[disabled]]"
-         >
-
+          is="iron-input"
+          autocomplete="off"
+          tabindex="-1"
+          type="text"
+          on-focus="_focusInputContainer"
+          invalid="{{invalid}}"
+          required$="[[required]]"
+          validator="[[validator]]"
+          readonly$="[[readonly]]"
+          disabled$="[[disabled]]" />
       <div suffix id="clear" on-tap="_clear">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
-
       <div suffix id="calendar" on-tap="_toggle"
          hidden$="[[_hideCalendarIcon(disabled, readonly)]]">
         <iron-icon icon="event"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
     </paper-input-container>
-    </content>
 
     <iron-dropdown
         id="dropdown"
@@ -201,15 +193,15 @@ If you want to replace the default input field with a custom implementation, you
         on-iron-overlay-canceled="_preventCancelOnComponentAccess"
         opened="{{_opened}}">
       <vaadin-date-picker-overlay
-        id="overlay" i18n="[[i18n]]"
-        fullscreen$=[[_fullscreen]]
-        label=[[label]]
-        on-date-tap="close"
-        selected-date="{{_selectedDate}}"
-        class="dropdown-content"
-        on-close="close"
-        focused-date="[[focusedDate]]"
-        tabindex="-1">
+          id="overlay" i18n="[[i18n]]"
+          fullscreen$=[[_fullscreen]]
+          label=[[label]]
+          on-date-tap="close"
+          selected-date="{{_selectedDate}}"
+          class="dropdown-content"
+          on-close="close"
+          focused-date="[[focusedDate]]"
+          tabindex="-1">
       </vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -217,8 +209,8 @@ If you want to replace the default input field with a custom implementation, you
         query="[[_fullscreenMediaQuery]]"
         query-matches="{{_fullscreen}}">
     </iron-media-query>
-
   </template>
+
   <script>
     Polymer({
       is: 'vaadin-date-picker',
@@ -256,6 +248,10 @@ If you want to replace the default input field with a custom implementation, you
 
       set _inputValue(value) {
         this._input.bindValue = value;
+      },
+
+      get _inputValue(value) {
+        return this._input.bindValue;
       }
     });
   </script>
