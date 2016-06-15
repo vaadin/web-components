@@ -50,43 +50,54 @@ There are certain events to modify the XHR before sending it, or the `response` 
 
 `upload-before`:: At this point, the XHR has not been opened yet, but you can set the server URL by setting the [propertyname]#file.uploadTarget# attribute.
 You can also reject the file at this point by preventing the default action.
-
++
 [source,javascript]
 ----
-  uploader.addEventListener('upload-before', function(e) {
-    e.detail.file.uploadTarget =
-      'http://127.0.0.1:8080/upload/servlet.gupld?filename=' + e.detail.file.name;
-  });
+uploader.addEventListener('upload-before', function(e) {
+  e.detail.file.uploadTarget =
+    'http://127.0.0.1:8080/upload/servlet.gupld?filename=' + e.detail.file.name;
+});
 
-  uploader.addEventListener('upload-before', function(e) {
-    if (e.detail.file.size > 10240) {
-      e.detail.file.error = 'File too big.'
-    }
-  });
+uploader.addEventListener('upload-before', function(e) {
+  if (e.detail.file.size > 10240) {
+    e.detail.file.error = 'File too big.'
+  }
+});
 ----
 
-`upload-request`::
-You can change request parameters before it is sent, append data keys to the request, or cancel sending the request to the server by calling [methodname]#event.preventDefault()#.
-
+`upload-request`:: You can change the request headers before it is sent and append data keys to the request.
++
 [source,javascript]
 ----
-  uploader.addEventListener('upload-request', function(e) {
-    e.detail.xhr.setRequestHeader('Accept', 'application/json');
-    e.detail.formData.append('documentId', 1234);
-  });
+uploader.addEventListener('upload-request', function(e) {
+  e.detail.xhr.setRequestHeader('Accept', 'application/json');
+  e.detail.formData.append('documentId', 1234);
+});
+----
++
+You can cancel sending the request to the server by calling [methodname]#event.preventDefault()#.
+In this case, you can send the request manually.
+This allows you to upload the file directly in the request data instead of inside a FormData wrapper.
++
+[source,javascript]
+----
+uploader.addEventListener('upload-request', function(e) {
+  e.preventDefault();
+  e.detail.xhr.send(e.detail.file);
+});
 ----
 
 `upload-response`:: The event is dispatched when the server message was received, but before the component processes it.
-  At this point, you can check the response and make the upload fail by setting the [propertyname]#file.error# property.
-  If the event is default-prevented, the response is not checked for errors and the UI is not updated.
-
+At this point, you can check the response and make the upload fail by setting the [propertyname]#file.error# property.
+If the event is default-prevented, the response is not checked for errors and the UI is not updated.
++
 [source,javascript]
 ----
-  uploader.addEventListener('upload-response', function(e) {
-    if (e.detail.xhr.status == 200) {
-      e.detail.file.error = JSON.parse(xhr.responseText).error;
-    }
-  });
+uploader.addEventListener('upload-response', function(e) {
+  if (e.detail.xhr.status == 200) {
+    e.detail.file.error = JSON.parse(xhr.responseText).error;
+  }
+});
 ----
 
 == Server Processing

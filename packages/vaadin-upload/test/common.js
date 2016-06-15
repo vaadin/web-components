@@ -64,52 +64,55 @@ function createFiles(arraySize, fileSize, contentType) {
  *     serverType: the contentType of the serverResponse.
  *     serverValidation: a function run once the file has been sent.
  */
- var xhrCreator = function(c) {
-   c = c || {};
-   cfg = {
-     size: c.size || 100,
-     connectTime: c.connectTime || 10,
-     uploadTime: c.uploadTime || 10,
-     stepTime: c.stepTime || 5,
-     serverTime: c.serverTime || 10,
-     serverMessage: c.message || '{"message": "ok"}',
-     serverType: c.serverType || 'application/json',
-     serverValidation: c.serverValidation || function() {}
-   };
-   return function() {
-     var xhr = new MockHttpRequest();
-     xhr.upload = {onprogress: function() {}};
-     xhr.onsend = function() {
-       var total = cfg.size, done = 0;
-       var step = total / cfg.uploadTime * cfg.stepTime;
-       function finish() {
-         var error = cfg.serverValidation(xhr);
-         if (error) {
-           xhr.setResponseHeader('Content-Type', cfg.serverType);
-           var status = error.status || 500;
-           var statusText = error.statusText || error;
-           xhr.receive(status, {error: statusText});
-         } else if (xhr.readyState === 0) {
-           xhr.onreadystatechange();
-         } else if (xhr.readyState < 4) {
-           xhr.setResponseHeader('Content-Type', cfg.serverType);
-           xhr.receive(200, cfg.serverMessage);
-         }
-       }
-       function progress() {
-         xhr.upload.onprogress({total: total, loaded: done});
-         if (done < total) {
-           setTimeout(progress, cfg.stepTime);
-           done = Math.min(total, done + step);
-         } else {
-           setTimeout(finish, cfg.serverTime);
-         }
-       }
-       function start() {
-         setTimeout(progress, cfg.connectTime);
-       }
-       start();
-     };
-     return xhr;
-   };
- };
+var xhrCreator = function(c) {
+  c = c || {};
+  cfg = {
+    size: c.size || 100,
+    connectTime: c.connectTime || 10,
+    uploadTime: c.uploadTime || 10,
+    stepTime: c.stepTime || 5,
+    serverTime: c.serverTime || 10,
+    serverMessage: c.message || '{"message": "ok"}',
+    serverType: c.serverType || 'application/json',
+    serverValidation: c.serverValidation || function() {}
+  };
+  return function() {
+    var xhr = new MockHttpRequest();
+    xhr.upload = {onprogress: function() {}};
+    xhr.onsend = function() {
+      if (xhr.upload.onloadstart) {
+        xhr.upload.onloadstart();
+      }
+      var total = cfg.size, done = 0;
+      var step = total / cfg.uploadTime * cfg.stepTime;
+      function finish() {
+        var error = cfg.serverValidation(xhr);
+        if (error) {
+          xhr.setResponseHeader('Content-Type', cfg.serverType);
+          var status = error.status || 500;
+          var statusText = error.statusText || error;
+          xhr.receive(status, {error: statusText});
+        } else if (xhr.readyState === 0) {
+          xhr.onreadystatechange();
+        } else if (xhr.readyState < 4) {
+          xhr.setResponseHeader('Content-Type', cfg.serverType);
+          xhr.receive(200, cfg.serverMessage);
+        }
+      }
+      function progress() {
+        xhr.upload.onprogress({total: total, loaded: done});
+        if (done < total) {
+          setTimeout(progress, cfg.stepTime);
+          done = Math.min(total, done + step);
+        } else {
+          setTimeout(finish, cfg.serverTime);
+        }
+      }
+      function start() {
+        setTimeout(progress, cfg.connectTime);
+      }
+      start();
+    };
+    return xhr;
+  };
+};
