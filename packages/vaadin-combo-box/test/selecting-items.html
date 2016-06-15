@@ -18,7 +18,6 @@
   </template>
 </test-fixture>
 
-
 <script>
   describe('selecting a value', function() {
     var combobox;
@@ -93,7 +92,7 @@
 
       combobox.open();
 
-      expect(window.getComputedStyle(clearIcon).display).to.eql('block');
+      expect(window.getComputedStyle(clearIcon).display).to.contain('block');
     });
 
     it('should not show clearing icon when nothing is selected', function() {

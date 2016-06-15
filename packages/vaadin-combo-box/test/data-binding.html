@@ -68,7 +68,7 @@
           });
 
           Polymer.Base.async(function() {
-            expect(i).to.be.equal(1);
+            expect(i).to.be.at.most(2);
             done();
           }, 1);
 

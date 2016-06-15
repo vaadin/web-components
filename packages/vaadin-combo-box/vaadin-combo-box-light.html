@@ -1,0 +1,131 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
+only the dropdown functionality and leaving the input field definition to the user.
+
+This element is using the same [`ComboBoxBehavior`](#vaadin.elements.combobox.ComboBoxBehavior) as
+[`<vaadin-combo-box>`](#vaadin-combo-box), so the API remains the same.
+
+To create a custom input field, you need to add a child element which has a two-way
+data-bindable property representing the input value. The property name is expected
+to be `bindValue` by default. See the example below for a simplest possible example
+using an `<input>` element extended with `iron-input`.
+
+```html
+<vaadin-combo-box-light>
+  <input is="iron-input">
+</vaadin-combo-box-light>
+```
+
+If you are using other custom input fields like `<paper-input>`, you
+need to define the name of value property with `attrForValue` property.
+See the example below on how to create a custom input field based
+on a `<paper-input>` decorated with a custom `<iron-icon>` and
+two `<paper-button>`s to act as the clear and toggle controls.
+
+```html
+<vaadin-combo-box-light attr-for-value="value">
+  <paper-input label="Elements" class="input">
+    <iron-icon icon="toll" prefix></iron-icon>
+    <paper-button suffix class="clear-button">Clear</paper-button>
+    <paper-button suffix class="toggle-button">Toggle</paper-button>
+  </paper-input>
+</vaadin-combo-box-light>
+```
+
+@element vaadin-combo-box-light
+-->
+
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="vaadin-combo-box-behavior.html">
+<link rel="import" href="vaadin-combo-box-overlay.html">
+<link rel="import" href="vaadin-combo-box-shared-styles.html">
+
+<dom-module id="vaadin-combo-box-light">
+  <style include="vaadin-combo-box-shared-styles">
+    :host > #overlay {
+      display: none;
+    }
+  </style>
+
+  <template>
+    <content></content>
+
+    <vaadin-combo-box-overlay
+        id="overlay"
+        _aria-active-index="{{_ariaActiveIndex}}"
+        position-target="[[inputElement]]"
+        _focused-index="[[_focusedIndex]]"
+        _item-label-path="[[itemLabelPath]]"
+        on-down="_onOverlayDown"
+        vertical-offset="[[overlayVerticalOffset]]">
+    </vaadin-combo-box-overlay>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-combo-box-light',
+
+    behaviors: [
+      Polymer.IronA11yKeysBehavior,
+      vaadin.elements.combobox.ComboBoxBehavior
+    ],
+
+    properties: {
+      /**
+       * Name of the two-way data-bindable property representing the
+       * value of the custom input field.
+       */
+      attrForValue: {
+        type: String,
+        value: 'bind-value'
+      },
+
+      /**
+       * Number of pixels used as the vertical offset in positioning of
+       * the dropdown.
+       */
+      overlayVerticalOffset: {
+        type: Number,
+        value: 0
+      }
+    },
+
+    attached: function() {
+      this.inputElement = Polymer.dom(this).querySelector('input[is="iron-input"],paper-input,.paper-input-input,.input');
+      this._toggleElement = Polymer.dom(this).querySelector('.toggle-button');
+      this._clearElement = Polymer.dom(this).querySelector('.clear-button');
+
+      this._revertInputValue();
+      this.listen(this, 'down', '_preventDefault');
+      this.listen(this.inputElement, 'input', '_inputValueChanged');
+      this.listen(this.inputElement, 'blur', '_onBlur');
+    },
+
+    detached: function() {
+      this.unlisten(this, 'down', '_preventDefault');
+      this.unlisten(this.inputElement, 'input', '_inputValueChanged');
+      this.unlisten(this.inputElement, 'blur', '_onBlur');
+    },
+
+    get _propertyForValue() {
+      return Polymer.CaseMap.dashToCamelCase(this.attrForValue);
+    },
+
+    get _inputElementValue() {
+      return this.inputElement && this.inputElement[this._propertyForValue];
+    },
+
+    set _inputElementValue(value) {
+      if (this.inputElement) {
+        this.inputElement[this._propertyForValue] = value;
+      }
+    }
+  });
+</script>

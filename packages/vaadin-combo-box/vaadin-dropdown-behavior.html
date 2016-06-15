@@ -13,6 +13,7 @@
         type: Boolean,
         notify: true,
         value: false,
+        reflectToAttribute: true,
         observer: '_openedChanged'
       },
 
@@ -21,7 +22,8 @@
        */
       disabled: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
 
       /**
@@ -29,7 +31,8 @@
        */
       readonly: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       }
     },
 
@@ -87,7 +90,13 @@
       // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
       // is explicitly focused by the user.
       if (!this.$.overlay.touchDevice) {
-        this.$.input.focus();
+        // If the inputElement is a paper-input, it would trigger an
+        // unnecessary blur event on focus. Check to see if there is a
+        // focused property and if it's already true.
+        // See also https://github.com/PolymerElements/paper-input/issues/341
+        if (!this.inputElement.focused) {
+          this.inputElement.focus();
+        }
       }
 
       this.fire('vaadin-dropdown-opened');
