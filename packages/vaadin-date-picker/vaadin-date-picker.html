@@ -160,7 +160,10 @@ If you want to replace the default input field with a custom implementation, you
 
     <paper-input-container id="inputcontainer"
         hideclear$="[[_hideClearIcon(_selectedDate, opened, _fullscreen)]]"
-        auto-validate$="[[autoValidate]]">
+        auto-validate$="[[autoValidate]]"
+        tabindex$="[[_tabindex(disabled)]]"
+        invalid$="[[invalid]]"
+        disabled$="[[disabled]]">
       <label id="label">[[label]]</label>
       <input id="input"
           is="iron-input"
@@ -219,6 +222,30 @@ If you want to replace the default input field with a custom implementation, you
         vaadin.elements.datepicker.DatePickerBehavior
       ],
 
+      properties: {
+        /**
+         * Set to true to disable this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Set to true to make this element read-only.
+         */
+        readonly: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      ready: function() {
+        window.d = this;
+        window.p = this.$.inputcontainer;
+        window.i = this.$.input;
+      },
+
       _hideClearIcon: function(selectedDate, opened, fullscreen) {
         return !selectedDate || !opened || fullscreen;
       },
@@ -236,6 +263,14 @@ If you want to replace the default input field with a custom implementation, you
       _toggle: function(e) {
         e.stopPropagation();
         this[this.$.dropdown.opened ? 'close' : 'open']();
+      },
+
+      _attrBool: function(elm, name, value) {
+        Polymer.dom(elm)[value ? 'setAttribute' : 'removeAttribute'](name, '');
+      },
+
+      _tabindex: function(disabled) {
+        return disabled ? -1 : 0;
       },
 
       get _input() {

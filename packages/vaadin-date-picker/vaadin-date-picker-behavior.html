@@ -9,8 +9,6 @@
   vaadin.elements.datepicker.DatePickerBehaviorImpl = {
     observers: [
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-      '_setDisabled(disabled)',
-      '_setInvalid(invalid)',
       '_setName(name)'
     ],
 
@@ -48,6 +46,9 @@
        */
       label: String,
 
+      /**
+       * Set true to open the date selector overlay.
+       */
       opened: {
         type: Boolean,
         reflectToAttribute: true
@@ -135,22 +136,6 @@
             }
           };
         }
-      },
-
-      /**
-       * Set to true to disable this element.
-       */
-      disabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to make this element read-only.
-       */
-      readonly: {
-        type: Boolean,
-        value: false
       }
     },
 
@@ -381,19 +366,6 @@
           }
           break;
       }
-    },
-
-    _attrBool: function(elm, name, value) {
-      Polymer.dom(elm)[value ? 'setAttribute' : 'removeAttribute'](name, '');
-    },
-
-    _setDisabled: function(disabled) {
-      this._inputcontainer.setAttribute('tabindex', disabled ? -1 : 0);
-      this._attrBool(this._inputcontainer, 'disabled', disabled);
-    },
-
-    _setInvalid: function(invalid) {
-      this._inputcontainer.invalid = invalid;
     },
 
     _setName: function(name) {
