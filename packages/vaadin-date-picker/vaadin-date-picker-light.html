@@ -98,7 +98,7 @@ need to define the name of value property using the `attrForValue` property.
         }
       },
 
-      get _input() {
+      _input: function() {
         return Polymer.dom(this).querySelector('[is="iron-input"]');
       },
 
@@ -107,15 +107,13 @@ need to define the name of value property using the `attrForValue` property.
       },
 
       set _inputValue(value) {
-        if (this._input) {
-          this._input[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = value;
+        if (this.inputElement) {
+          this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = value;
         }
       },
 
       get _inputValue() {
-        if (this._input) {
-          return this._input[Polymer.CaseMap.dashToCamelCase(this.attrForValue)];
-        }
+        return this.inputElement && this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)];
       }
     });
   </script>

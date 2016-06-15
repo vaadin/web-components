@@ -172,6 +172,18 @@
       this.$.dropdown.close();
     },
 
+   /**
+    * The reference to the UI element that handles the value, and opens the selector.
+    * Despite the name, it could be an input or any other Element implementing `iron-input`
+    *
+    * @property inputElement
+    * @type HTMLElement
+    * @read-only
+    */
+    get inputElement() {
+      return this._input();
+    },
+
     _parseDate: function(str) {
       // Parsing with RegExp to ensure correct format
       var parts = /^(\d{4}|[-+]\d{6})-(\d{2})-(\d{2})$/.exec(str);
@@ -369,7 +381,7 @@
     },
 
     _setName: function(name) {
-      this._input.setAttribute('name', name);
+      this.inputElement.setAttribute('name', name);
     }
   };
 
