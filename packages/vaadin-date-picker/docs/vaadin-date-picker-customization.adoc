@@ -7,7 +7,7 @@ layout: page
 [[vaadin-date-picker.input-customization]]
 = Customizing the Input Field
 
-The [vaadinelement]#vaadin-date-pickerx# element allows you to customize the default input field by using  CSS mixins.
+The [vaadinelement]#vaadin-date-picker# element allows you to customize the default input field by using  CSS mixins.
 If that's not enough, you can also replace the whole input field by using the [vaadinelement]#vaadin-date-picker-light# element.
 
 == Replacing the Input
