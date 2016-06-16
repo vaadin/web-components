@@ -12,6 +12,21 @@
 </head>
 
 <body>
+  <script>
+    // Needed for poly-filled browsers
+    document.addEventListener('WebComponentsReady', function() {
+      // Create a custom validator
+      new Polymer.IronMeta({
+        type: 'validator',
+        key: 'year-2016-validator',
+        value: {
+          validate: function(value) {
+            return new Date(value).getFullYear() === 2016;
+          }
+        }
+      });
+    });
+  </script>
   <test-fixture id="datepicker">
     <template>
       <vaadin-date-picker></vaadin-date-picker>
@@ -29,17 +44,6 @@
   <script>
     describe('using as a field in html form', function() {
       var datepicker;
-
-      // Create a custom validator
-      new Polymer.IronMeta({
-        type: 'validator',
-        key: 'year-2016-validator',
-        value: {
-          validate: function(value) {
-            return new Date(value).getFullYear() === 2016;
-          }
-        }
-      });
 
       beforeEach(function() {
         datepicker = fixture('datepicker');
