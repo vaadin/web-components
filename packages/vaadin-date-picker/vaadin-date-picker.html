@@ -241,6 +241,14 @@ If you want to replace the default input field with a custom implementation, you
         }
       },
 
+      /**
+       * Override the IronValidatableBehavior._getValidity implementation, replacing
+       * it with the iron-input validation.
+       */
+      _getValidity: function() {
+        return this.inputElement.validate();
+      },
+
       _hideClearIcon: function(selectedDate, opened, fullscreen) {
         return !selectedDate || !opened || fullscreen;
       },
