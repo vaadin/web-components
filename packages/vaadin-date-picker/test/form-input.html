@@ -13,7 +13,9 @@
 
 <body>
   <script>
+    // Needed for poly-filled browsers
     document.addEventListener('WebComponentsReady', function() {
+      // Create a custom validator
       new Polymer.IronMeta({
         type: 'validator',
         key: 'year-2016-validator',
@@ -25,7 +27,6 @@
       });
     });
   </script>
-
   <test-fixture id="datepicker">
     <template>
       <vaadin-date-picker></vaadin-date-picker>

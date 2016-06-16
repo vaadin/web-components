@@ -1,38 +1,32 @@
 <!doctype html>
 <html>
-
 <head>
-  <title>vaadin-date-picker Code Examples</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-upload Basic Examples</title>
+
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-  <link rel="import" href="../../iron-meta/iron-meta.html">
-  <link rel="import" href="../vaadin-date-picker.html">
-
-  <style is="custom-style" include="demo-pages-shared-styles iron-flex iron-flex-alignment">
-    body {
-      background: #f9f9f9;
-    }
-
-    .vertical-section-container {
-      max-width: 500px;
-    }
-  </style>
+  <link rel="import" href="common.html">
 </head>
 
 <body unresolved>
   <div class="vertical-section-container centered">
-    <h4>Plain date picker</h4>
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><b>Basic Examples</b></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+      </ul>
+    </nav>
+    <h3>Plain date picker</h3>
     <demo-snippet>
       <template>
         <vaadin-date-picker></vaadin-date-picker>
       </template>
     </demo-snippet>
 
-    <h4>Label attribute</h4>
+    <h3>Label attribute</h3>
     <demo-snippet>
       <template>
         <vaadin-date-picker label="Pick a date">
@@ -40,7 +34,7 @@
       </template>
     </demo-snippet>
 
-    <h4>Pre-selected value</h4>
+    <h3>Pre-selected value</h3>
     <demo-snippet>
       <template>
         <vaadin-date-picker label="Birthday" value="1980-08-14">
@@ -48,7 +42,7 @@
       </template>
     </demo-snippet>
 
-    <h4>Disabled and readonly</h4>
+    <h3>Disabled and readonly</h3>
     <demo-snippet>
       <template>
         <vaadin-date-picker disabled label="Disabled input" value="1980-08-14"></vaadin-date-picker>
@@ -56,32 +50,7 @@
       </template>
     </demo-snippet>
 
-    <h4>Localizing</h4>
-    <demo-snippet>
-      <template>
-        <vaadin-date-picker label="Syntymäpäivä" id="finnish" value="1980-08-14">
-        </vaadin-date-picker>
-        <script>
-          var datepicker = document.querySelector('vaadin-date-picker#finnish');
-          datepicker.i18n = {
-            today: 'tänään',
-            cancel: 'peruuta',
-            firstDayOfWeek: 1,
-            monthNames:
-             'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
-            weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
-            formatDate: function(d) {
-              return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
-            },
-            formatTitle: function(monthName, fullYear) {
-              return monthName + ' ' + fullYear;
-            }
-          };
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h4>Initial position</h4>
+    <h3>Initial position</h3>
     <demo-snippet>
       <template>
         <vaadin-date-picker label="Birthday" initial-position="1980-01-01">
@@ -89,82 +58,6 @@
       </template>
     </demo-snippet>
 
-    <h4>Two date pickers side-by-side</h4>
-    <demo-snippet>
-      <template>
-        <div class="layout horizontal around-justified">
-          <vaadin-date-picker id="start" label="Start"></vaadin-date-picker>
-          <vaadin-date-picker id="end" label="End"></vaadin-date-picker>
-        </div>
-        <script>
-          var start = document.querySelector('#start');
-          var end = document.querySelector('#end');
-          start.addEventListener('value-changed', function() {
-            // Open the end date picker with a delay to
-            // make it less confusing.
-            window.setTimeout(function() {
-              end.value = start.value;
-              end.open();
-            }, 500);
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h4>Styling</h4>
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          .custom-theme {
-            --primary-color: var(--paper-indigo-700);
-            --dark-theme-background-color: #fff;
-            --dark-theme-secondary-color: #737373;
-            --primary-text-color: #abc;
-            --secondary-text-color: #bcbcbc;
-            --light-primary-color: var(--paper-indigo-500);
-            --primary-background-color: var(--paper-grey-900);
-
-            --vaadin-date-picker-toolbar: {
-              background: var(--paper-grey-900);
-            }
-            --vaadin-date-picker-calendar-weekday-cell: {
-              text-transform: capitalize;
-              font-size: 14px;
-            }
-            --vaadin-date-picker-calendar-cell-selected: {
-              color: #fff;
-            }
-          }
-        </style>
-        <vaadin-date-picker class="custom-theme" label="Birthday"></vaadin-date-picker>
-      </template>
-    </demo-snippet>
-
-    <h4>Custom Validator</h4>
-    <demo-snippet>
-      <template>
-        <vaadin-date-picker
-          id="custom-validation"
-          auto-validate
-          label="Only this year is accepted">
-        </vaadin-date-picker>
-
-        <script>
-          document.addEventListener('WebComponentsReady', function() {
-            new Polymer.IronMeta({
-              type: 'validator',
-              key: 'this-year-validator',
-              value: {
-                validate: function(value) {
-                  var currentYear = new Date().getFullYear();
-                  return new Date(value).getFullYear() === currentYear;
-                }
-              }
-            });
-            document.querySelector('#custom-validation').validator = 'this-year-validator';
-          });
-        </script>
-    </demo-snippet>
   </div>
 </body>
 </html>

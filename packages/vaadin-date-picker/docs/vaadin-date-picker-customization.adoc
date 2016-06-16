@@ -1,0 +1,28 @@
+---
+title: Input Customization
+order: 8
+layout: page
+---
+
+[[vaadin-date-picker.input-customization]]
+= Customizing the Input Field
+
+The [vaadinelement]#vaadin-date-picker# element allows you to customize the default input field by using  CSS mixins.
+If that's not enough, you can also replace the whole input field by using the [vaadinelement]#vaadin-date-picker-light# element.
+
+== Replacing the Input
+
+The [vaadinelement]#vaadin-date-picker-light#  element is a light version of the full [vaadinelement]#vaadin-date-picker#, and it provides only the dropdown functionality.
+
+The custom input element must have a property for the value, which is available for two-way data-binding.
+By default it is expected that this property is named [propertyname]#bindValue# to make it compatible with link:https://elements.polymer-project.org/elements/iron-input[[elementname]#iron-input#].
+You can change the property name with the [propertyname]#attrForValue# property.
+
+In order to create a simple `iron-input`-based date-picker, you can just wrap the input inside the element.
+
+[source,html]
+----
+<vaadin-date-picker-light>
+  <input is="iron-input">
+</vaadin-date-picker-light>
+----

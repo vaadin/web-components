@@ -1,0 +1,400 @@
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.datepicker = vaadin.elements.datepicker || {};
+  vaadin.elements.datepicker.DatePickerBehaviorImpl = {
+    observers: [
+      '_selectedDateChanged(_selectedDate, i18n.formatDate)'
+    ],
+
+    properties: {
+      /**
+       * The current selected date.
+       */
+      _selectedDate: {
+        type: Date
+      },
+
+      /**
+       * The value for this element.
+       *
+       * Supported date formats:
+       * - ISO 8601 `"YYYY-MM-DD"` (default)
+       * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+       *
+       * @type {String}
+       */
+      value: {
+        type: String,
+        observer: '_valueChanged'
+      },
+
+      /**
+       * Indicates whether this date picker has a value.
+       */
+      hasValue: {
+        type: Boolean,
+        computed: '_hasValue(value)',
+        reflectToAttribute: true
+      },
+
+      /**
+       * Date which should be visible when there is no value selected.
+       *
+       * The same date formats as for the `value` property are supported.
+       */
+      initialPosition: String,
+
+      /**
+       * The label for this element.
+       */
+      label: String,
+
+      /**
+       * Set true to open the date selector overlay.
+       */
+      opened: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+
+      _fullscreen: {
+        value: false,
+        observer: '_fullscreenChanged'
+      },
+
+      _fullscreenMediaQuery: {
+        value: '(max-width: 420px), (max-height: 420px)'
+      },
+
+      // An array of ancestor elements whose -webkit-overflow-scrolling is forced from value
+      // 'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.
+      _touchPrevented: Array,
+
+      /**
+       * The object used to localize this component.
+       * To change the default localization, replace the entire
+       * _i18n_ object or just the property you want to modify.
+       *
+       * The object has the following JSON structure and default values:
+
+    {
+      // An array with the full names of months starting
+      // with January.
+      monthNames: [
+        'January', 'February', 'March', 'April', 'May',
+        'June', 'July', 'August', 'September',
+        'October', 'November', 'December'
+      ],
+
+      // An array with the short names of days starting
+      // with Sunday.
+      weekdaysShort: [
+        'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
+      ],
+
+      // An integer indicating the first day of the week
+      // (0 = Sunday, 1 = Monday, etc.).
+      firstDayOfWeek: 0,
+
+      // Translation of the Today shortcut button text.
+      today: 'Today',
+
+      // Translation of the Cancel button text.
+      cancel: 'Cancel',
+
+      // A function to format given `Date` object as
+      // date string.
+      formatDate: function(d) {
+        // returns a string representation of the given
+        // Date object in 'MM/DD/YYYY' -format
+      },
+
+      // A function to format given `monthName` and
+      // `fullYear` integer as calendar title string.
+      formatTitle: function(monthName, fullYear) {
+        return monthName + ' ' + fullYear;
+      }
+    }
+
+       *
+       * @default {English/US}
+       */
+      i18n: {
+        type: Object,
+        value: function() {
+          return {
+            monthNames: [
+              'January', 'February', 'March', 'April', 'May',
+              'June', 'July', 'August', 'September', 'October', 'November', 'December'
+            ],
+            weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            firstDayOfWeek: 0,
+            today: 'Today',
+            cancel: 'Cancel',
+            formatDate: function(d) {
+              return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+            },
+            formatTitle: function(monthName, fullYear) {
+              return monthName + ' ' + fullYear;
+            }
+          };
+        }
+      }
+    },
+
+    created: function() {
+      this._boundOnScroll = this._onScroll.bind(this);
+    },
+
+    listeners: {
+      'tap': 'open',
+      'touchend': '_preventDefault',
+      'keydown': '_onKeydown'
+    },
+
+    ready: function() {
+      // The value property is also defined in IronFormElementBehavior, which
+      // will mix up the default value if set in the property.
+      if (this.value === undefined) {
+        this.value = '';
+      }
+    },
+
+    /**
+     * Opens the dropdown.
+     */
+    open: function(e) {
+      this._updateAlignmentAndPosition();
+      // Prevent dropdown.open() being called when input is disabled or read-only, or tapped
+      // inside the overlay
+      if (!this.disabled && !this.readonly && (!e || Polymer.dom(e).path.indexOf(this.$.overlay) < 0)) {
+        this.$.dropdown.open();
+      }
+    },
+
+    /**
+     * Closes the dropdown.
+     */
+    close: function() {
+      this.$.dropdown.close();
+    },
+
+   /**
+    * @property inputElement
+    * @type HTMLElement
+    */
+    get inputElement() {
+      return this._input();
+    },
+
+    _parseDate: function(str) {
+      // Parsing with RegExp to ensure correct format
+      var parts = /^(\d{4}|[-+]\d{6})-(\d{2})-(\d{2})$/.exec(str);
+      if (!parts) {
+        return;
+      }
+
+      var date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+      date.setFullYear(parseInt(parts[1], 10));
+      date.setMonth(parseInt(parts[2], 10) - 1);
+      date.setDate(parseInt(parts[3], 10));
+      return date;
+    },
+
+    _formatISO: function(date) {
+      return date instanceof Date ?
+        (new Date(date.getTime() - date.getTimezoneOffset() * 60000)).toISOString().split('T')[0] :
+        '';
+    },
+
+    _selectedDateChanged: function(selectedDate) {
+      this.value = this._formatISO(selectedDate);
+      this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
+    },
+
+    _hasValue: function(value) {
+      return !!value;
+    },
+
+    _valueChanged: function(value, oldValue) {
+      if (!value) {
+        this._selectedDate = null;
+        return;
+      }
+
+      var date = this._parseDate(value);
+      if (!date) {
+        this.value = oldValue;
+        return;
+      }
+      if (!(this._selectedDate instanceof Date) ||
+        date.getFullYear() !== this._selectedDate.getFullYear() ||
+        date.getMonth() !== this._selectedDate.getMonth() ||
+        date.getDate() !== this._selectedDate.getDate()) {
+        this._selectedDate = date;
+      }
+    },
+
+    _updateAlignmentAndPosition: function() {
+      var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
+
+      var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
+      var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+
+      this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
+      this.$.dropdown.horizontalAlign = this._fullscreen ? null : rightAlign ? 'right' : 'left';
+
+      // Previously used verticalOffset property has been recently deprecated
+      // in favor of using top and bottom margins.
+      if (this._fullscreen) {
+        this.$.dropdown.style.marginTop = 0;
+        this.$.dropdown.style.marginBottom = 0;
+      } else {
+        this.$.dropdown.style.marginTop = (bottomAlign ? 10 : this.clientHeight + 2) + 'px';
+        this.$.dropdown.style.marginBottom = (bottomAlign ? this.clientHeight : 10) + 'px';
+      }
+
+      this.$.dropdown.refit();
+    },
+
+    _fullscreenChanged: function() {
+      if (this.$.dropdown.opened) {
+        this._updateAlignmentAndPosition();
+      }
+    },
+
+    _onOverlayOpened: function() {
+      this.$.overlay.initialPosition = this._selectedDate ||
+        this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
+      this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
+
+      window.addEventListener('scroll', this._boundOnScroll, true);
+      // We cannot use iron-resize event because 1- we fire it, 2- it's fired
+      // many times, 3- causes heigth and scroll issues in safari.
+      window.addEventListener('resize', this._boundOnScroll, true);
+
+      // Checking if the browser supports webkitOverflowScrolling
+      if (document.createElement('div').style.webkitOverflowScrolling === '') {
+        this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
+      }
+
+      // focus to enable keyboard navigation
+      this.$.overlay.focus();
+
+      this.updateStyles();
+    },
+
+    // A hack needed for iOS to prevent dropdown from being clipped in an
+    // ancestor container with -webkit-overflow-scrolling: touch;
+    _preventWebkitOverflowScrollingTouch: function(element) {
+      var result = [];
+      while (element) {
+        if (window.getComputedStyle(element).webkitOverflowScrolling === 'touch') {
+          var oldInlineValue = element.style.webkitOverflowScrolling;
+          element.style.webkitOverflowScrolling = 'auto';
+          result.push({
+            element: element,
+            oldInlineValue: oldInlineValue
+          });
+        }
+        element = element.parentElement;
+      }
+      return result;
+    },
+
+    _onOverlayClosed: function() {
+      window.removeEventListener('scroll', this._boundOnScroll, true);
+      window.removeEventListener('resize', this._boundOnScroll, true);
+
+      this._focus();
+
+      if (this._touchPrevented) {
+        this._touchPrevented.forEach(function(prevented) {
+          prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
+        });
+        this._touchPrevented = [];
+      }
+
+      this.updateStyles();
+    },
+
+    detached: function() {
+      this._onOverlayClosed();
+    },
+
+    _onScroll: function(e) {
+      if (e.target === window || !this.$.overlay.contains(e.target)) {
+        this.$.dropdown.style.bottom = 'auto';
+        this.$.dropdown.resetFit();
+        this._updateAlignmentAndPosition();
+        this.$.dropdown.fire('iron-resize');
+      }
+    },
+
+    _preventCancelOnComponentAccess: function(e) {
+      var event = Polymer.dom(e.detail);
+      if (/tap|mousedown|touchstart/.test(e.detail.type) && event.path.indexOf(this) > -1) {
+        e.preventDefault();
+      }
+    },
+
+    _focus: function() {
+      this.inputElement.focus();
+    },
+
+    _preventDefault: function(e) {
+      e.preventDefault();
+    },
+
+    /**
+     * Keyboard Navigation
+     */
+    _eventKey: function(e) {
+      var keys = ['down', 'up'];
+
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
+          return k;
+        }
+      }
+    },
+
+    _onKeydown: function(e) {
+      switch (this._eventKey(e)) {
+        case 'down':
+        case 'up':
+          // prevent scrolling the page with arrows
+          e.preventDefault();
+
+          if (!this.opened) {
+            this.open();
+          }
+          break;
+      }
+    }
+  };
+
+  /** @polymerBehavior vaadin.elements.datepicker.DatePickerBehavior */
+  vaadin.elements.datepicker.DatePickerBehavior = [
+    Polymer.IronFormElementBehavior,
+    Polymer.IronValidatableBehavior,
+    Polymer.IronA11yKeysBehavior,
+    vaadin.elements.datepicker.DatePickerBehaviorImpl
+  ];
+
+  /**
+   * Fired when the value changes.
+   *
+   * @event value-changed
+   * @param {Object} detail
+   *  @param {String} detail.value the date value or an empty `String`.
+   */
+</script>

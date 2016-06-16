@@ -1,0 +1,118 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-date-picker-light>` is a customizable version of the `<vaadin-date-picker>` providing
+only the scrollable month calendar view and leaving the input field definition to the user.
+
+To create a custom input field, you need to add a child element which has a two-way
+data-bindable property representing the input value. The property name is expected
+to be `bindValue` by default. See the example below for a simplest possible example
+using an `<input>` element extended with `iron-input`.
+
+```html
+<vaadin-date-picker-light>
+  <input is="iron-input" />
+</vaadin-date-picker-light>
+```
+
+If you are using other custom input fields like `<paper-input>`, you
+need to define the name of value property using the `attrForValue` property.
+
+```html
+<vaadin-date-picker-light attr-for-value="value">
+  <paper-input label="Birthday">
+  </paper-input>
+</vaadin-date-picker-light>
+```
+
+@element vaadin-date-picker-light
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="vaadin-date-picker-overlay.html">
+<link rel="import" href="vaadin-date-picker-behavior.html">
+
+<dom-module id="vaadin-date-picker-light">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #overlay {
+        height: 100vh;
+        width: 420px;
+      }
+
+    </style>
+    <content></content>
+
+    <iron-dropdown
+        id="dropdown"
+        fullscreen$=[[_fullscreen]]
+        allow-outside-scroll
+        on-iron-overlay-opened="_onOverlayOpened"
+        on-iron-overlay-closed="_onOverlayClosed"
+        on-iron-overlay-canceled="_preventCancelOnComponentAccess"
+        opened="{{opened}}">
+      <vaadin-date-picker-overlay
+        id="overlay" i18n="[[i18n]]"
+        fullscreen$=[[_fullscreen]]
+        label=[[label]]
+        on-date-tap="close"
+        selected-date="{{_selectedDate}}"
+        class="dropdown-content"
+        on-close="close"
+        focused-date="[[focusedDate]]"
+        tabindex="-1">
+      </vaadin-date-picker-overlay>
+    </iron-dropdown>
+
+    <iron-media-query
+        query="[[_fullscreenMediaQuery]]"
+        query-matches="{{_fullscreen}}">
+    </iron-media-query>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-date-picker-light',
+
+      behaviors: [
+        vaadin.elements.datepicker.DatePickerBehavior
+      ],
+
+      properties: {
+        /**
+         * Name of the two-way data-bindable property representing the
+         * value of the custom input field.
+         */
+        attrForValue: {
+          type: String,
+          value: 'bind-value'
+        }
+      },
+
+      _input: function() {
+        // Using the same selector than in combo-box.
+        // TODO: revisit this to decide the selector and document conveniently.
+        return Polymer.dom(this).querySelector('input[is="iron-input"],paper-input,.paper-input-input,.input');
+      },
+
+      set _inputValue(value) {
+        if (this.inputElement) {
+          this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = value;
+        }
+      },
+
+      get _inputValue() {
+        return this.inputElement && this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)];
+      }
+    });
+  </script>
+</dom-module>
