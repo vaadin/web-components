@@ -30,9 +30,8 @@
       });
 
       it('should open calendar on tap', function() {
-        // iOS needs this before using MockInteractions
-        window.focus();
-        MockInteractions.tap(datepicker.inputElement);
+        // mock-interactions tap does not work in mobile devices
+        tap(datepicker);
         expect(datepicker.$.dropdown.opened).to.be.true;
       });
     });
