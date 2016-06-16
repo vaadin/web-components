@@ -8,8 +8,7 @@
   vaadin.elements.datepicker = vaadin.elements.datepicker || {};
   vaadin.elements.datepicker.DatePickerBehaviorImpl = {
     observers: [
-      '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-      '_setName(name)'
+      '_selectedDateChanged(_selectedDate, i18n.formatDate)'
     ],
 
     properties: {
@@ -32,6 +31,15 @@
       value: {
         type: String,
         observer: '_valueChanged'
+      },
+
+      /**
+       * Indicates whether this date picker has a value.
+       */
+      hasValue: {
+        type: Boolean,
+        computed: '_hasValue(value)',
+        reflectToAttribute: true
       },
 
       /**
@@ -177,12 +185,8 @@
     },
 
    /**
-    * The reference to the UI element that handles the value, and opens the selector.
-    * Despite the name, it could be an input or any other Element implementing `iron-input`
-    *
     * @property inputElement
     * @type HTMLElement
-    * @read-only
     */
     get inputElement() {
       return this._input();
@@ -210,9 +214,11 @@
 
     _selectedDateChanged: function(selectedDate) {
       this.value = this._formatISO(selectedDate);
-      if (selectedDate) {
-        this._inputValue = this.i18n.formatDate(selectedDate);
-      }
+      this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
+    },
+
+    _hasValue: function(value) {
+      return !!value;
     },
 
     _valueChanged: function(value, oldValue) {
@@ -373,10 +379,6 @@
           }
           break;
       }
-    },
-
-    _setName: function(name) {
-      this.inputElement.setAttribute('name', name);
     }
   };
 

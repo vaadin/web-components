@@ -142,7 +142,7 @@ If you want to replace the default input field with a custom implementation, you
         @apply(--vaadin-date-picker-calendar-icon);
       }
 
-      [hideclear] #clear {
+      :host(:not([has-value])) #clear {
         display: none;
       }
 
@@ -151,16 +151,13 @@ If you want to replace the default input field with a custom implementation, you
         padding-right: 28px;
       }
 
-      :host([opened]) #inputcontainer:not([hideclear]) #input {
+      :host([opened][has-value]) #inputcontainer #input {
         padding-right: 60px;
         margin-right: -32px;
-
       }
-
     </style>
 
     <paper-input-container id="inputcontainer"
-        hideclear$="[[_hideClearIcon(_selectedDate, opened, _fullscreen)]]"
         auto-validate$="[[autoValidate]]"
         tabindex$="[[_tabindex(disabled)]]"
         invalid$="[[invalid]]"
@@ -172,6 +169,7 @@ If you want to replace the default input field with a custom implementation, you
           tabindex="-1"
           type="text"
           on-focus="_focus"
+          name$="[[name]]"
           invalid="{{invalid}}"
           required$="[[required]]"
           validator="[[validator]]"
@@ -241,6 +239,8 @@ If you want to replace the default input field with a custom implementation, you
         }
       },
 
+      // TODO: revisit this in order to use validatable-behavior for both the full and
+      // the light component. Consider auto-validate, and validate(value) signature.
       /**
        * Override the IronValidatableBehavior._getValidity implementation, replacing
        * it with the iron-input validation.

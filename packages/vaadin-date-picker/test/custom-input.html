@@ -29,15 +29,6 @@
         datepicker = fixture('custom-input-datepicker');
       });
 
-      it('should have the given name', function() {
-        datepicker.name = 'foo';
-        expect(datepicker.inputElement.getAttribute('name')).to.equal('foo');
-      });
-
-      it('should have no name', function() {
-        expect(datepicker.inputElement.getAttribute('name')).to.equal(null);
-      });
-
       it('should open calendar on tap', function() {
         // iOS needs this before using MockInteractions
         window.focus();

@@ -179,16 +179,11 @@
         expect(datepicker.$.input.bindValue).to.equal('12/31/1999');
       });
 
-      it('should not show clear icon', function(done) {
-        expect(datepicker.$.clear.clientHeight).to.equal(0);
+      it('should not show clear icon', function() {
         datepicker.value = '2000-02-01';
-        expect(datepicker.$.clear.clientHeight).to.equal(0);
+        expect(datepicker.$.clear.clientHeight).not.equal(0);
         datepicker.value = '';
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(datepicker.$.clear.clientHeight).to.equal(0);
-          done();
-        });
-        datepicker.open();
+        expect(datepicker.$.clear.clientHeight).to.equal(0);
       });
 
       it('should show clear icon', function(done) {
