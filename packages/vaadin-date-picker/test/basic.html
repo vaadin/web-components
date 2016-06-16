@@ -145,7 +145,7 @@
       });
 
       it('should focus the input on overlay close', function(done) {
-        var spy = sinon.spy(datepicker.$.inputcontainer, 'focus');
+        var spy = sinon.spy(datepicker.$.input, 'focus');
         datepicker.addEventListener('iron-overlay-closed', function() {
           expect(spy.called).to.be.true;
           done();
