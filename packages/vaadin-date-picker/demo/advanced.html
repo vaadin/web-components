@@ -123,19 +123,39 @@
       </template>
     </demo-snippet>
 
-    <h3>Custom Input</h3>
+    <h3>Custom Inputs</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .input {
+          .my-input1 input {
             background: var(--paper-grey-100);
             border: 2px solid var(--paper-blue-500);
             border-radius: 4px;
             padding: 4px;
+            text-align: center;
+          }
+        </style>
+        <vaadin-date-picker-light class="my-input1">
+          <input is="iron-input" placeholder="Date" readonly size="10"/>
+        </vaadin-date-picker-light>
+      </template>
+    </demo-snippet>
+
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .my-input2 input {
+            border: none;
+            font-size: 14px;
+            background: none;
           }
         </style>
         <vaadin-date-picker-light>
-          <input is="iron-input" placeholder="Date" readonly>
+         <div class="my-input2">
+           <iron-icon icon="event"></iron-icon>
+           CHECK-IN:
+           <input is="iron-input" disabled size="10"/>
+         </div>
         </vaadin-date-picker-light>
       </template>
     </demo-snippet>

@@ -241,12 +241,6 @@ If you want to replace the default input field with a custom implementation, you
         }
       },
 
-      ready: function() {
-        window.d = this;
-        window.p = this.$.inputcontainer;
-        window.i = this.$.input;
-      },
-
       _hideClearIcon: function(selectedDate, opened, fullscreen) {
         return !selectedDate || !opened || fullscreen;
       },
