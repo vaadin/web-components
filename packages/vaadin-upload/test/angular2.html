@@ -92,83 +92,11 @@
       });
 
       describe('Light DOM', function() {
-
-        it('should react to light DOM changes (drop-label)', function(done) {
-          setTimeout(function() {
-            var dropLabel = document.createElement('div');
-            dropLabel.className = 'drop-label';
-            dropLabel.innerHTML = 'Drop stuff here';
-            upload.appendChild(dropLabel);
-
-            setTimeout(function() {
-              var content = '';
-              if (Polymer.Settings.useShadow) {
-                content = upload.$.dropLabel.querySelector('content').getDistributedNodes()[0].innerHTML;
-              } else {
-                content = upload.$.dropLabel.firstElementChild.innerHTML;
-              }
-              expect(content).to.equal('Drop stuff here');
-              done();
-            }, 0);
-          }, 0);
-        });
-
-        it('should react to light DOM changes (file-list)', function(done) {
-          setTimeout(function() {
-            var dropLabel = document.createElement('div');
-            dropLabel.className = 'file-list';
-            dropLabel.innerHTML = 'Dummy list';
-            upload.appendChild(dropLabel);
-
-            setTimeout(function() {
-              var content = '';
-              if (Polymer.Settings.useShadow) {
-                content = upload.$.buttons.nextElementSibling.getDistributedNodes()[0].innerHTML;
-              } else {
-                content = upload.$.buttons.nextElementSibling.innerHTML;
-              }
-              expect(content).to.equal('Dummy list');
-              done();
-            }, 0);
-          }, 0);
-        });
-
-        it('should react to light DOM changes (content)', function(done) {
-          setTimeout(function() {
-            var dropLabel = document.createElement('div');
-            dropLabel.innerHTML = 'Dummy content';
-            upload.appendChild(dropLabel);
-
-            setTimeout(function() {
-              var content = '';
-              if (Polymer.Settings.useShadow) {
-                content = Polymer.dom(upload.root)
-                                 .querySelector('content[select=".file-list"]')
-                                 .nextElementSibling.getDistributedNodes()[1].textContent;
-              } else {
-                content = upload.$.fileList.nextElementSibling.innerHTML;
-              }
-              expect(content).to.equal('Dummy content');
-              done();
-            }, 0);
-          }, 0);
-        });
-
-        it('should render light DOM text content correctly', function(done) {
-          setTimeout(function() {
-            setTimeout(function() {
-              var content = '';
-              if (Polymer.Settings.useShadow) {
-                content = Polymer.dom(upload.root)
-                                 .querySelector('content[select=".file-list"]')
-                                 .nextElementSibling.getDistributedNodes()[0].textContent;
-              } else {
-                content = upload.$.fileInput.previousSibling.textContent;
-              }
-              expect(content).to.equal('Text content');
-              done();
-            }, 0);
-          }, 0);
+        it('should render light DOM text content correctly', function() {
+          var content = Polymer.dom(
+            Polymer.dom(upload.root).querySelector('content:not([select])')
+          ).getDistributedNodes()[0].textContent;
+          expect(content).to.equal('Text content');
         });
 
         it('should react to light DOM changes triggered by ngIf (file-list)', function() {
