@@ -25,8 +25,8 @@ image::img/vaadin-combo-box-customization.png[]
 [source,html]
 ----
 <vaadin-combo-box label="Custom Icons">
-  <paper-icon-button suffix icon="remove-circle" class="clear-button"></paper-icon-button>
-  <paper-icon-button suffix icon="search" class="toggle-button"></paper-icon-button>
+  <paper-icon-button icon="remove-circle" class="clear-button"></paper-icon-button>
+  <paper-icon-button icon="search" class="toggle-button"></paper-icon-button>
 </vaadin-combo-box>
 ----
 
