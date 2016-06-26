@@ -64,7 +64,7 @@ When using the element inside another Polymer element, you can use the declarati
 ----
 <dom-module id="my-element">
   <template>
-    <vaadin-combo-box on-value-change="valueChanged"></vaadin-combo-box>
+    <vaadin-combo-box on-value-changed="valueChanged"></vaadin-combo-box>
   </template>
 </dom-module>
 <script>
