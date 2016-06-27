@@ -156,15 +156,15 @@
     });
 
     it('should clear the selection when closing the overlay and input is cleared', function() {
-        combobox.value = 'foo';
+      combobox.value = 'foo';
 
-        combobox.$.input.bindValue = '';
-        combobox.$.input.fire('input');
+      combobox.$.input.bindValue = '';
+      combobox.$.input.fire('input');
 
-        combobox.close();
+      combobox.close();
 
-        expect(combobox.value).to.be.empty;
-        expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
+      expect(combobox.value).to.be.empty;
+      expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
     });
   });
 </script>

@@ -134,11 +134,11 @@
           });
 
           it('should not refocus the input field when closed from icon', function() {
-           tapToggleIcon();
+            tapToggleIcon();
 
-           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
-           expect(focusedInput).to.be.null;
+            expect(focusedInput).to.be.null;
           });
         } else if (!safari) { // TODO: Sauce Labs bug doesn't allow Safari in OS X to focus.
           it('should focus input on dropdown open', function() {
@@ -146,13 +146,13 @@
             expect(focusedInput).to.equal(combobox.$.input);
           });
 
-         it('should refocus the input field when closed from icon', function() {
-           tapToggleIcon();
+          it('should refocus the input field when closed from icon', function() {
+            tapToggleIcon();
 
-           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
-           expect(focusedInput).to.eql(combobox.$.input);
-         });
+            expect(focusedInput).to.eql(combobox.$.input);
+          });
         }
       });
     });
@@ -162,12 +162,12 @@
         it('should close popup when tapping outside overlay', function() {
           combobox.open();
 
-            Polymer.Base.fire('tap', {}, {
-              bubbles: true,
-              node: document.body
-            });
+          Polymer.Base.fire('tap', {}, {
+            bubbles: true,
+            node: document.body
+          });
 
-            expect(combobox.opened).to.be.false;
+          expect(combobox.opened).to.be.false;
         });
       } else {
         it('should close popup when clicking outside overlay', function() {

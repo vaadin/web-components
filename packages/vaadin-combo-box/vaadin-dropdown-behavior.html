@@ -134,11 +134,11 @@
 
     _removeOutsideClickListener: function() {
       if (this.$.overlay.touchDevice) {
-       // Not sure if this is a good idea to remove this Gesture globally, but that's how the iron-overlay-behavior does it.
-       Polymer.Gestures.remove(document, 'tap', null);
-       document.removeEventListener('tap', this._outsideClickListener.bind(this), true);
+        // Not sure if this is a good idea to remove this Gesture globally, but that's how the iron-overlay-behavior does it.
+        Polymer.Gestures.remove(document, 'tap', null);
+        document.removeEventListener('tap', this._outsideClickListener.bind(this), true);
       } else {
-       document.removeEventListener('click', this._outsideClickListener.bind(this), true);
+        document.removeEventListener('click', this._outsideClickListener.bind(this), true);
       }
     }
   };
