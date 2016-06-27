@@ -180,6 +180,7 @@
       });
 
       it('should not show clear icon', function() {
+        datepicker.open();
         datepicker.value = '2000-02-01';
         expect(datepicker.$.clear.clientHeight).not.equal(0);
         datepicker.value = '';
@@ -405,7 +406,13 @@
         });
 
         it('calendar icon should be hidden', function() {
-          expect(datepicker.$.calendar.hidden).to.be.equal(true);
+          expect(datepicker.$.calendar.clientHeight).to.equal(0);
+        });
+
+        it('clear icon should be hidden', function() {
+          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          datepicker.open();
+          expect(datepicker.$.clear.clientHeight).to.equal(0);
         });
 
         it('should not be focusable', function() {
@@ -425,7 +432,13 @@
         });
 
         it('calendar icon should be hidden', function() {
-          expect(datepicker.$.calendar.hidden).to.be.equal(true);
+          expect(datepicker.$.calendar.clientHeight).to.equal(0);
+        });
+
+        it('clear icon should be hidden', function() {
+          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          datepicker.open();
+          expect(datepicker.$.clear.clientHeight).to.equal(0);
         });
 
         it('should be focusable', function() {

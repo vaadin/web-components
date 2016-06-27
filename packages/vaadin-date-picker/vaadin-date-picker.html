@@ -142,7 +142,12 @@ If you want to replace the default input field with a custom implementation, you
         @apply(--vaadin-date-picker-calendar-icon);
       }
 
-      :host(:not([has-value])) #clear {
+      :host([disabled]) #calendar,
+      :host([readonly]) #calendar,
+      :host(:not([opened])) #clear,
+      :host(:not([has-value])) #clear,
+      :host([readonly]) #clear,
+      :host([disabled]) #clear {
         display: none;
       }
 
@@ -179,8 +184,7 @@ If you want to replace the default input field with a custom implementation, you
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
-      <div suffix id="calendar" on-tap="_toggle"
-          hidden$="[[_hideCalendarIcon(disabled, readonly)]]">
+      <div suffix id="calendar" on-tap="_toggle">
         <iron-icon icon="event"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
@@ -227,7 +231,8 @@ If you want to replace the default input field with a custom implementation, you
          */
         disabled: {
           type: Boolean,
-          value: false
+          value: false,
+          reflectToAttribute: true
         },
 
         /**
@@ -235,7 +240,8 @@ If you want to replace the default input field with a custom implementation, you
          */
         readonly: {
           type: Boolean,
-          value: false
+          value: false,
+          reflectToAttribute: true
         }
       },
 
@@ -247,14 +253,6 @@ If you want to replace the default input field with a custom implementation, you
        */
       _getValidity: function() {
         return this.inputElement.validate();
-      },
-
-      _hideClearIcon: function(selectedDate, opened, fullscreen) {
-        return !selectedDate || !opened || fullscreen;
-      },
-
-      _hideCalendarIcon: function(disabled, readonly) {
-        return readonly || disabled;
       },
 
       _clear: function(e) {
