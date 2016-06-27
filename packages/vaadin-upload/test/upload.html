@@ -154,16 +154,16 @@
           upload._uploadFile(file);
         });
 
-        it('should do nothing if a `upload-request` listener prevents default', function(done) {
+        it('should not send xhr if `upload-request` listener prevents default', function(done) {
           upload.addEventListener('upload-request', function(e) {
             e.preventDefault();
+
+            Polymer.Base.async(function() {
+              expect(e.detail.xhr.readyState).to.be.equal(1);
+              done();
+            }, 100);
           });
 
-          Polymer.Base.async(function() {
-            expect(file.uploading).not.to.be.ok;
-            expect(file.error).not.to.be.ok;
-            done();
-          }, 200);
           upload._uploadFile(file);
         });
 

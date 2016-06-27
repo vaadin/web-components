@@ -663,19 +663,21 @@ Custom property | Description | Default
       xhr.open(this.method, file.uploadTarget, true);
       this._configureXhr(xhr);
 
-      // Custom listener could modify the xhr just before sending it
-      // preventing default
-      evt = this.fire('upload-request', {file: file, xhr: xhr, formData: formData}, {cancelable: true});
-      if (evt.defaultPrevented) {
-        return;
-      }
-
       file.status = this.i18n.uploading.status.connecting;
       file.uploading = file.indeterminate = true;
       file.complete = file.abort = file.error = false;
-      this.fire('upload-start', {file: file, xhr: xhr});
-      this._notifyFileChanges(file);
-      xhr.send(formData);
+
+      xhr.upload.onloadstart = function() {
+        this.fire('upload-start', {file: file, xhr: xhr});
+        this._notifyFileChanges(file);
+      }.bind(this);
+
+      // Custom listener could modify the xhr just before sending it
+      // preventing default
+      evt = this.fire('upload-request', {file: file, xhr: xhr, formData: formData}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        xhr.send(formData);
+      }
     },
 
     _retryFileUpload: function(file) {

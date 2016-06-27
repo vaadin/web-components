@@ -110,7 +110,7 @@ The following events are fired by the component in different phases of the uploa
 `upload-error`:: Fired if the upload process failed.
 `upload-progress`:: Fired as many times as a file progress is updated.
 `upload-request`:: Fired when the request has been opened but not yet sent. It is useful for appending additional data keys to the request and for changing some parameters such as headers.
-  If the event is default-prevented, then the request is not sent to the server.
+  If the event is default-prevented, then the request is not sent to the server. In this case, you can send the XHR manually.
 `upload-response`:: Fired when the server response was received, but before the component processes it. It is useful for making the upload fail depending on the response.
   If the event is default-prevented, the vaadin-upload skips the default flow, allowing the developer to do something on his own, such as retrying the upload.
 `upload-retry`:: Fired when the upload is retried. If the default is prevented, retry would not be performed.
