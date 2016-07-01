@@ -136,7 +136,7 @@
         /* Center the year scroller position. */
         --vaadin-infinite-scroller-buffer: {
           top: 50%;
-          margin-top: -33px;
+          margin-top: -12px;
           width: 90px;
         }
       }
@@ -376,11 +376,11 @@
 
       _repositionYearScroller: function() {
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
-        this.$.yearScroller.position = this.$.scroller.position / 12;
+        this.$.yearScroller.position = (this.$.scroller.position + this._originDate.getMonth()) / 12;
       },
 
       _repositionMonthScroller: function() {
-        this.$.scroller.position = this.$.yearScroller.position * 12;
+        this.$.scroller.position = this.$.yearScroller.position * 12 - this._originDate.getMonth();
         this._visibleMonthIndex = Math.floor(this.$.scroller.position);
       },
 
