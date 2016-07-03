@@ -42,13 +42,13 @@ Custom property | Description | Default
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-input/iron-input.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="vaadin-combo-box-behavior.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
+<link rel="import" href="vaadin-combo-box-icons.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
 
 <dom-module id="vaadin-combo-box">
@@ -173,7 +173,7 @@ Custom property | Description | Default
         <paper-icon-button
             id="clearIcon"
             tabindex="-1"
-            icon="clear"
+            icon="vaadin-combo-box:clear"
             on-down="_preventDefault"
             class="clear-button small">
         </paper-icon-button>
@@ -183,7 +183,7 @@ Custom property | Description | Default
         <paper-icon-button
             id="toggleIcon"
             tabindex="-1"
-            icon="arrow-drop-down"
+            icon="vaadin-combo-box:arrow-drop-down"
             aria-controls="overlay"
             on-down="_preventDefault"
             class="toggle-button rotate-on-open">
