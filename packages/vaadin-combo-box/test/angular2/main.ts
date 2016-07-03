@@ -1,7 +1,6 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component, ElementRef, ChangeDetectorRef, enableProdMode} from '@angular/core';
 import {PolymerElement} from '@vaadin/angular2-polymer';
-import {enableProdMode} from '@angular/core';
 enableProdMode();
 
 @Component({
