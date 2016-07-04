@@ -63,6 +63,7 @@
       describe('taps', function() {
 
         beforeEach(function(done) {
+          overlay.$.scroller.$.scroller.scrollTop += 1;
           // Wait for ignoreTaps to settle after initial scroll event
           overlay.async(done, 350);
         });
