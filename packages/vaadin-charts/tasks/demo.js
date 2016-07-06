@@ -4,6 +4,7 @@ var replace = require('gulp-replace');
 var _ = require('lodash');
 var rsync = require('gulp-rsync');
 var util = require('gulp-util');
+var zip = require('gulp-zip');
 
 var config = require('config');
 
@@ -12,6 +13,13 @@ var demoPath = config.dest + '/demo/' + config.version + '/';
 var demoUserName = 'demo.username';
 var demoHost = 'demo.host';
 var demoDestination = 'demo.destination';
+
+gulp.task('demo:war',['demo:stage'], function () {
+    gulp.src(["./target/demo/"+config.version+"/**/*"])
+        .pipe(zip('vaadin-charts-demo.war'))
+        .pipe(gulp.dest("./target/dist"));
+
+});
 
 gulp.task('demo:stage', ['demo:copy-sources','demo:copy-demo' ,'demo:install-dependencies']);
 
