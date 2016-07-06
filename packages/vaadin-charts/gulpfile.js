@@ -20,3 +20,5 @@ gulp.task('clean:staging', function(done){
 gulp.task('stage', ['cdn:stage', 'zip:stage']);
 
 gulp.task('deploy', ['cdn:deploy']);
+
+gulp.task('war', ['demo:war']);
