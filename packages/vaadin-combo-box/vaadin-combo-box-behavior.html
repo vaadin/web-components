@@ -368,7 +368,8 @@
       // Notice also that document.activeElement doesn't return elements from inside shadow root
       // and therefore we're using _focusedInput method here.
       if (this._focusedInput() === this.inputElement && this.inputElement.setSelectionRange) {
-        this.inputElement.setSelectionRange(this._inputElementValue.length, this._inputElementValue.length);
+        var caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
+        this.inputElement.setSelectionRange(caretIndex, caretIndex);
       }
     },
 

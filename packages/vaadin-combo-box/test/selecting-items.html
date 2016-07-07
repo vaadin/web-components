@@ -73,6 +73,13 @@
       combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
       expect(valueChangedSpy.callCount).to.equal(0);
     });
+
+    it('should not throw an error if value was undefined', function() {
+      combobox.allowCustomValue = true;
+      combobox.value = undefined;
+      combobox.open();
+      combobox.close();
+    });
   });
 
   describe('clearing a selection', function() {
