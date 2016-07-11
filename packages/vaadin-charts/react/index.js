@@ -16,7 +16,8 @@ var Polymer = global.Polymer;
 
 // check if element is a vaadin-chart
 function isVaadinChart(element) {
-    return element.nodeName && element.nodeName.indexOf('VAADIN-') !== -1 && element.nodeName.indexOf('-CHART') !== -1;
+    return element.nodeName && element.nodeName.indexOf('VAADIN-') !== -1 &&
+        (element.nodeName.indexOf('-CHART') !== -1 || element.nodeName.indexOf('-SPARKLINE') !== -1);
 }
 
 var customTopLevelTypes = {};
