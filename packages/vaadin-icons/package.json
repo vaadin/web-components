@@ -1,6 +1,7 @@
 {
   "name": "vaadin-icons",
   "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
   "devDependencies": {
     "cheerio": "^0.19.0",
     "gulp": "latest",
