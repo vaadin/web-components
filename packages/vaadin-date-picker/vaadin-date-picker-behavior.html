@@ -6,6 +6,8 @@
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.datepicker = vaadin.elements.datepicker || {};
+
+  /** @polymerBehavior vaadin.elements.datepicker.DatePickerBehavior */
   vaadin.elements.datepicker.DatePickerBehaviorImpl = {
     observers: [
       '_selectedDateChanged(_selectedDate, i18n.formatDate)'
