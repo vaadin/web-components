@@ -420,6 +420,7 @@
         this.$.overlay.$.selector.clearSelection();
       }
 
+      this.fire('change', undefined, {bubbles: true});
       this.close();
     },
 
@@ -502,6 +503,10 @@
 
     _preventDefault: function(e) {
       e.preventDefault();
+    },
+
+    _stopPropagation: function(e) {
+      e.stopPropagation();
     }
   };
 
@@ -532,5 +537,11 @@
    * Fired when the user sets a custom value.
    * @event custom-value-set
    * @param {String} detail the custom value
+   */
+
+  /**
+   * Fired when value changes.
+   * To comply with http://www.w3schools.com/jsref/event_onchange.asp
+   * @event change
    */
 </script>

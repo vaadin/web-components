@@ -44,7 +44,11 @@ Since there are two selection properties, namely [propertyname]#value# and [prop
 an event is fired for each. [propertyname]#value-changed# event contains the selection as a String value,
 whereas [propertyname]#selected-item-changed# contains the selection as an Object.
 
-Note that the order in which these two events are fired might vary depending on the situation.
+Additionally, a [propertyname]#change# event is fired to match the behavior with <select> element.
+
+[NOTE]
+The order in which [propertyname]#value-changed# and [propertyname]#selected-item-changed# events are fired might vary depending on the situation, but
+[propertyname]#change# event should always be last.
 
 [source,javascript]
 ----
