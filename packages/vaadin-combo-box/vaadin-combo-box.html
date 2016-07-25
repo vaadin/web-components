@@ -326,7 +326,7 @@ Custom property | Description | Default
     },
 
     attached: function() {
-      this.inputElement = this.$.input;
+      this._setInputElement(this.$.input);
 
       // Use the default toggle/clear or one replaced in light DOM.
       this._toggleElement = Polymer.dom(this).querySelector('.toggle-button') || this.$.toggleIcon;
