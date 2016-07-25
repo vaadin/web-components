@@ -101,10 +101,13 @@
         value: 'value'
       },
 
-      // Keep the inputElement public, as vaadin-combo-box is extended with
-      // PaperInputBehavior, which already has "inputElement" defined and we
-      // don't want to have two separate properties.
-      inputElement: Object,
+      /**
+       * Returns a reference to the input element.
+       */
+      inputElement: {
+        type: HTMLElement,
+        readOnly: true
+      },
       _toggleElement: Object,
       _clearElement: Object,
 

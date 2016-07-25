@@ -126,6 +126,10 @@
           it('should not reflect invalid state to combobox initially', function() {
             expect(combobox.invalid).to.be.false;
           });
+
+          it('should have a value set in inputElement', function() {
+            expect(combobox.inputElement).to.not.be.empty;
+          });
         });
 
         describe('after a value change', function() {
