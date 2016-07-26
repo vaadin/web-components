@@ -174,6 +174,7 @@ Custom property | Description | Default
           size$="[[size]]"
           on-input="_inputValueChanged"
           on-blur="_onBlur"
+          on-change="_stopPropagation"
           key-event-target>
 
       <content select="[suffix]"></content>

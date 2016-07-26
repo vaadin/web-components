@@ -24,6 +24,7 @@
     var input;
     var selector;
     var valueChangedSpy;
+    var selectedItemChangedSpy;
 
     beforeEach(function() {
       combobox = fixture('combobox');
@@ -32,6 +33,9 @@
       selector = combobox.$.overlay.$.selector;
       valueChangedSpy = sinon.spy();
       combobox.addEventListener('value-changed', valueChangedSpy);
+
+      selectedItemChangedSpy = sinon.spy();
+      combobox.addEventListener('selected-item-changed', selectedItemChangedSpy);
     });
 
     it('should select by using the selector', function() {
@@ -55,9 +59,37 @@
       expect(combobox.opened).to.equal(false);
     });
 
-    it('should fire exactly one value change event', function() {
+    it('should fire exactly one `value-changed` event', function() {
       combobox.value = 'foo';
       expect(valueChangedSpy.callCount).to.equal(1);
+    });
+
+    it('should fire exactly one `change` event', function() {
+      var spy = sinon.spy();
+      combobox.addEventListener('change', spy);
+
+      combobox.value = 'foo';
+
+      expect(spy.callCount).to.equal(1);
+    });
+
+    it('should fire `value-changed` and `selected-item-changed` before `changed`', function(done) {
+      combobox.addEventListener('change', function() {
+        expect(valueChangedSpy.called).to.be.true;
+        expect(selectedItemChangedSpy.called).to.be.true;
+        done();
+      });
+
+      combobox.value = 'foo';
+    });
+
+    it('should stop input `change` event from bubbling', function() {
+      var spy = sinon.spy();
+      combobox.addEventListener('change', spy);
+
+      combobox.$.input.fire('change');
+
+      expect(spy.callCount).to.equal(0);
     });
 
     it('should close the dropdown when reselecting the current value', function() {
