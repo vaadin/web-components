@@ -23,7 +23,7 @@
     "iron-form": "polymerelements/iron-form#^1.0.10",
     "iron-form-element-behavior": "polymerelements/iron-form-element-behavior#^1.0.4",
     "iron-icon": "PolymerElements/iron-icon#^1.0.4",
-    "iron-icons": "PolymerElements/iron-icons#^1.0.3",
+    "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.9",
     "iron-input": "polymerelements/iron-input#^1.0.5",
     "iron-list": "polymerelements/iron-list#^1.0.0",
     "iron-validatable-behavior": "polymerelements/iron-validatable-behavior#^1.0.5",
@@ -41,6 +41,7 @@
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "iron-component-page": "polymerelements/iron-component-page#^1.1.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.3",
     "elements-demo-resources": "vaadin/elements-demo-resources#master",
     "components-demo-resources": "vaadin/components-demo-resources#master"
   }
