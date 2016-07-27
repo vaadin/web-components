@@ -37,10 +37,10 @@ Custom property | Description | Default
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="vaadin-upload-icons.html">
 
 <link rel="import" href="vaadin-upload-file.html">
 
@@ -145,7 +145,7 @@ Custom property | Description | Default
         <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]</paper-button>
         <div id="dropLabel" hidden$="[[nodrop]]">
           <content select=".drop-label">
-            <iron-icon icon="file-upload"></iron-icon>
+            <iron-icon icon="vaadin-upload:file-upload"></iron-icon>
             [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
           </content>
         </div>
