@@ -14,7 +14,7 @@
     "highcharts"
   ],
   "main": "vaadin-charts.html",
-  "license": "https://github.com/vaadin/vaadin-charts/LICENSE.md",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-charts/master/LICENSE.txt",
   "repository": {
     "type": "git",
     "url": "git@github.com:vaadin/vaadin-charts.git"
