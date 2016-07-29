@@ -38,12 +38,12 @@ Custom property | Description | Default
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
+<link rel="import" href="vaadin-upload-icons.html">
 
 <dom-module id="vaadin-upload-file">
   <template>
@@ -73,7 +73,7 @@ Custom property | Description | Default
         @apply(--vaadin-upload-file-status-icon);
       }
 
-      iron-icon[icon="warning"] {
+      iron-icon[icon="vaadin-upload:warning"] {
         color: var(--error-color, #f40303);
       }
 
@@ -148,8 +148,8 @@ Custom property | Description | Default
         color: var(--primary-text-color, #000);
       }
 
-      #commands [icon="refresh"],
-      #commands [icon="clear"] {
+      #commands [icon="vaadin-upload:refresh"],
+      #commands [icon="vaadin-upload:clear"] {
         color: var(--primary-color, #00B4F0);
       }
 
@@ -212,8 +212,8 @@ Custom property | Description | Default
 
     <div id="row">
 
-      <iron-icon icon="done" complete$="[[file.complete]]"></iron-icon>
-      <iron-icon icon="warning" error$="[[file.error]]"></iron-icon>
+      <iron-icon icon="vaadin-upload:done" complete$="[[file.complete]]"></iron-icon>
+      <iron-icon icon="vaadin-upload:warning" error$="[[file.error]]"></iron-icon>
 
       <div id="meta" complete$="[[file.complete]]" error$="[[file.error]]">
         <div id="name">[[file.name]]</div>
@@ -222,8 +222,8 @@ Custom property | Description | Default
       </div>
 
       <div id="commands">
-        <paper-icon-button icon="refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
-        <paper-icon-button icon="clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
+        <paper-icon-button icon="vaadin-upload:refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
+        <paper-icon-button icon="vaadin-upload:clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
       </div>
 
     </div>
