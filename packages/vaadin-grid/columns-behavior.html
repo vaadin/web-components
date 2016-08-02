@@ -40,6 +40,11 @@
         }, this);
       }, this);
 
+      requestAnimationFrame(function() {
+        this.$.items.style.paddingTop = this.$.header.clientHeight + 'px';
+      }.bind(this));
+
+
     }
   };
 

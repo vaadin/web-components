@@ -7,14 +7,29 @@
         transform: translateZ(0);
       }
 
+      #header {
+        position: absolute;
+        top: 0;
+        background: blue;
+        width: 100%;
+        z-index: -2;
+      }
+
+      #items {
+        background: yellow;
+        z-index: -3;
+      }
+
       :host([fixedmode]) #header {
         position: fixed;
         transform: translateZ(0);
       }
 
       table {
+        position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
+        z-index: 1;
       }
     </style>
   </template>
@@ -29,7 +44,7 @@
 
     properties: {
       fixedmode: {
-        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
+        value: true,
         reflectToAttribute: true
       }
     },

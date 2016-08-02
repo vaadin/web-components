@@ -177,7 +177,8 @@ will only render 20.
         box-sizing: border-box;
         margin: 0;
         position: absolute;
-        top: 0;
+        /* iron-list expects top to be 0. Might cause issues */
+        /*top: 0;*/
         will-change: transform;
       }
 
