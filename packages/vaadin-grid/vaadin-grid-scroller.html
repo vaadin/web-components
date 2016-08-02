@@ -292,8 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * The height of the physical content that isn't on the screen.
      */
     get _hiddenContentSize() {
-      var size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
-      return size - this._viewportHeight;
+      return this._physicalSize - this._viewportHeight;
     },
 
     /**
@@ -372,9 +371,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * to a viewport of physical items above and below the user's viewport.
      */
     get _optPhysicalSize() {
-      if (this.grid) {
-        return this._estRowsInView * this._rowHeight * this._maxPages;
-      }
       return this._viewportHeight * this._maxPages;
     },
 
@@ -403,11 +399,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             physicalOffset += this._getPhysicalSizeIncrement(pidx);
 
             if (physicalOffset > this._scrollPosition) {
-              return this.grid ? vidx - (vidx % this._itemsPerRow) : vidx;
-            }
-            // Handle a partially rendered final row in grid mode
-            if (this.grid && this._virtualCount - 1 === vidx) {
-              return vidx - (vidx % this._itemsPerRow);
+              return vidx;
             }
           }) || 0;
       }
@@ -421,21 +413,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      */
     get lastVisibleIndex() {
       if (this._lastVisibleIndexVal === null) {
-        if (this.grid) {
-          var lastIndex = this.firstVisibleIndex + this._estRowsInView * this._itemsPerRow - 1;
-          this._lastVisibleIndexVal = Math.min(this._virtualCount, lastIndex);
-        } else {
-          var physicalOffset = this._physicalTop;
-          this._iterateItems(function(pidx, vidx) {
-            if (physicalOffset < this._scrollBottom) {
-              this._lastVisibleIndexVal = vidx;
-            } else {
-              // Break _iterateItems
-              return true;
-            }
-            physicalOffset += this._getPhysicalSizeIncrement(pidx);
-          });
-        }
+        var physicalOffset = this._physicalTop;
+        this._iterateItems(function(pidx, vidx) {
+          if (physicalOffset < this._scrollBottom) {
+            this._lastVisibleIndexVal = vidx;
+          } else {
+            // Break _iterateItems
+            return true;
+          }
+          physicalOffset += this._getPhysicalSizeIncrement(pidx);
+        });
       }
       return this._lastVisibleIndexVal;
     },
@@ -616,12 +603,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }, itemSet);
 
       this._viewportHeight = this._scrollTargetHeight;
-      if (this.grid) {
-        this._updateGridMetrics();
-        this._physicalSize = Math.ceil(this._physicalCount / this._itemsPerRow) * this._rowHeight;
-      } else {
-        this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
-      }
+      this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
 
       // update the average if we measured something
       if (this._physicalAverageCount !== prevAvgCount) {
@@ -639,40 +621,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       var y = this._physicalTop;
 
-      if (this.grid) {
-        var totalItemWidth = this._itemsPerRow * this._itemWidth;
-        var rowOffset = (this._viewportWidth - totalItemWidth) / 2;
+      this._iterateItems(function(pidx, vidx) {
 
-        this._iterateItems(function(pidx, vidx) {
+        this.translate3d(0, y + 'px', 0, this._physicalItems[pidx]);
+        y += this._physicalSizes[pidx];
 
-          var modulus = vidx % this._itemsPerRow;
-          var x = Math.floor((modulus * this._itemWidth) + rowOffset);
+      });
 
-          this.translate3d(x + 'px', y + 'px', 0, this._physicalItems[pidx]);
-
-          if (this._shouldRenderNextRow(vidx)) {
-            y += this._rowHeight;
-          }
-
-        });
-      } else {
-        this._iterateItems(function(pidx, vidx) {
-
-          this.translate3d(0, y + 'px', 0, this._physicalItems[pidx]);
-          y += this._physicalSizes[pidx];
-
-        });
-      }
     },
 
     _getPhysicalSizeIncrement: function(pidx) {
-      if (!this.grid) {
-        return this._physicalSizes[pidx];
-      }
-      if (this._computeVidx(pidx) % this._itemsPerRow !== this._itemsPerRow - 1) {
-        return 0;
-      }
-      return this._rowHeight;
+      return this._physicalSizes[pidx];
     },
 
     /**
@@ -719,16 +678,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @param {boolean=} forceUpdate If true, updates the height no matter what.
      */
     _updateScrollerSize: function(forceUpdate) {
-      if (this.grid) {
-        this._estScrollHeight = this._virtualRowCount * this._rowHeight;
-      } else {
-        this._estScrollHeight = (this._physicalBottom +
-            Math.max(this._virtualCount - this._physicalCount - this._virtualStart, 0) * this._physicalAverage);
-      }
+      this._estScrollHeight = (this._physicalBottom +
+          Math.max(this._virtualCount - this._physicalCount - this._virtualStart, 0) * this._physicalAverage);
 
       forceUpdate = forceUpdate || this._scrollHeight === 0;
       forceUpdate = forceUpdate || this._scrollPosition >= this._estScrollHeight - this._physicalSize;
-      forceUpdate = forceUpdate || this.grid && this.$.items.style.height < this._estScrollHeight;
 
       // amortize height adjustment, so it won't trigger repaints very often
       if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._optPhysicalSize) {
@@ -750,7 +704,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       idx = Math.min(Math.max(idx, 0), this._virtualCount-1);
       // update the virtual start only when needed
       if (!this._isIndexRendered(idx) || idx >= this._maxVirtualStart) {
-        this._virtualStart = this.grid ? (idx - this._itemsPerRow * 2) : (idx - 1);
+        this._virtualStart = idx - 1;
       }
       // assign new models
       this._assignModels();
