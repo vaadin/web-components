@@ -44,7 +44,7 @@
 
     properties: {
       fixedmode: {
-        value: true,
+        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
         reflectToAttribute: true
       }
     },
