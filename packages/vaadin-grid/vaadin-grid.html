@@ -2,23 +2,6 @@
 <link rel="import" href="vaadin-grid-cell.html">
 <link rel="import" href="vaadin-grid-scroller.html">
 
-<script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
-
-  vaadin.elements.grid.GridCreatePoolBehaviorImpl = {
-    _createPool: function(size) {
-      console.log("foo");
-    }
-  };
-
-  vaadin.elements.grid.GridCreatePoolBehavior = [
-    vaadin.elements.grid.GridCreatePoolBehaviorImpl
-  ];
-
-</script>
-
 
 <dom-module id="vaadin-grid">
   <template>
@@ -32,10 +15,6 @@
 <script>
   Polymer({
     is: 'vaadin-grid',
-
-    behaviors: [
-      vaadin.elements.grid.GridCreatePoolBehavior
-    ],
 
     properties: {
 

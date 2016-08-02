@@ -1,0 +1,59 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.GridCreatePoolBehaviorImpl = {
+    /**
+     * Creates a pool of DOM elements and attaches them to the local dom.
+     */
+    _createPool: function(size) {
+      var physicalItems = new Array(size);
+
+      this._ensureTemplatized();
+
+      if (this._createPoolOverride) {
+        this._createPoolOverride(size);
+        return;
+      }
+
+      for (var i = 0; i < size; i++) {
+        // var inst = this.stamp(null);
+        // First element child is item; Safari doesn't support children[0]
+        // on a doc fragment
+        // physicalItems[i] = inst.root.querySelector('*');
+        // Polymer.dom(this.$.items).appendChild(inst.root);
+
+
+        var row = document.createElement('tr');
+        row._templateInstance = {
+          item: {},
+          as: 'item',
+          selectedAs: 'selected'
+        };
+        physicalItems[i] = row;
+        Polymer.dom(this.$.items).appendChild(row);
+
+        // for (var colIndex = 0; colIndex < this.columns.length; colIndex++) {
+        //   var cell = document.createElement('td', 'vaadin-grid-cell');
+        //   cell.target = this.domHost;
+        //   var column = this.columns[colIndex];
+        //   cell.template = column.template;
+        //   row.appendChild(cell);
+        // }
+
+
+      }
+
+
+
+
+      return physicalItems;
+    },
+  };
+
+  vaadin.elements.grid.GridCreatePoolBehavior = [
+    vaadin.elements.grid.GridCreatePoolBehaviorImpl
+  ];
+
+</script>

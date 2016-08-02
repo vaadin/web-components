@@ -1,0 +1,32 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.GridColumnsBehaviorImpl = {
+    properties: {
+      columns: {
+        type: Array,
+        observer: '_columnsChanged'
+      }
+    },
+
+    _columnsChanged: function(columns) {
+      this._physicalItems.forEach(function(row) {
+        for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+          var cell = document.createElement('td', 'vaadin-grid-cell');
+          cell.target = this.domHost;
+          var column = columns[colIndex];
+          cell.template = column.template;
+          row.appendChild(cell);
+        }
+      }, this);
+
+    }
+  };
+
+  vaadin.elements.grid.GridColumnsBehavior = [
+    vaadin.elements.grid.GridColumnsBehaviorImpl
+  ];
+
+</script>

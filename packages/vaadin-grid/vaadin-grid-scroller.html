@@ -12,6 +12,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="create-pool-behavior.html">
+<link rel="import" href="columns-behavior.html">
 
 <!--
 
@@ -145,7 +147,7 @@ will only render 20.
 
 -->
 
-<dom-module id="iron-list">
+<dom-module id="vaadin-grid-scroller">
   <template>
     <style>
       :host {
@@ -181,9 +183,10 @@ will only render 20.
       selected="{{selectedItems}}" selected-item="{{selectedItem}}">
     </array-selector>
 
-    <div id="items">
-      <content></content>
-    </div>
+    <table id="table" >
+      <tbody id="items">
+      </tbody>
+    </table>
 
   </template>
 </dom-module>
@@ -201,7 +204,7 @@ will only render 20.
 
   Polymer({
 
-    is: 'iron-list',
+    is: 'vaadin-grid-scroller',
 
     properties: {
 
@@ -317,7 +320,9 @@ will only render 20.
       Polymer.Templatizer,
       Polymer.IronResizableBehavior,
       Polymer.IronA11yKeysBehavior,
-      Polymer.IronScrollTargetBehavior
+      Polymer.IronScrollTargetBehavior,
+      vaadin.elements.grid.GridCreatePoolBehavior,
+      vaadin.elements.grid.GridColumnsBehavior
     ],
 
     keyBindings: {
@@ -840,24 +845,6 @@ will only render 20.
       this._updateScrollerSize();
       // increase the pool of physical items
       this._increasePoolIfNeeded();
-    },
-
-    /**
-     * Creates a pool of DOM elements and attaches them to the local dom.
-     */
-    _createPool: function(size) {
-      var physicalItems = new Array(size);
-
-      this._ensureTemplatized();
-
-      for (var i = 0; i < size; i++) {
-        var inst = this.stamp(null);
-        // First element child is item; Safari doesn't support children[0]
-        // on a doc fragment
-        physicalItems[i] = inst.root.querySelector('*');
-        Polymer.dom(this).appendChild(inst.root);
-      }
-      return physicalItems;
     },
 
     /**
