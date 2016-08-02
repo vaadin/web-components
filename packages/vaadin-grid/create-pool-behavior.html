@@ -8,16 +8,12 @@
      * Creates a pool of DOM elements and attaches them to the local dom.
      */
     _createPool: function(size) {
-      var physicalItems = new Array(size);
+      var physicalItems = new Array(25);
 
-      for (var i = 0; i < size; i++) {
+      for (var i = 0; i < 25; i++) {
         var row = document.createElement('tr');
-        row._templateInstance = {
-          item: {},
-          as: 'item',
-          selectedAs: 'selected'
-        };
         physicalItems[i] = row;
+        row.setAttribute('hidden', ''); //hidden by default, removed when data is bound.
         Polymer.dom(this.$.items).appendChild(row);
       }
 

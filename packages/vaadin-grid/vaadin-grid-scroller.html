@@ -197,7 +197,7 @@ will only render 20.
         top: 0;
       }
 
-      tr {
+      tr:not([hidden]) {
         display: block;
       }
 
@@ -704,6 +704,7 @@ will only render 20.
 
     attached: function() {
       this.updateViewportBoundaries();
+      this._increasePool(25);
       this._render();
       // `iron-resize` is fired when the list is attached if the event is added
       // before attached causing unnecessary work.
@@ -755,7 +756,7 @@ will only render 20.
       // set the scroller size
       this._updateScrollerSize();
       // increase the pool of physical items
-      this._increasePoolIfNeeded();
+      // this._increasePoolIfNeeded();
     },
 
     /**
@@ -1281,7 +1282,7 @@ will only render 20.
       // set the new scroll position
       this._resetScrollPosition(this._physicalTop + this._scrollerPaddingTop + targetOffsetTop);
       // increase the pool of physical items if needed
-      this._increasePoolIfNeeded();
+      // this._increasePoolIfNeeded();
       // clear cached visible index
       this._firstVisibleIndexVal = null;
       this._lastVisibleIndexVal = null;
