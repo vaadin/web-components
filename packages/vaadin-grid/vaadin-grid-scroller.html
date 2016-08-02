@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
 <link rel="import" href="create-pool-behavior.html">
 <link rel="import" href="columns-behavior.html">
+<link rel="import" href="models-behavior.html">
 
 <!--
 
@@ -338,7 +339,8 @@ will only render 20.
       Polymer.IronA11yKeysBehavior,
       Polymer.IronScrollTargetBehavior,
       vaadin.elements.grid.GridCreatePoolBehavior,
-      vaadin.elements.grid.GridColumnsBehavior
+      vaadin.elements.grid.GridColumnsBehavior,
+      vaadin.elements.grid.GridModelsBehavior
     ],
 
     keyBindings: {
@@ -1170,31 +1172,6 @@ will only render 20.
         return this._virtualStart + (pidx - this._physicalStart);
       }
       return this._virtualStart + (this._physicalCount - this._physicalStart) + pidx;
-    },
-
-    /**
-     * Assigns the data models to a given set of items.
-     * @param {!Array<number>=} itemSet
-     */
-    _assignModels: function(itemSet) {
-      this._iterateItems(function(pidx, vidx) {
-        var el = this._physicalItems[pidx];
-        var inst = el._templateInstance;
-        var item = this.items && this.items[vidx];
-
-        if (item != null) {
-          inst[this.as] = item;
-          inst.__key__ = this._collection.getKey(item);
-          inst[this.selectedAs] = /** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item);
-          inst[this.indexAs] = vidx;
-          inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
-          this._physicalIndexForKey[inst.__key__] = pidx;
-          el.removeAttribute('hidden');
-        } else {
-          inst.__key__ = null;
-          el.setAttribute('hidden', '');
-        }
-      }, itemSet);
     },
 
     /**
