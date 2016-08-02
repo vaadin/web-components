@@ -24,6 +24,22 @@
         }
       }, this);
 
+      this.$.header.innerHTML = '';
+      columns.forEach(function(column) {
+        column.headers.forEach(function(header, headerIndex) {
+          var headerRow = this.$.header.childNodes[headerIndex];
+          if (!headerRow) {
+            headerRow = document.createElement('tr');
+            Polymer.dom(this.$.header).appendChild(headerRow);
+          }
+          var cell = document.createElement('td', 'vaadin-grid-cell');
+          cell.target = this.domHost;
+          cell.template = header.template;
+          Polymer.dom(headerRow).appendChild(cell);
+
+        }, this);
+      }, this);
+
     }
   };
 
