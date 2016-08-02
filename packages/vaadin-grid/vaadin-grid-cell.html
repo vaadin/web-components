@@ -1,0 +1,72 @@
+<dom-module id="vaadin-grid-cell">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 8px;
+        border-top: 1px solid #ddd;
+      }
+
+      :host([frozen]) {
+        z-index: 2;
+      }
+    </style>
+
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-cell',
+
+      extends: 'td',
+
+      behaviors: [
+        Polymer.Templatizer
+      ],
+
+      properties: {
+
+        template: {
+          observer: '_templateChanged'
+        },
+
+        target: Object
+      },
+
+      _itemChanged: function() {
+        if (this.instance) {
+          this.instance.index = this.item;
+        }
+
+      },
+
+      _templateChanged: function() {
+
+        if (this.template){
+          this.templatize(this.template);
+          this.instance = this.stamp(null);
+
+          var item = document.createElement('div');
+          var itemClass = 'item-' + this.target.childElementCount;
+          item.classList.add(itemClass);
+
+          if (Polymer.Settings.useShadow) {
+
+            Polymer.dom(this.target).appendChild(item);
+
+            var content = document.createElement('content');
+            content.setAttribute('select', '.' + itemClass);
+            Polymer.dom(this).appendChild(content);
+
+          } else {
+            // Non-shadow
+            Polymer.dom(this).appendChild(item);
+          }
+          Polymer.dom(item).appendChild(this.instance.root);
+        }
+      }
+
+
+    });
+  </script>
+</dom-module>

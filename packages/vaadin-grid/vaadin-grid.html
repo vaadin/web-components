@@ -1,0 +1,111 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="vaadin-grid-cell.html">
+<link rel="import" href="vaadin-grid-scroller.html">
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.GridCreatePoolBehaviorImpl = {
+    _createPool: function(size) {
+      console.log("foo");
+    }
+  };
+
+  vaadin.elements.grid.GridCreatePoolBehavior = [
+    vaadin.elements.grid.GridCreatePoolBehaviorImpl
+  ];
+
+</script>
+
+
+<dom-module id="vaadin-grid">
+  <template>
+    <vaadin-grid-scroller id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
+      <content></content>
+
+    </vaadin-grid-scroller>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-grid',
+
+    behaviors: [
+      vaadin.elements.grid.GridCreatePoolBehavior
+    ],
+
+    properties: {
+
+      bufferSize: Number,
+
+      size: {
+        type: Number,
+        value: 100
+      },
+
+      frozenColumns: Number,
+
+    },
+
+    _foo: function() {
+      return true;
+    },
+
+    _getContentTarget: function() {
+      return this;
+    },
+
+    _isFrozenColumn: function(column) {
+      return this.columns.indexOf(column) < this.frozenColumns;
+    },
+
+    ready: function() {
+      var items = [];
+      for (var i = 0; i< this.size; i++){
+        items.push(i);
+      }
+      this.$.scroller.items = items;
+
+      var cols = Polymer.dom(this).querySelectorAll('.column');
+      var config = {
+        columns: [],
+        size: this.size,
+        frozenColumns: this.frozenColumns,
+        bufferSize: this.bufferSize
+      };
+      cols.forEach(function(col) {
+        var columnElement = document.createElement('vaadin-grid-column');
+        var template = col.querySelector('template:not(.header)');
+
+        var h = col.querySelectorAll('template.header');
+        var headers = Array.prototype.map.call(h,
+          function(header) {
+
+            return {
+              colspan: header.getAttribute('colspan'),
+              template: header
+            };
+          }, this);
+
+        var column = {
+          // renderer: this.renderer.bind(columnElement),
+          width: col.getAttribute('width'),
+          minWidth: col.getAttribute('min-width'),
+          headers: headers,
+          template: template
+        };
+
+        config.columns.push(column);
+      }, this);
+
+      this.columns = config.columns;
+
+    },
+
+
+  });
+
+</script>
