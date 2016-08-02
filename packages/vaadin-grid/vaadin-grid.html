@@ -15,7 +15,7 @@
     }
   </style>
   <template>
-    <vaadin-grid-scroller id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
+    <vaadin-grid-scroller size="150000" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
       <content></content>
 
     </vaadin-grid-scroller>
@@ -56,7 +56,7 @@
       for (var i = 0; i< this.size; i++){
         items.push(i);
       }
-      this.$.scroller.items = items;
+      // this.$.scroller.items = items;
 
       var cols = Polymer.dom(this).querySelectorAll('.column');
       var config = {

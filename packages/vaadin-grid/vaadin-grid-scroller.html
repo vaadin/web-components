@@ -1242,9 +1242,9 @@ will only render 20.
      * @param {number} idx The index of the item
      */
     scrollToIndex: function(idx) {
-      if (typeof idx !== 'number' || idx < 0 || idx > this.items.length - 1) {
-        return;
-      }
+      // if (typeof idx !== 'number' || idx < 0 || idx > this.items.length - 1) {
+      //   return;
+      // }
 
       Polymer.dom.flush();
 
@@ -1254,7 +1254,7 @@ will only render 20.
         this._virtualStart = this.grid ? (idx - this._itemsPerRow * 2) : (idx - 1);
       }
       // manage focus
-      this._manageFocus();
+      // this._manageFocus();
       // assign new models
       this._assignModels();
       // measure the new sizes
