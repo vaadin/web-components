@@ -14,5 +14,11 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "iron-list": "^1.3.5"
+  },
+  "dependencies": {
+    "polymer": "^1.6.1"
+  }
 }
