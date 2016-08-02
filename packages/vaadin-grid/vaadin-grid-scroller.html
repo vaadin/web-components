@@ -151,6 +151,7 @@ will only render 20.
 
 <dom-module id="vaadin-grid-scroller">
   <template>
+    <style include="fixedmode-styles"></style>
     <style>
       :host {
         display: block;
@@ -336,8 +337,7 @@ will only render 20.
     observers: [
       '_itemsChanged(items.*)',
       '_selectionEnabledChanged(selectionEnabled)',
-      '_multiSelectionChanged(multiSelection)',
-      '_setOverflow(scrollTarget)'
+      '_multiSelectionChanged(multiSelection)'
     ],
 
     behaviors: [
@@ -698,7 +698,6 @@ will only render 20.
     },
 
     ready: function() {
-      this.scrollTarget = this.$.table;
       this.addEventListener('focus', this._didFocus.bind(this), true);
     },
 
@@ -713,14 +712,6 @@ will only render 20.
     detached: function() {
       this._itemsRendered = false;
       this.unlisten(this, 'iron-resize', '_resizeHandler');
-    },
-
-    /**
-     * Set the overflow property if this element has its own scrolling region
-     */
-    _setOverflow: function(scrollTarget) {
-      this.style.webkitOverflowScrolling = scrollTarget === this ? 'touch' : '';
-      this.style.overflow = scrollTarget === this ? 'auto' : '';
     },
 
     /**

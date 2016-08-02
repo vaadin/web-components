@@ -1,3 +1,25 @@
+<dom-module id="fixedmode-styles">
+  <template>
+    <style>
+      :host([fixedmode]) {
+        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
+        a containing block. The object acts as a containing block for fixed positioned descendants. */
+        transform: translateZ(0);
+      }
+
+      :host([fixedmode]) #header {
+        position: fixed;
+        transform: translateZ(0);
+      }
+
+      table {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
@@ -5,7 +27,15 @@
 
   vaadin.elements.grid.GridScrollBehaviorImpl = {
 
+    properties: {
+      fixedmode: {
+        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
+        reflectToAttribute: true
+      }
+    },
+
     ready: function() {
+      this.scrollTarget = this.$.table;
       this.listen(this.$.table, 'wheel', '_onWheel');
     },
 
@@ -131,17 +161,16 @@
       this._onScroll();
     },
 
-    _onNonScroll: function() {
-      this.$.header.style.transform = // this._tfoot.style.transform =
+    _onScroll: function() {
+      if (!this.fixedmode) {
+        this.$.header.style.transform = // this._tfoot.style.transform =
         this._getTranslate3d(0, this._scrollPosition);
+      }
     },
 
     _getTranslate3d: function(x, y) {
       return 'translate3d(' + x + 'px,' + y + 'px, 0)';
     },
-
-
-
 
   };
 
