@@ -11,21 +11,23 @@
     _assignModels: function(itemSet) {
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
-        var inst = el._templateInstance;
-        var item = this.items && this.items[vidx];
+        el.childNodes.forEach(function(cell) {
+          var inst = cell.instance;
+          var item = this.items && this.items[vidx];
 
-        if (item != null) {
-          inst[this.as] = item;
-          inst.__key__ = this._collection.getKey(item);
-          inst[this.selectedAs] = /** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item);
-          inst[this.indexAs] = vidx;
-          inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
-          this._physicalIndexForKey[inst.__key__] = pidx;
-          el.removeAttribute('hidden');
-        } else {
-          inst.__key__ = null;
-          el.setAttribute('hidden', '');
-        }
+          if (item != null) {
+            inst[this.as] = item;
+            inst.__key__ = this._collection.getKey(item);
+            inst[this.selectedAs] = /** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item);
+            inst[this.indexAs] = vidx;
+            // inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
+            this._physicalIndexForKey[inst.__key__] = pidx;
+            el.removeAttribute('hidden');
+          } else {
+            inst.__key__ = null;
+            el.setAttribute('hidden', '');
+          }
+        }, this);
       }, itemSet);
     },
   };
