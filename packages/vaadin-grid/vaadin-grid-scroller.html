@@ -170,13 +170,29 @@ will only render 20.
         width: 100%;
       };
 
-      #items > ::content > * {
+      #items > tr {
         box-sizing: border-box;
         margin: 0;
         position: absolute;
         top: 0;
         will-change: transform;
       }
+
+      table {
+        height: 100%;
+        width: 100%;
+        display: block;
+        overflow: auto;
+      }
+
+      tbody {
+        display: block;
+      }
+
+      tr {
+        display: block;
+      }
+
     </style>
 
     <array-selector id="selector" items="{{items}}"
@@ -672,6 +688,7 @@ will only render 20.
     },
 
     ready: function() {
+      this.scrollTarget = this.$.table;
       this.addEventListener('focus', this._didFocus.bind(this), true);
     },
 
@@ -827,7 +844,7 @@ will only render 20.
      */
     _update: function(itemSet, movingUp) {
       // manage focus
-      this._manageFocus();
+      //this._manageFocus();
       // update models
       this._assignModels(itemSet);
       // measure heights

@@ -5,20 +5,22 @@
 
   vaadin.elements.grid.GridColumnsBehaviorImpl = {
     properties: {
-      columns: {
-        type: Array,
-        observer: '_columnsChanged'
-      }
+      columns: Array
     },
+
+    observers: [
+      '_columnsChanged(columns, _physicalCount)'
+    ],
 
     _columnsChanged: function(columns) {
       this._physicalItems.forEach(function(row) {
+        row.innerHTML = '';
         for (var colIndex = 0; colIndex < columns.length; colIndex++) {
           var cell = document.createElement('td', 'vaadin-grid-cell');
           cell.target = this.domHost;
           var column = columns[colIndex];
           cell.template = column.template;
-          row.appendChild(cell);
+          Polymer.dom(row).appendChild(cell);
         }
       }, this);
 

@@ -4,6 +4,16 @@
 
 
 <dom-module id="vaadin-grid">
+  <style>
+    :host {
+      display: block;
+    }
+
+    #scroller {
+      height: 300px;
+      width: 100%;
+    }
+  </style>
   <template>
     <vaadin-grid-scroller id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
       <content></content>
