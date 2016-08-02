@@ -233,15 +233,6 @@ will only render 20.
     is: 'vaadin-grid-scroller',
 
     properties: {
-
-      /**
-       * An array containing items determining how many instances of the template
-       * to stamp and that that each template instance should bind to.
-       */
-      items: {
-        type: Array
-      },
-
       /**
        * The max count of physical items the pool can extend to.
        */
@@ -293,53 +284,8 @@ will only render 20.
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      },
-
-      /**
-       * When true, tapping a row will select the item, placing its data model
-       * in the set of selected items retrievable via the selection property.
-       *
-       * Note that tapping focusable elements within the list item will not
-       * result in selection, since they are presumed to have their * own action.
-       */
-      selectionEnabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * When `multiSelection` is false, this is the currently selected item, or `null`
-       * if no item is selected.
-       */
-      selectedItem: {
-        type: Object,
-        notify: true
-      },
-
-      /**
-       * When `multiSelection` is true, this is an array that contains the selected items.
-       */
-      selectedItems: {
-        type: Object,
-        notify: true
-      },
-
-      /**
-       * When `true`, multiple items may be selected at once (in this case,
-       * `selected` is an array of currently selected items).  When `false`,
-       * only one item may be selected at a time.
-       */
-      multiSelection: {
-        type: Boolean,
-        value: false
       }
     },
-
-    observers: [
-      '_itemsChanged(items.*)',
-      '_selectionEnabledChanged(selectionEnabled)',
-      '_multiSelectionChanged(multiSelection)'
-    ],
 
     behaviors: [
       Polymer.Templatizer,
@@ -738,8 +684,6 @@ will only render 20.
      * @param {!Array<number>=} movingUp
      */
     _update: function(itemSet, movingUp) {
-      // manage focus
-      //this._manageFocus();
       // update models
       this._assignModels(itemSet);
       // measure heights
@@ -811,10 +755,11 @@ will only render 20.
         return;
       }
 
-      [].push.apply(this._physicalItems, this._createPool(delta));
-      [].push.apply(this._physicalSizes, new Array(delta));
 
-      this._physicalCount = prevPhysicalCount + delta;
+      this._physicalItems = this._createPool(25);
+      this._physicalSizes = new Array(25);
+
+      this._physicalCount = 25;
 
       // update the physical start if we need to preserve the model of the focused item.
       // In this situation, the focused item is currently rendered and its model would
@@ -946,47 +891,6 @@ will only render 20.
         }
         el._templateInstance[this.as] = value;
       }
-    },
-
-    /**
-     * Called when the items have changed. That is, ressignments
-     * to `items`, splices or updates to a single item.
-     */
-    _itemsChanged: function(change) {
-      if (change.path === 'items') {
-        // reset items
-        this._virtualStart = 0;
-        this._physicalTop = 0;
-        this._virtualCount = this.items ? this.items.length : 0;
-        this._collection = this.items ? Polymer.Collection.get(this.items) : null;
-        this._physicalIndexForKey = {};
-        this._firstVisibleIndexVal = null;
-        this._lastVisibleIndexVal = null;
-
-        this._resetScrollPosition(0);
-        this._removeFocusedItem();
-        // create the initial physical items
-        if (!this._physicalItems) {
-          this._physicalCount = Math.max(1, Math.min(DEFAULT_PHYSICAL_COUNT, this._virtualCount));
-          this._physicalItems = this._createPool(this._physicalCount);
-          this._physicalSizes = new Array(this._physicalCount);
-        }
-
-        this._physicalStart = 0;
-
-      } else if (change.path === 'items.splices') {
-
-        this._adjustVirtualIndex(change.value.indexSplices);
-        this._virtualCount = this.items ? this.items.length : 0;
-
-      } else {
-        // update a single item
-        this._forwardItemPath(change.path.split('.').slice(1).join('.'), change.value);
-        return;
-      }
-
-      this._itemsRendered = false;
-      this._debounceTemplate(this._render);
     },
 
     /**
@@ -1224,17 +1128,6 @@ will only render 20.
     },
 
     /**
-     * Scroll to a specific item in the virtual list regardless
-     * of the physical items in the DOM tree.
-     *
-     * @method scrollToItem
-     * @param {(Object)} item The item to be scrolled to
-     */
-    scrollToItem: function(item){
-      return this.scrollToIndex(this.items.indexOf(item));
-    },
-
-    /**
      * Scroll to a specific index in the virtual list regardless
      * of the physical items in the DOM tree.
      *
@@ -1242,10 +1135,6 @@ will only render 20.
      * @param {number} idx The index of the item
      */
     scrollToIndex: function(idx) {
-      // if (typeof idx !== 'number' || idx < 0 || idx > this.items.length - 1) {
-      //   return;
-      // }
-
       Polymer.dom.flush();
 
       idx = Math.min(Math.max(idx, 0), this._virtualCount-1);
@@ -1253,8 +1142,6 @@ will only render 20.
       if (!this._isIndexRendered(idx) || idx >= this._maxVirtualStart) {
         this._virtualStart = this.grid ? (idx - this._itemsPerRow * 2) : (idx - 1);
       }
-      // manage focus
-      // this._manageFocus();
       // assign new models
       this._assignModels();
       // measure the new sizes
@@ -1349,82 +1236,6 @@ will only render 20.
     },
 
     /**
-     * Select the list item at the given index.
-     *
-     * @method selectItem
-     * @param {(Object|number)} item The item object or its index
-     */
-    selectItem: function(item) {
-      item = this._getNormalizedItem(item);
-      var model = this._getModelFromItem(item);
-
-      if (!this.multiSelection && this.selectedItem) {
-        this.deselectItem(this.selectedItem);
-      }
-      if (model) {
-        model[this.selectedAs] = true;
-      }
-      this.$.selector.select(item);
-      this.updateSizeForItem(item);
-    },
-
-    /**
-     * Deselects the given item list if it is already selected.
-     *
-
-     * @method deselect
-     * @param {(Object|number)} item The item object or its index
-     */
-    deselectItem: function(item) {
-      item = this._getNormalizedItem(item);
-      var model = this._getModelFromItem(item);
-
-      if (model) {
-        model[this.selectedAs] = false;
-      }
-      this.$.selector.deselect(item);
-      this.updateSizeForItem(item);
-    },
-
-    /**
-     * Select or deselect a given item depending on whether the item
-     * has already been selected.
-     *
-     * @method toggleSelectionForItem
-     * @param {(Object|number)} item The item object or its index
-     */
-    toggleSelectionForItem: function(item) {
-      item = this._getNormalizedItem(item);
-      if (/** @type {!ArraySelectorElement} */ (this.$.selector).isSelected(item)) {
-        this.deselectItem(item);
-      } else {
-        this.selectItem(item);
-      }
-    },
-
-    /**
-     * Clears the current selection state of the list.
-     *
-     * @method clearSelection
-     */
-    clearSelection: function() {
-      function unselect(item) {
-        var model = this._getModelFromItem(item);
-        if (model) {
-          model[this.selectedAs] = false;
-        }
-      }
-
-      if (Array.isArray(this.selectedItems)) {
-        this.selectedItems.forEach(unselect, this);
-      } else if (this.selectedItem) {
-        unselect.call(this, this.selectedItem);
-      }
-
-      /** @type {!ArraySelectorElement} */ (this.$.selector).clearSelection();
-    },
-
-    /**
      * Add an event listener to `tap` if `selectionEnabled` is true,
      * it will remove the listener otherwise.
      */
@@ -1465,11 +1276,6 @@ will only render 20.
       this.toggleSelectionForItem(model[this.as]);
     },
 
-    _multiSelectionChanged: function(multiSelection) {
-      this.clearSelection();
-      this.$.selector.multi = multiSelection;
-    },
-
     /**
      * Updates the size of an item.
      *
@@ -1484,31 +1290,6 @@ will only render 20.
       if (pidx != null) {
         this._updateMetrics([pidx]);
         this._positionItems();
-      }
-    },
-
-    /**
-     * Creates a temporary backfill item in the rendered pool of physical items
-     * to replace the main focused item. The focused item has tabIndex = 0
-     * and might be currently focused by the user.
-     *
-     * This dynamic replacement helps to preserve the focus state.
-     */
-    _manageFocus: function() {
-      var fidx = this._focusedIndex;
-
-      if (fidx >= 0 && fidx < this._virtualCount) {
-        // if it's a valid index, check if that index is rendered
-        // in a physical item.
-        if (this._isIndexRendered(fidx)) {
-          this._restoreFocusedItem();
-        } else {
-          this._createFocusBackfillItem();
-        }
-      } else if (this._virtualCount > 0 && this._physicalCount > 0) {
-        // otherwise, assign the initial focused index.
-        this._focusedIndex = this._virtualStart;
-        this._focusedItem = this._physicalItems[this._physicalStart];
       }
     },
 
