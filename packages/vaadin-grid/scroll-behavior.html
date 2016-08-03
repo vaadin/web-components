@@ -5,6 +5,7 @@
         /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
         a containing block. The object acts as a containing block for fixed positioned descendants. */
         transform: translateZ(0);
+        overflow: hidden;
       }
 
       #header {
@@ -23,12 +24,26 @@
         transform: translateZ(0);
       }
 
+      :host([fixedmode]) #items {
+        position: fixed;
+        transform: translateZ(0);
+        will-change: transform;
+      }
+
       table {
         position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         z-index: 1;
       }
+
+      table:after {
+        content: "foo";
+        top: 10000px;
+        width: 1000px;
+        position: absolute;
+      }
+
     </style>
   </template>
 </dom-module>
@@ -160,16 +175,16 @@
         }
       }
 
-      if (recycledTiles === 0) {
-        // Try to increase the pool if the list's client height isn't filled up with physical items
-        if (physicalBottom < scrollBottom || this._physicalTop > scrollTop) {
-          // this._increasePoolIfNeeded();
+        if (recycledTiles === 0) {
+          // Try to increase the pool if the list's client height isn't filled up with physical items
+          if (physicalBottom < scrollBottom || this._physicalTop > scrollTop) {
+            // this._increasePoolIfNeeded();
+          }
+        } else {
+          this._virtualStart = this._virtualStart + recycledTiles;
+          this._physicalStart = this._physicalStart + recycledTiles;
+          this._update(recycledTileSet, movingUp);
         }
-      } else {
-        this._virtualStart = this._virtualStart + recycledTiles;
-        this._physicalStart = this._physicalStart + recycledTiles;
-        this._update(recycledTileSet, movingUp);
-      }
 
       this._onScroll();
     },
@@ -178,11 +193,23 @@
       if (!this.fixedmode) {
         this.$.header.style.transform = // this._tfoot.style.transform =
         this._getTranslate3d(0, this._scrollPosition);
-      }
 
-      Polymer.dom(this.root).querySelectorAll('.frozen').forEach(function(cell) {
-        cell.style.transform = this._getTranslate3d(this.$.table.scrollLeft, 0);
-      }, this);
+        Polymer.dom(this.root).querySelectorAll('.frozen').forEach(function(cell) {
+          cell.style.transform = this._getTranslate3d(this.$.table.scrollLeft, 0);
+        }, this);
+      } else {
+        Polymer.dom(this.root).querySelectorAll('tbody .frozen').forEach(function(cell) {
+          cell.style.transform = this._getTranslate3d(this.$.table.scrollLeft, 0);
+        }, this);
+
+        Polymer.dom(this.root).querySelectorAll('thead th:not(.frozen)').forEach(function(cell) {
+          cell.style.transform = this._getTranslate3d(-this.$.table.scrollLeft, 0);
+        }, this);
+
+        this.$.items.style.transform =
+          this._getTranslate3d(-this.$.table.scrollLeft || 0, -this.$.table.scrollTop || 0);
+
+      }
     },
 
     _getTranslate3d: function(x, y) {
