@@ -76,6 +76,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-sizing: border-box;
         background-color: #fff;
         display: block;
+
+        /* Bootstrap adds 8px padding to each cell, IE flexbasis ignores border-box so need to revert */
+        padding: 0 !important;
       }
 
       tr:nth-child(odd) td {
@@ -88,6 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       tr:not([hidden]) {
         display: flex;
+        width: 100%;
       }
 
       .last-frozen {
