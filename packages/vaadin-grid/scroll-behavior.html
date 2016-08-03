@@ -19,6 +19,12 @@
         z-index: -3;
       }
 
+      td, th {
+        /*will-change: translate;*/
+        transform: translateZ(0);
+      }
+
+
       :host([fixedmode]) #header {
         position: fixed;
         transform: translateZ(0);
@@ -207,7 +213,7 @@
         }, this);
 
         this.$.items.style.transform =
-          this._getTranslate3d(-this.$.table.scrollLeft || 0, -this.$.table.scrollTop || 0);
+          this._getTranslate3d(-this.$.table.scrollLeft || 0, -this._scrollPosition || 0);
 
       }
     },
