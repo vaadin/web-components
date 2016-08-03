@@ -21,7 +21,8 @@
           var column = columns[colIndex];
           cell.column = column;
           cell.template = column.template;
-          cell.toggleClass('frozen', colIndex <= 1);
+          cell.toggleClass('frozen', colIndex < this.frozenColumns);
+          cell.toggleClass('last-frozen', colIndex === this.frozenColumns - 1);
           Polymer.dom(row).appendChild(cell);
         }
       }, this);
@@ -39,7 +40,9 @@
           cell.target = this.domHost;
           cell.template = header.template;
           cell.column = column;
-          cell.toggleClass('frozen', columnIndex <= 1);
+          cell.toggleClass('frozen', columnIndex < this.frozenColumns);
+          var colspan = header.colspan || 1;
+          cell.toggleClass('last-frozen', columnIndex + colspan - 1 === this.frozenColumns - 1);
 
 
           if (header.colspan > 1) {
