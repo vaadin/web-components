@@ -179,6 +179,10 @@
         this.$.header.style.transform = // this._tfoot.style.transform =
         this._getTranslate3d(0, this._scrollPosition);
       }
+
+      Polymer.dom(this.root).querySelectorAll('.frozen').forEach(function(cell) {
+        cell.style.transform = this._getTranslate3d(this.$.table.scrollLeft, 0);
+      }, this);
     },
 
     _getTranslate3d: function(x, y) {
