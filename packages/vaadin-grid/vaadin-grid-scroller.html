@@ -18,8 +18,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="scroll-behavior.html">
 
 <dom-module id="vaadin-grid-scroller">
+  <link rel="import" type="css" href="../bootstrap/dist/css/bootstrap.css">
   <template>
-    <style include="fixedmode-styles"></style>
+    <style include="fixedmode-styles">
+
+    </style>
     <style>
       :host {
         display: block;
@@ -63,6 +66,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       thead {
         top: 0;
+        background-color: #fff;
       }
 
       tr:not([hidden]) {
@@ -71,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <table id="table" >
+    <table id="table" class="table table-striped">
       <thead id="header">
       </thead>
       <tbody id="items">

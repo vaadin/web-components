@@ -16,7 +16,8 @@
     "tests"
   ],
   "devDependencies": {
-    "iron-list": "^1.3.5"
+    "iron-list": "^1.3.5",
+    "bootstrap": "^3.3.7"
   },
   "dependencies": {
     "polymer": "^1.6.1"

@@ -32,7 +32,7 @@
             headerRow = document.createElement('tr');
             Polymer.dom(this.$.header).appendChild(headerRow);
           }
-          var cell = document.createElement('td', 'vaadin-grid-cell');
+          var cell = document.createElement('th', 'vaadin-grid-header-cell');
           cell.target = this.domHost;
           cell.template = header.template;
           Polymer.dom(headerRow).appendChild(cell);
