@@ -27,6 +27,7 @@
       }, this);
 
       this.$.header.innerHTML = '';
+      var spanning = [];
       columns.forEach(function(column, columnIndex) {
         column.headers.forEach(function(header, headerIndex) {
           var headerRow = this.$.header.childNodes[headerIndex];
@@ -39,6 +40,29 @@
           cell.template = header.template;
           cell.column = column;
           cell.toggleClass('frozen', columnIndex <= 1);
+
+
+          if (header.colspan > 1) {
+            spanning[headerIndex] = header.colspan;
+
+            var width = cell.style.flexBasis || '100px';
+            var flex = cell.style.flexGrow || 1;
+            for (var i = 1; i < spanning[headerIndex]; i++) {
+              width += ' + ' + (columns[columnIndex + i].minWidth || columns[columnIndex + i].width || '100px');
+              flex++;
+            }
+
+            cell.style.flexBasis = 'calc(' + width + ')';
+            cell.style.flexGrow = flex;
+          }
+
+
+          if (!header.colspan && spanning[headerIndex] > 0) {
+            cell.style.display = 'none';
+          }
+
+          spanning[headerIndex]--;
+
           Polymer.dom(headerRow).appendChild(cell);
 
         }, this);
@@ -55,5 +79,4 @@
   vaadin.elements.grid.GridColumnsBehavior = [
     vaadin.elements.grid.GridColumnsBehaviorImpl
   ];
-
 </script>
