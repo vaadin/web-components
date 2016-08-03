@@ -20,12 +20,13 @@
           cell.target = this.domHost;
           var column = columns[colIndex];
           cell.template = column.template;
+          cell.toggleClass('frozen', colIndex <= 1);
           Polymer.dom(row).appendChild(cell);
         }
       }, this);
 
       this.$.header.innerHTML = '';
-      columns.forEach(function(column) {
+      columns.forEach(function(column, columnIndex) {
         column.headers.forEach(function(header, headerIndex) {
           var headerRow = this.$.header.childNodes[headerIndex];
           if (!headerRow) {
@@ -35,6 +36,7 @@
           var cell = document.createElement('th', 'vaadin-grid-header-cell');
           cell.target = this.domHost;
           cell.template = header.template;
+          cell.toggleClass('frozen', columnIndex <= 1);
           Polymer.dom(headerRow).appendChild(cell);
 
         }, this);
