@@ -43,7 +43,7 @@
     _assignModels: function(itemSet) {
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
-        el.childNodes.forEach(function(cell) {
+        Polymer.dom(el).childNodes.forEach(function(cell) {
           var inst = cell.instance;
           inst[this.indexAs] = vidx;
           this.dataSource(vidx, function(index, item) {
