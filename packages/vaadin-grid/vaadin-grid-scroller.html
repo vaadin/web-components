@@ -71,10 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <array-selector id="selector" items="{{items}}"
-      selected="{{selectedItems}}" selected-item="{{selectedItem}}">
-    </array-selector>
-
     <table id="table" >
       <thead id="header">
       </thead>
@@ -92,7 +88,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
   var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
   var DEFAULT_PHYSICAL_COUNT = 3;
-  var HIDDEN_Y = '-10000px';
   var SECRET_TABINDEX = -100;
 
   Polymer({
