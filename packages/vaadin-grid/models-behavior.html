@@ -10,7 +10,7 @@
         type: Function,
         value: function() {
           return function(index, callback) {
-            callback(index > this.size - 1 ? null : {});
+            callback(index, index > this.size - 1 ? null : {});
           };
         }
       },
@@ -46,8 +46,8 @@
         el.childNodes.forEach(function(cell) {
           var inst = cell.instance;
           inst[this.indexAs] = vidx;
-          this.dataSource(vidx, function(item) {
-            if (item != null) {
+          this.dataSource(vidx, function(index, item) {
+            if (item != null && inst[this.indexAs] === index) {
               inst[this.as] = item;
               // inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
               // this._physicalIndexForKey[inst.__key__] = pidx;
