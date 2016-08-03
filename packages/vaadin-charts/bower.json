@@ -29,7 +29,7 @@
     "index.html"
   ],
   "dependencies": {
-    "highcharts": "highcharts/highcharts-dist#v4.2.1",
+    "highcharts": "highcharts/highcharts-dist#v4.2.6",
     "polymer": "Polymer/polymer#^1.1.0",
     "vaadin-license-checker": "vaadin/license-checker#0.9.6"
   },
