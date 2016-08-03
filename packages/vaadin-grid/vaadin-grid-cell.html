@@ -17,12 +17,19 @@
       ],
 
       properties: {
+        column: Object,
         instance: Object,
         template: {
           observer: '_templateChanged'
         },
 
         target: Object
+      },
+
+      observers: ['_columnChanged(column)'],
+
+      _columnChanged: function(column) {
+        this.style.flexBasis = column.minWidth || column.width;
       },
 
       _itemChanged: function() {

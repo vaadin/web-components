@@ -19,6 +19,7 @@
           var cell = document.createElement('td', 'vaadin-grid-cell');
           cell.target = this.domHost;
           var column = columns[colIndex];
+          cell.column = column;
           cell.template = column.template;
           cell.toggleClass('frozen', colIndex <= 1);
           Polymer.dom(row).appendChild(cell);
@@ -36,6 +37,7 @@
           var cell = document.createElement('th', 'vaadin-grid-header-cell');
           cell.target = this.domHost;
           cell.template = header.template;
+          cell.column = column;
           cell.toggleClass('frozen', columnIndex <= 1);
           Polymer.dom(headerRow).appendChild(cell);
 
