@@ -17,7 +17,7 @@
     }
   </style>
   <template>
-    <vaadin-grid-scroller size="150000" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
+    <vaadin-grid-scroller size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
       <content></content>
 
     </vaadin-grid-scroller>
@@ -32,10 +32,7 @@
 
       bufferSize: Number,
 
-      size: {
-        type: Number,
-        value: 100
-      },
+      size: Number,
 
       frozenColumns: Number,
 
