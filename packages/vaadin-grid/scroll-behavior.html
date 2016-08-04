@@ -49,6 +49,7 @@
         display: flex;
         visibility: hidden;
         transform: translateY(-100%);
+        width: 100%;
       }
 
     </style>
@@ -66,6 +67,10 @@
       fixedmode: {
         value: /Mobi/.test(navigator.userAgent),
         reflectToAttribute: true
+      },
+
+      _isIE: {
+        value: !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/))
       }
     },
 

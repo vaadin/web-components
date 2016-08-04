@@ -1,0 +1,104 @@
+<dom-module id="vaadin-outer-scroller">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        overflow: auto;
+      }
+
+      :host([passthrough]) {
+        pointer-events: none;
+      }
+    </style>
+
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-outer-scroller',
+
+      properties: {
+        scrollbarWidth: Number,
+
+        scrollTarget: {
+          observer: '_scrollTargetChanged'
+        }
+      },
+
+
+      listeners: {
+        'scroll': '_syncScrollTarget'
+      },
+
+      ready: function() {
+        this.async(function() {
+          this.scrollbarWidth = this._getScrollbarWidth();
+        }, 1);
+      },
+
+      attached: function() {
+        this.listen(this.domHost, 'mousemove', '_onMouseMove');
+        Polymer.dom(this).appendChild(this.domHost.$.sizer);
+      },
+
+      detached: function() {
+        this.unlisten(this.domHost, 'mousemove', '_onMouseMove');
+      },
+
+      _scrollTargetChanged: function(scrollTarget, oldScrollTarget) {
+        if (oldScrollTarget) {
+          this.unlisten(oldScrollTarget, 'scroll', '_syncOuterScroller');
+        }
+        this.listen(scrollTarget, 'scroll', '_syncOuterScroller');
+      },
+
+      _onMouseMove: function(e) {
+        var rect = this.getBoundingClientRect();
+        var passthrough = e.clientY <= rect.bottom - this.scrollbarWidth && e.clientX <= rect.right - this.scrollbarWidth;
+        this.toggleAttribute('passthrough', passthrough);
+      },
+
+      _getScrollbarWidth: function() {
+        // Create the measurement node
+        var scrollDiv = document.createElement("div");
+        scrollDiv.style.width = '100px';
+        scrollDiv.style.height = '100px';
+        scrollDiv.style.overflow = 'scroll';
+        scrollDiv.style.position = 'absolute';
+        scrollDiv.style.top = '-9999px';
+        document.body.appendChild(scrollDiv);
+        // Get the scrollbar width
+        var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+        // Delete the DIV
+        document.body.removeChild(scrollDiv);
+        return scrollbarWidth;
+      },
+
+      _syncOuterScroller: function() {
+        if (!this._syncingScrollTarget) {
+          this._syncingOuterScroller = true;
+          this.scrollTop = this.domHost._scrollTop;
+          this.scrollLeft = this.domHost._scrollLeft;
+        }
+        this._syncingScrollTarget = false;
+      },
+
+      _syncScrollTarget: function() {
+        if (!this._syncingOuterScroller) {
+          this._syncingScrollTarget = true;
+          this.scrollTarget.scrollTop = this.scrollTop;
+          this.scrollTarget.scrollLeft = this.scrollLeft;
+
+          this.domHost._scrollHandler();
+        }
+        this._syncingOuterScroller = false;
+      }
+    });
+  </script>
+</dom-module>
