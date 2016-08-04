@@ -23,11 +23,12 @@
     _sizeChanged: function(size) {
       this._virtualStart = 0;
       this._physicalTop = 0;
-      this._virtualCount = size;
+      this._virtualCount = Math.min(size, 100000);
       this._physicalIndexForKey = {};
       this._firstVisibleIndexVal = null;
       this._lastVisibleIndexVal = null;
 
+      this._vidxOffset = 0;
       this._resetScrollPosition(0);
 
       if (!this._physicalItems) {
@@ -51,11 +52,12 @@
     _assignModels: function(itemSet) {
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
+
         Polymer.dom(el).childNodes.forEach(function(cell) {
           var inst = cell.instance;
-          inst[this.indexAs] = vidx;
+          inst[this.indexAs] = vidx + this._vidxOffset;
           this.dataSource(vidx, function(index, item) {
-            if (item != null && inst[this.indexAs] === index) {
+            if (item != null && inst[this.indexAs] === index + this._vidxOffset) {
               inst[this.as] = item;
               // inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
               // this._physicalIndexForKey[inst.__key__] = pidx;
