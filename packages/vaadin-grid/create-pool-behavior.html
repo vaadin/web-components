@@ -8,9 +8,9 @@
      * Creates a pool of DOM elements and attaches them to the local dom.
      */
     _createPool: function(size) {
-      var physicalItems = new Array(25);
+      var physicalItems = new Array(size);
 
-      for (var i = 0; i < 25; i++) {
+      for (var i = 0; i < size; i++) {
         var row = document.createElement('tr');
         physicalItems[i] = row;
         row.setAttribute('hidden', ''); //hidden by default, removed when data is bound.

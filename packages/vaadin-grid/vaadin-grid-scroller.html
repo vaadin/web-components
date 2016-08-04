@@ -120,7 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
   var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
-  var DEFAULT_PHYSICAL_COUNT = 3;
+  var DEFAULT_PHYSICAL_COUNT = 25;
   var SECRET_TABINDEX = -100;
 
   Polymer({
@@ -472,7 +472,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     attached: function() {
       this.updateViewportBoundaries();
-      this._increasePool(25);
       this._render();
       // `iron-resize` is fired when the list is attached if the event is added
       // before attached causing unnecessary work.
@@ -518,6 +517,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this._positionItems();
       // set the scroller size
       this._updateScrollerSize();
+      // increase the pool of physical items
+      this._increasePoolIfNeeded();
+    },
+
+    /**
+     * Increases the pool of physical items only if needed.
+     *
+     * @return {boolean} True if the pool was increased.
+     */
+    _increasePoolIfNeeded: function() {
+      // Base case 1: the list has no height.
+      if (this._viewportHeight === 0) {
+        return false;
+      }
+      // Base case 2: If the physical size is optimal and the list's client height is full
+      // with physical items, don't increase the pool.
+      var isClientHeightFull = this._physicalBottom >= this._scrollBottom && this._physicalTop <= this._scrollPosition;
+      if (this._physicalSize >= this._optPhysicalSize && isClientHeightFull) {
+        return false;
+      }
+      // this value should range between [0 <= `currentPage` <= `_maxPages`]
+      var currentPage = Math.floor(this._physicalSize / this._viewportHeight);
+      if (currentPage === 0) {
+        // fill the first page
+        this._debounceTemplate(this._increasePool.bind(this, Math.round(this._physicalCount * 0.5)));
+      } else if (this._lastPage !== currentPage && isClientHeightFull) {
+        // paint the page and defer the next increase
+        // wait 16ms which is rough enough to get paint cycle.
+        Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', this._increasePool.bind(this, this._itemsPerRow), 16));
+      } else {
+        // fill the rest of the pages
+        this._debounceTemplate(this._increasePool.bind(this, this._itemsPerRow));
+      }
+      this._lastPage = currentPage;
+      return true;
     },
 
     /**
@@ -536,10 +570,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return;
       }
 
-      this._physicalItems = this._createPool(25);
-      this._physicalSizes = new Array(25);
+      [].push.apply(this._physicalItems, this._createPool(delta));
+      [].push.apply(this._physicalSizes, new Array(delta));
 
-      this._physicalCount = 25;
+      this._physicalCount = prevPhysicalCount + delta;
 
       this._update();
     },
@@ -761,7 +795,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // set the new scroll position
       this._resetScrollPosition(this._physicalTop + this._scrollerPaddingTop + targetOffsetTop);
       // increase the pool of physical items if needed
-      // this._increasePoolIfNeeded();
+      this._increasePoolIfNeeded();
       // clear cached visible index
       this._firstVisibleIndexVal = null;
       this._lastVisibleIndexVal = null;

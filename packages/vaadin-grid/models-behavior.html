@@ -30,6 +30,14 @@
 
       this._resetScrollPosition(0);
 
+      if (!this._physicalItems) {
+        var DEFAULT_PHYSICAL_COUNT = 25;
+
+        this._physicalCount = Math.max(1, Math.min(DEFAULT_PHYSICAL_COUNT, this._virtualCount));
+        this._physicalItems = this._createPool(this._physicalCount);
+        this._physicalSizes = new Array(this._physicalCount);
+      }
+
       this._physicalStart = 0;
 
       this._itemsRendered = false;
