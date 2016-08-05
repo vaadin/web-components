@@ -36,23 +36,27 @@
 
                     grid.style.width = "450px";
 
-                    //vaadin-charts as a renderer for a vaadin-grid cell
-                    grid.columns[1].renderer = function (cell) {
-                        var sparkline = document.createElement('vaadin-sparkline');
-                        sparkline.setAttribute('style', 'width:150px; height:48px;');
-                        sparkline.setAttribute('data', cell.data);
+                    grid.then(function (){
 
-                        cell.element.innerHTML = '';
-                        cell.element.appendChild(sparkline);
-                    };
+                        //vaadin-charts as a renderer for a vaadin-grid cell
+                        grid.columns[1].renderer = function (cell) {
+                            var sparkline = document.createElement('vaadin-sparkline');
+                            sparkline.setAttribute('style', 'width:150px; height:48px;');
+                            sparkline.setAttribute('data', cell.data);
 
-                    grid.columns[2].renderer = function (cell) {
-                        cell.element.innerHTML = '';
+                            cell.element.innerHTML = '';
+                            cell.element.appendChild(sparkline);
+                        };
 
-                        //show the last value of the data array
-                        var dataArray = cell.row.data.data;
-                        cell.element.innerHTML = '$' + dataArray[dataArray.length - 1];
-                    };
+                        grid.columns[2].renderer = function (cell) {
+                            cell.element.innerHTML = '';
+
+                            //show the last value of the data array
+                            var dataArray = cell.row.data.data;
+                            cell.element.innerHTML = '$' + dataArray[dataArray.length - 1];
+                        };
+
+                    });
 
                 },
 
