@@ -1,0 +1,23 @@
+<dom-module id="vaadin-grid-sizer">
+  <script>
+    Polymer({
+      is: 'vaadin-grid-sizer',
+      extends: 'caption',
+
+      properties: {
+        columns: Array
+      },
+
+      observers: ['_columnsChanged(columns)'],
+
+      _columnsChanged: function(columns) {
+        columns.forEach(function(column) {
+          var cell = document.createElement('td', 'vaadin-grid-cell');
+          cell.column = column;
+
+          Polymer.dom(this).appendChild(cell);
+        }.bind(this));
+      }
+    });
+  </script>
+</dom-module>

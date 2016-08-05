@@ -13,20 +13,6 @@
     ],
 
     _columnsChanged: function(columns) {
-      [].concat(this.$.sizer).forEach(function(row) {
-        row.innerHTML = '';
-        for (var colIndex = 0; colIndex < columns.length; colIndex++) {
-          var cell = document.createElement('td', 'vaadin-grid-cell');
-          cell.target = this.domHost;
-          var column = columns[colIndex];
-          cell.column = column;
-          cell.template = column.template;
-          cell.toggleClass('frozen', colIndex < this.frozenColumns);
-          cell.toggleClass('last-frozen', colIndex === this.frozenColumns - 1);
-          Polymer.dom(row).appendChild(cell);
-        }
-      }, this);
-
       this.$.header.innerHTML = '';
       var spanning = [];
       columns.forEach(function(column, columnIndex) {
