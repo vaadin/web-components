@@ -52,22 +52,19 @@
     _assignModels: function(itemSet) {
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
+        el.index = vidx + this._vidxOffset;
 
-        Polymer.dom(el).childNodes.forEach(function(cell) {
-          var inst = cell.instance;
-          inst[this.indexAs] = vidx + this._vidxOffset;
-          this.dataSource(vidx, function(index, item) {
-            if (item != null && inst[this.indexAs] === index + this._vidxOffset) {
-              inst[this.as] = item;
-              // inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
-              // this._physicalIndexForKey[inst.__key__] = pidx;
-              el.removeAttribute('hidden');
-            } else {
-              inst.__key__ = null;
-              el.setAttribute('hidden', '');
-            }
-          }.bind(this));
-        }, this);
+        this.dataSource(vidx, function(index, item) {
+          if (item != null && el.index === index + this._vidxOffset) {
+            el.item = item;
+            // inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
+            // this._physicalIndexForKey[inst.__key__] = pidx;
+            el.removeAttribute('hidden');
+          } else {
+            inst.__key__ = null;
+            el.setAttribute('hidden', '');
+          }
+        }.bind(this));
       }, itemSet);
     },
   };

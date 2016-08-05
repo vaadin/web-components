@@ -1,0 +1,62 @@
+<link rel="import" href="vaadin-grid-cell.html">
+
+<dom-module id="vaadin-grid-row">
+  <script>
+    Polymer({
+      is: 'vaadin-grid-row',
+      extends: 'tr',
+
+      properties: {
+        columns: Array,
+        index: Number,
+        cells: Array,
+        frozenColumns: Number,
+        target: Object
+      },
+
+      observers: ['_columnsChanged(columns, target)', '_indexChanged(index, cells)', '_frozenColumnsChanged(frozenColumns, cells)'],
+
+      created: function() {
+        this._instanceProps = {
+          index: true,
+          target: true,
+          column: true,
+          frozen: true,
+          lastFrozen: true
+        };
+      },
+
+      //TODO: implement support for columns.splices
+      _columnsChanged: function(columns, target) {
+        var cells = [];
+
+        columns.forEach(function(column) {
+          var cell = document.createElement('td', 'vaadin-grid-cell');
+          cell.index = this.index;
+          cell.target = this.target;
+          cell.column = column;
+          cell.template = column.template;
+
+          Polymer.dom(this).appendChild(cell);
+
+          cells.push(cell);
+        }.bind(this));
+
+        this.cells = cells;
+      },
+
+      _frozenColumnsChanged: function(frozenColumns, cells) {
+        cells.forEach(function(cell, i) {
+          cell.toggleClass('frozen', i < frozenColumns);
+          cell.toggleClass('last-frozen', i === frozenColumns - 1);
+        });
+      },
+
+      _indexChanged: function(index, cells) {
+        cells.forEach(function(cell) {
+          cell.index = index;
+        });
+      }
+    });
+  </script>
+</dom-module>

@@ -21,39 +21,33 @@
       properties: {
         column: Object,
         instance: Object,
-        template: {
-          observer: '_templateChanged'
-        },
-
+        index: Number,
+        template: Object,
         target: Object
       },
 
-      observers: ['_columnChanged(column)'],
+      observers: ['_columnChanged(column)', '_templateChanged(template, target)', '_indexChanged(index, instance)'],
 
       _columnChanged: function(column) {
         this.style.flexBasis = column.minWidth || column.width;
       },
 
-      _itemChanged: function() {
-        if (this.instance) {
-          this.instance.index = this.item;
-        }
-
+      _indexChanged: function(index, instance) {
+        instance.index = index;
       },
 
-      _templateChanged: function() {
-
-        if (this.template){
-          this.templatize(this.template);
+      _templateChanged: function(template, target) {
+        if (template) {
+          this.templatize(template);
           this.instance = this.stamp(null);
 
           var item = document.createElement('div');
-          var itemClass = 'item-' + this.target.childElementCount;
+          var itemClass = 'item-' + target.childElementCount;
           item.classList.add(itemClass);
 
           if (Polymer.Settings.useShadow) {
 
-            Polymer.dom(this.target).appendChild(item);
+            Polymer.dom(target).appendChild(item);
 
             var content = document.createElement('content');
             content.setAttribute('select', '.' + itemClass);
