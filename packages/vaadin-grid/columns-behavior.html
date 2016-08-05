@@ -9,10 +9,15 @@
     },
 
     observers: [
-      '_columnsChanged(columns, _physicalCount)'
+      '_columnsChanged(columns, frozenColumns, _physicalCount)'
     ],
 
-    _columnsChanged: function(columns) {
+    _columnsChanged: function(columns, frozenColumns) {
+      this._physicalItems.forEach(function(row) {
+        row.columns = columns;
+        row.frozenColumns = frozenColumns;
+      });
+
       requestAnimationFrame(function() {
         this.$.items.style.paddingTop = this.$.header.clientHeight + 'px';
       }.bind(this));

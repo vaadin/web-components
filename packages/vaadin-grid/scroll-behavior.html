@@ -196,7 +196,7 @@
       if (recycledTiles === 0) {
         // Try to increase the pool if the list's client height isn't filled up with physical items
         if (physicalBottom < scrollBottom || this._physicalTop > scrollTop) {
-          // this._increasePoolIfNeeded();
+          this._increasePoolIfNeeded();
         }
       } else {
         this._virtualStart = this._virtualStart + recycledTiles;
