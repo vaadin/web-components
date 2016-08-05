@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="scroll-behavior.html">
 <link rel="import" href="vaadin-outer-scroller.html">
 <link rel="import" href="vaadin-grid-sizer.html">
+<link rel="import" href="vaadin-grid-header.html">
 
 <dom-module id="vaadin-grid-scroller">
   <link rel="import" type="css" href="../bootstrap/dist/css/bootstrap.css">
@@ -109,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <table id="table" class="table table-striped">
       <caption id="sizer" is="vaadin-grid-sizer" columns="[[columns]]"></caption>
-      <thead id="header"></thead>
+      <thead id="header" is="vaadin-grid-header" columns="[[columns]]" frozen-columns="[[frozenColumns]]"></thead>
       <tbody id="items"></tbody>
     </table>
 
