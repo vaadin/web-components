@@ -1,3 +1,5 @@
+<link rel="import" href="vaadin-grid-header-row.html">
+
 <dom-module id="vaadin-grid-header">
   <script>
     Polymer({
@@ -6,58 +8,38 @@
 
       properties: {
         columns: Array,
-        frozenColumns: Number
+        frozenColumns: Number,
+        _rows: Array
       },
 
-      observers: ['_columnsChanged(columns)'],
+      observers: ['_columnsChanged(columns)', '_frozenColumnsChanged(frozenColumns, _rows)'],
 
-      _columnsChanged: function(columns) {
-        var spanning = [];
+      _columnsChanged: function(columns, frozenColumns) {
+        var rows = [];
         columns.forEach(function(column, columnIndex) {
           column.headers.forEach(function(header, headerIndex) {
             var headerRow = this.childNodes[headerIndex];
             if (!headerRow) {
-              headerRow = document.createElement('tr');
+              headerRow = document.createElement('tr', 'vaadin-grid-header-row');
+              headerRow.headerIndex = headerIndex;
+              // TODO: correct target should be the same scope as the templates were
+              // introduced. (consider encapsulated parent of vaadin-grid)
+              headerRow.target = this.domHost.domHost; //vaadin-grid
+              headerRow.columns = columns;
+
               Polymer.dom(this).appendChild(headerRow);
+              rows.push(headerRow);
             }
-            
-            var cell = document.createElement('th', 'vaadin-grid-header-cell');
-
-            // TODO: correct target should be the same scope as the templates were
-            // introduced. (consider encapsulated parent of vaadin-grid)
-            cell.target = this.domHost.domHost; //vaadin-grid
-            cell.template = header.template;
-            cell.column = column;
-            cell.toggleClass('frozen', columnIndex < this.frozenColumns);
-            var colspan = header.colspan || 1;
-            cell.toggleClass('last-frozen', columnIndex + colspan - 1 === this.frozenColumns - 1);
-
-
-            if (header.colspan > 1) {
-              spanning[headerIndex] = header.colspan;
-
-              var width = cell.style.flexBasis || '100px';
-              var flex = cell.style.flexGrow || 1;
-              for (var i = 1; i < spanning[headerIndex]; i++) {
-                width += ' + ' + (columns[columnIndex + i].minWidth || columns[columnIndex + i].width || '100px');
-                flex++;
-              }
-
-              cell.style.flexBasis = 'calc(' + width + ')';
-              cell.style.flexGrow = flex;
-            }
-
-
-            if (!header.colspan && spanning[headerIndex] > 0) {
-              cell.style.display = 'none';
-            }
-
-            spanning[headerIndex]--;
-
-            Polymer.dom(headerRow).appendChild(cell);
-
           }, this);
         }, this);
+
+        this._rows = rows;
+      },
+
+      _frozenColumnsChanged: function(frozenColumns, rows) {
+        rows.forEach(function(row) {
+          row.frozenColumns = frozenColumns;
+        })
       }
     });
   </script>

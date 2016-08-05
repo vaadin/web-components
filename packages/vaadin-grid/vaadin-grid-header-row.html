@@ -1,0 +1,74 @@
+<link rel="import" href="vaadin-grid-header-cell.html">
+
+<dom-module id="vaadin-grid-header-row">
+  <script>
+    Polymer({
+      is: 'vaadin-grid-header-row',
+      extends: 'tr',
+
+      properties: {
+        columns: Array,
+        index: Number,
+        headerIndex: Object,
+        cells: Array,
+        frozenColumns: Number,
+        target: Object
+      },
+
+      observers: ['_columnsChanged(columns, headerIndex, target)', '_indexChanged(index, cells)', '_frozenColumnsChanged(frozenColumns, cells)'],
+
+      //TODO: implement support for columns.splices
+      _columnsChanged: function(columns, headerIndex, target) {
+        var cells = [];
+        var spanning = 0;
+
+        columns.forEach(function(column, columnIndex) {
+          var header = column.headers[headerIndex];
+          var cell = document.createElement('th', 'vaadin-grid-header-cell');
+          cell.index = this.index;
+          cell.target = this.target;
+          cell.column = column;
+          cell.template = header.template;
+
+          Polymer.dom(this).appendChild(cell);
+          cells.push(cell);
+
+          if (header.colspan > 1) {
+            spanning = header.colspan;
+
+            var width = cell.style.flexBasis || '100px';
+            var flex = cell.style.flexGrow || 1;
+            for (var i = 1; i < spanning; i++) {
+              width += ' + ' + (columns[columnIndex + i].minWidth || columns[columnIndex + i].width || '100px');
+              flex++;
+            }
+
+            cell.style.flexBasis = 'calc(' + width + ')';
+            cell.style.flexGrow = flex;
+          }
+
+          if (!header.colspan && spanning > 0) {
+            cell.style.display = 'none';
+          }
+
+          spanning--;
+        }.bind(this));
+
+        this.cells = cells;
+      },
+
+      _frozenColumnsChanged: function(frozenColumns, cells) {
+        cells.forEach(function(cell, i) {
+          cell.toggleClass('frozen', i < frozenColumns);
+          cell.toggleClass('last-frozen', i === frozenColumns - 1);
+        });
+      },
+
+      _indexChanged: function(index, cells) {
+        cells.forEach(function(cell) {
+          cell.index = index;
+        });
+      }
+    });
+  </script>
+</dom-module>

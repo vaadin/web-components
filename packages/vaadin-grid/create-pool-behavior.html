@@ -15,6 +15,7 @@
         row.columns = this.columns;
         row.target = this.domHost;
         row.frozenColumns = this.frozenColumns;
+        row.header = null;
         physicalItems[i] = row;
         row.setAttribute('hidden', ''); //hidden by default, removed when data is bound.
         Polymer.dom(this.$.items).appendChild(row);
