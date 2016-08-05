@@ -16,16 +16,6 @@
 
       observers: ['_columnsChanged(columns, target)', '_indexChanged(index, cells)', '_frozenColumnsChanged(frozenColumns, cells)'],
 
-      created: function() {
-        this._instanceProps = {
-          index: true,
-          target: true,
-          column: true,
-          frozen: true,
-          lastFrozen: true
-        };
-      },
-
       //TODO: implement support for columns.splices
       _columnsChanged: function(columns, target) {
         var cells = [];
