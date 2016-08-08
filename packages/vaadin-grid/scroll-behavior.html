@@ -209,6 +209,7 @@
       }
 
       this._onScroll();
+      this._scheduleReorder();
     },
 
     _adjustVirtualIndexOffset: function(delta) {
@@ -236,6 +237,17 @@
           }
         }
       }
+    },
+
+    _scheduleReorder: function() {
+      this.debounce('reorderrows', function() {
+        this._physicalItems.slice(0)
+          .sort(function(a, b) {
+            return a.index - b.index;
+          }).forEach(function(row) {
+            this.$.items.appendChild(row);
+          }, this);
+      }, 100);
     },
 
     _onScroll: function() {

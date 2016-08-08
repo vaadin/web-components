@@ -43,6 +43,7 @@
       },
 
       _indexChanged: function(index, cells) {
+        this.toggleAttribute('odd', index % 2);
         cells.forEach(function(cell) {
           cell.index = index;
         });
