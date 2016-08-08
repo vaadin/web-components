@@ -1,0 +1,44 @@
+<dom-module id="vaadin-grid-sizer">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        width: 100%;
+      }
+
+      .cell {
+        flex-basis: 100px;
+        flex-shrink: 0;
+        flex-grow: 1;
+      }
+    </style>
+
+      <template is="dom-repeat" items="[[columns]]">
+        <div class="cell" style$="[[_getStyle(item)]]"></div>
+      </template>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-sizer',
+
+      extends: 'caption',
+
+      properties: {
+        columns: Array,
+
+        scrollHeight: Number
+      },
+
+      observers: ['_scrollHeightChanged(scrollHeight)'],
+
+      _getStyle: function(column) {
+        return 'flex-basis: ' + (column.minWidth || column.width || '100px');
+      },
+
+      _scrollHeightChanged: function(scrollHeight) {
+        this.style.top = Math.round(scrollHeight) + 'px';
+      }
+    });
+  </script>
+</dom-module>

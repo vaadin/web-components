@@ -7,19 +7,9 @@
         width: 100%;
         position: absolute;
         top: 0;
-        z-index: 1;
+        /*z-index: 1;*/
         overflow: auto;
-      }
-
-      :host > div {
-        width: 100%;
-        display: flex;
-      }
-
-      .cell {
-        flex-basis: 100px;
-        flex-shrink: 0;
-        flex-grow: 1;
+        /*transform: translateZ(0);*/
       }
 
       :host([passthrough]) {
@@ -27,11 +17,7 @@
       }
     </style>
 
-    <div id="sizer">
-      <template is="dom-repeat" items="[[columns]]">
-        <div class="cell" style="[[_getStyle(item)]]"></div>
-      </template>
-    </div>
+    <content></content>
 
   </template>
   <script>
@@ -39,16 +25,11 @@
       is: 'vaadin-outer-scroller',
 
       properties: {
-        columns: Array,
         scrollbarWidth: Number,
-        scrollHeight: Number,
         scrollTarget: {
           observer: '_scrollTargetChanged'
         }
       },
-
-      observers: ['_scrollHeightChanged(scrollHeight)'],
-
 
       listeners: {
         'scroll': '_syncScrollTarget'
@@ -116,14 +97,6 @@
           this.domHost._scrollHandler();
         }
         this._syncingOuterScroller = false;
-      },
-
-      _getStyle: function(column) {
-        return 'flex-basis: ' + (column.minWidth || column.width);
-      },
-
-      _scrollHeightChanged: function(scrollHeight) {
-        this.$.sizer.style.height = scrollHeight + 'px';
       }
     });
   </script>

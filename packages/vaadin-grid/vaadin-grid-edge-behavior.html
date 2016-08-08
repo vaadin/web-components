@@ -1,0 +1,40 @@
+<dom-module is="vaadin-grid-edge-styles">
+  <template>
+    <style>
+      :host([edge]) {
+        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
+        a containing block. The object acts as a containing block for fixed positioned descendants. */
+        transform: translateZ(0);
+        overflow: hidden;
+      }
+
+      :host([edge]) #header {
+        position: fixed;
+        transform: translateZ(0);
+      }
+
+      :host([edge]) #items {
+        position: fixed;
+        width: 100%;
+        transform: translateZ(0);
+        will-change: transform;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.EdgeBehavior = {
+
+    properties: {
+      edge: {
+        value: true,
+        reflectToAttribute: true
+      }
+    }
+  };
+</script>

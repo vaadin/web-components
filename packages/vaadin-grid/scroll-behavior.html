@@ -28,24 +28,18 @@
         position: relative;
       }
 
-
-      :host([fixedmode]) #header {
-        position: fixed;
-        transform: translateZ(0);
-      }
-
-      :host([fixedmode]) #items {
-        position: fixed;
-        width: 100%;
-        transform: translateZ(0);
-        will-change: transform;
-      }
-
       table {
         position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
-        z-index: 1;
+      }
+
+      :host(:not([ios])) table {
+        /* translate Z needed to be applied to keep scroll bars from disappearing
+        when scrolling on desktop Safari.
+        Also, this rule can't be applied on mobile
+        Safari to keep scroll bars visible in there :-) */
+        transform: translateZ(0);
       }
 
       #sizer {
@@ -69,7 +63,7 @@
 
     properties: {
       fixedmode: {
-        value: /Mobi/.test(navigator.userAgent),
+        value: false,
         reflectToAttribute: true
       },
 
@@ -235,7 +229,7 @@
     },
 
     _onScroll: function() {
-      if (!this.fixedmode) {
+      if (!this.fixedmode && !this.edge) {
         this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
 
         Polymer.dom(this.root).querySelectorAll('.frozen').forEach(function(cell) {
@@ -250,8 +244,8 @@
           cell.style.transform = this._getTranslate3d(-this._scrollLeft, 0);
         }, this);
 
-        this.$.items.style.transform =
-          this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
+        // this.$.items.style.transform =
+        //   this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
 
       }
     },
