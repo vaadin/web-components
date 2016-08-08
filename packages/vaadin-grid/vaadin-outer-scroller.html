@@ -43,6 +43,10 @@
 
       attached: function() {
         this.listen(this.domHost, 'mousemove', '_onMouseMove');
+
+        // for some reason scroll bars are hidden in iOS if this style is
+        // added in stylesheets or before attaching.
+        this.style.webkitOverflowScrolling = 'touch';
       },
 
       detached: function() {

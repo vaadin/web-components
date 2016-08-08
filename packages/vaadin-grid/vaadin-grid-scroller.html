@@ -64,12 +64,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       :host([ios]) table {
+        /* On iOS we should be always scrolling the outer scroller. */ 
         overflow: hidden;
-      }
-
-      :host([ios]) vaadin-outer-scroller {
-        /*z-index: 2;*/
-        -webkit-overflow-scrolling: touch;
       }
 
       tbody {
