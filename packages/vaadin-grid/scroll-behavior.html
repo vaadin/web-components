@@ -1,6 +1,10 @@
 <dom-module id="fixedmode-styles">
   <template>
     <style>
+      :host {
+        transform: translateZ(0);
+      }
+
       :host([fixedmode]) {
         /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
         a containing block. The object acts as a containing block for fixed positioned descendants. */
@@ -12,11 +16,10 @@
         position: absolute;
         top: 0;
         width: 100%;
-        z-index: 1;
       }
 
       #items {
-        /*z-index: -3;*/
+        z-index: -1;
       }
 
       td, th {
@@ -32,6 +35,7 @@
         position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
+        z-index: -2;
       }
 
       :host(:not([ios]):not([edge])) table {
