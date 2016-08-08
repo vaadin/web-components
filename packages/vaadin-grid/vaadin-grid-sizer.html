@@ -5,6 +5,7 @@
         display: flex;
         position: absolute;
         width: 100%;
+        visibility: hidden;
       }
 
       .cell {
@@ -15,7 +16,7 @@
     </style>
 
     <template is="dom-repeat" items="[[columns]]">
-      <div class="cell" style$="[[_getStyle(item)]]">foo</div>
+      <div class="cell" style$="[[_getStyle(item)]]">&nbsp;</div>
     </template>
 
   </template>
