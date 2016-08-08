@@ -11,24 +11,43 @@
         overflow: auto;
       }
 
+      :host > div {
+        width: 100%;
+        display: flex;
+      }
+
+      .cell {
+        flex-basis: 100px;
+        flex-shrink: 0;
+        flex-grow: 1;
+      }
+
       :host([passthrough]) {
         pointer-events: none;
       }
     </style>
 
-    <content></content>
+    <div id="sizer">
+      <template is="dom-repeat" items="[[columns]]">
+        <div class="cell" style="[[_getStyle(item)]]"></div>
+      </template>
+    </div>
+
   </template>
   <script>
     Polymer({
       is: 'vaadin-outer-scroller',
 
       properties: {
+        columns: Array,
         scrollbarWidth: Number,
-
+        scrollHeight: Number,
         scrollTarget: {
           observer: '_scrollTargetChanged'
         }
       },
+
+      observers: ['_scrollHeightChanged(scrollHeight)'],
 
 
       listeners: {
@@ -43,7 +62,6 @@
 
       attached: function() {
         this.listen(this.domHost, 'mousemove', '_onMouseMove');
-        Polymer.dom(this).appendChild(this.domHost.$.sizer);
       },
 
       detached: function() {
@@ -98,6 +116,14 @@
           this.domHost._scrollHandler();
         }
         this._syncingOuterScroller = false;
+      },
+
+      _getStyle: function(column) {
+        return 'flex-basis: ' + (column.minWidth || column.width);
+      },
+
+      _scrollHeightChanged: function(scrollHeight) {
+        this.$.sizer.style.height = scrollHeight + 'px';
       }
     });
   </script>
