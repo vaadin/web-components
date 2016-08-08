@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       :host([ios]) vaadin-outer-scroller {
-        /*z-index: 0;*/
+        /*z-index: 2;*/
         -webkit-overflow-scrolling: touch;
       }
 
@@ -111,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       caption {
         display: block;
-        position: absolute;
+        padding: 0;
         width: 100%;
         z-index: -100;
       }
@@ -119,7 +119,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <table id="table" class="table table-striped">
-      <caption is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
+      <caption>
+        <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
+        </div>
       </caption>
       <thead id="header" is="vaadin-grid-header" columns="[[columns]]" frozen-columns="[[frozenColumns]]"></thead>
       <tbody id="items"></tbody>

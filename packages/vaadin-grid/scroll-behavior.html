@@ -12,11 +12,11 @@
         position: absolute;
         top: 0;
         width: 100%;
-        z-index: -2;
+        z-index: 1;
       }
 
       #items {
-        z-index: -3;
+        /*z-index: -3;*/
       }
 
       td, th {
@@ -34,12 +34,17 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      :host(:not([ios])) table {
+      :host(:not([ios]):not([edge])) table {
         /* translate Z needed to be applied to keep scroll bars from disappearing
         when scrolling on desktop Safari.
         Also, this rule can't be applied on mobile
         Safari to keep scroll bars visible in there :-) */
+        /* In Edge, this causes header to jump */
         transform: translateZ(0);
+      }
+
+      :host[edge] tbody {
+        /*z-index: 1;*/
       }
 
       #sizer {
@@ -244,8 +249,8 @@
           cell.style.transform = this._getTranslate3d(-this._scrollLeft, 0);
         }, this);
 
-        // this.$.items.style.transform =
-        //   this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
+        this.$.items.style.transform =
+          this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
 
       }
     },

@@ -3,6 +3,7 @@
     <style>
       :host {
         display: flex;
+        position: absolute;
         width: 100%;
       }
 
@@ -13,16 +14,16 @@
       }
     </style>
 
-      <template is="dom-repeat" items="[[columns]]">
-        <div class="cell" style$="[[_getStyle(item)]]"></div>
-      </template>
+    <template is="dom-repeat" items="[[columns]]">
+      <div class="cell" style$="[[_getStyle(item)]]">foo</div>
+    </template>
 
   </template>
   <script>
     Polymer({
       is: 'vaadin-grid-sizer',
 
-      extends: 'caption',
+      extends: 'div',
 
       properties: {
         columns: Array,
@@ -37,7 +38,7 @@
       },
 
       _scrollHeightChanged: function(scrollHeight) {
-        this.style.top = Math.round(scrollHeight) + 'px';
+        this.style.top = scrollHeight + 'px';
       }
     });
   </script>
