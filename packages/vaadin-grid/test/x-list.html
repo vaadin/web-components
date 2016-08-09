@@ -1,0 +1,125 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../vaadin-grid-scroller.html">
+
+<dom-module id="x-list">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-fit);
+        @apply(--layout-vertical);
+
+        display: block;
+      }
+
+      ::content div {
+        height: var(--cell-height, 100px);
+      }
+
+      .item {
+        color: white;
+      }
+
+      .item:nth-child(odd) {
+        background-color: green;
+      }
+
+      .item:nth-child(even) {
+        background-color: red;
+      }
+
+      iron-list {
+        overflow: hidden;
+      }
+    </style>
+
+    <template id="cell">[[index]]</template>
+
+    <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
+    </vaadin-grid-scroller>
+
+    <content></content>
+    <!-- <iron-list style$="[[_computedListHeight(listHeight)]]" items="[[data]]" as="item" id="list">
+      <template>
+        <div class="item" tabindex$="[[tabIndex]]">
+          <div style$="[[_computedItemHeight(item)]]" tabindex="0" hidden$="[[primitive]]">[[item.index]]</div>
+          <div style$="[[_computedItemHeight(item)]]" tabindex="0" hidden$="[[!primitive]]">[[item]]</div>
+        </div>
+      </template>
+    </iron-list> -->
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'x-list',
+
+    properties: {
+
+      columns: Array,
+
+      frozenColumns: {
+        type: Number,
+        value: 0
+      },
+
+      data: {
+        type: Array
+      },
+
+      size: 100,
+
+      // height + cell border
+      itemHeight: {
+        type: Number,
+        value: 100 + 1,
+        reflectToAttribute: true,
+        observer: '_itemHeightChanged'
+      },
+
+      listHeight: {
+        type: Number,
+        value: 300
+      },
+
+      pre: {
+        type: Boolean
+      },
+
+      primitive: {
+        value: false,
+        type: Boolean
+      }
+    },
+
+    // observer: ['_itemHeightChanged(itemHeight)'],
+
+    ready: function() {
+      this.columns = [{width: '100px', template: this.$.cell, headers: []}];
+    },
+
+    _itemHeightChanged: function(itemHeight) {
+      this.customStyle['--cell-height'] = (itemHeight + 'px');
+      this.updateStyles();
+    },
+
+    get list() {
+      return this.$.scroller;
+    },
+
+    _computedItemHeight: function(item) {
+      var css = this.pre ? 'white-space:pre;' : '';
+      if (item.height) {
+        css += this.itemHeight === 0 ? '' : 'height: ' + (item.height) + 'px;';
+      } else if (this.itemHeight) {
+        css += 'height: ' + (this.itemHeight) + 'px;';
+      }
+      return css;
+    },
+
+    _computedListHeight: function(listHeight) {
+      return 'height: ' + (listHeight) + 'px;';
+    }
+  });
+</script>
