@@ -1,0 +1,34 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`vaadin-split-panel`
+Vaadin Split Panel
+
+@demo demo/index.html 
+-->
+
+<dom-module id="vaadin-split-panel">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]</h2>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'vaadin-split-panel',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'vaadin-split-panel',
+        },
+      },
+
+    });
+  </script>
+</dom-module>
