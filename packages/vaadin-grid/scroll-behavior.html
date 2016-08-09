@@ -194,7 +194,9 @@
         }
       }
 
-      this._adjustVirtualIndexOffset(delta);
+      if (this._virtualCount < this.size) {
+        this._adjustVirtualIndexOffset(delta);
+      }
 
       if (recycledTiles === 0) {
         // Try to increase the pool if the list's client height isn't filled up with physical items
@@ -212,6 +214,11 @@
 
     _adjustVirtualIndexOffset: function(delta) {
       if (Math.abs(delta) > 10000) {
+        if (this._noScale) {
+          this._noScale = false;
+          return;
+        }
+
         var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
         var offset = scale * this.size;
 
@@ -224,16 +231,36 @@
       } else {
         // Make sure user can always swipe/wheel scroll to the start and end
         // TODO: causes a small jump in the scroll handle
+
         var oldOffset = this._vidxOffset || 0;
+        var threshold = 1000;
+        var maxShift = 100;
+
+        // At start
         if (this._scrollTop === 0) {
           this._vidxOffset = 0;
-          this.scrollToIndex(oldOffset);
-        } else if (this._scrollTop >= this._maxScrollTop) {
-          this._vidxOffset = this.size - this._virtualCount;
           if (oldOffset !== this._vidxOffset) {
-            this.scrollToIndex(this._virtualCount - (this._vidxOffset - oldOffset));
+            this.scrollToIndex(0);
           }
+        } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
+          this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
+          this.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
+          this._noScale = true;
         }
+
+        // At end
+        var maxOffset = this.size - this._virtualCount;
+        if (this._scrollTop >= this._maxScrollTop) {
+          this._vidxOffset = maxOffset;
+          if (oldOffset !== this._vidxOffset) {
+            this.scrollToIndex(this._virtualCount);
+          }
+        } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
+          this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
+          this.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+          this._noScale = true;
+        }
+
       }
     },
 
