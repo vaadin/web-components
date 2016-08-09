@@ -9,9 +9,10 @@
     },
 
     observers: [
-      '_columnsChanged(columns, frozenColumns, _physicalCount)'
+      '_columnsChanged(columns, frozenColumns, _physicalCount, _physicalItems)'
     ],
 
+    // TODO: we should observe _physicalItems.splices instead of _physicalCount
     _columnsChanged: function(columns, frozenColumns) {
       this._physicalItems.forEach(function(row) {
         row.columns = columns;
