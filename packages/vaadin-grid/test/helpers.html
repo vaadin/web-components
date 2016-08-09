@@ -143,4 +143,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   function getNthItemRowStart(grid, n) {
     return n - (n % grid._itemsPerRow);
   }
+
+  function getHeader(container) {
+    return container.$$('thead');
+  }
+
+  function getBody(container) {
+    return container.$$('tbody');
+  }
+
+  function getRows(container) {
+    return Polymer.dom(container).querySelectorAll('tr');
+  }
+
+  function getRowCells(row) {
+    return Polymer.dom(row).querySelectorAll('td, th');
+  }
 </script>

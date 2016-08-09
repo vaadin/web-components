@@ -9,7 +9,9 @@
       properties: {
         columns: Array,
         index: Number,
-        cells: Array,
+        cells: {
+          value: []
+        },
         frozenColumns: Number,
         target: Object
       },
@@ -18,6 +20,10 @@
 
       //TODO: implement support for columns.splices
       _columnsChanged: function(columns, target) {
+        this.cells.forEach(function(cell) {
+          Polymer.dom(this).removeChild(cell);
+        }, this);
+
         var cells = [];
 
         columns.forEach(function(column) {
@@ -37,8 +43,8 @@
 
       _frozenColumnsChanged: function(frozenColumns, cells) {
         cells.forEach(function(cell, i) {
-          cell.toggleClass('frozen', i < frozenColumns);
-          cell.toggleClass('last-frozen', i === frozenColumns - 1);
+          cell.toggleAttribute('frozen', i < frozenColumns);
+          cell.toggleAttribute('last-frozen', i === frozenColumns - 1);
         });
       },
 

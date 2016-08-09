@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="x-list.html">
+</head>
+
+<body>
+
+  <test-fixture id="frozen-columns">
+    <template>
+      <x-list frozen-columns="1"></x-list>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('frozen columns', function() {
+      var scroller;
+
+      beforeEach(function() {
+        scroller = fixture('frozen-columns');
+        scroller.columns = [{
+          template: scroller.$.cell,
+          headers: [{
+            template: scroller.$.cell
+          }]
+        }, {
+          template: scroller.$.cell,
+          headers: [{
+            template: scroller.$.cell
+          }]
+        }];
+      });
+
+      it('should have a frozen cell in a header row', function() {
+        var cells = getRowCells(getRows(getHeader(scroller.list))[0]);
+        expect(cells[0].hasAttribute('frozen')).to.be.true;
+        expect(cells[1].hasAttribute('frozen')).not.to.be.true;
+      });
+
+      it('should have a frozen cell in a body row', function() {
+        var cells = getRowCells(getRows(getBody(scroller.list))[0]);
+        expect(cells[0].hasAttribute('frozen')).to.be.true;
+        expect(cells[1].hasAttribute('frozen')).not.to.be.true;
+      });
+
+      it.skip('should have a frozen column in a footer row', function() {
+
+      });
+    });
+  </script>
+
+</body>
+
+</html>
