@@ -1,6 +1,10 @@
 <dom-module id="fixedmode-styles">
   <template>
     <style>
+      :host {
+        transform: translateZ(0);
+      }
+
       :host([fixedmode]) {
         /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
         a containing block. The object acts as a containing block for fixed positioned descendants. */
@@ -12,11 +16,10 @@
         position: absolute;
         top: 0;
         width: 100%;
-        z-index: -2;
       }
 
       #items {
-        z-index: -3;
+        z-index: -1;
       }
 
       td, th {
@@ -28,24 +31,24 @@
         position: relative;
       }
 
-
-      :host([fixedmode]) #header {
-        position: fixed;
-        transform: translateZ(0);
-      }
-
-      :host([fixedmode]) #items {
-        position: fixed;
-        width: 100%;
-        transform: translateZ(0);
-        will-change: transform;
-      }
-
       table {
         position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
-        z-index: 1;
+        z-index: -2;
+      }
+
+      :host(:not([ios]):not([edge])) table {
+        /* translate Z needed to be applied to keep scroll bars from disappearing
+        when scrolling on desktop Safari.
+        Also, this rule can't be applied on mobile
+        Safari to keep scroll bars visible in there :-) */
+        /* In Edge, this causes header to jump */
+        transform: translateZ(0);
+      }
+
+      :host[edge] tbody {
+        /*z-index: 1;*/
       }
 
       #sizer {
@@ -69,12 +72,8 @@
 
     properties: {
       fixedmode: {
-        value: /Mobi/.test(navigator.userAgent),
+        value: false,
         reflectToAttribute: true
-      },
-
-      _isIE: {
-        value: !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/))
       },
 
       _vidxOffset: {
@@ -195,7 +194,9 @@
         }
       }
 
-      this._adjustVirtualIndexOffset(delta);
+      if (this._virtualCount < this.size) {
+        this._adjustVirtualIndexOffset(delta);
+      }
 
       if (recycledTiles === 0) {
         // Try to increase the pool if the list's client height isn't filled up with physical items
@@ -214,6 +215,11 @@
 
     _adjustVirtualIndexOffset: function(delta) {
       if (Math.abs(delta) > 10000) {
+        if (this._noScale) {
+          this._noScale = false;
+          return;
+        }
+
         var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
         var offset = scale * this.size;
 
@@ -226,16 +232,36 @@
       } else {
         // Make sure user can always swipe/wheel scroll to the start and end
         // TODO: causes a small jump in the scroll handle
+
         var oldOffset = this._vidxOffset || 0;
+        var threshold = 1000;
+        var maxShift = 100;
+
+        // At start
         if (this._scrollTop === 0) {
           this._vidxOffset = 0;
-          this.scrollToIndex(oldOffset);
-        } else if (this._scrollTop >= this._maxScrollTop) {
-          this._vidxOffset = this.size - this._virtualCount;
           if (oldOffset !== this._vidxOffset) {
-            this.scrollToIndex(this._virtualCount - (this._vidxOffset - oldOffset));
+            this.scrollToIndex(0);
           }
+        } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
+          this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
+          this.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
+          this._noScale = true;
         }
+
+        // At end
+        var maxOffset = this.size - this._virtualCount;
+        if (this._scrollTop >= this._maxScrollTop) {
+          this._vidxOffset = maxOffset;
+          if (oldOffset !== this._vidxOffset) {
+            this.scrollToIndex(this._virtualCount);
+          }
+        } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
+          this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
+          this.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+          this._noScale = true;
+        }
+
       }
     },
 
@@ -251,7 +277,7 @@
     },
 
     _onScroll: function() {
-      if (!this.fixedmode) {
+      if (!this.fixedmode && !this.edge) {
         this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
 
         Polymer.dom(this.root).querySelectorAll('.frozen').forEach(function(cell) {

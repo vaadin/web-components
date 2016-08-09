@@ -7,8 +7,9 @@
         width: 100%;
         position: absolute;
         top: 0;
-        z-index: 1;
+        /*z-index: 1;*/
         overflow: auto;
+        /*transform: translateZ(0);*/
       }
 
       :host([passthrough]) {
@@ -17,6 +18,7 @@
     </style>
 
     <content></content>
+
   </template>
   <script>
     Polymer({
@@ -24,12 +26,10 @@
 
       properties: {
         scrollbarWidth: Number,
-
         scrollTarget: {
           observer: '_scrollTargetChanged'
         }
       },
-
 
       listeners: {
         'scroll': '_syncScrollTarget'
@@ -43,7 +43,10 @@
 
       attached: function() {
         this.listen(this.domHost, 'mousemove', '_onMouseMove');
-        Polymer.dom(this).appendChild(this.domHost.$.sizer);
+
+        // for some reason scroll bars are hidden in iOS if this style is
+        // added in stylesheets or before attaching.
+        this.style.webkitOverflowScrolling = 'touch';
       },
 
       detached: function() {

@@ -16,16 +16,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="columns-behavior.html">
 <link rel="import" href="models-behavior.html">
 <link rel="import" href="scroll-behavior.html">
-<link rel="import" href="vaadin-outer-scroller.html">
 <link rel="import" href="vaadin-grid-sizer.html">
+<link rel="import" href="vaadin-outer-scroller.html">
 <link rel="import" href="vaadin-grid-header.html">
+<link rel="import" href="vaadin-grid-edge-behavior.html">
 
 <dom-module id="vaadin-grid-scroller">
   <link rel="import" type="css" href="../bootstrap/dist/css/bootstrap.css">
   <template>
-    <style include="fixedmode-styles">
-
-    </style>
+    <style include="fixedmode-styles"></style>
+    <style include="vaadin-grid-edge-styles"></style>
     <style>
       :host {
         display: block;
@@ -61,6 +61,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
         display: block;
         overflow: auto;
+      }
+
+      :host([ios]) table {
+        /* On iOS we should be always scrolling the outer scroller. */
+        overflow: hidden;
       }
 
       tbody {
@@ -100,17 +105,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-right: 2px solid #ddd;
       }
 
+      caption {
+        position: absolute;
+        display: block;
+        padding: 0;
+        width: 100%;
+        z-index: -100;
+      }
+
     </style>
 
     <table id="table" class="table table-striped">
-      <caption id="sizer" is="vaadin-grid-sizer" columns="[[columns]]"></caption>
+      <caption>
+        <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
+        </div>
+      </caption>
       <thead id="header" is="vaadin-grid-header" columns="[[columns]]" frozen-columns="[[frozenColumns]]"></thead>
       <tbody id="items"></tbody>
     </table>
 
-    <template is="dom-if" if="[[_isIE]]">
-      <vaadin-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]"></vaadin-outer-scroller>
-    </template>
+    <vaadin-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]">
+      <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]"></div>
+    </vaadin-outer-scroller>
 
   </template>
 </dom-module>
@@ -153,6 +169,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       indexAs: {
         type: String,
         value: 'index'
+      },
+
+      ios: {
+        value: IOS,
+        reflectToAttribute: true
       }
     },
 
@@ -163,7 +184,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       vaadin.elements.grid.GridCreatePoolBehavior,
       vaadin.elements.grid.GridColumnsBehavior,
       vaadin.elements.grid.GridModelsBehavior,
-      vaadin.elements.grid.GridScrollBehavior
+      vaadin.elements.grid.GridScrollBehavior,
+      vaadin.elements.grid.EdgeBehavior
     ],
 
     /**
@@ -749,7 +771,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       // amortize height adjustment, so it won't trigger repaints very often
       if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._optPhysicalSize) {
-        this.$.sizer.style.top = this.$.items.style.height = this._estScrollHeight + 'px';
+        this.$.items.style.height = this._estScrollHeight + 'px'
         this._scrollHeight = this._estScrollHeight;
       }
     },

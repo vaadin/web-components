@@ -1,38 +1,46 @@
 <dom-module id="vaadin-grid-sizer">
-  <style>
-    table, tbody {
-      width: 100%;
-    }
-    tr {
-      display: flex;
-      width: 100%;
-    }
-  </style>
   <template>
-    <table>
-      <tbody>
-        <tr id="row"></tr>
-      </tbody>
-    </table>
+    <style>
+      :host {
+        display: flex;
+        position: relative;
+        width: 100%;
+        visibility: hidden;
+        transform: translateY(-100%);
+      }
+
+      .cell {
+        flex-basis: 100px;
+        flex-shrink: 0;
+        flex-grow: 1;
+      }
+    </style>
+
+    <template is="dom-repeat" items="[[columns]]">
+      <div class="cell" style$="[[_getStyle(item)]]">&nbsp;</div>
+    </template>
+
   </template>
   <script>
     Polymer({
       is: 'vaadin-grid-sizer',
-      extends: 'caption',
+
+      extends: 'div',
 
       properties: {
-        columns: Array
+        columns: Array,
+
+        scrollHeight: Number
       },
 
-      observers: ['_columnsChanged(columns)'],
+      observers: ['_scrollHeightChanged(scrollHeight)'],
 
-      _columnsChanged: function(columns) {
-        columns.forEach(function(column) {
-          var cell = document.createElement('td', 'vaadin-grid-cell');
-          cell.column = column;
+      _getStyle: function(column) {
+        return 'flex-basis: ' + (column.minWidth || column.width || '100px');
+      },
 
-          Polymer.dom(this.$.row).appendChild(cell);
-        }.bind(this));
+      _scrollHeightChanged: function(scrollHeight) {
+        this.style.top = scrollHeight + 'px';
       }
     });
   </script>
