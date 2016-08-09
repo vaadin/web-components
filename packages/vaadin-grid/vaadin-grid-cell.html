@@ -66,6 +66,17 @@
           } else {
             // Non-shadow
             Polymer.dom(this).appendChild(item);
+
+            // wait until item is really attached to DOM. (Polymer.dom.flush())
+            // not helping here for some reason.
+            this.async(function() {
+              Polymer.StyleTransformer.dom(item, 'vaadin-grid-scroller', false, true);
+
+              if (this.target.domHost) {
+                Polymer.StyleTransformer.dom(this, this.target.domHost.tagName.toLowerCase(), false, false);
+              }
+
+            });
           }
           Polymer.dom(item).appendChild(this.instance.root);
         }
