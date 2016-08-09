@@ -1,4 +1,14 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
+
+<iron-iconset-svg size="24" name="vaadin-split-panel">
+<svg><defs>
+<g id="more-horiz"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
+<g id="more-vert"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
+</defs></svg>
+</iron-iconset-svg>
 
 <!--
 `vaadin-split-panel`
@@ -11,10 +21,58 @@ Vaadin Split Panel
   <template>
     <style>
       :host {
+        @apply(--layout-horizontal);
+      }
+
+      :host([vertical]) {
+        @apply(--layout-vertical);
+      }
+
+      :host ::content > * {
+        @apply(--layout-flex-auto);
+      }
+
+      #splitter {
+        @apply(--layout-vertical);
+        @apply(--layout-center-justified);
+        @apply(--layout-flex-none);
+        min-height: 8px;
+        min-width: 8px;
+        background: #ccc;
+        cursor: ew-resize;
+      }
+
+      :host([vertical]) #splitter {
+        @apply(--layout-horizontal);
+        cursor: ns-resize;
+      }
+
+      iron-icon {
+        margin: -8px;
+      }
+
+      #handle-icon-horizontal {
+        display: block;
+      }
+
+      #handle-icon-vertical {
+        display: none;
+      }
+
+      :host([vertical]) #handle-icon-horizontal {
+        display: none;
+      }
+
+      :host([vertical]) #handle-icon-vertical {
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]</h2>
+    <content select="[vaadin-split-panel=primary]" id="primary"></content>
+    <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
+      <iron-icon id="handle-icon-horizontal" icon="vaadin-split-panel:more-vert"></iron-icon>
+      <iron-icon id="handle-icon-vertical" icon="vaadin-split-panel:more-horiz"></iron-icon>
+    </div>
+    <content select="[vaadin-split-panel=secondary]" id="secondary"></content>
   </template>
 
   <script>
@@ -23,11 +81,70 @@ Vaadin Split Panel
       is: 'vaadin-split-panel',
 
       properties: {
-        prop1: {
-          type: String,
-          value: 'vaadin-split-panel',
-        },
+        vertical: {
+          type: Boolean,
+          reflectToAttribute: true
+        }
       },
+
+      attached: function() {
+        this._observer = Polymer.dom(this).observeNodes(this._processChildren);
+      },
+
+      detached: function() {
+        Polymer.dom(this).unobserveNodes(this._observer);
+      },
+
+      _processChildren: function() {
+        var childNodes = Polymer.dom(this).getEffectiveChildNodes();
+        var children = Array.prototype.filter.call(childNodes, function(node) {
+          return node.nodeType === Node.ELEMENT_NODE;
+        });
+        this._primaryChild = children[0];
+        this._secondaryChild = children[1];
+        children.forEach(function(child, i) {
+          var panel = i === 0 ? 'primary' :
+                      i === 1 ? 'secondary' :
+                      null;
+          if (panel) {
+            Polymer.dom(child).setAttribute('vaadin-split-panel', panel);
+          } else {
+            Polymer.dom(child).removeAttribute('vaadin-split-panel');
+          }
+        });
+      },
+
+      _setFlexBasis: function(element, flexBasis) {
+        flexBasis = Math.max(0, flexBasis);
+        ['-ms-flex', '-webkit-flex', 'flex'].forEach(function(prop) {
+          element.style[prop] = '1 1 ' + flexBasis + 'px';
+        });
+      },
+
+      _onHandleTrack: function(event) {
+        if (!this._primaryChild || !this._secondaryChild) return;
+
+        var size = this.vertical ? 'height' : 'width';
+        if (event.detail.state === 'start') {
+          this._primaryStartSize = this._primaryChild.getBoundingClientRect()[size];
+          this._secondaryStartSize = this._secondaryChild.getBoundingClientRect()[size];
+          return;
+        }
+
+        var distance = this.vertical ? event.detail.dy : event.detail.dx;
+        this._setFlexBasis(this._primaryChild, this._primaryStartSize + distance);
+        this._setFlexBasis(this._secondaryChild, this._secondaryStartSize - distance);
+
+        if (event.detail.state === 'end') {
+          delete this._containerStartSize;
+          delete this._primaryStartSize;
+          delete this._secondaryStartSize;
+        }
+      },
+
+      _preventDefault: function(event) {
+        event.preventDefault();
+      }
 
     });
   </script>

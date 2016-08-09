@@ -8,25 +8,185 @@
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
     <link rel="import" href="../vaadin-split-panel.html">
   </head>
   <body>
 
-    <test-fixture id="basic">
+    <test-fixture id="split-panel">
       <template>
-        <vaadin-split-panel></vaadin-split-panel>
+        <vaadin-split-panel>
+          <div id="first"></div>
+          <div id="second"></div>
+        </vaadin-split-panel>
       </template>
     </test-fixture>
 
     <script>
-      suite('vaadin-split-panel', function() {
+      var splitPanel, first, second;
+      var initialSizes = {width: 128, height: 128};
 
-        test('instantiating the element works', function() {
-          var element = fixture('basic');
-          assert.equal(element.is, 'vaadin-split-panel');
+      describe('container', function() {
+
+        beforeEach(function() {
+          splitPanel = fixture('split-panel');
+        });
+
+        it('is flex container', function() {
+          var styleDisplay = getComputedStyle(splitPanel).display;
+          expect(styleDisplay).to.be.oneOf(['flex', '-webkit-flex', '-ms-flexbox']);
         });
 
       });
+
+      describe('content elements', function() {
+
+        beforeEach(function(done) {
+          splitPanel = fixture('split-panel');
+          setTimeout(function() {
+            first = Polymer.dom(splitPanel.$.primary).getDistributedNodes()[0];
+            second = Polymer.dom(splitPanel.$.secondary).getDistributedNodes()[0];
+            done();
+          }, 1);
+        });
+
+        it('are distributed', function() {
+          expect(first.id).to.equal('first');
+          expect(second.id).to.equal('second');
+          expect(Polymer.dom(first).parentNode).to.equal(splitPanel);
+          expect(Polymer.dom(second).parentNode).to.equal(splitPanel);
+        });
+
+        it('are flex auto', function() {
+          function getComputedFlexStyle(el) {
+            var computedStyle = getComputedStyle(el);
+            return computedStyle.flex || computedStyle.WebkitFlex || computedStyle.MsFlex;
+          }
+
+          expect(getComputedFlexStyle(first)).to.equal('1 1 auto');
+          expect(getComputedFlexStyle(second)).to.equal('1 1 auto');
+        });
+
+        it('have a splitter in between', function() {
+          expect(splitPanel.$.splitter.previousElementSibling).to.equal(first);
+          expect(splitPanel.$.splitter.nextElementSibling).to.equal(second);
+        });
+
+      });
+
+      function testDimensions(isVertical) {
+
+        var axis = isVertical ? 'vertical' : 'horizontal';
+        var size = isVertical ? 'height' : 'width';
+        var crossAxis = isVertical ? 'horizontal' : 'vertical';
+        var crossSize = isVertical ? 'width' : 'height';
+        var splitPanelRect;
+
+        beforeEach(function() {
+          splitPanelRect = splitPanel.getBoundingClientRect();
+        });
+
+        describe('content elements', function() {
+
+          var firstRect, secondRect;
+
+          beforeEach(function() {
+            firstRect = first.getBoundingClientRect();
+            secondRect = second.getBoundingClientRect();
+          });
+
+          it('have identical size', function() {
+            expect(Math.abs(firstRect[size] - secondRect[size])).to.be.at.most(1);
+          });
+
+          it('have crossSize of container', function() {
+            expect(firstRect[crossSize]).to.equal(splitPanelRect[crossSize]);
+          });
+
+        });
+
+        describe('splitter', function() {
+
+          var splitterRect;
+
+          beforeEach(function() {
+            splitterRect = splitPanel.$.splitter.getBoundingClientRect();
+          });
+
+          it('has size of 8', function() {
+            expect(splitterRect[size]).to.be.within(7.5, 8.5);
+          });
+
+          it('has crossSize of container', function() {
+            expect(splitterRect[crossSize]).to.equal(splitPanelRect[crossSize]);
+          });
+
+        });
+
+        describe('handle drag', function() {
+          var distance = 30;
+          var initialSize = (initialSizes[size] - 8) / 2;
+          function dragHandle(d) {
+            MockInteractions.track(splitPanel.$.splitter,
+                isVertical ? 0 : d,
+                isVertical ? d : 0
+            );
+          }
+
+          it('resizes forwards', function() {
+            dragHandle(distance);
+
+            expect(Math.abs(first.getBoundingClientRect()[size] - (initialSize + distance))).to.be.at.most(1);
+            expect(Math.abs(second.getBoundingClientRect()[size] - (initialSize - distance))).to.be.at.most(1);
+          });
+
+          it('resizes backwards', function() {
+            dragHandle(distance);
+            dragHandle(-distance);
+
+            expect(Math.abs(first.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
+            expect(Math.abs(second.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
+          });
+
+        });
+
+      }
+
+      describe('horizontal', function() {
+
+        beforeEach(function(done) {
+          splitPanel = fixture('split-panel');
+          splitPanel.style.width = initialSizes.width + 'px';
+          splitPanel.style.height = initialSizes.height + 'px';
+          setTimeout(function() {
+            first = Polymer.dom(splitPanel.$.primary).getDistributedNodes()[0];
+            second = Polymer.dom(splitPanel.$.secondary).getDistributedNodes()[0];
+            done();
+          }, 1);
+        });
+
+        testDimensions(false);
+
+      });
+
+      describe('vertical', function() {
+
+        beforeEach(function(done) {
+          splitPanel = fixture('split-panel');
+          splitPanel.style.width = initialSizes.width + 'px';
+          splitPanel.style.height = initialSizes.height + 'px';
+          splitPanel.vertical = true;
+          setTimeout(function() {
+            first = Polymer.dom(splitPanel.$.primary).getDistributedNodes()[0];
+            second = Polymer.dom(splitPanel.$.secondary).getDistributedNodes()[0];
+            done();
+          }, 1);
+        });
+
+        testDimensions(true);
+
+      });
+
     </script>
   </body>
 </html>

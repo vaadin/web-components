@@ -12,17 +12,48 @@
     <link rel="import" href="../vaadin-split-panel.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
+      vaadin-split-panel {
+        min-height: 120px;
+        background: #eee;
+      }
     </style>
   </head>
   <body>
 
     <div class="vertical-section-container centered">
-      <h3>Basic vaadin-split-panel Demo</h3>
+      <h3>Horizontal Mode (Default)</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel></vaadin-split-panel>
+          <vaadin-split-panel>
+            <div>first panel content</div>
+            <div>second panel content</div>
+          </vaadin-split-panel>
         </template>
       </demo-snippet>
+
+      <h3>Vertical Mode</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel vertical>
+            <div>first panel content</div>
+            <div>second panel content</div>
+          </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
+      <h3>Modes Combination</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel>
+            <div>first panel content</div>
+            <vaadin-split-panel vertical>
+              <div>second panel content</div>
+              <div>third panel content</div>
+            </vaadin-split-panel>
+          </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
     </div>
 
   </body>
