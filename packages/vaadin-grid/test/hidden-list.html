@@ -18,49 +18,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="x-scroller.html">
+  <link rel="import" href="x-list.html">
 
 </head>
 <body>
 
   <test-fixture id="trivialList">
     <template>
-      <x-scroller hidden></x-scroller>
+      <x-list hidden></x-list>
     </template>
   </test-fixture>
 
   <script>
 
     suite('hidden list', function() {
-      var scroller, container;
+      var list, container;
 
       setup(function() {
         container = fixture('trivialList');
-        scroller = container.$.scroller;
+        list = container.list;
       });
 
-      test('scroller size', function(done) {
-        scroller.size = 100;
+      test('list size', function(done) {
+        list.size = 100;
 
         flush(function() {
-          assert.equal(scroller.offsetWidth, 0);
-          assert.equal(scroller.offsetHeight, 0);
+          assert.equal(list.offsetWidth, 0);
+          assert.equal(list.offsetHeight, 0);
           done();
         });
       });
 
       test('iron-resize', function(done) {
-        scroller.size = 100;
-        scroller.fire('iron-resize');
+        list.size = 100;
+        list.fire('iron-resize');
 
-        assert.notEqual(getFirstItemFromList(scroller).textContent, '0');
+        assert.notEqual(getFirstItemFromList(list).textContent, '0');
         Polymer.RenderStatus.whenReady(function() {
           container.removeAttribute('hidden');
-          assert.notEqual(getFirstItemFromList(scroller).textContent, '0');
-          scroller.fire('iron-resize');
+          assert.notEqual(getFirstItemFromList(list).textContent, '0');
+          list.fire('iron-resize');
           flush(function() {
-            assert.isTrue(scroller.isAttached);
-            assert.equal(getFirstItemFromList(scroller).textContent, '0');
+            assert.isTrue(list.isAttached);
+            assert.equal(getFirstItemFromList(list).textContent, '0');
             done();
           });
         });
