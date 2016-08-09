@@ -81,6 +81,10 @@
       }
     },
 
+    observers: [
+      '_cacheElements(columns, frozenColumns, _physicalCount)'
+    ],
+
     ready: function() {
       this.scrollTarget = this.$.table;
       this.listen(this.$.table, 'wheel', '_onWheel');
@@ -276,13 +280,18 @@
       }, 100);
     },
 
+    _cacheElements: function() {
+      this._frozenCells = Polymer.dom(this.root).querySelectorAll('.frozen');
+    },
+
     _onScroll: function() {
       if (!this.fixedmode && !this.edge) {
         this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
 
-        Polymer.dom(this.root).querySelectorAll('.frozen').forEach(function(cell) {
-          cell.style.transform = this._getTranslate3d(this._scrollLeft, 0);
-        }, this);
+        var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
+        for (var i = 0; i < this._frozenCells.length; i++) {
+          this._frozenCells[i].style.transform = frozenCellTransform;
+        }
       } else {
         Polymer.dom(this.root).querySelectorAll('tbody .frozen').forEach(function(cell) {
           cell.style.transform = this._getTranslate3d(this._scrollLeft, 0);
