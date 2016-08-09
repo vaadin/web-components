@@ -19,7 +19,7 @@
       });
 
       requestAnimationFrame(function() {
-        this.$.items.style.paddingTop = this.$.header.clientHeight + 'px';
+        this.$.outerscroller.style.paddingTop = this.$.table.style.paddingTop = this.$.header.clientHeight + 'px';
       }.bind(this));
     }
   };
