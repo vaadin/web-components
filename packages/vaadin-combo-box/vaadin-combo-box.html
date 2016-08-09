@@ -133,9 +133,8 @@ Custom property | Description | Default
           no-label-float="[[noLabelFloat]]"
           always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
           auto-validate$="[[autoValidate]]"
-          invalid="[[invalid]]"
-          on-down="_preventDefault">
-      <label id="label" hidden$="[[!label]]" aria-hidden="true" on-tap="_openAsync">[[label]]</label>
+          invalid="[[invalid]]">
+      <label on-down="_preventDefault" id="label" hidden$="[[!label]]" aria-hidden="true" on-tap="_openAsync">[[label]]</label>
 
       <content select="[prefix]"></content>
 
@@ -204,6 +203,7 @@ Custom property | Description | Default
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
         on-down="_onOverlayDown"
+        on-mousedown="_preventDefault"
         vertical-offset="2">
     </vaadin-combo-box-overlay>
   </template>
