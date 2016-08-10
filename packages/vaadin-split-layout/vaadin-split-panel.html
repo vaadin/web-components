@@ -2,6 +2,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <iron-iconset-svg size="24" name="vaadin-split-panel">
 <svg><defs>
@@ -82,6 +83,10 @@ Vaadin Split Panel
 
       is: 'vaadin-split-panel',
 
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+
       properties: {
         vertical: {
           type: Boolean,
@@ -141,6 +146,8 @@ Vaadin Split Panel
         var distance = this.vertical ? event.detail.dy : event.detail.dx;
         this._setFlexBasis(this._primaryChild, this._primaryStartSize + distance, this._containerStartSize);
         this._setFlexBasis(this._secondaryChild, this._secondaryStartSize - distance, this._containerStartSize);
+
+        this.notifyResize();
 
         if (event.detail.state === 'end') {
           delete this._containerStartSize;
