@@ -85,18 +85,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('last visible index', function(done) {
-      container.itemHeight = 50;
+      var actualHeight = 100 + 8 + 8 + 1; // 100px height + 2x paddings + border
       list.size = 100;
 
-      Polymer.dom.flush();
-
-      list.scroll(0, 100);
+      list.scroll(0, 200 + 2*1); // 1px row border
       list.fire('scroll');
 
-      list.async(function() {
-        assert.equal(list.lastVisibleIndex, ((list._scrollTop + container.listHeight) / container.itemHeight) - 1);
+      flush(function() {
+        assert.equal(list.lastVisibleIndex, Math.ceil(((list._scrollTop + container.listHeight) / actualHeight) - 1));
         done();
       }, 1);
+
     });
 
     test('scroll to index', function(done) {
