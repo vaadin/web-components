@@ -9,6 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <script>
+  var defaultCellWidth = 100;
+
   function findElementInList(container, selector) {
     var i = 0;
     var children = container._children;
@@ -85,12 +87,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function getFirstItemFromList(list) {
     var listRect = list.getBoundingClientRect();
-    return getItemFromPoint(listRect.left + 50, listRect.top + 1);
+    return getItemFromPoint(listRect.left + defaultCellWidth * 0.5, listRect.top + 1);
   }
 
   function getLastItemFromList(list) {
     var listRect = list.getBoundingClientRect();
-    return getItemFromPoint(listRect.left + 50, listRect.top + listRect.height - 1);
+    return getItemFromPoint(listRect.left + defaultCellWidth * 0.5, listRect.top + listRect.height - 1);
   }
 
   function getItemFromPoint(x, y) {

@@ -46,9 +46,16 @@
 
         describe(container, function() {
 
+          var containerElement;
+          var containerRows;
+
+          beforeEach(function() {
+            containerElement = scroller.list.$$(container);
+            containerRows = getRows(containerElement);
+          });
+
           it('should have a frozen cell in a row', function() {
-            var containerElement = scroller.list.$$(container);
-            var cells = getRowCells(getRows(containerElement)[0]);
+            var cells = getRowCells(containerRows[0]);
             expect(cells[0].hasAttribute('frozen')).to.be.true;
             expect(cells[1].hasAttribute('frozen')).not.to.be.true;
             expect(cells[2].hasAttribute('frozen')).not.to.be.true;
@@ -56,25 +63,30 @@
 
           it('should have the correct last-frozen cell in a row', function() {
             scroller.frozenColumns = 2;
-            var containerElement = scroller.list.$$(container);
-            var cells = getRowCells(getRows(containerElement)[0]);
+            var cells = getRowCells(containerRows[0]);
             expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
             expect(cells[1].hasAttribute('last-frozen')).to.be.true;
             expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
           });
 
           it('should not move while content scrolls horizontally', function(done) {
-            var containerElement = scroller.list.$$(container);
             var initialContainerRect = containerElement.getBoundingClientRect();
-            var cells = getRowCells(getRows(containerElement)[0]);
+            var containerTop = initialContainerRect.top + 1;
+            var cells = getRowCells(containerRows[0]);
 
             scroller.list.$.table.addEventListener('scroll', function() {
-              var cellContent = getItemFromPoint(initialContainerRect.left + 50, initialContainerRect.top + 50);
-              expect(cellContent).to.equal(getCellContent(cells[0]));
+              var scrollingCellContent = getItemFromPoint(
+                initialContainerRect.left + defaultCellWidth * 1.5, containerTop);
+              expect(scrollingCellContent).to.equal(getCellContent(cells[2]));
+
+              var frozenCellContent = getItemFromPoint(
+                initialContainerRect.left + defaultCellWidth * 0.5, containerTop);
+              expect(frozenCellContent).to.equal(getCellContent(cells[0]));
+
               done();
             });
 
-            scroller.list.$.table.scrollLeft = 100;
+            scroller.list.$.table.scrollLeft = defaultCellWidth;
           });
 
         });
