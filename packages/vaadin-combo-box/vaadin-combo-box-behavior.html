@@ -145,9 +145,6 @@
     },
 
     _onOverlayDown: function(event) {
-      // Prevent the focus transfer when user scrolls inside the overlay with mouse drag
-      event.preventDefault();
-
       if (this.$.overlay.touchDevice && event.target !== this.$.overlay.$.scroller) {
         // On touch devices, blur the input on touch start inside the overlay, in order to hide
         // the virtual keyboard. But don't close the overlay on this blur.
