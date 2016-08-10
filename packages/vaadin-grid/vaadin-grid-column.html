@@ -1,0 +1,40 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-grid-column">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+    <content select="template"></content>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-column',
+
+      properties: {
+        template: Object
+      },
+
+      created: function() {
+        this._observer = Polymer.dom(this).observeNodes(function(info) {
+          var isTemplate = function(node) {
+            return node.nodeType === Node.ELEMENT_NODE && node.tagName === 'TEMPLATE';
+          };
+
+          if (info.addedNodes.filter(isTemplate).length > 0 ||
+            info.removedNodes.filter(isTemplate).length > 0) {
+            this.set('template', this.getContentChildren("[select=template]")[0]);
+
+            // assuming parent element is always a Polymer element.
+            // set dataHost to the same context the template was declared in
+            // var parent = Polymer.dom(this.rowDetail).parentNode;
+            // this.rowDetail._rootDataHost = parent.dataHost ? (parent.dataHost._rootDataHost || parent.dataHost) : parent;
+
+          }
+        }.bind(this));
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vaadin-grid-column.html">
+</head>
+<body>
+
+  <test-fixture id="column">
+    <template>
+      <vaadin-grid-column>
+        <template>cell</template>
+      </vaadin-grid-column>
+    </template>
+  </test-fixture>
+
+  <template id="foobar">foobar</template>
+
+  <script>
+
+    describe('column', function() {
+      var column;
+
+      before(function(done) {
+        column = fixture('column');
+        flush(done);
+      });
+
+      it('should read template from light DOM', function() {
+        expect(column.template.innerHTML).to.eql('cell');
+      });
+
+      it('should update template property when template is removed', function(done) {
+        var template = column.template;
+        Polymer.dom(column).removeChild(column.template);
+
+        flush(function() {
+          expect(column.template).to.be.undefined;
+          done();
+        });
+      });
+
+      it('should use the first cell template', function(done) {
+        var foobar = document.getElementById('foobar');
+        Polymer.dom(column).insertBefore(foobar, column.template);
+
+        flush(function() {
+          expect(column.template).to.eql(foobar);
+          done();
+        });
+      });
+    });
+
+  </script>
+
+</body>
+</html>
