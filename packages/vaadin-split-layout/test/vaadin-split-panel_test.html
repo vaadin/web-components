@@ -107,12 +107,23 @@
             secondRect = second.getBoundingClientRect();
           });
 
-          it('have identical size', function() {
+          it('have equal initial size', function() {
             expect(Math.abs(firstRect[size] - secondRect[size])).to.be.at.most(1);
           });
 
           it('have crossSize of container', function() {
             expect(firstRect[crossSize]).to.equal(splitPanelRect[crossSize]);
+          });
+
+          it('respect initial css size', function() {
+            var initialTotalSize = initialSizes[size] - 8;
+            var cssPrimarySize = 0.25;
+            var cssSecondarySize = 1 - cssPrimarySize;
+            first.style[size] = cssPrimarySize * 100 + '%';
+            second.style[size] = cssSecondarySize * 100 + '%';
+
+            expect(Math.abs(first.getBoundingClientRect()[size] / initialTotalSize - cssPrimarySize)).to.be.at.most(0.01);
+            expect(Math.abs(second.getBoundingClientRect()[size] / initialTotalSize - cssSecondarySize)).to.be.at.most(0.01);
           });
 
         });
@@ -187,7 +198,7 @@
           });
 
           it('respects the container boundries', function() {
-            dragHandle(- initialSize * 2);
+            dragHandle(-initialSize * 2);
 
             expect(first.getBoundingClientRect()[size]).to.equal(0);
             expect(Math.abs(second.getBoundingClientRect()[size] - initialSize * 2)).to.be.at.most(0.1);
@@ -196,6 +207,39 @@
 
             expect(Math.abs(first.getBoundingClientRect()[size] - initialSize * 2)).to.be.at.most(0.1);
             expect(second.getBoundingClientRect()[size]).to.equal(0);
+          });
+
+          describe('min and max css limits', function() {
+
+            var min = 20;
+            var max = 40;
+            var minSize = isVertical ? 'minHeight' : 'minWidth';
+            var maxSize = isVertical ? 'maxHeight' : 'maxWidth';
+
+            function testCssLimits(element, directionToMinimum) {
+              dragHandle(directionToMinimum * initialSize * 2);
+
+              expect(Math.abs(element.getBoundingClientRect()[size] - min)).to.be.at.most(0.1);
+
+              dragHandle(-directionToMinimum * initialSize * 2);
+
+              expect(Math.abs(element.getBoundingClientRect()[size] - max)).to.be.at.most(0.1);
+            }
+
+            it('respected on the first element', function() {
+              first.style[minSize] = min + 'px';
+              first.style[maxSize] = max + 'px';
+
+              testCssLimits(first, -1);
+            });
+
+            it('respected on the second element', function() {
+              second.style[minSize] = min + 'px';
+              second.style[maxSize] = max + 'px';
+
+              testCssLimits(second, 1);
+            });
+
           });
 
         });
