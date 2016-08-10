@@ -96,8 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getItemFromPoint(x, y) {
-    var elements = document.elementsFromPoint(x, y);
-    return elements.length > 1 ? elements[1] : elements[0]; // first element is always vaadin-outer-scroller
+    return document.elementFromPoint(x, y);
   }
 
   function isFullOfItems(list) {

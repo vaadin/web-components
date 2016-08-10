@@ -1,3 +1,4 @@
+<link rel="import" href="../polymer/polymer.html">
 <dom-module id="vaadin-outer-scroller">
   <template>
     <style>
@@ -28,6 +29,11 @@
         scrollbarWidth: Number,
         scrollTarget: {
           observer: '_scrollTargetChanged'
+        },
+
+        passthrough: {
+          reflectToAttribute: true,
+          value: true
         }
       },
 
@@ -62,8 +68,7 @@
 
       _onMouseMove: function(e) {
         var rect = this.getBoundingClientRect();
-        var passthrough = e.clientY <= rect.bottom - this.scrollbarWidth && e.clientX <= rect.right - this.scrollbarWidth;
-        this.toggleAttribute('passthrough', passthrough);
+        this.passthrough = e.clientY <= rect.bottom - this.scrollbarWidth && e.clientX <= rect.right - this.scrollbarWidth;
       },
 
       _getScrollbarWidth: function() {

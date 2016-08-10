@@ -1,0 +1,143 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="x-list.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <x-list style="width: 50px;"></x-list>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('outer scroller', function() {
+      var scroller;
+      var outerScroller;
+      var target;
+      var listRect;
+
+      beforeEach(function(done) {
+        scroller = fixture('default');
+        outerScroller = scroller.list.$.outerscroller;
+        target = outerScroller.scrollTarget;
+        listRect = scroller.list.getBoundingClientRect();
+        Polymer.Base.async(done, 1);
+      });
+
+      it('should invoke onScroll synchronously', function() {
+        var spy = sinon.spy(scroller.list, '_onScroll');
+        outerscroller._syncScrollTarget();
+        expect(spy.called).to.be.true;
+      });
+
+      describe('syncing with scroll target', function() {
+
+        it('should scroll the target', function(done) {
+          outerScroller.addEventListener('scroll', function() {
+            expect(target.scrollLeft).to.equal(1);
+            done();
+          });
+          outerScroller.scrollLeft = 1;
+        });
+
+        it('should scroll the outer scroller', function(done) {
+          target.addEventListener('scroll', function() {
+            expect(outerScroller.scrollLeft).to.equal(1);
+            done();
+          });
+          target.scrollLeft = 1;
+        });
+
+      });
+
+      describe('passtrough pointer events', function() {
+
+        function move(x, y) {
+          var e = new MouseEvent('mousemove', {
+            bubbles: true,
+            cancelable: true,
+            clientX: x,
+            clientY: y,
+            buttons: 1
+          });
+          scroller.list.dispatchEvent(e);
+        }
+
+        it('should passtrough pointer events', function(done) {
+          scroller.list.addEventListener('mousemove', function() {
+            expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
+            done();
+          });
+
+          move(1, 1);
+        });
+
+        describe('visible scrollbars', function() {
+
+          beforeEach(function() {
+            outerScroller.scrollbarWidth = 10;
+          });
+
+          it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
+            scroller.list.addEventListener('mousemove', function() {
+              expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
+              done();
+            });
+            move(listRect.width, 1);
+          });
+
+          it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
+            scroller.list.addEventListener('mousemove', function() {
+              expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
+              done();
+            });
+            move(1, listRect.height);
+          });
+
+        });
+
+        describe('invisible scrollbars', function() {
+
+          beforeEach(function() {
+            outerScroller.scrollbarWidth = 0;
+          });
+
+          it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
+            scroller.list.addEventListener('mousemove', function() {
+              expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
+              done();
+            });
+            move(listRect.width, 1);
+          });
+
+          it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
+            scroller.list.addEventListener('mousemove', function() {
+              expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
+              done();
+            });
+            move(1, listRect.height);
+          });
+
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
