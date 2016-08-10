@@ -16,8 +16,8 @@
     <test-fixture id="split-panel">
       <template>
         <vaadin-split-panel>
-          <div id="first"></div>
-          <div id="second"></div>
+          <div id="first">some content</div>
+          <div id="second">some content</div>
         </vaadin-split-panel>
       </template>
     </test-fixture>
@@ -70,6 +70,18 @@
         it('have a splitter in between', function() {
           expect(splitPanel.$.splitter.previousElementSibling).to.equal(first);
           expect(splitPanel.$.splitter.nextElementSibling).to.equal(second);
+        });
+
+      });
+
+      describe('splitter', function() {
+
+        beforeEach(function() {
+          splitPanel = fixture('split-panel');
+        });
+
+        it('has overflow visible', function() {
+          expect(getComputedStyle(splitPanel.$.splitter).overflow).to.equal('visible');
         });
 
       });
@@ -148,11 +160,49 @@
             expect(Math.abs(second.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
           });
 
+          it('collapses primary', function() {
+            dragHandle(-initialSize);
+
+            expect(first.getBoundingClientRect()[size]).to.equal(0);
+          });
+
+          it('reveals primary', function() {
+            dragHandle(-initialSize);
+            dragHandle(initialSize);
+
+            expect(Math.abs(first.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
+          });
+
+          it('collapses secondary', function() {
+            dragHandle(initialSize);
+
+            expect(second.getBoundingClientRect()[size]).to.equal(0);
+          });
+
+          it('reveals secondary', function() {
+            dragHandle(initialSize);
+            dragHandle(-initialSize);
+
+            expect(Math.abs(second.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
+          });
+
+          it('respects the container boundries', function() {
+            dragHandle(- initialSize * 2);
+
+            expect(first.getBoundingClientRect()[size]).to.equal(0);
+            expect(Math.abs(second.getBoundingClientRect()[size] - initialSize * 2)).to.be.at.most(0.1);
+
+            dragHandle(initialSize * 2);
+
+            expect(Math.abs(first.getBoundingClientRect()[size] - initialSize * 2)).to.be.at.most(0.1);
+            expect(second.getBoundingClientRect()[size]).to.equal(0);
+          });
+
         });
 
       }
 
-      describe('horizontal', function() {
+      describe('horizontal mode', function() {
 
         beforeEach(function(done) {
           splitPanel = fixture('split-panel');
@@ -169,7 +219,7 @@
 
       });
 
-      describe('vertical', function() {
+      describe('vertical mode', function() {
 
         beforeEach(function(done) {
           splitPanel = fixture('split-panel');

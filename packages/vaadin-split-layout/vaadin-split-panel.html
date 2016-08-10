@@ -30,12 +30,14 @@ Vaadin Split Panel
 
       :host ::content > * {
         @apply(--layout-flex-auto);
+        overflow: auto;
       }
 
       #splitter {
         @apply(--layout-vertical);
         @apply(--layout-center-justified);
         @apply(--layout-flex-none);
+        overflow: visible;
         min-height: 8px;
         min-width: 8px;
         background: #ccc;
@@ -114,8 +116,12 @@ Vaadin Split Panel
         });
       },
 
-      _setFlexBasis: function(element, flexBasis) {
-        flexBasis = Math.max(0, flexBasis);
+      _setFlexBasis: function(element, flexBasis, containerSize) {
+        flexBasis = Math.max(0, Math.min(flexBasis, containerSize));
+        if (flexBasis === 0) {
+          // Pure zero does not play well in Safari
+          flexBasis = 0.000001;
+        }
         ['-ms-flex', '-webkit-flex', 'flex'].forEach(function(prop) {
           element.style[prop] = '1 1 ' + flexBasis + 'px';
         });
@@ -126,14 +132,15 @@ Vaadin Split Panel
 
         var size = this.vertical ? 'height' : 'width';
         if (event.detail.state === 'start') {
+          this._containerStartSize = this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size];
           this._primaryStartSize = this._primaryChild.getBoundingClientRect()[size];
           this._secondaryStartSize = this._secondaryChild.getBoundingClientRect()[size];
           return;
         }
 
         var distance = this.vertical ? event.detail.dy : event.detail.dx;
-        this._setFlexBasis(this._primaryChild, this._primaryStartSize + distance);
-        this._setFlexBasis(this._secondaryChild, this._secondaryStartSize - distance);
+        this._setFlexBasis(this._primaryChild, this._primaryStartSize + distance, this._containerStartSize);
+        this._setFlexBasis(this._secondaryChild, this._secondaryStartSize - distance, this._containerStartSize);
 
         if (event.detail.state === 'end') {
           delete this._containerStartSize;
