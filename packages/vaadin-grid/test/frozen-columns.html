@@ -27,34 +27,40 @@
 
       beforeEach(function() {
         scroller = fixture('frozen-columns');
-        scroller.columns = [{
-          template: scroller.$.cell,
-          headers: [{
-            template: scroller.$.cell
-          }]
-        }, {
-          template: scroller.$.cell,
-          headers: [{
-            template: scroller.$.cell
-          }]
-        }];
-      });
 
-      it('should have a frozen cell in a header row', function() {
-        var cells = getRowCells(getRows(getHeader(scroller.list))[0]);
-        expect(cells[0].hasAttribute('frozen')).to.be.true;
-        expect(cells[1].hasAttribute('frozen')).not.to.be.true;
-      });
-
-      it('should have a frozen cell in a body row', function() {
-        var cells = getRowCells(getRows(getBody(scroller.list))[0]);
-        expect(cells[0].hasAttribute('frozen')).to.be.true;
-        expect(cells[1].hasAttribute('frozen')).not.to.be.true;
-      });
-
-      it.skip('should have a frozen column in a footer row', function() {
+        scroller.columns = [1, 2, 3].map(function(){
+          return {
+            template: scroller.$.cell,
+            headers: [{
+              template: scroller.$.cell
+            }]
+          };
+        });
 
       });
+
+      ['thead', 'tbody'].forEach(function(container) {
+
+        it('should have a frozen cell in a ' + container + ' row', function() {
+          var containerElement = scroller.list.$$(container);
+          var cells = getRowCells(getRows(containerElement)[0]);
+          expect(cells[0].hasAttribute('frozen')).to.be.true;
+          expect(cells[1].hasAttribute('frozen')).not.to.be.true;
+          expect(cells[2].hasAttribute('frozen')).not.to.be.true;
+        });
+
+        it('should have the correct last-frozen cell in a ' + container + ' row', function() {
+          scroller.frozenColumns = 2;
+          var containerElement = scroller.list.$$(container);
+          var cells = getRowCells(getRows(containerElement)[0]);
+          expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+          expect(cells[1].hasAttribute('last-frozen')).to.be.true;
+          expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
+        });
+
+      });
+
+
     });
   </script>
 

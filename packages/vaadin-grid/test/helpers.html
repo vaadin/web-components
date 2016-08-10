@@ -144,14 +144,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return n - (n % grid._itemsPerRow);
   }
 
-  function getHeader(container) {
-    return container.$$('thead');
-  }
-
-  function getBody(container) {
-    return container.$$('tbody');
-  }
-
   function getRows(container) {
     return Polymer.dom(container).querySelectorAll('tr');
   }
