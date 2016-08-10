@@ -50,21 +50,21 @@
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should notify opened on open', function(done) {
-        datepicker.addEventListener('iron-overlay-opened', function() {
+      it('should notify opened changed on open', function(done) {
+        datepicker.addEventListener('opened-changed', function() {
           expect(datepicker.opened).to.be.true;
           done();
         });
         datepicker.open();
       });
 
-      it('should notify opened on open', function(done) {
+      it('should notify opened changed on close', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
+          datepicker.addEventListener('opened-changed', function() {
+            expect(datepicker.opened).to.be.false;
+            done();
+          });
           datepicker.close();
-        });
-        datepicker.addEventListener('iron-overlay-closed', function() {
-          expect(datepicker.opened).to.be.false;
-          done();
         });
         datepicker.open();
       });
