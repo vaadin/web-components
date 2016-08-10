@@ -25,10 +25,10 @@
     describe('frozen columns', function() {
       var scroller;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
         scroller = fixture('frozen-columns');
 
-        scroller.columns = [1, 2, 3].map(function(){
+        scroller.columns = [1, 2, 3].map(function() {
           return {
             template: scroller.$.cell,
             headers: [{
@@ -36,26 +36,47 @@
             }]
           };
         });
+        scroller.style.width = '200px';
+
+        Polymer.Base.async(done, 1);
 
       });
 
       ['thead', 'tbody'].forEach(function(container) {
 
-        it('should have a frozen cell in a ' + container + ' row', function() {
-          var containerElement = scroller.list.$$(container);
-          var cells = getRowCells(getRows(containerElement)[0]);
-          expect(cells[0].hasAttribute('frozen')).to.be.true;
-          expect(cells[1].hasAttribute('frozen')).not.to.be.true;
-          expect(cells[2].hasAttribute('frozen')).not.to.be.true;
-        });
+        describe(container, function() {
 
-        it('should have the correct last-frozen cell in a ' + container + ' row', function() {
-          scroller.frozenColumns = 2;
-          var containerElement = scroller.list.$$(container);
-          var cells = getRowCells(getRows(containerElement)[0]);
-          expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
-          expect(cells[1].hasAttribute('last-frozen')).to.be.true;
-          expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
+          it('should have a frozen cell in a row', function() {
+            var containerElement = scroller.list.$$(container);
+            var cells = getRowCells(getRows(containerElement)[0]);
+            expect(cells[0].hasAttribute('frozen')).to.be.true;
+            expect(cells[1].hasAttribute('frozen')).not.to.be.true;
+            expect(cells[2].hasAttribute('frozen')).not.to.be.true;
+          });
+
+          it('should have the correct last-frozen cell in a row', function() {
+            scroller.frozenColumns = 2;
+            var containerElement = scroller.list.$$(container);
+            var cells = getRowCells(getRows(containerElement)[0]);
+            expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+            expect(cells[1].hasAttribute('last-frozen')).to.be.true;
+            expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
+          });
+
+          it('should not move while content scrolls horizontally', function(done) {
+            var containerElement = scroller.list.$$(container);
+            var initialContainerRect = containerElement.getBoundingClientRect();
+            var cells = getRowCells(getRows(containerElement)[0]);
+
+            scroller.list.$.table.addEventListener('scroll', function() {
+              var cellContent = getItemFromPoint(initialContainerRect.left + 50, initialContainerRect.top + 50);
+              expect(cellContent).to.equal(getCellContent(cells[0]));
+              done();
+            });
+
+            scroller.list.$.table.scrollLeft = 100;
+          });
+
         });
 
       });

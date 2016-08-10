@@ -36,9 +36,10 @@
     <template id="cell">[[index]]</template>
 
     <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
+      <content></content>
     </vaadin-grid-scroller>
 
-    <content></content>
+
     <!-- <iron-list style$="[[_computedListHeight(listHeight)]]" items="[[data]]" as="item" id="list">
       <template>
         <div class="item" tabindex$="[[tabIndex]]">

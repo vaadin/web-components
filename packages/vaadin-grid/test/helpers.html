@@ -79,20 +79,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var gridRect = grid.getBoundingClientRect();
     var x = gridRect.left + ((n % grid._itemsPerRow) * itemSize) + (itemSize / 2);
     var y = gridRect.top + (Math.floor(n / grid._itemsPerRow) * itemSize) + (itemSize / 2);
-    return document.elementFromPoint(x, y);
+
+    return getItemFromPoint(x, y);
   }
 
   function getFirstItemFromList(list) {
     var listRect = list.getBoundingClientRect();
-    var elements = document.elementsFromPoint(listRect.left + 100, listRect.top + 1);
-
-    return elements.length > 1 ? elements[1] : elements[0]; // first element is always vaadin-outer-scroller
+    return getItemFromPoint(listRect.left + 50, listRect.top + 1);
   }
 
   function getLastItemFromList(list) {
     var listRect = list.getBoundingClientRect();
-    var elements = document.elementsFromPoint(listRect.left + 100, listRect.top + listRect.height - 1);
+    return getItemFromPoint(listRect.left + 50, listRect.top + listRect.height - 1);
+  }
 
+  function getItemFromPoint(x, y) {
+    var elements = document.elementsFromPoint(x, y);
     return elements.length > 1 ? elements[1] : elements[0]; // first element is always vaadin-outer-scroller
   }
 
@@ -150,5 +152,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function getRowCells(row) {
     return Polymer.dom(row).querySelectorAll('td, th');
+  }
+
+  function getCellContent(cell) {
+    return cell.getContentChildren('content')[0];
   }
 </script>
