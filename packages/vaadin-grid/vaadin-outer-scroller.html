@@ -26,7 +26,6 @@
       is: 'vaadin-outer-scroller',
 
       properties: {
-        scrollbarWidth: Number,
         scrollTarget: {
           observer: '_scrollTargetChanged'
         },
@@ -39,12 +38,6 @@
 
       listeners: {
         'scroll': '_syncScrollTarget'
-      },
-
-      ready: function() {
-        this.async(function() {
-          this.scrollbarWidth = this._getScrollbarWidth();
-        }, 1);
       },
 
       attached: function() {
@@ -67,25 +60,7 @@
       },
 
       _onMouseMove: function(e) {
-        var rect = this.getBoundingClientRect();
-        this.passthrough = e.clientY <= rect.bottom - this.scrollbarWidth && e.clientX <= rect.right - this.scrollbarWidth;
-      },
-
-      _getScrollbarWidth: function() {
-        // Create the measurement node
-        var scrollDiv = document.createElement("div");
-        scrollDiv.style.width = '100px';
-        scrollDiv.style.height = '100px';
-        scrollDiv.style.overflow = 'scroll';
-        scrollDiv.style.position = 'absolute';
-        scrollDiv.style.top = '-9999px';
-        document.body.appendChild(scrollDiv);
-        // Get the scrollbar width
-        var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-
-        // Delete the DIV
-        document.body.removeChild(scrollDiv);
-        return scrollbarWidth;
+        this.passthrough = e.offsetY <= this.clientHeight && e.offsetX <= this.clientWidth;
       },
 
       _syncOuterScroller: function() {

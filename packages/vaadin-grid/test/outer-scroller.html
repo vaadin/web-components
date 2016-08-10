@@ -85,53 +85,53 @@
           move(1, 1);
         });
 
-        describe('visible scrollbars', function() {
-
-          beforeEach(function() {
-            outerScroller.scrollbarWidth = 10;
-          });
-
-          it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
-            scroller.list.addEventListener('mousemove', function() {
-              expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
-              done();
-            });
-            move(listRect.width, 1);
-          });
-
-          it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
-            scroller.list.addEventListener('mousemove', function() {
-              expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
-              done();
-            });
-            move(1, listRect.height);
-          });
-
-        });
-
-        describe('invisible scrollbars', function() {
-
-          beforeEach(function() {
-            outerScroller.scrollbarWidth = 0;
-          });
-
-          it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
-            scroller.list.addEventListener('mousemove', function() {
-              expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
-              done();
-            });
-            move(listRect.width, 1);
-          });
-
-          it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
-            scroller.list.addEventListener('mousemove', function() {
-              expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
-              done();
-            });
-            move(1, listRect.height);
-          });
-
-        });
+        // describe('visible scrollbars', function() {
+        //
+        //   beforeEach(function() {
+        //     outerScroller.scrollbarWidth = 10;
+        //   });
+        //
+        //   it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
+        //     scroller.list.addEventListener('mousemove', function() {
+        //       expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
+        //       done();
+        //     });
+        //     move(listRect.width, 1);
+        //   });
+        //
+        //   it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
+        //     scroller.list.addEventListener('mousemove', function() {
+        //       expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
+        //       done();
+        //     });
+        //     move(1, listRect.height);
+        //   });
+        //
+        // });
+        //
+        // describe('invisible scrollbars', function() {
+        //
+        //   beforeEach(function() {
+        //     outerScroller.scrollbarWidth = 0;
+        //   });
+        //
+        //   it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
+        //     scroller.list.addEventListener('mousemove', function() {
+        //       expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
+        //       done();
+        //     });
+        //     move(listRect.width, 1);
+        //   });
+        //
+        //   it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
+        //     scroller.list.addEventListener('mousemove', function() {
+        //       expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
+        //       done();
+        //     });
+        //     move(1, listRect.height);
+        //   });
+        //
+        // });
 
       });
 
