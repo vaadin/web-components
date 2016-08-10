@@ -59,8 +59,7 @@
         this.dataSource(vidx, function(index, item) {
           if (item != null && el.index === index + this._vidxOffset) {
             el.item = item;
-            // inst.tabIndex = this._focusedIndex === vidx ? 0 : -1;
-            // this._physicalIndexForKey[inst.__key__] = pidx;
+            this._physicalIndexForKey[el.index] = pidx;
             el.removeAttribute('hidden');
           } else {
             el.setAttribute('hidden', '');

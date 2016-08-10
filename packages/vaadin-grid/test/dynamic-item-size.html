@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <test-fixture id="trivialList">
     <template>
-      <x-list item-height="0" pre></x-list>
+      <x-list item-height="100"></x-list>
     </template>
   </test-fixture>
 
@@ -41,78 +41,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       test('update size using item index', function(done) {
-        list.items = buildDataSet(100);
+        list.size = 100;
 
         flush(function() {
           var firstItem = getFirstItemFromList(list);
-          var initHeight = firstItem.offsetHeight;
 
-          list.set('items.0.index', '1\n2\n3\n4');
+          expect(firstItem.offsetHeight).to.equal(100 + 8 + 8);
+
+          container.itemHeight = 200;
+
           list.updateSizeForItem(0);
-          assert.isAbove(firstItem.offsetHeight, initHeight*3);
-
-          list.set('items.0.index', '1');
-          list.updateSizeForItem(0);
-          assert.equal(firstItem.offsetHeight, initHeight);
-
-          done();
-        });
-      });
-
-      test('update size using item object', function(done) {
-        list.items = buildDataSet(100);
-
-        flush(function() {
-          var firstItem = getFirstItemFromList(list);
-          var initHeight = firstItem.offsetHeight;
-
-          list.set('items.0.index', '1\n2\n3\n4');
-          list.updateSizeForItem(list.items[0]);
-          assert.isAbove(firstItem.offsetHeight, initHeight*3);
-
-          list.set('items.0.index', '1');
-          list.updateSizeForItem(list.items[0]);
-          assert.equal(firstItem.offsetHeight, initHeight);
-
+          expect(firstItem.offsetHeight).to.eql(200 + 8 + 8);
           done();
         });
       });
 
       test('ignore items that are not rendered', function(done) {
-        list.items = buildDataSet(100);
+        list.size = 100;
 
         flush(function() {
-          list.updateSizeForItem(list.items[list.items.length - 1]);
+          list.updateSizeForItem(100);
           done();
         });
       });
-
-
-      test('throw if the item is invalid', function(done) {
-        list.items = buildDataSet(100);
-
-        flush(function() {
-          var firstItem = getFirstItemFromList(list);
-          var initHeight = firstItem.offsetHeight;
-          var throws = 0;
-
-          try {
-            list.updateSizeForItem(100);
-          } catch (error) {
-            throws++;
-          }
-
-          try {
-            list.updateSizeForItem({});
-          } catch (error) {
-            throws++;
-          }
-
-          assert.equal(throws, 2);
-          done();
-        });
-      });
-
     });
 
   </script>

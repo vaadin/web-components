@@ -862,13 +862,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * Updates the size of an item.
      *
      * @method updateSizeForItem
-     * @param {(Object|number)} item The item object or its index
+     * @param {|number} index
      */
-    updateSizeForItem: function(item) {
-      // TODO: fix me, determine correct element to update somehow other.
-      item = this._getNormalizedItem(item);
-      var key = this._collection.getKey(item);
-      var pidx = this._physicalIndexForKey[key];
+     // TODO: rename to updateSizeForIndex ?
+    updateSizeForItem: function(index) {
+      var pidx = this._physicalIndexForKey[index];
 
       if (pidx != null) {
         this._updateMetrics([pidx]);
