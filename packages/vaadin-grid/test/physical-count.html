@@ -69,19 +69,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setup(function() {
         container = fixture('trivialListSmall');
         list = container.list;
-        list.style.display = 'none';
+        container.style.display = 'none';
         list.size = 200;
       });
 
       test('increase pool size after resizing the list', function(done) {
-        flush(function() {
-          list.style.display = '';
-          assert.notEqual(getFirstItemFromList(list).textContent, '0', 'Item should not be rendered');
+        container.listHeight = 200;
 
+        flush(function() {
+          expect(list._physicalItems.length).to.eql(25);
+
+          container.style.display = '';
           list.fire('iron-resize');
 
           flush(function() {
-            assert.equal(getFirstItemFromList(list).textContent, '0', 'Item should be rendered');
+            expect(list._physicalItems.length).to.be.greaterThan(25);
             done();
           });
         });
