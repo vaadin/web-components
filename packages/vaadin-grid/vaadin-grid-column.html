@@ -7,13 +7,21 @@
         display: none;
       }
     </style>
-    <content select="template"></content>
+    <!-- Header selector needs to be first, because it's a subset of "select=template" -->
+    <content id="contentForHeaderTemplates" select="template[is=header]"></content>
+    <content id="contentForTemplate" select="template"></content>
   </template>
   <script>
     Polymer({
       is: 'vaadin-grid-column',
 
       properties: {
+        headers: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
         template: Object
       },
 
@@ -22,10 +30,27 @@
           var isTemplate = function(node) {
             return node.nodeType === Node.ELEMENT_NODE && node.tagName === 'TEMPLATE';
           };
+          var isHeaderTemplate = function(node) {
+            return isTemplate(node) && node.hasAttribute('is') && node.getAttribute('is').toLowerCase() === 'header';
+          };
+
+          if (info.addedNodes.filter(isHeaderTemplate).length > 0 ||
+              info.removedNodes.filter(isHeaderTemplate).length > 0) {
+                var headerTemplates = Polymer.dom(this.$.contentForHeaderTemplates).getDistributedNodes();
+                if (headerTemplates) {
+                  this.set('headers', headerTemplates.map(function(t) {
+                    var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
+                    return { template: t, colspan: colspan };
+                  }));
+                } else {
+                  this.set('headers', []);
+                }
+          }
 
           if (info.addedNodes.filter(isTemplate).length > 0 ||
             info.removedNodes.filter(isTemplate).length > 0) {
-            this.set('template', this.getContentChildren("[select=template]")[0]);
+            // id works here better than using this.getContentChildren(selector);
+            this.set('template', Polymer.dom(this.$.contentForTemplate).getDistributedNodes()[0]);
 
             // assuming parent element is always a Polymer element.
             // set dataHost to the same context the template was declared in
