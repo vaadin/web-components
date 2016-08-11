@@ -133,7 +133,9 @@ Vaadin Split Panel
       },
 
       _onHandleTrack: function(event) {
-        if (!this._primaryChild || !this._secondaryChild) return;
+        if (!this._primaryChild || !this._secondaryChild) {
+          return;
+        }
 
         var size = this.vertical ? 'height' : 'width';
         if (event.detail.state === 'start') {

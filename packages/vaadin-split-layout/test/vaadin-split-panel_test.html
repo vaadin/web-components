@@ -285,7 +285,7 @@
 
           it('notifies resizables', function() {
             var spy = sinon.spy(splitPanel, 'notifyResize');
-            dragHandle(initialSize/2);
+            dragHandle(initialSize / 2);
 
             expect(spy.callCount).to.be.above(0);
           });

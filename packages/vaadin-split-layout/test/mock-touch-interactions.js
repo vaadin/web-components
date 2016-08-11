@@ -1,3 +1,4 @@
+// jscs:disable disallowMultipleLineBreaks, disallowSpacesInsideObjectBrackets
 /**
  * The following is copied and adapted from https://github.com/PolymerElements/iron-test-helpers/blob/master/mock-interactions.js
  *
@@ -18,7 +19,7 @@
     var has = false;
     try {
       has = Boolean(new TouchEvent('x'));
-    } catch(_) {}
+    } catch (_) {}
     return has;
   })();
 
