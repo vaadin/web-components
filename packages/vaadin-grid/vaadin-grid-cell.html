@@ -37,6 +37,12 @@
 
       observers: ['_columnChanged(column)', '_templateChanged(template, target)', '_indexChanged(index, instance)'],
 
+      created: function() {
+        this._instanceProps = {
+          index: true
+        };
+      },
+
       _columnChanged: function(column) {
         this.template = column.template;
         this.listen(column, 'template-changed', '_columnTemplateChanged');
@@ -67,6 +73,8 @@
         }
 
         this.instance = this.stamp(null);
+        this.column.push('instances', this.instance);
+
         this.style.height = '';
         var item = document.createElement('div');
         var itemClass = 'item-' + target.childElementCount;
@@ -96,9 +104,13 @@
           });
         }
         Polymer.dom(item).appendChild(this.instance.root);
+      },
+
+      _forwardParentProp(prop, value) {
+        this.column.instances.forEach(function(inst) {
+          inst.notifyPath(prop, value);
+        });
       }
-
-
     });
   </script>
 </dom-module>
