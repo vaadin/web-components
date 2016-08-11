@@ -137,6 +137,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <app-toolbar>Size</app-toolbar>
         <paper-slider min="1" max="20000000000" value="{{size}}" editable></paper-slider>
+        <app-toolbar>1st Column Width</app-toolbar>
+        <paper-slider min="100" max="300" immediate-value="{{width}}"></paper-slider>
 
       </app-drawer>
       <app-header-layout>
@@ -151,7 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <vaadin-grid id="component" size="[[size]]" frozen-columns="1" row-count="2">
-          <vaadin-grid-column width="100px">
+          <vaadin-grid-column width="[[width]]px">
             <template>
               <i class="elItem">[[_getContent(index)]]</i>
             </template>
@@ -228,6 +230,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       };
 
       scope.size = 1000;
+      scope.width = '100';
 
       scope._getContent = function(index) {
         return 'foo-' + index;
