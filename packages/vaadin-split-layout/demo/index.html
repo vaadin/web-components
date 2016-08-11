@@ -12,17 +12,72 @@
     <link rel="import" href="../vaadin-split-panel.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
+      .centered {
+        max-width: 600px;
+      }
+
+      vaadin-split-panel {
+        height: 160px;
+        background: #eee;
+      }
     </style>
   </head>
   <body>
 
     <div class="vertical-section-container centered">
-      <h3>Basic vaadin-split-panel Demo</h3>
+      <h3>Horizontal Mode (Default)</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel></vaadin-split-panel>
+          <vaadin-split-panel>
+            <div>first panel content</div>
+            <div>second panel content</div>
+          </vaadin-split-panel>
         </template>
       </demo-snippet>
+
+      <h3>Vertical Mode</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel vertical>
+            <div>first panel content</div>
+            <div>second panel content</div>
+          </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
+      <h3>Modes Combination</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel>
+            <div>first panel content</div>
+            <vaadin-split-panel vertical>
+              <div>second panel content</div>
+              <div>third panel content</div>
+            </vaadin-split-panel>
+          </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
+      <h3>Specifying Initial Sizes</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel>
+            <div style="width: 75%;">first panel content</div>
+            <div style="width: 25%;">second panel content</div>
+          </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
+      <h3>Specifying Min- and Max- Sizes</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel>
+            <div style="min-width: 50px; max-width: 150px;">first</div>
+            <div>second</div>
+          </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
     </div>
 
   </body>
