@@ -1,4 +1,4 @@
-<dom-module id="vaadin-grid-cell">
+<dom-module id="vaadin-grid-cell-styles">
   <template>
     <style>
       ::content> div {
@@ -16,19 +16,26 @@
         overflow: hidden;
       }
     </style>
+  </template>
+</dom-module>
 
+<dom-module id="vaadin-grid-cell">
+  <template>
+    <style include="vaadin-grid-cell-styles"></style>
     <content></content>
   </template>
-  <script>
-    Polymer({
-      is: 'vaadin-grid-cell',
+</dom-module>
 
-      extends: 'td',
+<dom-module id="vaadin-grid-header-cell">
+  <template>
+    <style include="vaadin-grid-cell-styles"></style>
+    <content></content>
+  </template>
+</dom-module>
 
-      behaviors: [
-        Polymer.Templatizer
-      ],
-
+<script>
+  (function() {
+    var vaadinGridCellBehavior = {
       properties: {
         column: Object,
         instance: Object,
@@ -71,11 +78,16 @@
 
         // fix _rootDataHost to the context where template has been defined
         if (template._rootDataHost) {
-          this._getRootDataHost = function() { return template._rootDataHost; };
+          this._getRootDataHost = function() {
+            return template._rootDataHost;
+          };
         }
 
         this.instance = this.stamp(null);
-        this.column.push('instances', this.instance);
+
+        if (this.column.instances) {
+          this.column.push('instances', this.instance);
+        }
 
         this.style.height = '';
         var item = document.createElement('div');
@@ -108,11 +120,62 @@
         Polymer.dom(item).appendChild(this.instance.root);
       },
 
-      _forwardParentProp(prop, value) {
+      _forwardParentProp: function(prop, value) {
         this.column.instances.forEach(function(inst) {
           inst.notifyPath(prop, value);
         });
       }
+    };
+
+    Polymer({
+      is: 'vaadin-grid-cell',
+
+      extends: 'td',
+
+      behaviors: [
+        Polymer.Templatizer,
+        vaadinGridCellBehavior
+      ],
+
     });
-  </script>
-</dom-module>
+
+    Polymer({
+      is: 'vaadin-grid-header-cell',
+
+      extends: 'th',
+
+      behaviors: [
+        Polymer.Templatizer,
+        vaadinGridCellBehavior
+      ],
+
+      observers: ['_headerIndexChanged(headerIndex, _headers)'],
+
+      properties: {
+        colspan: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        headerIndex: Number
+      },
+
+      _columnChanged: function(column) {
+        this._headers = column.headers;
+        this.listen(column, 'headers-changed', '_headersChanged');
+      },
+
+      _headersChanged: function(e) {
+        this._headers = e.detail.value;
+      },
+
+      _headerIndexChanged: function(headerIndex, headers) {
+        if (headers[headerIndex]) {
+          this.template = headers[headerIndex].template;
+          this.colspan = headers[headerIndex].colspan;
+        }
+      },
+
+    });
+  })();
+</script>
