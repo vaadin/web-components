@@ -34,252 +34,291 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../paper-slider/paper-slider.html">
 
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="getjson.html">
 
-  <style is="custom-style">
-
-    body {
-      margin: 0;
-      font-family: 'Roboto', 'Noto', sans-serif;
-      background-color: #eee;
-    }
-
-    app-header {
-      background-color: #0b8043;
-      color: white;
-
-      --app-header-background-front-layer: {
-        background-color: #4285f4;
-      };
-    }
-
-    app-header paper-icon-button {
-      --paper-icon-button-ink-color: white;
-    }
-
-    iron-list {
-      background-color: var(--paper-grey-200, #eee);
-      padding-bottom: 16px;
-      @apply(--layout-flex);
-    }
-
-    .item {
-      @apply(--layout-horizontal);
-
-      margin: 16px 16px 0 16px;
-      padding: 20px;
-
-      border-radius: 8px;
-      background-color: white;
-      border: 1px solid #ddd;
-    }
-
-    .avatar {
-      height: 40px;
-      width: 40px;
-      border-radius: 20px;
-      box-sizing: border-box;
-      background-color: #DDD;
-    }
-
-    .pad {
-      padding: 0 16px;
-      @apply(--layout-flex);
-      @apply(--layout-vertical);
-    }
-
-    .primary {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .secondary {
-      font-size: 14px;
-    }
-
-    .dim {
-      color: gray;
-    }
-
-    .mainHeader [main-title] {
-      font-weight: 400;
-      margin: 0 0 0 50px;
-    }
-
-    .mainHeader [condensed-title] {
-      font-weight: 400;
-      margin-left: 30px;
-    }
-
-    .mainHeader [condensed-title] i {
-      font-style: normal;
-      font-weight: 100;
-    }
-
-    app-toolbar.tall {
-      height: 148px;
-    }
-
-    vaadin-grid {
-      height: 500px;
-    }
-
-    section {
-      margin: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-    }
-
-    section app-toolbar {
-      padding: 0 !important;
-    }
-
-
-  </style>
 
 </head>
+<style>
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Noto', sans-serif;
+  background-color: #eee;
+}
+</style>
 <body unresolved>
 
-  <template is="dom-bind">
-    <app-drawer-layout>
-      <app-drawer swipe-open>
+  <x-grid></x-grid>
 
-        <section>
-          <app-toolbar>Size</app-toolbar>
-          <paper-input value="{{size}}"></paper-input>
-        </section>
+  <dom-module id="x-grid">
+    <template>
 
-        <section>
-          <app-toolbar>1st Column Width</app-toolbar>
-          <paper-slider min="100" max="300" immediate-value="{{width}}"></paper-slider>
-        </section>
+    <style>
 
-        <section>
-          <app-toolbar>Every 3rd Row Height</app-toolbar>
-          <paper-slider min="39" max="200" immediate-value="{{height}}" on-immediate-value-changed="_heightChanged"></paper-slider>
-        </section>
+      app-header {
+        background-color: #0b8043;
+        color: white;
 
-        <section>
-          <app-toolbar>Colspan</app-toolbar>
-          <paper-slider min="0" max="3" on-immediate-value-changed="_colspanChanged"></paper-slider>
-        </section>
-      </app-drawer>
-      <app-header-layout>
-        <app-header class="mainHeader" condenses fixed effects="resize-title blend-background waterfall">
-          <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <h4 condensed-title>Vaadin Grid Scroller</h4>
-          </app-toolbar>
-          <app-toolbar class="tall">
-            <h1 main-title>Vaadin Grid Scroller</h1>
-          </app-toolbar>
-        </app-header>
+        --app-header-background-front-layer: {
+          background-color: #4285f4;
+        };
+      }
 
-        <vaadin-grid id="component" size="[[size]]" frozen-columns="1" row-count="2">
-          <vaadin-grid-column width="[[width]]px">
-            <template>
-              <div class="elItem" style$="[[_getStyle(index, height)]]">[[_getContent(index)]]</div>
-            </template>
-            <template is="header">
-              <b class="elItem">foo-h1</b>
-            </template>
-            <template is="header">
-              foo-h2
-            </template>
-          </vaadin-grid-column>
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
 
-          <vaadin-grid-column>
-            <template>
-              <div>bar-[[index]]</div>
-            </template>
-            <template is="header">
-              bar-h1
-            </template>
-            <template is="header">
-              bar-h2
-            </template>
-          </vaadin-grid-column>
+      iron-list {
+        background-color: var(--paper-grey-200, #eee);
+        padding-bottom: 16px;
+        @apply(--layout-flex);
+      }
 
-          <vaadin-grid-column width="400px">
-            <template>
-              <div>baz-[[index]]</div>
-            </template>
-            <template is="header">
-              baz-h1
-            </template>
-            <template is="header" colspan="2">
-              baz-h2
-            </template>
-          </vaadin-grid-column>
+      .item {
+        @apply(--layout-horizontal);
 
-          <vaadin-grid-column width="20%">
-            <template>
-              <button onclick="alert(this.textContent)">[[index]]</button>
-            </template>
-            <template is="header">
-              qux-h1
-            </template>
-            <template is="header">
-              qux-h2
-            </template>
-          </vaadin-grid-column>
+        margin: 16px 16px 0 16px;
+        padding: 20px;
 
-          <vaadin-grid-column min-width="100px">
-            <template>
-              derp
-            </template>
-            <template is="header">
-              derp
-            </template>
-            <template is="header">
-              derp
-            </template>
-          </vaadin-grid-column>
+        border-radius: 8px;
+        background-color: white;
+        border: 1px solid #ddd;
+      }
 
-        </vaadin-grid>
+      .avatar {
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        box-sizing: border-box;
+        background-color: #DDD;
+      }
 
-        <iron-ajax url="../../app-layout/demo/contacts.json" last-response="{{data}}" auto></iron-ajax>
+      .pad {
+        padding: 0 16px;
+        @apply(--layout-flex);
+        @apply(--layout-vertical);
+      }
 
-      </app-header-layout>
-    </app-drawer-layout>
+      .primary {
+        font-size: 16px;
+        font-weight: bold;
+      }
 
-  </template>
+      .secondary {
+        font-size: 14px;
+      }
 
-  <script>
-    (function(scope) {
+      .dim {
+        color: gray;
+      }
 
-      scope.iconForItem = function(item) {
-        return item ? (item.integer < 50 ? 'star-border' : 'star') : '';
-      };
+      .mainHeader [main-title] {
+        font-weight: 400;
+        margin: 0 0 0 50px;
+      }
 
-      scope.size = 1000;
-      scope.width = '100';
+      .mainHeader [condensed-title] {
+        font-weight: 400;
+        margin-left: 30px;
+      }
 
-      scope._getContent = function(index) {
-        return 'foo-' + index;
-      };
+      .mainHeader [condensed-title] i {
+        font-style: normal;
+        font-weight: 100;
+      }
 
-      scope._getStyle = function(index, height) {
-        if (index % 3 === 0) {
-          return 'height: ' + height + 'px';
-        } else {
-          return '';
+      app-toolbar.tall {
+        height: 148px;
+      }
+
+      vaadin-grid {
+        height: 500px;
+      }
+
+      section {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+
+      section app-toolbar {
+        padding: 0 !important;
+      }
+
+      vaadin-grid /deep/ vaadin-grid-scroller /deep/ table {
+        background: #fff;
+      }
+
+      img {
+        position: absolute;
+        top: 5px;
+
+        height: 30px;
+      }
+
+
+
+
+    </style>
+
+      <app-drawer-layout>
+        <app-drawer swipe-open>
+
+          <section>
+            <app-toolbar>Size</app-toolbar>
+            <paper-input value="{{size}}"></paper-input>
+          </section>
+
+          <section>
+            <app-toolbar>Frozen columns</app-toolbar>
+            <paper-slider pin value="1" min="0" max="3" immediate-value="{{frozenColumns}}"></paper-slider>
+          </section>
+
+          <section>
+            <app-toolbar>1st Column Width</app-toolbar>
+            <paper-slider min="100" max="300" immediate-value="{{width}}"></paper-slider>
+          </section>
+
+          <section>
+            <app-toolbar>Every 3rd Row Height</app-toolbar>
+            <paper-slider min="22" max="200" immediate-value="{{height}}" on-immediate-value-changed="_heightChanged"></paper-slider>
+          </section>
+
+          <section>
+            <app-toolbar>Colspan</app-toolbar>
+            <paper-slider min="0" max="3" on-immediate-value-changed="_colspanChanged"></paper-slider>
+          </section>
+
+        </app-drawer>
+        <app-header-layout>
+          <app-header class="mainHeader" condenses fixed effects="resize-title blend-background waterfall">
+            <app-toolbar>
+              <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+              <h4 condensed-title>Vaadin Grid Scroller</h4>
+            </app-toolbar>
+            <app-toolbar class="tall">
+              <h1 main-title>Vaadin Grid Scroller</h1>
+            </app-toolbar>
+          </app-header>
+
+          <vaadin-grid id="component" size="[[size]]" frozen-columns="[[frozenColumns]]" row-count="2">
+            <vaadin-grid-column width="[[width]]px">
+              <template>
+                <div class="elItem" style$="[[_getStyle(index, height)]]">#[[index]]</div>
+              </template>
+              <template is="header">
+                <b class="elItem">Index</b>
+              </template>
+              <template is="header">
+
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column  width="150px">
+              <template>
+                <img src="[[_getUserProperty(index, 'picture.thumbnail')]]"></img>
+              </template>
+              <template is="header">
+                Picture
+              </template>
+              <template is="header">
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+              <template>
+                [[_getUserProperty(index, 'name.first')]]
+              </template>
+              <template is="header">
+                Name
+              </template>
+              <template is="header">
+                First
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column width="200px">
+              <template>
+                [[_getUserProperty(index, 'name.last')]]
+              </template>
+              <template is="header">
+
+              </template>
+              <template is="header" colspan="2">
+                Last
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column min-width="300px">
+              <template>
+                [[_getUserProperty(index, 'email')]]
+              </template>
+              <template is="header">
+                Email
+              </template>
+              <template is="header">
+              </template>
+            </vaadin-grid-column>
+
+          </vaadin-grid>
+
+          <iron-ajax url="../../app-layout/demo/contacts.json" last-response="{{data}}" auto></iron-ajax>
+
+        </app-header-layout>
+      </app-drawer-layout>
+
+    </template>
+
+    <script>
+      Polymer({
+        is: 'x-grid',
+
+        properties: {
+          size: {
+            value: 1000
+          },
+
+          width: {
+            value: 100
+          }
+        },
+
+        iconForItem: function(item) {
+          return item ? (item.integer < 50 ? 'star-border' : 'star') : '';
+        },
+
+        _getUserProperty: function(index, prop) {
+          var user = window.getJSON('http://randomuser.me?index='+index);
+
+          return this.get('user.' + prop, user);
+        },
+
+        _getStyle: function(index, height) {
+          if (index % 3 === 0) {
+            return 'height: ' + height + 'px';
+          } else {
+            return '';
+          }
+
+        },
+
+        _heightChanged: function(e) {
+          this.$.component.$.scroller.notifyResize();
+        },
+
+        _colspanChanged: function(e) {
+          var th = this.$.component.$.scroller.$.header.querySelectorAll('th:not([frozen])')[0];
+          if (th) {
+            th.colspan = e.detail.value;
+          }
         }
 
-      };
 
-      scope._heightChanged = function(e) {
-        scope.$.component.$.scroller.notifyResize();
-      };
 
-      scope._colspanChanged = function(e) {
-        var th = scope.$.component.$.scroller.$.header.querySelectorAll('th:not([frozen])')[0];
-        if (th) {
-          th.colspan = e.detail.value;
-        }
-      };
+      });
+    </script>
+  </dom-module>
 
-    })(document.querySelector('template[is=dom-bind]'));
-  </script>
+
 
 </body>
 </html>
