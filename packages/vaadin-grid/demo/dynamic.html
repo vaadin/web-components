@@ -153,6 +153,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-slider min="100" max="300" immediate-value="{{width}}"></paper-slider>
         </section>
 
+        <section>
+          <app-toolbar>Every 3rd Row Height</app-toolbar>
+          <paper-slider min="39" max="200" immediate-value="{{height}}" on-immediate-value-changed="_heightChanged"></paper-slider>
+        </section>
       </app-drawer>
       <app-header-layout>
         <app-header class="mainHeader" condenses fixed effects="resize-title blend-background waterfall">
@@ -168,7 +172,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <vaadin-grid id="component" size="[[size]]" frozen-columns="1" row-count="2">
           <vaadin-grid-column width="[[width]]px">
             <template>
-              <i class="elItem">[[_getContent(index)]]</i>
+              <div class="elItem" style$="[[_getStyle(index, height)]]">[[_getContent(index)]]</div>
             </template>
             <template is="header">
               <b class="elItem">foo-h1</b>
@@ -247,6 +251,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       scope._getContent = function(index) {
         return 'foo-' + index;
+      };
+
+      scope._getStyle = function(index, height) {
+        if (index % 3 === 0) {
+          return 'height: ' + height + 'px';
+        } else {
+          return '';
+        }
+
+      };
+
+      scope._heightChanged = function(e) {
+        scope.$.component.$.scroller.notifyResize();
       };
 
     })(document.querySelector('template[is=dom-bind]'));
