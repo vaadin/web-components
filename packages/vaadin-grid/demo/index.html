@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  
+
   <link rel="import" href="../vaadin-grid.html">
 
   <style is="custom-style">
@@ -24,65 +24,65 @@
 
 <body unresolved>
   <vaadin-grid id="component" size="10000000" frozen-columns="1">
-    <div class="column" width="100px">
+    <vaadin-grid-column width="100px">
       <template>
         <i class="elItem">foo [[index]]</i>
       </template>
-      <template class="header">
+      <template is="header">
         <b class="elItem">foo-h1</b>
       </template>
-      <template class="header">
+      <template is="header">
         foo-h2
       </template>
-    </div>
+    </vaadin-grid-column>
 
-    <div class="column">
+    <vaadin-grid-column>
       <template>
         <div>bar-[[index]]</div>
       </template>
-      <template class="header">
+      <template is="header">
         bar-h1
       </template>
-      <template class="header">
+      <template is="header">
         bar-h2
       </template>
-    </div>
+    </vaadin-grid-column>
 
-    <div class="column" width="400px">
+    <vaadin-grid-column width="400px">
       <template>
         <div>baz-[[index]]</div>
       </template>
-      <template class="header">
+      <template is="header">
         baz-h1
       </template>
-      <template class="header" colspan="2">
+      <template is="header" colspan="2">
         baz-h2
       </template>
-    </div>
+    </vaadin-grid-column>
 
-    <div class="column" width="20%">
+    <vaadin-grid-column width="20%">
       <template>
         <button onclick="alert(this.textContent)">[[index]]</button>
       </template>
-      <template class="header">
+      <template is="header">
         qux-h1
       </template>
-      <template class="header">
+      <template is="header">
         qux-h2
       </template>
-    </div>
+    </vaadin-grid-column>
 
-    <div class="column" min-width="100px">
+    <vaadin-grid-column min-width="100px">
       <template>
         derp
       </template>
-      <template class="header">
+      <template is="header">
         derp
       </template>
-      <template class="header">
+      <template is="header">
         derp
       </template>
-    </div>
+    </vaadin-grid-column>
 
   </vaadin-grid>
 

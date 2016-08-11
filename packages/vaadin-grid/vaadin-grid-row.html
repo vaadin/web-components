@@ -30,8 +30,11 @@
           var cell = document.createElement('td', 'vaadin-grid-cell');
           cell.index = this.index;
           cell.target = this.target;
+
+          // TODO: remove hack: set a temporary height to prevent row pool
+          // creation from using 1px row height.
+          cell.style = 'height: 50px';
           cell.column = column;
-          cell.template = column.template;
 
           Polymer.dom(this).appendChild(cell);
 

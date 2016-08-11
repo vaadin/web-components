@@ -9,31 +9,35 @@
       properties: {
         columns: Array,
         frozenColumns: Number,
+        rowCount: {
+          type: Number,
+          value: 1
+        },
         _rows: Array
       },
 
-      observers: ['_columnsChanged(columns)', '_frozenColumnsChanged(frozenColumns, _rows)'],
+      observers: ['_rowCountChanged(rowCount, columns)', '_frozenColumnsChanged(frozenColumns, _rows)'],
 
-      _columnsChanged: function(columns, frozenColumns) {
-        var rows = [];
-        columns.forEach(function(column, columnIndex) {
-          column.headers.forEach(function(header, headerIndex) {
-            var headerRow = this.childNodes[headerIndex];
-            if (!headerRow) {
-              headerRow = document.createElement('tr', 'vaadin-grid-header-row');
-              headerRow.headerIndex = headerIndex;
-              // TODO: correct target should be the same scope as the templates were
-              // introduced. (consider encapsulated parent of vaadin-grid)
-              headerRow.target = this.domHost.domHost; //vaadin-grid
-              headerRow.columns = columns;
+      _rowCountChanged: function(rowCount, columns) {
+        var rows = this._rows || [];
 
-              Polymer.dom(this).appendChild(headerRow);
-              rows.push(headerRow);
-            }
-          }, this);
-        }, this);
+        while (rows.length > rowCount) {
+          var lastRow = rows.pop();
+          Polymer.dom(this).removeChild(lastRow);
+        }
 
-        this._rows = rows;
+        while (rows.length < rowCount) {
+          var row = document.createElement('tr', 'vaadin-grid-header-row');
+          row.headerIndex = rows.length;
+          row.target = this.domHost.domHost;
+          row.columns = columns;
+
+          rows.push(row);
+
+          Polymer.dom(this).appendChild(row);
+        }
+
+        this._rows = rows.slice(0); // new array to make the observer trigger.
       },
 
       _frozenColumnsChanged: function(frozenColumns, rows) {

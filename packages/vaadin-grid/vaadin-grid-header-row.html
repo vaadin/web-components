@@ -17,29 +17,16 @@
 
       observers: ['_columnsChanged(columns, headerIndex, target)', '_indexChanged(index, cells)', '_frozenColumnsChanged(frozenColumns, cells)'],
 
-      //TODO: implement support for columns.splices
-      _columnsChanged: function(columns, headerIndex, target) {
-        var cells = [];
+      _colspanChanged: function() {
         var spanning = 0;
-
-        columns.forEach(function(column, columnIndex) {
-          var header = column.headers[headerIndex];
-          var cell = document.createElement('th', 'vaadin-grid-header-cell');
-          cell.index = this.index;
-          cell.target = this.target;
-          cell.column = column;
-          cell.template = header.template;
-
-          Polymer.dom(this).appendChild(cell);
-          cells.push(cell);
-
-          if (header.colspan > 1) {
-            spanning = header.colspan;
+        this.cells.forEach(function(cell, index) {
+          if (cell.colspam > 1) {
+            spanning = cell.colspam;
 
             var width = cell.style.flexBasis || '100px';
             var flex = cell.style.flexGrow || 1;
             for (var i = 1; i < spanning; i++) {
-              width += ' + ' + (columns[columnIndex + i].minWidth || columns[columnIndex + i].width || '100px');
+              width += ' + ' + (this.columns[index + i].minWidth || this.columns[index + i].width || '100px');
               flex++;
             }
 
@@ -47,14 +34,35 @@
             cell.style.flexGrow = flex;
           }
 
-          if (!header.colspan && spanning > 0) {
+          if (!cell.colspam && spanning > 0) {
             cell.style.display = 'none';
           }
 
           spanning--;
         }.bind(this));
+      },
+
+      //TODO: implement support for columns.splices
+      _columnsChanged: function(columns, headerIndex, target) {
+        var cells = [];
+        var spanning = 0;
+
+        columns.forEach(function(column, columnIndex) {
+          var cell = document.createElement('th', 'vaadin-grid-header-cell');
+          cell.index = this.index;
+          cell.target = this.target;
+          cell.column = column;
+          cell.headerIndex = headerIndex;
+
+          this.listen(cell, 'colspam-changed', '_colspanChanged');
+
+          Polymer.dom(this).appendChild(cell);
+          cells.push(cell);
+
+        }.bind(this));
 
         this.cells = cells;
+        this._colspanChanged();
       },
 
       _frozenColumnsChanged: function(frozenColumns, cells) {

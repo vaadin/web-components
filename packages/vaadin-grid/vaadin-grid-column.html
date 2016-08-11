@@ -18,11 +18,28 @@
       properties: {
         headers: {
           type: Array,
+          notify: true,
           value: function() {
             return [];
           }
         },
-        template: Object
+        minWidth: {
+          type: String,
+          notify: true
+        },
+        name: {
+          type: String,
+          value: ''
+        },
+        template: {
+          type: Object,
+          notify: true
+        },
+        width: {
+          type: String,
+          notify: true,
+          value: '100px'
+        }
       },
 
       created: function() {
@@ -59,7 +76,16 @@
 
           }
         }.bind(this));
-      }
+      },
+
+      ready: function() {
+        // when using Polymer bindings, default values trickle down using observers.
+        // we're not using bindings between columns and cells so we need to use
+        // and fire notifications manually.
+        this.fire('width-changed', {value: this.width});
+        if (this.minWidth) { this.fire('min-width-changed', {value: this.minWidth}); }
+        this.fire('headers-changed', {value: this.headers});
+      },
     });
   </script>
 </dom-module>

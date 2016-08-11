@@ -1,7 +1,7 @@
 <dom-module id="vaadin-grid-header-cell">
   <template>
     <style>
-      ::content > div {
+      ::content> div {
         padding: 8px;
       }
 
@@ -29,6 +29,12 @@
 
       properties: {
         column: Object,
+        colspam: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        headerIndex: Number,
         instance: Object,
         template: {
           observer: '_templateChanged'
@@ -37,46 +43,54 @@
         target: Object
       },
 
-      observers: ['_columnChanged(column)'],
+      observers: ['_headerIndexChanged(headerIndex, _headers)', '_columnChanged(column)'],
 
       _columnChanged: function(column) {
-        this.style.flexBasis = column.minWidth || column.width;
+        this._headers = column.headers;
+        this.listen(column, 'headers-changed', '_headersChanged');
+
+        this.style.flexBasis = column.minWidth || column.width || '100px';
+        this.listen(column, 'min-width-changed', '_widthChanged');
+        this.listen(column, 'width-changed', '_widthChanged');
       },
 
-      _itemChanged: function() {
-        if (this.instance) {
-          this.instance.index = this.item;
-        }
-
+      _widthChanged: function(e) {
+        this.style.flexBasis = e.detail.value;
       },
 
-      _templateChanged: function() {
+      _headersChanged: function(e) {
+        this._headers = e.detail.value;
+      },
 
-        if (this.template){
-          this.templatize(this.template);
-          this.instance = this.stamp(null);
-
-          var item = document.createElement('div');
-          var itemClass = 'item-' + this.target.childElementCount;
-          item.classList.add(itemClass);
-
-          if (Polymer.Settings.useShadow) {
-
-            Polymer.dom(this.target).appendChild(item);
-
-            var content = document.createElement('content');
-            content.setAttribute('select', '.' + itemClass);
-            Polymer.dom(this).appendChild(content);
-
-          } else {
-            // Non-shadow
-            Polymer.dom(this).appendChild(item);
-          }
-          Polymer.dom(item).appendChild(this.instance.root);
+      _headerIndexChanged: function(headerIndex, headers) {
+        if (headers[headerIndex]) {
+          this.template = headers[headerIndex].template;
+          this.colspam = headers[headerIndex].colspan;
         }
+      },
+
+      _templateChanged: function(template) {
+        this.templatize(this.template);
+        this.instance = this.stamp(null);
+
+        var item = document.createElement('div');
+        var itemClass = 'item-' + this.target.childElementCount;
+        item.classList.add(itemClass);
+
+        if (Polymer.Settings.useShadow) {
+
+          Polymer.dom(this.target).appendChild(item);
+
+          var content = document.createElement('content');
+          content.setAttribute('select', '.' + itemClass);
+          Polymer.dom(this).appendChild(content);
+
+        } else {
+          // Non-shadow
+          Polymer.dom(this).appendChild(item);
+        }
+        Polymer.dom(item).appendChild(this.instance.root);
       }
-
-
     });
   </script>
 </dom-module>

@@ -33,6 +33,16 @@
         flush(done);
       });
 
+      describe('properties', function() {
+        it('should have default width', function() {
+          expect(column.width).to.eql('100px');
+        });
+
+        it('should have default name', function() {
+          expect(column.name).to.eql('');
+        });
+      });
+
       describe('cell template', function() {
         it('should read template from light DOM', function() {
           expect(column.template.innerHTML).to.eql('cell');
@@ -46,6 +56,14 @@
             expect(column.template).to.be.undefined;
             done();
           });
+        });
+
+        it('should notify changes', function(done) {
+          column.addEventListener('template-changed', function() {
+            done();
+          });
+
+          Polymer.dom(column).removeChild(column.template);
         });
 
         it('should use the first cell template', function(done) {
@@ -78,6 +96,14 @@
             expect(column.headers.length).to.eql(1);
             done();
           });
+        });
+
+        it('should notify changes', function(done) {
+          column.addEventListener('headers-changed', function() {
+            done();
+          });
+
+          Polymer.dom(column).removeChild(column.headers[0].template);
         });
 
         it('should update headers when template is added', function(done) {

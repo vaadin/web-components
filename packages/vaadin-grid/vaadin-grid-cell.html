@@ -1,7 +1,7 @@
 <dom-module id="vaadin-grid-cell">
   <template>
     <style>
-      ::content > div {
+      ::content> div {
         padding: 8px;
       }
 
@@ -13,7 +13,6 @@
         display: block;
         overflow: hidden;
       }
-
     </style>
 
     <content></content>
@@ -39,7 +38,20 @@
       observers: ['_columnChanged(column)', '_templateChanged(template, target)', '_indexChanged(index, instance)'],
 
       _columnChanged: function(column) {
-        this.style.flexBasis = column.minWidth || column.width;
+        this.template = column.template;
+        this.listen(column, 'template-changed', '_columnTemplateChanged');
+
+        this.style.flexBasis = column.minWidth || column.width || '100px';
+        this.listen(column, 'min-width-changed', '_widthChanged');
+        this.listen(column, 'width-changed', '_widthChanged');
+      },
+
+      _columnTemplateChanged: function(e) {
+        this.template = e.detail.value;
+      },
+
+      _widthChanged: function(e) {
+        this.style.flexBasis = e.detail.value;
       },
 
       _indexChanged: function(index, instance) {
@@ -47,39 +59,37 @@
       },
 
       _templateChanged: function(template, target) {
-        if (template) {
-          this.templatize(template);
-          this.instance = this.stamp(null);
+        this.templatize(template);
+        this.instance = this.stamp(null);
+        this.style.height = '';
+        var item = document.createElement('div');
+        var itemClass = 'item-' + target.childElementCount;
+        item.classList.add(itemClass);
 
-          var item = document.createElement('div');
-          var itemClass = 'item-' + target.childElementCount;
-          item.classList.add(itemClass);
+        if (Polymer.Settings.useShadow) {
 
-          if (Polymer.Settings.useShadow) {
+          Polymer.dom(target).appendChild(item);
 
-            Polymer.dom(target).appendChild(item);
+          var content = document.createElement('content');
+          content.setAttribute('select', '.' + itemClass);
+          Polymer.dom(this).appendChild(content);
 
-            var content = document.createElement('content');
-            content.setAttribute('select', '.' + itemClass);
-            Polymer.dom(this).appendChild(content);
+        } else {
+          // Non-shadow
+          Polymer.dom(this).appendChild(item);
 
-          } else {
-            // Non-shadow
-            Polymer.dom(this).appendChild(item);
+          // wait until item is really attached to DOM. (Polymer.dom.flush())
+          // not helping here for some reason.
+          this.async(function() {
+            Polymer.StyleTransformer.dom(item, 'vaadin-grid-scroller', false, true);
 
-            // wait until item is really attached to DOM. (Polymer.dom.flush())
-            // not helping here for some reason.
-            this.async(function() {
-              Polymer.StyleTransformer.dom(item, 'vaadin-grid-scroller', false, true);
+            if (this.target.domHost) {
+              Polymer.StyleTransformer.dom(this, this.target.domHost.tagName.toLowerCase(), false, false);
+            }
 
-              if (this.target.domHost) {
-                Polymer.StyleTransformer.dom(this, this.target.domHost.tagName.toLowerCase(), false, false);
-              }
-
-            });
-          }
-          Polymer.dom(item).appendChild(this.instance.root);
+          });
         }
+        Polymer.dom(item).appendChild(this.instance.root);
       }
 
 
