@@ -60,7 +60,14 @@
         it('are flex auto', function() {
           function getComputedFlexStyle(el) {
             var computedStyle = getComputedStyle(el);
-            return computedStyle.flex || computedStyle.WebkitFlex || computedStyle.MsFlex;
+            return computedStyle.flex ||
+                computedStyle.WebkitFlex ||
+                computedStyle.MsFlex ||
+                [
+                  computedStyle.flexGrow,
+                  computedStyle.flexShrink,
+                  computedStyle.flexBasis
+                ].join(' ');
           }
 
           expect(getComputedFlexStyle(first)).to.equal('1 1 auto');
