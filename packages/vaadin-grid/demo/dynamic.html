@@ -157,6 +157,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar>Every 3rd Row Height</app-toolbar>
           <paper-slider min="39" max="200" immediate-value="{{height}}" on-immediate-value-changed="_heightChanged"></paper-slider>
         </section>
+
+        <section>
+          <app-toolbar>Colspan</app-toolbar>
+          <paper-slider min="0" max="3" on-immediate-value-changed="_colspanChanged"></paper-slider>
+        </section>
       </app-drawer>
       <app-header-layout>
         <app-header class="mainHeader" condenses fixed effects="resize-title blend-background waterfall">
@@ -264,6 +269,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       scope._heightChanged = function(e) {
         scope.$.component.$.scroller.notifyResize();
+      };
+
+      scope._colspanChanged = function(e) {
+        var th = scope.$.component.$.scroller.$.header.querySelectorAll('th:not([frozen])')[0];
+        if (th) {
+          th.colspan = e.detail.value;
+        }
       };
 
     })(document.querySelector('template[is=dom-bind]'));
