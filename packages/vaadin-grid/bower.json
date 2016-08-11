@@ -22,6 +22,8 @@
     "iron-test-helpers": "^1.2.5"
   },
   "dependencies": {
-    "polymer": "^1.6.1"
+    "polymer": "^1.6.1",
+    "paper-slider": "^1.0.11",
+    "app-layout": "polymerelements/app-layout#^0.10.2"
   }
 }

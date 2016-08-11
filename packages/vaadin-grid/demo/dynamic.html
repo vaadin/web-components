@@ -1,0 +1,240 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <title>Vaadin Grid Scroller demo</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-list/iron-list.html">
+  <link rel="import" href="../../iron-ajax/iron-ajax.html">
+  <link rel="import" href="../../app-layout/app-scroll-effects/app-scroll-effects.html">
+  <link rel="import" href="../../app-layout/app-header/app-header.html">
+  <link rel="import" href="../../app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="../../app-layout/app-drawer-layout/app-drawer-layout.html">
+  <link rel="import" href="../../app-layout/app-drawer/app-drawer.html">
+  <link rel="import" href="../../app-layout/app-header-layout/app-header-layout.html">
+  <link rel="import" href="../../app-layout/demo/sample-content.html">
+
+  <link rel="import" href="../../paper-slider/paper-slider.html">
+
+  <link rel="import" href="../vaadin-grid.html">
+
+  <style is="custom-style">
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      background-color: #eee;
+    }
+
+    app-header {
+      background-color: #0b8043;
+      color: white;
+
+      --app-header-background-front-layer: {
+        background-color: #4285f4;
+      };
+    }
+
+    app-header paper-icon-button {
+      --paper-icon-button-ink-color: white;
+    }
+
+    iron-list {
+      background-color: var(--paper-grey-200, #eee);
+      padding-bottom: 16px;
+      @apply(--layout-flex);
+    }
+
+    .item {
+      @apply(--layout-horizontal);
+
+      margin: 16px 16px 0 16px;
+      padding: 20px;
+
+      border-radius: 8px;
+      background-color: white;
+      border: 1px solid #ddd;
+    }
+
+    .avatar {
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+      box-sizing: border-box;
+      background-color: #DDD;
+    }
+
+    .pad {
+      padding: 0 16px;
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+    }
+
+    .primary {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .secondary {
+      font-size: 14px;
+    }
+
+    .dim {
+      color: gray;
+    }
+
+    .mainHeader [main-title] {
+      font-weight: 400;
+      margin: 0 0 0 50px;
+    }
+
+    .mainHeader [condensed-title] {
+      font-weight: 400;
+      margin-left: 30px;
+    }
+
+    .mainHeader [condensed-title] i {
+      font-style: normal;
+      font-weight: 100;
+    }
+
+    app-toolbar.tall {
+      height: 148px;
+    }
+
+    vaadin-grid {
+      height: 500px;
+    }
+
+    paper-slider {
+
+    }
+  </style>
+
+</head>
+<body unresolved>
+
+  <template is="dom-bind">
+    <app-drawer-layout>
+      <app-drawer swipe-open>
+
+        <app-toolbar>Size</app-toolbar>
+        <paper-slider min="1" max="20000000000" value="{{size}}" editable></paper-slider>
+
+      </app-drawer>
+      <app-header-layout>
+        <app-header class="mainHeader" condenses fixed effects="resize-title blend-background waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <h4 condensed-title>Vaadin Grid Scroller</h4>
+          </app-toolbar>
+          <app-toolbar class="tall">
+            <h1 main-title>Vaadin Grid Scroller</h1>
+          </app-toolbar>
+        </app-header>
+
+        <vaadin-grid id="component" size="[[size]]" frozen-columns="1" row-count="2">
+          <vaadin-grid-column width="100px">
+            <template>
+              <i class="elItem">[[_getContent(index)]]</i>
+            </template>
+            <template is="header">
+              <b class="elItem">foo-h1</b>
+            </template>
+            <template is="header">
+              foo-h2
+            </template>
+          </vaadin-grid-column>
+
+          <vaadin-grid-column>
+            <template>
+              <div>bar-[[index]]</div>
+            </template>
+            <template is="header">
+              bar-h1
+            </template>
+            <template is="header">
+              bar-h2
+            </template>
+          </vaadin-grid-column>
+
+          <vaadin-grid-column width="400px">
+            <template>
+              <div>baz-[[index]]</div>
+            </template>
+            <template is="header">
+              baz-h1
+            </template>
+            <template is="header" colspan="2">
+              baz-h2
+            </template>
+          </vaadin-grid-column>
+
+          <vaadin-grid-column width="20%">
+            <template>
+              <button onclick="alert(this.textContent)">[[index]]</button>
+            </template>
+            <template is="header">
+              qux-h1
+            </template>
+            <template is="header">
+              qux-h2
+            </template>
+          </vaadin-grid-column>
+
+          <vaadin-grid-column min-width="100px">
+            <template>
+              derp
+            </template>
+            <template is="header">
+              derp
+            </template>
+            <template is="header">
+              derp
+            </template>
+          </vaadin-grid-column>
+
+        </vaadin-grid>
+
+        <iron-ajax url="../../app-layout/demo/contacts.json" last-response="{{data}}" auto></iron-ajax>
+
+      </app-header-layout>
+    </app-drawer-layout>
+
+  </template>
+
+  <script>
+    (function(scope) {
+
+      scope.iconForItem = function(item) {
+        return item ? (item.integer < 50 ? 'star-border' : 'star') : '';
+      };
+
+      scope.size = 1000;
+
+      scope._getContent = function(index) {
+        return 'foo-' + index;
+      };
+
+    })(document.querySelector('template[is=dom-bind]'));
+  </script>
+
+</body>
+</html>
