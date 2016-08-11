@@ -123,9 +123,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       height: 500px;
     }
 
-    paper-slider {
-
+    section {
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
     }
+
+    section app-toolbar {
+      padding: 0 !important;
+    }
+
+
   </style>
 
 </head>
@@ -135,10 +143,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-drawer-layout>
       <app-drawer swipe-open>
 
-        <app-toolbar>Size</app-toolbar>
-        <paper-slider min="1" max="20000000000" value="{{size}}" editable></paper-slider>
-        <app-toolbar>1st Column Width</app-toolbar>
-        <paper-slider min="100" max="300" immediate-value="{{width}}"></paper-slider>
+        <section>
+          <app-toolbar>Size</app-toolbar>
+          <paper-input value="{{size}}"></paper-input>
+        </section>
+
+        <section>
+          <app-toolbar>1st Column Width</app-toolbar>
+          <paper-slider min="100" max="300" immediate-value="{{width}}"></paper-slider>
+        </section>
 
       </app-drawer>
       <app-header-layout>
