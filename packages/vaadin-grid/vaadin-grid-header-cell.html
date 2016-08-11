@@ -71,6 +71,12 @@
 
       _templateChanged: function(template) {
         this.templatize(this.template);
+
+        // fix _rootDataHost to the context where template has been defined
+        if (template._rootDataHost) {
+          this._getRootDataHost = function() { return template._rootDataHost; };
+        }
+        
         this.instance = this.stamp(null);
 
         var item = document.createElement('div');

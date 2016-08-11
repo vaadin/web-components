@@ -57,8 +57,14 @@
                 if (headerTemplates) {
                   this.set('headers', headerTemplates.map(function(t) {
                     var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
+
+                    if (this.dataHost) {
+                      // set dataHost to the context where template has been defined
+                      t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+                    }
+
                     return { template: t, colspan: colspan };
-                  }));
+                  }.bind(this)));
                 } else {
                   this.set('headers', []);
                 }
@@ -67,7 +73,13 @@
           if (info.addedNodes.filter(isTemplate).length > 0 ||
             info.removedNodes.filter(isTemplate).length > 0) {
             // id works here better than using this.getContentChildren(selector);
-            this.set('template', Polymer.dom(this.$.contentForTemplate).getDistributedNodes()[0]);
+            var template = Polymer.dom(this.$.contentForTemplate).getDistributedNodes()[0];
+            if (this.dataHost) {
+              // set dataHost to the context where template has been defined
+              template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+            }
+
+            this.set('template', template);
 
             // assuming parent element is always a Polymer element.
             // set dataHost to the same context the template was declared in
