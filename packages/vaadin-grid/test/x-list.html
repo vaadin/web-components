@@ -33,7 +33,9 @@
       }
     </style>
 
-    <template id="cell">[[index]]</template>
+    <vaadin-grid-column id="column" width="100px">
+      <template id="cell">[[index]]</template>
+    </vaadin-grid-column>
 
     <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
       <content></content>
@@ -99,7 +101,7 @@
     // observer: ['_itemHeightChanged(itemHeight)'],
 
     ready: function() {
-      this.columns = [{width: '100px', template: this.$.cell, headers: []}];
+      this.columns = [this.$.column];
     },
 
     _itemHeightChanged: function(itemHeight) {

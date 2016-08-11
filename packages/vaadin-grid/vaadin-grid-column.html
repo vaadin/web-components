@@ -7,9 +7,6 @@
         display: none;
       }
     </style>
-    <!-- Header selector needs to be first, because it's a subset of "select=template" -->
-    <content id="contentForHeaderTemplates" select="template[is=header]"></content>
-    <content id="contentForTemplate" select="template"></content>
   </template>
   <script>
     Polymer({
@@ -20,7 +17,21 @@
           type: Array,
           notify: true,
           value: function() {
-            return [];
+            var headerTemplates = Polymer.dom(this).querySelectorAll('template[is=header]');
+            if (headerTemplates) {
+              return headerTemplates.map(function(t) {
+                var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
+
+                if (this.dataHost) {
+                  // set dataHost to the context where template has been defined
+                  t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+                }
+
+                return { template: t, colspan: colspan };
+              }.bind(this));
+            } else {
+              return [];
+            }
           }
         },
         instances: {
@@ -39,61 +50,20 @@
         },
         template: {
           type: Object,
-          notify: true
-        },
-        width: {
-          type: String,
           notify: true,
-          value: '100px'
-        }
-      },
-
-      created: function() {
-        this._observer = Polymer.dom(this).observeNodes(function(info) {
-          var isTemplate = function(node) {
-            return node.nodeType === Node.ELEMENT_NODE && node.tagName === 'TEMPLATE';
-          };
-          var isHeaderTemplate = function(node) {
-            return isTemplate(node) && node.hasAttribute('is') && node.getAttribute('is').toLowerCase() === 'header';
-          };
-
-          if (info.addedNodes.filter(isHeaderTemplate).length > 0 ||
-              info.removedNodes.filter(isHeaderTemplate).length > 0) {
-                var headerTemplates = Polymer.dom(this.$.contentForHeaderTemplates).getDistributedNodes();
-                if (headerTemplates) {
-                  this.set('headers', headerTemplates.map(function(t) {
-                    var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
-
-                    if (this.dataHost) {
-                      // set dataHost to the context where template has been defined
-                      t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-                    }
-
-                    return { template: t, colspan: colspan };
-                  }.bind(this)));
-                } else {
-                  this.set('headers', []);
-                }
-          }
-
-          if (info.addedNodes.filter(isTemplate).length > 0 ||
-            info.removedNodes.filter(isTemplate).length > 0) {
-            // id works here better than using this.getContentChildren(selector);
-            var template = Polymer.dom(this.$.contentForTemplate).getDistributedNodes()[0];
+          value: function() {
+            var template = Polymer.dom(this).querySelector('template:not([is=header])');
             if (this.dataHost) {
               // set dataHost to the context where template has been defined
               template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
             }
-
-            this.set('template', template);
-
-            // assuming parent element is always a Polymer element.
-            // set dataHost to the same context the template was declared in
-            // var parent = Polymer.dom(this.rowDetail).parentNode;
-            // this.rowDetail._rootDataHost = parent.dataHost ? (parent.dataHost._rootDataHost || parent.dataHost) : parent;
-
+            return template;
           }
-        }.bind(this));
+        },
+        width: {
+          type: String,
+          notify: true
+        }
       },
 
       ready: function() {

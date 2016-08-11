@@ -17,7 +17,7 @@
 
       observers: ['_columnsChanged(columns, headerIndex, target)', '_indexChanged(index, cells)', '_frozenColumnsChanged(frozenColumns, cells)'],
 
-      _colspanChanged: function() {
+      _updateCells: function() {
         var spanning = 0;
         this.cells.forEach(function(cell, index) {
 
@@ -48,6 +48,7 @@
         }.bind(this));
       },
 
+
       //TODO: implement support for columns.splices
       _columnsChanged: function(columns, headerIndex, target) {
         var cells = [];
@@ -60,7 +61,10 @@
           cell.column = column;
           cell.headerIndex = headerIndex;
 
-          this.listen(cell, 'colspan-changed', '_colspanChanged');
+          this.listen(cell, 'colspan-changed', '_updateCells');
+
+          this.listen(column, 'width-changed', '_updateCells');
+          this.listen(column, 'min-width-changed', '_updateCells');
 
           Polymer.dom(this).appendChild(cell);
           cells.push(cell);
@@ -68,7 +72,7 @@
         }.bind(this));
 
         this.cells = cells;
-        this._colspanChanged();
+        this._updateCells();
       },
 
       _frozenColumnsChanged: function(frozenColumns, cells) {

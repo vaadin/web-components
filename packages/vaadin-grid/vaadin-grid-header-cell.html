@@ -48,14 +48,6 @@
       _columnChanged: function(column) {
         this._headers = column.headers;
         this.listen(column, 'headers-changed', '_headersChanged');
-
-        this.style.flexBasis = column.minWidth || column.width || '100px';
-        this.listen(column, 'min-width-changed', '_widthChanged');
-        this.listen(column, 'width-changed', '_widthChanged');
-      },
-
-      _widthChanged: function(e) {
-        this.style.flexBasis = e.detail.value;
       },
 
       _headersChanged: function(e) {
