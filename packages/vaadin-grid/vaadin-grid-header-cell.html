@@ -29,7 +29,7 @@
 
       properties: {
         column: Object,
-        colspam: {
+        colspan: {
           type: Number,
           value: 0,
           notify: true
@@ -65,7 +65,7 @@
       _headerIndexChanged: function(headerIndex, headers) {
         if (headers[headerIndex]) {
           this.template = headers[headerIndex].template;
-          this.colspam = headers[headerIndex].colspan;
+          this.colspan = headers[headerIndex].colspan;
         }
       },
 

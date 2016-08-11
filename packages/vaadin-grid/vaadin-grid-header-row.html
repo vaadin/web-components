@@ -20,8 +20,14 @@
       _colspanChanged: function() {
         var spanning = 0;
         this.cells.forEach(function(cell, index) {
-          if (cell.colspam > 1) {
-            spanning = cell.colspam;
+
+          // TODO: reset cell styles to make sure colspan have be changed dynamically.
+          cell.style.display = '';
+          cell.style.flexBasis = this.columns[index].minWidth || this.columns[index].width || '100px';
+          cell.style.flexGrow = 1;
+
+          if (cell.colspan > 1) {
+            spanning = cell.colspan;
 
             var width = cell.style.flexBasis || '100px';
             var flex = cell.style.flexGrow || 1;
@@ -34,11 +40,11 @@
             cell.style.flexGrow = flex;
           }
 
-          if (!cell.colspam && spanning > 0) {
+          if (!cell.colspan && spanning > 0) {
             cell.style.display = 'none';
           }
 
-          spanning--;
+          spanning = Math.max(0, spanning - 1);
         }.bind(this));
       },
 
@@ -54,7 +60,7 @@
           cell.column = column;
           cell.headerIndex = headerIndex;
 
-          this.listen(cell, 'colspam-changed', '_colspanChanged');
+          this.listen(cell, 'colspan-changed', '_colspanChanged');
 
           Polymer.dom(this).appendChild(cell);
           cells.push(cell);
