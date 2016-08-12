@@ -78,6 +78,11 @@
 
       _vidxOffset: {
         value: 0
+      },
+
+      ios: {
+        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
+        reflectToAttribute: true
       }
     },
 
