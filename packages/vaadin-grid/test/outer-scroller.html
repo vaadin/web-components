@@ -51,6 +51,11 @@
         expect(outerRect.bottom).to.eql(listRect.bottom);
       });
 
+      it('should have the same scrollHeight/scrollWidth as the target', function() {
+        expect(outerScroller.scrollHeight).to.eql(target.scrollHeight);
+        expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
+      });
+
       describe('syncing with scroll target', function() {
 
         it('should scroll the target', function(done) {
@@ -102,9 +107,7 @@
         })();
 
         function outerScrollerInUse() {
-          var rect = scroller.list.getBoundingClientRect();
-          var element = getItemFromPoint(rect.right - scrollbarWidth - 1, rect.bottom - scrollbarWidth - 1);
-          return element.is === 'vaadin-grid-outer-scroller';
+          return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
         }
 
         it('should passtrough pointer events', function(done) {
