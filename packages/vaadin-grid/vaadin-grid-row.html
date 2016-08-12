@@ -96,16 +96,16 @@
 
           // TODO: reset cell styles to make sure colspan have be changed dynamically.
           cell.style.display = '';
-          cell.style.flexBasis = this.columns[index].minWidth || this.columns[index].width || '100px';
+          cell.style.flexBasis = this.columns[index].minWidth || this.columns[index].width;
           cell.style.flexGrow = 1;
 
           if (cell.colspan > 1) {
             spanning = cell.colspan;
 
-            var width = cell.style.flexBasis || '100px';
+            var width = cell.style.flexBasis;
             var flex = cell.style.flexGrow || 1;
             for (var i = 1; i < spanning; i++) {
-              width += ' + ' + (this.columns[index + i].minWidth || this.columns[index + i].width || '100px');
+              width += ' + ' + (this.columns[index + i].minWidth || this.columns[index + i].width);
               flex++;
             }
 

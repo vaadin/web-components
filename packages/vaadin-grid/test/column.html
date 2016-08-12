@@ -48,32 +48,12 @@
           expect(column.template.innerHTML).to.eql('cell');
         });
 
-        it('should update template property when template is removed', function(done) {
-          var template = column.template;
-          Polymer.dom(column).removeChild(column.template);
-
-          flush(function() {
-            expect(column.template).to.be.undefined;
-            done();
-          });
-        });
-
         it('should notify changes', function(done) {
           column.addEventListener('template-changed', function() {
             done();
           });
 
           Polymer.dom(column).removeChild(column.template);
-        });
-
-        it('should use the first cell template', function(done) {
-          var foobar = document.createElement('template');
-          Polymer.dom(column).insertBefore(foobar, column.template);
-
-          flush(function() {
-            expect(column.template).to.eql(foobar);
-            done();
-          });
         });
       });
 
@@ -89,32 +69,12 @@
           expect(column.headers[1].colspan).to.eql(2);
         });
 
-        it('should update headers property when template is removed', function(done) {
-          Polymer.dom(column).removeChild(column.headers[0].template);
-
-          flush(function() {
-            expect(column.headers.length).to.eql(1);
-            done();
-          });
-        });
-
         it('should notify changes', function(done) {
           column.addEventListener('headers-changed', function() {
             done();
           });
 
           Polymer.dom(column).removeChild(column.headers[0].template);
-        });
-
-        it('should update headers when template is added', function(done) {
-          var foobar = document.createElement('template');
-          foobar.setAttribute('is', 'header');
-          Polymer.dom(column).insertBefore(foobar, column.headers[1].template);
-
-          flush(function() {
-            expect(column.headers[1].template).to.eql(foobar);
-            done();
-          });
         });
       });
     });
