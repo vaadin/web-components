@@ -103,10 +103,7 @@ Vaadin Split Panel
       },
 
       _processChildren: function() {
-        var childNodes = Polymer.dom(this).getEffectiveChildNodes();
-        var children = Array.prototype.filter.call(childNodes, function(node) {
-          return node.nodeType === Node.ELEMENT_NODE;
-        });
+        var children = this.getEffectiveChildren();
         this._primaryChild = children[0];
         this._secondaryChild = children[1];
         children.forEach(function(child, i) {
