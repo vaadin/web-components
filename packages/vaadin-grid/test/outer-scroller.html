@@ -43,6 +43,14 @@
         expect(spy.called).to.be.true;
       });
 
+      it('should have the same size as the scroller', function() {
+        var outerRect = outerScroller.getBoundingClientRect();
+        expect(outerRect.left).to.eql(listRect.left);
+        expect(outerRect.right).to.eql(listRect.right);
+        expect(outerRect.top).to.eql(listRect.top);
+        expect(outerRect.bottom).to.eql(listRect.bottom);
+      });
+
       describe('syncing with scroll target', function() {
 
         it('should scroll the target', function(done) {
@@ -76,7 +84,7 @@
           scroller.list.dispatchEvent(e);
         }
 
-        var scrollbarWidth = (function(){
+        var scrollbarWidth = (function() {
           // Create the measurement node
           var scrollDiv = document.createElement("div");
           scrollDiv.style.width = '100px';
@@ -93,9 +101,15 @@
           return scrollbarWidth;
         })();
 
+        function outerScrollerInUse() {
+          var rect = scroller.list.getBoundingClientRect();
+          var element = getItemFromPoint(rect.right - scrollbarWidth - 1, rect.bottom - scrollbarWidth - 1);
+          return element.is === 'vaadin-grid-outer-scroller';
+        }
+
         it('should passtrough pointer events', function(done) {
           scroller.list.addEventListener('mousemove', function() {
-            expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
+            expect(outerScrollerInUse()).to.be.false;
             done();
           });
 
@@ -105,7 +119,7 @@
         it('should not passtrough iff scrollbars exist (vertical scrollbar hover)', function(done) {
           scroller.list.addEventListener('mousemove', function() {
             var pointerEvents = window.getComputedStyle(outerScroller).pointerEvents;
-            expect(pointerEvents === 'none').to.be[scrollbarWidth === 0 ? 'true' : 'false'];
+            expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
             done();
           });
           move(listRect.width, 1);
@@ -114,7 +128,7 @@
         it('should not passtrough iff scrollbars exist (horizontal scrollbar hover)', function(done) {
           scroller.list.addEventListener('mousemove', function() {
             var pointerEvents = window.getComputedStyle(outerScroller).pointerEvents;
-            expect(pointerEvents === 'none').to.be[scrollbarWidth === 0 ? 'true' : 'false'];
+            expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
             done();
           });
           move(1, listRect.height);
