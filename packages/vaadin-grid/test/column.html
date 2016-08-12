@@ -47,14 +47,6 @@
         it('should read template from light DOM', function() {
           expect(column.template.innerHTML).to.eql('cell');
         });
-
-        it('should notify changes', function(done) {
-          column.addEventListener('template-changed', function() {
-            done();
-          });
-
-          Polymer.dom(column).removeChild(column.template);
-        });
       });
 
       describe('header templates', function() {
@@ -67,14 +59,6 @@
         it('should read colspan from template attributes', function() {
           expect(column.headers[0].colspan).to.eql(0);
           expect(column.headers[1].colspan).to.eql(2);
-        });
-
-        it('should notify changes', function(done) {
-          column.addEventListener('headers-changed', function() {
-            done();
-          });
-
-          Polymer.dom(column).removeChild(column.headers[0].template);
         });
       });
     });
