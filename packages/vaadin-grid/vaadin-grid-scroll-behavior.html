@@ -148,7 +148,13 @@
 
     _cacheElements: function() {
       this.debounce('cache-elements', function() {
+        var oldCells = this._frozenCells || [];
         this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
+        oldCells.filter(function(cell) {
+          return this._frozenCells.indexOf(cell) === -1;
+        }.bind(this)).forEach(function(cell) {
+          cell.style.transform = '';
+        }.bind(this));
       });
     },
 

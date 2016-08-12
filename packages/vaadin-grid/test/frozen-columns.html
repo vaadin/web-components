@@ -95,8 +95,22 @@
             scroller.$.table.scrollLeft = defaultCellWidth;
           });
 
-        });
+          it('should reset transform on unfrozen cells frozen columns change', function(done) {
+            var cells = getRowCells(containerRows[0]);
 
+            scroller.$.table.addEventListener('scroll', function() {
+              expect(cells[0].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');
+
+              scroller.frozenColumns = 0;
+              flush(function() {
+                expect(cells[0].style.transform).to.be.empty;
+                done();
+              })
+            });
+            scroller.$.table.scrollLeft = defaultCellWidth;
+
+          });
+        });
       });
 
 
