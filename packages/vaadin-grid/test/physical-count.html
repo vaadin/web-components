@@ -25,7 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <test-fixture id="trivialList">
     <template>
-      <x-list list-height="100" item-height="2"></x-list>
+      <x-list list-height="100" item-height="20"></x-list>
     </template>
   </test-fixture>
 
@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var expectedFinalItem = Math.round(container.listHeight/lastItemHeight) - 1;
 
           assert.equal(list.offsetHeight, container.listHeight);
-          assert.equal(lastItemHeight, 2 + 8 + 8); // height + paddings
+          assert.equal(lastItemHeight, 20);
           assert.isTrue(isFullOfItems(list));
           assert.equal(lastItem.textContent, expectedFinalItem);
           done();

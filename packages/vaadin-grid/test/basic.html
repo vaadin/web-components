@@ -60,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       list.size = 10;
 
       flush(function() {
-        expect(Polymer.dom(list.root).querySelectorAll('tr:not([hidden])').length).to.eql(10);
+        expect(Polymer.dom(list.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
         done();
       });
     });
@@ -109,12 +109,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         list.scrollToIndex(0);
         assert.equal(list.firstVisibleIndex, 0);
 
+        list.scrollToIndex(99);
+
         var rowHeight = getFirstItemFromList(list).offsetHeight;
         var viewportHeight = list.offsetHeight;
-        var itemsPerViewport = Math.floor(viewportHeight/rowHeight);
+        var itemsPerViewport = viewportHeight/rowHeight;
 
-        list.scrollToIndex(99);
-        assert.equal(list.firstVisibleIndex, list.size - itemsPerViewport);
+        assert.equal(list.firstVisibleIndex, Math.floor(list.size - itemsPerViewport));
 
         // make the height of the viewport same as the height of the row
         // and scroll to the last item
@@ -156,16 +157,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       list.size = 100;
 
       flush(function() {
-        assert.equal(getFirstItemFromList(list).textContent, '0');
+        assert.equal(getFirstItemFromList(list.$.items).textContent, '0');
 
         list.size = 0;
 
         flush(function() {
-          assert.notEqual(getFirstItemFromList(list).textContent, '0');
+          assert.notEqual(getFirstItemFromList(list.$.items).textContent, '0');
           list.size = 100;
 
           flush(function() {
-            assert.equal(getFirstItemFromList(list).textContent, '0');
+            assert.equal(getFirstItemFromList(list.$.items).textContent, '0');
             done();
           });
         });

@@ -53,14 +53,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         list.size = 100;
         list.fire('iron-resize');
 
-        assert.notEqual(getFirstItemFromList(list).textContent, '0');
+        assert.notEqual(getFirstItemFromList(list.$.items).textContent, '0');
         Polymer.RenderStatus.whenReady(function() {
           container.removeAttribute('hidden');
-          assert.notEqual(getFirstItemFromList(list).textContent, '0');
+          assert.notEqual(getFirstItemFromList(list.$.items).textContent, '0');
           list.fire('iron-resize');
           flush(function() {
             assert.isTrue(list.isAttached);
-            assert.equal(getFirstItemFromList(list).textContent, '0');
+            assert.equal(getFirstItemFromList(list.$.items).textContent, '0');
             done();
           });
         });

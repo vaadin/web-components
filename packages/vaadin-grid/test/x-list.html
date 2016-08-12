@@ -1,6 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../vaadin-grid-scroller.html">
+<link rel="import" href="../vaadin-grid-column.html">
 
 <dom-module id="x-list">
   <template>
@@ -40,18 +41,7 @@
     <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
       <content></content>
     </vaadin-grid-scroller>
-
-
-    <!-- <iron-list style$="[[_computedListHeight(listHeight)]]" items="[[data]]" as="item" id="list">
-      <template>
-        <div class="item" tabindex$="[[tabIndex]]">
-          <div style$="[[_computedItemHeight(item)]]" tabindex="0" hidden$="[[primitive]]">[[item.index]]</div>
-          <div style$="[[_computedItemHeight(item)]]" tabindex="0" hidden$="[[!primitive]]">[[item]]</div>
-        </div>
-      </template>
-    </iron-list> -->
   </template>
-
 </dom-module>
 
 <script>
@@ -98,10 +88,9 @@
       }
     },
 
-    // observer: ['_itemHeightChanged(itemHeight)'],
-
     ready: function() {
-      this.columns = [this.$.column];
+      var columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+      this.columns = columns.length > 0 ? columns : [this.$.column];
     },
 
     _itemHeightChanged: function(itemHeight) {
