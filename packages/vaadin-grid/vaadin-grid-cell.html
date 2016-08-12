@@ -41,10 +41,19 @@
         instance: Object,
         index: Number,
         template: Object,
-        target: Object
+        target: Object,
+
+        _forwardedParentProps: {
+          value: function() {
+            return {};
+          }
+        }
       },
 
-      observers: ['_columnChanged(column)', '_templateChanged(template, target)', '_indexChanged(index, instance)'],
+      observers: ['_columnChanged(column)',
+                  '_templateChanged(template, target)',
+                  '_indexChanged(index, instance)',
+                  '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)'],
 
       created: function() {
         this._instanceProps = {
@@ -85,9 +94,14 @@
 
         this.instance = this.stamp(null);
 
-        if (this.column.instances) {
-          this.column.push('instances', this.instance);
+        // initializing new template instance with previously forwarded parent props.
+        // could be done with observers, but this is simpler.
+        for (var key in this._forwardedParentProps) {
+          this.instance[key] = this._forwardedParentProps[key];
         }
+
+        this.column.instances = this.column.instances || [];
+        this.column.push('instances', this.instance);
 
         this.style.height = '';
         var item = document.createElement('div');
@@ -121,9 +135,20 @@
       },
 
       _forwardParentProp: function(prop, value) {
-        this.column.instances.forEach(function(inst) {
-          inst.notifyPath(prop, value);
-        });
+        // _forwardParentProp might be called during this.stamp() before
+        // this.instance is set. We need to delay it until instance is set.
+        this.set('_forwardedParentProps.' + prop, value);
+      },
+
+      _forwardedParentPropsChanged: function(parentProps) {
+        if (parentProps.path !== '_forwardedParentProps') {
+          var prop = parentProps.path.substring(parentProps.path.indexOf('.') + 1);
+          var value = parentProps.value;
+
+          this.column.instances.forEach(function(inst) {
+            inst.notifyPath(prop, value);
+          });
+        }
       }
     };
 

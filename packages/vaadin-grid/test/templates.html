@@ -1,0 +1,161 @@
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+</head>
+<body>
+
+  <dom-module id="x-grid">
+    <template>
+      <vaadin-grid size="100" id="grid" frozen-columns="1" style="height: 300px">
+        <vaadin-grid-column>
+          <template>[[_format(index)]] [[parentProp]]</template>
+          <template is="header">[[_format('header1')]] [[parentProp]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>
+            <paper-input on-value-changed="_valueChanged" value="{{parentProp}}"></paper-input>
+          </template>
+          <template is="header">
+            <paper-input on-invalid-changed="_invalidChanged" value="{{parentProp}}"></paper-input>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+    Polymer({
+      is: 'x-grid',
+
+      properties: {
+        parentProp: String
+      },
+
+      _format: function(value) {
+        return 'foo' + value;
+      },
+
+      _valueChanged: function() {
+        this.valueChanged = true;
+      },
+
+      _invalidChanged: function() {
+        this.invalidChanged = true;
+      },
+    });
+    </script>
+  </dom-module>
+
+  <test-fixture id="formatting">
+    <template>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="parentProp">
+
+  </test-fixture>
+
+  <test-fixture id="eventHandlers"></test-fixture>
+
+  <script>
+    function getCell(index) {
+      return grid.$.scroller.$.items.querySelectorAll('td')[index];
+    }
+
+    function getFirstCell() {
+      return getCell(0);
+    }
+
+    function getHeaderCell(index) {
+      return grid.$.scroller.$.header.querySelectorAll('th')[index];
+    }
+
+    function getFirstHeaderCell() {
+      return getHeaderCell(0);
+    }
+
+    describe('templating', function() {
+      var container, grid;
+
+      beforeEach(function(done) {
+        container = fixture('formatting');
+        grid = container.$.grid;
+        flush(done);
+      });
+
+      describe('using functions inside templates', function() {
+        it('should work inside cell templates', function() {
+          expect(getFirstCell().textContent).to.contain('foo0');
+        });
+
+        it('should header templates', function() {
+          expect(getFirstHeaderCell().textContent).to.contain('fooheader1');
+        });
+      });
+
+      describe('using parent properties inside templates', function() {
+        beforeEach(function() {
+          container.parentProp = 'foobar';
+        });
+
+        it('should bind inside cell templates', function() {
+          expect(getCell(0).textContent).to.contain('foobar');
+          expect(getCell(2).textContent).to.contain('foobar');
+        });
+
+        it('should two-way bind parent properties inside cell templates', function() {
+          var input = getCell(1).querySelector('paper-input');
+          expect(input.value).to.eql('foobar');
+
+          input.value = 'value';
+
+          expect(container.parentProp).to.eql('value');
+        });
+
+        it('should bind inside header templates', function() {
+          expect(getFirstHeaderCell().textContent).to.contain('foobar');
+        });
+
+        it('should two-way bind parent properties inside header templates', function() {
+          var input = getHeaderCell(1).querySelector('paper-input');
+          expect(input.value).to.eql('foobar');
+
+          input.value = 'value';
+
+          expect(container.parentProp).to.eql('value');
+        });
+      });
+
+      describe('using event handlers inside templates', function() {
+        it('should add event listeners inside cell templates', function() {
+          var input = getCell(1).querySelector('paper-input');
+
+          input.value = 'foo';
+
+          expect(container.valueChanged).to.eql(true);
+        });
+
+        it('should add event listeners inside header templates', function() {
+          var input = getHeaderCell(1).querySelector('paper-input');
+
+          input.invalid = true;
+
+          expect(container.invalidChanged).to.eql(true);
+        });
+      });
+    });
+
+
+  </script>
+
+</body>
+</html>
