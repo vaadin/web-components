@@ -1,15 +1,8 @@
-<dom-module id="fixedmode-styles">
+<dom-module id="scroll-styles">
   <template>
     <style>
       :host {
         transform: translateZ(0);
-      }
-
-      :host([fixedmode]) {
-        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
-        a containing block. The object acts as a containing block for fixed positioned descendants. */
-        transform: translateZ(0);
-        overflow: hidden;
       }
 
       #header {
@@ -20,11 +13,6 @@
 
       #items {
         z-index: -1;
-      }
-
-      td, th {
-        /*will-change: translate;*/
-        /*transform: translateZ(0);*/
       }
 
       [frozen] {
@@ -47,10 +35,6 @@
         transform: translateZ(0);
       }
 
-      :host[edge] tbody {
-        /*z-index: 1;*/
-      }
-
       #sizer {
         position: absolute;
         display: flex;
@@ -71,10 +55,6 @@
   vaadin.elements.grid.GridScrollBehaviorImpl = {
 
     properties: {
-      fixedmode: {
-        value: false,
-        reflectToAttribute: true
-      },
 
       _vidxOffset: {
         value: 0
@@ -173,25 +153,11 @@
     },
 
     _onScroll: function() {
-      if (!this.fixedmode && !this.edge) {
-        this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
+      this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
 
-        var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
-        for (var i = 0; i < this._frozenCells.length; i++) {
-          this._frozenCells[i].style.transform = frozenCellTransform;
-        }
-      } else {
-        Polymer.dom(this.root).querySelectorAll('tbody [frozen]').forEach(function(cell) {
-          cell.style.transform = this._getTranslate3d(this._scrollLeft, 0);
-        }, this);
-
-        Polymer.dom(this.root).querySelectorAll('thead th:not([frozen])').forEach(function(cell) {
-          cell.style.transform = this._getTranslate3d(-this._scrollLeft, 0);
-        }, this);
-
-        this.$.items.style.transform =
-          this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
-
+      var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
+      for (var i = 0; i < this._frozenCells.length; i++) {
+        this._frozenCells[i].style.transform = frozenCellTransform;
       }
     },
 

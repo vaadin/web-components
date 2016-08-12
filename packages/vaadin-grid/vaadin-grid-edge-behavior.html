@@ -30,11 +30,23 @@
 
   vaadin.elements.grid.EdgeBehavior = {
 
-    properties: {
-      edge: {
-        value: navigator.userAgent.match(/Edge/),
-        reflectToAttribute: true
-      }
+    hostAttributes: {
+      edge: true
+    },
+
+    _onScroll: function() {
+      // TODO: Cache queries
+      Polymer.dom(this.root).querySelectorAll('tbody [frozen]').forEach(function(cell) {
+        cell.style.transform = this._getTranslate3d(this._scrollLeft, 0);
+      }, this);
+
+      Polymer.dom(this.root).querySelectorAll('thead th:not([frozen])').forEach(function(cell) {
+        cell.style.transform = this._getTranslate3d(-this._scrollLeft, 0);
+      }, this);
+
+      this.$.items.style.transform =
+        this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
     }
+
   };
 </script>

@@ -14,7 +14,7 @@
 <dom-module id="vaadin-grid-scroller">
   <link rel="import" type="css" href="../bootstrap/dist/css/bootstrap.css">
   <template>
-    <style include="fixedmode-styles"></style>
+    <style include="scroll-styles"></style>
     <style include="vaadin-grid-edge-styles"></style>
     <style>
       :host {
@@ -130,10 +130,11 @@
     behaviors: [
       vaadin.elements.grid.IronListBehavior,
       vaadin.elements.grid.GridScrollBehavior,
-      vaadin.elements.grid.EdgeBehavior,
       Polymer.Templatizer,
       Polymer.IronResizableBehavior,
-      Polymer.IronScrollTargetBehavior
+      Polymer.IronScrollTargetBehavior,
+
+      navigator.userAgent.match(/Edge/) ? vaadin.elements.grid.EdgeBehavior : vaadin.elements.grid.GridScrollBehavior
     ],
 
     properties: {
