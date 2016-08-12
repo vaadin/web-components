@@ -1,9 +1,12 @@
 <link rel="import" href="vaadin-grid-cell.html">
 
-<dom-module id="vaadin-grid-row">
-  <script>
-    Polymer({
-      is: 'vaadin-grid-row',
+<dom-module id="vaadin-grid-row"></dom-module>
+<dom-module id="vaadin-grid-header-row"></dom-module>
+
+<script>
+  (function() {
+    var vaadinGridRowBehavior = {
+
       extends: 'tr',
 
       properties: {
@@ -16,7 +19,11 @@
         target: Object
       },
 
-      observers: ['_columnsChanged(columns, target)', '_indexChanged(index, cells)', '_frozenColumnsChanged(frozenColumns, cells)'],
+      observers: [
+        '_columnsChanged(columns, target)',
+        '_indexChanged(index, cells)',
+        '_frozenColumnsChanged(frozenColumns, cells)'
+      ],
 
       //TODO: implement support for columns.splices
       _columnsChanged: function(columns, target) {
@@ -57,6 +64,94 @@
           cell.index = index;
         });
       }
+
+    };
+
+    Polymer({
+      is: 'vaadin-grid-row',
+
+      behaviors: [
+        vaadinGridRowBehavior
+      ]
     });
-  </script>
-</dom-module>
+
+    Polymer({
+      is: 'vaadin-grid-header-row',
+
+      behaviors: [
+        vaadinGridRowBehavior
+      ],
+
+      properties: {
+        headerIndex: Object
+      },
+
+      observers: [
+        '_columnsChanged(columns, target, headerIndex)'
+      ],
+
+      _updateCells: function() {
+        var spanning = 0;
+        this.cells.forEach(function(cell, index) {
+
+          // TODO: reset cell styles to make sure colspan have be changed dynamically.
+          cell.style.display = '';
+          cell.style.flexBasis = this.columns[index].minWidth || this.columns[index].width || '100px';
+          cell.style.flexGrow = 1;
+
+          if (cell.colspan > 1) {
+            spanning = cell.colspan;
+
+            var width = cell.style.flexBasis || '100px';
+            var flex = cell.style.flexGrow || 1;
+            for (var i = 1; i < spanning; i++) {
+              width += ' + ' + (this.columns[index + i].minWidth || this.columns[index + i].width || '100px');
+              flex++;
+            }
+
+            cell.style.flexBasis = 'calc(' + width + ')';
+            cell.style.flexGrow = flex;
+          }
+
+          if (!cell.colspan && spanning > 0) {
+            cell.style.display = 'none';
+          }
+
+          spanning = Math.max(0, spanning - 1);
+        }.bind(this));
+      },
+
+      //TODO: implement support for columns.splices
+      _columnsChanged: function(columns, target, headerIndex) {
+        this.cells.forEach(function(cell) {
+          Polymer.dom(this).removeChild(cell);
+        }, this);
+
+        var cells = [];
+        var spanning = 0;
+
+        columns.forEach(function(column, columnIndex) {
+          var cell = document.createElement('th', 'vaadin-grid-header-cell');
+          cell.index = this.index;
+          cell.target = this.target;
+          cell.column = column;
+          cell.headerIndex = headerIndex;
+
+          this.listen(cell, 'colspan-changed', '_updateCells');
+
+          this.listen(column, 'width-changed', '_updateCells');
+          this.listen(column, 'min-width-changed', '_updateCells');
+
+          Polymer.dom(this).appendChild(cell);
+          cells.push(cell);
+
+        }.bind(this));
+
+        this.cells = cells;
+        this._updateCells();
+      },
+
+    });
+
+  })();
+</script>
