@@ -76,6 +76,23 @@
           scroller.list.dispatchEvent(e);
         }
 
+        var scrollbarWidth = (function(){
+          // Create the measurement node
+          var scrollDiv = document.createElement("div");
+          scrollDiv.style.width = '100px';
+          scrollDiv.style.height = '100px';
+          scrollDiv.style.overflow = 'scroll';
+          scrollDiv.style.position = 'absolute';
+          scrollDiv.style.top = '-9999px';
+          document.body.appendChild(scrollDiv);
+          // Get the scrollbar width
+          var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+          // Delete the DIV
+          document.body.removeChild(scrollDiv);
+          return scrollbarWidth;
+        })();
+
         it('should passtrough pointer events', function(done) {
           scroller.list.addEventListener('mousemove', function() {
             expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
@@ -85,53 +102,23 @@
           move(1, 1);
         });
 
-        // describe('visible scrollbars', function() {
-        //
-        //   beforeEach(function() {
-        //     outerScroller.scrollbarWidth = 10;
-        //   });
-        //
-        //   it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
-        //     scroller.list.addEventListener('mousemove', function() {
-        //       expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
-        //       done();
-        //     });
-        //     move(listRect.width, 1);
-        //   });
-        //
-        //   it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
-        //     scroller.list.addEventListener('mousemove', function() {
-        //       expect(window.getComputedStyle(outerScroller).pointerEvents).not.to.equal('none');
-        //       done();
-        //     });
-        //     move(1, listRect.height);
-        //   });
-        //
-        // });
-        //
-        // describe('invisible scrollbars', function() {
-        //
-        //   beforeEach(function() {
-        //     outerScroller.scrollbarWidth = 0;
-        //   });
-        //
-        //   it('should not passtrough pointer events (vertical scrollbar hover)', function(done) {
-        //     scroller.list.addEventListener('mousemove', function() {
-        //       expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
-        //       done();
-        //     });
-        //     move(listRect.width, 1);
-        //   });
-        //
-        //   it('should not passtrough pointer events (horizontal scrollbar hover)', function(done) {
-        //     scroller.list.addEventListener('mousemove', function() {
-        //       expect(window.getComputedStyle(outerScroller).pointerEvents).to.equal('none');
-        //       done();
-        //     });
-        //     move(1, listRect.height);
-        //   });
-        //
-        // });
+        it('should not passtrough iff scrollbars exist (vertical scrollbar hover)', function(done) {
+          scroller.list.addEventListener('mousemove', function() {
+            var pointerEvents = window.getComputedStyle(outerScroller).pointerEvents;
+            expect(pointerEvents === 'none').to.be[scrollbarWidth === 0 ? 'true' : 'false'];
+            done();
+          });
+          move(listRect.width, 1);
+        });
+
+        it('should not passtrough iff scrollbars exist (horizontal scrollbar hover)', function(done) {
+          scroller.list.addEventListener('mousemove', function() {
+            var pointerEvents = window.getComputedStyle(outerScroller).pointerEvents;
+            expect(pointerEvents === 'none').to.be[scrollbarWidth === 0 ? 'true' : 'false'];
+            done();
+          });
+          move(1, listRect.height);
+        });
 
       });
 
