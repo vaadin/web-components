@@ -10,33 +10,38 @@
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="x-list.html">
+  <link rel="import" href="../vaadin-grid.html">
 </head>
 
 <body>
 
   <test-fixture id="frozen-columns">
     <template>
-      <x-list frozen-columns="1"></x-list>
+      <vaadin-grid frozen-columns="1" style="width: 200px; height: 400px;" size="1000">
+        <vaadin-grid-column>
+          <template>foo</template>
+          <template is="header">foo</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>foo</template>
+          <template is="header">foo</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>foo</template>
+          <template is="header">foo</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
     </template>
   </test-fixture>
 
   <script>
     describe('frozen columns', function() {
+      var grid;
       var scroller;
 
       beforeEach(function(done) {
-        scroller = fixture('frozen-columns');
-
-        scroller.columns = [1, 2, 3].map(function() {
-          return {
-            template: scroller.$.cell,
-            headers: [{
-              template: scroller.$.cell
-            }]
-          };
-        });
-        scroller.style.width = '200px';
+        grid = fixture('frozen-columns');
+        scroller = grid.$.scroller;
 
         Polymer.Base.async(done, 1);
 
@@ -50,7 +55,7 @@
           var containerRows;
 
           beforeEach(function() {
-            containerElement = scroller.list.$$(container);
+            containerElement = scroller.$$(container);
             containerRows = getRows(containerElement);
           });
 
@@ -74,9 +79,10 @@
             var containerTop = initialContainerRect.top + 1;
             var cells = getRowCells(containerRows[0]);
 
-            scroller.list.$.table.addEventListener('scroll', function() {
+            scroller.$.table.addEventListener('scroll', function() {
               var scrollingCellContent = getItemFromPoint(
                 initialContainerRect.left + defaultCellWidth * 1.5, containerTop);
+
               expect(scrollingCellContent).to.equal(getCellContent(cells[2]));
 
               var frozenCellContent = getItemFromPoint(
@@ -86,7 +92,7 @@
               done();
             });
 
-            scroller.list.$.table.scrollLeft = defaultCellWidth;
+            scroller.$.table.scrollLeft = defaultCellWidth;
           });
 
         });
