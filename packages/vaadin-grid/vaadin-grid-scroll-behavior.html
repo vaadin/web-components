@@ -167,7 +167,9 @@
     },
 
     _cacheElements: function() {
-      this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
+      this.debounce('cache-elements', function() {
+        this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
+      });
     },
 
     _onScroll: function() {
