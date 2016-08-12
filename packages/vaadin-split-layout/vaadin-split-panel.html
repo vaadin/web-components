@@ -1,3 +1,58 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-split-panel>` is a Polymer element implementing a split layout for two
+content elements with a draggable splitter between them.
+
+```html
+<vaadin-split-panel>
+  <div>First panel content</div>
+  <div>Second panel content</div>
+</vaadin-split-panel>
+```
+
+### Horizontal and Vertical Layouts
+
+By default, the split is horizontal, meaning that the content elements are
+positioned side by side in a flex container with a horizontal layout.
+
+You can change the split mode to vertical by adding the `vertical` attribute:
+
+```html
+<vaadin-split-panel vertical>
+  <div>Content on the top</div>
+  <div>Content on the bottom</div>
+</vaadin-split-panel>
+```
+
+You can also trigger the vertical mode by setting the property:
+`splitPanel.vertical = true`.
+
+### Initial Sizes and Size Limits
+
+The initial sizes for the content elements are determined from their size values
+corresponding to the split layout. `width` is used for the horizontal
+layout, while `height` is used for the vertical one. Then the sizes of the
+content elements are scaled proportionally to fit in the split panel size.
+
+The `min-width`/`min-height`, and `max-width`/`max-height` CSS size values
+for the content elements are respected and used to limit the splitter position
+when it is dragged.
+
+### Resize Notification
+
+This element implements `IronResizableBehavior` to notify the nested resizables
+when the splitter is dragged. In order to define a resizable and receive that
+notification in a nested element, include `IronResizableBehavior` and listen
+for the `iron-resize` event.
+
+@element vaadin-split-panel
+-->
+
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
@@ -10,13 +65,6 @@
 <g id="more-vert"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
-
-<!--
-`vaadin-split-panel`
-Vaadin Split Panel
-
-@demo demo/index.html
--->
 
 <dom-module id="vaadin-split-panel">
   <template>
@@ -88,9 +136,13 @@ Vaadin Split Panel
       ],
 
       properties: {
+        /**
+         * Change the split layout to vertical
+         */
         vertical: {
           type: Boolean,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          value: false
         }
       },
 
@@ -160,5 +212,12 @@ Vaadin Split Panel
       }
 
     });
+
+    /**
+     * Fired when the splitter is dragged. Non-bubbing. Fired for the splitter
+     * element and any nested elements with `IronResizableBehavior`.
+     *
+     * @event iron-resize
+     */
   </script>
 </dom-module>

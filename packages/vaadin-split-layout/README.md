@@ -1,38 +1,24 @@
-# \<vaadin-split-panel\>
+![Bower version](https://img.shields.io/bower/v/vaadin-split-panel.svg)
+[![Build status](https://travis-ci.org/vaadin/vaadin-split-panel.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-split-panel)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Vaadin Split Panel
+# &lt;vaadin-split-panel&gt;
 
-## Install the Polymer-CLI
+[&lt;vaadin-split-panel&gt;](https://vaadin.com/elements/-/element/vaadin-upload) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+<!--- ## Getting started --->
 
-## Viewing Your Application
+<!--- Visit https://vaadin.com/elements/-/element/vaadin-split-panel for features, demos and documentation. --->
 
-```
-$ polymer serve
-```
+## Contributing
 
-## Building Your Application
+See the [contribution instructions](https://github.com/vaadin/vaadin-core-elements#contributing) which apply to all Vaadin core elements.
 
-```
-$ polymer build
-```
+## Development
 
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
+See the [development instructions](https://github.com/vaadin/vaadin-core-elements#development) which apply to all Vaadin core elements.
 
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
+## License
 
-```
-$ polymer serve build/bundled
-```
+Apache License 2.0
 
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
