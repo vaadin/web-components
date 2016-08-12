@@ -15,7 +15,7 @@
 `vaadin-split-panel`
 Vaadin Split Panel
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="vaadin-split-panel">
@@ -103,10 +103,7 @@ Vaadin Split Panel
       },
 
       _processChildren: function() {
-        var childNodes = Polymer.dom(this).getEffectiveChildNodes();
-        var children = Array.prototype.filter.call(childNodes, function(node) {
-          return node.nodeType === Node.ELEMENT_NODE;
-        });
+        var children = this.getEffectiveChildren();
         this._primaryChild = children[0];
         this._secondaryChild = children[1];
         children.forEach(function(child, i) {
@@ -139,22 +136,22 @@ Vaadin Split Panel
 
         var size = this.vertical ? 'height' : 'width';
         if (event.detail.state === 'start') {
-          this._containerStartSize = this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size];
-          this._primaryStartSize = this._primaryChild.getBoundingClientRect()[size];
-          this._secondaryStartSize = this._secondaryChild.getBoundingClientRect()[size];
+          this._startSize = {
+            container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
+            primary: this._primaryChild.getBoundingClientRect()[size],
+            secondary: this._secondaryChild.getBoundingClientRect()[size]
+          };
           return;
         }
 
         var distance = this.vertical ? event.detail.dy : event.detail.dx;
-        this._setFlexBasis(this._primaryChild, this._primaryStartSize + distance, this._containerStartSize);
-        this._setFlexBasis(this._secondaryChild, this._secondaryStartSize - distance, this._containerStartSize);
+        this._setFlexBasis(this._primaryChild, this._startSize.primary + distance, this._startSize.container);
+        this._setFlexBasis(this._secondaryChild, this._startSize.secondary - distance, this._startSize.container);
 
         this.notifyResize();
 
         if (event.detail.state === 'end') {
-          delete this._containerStartSize;
-          delete this._primaryStartSize;
-          delete this._secondaryStartSize;
+          delete this._startSize;
         }
       },
 
