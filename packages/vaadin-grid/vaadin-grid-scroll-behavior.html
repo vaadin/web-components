@@ -5,18 +5,14 @@
         transform: translateZ(0);
       }
 
-      #header {
+      thead {
         position: absolute;
         top: 0;
         width: 100%;
       }
 
-      #items {
+      tbody {
         z-index: -1;
-      }
-
-      [frozen] {
-        position: relative;
       }
 
       table {
@@ -24,9 +20,7 @@
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         z-index: -2;
-      }
 
-      :host table {
         /* translate Z needed to be applied to keep scroll bars from disappearing
         when scrolling on desktop Safari.
         Also, this rule can't be applied on mobile

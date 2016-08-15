@@ -17,7 +17,6 @@
   <template>
     <vaadin-grid-scroller size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
       <content></content>
-
     </vaadin-grid-scroller>
   </template>
 </dom-module>
@@ -27,8 +26,6 @@
     is: 'vaadin-grid',
 
     properties: {
-
-      bufferSize: Number,
 
       columns: Array,
 

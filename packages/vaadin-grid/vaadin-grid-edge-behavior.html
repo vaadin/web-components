@@ -8,15 +8,13 @@
         overflow: hidden;
       }
 
-      :host([edge]) #header {
+      :host([edge]) thead {
         position: fixed;
-        transform: translateZ(0);
       }
 
-      :host([edge]) #items {
+      :host([edge]) tbody#items {
         position: fixed;
         width: 100%;
-        transform: translateZ(0);
         will-change: transform;
       }
 
