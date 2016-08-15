@@ -121,7 +121,6 @@
 
         it('should not passtrough iff scrollbars exist (vertical scrollbar hover)', function(done) {
           scroller.list.addEventListener('mousemove', function() {
-            var pointerEvents = window.getComputedStyle(outerScroller).pointerEvents;
             expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
             done();
           });
@@ -130,7 +129,6 @@
 
         it('should not passtrough iff scrollbars exist (horizontal scrollbar hover)', function(done) {
           scroller.list.addEventListener('mousemove', function() {
-            var pointerEvents = window.getComputedStyle(outerScroller).pointerEvents;
             expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
             done();
           });

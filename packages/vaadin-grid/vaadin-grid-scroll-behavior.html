@@ -142,13 +142,13 @@
     },
 
     _scheduleReorder: function() {
-      var table = Polymer.dom(this.$.items);
+      var tbody = Polymer.dom(this.$.items);
       this.debounce('reorderrows', function() {
         this._physicalItems.slice(0)
           .sort(function(a, b) {
             return a.index - b.index;
           }).forEach(function(row) {
-            table.appendChild(row);
+            tbody.appendChild(row);
           }, this);
       }, 100);
     },

@@ -1,0 +1,48 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="x-list.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <x-list style="width: 50px;"></x-list>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('scrolling mode', function() {
+      var scroller;
+
+      beforeEach(function() {
+        scroller = fixture('default').list;
+      });
+
+      function isFixed(element) {
+        return window.getComputedStyle(element).position === 'fixed';
+      }
+
+      it('should/should not have fixed container elements depending on scrolling mode', function() {
+        var fixedContainers = !!navigator.userAgent.match(/Edge/);
+        expect(isFixed(scroller.$.items)).to.equal(fixedContainers);
+        expect(isFixed(scroller.$.header)).to.equal(fixedContainers);
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
