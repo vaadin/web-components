@@ -106,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // IE 10 & 11 doesn't render propertly :(
     var badPixels = 0;
     while (y < listHeight) {
-      item = document.elementsFromPoint(listRect.left + 100, y)[1];
+      item = document.elementFromPoint(listRect.left + 100, y);
 
       if (!item) {
         badPixels++;
