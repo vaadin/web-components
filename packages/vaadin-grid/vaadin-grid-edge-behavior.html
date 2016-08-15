@@ -28,25 +28,27 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
-  vaadin.elements.grid.EdgeBehavior = {
+  vaadin.elements.grid.EdgeBehaviorImpl = {
 
     hostAttributes: {
       edge: true
     },
 
     _onScroll: function() {
-      // TODO: Cache queries
-      Polymer.dom(this.root).querySelectorAll('tbody [frozen]').forEach(function(cell) {
-        cell.style.transform = this._getTranslate3d(this._scrollLeft, 0);
-      }, this);
-
-      Polymer.dom(this.root).querySelectorAll('thead th:not([frozen])').forEach(function(cell) {
-        cell.style.transform = this._getTranslate3d(-this._scrollLeft, 0);
-      }, this);
-
       this.$.items.style.transform =
         this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
-    }
 
+      this.$.header.style.transform =
+        this._getTranslate3d(-this._scrollLeft || 0, 0);
+
+      var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
+      for (var i = 0; i < this._frozenCells.length; i++) {
+        this._frozenCells[i].style.transform = frozenCellTransform;
+      }
+    }
   };
+
+  vaadin.elements.grid.EdgeBehavior = [
+    vaadin.elements.grid.GridScrollBehavior, vaadin.elements.grid.EdgeBehaviorImpl
+  ];
 </script>
