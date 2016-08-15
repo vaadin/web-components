@@ -63,11 +63,14 @@
       ios: {
         value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
         reflectToAttribute: true
-      }
+      },
+
+      // Cached array of frozen cells
+      _frozenCells: Array
     },
 
     observers: [
-      '_cacheElements(columns, frozenColumns, _physicalCount)'
+      '_frozenCellsChanged(columns, frozenColumns, _physicalCount)'
     ],
 
     ready: function() {
@@ -146,15 +149,13 @@
       }, 100);
     },
 
-    _cacheElements: function() {
+    _frozenCellsChanged: function() {
       this.debounce('cache-elements', function() {
-        var oldCells = this._frozenCells || [];
-        this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
-        oldCells.filter(function(cell) {
-          return this._frozenCells.indexOf(cell) === -1;
-        }.bind(this)).forEach(function(cell) {
+        Polymer.dom(this.root).querySelectorAll('td, th').forEach(function(cell) {
           cell.style.transform = '';
-        }.bind(this));
+        });
+        this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
+        this._onScroll();
       });
     },
 
