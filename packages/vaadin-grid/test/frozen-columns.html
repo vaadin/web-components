@@ -102,10 +102,10 @@
               expect(cells[0].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');
 
               scroller.frozenColumns = 0;
-              flush(function() {
-                expect(cells[0].style.transform).to.be.empty;
-                done();
-              });
+              scroller.flushDebouncer('cache-elements');
+
+              expect(cells[0].style.transform).to.be.empty;
+              done();
             });
             scroller.$.table.scrollLeft = defaultCellWidth;
 
@@ -118,10 +118,10 @@
               expect(cells[1].style.transform).to.eql('');
 
               scroller.frozenColumns = 2;
-              flush(function() {
-                expect(cells[1].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');
-                done();
-              });
+              scroller.flushDebouncer('cache-elements');
+              
+              expect(cells[1].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');
+              done();
             });
             scroller.$.table.scrollLeft = defaultCellWidth;
 
