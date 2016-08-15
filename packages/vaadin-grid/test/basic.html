@@ -173,6 +173,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });
 
+    test('reorder rows', function(done) {
+      list.$.table.scrollTop = list._physicalAverage * list._physicalCount;
+
+      setTimeout(function() {
+        var rows = Polymer.dom(list.$.items).querySelectorAll('tr');
+        var firstIndex;
+        for (var i = 0; i < rows.length; i++) {
+          if (!firstIndex) {
+            firstIndex = rows[i].index;
+          } else {
+            expect(rows[i].index).to.equal(firstIndex + i);
+          }
+        }
+        done();
+      }.bind(this), 200); // Reorder debounce period is 100ms
+    });
+
   });
 </script>
 
