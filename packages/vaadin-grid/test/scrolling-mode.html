@@ -40,6 +40,12 @@
         expect(isFixed(scroller.$.header)).to.equal(fixedContainers);
       });
 
+      it('should have correct scroll bounds on all scroll modes', function() {
+        expect(scroller.$.outerscroller.scrollHeight).to.be.above(scroller.clientHeight);
+        expect(scroller.$.table.scrollHeight).to.equal(scroller.$.outerscroller.scrollHeight);
+        expect(scroller.$.table.scrollWidth).to.equal(scroller.$.outerscroller.scrollWidth);
+      });
+
     });
   </script>
 
