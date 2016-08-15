@@ -25,34 +25,34 @@
   <body>
 
     <div class="vertical-section-container centered">
-      <h3>Horizontal Mode (Default)</h3>
+      <h3>Horizontal Split Layout (Default)</h3>
       <demo-snippet>
         <template>
           <vaadin-split-panel>
-            <div>first panel content</div>
-            <div>second panel content</div>
+            <div>First panel content</div>
+            <div>Second panel content</div>
           </vaadin-split-panel>
         </template>
       </demo-snippet>
 
-      <h3>Vertical Mode</h3>
+      <h3>Vertical Split Layout</h3>
       <demo-snippet>
         <template>
           <vaadin-split-panel vertical>
-            <div>first panel content</div>
-            <div>second panel content</div>
+            <div>Top panel content</div>
+            <div>Bottom panel content</div>
           </vaadin-split-panel>
         </template>
       </demo-snippet>
 
-      <h3>Modes Combination</h3>
+      <h3>Layout Combination</h3>
       <demo-snippet>
         <template>
           <vaadin-split-panel>
-            <div>first panel content</div>
+            <div>First panel content</div>
             <vaadin-split-panel vertical>
-              <div>second panel content</div>
-              <div>third panel content</div>
+              <div>Second panel content</div>
+              <div>Third panel content</div>
             </vaadin-split-panel>
           </vaadin-split-panel>
         </template>
@@ -62,8 +62,8 @@
       <demo-snippet>
         <template>
           <vaadin-split-panel>
-            <div style="width: 75%;">first panel content</div>
-            <div style="width: 25%;">second panel content</div>
+            <div style="width: 75%;">First panel content</div>
+            <div style="width: 25%;">Second panel content</div>
           </vaadin-split-panel>
         </template>
       </demo-snippet>
@@ -72,9 +72,33 @@
       <demo-snippet>
         <template>
           <vaadin-split-panel>
-            <div style="min-width: 50px; max-width: 150px;">first</div>
-            <div>second</div>
+            <div style="min-width: 50px; max-width: 150px;">First</div>
+            <div>Second</div>
           </vaadin-split-panel>
+        </template>
+      </demo-snippet>
+
+      <h3>Resize Notification for the Nested Elements</h3>
+      <demo-snippet>
+        <template>
+          <vaadin-split-panel>
+            <div>First</div>
+            <custom-resizable>Second</custom-resizable>
+          </vaadin-split-panel>
+          <script>
+            Polymer({
+              is: 'custom-resizable',
+              behaviors: [
+                Polymer.IronResizableBehavior
+              ],
+              listeners: {
+                'iron-resize': '_onIronResize'
+              },
+              _onIronResize: function() {
+                console.log('Resized');
+              }
+            });
+          </script>
         </template>
       </demo-snippet>
 
