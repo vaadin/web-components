@@ -26,13 +26,16 @@
         z-index: -2;
       }
 
-      :host(:not([ios]):not([edge])) table {
+      :host table {
         /* translate Z needed to be applied to keep scroll bars from disappearing
         when scrolling on desktop Safari.
         Also, this rule can't be applied on mobile
         Safari to keep scroll bars visible in there :-) */
-        /* In Edge, this causes header to jump */
         transform: translateZ(0);
+      }
+
+      :host([ios]) table {
+        transform: none;
       }
 
       #sizer {
@@ -139,12 +142,13 @@
     },
 
     _scheduleReorder: function() {
+      var table = Polymer.dom(this.$.items);
       this.debounce('reorderrows', function() {
         this._physicalItems.slice(0)
           .sort(function(a, b) {
             return a.index - b.index;
           }).forEach(function(row) {
-            this.$.items.appendChild(row);
+            table.appendChild(row);
           }, this);
       }, 100);
     },
