@@ -1,0 +1,161 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+
+  <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+</head>
+
+<body>
+
+  <dom-module id="x-grid">
+    <template>
+      <style>
+        .item {
+          height: 30px;
+        }
+      </style>
+      <vaadin-grid size="100" id="grid" style="height: 300px">
+        <vaadin-grid-column>
+          <template>
+            <div class="item">item[[index]]</div>
+          </template>
+          <template is="header">Header</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      Polymer({
+        is: 'x-grid'
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="table">
+    <template>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    function getCell(index) {
+      return grid.$.scroller.$.items.querySelectorAll('td')[index];
+    }
+
+    function getFirstCell() {
+      return getCell(0);
+    }
+
+    function getHeaderCell(index) {
+      return grid.$.scroller.$.header.querySelectorAll('th')[index];
+    }
+
+    function getFirstHeaderCell() {
+      return getHeaderCell(0);
+    }
+
+
+    function simulateScrollToStart(done) {
+      // make sure not over scroll more than the delta threshold limit of 10k.
+      grid.$.scroller.$.table.scrollTop -= 2500;
+
+      setTimeout(function() {
+        if (grid.$.scroller.$.table.scrollTop > 0) {
+          simulateScrollToStart(done);
+        } else {
+          done();
+        }
+      }, 10);
+    }
+
+    function simulateScrollToEnd(done) {
+      // make sure not over scroll more than the delta threshold limit of 10k.
+      grid.$.scroller.$.table.scrollTop += 2500;
+
+      setTimeout(function() {
+        if (grid.$.scroller.$.table.scrollTop < grid.$.scroller.$.table.scrollHeight - 300) {
+          simulateScrollToEnd(done);
+        } else {
+          done();
+        }
+      }, 10);
+    }
+
+    function scrollToEnd() {
+      grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight;
+    }
+
+    describe('scrolling', function() {
+      var container, grid;
+
+      [100, 10000, 100000, 1000000, 10000000].forEach(function(size) {
+        describe(size + ' items', function() {
+          beforeEach(function(done) {
+            container = fixture('table');
+            grid = container.$.grid;
+            grid.size = size;
+            flush(function() {
+              grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight;
+
+              setTimeout(function() {
+                grid.$.scroller.$.table.scrollTop = 0;
+                done();
+              }, 50);
+            });
+          });
+
+          it('should be able to scroll to half-way', function(done) {
+            var viewportHeight = 300;
+            var itemHeight = 30;
+            grid.$.scroller.$.table.scrollTop = Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
+
+            Polymer.Base.async(function() {
+              expect(getCell(0).textContent).to.contain('item' + grid.size / 2);
+              done();
+            }, 300)
+          });
+
+          it('should be able to scroll to end', function() {
+            scrollToEnd();
+
+            expect(getLastItemFromList(grid.$.scroller.$.items).textContent).to.contain('item' + (grid.size - 1));
+          });
+
+          it('should be able to manually scroll to start', function(done) {
+            grid.$.scroller.$.table.scrollTop = 20000;
+            this.timeout(1000000);
+
+            simulateScrollToStart(function() {
+              expect(getFirstItemFromList(grid.$.scroller.$.items).textContent).to.contain('item0');
+              done();
+            });
+          });
+
+          it('should be able to manually scroll to end', function(done) {
+            grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight - 20000;
+            this.timeout(1000000);
+
+            simulateScrollToEnd(function() {
+              expect(getLastItemFromList(grid.$.scroller.$.items).textContent).to.contain('item' + (grid.size - 1));
+              done();
+            });
+          });
+
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
