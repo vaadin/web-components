@@ -25,9 +25,11 @@
   <script>
     describe('scrolling mode', function() {
       var scroller;
+      var fixedContainers;
 
       beforeEach(function() {
         scroller = fixture('default').list;
+        fixedContainers = !!navigator.userAgent.match(/Edge/);
       });
 
       function isFixed(element) {
@@ -35,7 +37,6 @@
       }
 
       it('should/should not have fixed container elements depending on scrolling mode', function() {
-        var fixedContainers = !!navigator.userAgent.match(/Edge/);
         expect(isFixed(scroller.$.items)).to.equal(fixedContainers);
         expect(isFixed(scroller.$.header)).to.equal(fixedContainers);
       });
@@ -44,6 +45,10 @@
         expect(scroller.$.outerscroller.scrollHeight).to.be.above(scroller.clientHeight);
         expect(scroller.$.table.scrollHeight).to.equal(scroller.$.outerscroller.scrollHeight);
         expect(scroller.$.table.scrollWidth).to.equal(scroller.$.outerscroller.scrollWidth);
+      });
+
+      it('should/should not have the table transformed', function() {
+        expect(window.getComputedStyle(scroller.$.table).transform === 'none').to.equal(fixedContainers);
       });
 
     });
