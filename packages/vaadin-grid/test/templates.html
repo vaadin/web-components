@@ -29,6 +29,14 @@
             <paper-input on-invalid-changed="_invalidChanged" value="{{parentProp}}"></paper-input>
           </template>
         </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>
+            <paper-input value="{{parentPath.foo}}"></paper-input>
+          </template>
+          <template is="header">
+            <paper-input value="{{parentPath.foo}}"></paper-input>
+          </template>
+        </vaadin-grid-column>
       </vaadin-grid>
     </template>
     <script>
@@ -36,7 +44,14 @@
       is: 'x-grid',
 
       properties: {
-        parentProp: String
+        parentProp: String,
+        parentPath: {
+          type: Object,
+          value: function() {
+            return { foo: 'foo' };
+          }
+        }
+
       },
 
       _format: function(value) {
@@ -103,7 +118,7 @@
 
         it('should bind inside cell templates', function() {
           expect(getCell(0).textContent).to.contain('foobar');
-          expect(getCell(2).textContent).to.contain('foobar');
+          expect(getCell(3).textContent).to.contain('foobar');
         });
 
         it('should two-way bind parent properties inside cell templates', function() {
@@ -141,14 +156,45 @@
         it('should add event listeners inside header templates', function() {
           var input = getHeaderCell(1).querySelector('paper-input');
 
-          input.invalid = true;
+          input.invalid = 'foo';
 
           expect(container.invalidChanged).to.eql(true);
         });
       });
+
+      describe('using parent paths inside templates', function() {
+        beforeEach(function() {
+          container.set('parentPath.foo', 'bar');
+        });
+
+        it('should bind inside cell templates', function() {
+          expect(getCell(2).querySelector('paper-input').value).to.contain('bar');
+          expect(getCell(5).querySelector('paper-input').value).to.contain('bar');
+        });
+
+        it('should two-way bind parent path inside cell templates', function() {
+          var input = getCell(2).querySelector('paper-input');
+          expect(input.value).to.eql('bar');
+
+          input.value = 'value';
+
+          expect(container.parentPath.foo).to.eql('value');
+        });
+
+        it('should bind inside header templates', function() {
+          expect(getHeaderCell(2).querySelector('paper-input').value).to.contain('bar');
+        });
+
+        it('should two-way bind parent path inside header templates', function() {
+          var input = getHeaderCell(2).querySelector('paper-input');
+          expect(input.value).to.eql('bar');
+
+          input.value = 'value';
+
+          expect(container.parentPath.foo).to.eql('value');
+        });
+      });
     });
-
-
   </script>
 
 </body>

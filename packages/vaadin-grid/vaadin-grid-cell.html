@@ -140,6 +140,10 @@
         this.set('_forwardedParentProps.' + prop, value);
       },
 
+      _forwardParentPath: function(path, value) {
+        this.set('_forwardedParentProps.' + path, value);
+      },
+
       _forwardedParentPropsChanged: function(parentProps) {
         if (parentProps.path !== '_forwardedParentProps') {
           var prop = parentProps.path.substring(parentProps.path.indexOf('.') + 1);
