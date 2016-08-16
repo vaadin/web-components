@@ -69,7 +69,7 @@
 
     <vaadin-grid-column width="20%">
       <template>
-        <button onclick="alert(this.textContent)">[[index]]</button>
+        <button onclick="document.querySelector('vaadin-grid')[(this._foo = !this._foo) ? 'expandRow' : 'collapseRow'](parseInt(this.textContent))">[[index]]</button>
       </template>
       <template is="header">
         qux-h1
