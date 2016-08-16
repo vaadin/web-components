@@ -1,6 +1,6 @@
 # Row Details
 
-In order to use row details, a template must be defined. The row details template has to be set as a direct child of `<vaadin-grid>` and it must have `is="row-detail"` attribute. The same variables can be used inside the template as in cell templates, namely `index`, `item` and `selected`. There is also a variable `expanded` available, which we will look into later. Variable `column` is excluded here.
+In order to use row details, a template must be defined. The row details template has to be set as a direct child of `<vaadin-grid>` and it must have `is="row-detail"` attribute. The same variables can be used inside the template as in cell templates, namely `index`, `item`, `selected` and `expanded`. Variable `column` is excluded here.
 
 ```html
 <vaadin-grid>
@@ -93,10 +93,19 @@ A variable `expanded` is available inside the row detail template. It is a `Bool
 <vaadin-grid>
   <template is="row-detail">
     These are the details for [[item.value]]!
-    <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
   </template>
   <vaadin-grid-column>
-     ...
+    ...
+  </vaadin-grid-column>
+  <vaadin-grid-column>
+    <template>
+      <template is="dom-if" if="[[!expanded]]">
+        <iron-icon icon="icons:expand-more"></iron-icon>
+      </template>
+      <template is="dom-if" if="[[expanded]]">
+        <iron-icon icon="icons:expand-less"></iron-icon>
+      </template>
+    </template>
   </vaadin-grid-column>
 </vaadin-grid>
 ```
