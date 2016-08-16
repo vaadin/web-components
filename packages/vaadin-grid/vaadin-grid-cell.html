@@ -93,15 +93,14 @@
         }
 
         this.instance = this.stamp(null);
+        template.instances = template.instances || [];
+        template.instances.push(this.instance);
 
         // initializing new template instance with previously forwarded parent props.
         // could be done with observers, but this is simpler.
         for (var key in this._forwardedParentProps) {
           this.instance[key] = this._forwardedParentProps[key];
         }
-
-        this.column.instances = this.column.instances || [];
-        this.column.push('instances', this.instance);
 
         this.style.height = '';
         var item = document.createElement('div');
@@ -118,17 +117,17 @@
 
         } else {
           // Non-shadow
-          Polymer.dom(this).appendChild(item);
+
+          // Can't use Polymer.dom.appendChild here as using it will "fix"
+          // the item later with the style scope of vaadin-grid-scroller
+          this.appendChild(item);
 
           // wait until item is really attached to DOM. (Polymer.dom.flush())
           // not helping here for some reason.
           this.async(function() {
-            Polymer.StyleTransformer.dom(item, 'vaadin-grid-scroller', false, true);
-
             if (this.target.domHost) {
               Polymer.StyleTransformer.dom(this, this.target.domHost.tagName.toLowerCase(), false, false);
             }
-
           });
         }
         Polymer.dom(item).appendChild(this.instance.root);
@@ -149,7 +148,7 @@
           var prop = parentProps.path.substring(parentProps.path.indexOf('.') + 1);
           var value = parentProps.value;
 
-          this.column.instances.forEach(function(inst) {
+          this.template.instances.forEach(function(inst) {
             inst.notifyPath(prop, value);
           });
         }

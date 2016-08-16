@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-scroller.html">
 <link rel="import" href="vaadin-grid-column.html">
+<link rel="import" href="vaadin-grid-row-details-behavior.html">
 
 <dom-module id="vaadin-grid">
   <style>
@@ -15,7 +16,7 @@
     }
   </style>
   <template>
-    <vaadin-grid-scroller size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]]>
+    <vaadin-grid-scroller bind-data="[[bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
       <content></content>
     </vaadin-grid-scroller>
   </template>
@@ -35,7 +36,20 @@
         value: 0
       },
 
+      rowDetailsTemplate: Object,
+
+      bindData: {
+        value: function() {
+          return function(index, row) {
+            row.expanded = this._isExpanded(index);
+          }.bind(this);
+        }
+      }
     },
+
+    behaviors: [
+      vaadin.elements.grid.GridRowDetailsBehavior
+    ],
 
     _getContentTarget: function() {
       return this;
@@ -47,6 +61,7 @@
 
     ready: function() {
       this.columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template[is=row-details]');
     },
 
 

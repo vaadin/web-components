@@ -9,13 +9,18 @@
 <link rel="import" href="vaadin-grid-edge-behavior.html">
 <link rel="import" href="vaadin-grid-cell.html">
 <link rel="import" href="vaadin-grid-row.html">
+<link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="iron-list-behavior.html">
 
 <dom-module id="vaadin-grid-scroller">
+  <!-- TODO: Remove external stylesheet -->
   <link rel="import" type="css" href="../bootstrap/dist/css/bootstrap.css">
+
   <template>
     <style include="scroll-styles"></style>
     <style include="vaadin-grid-edge-styles"></style>
+    <style include="row-details-styles"></style>
+
     <style>
       :host {
         display: block;
@@ -144,21 +149,25 @@
         value: 0
       },
 
-      dataSource: {
-        type: Function,
-        value: function() {
-          return function(index, callback) {
-            callback(index, index > this.size - 1 ? null : {});
-          };
-        }
-      }
+      bindData: Function,
+
+      rowDetailsTemplate: Object
 
     },
 
     observers: [
       '_columnsChanged(columns, frozenColumns, _physicalCount, _physicalItems)',
-      '_sizeChanged(size)'
+      '_sizeChanged(size)',
+      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalCount)'
     ],
+
+    _rowDetailsTemplateChanged: function(rowDetailsTemplate, _physicalCount) {
+      if (_physicalCount) {
+        this._physicalItems.forEach(function(row) {
+          row.rowDetailsTemplate = this.rowDetailsTemplate;
+        }, this);
+      }
+    },
 
     // TODO: we should observe _physicalItems.splices instead of _physicalCount
     _columnsChanged: function(columns, frozenColumns) {
@@ -224,16 +233,8 @@
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
         el.index = vidx + this._vidxOffset;
-
-        this.dataSource(vidx, function(index, item) {
-          if (item !== null && el.index === index + this._vidxOffset) {
-            el.item = item;
-            this._physicalIndexForKey[el.index] = pidx;
-            el.removeAttribute('hidden');
-          } else {
-            el.setAttribute('hidden', '');
-          }
-        }.bind(this));
+        el.toggleAttribute('hidden', el.index >= this.size);
+        this.bindData(el.index, el);
       }, itemSet);
     },
 

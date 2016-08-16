@@ -16,14 +16,47 @@
           value: []
         },
         frozenColumns: Number,
-        target: Object
+        target: Object,
+
+        expanded: Boolean,
+
+        _rowDetailsCell: {
+          value: null
+        },
+
+        rowDetailsTemplate: Object
       },
 
       observers: [
         '_columnsChanged(columns, target)',
-        '_indexChanged(index, cells)',
-        '_frozenColumnsChanged(frozenColumns, cells)'
+        '_indexChanged(index, cells, _rowDetailsCell)',
+        '_frozenColumnsChanged(frozenColumns, cells)',
+        '_rowDetailsChanged(expanded, rowDetailsTemplate, target)'
       ],
+
+      _rowDetailsChanged: function(expanded, rowDetailsTemplate, target) {
+        if (expanded) {
+          var rowDetailsCell = document.createElement('td', 'vaadin-grid-cell');
+          rowDetailsCell.setAttribute('detailscell', true);
+          // Using a frozen cell as the details cell works as a handy way of
+          // making it float in place
+          rowDetailsCell.setAttribute('frozen', true);
+          rowDetailsCell.target = target;
+          rowDetailsCell.template = rowDetailsTemplate;
+          Polymer.dom(this.root).appendChild(rowDetailsCell);
+          Polymer.dom.flush();
+          this._rowDetailsCell = rowDetailsCell;
+        } else {
+          if (this._rowDetailsCell) {
+            Polymer.dom(this.root).removeChild(this._rowDetailsCell);
+            this._rowDetailsCell = null;
+            this.style.paddingBottom = '';
+          }
+        }
+
+        // Row details uses a frozen cell to need to invoke this to update cache
+        this.target.$.scroller._frozenCellsChanged();
+      },
 
       //TODO: implement support for columns.splices
       _columnsChanged: function(columns, target) {
@@ -58,11 +91,15 @@
         });
       },
 
-      _indexChanged: function(index, cells) {
+      _indexChanged: function(index, cells, _rowDetailsCell) {
         this.toggleAttribute('odd', index % 2);
         cells.forEach(function(cell) {
           cell.index = index;
         });
+        if (_rowDetailsCell) {
+          _rowDetailsCell.index = index;
+          this.style.paddingBottom = _rowDetailsCell.style.height = _rowDetailsCell.clientHeight + 'px';
+        }
       }
 
     };

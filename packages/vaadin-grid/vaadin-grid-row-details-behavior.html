@@ -1,0 +1,56 @@
+<dom-module id="row-details-styles">
+  <template>
+    <style>
+      [detailscell] {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #fff !important;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.GridRowDetailsBehavior = {
+
+    properties: {
+      _expandedRows: {
+        value: function() {
+          return [];
+        }
+      }
+    },
+
+    observers: [
+      '_expandedRowsChanged(_expandedRows.*)'
+    ],
+
+    _expandedRowsChanged: function(expandedRows) {
+      this.$.scroller._update();
+    },
+
+    _isExpanded: function(index) {
+      return this._expandedRows.indexOf(index) !== -1;
+    },
+
+    expandRow: function(index) {
+      if (!this._isExpanded(index)){
+        this.push('_expandedRows', index);
+      }
+    },
+
+    collapseRow: function(index) {
+      if (this._isExpanded(index)) {
+        this.splice('_expandedRows', this._expandedRows.indexOf(index), 1);
+      }
+    }
+
+  };
+
+</script>
