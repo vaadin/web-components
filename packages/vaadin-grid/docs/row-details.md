@@ -97,14 +97,9 @@ A variable `expanded` is available inside the row detail template. It is a `Bool
   <vaadin-grid-column>
     ...
   </vaadin-grid-column>
-  <vaadin-grid-column>
+  <vaadin-grid-column width="30px">
     <template>
-      <template is="dom-if" if="[[!expanded]]">
-        <iron-icon icon="icons:expand-more"></iron-icon>
-      </template>
-      <template is="dom-if" if="[[expanded]]">
-        <iron-icon icon="icons:expand-less"></iron-icon>
-      </template>
+      <paper-checkbox checked="{{expanded}}">Details</paper-checkbox>
     </template>
   </vaadin-grid-column>
 </vaadin-grid>
