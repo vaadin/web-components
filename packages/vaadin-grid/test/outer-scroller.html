@@ -79,14 +79,46 @@
       describe('passtrough pointer events', function() {
 
         function move(x, y) {
-          var e = new MouseEvent('mousemove', {
+          makeMouseEvent('mousemove', {x: x, y: y}, scroller.list);
+        }
+
+        var HAS_NEW_MOUSE = (function() {
+          var has = false;
+          try {
+            has = Boolean(new MouseEvent('x'));
+          } catch (_) {}
+          return has;
+        })();
+
+        function makeMouseEvent(type, xy, node) {
+          var props = {
             bubbles: true,
             cancelable: true,
-            clientX: x,
-            clientY: y,
-            buttons: 1
-          });
-          scroller.list.dispatchEvent(e);
+            clientX: xy.x,
+            clientY: xy.y,
+            // Make this a primary input.
+            buttons: 1 // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
+          };
+          var e;
+          if (HAS_NEW_MOUSE) {
+            e = new MouseEvent(type, props);
+          } else {
+            e = document.createEvent('MouseEvent');
+            e.initMouseEvent(
+              type, props.bubbles, props.cancelable,
+              null, /* view */
+              null, /* detail */
+              0,    /* screenX */
+              0,    /* screenY */
+              props.clientX, props.clientY,
+              false, /*ctrlKey */
+              false, /*altKey */
+              false, /*shiftKey */
+              false, /*metaKey */
+              0,     /*button */
+              null   /*relatedTarget*/);
+          }
+          node.dispatchEvent(e);
         }
 
         var scrollbarWidth = (function() {

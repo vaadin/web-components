@@ -33,6 +33,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   suite('basic features', function() {
     var list, container;
 
+    suiteSetup(function (done) {
+      HTMLImports.whenReady(function () {
+        done();
+      });
+    });
+
     setup(function(done) {
       container = fixture('trivialList');
       list = container.list;
