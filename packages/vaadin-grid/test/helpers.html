@@ -87,7 +87,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function getFirstItemFromList(list) {
     var listRect = list.getBoundingClientRect();
-    return getItemFromPoint(listRect.left + defaultCellWidth * 0.5, listRect.top + 1);
+    var top = listRect.top;
+    if (list.$ && list.$.header) {
+      top = list.$.header.getBoundingClientRect().bottom;
+    }
+    return getItemFromPoint(listRect.left + defaultCellWidth * 0.5, top + 1);
   }
 
   function getLastItemFromList(list) {

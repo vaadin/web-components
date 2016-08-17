@@ -75,7 +75,7 @@
         if (grid.$.scroller.$.table.scrollTop > 0) {
           simulateScrollToStart(done);
         } else {
-          done();
+          Polymer.Base.async(done, 100);
         }
       }, 10);
     }
@@ -89,7 +89,7 @@
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           simulateScrollToEnd(done);
         } else {
-          done();
+          Polymer.Base.async(done, 100);
         }
       }, 10);
     }
@@ -100,6 +100,10 @@
 
     describe('scrolling', function() {
       var container, grid;
+
+      beforeEach(function(done) {
+        Polymer.Base.async(done, 1);
+      });
 
       [100, 10000, 100000, 1000000, 10000000].forEach(function(size) {
         describe(size + ' items', function() {
@@ -123,15 +127,17 @@
             grid.$.scroller.$.table.scrollTop = Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
 
             Polymer.Base.async(function() {
-              expect(getCell(0).textContent).to.contain('item' + grid.size / 2);
+              expect(getCell(0).index).to.be.closeTo(grid.size / 2, 10);
               done();
             }, 300);
           });
 
-          it('should be able to scroll to end', function() {
+          it('should be able to scroll to end', function(done) {
+            grid.$.scroller.$.table.addEventListener('scroll', function() {
+              expect(getLastItemFromList(grid.$.scroller.$.table).textContent).to.contain('item' + (grid.size - 1));
+              done();
+            });
             scrollToEnd();
-
-            expect(getLastItemFromList(grid.$.scroller.$.items).textContent).to.contain('item' + (grid.size - 1));
           });
 
           it('should be able to manually scroll to start', function(done) {
@@ -149,7 +155,7 @@
             this.timeout(1000000);
 
             simulateScrollToEnd(function() {
-              expect(getLastItemFromList(grid.$.scroller.$.items).textContent).to.contain('item' + (grid.size - 1));
+              expect(getLastItemFromList(grid.$.scroller.$.table).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });
