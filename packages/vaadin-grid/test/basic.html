@@ -33,9 +33,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   suite('basic features', function() {
     var list, container;
 
-    setup(function() {
+    setup(function(done) {
       container = fixture('trivialList');
       list = container.list;
+      Polymer.Base.async(done, 1);
     });
 
     test('defaults', function() {
@@ -70,18 +71,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       Polymer.dom.flush();
       assert.equal(list.firstVisibleIndex, 0);
-      list.scroll(0, container.itemHeight * 50);
-      list.fire('scroll');
 
       list.async(function() {
-        assert.equal(list.firstVisibleIndex, 50);
 
-        list.scrollToIndex(0);
+        list.scroll(0, container.itemHeight * 50);
+
         list.async(function() {
-          assert.equal(list.firstVisibleIndex, 0);
-          done();
-        });
-      }, 1);
+          assert.equal(list.firstVisibleIndex, 50);
+
+          list.scrollToIndex(0);
+          list.async(function() {
+            assert.equal(list.firstVisibleIndex, 0);
+            done();
+          });
+        }, 100);
+      }, 100);
     });
 
     test('last visible index', function(done) {
@@ -148,11 +152,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer.dom.flush();
       list.scrollToIndex(99);
       Polymer.dom.flush();
-      list.scroll(0, 500);
-      setTimeout(function() {
-        assert.equal(list._scrollTop, 500, 'scrollTop = 500');
+      list.$.table.addEventListener('scroll', function() {
+        assert.equal(list.$.table.scrollTop, 500, 'scrollTop = 500');
         done();
-      }, 100);
+      });
+      list.scroll(0, 500);
     });
 
     test('reset items', function(done) {
@@ -178,15 +182,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     test('reorder rows', function(done) {
       list.$.table.scrollTop = list._physicalAverage * list._physicalCount;
 
-      setTimeout(function() {
+      list.async(function() {
         var rows = Polymer.dom(list.$.items).querySelectorAll('tr');
-        var firstIndex;
-        for (var i = 0; i < rows.length; i++) {
-          if (!firstIndex) {
-            firstIndex = rows[i].index;
-          } else {
-            expect(rows[i].index).to.equal(firstIndex + i);
-          }
+        for (var i = 1; i < rows.length; i++) {
+          expect(rows[i].index).to.equal(rows[i - 1].index + 1);
         }
         done();
       }.bind(this), 200); // Reorder debounce period is 100ms
