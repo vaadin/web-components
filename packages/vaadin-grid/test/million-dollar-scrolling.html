@@ -84,8 +84,9 @@
       // make sure not over scroll more than the delta threshold limit of 10k.
       grid.$.scroller.$.table.scrollTop += 2500;
 
+      var table = grid.$.scroller.$.table;
       setTimeout(function() {
-        if (grid.$.scroller.$.table.scrollTop < grid.$.scroller.$.table.scrollHeight - 300) {
+        if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           simulateScrollToEnd(done);
         } else {
           done();
@@ -124,7 +125,7 @@
             Polymer.Base.async(function() {
               expect(getCell(0).textContent).to.contain('item' + grid.size / 2);
               done();
-            }, 300)
+            }, 300);
           });
 
           it('should be able to scroll to end', function() {
