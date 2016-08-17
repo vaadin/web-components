@@ -222,7 +222,7 @@
 
         it('should allow files with correct extension', function() {
           upload.accept = 'image/*,.foo,video/*';
-          file.name = 'bar.foo';
+          file.name = 'bar.FOO';
           upload._addFiles([file]);
           expect(upload.files.lentgh == 1);
         });

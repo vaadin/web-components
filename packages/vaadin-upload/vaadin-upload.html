@@ -726,7 +726,7 @@ Custom property | Description | Default
         return;
       }
       var fileExt = file.name.match(/\.[^\.]*$|$/)[0];
-      var re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace('/*', '/.*') + ')$');
+      var re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace('/*', '/.*') + ')$', 'i');
       if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
         this.fire('file-reject', {file: file, error: this.i18n.error.incorrectFileType});
         return;
