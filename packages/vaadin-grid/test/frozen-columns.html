@@ -76,7 +76,7 @@
 
           it('should not move while content scrolls horizontally', function(done) {
             var initialContainerRect = containerElement.getBoundingClientRect();
-            var containerTop = initialContainerRect.top + 1;
+            var containerTop = initialContainerRect.top + 2;
             var cells = getRowCells(containerRows[0]);
 
             scroller.$.table.addEventListener('scroll', function() {
