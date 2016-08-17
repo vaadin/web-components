@@ -156,6 +156,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getCellContent(cell) {
-    return cell.getContentChildren('content')[0];
+    if (Polymer.Settings.useShadow) {
+      return cell.getContentChildren('content')[0];
+    } else {
+      return cell.firstElementChild;
+    }
+
   }
 </script>

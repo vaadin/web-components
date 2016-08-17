@@ -38,7 +38,7 @@
       <template id="cell">[[index]]</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
+    <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]" bind-data=[[bindData]]>
       <content></content>
     </vaadin-grid-scroller>
   </template>
@@ -85,7 +85,16 @@
       primitive: {
         value: false,
         type: Boolean
+      },
+
+      bindData: {
+        value: function() {
+          return function(index, row) {
+
+          }.bind(this);
+        }
       }
+
     },
 
     ready: function() {
