@@ -48,7 +48,7 @@ After details have been expanded for a row, you can use `expandedItems` to acces
 </vaadin-grid>
 
 <ul>Currently Expanded:
-  <template is="dom-repeat">
+  <template is="dom-repeat" items="[[expandedItems]]">
     <li>[[item.value]</li>
   </template>
 </ul>
