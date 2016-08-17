@@ -47,8 +47,12 @@
         expect(scroller.$.table.scrollWidth).to.equal(scroller.$.outerscroller.scrollWidth);
       });
 
-      it('should/should not have the table transformed', function() {
-        expect(window.getComputedStyle(scroller.$.table).transform === 'none').to.equal(fixedContainers);
+      it('should not have the table transformed with fixed containers', function() {
+        // This is to ensure that a fixed tbody/thead/tfoot are not positioned
+        // in relation to the table element but it's parent
+        if (fixedContainers) {
+          expect(window.getComputedStyle(scroller.$.table).transform).to.equal('none');
+        }
       });
 
     });
