@@ -35,8 +35,10 @@
       </vaadin-grid>
     </template>
     <script>
-      Polymer({
-        is: 'x-grid'
+      HTMLImports.whenReady(function() {
+        Polymer({
+          is: 'x-grid'
+        });
       });
     </script>
   </dom-module>

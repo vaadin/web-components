@@ -3,7 +3,7 @@
     <style>
       ::content> div {
         padding: 8px;
-        height: 100%;
+        width: 100%;
         box-sizing: border-box;
       }
 
@@ -12,7 +12,7 @@
         flex-grow: 1;
         flex-basis: 100px;
         box-sizing: border-box;
-        display: block;
+        display: flex;
         overflow: hidden;
       }
     </style>
@@ -51,9 +51,10 @@
       },
 
       observers: ['_columnChanged(column)',
-                  '_templateChanged(template, target)',
-                  '_indexChanged(index, instance)',
-                  '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)'],
+        '_templateChanged(template, target)',
+        '_indexChanged(index, instance)',
+        '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)'
+      ],
 
       created: function() {
         this._instanceProps = {

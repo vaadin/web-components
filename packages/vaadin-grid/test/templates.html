@@ -1,6 +1,7 @@
 <!doctype html>
 
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>iron-list test</title>
@@ -12,6 +13,7 @@
   <link rel="import" href="../vaadin-grid.html">
   <link rel="import" href="../../paper-input/paper-input.html">
 </head>
+
 <body>
 
   <dom-module id="x-grid">
@@ -40,32 +42,36 @@
       </vaadin-grid>
     </template>
     <script>
-    Polymer({
-      is: 'x-grid',
+      HTMLImports.whenReady(function() {
+        Polymer({
+          is: 'x-grid',
 
-      properties: {
-        parentProp: String,
-        parentPath: {
-          type: Object,
-          value: function() {
-            return { foo: 'foo' };
-          }
-        }
+          properties: {
+            parentProp: String,
+            parentPath: {
+              type: Object,
+              value: function() {
+                return {
+                  foo: 'foo'
+                };
+              }
+            }
 
-      },
+          },
 
-      _format: function(value) {
-        return 'foo' + value;
-      },
+          _format: function(value) {
+            return 'foo' + value;
+          },
 
-      _valueChanged: function() {
-        this.valueChanged = true;
-      },
+          _valueChanged: function() {
+            this.valueChanged = true;
+          },
 
-      _invalidChanged: function() {
-        this.invalidChanged = true;
-      },
-    });
+          _invalidChanged: function() {
+            this.invalidChanged = true;
+          },
+        });
+      });
     </script>
   </dom-module>
 
@@ -198,4 +204,5 @@
   </script>
 
 </body>
+
 </html>
