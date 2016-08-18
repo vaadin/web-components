@@ -9,7 +9,7 @@
 
       pageSize: {
         type: Number,
-        value: 50
+        value: 10
       },
 
       dataSource: Function,
@@ -24,48 +24,73 @@
         value: function() {
           return {};
         }
+      },
+    },
+
+    _getItem: function(index) {
+      this.debounce('load', function() {
+
+        // TODO: potentially heavy operation to run first and last visible index,
+        // reconsider if performance issues occur on data binding / scrolling.
+        var firstVisiblePage = this._getPageForIndex(this.$.scroller.firstVisibleIndex + this.$.scroller._vidxOffset);
+        this._loadPage(firstVisiblePage);
+
+        var lastVisiblePage = this._getPageForIndex(this.$.scroller.lastVisibleIndex + this.$.scroller._vidxOffset);
+        this._loadPage(lastVisiblePage);
+
+        this.$.scroller._physicalItems.forEach(function(row) {
+          var page = this._getPageForIndex(row.index);
+          this._loadPage(page);
+        }.bind(this));
+      }, 25);
+    },
+
+    _updateItems: function(page, items) {
+      var map = {};
+      this.$.scroller._physicalItems.map(function(row) {
+        map[row.index] = row;
+      });
+
+      for(var i=0;i<this.pageSize;i++) {
+        var index = page*this.pageSize + i;
+        var row = map[index];
+        if (row) {
+          if (items) {
+            var item = items[i];
+            this._updateItem(row, item);
+
+            if (row._item === item) {
+              return;
+            }
+            row._item = item;
+
+            this.debounce('update-heights', function() {
+              this.$.scroller._update();
+            }, 1);
+          } else {
+            this._updateItem(row, null);
+          }
+        }
       }
-
     },
-
-    _getItem: function(index, callback) {
-      // this.async(function() {
-
-        var page = this._getPageForIndex(index);
-
-        if (this._cache[page]) {
-          callback(this._cache[page][index - page * this.pageSize]);
-          return true;
-        }
-
-        if (this._pendingRequests[page]) {
-          this._pendingRequests[page].push({
-            index: index,
-            callback: callback
-          });
-        } else {
-          this._pendingRequests[page] = [{
-            index: index,
-            callback: callback
-          }];
-
-          // this._loadPage(page);
-          this.async(this._loadPage.bind(this, page), 100);
-        }
-
-      // });
-    },
-
 
     _loadPage: function(page) {
-      this.dataSource(page, this.pageSize, function(items) {
-        this._cache[page] = items;
+      if (this._cache[page]) {
+        this._updateItems(page, this._cache[page]);
+      } else {
+        // clear items while waiting for the correct data.
+        this._updateItems(page, null);
 
-        this._pendingRequests[page].forEach(function(req) {
-          req.callback(items[req.index - this.pageSize * page]);
-        }, this);
-        delete this._pendingRequests[page];
-      }.bind(this));
+        // make sure same page isn't requested multiple times.
+        if (!this._pendingRequests[page]) {
+          this._pendingRequests[page] = true;
+          this.dataSource(page, this.pageSize, function(items) {
+            this._cache[page] = items;
+            delete this._pendingRequests[page];
+            this._updateItems(page, items);
+          }.bind(this));
+        }
+      }
     },
 
     _getPageForIndex: function(index) {

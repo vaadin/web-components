@@ -41,7 +41,7 @@
 
       _bindData: {
         value: function() {
-          return this._doBindData.bind(this);
+          return this._getItem.bind(this);
         }
       }
     },
@@ -51,19 +51,6 @@
       vaadin.elements.grid.DataSourceBehavior
     ],
 
-    _doBindData: function(index, row) {
-      var callback = function(item) {
-        if (row.index === index) {
-          this._updateItem(row, item);
-        }
-      }.bind(this);
-
-      if (!this._getItem(index, callback)) {
-        // Item wasn't cached, clear the row item
-        this._updateItem(row, null);
-      }
-    },
-
     _updateItem: function(row, item) {
       row.iterateCells(function(cell) {
         cell.instance.item = item;
@@ -72,15 +59,6 @@
       // cache original expanded value to __expanded__ to detect when value changes
       // by a user-action.
       row.expanded = row.__expanded__ = this._isExpanded(item);
-
-      if (row._item === item) {
-        return;
-      }
-      row._item = item;
-
-      this.debounce('update-scroller', function() {
-        this.$.scroller._update();
-      }, 1);
     },
 
     _getContentTarget: function() {
