@@ -213,8 +213,8 @@
         it('should reject files with incorrect contentType', function(done) {
           upload.accept = 'image/*,video/*';
           upload.addEventListener('file-reject', function(e) {
-            expect(upload.files.lentgh == 1);
-            expect(e.detail.error).to.be.ok;
+            expect(upload.files.length).to.equal(0);
+            expect(e.detail.error).to.equal('Incorrect File Type.');
             done();
           });
           upload._addFiles([file]);
@@ -224,19 +224,19 @@
           upload.accept = 'image/*,.foo,video/*';
           file.name = 'bar.FOO';
           upload._addFiles([file]);
-          expect(upload.files.lentgh == 1);
+          expect(upload.files.length).to.equal(1);
         });
 
         it('should allow files with correct mime type', function() {
           upload.accept = 'application/x-octet-stream';
           upload._addFiles([file]);
-          expect(upload.files.lentgh == 1);
+          expect(upload.files.length).to.equal(1);
         });
 
         it('should allow wildcards', function() {
           upload.accept = 'application/*';
           upload._addFiles([file]);
-          expect(upload.files.lentgh == 1);
+          expect(upload.files.length).to.equal(1);
         });
       });
 
