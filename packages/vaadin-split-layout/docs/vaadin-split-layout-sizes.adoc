@@ -4,26 +4,26 @@ order: 3
 layout: page
 ---
 
-[[vaadin-split-panel.sizes]]
+[[vaadin-split-layout.sizes]]
 = Customizing the Sizes
 
 == Specifying the Initial Size
 
-The sizes for the content elements in the [vaadinelement]#vaadin-split-panel# element are determined from the corresponding size values and scaled proportionally to fit into the split panel element. The `width` values are used for the horizontal layout, and the `height` values are used for the vertical one.
+The sizes for the content elements in the [vaadinelement]#vaadin-split-layout# element are determined from the corresponding size values and scaled proportionally to fit into the split layout element. The `width` values are used for the horizontal layout, and the `height` values are used for the vertical one.
 
 You can customize the initial sizes by resizing the content elements. For example, using inline styles:
 
 [source,html]
 ----
-<vaadin-split-panel>
-  <div style="width: 75%;">First panel content</div>
-  <div style="height: 25%;">Second panel content</div>
-</vaadin-split-panel>
+<vaadin-split-layout>
+  <div style="width: 75%;">First layout content</div>
+  <div style="height: 25%;">Second layout content</div>
+</vaadin-split-layout>
 ----
 
-[[figure.vaadin-split-panel.sizes.initial]]
-.A screenshot of [vaadinelement]#vaadin-split-panel# with custom initial sizes
-image::img/vaadin-split-panel-sizes.png[width="560"]
+[[figure.vaadin-split-layout.sizes.initial]]
+.A screenshot of [vaadinelement]#vaadin-split-layout# with custom initial sizes
+image::img/vaadin-split-layout-sizes.png[width="560"]
 
 == Specifying the Size Limits
 
@@ -35,8 +35,8 @@ It is usually enough to set the limits on just one content element, either a fir
 
 [source,html]
 ----
-<vaadin-split-panel>
+<vaadin-split-layout>
   <div style="min-width: 50px; max-width: 150px;">First</div>
   <div>Second</div>
-</vaadin-split-panel>
+</vaadin-split-layout>
 ----

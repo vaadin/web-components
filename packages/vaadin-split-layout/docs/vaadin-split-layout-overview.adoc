@@ -1,0 +1,22 @@
+---
+title: Overview
+order: 1
+layout: page
+---
+
+[[vaadin-split-layout.overview]]
+= Overview
+
+The [vaadinelement]#vaadin-split-layout# is a Polymer element implementing a split layout for two content elements with a draggable splitter between them.
+
+[source,html]
+----
+<vaadin-split-layout>
+  <div>First layout content</div>
+  <div>Second layout content</div>
+</vaadin-split-layout>
+----
+
+[[figure.vaadin-split-layout.overview]]
+.A screenshot of [vaadinelement]#vaadin-split-layout#
+image::img/vaadin-split-layout.png[width="560"]

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>vaadin-split-panel demo</title>
+    <title>vaadin-split-layout demo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
@@ -9,14 +9,14 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
 
-    <link rel="import" href="../vaadin-split-panel.html">
+    <link rel="import" href="../vaadin-split-layout.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
       .centered {
         max-width: 600px;
       }
 
-      vaadin-split-panel {
+      vaadin-split-layout {
         height: 160px;
         background: #eee;
       }
@@ -28,63 +28,63 @@
       <h3>Horizontal Split Layout (Default)</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel>
-            <div>First panel content</div>
-            <div>Second panel content</div>
-          </vaadin-split-panel>
+          <vaadin-split-layout>
+            <div>First layout content</div>
+            <div>Second layout content</div>
+          </vaadin-split-layout>
         </template>
       </demo-snippet>
 
       <h3>Vertical Split Layout</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel vertical>
-            <div>Top panel content</div>
-            <div>Bottom panel content</div>
-          </vaadin-split-panel>
+          <vaadin-split-layout vertical>
+            <div>Top layout content</div>
+            <div>Bottom layout content</div>
+          </vaadin-split-layout>
         </template>
       </demo-snippet>
 
       <h3>Layout Combination</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel>
-            <div>First panel content</div>
-            <vaadin-split-panel vertical>
-              <div>Second panel content</div>
-              <div>Third panel content</div>
-            </vaadin-split-panel>
-          </vaadin-split-panel>
+          <vaadin-split-layout>
+            <div>First layout content</div>
+            <vaadin-split-layout vertical>
+              <div>Second layout content</div>
+              <div>Third layout content</div>
+            </vaadin-split-layout>
+          </vaadin-split-layout>
         </template>
       </demo-snippet>
 
       <h3>Specifying Initial Sizes</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel>
-            <div style="width: 75%;">First panel content</div>
-            <div style="width: 25%;">Second panel content</div>
-          </vaadin-split-panel>
+          <vaadin-split-layout>
+            <div style="width: 75%;">First layout content</div>
+            <div style="width: 25%;">Second layout content</div>
+          </vaadin-split-layout>
         </template>
       </demo-snippet>
 
       <h3>Specifying Min- and Max- Sizes</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel>
+          <vaadin-split-layout>
             <div style="min-width: 50px; max-width: 150px;">First</div>
             <div>Second</div>
-          </vaadin-split-panel>
+          </vaadin-split-layout>
         </template>
       </demo-snippet>
 
       <h3>Resize Notification for the Nested Elements</h3>
       <demo-snippet>
         <template>
-          <vaadin-split-panel>
+          <vaadin-split-layout>
             <div>First</div>
             <custom-resizable>Second</custom-resizable>
-          </vaadin-split-panel>
+          </vaadin-split-layout>
           <script>
             Polymer({
               is: 'custom-resizable',
