@@ -58,6 +58,7 @@
 
       created: function() {
         this._instanceProps = {
+          expanded: true,
           index: true
         };
       },
@@ -132,6 +133,17 @@
           });
         }
         Polymer.dom(item).appendChild(this.instance.root);
+      },
+
+      _forwardInstanceProp: function(inst, prop, value) {
+        // fire notification event only when a prop is changed through a user-action.
+        // e.g. 'expanded' is different from the originally bound '__expanded__' value.
+        if (this.parentElement &&
+            this.parentElement['__' + prop + '__'] !== undefined &&
+            this.parentElement['__' + prop + '__'] !== value) {
+              
+          this.fire('template-instance-changed', { prop: prop, value: value, inst: inst});
+        }
       },
 
       _forwardParentProp: function(prop, value) {

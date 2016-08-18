@@ -63,6 +63,12 @@
           }
         }
 
+        this.iterateCells(function(cell) {
+          if (cell.instance) {
+            cell.instance.expanded = expanded;
+          }
+        });
+
         // Row details uses a frozen cell to need to invoke this to update cache
         this.target.$.scroller._frozenCellsChanged();
       },

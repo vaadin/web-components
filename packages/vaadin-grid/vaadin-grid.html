@@ -68,15 +68,18 @@
     },
 
     _updateItem: function(row, item) {
-      // row.expanded = this._isExpanded(item);
+      row.iterateCells(function(cell) {
+        cell.instance.item = item;
+      });
+
+      row.__expanded__ = this._isExpanded(item);
+      row.expanded = row.__expanded__;
+
       if (row._item === item) {
         return;
       }
       row._item = item;
 
-      row.iterateCells(function(cell) {
-        cell.instance.item = item;
-      });
       this.debounce('update-scroller', function() {
         this.$.scroller._update();
       }, 1);

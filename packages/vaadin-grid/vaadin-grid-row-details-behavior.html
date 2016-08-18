@@ -27,6 +27,10 @@
       }
     },
 
+    listeners: {
+      'template-instance-changed': '_templateInstanceChanged'
+    },
+
     observers: [
       '_expandedItemsChanged(_expandedItems.*)'
     ],
@@ -42,14 +46,27 @@
     expandItem: function(item) {
       if (!this._isExpanded(item)) {
         this.push('_expandedItems', item);
+        this.$.scroller.notifyResize();
       }
     },
 
     collapseItem: function(item) {
       if (this._isExpanded(item)) {
         this.splice('_expandedItems', this._expandedItems.indexOf(item), 1);
+        this.$.scroller.notifyResize();
+      }
+    },
+
+    _templateInstanceChanged: function(e) {
+      if (e.detail.prop === 'expanded') {
+        if (e.detail.value) {
+          this.expandItem(e.detail.inst.item);
+        } else {
+          this.collapseItem(e.detail.inst.item);
+        }
+
+        e.stopPropagation();
       }
     }
-
   };
 </script>

@@ -8,6 +8,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
 
   <style is="custom-style">
     body {
@@ -18,6 +19,11 @@
     #component {
       height: 500px;
       width: 80%;
+    }
+
+    i.elItem {
+      height: 30px;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -34,7 +40,7 @@
 
     <vaadin-grid-column width="100px">
       <template>
-        <i class="elItem">foo [[index]] - [[item.name]]</i>
+        <i class="elItem">[[item.name]]</i>
       </template>
       <template is="header">
         <b class="elItem">foo-h1</b>
@@ -82,7 +88,7 @@
 
     <vaadin-grid-column min-width="100px">
       <template>
-        derp
+        <paper-checkbox checked="{{expanded}}">Details</paper-checkbox>
       </template>
       <template is="header">
         derp
