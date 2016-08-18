@@ -32,10 +32,11 @@
     },
 
     observers: [
-      '_expandedItemsChanged(_expandedItems.*)'
+      '_expandedItemsChanged(_expandedItems.*, dataSource)'
     ],
 
-    _expandedItemsChanged: function(expandedItems) {
+    _expandedItemsChanged: function(expandedItems, dataSource) {
+      // make sure _update() isn't called before dataSource is set.
       this.$.scroller._update();
     },
 
@@ -46,14 +47,12 @@
     expandItem: function(item) {
       if (!this._isExpanded(item)) {
         this.push('_expandedItems', item);
-        this.$.scroller.notifyResize();
       }
     },
 
     collapseItem: function(item) {
       if (this._isExpanded(item)) {
         this.splice('_expandedItems', this._expandedItems.indexOf(item), 1);
-        this.$.scroller.notifyResize();
       }
     },
 

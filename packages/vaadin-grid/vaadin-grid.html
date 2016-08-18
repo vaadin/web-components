@@ -52,19 +52,16 @@
     ],
 
     _doBindData: function(index, row) {
-      // TODO: No async
-      this.async(function() {
-        var callback = function(item) {
-          if (row.index === index) {
-            this._updateItem(row, item);
-          }
-        }.bind(this);
-
-        if (!this._getItem(index, callback)) {
-          // Item wasn't cached, clear the row item
-          this._updateItem(row, null);
+      var callback = function(item) {
+        if (row.index === index) {
+          this._updateItem(row, item);
         }
-      }, 1);
+      }.bind(this);
+
+      if (!this._getItem(index, callback)) {
+        // Item wasn't cached, clear the row item
+        this._updateItem(row, null);
+      }
     },
 
     _updateItem: function(row, item) {
@@ -72,8 +69,9 @@
         cell.instance.item = item;
       });
 
-      row.__expanded__ = this._isExpanded(item);
-      row.expanded = row.__expanded__;
+      // cache original expanded value to __expanded__ to detect when value changes
+      // by a user-action.
+      row.expanded = row.__expanded__ = this._isExpanded(item);
 
       if (row._item === item) {
         return;
