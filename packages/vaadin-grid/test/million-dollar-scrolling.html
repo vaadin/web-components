@@ -69,29 +69,28 @@
 
     function simulateScrollToStart(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      grid.$.scroller.$.table.scrollTop -= 2500;
-
-      setTimeout(function() {
+      var table = grid.$.scroller.$.table;
+      table.addEventListener('scroll', function () {
         if (grid.$.scroller.$.table.scrollTop > 0) {
-          simulateScrollToStart(done);
+          table.scrollTop -= 2500;
         } else {
           Polymer.Base.async(done, 100);
         }
-      }, 10);
+      });
+      table.scrollTop -= 2500;
     }
 
     function simulateScrollToEnd(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      grid.$.scroller.$.table.scrollTop += 2500;
-
       var table = grid.$.scroller.$.table;
-      setTimeout(function() {
+      table.addEventListener('scroll', function () {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
-          simulateScrollToEnd(done);
+          table.scrollTop += 2500;
         } else {
           Polymer.Base.async(done, 100);
         }
-      }, 10);
+      });
+      table.scrollTop += 2500;
     }
 
     function scrollToEnd() {
@@ -105,7 +104,7 @@
         Polymer.Base.async(done, 1);
       });
 
-      [100, 10000, 100000, 1000000, 10000000].forEach(function(size) {
+      [100, 10000, 100000, 1000000].forEach(function(size) {
         describe(size + ' items', function() {
           beforeEach(function(done) {
             container = fixture('table');
