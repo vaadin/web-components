@@ -69,9 +69,13 @@ This program is available under Apache License Version 2.0, available at https:/
             // Prevent the upload request:
             // event.preventDefault();
 
-            // Custom upload request url for file
             var file = event.detail.file;
+
+            // Custom upload request url for file
             file.uploadTarget = upload.target + '/' + file.name;
+
+            // Custom name in the Content-Disposition header
+            file.formDataName = 'attachment';
           });
 
           upload.addEventListener('upload-request', function(event) {
