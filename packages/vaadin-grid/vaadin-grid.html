@@ -17,7 +17,7 @@
     }
   </style>
   <template>
-    <vaadin-grid-scroller bind-data="[[bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
+    <vaadin-grid-scroller bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
       <content></content>
     </vaadin-grid-scroller>
   </template>
@@ -39,19 +39,48 @@
 
       rowDetailsTemplate: Object,
 
-      // bindData: {
-      //   value: function() {
-      //     return function(index, row) {
-      //       row.expanded = this._isExpanded(index);
-      //     }.bind(this);
-      //   }
-      // }
+      _bindData: {
+        value: function() {
+          return this._doBindData.bind(this);
+        }
+      }
     },
 
     behaviors: [
       vaadin.elements.grid.GridRowDetailsBehavior,
       vaadin.elements.grid.DataSourceBehavior
     ],
+
+    _doBindData: function(index, row) {
+      // TODO: No async
+      this.async(function() {
+        var callback = function(item) {
+          if (row.index === index) {
+            this._updateItem(row, item);
+          }
+        }.bind(this);
+
+        if (!this._getItem(index, callback)) {
+          // Item wasn't cached, clear the row item
+          this._updateItem(row, null);
+        }
+      }, 1);
+    },
+
+    _updateItem: function(row, item) {
+      // row.expanded = this._isExpanded(item);
+      if (row._item === item) {
+        return;
+      }
+      row._item = item;
+
+      row.iterateCells(function(cell) {
+        cell.instance.item = item;
+      });
+      this.debounce('update-scroller', function() {
+        this.$.scroller._update();
+      }, 1);
+    },
 
     _getContentTarget: function() {
       return this;
@@ -65,6 +94,7 @@
       this.columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template[is=row-details]');
     },
+
 
 
   });

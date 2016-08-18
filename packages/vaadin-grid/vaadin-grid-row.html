@@ -36,6 +36,13 @@
         '_rowDetailsChanged(expanded, rowDetailsTemplate, target)'
       ],
 
+      iterateCells: function(callback) {
+        this.cells.forEach(callback);
+        if (this._rowDetailsCell) {
+          callback(this._rowDetailsCell);
+        }
+      },
+
       _rowDetailsChanged: function(expanded, rowDetailsTemplate, target) {
         if (expanded) {
           var rowDetailsCell = document.createElement('td', 'vaadin-grid-cell');
