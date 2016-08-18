@@ -1,0 +1,95 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.DataSourceBehavior = {
+
+    properties: {
+
+      bindData: {
+        value: function() {
+          return this._dataRequested.bind(this);
+        }
+      },
+
+      pageSize: {
+        type: Number,
+        value: 50
+      },
+
+      _cache: {
+        value: function() {
+          return {};
+        }
+      },
+
+      _pendingRequests: {
+        value: function() {
+          return {};
+        }
+      },
+
+      dataSource: Function
+
+    },
+
+    _dataRequested: function(index, row) {
+      this.async(function() {
+
+
+        var page = this._getPageForIndex(index);
+
+        if (this._cache[page]) {
+          this._updateInstances(row, this._cache[page][index - page * this.pageSize]);
+          return;
+        }
+
+        this._updateInstances(row, null);
+
+        if (this._pendingRequests[page]) {
+          this._pendingRequests[page].push({
+            index: index,
+            row: row
+          });
+        } else {
+          this._pendingRequests[page] = [{
+            index: index,
+            row: row
+          }];
+
+          // this._loadPage(page);
+          this.async(this._loadPage.bind(this, page), 100);
+        }
+
+      });
+    },
+
+    _loadPage: function(page) {
+      this.dataSource(page, this.pageSize, function(items) {
+        this._cache[page] = items;
+
+        this._pendingRequests[page].forEach(function(req) {
+          if (req.row.index === req.index) {
+            this._updateInstances(req.row, items[req.index - this.pageSize * page]);
+          }
+        }, this);
+        delete this._pendingRequests[page];
+      }.bind(this));
+    },
+
+    _updateInstances: function(row, item) {
+      Polymer.dom(row).childNodes.forEach(function(cell) {
+        cell.instance.item = item;
+      });
+      this.debounce('update-scroller', function() {
+        this.$.scroller._update();
+      }, 1);
+    },
+
+    _getPageForIndex: function(index) {
+      return Math.floor(index / this.pageSize);
+    }
+
+  };
+</script>

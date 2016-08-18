@@ -2,6 +2,7 @@
 <link rel="import" href="vaadin-grid-scroller.html">
 <link rel="import" href="vaadin-grid-column.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
+<link rel="import" href="vaadin-grid-data-source-behavior.html">
 
 <dom-module id="vaadin-grid">
   <style>
@@ -38,17 +39,18 @@
 
       rowDetailsTemplate: Object,
 
-      bindData: {
-        value: function() {
-          return function(index, row) {
-            row.expanded = this._isExpanded(index);
-          }.bind(this);
-        }
-      }
+      // bindData: {
+      //   value: function() {
+      //     return function(index, row) {
+      //       row.expanded = this._isExpanded(index);
+      //     }.bind(this);
+      //   }
+      // }
     },
 
     behaviors: [
-      vaadin.elements.grid.GridRowDetailsBehavior
+      vaadin.elements.grid.GridRowDetailsBehavior,
+      vaadin.elements.grid.DataSourceBehavior
     ],
 
     _getContentTarget: function() {
@@ -66,5 +68,4 @@
 
 
   });
-
 </script>

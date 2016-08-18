@@ -26,14 +26,15 @@
   <vaadin-grid id="component" size="10000000" frozen-columns="1">
 
     <template is="row-details">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       <div>details-[[index]]</div>
       <button>Howdy</button>
     </template>
 
     <vaadin-grid-column width="100px">
       <template>
-        <i class="elItem">foo [[index]]</i>
+        <i class="elItem">foo [[index]] - [[item.name]]</i>
       </template>
       <template is="header">
         <b class="elItem">foo-h1</b>
@@ -93,6 +94,21 @@
 
   </vaadin-grid>
 
+  <script>
+    document.querySelector('vaadin-grid').dataSource = function(page, pageSize, callback) {
+      console.log('requesting page ' + page);
+      setTimeout(function() {
+        var result = [];
+        var firstIndex = page * pageSize;
+        for (var i = 0; i < pageSize; i++) {
+          result.push({
+            name: 'name-' + (firstIndex + i)
+          });
+        }
+        callback(result);
+      }, 1000);
+    };
+  </script>
 </body>
 
 </html>
