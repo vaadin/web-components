@@ -101,12 +101,12 @@
   </vaadin-grid>
 
   <script>
-    document.querySelector('vaadin-grid').dataSource = function(page, pageSize, callback) {
-      console.log('requesting page ' + page);
+    document.querySelector('vaadin-grid').dataSource = function(opts, callback) {
+      console.log('requesting page ' + opts.page);
       setTimeout(function() {
         var result = [];
-        var firstIndex = page * pageSize;
-        for (var i = 0; i < pageSize; i++) {
+        var firstIndex = opts.page * opts.pageSize;
+        for (var i = 0; i < opts.pageSize; i++) {
           result.push({
             name: 'name-' + (firstIndex + i)
           });

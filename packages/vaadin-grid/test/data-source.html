@@ -1,0 +1,182 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+
+  <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+</head>
+
+<body>
+
+  <dom-module id="x-grid">
+    <template>
+      <style>
+        .item {
+          height: 30px;
+        }
+      </style>
+      <vaadin-grid size="100" id="grid" style="height: 300px" data-source="[[dataSource]]">
+        <vaadin-grid-column>
+          <template>
+            <div class="item">[[item]][[index]]</div>
+          </template>
+          <template is="header">Header</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      HTMLImports.whenReady(function() {
+        Polymer({
+          is: 'x-grid',
+
+          properties: {
+            dataSource: Object
+          }
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="table">
+    <template>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    function getCell(index) {
+      return grid.$.scroller.$.items.querySelectorAll('td')[index];
+    }
+
+    function getFirstCell() {
+      return getCell(0);
+    }
+
+    function getHeaderCell(index) {
+      return grid.$.scroller.$.header.querySelectorAll('th')[index];
+    }
+
+    function getFirstHeaderCell() {
+      return getHeaderCell(0);
+    }
+
+
+    function simulateScrollToStart(done) {
+      // make sure not over scroll more than the delta threshold limit of 10k.
+      var table = grid.$.scroller.$.table;
+      table.addEventListener('scroll', function () {
+        if (grid.$.scroller.$.table.scrollTop > 0) {
+          table.scrollTop -= 2500;
+        } else {
+          Polymer.Base.async(done, 100);
+        }
+      });
+      table.scrollTop -= 2500;
+    }
+
+    function simulateScrollToEnd(done) {
+      // make sure not over scroll more than the delta threshold limit of 10k.
+      var table = grid.$.scroller.$.table;
+      table.addEventListener('scroll', function () {
+        if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
+          table.scrollTop += 2500;
+        } else {
+          Polymer.Base.async(done, 100);
+        }
+      });
+      table.scrollTop += 2500;
+    }
+
+    function scrollToEnd() {
+      grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight;
+    }
+
+    describe('data-source', function() {
+      var container, grid;
+      var loadDebounceTime = 25;
+
+      beforeEach(function(done) {
+        container = fixture('table');
+        grid = container.$.grid;
+
+        container.dataSource = sinon.spy();
+        grid.async(done, 1);
+      });
+
+      it('should call datasource for first page', function(done) {
+        grid.pageSize = 100;
+
+        grid.async(function() {
+          expect(container.dataSource.callCount).to.eql(1);
+          expect(container.dataSource.firstCall.args[0].page).to.eql(0);
+          done();
+        }, loadDebounceTime);
+      });
+
+      it('should call datasource multiple times to load all items', function(done) {
+        grid.pageSize = 10;
+
+        grid.async(function() {
+          //assuming grid has about 30 items
+          expect(container.dataSource.callCount).to.eql(3);
+          expect(container.dataSource.firstCall.args[0].page).to.eql(0);
+          expect(container.dataSource.secondCall.args[0].page).to.eql(1);
+          expect(container.dataSource.thirdCall.args[0].page).to.eql(2);
+          done();
+        }, loadDebounceTime);
+      });
+
+      it('should always load visible page first', function(done) {
+        grid.pageSize = 10;
+
+        simulateScrollToEnd(function() {
+          grid.async(function() {
+            // fourth call is the first call after scrolling to end.
+            // 9 is last page out of 100 items / 10 per page.
+            expect(container.dataSource.getCall(3).args[0].page).to.eql(9);
+            expect(container.dataSource.getCall(4).args[0].page).to.eql(8);
+            done();
+          }, loadDebounceTime);
+        });
+      });
+
+      it.skip('should cache fetched pages', function(done) {
+        grid.pageSize = 10;
+        simulateScrollToEnd(function() { //remove scroll listeners after they're done to get this workings.
+        container.dataSource.reset();
+          grid.$.scroller.$.table.scrollTop = 0;
+
+        }, loadDebounceTime);
+      });
+
+      it('should bind item to templates', function(done) {
+        container.dataSource = function(opts, callback) {
+          var items = [];
+          for (var i=0;i<opts.pageSize;i++) {
+            items.push('foo' + i);
+          }
+
+          callback(items);
+        };
+
+        grid.async(function() {
+          expect(getFirstCell().textContent).to.contain('foo0');
+          done();
+        }, loadDebounceTime);
+      });
+    });
+  </script>
+
+</body>
+
+</html>

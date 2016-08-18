@@ -9,7 +9,7 @@
 
       pageSize: {
         type: Number,
-        value: 10
+        value: 50
       },
 
       dataSource: Function,
@@ -84,7 +84,8 @@
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page]) {
           this._pendingRequests[page] = true;
-          this.dataSource(page, this.pageSize, function(items) {
+          var opts = {page: page, pageSize: this.pageSize};
+          this.dataSource(opts, function(items) {
             this._cache[page] = items;
             delete this._pendingRequests[page];
             this._updateItems(page, items);
