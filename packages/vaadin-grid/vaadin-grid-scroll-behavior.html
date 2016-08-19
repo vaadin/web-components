@@ -31,6 +31,17 @@
       :host([ios]) table {
         transform: none;
       }
+
+      :host(:not([has-data])) td::after {
+        visibility: hidden;
+        content: '-';
+        width: 0;
+
+         /* Must use the same padding as the cell wrapper itself.
+         FIXME: Use the vertical paddings on the cell directly (not the wrapper).
+         Then this could be removed.*/
+        padding: 8px 0;
+      }
     </style>
   </template>
 </dom-module>

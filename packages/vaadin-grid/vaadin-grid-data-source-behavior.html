@@ -64,11 +64,23 @@
             }
             row._item = item;
 
+            // Allow the content to determine row height
+            row.style.minHeight = '';
+
+            if (!this.$.scroller.hasAttribute('has-data')) {
+              // First set of actual data set to rows, have average height re-measured
+              this.$.scroller._resetAverage();
+              this.$.scroller.toggleAttribute('has-data', true);
+            }
+
             this.debounce('update-heights', function() {
               this.$.scroller._update();
             }, 1);
           } else {
             this._updateItem(row, null);
+
+            // Item was cleared, use current physical average as min height
+            row.style.minHeight = this.$.scroller._physicalAverage + 'px';
           }
         }
       }
