@@ -30,10 +30,9 @@
     _getItem: function(index) {
       this.debounce('load', function() {
 
-        // TODO: potentially heavy operation to run first and last visible index,
+        // TODO: potentially heavy operation to run first visible index,
         // reconsider if performance issues occur on data binding / scrolling.
         var firstVisiblePage = this._getPageForIndex(this.$.scroller.firstVisibleIndex + this.$.scroller._vidxOffset);
-        var lastVisiblePage = this._getPageForIndex(this.$.scroller.lastVisibleIndex + this.$.scroller._vidxOffset);
 
         [firstVisiblePage].concat(
          this.$.scroller._physicalItems.map(function(row) {
