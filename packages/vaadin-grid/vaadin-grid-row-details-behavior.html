@@ -38,6 +38,7 @@
     _expandedItemsChanged: function(expandedItems, dataSource) {
       // make sure _update() isn't called before dataSource is set.
       this.$.scroller._update();
+      this.flushDebouncer('load');
     },
 
     _isExpanded: function(item) {

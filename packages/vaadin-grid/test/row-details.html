@@ -33,31 +33,42 @@
 
       beforeEach(function(done) {
         grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
         bodyRows = getRows(grid.$.scroller.$.items);
-        Polymer.Base.async(done, 1);
+        Polymer.Base.async(done, 25);
       });
 
-      it('should expand a row', function() {
+      function expandRow(index) {
+        grid.expandItem(grid._cache[0][index]);
+      }
+
+      function collapseRow(index) {
+        grid.collapseItem(grid._cache[0][index]);
+      }
+
+      it('should expand a row', function(done) {
+
         expect(getRowCells(bodyRows[1])).to.have.length(1);
-        grid.expandRow(1);
+        expandRow(1);
         var cells = getRowCells(bodyRows[1]);
         expect(cells[1].hasAttribute('detailscell')).to.be.true;
+        done();
       });
 
       it('should collapse a row', function() {
-        grid.expandRow(1);
-        grid.collapseRow(1);
+        expandRow(1);
+        collapseRow(1);
         expect(getRowCells(bodyRows[1])).to.have.length(1);
       });
 
       it('should stamp the details template', function() {
-        grid.expandRow(1);
+        expandRow(1);
         var cells = getRowCells(bodyRows[1]);
         expect(cells[1].textContent.trim()).to.equal('1-details');
       });
 
       it('should have correct bounds', function() {
-        grid.expandRow(1);
+        expandRow(1);
         var cells = getRowCells(bodyRows[1]);
         var bounds = cells[1].getBoundingClientRect();
         expect(bounds.top).to.equal(cells[0].getBoundingClientRect().bottom);
@@ -68,19 +79,22 @@
       });
 
       it('should remove the details cell', function() {
-        grid.expandRow(1);
+        expandRow(1);
         var row = bodyRows[1];
         grid.$.scroller.scrollToIndex(100);
+        grid.flushDebouncer('load');
         expect(getRowCells(row)).to.have.length(1);
       });
 
       it('should restore to fixed cells cache', function() {
-        grid.expandRow(1);
+        expandRow(1);
         grid.$.scroller.scrollToIndex(100);
+        grid.flushDebouncer('load');
         grid.$.scroller.flushDebouncer('cache-elements');
         expect(grid.$.scroller._frozenCells).to.be.empty;
 
         grid.$.scroller.scrollToIndex(0);
+        grid.flushDebouncer('load');
         grid.$.scroller.flushDebouncer('cache-elements');
         bodyRows = getRows(grid.$.scroller.$.items);
         expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);

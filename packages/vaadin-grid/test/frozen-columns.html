@@ -41,6 +41,7 @@
 
       beforeEach(function(done) {
         grid = fixture('frozen-columns');
+        grid.dataSource = infiniteDataSource;
         scroller = grid.$.scroller;
 
         Polymer.Base.async(done, 1);
