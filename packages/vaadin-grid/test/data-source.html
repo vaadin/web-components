@@ -74,26 +74,34 @@
     function simulateScrollToStart(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
-      table.addEventListener('scroll', function () {
+
+      var handler = function () {
         if (grid.$.scroller.$.table.scrollTop > 0) {
           table.scrollTop -= 2500;
         } else {
+          table.removeEventListener('scroll', handler);
           Polymer.Base.async(done, 100);
         }
-      });
+      };
+
+      table.addEventListener('scroll', handler);
       table.scrollTop -= 2500;
     }
 
     function simulateScrollToEnd(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
-      table.addEventListener('scroll', function () {
+
+      var handler = function () {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
         } else {
+          table.removeEventListener('scroll', handler);
           Polymer.Base.async(done, 100);
         }
-      });
+      };
+
+      table.addEventListener('scroll', handler);
       table.scrollTop += 2500;
     }
 
@@ -139,23 +147,34 @@
       it('should always load visible page first', function(done) {
         grid.pageSize = 10;
 
-        simulateScrollToEnd(function() {
-          grid.async(function() {
-            // fourth call is the first call after scrolling to end.
-            // 9 is last page out of 100 items / 10 per page.
-            expect(container.dataSource.getCall(3).args[0].page).to.eql(9);
-            expect(container.dataSource.getCall(4).args[0].page).to.eql(8);
-            done();
-          }, loadDebounceTime);
-        });
+        grid.async(function() {
+          container.dataSource.reset();
+          simulateScrollToEnd(function() {
+            grid.async(function() {
+              // 9 is last page out of 100 items / 10 per page.
+              expect(container.dataSource.callCount).to.eql(3);
+              expect(container.dataSource.getCall(0).args[0].page).to.eql(9);
+              expect(container.dataSource.getCall(1).args[0].page).to.eql(8);
+              expect(container.dataSource.getCall(2).args[0].page).to.eql(7);
+              done();
+            }, loadDebounceTime);
+          });
+        }, loadDebounceTime);
       });
 
-      it.skip('should cache fetched pages', function(done) {
+      it('should cache fetched pages', function(done) {
         grid.pageSize = 10;
-        simulateScrollToEnd(function() { //remove scroll listeners after they're done to get this workings.
-        container.dataSource.reset();
-          grid.$.scroller.$.table.scrollTop = 0;
-
+        // wait first to initially load first pages.
+        grid.async(function() {
+          simulateScrollToEnd(function() {
+          container.dataSource.reset();
+            simulateScrollToStart(function() {
+              grid.async(function() {
+                expect(container.dataSource.callCount).to.eql(0);
+                done();
+              }, loadDebounceTime);
+            });
+          });
         }, loadDebounceTime);
       });
 
