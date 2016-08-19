@@ -142,8 +142,30 @@
         if (this.parentElement &&
             this.parentElement['__' + prop + '__'] !== undefined &&
             this.parentElement['__' + prop + '__'] !== value) {
-              
+
           this.fire('template-instance-changed', { prop: prop, value: value, inst: inst});
+        }
+      },
+
+      _forwardInstancePath: function(inst, path, value) {
+        // TODO: assuming we're currently just listening to [[item.xxxx]] properties
+        // which affect only cells on the current row.
+        this.parentElement.iterateCells(function(cell) {
+          // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
+          cell._parentProps = cell._parentProps || {};
+
+          if (cell.instance) {
+            cell.instance.notifyPath(path, value);
+          }
+        });
+
+        if (path.indexOf('item') === 0) {
+          // instance.notifyPath above will call _forwardInstancePath recursively,
+          // so need to debounce to avoid firing the same event multiple times.
+          this.parentElement.debounce('item-changed', function() {
+            // stripping 'item.' from path.
+            this.parentElement.fire('item-changed', {item: inst.item, path: path.substring(5), value: value});
+          }.bind(this));
         }
       },
 

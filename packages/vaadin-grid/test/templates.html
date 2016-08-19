@@ -9,7 +9,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-
+  <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
   <link rel="import" href="../../paper-input/paper-input.html">
 </head>
@@ -18,7 +18,7 @@
 
   <dom-module id="x-grid">
     <template>
-      <vaadin-grid size="100" id="grid" style="height: 300px">
+      <vaadin-grid size="100" id="grid" style="height: 300px" data-source="[[dataSource]]">
         <vaadin-grid-column>
           <template>[[_format(index)]] [[parentProp]]</template>
           <template is="header">[[_format('header1')]] [[parentProp]]</template>
@@ -39,10 +39,18 @@
             <paper-input value="{{parentPath.foo}}"></paper-input>
           </template>
         </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>
+            <paper-input value="{{item.value}}"></paper-input>
+          </template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>[[item.value]]</template>
+        </vaadin-grid-column>
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      document.addEventListener('WebComponentsReady', function() {
         Polymer({
           is: 'x-grid',
 
@@ -55,8 +63,12 @@
                   foo: 'foo'
                 };
               }
+            },
+            dataSource: {
+              value: function() {
+                return infiniteDataSource;
+              }
             }
-
           },
 
           _format: function(value) {
@@ -198,6 +210,39 @@
           input.value = 'value';
 
           expect(container.parentPath.foo).to.eql('value');
+        });
+      });
+
+      describe('using instance paths inside templates', function() {
+        var input;
+        beforeEach(function() {
+          input = getCell(3).querySelector('paper-input');
+          expect(input.value).to.eql('foo0');
+        });
+
+        it('should two-way bind instance path inside cell templates', function() {
+          input.value = 'bar0';
+
+          expect(getCell(3).instance.item.value).to.eql('bar0');
+        });
+
+        it('should notify other cell templates for instance path changes', function() {
+          input.value = 'bar0';
+
+          expect(getCell(4).textContent).to.contain('bar0');
+        });
+
+        it('should fire an event when item path changes', function(done) {
+          var item = getCell(0).instance.item;
+          grid.addEventListener('item-changed', function(e) {
+            expect(e.detail.item).to.eql(item);
+            expect(e.detail.path).to.eql('value');
+            expect(e.detail.value).to.eql('bar0');
+
+            done();
+          });
+
+          input.value = 'bar0';
         });
       });
     });

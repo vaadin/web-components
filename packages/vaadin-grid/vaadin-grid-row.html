@@ -45,6 +45,8 @@
 
       _rowDetailsChanged: function(expanded, rowDetailsTemplate, target) {
         if (expanded) {
+          // TODO: template instance for each detail cell is pushed to the template.instances
+          // but never cleaned up. Maybe consider just hiding details instead of removing.
           var rowDetailsCell = document.createElement('td', 'vaadin-grid-cell');
           rowDetailsCell.setAttribute('detailscell', true);
           // Using a frozen cell as the details cell works as a handy way of
