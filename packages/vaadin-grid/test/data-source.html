@@ -182,7 +182,7 @@
         container.dataSource = function(opts, callback) {
           var items = [];
           for (var i=0;i<opts.pageSize;i++) {
-            items.push('foo' + i);
+            items.push('foo' + (opts.page*opts.pageSize + i));
           }
 
           callback(items);

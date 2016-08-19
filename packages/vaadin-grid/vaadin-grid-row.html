@@ -22,18 +22,18 @@
           value: false
         },
 
-        _rowDetailsCell: {
-          value: null
-        },
+        _rowDetailsCell: Object,
 
         rowDetailsTemplate: Object
       },
 
       observers: [
         '_columnsChanged(columns, target)',
-        '_indexChanged(index, cells, _rowDetailsCell)',
+        '_indexChanged(index, cells)',
         '_frozenColumnsChanged(frozenColumns, cells)',
-        '_rowDetailsChanged(expanded, rowDetailsTemplate, target)'
+        '_rowDetailsChanged(expanded, rowDetailsTemplate, target)',
+        '_rowDetailsCellIndexChanged(_rowDetailsCell, index)',
+        '_rowDetailsCellChanged(_rowDetailsCell, target)'
       ],
 
       iterateCells: function(callback) {
@@ -55,11 +55,12 @@
           Polymer.dom(this.root).appendChild(rowDetailsCell);
           Polymer.dom.flush();
           this._rowDetailsCell = rowDetailsCell;
+
         } else {
           if (this._rowDetailsCell) {
             Polymer.dom(this.root).removeChild(this._rowDetailsCell);
-            this._rowDetailsCell = null;
             this.style.paddingBottom = '';
+            this._rowDetailsCell = null;
           }
         }
 
@@ -71,6 +72,19 @@
 
         // Row details uses a frozen cell to need to invoke this to update cache
         this.target.$.scroller._frozenCellsChanged();
+      },
+
+      _rowDetailsCellChanged: function(_rowDetailsCell, target) {
+        // paddingBottom must be set before update() is called!
+        // make sure observers are in the correct order!
+        target.$.scroller._update();
+      },
+
+      _rowDetailsCellIndexChanged: function(_rowDetailsCell, index, target) {
+        if (_rowDetailsCell) {
+          _rowDetailsCell.index = index;
+          this.style.paddingBottom = _rowDetailsCell.style.height = _rowDetailsCell.clientHeight + 'px';
+        }
       },
 
       //TODO: implement support for columns.splices
@@ -111,10 +125,6 @@
         cells.forEach(function(cell) {
           cell.index = index;
         });
-        if (_rowDetailsCell) {
-          _rowDetailsCell.index = index;
-          this.style.paddingBottom = _rowDetailsCell.style.height = _rowDetailsCell.clientHeight + 'px';
-        }
       }
 
     };

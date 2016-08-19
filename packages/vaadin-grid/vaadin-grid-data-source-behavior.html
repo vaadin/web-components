@@ -33,15 +33,20 @@
         // TODO: potentially heavy operation to run first and last visible index,
         // reconsider if performance issues occur on data binding / scrolling.
         var firstVisiblePage = this._getPageForIndex(this.$.scroller.firstVisibleIndex + this.$.scroller._vidxOffset);
-        this._loadPage(firstVisiblePage);
-
         var lastVisiblePage = this._getPageForIndex(this.$.scroller.lastVisibleIndex + this.$.scroller._vidxOffset);
-        this._loadPage(lastVisiblePage);
 
-        this.$.scroller._physicalItems.forEach(function(row) {
-          var page = this._getPageForIndex(row.index);
-          this._loadPage(page);
-        }.bind(this));
+        [firstVisiblePage].concat(
+         this.$.scroller._physicalItems.map(function(row) {
+          return this._getPageForIndex(row.index);
+        }.bind(this)))
+        .reduce(function(prev, curr) {
+          if (prev.indexOf(curr) === -1) {
+            prev.push(curr);
+          }
+
+          return prev;
+        }, [])
+        .forEach(this._loadPage.bind(this));
       }, 25);
     },
 
@@ -60,7 +65,7 @@
             this._updateItem(row, item);
 
             if (row._item === item) {
-              return;
+              continue;
             }
             row._item = item;
 
@@ -73,6 +78,7 @@
               this.$.scroller.toggleAttribute('has-data', true);
             }
 
+            // update heights if any of the items change.
             this.debounce('update-heights', function() {
               this.$.scroller._update();
             }, 1);
