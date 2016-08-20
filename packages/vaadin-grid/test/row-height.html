@@ -34,7 +34,7 @@
       <vaadin-grid style="width: 200px; height: 200px;" size="10000">
         <vaadin-grid-column>
           <template>
-            <div style="line-height: 0.5em">[[item]]</div>
+            <div style="line-height: 0.5em">[[item.index]]</div>
           </template>
           <template is="header">foo</template>
         </vaadin-grid-column>
@@ -60,7 +60,7 @@
       <vaadin-grid style="width: 200px; height: 200px;" size="10000">
         <vaadin-grid-column>
           <template>
-            <div style="line-height: 2em">[[item]]</div>
+            <div style="line-height: 2em">[[item.index]]</div>
           </template>
           <template is="header">foo</template>
         </vaadin-grid-column>
@@ -87,23 +87,6 @@
       var grid, scroller, rows, defaultHeight, wrappers;
       var dataSourceDelay = 100;
 
-      var ds = function(info, callback) {
-
-        setTimeout(function() {
-          if (grid) {
-            var result = [];
-            for (var i = 0; i < info.pageSize; i++) {
-              result.push('foo');
-            }
-            callback(result);
-
-            grid.async(function() {
-              grid.fire('items-assigned');
-            }, 10); // TODO: Fix async
-          }
-        }, dataSourceDelay);
-      };
-
       function init(fixtureName) {
         grid = fixture(fixtureName);
 
@@ -118,7 +101,16 @@
         scroller = grid.$.scroller;
         rows = getRows(scroller.$.items);
         defaultHeight = getRowCells(getRows(grid.$.scroller.$.header)[0])[0].clientHeight + 1;
-        grid.dataSource = ds;
+        grid.dataSource = function(info, callback) {
+          setTimeout(function() {
+            var startIndex = info.pageSize * info.page;
+            callback(buildDataSet(startIndex + info.pageSize).splice(startIndex));
+
+            grid.async(function() {
+              grid.fire('items-assigned');
+            }, 10);
+          }, dataSourceDelay);
+        };
         wrappers = getRowCells(rows[0]).map(function(cell) {
           return getCellContent(cell);
         });
