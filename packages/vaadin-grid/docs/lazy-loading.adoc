@@ -1,0 +1,158 @@
+---
+title: Lazy Loading and Remote Data
+order: 1
+layout: page
+---
+
+[[vaadin-grid.lazy-loading]]
+= Lazy Loading and Remote Data
+
+In this section, you will learn how to use functions as data sources.
+This enables you to use lazy loading and remote data, such as with REST APIs.
+
+[[vaadin-grid.lazy-loading.functions]]
+== Function Data Source
+
+In addition to assigning an array to the [propertyname]#items# property, you can alternatively provide the [vaadinelement]#vaadin-grid# data through the [propertyname]#dataSource# function.
+The [vaadinelement]#vaadin-grid# element calls this function lazily, only when it needs more data to be displayed.
+
+The function takes two parameters: a `params` object and a `callback` function.
+The `params` object provides `page` and `pageSize` properties, expressing the index of the page for which
+data should be returned, and how many items one page of data should consist of.
+
+The `callback` parameter is a callback function which you must invoke with an array of the requested items as the parameter.
+
+[source,javascript]
+----
+var employees = [
+  {
+    user: {
+      name: { first: 'amber', last: 'crawford' },
+      email: 'amber.crawford@example.com'
+    }
+  },
+  {
+    user: {
+      name: { first: 'zoe', last: 'caldwell' },
+      email: 'zoe.caldwell@example.com'
+    }
+  },
+  {
+    user: {
+      name: { first: 'jessie', last: 'brooks' },
+      email: 'jessie.brooks@example.com'
+    }
+  }
+  ...
+];
+
+grid.size = employees.length;
+grid.dataSource = function(params, callback) {
+  var start = params.pageSize * params.page;
+  callback(employees.slice(start, start + params.pageSize));
+};
+----
+
+When using function data sources, [propertyname]#size# always needs to be set manually.
+
+[[vaadin-grid.lazy-loading.remote]]
+== Remote Data
+
+Using remote data does not differ much from using arrays within a function data source.
+You just need make sure you are handing an array of data over to the `callback` function.
+
+The `page` and `pageSize` properties from the `params` argument come in handy if you are using a
+REST API that supports fetching partial result sets.
+
+[source,javascript]
+----
+grid.items = function(params, callback) {
+  var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      var response = JSON.parse(xhr.responseText);
+      callback(response.employees);
+    }
+  };
+
+  xhr.open('GET', url, true);
+  xhr.send();
+};
+----
+
+
+[[vaadin-grid.lazy-loading.size]]
+== Defining the Data Set Size
+In most cases when using remote data, you cannot know the size of the data set in advance.
+The following describes a few examples on how you could set the [propertyname]#size# in different scenarios.
+
+* There is a separate API for fetching the size.
++
+[source,javascript]
+----
+// Define a function that you call manually every time
+// you believe the size might've changed.
+function setSize() {
+  var url = 'https://my.data/size';
+  var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        grid.size = JSON.parse(xhr.responseText).totalSize);
+      }
+    };
+    xhr.open('GET', url, true);
+    xhr.send();
+  };
+}
+----
+
+* The size is delivered with the data payload.
++
+[source,javascript]
+----
+grid.items = function(params, callback) {
+  var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      var response = JSON.parse(xhr.responseText);
+      callback(response.employees);
+
+      // Assign size from the data payload.
+      grid.size = response.totalSize;
+    }
+  };
+
+  xhr.open('GET', url, true);
+  xhr.send();
+};
+----
+
+* There is no API for getting the total size at all.
++
+[source,javascript]
+----
+// Set an initial size.
+grid.size = 10;
+
+grid.items = function(params, callback) {
+  var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      var response = JSON.parse(xhr.responseText);
+      callback(response.employees);
+
+      // Increase the size dynamically, resulting in "infinite" scrolling.
+      var nextPageStart = params.pageSize * (params.page + 1);
+      if (nextPageStart >= grid.size) {
+        grid.size += 10;
+      }
+    }
+  };
+
+  xhr.open('GET', url, true);
+  xhr.send();
+};
+----
