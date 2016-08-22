@@ -27,6 +27,10 @@
       },
     },
 
+    observers: [
+      'clearCache(pageSize, dataSource)'
+    ],
+
     _getItem: function(index) {
       this.debounce('load', function() {
 
@@ -117,6 +121,7 @@
 
     clearCache: function () {
       this._cache = {};
+      this._pendingRequests  = {};
       this.$.scroller._update();
     }
 

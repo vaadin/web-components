@@ -122,6 +122,7 @@
       });
 
       it('should call datasource for first page', function(done) {
+        container.dataSource.reset();
         grid.pageSize = 100;
 
         grid.async(function() {
@@ -132,6 +133,7 @@
       });
 
       it('should call datasource multiple times to load all items', function(done) {
+        container.dataSource.reset();
         grid.pageSize = 10;
 
         grid.async(function() {
