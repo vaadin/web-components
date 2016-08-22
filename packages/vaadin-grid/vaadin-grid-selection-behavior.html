@@ -1,0 +1,153 @@
+<dom-module id="selection-styles">
+  <template>
+    <style>
+      tbody tr[selected] td {
+        background-color: #cdd1f1;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.SelectionBehavior = {
+
+    properties: {
+
+      /**
+       * When `true`, multiple items may be selected at once (in this case,
+       * `selected` is an array of currently selected items).  When `false`,
+       * only one item may be selected at a time.
+       */
+      multiSelection: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * If `true`, tapping a row will select the item.
+       */
+      selectionEnabled: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * This is the currently selected item, or `null`
+       * if no item is selected.
+       */
+      selectedItem: {
+        type: Object,
+        readOnly: true,
+        notify: true
+      },
+
+      /**
+       * When `multiSelection` is true, this is an array that contains the selected items.
+       */
+      selectedItems: {
+        type: Object,
+        notify: true,
+        readOnly: true,
+        value: function() {
+          return [];
+        }
+      },
+
+      _allColumns: {
+        computed: '_getColumns(columns, selectionEnabled, multiSelection)'
+      }
+
+    },
+
+    observers: [
+      '_selectedItemsChanged(selectedItems, selectedItems.*)'
+    ],
+
+    _isSelected: function(item) {
+      var selected = this.selectedItems.indexOf(item) > -1;
+      return this.selectedItems.inverted ? !selected : selected;
+    },
+
+    _onCheckboxChange: function(e) {
+      if (this.selectionEnabled) {
+        var item = e.target.item;
+        (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
+      }
+    },
+
+    /**
+     * Select the list item at the given index.
+     *
+     * @method selectItem
+     * @param {(Object|number)} item The item object or its index
+     */
+    selectItem: function(item) {
+      if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
+        this._selectItem(this.items[item]);
+      } else {
+        this._selectItem(item);
+      }
+    },
+
+    _selectItem: function(item) {
+      this._setSelectedItem(item);
+      if (this.multiSelection) {
+        if (this.selectedItems.inverted) {
+          var index;
+          if ((index = this.selectedItems.indexOf(item)) > -1) {
+            this.splice('selectedItems', index, 1);
+          }
+        } else {
+          this.push('selectedItems', item);
+        }
+      } else {
+        this.splice('selectedItems', 0, this.selectedItems.length, item);
+      }
+    },
+
+    /**
+     * Deselects the given item list if it is already selected.
+     *
+     * @method deselect
+     * @param {(Object|number)} item The item object or its index
+     */
+    deselectItem: function(item) {
+      if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
+        this._deselectItem(this.items[item]);
+      } else {
+        this._deselectItem(item);
+      }
+    },
+
+    _deselectItem: function(item) {
+      this._setSelectedItem(null);
+      var index = this.selectedItems.indexOf(item);
+      if (this.selectedItems.inverted) {
+        if (index === -1) {
+          this.push('selectedItems', item);
+        }
+      } else {
+        if (index > -1) {
+          this.splice('selectedItems', index, 1);
+        }
+      }
+    },
+
+    _selectedItemsChanged: function() {
+      this.$.scroller._update();
+    },
+
+    _getColumns: function() {
+      if (this.selectionEnabled && this.multiSelection) {
+        return [this.$.multiSelectColumn].concat(this.columns);
+      } else {
+        return this.columns;
+      }
+    }
+
+  };
+</script>
