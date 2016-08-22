@@ -80,6 +80,7 @@
           this.scrollTarget.scrollLeft = this.scrollLeft;
 
           this.domHost._scrollHandler();
+          this.domHost._ignoreScroll = true;
         }
         this._syncingOuterScroller = false;
       }

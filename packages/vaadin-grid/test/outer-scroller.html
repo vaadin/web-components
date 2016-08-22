@@ -43,6 +43,15 @@
         expect(spy.called).to.be.true;
       });
 
+      it('should invoke frozen element translate handler once', function(done) {
+        var spy = sinon.spy(scroller.list, '_onScroll');
+        outerScroller.scrollLeft = 1;
+        setTimeout(function () {
+          expect(spy.callCount).to.equal(1);
+          done();
+        }, 200);
+      });
+
       it('should have the same size as the scroller', function() {
         var outerRect = outerScroller.getBoundingClientRect();
         expect(outerRect.left).to.eql(listRect.left);
