@@ -123,6 +123,11 @@
       this._cache = {};
       this._pendingRequests  = {};
       this.$.scroller._update();
+      this._flushItemsDebouncer();
+    },
+
+    _flushItemsDebouncer: function () {
+      this.flushDebouncer('load');
     }
 
   };
