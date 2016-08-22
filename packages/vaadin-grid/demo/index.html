@@ -33,7 +33,7 @@
           white-space: nowrap;
         }
       </style>
-      <vaadin-grid id="component" size="10000000" frozen-columns="1" on-item-changed="_itemChanged">
+      <vaadin-grid id="component" data-source="[[dataSource]]" size="10000000" frozen-columns="1" on-item-changed="_itemChanged">
 
         <template is="row-details">
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -110,20 +110,24 @@
         Polymer({
           is: 'x-app',
 
-          ready: function() {
-            this.$.component.dataSource = function(opts, callback) {
-              console.log('requesting page ' + opts.page);
-              setTimeout(function() {
-                var result = [];
-                var firstIndex = opts.page * opts.pageSize;
-                for (var i = 0; i < opts.pageSize; i++) {
-                  result.push({
-                    name: 'name-' + (firstIndex + i)
-                  });
-                }
-                callback(result);
-              }, 1000);
-            };
+          properties: {
+            dataSource: {
+              value: function() {
+                return function(opts, callback) {
+                  console.log('requesting page ' + opts.page);
+                  setTimeout(function() {
+                    var result = [];
+                    var firstIndex = opts.page * opts.pageSize;
+                    for (var i = 0; i < opts.pageSize; i++) {
+                      result.push({
+                        name: 'name-' + (firstIndex + i)
+                      });
+                    }
+                    callback(result);
+                  }, 1000);
+                };
+              }
+            }
           },
 
           _itemChanged: function(e) {

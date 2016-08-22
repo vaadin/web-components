@@ -111,13 +111,13 @@
 
     describe('data-source', function() {
       var container, grid;
-      var loadDebounceTime = 25;
+      var loadDebounceTime = 100;
 
       beforeEach(function(done) {
         container = fixture('table');
         grid = container.$.grid;
 
-        container.dataSource = sinon.spy();
+        container.dataSource = sinon.spy(infiniteDataSource);
         grid.async(done, 1);
       });
 
@@ -138,15 +138,16 @@
 
         grid.async(function() {
           //assuming grid has about 30 items
-          expect(container.dataSource.callCount).to.eql(3);
+          expect(container.dataSource.callCount).to.eql(4);
           expect(container.dataSource.firstCall.args[0].page).to.eql(0);
           expect(container.dataSource.secondCall.args[0].page).to.eql(1);
           expect(container.dataSource.thirdCall.args[0].page).to.eql(2);
+          expect(container.dataSource.getCall(3).args[0].page).to.eql(3); //eagerly loaded
           done();
         }, loadDebounceTime);
       });
 
-      it('should always load visible page first', function(done) {
+      it('should always load visible items', function(done) {
         grid.pageSize = 10;
 
         grid.async(function() {
@@ -154,10 +155,9 @@
           simulateScrollToEnd(function() {
             grid.async(function() {
               // 9 is last page out of 100 items / 10 per page.
-              expect(container.dataSource.callCount).to.eql(3);
-              expect(container.dataSource.getCall(0).args[0].page).to.eql(9);
-              expect(container.dataSource.getCall(1).args[0].page).to.eql(8);
-              expect(container.dataSource.getCall(2).args[0].page).to.eql(7);
+              var pages = container.dataSource.getCalls()
+                  .map(function(call) { return call.args[0].page; });
+                expect(pages).to.contain.members([7,8,9]);
               done();
             }, loadDebounceTime);
           });
@@ -169,10 +169,13 @@
         // wait first to initially load first pages.
         grid.async(function() {
           simulateScrollToEnd(function() {
-          container.dataSource.reset();
+            container.dataSource.reset();
             simulateScrollToStart(function() {
               grid.async(function() {
-                expect(container.dataSource.callCount).to.eql(0);
+                var pages = container.dataSource.getCalls().map(function(call) {
+                  return call.args[0].page;
+                });
+                expect(pages).not.to.contain(0);
                 done();
               }, loadDebounceTime);
             });
@@ -190,6 +193,8 @@
           callback(items);
         };
 
+        grid.clearCache();
+
         grid.async(function() {
           expect(getFirstCell().textContent).to.contain('foo0');
           done();
@@ -198,6 +203,7 @@
 
       it('should clear item cache', function(done) {
         container.dataSource = sinon.spy(infiniteDataSource);
+        grid.clearCache();
 
         grid.async(function() {
           expect(container.dataSource.called).to.be.true;
