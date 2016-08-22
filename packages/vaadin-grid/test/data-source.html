@@ -193,6 +193,25 @@
           done();
         }, loadDebounceTime);
       });
+
+      it('should clear item cache', function(done) {
+        container.dataSource = sinon.spy(infiniteDataSource);
+
+        grid.async(function() {
+          expect(container.dataSource.called).to.be.true;
+          expect(grid._cache[0]).to.be.ok;
+
+          container.dataSource.reset();
+          grid.clearCache();
+          expect(grid._cache[0]).not.to.be.ok;
+
+          grid.async(function() {
+            expect(container.dataSource.called).to.be.true;
+            expect(grid._cache[0]).to.be.ok;
+            done();
+          }, loadDebounceTime * 2);
+        }, loadDebounceTime * 2);
+      });
     });
   </script>
 

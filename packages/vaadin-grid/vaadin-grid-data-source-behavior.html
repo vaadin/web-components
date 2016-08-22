@@ -113,6 +113,11 @@
 
     _getPageForIndex: function(index) {
       return Math.floor(index / this.pageSize);
+    },
+
+    clearCache: function () {
+      this._cache = {};
+      this.$.scroller._update();
     }
 
   };
