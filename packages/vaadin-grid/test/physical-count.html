@@ -55,7 +55,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var expectedFinalItem = Math.round(container.listHeight/lastItemHeight) - 1;
 
           assert.equal(list.offsetHeight, container.listHeight);
-          assert.equal(lastItemHeight, 20);
           assert.isTrue(isFullOfItems(list));
           assert.equal(lastItem.textContent, expectedFinalItem);
           done();
@@ -74,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       test('increase pool size after resizing the list', function(done) {
-        container.listHeight = 200;
+        container.listHeight = 1000;
 
         flush(function() {
           expect(list._physicalItems.length).to.eql(25);
