@@ -17,7 +17,7 @@
     }
   </style>
   <template>
-    <vaadin-grid-scroller bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
+    <vaadin-grid-scroller loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
       <content></content>
     </vaadin-grid-scroller>
   </template>

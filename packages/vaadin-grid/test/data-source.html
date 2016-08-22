@@ -215,6 +215,19 @@
           }, loadDebounceTime * 2);
         }, loadDebounceTime * 2);
       });
+
+      it('should apply `loading` attribute to scroller', function(done) {
+        container.dataSource = function(opts, callback) {
+          expect(grid.$.scroller.hasAttribute('loading')).to.be.true;
+
+          // prevent done from being multiple times.
+          grid.debounce('done', function() {
+            done();
+          });
+        };
+
+        grid.clearCache();
+      });
     });
   </script>
 

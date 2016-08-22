@@ -1,3 +1,53 @@
+<dom-module id="vaadin-grid-data-source-styles">
+  <template>
+    <style>
+      :host([loading]) #items {
+        opacity: 0.25;
+      }
+
+      #items {
+        transition: opacity 500ms;
+      }
+
+      :host([loading]::before)  {
+        display: block;
+      }
+
+      /* Anim */
+      @keyframes vaadin-grid-spin-360 {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @-webkit-keyframes vaadin-grid-spin-360 {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        }
+      }
+      :host(::before) {
+        -webkit-animation: vaadin-grid-spin-360 400ms linear infinite;
+        animation: vaadin-grid-spin-360 400ms linear infinite;
+        border: 2px solid #03A9F4;
+        border-radius: 50%;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        content: "";
+        height: 16px;
+        left: 50%;
+        margin-left: -8px;
+        margin-top: -8px;
+        position: absolute;
+        top: 50%;
+        width: 16px;
+
+        display: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
@@ -13,6 +63,8 @@
       },
 
       dataSource: Function,
+
+      loading: Boolean,
 
       _cache: {
         value: function() {
@@ -101,6 +153,7 @@
       } else {
         // clear items while waiting for the correct data.
         this._updateItems(page, null);
+        this.loading = true;
 
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page]) {
@@ -110,6 +163,8 @@
             this._cache[page] = items;
             delete this._pendingRequests[page];
             this._updateItems(page, items);
+
+            this.loading = this._pendingRequests.length > 0;
           }.bind(this));
         }
       }
