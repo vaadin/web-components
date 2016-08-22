@@ -106,28 +106,30 @@
       </vaadin-grid>
     </template>
     <script>
-      Polymer({
-        is: 'x-app',
+      document.addEventListener('WebComponentsReady', function () {
+        Polymer({
+          is: 'x-app',
 
-        ready: function() {
-          this.$.component.dataSource = function(opts, callback) {
-            console.log('requesting page ' + opts.page);
-            setTimeout(function() {
-              var result = [];
-              var firstIndex = opts.page * opts.pageSize;
-              for (var i = 0; i < opts.pageSize; i++) {
-                result.push({
-                  name: 'name-' + (firstIndex + i)
-                });
-              }
-              callback(result);
-            }, 1000);
-          };
-        },
+          ready: function() {
+            this.$.component.dataSource = function(opts, callback) {
+              console.log('requesting page ' + opts.page);
+              setTimeout(function() {
+                var result = [];
+                var firstIndex = opts.page * opts.pageSize;
+                for (var i = 0; i < opts.pageSize; i++) {
+                  result.push({
+                    name: 'name-' + (firstIndex + i)
+                  });
+                }
+                callback(result);
+              }, 1000);
+            };
+          },
 
-        _itemChanged: function(e) {
-          console.log(e.detail);
-        }
+          _itemChanged: function(e) {
+            console.log(e.detail);
+          }
+        });
       });
     </script>
   </dom-module>
