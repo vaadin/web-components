@@ -156,3 +156,15 @@ grid.items = function(params, callback) {
   xhr.send();
 };
 ----
+
+[[vaadin-grid.lazy-loading.change]]
+== Changing the data
+
+In case the source of the data changes so that formerly fetched data might no longer be up-to-date, you can request the [vaadinelement]#vaadin-grid# to clear it's cache of previously loaded items by calling [propertyname]#clearCache# function.
+
+This will result in the [vaadinelement]#vaadin-grid# requesting the data source for a fresh set of items to cover the rows currently visible.
+
+[source,javascript]
+----
+grid.clearCache();
+----
