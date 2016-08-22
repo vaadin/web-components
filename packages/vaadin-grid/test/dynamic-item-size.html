@@ -35,9 +35,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     suite('Dynamic item size', function() {
       var list, container;
 
-      setup(function() {
+      setup(function(done) {
         container = fixture('trivialList');
         list = container.list;
+        setTimeout(done, 1);
       });
 
       test('update size using item index', function(done) {
