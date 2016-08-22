@@ -53,11 +53,21 @@
 
     properties: {
 
+      /**
+       * Number of items fetched at a time from the datasource.
+       */
       pageSize: {
         type: Number,
         value: 50
       },
 
+      /**
+       * Function that provides items lazily. Receives parameters `params`, `callback`
+       *
+       * `params.page` Requested page index
+       *
+       * `params.pageSize` Current page size
+       */
       dataSource: Function,
 
       loading: Boolean,
@@ -170,14 +180,17 @@
       return Math.floor(index / this.pageSize);
     },
 
-    clearCache: function () {
+    /**
+     * Clears the cached pages and reloads data from datasource when needed.
+     */
+    clearCache: function() {
       this._cache = {};
-      this._pendingRequests  = {};
+      this._pendingRequests = {};
       this.$.scroller._update();
       this._flushItemsDebouncer();
     },
 
-    _flushItemsDebouncer: function () {
+    _flushItemsDebouncer: function() {
       this.flushDebouncer('load');
     }
 
