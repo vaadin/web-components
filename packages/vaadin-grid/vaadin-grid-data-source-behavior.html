@@ -166,6 +166,7 @@
         var index = page*this.pageSize + i;
         var row = map[index];
         if (row) {
+          //TODO: items should not be null ever, this check can be removed?
           if (items) {
             var item = items[i];
             this._updateItem(row, item);
@@ -202,8 +203,6 @@
       if (this._cache[page]) {
         this._updateItems(page, this._cache[page]);
       } else {
-        // clear items while waiting for the correct data.
-        this._updateItems(page, null);
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page] && this.dataSource) {
           this._pendingRequests[page] = true;
