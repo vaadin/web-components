@@ -1,6 +1,6 @@
 {
-  "name": "vaadin-split-panel",
-  "description": "Vaadin Split Panel",
+  "name": "vaadin-split-layout",
+  "description": "Vaadin Split Layout",
   "authors": [
     "Vaadin Ltd"
   ],
@@ -9,13 +9,14 @@
     "web-component",
     "polymer",
     "Vaadin",
-    "split-panel"
+    "split-panel",
+    "split-layout"
   ],
-  "main": "vaadin-split-panel.html",
+  "main": "vaadin-split-layout.html",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Vaadin/vaadin-split-panel"
+    "url": "git://github.com/vaadin/vaadin-split-layout"
   },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",

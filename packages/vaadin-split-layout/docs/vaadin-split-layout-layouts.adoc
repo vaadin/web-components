@@ -1,0 +1,47 @@
+---
+title: Horizontal and Vertical Layouts
+order: 2
+layout: page
+---
+
+[[vaadin-split-layout.layouts]]
+= Horizontal and Vertical Layouts
+
+== Horizontal Layout
+
+The [vaadinelement]#vaadin-split-layout# element can arrange the content elements in either a horizontal (side by side) or a vertical layout. By default, the horizontal layout is used.
+
+== Vertical Layout
+
+You can change the layout to vertical by using the `vertical` attribute:
+
+[source,html]
+----
+<vaadin-split-layout vertical>
+  <div>Top layout content</div>
+  <div>Bottom layout content</div>
+</vaadin-split-layout>
+----
+
+[[figure.vaadin-split-layout.layouts.vertical]]
+.A screenshot of [vaadinelement]#vaadin-split-layout# with a vertical layout
+image::img/vaadin-split-layout-vertical.png[width="560"]
+
+== Layouts Combination
+
+You can combine different layouts by using nested [vaadinelement]#vaadin-split-layout# elements:
+
+[source,html]
+----
+<vaadin-split-layout>
+  <div>First layout content</div>
+  <vaadin-split-layout vertical>
+    <div>Second layout content</div>
+    <div>Third layout content</div>
+  </vaadin-split-layout>
+</vaadin-split-layout>
+----
+
+[[figure.vaadin-split-layout.layouts.vertical]]
+.A screenshot of nested [vaadinelement]#vaadin-split-layout# elements with different layouts
+image::img/vaadin-split-layout-combo.png[width="560"]

@@ -5,14 +5,14 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <!--
-`<vaadin-split-panel>` is a Polymer element implementing a split layout for two
+`<vaadin-split-layout>` is a Polymer element implementing a split layout for two
 content elements with a draggable splitter between them.
 
 ```html
-<vaadin-split-panel>
-  <div>First panel content</div>
-  <div>Second panel content</div>
-</vaadin-split-panel>
+<vaadin-split-layout>
+  <div>First layout content</div>
+  <div>Second layout content</div>
+</vaadin-split-layout>
 ```
 
 ### Horizontal and Vertical Layouts
@@ -23,21 +23,21 @@ positioned side by side in a flex container with a horizontal layout.
 You can change the split mode to vertical by adding the `vertical` attribute:
 
 ```html
-<vaadin-split-panel vertical>
+<vaadin-split-layout vertical>
   <div>Content on the top</div>
   <div>Content on the bottom</div>
-</vaadin-split-panel>
+</vaadin-split-layout>
 ```
 
 You can also trigger the vertical mode by setting the property:
-`splitPanel.vertical = true`.
+`splitLayout.vertical = true`.
 
 ### Initial Sizes and Size Limits
 
 The initial sizes for the content elements are determined from their size values
 corresponding to the split layout. `width` is used for the horizontal
 layout, while `height` is used for the vertical one. Then the sizes of the
-content elements are scaled proportionally to fit in the split panel size.
+content elements are scaled proportionally to fit in the split layout size.
 
 The `min-width`/`min-height`, and `max-width`/`max-height` CSS size values
 for the content elements are respected and used to limit the splitter position
@@ -50,7 +50,7 @@ when the splitter is dragged. In order to define a resizable and receive that
 notification in a nested element, include `IronResizableBehavior` and listen
 for the `iron-resize` event.
 
-@element vaadin-split-panel
+@element vaadin-split-layout
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -59,14 +59,14 @@ for the `iron-resize` event.
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
-<iron-iconset-svg size="24" name="vaadin-split-panel">
+<iron-iconset-svg size="24" name="vaadin-split-layout">
 <svg><defs>
 <g id="more-horiz"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
 <g id="more-vert"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
 
-<dom-module id="vaadin-split-panel">
+<dom-module id="vaadin-split-layout">
   <template>
     <style>
       :host {
@@ -118,18 +118,18 @@ for the `iron-resize` event.
         display: block;
       }
     </style>
-    <content select="[vaadin-split-panel=primary]" id="primary"></content>
+    <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <iron-icon id="handle-icon-horizontal" icon="vaadin-split-panel:more-vert"></iron-icon>
-      <iron-icon id="handle-icon-vertical" icon="vaadin-split-panel:more-horiz"></iron-icon>
+      <iron-icon id="handle-icon-horizontal" icon="vaadin-split-layout:more-vert"></iron-icon>
+      <iron-icon id="handle-icon-vertical" icon="vaadin-split-layout:more-horiz"></iron-icon>
     </div>
-    <content select="[vaadin-split-panel=secondary]" id="secondary"></content>
+    <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
   </template>
 
   <script>
     Polymer({
 
-      is: 'vaadin-split-panel',
+      is: 'vaadin-split-layout',
 
       behaviors: [
         Polymer.IronResizableBehavior
@@ -159,13 +159,13 @@ for the `iron-resize` event.
         this._primaryChild = children[0];
         this._secondaryChild = children[1];
         children.forEach(function(child, i) {
-          var panel = i === 0 ? 'primary' :
+          var layout = i === 0 ? 'primary' :
                       i === 1 ? 'secondary' :
                       null;
-          if (panel) {
-            Polymer.dom(child).setAttribute('vaadin-split-panel', panel);
+          if (layout) {
+            Polymer.dom(child).setAttribute('vaadin-split-layout', layout);
           } else {
-            Polymer.dom(child).removeAttribute('vaadin-split-panel');
+            Polymer.dom(child).removeAttribute('vaadin-split-layout');
           }
         });
       },

@@ -46,7 +46,7 @@ function testSauce(browsers, done) {
       expanded: true,
       browserOptions: {
         name: localAddress() + ' / ' + new Date(),
-        build: 'vaadin-split-panel'
+        build: 'vaadin-split-layout'
       },
       plugins: {
         sauce: {
