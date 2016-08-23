@@ -1,3 +1,5 @@
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+
 <dom-module id="selection-styles">
   <template>
     <style>
@@ -58,8 +60,8 @@
        */
       selectedItem: {
         type: Object,
-        readOnly: true,
-        notify: true
+        notify: true,
+        computed: '_getSelectedItem(selectedItems.*)'
       },
 
       /**
@@ -88,12 +90,11 @@
     },
 
     observers: [
-      '_selectedItemsChanged(selectedItems.*)',
-      // '_selectedItemsChanged(selectedItems, selectedItems.*)'
+      '_selectedItemsChanged(selectedItems.*)'
     ],
 
     listeners: {
-      'template-instance-changed' : '_templateInstanceChangedSelection'
+      'template-instance-changed': '_templateInstanceChangedSelection'
     },
 
     _templateInstanceChangedSelection: function(e) {
@@ -132,7 +133,6 @@
     },
 
     _selectItem: function(item) {
-      this._setSelectedItem(item);
       if (this.multiSelection) {
         if (this.selectedItems.inverted) {
           var index;
@@ -162,7 +162,6 @@
     },
 
     _deselectItem: function(item) {
-      this._setSelectedItem(null);
       var index = this.selectedItems.indexOf(item);
       if (this.selectedItems.inverted) {
         if (index === -1) {
@@ -185,6 +184,10 @@
       } else {
         return this.columns;
       }
+    },
+
+    _getSelectedItem: function() {
+      return this.selectedItems[0] || null;
     }
 
   };
