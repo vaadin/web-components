@@ -119,10 +119,10 @@
     },
 
     /**
-     * Select the list item at the given index.
+     * Selects the given item.
      *
      * @method selectItem
-     * @param {(Object|number)} item The item object or its index
+     * @param {Object} item The item object
      */
     selectItem: function(item) {
       if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
@@ -148,10 +148,10 @@
     },
 
     /**
-     * Deselects the given item list if it is already selected.
+     * Deselects the given item if it is already selected.
      *
      * @method deselect
-     * @param {(Object|number)} item The item object or its index
+     * @param {Object} item The item object
      */
     deselectItem: function(item) {
       if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {

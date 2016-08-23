@@ -1,0 +1,49 @@
+---
+title: Selection
+order: 3
+layout: page
+---
+
+[[vaadin-grid.selection]]
+= Selection
+
+Grid allows item based selection of data rows either through UI interaction or using the JavaScript API.
+The selection behavior depends on the currently active selection mode.
+
+[[vaadin-grid.selection.mode]]
+== Selection Mode
+
+The [vaadinelement]#vaadin-grid# is on single selection mode by default.
+This means that it allows only one row to be selected at once.
+
+You can switch on multi select mode by setting [propertyname]#multiSelection# propety to true.
+This reveals an additional checkbox column that can be used to select multiple rows.
+
+[[vaadin-grid.selection.api]]
+== Selection API
+
+This section explains the basic operations available through the selection API.
+
+[methodname]#grid.selectItem(item)#::
+  Selects the row with the given item. If the selection mode is `single`, the method deselects the previously selected row.
+
+[methodname]#grid.deselectItem(item)#::
+  Deselects the row with the given item.
+
+[[vaadin-grid.selection.selected]]
+== Accessing the Selected Rows
+
+The [vaadinelement]#vaadin-grid# defines a property [propertyname]#selectedItems# that represents the list of selected items.
+The array can be accessed (read/changed/data-bound) trough standard API's.
+It also notifies changes to it by firing a 'selected-items-changed' -event.
+
+[source,javascript]
+----
+// Log the selections to console on select event.
+// Example output: "Selected: 3,5,6"
+grid.addEventListener('selected-items-changed', function() {
+  console.log('Selected: ' + grid.selectedItems);
+});
+----
+
+The [propertyname]#selectedItems# array has property called [propertyname]#inverted# which, when set true, changes the array's nature so that it actually contains all the non-selected items and expects every item not on the list to be selected.
