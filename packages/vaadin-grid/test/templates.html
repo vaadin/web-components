@@ -119,6 +119,27 @@
         flush(done);
       });
 
+      it('should fire an event when a non-focusable element is clicked', function(done) {
+        grid.addEventListener('cell-clicked', function(e) {
+          expect(e.detail.model.index).to.eql(0);
+          done();
+        });
+
+        getCell(0).click();
+      });
+
+      it('should not fire an event when a focusable element is clicked', function(done) {
+        grid.addEventListener('cell-clicked', function(e) {
+          done('Should not come here!');
+        });
+
+        var input = getCell(1).querySelector('paper-input');
+        input.focus();
+        input.click();
+
+        grid.async(done, 100);
+      });
+
       describe('using functions inside templates', function() {
         it('should work inside cell templates', function() {
           expect(getFirstCell().textContent).to.contain('foo0');
