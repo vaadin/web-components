@@ -32,7 +32,7 @@
     },
 
     listeners: {
-      'template-instance-changed': '_templateInstanceChanged'
+      'template-instance-changed': '_templateInstanceChangedExpanded'
     },
 
     observers: [
@@ -61,7 +61,7 @@
       }
     },
 
-    _templateInstanceChanged: function(e) {
+    _templateInstanceChangedExpanded: function(e) {
       if (e.detail.prop === 'expanded') {
         if (e.detail.value) {
           this.expandItem(e.detail.inst.item);
