@@ -39,6 +39,17 @@
 
         visibility: hidden;
       }
+
+      :host(:not([has-data])) tr::after {
+        visibility: hidden;
+        content: '-';
+        width: 0;
+
+         /* Must use the same padding (+border-top) as the cell wrapper itself.
+         FIXME: Use the vertical paddings on the cell directly (not the wrapper).
+         Then this could be removed.*/
+        padding: 9px 0 8px;
+      }
     </style>
   </template>
 </dom-module>
