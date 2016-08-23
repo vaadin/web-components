@@ -1,0 +1,175 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid style="width: 200px; height: 200px;" size="10000" selection-enabled>
+        <vaadin-grid-column>
+          <template>foo</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>bar</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('selection', function() {
+      var grid;
+      var rows;
+      var cachedItems;
+
+      beforeEach(function() {
+        grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
+        cachedItems = grid._cache[0];
+        rows = getRows(grid.$.scroller.$.items);
+        grid.selectedItems = [cachedItems[0]];
+      });
+
+      describe('selectedItems', function() {
+
+        it('should set selected attribute', function() {
+          expect(rows[0].hasAttribute('selected')).to.be.true;
+          expect(rows[1].hasAttribute('selected')).to.be.false;
+        });
+
+        it('should reflect changes', function() {
+          grid.push('selectedItems', cachedItems[1]);
+          expect(rows[1].hasAttribute('selected')).to.be.true;
+        });
+
+        it('should bind to cells', function() {
+          var cells = getRowCells(rows[0]);
+          expect(cells[0].instance.selected).to.be.true;
+          expect(cells[1].instance.selected).to.be.true;
+          expect(getRowCells(rows[1])[0].instance.selected).to.be.false;
+        });
+
+        it('should reflect cell instance value', function() {
+          var cells = getRowCells(rows[0]);
+          cells[0].instance.selected = false;
+          expect(cells[0].instance.selected).to.be.false;
+          expect(grid.selectedItems).to.be.empty;
+        });
+
+        it('should notify', function(done) {
+          grid.addEventListener('selected-items-changed', function() {
+            done();
+          });
+          grid.selectedItems = [cachedItems[1]];
+        });
+
+      });
+
+      describe('select functions', function() {
+
+        it('should select item', function() {
+          expect(grid._isSelected(cachedItems[1])).to.be.false;
+          grid.selectItem(cachedItems[1]);
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
+        });
+
+        it('should deselect item', function() {
+          expect(grid._isSelected(cachedItems[0])).to.be.true;
+          grid.deselectItem(cachedItems[0]);
+          expect(grid._isSelected(cachedItems[0])).to.be.false;
+        });
+
+      });
+
+      describe('multi selection', function() {
+
+        beforeEach(function() {
+          grid.multiSelection = true;
+        });
+
+        it('should have multi selection column', function() {
+          expect(grid.columns.length).to.equal(grid.$.scroller.columns.length - 1);
+        });
+
+        it('should select multiple rows', function() {
+          grid.selectItem(cachedItems[1]);
+          grid.selectItem(cachedItems[2]);
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
+          expect(grid._isSelected(cachedItems[2])).to.be.true;
+        });
+
+        it('should reset selection', function() {
+          grid.selectedItems.inverted = true;
+          expect(grid.selectedItems).to.be.empty;
+        });
+
+        it('should invert selection', function() {
+          grid.selectedItems.inverted = true;
+          grid.push('selectedItems', cachedItems[0]);
+          expect(grid._isSelected(cachedItems[0])).to.be.false;
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
+        });
+
+        it('should change inverted selection', function () {
+          expect(grid.selectedItems.inverted).to.be.false;
+          var cells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
+          var content = getCellContent(cells[0]);
+          var selectAllCheckbox = content.querySelector('*');
+          selectAllCheckbox.checked = true;
+          expect(grid.selectedItems.inverted).to.be.true;
+        });
+
+        it('should select an item', function () {
+          var cells = getRowCells(rows[1]);
+          var content = getCellContent(cells[0]);
+          var selectCheckbox = content.querySelector('*');
+          selectCheckbox.checked = true;
+          selectCheckbox.checked = true;
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
+        });
+
+      });
+
+      describe('single selection', function() {
+
+        it('should not have multi selection column', function() {
+          expect(grid.columns).to.eql(grid.$.scroller.columns);
+        });
+
+        it('should not select multiple rows', function() {
+          grid.selectItem(cachedItems[1]);
+          grid.selectItem(cachedItems[2]);
+          expect(grid._isSelected(cachedItems[1])).to.be.false;
+          expect(grid._isSelected(cachedItems[2])).to.be.true;
+        });
+
+        it('should reflect the last selected item', function () {
+          expect(grid.selectedItem).to.equal(cachedItems[0]);
+          grid.selectItem(cachedItems[1]);
+          expect(grid.selectedItem).to.equal(cachedItems[1]);
+          grid.deselectItem(cachedItems[1]);
+          expect(grid.selectedItem).to.be.null;
+        });
+
+      });
+
+
+    });
+  </script>
+
+</body>
+
+</html>
