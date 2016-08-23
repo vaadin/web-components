@@ -20,7 +20,11 @@
   vaadin.elements.grid.GridRowDetailsBehavior = {
 
     properties: {
-      _expandedItems: {
+
+      /**
+       * An array containing references to expanded items.
+       */
+      expandedItems: {
         value: function() {
           return [];
         }
@@ -32,7 +36,7 @@
     },
 
     observers: [
-      '_expandedItemsChanged(_expandedItems.*, dataSource)'
+      '_expandedItemsChanged(expandedItems.*, dataSource)'
     ],
 
     _expandedItemsChanged: function(expandedItems, dataSource) {
@@ -42,18 +46,18 @@
     },
 
     _isExpanded: function(item) {
-      return this._expandedItems.indexOf(item) !== -1;
+      return this.expandedItems.indexOf(item) !== -1;
     },
 
     expandItem: function(item) {
       if (!this._isExpanded(item)) {
-        this.push('_expandedItems', item);
+        this.push('expandedItems', item);
       }
     },
 
     collapseItem: function(item) {
       if (this._isExpanded(item)) {
-        this.splice('_expandedItems', this._expandedItems.indexOf(item), 1);
+        this.splice('expandedItems', this.expandedItems.indexOf(item), 1);
       }
     },
 
