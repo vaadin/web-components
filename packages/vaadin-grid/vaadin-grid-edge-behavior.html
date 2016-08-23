@@ -36,7 +36,7 @@
       edge: true
     },
 
-    _onScroll: function() {
+    _translateStationaryElements: function() {
       this.$.items.style.transform =
         this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
 

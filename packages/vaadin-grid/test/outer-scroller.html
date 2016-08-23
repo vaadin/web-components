@@ -38,13 +38,13 @@
       });
 
       it('should invoke onScroll synchronously', function() {
-        var spy = sinon.spy(scroller.list, '_onScroll');
+        var spy = sinon.spy(scroller.list, '_translateStationaryElements');
         outerscroller._syncScrollTarget();
         expect(spy.called).to.be.true;
       });
 
       it('should invoke frozen element translate handler once', function(done) {
-        var spy = sinon.spy(scroller.list, '_onScroll');
+        var spy = sinon.spy(scroller.list, '_translateStationaryElements');
         outerScroller.scrollLeft = 1;
         setTimeout(function () {
           expect(spy.callCount).to.equal(1);

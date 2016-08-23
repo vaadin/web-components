@@ -145,11 +145,11 @@
           cell.style.transform = '';
         });
         this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
-        this._onScroll();
+        this._translateStationaryElements();
       });
     },
 
-    _onScroll: function() {
+    _translateStationaryElements: function() {
       this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
 
       var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
