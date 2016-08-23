@@ -53,14 +53,6 @@
       },
 
       /**
-       * If `true`, tapping a row will select the item.
-       */
-      selectionEnabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * This is the currently selected item, or `null`
        * if no item is selected.
        */
@@ -82,7 +74,7 @@
       },
 
       _allColumns: {
-        computed: '_getColumns(columns, selectionEnabled, multiSelection)'
+        computed: '_getColumns(columns, multiSelection)'
       },
 
       _multiSelectColumn: {
@@ -106,10 +98,9 @@
 
     _templateInstanceChangedSelection: function(e) {
       if (e.detail.prop === 'selected') {
-        if (this.selectionEnabled) {
-          var item = e.detail.inst.item;
-          (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
-        }
+        var item = e.detail.inst.item;
+        (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
+
         // stop this internal event from propagating outside.
         e.stopPropagation();
       }
@@ -189,7 +180,7 @@
     },
 
     _getColumns: function() {
-      if (this.selectionEnabled && this.multiSelection) {
+      if (this.multiSelection) {
         return [this._multiSelectColumn.$.column].concat(this.columns);
       } else {
         return this.columns;
