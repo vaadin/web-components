@@ -12,11 +12,10 @@
   <template>
     <vaadin-grid-column id="column">
       <template is="header">
-        <!-- TODO: Select all -->
+        <paper-checkbox checked="{{selectAll}}"></paper-checkbox>
       </template>
-
       <template>
-        <paper-checkbox checked="{{selected}}" item=[[item]] on-change="_change"></paper-checkbox>
+        <paper-checkbox checked="{{selected}}"></paper-checkbox>
       </template>
     </vaadin-grid-column>
   </template>
@@ -24,9 +23,12 @@
     Polymer({
       is: 'vaadin-grid-multi-select-column',
 
-      _change: function (e) {
-        this.fire('multiSelectCheckboxChange', e.target.item);
+      properties: {
+        selectAll: {
+          notify: true
+        },
       }
+
     });
   </script>
 </dom-module>
@@ -74,7 +76,6 @@
       selectedItems: {
         type: Object,
         notify: true,
-        readOnly: true,
         value: function() {
           return [];
         }
@@ -85,30 +86,44 @@
       },
 
       _multiSelectColumn: {
-        value: function () {
+        value: function() {
           var msColumn = document.createElement('vaadin-grid-multi-select-column');
-          this.listen(msColumn, 'multiSelectCheckboxChange', '_onMultiSelectCheckboxChange');
-          return msColumn.$.column;
+          this.listen(msColumn, 'select-all-changed', '_onSelectAllChanged');
+          return msColumn;
         }
       }
 
     },
 
     observers: [
-      '_selectedItemsChanged(selectedItems.*)'
+      '_selectedItemsChanged(selectedItems.*)',
       // '_selectedItemsChanged(selectedItems, selectedItems.*)'
     ],
+
+    listeners: {
+      'template-instance-changed' : '_templateInstanceChanged'
+    },
+
+    _templateInstanceChanged: function(e) {
+      if (e.detail.prop === 'selected') {
+        if (this.selectionEnabled) {
+          var item = e.detail.inst.item;
+          (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
+        }
+        // stop this internal event from propagating outside.
+        e.stopPropagation();
+      }
+    },
 
     _isSelected: function(item) {
       var selected = this.selectedItems.indexOf(item) > -1;
       return this.selectedItems.inverted ? !selected : selected;
     },
 
-    _onMultiSelectCheckboxChange: function(e) {
-      if (this.selectionEnabled) {
-        var item = e.detail;
-        (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
-      }
+    _onSelectAllChanged: function(e) {
+      var selectedItems = [];
+      selectedItems.inverted = e.detail.value;
+      this.selectedItems = selectedItems;
     },
 
     /**
@@ -175,7 +190,7 @@
 
     _getColumns: function() {
       if (this.selectionEnabled && this.multiSelection) {
-        return [this._multiSelectColumn].concat(this.columns);
+        return [this._multiSelectColumn.$.column].concat(this.columns);
       } else {
         return this.columns;
       }

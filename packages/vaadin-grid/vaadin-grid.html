@@ -54,6 +54,8 @@
     ],
 
     _updateItem: function(row, item) {
+      row.__selected__ = this._isSelected(item);
+
       row.iterateCells(function(cell) {
         cell.instance.item = item;
         cell.instance.selected = this._isSelected(item);
