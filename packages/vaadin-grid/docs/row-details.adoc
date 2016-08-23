@@ -1,8 +1,21 @@
-# Row Details
+---
+title: Row Details
+order: 2
+layout: page
+---
 
-In order to use row details, a template must be defined. The row details template has to be set as a direct child of `<vaadin-grid>` and it must have `is="row-details"` attribute. The same variables can be used inside the template as in cell templates, namely `index`, `item`, `selected` and `expanded`.
+[[vaadin-grid.row-details]]
+= Row Details
 
-```html
+[[vaadin-grid.row-details.templates]]
+== Defining a Template
+
+In order to use row details, a template must be defined.
+The row details template has to be set as a direct child of [vaadinelement]#vaadin-grid# and it must have `is="row-details"` attribute.
+The same variables can be used inside the template as in cell templates, namely [propertyname]#index#, [propertyname]#item#, [propertyname]#selected# and [propertyname]#expanded#.
+
+[source,html]
+----
 <vaadin-grid>
   <template is="row-details">
     These are the details for [[item.value]]!
@@ -11,24 +24,28 @@ In order to use row details, a template must be defined. The row details templat
      ...
   </vaadin-grid-column>
 </vaadin-grid>
-```
+----
 
-### Expanding Rows
+[[vaadin-grid.row-details.expanding-rows]]
+== Expanding Rows
 
 After a template has been set, details can be expanded and collapsed in various ways.
 
 API can be used to expand and collapse items using reference to the item object:
 
-```js
+[source,javascript]
+----
 grid.expandItem(item1);
 grid.collapseItem(item2);
-```
+----
 
-### Accessing Expanded Items
+[[vaadin-grid.row-details.accessing]]
+== Accessing Expanded Items
 
-After details have been expanded for a row, you can use `expandedItems` to access them.
+After details have been expanded for a row, you can use [propertyname]#expandedItems# to access them.
 
-```html
+[source,html]
+----
 <vaadin-grid expanded-items="{{expandedItems}}">
   <template is="row-details">
     These are the details for [[item.value]]!
@@ -43,26 +60,31 @@ After details have been expanded for a row, you can use `expandedItems` to acces
     <li>[[item.value]</li>
   </template>
 </ul>
-```
+----
 
-> Similarily to `selectedItems`, `expandedItems` will be cleared when the data source is updated.
+[NOTE]
+Similarily to [propertyname]#selectedItems#, [propertyname]#expandedItems# will be cleared when the data source is updated.
 
-`expandedItems` can also be modified to expand or collapse row details. This is especially handy when you want to close all expanded details:
+[propertyname]#expandedItems# can also be modified to expand or collapse row details. This is especially handy when you want to close all expanded details:
 
-```js
+[source,javascript]
+----
 grid.expandedItems = []; //closes all expanded details.
 grid.push('expandedItems', item); //expands row details for 'item'
-```
+----
 
-> When modifying `expandedItems`, remember to use the array mutation methods from Polymer.Base
+[NOTE]
+When modifying [propertyname]#expandedItems#, remember to use the array mutation methods from Polymer.Base
 
-### Expanding and Collapsing Items on Click
+[[vaadin-grid.row-details.clicking]]
+== Expanding and Collapsing Items on Click
 
-You can listen to an event `cell-clicked` which is fired when a user clicks on a *non-focusable* element
+You can listen to [propertyname]#cell-clicked# event which is fired when a user clicks on a *non-focusable* element
 inside a cell. Event details contain a reference to the instance model of the cell which can be used
 to access the item.
 
-```html
+[source,html]
+----
 <vaadin-grid id="grid" on-cell-clicked="_onCellClicked">
   <template is="row-details">
     These are the details for [[item.value]]!
@@ -84,13 +106,15 @@ to access the item.
     }
   ...
 </script>
-```
+----
 
-### Expanding and Collapsing Items using Two-Way binding
+[[vaadin-grid.row-details.bindings]]
+== Expanding and Collapsing Items using Two-Way binding
 
-A variable `expanded` is available inside the row detail template. It is a `Boolean` variable which can be used two-way to determine if the details are expanded for this item.
+A variable [propertyname]#expanded# is available inside the row detail template. It is a Boolean variable which can be used two-way to determine if the details are expanded for this item.
 
-```html
+[source,html]
+----
 <vaadin-grid>
   <template is="row-details">
     These are the details for [[item.value]]!
@@ -104,13 +128,15 @@ A variable `expanded` is available inside the row detail template. It is a `Bool
     </template>
   </vaadin-grid-column>
 </vaadin-grid>
-```
+----
 
-## Styling Row Details
+[[vaadin-grid.row-details.styling]]
+== Styling Row Details
 
-Same way as with other templates, their contents can be fully styled by placing CSS rules in the same scope with `<vaadin-grid>`:
+Same way as with other templates, their contents can be fully styled by placing CSS rules in the same scope with [vaadinelement]#vaadin-grid#:
 
-```html
+[source,html]
+----
 <style>
   vaadin-grid .details {
     background-color: red;
@@ -126,4 +152,4 @@ Same way as with other templates, their contents can be fully styled by placing 
      ...
   </vaadin-grid-column>
 </vaadin-grid>
-```
+----
