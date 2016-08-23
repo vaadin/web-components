@@ -92,11 +92,11 @@
       'clearCache(pageSize)'
     ],
 
-    _getItem: function(index) {
-      this._cachedPagesNeededFor(index).forEach(this._loadPage.bind(this));
-      this._eagerlyLoadPagesFor(index);
+    _getItem: function() {
+      this._cachedPagesForPhysicalItems().forEach(this._loadPage.bind(this));
+      this._eagerlyLoadPages();
 
-      var uncachedPages = this._uncachedPagesNeededFor(index);
+      var uncachedPages = this._uncachedPagesForPhysicalItems();
       if (uncachedPages.length > 0) {
         this.loading = true;
         // avoid debounce during scroll to mitigate scrollbar flickering on iOS.
@@ -108,20 +108,20 @@
       }
     },
 
-    _cachedPagesNeededFor: function(index) {
-      return this._pagesToLoad(index).filter(function(page) {
+    _cachedPagesForPhysicalItems: function() {
+      return this._pagesForPhysicalItems().filter(function(page) {
         return this._cache !== undefined && this._cache[page] !== undefined;
       }.bind(this));
     },
 
-    _uncachedPagesNeededFor: function(index) {
-      return this._pagesToLoad(index).filter(function(page) {
+    _uncachedPagesForPhysicalItems: function() {
+      return this._pagesForPhysicalItems().filter(function(page) {
         return this._cache === undefined || this._cache[page] === undefined;
       }.bind(this));
     },
 
-    _eagerlyLoadPagesFor: function(index) {
-      var pages = this._cachedPagesNeededFor(index).slice(0);
+    _eagerlyLoadPages: function() {
+      var pages = this._cachedPagesForPhysicalItems().slice(0);
 
       if (pages.length > 0) {
         pages.sort(function(a, b) {
@@ -136,7 +136,7 @@
       }
     },
 
-    _pagesToLoad: function(index) {
+    _pagesForPhysicalItems: function() {
       // TODO: potentially heavy operation to run first visible index,
       // reconsider if performance issues occur on data binding / scrolling.
       var firstVisiblePage = this._getPageForIndex(this.$.scroller.firstVisibleIndex + this.$.scroller._vidxOffset);
