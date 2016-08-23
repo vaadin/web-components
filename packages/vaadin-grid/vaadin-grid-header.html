@@ -28,12 +28,15 @@
           var row = document.createElement('tr', 'vaadin-grid-header-row');
           row.headerIndex = rows.length;
           row.target = this.domHost.domHost;
-          row.columns = columns;
 
           rows.push(row);
 
           Polymer.dom(this).appendChild(row);
         }
+
+        rows.forEach(function(row) {
+          row.columns = columns;
+        });
 
         this._rows = rows.slice(0); // new array to make the observer trigger.
       },
@@ -41,7 +44,7 @@
       _frozenColumnsChanged: function(frozenColumns, rows) {
         rows.forEach(function(row) {
           row.frozenColumns = frozenColumns;
-        })
+        });
       }
     });
   </script>
