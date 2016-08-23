@@ -21,16 +21,6 @@
     <vaadin-grid-scroller loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[_allColumns]]" frozen-columns=[[frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
       <content></content>
     </vaadin-grid-scroller>
-
-    <vaadin-grid-column id="multiSelectColumn">
-      <template is="header">
-        <!-- TODO: Select all -->
-      </template>
-
-      <template>
-        <paper-checkbox checked="{{selected}}" on-change="_onCheckboxChange" item=[[item]]></paper-checkbox>
-      </template>
-    </vaadin-grid-column>
   </template>
 </dom-module>
 

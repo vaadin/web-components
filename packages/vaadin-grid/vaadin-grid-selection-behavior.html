@@ -8,6 +8,29 @@
   </template>
 </dom-module>
 
+<dom-module id="vaadin-grid-multi-select-column">
+  <template>
+    <vaadin-grid-column id="column">
+      <template is="header">
+        <!-- TODO: Select all -->
+      </template>
+
+      <template>
+        <paper-checkbox checked="{{selected}}" item=[[item]] on-change="_change"></paper-checkbox>
+      </template>
+    </vaadin-grid-column>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-multi-select-column',
+
+      _change: function (e) {
+        this.fire('multiSelectCheckboxChange', e.target.item);
+      }
+    });
+  </script>
+</dom-module>
+
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
@@ -59,6 +82,14 @@
 
       _allColumns: {
         computed: '_getColumns(columns, selectionEnabled, multiSelection)'
+      },
+
+      _multiSelectColumn: {
+        value: function () {
+          var msColumn = document.createElement('vaadin-grid-multi-select-column');
+          this.listen(msColumn, 'multiSelectCheckboxChange', '_onMultiSelectCheckboxChange');
+          return msColumn.$.column;
+        }
       }
 
     },
@@ -73,9 +104,9 @@
       return this.selectedItems.inverted ? !selected : selected;
     },
 
-    _onCheckboxChange: function(e) {
+    _onMultiSelectCheckboxChange: function(e) {
       if (this.selectionEnabled) {
-        var item = e.target.item;
+        var item = e.detail;
         (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
       }
     },
@@ -144,7 +175,7 @@
 
     _getColumns: function() {
       if (this.selectionEnabled && this.multiSelection) {
-        return [this.$.multiSelectColumn].concat(this.columns);
+        return [this._multiSelectColumn].concat(this.columns);
       } else {
         return this.columns;
       }
