@@ -60,8 +60,7 @@
         box-sizing: border-box;
       }
 
-      :host([ios]) table {
-        /* On iOS we should be always scrolling the outer scroller. */
+      :host([hide-overflow]) table {
         overflow: hidden;
       }
 
@@ -130,7 +129,7 @@
       <tbody id="items"></tbody>
     </table>
 
-    <vaadin-grid-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]">
+    <vaadin-grid-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" hidden="[[hideOuterScroller]]">
       <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]"></div>
     </vaadin-grid-outer-scroller>
 
@@ -162,7 +161,31 @@
 
       bindData: Function,
 
-      rowDetailsTemplate: Object
+      rowDetailsTemplate: Object,
+
+      hideOverflow: {
+        reflectToAttribute: true,
+        value: function () {
+          // Need to hide table's overflow to avoid 2 semi-invisible scrollbars
+          // when scrollbar width is 0 (OSX's "show scrollbars: when scrolling")
+          var hide = this._getScrollbarWidth() === 0;
+          // Chrome doesn't support scrolling the outerscroller (on Android or
+          // desktop) because of the pointer-events rule so it's an exception.
+          if (window.chrome) {
+            hide = false;
+          }
+          return hide;
+        }
+      },
+
+      hideOuterScroller: {
+        value: function () {
+          // Need to hide table's overflow to avoid 2 semi-invisible scrollbars
+          // when scrollbar width is 0 (OSX's "show scrollbars: when scrolling")
+          // On Chrome the best option is to hide the outer scroller.
+          return window.chrome;
+        }
+      }
 
     },
 
@@ -171,6 +194,23 @@
       '_sizeChanged(size, bindData)',
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalCount)'
     ],
+
+    _getScrollbarWidth: function() {
+      // Create the measurement node
+      var scrollDiv = document.createElement("div");
+      scrollDiv.style.width = '100px';
+      scrollDiv.style.height = '100px';
+      scrollDiv.style.overflow = 'scroll';
+      scrollDiv.style.position = 'absolute';
+      scrollDiv.style.top = '-9999px';
+      document.body.appendChild(scrollDiv);
+      // Get the scrollbar width
+      var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+      // Delete the DIV
+      document.body.removeChild(scrollDiv);
+      return scrollbarWidth;
+    },
 
     _rowDetailsTemplateChanged: function(rowDetailsTemplate, _physicalCount) {
       if (_physicalCount) {
