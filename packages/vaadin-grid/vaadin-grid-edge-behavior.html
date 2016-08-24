@@ -8,7 +8,8 @@
         overflow: hidden;
       }
 
-      :host([edge]) thead {
+      :host([edge]) thead,
+      :host([edge]) tfoot {
         position: fixed;
       }
 
@@ -40,7 +41,7 @@
       this.$.items.style.transform =
         this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
 
-      this.$.header.style.transform =
+      this.$.footer.style.transform = this.$.header.style.transform =
         this._getTranslate3d(-this._scrollLeft || 0, 0);
 
       var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);

@@ -37,6 +37,13 @@
   </template>
 </dom-module>
 
+<dom-module id="vaadin-grid-footer-cell">
+  <template>
+    <style include="vaadin-grid-cell-styles"></style>
+    <content></content>
+  </template>
+</dom-module>
+
 <script>
   (function() {
     var vaadinGridCellBehavior = {
@@ -261,6 +268,45 @@
         if (headers[headerIndex]) {
           this.template = headers[headerIndex].template;
           this.colspan = headers[headerIndex].colspan;
+        }
+      },
+
+    });
+
+    Polymer({
+      is: 'vaadin-grid-footer-cell',
+
+      extends: 'td',
+
+      behaviors: [
+        Polymer.Templatizer,
+        vaadinGridCellBehavior
+      ],
+
+      observers: ['_footerIndexChanged(footerIndex, _footers)'],
+
+      properties: {
+        colspan: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        footerIndex: Number
+      },
+
+      _columnChanged: function(column) {
+        this._footers = column.footers;
+        this.listen(column, 'footers-changed', '_footersChanged');
+      },
+
+      _footersChanged: function(e) {
+        this._footers = e.detail.value;
+      },
+
+      _footerIndexChanged: function(footerIndex, footers) {
+        if (footers[footerIndex]) {
+          this.template = footers[footerIndex].template;
+          this.colspan = footers[footerIndex].colspan;
         }
       },
 

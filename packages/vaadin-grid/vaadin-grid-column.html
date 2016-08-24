@@ -34,6 +34,27 @@
             }
           }
         },
+        footers: {
+          type: Array,
+          notify: true,
+          value: function() {
+            var headerTemplates = Polymer.dom(this).querySelectorAll('template[is=footer]');
+            if (headerTemplates) {
+              return headerTemplates.map(function(t) {
+                var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
+
+                if (this.dataHost) {
+                  // set dataHost to the context where template has been defined
+                  t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+                }
+
+                return { template: t, colspan: colspan };
+              }.bind(this));
+            } else {
+              return [];
+            }
+          }
+        },
         instances: {
           type: Array,
           value: function() {
@@ -74,6 +95,7 @@
         this.fire('width-changed', {value: this.width});
         this.fire('flex-changed', {value: this.flex});
         this.fire('headers-changed', {value: this.headers});
+        this.fire('footers-changed', {value: this.footers});
       },
     });
   </script>

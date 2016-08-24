@@ -1,0 +1,39 @@
+<!-- TODO: Share a behavior with grid header -->
+<dom-module id="vaadin-grid-footer">
+  <script>
+    Polymer({
+      is: 'vaadin-grid-footer',
+
+      extends: 'tfoot',
+
+      properties: {
+        columns: Array,
+        frozenColumns: Number,
+        _rows: Array
+      },
+
+      observers: ['_columnsChanged(columns.*, frozenColumns)'],
+
+      _columnsChanged: function() {
+        Polymer.dom(this).innerHTML = "";
+
+        var rows = [];
+        var rowCount = Math.max.apply(Math, this.columns.map(function(column) {
+          return Polymer.dom(column).querySelectorAll('[is="footer"]').length;
+        }));
+        while (rows.length < rowCount) {
+          var row = document.createElement('tr', 'vaadin-grid-footer-row');
+          row.footerIndex = rows.length;
+          row.frozenColumns = this.frozenColumns;
+          row.target = this.domHost.domHost;
+          row.columns = this.columns;
+          rows.push(row);
+          Polymer.dom(this).appendChild(row);
+        }
+
+        this._rows = rows;
+      }
+
+    });
+  </script>
+</dom-module>

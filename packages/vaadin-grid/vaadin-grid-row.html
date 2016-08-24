@@ -201,5 +201,32 @@
 
     });
 
+    Polymer({
+      is: 'vaadin-grid-footer-row',
+
+      behaviors: [
+        vaadinGridRowBehavior
+      ],
+
+      properties: {
+        footerIndex: Object
+      },
+
+      observers: [
+        '_footerIndexChanged(columns, target, footerIndex)'
+      ],
+
+      _footerIndexChanged: function() {
+        this.cells.forEach(function(cell) {
+          cell.footerIndex = this.footerIndex;
+        }, this);
+      },
+
+      _createCell: function () {
+        return document.createElement('td', 'vaadin-grid-footer-cell');
+      }
+
+    });
+
   })();
 </script>
