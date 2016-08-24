@@ -222,7 +222,7 @@
       _onClick: function(e) {
        // Prevent item action if cell itself is not focused.
        if (!this._isFocusable(Polymer.dom(e).localTarget)) {
-         this.fire('cell-clicked', {model: this.instance}, {cancelable: true});
+         this.fire('cell-click', {model: this.instance});
        }
       }
     });
