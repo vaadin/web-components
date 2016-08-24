@@ -5,6 +5,10 @@
         padding: 8px;
         width: 100%;
         box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        white-space: nowrap;
       }
 
       :host {
@@ -69,8 +73,9 @@
         this.template = column.template;
         this.listen(column, 'template-changed', '_columnTemplateChanged');
 
-        this.style.flexBasis = column.minWidth || column.width || '100px';
-        this.listen(column, 'min-width-changed', '_widthChanged');
+        this.style.flexBasis = column.width || '100px';
+        this.style.flexGrow = column.flex || 1;
+        this.listen(column, 'flex-changed', '_flexChanged');
         this.listen(column, 'width-changed', '_widthChanged');
       },
 
@@ -80,6 +85,10 @@
 
       _widthChanged: function(e) {
         this.style.flexBasis = e.detail.value;
+      },
+
+      _flexChanged: function(e) {
+        this.style.flexGrow = e.detail.value;
       },
 
       _indexChanged: function(index, instance) {

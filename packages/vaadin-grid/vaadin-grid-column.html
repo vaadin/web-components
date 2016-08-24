@@ -40,10 +40,6 @@
             return [];
           }
         },
-        minWidth: {
-          type: String,
-          notify: true
-        },
         name: {
           type: String,
           value: ''
@@ -64,6 +60,10 @@
           type: String,
           notify: true,
           value: '100px'
+        },
+        flex: {
+          value: 1,
+          notify: true
         }
       },
 
@@ -72,7 +72,7 @@
         // we're not using bindings between columns and cells so we need to use
         // and fire notifications manually.
         this.fire('width-changed', {value: this.width});
-        if (this.minWidth) { this.fire('min-width-changed', {value: this.minWidth}); }
+        this.fire('flex-changed', {value: this.flex});
         this.fire('headers-changed', {value: this.headers});
       },
     });

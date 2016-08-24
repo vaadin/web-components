@@ -12,12 +12,12 @@
 
 <dom-module id="vaadin-grid-multi-select-column">
   <template>
-    <vaadin-grid-column id="column">
+    <vaadin-grid-column id="column" width="52px" flex="0">
       <template is="header">
-        <paper-checkbox checked="{{selectAll}}"></paper-checkbox>
+        <paper-checkbox style="padding-left: 8px" checked="{{selectAll}}"></paper-checkbox>
       </template>
       <template>
-        <paper-checkbox checked="{{selected}}"></paper-checkbox>
+        <paper-checkbox style="padding-left: 8px" checked="{{selected}}"></paper-checkbox>
       </template>
     </vaadin-grid-column>
   </template>
@@ -76,7 +76,7 @@
       },
 
       _allColumns: {
-        computed: '_getColumns(columns, multiSelection)'
+        computed: '_getColumns(columns.*, multiSelection)'
       },
 
       _multiSelectColumn: {

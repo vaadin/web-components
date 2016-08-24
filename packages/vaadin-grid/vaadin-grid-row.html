@@ -160,17 +160,17 @@
 
           // TODO: reset cell styles to make sure colspan have be changed dynamically.
           cell.style.display = '';
-          cell.style.flexBasis = this.columns[index].minWidth || this.columns[index].width;
-          cell.style.flexGrow = 1;
+          cell.style.flexBasis = this.columns[index].width;
+          cell.style.flexGrow = this.columns[index].flex;
 
           if (cell.colspan > 1) {
             spanning = cell.colspan;
 
             var width = cell.style.flexBasis;
-            var flex = cell.style.flexGrow || 1;
+            var flex = parseInt(cell.style.flexGrow);
             for (var i = 1; i < spanning; i++) {
-              width += ' + ' + (this.columns[index + i].minWidth || this.columns[index + i].width);
-              flex++;
+              width += ' + ' + this.columns[index + i].width;
+              flex += this.columns[index + i].flex;
             }
 
             cell.style.flexBasis = 'calc(' + width + ')';
@@ -204,7 +204,7 @@
           this.listen(cell, 'colspan-changed', '_updateCells');
 
           this.listen(column, 'width-changed', '_updateCells');
-          this.listen(column, 'min-width-changed', '_updateCells');
+          this.listen(column, 'flex-changed', '_updateCells');
 
           Polymer.dom(this).appendChild(cell);
           cells.push(cell);
