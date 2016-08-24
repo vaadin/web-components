@@ -122,9 +122,7 @@
 
       //TODO: implement support for columns.splices
       _columnsChanged: function(columns, target) {
-        this.cells.forEach(function(cell) {
-          Polymer.dom(this).removeChild(cell);
-        }, this);
+        Polymer.dom(this).innerHTML = '';
 
         var cells = [];
         var spanning = 0;
