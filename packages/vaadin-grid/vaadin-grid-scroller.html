@@ -60,7 +60,7 @@
         box-sizing: border-box;
       }
 
-      :host([hide-overflow]) table {
+      table[overflow-hidden] {
         overflow: hidden;
       }
 
@@ -120,7 +120,7 @@
       }
     </style>
 
-    <table id="table" class="table table-striped">
+    <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>
         <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
         </div>
@@ -129,7 +129,7 @@
       <tbody id="items"></tbody>
     </table>
 
-    <vaadin-grid-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" hidden="[[hideOuterScroller]]">
+    <vaadin-grid-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" hidden="[[_hideOuterScroller(scrollbarWidth, safari)]]">
       <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]"></div>
     </vaadin-grid-outer-scroller>
 
@@ -163,27 +163,26 @@
 
       rowDetailsTemplate: Object,
 
-      hideOverflow: {
-        reflectToAttribute: true,
-        value: function () {
-          // Need to hide table's overflow to avoid 2 semi-invisible scrollbars
-          // when scrollbar width is 0 (OSX's "show scrollbars: when scrolling")
-          var hide = this._getScrollbarWidth() === 0;
-          // Chrome doesn't support scrolling the outerscroller (on Android or
-          // desktop) because of the pointer-events rule so it's an exception.
-          if (window.chrome) {
-            hide = false;
-          }
-          return hide;
-        }
+      safari: {
+        value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       },
 
-      hideOuterScroller: {
-        value: function () {
-          // Need to hide table's overflow to avoid 2 semi-invisible scrollbars
-          // when scrollbar width is 0 (OSX's "show scrollbars: when scrolling")
-          // On Chrome the best option is to hide the outer scroller.
-          return window.chrome;
+      scrollbarWidth: {
+        value: function() {
+          // Create the measurement node
+          var scrollDiv = document.createElement("div");
+          scrollDiv.style.width = '100px';
+          scrollDiv.style.height = '100px';
+          scrollDiv.style.overflow = 'scroll';
+          scrollDiv.style.position = 'absolute';
+          scrollDiv.style.top = '-9999px';
+          document.body.appendChild(scrollDiv);
+          // Get the scrollbar width
+          var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+          // Delete the DIV
+          document.body.removeChild(scrollDiv);
+          return scrollbarWidth;
         }
       }
 
@@ -195,21 +194,17 @@
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalCount)'
     ],
 
-    _getScrollbarWidth: function() {
-      // Create the measurement node
-      var scrollDiv = document.createElement("div");
-      scrollDiv.style.width = '100px';
-      scrollDiv.style.height = '100px';
-      scrollDiv.style.overflow = 'scroll';
-      scrollDiv.style.position = 'absolute';
-      scrollDiv.style.top = '-9999px';
-      document.body.appendChild(scrollDiv);
-      // Get the scrollbar width
-      var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-
-      // Delete the DIV
-      document.body.removeChild(scrollDiv);
-      return scrollbarWidth;
+    // The following values aim at avoiding having 2 overlapping semi-invisible
+    // scrollbars visible at the same time when scrollbar width is 0
+    // (OSX's "show scrollbars: when scrolling").
+    // 1. hide the outerscroller altogether when scrollbar width is 0
+    _hideOuterScroller: function (scrollbarWidth, safari) {
+      return scrollbarWidth === 0 && !safari;
+    },
+    // 2. Safari (on desktop and IOS) requires outer scroller to work properly
+    // so in that case we hide the table's scrollbar instead.
+    _hideTableOverflow: function (scrollbarWidth, safari) {
+      return scrollbarWidth === 0 && safari;
     },
 
     _rowDetailsTemplateChanged: function(rowDetailsTemplate, _physicalCount) {
