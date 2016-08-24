@@ -89,71 +89,6 @@
         }
       },
 
-      //TODO: implement support for columns.splices
-      _columnsChanged: function(columns, target) {
-        this.cells.forEach(function(cell) {
-          Polymer.dom(this).removeChild(cell);
-        }, this);
-
-        var cells = [];
-
-        columns.forEach(function(column) {
-          var cell = document.createElement('td', 'vaadin-grid-cell');
-          cell.index = this.index;
-          cell.target = this.target;
-
-          // TODO: remove hack: set a temporary height to prevent row pool
-          // creation from using 1px row height.
-          cell.style = 'height: 50px';
-          cell.column = column;
-
-          Polymer.dom(this).appendChild(cell);
-
-          cells.push(cell);
-        }.bind(this));
-
-        this.cells = cells;
-      },
-
-      _frozenColumnsChanged: function(frozenColumns, cells) {
-        cells.forEach(function(cell, i) {
-          cell.toggleAttribute('frozen', i < frozenColumns);
-          cell.toggleAttribute('last-frozen', i === frozenColumns - 1);
-        });
-      },
-
-      _indexChanged: function(index, cells, _rowDetailsCell) {
-        this.toggleAttribute('odd', index % 2);
-        cells.forEach(function(cell) {
-          cell.index = index;
-        });
-      }
-
-    };
-
-    Polymer({
-      is: 'vaadin-grid-row',
-
-      behaviors: [
-        vaadinGridRowBehavior
-      ]
-    });
-
-    Polymer({
-      is: 'vaadin-grid-header-row',
-
-      behaviors: [
-        vaadinGridRowBehavior
-      ],
-
-      properties: {
-        headerIndex: Object
-      },
-
-      observers: [
-        '_columnsChanged(columns, target, headerIndex)'
-      ],
-
       _updateCells: function() {
         var spanning = 0;
         this.cells.forEach(function(cell, index) {
@@ -186,7 +121,7 @@
       },
 
       //TODO: implement support for columns.splices
-      _columnsChanged: function(columns, target, headerIndex) {
+      _columnsChanged: function(columns, target) {
         this.cells.forEach(function(cell) {
           Polymer.dom(this).removeChild(cell);
         }, this);
@@ -195,14 +130,12 @@
         var spanning = 0;
 
         columns.forEach(function(column, columnIndex) {
-          var cell = document.createElement('th', 'vaadin-grid-header-cell');
+          var cell = this._createCell();
           cell.index = this.index;
           cell.target = this.target;
           cell.column = column;
-          cell.headerIndex = headerIndex;
 
           this.listen(cell, 'colspan-changed', '_updateCells');
-
           this.listen(column, 'width-changed', '_updateCells');
           this.listen(column, 'flex-changed', '_updateCells');
 
@@ -214,6 +147,59 @@
         this.cells = cells;
         this._updateCells();
       },
+
+      _frozenColumnsChanged: function(frozenColumns, cells) {
+        cells.forEach(function(cell, i) {
+          cell.toggleAttribute('frozen', i < frozenColumns);
+          cell.toggleAttribute('last-frozen', i === frozenColumns - 1);
+        });
+      },
+
+      _indexChanged: function(index, cells, _rowDetailsCell) {
+        this.toggleAttribute('odd', index % 2);
+        cells.forEach(function(cell) {
+          cell.index = index;
+        });
+      }
+
+    };
+
+    Polymer({
+      is: 'vaadin-grid-row',
+
+      behaviors: [
+        vaadinGridRowBehavior
+      ],
+
+      _createCell: function () {
+        return document.createElement('td', 'vaadin-grid-cell');
+      }
+    });
+
+    Polymer({
+      is: 'vaadin-grid-header-row',
+
+      behaviors: [
+        vaadinGridRowBehavior
+      ],
+
+      properties: {
+        headerIndex: Object
+      },
+
+      observers: [
+        '_headerIndexChanged(columns, target, headerIndex)'
+      ],
+
+      _headerIndexChanged: function() {
+        this.cells.forEach(function(cell) {
+          cell.headerIndex = this.headerIndex;
+        }, this);
+      },
+
+      _createCell: function () {
+        return document.createElement('th', 'vaadin-grid-header-cell');
+      }
 
     });
 

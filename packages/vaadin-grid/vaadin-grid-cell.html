@@ -68,23 +68,10 @@
       _columnChanged: function(column) {
         this.template = column.template;
         this.listen(column, 'template-changed', '_columnTemplateChanged');
-
-        this.style.flexBasis = column.width || '100px';
-        this.style.flexGrow = column.flex || 1;
-        this.listen(column, 'flex-changed', '_flexChanged');
-        this.listen(column, 'width-changed', '_widthChanged');
       },
 
       _columnTemplateChanged: function(e) {
         this.template = e.detail.value;
-      },
-
-      _widthChanged: function(e) {
-        this.style.flexBasis = e.detail.value;
-      },
-
-      _flexChanged: function(e) {
-        this.style.flexGrow = e.detail.value;
       },
 
       _indexChanged: function(index, instance) {
