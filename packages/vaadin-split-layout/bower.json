@@ -1,5 +1,6 @@
 {
   "name": "vaadin-split-layout",
+  "version": "0.1.0",
   "description": "Vaadin Split Layout",
   "authors": [
     "Vaadin Ltd"
