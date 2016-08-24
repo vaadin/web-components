@@ -75,8 +75,12 @@
         }
       },
 
-      _allColumns: {
+      _columns: {
         computed: '_getColumns(columns.*, multiSelection)'
+      },
+
+      _frozenColumns: {
+        computed: '_getFrozenColumns(frozenColumns, multiSelection)'
       },
 
       _multiSelectColumn: {
@@ -184,6 +188,10 @@
       } else {
         return this.columns;
       }
+    },
+
+    _getFrozenColumns: function () {
+      return this.frozenColumns + (this.multiSelection ? 1 : 0);
     },
 
     _getSelectedItem: function() {
