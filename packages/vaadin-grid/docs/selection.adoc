@@ -16,7 +16,7 @@ The selection behavior depends on the currently active selection mode.
 The [vaadinelement]#vaadin-grid# is on single selection mode by default.
 This means that it allows only one row to be selected at once.
 
-You can switch on multi select mode by setting [propertyname]#multiSelection# propety to true.
+You can switch on multi select mode by setting [propertyname]#multiSelection# property to true.
 This reveals an additional checkbox column that can be used to select multiple rows.
 
 [[vaadin-grid.selection.api]]
