@@ -222,7 +222,7 @@
         row.frozenColumns = frozenColumns;
       });
 
-      requestAnimationFrame(function() {
+      Polymer.RenderStatus.afterNextRender(this.$.header, function() {
         this.$.outerscroller.style.paddingTop = this.$.table.style.paddingTop = this.$.header.clientHeight + 'px';
       }.bind(this));
     },
