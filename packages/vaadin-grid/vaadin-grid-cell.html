@@ -47,11 +47,7 @@
         template: Object,
         target: Object,
 
-        _forwardedParentProps: {
-          value: function() {
-            return {};
-          }
-        }
+        _forwardedParentProps: Object
       },
 
       observers: ['_columnChanged(column)',
@@ -108,6 +104,10 @@
         this.instance = this.stamp(null);
         template.instances = template.instances || [];
         template.instances.push(this.instance);
+
+        // use the same forwardedParentProps instance for all cells using the same template.
+        template.forwardedParentProps = template.forwardedParentProps || {};
+        this._forwardedParentProps = template.forwardedParentProps;
 
         // initializing new template instance with previously forwarded parent props.
         // could be done with observers, but this is simpler.
