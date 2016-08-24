@@ -3,7 +3,7 @@
   window.getJSON = function(url, callback) {
     if (url.indexOf('randomuser.me') > -1) {
       var index = parseInt(getParameterByName(url, 'index') || 0);
-      return users.results[index % users.results.length];
+      return JSON.parse(JSON.stringify(users.results[index % users.results.length])); //clone object
     }
   };
 

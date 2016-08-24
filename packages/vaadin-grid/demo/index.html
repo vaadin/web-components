@@ -7,19 +7,292 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+
+  <link rel="import" href="getjson.html">
   <link rel="import" href="../vaadin-grid.html">
+
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../iron-image/iron-image.html">
 
-  <style is="custom-style">
-    body {
-      margin: 0;
-      padding-top: 100px;
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro" rel="stylesheet">
+
+
+  <style is="custom-style" include="demo-pages-shared-styles">
+    html, body {
+      background: #33383a;
+      font-family: 'Montserrat', sans-serif;
+
+      width: 100%;
+    }
+
+    h3 {
+      color: #e5e8e8;
+    }
+
+    .vertical-section-container {
+      max-width: 60%;
+    }
+
+    .centered {
+      max-width: 60%;
+    }
+
+    demo-snippet {
+      border-radius: 10px;
+      overflow: hidden;
+
+    }
+
+    vaadin-grid {
+      height: 500px;
     }
   </style>
 </head>
 
 <body unresolved>
+  <style is="custom-style">
+    vaadin-grid {
+      --primary-color: #00b4f0;
+      --paper-input-container-input: {
+        font-family: 'Montserrat', sans-serif;
+      };
+
+      --paper-font-common-base: {
+        font-family: 'Montserrat', sans-serif;
+      };
+    }
+
+    paper-checkbox {
+      --primary-color: #00b4f0;
+      --paper-font-common-base: {
+        font-family: 'Montserrat', sans-serif;
+      };
+
+    }
+  </style>
+  <div class="vertical-section-container centered">
+
+    <dom-module id="x-data-source">
+      <script>
+        document.addEventListener('WebComponentsReady', function() {
+          Polymer({
+            is: 'x-data-source',
+
+            properties: {
+              dataSource: {
+                notify: true,
+                value: function() {
+                  return function(opts, callback) {
+                    var items = new Array(opts.pageSize).fill(0).map(function(item, index) {
+                      return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
+                    });
+
+                    callback(items);
+                  };
+                }
+              }
+            }
+          });
+        });
+      </script>
+    </dom-module>
+
+    <h3>Basic Binding</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            #basic-binding {
+              --iron-image-width: 30px;
+              --iron-image-height: 30px;
+            }
+
+            #basic-binding iron-image {
+              position: absolute;
+              top: 5px;
+              height: 30px;
+            }
+          </style>
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid id="basic-binding" data-source="[[dataSource]]" size="10000">
+            <vaadin-grid-column width="50px">
+              <template is="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px">
+              <template is="header"></template>
+              <template>
+                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="calc(50% - 100px)">
+              <template is="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="calc(50% - 100px)">
+              <template is="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Two-Way Binding</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            #two-way-binding {
+              margin-top: 20px;
+            }
+
+            #two-way-binding paper-input {
+              margin-top: -25px;
+            }
+
+            #two-way-binding {
+              --paper-input-container-underline-disabled: {
+                display: none;
+              };
+
+              --paper-input-container-disabled: {
+                opacity: 1;
+              };
+            }
+          </style>
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
+          <vaadin-grid id="two-way-binding" on-item-changed="_log" data-source="[[dataSource]]" size="10000">
+            <vaadin-grid-column>
+              <template is="header">First Name</template>
+              <template>
+                <paper-input value="{{item.user.name.first}}" disabled="[[!editing]]"></paper-input>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template is="header">Last Name</template>
+              <template>
+                <paper-input value="{{item.user.name.last}}" disabled="[[!editing]]"></paper-input>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="200px">
+              <template is="header">Email</template>
+              <template>
+                <paper-input value="{{item.user.email}}" disabled="[[!editing]]"></paper-input>
+              </template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Handling Events</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            #basic-binding {
+              --iron-image-width: 30px;
+              --iron-image-height: 30px;
+            }
+
+            #basic-binding iron-image {
+              position: absolute;
+              top: 5px;
+              height: 30px;
+            }
+          </style>
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid id="basic-binding" data-source="[[dataSource]]" size="10000">
+            <vaadin-grid-column width="50px">
+              <template is="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px">
+              <template is="header"></template>
+              <template>
+                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="calc(50% - 100px)">
+              <template is="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="calc(50% - 100px)">
+              <template is="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Row Details</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            #example2 .details {
+              height: 100px;
+              padding: 10px;
+
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+
+              --iron-image-width: 80px;
+              --iron-image-height: 80px;
+
+              font-size: 20px;
+            }
+
+            #example2 .details iron-image {
+            }
+
+            #example2 {
+              --primary-color: #00b4f0;
+              --paper-font-common-base: {
+                font-family: 'Montserrat', sans-serif;
+              };
+            }
+          </style>
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid id="example2" data-source="[[dataSource]]" size="10000">
+            <template is="row-details">
+              <div class="details">
+                <iron-image src="[[item.user.picture.large]]"></iron-image>
+                <p>Hi! My name is [[item.user.name.first]]!</p>
+              </div>
+            </template>
+            <vaadin-grid-column width="50px">
+              <template is="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template is="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template is="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="100px">
+              <template is="header"></template>
+              <template>
+                <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
+              </template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+  </div>
+
   <dom-module id="x-app">
     <template>
       <style>
@@ -36,8 +309,8 @@
       <vaadin-grid id="component" data-source="[[dataSource]]" size="10000000" frozen-columns="1" on-item-changed="_itemChanged" multi-selection>
 
         <template is="row-details">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           <div>details-[[index]]-[[item.name]]</div>
           <button>Howdy</button>
           <paper-input value="{{item.name}}"></paper-input>
@@ -106,7 +379,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function () {
+      document.addEventListener('WebComponentsReady', function() {
         Polymer({
           is: 'x-app',
 
