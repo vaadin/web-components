@@ -2,50 +2,37 @@
   <script>
     Polymer({
       is: 'vaadin-grid-header',
+
       extends: 'thead',
 
       properties: {
         columns: Array,
         frozenColumns: Number,
-        rowCount: {
-          type: Number,
-          value: 1
-        },
         _rows: Array
       },
 
-      observers: ['_rowCountChanged(rowCount, columns)', '_frozenColumnsChanged(frozenColumns, _rows)'],
+      observers: ['_columnsChanged(columns.*, frozenColumns)'],
 
-      _rowCountChanged: function(rowCount, columns) {
-        var rows = this._rows || [];
+      _columnsChanged: function() {
+        Polymer.dom(this).innerHTML = "";
 
-        while (rows.length > rowCount) {
-          var lastRow = rows.pop();
-          Polymer.dom(this).removeChild(lastRow);
-        }
-
+        var rows = [];
+        var rowCount = Math.max.apply(Math, this.columns.map(function(column) {
+          return Polymer.dom(column).querySelectorAll('[is="header"]').length;
+        }));
         while (rows.length < rowCount) {
           var row = document.createElement('tr', 'vaadin-grid-header-row');
           row.headerIndex = rows.length;
+          row.frozenColumns = this.frozenColumns;
           row.target = this.domHost.domHost;
-
+          row.columns = this.columns;
           rows.push(row);
-
           Polymer.dom(this).appendChild(row);
         }
 
-        rows.forEach(function(row) {
-          row.columns = columns;
-        });
-
-        this._rows = rows.slice(0); // new array to make the observer trigger.
-      },
-
-      _frozenColumnsChanged: function(frozenColumns, rows) {
-        rows.forEach(function(row) {
-          row.frozenColumns = frozenColumns;
-        });
+        this._rows = rows;
       }
+
     });
   </script>
 </dom-module>
