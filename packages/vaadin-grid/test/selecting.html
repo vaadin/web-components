@@ -104,6 +104,10 @@
           expect(grid.columns.length).to.equal(grid.$.scroller.columns.length - 1);
         });
 
+        it('should adjust frozen columns', function() {
+          expect(grid.frozenColumns).to.equal(grid.$.scroller.frozenColumns - 1);
+        });
+
         it('should select multiple rows', function() {
           grid.selectItem(cachedItems[1]);
           grid.selectItem(cachedItems[2]);
