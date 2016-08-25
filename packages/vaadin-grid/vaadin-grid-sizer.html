@@ -17,7 +17,7 @@
     </style>
 
     <template is="dom-repeat" items="[[columns]]">
-      <div class="cell" style$="[[_getStyle(item)]]">&nbsp;</div>
+      <div class="cell" style$="[[_getStyle(item.width, item.flex)]]">&nbsp;</div>
     </template>
 
   </template>
@@ -33,15 +33,37 @@
         scrollHeight: Number
       },
 
-      observers: ['_scrollHeightChanged(scrollHeight)'],
+      observers: [
+        '_scrollHeightChanged(scrollHeight)',
+        '_columnsChanged(columns.*)'
+      ],
 
-      _getStyle: function(column) {
-        return 'flex-basis: ' + (column.minWidth || column.width || '100px');
+      // TODO: There might be other places were we listen to changes to columns
+      // so it might be a good idea to move these listeners to vaadin-grid-scroller
+      // level
+      _columnsChanged: function() {
+        this.columns.forEach(function (column) {
+          this.listen(column, 'flex-changed', '_notifyColumn');
+          this.listen(column, 'width-changed', '_notifyColumn');
+        }, this);
+      },
+
+      _notifyColumn: function(e) {
+        var column = Polymer.dom(e).rootTarget;
+        var index = this.columns.indexOf(column);
+        this.notifyPath('columns.' + index + '.flex', column.flex);
+        this.notifyPath('columns.' + index + '.width', column.width);
+      },
+
+      _getStyle: function(width, flex) {
+        return 'flex-basis: ' + width + '; flex-grow: ' + flex;
       },
 
       _scrollHeightChanged: function(scrollHeight) {
         this.style.top = scrollHeight + 'px';
-      }
+      },
+
+
     });
   </script>
 </dom-module>
