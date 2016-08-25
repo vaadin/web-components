@@ -10,10 +10,11 @@
     :host {
       display: block;
       height: 400px; /* default height to avoid accidental usage without explicit height */
+      --vaadin-grid-border-color: rgba(0,0,0,0.08);
     }
 
     #scroller {
-      border: 1px solid;
+      border: 1px solid var(--vaadin-grid-border-color);
       height: 100%;
       width: 100%;
     }

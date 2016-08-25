@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Uber-table polymer wrapper demo</title>
+  <title>vaadin-grid 2.0 demos</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
@@ -24,19 +24,28 @@
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
 
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro" rel="stylesheet">
-
 
   <style is="custom-style" include="demo-pages-shared-styles">
+    :root {
+      --font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    }
+
     html, body {
       background: #33383a;
-      font-family: 'Montserrat', sans-serif;
-
+      font-weight: 400;
+      font-size: 16px;
+      color: rgba(0,0,0,0.8);
       width: 100%;
     }
 
     h3 {
       color: #e5e8e8;
+      text-transform: uppercase;
+      font-weight: 200;
+      font-size: 2em;
+      letter-spacing: 0.3em;
+      text-align: center;
+      margin: 2em 0 2em;
     }
 
     .vertical-section-container {
@@ -48,9 +57,11 @@
     }
 
     demo-snippet {
-      border-radius: 10px;
       overflow: hidden;
-
+      /*background: #fff;*/
+      --demo-snippet-demo: {
+        padding: 50px;
+      }
     }
 
     vaadin-grid {
@@ -64,18 +75,20 @@
     vaadin-grid {
       --primary-color: #00b4f0;
       --paper-input-container-input: {
-        font-family: 'Montserrat', sans-serif;
+        font-family: var(--font-family);
+
       };
 
       --paper-font-common-base: {
-        font-family: 'Montserrat', sans-serif;
+        font-family: var(--font-family);
       };
     }
 
     paper-checkbox {
       --primary-color: #00b4f0;
       --paper-font-common-base: {
-        font-family: 'Montserrat', sans-serif;
+        font-family: var(--font-family);
+        color: inherit;
       };
 
     }
@@ -119,7 +132,7 @@
 
             #basic-binding iron-image {
               position: absolute;
-              top: 5px;
+              top: 3px;
               height: 30px;
             }
           </style>
@@ -209,7 +222,7 @@
 
             #click-events iron-image {
               position: absolute;
-              top: 5px;
+              top: 3px;
               height: 30px;
             }
           </style>
@@ -263,7 +276,8 @@
             #example2 {
               --primary-color: #00b4f0;
               --paper-font-common-base: {
-                font-family: 'Montserrat', sans-serif;
+                font-family: var(--font-family);
+                font-size: 14px;
               };
             }
           </style>
