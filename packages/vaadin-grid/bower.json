@@ -1,19 +1,32 @@
 {
-  "name": "grid",
+  "name": "vaadin-grid",
+  "version": "1.1.1",
   "authors": [
-    "Tomi Virkki <virkki@vaadin.com>"
+    "Vaadin Ltd"
   ],
-  "description": "",
-  "main": "",
-  "moduleType": [],
-  "license": "MIT",
-  "homepage": "",
+  "license": "Apache-2.0",
+  "keywords": [
+    "web-components",
+    "vaadin",
+    "vaadin elements",
+    "grid",
+    "table",
+    "datagrid",
+    "datatable",
+    "data-grid",
+    "data-table"
+  ],
+  "main": "vaadin-grid.html",
   "ignore": [
     "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "**/node_modules",
+    "**/bower_components",
+    "**/test",
+    "**/java",
+    "**/tasks",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
   ],
   "devDependencies": {
     "iron-list": "^1.3.5",
@@ -28,11 +41,11 @@
     "paper-menu-button": "^1.5.1",
     "paper-icon-button": "^1.1.2",
     "paper-item": "^1.2.1",
+    "paper-slider": "^1.0.11",
+    "app-layout": "polymerelements/app-layout#^0.10.2",
     "iron-icons": "^1.1.3"
   },
   "dependencies": {
     "polymer": "^1.6.1",
-    "paper-slider": "^1.0.11",
-    "app-layout": "polymerelements/app-layout#^0.10.2"
   }
 }

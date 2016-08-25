@@ -1,0 +1,14 @@
+*~
+.git
+.gitignore
+.npmignore
+.??*
+gulpfile.js
+pom.xml
+target
+test
+kk
+pp
+tmp
+node_modules
+bower_components
