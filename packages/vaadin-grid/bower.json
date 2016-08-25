@@ -46,6 +46,6 @@
     "iron-icons": "^1.1.3"
   },
   "dependencies": {
-    "polymer": "^1.6.1",
+    "polymer": "^1.6.1"
   }
 }
