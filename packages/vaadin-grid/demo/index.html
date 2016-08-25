@@ -312,6 +312,44 @@
       </template>
     </demo-snippet>
 
+    <h3>Selection</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+
+          </style>
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid id="example2" data-source="[[dataSource]]" size="10000" multi-selection>
+            <template is="row-details">
+              <div class="details">
+                <iron-image src="[[item.user.picture.large]]"></iron-image>
+                <p>Hi! My name is [[item.user.name.first]]!</p>
+              </div>
+            </template>
+            <vaadin-grid-column width="50px">
+              <template is="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template is="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template is="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="100px">
+              <template is="header"></template>
+              <template>
+                <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
+              </template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
     <h3>Column Hiding</h3>
     <demo-snippet>
       <template>
