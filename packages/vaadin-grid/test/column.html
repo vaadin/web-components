@@ -9,51 +9,177 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
-  <link rel="import" href="../vaadin-grid-column.html">
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
 </head>
 <body>
 
-  <test-fixture id="column">
+  <dom-module id="x-grid">
     <template>
-      <vaadin-grid-column>
-        <template>cell</template>
-        <template is="header">header1</template>
-        <template is="header" colspan="2">header2</template>
-      </vaadin-grid-column>
+      <div id="flex">[[columns.0.flex]]</div>
+      <div id="width">[[columns.0.width]]</div>
+      <vaadin-grid id="grid" columns="{{columns}}" size="100">
+        <vaadin-grid-column>
+          <template>cell</template>
+          <template is="header">header1</template>
+          <template is="header" colspan="2">header2</template>
+          <template is="footer">footer1</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>cell</template>
+          <template is="header">header3</template>
+          <template is="header">header4</template>
+          <template is="footer">footer2</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+    document.addEventListener('WebComponentsReady', function() {
+      Polymer({
+        is: 'x-grid',
+
+        properties: {
+          columns: Array
+        },
+
+        observers: ['_columnsChanged(columns.*)'],
+
+        _columnsChanged: function(e) {
+          if (e.path === 'columns') {
+            this.fire('columns-changed');
+          } else if (e.path === 'columns.#0.flex') {
+            this.flex = e.value;
+          } else if (e.path === 'columns.#0.width') {
+            this.width = e.value;
+          }
+        }
+      });
+    });
+    </script>
+  </dom-module>
+
+  <test-fixture id="grid">
+    <template>
+      <x-grid></x-grid>
     </template>
   </test-fixture>
 
   <script>
 
     describe('column', function() {
-      var column;
+      var container, column, grid;
 
       beforeEach(function(done) {
-        column = fixture('column');
+        container = fixture('grid');
+        grid = container.$.grid;
+        grid.dataSource = infiniteDataSource;
+        column = grid.columns[0];
         flush(done);
       });
 
+      it('should handle splices', function() {
+        grid.splice('columns', 0, 1);
+
+        expect(container.columns.length).to.eql(1);
+      });
+
       describe('properties', function() {
-        it('should have default width', function() {
-          expect(column.width).to.eql('100px');
+        it('should have reference to grid', function() {
+          expect(column.grid).to.eql(grid);
         });
 
-        it('should have default name', function() {
-          expect(column.name).to.eql('');
+        describe('flex', function() {
+          it('should have default value', function() {
+            expect(column.flex).to.eql(1);
+          });
+
+          it('should notify changes', function() {
+            column.flex = 2;
+
+            expect(container.flex).to.eql(2);
+          });
+
+          it('should be bound to header cells', function() {
+            column.flex = 2;
+
+            var header = grid.$.scroller.$.header;
+
+            expect(header._rows[0].cells[0].style.flexGrow).to.eql('2');
+            expect(header._rows[1].cells[0].style.flexGrow).to.eql('3'); // colspan 2 + 1
+          });
+
+          it('should be bound to row cells', function() {
+            column.flex = 2;
+
+            expect(grid.$.scroller._physicalItems[0].cells[0].style.flexGrow).to.eql('2');
+          });
+
+          it('should be bound to row cells on multiSelection', function() {
+            grid.multiSelection = true;
+            column.flex = 2;
+
+            expect(grid.$.scroller._physicalItems[0].cells[1].style.flexGrow).to.eql('2');
+          });
+
+          it('should be bound to footer cells', function() {
+            column.flex = 2;
+
+            expect(grid.$.scroller.$.footer._rows[0].cells[0].style.flexGrow).to.eql('2');
+          });
+        });
+
+        describe('width', function() {
+          it('should have default width', function() {
+            expect(column.width).to.eql('100px');
+          });
+
+          it('should notify changes to width', function() {
+            column.width = '200px';
+
+            expect(container.width).to.eql('200px');
+          });
+
+          it('should be bound to header cells', function() {
+            column.width = '200px';
+
+            var header = grid.$.scroller.$.header;
+
+            expect(header._rows[0].cells[0].style.flexBasis).to.eql('200px');
+          });
+
+          it('should be bound to row cells', function() {
+            column.width = '200px';
+
+            expect(grid.$.scroller._physicalItems[0].cells[0].style.flexBasis).to.eql('200px');
+          });
+
+          it('should be bound to row cells on multiSelection', function() {
+            grid.multiSelection = true;
+            column.width = '200px';
+
+            expect(grid.$.scroller._physicalItems[0].cells[1].style.flexBasis).to.eql('200px');
+          });
+
+          it('should be bound to footer cells', function() {
+            column.width = '200px';
+
+            expect(grid.$.scroller.$.footer._rows[0].cells[0].style.flexBasis).to.eql('200px');
+          });
         });
       });
 
       describe('cell template', function() {
         it('should read template from light DOM', function() {
-          expect(column.template.innerHTML).to.eql('cell');
+          expect(grid.$.scroller._physicalItems[0].cells[0].textContent).to.contain('cell');
         });
       });
 
       describe('header templates', function() {
         it('should read templates from light DOM', function() {
           expect(column.headers.length).to.eql(2);
-          expect(column.headers[0].template.innerHTML).to.eql('header1');
-          expect(column.headers[1].template.innerHTML).to.eql('header2');
+
+          expect(grid.$.scroller.$.header._rows[0].cells[0].textContent).to.contain('header1');
+          expect(grid.$.scroller.$.header._rows[1].cells[0].textContent).to.contain('header2');
         });
 
         it('should read colspan from template attributes', function() {

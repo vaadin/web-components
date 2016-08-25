@@ -11,28 +11,37 @@
         _rows: Array
       },
 
-      observers: ['_columnsChanged(columns.*, frozenColumns)'],
+      observers: ['_columnsChanged(columns.*, frozenColumns)', '_rowsChanged(_rows)'],
 
-      _columnsChanged: function() {
-        Polymer.dom(this).innerHTML = "";
+      _columnsChanged: function(e) {
+        if (e.path === 'columns') {
+          var rowCount = Math.max.apply(Math, e.value.map(function(column) {
+            return Polymer.dom(column).querySelectorAll('[is="header"]').length;
+          }));
 
-        var rows = [];
-        var rowCount = Math.max.apply(Math, this.columns.map(function(column) {
-          return Polymer.dom(column).querySelectorAll('[is="header"]').length;
-        }));
-        while (rows.length < rowCount) {
-          var row = document.createElement('tr', 'vaadin-grid-header-row');
-          row.headerIndex = rows.length;
-          row.frozenColumns = this.frozenColumns;
-          row.target = this.domHost.domHost;
-          row.columns = this.columns;
-          rows.push(row);
-          Polymer.dom(this).appendChild(row);
+          this._rows = new Array(rowCount).fill(0).map(function(item, index) {
+            var row = document.createElement('tr', 'vaadin-grid-header-row');
+            row.headerIndex = index;
+            row.frozenColumns = this.frozenColumns;
+            row.target = this.domHost.domHost;
+            row.columns = e.value;
+
+            return row;
+          }.bind(this));
+        } else if (e.path.indexOf('columns.#') === 0) {
+          this._rows.forEach(function(row) {
+            row.notifyPath(e.path, e.value);
+          });
         }
+      },
 
-        this._rows = rows;
+      _rowsChanged: function(rows) {
+        Polymer.dom(this).innerHTML = '';
+
+        rows.forEach(function(row) {
+          Polymer.dom(this).appendChild(row);
+        }.bind(this));
       }
-
     });
   </script>
 </dom-module>

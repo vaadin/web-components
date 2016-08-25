@@ -197,9 +197,10 @@
     },
 
     observers: [
-      '_columnsChanged(columns, frozenColumns, _physicalCount, _physicalItems)',
+      '_columnsChanged(columns.*, frozenColumns, _physicalItems)',
       '_sizeChanged(size, bindData)',
-      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalCount)'
+      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)',
+      '_physicalItemsChanged(_physicalCount, columns, frozenColumns)'
     ],
 
     // The following values aim at avoiding having 2 overlapping semi-invisible
@@ -215,25 +216,39 @@
       return scrollbarWidth === 0 && safari;
     },
 
-    _rowDetailsTemplateChanged: function(rowDetailsTemplate, _physicalCount) {
-      if (_physicalCount) {
-        this._physicalItems.forEach(function(row) {
-          row.rowDetailsTemplate = this.rowDetailsTemplate;
-        }, this);
-      }
+    _rowDetailsTemplateChanged: function(rowDetailsTemplate, physicalItems) {
+      physicalItems.forEach(function(row) {
+        row.rowDetailsTemplate = rowDetailsTemplate;
+      });
     },
 
-    // TODO: we should observe _physicalItems.splices instead of _physicalCount
-    _columnsChanged: function(columns, frozenColumns) {
-      this._physicalItems.forEach(function(row) {
-        row.columns = columns;
-        row.frozenColumns = frozenColumns;
-      });
+    _columnsChanged: function(e, frozenColumns, physicalItems) {
+      if (e.path === 'columns') {
+        physicalItems.forEach(function(row) {
+          row.columns = e.value;
+          row.frozenColumns = frozenColumns;
+        });
+      } else if (e.path === 'columns.splices') {
+        throw Error('Splicing columns is not supported.');
+      } else if (e.path.indexOf('columns.#' === 0)) {
+        physicalItems.forEach(function(row) {
+          row.notifyPath(e.path, e.value);
+        });
+      }
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
         this.$.outerscroller.style.paddingTop = this.$.table.style.paddingTop = this.$.header.clientHeight + 'px';
         this.$.outerscroller.style.paddingBottom = this.$.table.style.paddingBottom = this.$.footer.clientHeight + 'px';
       }.bind(this));
+    },
+
+    _physicalItemsChanged: function(count, columns, frozenColumns) {
+      // observing _physicalCount instead of _physicalItems.length because grid
+      // seems to startup somewhat faster without using this.push('_physicalItems')...
+      this._physicalItems.forEach(function(row) {
+        row.columns = columns;
+        row.frozenColumns = frozenColumns;
+      });
     },
 
     /**

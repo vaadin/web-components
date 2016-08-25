@@ -28,7 +28,7 @@
       },
 
       observers: [
-        '_columnsChanged(columns, target)',
+        '_columnsChanged(columns.*, target)',
         '_indexChanged(index, cells)',
         '_frozenColumnsChanged(frozenColumns, cells)',
         '_rowDetailsChanged(expanded, rowDetailsTemplate, target)',
@@ -120,30 +120,35 @@
         }.bind(this));
       },
 
-      //TODO: implement support for columns.splices
-      _columnsChanged: function(columns, target) {
-        Polymer.dom(this).innerHTML = '';
+      _columnsChanged: function(e, target) {
+        if (e.path === 'columns') {
+          Polymer.dom(this).innerHTML = '';
 
-        var cells = [];
-        var spanning = 0;
+          var cells = [];
+          var spanning = 0;
 
-        columns.forEach(function(column, columnIndex) {
-          var cell = this._createCell();
-          cell.index = this.index;
-          cell.target = this.target;
-          cell.column = column;
+          e.value.forEach(function(column, columnIndex) {
+            var cell = this._createCell();
+            cell.index = this.index;
+            cell.target = this.target;
+            cell.column = column;
 
-          this.listen(cell, 'colspan-changed', '_updateCells');
-          this.listen(column, 'width-changed', '_updateCells');
-          this.listen(column, 'flex-changed', '_updateCells');
+            this.listen(cell, 'colspan-changed', '_updateCells');
 
-          Polymer.dom(this).appendChild(cell);
-          cells.push(cell);
+            Polymer.dom(this).appendChild(cell);
+            cells.push(cell);
 
-        }.bind(this));
+          }.bind(this));
 
-        this.cells = cells;
-        this._updateCells();
+          this.cells = cells;
+          this._updateCells();
+        } else if (e.path === 'columns.splices') {
+          // TODO:
+          throw Error('Splicing columns is not Supported.');
+        } else if (e.path.indexOf('columns.#') === 0) {
+          // TODO: optimize to update only affected cells.
+          this._updateCells();
+        }
       },
 
       _frozenColumnsChanged: function(frozenColumns, cells) {
