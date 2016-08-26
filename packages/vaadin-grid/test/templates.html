@@ -120,7 +120,7 @@
       });
 
       it('should fire an event when a non-focusable element is clicked', function(done) {
-        grid.addEventListener('cell-clicked', function(e) {
+        grid.addEventListener('cell-click', function(e) {
           expect(e.detail.model.index).to.eql(0);
           done();
         });
@@ -129,7 +129,7 @@
       });
 
       it('should not fire an event when a focusable element is clicked', function(done) {
-        grid.addEventListener('cell-clicked', function(e) {
+        grid.addEventListener('cell-click', function(e) {
           done('Should not come here!');
         });
 
@@ -157,7 +157,7 @@
 
         it('should bind inside cell templates', function() {
           expect(getCell(0).textContent).to.contain('foobar');
-          expect(getCell(3).textContent).to.contain('foobar');
+          expect(getCell(5).textContent).to.contain('foobar');
         });
 
         it('should two-way bind parent properties inside cell templates', function() {
@@ -208,7 +208,7 @@
 
         it('should bind inside cell templates', function() {
           expect(getCell(2).querySelector('paper-input').value).to.contain('bar');
-          expect(getCell(5).querySelector('paper-input').value).to.contain('bar');
+          expect(getCell(7).querySelector('paper-input').value).to.contain('bar');
         });
 
         it('should two-way bind parent path inside cell templates', function() {

@@ -11,40 +11,48 @@
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="x-list.html">
+  <link rel="import" href="../vaadin-grid.html">
 </head>
 
 <body>
 
   <test-fixture id="default">
     <template>
-      <x-list style="width: 50px;"></x-list>
+      <vaadin-grid frozen-columns="1" style="width: 50px; height: 400px;" size="1000">
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
     </template>
   </test-fixture>
 
   <script>
     describe('outer scroller', function() {
+      var grid;
       var scroller;
       var outerScroller;
       var target;
-      var listRect;
+      var tableRect;
 
       beforeEach(function(done) {
-        scroller = fixture('default');
-        outerScroller = scroller.list.$.outerscroller;
+        grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
+        scroller = grid.$.scroller;
+        outerScroller = scroller.$.outerscroller;
+        outerScroller.hidden = false;
         target = outerScroller.scrollTarget;
-        listRect = scroller.list.getBoundingClientRect();
+        tableRect = scroller.$.table.getBoundingClientRect();
         Polymer.Base.async(done, 1);
       });
 
       it('should invoke onScroll synchronously', function() {
-        var spy = sinon.spy(scroller.list, '_translateStationaryElements');
+        var spy = sinon.spy(scroller, '_translateStationaryElements');
         outerscroller._syncScrollTarget();
         expect(spy.called).to.be.true;
       });
 
       it('should invoke frozen element translate handler once', function(done) {
-        var spy = sinon.spy(scroller.list, '_translateStationaryElements');
+        var spy = sinon.spy(scroller, '_translateStationaryElements');
         outerScroller.scrollLeft = 1;
         setTimeout(function () {
           expect(spy.callCount).to.equal(1);
@@ -54,10 +62,10 @@
 
       it('should have the same size as the scroller', function() {
         var outerRect = outerScroller.getBoundingClientRect();
-        expect(outerRect.left).to.eql(listRect.left);
-        expect(outerRect.right).to.eql(listRect.right);
-        expect(outerRect.top).to.eql(listRect.top);
-        expect(outerRect.bottom).to.eql(listRect.bottom);
+        expect(outerRect.left).to.eql(tableRect.left);
+        expect(outerRect.right).to.eql(tableRect.right);
+        expect(outerRect.top).to.eql(tableRect.top);
+        expect(outerRect.bottom).to.eql(tableRect.bottom);
       });
 
       it('should have the same scrollHeight/scrollWidth as the target', function() {
@@ -88,7 +96,7 @@
       describe('passtrough pointer events', function() {
 
         function move(x, y) {
-          makeMouseEvent('mousemove', {x: x, y: y}, scroller.list);
+          makeMouseEvent('mousemove', {x: x, y: y}, scroller);
         }
 
         var HAS_NEW_MOUSE = (function() {
@@ -152,7 +160,7 @@
         }
 
         it('should passtrough pointer events', function(done) {
-          scroller.list.addEventListener('mousemove', function() {
+          scroller.addEventListener('mousemove', function() {
             expect(outerScrollerInUse()).to.be.false;
             done();
           });
@@ -161,19 +169,19 @@
         });
 
         it('should not passtrough iff scrollbars exist (vertical scrollbar hover)', function(done) {
-          scroller.list.addEventListener('mousemove', function() {
+          scroller.addEventListener('mousemove', function() {
             expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
             done();
           });
-          move(listRect.width, 1);
+          move(tableRect.width, 1);
         });
 
         it('should not passtrough iff scrollbars exist (horizontal scrollbar hover)', function(done) {
-          scroller.list.addEventListener('mousemove', function() {
+          scroller.addEventListener('mousemove', function() {
             expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
             done();
           });
-          move(1, listRect.height);
+          move(1, tableRect.height);
         });
 
       });

@@ -69,6 +69,7 @@
 
           it('should have the correct last-frozen cell in a row', function() {
             scroller.frozenColumns = 2;
+            containerRows = getRows(containerElement);
             var cells = getRowCells(containerRows[0]);
             expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
             expect(cells[1].hasAttribute('last-frozen')).to.be.true;
@@ -103,6 +104,7 @@
               expect(cells[0].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');
 
               scroller.frozenColumns = 0;
+              cells = getRowCells(getRows(containerElement)[0]);
               scroller.flushDebouncer('cache-elements');
 
               expect(cells[0].style.transform).to.be.empty;
@@ -119,6 +121,7 @@
               expect(cells[1].style.transform).to.eql('');
 
               scroller.frozenColumns = 2;
+              cells = getRowCells(getRows(containerElement)[0]);
               scroller.flushDebouncer('cache-elements');
               
               expect(cells[1].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');

@@ -11,14 +11,18 @@
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="x-list.html">
+  <link rel="import" href="../vaadin-grid.html">
 </head>
 
 <body>
 
   <test-fixture id="default">
     <template>
-      <x-list style="width: 50px;"></x-list>
+      <vaadin-grid frozen-columns="1" style="width: 50px; height: 400px;" size="1000">
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
     </template>
   </test-fixture>
 
@@ -26,9 +30,12 @@
     describe('scrolling mode', function() {
       var scroller;
       var fixedContainers;
+      var grid;
 
       beforeEach(function() {
-        scroller = fixture('default').list;
+        grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
+        scroller = grid.$.scroller;
         fixedContainers = !!navigator.userAgent.match(/Edge/);
       });
 
