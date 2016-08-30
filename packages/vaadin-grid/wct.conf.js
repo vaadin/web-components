@@ -19,7 +19,7 @@ module.exports = {
         "/vaadin-grid-row.html",
         "/vaadin-grid-scroll-behavior.html",
         "/vaadin-grid-scroller.html",
-        // "/vaadin-grid-selection-behavior.html",
+        "/vaadin-grid-selection-behavior.html",
         "/vaadin-grid-sizer.html",
         "/vaadin-grid.html"
       ],
