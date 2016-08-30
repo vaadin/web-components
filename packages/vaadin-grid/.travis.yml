@@ -6,10 +6,13 @@ addons:
 cache:
   directories:
       - node_modules
-install: travis_retry npm install
+install:
+      - travis_retry npm install
+      - npm install -g coveralls
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 script:
   - wct --local=firefox
+after_success: "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
