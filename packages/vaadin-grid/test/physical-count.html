@@ -50,9 +50,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         setTimeout(function() {
           list.scrollTop = 0;
 
-          var lastItem = getLastItemFromList(list);
+          var lastItem = list._physicalItems[list.lastVisibleIndex];
           var lastItemHeight = lastItem.offsetHeight;
-          var expectedFinalItem = Math.round(container.listHeight/lastItemHeight) - 1;
+          var expectedFinalItem = Math.round(container.listHeight/list._physicalAverage) - 1;
 
           assert.equal(list.offsetHeight, container.listHeight);
           assert.isTrue(isFullOfItems(list));

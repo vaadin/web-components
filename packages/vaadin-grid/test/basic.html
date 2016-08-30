@@ -95,11 +95,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('last visible index', function(done) {
-      var actualHeight = 100 + 8 + 8 + 1; // 100px height + 2x paddings + border
+      var actualHeight = 100 + 1; // 100px height + border
       list.size = 100;
 
-      list.scroll(0, 200 + 2*1); // 1px row border
-      list.fire('scroll');
+      list.scrollToIndex(2);
 
       flush(function() {
         assert.equal(list.lastVisibleIndex, Math.ceil(((list._scrollTop + container.listHeight) / actualHeight) - 1));
