@@ -116,7 +116,7 @@
         datepicker.invalid = true;
         datepicker.errorMessage = 'Not cool';
         flush(function() {
-          var error = datepicker.querySelector('paper-input-error');
+          var error = datepicker.$$('paper-input-error');
           expect(error).not.to.equal(null);
           expect(error.textContent.trim()).to.equal(datepicker.errorMessage);
           done();
@@ -126,7 +126,7 @@
       it('should not display the error-message when undefined', function(done) {
         datepicker.invalid = true;
         flush(function() {
-          var error = datepicker.querySelector('paper-input-error');
+          var error = datepicker.$$('paper-input-error');
           expect(error).to.equal(null);
           done();
         });
