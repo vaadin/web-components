@@ -227,8 +227,6 @@
           row.columns = e.value;
           row.frozenColumns = frozenColumns;
         });
-      } else if (e.path === 'columns.splices') {
-        throw Error('Splicing columns is not supported.');
       } else if (e.path.indexOf('columns.#' === 0)) {
         physicalItems.forEach(function(row) {
           row.notifyPath(e.path, e.value);

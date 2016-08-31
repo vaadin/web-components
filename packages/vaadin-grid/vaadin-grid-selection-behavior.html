@@ -10,9 +10,7 @@
     properties: {
 
       /**
-       * When `true`, multiple items may be selected at once (in this case,
-       * `selected` is an array of currently selected items).  When `false`,
-       * only one item may be selected at a time.
+       * When `true`, a multi-selection column is automatically added as the first column.
        */
       multiSelection: {
         type: Boolean,
@@ -30,7 +28,7 @@
       },
 
       /**
-       * When `multiSelection` is true, this is an array that contains the selected items.
+       * An array that contains the selected items.
        */
       selectedItems: {
         type: Object,
@@ -40,24 +38,15 @@
         }
       },
 
-      _columns: Array,
-
       _frozenColumns: {
         computed: '_getFrozenColumns(frozenColumns, multiSelection)'
       },
 
-      _multiSelectColumn: {
-        value: function() {
-          var msColumn = document.createElement('vaadin-grid-multi-select-column');
-          this.listen(msColumn, 'select-all-changed', '_onSelectAllChanged');
-          return msColumn;
-        }
-      }
-
+      _multiSelectColumn: Object
     },
 
     observers: [
-      '_columnsChanged2(columns, columns.*, multiSelection)',
+      '_multiSelectionChanged(multiSelection, columns)',
       '_selectedItemsChanged(selectedItems.*)'
     ],
 
@@ -65,19 +54,22 @@
       'template-instance-changed': '_templateInstanceChangedSelection'
     },
 
-    _columnsChanged2: function(columns, e, multiSelection) {
-      if (e.path === 'columns') {
-        if (multiSelection) {
-          this._columns = [this._multiSelectColumn.$.column].concat(e.value);
-        } else {
-          this._columns = e.value;
-        }
-      } else if (e.path.indexOf('columns.#') === 0) {
-        var pathParts = e.path.split('.');
-        var index = parseInt(pathParts[1].substring(1));
-        var column = this.columns[index];
+    _multiSelectionChanged: function(multiSelection, columns) {
+      if (multiSelection && !this._multiSelectionColumn) {
+        this._multiSelectionColumn = document.createElement('vaadin-grid-multi-select-column');
+        this._multiSelectionColumn.grid = this;
+        this.listen(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
 
-        this.notifyPath('_columns.' + this._columns.indexOf(column) + '.' + pathParts[2], e.value);
+        this.unshift('columns', this._multiSelectionColumn.$.column);
+      } else if(!multiSelection && this._multiSelectionColumn) {
+        this.unlisten(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
+
+        var index = columns.indexOf(this._multiSelectionColumn.$.column);
+        if (index > -1) {
+          this.splice('columns', index, 1);
+        }
+
+        this._multiSelectionColumn = undefined;
       }
     },
 
@@ -117,17 +109,13 @@
     },
 
     _selectItem: function(item) {
-      if (this.multiSelection) {
-        if (this.selectedItems.inverted) {
-          var index;
-          if ((index = this.selectedItems.indexOf(item)) > -1) {
-            this.splice('selectedItems', index, 1);
-          }
-        } else {
-          this.push('selectedItems', item);
+      if (this.selectedItems.inverted) {
+        var index;
+        if ((index = this.selectedItems.indexOf(item)) > -1) {
+          this.splice('selectedItems', index, 1);
         }
       } else {
-        this.splice('selectedItems', 0, this.selectedItems.length, item);
+        this.push('selectedItems', item);
       }
     },
 
@@ -162,20 +150,16 @@
       this.$.scroller._update();
     },
 
-    _getColumns: function() {
-      if (this.multiSelection) {
-        return [this._multiSelectColumn.$.column].concat(this.columns);
-      } else {
-        return this.columns;
-      }
-    },
-
     _getFrozenColumns: function () {
       return this.frozenColumns + (this.multiSelection ? 1 : 0);
     },
 
     _getSelectedItem: function() {
-      return this.selectedItems[0] || null;
+      if (this.selectedItems && this.selectedItems.length > 0) {
+        return this.selectedItems[this.selectedItems.length - 1];
+      } else {
+        return null;
+      }
     }
 
   };

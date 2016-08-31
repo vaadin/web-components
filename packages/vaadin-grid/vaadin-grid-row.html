@@ -142,9 +142,6 @@
 
           this.cells = cells;
           this._updateCells();
-        } else if (e.path === 'columns.splices') {
-          // TODO:
-          throw Error('Splicing columns is not Supported.');
         } else if (e.path.indexOf('columns.#') === 0) {
           // TODO: optimize to update only affected cells.
           this._updateCells();

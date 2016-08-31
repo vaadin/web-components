@@ -101,7 +101,7 @@
         });
 
         it('should have multi selection column', function() {
-          expect(grid.columns.length).to.equal(grid.$.scroller.columns.length - 1);
+          expect(grid.columns.length).to.equal(3);
         });
 
         it('should adjust frozen columns', function() {
@@ -150,13 +150,13 @@
       describe('single selection', function() {
 
         it('should not have multi selection column', function() {
-          expect(grid.columns).to.eql(grid.$.scroller.columns);
+          expect(grid.columns.length).to.eql(2);
         });
 
-        it('should not select multiple rows', function() {
+        it('should select multiple rows', function() {
           grid.selectItem(cachedItems[1]);
           grid.selectItem(cachedItems[2]);
-          expect(grid._isSelected(cachedItems[1])).to.be.false;
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
           expect(grid._isSelected(cachedItems[2])).to.be.true;
         });
 
@@ -165,9 +165,8 @@
           grid.selectItem(cachedItems[1]);
           expect(grid.selectedItem).to.equal(cachedItems[1]);
           grid.deselectItem(cachedItems[1]);
-          expect(grid.selectedItem).to.be.null;
+          expect(grid.selectedItem).to.eql(cachedItems[0]);
         });
-
       });
 
 
