@@ -18,7 +18,14 @@
   <!-- 2. Configure SystemJS -->
   <script>
     document.addEventListener('WebComponentsReady', function() {
-      var angularPackages = ['core', 'common', 'compiler', 'platform-browser', 'platform-browser-dynamic'];
+      var angularPackages = [
+        'core',
+        'common',
+        'compiler',
+        'forms',
+        'platform-browser',
+        'platform-browser-dynamic'
+      ];
       var packages = {};
 
       angularPackages.forEach(function(p) {
@@ -26,6 +33,7 @@
       });
 
       packages.app = {
+        main: 'main.js',
         format: 'register',
         defaultExtension: 'js'
       };
@@ -36,6 +44,7 @@
 
       System.config({
         map: {
+          'app': 'angular2',
           '@vaadin': '../node_modules/@vaadin',
           '@angular': '../node_modules/@angular'
         },
@@ -63,7 +72,7 @@
         // at SauceLabs, so need to pump up the timeout.
         this.timeout(60000);
 
-        return System.import('angular2/main.js');
+        return System.import('app');
       });
 
       beforeEach(function(done) {
@@ -87,14 +96,14 @@
         });
 
         it('should change value on bound value change', function() {
-          testApp.date = '2001-01-01';
+          testApp.boundDate = '2001-01-01';
           testApp.detectChanges();
           expect(datepicker.value).to.equal('2001-01-01');
         });
 
         it('should change bound value on value change', function() {
           datepicker.value = '2001-01-01';
-          expect(testApp.date).to.equal('2001-01-01');
+          expect(testApp.boundDate).to.equal('2001-01-01');
         });
 
       });
@@ -120,7 +129,7 @@
           });
 
           it('should be an invalid form', function() {
-            expect(datepicker._form.valid).to.be.false;
+            expect(testApp.form.valid).to.be.false;
           });
 
           it('should not reflect invalid state to datepicker initially', function() {
@@ -138,11 +147,11 @@
           });
 
           it('should be a valid form', function() {
-            expect(datepicker._form.valid).to.be.true;
+            expect(testApp.form.valid).to.be.true;
           });
 
           it('should have correct date value', function() {
-            expect(datepicker._form.value.date).to.equal('2001-01-01');
+            expect(testApp.form.value.date).to.equal('2001-01-01');
           });
 
           it('should be valid', function() {
