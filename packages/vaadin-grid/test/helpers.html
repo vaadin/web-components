@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var defaultCellWidth = 100;
 
   function infiniteDataSource(opts, callback) {
-    callback(new Array(opts.pageSize).fill({}).map(function(item, index) { return {value: 'foo' + index}; } ));
+    callback(Array.apply(null, Array(opts.pageSize)).map(function(item, index) { return {value: 'foo' + index}; } ));
   }
 
   function findElementInList(container, selector) {
