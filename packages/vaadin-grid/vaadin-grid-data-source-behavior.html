@@ -103,10 +103,23 @@
       'clearCache(pageSize)'
     ],
 
-    _getItem: function() {
-      this._cachedPagesForPhysicalItems().forEach(this._loadPage.bind(this));
-      this._eagerlyLoadPages();
+    _getCachedItem: function(index) {
+      var page = this._getPageForIndex(index);
 
+      var p = this._cache[page];
+
+      if (p) {
+        return p[index - page * this.pageSize];
+      } else {
+        return null;
+      }
+    },
+
+    _getItem: function(index, el) {
+      this._updateItem(el, this._getCachedItem(index));
+      // this._cachedPagesForPhysicalItems().forEach(this._loadPage.bind(this));
+      this._eagerlyLoadPages();
+      //
       var uncachedPages = this._uncachedPagesForPhysicalItems();
       if (uncachedPages.length > 0) {
         this.loading = true;
@@ -168,23 +181,25 @@
     },
 
     _updateItems: function(page, items) {
-      var map = {};
-      this.$.scroller._physicalItems.map(function(row) {
-        map[row.index] = row;
-      });
+      // var map = {};
+      // this.$.scroller._physicalItems.map(function(row) {
+      //   map[row.index] = row;
+      // });
+
+      // console.log(page);
 
       for(var i=0;i<this.pageSize;i++) {
         var index = page*this.pageSize + i;
-        var row = map[index];
+        var row = this.$.scroller._virtualIndexToItem[index];
         if (row) {
           //TODO: items should not be null ever, this check can be removed?
           if (items) {
             var item = items[i];
-            this._updateItem(row, item);
 
             if (row._item === item) {
               continue;
             }
+            this._updateItem(row, item);
             row._item = item;
 
             // Allow the content to determine row height
@@ -201,6 +216,7 @@
               this.$.scroller._update();
             }, 1);
           } else {
+            throw Error();
             this._updateItem(row, null);
 
             // Item was cleared, use current physical average as min height
@@ -212,7 +228,6 @@
 
     _loadPage: function(page) {
       if (this._cache[page]) {
-        this._updateItems(page, this._cache[page]);
       } else {
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page] && this.dataSource) {
