@@ -54,6 +54,7 @@ If you want to replace the default input field with a custom implementation, you
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../paper-input/paper-input-error.html">
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
@@ -189,6 +190,9 @@ If you want to replace the default input field with a custom implementation, you
         <iron-icon icon="event"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
+      <template is="dom-if" if="[[errorMessage]]">
+        <paper-input-error aria-live="assertive">[[errorMessage]]</paper-input-error>
+      </template>
     </paper-input-container>
 
     <iron-dropdown
@@ -251,7 +255,12 @@ If you want to replace the default input field with a custom implementation, you
           type: Boolean,
           value: false,
           reflectToAttribute: true
-        }
+        },
+
+        /**
+         * The error message to display when the input is invalid.
+         */
+        errorMessage: String
       },
 
       // TODO: revisit this in order to use validatable-behavior for both the full and

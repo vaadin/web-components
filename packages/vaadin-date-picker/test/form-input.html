@@ -112,6 +112,26 @@
         expect(datepicker.$.inputcontainer.invalid).to.be.true;
       });
 
+      it('should display the error-message when invalid', function(done) {
+        datepicker.invalid = true;
+        datepicker.errorMessage = 'Not cool';
+        flush(function() {
+          var error = datepicker.$$('paper-input-error');
+          expect(error).not.to.equal(null);
+          expect(error.textContent.trim()).to.equal(datepicker.errorMessage);
+          done();
+        });
+      });
+
+      it('should not display the error-message when undefined', function(done) {
+        datepicker.invalid = true;
+        flush(function() {
+          var error = datepicker.$$('paper-input-error');
+          expect(error).to.equal(null);
+          done();
+        });
+      });
+
       it('should serialize correctly', function() {
         var form = fixture('datepicker-in-form', {name: 'foo'});
         datepicker = form.querySelector('vaadin-date-picker');
