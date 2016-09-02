@@ -49,8 +49,11 @@
     var vaadinGridCellBehavior = {
       properties: {
         column: Object,
+        expanded: Boolean,
         instance: Object,
         index: Number,
+        item: Object,
+        selected: Boolean,
         template: Object,
         target: Object,
 
@@ -59,8 +62,11 @@
 
       observers: ['_columnChanged(column)',
         '_templateChanged(template, target)',
+        '_expandedChanged(expanded, instance)',
         '_indexChanged(index, instance)',
-        '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)'
+        '_itemChanged(item, instance)',
+        '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)',
+        '_selectedChanged(selected, instance)'
       ],
 
       created: function() {
@@ -81,8 +87,22 @@
         this.template = e.detail.value;
       },
 
+      _expandedChanged: function(expanded, instance) {
+        instance.notifyPath('expanded', expanded);
+      },
+
       _indexChanged: function(index, instance) {
-        instance.index = index;
+        instance.notifyPath('index', index);
+      },
+
+      _itemChanged: function(item, instance) {
+        // use assignment here instead of notifyPath to avoid triggering
+        // forwardInstancePath for path "item" on cells unnecessarily.
+        instance.item = item;
+      },
+
+      _selectedChanged: function(selected, instance) {
+        instance.notifyPath('selected', selected);
       },
 
       _templateChanged: function(template, target) {
@@ -94,6 +114,9 @@
             return template._rootDataHost;
           };
         }
+
+        // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
+        this._parentProps = this._parentProps || {};
 
         this.instance = this.stamp(null);
         template.instances = template.instances || [];
@@ -154,16 +177,13 @@
       _forwardInstancePath: function(inst, path, value) {
         // TODO: assuming we're currently just listening to [[item.xxxx]] properties
         // which affect only cells on the current row.
-        this.parentElement.iterateCells(function(cell) {
-          // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
-          cell._parentProps = cell._parentProps || {};
+        if (path.indexOf('item.') === 0) {
+          this.parentElement.iterateCells(function(cell) {
+            if (cell.instance) {
+              cell.instance.notifyPath(path, value);
+            }
+          });
 
-          if (cell.instance) {
-            cell.instance.notifyPath(path, value);
-          }
-        });
-
-        if (path.indexOf('item') === 0) {
           // instance.notifyPath above will call _forwardInstancePath recursively,
           // so need to debounce to avoid firing the same event multiple times.
           this.parentElement.debounce('item-changed', function() {

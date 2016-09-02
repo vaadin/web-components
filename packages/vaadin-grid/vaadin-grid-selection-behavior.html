@@ -85,7 +85,7 @@
 
     _isSelected: function(item) {
       var selected = this.selectedItems && this.selectedItems.indexOf(item) > -1;
-      return this.selectedItems && this.selectedItems.inverted ? !selected : selected;
+      return (this.selectedItems && this.selectedItems.inverted) ? !selected : selected;
     },
 
     _onSelectAllChanged: function(e) {
@@ -146,12 +146,12 @@
       }
     },
 
-    _selectedItemsChanged: function() {
-      this.$.scroller._update();
-
-      // TODO: no need to call update(),
-      // we should run notifyPath('selected') on the cell instances
-      // of the affected rows.
+    _selectedItemsChanged: function(e) {
+      if (e.path === 'selectedItems' || e.path === 'selectedItems.splices') {
+        this.$.scroller._physicalItems.forEach(function(row) {
+          row.selected = this._isSelected(row.item);
+        }.bind(this));
+      }
     },
 
     _getFrozenColumns: function () {

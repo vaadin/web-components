@@ -63,17 +63,10 @@
     observers: ['_columnsChanged(columns.*)'],
 
     _updateItem: function(row, item) {
-      row.__selected__ = this._isSelected(item);
-
-      row.iterateCells(function(cell) {
-        cell.instance.item = item;
-        cell.instance.selected = this._isSelected(item);
-      }.bind(this));
-
-      // cache original expanded value to __expanded__ to detect when value changes
-      // by a user-action.
-      row.expanded = row.__expanded__ = this._isExpanded(item);
-      row.toggleAttribute('selected', this._isSelected(item));
+      row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
+      row.item = item;
+      row.selected = this._isSelected(item);
+      row.expanded = this._isExpanded(item);
     },
 
     _getContentTarget: function() {

@@ -22,6 +22,12 @@
           value: false
         },
 
+        item: Object,
+
+        selected: {
+          reflectToAttribute: true
+        },
+
         _rowDetailsCell: Object,
 
         rowDetailsTemplate: Object
@@ -30,10 +36,14 @@
       observers: [
         '_columnsChanged(columns.*, target)',
         '_indexChanged(index, cells)',
+        '_itemChanged(item, cells)',
+        '_itemChangedForDetails(item, _rowDetailsCell)',
         '_frozenColumnsChanged(frozenColumns, cells)',
         '_rowDetailsChanged(expanded, rowDetailsTemplate, target)',
         '_rowDetailsCellIndexChanged(_rowDetailsCell, index)',
-        '_rowDetailsCellChanged(_rowDetailsCell, target)'
+        '_rowDetailsCellChanged(_rowDetailsCell, target)',
+        '_selectedChanged(selected, cells)',
+        '_selectedChangedForDetails(selected, _rowDetailsCell)',
       ],
 
       iterateCells: function(callback) {
@@ -66,10 +76,9 @@
           }
         }
 
+        this.__expanded__ = expanded;
         this.iterateCells(function(cell) {
-          if (cell.instance) {
-            cell.instance.expanded = expanded;
-          }
+          cell.expanded = expanded;
         });
 
         // Row details uses a frozen cell to need to invoke this to update cache
@@ -160,8 +169,35 @@
         cells.forEach(function(cell) {
           cell.index = index;
         });
-      }
+      },
 
+      _itemChanged: function(item, cells) {
+        cells.forEach(function(cell) {
+          // use assignment here instead of notifyPath to avoid triggering
+          // forwardInstancePath for path "item" on cells unnecessarily.
+          cell.item = item;
+        });
+      },
+
+      _itemChangedForDetails: function(item, rowDetails) {
+        if (rowDetails) {
+          rowDetails.item = item;
+        }
+      },
+
+      _selectedChanged: function(selected, cells) {
+        this.__selected__ = selected;
+        cells.forEach(function(cell) {
+          cell.selected = selected;
+        });
+      },
+
+      _selectedChangedForDetails: function(selected, rowDetails) {
+        this.__selected__ = selected;
+        if (rowDetails) {
+          rowDetails.selected = selected;
+        }
+      }
     };
 
     Polymer({

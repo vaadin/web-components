@@ -138,11 +138,10 @@
 
         grid.async(function() {
           //assuming grid has about 30 items
-          expect(container.dataSource.callCount).to.eql(4);
+          expect(container.dataSource.callCount).to.eql(3);
           expect(container.dataSource.firstCall.args[0].page).to.eql(0);
           expect(container.dataSource.secondCall.args[0].page).to.eql(1);
           expect(container.dataSource.thirdCall.args[0].page).to.eql(2);
-          expect(container.dataSource.getCall(3).args[0].page).to.eql(3); //eagerly loaded
           done();
         }, loadDebounceTime);
       });

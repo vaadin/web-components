@@ -40,9 +40,10 @@
     ],
 
     _expandedItemsChanged: function(expandedItems, dataSource) {
-      // make sure _update() isn't called before dataSource is set.
-      this.$.scroller._update();
       this._flushItemsDebouncer();
+      this.$.scroller._physicalItems.forEach(function(row) {
+        row.expanded = this._isExpanded(row.item);
+      }.bind(this));
     },
 
     _isExpanded: function(item) {

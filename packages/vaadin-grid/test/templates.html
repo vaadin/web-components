@@ -116,6 +116,8 @@
       beforeEach(function(done) {
         container = fixture('formatting');
         grid = container.$.grid;
+        grid._flushItemsDebouncer();
+
         flush(done);
       });
 

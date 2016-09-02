@@ -117,7 +117,6 @@
 
     _getItem: function(index, el) {
       this._updateItem(el, this._getCachedItem(index));
-      // this._cachedPagesForPhysicalItems().forEach(this._loadPage.bind(this));
       this._eagerlyLoadPages();
       //
       var uncachedPages = this._uncachedPagesForPhysicalItems();
@@ -181,53 +180,28 @@
     },
 
     _updateItems: function(page, items) {
-      // var map = {};
-      // this.$.scroller._physicalItems.map(function(row) {
-      //   map[row.index] = row;
-      // });
-
-      // console.log(page);
-
       for(var i=0;i<this.pageSize;i++) {
         var index = page*this.pageSize + i;
         var row = this.$.scroller._virtualIndexToItem[index];
         if (row) {
-          //TODO: items should not be null ever, this check can be removed?
-          if (items) {
-            var item = items[i];
+          this._updateItem(row, items[i]);
 
-            if (row._item === item) {
-              continue;
-            }
-            this._updateItem(row, item);
-            row._item = item;
-
-            // Allow the content to determine row height
-            row.style.minHeight = '';
-
-            if (!this.$.scroller.hasAttribute('has-data')) {
-              // First set of actual data set to rows, have average height re-measured
-              this.$.scroller._resetAverage();
-              this.$.scroller.toggleAttribute('has-data', true);
-            }
-
-            // update heights if any of the items change.
-            // TODO: in a way these should be obsolete, since _update() is called
-            // on scrollHandler every time tiles are recycled. And the function we
-            // are currently in is called as a result from calling assignModels when
-            // tiles are being recycled. I really should draw a diagram of all this.
-            this.debounce('update-heights', function() {
-              this.$.scroller._updateMetrics();
-              this.$.scroller._positionItems();
-              this.$.scroller._updateScrollerSize();
-            }, 1);
-          } else {
-            throw Error();
-            this._updateItem(row, null);
-
-            // Item was cleared, use current physical average as min height
-            row.style.minHeight = this.$.scroller._physicalAverage + 'px';
+          // update heights if any of the items change.
+          // TODO: in a way these should be obsolete, since _update() is called
+          // on scrollHandler every time tiles are recycled. And the function we
+          // are currently in is called as a result from calling assignModels when
+          // tiles are being recycled. I really should draw a diagram of all this.
+          if (!this.$.scroller.hasAttribute('has-data')) {
+            // First set of actual data set to rows, have average height re-measured
+            this.$.scroller._resetAverage();
+            this.$.scroller.toggleAttribute('has-data', true);
           }
+
+          this.debounce('update-heights', function() {
+            this.$.scroller._updateMetrics();
+            this.$.scroller._positionItems();
+            this.$.scroller._updateScrollerSize();
+          }, 1);
         }
       }
     },
