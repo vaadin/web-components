@@ -176,11 +176,11 @@ If you want to replace the default input field with a custom implementation, you
           tabindex="-1"
           type="text"
           on-focus="_focus"
+          on-keydown="_onKeyDown"
           name$="[[name]]"
           invalid="{{invalid}}"
           required$="[[required]]"
           validator="[[validator]]"
-          readonly$="[[readonly]]"
           disabled$="[[disabled]]" />
       <div suffix id="clear" on-tap="_clear">
         <iron-icon icon="clear"></iron-icon>
@@ -286,6 +286,18 @@ If you want to replace the default input field with a custom implementation, you
 
       _tabindex: function(disabled) {
         return disabled ? -1 : 0;
+      },
+
+      _onKeyDown: function(e) {
+        // The input element cannot be readonly as it would conflict with
+        // the required attribute. Both are not allowed on an input element.
+        // Therefore we prevent default on most keydown events.
+        var allowedKeys = [
+          9 // tab
+        ];
+        if (allowedKeys.indexOf(e.keyCode) === -1) {
+          e.preventDefault();
+        }
       },
 
       _input: function() {
