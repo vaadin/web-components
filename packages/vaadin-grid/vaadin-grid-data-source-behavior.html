@@ -212,8 +212,14 @@
             }
 
             // update heights if any of the items change.
+            // TODO: in a way these should be obsolete, since _update() is called
+            // on scrollHandler every time tiles are recycled. And the function we
+            // are currently in is called as a result from calling assignModels when
+            // tiles are being recycled. I really should draw a diagram of all this.
             this.debounce('update-heights', function() {
-              this.$.scroller._update();
+              this.$.scroller._updateMetrics();
+              this.$.scroller._positionItems();
+              this.$.scroller._updateScrollerSize();
             }, 1);
           } else {
             throw Error();
