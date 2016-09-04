@@ -13,7 +13,7 @@
         if (e.path === 'columns') {
           this._rows = Array.apply(null, Array(this._rowCount(e.value))).map(function(item, index) {
             var row = this._createRow();
-            row.headerIndex = index;
+            row.rowIndex = index;
             row.frozenColumns = this.frozenColumns;
             row.target = this.domHost.domHost;
             row.columns = e.value;

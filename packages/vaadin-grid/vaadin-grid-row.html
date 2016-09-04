@@ -200,6 +200,23 @@
       }
     };
 
+    var vaadinGridRowContainerRowBehavior = {
+
+      properties: {
+        rowIndex: Object
+      },
+
+      observers: [
+        '_rowIndexChanged(columns, target, rowIndex)'
+      ],
+
+      _rowIndexChanged: function() {
+        this.cells.forEach(function(cell) {
+          cell.rowIndex = this.rowIndex;
+        }, this);
+      },
+    };
+
     Polymer({
       is: 'vaadin-grid-row',
 
@@ -207,7 +224,7 @@
         vaadinGridRowBehavior
       ],
 
-      _createCell: function () {
+      _createCell: function() {
         return document.createElement('td', 'vaadin-grid-cell');
       }
     });
@@ -216,24 +233,11 @@
       is: 'vaadin-grid-header-row',
 
       behaviors: [
-        vaadinGridRowBehavior
+        vaadinGridRowBehavior,
+        vaadinGridRowContainerRowBehavior
       ],
 
-      properties: {
-        headerIndex: Object
-      },
-
-      observers: [
-        '_headerIndexChanged(columns, target, headerIndex)'
-      ],
-
-      _headerIndexChanged: function() {
-        this.cells.forEach(function(cell) {
-          cell.headerIndex = this.headerIndex;
-        }, this);
-      },
-
-      _createCell: function () {
+      _createCell: function() {
         return document.createElement('th', 'vaadin-grid-header-cell');
       }
 
@@ -243,24 +247,11 @@
       is: 'vaadin-grid-footer-row',
 
       behaviors: [
-        vaadinGridRowBehavior
+        vaadinGridRowBehavior,
+        vaadinGridRowContainerRowBehavior
       ],
 
-      properties: {
-        footerIndex: Object
-      },
-
-      observers: [
-        '_footerIndexChanged(columns, target, footerIndex)'
-      ],
-
-      _footerIndexChanged: function() {
-        this.cells.forEach(function(cell) {
-          cell.footerIndex = this.footerIndex;
-        }, this);
-      },
-
-      _createCell: function () {
+      _createCell: function() {
         return document.createElement('td', 'vaadin-grid-footer-cell');
       }
 

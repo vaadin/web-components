@@ -1,7 +1,7 @@
 <dom-module id="vaadin-grid-cell-styles">
   <template>
     <style>
-      ::content> div {
+       ::content>div {
         padding: 8px;
         width: 100%;
         box-sizing: border-box;
@@ -11,7 +11,7 @@
         white-space: nowrap;
       }
 
-      :host {
+       :host {
         flex-shrink: 0;
         flex-grow: 1;
         flex-basis: 100px;
@@ -167,10 +167,14 @@
         // fire notification event only when a prop is changed through a user-action.
         // e.g. 'expanded' is different from the originally bound '__expanded__' value.
         if (this.parentElement &&
-            this.parentElement['__' + prop + '__'] !== undefined &&
-            this.parentElement['__' + prop + '__'] !== value) {
+          this.parentElement['__' + prop + '__'] !== undefined &&
+          this.parentElement['__' + prop + '__'] !== value) {
 
-          this.fire('template-instance-changed', { prop: prop, value: value, inst: inst});
+          this.fire('template-instance-changed', {
+            prop: prop,
+            value: value,
+            inst: inst
+          });
         }
       },
 
@@ -188,7 +192,11 @@
           // so need to debounce to avoid firing the same event multiple times.
           this.parentElement.debounce('item-changed', function() {
             // stripping 'item.' from path.
-            this.parentElement.fire('item-changed', {item: inst.item, path: path.substring(5), value: value});
+            this.parentElement.fire('item-changed', {
+              item: inst.item,
+              path: path.substring(5),
+              value: value
+            });
           }.bind(this));
         }
       },
@@ -213,6 +221,31 @@
           });
         }
       }
+    };
+
+    var vaadinGridRowContainerCellBehavior = {
+      observers: ['_rowIndexChanged(rowIndex, _rowContainerObjects)'],
+
+      properties: {
+        colspan: {
+          type: Number,
+          notify: true
+        },
+        rowIndex: Number,
+        _rowContainerObjects: Array
+      },
+
+      _rowContainerObjectsChanged: function(e) {
+        this._rowContainerObjects = e.detail.value;
+      },
+
+      _rowIndexChanged: function(rowIndex, rowContainerObjects) {
+        if (rowContainerObjects[rowIndex]) {
+          this.template = rowContainerObjects[rowIndex].template;
+          this.colspan = rowContainerObjects[rowIndex].colspan;
+        }
+      }
+
     };
 
     Polymer({
@@ -244,13 +277,15 @@
       },
 
       // we need to listen to click instead of tap because on mobile safari, the
-     // document.activeElement has not been updated (focus has not been shifted)
-     // yet at the point when tap event is being executed.
+      // document.activeElement has not been updated (focus has not been shifted)
+      // yet at the point when tap event is being executed.
       _onClick: function(e) {
-       // Prevent item action if cell itself is not focused.
-       if (!this._isFocusable(Polymer.dom(e).localTarget)) {
-         this.fire('cell-click', {model: this.instance});
-       }
+        // Prevent item action if cell itself is not focused.
+        if (!this._isFocusable(Polymer.dom(e).localTarget)) {
+          this.fire('cell-click', {
+            model: this.instance
+          });
+        }
       }
     });
 
@@ -261,35 +296,14 @@
 
       behaviors: [
         Polymer.Templatizer,
-        vaadinGridCellBehavior
+        vaadinGridCellBehavior,
+        vaadinGridRowContainerCellBehavior
       ],
 
-      observers: ['_headerIndexChanged(headerIndex, _headers)'],
-
-      properties: {
-        colspan: {
-          type: Number,
-          value: 0,
-          notify: true
-        },
-        headerIndex: Number
-      },
-
       _columnChanged: function(column) {
-        this._headers = column.headers;
-        this.listen(column, 'headers-changed', '_headersChanged');
-      },
-
-      _headersChanged: function(e) {
-        this._headers = e.detail.value;
-      },
-
-      _headerIndexChanged: function(headerIndex, headers) {
-        if (headers[headerIndex]) {
-          this.template = headers[headerIndex].template;
-          this.colspan = headers[headerIndex].colspan;
-        }
-      },
+        this._rowContainerObjects = column.headers;
+        this.listen(column, 'headers-changed', '_rowContainerObjectsChanged');
+      }
 
     });
 
@@ -300,35 +314,14 @@
 
       behaviors: [
         Polymer.Templatizer,
-        vaadinGridCellBehavior
+        vaadinGridCellBehavior,
+        vaadinGridRowContainerCellBehavior
       ],
 
-      observers: ['_footerIndexChanged(footerIndex, _footers)'],
-
-      properties: {
-        colspan: {
-          type: Number,
-          value: 0,
-          notify: true
-        },
-        footerIndex: Number
-      },
-
       _columnChanged: function(column) {
-        this._footers = column.footers;
-        this.listen(column, 'footers-changed', '_footersChanged');
-      },
-
-      _footersChanged: function(e) {
-        this._footers = e.detail.value;
-      },
-
-      _footerIndexChanged: function(footerIndex, footers) {
-        if (footers[footerIndex]) {
-          this.template = footers[footerIndex].template;
-          this.colspan = footers[footerIndex].colspan;
-        }
-      },
+        this._rowContainerObjects = column.footers;
+        this.listen(column, 'footers-changed', '_rowContainerObjectsChanged');
+      }
 
     });
   })();
