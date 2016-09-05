@@ -1,0 +1,41 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-context-menu">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-context-menu',
+
+      properties: {
+        target: Object,
+        targetSelector: {
+          type: String,
+          observer: '_targetSelectorChanged'
+        },
+      },
+
+      observers: ['_targetSelectorChanged(isAttached, targetSelector)'],
+
+      attached: function() {
+        if (!this.target) {
+          this.target = this.parentElement;
+        }
+      },
+
+      _targetSelectorChanged: function(isAttached, targetSelector) {
+        if (isAttached) {
+          var host = Polymer.dom(this).parentNode;
+          // TODO: use querySelectorAll and use target as array for multi-targeting?
+          this.target = Polymer.dom(host).querySelector(targetSelector);
+        }
+      }
+    });
+  </script>
+</dom-module>

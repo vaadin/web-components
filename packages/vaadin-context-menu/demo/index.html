@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="http://code.jquery.com/jquery-1.12.4.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../vaadin-context-menu.html">
+
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <style is="custom-style">
+    :root {
+      --font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    }
+
+    html,
+    body {
+      background: #33383a;
+      font-weight: 400;
+      font-size: 16px;
+      color: rgba(0, 0, 0, 0.8);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h3 {
+      color: #e5e8e8;
+      text-transform: uppercase;
+      font-weight: 200;
+      font-size: 2em;
+      letter-spacing: 0.3em;
+      text-align: center;
+      margin: 2em 0 2em;
+    }
+
+    demo-snippet {
+      margin: 50px;
+      overflow: hidden;
+      --demo-snippet-demo: {
+        padding: 50px;
+      }
+    }
+
+    .centered {
+      width: 60%;
+    }
+  </style>
+</head>
+
+<body unresolved>
+  <div class="centered">
+    <demo-snippet>
+      <template>
+        <vaadin-context-menu for="label">
+          <vaadin-context-menu-item>I liked what I read</vaadin-context-menu-item>
+          <vaadin-context-menu-item>I did not read what I read</vaadin-context-menu-item>
+        </vaadin-context-menu>
+        <p>Lorem Lipsum
+          <label id="label" style="border-bottom: 2px dotted">Foobar</label>
+        </p>
+      </template>
+    </demo-snippet>
+  </div>
+
+  <div class="centered">
+    <demo-snippet>
+      <template>
+        <x-foo></x-foo>
+        <dom-module id="x-foo">
+          <template>
+            <style>
+              vaadin-grid {
+                /*-webkit-touch-callout: none !important;
+                  -webkit-user-select: none !important;*/
+              }
+            </style>
+            <vaadin-context-menu id="menu" target="[[grid]]" on-opening="_setContext" context="{{_context}}">
+              <vaadin-context-menu-item on-selected="_delete">Delete User: [[_context.name]] [[_context.surname]]</vaadin-context-menu-item>
+              <template is="dom-if" if="[[_nice(_context)]]">
+                <vaadin-context-menu-item on-selected="_delete">Delete User: [[_context.name]] [[_context.surname]]</vaadin-context-menu-item>
+              </template>
+            </vaadin-context-menu>
+
+            <vaadin-grid id="grid" size="[[size]]" data-source="[[dataSource]]">
+              <vaadin-grid-column>
+                <template is="header">First Name</template>
+                <template>[[item.name]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template is="header">Last Name</template>
+                <template>[[item.surname]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template is="header"></template>
+                <template>
+                  <paper-button raised on-tap="_openMenu">Menu</paper-button>
+                </template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          </template>
+          <script>
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-foo',
+
+                properties: {
+                  grid: Object,
+
+                  dataSource: Function,
+
+                  size: {
+                    value: 100
+                  },
+
+                  _context: Object
+                },
+
+                _nice: function(context) {
+                  return context.name.indexOf('A') > -1;
+                },
+
+                ready: function() {
+                  this.grid = this.$.grid;
+
+                  $.getJSON("http://uinames.com/api/?amount=" + this.size)
+                    .done(function(data) {
+                      this.items = data;
+
+                      this.dataSource = function(opts, callback) {
+                        var start = opts.page * opts.pageSize;
+                        var end = Math.min(start + opts.pageSize, this.size);
+
+                        callback(data.slice(start, end));
+                      }.bind(this);
+
+                    }.bind(this));
+                },
+
+                _openMenu: function(e) {
+                  this.$.menu.context = e.model.item;
+                  this.$.menu.x = e.detail.x;
+                  this.$.menu.y = e.detail.y;
+
+                  this.$.menu.opened = true;
+                },
+
+                _delete: function(e) {
+                  var index = this.items.indexOf(e.detail.context);
+                  this.splice('items', index, 1);
+                  this.size--;
+
+                  this.$.grid.clearCache();
+                },
+
+                // this is not so nice because we need to penerate shadow root
+                _setContext: function(e) {
+                  var path = Polymer.dom(e.detail.sourceEvent).path;
+                  var cells = path.filter(function(el) {
+                    return el.tagName === 'TD';
+                  });
+
+                  if (cells && cells.length > 0) {
+                    e.context = cells[0].instance.item;
+                  }
+                }
+              });
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+  </div>
+
+  <!-- <div style="position: fixed;left 100px; top: 100px; height: 500px; width: 500px; overflow:hidden; border: 1px solid red">
+      <x-foo></x-foo>
+    </div> -->
+
+
+</body>
+
+</html>

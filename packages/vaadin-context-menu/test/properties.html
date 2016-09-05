@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+    <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+    <link rel="import" href="../vaadin-context-menu.html">
+    <script src="../../web-component-tester/browser.js"></script>
+  </head>
+  <body>
+    <test-fixture id="default">
+      <template>
+        <div>
+          <vaadin-context-menu>
+          </vaadin-context-menu>
+        </div>
+      </template>
+    </test-fixture>
+
+    <dom-module id="x-foo">
+      <template>
+        <vaadin-context-menu id="menu"></vaadin-context-menu>
+        <div id="container"></div>
+        <div id="container2"></div>
+      </template>
+      <script>
+        Polymer({
+          is: 'x-foo',
+
+          ready: function() {
+            this.$.menu.target = this.$.container;
+          }
+        });
+      </script>
+    </dom-module>
+
+    <test-fixture id="assigned">
+      <template>
+        <div>
+          <x-foo></x-foo>
+        </div>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="bound">
+      <template>
+        <div>
+          <template is="dom-bind">
+            <vaadin-context-menu target-selector="div"></vaadin-context-menu>
+            <div id="container"></div>
+            <div></div>
+          </template>
+        </div>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="body">
+      <template>
+        <div>
+          <vaadin-context-menu target-selector="#container"></vaadin-context-menu>
+          <div id="container"></div>
+        </div>
+      </template>
+    </test-fixture>
+
+    <script>
+      describe('properties', function() {
+        describe('target', function() {
+          it('should use parent element as default on attach', function() {
+            var container = fixture('default');
+
+            var menu = container.querySelector('vaadin-context-menu');
+
+            expect(menu.target).to.eql(container);
+          });
+
+          it('should use a selector for dom host', function() {
+            var foo = fixture('assigned').querySelector('x-foo');
+
+            foo.$.menu.targetSelector = '#container2';
+
+            expect(foo.$.menu.target).to.eql(foo.$.container2);
+          });
+
+          it('should use a selector for dom bind template', function() {
+            var bound = fixture('bound');
+
+            var menu = bound.querySelector('vaadin-context-menu');
+            var container = bound.querySelector('#container');
+
+            expect(menu.target).to.eql(container);
+          });
+
+          it('should use a selector for document body', function() {
+            var body = fixture('body');
+
+            var menu = body.querySelector('vaadin-context-menu');
+            var container = body.querySelector('#container');
+
+            expect(menu.target).to.eql(container);
+          });
+        });
+      });
+
+    </script>
+
+  </body>
+</html>

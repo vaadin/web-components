@@ -1,0 +1,29 @@
+{
+  "name": "vaadin-context-menu",
+  "homepage": "https://github.com/vaadin/vaadin-context-menu",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "vaadin",
+    "context",
+    "menu"
+  ],
+  "description": "",
+  "main": "",
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^1.6.1"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.3.5",
+    "iron-test-helpers": "^1.2.5"
+  }
+}
