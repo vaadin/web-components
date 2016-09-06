@@ -1,0 +1,100 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <dom-module id="test-component">
+    <template>
+      <style>
+         :host {
+          display: block;
+        }
+
+        div {
+          line-height: 50px;
+        }
+
+        .cellcontent {
+          color: rgb(255, 0, 0);
+        }
+      </style>
+
+      <vaadin-grid style="height: 400px;" size="1000" data-source="[[dataSource]]" id="grid">
+        <vaadin-grid-column>
+          <template>
+            <b class="cellcontent">[[index]]</b>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', function() {
+        Polymer({
+          is: 'test-component',
+
+          properties: {
+            dataSource: {
+              value: function() {
+                return infiniteDataSource;
+              }
+            }
+          }
+
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="default">
+    <template>
+      <test-component></test-component>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('style scope', function() {
+      var component;
+      var wrapper;
+      var content;
+
+      beforeEach(function(done) {
+        component = fixture('default');
+        // TODO: Need identifiers for the content wrappers
+        if (Polymer.Settings.useShadow) {
+          wrapper = Polymer.dom(component.$.grid).querySelector('div');
+        } else {
+          // Can't use Polymer.dom for querying in shady since the wrapper isn't
+          // appended with Polymer.dom eihter
+          wrapper = component.$.grid.$.scroller.$.items.querySelector('div');
+        }
+        content = wrapper.querySelector('.cellcontent');
+        Polymer.Base.async(done, 1);
+      });
+
+      it('should target cell content', function() {
+        expect(window.getComputedStyle(wrapper).lineHeight).to.equal('50px');
+      });
+
+      it('should target cell wrapper', function() {
+        expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
