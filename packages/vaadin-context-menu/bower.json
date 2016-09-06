@@ -20,7 +20,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "^1.6.1"
+    "polymer": "^1.6.1",
+    "iron-overlay-behavior": "^1.8.6"
   },
   "devDependencies": {
     "web-component-tester": "^4.3.5",
