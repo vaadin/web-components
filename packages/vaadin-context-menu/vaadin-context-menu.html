@@ -8,9 +8,10 @@
         display: block;
       }
     </style>
-
-    <vaadin-context-menu-overlay id="overlay" opened="{{opened}}">
-      <div class="dropdown-content" style="background: red; width: 200px; height: 200px">Hello!</div>
+    <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{opened}}">
+      <div class="dropdown-content">
+        <content></content>
+      </div>
     </vaadin-context-menu-overlay>
 
   </template>
@@ -33,12 +34,31 @@
         }
       },
 
+      listeners: {
+        click: 'close'
+      },
+
       observers: ['_targetSelectorChanged(isAttached, targetSelector)'],
 
       attached: function() {
         if (!this.target) {
           this.target = this.parentElement;
         }
+      },
+
+      _onOverlayOpened: function() {
+        var child = Polymer.dom(this).queryDistributedElements('*')[0];
+        if (child) {
+          child.focus();
+        }
+      },
+
+      open: function() {
+        this.opened = true;
+      },
+
+      close: function() {
+        this.opened = false;
       },
 
       _targetChanged: function(target, oldTarget) {
