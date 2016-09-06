@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="vaadin-grid-scroller.html">
+<link rel="import" href="vaadin-grid-table.html">
 <link rel="import" href="vaadin-grid-column.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
@@ -23,9 +23,9 @@
     }
   </style>
   <template>
-    <vaadin-grid-scroller loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[_frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
+    <vaadin-grid-table loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[_frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
       <content></content>
-    </vaadin-grid-scroller>
+    </vaadin-grid-table>
   </template>
 </dom-module>
 
@@ -57,7 +57,7 @@
     },
 
     behaviors: [
-      vaadin.elements.grid.GridRowDetailsBehavior,
+      vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.DataSourceBehavior,
       vaadin.elements.grid.SelectionBehavior
     ],

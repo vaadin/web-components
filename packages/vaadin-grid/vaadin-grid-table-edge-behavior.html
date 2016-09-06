@@ -1,4 +1,4 @@
-<dom-module is="vaadin-grid-edge-styles">
+<dom-module is="vaadin-grid-table-edge-styles">
   <template>
     <style>
       :host([edge]) {
@@ -31,7 +31,7 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
-  vaadin.elements.grid.EdgeBehaviorImpl = {
+  vaadin.elements.grid.TableEdgeBehaviorImpl = {
 
     hostAttributes: {
       edge: true
@@ -51,7 +51,7 @@
     }
   };
 
-  vaadin.elements.grid.EdgeBehavior = [
-    vaadin.elements.grid.GridScrollBehavior, vaadin.elements.grid.EdgeBehaviorImpl
+  vaadin.elements.grid.TableEdgeBehavior = [
+    vaadin.elements.grid.GridTableScrollBehavior, vaadin.elements.grid.TableEdgeBehaviorImpl
   ];
 </script>
