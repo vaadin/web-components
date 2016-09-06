@@ -1,4 +1,4 @@
-<dom-module id="scroll-styles">
+<dom-module id="vaadin-grid-table-scroll-styles">
   <template>
     <style>
       :host {
@@ -47,7 +47,7 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
-  vaadin.elements.grid.GridScrollBehaviorImpl = {
+  vaadin.elements.grid.TableScrollBehavior = {
 
     properties: {
 
@@ -169,9 +169,5 @@
     },
 
   };
-
-  vaadin.elements.grid.GridScrollBehavior = [
-    vaadin.elements.grid.GridScrollBehaviorImpl
-  ];
 
 </script>

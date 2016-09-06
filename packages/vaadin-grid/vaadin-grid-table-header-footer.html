@@ -1,6 +1,6 @@
 <script>
   (function() {
-    var rowContainerBehavior = {
+    var vaadinGridTableRowContainerBehavior = {
       properties: {
         columns: Array,
         frozenColumns: Number,
@@ -37,12 +37,12 @@
     };
 
     Polymer({
-      is: 'vaadin-grid-header',
+      is: 'vaadin-grid-table-header',
       extends: 'thead',
-      behaviors: [rowContainerBehavior],
+      behaviors: [vaadinGridTableRowContainerBehavior],
 
       _createRow: function() {
-        return document.createElement('tr', 'vaadin-grid-header-row');
+        return document.createElement('tr', 'vaadin-grid-table-header-row');
       },
 
       _rowCount: function(columns) {
@@ -53,12 +53,12 @@
     });
 
     Polymer({
-      is: 'vaadin-grid-footer',
+      is: 'vaadin-grid-table-footer',
       extends: 'tfoot',
-      behaviors: [rowContainerBehavior],
+      behaviors: [vaadinGridTableRowContainerBehavior],
 
       _createRow: function() {
-        return document.createElement('tr', 'vaadin-grid-footer-row');
+        return document.createElement('tr', 'vaadin-grid-table-footer-row');
       },
 
       _rowCount: function(columns) {

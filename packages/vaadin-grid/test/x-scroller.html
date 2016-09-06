@@ -1,6 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../vaadin-grid-scroller.html">
+<link rel="import" href="../vaadin-grid-table.html">
 
 <dom-module id="x-scroller">
   <template>
@@ -35,8 +35,8 @@
 
     <template id="cell">[[index]]</template>
 
-    <vaadin-grid-scroller  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
-    </vaadin-grid-scroller>
+    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
+    </vaadin-grid-table>
 
     <content></content>
     <!-- <iron-list style$="[[_computedListHeight(listHeight)]]" items="[[data]]" as="item" id="list">

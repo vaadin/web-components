@@ -1,11 +1,11 @@
-<link rel="import" href="vaadin-grid-cell.html">
+<link rel="import" href="vaadin-grid-table-cell.html">
 
-<dom-module id="vaadin-grid-row"></dom-module>
-<dom-module id="vaadin-grid-header-row"></dom-module>
+<dom-module id="vaadin-grid-table-row"></dom-module>
+<dom-module id="vaadin-grid-table-header-row"></dom-module>
 
 <script>
   (function() {
-    var vaadinGridRowBehavior = {
+    var vaadinGridTableRowBehavior = {
 
       extends: 'tr',
 
@@ -57,7 +57,7 @@
         if (expanded) {
           // TODO: template instance for each detail cell is pushed to the template.instances
           // but never cleaned up. Maybe consider just hiding details instead of removing.
-          var rowDetailsCell = document.createElement('td', 'vaadin-grid-cell');
+          var rowDetailsCell = document.createElement('td', 'vaadin-grid-table-cell');
           rowDetailsCell.setAttribute('detailscell', true);
           // Using a frozen cell as the details cell works as a handy way of
           // making it float in place
@@ -200,7 +200,7 @@
       }
     };
 
-    var vaadinGridRowContainerRowBehavior = {
+    var vaadinGridTableRowContainerRowBehavior = {
 
       properties: {
         rowIndex: Object
@@ -218,41 +218,41 @@
     };
 
     Polymer({
-      is: 'vaadin-grid-row',
+      is: 'vaadin-grid-table-row',
 
       behaviors: [
-        vaadinGridRowBehavior
+        vaadinGridTableRowBehavior
       ],
 
       _createCell: function() {
-        return document.createElement('td', 'vaadin-grid-cell');
+        return document.createElement('td', 'vaadin-grid-table-cell');
       }
     });
 
     Polymer({
-      is: 'vaadin-grid-header-row',
+      is: 'vaadin-grid-table-header-row',
 
       behaviors: [
-        vaadinGridRowBehavior,
-        vaadinGridRowContainerRowBehavior
+        vaadinGridTableRowBehavior,
+        vaadinGridTableRowContainerRowBehavior
       ],
 
       _createCell: function() {
-        return document.createElement('th', 'vaadin-grid-header-cell');
+        return document.createElement('th', 'vaadin-grid-table-header-cell');
       }
 
     });
 
     Polymer({
-      is: 'vaadin-grid-footer-row',
+      is: 'vaadin-grid-table-footer-row',
 
       behaviors: [
-        vaadinGridRowBehavior,
-        vaadinGridRowContainerRowBehavior
+        vaadinGridTableRowBehavior,
+        vaadinGridTableRowContainerRowBehavior
       ],
 
       _createCell: function() {
-        return document.createElement('td', 'vaadin-grid-footer-cell');
+        return document.createElement('td', 'vaadin-grid-table-footer-cell');
       }
 
     });
