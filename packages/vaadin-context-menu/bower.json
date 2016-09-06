@@ -27,6 +27,9 @@
     "web-component-tester": "^4.3.5",
     "iron-test-helpers": "^1.2.5",
     "paper-menu": "^1.2.2",
-    "paper-item": "^1.2.1"
+    "paper-item": "^1.2.1",
+    "iron-icons": "^1.1.3",
+    "elements-demo-resources": "vaadin/elements-demo-resources#master",
+    "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.0.0"    
   }
 }
