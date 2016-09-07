@@ -26,12 +26,15 @@
         <div id="container2"></div>
       </template>
       <script>
-        Polymer({
-          is: 'x-foo',
+        // Wait for Polymer being loaded.
+        HTMLImports.whenReady(function() {
+          Polymer({
+            is: 'x-foo',
 
-          ready: function() {
-            this.$.menu.target = this.$.container;
-          }
+            ready: function() {
+              this.$.menu.target = this.$.container;
+            }
+          });
         });
       </script>
     </dom-module>
