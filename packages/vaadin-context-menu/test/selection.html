@@ -50,7 +50,7 @@
             menu.addEventListener('iron-overlay-opened', function() {
               menu.async(function() {
                 MockInteractions.pressEnter(document.activeElement);
-              }, 0);
+              }, 10);
             });
             menu.addEventListener('iron-overlay-closed', function() {
               done();
