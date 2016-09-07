@@ -2,13 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>vaadin-context-menu tests</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
   </head>
   <body>
     <script>
+      var shadow = document.location.search.indexOf('dom=shadow') > -1;
+      WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
+
       WCT.loadSuites([
         'properties.html',
         'overlay.html',
