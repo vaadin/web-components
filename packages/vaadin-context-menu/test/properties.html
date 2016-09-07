@@ -87,13 +87,16 @@
             expect(foo.$.menu.target).to.eql(foo.$.container2);
           });
 
-          it('should use a selector for dom bind template', function() {
+          it('should use a selector for dom bind template', function(done) {
             var bound = fixture('bound');
 
             var menu = bound.querySelector('vaadin-context-menu');
             var container = bound.querySelector('#container');
-
-            expect(menu.target).to.eql(container);
+            
+            menu.async(function() {
+              expect(menu.target).to.eql(container);
+              done();
+            }, 1);
           });
 
           it('should use a selector for document body', function() {
