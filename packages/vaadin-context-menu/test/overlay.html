@@ -27,12 +27,31 @@
         });
 
         function contextmenu(x, y) {
-          var e = new MouseEvent('contextmenu', {
-            bubbles: true,
-            cancelable: true,
-            clientX: x,
-            clientY: y
-          });
+          var e;
+          try {
+            e = new MouseEvent('contextmenu', {
+              bubbles: true,
+              cancelable: true,
+              clientX: x,
+              clientY: y
+            });
+          } catch (err) {
+            // For IE11
+            e = document.createEvent('MouseEvent');
+            e.initMouseEvent('contextmenu', true, true,
+              null, /* view */
+              null, /* detail */
+              0,    /* screenX */
+              0,    /* screenY */
+              x, y,
+              false, /*ctrlKey */
+              false, /*altKey */
+              false, /*shiftKey */
+              false, /*metaKey */
+              0,     /*button */
+              null   /*relatedTarget*/
+            );
+          }
           menu.target.dispatchEvent(e);
         }
 
