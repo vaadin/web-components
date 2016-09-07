@@ -98,7 +98,10 @@
               done();
             });
             menu.addEventListener('iron-overlay-opened', function() {
-              MockInteractions.tap(document.body);
+              Polymer.Base.fire('tap', {}, {
+                bubbles: true,
+                node: document.body
+              });
             });
           });
         });
