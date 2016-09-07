@@ -71,6 +71,16 @@
         expect(getRowCells(headerRows[1])[0].clientWidth).to.equal(combinedWidth);
       });
 
+      it('should have last row fully visible when scrolled to end', function(done) {
+        scrollToEnd(grid, function() {
+          var bodyRows = getRows(scroller.$.items);
+          var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
+          var footerTop = footer.getBoundingClientRect().top;
+          expect(lastRowBottom).to.be.closeTo(footerTop, 1);
+          done();
+        });
+      });
+
 
     });
   </script>

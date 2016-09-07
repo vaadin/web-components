@@ -93,10 +93,6 @@
       table.scrollTop += 2500;
     }
 
-    function scrollToEnd() {
-      grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight;
-    }
-
     describe('scrolling', function() {
       var container, grid;
 
@@ -133,11 +129,10 @@
           });
 
           it('should be able to scroll to end', function(done) {
-            grid.$.scroller.$.table.addEventListener('scroll', function() {
+            scrollToEnd(grid, function() {
               expect(getLastItemFromList(grid.$.scroller.$.table).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
-            scrollToEnd();
           });
 
           it('should be able to manually scroll to start', function(done) {
@@ -145,7 +140,7 @@
             this.timeout(1000000);
 
             simulateScrollToStart(function() {
-              expect(getFirstItemFromList(grid.$.scroller.$.items).textContent).to.contain('item0');
+              expect(getFirstItemFromList(grid.$.scroller).textContent).to.contain('item0');
               done();
             });
           });
