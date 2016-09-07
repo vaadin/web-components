@@ -33,8 +33,13 @@
     <demo-snippet>
       <template>
         <template is="dom-bind" id="container">
-          <vaadin-context-menu selector="a" id="menu">
+          <vaadin-context-menu selector="a">
             <template>
+              <style>
+                paper-menu {
+                  width: 100%;
+                }
+              </style>
               <paper-menu on-iron-select="_selectedItemChanged">
                 <paper-item>Item 1</paper-item>
                 <paper-item>Item 2</paper-item>
@@ -67,31 +72,31 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <style>
-            div[role="menu"] {
-              padding: 16px 0;
-            }
-
-            div[role="option"] {
-              min-height: 32px;
-              padding: 0 24px;
-              font-size: 16px;
-              display: flex;
-              align-items: center;
-            }
-
-            div[role="option"]:hover {
-              background: #d6d6d6;
-            }
-          </style>
-          <vaadin-context-menu selector="#opener" id="menu2">
+          <vaadin-context-menu selector="#opener" open-on="click">
             <template>
+              <style>
+                div[role="menu"] {
+                  padding: 16px 0;
+                }
+
+                div[role="option"] {
+                  min-height: 32px;
+                  padding: 0 24px;
+                  font-size: 16px;
+                  display: flex;
+                  align-items: center;
+                }
+
+                div[role="option"]:hover {
+                  background: #d6d6d6;
+                }
+              </style>
               <div role="menu">
                 <div on-tap="_log" role="option">Item 1</div>
                 <div on-tap="_log" role="option">Item 2</div>
               </div>
             </template>
-            <button id="opener">Right-click me</button>
+            <button id="opener">Open</button>
           </vaadin-context-menu>
         </template>
       </template>

@@ -79,6 +79,22 @@
 
             menu.opened = true;
           });
+
+          it('should focus the child element on `contextmenu` event', function(done) {
+            menu.addEventListener('iron-overlay-opened', function() {
+              // document.activeElement doesn't penerate shadow root.
+              if (Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
+                expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
+              } else {
+                expect(document.activeElement).to.eql(unwrapIfNeeded(Polymer.dom(menu.$.overlay).querySelector('#menu')));
+              }
+              done();
+            });
+
+            menu.fire('contextmenu', {}, {
+              node: menu.target
+            });
+          });
         });
       });
     </script>

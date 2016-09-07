@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-context-menu.html">
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-context-menu target-selector="#target"></vaadin-context-menu>
+      <div id="target"></div>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('mobile support', function() {
+      var menu;
+
+      beforeEach(function() {
+        menu = fixture('default')[0];
+        menu.$.overlay.desktop = false;
+      });
+
+      function makeSoloTouchEvent(type, xy, node) {
+        xy = xy || middleOfNode(node);
+        var touches = makeTouches([xy], node);
+        var touchEventInit = {
+          touches: touches,
+          targetTouches: touches,
+          changedTouches: touches
+        };
+        var event = new CustomEvent(type, {
+          bubbles: true,
+          cancelable: true
+        });
+
+        for (var property in touchEventInit) {
+          event[property] = touchEventInit[property];
+        }
+
+        node.dispatchEvent(event);
+      }
+
+      function middleOfNode(node) {
+        var bcr = node.getBoundingClientRect();
+        return {
+          y: bcr.top + (bcr.height / 2),
+          x: bcr.left + (bcr.width / 2)
+        };
+      }
+
+      function makeTouches(xyList, node) {
+        var id = 0;
+
+        return xyList.map(function(xy) {
+          return {
+            identifier: id++,
+            target: node,
+            clientX: xy.x,
+            clientY: xy.y
+          };
+        });
+      }
+
+      it('should have a backdrop', function() {
+        expect(menu.$.overlay.withBackdrop).to.eql(true);
+      });
+
+      it('should align to bottom of the viewport', function() {
+        var styles = window.getComputedStyle(menu.$.overlay);
+
+        expect(styles.bottom).to.eql('20px');
+        expect(styles.top).to.eql('auto');
+        expect(styles.left).to.eql('0px');
+        expect(styles.transform).not.to.contain('translate');
+      });
+
+      it('should open on long-touch on ios', function(done) {
+        menu._ios = true;
+        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+        menu.async(function() {
+          expect(menu.opened).to.eql(true);
+          done();
+        }, 1000);
+      });
+
+      it('should not open on normal tap', function(done) {
+        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+
+        menu.async(function() {
+          makeSoloTouchEvent('tap', null, menu.listenOn);
+        }, 100);
+
+        menu.async(function() {
+          expect(menu.opened).to.eql(false);
+          done();
+        }, 1000);
+      });
+
+      it('should not stop `tap` bubbling in the middle of a long touch', function(done) {
+        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+
+        menu.async(function() {
+          var evt = menu.fire('tap', null, {
+            node: menu.listenOn,
+            cancelable: true,
+            bubbles: true
+          });
+
+          expect(evt.defaultPrevented).to.eql(false);
+
+          done();
+        }, 100);
+      });
+
+      it('should not stop `tap` bubbling after a long touch', function(done) {
+        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+
+        menu.async(function() {
+          var evt = menu.fire('tap', null, {
+            node: menu.listenOn,
+            cancelable: true,
+            bubbles: true
+          });
+
+          expect(evt.defaultPrevented).to.eql(true);
+
+          done();
+        }, 1000);
+      });
+
+      it('should not open when touch moving', function(done) {
+        var xy = middleOfNode(menu.listenOn);
+        makeSoloTouchEvent('touchstart', xy, menu.listenOn);
+
+        menu.async(function() {
+          xy.x += 16; // threshold is 15px from start
+          makeSoloTouchEvent('touchmove', xy, menu.listenOn);
+        }, 100);
+
+        menu.async(function() {
+          expect(menu.opened).to.eql(false);
+          done();
+        }, 1000);
+      });
+    });
+  </script>
+
+</body>
+
+</html>
