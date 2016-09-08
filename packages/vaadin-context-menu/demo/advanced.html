@@ -8,6 +8,7 @@
   <title>vaadin-context-menu Basic Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
 
   <link rel="import" href="common.html">
 </head>
@@ -22,10 +23,71 @@
     </nav>
 
     <h3>Context Menu Advanded Usage</h3>
+    <p>
+      Right-Click on the headers to open a context menu that will allow you hide and show columns in the grid.
+    </p>
     <demo-snippet>
       <template>
-        TODO
+      <grid-example></grid-example>
+      <dom-module id="grid-example">
+        <template>
+
+          <vaadin-grid id="grid" frozen-columns="1" items="[[_items()]]" columns="{{columns}}">
+            <table>
+              <colgroup>
+                <col name="name" resizable>
+                <col name="surname" resizable>
+                <col name="activity">
+                <col name="target">
+                <col name="effort">
+              </colgroup>
+            </table>
+          </vaadin-grid>
+
+          <vaadin-context-menu id="menu" target-selector="#grid" no-close >
+              <paper-menu multi selected-values="{{selectedValues}}">
+                <paper-item>Name</paper-item>
+                <paper-item>Surname</paper-item>
+                <paper-item>Activity</paper-item>
+                <paper-item>Target</paper-item>
+                <paper-item>Effort</paper-item>
+              </paper-menu>
+          </vaadin-context-menu>
+        </template>
+      </dom-module>
+      <script>
+        Polymer({
+          is: "grid-example",
+          properties: {
+            selectedValues: {
+              type: Array,
+              value: [0,1,2,3,4]
+            }
+          },
+          observers: [
+            '_selectedChanged(selectedValues.*)'
+          ],
+          ready: function() {
+            // Cancel event unless the user clicks on the header
+            this.$.grid.addEventListener('contextmenu', function(e) {
+              if (this.$.grid.getRowIndex(e.target) > -1) {
+                e.stopImmediatePropagation();
+              }
+            }.bind(this), true);
+          },
+          _items: function() {
+            return getRandomItems();
+          },
+          _selectedChanged: function() {
+            for (var i = 0; this.columns && i < this.columns.length; i++) {
+              this.columns[i].hidden = !this.selectedValues.includes(i);
+            }
+          },
+        });
+      </script>
+
       </template>
+
     </demo-snippet>
 
   </div>

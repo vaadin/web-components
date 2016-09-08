@@ -60,3 +60,26 @@
     max-width: 800px;
   }
 </style>
+<script>
+function getRandomItems() {
+  function random(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+  var employees = [];
+  var names = ['Artur', 'Patrik', 'Henrik', 'Teemu'];
+  var surnames = ['Signell', 'Lehtinen', 'Ahlroos', 'Paul'];
+  var activities = ['Design', 'Implement', 'Polish', 'Deliver'];
+  var targets = ['soup', 'Vaadin', 'dog', 'world peace'];
+  for (var i = 0; i < 400; i++) {
+    var row = {
+      name: random(names),
+      surname: random(surnames),
+      activity: random(activities),
+      target: random(targets),
+      effort: Math.floor(Math.random() * 6)
+    };
+    employees.push(row);
+  }
+  return employees;
+}
+</script>

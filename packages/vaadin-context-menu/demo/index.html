@@ -22,28 +22,37 @@
     </nav>
 
     <h3>Context Menu Basic Usage</h3>
+    <p>
+      Right click on the following link to open a context menu.
+    </p>
     <demo-snippet>
       <template>
         Lorem ipsum dolor sit amet.
-        <span id="opener" on-contextmenu="_context" style="color: blue">
-          Right-Click Me
-        </span>
-        Consectetur adipiscing elit.
+        <a id="opener" on-contextmenu="_context" href='#'>
+          Consectetur
+        </a>
+        adipiscing elit.
 
-        <vaadin-context-menu target-selector="#opener">
+        <vaadin-context-menu target-selector="#opener" id="menu">
           <paper-menu>
-            <paper-item>item1</paper-item>
-            <paper-item>item2</paper-item>
-            <paper-item>item3</paper-item>
+            <paper-item>Item 1</paper-item>
+            <paper-item>Item 2</paper-item>
+            <paper-item>Item 3</paper-item>
             <paper-item>
               <iron-icon icon="warning"></iron-icon>
               <paper-item-body two-line>
-                <div>Show your status</div>
-                <div secondary>Your status is visible to everyone</div>
+                <div>Item 4 - Line 1</div>
+                <div secondary>Item 4 - Line 2</div>
               </paper-item-body>
             </paper-item>
           </paper-menu>
         </vaadin-context-menu>
+        <script>
+          var myContextMenu = document.querySelector("#menu");
+          menu.addEventListener("item-select", function(e) {
+            console.log("Selected Item: " + e.detail);
+          });
+        </script>
 
       </template>
     </demo-snippet>
