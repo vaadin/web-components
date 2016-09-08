@@ -28,36 +28,35 @@
     </p>
     <demo-snippet>
       <template>
-      <grid-example></grid-example>
-      <dom-module id="grid-example">
-        <template>
+        <grid-example></grid-example>
+        <dom-module id="grid-example">
+          <template>
+            <vaadin-grid id="grid" frozen-columns="1" items="[[_items()]]" columns="{{columns}}">
+              <table>
+                <colgroup>
+                  <col name="name" resizable>
+                  <col name="surname" resizable>
+                  <col name="activity">
+                  <col name="target">
+                  <col name="effort">
+                </colgroup>
+              </table>
+            </vaadin-grid>
 
-          <vaadin-grid id="grid" frozen-columns="1" items="[[_items()]]" columns="{{columns}}">
-            <table>
-              <colgroup>
-                <col name="name" resizable>
-                <col name="surname" resizable>
-                <col name="activity">
-                <col name="target">
-                <col name="effort">
-              </colgroup>
-            </table>
-          </vaadin-grid>
-
-          <vaadin-context-menu id="menu" target-selector="#grid" no-close >
-              <paper-menu multi selected-values="{{selectedValues}}">
-                <paper-item>Name</paper-item>
-                <paper-item>Surname</paper-item>
-                <paper-item>Activity</paper-item>
-                <paper-item>Target</paper-item>
-                <paper-item>Effort</paper-item>
-              </paper-menu>
-          </vaadin-context-menu>
+            <vaadin-context-menu id="menu" target-selector="#grid" no-close >
+                <paper-menu multi selected-values="{{selectedValues}}">
+                  <paper-item>Name</paper-item>
+                  <paper-item>Surname</paper-item>
+                  <paper-item>Activity</paper-item>
+                  <paper-item>Target</paper-item>
+                  <paper-item>Effort</paper-item>
+                </paper-menu>
+            </vaadin-context-menu>
         </template>
       </dom-module>
       <script>
         Polymer({
-          is: "grid-example",
+          is: 'grid-example',
           properties: {
             selectedValues: {
               type: Array,
