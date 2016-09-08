@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
 
 <dom-module id="vaadin-context-menu">
@@ -6,6 +7,21 @@
     <style>
       :host {
         display: block;
+      }
+
+      #overlay {
+        @apply(--shadow-elevation-6dp);
+      }
+
+      :host ::content paper-menu {
+        width: calc(64px * 4);
+        padding: 16px 0;
+      }
+
+      :host ::content paper-item,
+      :host ::content paper-item-body {
+        min-height: 32px !important;
+        padding: 0 24px;
       }
     </style>
     <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{opened}}">
@@ -29,16 +45,33 @@
           observer: '_targetSelectorChanged'
         },
         opened: {
+          type: Boolean,
           value: false,
           notify: true
+        },
+        noClose: {
+          type: Boolean,
+          value: false
         }
       },
 
       listeners: {
-        click: 'close'
+        click: '_onClick',
+        'iron-select' : '_onSelect',
+        'iron-deselect' : '_onDeselect'
       },
 
-      observers: ['_targetSelectorChanged(isAttached, targetSelector)'],
+      observers: [
+        '_targetSelectorChanged(isAttached, targetSelector)'
+      ],
+
+      _onSelect: function(e) {
+        e.detail.item.fire('item-select', e.target.indexOf(e.detail.item));
+      },
+
+      _onDeselect: function(e) {
+        e.detail.item.fire('item-deselect', e.target.indexOf(e.detail.item));
+      },
 
       attached: function() {
         if (!this.target) {
@@ -61,6 +94,12 @@
         this.opened = false;
       },
 
+      _onClick: function() {
+        if (!this.noClose) {
+          this.close();
+        }
+      },
+
       _targetChanged: function(target, oldTarget) {
         if (oldTarget) {
           this.unlisten(oldTarget, 'contextmenu', '_onContextMenu');
@@ -72,7 +111,7 @@
 
       _onContextMenu: function(e) {
         e.preventDefault();
-
+        this.$.overlay.resetFit();
         this.$.overlay.x = e.clientX;
         this.$.overlay.y = e.clientY;
         this.opened = true;
