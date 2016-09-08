@@ -11,7 +11,7 @@
     "gulp-jscs": "^4.0.0",
     "gulp-jshint": "^2.0.1",
     "jshint": "^2.9.3",
-    "web-component-tester": "^4.3.4",
+    "web-component-tester": "4.0.3",
     "yargs": "^5.0.0"
   },
   "scripts": {
