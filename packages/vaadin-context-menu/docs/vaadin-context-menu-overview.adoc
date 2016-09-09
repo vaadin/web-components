@@ -1,0 +1,34 @@
+---
+title: Overview
+order: 1
+layout: page
+---
+
+[[vaadin-context-menu.overview]]
+= Overview
+
+The [vaadinelement]#vaadin-context-menu# is a Polymer element implementing a menu in an overlay which is open by the target element.
+
+[source,html]
+----
+<a id="opener" href='#'>
+
+<vaadin-context-menu target-selector="#opener" id="menu">
+  <paper-menu>
+    <paper-item>Item 1</paper-item>
+    <paper-item>Item 2</paper-item>
+    <paper-item>Item 3</paper-item>
+    <paper-item>
+      <iron-icon icon="warning"></iron-icon>
+      <paper-item-body two-line>
+        <div>Item 4 - Line 1</div>
+        <div secondary>Item 4 - Line 2</div>
+      </paper-item-body>
+    </paper-item>
+  </paper-menu>
+</vaadin-context-menu>
+----
+
+[[figure.vaadin-context-menu.overview]]
+.A screenshot of [vaadinelement]#vaadin-context-menu#
+image::img/vaadin-context-menu.png[width="400"]
