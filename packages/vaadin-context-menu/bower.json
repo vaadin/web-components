@@ -32,5 +32,6 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#master",
     "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.0.0",
     "vaadin-grid": "vaadin/vaadin-grid#feature/row-col-index"
-  }
+  },
+  "version": "0.1.0"
 }
