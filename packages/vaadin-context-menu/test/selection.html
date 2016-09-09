@@ -57,7 +57,7 @@
           it('should close on keyboard selection', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
               menu.async(function() {
-                MockInteractions.pressEnter(document.activeElement);
+                MockInteractions.pressEnter(document.querySelector('#menu paper-item'));
               }, 10);
             });
             menu.addEventListener('iron-overlay-closed', function() {
