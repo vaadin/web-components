@@ -36,18 +36,39 @@
       is: 'vaadin-context-menu',
 
       properties: {
+
+        /**
+         * The target element that's listened to for context menu opening events.
+         * By default the vaadin-context-menu listens to the target's 'contextmenu'
+         * events.
+         * @type {!Element}
+         */
         target: {
           type: Object,
           observer: '_targetChanged'
         },
+
+        /**
+         * A convencience property for selecting the target element using a CSS
+         * selector. The target element must be a descendant of the
+         * vaadin-context-menu's parent node while the property is changed.
+         */
         targetSelector: {
           type: String
         },
+
+        /**
+         * True if the overlay is currently displayed.
+         */
         opened: {
           type: Boolean,
           value: false,
           notify: true
         },
+
+        /**
+         * Set to true to disable closing the overlay by changing the selection.
+         */
         noClose: {
           type: Boolean,
           value: false
@@ -85,10 +106,16 @@
         }
       },
 
+      /**
+       * Open the overlay.
+       */
       open: function() {
         this.opened = true;
       },
 
+      /**
+       * Close the overlay.
+       */
       close: function() {
         this.opened = false;
       },
