@@ -10,6 +10,8 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
 <body unresolved>
@@ -30,27 +32,31 @@
       <style is="custom-style">
       </style>
       <template>
-        Right click on this <a id="opener" href="#">link</a> to open the context menu.
-        <vaadin-context-menu target-selector="#opener" id="menu">
-          <paper-menu>
-            <paper-item>Item 1</paper-item>
-            <paper-item>Item 2</paper-item>
-            <paper-item>Item 3</paper-item>
-            <paper-item>
-              <paper-item-body two-line>
-                <div>Item 4 - Line 1</div>
-                <div secondary>Item 4 - Line 2</div>
-              </paper-item-body>
-            </paper-item>
-          </paper-menu>
-        </vaadin-context-menu>
-        <script>
-          var myContextMenu = document.querySelector('#menu');
-          menu.addEventListener('item-select', function(e) {
-            console.log('Selected Item: ' + e.detail);
-          });
-        </script>
-
+        <template is="dom-bind" id="container">
+          <vaadin-context-menu context-selector="#opener" id="menu">
+            <template>
+              <paper-menu on-iron-select="_selectedItemChanged">
+                <paper-item>Item 1</paper-item>
+                <paper-item>Item 2</paper-item>
+                <paper-item>Item 3</paper-item>
+                <paper-item>
+                  <iron-icon icon="warning"></iron-icon>
+                  <paper-item-body two-line>
+                    <div>Item 4 - Line 1</div>
+                    <div secondary>Item 4 - Line 2</div>
+                  </paper-item-body>
+                </paper-item>
+              </paper-menu>
+            </template>
+            Right click on this <a id="opener" href="#">link</a> to open the context menu.
+          </vaadin-context-menu>
+          <script>
+            var container = document.querySelector('#container');
+            container._selectedItemChanged = function(e) {
+              console.log('Selected Item: ' + e.target.indexOf(e.detail.item));
+            };
+          </script>
+        </template>
       </template>
     </demo-snippet>
 

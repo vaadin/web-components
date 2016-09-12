@@ -15,14 +15,15 @@
   <body>
     <test-fixture id="default">
       <template>
-        <vaadin-context-menu target-selector="#target">
-          <paper-menu id="menu">
-            <paper-item>item1</paper-item>
-            <paper-item>item2</paper-item>
-            <paper-item>item3</paper-item>
-          </paper-menu>
+        <vaadin-context-menu>
+          <template>
+            <paper-menu id="menu">
+              <paper-item>item1</paper-item>
+              <paper-item>item2</paper-item>
+              <paper-item>item3</paper-item>
+            </paper-menu>
+          </template>
         </vaadin-context-menu>
-        <div id="target"></div>
       </template>
     </test-fixture>
 
@@ -32,7 +33,7 @@
         var menu;
 
         beforeEach(function() {
-          menu = fixture('default')[0];
+          menu = fixture('default');
         });
 
         function unwrapIfNeeded(element) {
@@ -44,7 +45,7 @@
 
           it('should close on item tap', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
-              MockInteractions.tap(Polymer.dom(menu).querySelector('paper-item'));
+              MockInteractions.tap(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -55,7 +56,7 @@
           it('should close on keyboard selection', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
               menu.async(function() {
-                MockInteractions.pressEnter(document.querySelector('#menu paper-item'));
+                MockInteractions.pressEnter(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               }, 10);
             });
             menu.addEventListener('iron-overlay-closed', function() {
@@ -67,7 +68,12 @@
 
           it('should focus the child element', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
-              expect(document.activeElement).to.eql(unwrapIfNeeded(document.querySelector('#menu')));
+              // document.activeElement doesn't penerate shadow root.
+              if (Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
+                expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
+              } else {
+                expect(document.activeElement).to.eql(unwrapIfNeeded(Polymer.dom(menu.$.overlay).querySelector('#menu')));
+              }
               done();
             });
 

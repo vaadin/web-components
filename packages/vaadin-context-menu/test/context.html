@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+    <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+    <link rel="import" href="../vaadin-context-menu.html">
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  </head>
+  <body>
+    <dom-module id="x-foo">
+      <template>
+        <div id="wrapper">
+          <div id="content"></div>
+        </div>
+      </template>
+      <script>
+        document.addEventListener('WebComponentsReady', function() {
+          Polymer({
+            is: 'x-foo'
+          });
+        });
+      </script>
+    </dom-module>
+
+    <test-fixture id="default">
+      <template>
+        <vaadin-context-menu>
+          <div id="target">
+            <x-foo></x-foo>
+          </div>
+        </vaadin-context-menu>
+      </template>
+    </test-fixture>
+
+    <script>
+      describe('context', function() {
+        var menu, foo;
+
+        beforeEach(function() {
+          menu = fixture('default');
+          foo = document.querySelector('x-foo');
+          target = document.querySelector('#target');
+        });
+
+        it('should use target as default context', function() {
+          menu.fire('contextmenu', {}, {
+            node: target
+          });
+
+          expect(menu.context.target).to.eql(target);
+        });
+
+        it('should use details as context details', function() {
+          var detail = {};
+          menu.fire('contextmenu', detail, {
+            node: target
+          });
+
+          expect(menu.context.detail).to.eql(detail);
+        });
+
+        it('should use local target when targeting inside shadow root', function() {
+          menu.fire('contextmenu', {}, {
+            node: foo.$.content
+          });
+
+          expect(menu.context.target).to.eql(foo);
+        });
+
+        it('should not penerate shadow root to change context', function() {
+          menu.contextSelector = '#content';
+          menu.fire('contextmenu', {}, {
+            node: foo.$.content
+          });
+
+          expect(menu.context.target).to.be.null;
+        });
+
+        it('should use selector outside shadow root to change context', function() {
+          menu.contextSelector = '#target';
+          menu.fire('contextmenu', {}, {
+            node: foo
+          });
+
+          expect(menu.context.target).to.eql(target);
+        });
+
+        it('should not open if no context available', function() {
+          menu.contextSelector = 'foobar';
+          menu.fire('contextmenu', {}, {
+            node: foo.$.content
+          });
+
+          expect(menu.opened).to.eql(false);
+        });
+
+        it('should not prevent default if no context available', function() {
+          menu.contextSelector = 'foobar';
+          var evt = menu.fire('contextmenu', {}, {
+            node: foo.$.content,
+            cancelable: true
+          });
+
+          expect(evt.defaultPrevented).to.eql(false);
+        });
+      });
+    </script>
+
+  </body>
+</html>
