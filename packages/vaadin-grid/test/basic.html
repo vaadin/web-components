@@ -184,16 +184,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });
 
-    test('reorder rows', function(done) {
-      list.$.table.scrollTop = list._physicalAverage * list._physicalCount;
-
-      list.async(function() {
+    test('reorder rows', function() {
+      list.size = 100000;
+      [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+        list.$.table.scrollTop = 5000 + list._physicalAverage * steps;
+        list._scrollHandler();
+        list.flushDebouncer('_debounceTemplate');
+        list.flushDebouncer('reorderrows');
+        // Expect the physical rows to be in order after scrolling
         var rows = Polymer.dom(list.$.items).querySelectorAll('tr');
         for (var i = 1; i < rows.length; i++) {
           expect(rows[i].index).to.equal(rows[i - 1].index + 1);
         }
-        done();
-      }.bind(this), 200); // Reorder debounce period is 100ms
+      });
     });
 
   });
