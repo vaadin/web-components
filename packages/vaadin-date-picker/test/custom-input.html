@@ -34,6 +34,13 @@
         tap(datepicker);
         expect(datepicker.$.dropdown.opened).to.be.true;
       });
+
+      it('should open calendar on input', function() {
+        var target = datepicker.inputElement;
+        target.value = '1';
+        target.fire('input');
+        expect(datepicker.$.dropdown.opened).to.be.true;
+      });
     });
   </script>
 

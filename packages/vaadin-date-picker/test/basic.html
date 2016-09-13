@@ -86,23 +86,6 @@
         datepicker.open();
       });
 
-      it('should prevent text input', function() {
-        var spy = sinon.spy();
-        var keyDownEvent = new CustomEvent('keydown', {
-          bubbles: true,
-          cancelable: true
-        });
-        keyDownEvent.preventDefault = spy;
-
-        keyDownEvent.keyCode = 9; // tab key -> should not be prevented
-        datepicker.$.input.dispatchEvent(keyDownEvent);
-        expect(spy.called).to.be.false;
-
-        keyDownEvent.keyCode = 82;  // r key -> should be prevented
-        datepicker.$.input.dispatchEvent(keyDownEvent);
-        expect(spy.called).to.be.true;
-      });
-
       it('should open on input tap', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
           done();
@@ -187,7 +170,8 @@
           done();
         });
         datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(spy.called).to.be.false;
+          expect(spy.called).to.be.true;
+          spy.reset();
           datepicker.close();
         });
         datepicker.open();
@@ -478,7 +462,7 @@
         });
 
         it('should be focusable', function() {
-          expect(datepicker.$.inputcontainer.tabIndex).to.equal(0);
+          expect(datepicker.$.input.tabIndex).to.equal(0);
         });
       });
 

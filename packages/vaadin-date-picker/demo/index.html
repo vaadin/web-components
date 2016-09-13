@@ -8,6 +8,7 @@
   <title>vaadin-date-picker Basic Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../sugar/dist/sugar.min.js"></script>
   <link rel="import" href="common.html">
 </head>
 
@@ -78,6 +79,39 @@
               var datepicker = document.querySelector('vaadin-date-picker#weeks');
               datepicker.set('i18n.firstDayOfWeek', 1);
             });
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Keyboard input</h3>
+    <demo-snippet>
+      <template>
+        <!--
+        Using a 3rd party library to parse dates from the input text.
+
+        Try typing the following examples:
+        "5/13/2014"
+        "today"
+        "in 20 days"
+        "three months from now"
+        "last year"
+        "in half a year"
+        "next week Thursday"
+        -->
+
+        <vaadin-date-picker label="Birthday" id="keyboard-input">
+        </vaadin-date-picker>
+        <script>
+          var datepicker = document.querySelector('vaadin-date-picker#keyboard-input');
+          datepicker.set('i18n.parseDate', function(dateString) {
+            // See if we get exactly 1 match from the month names
+            var matches = datepicker.i18n.monthNames.filter(function(monthName) {
+              return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
+            });
+            dateString = matches.length === 1 ? matches[0] : dateString;
+            // Parse the date (using a 3rd party library)
+            return Sugar.Date.create(dateString);
           });
         </script>
       </template>

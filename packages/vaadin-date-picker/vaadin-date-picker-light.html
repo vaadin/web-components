@@ -69,7 +69,7 @@ need to define the name of value property using the `attrForValue` property.
         selected-date="{{_selectedDate}}"
         class="dropdown-content"
         on-close="close"
-        focused-date="[[focusedDate]]"
+        focused-date="{{_focusedDate}}"
         min-date="[[_minDate]]"
         max-date="[[_maxDate]]"
         tabindex="-1">
@@ -98,6 +98,10 @@ need to define the name of value property using the `attrForValue` property.
           type: String,
           value: 'bind-value'
         }
+      },
+
+      listeners: {
+        'input': '_userInputValueChanged'
       },
 
       _input: function() {

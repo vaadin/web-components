@@ -11,7 +11,8 @@
   vaadin.elements.datepicker.DatePickerBehaviorImpl = {
     observers: [
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-      '_validateInput(_selectedDate, _minDate, _maxDate)'
+      '_validateInput(_selectedDate, _minDate, _maxDate)',
+      '_focusedDateChanged(_focusedDate)'
     ],
 
     properties: {
@@ -21,6 +22,8 @@
       _selectedDate: {
         type: Date
       },
+
+      _focusedDate: Date,
 
       /**
        * The value for this element.
@@ -127,11 +130,19 @@
         // Date object in 'MM/DD/YYYY' -format
       },
 
+      // A function to parse the given text to a `Date`
+      // object. Must properly parse (at least) text
+      // formatted by `formatDate`.
+      parseDate: function(text) {
+        return new Date(text);
+      }
+
       // A function to format given `monthName` and
       // `fullYear` integer as calendar title string.
       formatTitle: function(monthName, fullYear) {
         return monthName + ' ' + fullYear;
       }
+
     }
 
        *
@@ -154,6 +165,9 @@
             },
             formatTitle: function(monthName, fullYear) {
               return monthName + ' ' + fullYear;
+            },
+            parseDate: function(text) {
+              return new Date(text);
             }
           };
         }
@@ -201,7 +215,11 @@
       _maxDate: {
         type: Date,
         value: null
-      }
+      },
+
+      _forwardKeysToOverlay: Boolean,
+
+      _cachedInputValue: String
     },
 
     created: function() {
@@ -274,6 +292,13 @@
       this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
     },
 
+    _focusedDateChanged: function() {
+      if (!this._ignoreFoo && !this._fullscreen) {
+        this._inputValue = this._focusedDate ? this.i18n.formatDate(this._focusedDate) : '';
+        this._input().setSelectionRange(0, this._inputValue.length);
+      }
+    },
+
     _hasValue: function(value) {
       return !!value;
     },
@@ -343,6 +368,10 @@
       this.$.overlay.initialPosition = this._selectedDate ||
         this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
       this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
+      // Have a default focused date
+      this._ignoreFoo = true;
+      this.$.overlay.focusedDate = this.$.overlay.focusedDate || this.$.overlay.initialPosition;
+      this._ignoreFoo = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
       // We cannot use iron-resize event because 1- we fire it, 2- it's fired
@@ -354,10 +383,10 @@
         this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
       }
 
-      // focus to enable keyboard navigation
-      this.$.overlay.focus();
-
+      // focus to enable keyboard navigation and keyboard input
+      this._focus();
       this.updateStyles();
+
     },
 
     // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -392,6 +421,8 @@
       }
 
       this.updateStyles();
+      this._forwardKeysToOverlay = false;
+      this.validate();
     },
 
     detached: function() {
@@ -415,7 +446,11 @@
     },
 
     _focus: function() {
-      this.inputElement.focus();
+      if (this._fullscreen || !this.i18n.parseDate) {
+        this.$.overlay.focus();
+      } else {
+        this.inputElement.focus();
+      }
     },
 
     _preventDefault: function(e) {
@@ -426,7 +461,7 @@
      * Keyboard Navigation
      */
     _eventKey: function(e) {
-      var keys = ['down', 'up'];
+      var keys = ['down', 'up', 'enter', 'esc'];
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -436,17 +471,56 @@
       }
     },
 
+    _isValidDate: function(d) {
+      return d && !isNaN(d.getTime());
+    },
+
     _onKeydown: function(e) {
+      var noForward = false;
       switch (this._eventKey(e)) {
         case 'down':
         case 'up':
           // prevent scrolling the page with arrows
           e.preventDefault();
-
-          if (!this.opened) {
-            this.open();
+          if (!this._forwardKeysToOverlay) {
+            if (this.opened) {
+              this._cachedInputValue = this._inputValue;
+              this._forwardKeysToOverlay = true;
+            } else {
+              this.open();
+            }
           }
           break;
+        case 'enter':
+          if (this.$.overlay.focusedDate) {
+            this._selectedDate = this.$.overlay.focusedDate;
+          }
+          this.close();
+          break;
+        case 'esc':
+          if (this._forwardKeysToOverlay) {
+            // The keys are forwarded to ovelay, revert the input text to the cached value
+            this._inputValue = this._cachedInputValue;
+            this._userInputValueChanged();
+            // If the input field is empty, focusedDate didn't update automatically, handle manually
+            if (!this._inputValue) {
+              this.$.overlay.focusedDate = new Date();
+            }
+          } else {
+            var newInputValue = this._selectedDate ? this.i18n.formatDate(this._selectedDate) : '';
+            if (newInputValue !== this._inputValue) {
+              this.open();
+              this.$.overlay.focusedDate = this._selectedDate || new Date();
+            }
+            this._inputValue = newInputValue;
+          }
+
+          this._forwardKeysToOverlay = false;
+          break;
+      }
+
+      if (this.opened && this._forwardKeysToOverlay) {
+        this.$.overlay._onKeydown(e);
       }
     },
 
@@ -458,7 +532,25 @@
 
     _dateAllowed: function(date, min, max) {
       return (!min || date >= min) && (!max || date <= max);
+    },
+
+    _userInputValueChanged: function() {
+      var parseDate = this.i18n.parseDate(this._inputValue);
+      if (this._isValidDate(parseDate)) {
+        this._ignoreFoo = true;
+        this._focusedDate = parseDate;
+        this._ignoreFoo = false;
+      } else {
+        this._forwardKeysToOverlay = false;
+      }
+
+      if (!this.opened) {
+        this.open();
+        // iOS needs a refit after input blur animation has finished
+        this.$.dropdown.async(this.$.dropdown.refit, 500);
+      }
     }
+
   };
 
   /** @polymerBehavior vaadin.elements.datepicker.DatePickerBehavior */
