@@ -252,7 +252,15 @@
       <div id="fade"></div>
       <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" on-track="_track" item-height="250" buffer-size="6">
         <template>
-          <vaadin-month-calendar i18n="[[i18n]]" month="[[_dateAfterXMonths(index)]]" selected-date="{{selectedDate}}" focused-date="[[focusedDate]]" ignore-taps=[[_ignoreTaps]]></vaadin-month-calendar>
+          <vaadin-month-calendar
+            i18n="[[i18n]]"
+            month="[[_dateAfterXMonths(index)]]"
+            selected-date="{{selectedDate}}"
+            focused-date="[[focusedDate]]"
+            ignore-taps=[[_ignoreTaps]]
+            min-date="[[minDate]]"
+            max-date="[[maxDate]]">
+          </vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25">
@@ -331,7 +339,17 @@
 
         _ignoreTaps: Boolean,
 
-        _notTapping: Boolean
+        _notTapping: Boolean,
+
+        /**
+         * The earliest date that can be selected. All earlier dates will be disabled.
+         */
+        minDate: Date,
+
+        /**
+         * The latest date that can be selected. All later dates will be disabled.
+         */
+        maxDate: Date
       },
 
       /**
@@ -605,7 +623,8 @@
       },
 
       _onKeydown: function(e) {
-        var focus = this._currentlyFocusedDate();
+        var focus = this._currentlyFocusedDate(),
+            dateToFocus;
 
         var eventKey = this._eventKey(e);
         if (eventKey) {
@@ -638,10 +657,10 @@
               }
               break;
             case 'home':
-              this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), 1);
+              this._moveFocusInsideMonth(focus, 'minDate');
               break;
             case 'end':
-              this.focusedDate = new Date(focus.getFullYear(), focus.getMonth() + 1, 0);
+              this._moveFocusInsideMonth(focus, 'maxDate');
               break;
             case 'pagedown':
               this._moveFocusByMonths(e.shiftKey ? 12 : 1);
@@ -669,9 +688,26 @@
 
       _moveFocusByDays: function(days) {
         var focus = this._currentlyFocusedDate();
-
-        this.focusedDate = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
-        this._focusedMonthDate = this.focusedDate.getDate();
+        var dateToFocus = new Date(focus.getFullYear(), focus.getMonth(), focus.getDate() + days);
+        if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
+          this.focusedDate = dateToFocus;
+          this._focusedMonthDate = this.focusedDate.getDate();
+        } else {
+          if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
+            // Move to min or max date
+            if (days > 0) { // down or right
+              this.focusedDate = this.maxDate;
+              this._focusedMonthDate = this.maxDate.getDate();
+            } else { // up or left
+              this.focusedDate = this.minDate;
+              this._focusedMonthDate = this.minDate.getDate();
+            }
+          } else {
+            // Move to closest allowed date
+            this.focusedDate = this._getClosestDate(focus, [this.minDate, this.maxDate]);
+            this._focusedMonthDate = this.focusedDate.getDate();
+          }
+        }
       },
 
       _moveFocusByMonths: function(months) {
@@ -683,7 +719,65 @@
         if (dateToFocus.getMonth() !== targetMonth) {
           dateToFocus.setDate(0);
         }
-        this.focusedDate = dateToFocus;
+
+        if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
+          this.focusedDate = dateToFocus;
+        } else {
+          if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
+            // Move to min or max date
+            if (months > 0) { // pagedown
+              this.focusedDate = this.maxDate;
+              this._focusedMonthDate = this.maxDate.getDate();
+            } else { // pageup
+              this.focusedDate = this.minDate;
+              this._focusedMonthDate = this.minDate.getDate();
+            }
+          } else {
+            // Move to closest allowed date
+            this.focusedDate = this._getClosestDate(focus, [this.minDate, this.maxDate]);
+            this._focusedMonthDate = this.focusedDate.getDate();
+          }
+        }
+      },
+
+      _moveFocusInsideMonth: function(focusedDate, property) {
+        var dateToFocus;
+
+        if (property === 'minDate') {
+          dateToFocus = new Date(focusedDate.getFullYear(), focusedDate.getMonth(), 1);
+        } else {
+          dateToFocus = new Date(focusedDate.getFullYear(), focusedDate.getMonth() + 1, 0);
+        }
+
+        if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
+          this.focusedDate = dateToFocus;
+          this._focusedMonthDate = this.focusedDate.getDate();
+        } else {
+          if (this._dateAllowed(focusedDate, this.minDate, this.maxDate)) {
+            // Move to minDate or maxDate
+            this.focusedDate = this[property];
+            this._focusedMonthDate = this[property].getDate();
+          } else {
+            // Move to closest allowed date
+            this.focusedDate = this._getClosestDate(focusedDate, [this.minDate, this.maxDate]);
+            this._focusedMonthDate = this.focusedDate.getDate();
+          }
+        }
+      },
+
+      _dateAllowed: function(date, min, max) {
+        return (!min || date >= min) && (!max || date <= max);
+      },
+
+      _getClosestDate: function(date, dates) {
+        return dates.filter(function(date) {
+           return date !== undefined;
+         })
+         .reduce(function(closestDate, candidate) {
+           var candidateDiff = Math.abs(date.getTime() - candidate.getTime());
+           var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
+           return candidateDiff < closestDateDiff ? candidate : closestDate;
+         });
       }
     });
   </script>

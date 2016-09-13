@@ -168,6 +168,23 @@
         });
       });
 
+      it('should not update value on disabled date tap', function(done) {
+
+        monthCalendar.maxDate = new Date('2016-02-09');
+
+        Polymer.Base.async(function() {
+          var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          for (var i = 0; i < dateElements.length; i++) {
+            if (dateElements[i].date.getDate() === 10) {
+              // Tenth of February.
+              tap(dateElements[i]);
+            }
+          }
+          expect(monthCalendar.selectedDate).to.be.undefined;
+          done();
+        });
+      });
+
       describe('i18n', function() {
         beforeEach(function(done) {
           monthCalendar.i18n = {
