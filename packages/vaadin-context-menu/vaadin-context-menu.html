@@ -18,7 +18,7 @@ Custom property | Description | Default
 
 <dom-module id="vaadin-context-menu">
   <template>
-    <style is="custom-style">
+    <style>
       :host {
         display: block;
       }
@@ -35,8 +35,7 @@ Custom property | Description | Default
         padding: 0;
       }
 
-      :host ::content paper-item,
-      :host ::content paper-item-body {
+      :host ::content paper-item {
         min-height: 32px;
         padding: 0 24px;
         @apply(--vaadin-context-menu-item);
