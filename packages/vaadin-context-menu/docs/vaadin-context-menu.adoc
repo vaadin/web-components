@@ -66,6 +66,28 @@ setting the [propertyname]#target# value.
 </script>
 ----
 
+[[vaadin-context-menu.styling]]
+= Styling
+
+When styling the overlay contents, place a [propertyname]#style# element inside the template.
+
+[source,html]
+----
+<vaadin-context-menu context-selector="b">
+  <template>
+    <style is="custom-style">
+      div {
+        background-color: var(--primary-color);
+      }
+    </style>
+    <div>You've clicked on a word that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. <b>Consectetur</b> adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----
+
 [[vaadin-context-menu.opening]]
 = Opening
 

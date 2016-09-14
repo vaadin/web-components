@@ -22,10 +22,13 @@ Custom property | Description | Default
         display: block;
       }
 
+      #overlay {
+        @apply(--shadow-elevation-6dp);
+      }
+
       .dropdown-content {
         width: calc(64px * 4);
         background: var(--primary-background-color, #ffffff);
-        @apply(--shadow-elevation-6dp);
         @apply(--vaadin-context-menu-overlay);
       }
     </style>
