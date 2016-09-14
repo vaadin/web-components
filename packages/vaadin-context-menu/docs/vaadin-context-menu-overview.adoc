@@ -11,7 +11,8 @@ The [vaadinelement]#vaadin-context-menu# is a Polymer element implementing a men
 
 [source,html]
 ----
-<a id="opener" href='#'>
+Lorem ipsum dolor sit amet.<a id="opener" href='#'>Consectetur</a> adipiscing elit.
+
 
 <vaadin-context-menu target-selector="#opener" id="menu">
   <paper-menu>
@@ -32,3 +33,31 @@ The [vaadinelement]#vaadin-context-menu# is a Polymer element implementing a men
 [[figure.vaadin-context-menu.overview]]
 .A screenshot of [vaadinelement]#vaadin-context-menu#
 image::img/vaadin-context-menu.png[width="400"]
+
+[[vaadin-context-menu.closing]]
+== Closing
+
+By default, [vaadinelement]#vaadin-context-menu# closes when a [propertyname]#click# event is triggered inside the overlay.
+
+To replace [propertyname]#click# by any other event, use the [propertyname]#closeOn# property. You can set it to an empty value to avoid closing the overlay on [propertyname]#click#.
+Note that the user can always close the overlay clicking outside the overlay, or pressing the escape key.
+
+[source,html]
+----
+Lorem ipsum dolor sit amet.<a id="opener" href='#'>Consectetur</a> adipiscing elit.
+
+<vaadin-context-menu target-selector="#opener" id="menu" close-on="">
+  <paper-menu multi>
+    <paper-item>Item 1</paper-item>
+    <paper-item>Item 2</paper-item>
+    <paper-item>Item 3</paper-item>
+    <paper-item>
+      <iron-icon icon="warning"></iron-icon>
+      <paper-item-body two-line>
+        <div>Item 4 - Line 1</div>
+        <div secondary>Item 4 - Line 2</div>
+      </paper-item-body>
+    </paper-item>
+  </paper-menu>
+</vaadin-context-menu>
+----
