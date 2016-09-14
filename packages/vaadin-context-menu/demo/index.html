@@ -23,7 +23,11 @@
 
     <h3>Context Menu Basic Usage</h3>
     <p>
-      Right click on the following link to open a context menu.
+      In this example you can see how to use <code>paper-menu</code>, <code>paper-items</code> and
+      <code>paper-item-body</code> elements to configure the content of context menu.
+    </p>
+    <p>
+      Right click on the following link to open the context menu.
     </p>
     <demo-snippet>
       <style>
@@ -62,6 +66,42 @@
           });
         </script>
 
+      </template>
+    </demo-snippet>
+
+    <h3>Context Menu with custom items</h3>
+    <p>
+      In the following example we use plain HTML elements configure menu items.
+    </p>
+    <demo-snippet>
+      <template>
+        <context-example></context-example>
+        <dom-module id="context-example">
+          <style>
+            div {
+              padding: 5px 20px;
+            }
+            div:hover {
+              background: #d6d6d6;
+            }
+          </style>
+          <template>
+            <button id="opener2">right-click me</button>
+
+            <vaadin-context-menu target-selector="#opener2" id="menu2">
+              <div on-tap="_select">Item 1</div>
+              <div on-tap="_select">Item 2</div>
+            </vaadin-context-menu>
+          </template>
+          <script>
+            Polymer({
+              is: 'context-example',
+              _select: function(e) {
+                console.log(e.target.textContent);
+              },
+            });
+          </script>
+        </dom-module>
       </template>
     </demo-snippet>
 
