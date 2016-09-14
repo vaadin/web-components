@@ -11,8 +11,6 @@ The following custom properties and mixins are available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-context-menu-overlay`     | Mixin applied to the overlay                                     | `{}`
-`--vaadin-context-menu-paper-menu`  | Mixin applied to contained paper-menu                            | `{}`
-`--vaadin-context-menu-paper-item`  | Mixin applied to contained paper-items                           | `{}`
 
 @demo demo/index.html
 -->
@@ -26,20 +24,10 @@ Custom property | Description | Default
 
       .dropdown-content {
         width: calc(64px * 4);
-        background: var(--primary-background-color);
+        background: var(--primary-background-color, #ffffff);
+        padding: 8px 0;
         @apply(--shadow-elevation-6dp);
         @apply(--vaadin-context-menu-overlay);
-      }
-
-      :host ::content paper-menu {
-        padding: 16px 0;
-        @apply(--vaadin-context-menu-paper-menu);
-      }
-
-      :host ::content paper-item {
-        min-height: 32px;
-        padding: 0 24px;
-        @apply(--vaadin-context-menu-paper-item);
       }
     </style>
     <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{opened}}">
