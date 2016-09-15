@@ -328,6 +328,161 @@
             expect(overlay.focusedDate.getMonth()).to.eql(new Date().getMonth());
             expect(overlay.focusedDate.getDate()).to.eql(new Date().getDate());
           });
+
+          it('should move to max date when targeted date is disabled', function() {
+            overlay.maxDate = new Date(2000, 0, 7);
+
+            arrowDown(overlay);
+
+            expect(overlay.focusedDate).to.eql(new Date(2000, 0, 7));
+          });
+
+          it('should move to min date when targeted date is disabled', function() {
+            overlay.minDate = new Date(1999, 11, 26);
+
+            arrowUp(overlay);
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 26));
+          });
+
+          it('should focus min date with home', function() {
+            overlay.minDate = new Date(1999, 11, 3);
+
+            arrowLeft();
+            home();
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
+          });
+
+          it('should focus max date with end', function() {
+            overlay.maxDate = new Date(2000, 0, 26);
+
+            end();
+
+            expect(overlay.focusedDate).to.eql(new Date(2000, 0, 26));
+          });
+
+          it('should focus max date with pagedown', function() {
+            overlay.maxDate = new Date(2000, 0, 28);
+
+            pageDown();
+
+            expect(overlay.focusedDate).to.eql(new Date(2000, 0, 28));
+          });
+
+          it('should focus min date with pageup', function() {
+            overlay.minDate = new Date(1999, 11, 3);
+
+            pageUp();
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
+          });
+
+          it('should focus max date with shift and pagedown', function() {
+            overlay.maxDate = new Date(2000, 11, 28);
+
+            pageDown('shift');
+
+            expect(overlay.focusedDate).to.eql(new Date(2000, 11, 28));
+          });
+
+          it('should focus min date with shift and pageup', function() {
+            overlay.minDate = new Date(1999, 5, 3);
+
+            pageUp('shift');
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 5, 3));
+          });
+
+          it('should focus the closest allowed date with pageup when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            pageUp();
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with pagedown when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            pageDown();
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with shift pageup when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            pageUp('shift');
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with shift pagedown when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            pageUp('shift');
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with home when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            home();
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with end when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            end();
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with arrow up when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            arrowUp(overlay);
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with arrow down when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            arrowDown(overlay);
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with arrow left when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            arrowLeft(overlay);
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
+
+          it('should focus the closest allowed date with arrow right when selected date is disabled', function() {
+            overlay.focusedDate = new Date(1999, 5, 10);
+            overlay.minDate = new Date(1999, 11, 25);
+
+            arrowRight(overlay);
+
+            expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+          });
         });
       });
     }

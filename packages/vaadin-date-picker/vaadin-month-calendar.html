@@ -77,6 +77,12 @@
         border-radius: 2px;
         @apply(--vaadin-date-picker-calendar-cell-selected);
       }
+
+      #monthGrid div[disabled] {
+        opacity: 0.3;
+        cursor: default;
+        @apply(--vaadin-date-picker-calendar-cell-disabled);
+      }
     </style>
 
     <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
@@ -84,8 +90,8 @@
       <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek)]]">
         <div class="weekday">[[item]]</div>
       </template>
-      <template is="dom-repeat" items="[[_getDays(month, i18n.firstDayOfWeek)]]">
-        <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]">[[_getDate(item)]]</div>
+      <template is="dom-repeat" items="[[_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)]]">
+        <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]" disabled$="[[_dateDisabled(item)]]">[[_getDate(item)]]</div>
       </template>
     </div>
   </template>
@@ -125,7 +131,23 @@
          */
         ignoreTaps: Boolean,
 
-        _notTapping: Boolean
+        _notTapping: Boolean,
+
+        /**
+         * The earliest date that can be selected. All earlier dates will be disabled.
+         */
+        minDate: {
+          type: Date,
+          value: null
+        },
+
+        /**
+         * The latest date that can be selected. All later dates will be disabled.
+         */
+        maxDate: {
+          type: Date,
+          value: null
+        }
       },
 
       _getTitle: function(month, monthNames) {
@@ -190,7 +212,7 @@
       },
 
       _handleTap: function(e) {
-        if (!this.ignoreTaps && !this._notTapping && e.target.date) {
+        if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
           this.selectedDate = e.target.date;
           this.fire('date-tap');
         }
@@ -198,6 +220,22 @@
 
       _preventDefault: function(e) {
         e.preventDefault();
+      },
+
+      _dateDisabled: function(date, minDate, maxDate) {
+        if (!date) {
+          return false;
+        }
+
+        if (this.minDate && this.maxDate) {
+          return date < this.minDate || date > this.maxDate;
+        } else if (this.minDate) {
+          return date < this.minDate;
+        } else if (this.maxDate) {
+          return date > this.maxDate;
+        }
+
+        return false;
       }
 
     });

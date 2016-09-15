@@ -10,7 +10,8 @@
   /** @polymerBehavior vaadin.elements.datepicker.DatePickerBehavior */
   vaadin.elements.datepicker.DatePickerBehaviorImpl = {
     observers: [
-      '_selectedDateChanged(_selectedDate, i18n.formatDate)'
+      '_selectedDateChanged(_selectedDate, i18n.formatDate)',
+      '_validateInput(_selectedDate, _minDate, _maxDate)'
     ],
 
     properties: {
@@ -147,6 +148,50 @@
             }
           };
         }
+      },
+
+      /**
+       * The earliest date that can be selected. All earlier dates will be disabled.
+       *
+       * Supported date formats:
+       * - ISO 8601 `"YYYY-MM-DD"` (default)
+       * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+       *
+       * @type {String}
+       */
+      min: {
+        type: String,
+        observer: '_minChanged'
+      },
+
+      /**
+       * The latest date that can be selected. All later dates will be disabled.
+       *
+       * Supported date formats:
+       * - ISO 8601 `"YYYY-MM-DD"` (default)
+       * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+       *
+       * @type {String}
+       */
+      max: {
+        type: String,
+        observer: '_maxChanged'
+      },
+
+      /**
+       * The earliest date that can be selected. All earlier dates will be disabled.
+       */
+      _minDate: {
+        type: Date,
+        value: null
+      },
+
+      /**
+       * The latest date that can be selected. All later dates will be disabled.
+       */
+      _maxDate: {
+        type: Date,
+        value: null
       }
     },
 
@@ -224,9 +269,9 @@
       return !!value;
     },
 
-    _valueChanged: function(value, oldValue) {
+    _handleDateChange: function(property, value, oldValue) {
       if (!value) {
-        this._selectedDate = null;
+        this[property] = null;
         return;
       }
 
@@ -235,12 +280,24 @@
         this.value = oldValue;
         return;
       }
-      if (!(this._selectedDate instanceof Date) ||
-        date.getFullYear() !== this._selectedDate.getFullYear() ||
-        date.getMonth() !== this._selectedDate.getMonth() ||
-        date.getDate() !== this._selectedDate.getDate()) {
-        this._selectedDate = date;
+      if (!(this[property] instanceof Date) ||
+        date.getFullYear() !== this[property].getFullYear() ||
+        date.getMonth() !== this[property].getMonth() ||
+        date.getDate() !== this[property].getDate()) {
+        this[property] = date;
       }
+    },
+
+    _valueChanged: function(value, oldValue) {
+      this._handleDateChange('_selectedDate', value, oldValue);
+    },
+
+    _minChanged: function(value, oldValue) {
+      this._handleDateChange('_minDate', value, oldValue);
+    },
+
+    _maxChanged: function(value, oldValue) {
+      this._handleDateChange('_maxDate', value, oldValue);
     },
 
     _updateAlignmentAndPosition: function() {
@@ -382,6 +439,16 @@
           }
           break;
       }
+    },
+
+    _validateInput: function(date, min, max) {
+      if (date && (min || max)) {
+        this.invalid = !this._dateAllowed(date, min, max);
+      }
+    },
+
+    _dateAllowed: function(date, min, max) {
+      return (!min || date >= min) && (!max || date <= max);
     }
   };
 

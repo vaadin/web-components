@@ -36,3 +36,16 @@ datePicker.addEventListener('value-changed', function() {
   console.log('Selected: ' + datePicker.value);
 });
 ----
+
+== Limit the Selectable Values
+
+With the [propertyname]#min# and [propertyname]#max# properties you can limit the range of selectable dates.
+Format of the properties are the same as the [propertyname]#value# property's format.
+
+You can limit the range programmatically by assigning the [propertyname]#min# and [propertyname]#max# properties
+or by using the [propertyname]#min# and [propertyname]#max# attributes.
+
+[source,html]
+----
+<vaadin-date-picker min="2000-01-01" max="2000-12-31"></vaadin-date-picker>
+----
