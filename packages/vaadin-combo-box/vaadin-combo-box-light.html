@@ -63,6 +63,7 @@ two `<paper-button>`s to act as the clear and toggle controls.
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
         on-down="_onOverlayDown"
+        on-mousedown="_preventDefault"
         vertical-offset="[[overlayVerticalOffset]]">
     </vaadin-combo-box-overlay>
   </template>

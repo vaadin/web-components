@@ -18,11 +18,20 @@
   </template>
 </test-fixture>
 
+<test-fixture id="combobox-light">
+  <template>
+    <vaadin-combo-box-light>
+      <input is="iron-input">
+    </vaadin-combo-box-light>
+  </template>
+</test-fixture>
+
 
 <script>
   var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
   describe('toggling the dropdown', function() {
     var combobox;
+    var comboboxLight;
 
     function tapToggleIcon() {
       Polymer.Base.fire('tap', {}, {
@@ -33,6 +42,7 @@
 
     beforeEach(function() {
       combobox = fixture('combobox');
+      comboboxLight = fixture('combobox-light');
     });
 
     describe('opening', function() {
@@ -127,6 +137,15 @@
           combobox.open();
         });
 
+        function createMouseDown(preventDefaultSpy) {
+          var mouseDownEvent = new CustomEvent('mousedown', {
+            bubbles: true,
+            cancelable: true
+          });
+          mouseDownEvent.preventDefault = preventDefaultSpy;
+          return mouseDownEvent;
+        }
+
         if (touchDevice) {
           it('should not focus input on dropdown open', function() {
             var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
@@ -152,6 +171,24 @@
             var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
             expect(focusedInput).to.eql(combobox.$.input);
+          });
+        }
+
+        if (!touchDevice) {
+
+          it('should prevent default on overlay mousedown', function() {
+            var preventDefaultSpy = sinon.spy();
+            combobox.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
+
+            expect(preventDefaultSpy).to.have.been.called;
+          });
+
+          it('should prevent default on overlay mousedown (vaadin-combo-box-light)', function() {
+            var preventDefaultSpy = sinon.spy();
+            comboboxLight.open();
+            comboboxLight.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
+
+            expect(preventDefaultSpy).to.have.been.called;
           });
         }
       });
