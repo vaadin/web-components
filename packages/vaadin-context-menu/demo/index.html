@@ -54,58 +54,6 @@
       </template>
     </demo-snippet>
 
-    <h3>Styling the Context Menu</h3>
-    <p>
-      You can easily customize the <code>vaadin-context-menu</code> using custom CSS properties and
-      mixins in order to fulfil the Material Design spec for
-      <a href="https://material.google.com/components/menus.html"> cascading menus.</a>
-    </p>
-    <demo-snippet>
-      <template>
-        <dom-module id="context-example2">
-          <style>
-            :host {
-               --paper-menu: {
-                 padding: 16px 0;
-               };
-               --paper-item: {
-                 padding: 0 24px;
-                 min-height: 32px;
-               };
-               --iron-icon: {
-                 margin-right: 16px;
-               };
-               --paper-item-body-two-line-min-height: 32px;
-            }
-          </style>
-          <template>
-            <button id="opener">right-click me</button>
-
-            <vaadin-context-menu target-selector="#opener" id="menu">
-              <paper-menu>
-                <paper-item></iron-icon>Item 1</paper-item>
-                <paper-item>Item 2</paper-item>
-                <paper-item>Item 3</paper-item>
-                <paper-item>
-                  <iron-icon icon="warning"></iron-icon>
-                  <paper-item-body two-line>
-                    <div>Item 4 - Line 1</div>
-                    <div secondary>Item 4 - Line 2</div>
-                  </paper-item-body>
-                </paper-item>
-              </paper-menu>
-            </vaadin-context-menu>
-          </template>
-          <script>
-            Polymer({
-              is: 'context-example2'
-            });
-          </script>
-        </dom-module>
-        <context-example2></context-example2>
-      </template>
-    </demo-snippet>
-
     <h3>Customized Items</h3>
     <p>
       In the following example we use plain HTML elements as items in the context menu.
