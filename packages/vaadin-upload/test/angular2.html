@@ -18,28 +18,41 @@
   <!-- 2. Configure SystemJS -->
   <script>
     document.addEventListener('WebComponentsReady', function() {
-      var angularPackages = ['core', 'common', 'compiler', 'platform-browser', 'platform-browser-dynamic'];
-      var packages = {};
-
-      angularPackages.forEach(function(p) {
-        packages['@angular/' + p] = {main: 'index.js'};
-      });
-
-      packages.app = {
-        format: 'register',
-        defaultExtension: 'js'
-      };
-
-      packages['@vaadin/angular2-polymer'] = {
-        main: 'index.js'
-      };
-
       System.config({
         map: {
+          'app': 'angular2',
           '@vaadin': '../node_modules/@vaadin',
-          '@angular': '../node_modules/@angular'
+          '@angular/core': '../node_modules/@angular/core/bundles/core.umd.js',
+          '@angular/common': '../node_modules/@angular/common/bundles/common.umd.js',
+          '@angular/compiler': '../node_modules/@angular/compiler/bundles/compiler.umd.js',
+          '@angular/platform-browser': '../node_modules/@angular/platform-browser/bundles/platform-browser.umd.js',
+          '@angular/platform-browser-dynamic': '../node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+          '@angular/forms': '../node_modules/@angular/forms/bundles/forms.umd.js',
+          // angular testing umd bundles
+          '@angular/core/testing': '../node_modules/@angular/core/bundles/core-testing.umd.js',
+          '@angular/common/testing': '../node_modules/@angular/common/bundles/common-testing.umd.js',
+          '@angular/compiler/testing': '../node_modules/@angular/compiler/bundles/compiler-testing.umd.js',
+          '@angular/platform-browser/testing': '../node_modules/@angular/platform-browser/bundles/platform-browser-testing.umd.js',
+          '@angular/platform-browser-dynamic/testing':
+              '../node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
+          '@angular/forms/testing': '../node_modules/@angular/forms/bundles/forms-testing.umd.js',
+          // other libraries
+          'rxjs': '../node_modules/rxjs'
         },
-        packages: packages
+        packages: {
+          app: {
+            main: 'main.js'
+          },
+          rxjs: {
+            defaultExtension: 'js'
+          },
+          'angular2-in-memory-web-api': {
+            defaultExtension: 'js'
+          },
+          '@vaadin/angular2-polymer': {
+            main: 'index.js'
+          }
+        }
       });
     });
   </script>
