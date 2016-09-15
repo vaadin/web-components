@@ -2,6 +2,19 @@
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
 
+<!--
+
+`<vaadin-context-menu>` is a component for contextual menus bound to UI elements.
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-context-menu-overlay`     | Mixin applied to the overlay                                     | `{}`
+
+@demo demo/index.html
+-->
+
 <dom-module id="vaadin-context-menu">
   <template>
     <style>
@@ -9,19 +22,11 @@
         display: block;
       }
 
-      #overlay {
-        @apply(--shadow-elevation-6dp);
-      }
-
-      :host ::content paper-menu {
+      .dropdown-content {
         width: calc(64px * 4);
-        padding: 16px 0;
-      }
-
-      :host ::content paper-item,
-      :host ::content paper-item-body {
-        min-height: 32px !important;
-        padding: 0 24px;
+        background: var(--primary-background-color, #ffffff);
+        @apply(--shadow-elevation-6dp);
+        @apply(--vaadin-context-menu-overlay);
       }
     </style>
     <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{opened}}">

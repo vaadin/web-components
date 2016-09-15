@@ -24,12 +24,42 @@
 
     <h3>Context Menu Advanded Usage</h3>
     <p>
-      Right-Click on the headers to open a context menu that will allow you hide and show columns in the grid.
+      Right-Click on the table to open a context menu that will allow you hide and show columns in the grid.
+      Note that this context menu is fully customized using CSS and Polymer mixins.
     </p>
     <demo-snippet>
       <template>
         <grid-example></grid-example>
         <dom-module id="grid-example">
+          <style>
+            :host {
+              --vaadin-context-menu-overlay: {
+                box-shadow: none;
+                border: 1px solid var(--primary-color);
+                width: 110px;
+                padding: 0;
+              };
+              --paper-menu-selected-item: {
+                font-weight: normal;
+              };
+              --paper-item: {
+                min-height: 24px;
+                padding: 0 10px;
+              }
+              --paper-menu-background-color: #e1f3fc;
+            }
+
+            paper-item::before {
+              position: relative !important;
+              content: "✔" !important;
+              margin-right: 10px;
+              background: transparent !important;
+              opacity: 0 !important;
+            }
+            paper-item.iron-selected::before {
+              opacity: 0.8 !important;
+            }
+          </style>
           <template>
             <vaadin-grid id="grid" frozen-columns="1" items="[[_items()]]" columns="{{columns}}">
               <table>
@@ -66,14 +96,6 @@
           observers: [
             '_selectedChanged(selectedValues.*)'
           ],
-          ready: function() {
-            // Cancel event unless the user clicks on the header
-            this.$.grid.addEventListener('contextmenu', function(e) {
-              if (this.$.grid.getRowIndex(e.target) > -1) {
-                e.stopImmediatePropagation();
-              }
-            }.bind(this), true);
-          },
           _items: function() {
             return getRandomItems();
           },

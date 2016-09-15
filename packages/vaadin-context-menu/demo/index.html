@@ -23,25 +23,20 @@
 
     <h3>Context Menu Basic Usage</h3>
     <p>
-      Right click on the following link to open a context menu.
+      In this example you can see how to use <code>paper-menu</code>, <code>paper-items</code>
+      and <code>paper-item-body</code> elements to configure the content of the context menu.
     </p>
     <demo-snippet>
+      <style is="custom-style">
+      </style>
       <template>
-        <p>
-          Lorem ipsum dolor sit amet.
-          <a id="opener" on-contextmenu="_context" href='#'>
-            Consectetur
-          </a>
-          adipiscing elit.
-        </p>
-
+        Right click on this <a id="opener" href="#">link</a> to open the context menu.
         <vaadin-context-menu target-selector="#opener" id="menu">
           <paper-menu>
             <paper-item>Item 1</paper-item>
             <paper-item>Item 2</paper-item>
             <paper-item>Item 3</paper-item>
             <paper-item>
-              <iron-icon icon="warning"></iron-icon>
               <paper-item-body two-line>
                 <div>Item 4 - Line 1</div>
                 <div secondary>Item 4 - Line 2</div>
@@ -56,6 +51,50 @@
           });
         </script>
 
+      </template>
+    </demo-snippet>
+
+    <h3>Customized Items</h3>
+    <p>
+      In the following example we use plain HTML elements as items in the context menu.
+    </p>
+    <demo-snippet>
+      <template>
+        <dom-module id="context-example3">
+          <style>
+            div[role="menu"]{
+              padding: 16px 0;
+            }
+            div[role="option"] {
+              min-height: 32px;
+              padding: 0 24px;
+              font-size: 16px;
+              display: flex;
+              align-items: center;
+            }
+            div[role="option"]:hover {
+              background: #d6d6d6;
+            }
+          </style>
+          <template>
+            <button id="opener">right-click me</button>
+            <vaadin-context-menu target-selector="#opener" id="menu2">
+              <div role="menu">
+                <div on-tap="_select" role="option">Item 1</div>
+                <div on-tap="_select" role="option">Item 2</div>
+              </div>
+            </vaadin-context-menu>
+          </template>
+          <script>
+            Polymer({
+              is: 'context-example3',
+              _select: function(e) {
+                console.log(e.target.textContent);
+              },
+            });
+          </script>
+        </dom-module>
+        <context-example3></context-example3>
       </template>
     </demo-snippet>
 
