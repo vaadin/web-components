@@ -8,7 +8,6 @@ var jshint = require('gulp-jshint');
 var htmlExtract = require('gulp-html-extract');
 var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
-var tsProject = ts.createProject('directives/tsconfig.json');
 var typings = require('gulp-typings');
 
 function cleanDone(done) {
@@ -145,21 +144,20 @@ gulp.task('test', ['lint:js', 'lint:html'], function(done) {
 });
 
 gulp.task('typings', function() {
-  return gulp.src('directives/typings.json')
+  return gulp.src('test/angular2/typings.json')
     .pipe(typings());
 });
 
 gulp.task('ng2', ['typings'], function() {
-  ['directives', 'test/angular2'].forEach(function(dir) {
-    gulp.src([dir + '/*.ts', 'directives/typings/main/**/*.d.ts'])
+  ['test/angular2'].forEach(function(dir) {
+    gulp.src([dir + '/*.ts', 'test/angular2/typings/main/**/*.d.ts'])
       .pipe(sourcemaps.init())
-      .pipe(ts(ts.createProject('directives/tsconfig.json')))
+      .pipe(ts(ts.createProject('test/angular2/tsconfig.json')))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(dir));
   });
 });
 
 gulp.task('ng2:watch', function() {
-  gulp.watch('directives/*.ts', ['ng2']);
   gulp.watch('test/angular2/*.ts', ['ng2']);
 });
