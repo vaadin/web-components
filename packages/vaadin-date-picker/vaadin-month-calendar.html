@@ -91,7 +91,7 @@
         <div class="weekday">[[item]]</div>
       </template>
       <template is="dom-repeat" items="[[_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)]]">
-        <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]" disabled$="[[_dateDisabled(item)]]">[[_getDate(item)]]</div>
+        <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]" disabled$="[[!_dateAllowed(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
       </template>
     </div>
   </template>
@@ -222,20 +222,8 @@
         e.preventDefault();
       },
 
-      _dateDisabled: function(date, minDate, maxDate) {
-        if (!date) {
-          return false;
-        }
-
-        if (this.minDate && this.maxDate) {
-          return date < this.minDate || date > this.maxDate;
-        } else if (this.minDate) {
-          return date < this.minDate;
-        } else if (this.maxDate) {
-          return date > this.maxDate;
-        }
-
-        return false;
+      _dateAllowed: function(date, min, max) {
+        return (!min || date >= min) && (!max || date <= max);
       }
 
     });
