@@ -11,26 +11,10 @@
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
   </head>
   <body>
-    <dom-module id="x-foo">
-      <template>
-        <vaadin-context-menu>
-          <template>FOOBAR</template>
-          <div id="target"></div>
-        </vaadin-context-menu>
-      </template>
-      <script>
-        document.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'x-foo'
-          });
-        });
-      </script>
-    </dom-module>
-
     <test-fixture id="default">
       <template>
         <vaadin-context-menu>
-          <template>FOOBAR</template>
+          <template>FOOBAR [[detail.foo]] [[target.id]]</template>
           <div id="target"></div>
         </vaadin-context-menu>
       </template>
@@ -38,7 +22,7 @@
 
     <script>
       describe('template', function() {
-        var menu, foo;
+        var menu, target;
 
         beforeEach(function() {
           menu = fixture('default');
@@ -51,6 +35,22 @@
           menu.opened = true;
 
           expect(menu.$.overlay.textContent).to.contain('FOOBAR');
+        });
+
+        it('should bind target property', function() {
+          menu.fire('contextmenu', {}, {
+            node: target
+          });
+
+          expect(menu.$.overlay.textContent).to.contain('target');
+        });
+
+        it('should bind detail property', function() {
+          menu.fire('contextmenu', {foo: 'bar'}, {
+            node: target
+          });
+
+          expect(menu.$.overlay.textContent).to.contain('bar');
         });
       });
     </script>

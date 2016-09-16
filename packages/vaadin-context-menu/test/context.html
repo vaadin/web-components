@@ -53,7 +53,7 @@
             node: target
           });
 
-          expect(menu.context.target).to.eql(target);
+          expect(menu._context.target).to.eql(target);
         });
 
         it('should use details as context details', function() {
@@ -62,7 +62,7 @@
             node: target
           });
 
-          expect(menu.context.detail).to.eql(detail);
+          expect(menu._context.detail).to.eql(detail);
         });
 
         it('should use local target when targeting inside shadow root', function() {
@@ -70,7 +70,7 @@
             node: foo.$.content
           });
 
-          expect(menu.context.target).to.eql(foo);
+          expect(menu._context.target).to.eql(foo);
         });
 
         it('should not penerate shadow root to change context', function() {
@@ -79,7 +79,7 @@
             node: foo.$.content
           });
 
-          expect(menu.context.target).to.be.undefined;
+          expect(menu._context.target).to.be.undefined;
         });
 
         it('should use selector outside shadow root to change context', function() {
@@ -88,7 +88,7 @@
             node: foo
           });
 
-          expect(menu.context.target).to.eql(target);
+          expect(menu._context.target).to.eql(target);
         });
 
         it('should not open if no context available', function() {

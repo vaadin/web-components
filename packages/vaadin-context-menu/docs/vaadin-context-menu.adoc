@@ -127,17 +127,16 @@ Overlay can be also opened programmatically using [propertyname]#opened#.
 [[vaadin-context-menu.context]]
 = Context
 
-Whenever the overlay opens, the context is set to [propertyname]#context# property.
-The context has two properties, [propertyname]#detail# and [propertyname]#target#.
+Whenever the overlay opens, the context is bound to [propertyname]#detail# and [propertyname]#target# properties in the template.
 They are especially helpful when defining dynamic content for the overlay based on the context.
 
-[propertyname]#context.target# is the element from which the event originated from.
+[propertyname]#target# is the element from which the event originated from.
 
 [source,html]
 ----
-<vaadin-context-menu selector="b" context="{{context}}">
+<vaadin-context-menu selector="b">
   <template>
-    <div>You've clicked on the word [[context.target.textContent]] that's in Latin.</div>
+    <div>You've clicked on the word [[target.textContent]] that's in Latin.</div>
   </template>
   <div>
     Lorem <b>ipsum</b> dolor sit amet. <b>Consectetur</b> adipiscing elit.
@@ -145,14 +144,14 @@ They are especially helpful when defining dynamic content for the overlay based 
 </vaadin-context-menu>
 ----
 
-[propertyname]#context.detail# contains the event details from the originating event, which
+[propertyname]#detail# contains the event details from the originating event, which
 is very useful when firing custom events from inside custom elements.
 
 [source,html]
 ----
-<vaadin-context-menu open-on="latin-word-clicked" context="{{context}}">
+<vaadin-context-menu open-on="latin-word-clicked">
   <template>
-    <div>You've clicked on the word [[context.detail.word]] that's in Latin.</div>
+    <div>You've clicked on the word [[detail.word]] that's in Latin.</div>
   </template>
   <latin-word-list></latin-word-list>
 </vaadin-context-menu>

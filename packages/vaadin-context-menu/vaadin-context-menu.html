@@ -47,14 +47,6 @@ Custom property | Description | Default
       properties: {
 
         /**
-         * Reference to an element the context menu was opened on.
-         */
-        context: {
-          type: Object,
-          notify: true
-        },
-
-        /**
          * CSS selector that can be used to select any of the parent elements
          * of the element the context menu was opened on.
          */
@@ -99,7 +91,18 @@ Custom property | Description | Default
           observer: '_closeOnChanged'
         },
 
-        _contentTemplate: Object
+        _context: Object,
+
+        _contentTemplate: Object,
+
+        _instanceProps: {
+          value: function() {
+            return {
+              detail: true,
+              target: true
+            };
+          }
+        }
       },
 
       observers: ['_contentTemplateChanged(_contentTemplate)',
@@ -146,6 +149,11 @@ Custom property | Description | Default
       _openedChanged: function(opened) {
         if (opened) {
           this._contentTemplate = Polymer.dom(this).querySelector('template');
+
+          if (this._context && this._instance) {
+            this._instance.detail = this._context.detail;
+            this._instance.target = this._context.target;
+          }
         }
       },
 
@@ -169,12 +177,12 @@ Custom property | Description | Default
       },
 
       _onContextMenu: function(e) {
-        this.context = {
+        this._context = {
           detail: e.detail,
           target: this._contextTarget(e)
         };
 
-        if (this.context.target) {
+        if (this._context.target) {
           e.preventDefault();
 
           this.$.overlay.resetFit();

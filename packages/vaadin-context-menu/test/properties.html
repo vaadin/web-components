@@ -42,7 +42,7 @@
           it('should use event target as context target', function() {
             menu.fire('contextmenu', {}, {node: target});
 
-            expect(menu.context.target).to.eql(target);
+            expect(menu._context.target).to.eql(target);
           });
 
           it('should use context-selector scope to target', function() {
@@ -50,7 +50,7 @@
 
             menu.fire('contextmenu', {}, {node: target});
 
-            expect(menu.context.target).to.eql(target.parentElement);
+            expect(menu._context.target).to.eql(target.parentElement);
           });
         });
 
@@ -145,7 +145,7 @@
               node: target
             });
 
-            expect(menu.context.target).to.eql(target);
+            expect(menu._context.target).to.eql(target);
           });
 
           it('should use context selector on external target', function() {
@@ -155,7 +155,7 @@
               node: target
             });
 
-            expect(menu.context.target).to.eql(target.parentElement);
+            expect(menu._context.target).to.eql(target.parentElement);
           });
 
           describe('event listeners', function() {
