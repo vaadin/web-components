@@ -7,10 +7,10 @@ layout: page
 [[vaadin-context-menu.overview]]
 = Overview
 
-[vaadinelement]#vaadin-context-menu# is a Polymer element implementing a menu in an overlay which is open by a context click.
+[vaadinelement]#vaadin-context-menu# is a Polymer element implementing a menu in an overlay which by default is opened by a context click or a long press touch event.
 
 [[figure.vaadin-context-menu.overview]]
-.A screenshot of [vaadinelement]#vaadin-context-menu#
+[vaadinelement]#vaadin-context-menu#
 image::img/vaadin-context-menu.png[width="400"]
 
 [[vaadin-context-menu.getting-started]]
@@ -18,8 +18,9 @@ image::img/vaadin-context-menu.png[width="400"]
 
 [vaadinelement]#vaadin-context-menu# uses a [propertyname]#template# element inside to determine the contents for the overlay.
 
-By default, [vaadinelement]#vaadin-context-menu# itself is used as a target to listen for [propertyname]#contextmenu# events.
-In practice, any child element of the target element can be context clicked.
+By default, [vaadinelement]#vaadin-context-menu# itself is used as the target to listen to [propertyname]#contextmenu# events.
+In practice, any child of the target element will respond to [propertyname]#contextmenu# events for opening the menu.
+This event can be customized as explained in the following chapters.
 
 [source,html]
 ----
@@ -47,7 +48,7 @@ In practice, any child element of the target element can be context clicked.
 </vaadin-context-menu>
 ----
 
-In case you don't want [vaadinelement]#vaadin-context-menu# as your target element for clicks, you can listen on any element outside by
+In case you don't want [vaadinelement]#vaadin-context-menu# as your target element for the opening event, you can listen on any element outside by
 setting the [propertyname]#listenOn# value.
 
 [source,html]
@@ -93,7 +94,7 @@ When styling the overlay contents, place a [propertyname]#style# element inside 
 
 By default, the overlay opens when the [propertyname]#listenOn# element receives a [propertyname]#contextmenu# event.
 
-To replace [propertyname]#contextmenu# by any other event, use [propertyname]#openOn#.
+To replace it by any other event, use [propertyname]#openOn#.
 
 [source,html]
 ----
@@ -107,7 +108,7 @@ To replace [propertyname]#contextmenu# by any other event, use [propertyname]#op
 </vaadin-context-menu>
 ----
 
-Overlay can be also opened programmatically using [propertyname]#opened#.
+Overlay can be also opened programmatically by setting property [propertyname]#opened# as `true`.
 
 [source,html]
 ----
@@ -127,10 +128,10 @@ Overlay can be also opened programmatically using [propertyname]#opened#.
 [[vaadin-context-menu.context]]
 = Context
 
-Whenever the overlay opens, the context is bound to [propertyname]#detail# and [propertyname]#target# properties in the template.
-They are especially helpful when defining dynamic content for the overlay based on the context.
+Whenever the overlay opens, the context is bound to [propertyname]#detail# and [propertyname]#target# properties inside the template.
+They are especially helpful when defining dynamic content for the overlay based on which element it is opened on.
 
-[propertyname]#target# is the element from which the event originated from.
+[propertyname]#target# is the element that originated the event.
 
 [source,html]
 ----
@@ -144,8 +145,8 @@ They are especially helpful when defining dynamic content for the overlay based 
 </vaadin-context-menu>
 ----
 
-[propertyname]#detail# contains the event details from the originating event, which
-is very useful when firing custom events from inside custom elements.
+[propertyname]#detail# contains the event details of the original event.
+It is useful when firing custom events from inside custom elements.
 
 [source,html]
 ----

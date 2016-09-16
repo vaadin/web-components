@@ -110,7 +110,7 @@ Custom property | Description | Default
                   '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'],
 
       _onOverlayOpened: function() {
-        var child = Polymer.dom(this.$.content).querySelector('*');
+        var child = Polymer.dom(this.$.content).firstElementChild;
         if (child) {
           child.focus();
         }
@@ -148,7 +148,9 @@ Custom property | Description | Default
 
       _openedChanged: function(opened) {
         if (opened) {
-          this._contentTemplate = Polymer.dom(this).querySelector('template');
+          this._contentTemplate = Polymer.dom(this).children.filter(function(el) {
+            return el.localName === 'template';
+          })[0];
 
           if (this._context && this._instance) {
             this._instance.detail = this._context.detail;
@@ -186,8 +188,8 @@ Custom property | Description | Default
           e.preventDefault();
 
           this.$.overlay.resetFit();
-          this.$.overlay.x = e.clientX || e.detail.clientX;
-          this.$.overlay.y = e.clientY || e.detail.clientY;
+          this.$.overlay.x = e.detail && e.detail.clientX || e.clientX;
+          this.$.overlay.y = e.detail && e.detail.clientY || e.clientY;
           this.opened = true;
         }
       },
