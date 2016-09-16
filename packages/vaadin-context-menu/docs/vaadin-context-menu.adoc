@@ -47,8 +47,8 @@ In practice, any child element of the target element can be context clicked.
 </vaadin-context-menu>
 ----
 
-In case you don't want [vaadinelement]#vaadin-context-menu# as your target element for clicks, you can target any element outside by
-setting the [propertyname]#target# value.
+In case you don't want [vaadinelement]#vaadin-context-menu# as your target element for clicks, you can listen on any element outside by
+setting the [propertyname]#listenOn# value.
 
 [source,html]
 ----
@@ -62,7 +62,7 @@ setting the [propertyname]#target# value.
 </div>
 <script>
   var menu = document.querySelector('vaadin-context-menu');
-  menu.target = document.querySelector('#target');
+  menu.listenOn = document.querySelector('#target');
 </script>
 ----
 
@@ -91,7 +91,7 @@ When styling the overlay contents, place a [propertyname]#style# element inside 
 [[vaadin-context-menu.opening]]
 = Opening
 
-By default, the overlay opens when the [propertyname]#target# element receives a [propertyname]#contextmenu# event.
+By default, the overlay opens when the [propertyname]#listenOn# element receives a [propertyname]#contextmenu# event.
 
 To replace [propertyname]#contextmenu# by any other event, use [propertyname]#openOn#.
 

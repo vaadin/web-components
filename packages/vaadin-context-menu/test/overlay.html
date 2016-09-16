@@ -52,7 +52,7 @@
               null   /*relatedTarget*/
             );
           }
-          menu.target.dispatchEvent(e);
+          menu.listenOn.dispatchEvent(e);
         }
 
         describe('opening', function() {
@@ -78,7 +78,7 @@
           });
 
           it('should be positioned on click target', function(done) {
-            menu.target.addEventListener('contextmenu', function() {
+            menu.listenOn.addEventListener('contextmenu', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(10);
               done();
@@ -88,7 +88,7 @@
           });
 
           it('should be positioned on custom event', function(done) {
-            menu.target.addEventListener('iron-overlay-opened', function() {
+            menu.listenOn.addEventListener('iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -97,7 +97,7 @@
             menu.openOn = 'foobar';
 
             menu.fire('foobar', { clientX: 10, clientY: 20}, {
-              node: menu.target
+              node: menu.listenOn
             });
           });
         });

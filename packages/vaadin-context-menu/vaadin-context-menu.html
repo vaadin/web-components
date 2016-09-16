@@ -75,7 +75,7 @@ Custom property | Description | Default
          * events.
          * @type {!Element}
          */
-        target: {
+        listenOn: {
           type: Object,
           value: function() {
             return this;
@@ -107,7 +107,7 @@ Custom property | Description | Default
 
       observers: ['_contentTemplateChanged(_contentTemplate)',
                   '_openedChanged(opened)',
-                  '_targetOrOpenOnChanged(target, openOn, isAttached)'],
+                  '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'],
 
       _onOverlayOpened: function() {
         var child = Polymer.dom(this.$.content).querySelector('*');
@@ -116,16 +116,16 @@ Custom property | Description | Default
         }
       },
 
-      _targetOrOpenOnChanged: function(target, openOn, isAttached) {
-        if (this._oldTarget && this._oldOpenOn) {
-          this.unlisten(this._oldTarget, this._oldOpenOn, '_onContextMenu');
-          this._oldTarget = null;
+      _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
+        if (this._oldListenOn && this._oldOpenOn) {
+          this.unlisten(this._oldListenOn, this._oldOpenOn, '_onContextMenu');
+          this._oldListenOn = null;
           this._oldOpenOn = null;
         }
 
-        if (target && openOn && isAttached) {
-          this.listen(target, openOn, '_onContextMenu');
-          this._oldTarget = target;
+        if (listenOn && openOn && isAttached) {
+          this.listen(listenOn, openOn, '_onContextMenu');
+          this._oldListenOn = listenOn;
           this._oldOpenOn = openOn;
         }
       },
@@ -166,7 +166,7 @@ Custom property | Description | Default
 
       _contextTarget: function(e) {
         if (this.selector) {
-          var targets = Polymer.dom(this.target).querySelectorAll(this.selector);
+          var targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
 
           return targets.filter(function(el) {
             return Polymer.dom(e).path.indexOf(el) > -1;

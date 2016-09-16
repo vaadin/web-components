@@ -85,16 +85,16 @@
             it('should update listeners when set', function() {
               menu.openOn = 'foobar';
 
-              expect(menu.unlisten.withArgs(menu.target, 'contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.target, 'foobar').callCount).to.eql(1);
+              expect(menu.unlisten.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(menu.listenOn, 'foobar').callCount).to.eql(1);
             });
 
             it('should not add listener when set to empty', function() {
               menu.openOn = '';
 
-              expect(menu.unlisten.withArgs(menu.target, 'contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.target, '').callCount).to.eql(0);
-              expect(menu.listen.withArgs(menu.target, 'contextmenu').callCount).to.eql(0);
+              expect(menu.unlisten.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(menu.listenOn, '').callCount).to.eql(0);
+              expect(menu.listen.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(0);
             });
           });
         });
@@ -129,7 +129,7 @@
             menu = fixture('external')[0];
             target = document.body.querySelector('#target');
 
-            menu.target = target;
+            menu.listenOn = target;
           });
 
           it('should open on external target', function() {
@@ -150,7 +150,7 @@
 
           it('should use context selector on external target', function() {
             menu.selector = 'section'; //parent of #target
-            menu.target = menu.parentElement;
+            menu.listenOn = menu.parentElement;
             menu.fire('contextmenu', {}, {
               node: target
             });
@@ -165,21 +165,21 @@
             });
 
             it('should update target listeners when set', function() {
-              var oldTarget = menu.target;
+              var oldTarget = menu.listenOn;
 
-              menu.target = document.body;
+              menu.listenOn = document.body;
 
               expect(menu.unlisten.withArgs(oldTarget, 'contextmenu').callCount).to.eql(1);
               expect(menu.listen.withArgs(document.body, 'contextmenu').callCount).to.eql(1);
             });
 
             it('should not target listeners when set to null', function() {
-              var oldTarget = menu.target;
+              var oldTarget = menu.listenOn;
 
-              menu.target = null;
+              menu.listenOn = null;
 
               expect(menu.unlisten.withArgs(oldTarget, 'contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.target, 'contextmenu').callCount).to.eql(0);
+              expect(menu.listen.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(0);
             });
           });
         });

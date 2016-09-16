@@ -98,7 +98,7 @@
             '_selectedChanged(selectedValues.*)'
           ],
           ready: function() {
-            this.$.menu.target = this.$.grid;
+            this.$.menu.listenOn = this.$.grid;
           },
           _items: function() {
             return getRandomItems();
