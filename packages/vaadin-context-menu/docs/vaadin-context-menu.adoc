@@ -33,11 +33,11 @@ In practice, any child element of the target element can be context clicked.
 </vaadin-context-menu>
 ----
 
-[propertyname]#contextSelector# property can be used to more precisely define which element(s) should open the overlay.
+[propertyname]#selector# property can be used to more precisely define which element(s) should open the overlay.
 
 [source,html]
 ----
-<vaadin-context-menu context-selector="b">
+<vaadin-context-menu selector="b">
   <template>
     <div>You've clicked on a word that's in Latin.</div>
   </template>
@@ -52,7 +52,7 @@ setting the [propertyname]#target# value.
 
 [source,html]
 ----
-<vaadin-context-menu context-selector="b">
+<vaadin-context-menu selector="b">
   <template>
     <div>You've clicked on a word that's in Latin.</div>
   </template>
@@ -73,7 +73,7 @@ When styling the overlay contents, place a [propertyname]#style# element inside 
 
 [source,html]
 ----
-<vaadin-context-menu context-selector="b">
+<vaadin-context-menu selector="b">
   <template>
     <style is="custom-style">
       div {
@@ -135,7 +135,7 @@ They are especially helpful when defining dynamic content for the overlay based 
 
 [source,html]
 ----
-<vaadin-context-menu context-selector="b" context="{{context}}">
+<vaadin-context-menu selector="b" context="{{context}}">
   <template>
     <div>You've clicked on the word [[context.target.textContent]] that's in Latin.</div>
   </template>

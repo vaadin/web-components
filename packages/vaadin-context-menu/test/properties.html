@@ -46,7 +46,7 @@
           });
 
           it('should use context-selector scope to target', function() {
-            menu.contextSelector = 'section';
+            menu.selector = 'section';
 
             menu.fire('contextmenu', {}, {node: target});
 
@@ -149,7 +149,7 @@
           });
 
           it('should use context selector on external target', function() {
-            menu.contextSelector = 'section'; //parent of #target
+            menu.selector = 'section'; //parent of #target
             menu.target = menu.parentElement;
             menu.fire('contextmenu', {}, {
               node: target

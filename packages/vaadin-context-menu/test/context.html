@@ -32,18 +32,20 @@
           <div id="target">
             <x-foo></x-foo>
           </div>
+          <div id="another"></div>
         </vaadin-context-menu>
       </template>
     </test-fixture>
 
     <script>
       describe('context', function() {
-        var menu, foo;
+        var menu, foo, target, another;
 
         beforeEach(function() {
           menu = fixture('default');
           foo = document.querySelector('x-foo');
           target = document.querySelector('#target');
+          another = document.querySelector('#another');
         });
 
         it('should use target as default context', function() {
@@ -72,16 +74,16 @@
         });
 
         it('should not penerate shadow root to change context', function() {
-          menu.contextSelector = '#content';
+          menu.selector = '#content';
           menu.fire('contextmenu', {}, {
             node: foo.$.content
           });
 
-          expect(menu.context.target).to.be.null;
+          expect(menu.context.target).to.be.undefined;
         });
 
         it('should use selector outside shadow root to change context', function() {
-          menu.contextSelector = '#target';
+          menu.selector = '#target';
           menu.fire('contextmenu', {}, {
             node: foo
           });
@@ -90,7 +92,7 @@
         });
 
         it('should not open if no context available', function() {
-          menu.contextSelector = 'foobar';
+          menu.selector = 'foobar';
           menu.fire('contextmenu', {}, {
             node: foo.$.content
           });
@@ -99,13 +101,23 @@
         });
 
         it('should not prevent default if no context available', function() {
-          menu.contextSelector = 'foobar';
+          menu.selector = 'foobar';
           var evt = menu.fire('contextmenu', {}, {
             node: foo.$.content,
             cancelable: true
           });
 
           expect(evt.defaultPrevented).to.eql(false);
+        });
+
+        it('should target multiple elements', function() {
+          menu.selector = 'div';
+
+          menu.fire('contextmenu', {}, {
+            node: another
+          });
+
+          expect(menu.opened).to.be.true;
         });
       });
     </script>
