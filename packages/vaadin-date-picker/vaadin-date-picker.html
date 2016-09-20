@@ -273,7 +273,7 @@ If you want to replace the default input field with a custom implementation, you
        * it with the iron-input validation.
        */
       _getValidity: function() {
-        return this.inputElement.validate();
+        return this.inputElement.validate() && (!this._selectedDate || this._dateAllowed(this._selectedDate, this._minDate, this._maxDate));
       },
 
       _clear: function(e) {

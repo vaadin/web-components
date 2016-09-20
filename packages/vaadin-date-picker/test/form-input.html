@@ -107,6 +107,20 @@
         expect(datepicker.invalid).to.be.false;
       });
 
+      it('should validate min/max dates', function() {
+        datepicker.min = '2000-01-01';
+        datepicker.max = '2001-01-01';
+
+        // Set invalid value.
+        datepicker.value = '2014-01-01';
+        expect(datepicker.validate()).to.equal(false);
+        expect(datepicker.invalid).to.be.equal(true);
+
+        datepicker.value = '2000-02-01';
+        expect(datepicker.validate()).to.equal(true);
+        expect(datepicker.invalid).to.be.equal(false);
+      });
+
       it('should be possible to force invalid status', function() {
         datepicker.invalid = true;
         expect(datepicker.$.inputcontainer.invalid).to.be.true;
