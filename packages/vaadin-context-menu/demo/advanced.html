@@ -45,6 +45,7 @@
               --paper-item: {
                 min-height: 24px;
                 padding: 0 10px;
+                cursor: default;
               }
               --paper-menu-background-color: #e1f3fc;
             }
@@ -95,7 +96,7 @@
             }
           },
           observers: [
-            '_selectedChanged(selectedValues.*)'
+            '_selectedChanged(selectedValues.splices)'
           ],
           ready: function() {
             this.$.menu.listenOn = this.$.grid;
@@ -105,9 +106,9 @@
           },
           _selectedChanged: function() {
             for (var i = 0; this.columns && i < this.columns.length; i++) {
-              this.columns[i].hidden = !this.selectedValues.includes(i);
+              this.columns[i].hidden = this.selectedValues.indexOf(i) === -1;
             }
-          },
+          }
         });
       </script>
 
