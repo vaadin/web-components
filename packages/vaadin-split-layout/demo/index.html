@@ -86,17 +86,19 @@
             <custom-resizable>Second</custom-resizable>
           </vaadin-split-layout>
           <script>
-            Polymer({
-              is: 'custom-resizable',
-              behaviors: [
-                Polymer.IronResizableBehavior
-              ],
-              listeners: {
-                'iron-resize': '_onIronResize'
-              },
-              _onIronResize: function() {
-                console.log('Resized');
-              }
+            window.addEventListener('WebComponentsReady', function(e) {
+              Polymer({
+                is: 'custom-resizable',
+                behaviors: [
+                  Polymer.IronResizableBehavior
+                ],
+                listeners: {
+                  'iron-resize': '_onIronResize'
+                },
+                _onIronResize: function() {
+                  console.log('Resized');
+                }
+              });
             });
           </script>
         </template>
