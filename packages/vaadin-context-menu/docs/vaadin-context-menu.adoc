@@ -1,0 +1,179 @@
+---
+title: Overview
+order: 1
+layout: page
+---
+
+[[vaadin-context-menu.overview]]
+= Overview
+
+[vaadinelement]#vaadin-context-menu# is a Polymer element implementing a menu in an overlay which by default is opened by a context click or a long press touch event.
+
+[[figure.vaadin-context-menu.overview]]
+[vaadinelement]#vaadin-context-menu#
+image::img/vaadin-context-menu.png[width="400"]
+
+[[vaadin-context-menu.getting-started]]
+= Getting Started
+
+[vaadinelement]#vaadin-context-menu# uses a [propertyname]#template# element inside to determine the contents for the overlay.
+
+By default, [vaadinelement]#vaadin-context-menu# itself is used as the target to listen to [propertyname]#contextmenu# events.
+In practice, any child of the target element will respond to [propertyname]#contextmenu# events for opening the menu.
+This event can be customized as explained in the following chapters.
+
+[source,html]
+----
+<vaadin-context-menu>
+  <template>
+    <div>You've clicked on a piece of text that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. Consectetur adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----
+
+[propertyname]#selector# property can be used to more precisely define which element(s) should open the overlay.
+
+[source,html]
+----
+<vaadin-context-menu selector="b">
+  <template>
+    <div>You've clicked on a word that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. <b>Consectetur</b> adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----
+
+In case you don't want [vaadinelement]#vaadin-context-menu# as your target element for the opening event, you can listen on any element outside by
+setting the [propertyname]#listenOn# value.
+
+[source,html]
+----
+<vaadin-context-menu selector="b">
+  <template>
+    <div>You've clicked on a word that's in Latin.</div>
+  </template>
+</vaadin-context-menu>
+<div id="target">
+  Lorem ipsum dolor sit amet. <b>Consectetur</b> adipiscing elit.
+</div>
+<script>
+  var menu = document.querySelector('vaadin-context-menu');
+  menu.listenOn = document.querySelector('#target');
+</script>
+----
+
+[[vaadin-context-menu.styling]]
+= Styling
+
+When styling the overlay contents, place a [propertyname]#style# element inside the template.
+
+[source,html]
+----
+<vaadin-context-menu selector="b">
+  <template>
+    <style is="custom-style">
+      div {
+        background-color: var(--primary-color);
+      }
+    </style>
+    <div>You've clicked on a word that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. <b>Consectetur</b> adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----
+
+[[vaadin-context-menu.opening]]
+= Opening
+
+By default, the overlay opens when the [propertyname]#listenOn# element receives a [propertyname]#contextmenu# event.
+
+To replace it by any other event, use [propertyname]#openOn#.
+
+[source,html]
+----
+<vaadin-context-menu open-on="mouseover">
+  <template>
+    <div>You've hovered over a piece of text that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. Consectetur adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----
+
+Overlay can be also opened programmatically by setting property [propertyname]#opened# as `true`.
+
+[source,html]
+----
+<vaadin-context-menu id="menu">
+  <template>
+    <div>You've clicked on a piece of text that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. Consectetur adipiscing elit.
+  </div>
+</vaadin-context-menu>
+<script>
+  document.querySelector('#menu').opened = true;
+</script>
+----
+
+[[vaadin-context-menu.context]]
+= Context
+
+Whenever the overlay opens, the context is bound to [propertyname]#detail# and [propertyname]#target# properties inside the template.
+They are especially helpful when defining dynamic content for the overlay based on which element it is opened on.
+
+[propertyname]#target# is the element that originated the event.
+
+[source,html]
+----
+<vaadin-context-menu selector="b">
+  <template>
+    <div>You've clicked on the word [[target.textContent]] that's in Latin.</div>
+  </template>
+  <div>
+    Lorem <b>ipsum</b> dolor sit amet. <b>Consectetur</b> adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----
+
+[propertyname]#detail# contains the event details of the original event.
+It is useful when firing custom events from inside custom elements.
+
+[source,html]
+----
+<vaadin-context-menu open-on="latin-word-clicked">
+  <template>
+    <div>You've clicked on the word [[detail.word]] that's in Latin.</div>
+  </template>
+  <latin-word-list></latin-word-list>
+</vaadin-context-menu>
+----
+
+[[vaadin-context-menu.closing]]
+== Closing
+
+By default, [vaadinelement]#vaadin-context-menu# closes when a [propertyname]#click# event is triggered inside the overlay.
+
+To replace [propertyname]#click# by any other event, use the [propertyname]#closeOn# property. You can set it to an empty value to avoid closing the overlay on [propertyname]#click#.
+Note that the user can always close the overlay clicking outside the overlay, or pressing the escape key.
+
+[source,html]
+----
+<vaadin-context-menu close-on="mouseout" open-on="mouseover">
+  <template>
+    <div>You've hovered over a piece of text that's in Latin.</div>
+  </template>
+  <div>
+    Lorem ipsum dolor sit amet. Consectetur adipiscing elit.
+  </div>
+</vaadin-context-menu>
+----

@@ -12,99 +12,175 @@
   <body>
     <test-fixture id="default">
       <template>
-        <div>
-          <vaadin-context-menu>
-          </vaadin-context-menu>
-        </div>
+        <vaadin-context-menu>
+          <section>
+            <div id="target"></div>
+          </section>
+        </vaadin-context-menu>
       </template>
     </test-fixture>
 
-    <dom-module id="x-foo">
+    <test-fixture id="external">
       <template>
-        <vaadin-context-menu id="menu"></vaadin-context-menu>
-        <div id="container"></div>
-        <div id="container2"></div>
-      </template>
-      <script>
-        // Wait for Polymer being loaded.
-        HTMLImports.whenReady(function() {
-          Polymer({
-            is: 'x-foo',
-
-            ready: function() {
-              this.$.menu.target = this.$.container;
-            }
-          });
-        });
-      </script>
-    </dom-module>
-
-    <test-fixture id="assigned">
-      <template>
-        <div>
-          <x-foo></x-foo>
-        </div>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="bound">
-      <template>
-        <div>
-          <template is="dom-bind">
-            <vaadin-context-menu target-selector="#container"></vaadin-context-menu>
-            <div id="container"></div>
-          </template>
-        </div>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="body">
-      <template>
-        <div>
-          <vaadin-context-menu target-selector="#container"></vaadin-context-menu>
-          <div id="container"></div>
-        </div>
+        <vaadin-context-menu></vaadin-context-menu>
+        <section>
+          <div id="target"></div>
+        </section>
       </template>
     </test-fixture>
 
     <script>
       describe('properties', function() {
-        describe('target', function() {
-          it('should use parent element as default on attach', function() {
-            var container = fixture('default');
+        describe('context', function() {
+          var menu, target;
 
-            var menu = container.querySelector('vaadin-context-menu');
-
-            expect(menu.target).to.eql(container);
+          beforeEach(function() {
+            menu = fixture('default');
+            target = menu.querySelector('#target');
           });
 
-          it('should use a selector for dom host', function() {
-            var foo = fixture('assigned').querySelector('x-foo');
+          it('should use event target as context target', function() {
+            menu.fire('contextmenu', {}, {node: target});
 
-            foo.$.menu.targetSelector = '#container2';
-
-            expect(foo.$.menu.target).to.eql(foo.$.container2);
+            expect(menu._context.target).to.eql(target);
           });
 
-          it('should use a selector for dom bind template', function(done) {
-            var bound = fixture('bound');
+          it('should use context-selector scope to target', function() {
+            menu.selector = 'section';
 
-            var menu = bound.querySelector('vaadin-context-menu');
-            var container = bound.querySelector('#container');
-            
-            menu.async(function() {
-              expect(menu.target).to.eql(container);
-              done();
-            }, 1);
+            menu.fire('contextmenu', {}, {node: target});
+
+            expect(menu._context.target).to.eql(target.parentElement);
+          });
+        });
+
+        describe('openOn', function() {
+          var menu;
+          beforeEach(function() {
+            menu = fixture('external')[0];
           });
 
-          it('should use a selector for document body', function() {
-            var body = fixture('body');
+          it('should open on custom event', function() {
+            menu.openOn = 'click';
 
-            var menu = body.querySelector('vaadin-context-menu');
-            var container = body.querySelector('#container');
+            menu.click();
 
-            expect(menu.target).to.eql(container);
+            expect(menu.opened).to.eql(true);
+          });
+
+          it('should not open on `contextmenu`', function() {
+            menu.openOn = 'click';
+
+            menu.fire('contextmenu', {}, {node: menu});
+
+            expect(menu.opened).to.eql(false);
+          });
+
+          describe('event listener', function() {
+            beforeEach(function() {
+              menu.listen = sinon.spy();
+              menu.unlisten = sinon.spy();
+            });
+
+            it('should update listeners when set', function() {
+              menu.openOn = 'foobar';
+
+              expect(menu.unlisten.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(menu.listenOn, 'foobar').callCount).to.eql(1);
+            });
+
+            it('should not add listener when set to empty', function() {
+              menu.openOn = '';
+
+              expect(menu.unlisten.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(menu.listenOn, '').callCount).to.eql(0);
+              expect(menu.listen.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(0);
+            });
+          });
+        });
+
+        describe('closeOn', function() {
+          var menu;
+          beforeEach(function() {
+            menu = fixture('external')[0];
+            menu.opened = true;
+          });
+
+          it('should not close on `click`', function() {
+            menu.closeOn = '';
+
+            menu.$.overlay.click();
+
+            expect(menu.opened).to.eql(true);
+          });
+
+          it('should close on custom event', function() {
+            menu.closeOn = 'foobar';
+
+            menu.fire('foobar', {}, {node: menu.$.overlay});
+
+            expect(menu.opened).to.eql(false);
+          });
+        });
+
+        describe('external target', function() {
+          var menu, target;
+          beforeEach(function() {
+            menu = fixture('external')[0];
+            target = document.body.querySelector('#target');
+
+            menu.listenOn = target;
+          });
+
+          it('should open on external target', function() {
+            menu.fire('contextmenu', {}, {
+              node: target
+            });
+
+            expect(menu.opened).to.eql(true);
+          });
+
+          it('should select context target on external target', function() {
+            menu.fire('contextmenu', {}, {
+              node: target
+            });
+
+            expect(menu._context.target).to.eql(target);
+          });
+
+          it('should use context selector on external target', function() {
+            menu.selector = 'section'; //parent of #target
+            menu.listenOn = menu.parentElement;
+            menu.fire('contextmenu', {}, {
+              node: target
+            });
+
+            expect(menu._context.target).to.eql(target.parentElement);
+          });
+
+          describe('event listeners', function() {
+            beforeEach(function() {
+              menu.listen = sinon.spy();
+              menu.unlisten = sinon.spy();
+            });
+
+            it('should update target listeners when set', function() {
+              var oldTarget = menu.listenOn;
+
+              menu.listenOn = document.body;
+
+              expect(menu.unlisten.withArgs(oldTarget, 'contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(document.body, 'contextmenu').callCount).to.eql(1);
+            });
+
+            it('should not target listeners when set to null', function() {
+              var oldTarget = menu.listenOn;
+
+              menu.listenOn = null;
+
+              expect(menu.unlisten.withArgs(oldTarget, 'contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(0);
+            });
           });
         });
       });

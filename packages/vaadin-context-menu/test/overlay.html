@@ -13,7 +13,7 @@
   <body>
     <test-fixture id="default">
       <template>
-        <vaadin-context-menu target-selector="#target"></vaadin-context-menu>
+        <vaadin-context-menu></vaadin-context-menu>
         <div id="target"></div>
       </template>
     </test-fixture>
@@ -52,7 +52,7 @@
               null   /*relatedTarget*/
             );
           }
-          menu.target.dispatchEvent(e);
+          menu.listenOn.dispatchEvent(e);
         }
 
         describe('opening', function() {
@@ -78,7 +78,7 @@
           });
 
           it('should be positioned on click target', function(done) {
-            menu.target.addEventListener('contextmenu', function() {
+            menu.listenOn.addEventListener('contextmenu', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(10);
               done();
@@ -87,6 +87,19 @@
             contextmenu(10, 10);
           });
 
+          it('should be positioned on custom event', function(done) {
+            menu.listenOn.addEventListener('iron-overlay-opened', function() {
+              expect(menu.$.overlay.x).to.eql(10);
+              expect(menu.$.overlay.y).to.eql(20);
+              done();
+            });
+
+            menu.openOn = 'foobar';
+
+            menu.fire('foobar', {clientX: 10, clientY: 20}, {
+              node: menu.listenOn
+            });
+          });
         });
 
         describe('closing', function() {

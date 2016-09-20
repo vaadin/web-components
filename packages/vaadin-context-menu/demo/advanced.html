@@ -72,8 +72,8 @@
                 </colgroup>
               </table>
             </vaadin-grid>
-
-            <vaadin-context-menu id="menu" target-selector="#grid" close-on="">
+            <vaadin-context-menu id="menu" close-on="">
+              <template>
                 <paper-menu multi selected-values="{{selectedValues}}">
                   <paper-item>Name</paper-item>
                   <paper-item>Surname</paper-item>
@@ -81,6 +81,7 @@
                   <paper-item>Target</paper-item>
                   <paper-item>Effort</paper-item>
                 </paper-menu>
+              </template>
             </vaadin-context-menu>
         </template>
       </dom-module>
@@ -96,6 +97,9 @@
           observers: [
             '_selectedChanged(selectedValues.*)'
           ],
+          ready: function() {
+            this.$.menu.listenOn = this.$.grid;
+          },
           _items: function() {
             return getRandomItems();
           },
