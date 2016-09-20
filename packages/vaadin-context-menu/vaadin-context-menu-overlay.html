@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-overlay-behavior/iron-overlay-behavior.html">
-<link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../paper-styles/shadow.html">
+<link rel="import" href="vaadin-device-detector.html">
 
 <dom-module id="vaadin-context-menu-overlay">
   <template>
@@ -12,14 +12,14 @@
         -webkit-user-select: none;
       }
 
-      :host([desktop]) {
+      :host(:not([phone])) {
         position: fixed;
         top: 0;
         left: 0;
         @apply(--shadow-elevation-6dp);
       }
 
-      :host(:not([desktop])) {
+      :host([phone]) {
         /* width set to make it possible for the user make the contents fit whole screen */
         width: 100vw;
         top: auto !important;
@@ -29,14 +29,14 @@
       }
     </style>
     <content></content>
-    <iron-media-query query="(min-width: 750px)" query-matches="{{desktop}}"></iron-media-query>
+    <vaadin-device-detector phone="{{phone}}"></vaadin-device-detector>
   </template>
   <script>
     Polymer({
       is: 'vaadin-context-menu-overlay',
 
       observers: [
-        '_positionChanged(x, y)', 'desktopChanged(desktop)'
+        '_positionChanged(x, y)', 'phoneChanged(phone)'
       ],
 
       properties: {
@@ -58,10 +58,10 @@
         },
 
         /**
-         * When `true`, overlay position and size is optimized for a desktop screen.
-         * When `false` overlay is optimized for a small touch screen.
+         * When `true` overlay is optimized for a small touch screen.
+         * When `false`, overlay position and size is optimized for a desktop/tablet screen.
          */
-        desktop: {
+        phone: {
           type: Boolean,
           reflectToAttribute: true
         }
@@ -74,8 +74,8 @@
         e.stopPropagation();
       },
 
-      desktopChanged: function(desktop) {
-        this.withBackdrop = !desktop;
+      phoneChanged: function(phone) {
+        this.withBackdrop = phone;
       },
 
       // monkey patching iron-overlay-behavior to cancel overriding transform styles.
