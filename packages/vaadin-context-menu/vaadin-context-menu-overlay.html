@@ -1,5 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../paper-styles/shadow.html">
 
 <dom-module id="vaadin-context-menu-overlay">
   <template>
@@ -7,33 +9,99 @@
       :host {
         display: block;
         position: fixed;
+
+        -webkit-overflow-scrolling: touch;
+        -webkit-user-select: none;
+
+        top: 0;
+        left: 0;
+      }
+
+      :host([desktop]) {
+        @apply(--shadow-elevation-6dp);
+      }
+
+      :host(:not([desktop])) {
+        display: flex;
+        justify-content: center;
+        width: 100vw;
+        padding: 0px 20px;
+
+        bottom: 20px;
+        transform: none !important;
+        top: auto !important;
+      }
+
+      :host(:not([desktop])) ::content .dropdown-content {
+        display: flex;
+        justify-content: center;
+
+        width: 100%;
+        max-width: 400px;
       }
     </style>
     <content></content>
+    <iron-media-query query="(min-width: 750px)" query-matches="{{desktop}}"></iron-media-query>
   </template>
   <script>
     Polymer({
       is: 'vaadin-context-menu-overlay',
 
       observers: [
-        '_positionChanged(x, y)'
+        '_positionChanged(x, y)', 'desktopChanged(desktop)'
       ],
 
       properties: {
+
         /**
          * Position of the overlay on horizontal axis.
          */
-        x: Number,
+        x: {
+          type: Number,
+          value: 0
+        },
 
         /**
          * Position of the overlay on vertical axis.
          */
-        y: Number
+        y: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * When `true`, overlay position and size is optimized for a desktop screen.
+         * When `false` overlay is optimized for a small touch screen.
+         */
+        desktop: {
+          type: Boolean,
+          reflectToAttribute: true
+        }
+      },
+
+      _preventDefault: function(e) {
+        // note: at least in Chrome, even though preventDefault() is called,
+        // the e.target still loses focus.
+        e.preventDefault();
+        e.stopPropagation();
+      },
+
+      desktopChanged: function(desktop) {
+        this.withBackdrop = !desktop;
+      },
+
+      // monkey patching iron-overlay-behavior to cancel overriding transform styles.
+      _preparePositioning: function() {
+        this.style.display = '';
+      },
+
+      // monkey patching iron-overlay-behavior to cancel overriding transform styles.
+      _finishPositioning: function() {
+        this.style.display = '';
       },
 
       _positionChanged: function(x, y) {
-        this.style.top = y + 'px';
-        this.style.left = x + 'px';
+        this.translate3d(x + 'px', y + 'px', 0);
       },
 
       behaviors: [

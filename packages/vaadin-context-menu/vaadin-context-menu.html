@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
+<link rel="import" href="vaadin-long-touch.html">
 
 <!--
 
@@ -20,10 +20,6 @@ Custom property | Description | Default
     <style>
       :host {
         display: block;
-      }
-
-      #overlay {
-        @apply(--shadow-elevation-6dp);
       }
 
       .dropdown-content {
@@ -102,6 +98,10 @@ Custom property | Description | Default
               target: true
             };
           }
+        },
+
+        _ios: {
+          value: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
         }
       },
 
@@ -110,7 +110,7 @@ Custom property | Description | Default
                   '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'],
 
       _onOverlayOpened: function() {
-        var child = Polymer.dom(this.$.content).firstElementChild;
+        var child = Polymer.dom(this.$.content).querySelector(':not(style)');
         if (child) {
           child.focus();
         }
@@ -119,12 +119,23 @@ Custom property | Description | Default
       _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
         if (this._oldListenOn && this._oldOpenOn) {
           this.unlisten(this._oldListenOn, this._oldOpenOn, '_onContextMenu');
+          this.unlisten(this._oldListenOn, 'vaadin-long-touch', '_onLongTouch');
+
+          this._oldListenOn.style.webkitTouchCallout = '';
+          this._oldListenOn.style.webkitUserSelect = '';
+
           this._oldListenOn = null;
           this._oldOpenOn = null;
         }
 
         if (listenOn && openOn && isAttached) {
           this.listen(listenOn, openOn, '_onContextMenu');
+          this.listen(listenOn, 'vaadin-long-touch', '_onLongTouch');
+
+          // note: these styles don't seem to work in Firefox on iOS.
+          listenOn.style.webkitTouchCallout = 'none';
+          listenOn.style.webkitUserSelect = 'none';
+
           this._oldListenOn = listenOn;
           this._oldOpenOn = openOn;
         }
@@ -178,6 +189,14 @@ Custom property | Description | Default
         }
       },
 
+      _onLongTouch: function(e) {
+        // on Android, a `contextmenu` is fired natively. However, it's important
+        // to have the long-touch listener to prevent `tap` event from bubbling.
+        if (this._ios) {
+          this._onContextMenu(e);
+        }
+      },
+
       _onContextMenu: function(e) {
         this._context = {
           detail: e.detail,
@@ -186,10 +205,12 @@ Custom property | Description | Default
 
         if (this._context.target) {
           e.preventDefault();
+          e.stopPropagation();
 
           this.$.overlay.resetFit();
           this.$.overlay.x = e.detail && e.detail.clientX || e.clientX;
           this.$.overlay.y = e.detail && e.detail.clientY || e.clientY;
+
           this.opened = true;
         }
       },
@@ -214,7 +235,7 @@ Custom property | Description | Default
 
           Polymer.dom(this.$.content).appendChild(this._instance.root);
         }
-      },
+      }
     });
   </script>
 </dom-module>

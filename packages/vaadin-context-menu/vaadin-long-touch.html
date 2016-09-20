@@ -1,0 +1,69 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  (function() {
+    Polymer.Gestures.register({
+      name: 'vaadin-long-touch',
+      deps: ['touchstart', 'touchmove', 'tap'],
+      flow: {
+        start: ['touchstart'],
+        end: ['tap']
+      },
+
+      emits: ['vaadin-long-touch'],
+
+      info: {
+        x: 0,
+        y: 0
+      },
+
+      reset: function() {
+        this.info.x = 0;
+        this.info.y = 0;
+        this.info.fired = false;
+        if (this.info.touchJob) {
+          this.info.touchJob.stop();
+        }
+        this.info.touchJob = null;
+      },
+
+      touchstart: function(e) {
+        this.info.x = e.changedTouches[0].clientX;
+        this.info.y = e.changedTouches[0].clientY;
+        this.info.touchJob = Polymer.Debounce(this.info.touchJob, function() {
+          var t = Polymer.Gestures.findOriginalTarget(e);
+          var ct = e.changedTouches[0];
+          this.fire(t, ct);
+        }.bind(this), 500); //default setting for Android and iOS.
+      },
+
+      touchmove: function(e) {
+        var moveThreshold = 15;
+        if (Math.abs(this.info.x - e.changedTouches[0].clientX) > moveThreshold ||
+            Math.abs(this.info.y - e.changedTouches[0].clientY) > moveThreshold) {
+          this.info.touchJob.stop();
+        }
+      },
+
+      // tap is fired on touchend – this is the easiest way to stop it from bubbling.
+      tap: function(e) {
+        if (this.info.touchJob) {
+          this.info.touchJob.stop();
+        }
+        if (this.info.fired) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+
+      fire: function(target, touch) {
+        Polymer.Gestures.fire(target, 'vaadin-long-touch', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+
+        this.info.fired = true;
+      }
+    });
+  })();
+</script>
