@@ -42,6 +42,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return data;
   }
 
+  function scrollToEnd(grid, callback) {
+    var table = grid.$.scroller.$.table;
+    table.addEventListener('scroll', function () {
+      grid.async(function () {
+        table.scrollTop = table.scrollHeight;
+      }, 1);
+
+      grid.debounce('scroll-done', function () {
+        // Ensure rows are in order
+        grid.flushDebouncer('reorderrows');
+        callback();
+      }, 100);
+    });
+    table.scrollTop = table.scrollHeight;
+  }
+
   function simulateScroll(config) {
     var list = config.list;
     var target = config.target;

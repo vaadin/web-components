@@ -37,6 +37,8 @@
       #items {
         @apply(--iron-list-items-container);
         position: relative;
+        border-top: 0 solid transparent;
+        border-bottom: 0 solid transparent;
       }
 
       :host(:not([grid])) #items > ::content > * {
@@ -234,8 +236,8 @@
       }
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
-        this.$.outerscroller.style.paddingTop = this.$.table.style.paddingTop = this.$.header.clientHeight + 'px';
-        this.$.outerscroller.style.paddingBottom = this.$.table.style.paddingBottom = this.$.footer.clientHeight + 'px';
+        this.$.outerscroller.style.paddingTop = this.$.items.style.borderTopWidth = this.$.header.clientHeight + 'px';
+        this.$.outerscroller.style.paddingBottom = this.$.items.style.borderBottomWidth = this.$.footer.clientHeight + 'px';
       }.bind(this));
     },
 
