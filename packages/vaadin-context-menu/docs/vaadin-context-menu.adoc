@@ -125,6 +125,22 @@ Overlay can be also opened programmatically by setting property [propertyname]#o
 </script>
 ----
 
+Additionally, the [methodname]#open(event)# could be used whenever you need to pass information of
+the original event opening the overlay.
+
+[source,html]
+----
+<span id="opener">Open</span>
+<vaadin-context-menu id="menu">
+ Menu Content
+</vaadin-context-menu>
+<script>
+  document.querySelector('#opener').addEventListener('click', function(ev){
+     document.querySelector('#menu').open(ev);
+  });
+</script>
+----
+
 [[vaadin-context-menu.context]]
 = Context
 
