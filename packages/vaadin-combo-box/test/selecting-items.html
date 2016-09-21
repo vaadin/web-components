@@ -38,6 +38,16 @@
       combobox.addEventListener('selected-item-changed', selectedItemChangedSpy);
     });
 
+    it('should stop tap events from bubbling outside the overlay', function() {
+      var tapSpy = sinon.spy();
+      document.addEventListener('tap', tapSpy);
+      combobox.$.overlay.$.selector.dispatchEvent(new CustomEvent('tap', {
+        bubbles: true
+      }));
+      document.removeEventListener('tap', tapSpy);
+      expect(tapSpy.called).not.to.be.true;
+    });
+
     it('should select by using the selector', function() {
       selector.selectedItem = 'foo';
       expect(combobox.value).to.equal('foo');

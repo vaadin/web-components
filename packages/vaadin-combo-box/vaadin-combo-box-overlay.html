@@ -63,7 +63,7 @@
   </style>
 
   <template>
-    <div id="scroller" scroller="[[_getScroller()]]">
+    <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation">
       <iron-list
           id="selector"
           touch-device$="[[touchDevice]]"
@@ -339,6 +339,10 @@
 
     _preventDefault: function(e) {
       e.preventDefault();
+    },
+
+    _stopPropagation: function(e) {
+      e.stopPropagation();
     }
   });
 </script>
