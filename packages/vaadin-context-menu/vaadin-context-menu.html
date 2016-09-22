@@ -153,7 +153,8 @@ Custom property | Description | Default
       /**
        * Open the overlay.
        * @param {Event|undefined} When an event is passed, it is used to figure
-       *    out the position of the menu.
+       *    out the position of the menu, and to set the context object that can
+       *    be used inside the template.
        */
       open: function(ev) {
         if (ev) {
@@ -203,20 +204,26 @@ Custom property | Description | Default
         }
       },
 
-      _onContextMenu: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
+      _onContextMenu: function(event) {
         this._context = {
-          detail: e.detail,
+          detail: event.detail,
           target: this._contextTarget(e)
         };
 
         if (this._context.target) {
-          var ev = e.detail && e.detail.event || e.detail || e;
+          event.preventDefault();
+          event.stopPropagation();
+
           this.$.overlay.resetFit();
-          this.$.overlay.x = ev.clientX;
-          this.$.overlay.y = ev.clientY;
+
+          var originalEvent = event.detail && event.detail.event;
+          this.$.overlay.x = originalEvent && originalEvent.clientX ||
+            event.detail && event.detail.clientX ||
+            event.clientX;
+          this.$.overlay.y = originalEvent && originalEvent.clientY ||
+            event.detail && event.detail.clientY ||
+            event.clientY
+
           this.opened = true;
         }
       },
