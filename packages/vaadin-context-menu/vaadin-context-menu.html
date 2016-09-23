@@ -22,9 +22,10 @@ Custom property | Description | Default
         display: block;
       }
 
-      .dropdown-content {
+      vaadin-context-menu-overlay {
         width: calc(64px * 4);
         background: var(--primary-background-color, #ffffff);
+        overflow: auto;
         @apply(--vaadin-context-menu-overlay);
       }
     </style>
