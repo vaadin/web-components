@@ -9,7 +9,6 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
-
   <link rel="import" href="common.html">
 </head>
 
@@ -87,28 +86,30 @@
         </template>
       </dom-module>
       <script>
-        Polymer({
-          is: 'grid-example',
-          properties: {
-            selectedValues: {
-              type: Array,
-              value: [0,1,2,3,4]
+        window.addEventListener('WebComponentsReady', function(e) {
+          Polymer({
+            is: 'grid-example',
+            properties: {
+              selectedValues: {
+                type: Array,
+                value: [0,1,2,3,4]
+              }
+            },
+            observers: [
+              '_selectedChanged(selectedValues.splices)'
+            ],
+            ready: function() {
+              this.$.menu.listenOn = this.$.grid;
+            },
+            _items: function() {
+              return getRandomItems();
+            },
+            _selectedChanged: function() {
+              for (var i = 0; this.columns && i < this.columns.length; i++) {
+                this.columns[i].hidden = this.selectedValues.indexOf(i) === -1;
+              }
             }
-          },
-          observers: [
-            '_selectedChanged(selectedValues.splices)'
-          ],
-          ready: function() {
-            this.$.menu.listenOn = this.$.grid;
-          },
-          _items: function() {
-            return getRandomItems();
-          },
-          _selectedChanged: function() {
-            for (var i = 0; this.columns && i < this.columns.length; i++) {
-              this.columns[i].hidden = this.selectedValues.indexOf(i) === -1;
-            }
-          }
+          });
         });
       </script>
 
