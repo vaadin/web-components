@@ -118,7 +118,7 @@ Custom property | Description | Default
 
       _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
         if (this._oldListenOn && this._oldOpenOn) {
-          this.unlisten(this._oldListenOn, this._oldOpenOn, '_onContextMenu');
+          this.unlisten(this._oldListenOn, this._oldOpenOn, 'open');
           this.unlisten(this._oldListenOn, 'vaadin-long-touch', '_onLongTouch');
 
           this._oldListenOn.style.webkitTouchCallout = '';
@@ -129,7 +129,7 @@ Custom property | Description | Default
         }
 
         if (listenOn && openOn && isAttached) {
-          this.listen(listenOn, openOn, '_onContextMenu');
+          this.listen(listenOn, openOn, 'open');
           this.listen(listenOn, 'vaadin-long-touch', '_onLongTouch');
 
           // note: these styles don't seem to work in Firefox on iOS.
@@ -147,20 +147,6 @@ Custom property | Description | Default
         }
         if (closeOn) {
           this.listen(this, closeOn, 'close');
-        }
-      },
-
-      /**
-       * Open the overlay.
-       * @param {Event|undefined} When an event is passed, it is used to figure
-       *    out the position of the menu, and to set the context object that can
-       *    be used inside the template.
-       */
-      open: function(ev) {
-        if (ev) {
-          this._onContextMenu(ev);
-        } else {
-          this.opened = true;
         }
       },
 
@@ -200,31 +186,32 @@ Custom property | Description | Default
         // on Android, a `contextmenu` is fired natively. However, it's important
         // to have the long-touch listener to prevent `tap` event from bubbling.
         if (this._ios) {
-          this._onContextMenu(e);
+          this.open(e);
         }
       },
 
-      _onContextMenu: function(event) {
-        this._context = {
-          detail: event.detail,
-          target: this._contextTarget(e)
-        };
+      /**
+       * Open the overlay.
+       * @param {Event} Event used as the context for the menu. Overlay wont open without it.
+       */
+      open: function(e) {
+        if (!!e) {
+          this._context = {
+            detail: e.detail,
+            target: this._contextTarget(e)
+          };
 
-        if (this._context.target) {
-          event.preventDefault();
-          event.stopPropagation();
+          if (this._context.target) {
+            e.preventDefault();
+            e.stopPropagation();
 
-          this.$.overlay.resetFit();
+            this.$.overlay.resetFit();
 
-          var originalEvent = event.detail && event.detail.event;
-          this.$.overlay.x = originalEvent && originalEvent.clientX ||
-            event.detail && event.detail.clientX ||
-            event.clientX;
-          this.$.overlay.y = originalEvent && originalEvent.clientY ||
-            event.detail && event.detail.clientY ||
-            event.clientY
+            this.$.overlay.x = e.detail && e.detail.clientX || e.clientX;
+            this.$.overlay.y = e.detail && e.detail.clientY || e.clientY;
 
-          this.opened = true;
+            this.opened = true;
+          }
         }
       },
 
