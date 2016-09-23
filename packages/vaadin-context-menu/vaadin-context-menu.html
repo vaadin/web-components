@@ -29,7 +29,7 @@ Custom property | Description | Default
       }
     </style>
     <content></content>
-    <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{opened}}">
+    <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
       <div class="dropdown-content" id="content"></div>
     </vaadin-context-menu-overlay>
 
@@ -51,7 +51,7 @@ Custom property | Description | Default
         /**
          * True if the overlay is currently displayed.
          */
-        opened: {
+        _opened: {
           type: Boolean,
           value: false,
           notify: true
@@ -106,7 +106,7 @@ Custom property | Description | Default
       },
 
       observers: ['_contentTemplateChanged(_contentTemplate)',
-                  '_openedChanged(opened)',
+                  '_openedChanged(_opened)',
                   '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'],
 
       _onOverlayOpened: function() {
@@ -167,7 +167,7 @@ Custom property | Description | Default
        * Close the overlay.
        */
       close: function() {
-        this.opened = false;
+        this._opened = false;
       },
 
       _contextTarget: function(e) {
@@ -210,7 +210,7 @@ Custom property | Description | Default
             this.$.overlay.x = e.detail && e.detail.clientX || e.clientX;
             this.$.overlay.y = e.detail && e.detail.clientY || e.clientY;
 
-            this.opened = true;
+            this._opened = true;
           }
         }
       },
