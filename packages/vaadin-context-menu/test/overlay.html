@@ -97,7 +97,7 @@
 
             menu.openOn = 'foobar';
 
-            menu.fire('foobar', {clientX: 10, clientY: 20}, {
+            menu.fire('foobar', {sourceEvent: {clientX: 10, clientY: 20}}, {
               node: menu.listenOn
             });
           });

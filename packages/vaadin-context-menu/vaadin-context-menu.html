@@ -207,8 +207,9 @@ Custom property | Description | Default
 
             this.$.overlay.resetFit();
 
-            this.$.overlay.x = e.detail && e.detail.clientX || e.clientX;
-            this.$.overlay.y = e.detail && e.detail.clientY || e.clientY;
+            var sourceEvent = e.detail && e.detail.sourceEvent;
+            this.$.overlay.x = sourceEvent && sourceEvent.clientX || e.clientX;
+            this.$.overlay.y = sourceEvent && sourceEvent.clientY || e.clientY;
 
             this._opened = true;
           }
