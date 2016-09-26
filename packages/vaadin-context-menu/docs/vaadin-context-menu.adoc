@@ -108,25 +108,8 @@ To replace it by any other event, use [propertyname]#openOn#.
 </vaadin-context-menu>
 ----
 
-Overlay can be also opened programmatically by setting property [propertyname]#opened# as `true`.
-
-[source,html]
-----
-<vaadin-context-menu id="menu">
-  <template>
-    <div>You've clicked on a piece of text that's in Latin.</div>
-  </template>
-  <div>
-    Lorem ipsum dolor sit amet. Consectetur adipiscing elit.
-  </div>
-</vaadin-context-menu>
-<script>
-  document.querySelector('#menu').opened = true;
-</script>
-----
-
-Additionally, the [methodname]#open(event)# could be used whenever you need to pass information of
-the original event opening the overlay.
+Overlay can be also opened programmatically by calling the [methodname]#open(event)#. It accepts an
+argument with the original event, so as the context menu can calculate its position in the UI.
 
 [source,html]
 ----
