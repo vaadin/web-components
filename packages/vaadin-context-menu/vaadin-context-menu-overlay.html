@@ -20,15 +20,12 @@
       }
 
       :host(:not([desktop])) {
-        display: flex;
+        /* width set to make it possible for the user make the contents fit whole screen */
         width: 100vw;
-        bottom: 20px;
         top: auto !important;
-      }
-
-      :host(:not([desktop])) ::content .dropdown-content {
-        display: flex;
-        width: 100%;
+        bottom: 0;
+        padding: 24px;
+        transform: none !important;
       }
     </style>
     <content></content>
@@ -92,9 +89,7 @@
       },
 
       _positionChanged: function(x, y) {
-        if (this.desktop) {
-          this.translate3d(x + 'px', y + 'px', 0);
-        }
+        this.translate3d(x + 'px', y + 'px', 0);
       },
 
       behaviors: [
