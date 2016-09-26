@@ -49,6 +49,7 @@
         fill: var(--primary-color);
         padding: 0px;
         transition: transform 200ms;
+        will-change: transform;
         --iron-icon-width: 20px;
         --iron-icon-height: 20px;
         @apply(--vaadin-date-picker-toolbar-icon);
@@ -248,9 +249,9 @@
       <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="chevron-right"></iron-icon>
     </div>
 
-    <div id="scrollers" desktop$="[[_desktopMode]]" on-scroll="_stopPropagation">
+    <div id="scrollers" desktop$="[[_desktopMode]]" on-scroll="_stopPropagation" on-track="_track">
       <div id="fade"></div>
-      <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" on-track="_track" item-height="250" buffer-size="6">
+      <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6">
         <template>
           <vaadin-month-calendar
             i18n="[[i18n]]"
@@ -362,7 +363,7 @@
       attached: function() {
         this._translateX = this._yearScrollerWidth;
         this.toggleClass('animate', true);
-        this.setScrollDirection('y', this.$.scroller);
+        this.setScrollDirection('y', this.$.scrollers);
       },
 
       /**
@@ -514,6 +515,29 @@
         window.requestAnimationFrame(smoothScroll);
       },
 
+      _limit: function(value, range) {
+        return Math.min(range.max, Math.max(range.min, value));
+      },
+
+      _handleTrack: function(e) {
+        // Check if horizontal movement threshold (dx) not exceeded or
+        // scrolling fast vertically (ddy).
+        if (Math.abs(e.detail.dx) < 10 || Math.abs(e.detail.ddy) > 10) {
+          return;
+        }
+
+        // If we're flinging quickly -> start animating already.
+        if (Math.abs(e.detail.ddx) > this._yearScrollerWidth / 3) {
+          this.toggleClass('animate', true);
+        }
+
+        var newTranslateX = this._translateX + e.detail.ddx;
+        this._translateX = this._limit(newTranslateX, {
+          min: 0,
+          max: this._yearScrollerWidth
+        });
+      },
+
       _track: function(e) {
         if (this._desktopMode) {
           // No need to track for swipe gestures on desktop.
@@ -524,16 +548,11 @@
           case 'start':
             this.toggleClass('animate', false);
             break;
+
           case 'track':
-            var newTranslateX = this._translateX + e.detail.dx / this._yearScrollerWidth * 5;
-            if (newTranslateX > this._yearScrollerWidth) {
-              this._closeYearScroller();
-            } else if (newTranslateX < 0) {
-              this._openYearScroller();
-            } else {
-              this._translateX = newTranslateX;
-            }
+            this._handleTrack(e);
             break;
+
           case 'end':
             this.toggleClass('animate', true);
             if (this._translateX >= this._yearScrollerWidth / 2) {
