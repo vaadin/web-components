@@ -32,7 +32,7 @@
         it('should stamp template on open', function() {
           expect(menu.$.overlay.textContent).not.to.contain('FOOBAR');
 
-          menu.opened = true;
+          menu._opened = true;
 
           expect(menu.$.overlay.textContent).to.contain('FOOBAR');
         });

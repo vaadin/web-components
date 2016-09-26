@@ -52,6 +52,7 @@
               null   /*relatedTarget*/
             );
           }
+
           menu.listenOn.dispatchEvent(e);
         }
 
@@ -65,12 +66,12 @@
               done();
             });
 
-            menu.opened = true;
+            menu._opened = true;
           });
 
           it('should open on `contextmenu` event', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
-              expect(menu.opened).to.eql(true);
+              expect(menu._opened).to.eql(true);
               done();
             });
 
@@ -96,7 +97,7 @@
 
             menu.openOn = 'foobar';
 
-            menu.fire('foobar', {clientX: 10, clientY: 20}, {
+            menu.fire('foobar', {sourceEvent: {clientX: 10, clientY: 20}}, {
               node: menu.listenOn
             });
           });
@@ -108,12 +109,12 @@
               done();
             });
 
-            menu.opened = true;
+            menu._opened = true;
           });
 
           it('should close on outside tap', function(done) {
             menu.addEventListener('iron-overlay-closed', function() {
-              expect(menu.opened).to.eql(false);
+              expect(menu._opened).to.eql(false);
               done();
             });
 
@@ -126,7 +127,7 @@
           it('should close on `click`', function() {
             menu.$.overlay.click();
 
-            expect(menu.opened).to.eql(false);
+            expect(menu._opened).to.eql(false);
           });
 
           it('should close on custom event', function() {
@@ -134,7 +135,7 @@
 
             menu.$.overlay.fire('foobar');
 
-            expect(menu.opened).to.eql(false);
+            expect(menu._opened).to.eql(false);
           });
 
           it('should disable close on empty `closeOn`', function() {
@@ -142,7 +143,7 @@
 
             menu.$.overlay.click();
 
-            expect(menu.opened).to.eql(true);
+            expect(menu._opened).to.eql(true);
           });
         });
       });

@@ -87,7 +87,7 @@
         menu._ios = true;
         makeSoloTouchEvent('touchstart', null, menu.listenOn);
         menu.async(function() {
-          expect(menu.opened).to.eql(true);
+          expect(menu._opened).to.eql(true);
           done();
         }, 1000);
       });
@@ -100,7 +100,7 @@
         }, 100);
 
         menu.async(function() {
-          expect(menu.opened).to.eql(false);
+          expect(menu._opened).to.eql(false);
           done();
         }, 1000);
       });
@@ -147,7 +147,7 @@
         }, 100);
 
         menu.async(function() {
-          expect(menu.opened).to.eql(false);
+          expect(menu._opened).to.eql(false);
           done();
         }, 1000);
       });
