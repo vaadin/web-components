@@ -8,36 +8,24 @@
     <style>
       :host {
         display: block;
-        position: fixed;
-
         -webkit-overflow-scrolling: touch;
         -webkit-user-select: none;
-
-        top: 0;
-        left: 0;
       }
 
       :host([desktop]) {
+        position: fixed;
+        top: 0;
+        left: 0;
         @apply(--shadow-elevation-6dp);
       }
 
       :host(:not([desktop])) {
-        display: flex;
-        justify-content: center;
+        /* width set to make it possible for the user make the contents fit whole screen */
         width: 100vw;
-        padding: 0px 20px;
-
-        bottom: 20px;
-        transform: none !important;
         top: auto !important;
-      }
-
-      :host(:not([desktop])) ::content .dropdown-content {
-        display: flex;
-        justify-content: center;
-
-        width: 100%;
-        max-width: 400px;
+        bottom: 0;
+        padding: 24px;
+        transform: none !important;
       }
     </style>
     <content></content>
