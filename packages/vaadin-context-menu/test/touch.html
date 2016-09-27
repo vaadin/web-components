@@ -77,9 +77,9 @@
       it('should align to bottom of the viewport', function() {
         var styles = window.getComputedStyle(menu.$.overlay);
 
-        expect(styles.bottom).to.eql('20px');
+        expect(styles.paddingBottom).to.eql('24px');
         expect(styles.top).to.eql('auto');
-        expect(styles.left).to.eql('0px');
+        expect(styles.left).to.eql('auto');
         expect(styles.transform).not.to.contain('translate');
       });
 
