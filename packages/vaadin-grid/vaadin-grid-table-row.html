@@ -99,33 +99,31 @@
       },
 
       _updateCells: function() {
-        var spanning = 0;
-        this.cells.forEach(function(cell, index) {
-
-          // TODO: reset cell styles to make sure colspan have be changed dynamically.
-          cell.style.display = '';
-          cell.style.flexBasis = this.columns[index].width;
-          cell.style.flexGrow = this.columns[index].flex;
-
-          if (cell.colspan > 1) {
-            spanning = cell.colspan;
-
-            var width = cell.style.flexBasis;
-            var flex = parseInt(cell.style.flexGrow);
-            for (var i = 1; i < spanning; i++) {
-              width += ' + ' + this.columns[index + i].width;
-              flex += this.columns[index + i].flex;
+        // debouncing reduces the call
+        // - from 60 to 4 in a grid with 2 headers with 5 columns.
+        // - from 416 to 30 in the same grid with data and one footer.
+        this.debounce('_updateCells', function() {
+          // columns > cells means that there is an extra col for multiselection
+          var multiSel = this.columns.length > this.cells.length ? 1 : 0;
+          var spanning = 0;
+          this.cells.forEach(function(cell, index) {
+            var width = this.columns[index + multiSel].width;
+            var flex = this.columns[index + multiSel].flex;
+            // spanning > 0 means that this row is already spanned
+            if (!spanning && cell.colspan > 1) {
+              spanning = cell.colspan;
+              for (var i = 1; i < spanning; i++) {
+                width += ' + ' + this.columns[index + multiSel + i].width;
+                flex += this.columns[index + multiSel + i].flex;
+              }
             }
 
             cell.style.flexBasis = 'calc(' + width + ')';
             cell.style.flexGrow = flex;
-          }
+            cell.style.display = (!cell.colspan && spanning > 0) ? 'none' : '';
+            spanning = Math.max(0, spanning - 1);
 
-          if (!cell.colspan && spanning > 0) {
-            cell.style.display = 'none';
-          }
-
-          spanning = Math.max(0, spanning - 1);
+          }.bind(this));
         }.bind(this));
       },
 
