@@ -64,11 +64,14 @@
         expect(getRowCells(headerRows[1])[0].colspan).to.equal(2);
       });
 
-      it('should render colspan correctly', function() {
+      it('should render colspan correctly', function(done) {
         window.getComputedStyle(getRowCells(headerRows[1])[1]).display === 'none';
         var firstRowCells = getRowCells(headerRows[0]);
         var combinedWidth = firstRowCells[0].clientWidth + firstRowCells[1].clientWidth;
-        expect(getRowCells(headerRows[1])[0].clientWidth).to.equal(combinedWidth);
+        grid.async(function() {
+          expect(getRowCells(headerRows[1])[0].clientWidth).to.equal(combinedWidth);
+          done();
+        });
       });
 
       it('should have last row fully visible when scrolled to end', function(done) {
@@ -80,8 +83,6 @@
           done();
         });
       });
-
-
     });
   </script>
 
