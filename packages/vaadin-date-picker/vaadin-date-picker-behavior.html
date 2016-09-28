@@ -412,8 +412,6 @@
       window.removeEventListener('scroll', this._boundOnScroll, true);
       window.removeEventListener('resize', this._boundOnScroll, true);
 
-      this._focus();
-
       if (this._touchPrevented) {
         this._touchPrevented.forEach(function(prevented) {
           prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
@@ -424,6 +422,8 @@
       this.updateStyles();
       this._forwardKeysToOverlay = false;
 
+      // Select the parsed input or focused date
+      this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
         var inputValue = this._inputValue;
         var parsedDate = this.i18n.parseDate(inputValue);
@@ -436,6 +436,7 @@
       } else if (this._focusedDate) {
         this._selectedDate = this._focusedDate;
       }
+      this._ignoreFocusedDateChange = false;
 
       this.validate();
     },
@@ -461,7 +462,7 @@
     },
 
     _focus: function() {
-      if (this._fullscreen || !this.i18n.parseDate) {
+      if (this._fullscreen) {
         this.$.overlay.focus();
       } else {
         this.inputElement.focus();
@@ -476,7 +477,7 @@
      * Keyboard Navigation
      */
     _eventKey: function(e) {
-      var keys = ['down', 'up', 'enter', 'esc'];
+      var keys = ['down', 'up', 'enter', 'esc', 'tab'];
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -491,7 +492,18 @@
     },
 
     _onKeydown: function(e) {
-      var noForward = false;
+      if (!this.i18n.parseDate || this._fullscreen) {
+        // The input element cannot be readonly as it would conflict with
+        // the required attribute. Both are not allowed on an input element.
+        // Therefore we prevent default on most keydown events.
+        var allowedKeys = [
+          9 // tab
+        ];
+        if (allowedKeys.indexOf(e.keyCode) === -1) {
+          e.preventDefault();
+        }
+      }
+
       switch (this._eventKey(e)) {
         case 'down':
         case 'up':
@@ -535,6 +547,11 @@
 
           this._forwardKeysToOverlay = false;
           break;
+
+          case 'tab':
+            this.close();
+            return;
+
       }
 
       if (this.opened && this._forwardKeysToOverlay) {
@@ -553,7 +570,7 @@
     },
 
     _userInputValueChanged: function() {
-      var parseDate = this.i18n.parseDate(this._inputValue);
+      var parseDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
       if (this._isValidDate(parseDate)) {
         this._ignoreFocusedDateChange = true;
         this._focusedDate = parseDate;

@@ -130,8 +130,7 @@ If you want to replace the default input field with a custom implementation, you
         fill: rgba(0, 0, 0, .86);
       }
 
-      #input[fullscreen],
-      #inputcontainer[tabindex='-1'] #input {
+      #input[fullscreen] {
         pointer-events: none;
       }
 
@@ -169,7 +168,6 @@ If you want to replace the default input field with a custom implementation, you
 
     <paper-input-container id="inputcontainer"
         auto-validate$="[[autoValidate]]"
-        tabindex$="[[_tabindex(disabled, i18n.parseDate)]]"
         invalid$="[[invalid]]"
         disabled$="[[disabled]]">
       <label id="label">[[label]]</label>
@@ -178,7 +176,6 @@ If you want to replace the default input field with a custom implementation, you
           autocomplete="off"
           type="text"
           on-focus="_focus"
-          on-keydown="_onInputKeyDown"
           value="{{_userInputValue::input}}"
           name$="[[name]]"
           invalid="{{invalid}}"
@@ -298,24 +295,6 @@ If you want to replace the default input field with a custom implementation, you
       _toggle: function(e) {
         e.stopPropagation();
         this[this.$.dropdown.opened ? 'close' : 'open']();
-      },
-
-      _tabindex: function() {
-        return (this.disabled || !this.i18n.parseDate) ? -1 : 0;
-      },
-
-      _onInputKeyDown: function(e) {
-        if (!this.i18n.parseDate && !this._fullscreen) {
-          // The input element cannot be readonly as it would conflict with
-          // the required attribute. Both are not allowed on an input element.
-          // Therefore we prevent default on most keydown events.
-          var allowedKeys = [
-            9 // tab
-          ];
-          if (allowedKeys.indexOf(e.keyCode) === -1) {
-            e.preventDefault();
-          }
-        }
       },
 
       _input: function() {

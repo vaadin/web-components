@@ -274,10 +274,10 @@
     </div>
 
     <div id="footer" on-touchend="_preventDefault">
-      <paper-button id="todayButton" on-tap="_scrollToCurrentMonth">
+      <paper-button id="todayButton" on-tap="_scrollToCurrentMonth" tabindex="-1">
         [[i18n.today]]
       </paper-button>
-      <paper-button id="cancelButton" on-tap="_cancel">
+      <paper-button id="cancelButton" on-tap="_cancel" tabindex="-1">
         [[i18n.cancel]]
       </paper-button>
     </div>
