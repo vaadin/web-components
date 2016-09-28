@@ -105,25 +105,24 @@
         this.debounce('_updateCells', function() {
           // columns > cells means that there is an extra col for multiselection
           var multiSel = this.columns.length > this.cells.length ? 1 : 0;
-          var spanning = 0;
-          this.cells.forEach(function(cell, index) {
-            var width = this.columns[index + multiSel].width;
-            var flex = this.columns[index + multiSel].flex;
-            // spanning > 0 means that this row is already spanned
-            if (!spanning && cell.colspan > 1) {
-              spanning = cell.colspan;
-              for (var i = 1; i < spanning; i++) {
-                width += ' + ' + this.columns[index + multiSel + i].width;
-                flex += this.columns[index + multiSel + i].flex;
-              }
+
+          for (var i = 0, l = this.cells.length, colspan; i < l; i += colspan) {
+            var cell = this.cells[i];
+            colspan = cell.colspan || 1;
+            var width = this.columns[i + multiSel].width;
+            var flex = this.columns[i + multiSel].flex;
+
+            // Visit colspanned cells to hide then and increase width and flex of parent
+            for (var j = 1; j < colspan && i + j < l; j++) {
+              this.cells[i + j].style.display = 'none';
+              width = width + ' + ' + this.columns[i + multiSel + j].width;
+              flex += this.columns[i + multiSel + j].flex;
             }
 
             cell.style.flexBasis = 'calc(' + width + ')';
             cell.style.flexGrow = flex;
-            cell.style.display = (!cell.colspan && spanning > 0) ? 'none' : '';
-            spanning = Math.max(0, spanning - 1);
-
-          }.bind(this));
+            cell.style.display = '';
+          }
         }.bind(this));
       },
 
