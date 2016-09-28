@@ -37,6 +37,14 @@
         @apply(--vaadin-date-picker-calendar-cell);
       }
 
+      :host([week-numbers]) #monthGrid {
+        padding-left: 5%;
+      }
+
+      :host([week-numbers]) #monthGrid div {
+        padding: 3px 0;
+      }
+
       #monthGrid div:not(:empty) {
         cursor: pointer;
         color: var(--primary-text-color);
@@ -94,8 +102,8 @@
         background: rgba(0, 0, 0, .08);
         color: rgba(0, 0, 0, .4);
         pointer-events: none;
-        margin-left: 1.5em;
-        text-indent: -1.5em;
+        margin: 2px 0 2px 0;
+        text-indent: -5%;
         @apply(--vaadin-date-picker-calendar-week-separator);
       }
     </style>
@@ -177,6 +185,10 @@
         }
       },
 
+      observers: [
+        '_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)'
+      ],
+
       _getTitle: function(month, monthNames) {
         return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
       },
@@ -208,6 +220,10 @@
 
       _getDate: function(date) {
         return date ? date.getDate() : '';
+      },
+
+      _showWeekNumbersChanged: function(showWeekNumbers, firstDayOfWeek) {
+        this.toggleAttribute('week-numbers', showWeekNumbers && firstDayOfWeek === 1);
       },
 
       _showWeekSeparator: function(showWeekNumbers, firstDayOfWeek, index) {
