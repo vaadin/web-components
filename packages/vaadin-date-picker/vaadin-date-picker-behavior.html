@@ -66,6 +66,15 @@
         notify: true
       },
 
+      /**
+       * Set true to display ISO-8601 week numbers in the calendar. Notice that
+       * displaying week numbers is only supported when `i18n.firstDayOfWeek`
+       * is 1 (Monday).
+       */
+      showWeekNumbers: {
+        type: Boolean
+      },
+
       _fullscreen: {
         value: false,
         observer: '_fullscreenChanged'

@@ -212,6 +212,52 @@
         });
       });
 
+      describe('Week Numbers', function() {
+        beforeEach(function() {
+          monthCalendar.showWeekNumbers = true;
+          monthCalendar.set('i18n.firstDayOfWeek', 1);
+        });
+
+        function getWeekNumbers(cal) {
+          return Polymer.dom(cal.$.monthGrid).querySelectorAll('.weekSeparator').map(function(elem) {
+            return parseInt(elem.textContent, 10);
+          });
+        }
+
+        it('should render correct week numbers for Jan 2016', function(done) {
+          var month = new Date(2016, 0, 1);
+          monthCalendar.month = month;
+
+          monthCalendar.async(function() {
+            var weekNumbers = getWeekNumbers(monthCalendar);
+            expect(weekNumbers).to.eql([53, 1, 2, 3, 4]);
+            done();
+          });
+        });
+
+        it('should render correct week numbers for Dec 2015', function(done) {
+          var month = new Date(2015, 11, 1);
+          monthCalendar.month = month;
+
+          monthCalendar.async(function() {
+            var weekNumbers = getWeekNumbers(monthCalendar);
+            expect(weekNumbers).to.eql([49, 50, 51, 52, 53]);
+            done();
+          });
+        });
+
+        it('should render correct week numbers for Feb 2016', function(done) {
+          var month = new Date(2016, 1, 1);
+          monthCalendar.month = month;
+
+          monthCalendar.async(function() {
+            var weekNumbers = getWeekNumbers(monthCalendar);
+            expect(weekNumbers).to.eql([5, 6, 7, 8, 9]);
+            done();
+          });
+        });
+      });
+
     });
   </script>
 

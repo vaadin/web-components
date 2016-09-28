@@ -258,7 +258,8 @@
             month="[[_dateAfterXMonths(index)]]"
             selected-date="{{selectedDate}}"
             focused-date="[[focusedDate]]"
-            ignore-taps=[[_ignoreTaps]]
+            ignore-taps="[[_ignoreTaps]]"
+            show-week-numbers="[[showWeekNumbers]]"
             min-date="[[minDate]]"
             max-date="[[maxDate]]">
           </vaadin-month-calendar>
@@ -336,6 +337,10 @@
 
         i18n: {
           type: Object
+        },
+
+        showWeekNumbers: {
+          type: Boolean
         },
 
         _ignoreTaps: Boolean,
