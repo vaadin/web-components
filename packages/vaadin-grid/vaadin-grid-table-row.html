@@ -108,7 +108,7 @@
             var flex = this.columns[i].flex;
 
             // Visit colspanned cells to hide them, and increase parent width and flex.
-            for (var j = i + 1; j < i + colspan && j < size; j++) {
+            for (var j = i + 1; j < i + colspan; j++) {
               this.cells[j].style.display = 'none';
 
               width += ' + ' + this.columns[j].width;
