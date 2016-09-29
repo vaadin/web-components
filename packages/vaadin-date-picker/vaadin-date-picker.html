@@ -64,6 +64,7 @@ If you want to replace the default input field with a custom implementation, you
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-behavior.html">
+<link rel="import" href="vaadin-date-picker-helper.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -169,8 +170,9 @@ If you want to replace the default input field with a custom implementation, you
     <paper-input-container id="inputcontainer"
         auto-validate$="[[autoValidate]]"
         invalid$="[[invalid]]"
-        disabled$="[[disabled]]">
-      <label id="label">[[label]]</label>
+        disabled$="[[disabled]]"
+        role="application">
+      <label id="label" aria-hidden="true">[[label]]</label>
       <input id="input"
           is="iron-input"
           autocomplete="off"
@@ -178,17 +180,18 @@ If you want to replace the default input field with a custom implementation, you
           on-focus="_focus"
           value="{{_userInputValue::input}}"
           name$="[[name]]"
+          aria-label$="[[label]]"
           invalid="{{invalid}}"
           required$="[[required]]"
           validator="[[validator]]"
           disabled$="[[disabled]]"
           readonly$="[[readonly]]"
           no-input$="[[_noInput]]" />
-      <div suffix id="clear" on-tap="_clear">
+      <div suffix id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
-      <div suffix id="calendar" on-tap="_toggle">
+      <div suffix id="calendar" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]">
         <iron-icon icon="event"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
       </div>
@@ -207,8 +210,8 @@ If you want to replace the default input field with a custom implementation, you
         opened="{{opened}}">
       <vaadin-date-picker-overlay
           id="overlay" i18n="[[i18n]]"
-          fullscreen$=[[_fullscreen]]
-          label=[[label]]
+          fullscreen$="[[_fullscreen]]"
+          label="[[label]]"
           on-date-tap="close"
           selected-date="{{_selectedDate}}"
           class="dropdown-content"
@@ -217,7 +220,7 @@ If you want to replace the default input field with a custom implementation, you
           show-week-numbers="[[showWeekNumbers]]"
           min-date="[[_minDate]]"
           max-date="[[_maxDate]]"
-          tabindex="-1">
+          role="dialog">
       </vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -282,7 +285,8 @@ If you want to replace the default input field with a custom implementation, you
        */
       _getValidity: function() {
         var inputValid = !this._inputValue || (this._selectedDate && this._inputValue === this.i18n.formatDate(this._selectedDate));
-        var minMaxValid = !this._selectedDate || this._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+        var minMaxValid = !this._selectedDate ||
+            vaadin.elements.datepicker.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
         return this.inputElement.validate() && inputValid && minMaxValid;
       },
 
@@ -307,6 +311,10 @@ If you want to replace the default input field with a custom implementation, you
 
       get _inputValue() {
         return this.inputElement.bindValue;
+      },
+
+      _getAriaExpanded: function(opened) {
+        return Boolean(opened).toString();
       }
     });
   </script>

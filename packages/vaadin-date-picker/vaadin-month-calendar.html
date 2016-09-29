@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="vaadin-date-picker-helper.html">
 
 <dom-module id="vaadin-month-calendar">
   <template>
@@ -103,16 +104,24 @@
       }
     </style>
 
-    <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
+    <div id="title" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek, showWeekNumbers)]]">
-        <div class="weekday">[[item]]</div>
+      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
+        <div class="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
       </template>
       <template is="dom-repeat" items="[[_days]]">
         <template is="dom-if" if="[[_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek, index)]]">
-          <div class="weeknumber">[[_getWeekNumber(item, _days)]]</div>
+          <div class="weeknumber" role="heading" aria-label$="[[i18n.week]] [[_getWeekNumber(item, _days)]]">[[_getWeekNumber(item, _days)]]</div>
         </template>
-        <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]" disabled$="[[!_dateAllowed(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
+        <div
+            today$="[[_isToday(item)]]"
+            selected$="[[_dateEquals(item, selectedDate)]]"
+            focused$="[[_dateEquals(item, focusedDate)]]"
+            date="[[item]]"
+            disabled$="[[!_dateAllowed(item, minDate, maxDate)]]"
+            role$="[[_getRole(item)]]"
+            aria-label$="[[_getAriaLabel(item)]]"
+            aria-disabled$="[[_getAriaDisabled(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
       </template>
     </div>
   </template>
@@ -189,15 +198,7 @@
         return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
       },
 
-      _dateEquals: function(date1, date2) {
-        if (date1 && date2) {
-          return date1.getFullYear() === date2.getFullYear() &&
-            date1.getMonth() === date2.getMonth() &&
-            date1.getDate() === date2.getDate();
-        } else {
-          return false;
-        }
-      },
+      _dateEquals: vaadin.elements.datepicker.DatePickerHelper._dateEquals,
 
       _onMonthGridTouchStart: function() {
         this._notTapping = false;
@@ -210,15 +211,29 @@
         date.setDate(date.getDate() + delta);
       },
 
-      _getWeekDayNames: function(weekDayNames, firstDayOfWeek, showWeekNumbers) {
-        var _weekDayNames = weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
+      _applyFirstDayOfWeek: function(weekDayNames, firstDayOfWeek) {
+        return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
+      },
+
+      _getWeekDayNames: function(weekDayNames, weekDayNamesShort, showWeekNumbers, firstDayOfWeek) {
+        weekDayNames = this._applyFirstDayOfWeek(weekDayNames, firstDayOfWeek);
+        weekDayNamesShort = this._applyFirstDayOfWeek(weekDayNamesShort, firstDayOfWeek);
+        weekDayNames = weekDayNames.map(function(day, index) {
+          return {
+            weekDay: day,
+            weekDayShort: weekDayNamesShort[index]
+          };
+        });
 
         // Add extra space in the beginning of weekday names
         if (showWeekNumbers && firstDayOfWeek === 1) {
-          _weekDayNames.unshift('');
+          weekDayNames.unshift({
+            weekDay: '',
+            weekDayShort: ''
+          });
         }
 
-        return _weekDayNames;
+        return weekDayNames;
       },
 
       _getDate: function(date) {
@@ -268,28 +283,7 @@
           date = days.reduce(function(acc, d) { return (!acc && d ? d : acc); });
         }
 
-        // Rest of the implementation from Vaadin Framework method
-        // com.vaadin.client.DateTimeService.getISOWeekNumber(date)
-        var dayOfWeek = date.getDay(); // 0 == sunday
-
-        // ISO 8601 use weeks that start on monday so we use
-        // mon=1,tue=2,...sun=7;
-        if (dayOfWeek === 0) {
-          dayOfWeek = 7;
-        }
-        // Find nearest thursday (defines the week in ISO 8601). The week number
-        // for the nearest thursday is the same as for the target date.
-        var nearestThursdayDiff = 4 - dayOfWeek; // 4 is thursday
-        var nearestThursday = new Date(date.getTime() + nearestThursdayDiff * 24 * 3600 * 1000);
-
-        var firstOfJanuary = new Date(nearestThursday.getFullYear(), 0, 1);
-        var timeDiff = nearestThursday.getTime() - firstOfJanuary.getTime();
-
-        // Rounding the result, as the division doesn't result in an integer
-        // when the given date is inside daylight saving time period.
-        var daysSinceFirstOfJanuary = Math.round(timeDiff / (24 * 3600 * 1000));
-
-        return Math.floor((daysSinceFirstOfJanuary) / 7 + 1);
+        return vaadin.elements.datepicker.DatePickerHelper._getISOWeekNumber(date);
       },
 
       _handleTap: function(e) {
@@ -303,10 +297,32 @@
         e.preventDefault();
       },
 
-      _dateAllowed: function(date, min, max) {
-        return (!min || date >= min) && (!max || date <= max);
-      }
+      _dateAllowed: vaadin.elements.datepicker.DatePickerHelper._dateAllowed,
 
+      _getRole: function(date) {
+        return date ? 'button' : 'presentational';
+      },
+
+      _getAriaLabel: function(date) {
+        if (!date) {
+          return '';
+        }
+
+        var ariaLabel = this._getDate(date) + ' ' +
+          this.i18n.monthNames[date.getMonth()] + ' ' +
+          date.getFullYear() + ', ' +
+          this.i18n.weekdays[date.getDay()];
+
+        if (this._isToday(date)) {
+          ariaLabel += ', ' + this.i18n.today;
+        }
+
+        return ariaLabel;
+      },
+
+      _getAriaDisabled: function(date, min, max) {
+        return this._dateAllowed(date, min, max) ? 'false' : 'true';
+      }
     });
   </script>
 </dom-module>
