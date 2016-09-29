@@ -99,34 +99,27 @@
       },
 
       _updateCells: function() {
-        var spanning = 0;
-        this.cells.forEach(function(cell, index) {
+        var size = this.cells.length;
+        if (this.columns.length == size) {
+          for (var i = 0, colspan; i < size; i += colspan) {
+            var cell = this.cells[i];
+            colspan = cell.colspan || 1;
+            var width = this.columns[i].width;
+            var flex = this.columns[i].flex;
 
-          // TODO: reset cell styles to make sure colspan have be changed dynamically.
-          cell.style.display = '';
-          cell.style.flexBasis = this.columns[index].width;
-          cell.style.flexGrow = this.columns[index].flex;
+            // Visit colspanned cells to hide them, and increase parent width and flex.
+            for (var j = i + 1; j < i + colspan && j < size; j++) {
+              this.cells[j].style.display = 'none';
 
-          if (cell.colspan > 1) {
-            spanning = cell.colspan;
-
-            var width = cell.style.flexBasis;
-            var flex = parseInt(cell.style.flexGrow);
-            for (var i = 1; i < spanning; i++) {
-              width += ' + ' + this.columns[index + i].width;
-              flex += this.columns[index + i].flex;
+              width += ' + ' + this.columns[j].width;
+              flex += this.columns[j].flex;
             }
 
             cell.style.flexBasis = 'calc(' + width + ')';
             cell.style.flexGrow = flex;
+            cell.style.display = '';
           }
-
-          if (!cell.colspan && spanning > 0) {
-            cell.style.display = 'none';
-          }
-
-          spanning = Math.max(0, spanning - 1);
-        }.bind(this));
+        }
       },
 
       _columnsChanged: function(e, target) {
