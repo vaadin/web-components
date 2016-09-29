@@ -79,12 +79,11 @@
         beforeEach(function() {
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
+          target = datepicker.$.input;
         });
 
         it('should open overlay on input', function() {
-          target = datepicker.$.input;
           inputChar('j');
-
           expect(datepicker.opened).to.be.true;
         });
 
@@ -97,14 +96,12 @@
         });
 
         it('should not focus with unparseable date', function() {
-          target = datepicker.$.input;
           inputChar('j');
 
           expect(focusedDate()).not.to.be.ok;
         });
 
         it('should focus parsed date', function() {
-          target = datepicker.$.input;
           inputText('jan 20');
 
           expect(focusedDate().getMonth()).to.equal(0);
@@ -112,7 +109,6 @@
         });
 
         it('should update focus on input change', function() {
-          target = datepicker.$.input;
           inputText('jan 20');
           inputText('17');
 
@@ -125,20 +121,18 @@
             expect(datepicker.value).to.equal('2001-01-01');
             done();
           });
-          target = datepicker.$.input;
+
           inputText('2001-01-01');
           enter();
         });
 
         it('should display focused date while overlay focused', function() {
-          target = datepicker.$.input;
           inputText('jan 2');
           arrowDown();
           expect(target.value).not.to.equal('jan 2');
         });
 
         it('should not forward keys after close', function(done) {
-          target = datepicker.$.input;
           inputText('jan 2');
           arrowDown();
           datepicker.addEventListener('iron-overlay-closed', function () {
@@ -151,13 +145,11 @@
         });
 
         it('should not open with wrong keys', function() {
-          target = datepicker.$.input;
           arrowRight();
           expect(datepicker.opened).to.be.false;
         });
 
         it('should not forward keys after reopen', function(done) {
-          target = datepicker.$.input;
           inputText('jan 2');
           arrowDown();
           datepicker.addEventListener('iron-overlay-opened', function () {
@@ -173,7 +165,6 @@
         });
 
         it('should not forward after user changes input', function(done) {
-          target = datepicker.$.input;
           datepicker.addEventListener('iron-overlay-opened', function () {
             arrowDown();
             // Forwarding keys to overlay
@@ -189,7 +180,7 @@
 
         it('should reflect focused date to input', function(done) {
           datepicker.value = '2000-01-01';
-          target = datepicker.$.input;
+
           datepicker.addEventListener('iron-overlay-opened', function () {
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/8/2000');
@@ -200,7 +191,7 @@
         });
 
         it('should not reflect focused date on open', function(done) {
-          target = datepicker.$.input;
+
           datepicker.addEventListener('iron-overlay-opened', function () {
             expect(datepicker._inputValue).to.equal('');
             done();
@@ -210,7 +201,7 @@
 
         it('should stop key event bubbles from overlay', function(done) {
           datepicker.value = '2000-01-01';
-          target = datepicker.$.input;
+
           datepicker.addEventListener('iron-overlay-opened', function () {
             arrowDown();
             target = overlay;
@@ -224,7 +215,6 @@
         describe('esc behavior', function () {
 
           it('should revert input value on esc', function(done) {
-            target = datepicker.$.input;
             open(function() {
               inputText('jan 2');
               arrowDown();
@@ -238,7 +228,6 @@
           });
 
           it('should empty on esc', function(done) {
-            target = datepicker.$.input;
             var openedListener = function () {
               datepicker.removeEventListener('iron-overlay-opened', openedListener);
               esc();
@@ -254,7 +243,7 @@
 
           it('should revert selected value on second esc', function(done) {
             datepicker.value = '2000-01-01';
-            target = datepicker.$.input;
+
             var originalInputValue = target.value;
             var openedListener = function () {
               datepicker.removeEventListener('iron-overlay-opened', openedListener);
@@ -274,7 +263,6 @@
           });
 
           it('should restore focus to today on esc', function(done) {
-            target = datepicker.$.input;
             var todayFormatted = datepicker.i18n.formatDate(new Date());
 
             open(function() {
@@ -289,7 +277,6 @@
           });
 
           it('should restore focus to selected date on esc', function(done) {
-            target = datepicker.$.input;
             datepicker.value = '2000-01-01';
 
             open(function() {
@@ -304,7 +291,6 @@
           });
 
           it('should restore focus to selected date on esc after typing', function(done) {
-            target = datepicker.$.input;
             datepicker.value = '2000-01-01';
 
             open(function() {
@@ -319,8 +305,6 @@
           });
 
           it('should restore focus to today date on esc after typing', function(done) {
-            target = datepicker.$.input;
-
             open(function() {
               target.bindValue = '';
               inputText('jan 2');
@@ -333,8 +317,6 @@
           });
 
           it('should close after refocusing', function(done) {
-            target = datepicker.$.input;
-
             open(function() {
               arrowDown();
               esc();
@@ -345,6 +327,19 @@
               esc();
               expect(datepicker.opened).to.be.false;
               done();
+            });
+          });
+
+          it('should not select a value', function(done) {
+            open(function() {
+              datepicker.addEventListener('iron-overlay-closed', function () {
+                expect(datepicker.value).to.equal('');
+                done();
+              });
+              arrowDown();
+              esc();
+              esc();
+              esc();
             });
           });
 

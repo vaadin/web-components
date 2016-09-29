@@ -241,7 +241,7 @@
         <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
-      <iron-icon id="toggle" icon="event" on-tap="_close"></iron-icon>
+      <iron-icon id="toggle" icon="event" on-tap="_cancel"></iron-icon>
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
@@ -277,7 +277,7 @@
       <paper-button id="todayButton" on-tap="_scrollToCurrentMonth">
         [[i18n.today]]
       </paper-button>
-      <paper-button id="cancelButton" on-tap="_close">
+      <paper-button id="cancelButton" on-tap="_cancel">
         [[i18n.cancel]]
       </paper-button>
     </div>
@@ -626,6 +626,11 @@
         this.fire('close');
       },
 
+      _cancel: function() {
+        this.focusedDate = this.selectedDate;
+        this._close();
+      },
+
       _preventDefault: function(e) {
         e.preventDefault();
       },
@@ -667,9 +672,6 @@
               this._moveFocusByDays(-1);
               break;
             case 'enter':
-              if (this.focusedDate) {
-                this.selectedDate = this.focusedDate;
-              }
               this._close();
               break;
             case 'space':

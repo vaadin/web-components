@@ -289,11 +289,12 @@
 
     _selectedDateChanged: function(selectedDate) {
       this.value = this._formatISO(selectedDate);
-      this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
+      this._focusedDate = selectedDate;
+      this._cachedInputValue = this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
     },
 
     _focusedDateChanged: function() {
-      if (!this._ignoreFoo && !this._fullscreen) {
+      if (!this._ignoreFocusedDateChange && !this._fullscreen) {
         this._inputValue = this._focusedDate ? this.i18n.formatDate(this._focusedDate) : '';
         this._input().setSelectionRange(0, this._inputValue.length);
       }
@@ -369,9 +370,9 @@
         this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
       this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
       // Have a default focused date
-      this._ignoreFoo = true;
+      this._ignoreFocusedDateChange = true;
       this.$.overlay.focusedDate = this.$.overlay.focusedDate || this.$.overlay.initialPosition;
-      this._ignoreFoo = false;
+      this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
       // We cannot use iron-resize event because 1- we fire it, 2- it's fired
@@ -422,6 +423,20 @@
 
       this.updateStyles();
       this._forwardKeysToOverlay = false;
+
+      if (this.i18n.parseDate) {
+        var inputValue = this._inputValue;
+        var parsedDate = this.i18n.parseDate(inputValue);
+        if (this._isValidDate(parsedDate)) {
+          this._selectedDate = parsedDate;
+        } else {
+          this._selectedDate = null;
+          this._inputValue = inputValue;
+        }
+      } else if (this._focusedDate) {
+        this._selectedDate = this._focusedDate;
+      }
+
       this.validate();
     },
 
@@ -502,8 +517,9 @@
             // The keys are forwarded to ovelay, revert the input text to the cached value
             this._inputValue = this._cachedInputValue;
             this._userInputValueChanged();
-            // If the input field is empty, focusedDate didn't update automatically, handle manually
+
             if (!this._inputValue) {
+              // Default to today
               this.$.overlay.focusedDate = new Date();
             }
           } else {
@@ -511,6 +527,8 @@
             if (newInputValue !== this._inputValue) {
               this.open();
               this.$.overlay.focusedDate = this._selectedDate || new Date();
+            } else {
+              this._focusedDate = this._selectedDate;
             }
             this._inputValue = newInputValue;
           }
@@ -537,9 +555,9 @@
     _userInputValueChanged: function() {
       var parseDate = this.i18n.parseDate(this._inputValue);
       if (this._isValidDate(parseDate)) {
-        this._ignoreFoo = true;
+        this._ignoreFocusedDateChange = true;
         this._focusedDate = parseDate;
-        this._ignoreFoo = false;
+        this._ignoreFocusedDateChange = false;
       } else {
         this._forwardKeysToOverlay = false;
       }
