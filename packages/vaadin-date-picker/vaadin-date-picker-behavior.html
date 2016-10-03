@@ -133,8 +133,11 @@
       // A function to parse the given text to a `Date`
       // object. Must properly parse (at least) text
       // formatted by `formatDate`.
+      // Setting the property to null will disable
+      // keyboard input feature.
       parseDate: function(text) {
-        return new Date(text);
+        // Parses a string in 'MM/DD/YYYY' -format to
+        // a Date object
       }
 
       // A function to format given `monthName` and
@@ -167,7 +170,14 @@
               return monthName + ' ' + fullYear;
             },
             parseDate: function(text) {
-              return new Date(text);
+              var parts = text.split('/');
+              if (parts.length === 3) {
+                var date = new Date(0, 0);
+                date.setFullYear(parseInt(parts[2], 10));
+                date.setMonth(parseInt(parts[0], 10) - 1);
+                date.setDate(parseInt(parts[1], 10));
+                return new Date(text);
+              }
             }
           };
         }

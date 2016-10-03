@@ -189,7 +189,7 @@
 
       it('should validate keyboard input (valid)', function(done) {
         var input = datepicker.$.input;
-        input.value = '2000-01-01';
+        input.value = '01/01/2000';
         input.fire('input');
 
         datepicker.addEventListener('iron-overlay-closed', function() {
