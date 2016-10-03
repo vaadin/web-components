@@ -37,6 +37,9 @@ document.getElementById('my-picker').i18n = {
 * [propertyname]#i18n.today# – Translation of the Today shortcut button text.
 * [propertyname]#i18n.cancel# – Translation of the Cancel button text.
 * [propertyname]#i18n.formatDate# – A function to format given [classname]#Date# object as [classname]#String#.
+* [propertyname]#i18n.parseDate# – A function to parse given [classname]#String# to a [classname]#Date# object. +
+Ensure the parser understands at least the format produced by the [propertyname]#formatDate# function. +
+Leaving out the [propertyname]#i18n.parseDate# altogether will disable keyboard input feature.
 * [propertyname]#i18n.formatTitle# – A function to format the given monthName and year as a [classname]#String# representation to be placed over a calendar.
 
 Once set, the [propertyname]#i18n# property affects how months and dates are displayed in the [vaadinelement]#vaadin-date-picker# dropdown as well as the language of the buttons in the element.
@@ -70,6 +73,9 @@ document.querySelector('vaadin-date-picker').i18n = {
   cancel: 'Peruuta',
   formatDate: function(d) {
     return moment(d).format(moment.localeData().longDateFormat('L'));
+  },
+  parseDate: function(s) {
+    return moment(s, moment.localeData().longDateFormat('L'));
   },
   formatTitle: function(monthName, fullYear) {
     return monthName + ' ' + fullYear;

@@ -7,8 +7,8 @@ layout: page
 [[vaadin-date-picker.value]]
 = Handling the Value
 
-The user can select a date by clicking or tapping on it.
-Use of keyboard for navigation or for entering the date is not yet supported in the alpha version of the element.
+The user can select a date by clicking or tapping on it on the dropdown overlay.
+A date can also be selected with keyboard either by typing the value to the input field or using arrow keys for focusing the desired date on the dropdown overlay and selecting it with space/enter.
 The selected date is contained in the [propertyname]#value# property.
 
 == Value Property Type and Format
