@@ -198,13 +198,6 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 31));
           });
 
-          it('should select focused day with enter', function() {
-            arrowRight();
-            enter();
-
-            expect(overlay.selectedDate).to.eql(new Date(2000, 0, 2));
-          });
-
           it('should close overlay with enter', function() {
             var spy = sinon.spy(overlay, '_close');
             enter();

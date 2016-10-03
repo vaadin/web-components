@@ -174,18 +174,30 @@
         expect(datepicker.$.input.disabled).to.equal(true);
       });
 
-      it('should validate keyboard input (invalid)', function() {
+      it('should validate keyboard input (invalid)', function(done) {
         var input = datepicker.$.input;
         input.value = 'foo';
-        expect(datepicker.validate()).to.equal(false);
-        expect(datepicker.invalid).to.be.equal(true);
+        input.fire('input');
+
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(datepicker.validate()).to.equal(false);
+          expect(datepicker.invalid).to.be.equal(true);
+          done();
+        });
+        datepicker.close();
       });
 
-      it('should validate keyboard input (valid)', function() {
+      it('should validate keyboard input (valid)', function(done) {
         var input = datepicker.$.input;
         input.value = '2000-01-01';
-        expect(datepicker.validate()).to.equal(true);
-        expect(datepicker.invalid).to.be.equal(false);
+        input.fire('input');
+
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(datepicker.validate()).to.equal(true);
+          expect(datepicker.invalid).to.be.equal(false);
+          done();
+        });
+        datepicker.close();
       });
 
       it('should validate keyboard input (disallowed value)', function(done) {

@@ -420,10 +420,6 @@
           datepicker.open();
           expect(datepicker.$.clear.clientHeight).to.equal(0);
         });
-
-        it('should not be focusable', function() {
-          expect(datepicker.$.inputcontainer.tabIndex).to.equal(-1);
-        });
       });
 
       describe('Readonly', function() {
