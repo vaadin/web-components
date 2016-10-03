@@ -55,6 +55,20 @@
           });
         }
       });
+
+      it('should prevent default on overlay down', function() {
+        var e = new CustomEvent('mousedown', {bubbles: true});
+        var spy = sinon.spy(e, 'preventDefault');
+        comboBox.$.overlay.dispatchEvent(e);
+        expect(spy.called).to.be.true;
+      });
+
+      it('should not prevent default on input down', function() {
+        var e = new CustomEvent('mousedown', {bubbles: true});
+        var spy = sinon.spy(e, 'preventDefault');
+        ironInput.dispatchEvent(e);
+        expect(spy.called).to.be.false;
+      });
     });
   </script>
 
