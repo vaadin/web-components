@@ -261,6 +261,29 @@
         datepicker.close();
       });
 
+      it('should clear selection on close', function(done) {
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(target.selectionStart).to.equal(target.selectionEnd);
+          done();
+        });
+        open(function() {
+          arrowDown();
+          datepicker.close();
+        });
+      });
+
+      it('should not clear selection on close (not focused)', function(done) {
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(target.selectionStart).not.to.equal(target.selectionEnd);
+          done();
+        });
+        open(function() {
+          arrowDown();
+          target.blur();
+          datepicker.close();
+        });
+      });
+
       describe('no parseDate', function() {
 
         beforeEach(function() {
@@ -268,7 +291,9 @@
         });
 
         it('should prevent key input', function(done) {
-          var e = new CustomEvent('keydown', {bubbles: true});
+          var e = new CustomEvent('keydown', {
+            bubbles: true
+          });
           var spy = sinon.spy(e, 'preventDefault');
           target.dispatchEvent(e);
           expect(spy.called).to.be.true;
