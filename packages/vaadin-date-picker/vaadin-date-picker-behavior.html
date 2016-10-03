@@ -580,10 +580,10 @@
     },
 
     _userInputValueChanged: function() {
-      var parseDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
-      if (this._isValidDate(parseDate)) {
+      var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
+      if (this._isValidDate(parsedDate)) {
         this._ignoreFocusedDateChange = true;
-        this._focusedDate = parseDate;
+        this._focusedDate = parsedDate;
         this._ignoreFocusedDateChange = false;
       } else {
         this._forwardKeysToOverlay = false;

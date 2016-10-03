@@ -226,6 +226,68 @@
         arrowDown();
       });
 
+      it('should update focused date on select', function() {
+        datepicker.value = '2000-01-01';
+        expect(focusedDate().getMonth()).to.equal(0);
+        expect(focusedDate().getDate()).to.equal(1);
+        expect(focusedDate().getFullYear()).to.equal(2000);
+      });
+
+      it('should validate on close', function() {
+        open(function() {
+          var spy = sinon.spy(datepicker, 'validate');
+          datepicker.close();
+          expect(spy.called).to.be.true;
+        });
+      });
+
+      it('should empty value with false input', function(done) {
+        datepicker.value = '2000-01-01';
+        inputText('foo');
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(datepicker.value).to.equal('');
+          done();
+        });
+        datepicker.close();
+      });
+
+      it('should be invalid with false input', function(done) {
+        datepicker.value = '2000-01-01';
+        inputText('foo');
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(datepicker.invalid).to.be.true;
+          done();
+        });
+        datepicker.close();
+      });
+
+      describe('no parseDate', function() {
+
+        beforeEach(function() {
+          datepicker.set('i18n.parseDate', null);
+        });
+
+        it('should prevent key input', function(done) {
+          var e = new CustomEvent('keydown', {bubbles: true});
+          var spy = sinon.spy(e, 'preventDefault');
+          target.dispatchEvent(e);
+          expect(spy.called).to.be.true;
+          done();
+        });
+
+        it('should select focused date on close', function(done) {
+          datepicker.addEventListener('iron-overlay-closed', function() {
+            expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
+            done();
+          });
+
+          open(function() {
+            datepicker.close();
+          });
+        });
+
+      });
+
       describe('esc behavior', function() {
 
         it('should revert input value on esc', function(done) {
