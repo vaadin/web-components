@@ -250,6 +250,7 @@
     },
 
     ensureItemsRendered: function() {
+      this.$.selector.flushDebouncer('_debounceTemplate');
       this.$.selector._render && this.$.selector._render();
     },
 
