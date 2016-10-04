@@ -139,6 +139,15 @@
         expect(spy.called).to.be.true;
       });
 
+      it('should reposition on scroll', function() {
+        comboBox.opened = true;
+        comboBox.$.overlay.updateViewportBoundaries = sinon.spy();
+
+        comboBox.fire('scroll', {}, {node: document});
+
+        expect(comboBox.$.overlay.updateViewportBoundaries.callCount).to.eql(1);
+      }),
+
       it('should be aligned with input container', function() {
         comboBox.open();
 
