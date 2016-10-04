@@ -166,9 +166,6 @@
             formatDate: function(d) {
               return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
             },
-            formatTitle: function(monthName, fullYear) {
-              return monthName + ' ' + fullYear;
-            },
             parseDate: function(text) {
               var parts = text.split('/');
               if (parts.length === 3) {
@@ -176,8 +173,11 @@
                 date.setFullYear(parseInt(parts[2], 10));
                 date.setMonth(parseInt(parts[0], 10) - 1);
                 date.setDate(parseInt(parts[1], 10));
-                return new Date(text);
+                return date;
               }
+            },
+            formatTitle: function(monthName, fullYear) {
+              return monthName + ' ' + fullYear;
             }
           };
         }
