@@ -123,21 +123,19 @@
 
       it('should remember the original initial position on reopen', function(done) {
         datepicker.initialPosition = null;
+        var initialPosition;
 
-        datepicker.open();
-
-        datepicker.async(function() {
-          var initialPosition = datepicker.$.overlay.initialPosition;
-
-          datepicker.close();
-          datepicker.open();
-
-          // wait needed to new Date() have a few milliseconds difference from previous open()
-          datepicker.async(function() {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          if (initialPosition) {
             expect(datepicker.$.overlay.initialPosition).to.eql(initialPosition);
             done();
-          }, 1);
-        }, 1);
+          } else {
+            initialPosition = datepicker.$.overlay.initialPosition;
+            datepicker.close();
+            datepicker.open();
+          }
+        });
+        datepicker.open();
       });
 
       it('should scroll to selected value by default', function(done) {
