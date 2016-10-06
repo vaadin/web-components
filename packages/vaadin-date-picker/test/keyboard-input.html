@@ -197,6 +197,19 @@
           inputText('1/2/2000');
         });
 
+        it('should not forward after input tap', function(done) {
+          open(function() {
+            arrowDown();
+            var focused = focusedDate();
+            target.fire('tap', {
+              bubbles: true
+            });
+            arrowLeft();
+            expect(focusedDate()).to.eql(focused);
+            done();
+          });
+        });
+
         it('should reflect focused date to input', function(done) {
           datepicker.value = '2000-01-01';
 

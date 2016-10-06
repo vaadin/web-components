@@ -276,6 +276,7 @@
       // inside the overlay
       if (!this.disabled && !this.readonly && (!e || Polymer.dom(e).path.indexOf(this.$.overlay) < 0)) {
         this.$.dropdown.open();
+        this._forwardKeysToOverlay = false;
       }
     },
 
