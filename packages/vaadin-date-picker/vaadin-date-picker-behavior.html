@@ -136,7 +136,7 @@
       // Setting the property to null will disable
       // keyboard input feature.
       parseDate: function(text) {
-        // Parses a string in 'MM/DD/YYYY' -format to
+        // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
         // a Date object
       }
 
@@ -168,12 +168,29 @@
             },
             parseDate: function(text) {
               var parts = text.split('/');
+              var today = new Date();
+              var date, month = today.getMonth(), year = today.getFullYear();
+
               if (parts.length === 3) {
-                var date = new Date(0, 0);
-                date.setFullYear(parseInt(parts[2], 10));
-                date.setMonth(parseInt(parts[0], 10) - 1);
-                date.setDate(parseInt(parts[1], 10));
-                return date;
+                year = parseInt(parts[2]);
+                if (parts[2].length === 2 && year >= 0) {
+                  year += year < 50 ? 2000 : 1900;
+                }
+                month = parseInt(parts[0]) - 1;
+                date = parseInt(parts[1]);
+              } else if (parts.length === 2) {
+                month = parseInt(parts[0]) - 1;
+                date = parseInt(parts[1]);
+              } else if (parts.length === 1) {
+                date = parseInt(parts[0]);
+              }
+
+              if (date !== undefined) {
+                var result = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+                result.setFullYear(year);
+                result.setMonth(month);
+                result.setDate(date);
+                return result;
               }
             },
             formatTitle: function(monthName, fullYear) {

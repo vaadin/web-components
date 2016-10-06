@@ -453,6 +453,72 @@
 
         });
 
+        describe('default parser', function() {
+
+          var today;
+
+          beforeEach(function() {
+            today = new Date();
+          });
+
+          it('should parse a single digit', function() {
+            inputText('20');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(today.getFullYear());
+            expect(result.getMonth()).to.equal(today.getMonth());
+            expect(result.getDate()).to.equal(20);
+          });
+
+          it('should parse two digits', function() {
+            inputText('6/20');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(today.getFullYear());
+            expect(result.getMonth()).to.equal(5);
+            expect(result.getDate()).to.equal(20);
+          });
+
+          it('should parse three digits', function() {
+            inputText('6/20/1999');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(1999);
+            expect(result.getMonth()).to.equal(5);
+            expect(result.getDate()).to.equal(20);
+          });
+
+          it('should parse three digits with small year', function() {
+            inputText('6/20/0099');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(99);
+          });
+
+          it('should parse three digits with short year', function() {
+            inputText('6/20/99');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(1999);
+          });
+
+          it('should parse three digits with short year 2', function() {
+            inputText('6/20/20');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(2020);
+          });
+
+          it('should parse three digits with negative year', function() {
+            inputText('6/20/-1');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(-1);
+          });
+
+          it('should parse in base 10', function() {
+            inputText('09/09/09');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(2009);
+            expect(result.getMonth()).to.equal(8);
+            expect(result.getDate()).to.equal(9);
+          });
+
+        });
+
       });
     }
   </script>

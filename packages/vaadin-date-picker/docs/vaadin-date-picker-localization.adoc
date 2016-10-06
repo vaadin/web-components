@@ -26,12 +26,15 @@ document.getElementById('my-picker').i18n = {
     return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
   },
   parseDate: function(text) {
+    // This example produces a really strict parser which only accepts
+    // perfectly formatted dates like '12.8.2013'. Less strict implementation or
+    // a 3rd party parser like in the example below is recommended.
     var parts = text.split('.');
     if (parts.length === 3) {
       var date = new Date(0, 0);
-      date.setFullYear(parseInt(parts[2], 10));
-      date.setMonth(parseInt(parts[1], 10) - 1);
-      date.setDate(parseInt(parts[0], 10));
+      date.setFullYear(parseInt(parts[2]));
+      date.setMonth(parseInt(parts[1]) - 1);
+      date.setDate(parseInt(parts[0]));
       return date;
     }
   },
