@@ -49,7 +49,6 @@
                 return monthName + ' ' + fullYear;
               },
               parseDate: function(dateString) {
-                // See if we get exactly 1 match from the month names
                 var matches = datepicker.i18n.monthNames.filter(function(monthName) {
                   return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
                 });
