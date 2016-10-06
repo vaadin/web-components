@@ -130,7 +130,7 @@ If you want to replace the default input field with a custom implementation, you
         fill: rgba(0, 0, 0, .86);
       }
 
-      #input[fullscreen] {
+      #input[no-input] {
         pointer-events: none;
       }
 
@@ -183,7 +183,7 @@ If you want to replace the default input field with a custom implementation, you
           validator="[[validator]]"
           disabled$="[[disabled]]"
           readonly$="[[readonly]]"
-          fullscreen$=[[_fullscreen]] />
+          no-input$="[[_noInput]]" />
       <div suffix id="clear" on-tap="_clear">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>

@@ -19,9 +19,11 @@
   </test-fixture>
 
   <script>
-    if (!android) {
+    if (!android && !ios) {
       // The test environment can currently only handle a certain number of tests
       // on the Android emulator. Omitting the keyboard inputs tests on Android for now.
+      // Keybard input is disabled on IOS since it doesn't handle fixed positioned elements
+      // (the dropdown) well while input is focused.
 
       describe('keyboard input', function() {
 

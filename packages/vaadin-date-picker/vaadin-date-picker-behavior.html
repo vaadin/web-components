@@ -246,7 +246,17 @@
 
       _forwardKeysToOverlay: Boolean,
 
-      _cachedInputValue: String
+      _cachedInputValue: String,
+
+      _noInput: {
+        type: Boolean,
+        computed: '_isNoInput(_fullscreen, i18n, i18n.*, _ios)'
+      },
+
+      _ios: {
+        type: Boolean,
+        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/)
+      }
     },
 
     created: function() {
@@ -309,6 +319,10 @@
       return date;
     },
 
+    _isNoInput: function() {
+      return this._fullscreen || !this.i18n.parseDate || this._ios;
+    },
+
     _formatISO: function(date) {
       return date instanceof Date ?
         (new Date(date.getTime() - date.getTimezoneOffset() * 60000)).toISOString().split('T')[0] :
@@ -322,7 +336,7 @@
     },
 
     _focusedDateChanged: function() {
-      if (!this._ignoreFocusedDateChange && !this._fullscreen) {
+      if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = this._focusedDate ? this.i18n.formatDate(this._focusedDate) : '';
         this._input().setSelectionRange(0, this._inputValue.length);
       }
@@ -495,7 +509,7 @@
     },
 
     _focus: function() {
-      if (this._fullscreen) {
+      if (this._noInput) {
         this.$.overlay.focus();
       } else {
         this.inputElement.focus();
@@ -525,7 +539,7 @@
     },
 
     _onKeydown: function(e) {
-      if (!this.i18n.parseDate || this._fullscreen) {
+      if (this._noInput) {
         // The input element cannot be readonly as it would conflict with
         // the required attribute. Both are not allowed on an input element.
         // Therefore we prevent default on most keydown events.
