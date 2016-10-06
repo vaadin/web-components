@@ -103,15 +103,20 @@
         <vaadin-date-picker label="Birthday" id="keyboard-input">
         </vaadin-date-picker>
         <script>
-          var datepicker = document.querySelector('vaadin-date-picker#keyboard-input');
-          datepicker.set('i18n.parseDate', function(dateString) {
-            // See if we get exactly 1 match from the month names
-            var matches = datepicker.i18n.monthNames.filter(function(monthName) {
-              return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
+          window.addEventListener('WebComponentsReady', function() {
+            // Async call needed here for IE11 compatibility.
+            Polymer.Base.async(function() {
+              var datepicker = document.querySelector('vaadin-date-picker#keyboard-input');
+              datepicker.set('i18n.parseDate', function(dateString) {
+                // See if we get exactly 1 match from the month names
+                var matches = datepicker.i18n.monthNames.filter(function(monthName) {
+                  return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
+                });
+                dateString = matches.length === 1 ? matches[0] : dateString;
+                // Parse the date (using a 3rd party library)
+                return Sugar.Date.create(dateString);
+              });
             });
-            dateString = matches.length === 1 ? matches[0] : dateString;
-            // Parse the date (using a 3rd party library)
-            return Sugar.Date.create(dateString);
           });
         </script>
       </template>
