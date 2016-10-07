@@ -12,7 +12,7 @@
     observers: [
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
       '_validateInput(_selectedDate, _minDate, _maxDate)',
-      '_focusedDateChanged(_focusedDate)'
+      '_focusedDateChanged(_focusedDate, i18n.formatDate)'
     ],
 
     properties: {
@@ -329,15 +329,15 @@
         '';
     },
 
-    _selectedDateChanged: function(selectedDate) {
+    _selectedDateChanged: function(selectedDate, formatDate) {
       this.value = this._formatISO(selectedDate);
       this._focusedDate = selectedDate;
-      this._cachedInputValue = this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
+      this._cachedInputValue = this._inputValue = selectedDate ? formatDate(selectedDate) : '';
     },
 
-    _focusedDateChanged: function() {
+    _focusedDateChanged: function(focusedDate, formatDate) {
       if (!this._ignoreFocusedDateChange && !this._noInput && this.opened) {
-        this._inputValue = this._focusedDate ? this.i18n.formatDate(this._focusedDate) : '';
+        this._inputValue = focusedDate ? formatDate(focusedDate) : '';
         this._input().setSelectionRange(0, this._inputValue.length);
       }
     },
