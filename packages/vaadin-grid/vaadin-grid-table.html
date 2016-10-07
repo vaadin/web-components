@@ -138,7 +138,7 @@
       <tfoot id="footer" is="vaadin-grid-table-footer" columns="[[columns]]" frozen-columns="[[frozenColumns]]"></tfoot>
     </table>
 
-    <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" hidden="[[_hideOuterScroller(scrollbarWidth, safari)]]">
+    <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" hidden="[[_hideOuterScroller(scrollbarWidth, safari)]]" ios$=[[ios]]>
       <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]"></div>
     </vaadin-grid-table-outer-scroller>
 
