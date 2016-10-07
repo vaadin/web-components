@@ -317,11 +317,6 @@
      * items in the viewport and recycle tiles as needed.
      */
     _scrollHandler: function(e) {
-      // We may ignore a duplicate invocation if this was handled on wheel event already
-      if (this._ignoreScroll && e) {
-        this._ignoreScroll = false;
-        return;
-      }
       // clamp the `scrollTop` value
       var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
       var delta = scrollTop - this._scrollPosition;
