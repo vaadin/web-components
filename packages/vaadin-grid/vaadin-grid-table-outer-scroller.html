@@ -17,6 +17,15 @@
       :host([passthrough]) {
         pointer-events: none;
       }
+
+      :host([ios]) {
+        pointer-events: all;
+        z-index: -3;
+      }
+
+      :host([ios][scrolling]) {
+        z-index: 0;
+      }
     </style>
 
     <content></content>
@@ -34,6 +43,11 @@
         passthrough: {
           reflectToAttribute: true,
           value: true
+        },
+
+        scrolling: {
+          type: Boolean,
+          reflectToAttribute: true
         }
       },
 
@@ -71,6 +85,8 @@
           this.scrollLeft = this.domHost._scrollLeft;
         }
         this._syncingScrollTarget = false;
+
+        this._scrolling();
       },
 
       _syncScrollTarget: function() {
@@ -83,6 +99,15 @@
           this.domHost._ignoreScroll = true;
         }
         this._syncingOuterScroller = false;
+
+        this._scrolling();
+      },
+
+      _scrolling: function() {
+        this.scrolling = true;
+        this.debounce('scrolling-stopped', function() {
+          this.scrolling = false;
+        }, 100);
       }
     });
   </script>
