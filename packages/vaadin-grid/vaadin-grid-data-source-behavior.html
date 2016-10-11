@@ -69,7 +69,8 @@
        */
       pageSize: {
         type: Number,
-        value: 50
+        value: 50,
+        observer: '_pageSizeChanged'
       },
 
       /**
@@ -99,14 +100,10 @@
       },
     },
 
-    observers: [
-      'clearCache(pageSize)'
-    ],
-
     _getCachedItem: function(index) {
       var page = this._getPageForIndex(index);
 
-      var p = this._cache[page];
+      var p = this._cache && this._cache[page];
 
       if (p) {
         return p[index - page * this.pageSize];
@@ -139,7 +136,7 @@
 
     _uncachedPagesForPhysicalItems: function() {
       return this._pagesForPhysicalItems().filter(function(page) {
-        return this._cache === undefined || this._cache[page] === undefined;
+        return this._cache !== undefined && this._cache[page] === undefined;
       }.bind(this));
     },
 
@@ -240,6 +237,12 @@
 
     _flushItemsDebouncer: function() {
       this.flushDebouncer('load');
+    },
+
+    _pageSizeChanged: function(pageSize, oldPageSize) {
+      if (oldPageSize !== undefined && pageSize !== oldPageSize) {
+        this.clearCache();
+      }
     }
 
   };

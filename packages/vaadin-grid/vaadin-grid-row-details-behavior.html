@@ -47,7 +47,7 @@
     },
 
     _isExpanded: function(item) {
-      return this.expandedItems.indexOf(item) !== -1;
+      return this.expandedItems && this.expandedItems.indexOf(item) !== -1;
     },
 
     expandItem: function(item) {
