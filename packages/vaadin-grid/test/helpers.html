@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function scrollToEnd(grid, callback) {
     var table = grid.$.scroller.$.table;
-    table.addEventListener('scroll', function () {
+    var listener = function () {
       grid.async(function () {
         table.scrollTop = table.scrollHeight;
       }, 1);
@@ -52,9 +52,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       grid.debounce('scroll-done', function () {
         // Ensure rows are in order
         grid.flushDebouncer('reorderrows');
+        table.removeEventListener('scroll', listener);
         callback();
       }, 100);
-    });
+    };
+    table.addEventListener('scroll', listener);
     table.scrollTop = table.scrollHeight;
   }
 
