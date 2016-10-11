@@ -1,0 +1,128 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column>
+          <template is="header">First</template>
+          <template>[[item.name.first]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template is="header">Last</template>
+          <template>[[item.name.last]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('array data source', function() {
+      var grid, body;
+
+      function getContent(row, column) {
+        return getCellContent(getCell(row, column)).innerText;
+      }
+
+      function getCell(row, column) {
+        return getRowCells(getRows(body)[row])[column];
+      }
+
+      beforeEach(function(done) {
+        grid = fixture('default');
+        grid.items = [{
+          name: {
+            first: 'foo',
+            last: 'bar'
+          }
+        }, {
+          name: {
+            first: 'baz',
+            last: 'qux'
+          }
+        }];
+        body = grid.$.scroller.$.items;
+        done();
+      });
+
+      it('should have right amount of data', function() {
+        var bodyRows = getRows(body);
+        expect(bodyRows).to.have.length(2);
+      });
+
+      it('should have the right data', function() {
+        expect(getContent(0, 0)).to.equal('foo');
+        expect(getContent(1, 0)).to.equal('baz');
+      });
+
+      it('should be observed for shift', function() {
+        grid.unshift('items', {
+          name: {
+            first: 'a',
+            last: 'b'
+          }
+        });
+        expect(grid.size).to.equal(3);
+        expect(getContent(0, 0)).to.equal('a');
+      });
+
+      it('should be observed for mutation', function() {
+        grid.set('items.0.name.first', 'new');
+        expect(getContent(0, 0)).to.equal('new');
+      });
+
+      it('should handle null', function() {
+        grid.items = null;
+        expect(grid.size).to.equal(0);
+      });
+
+      it('should handle string values', function() {
+        grid.items = 'FOO';
+        expect(grid.size).to.equal(3);
+        expect(getCell(0, 0).item).to.equal('F');
+      });
+
+      it('should set array data source', function() {
+        expect(grid.dataSource).to.equal(grid._arrayDataSource);
+      });
+
+      it('should not override custom data source', function() {
+        var ds = grid.dataSource = function() {};
+        grid.items = [1, 2, 3];
+        expect(grid.dataSource).to.equal(ds);
+      });
+
+      it('should handle new array of same length', function() {
+        grid.items = [{
+          name: {
+            first: 'a'
+          }
+        }, {
+          name: {
+            first: 'b'
+          }
+        }];
+        expect(getContent(0, 0)).to.equal('a');
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

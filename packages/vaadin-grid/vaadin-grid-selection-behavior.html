@@ -147,7 +147,7 @@
     },
 
     _selectedItemsChanged: function(e) {
-      if (e.path === 'selectedItems' || e.path === 'selectedItems.splices') {
+      if (this.$.scroller._physicalItems && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
         this.$.scroller._physicalItems.forEach(function(row) {
           row.selected = this._isSelected(row.item);
         }.bind(this));

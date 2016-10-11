@@ -66,7 +66,7 @@ REST API that supports fetching partial result sets.
 
 [source,javascript]
 ----
-grid.items = function(params, callback) {
+grid.dataSource = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
@@ -111,7 +111,7 @@ function setSize() {
 +
 [source,javascript]
 ----
-grid.items = function(params, callback) {
+grid.dataSource = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
@@ -136,7 +136,7 @@ grid.items = function(params, callback) {
 // Set an initial size.
 grid.size = 10;
 
-grid.items = function(params, callback) {
+grid.dataSource = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
