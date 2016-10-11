@@ -8,6 +8,8 @@
   <title>vaadin-date-picker Basic Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../sugar/dist/sugar.min.js"></script>
+  <script src="../../sugar/dist/locales/fi.js"></script>
   <link rel="import" href="common.html">
 </head>
 
@@ -26,21 +28,37 @@
         <vaadin-date-picker label="Syntymäpäivä" id="finnish" value="1980-08-14">
         </vaadin-date-picker>
         <script>
-          var datepicker = document.querySelector('vaadin-date-picker#finnish');
-          datepicker.i18n = {
-            today: 'tänään',
-            cancel: 'peruuta',
-            firstDayOfWeek: 1,
-            monthNames:
-             'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
-            weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
-            formatDate: function(d) {
-              return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
-            },
-            formatTitle: function(monthName, fullYear) {
-              return monthName + ' ' + fullYear;
-            }
-          };
+        window.addEventListener('WebComponentsReady', function() {
+          // Async call needed here for IE11 compatibility.
+          Polymer.Base.async(function() {
+            // Set up the parser library for Finnish locale
+            Sugar.Date.setLocale('fi');
+
+            var datepicker = document.querySelector('vaadin-date-picker#finnish');
+            datepicker.i18n = {
+              today: 'tänään',
+              cancel: 'peruuta',
+              firstDayOfWeek: 1,
+              monthNames:
+               'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
+              weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
+              formatDate: function(date) {
+                return Sugar.Date.format(date, '{short}');
+              },
+              formatTitle: function(monthName, fullYear) {
+                return monthName + ' ' + fullYear;
+              },
+              parseDate: function(dateString) {
+                var matches = datepicker.i18n.monthNames.filter(function(monthName) {
+                  return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
+                });
+                dateString = matches.length === 1 ? matches[0] : dateString;
+                // Parse the date
+                return Sugar.Date.create(dateString);
+              }
+            };
+          });
+        });
         </script>
       </template>
     </demo-snippet>
@@ -136,7 +154,7 @@
           }
         </style>
         <vaadin-date-picker-light class="my-input1">
-          <input is="iron-input" placeholder="Date" readonly size="10"/>
+          <input is="iron-input" placeholder="Date" size="10"/>
         </vaadin-date-picker-light>
       </template>
     </demo-snippet>
@@ -154,7 +172,7 @@
          <div class="my-input2">
            <iron-icon icon="event"></iron-icon>
            CHECK-IN:
-           <input is="iron-input" disabled size="10"/>
+           <input is="iron-input" size="10"/>
          </div>
         </vaadin-date-picker-light>
       </template>

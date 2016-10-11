@@ -86,23 +86,6 @@
         datepicker.open();
       });
 
-      it('should prevent text input', function() {
-        var spy = sinon.spy();
-        var keyDownEvent = new CustomEvent('keydown', {
-          bubbles: true,
-          cancelable: true
-        });
-        keyDownEvent.preventDefault = spy;
-
-        keyDownEvent.keyCode = 9; // tab key -> should not be prevented
-        datepicker.$.input.dispatchEvent(keyDownEvent);
-        expect(spy.called).to.be.false;
-
-        keyDownEvent.keyCode = 82;  // r key -> should be prevented
-        datepicker.$.input.dispatchEvent(keyDownEvent);
-        expect(spy.called).to.be.true;
-      });
-
       it('should open on input tap', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
           done();
@@ -140,21 +123,19 @@
 
       it('should remember the original initial position on reopen', function(done) {
         datepicker.initialPosition = null;
+        var initialPosition;
 
-        datepicker.open();
-
-        datepicker.async(function() {
-          var initialPosition = datepicker.$.overlay.initialPosition;
-
-          datepicker.close();
-          datepicker.open();
-
-          // wait needed to new Date() have a few milliseconds difference from previous open()
-          datepicker.async(function() {
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          if (initialPosition) {
             expect(datepicker.$.overlay.initialPosition).to.eql(initialPosition);
             done();
-          }, 1);
-        }, 1);
+          } else {
+            initialPosition = datepicker.$.overlay.initialPosition;
+            datepicker.close();
+            datepicker.open();
+          }
+        });
+        datepicker.open();
       });
 
       it('should scroll to selected value by default', function(done) {
@@ -176,19 +157,6 @@
             bubbles: true,
             node: datepicker.$.overlay
           });
-        });
-        datepicker.open();
-      });
-
-      it('should focus the input on overlay close', function(done) {
-        var spy = sinon.spy(datepicker.$.input, 'focus');
-        datepicker.addEventListener('iron-overlay-closed', function() {
-          expect(spy.called).to.be.true;
-          done();
-        });
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          expect(spy.called).to.be.false;
-          datepicker.close();
         });
         datepicker.open();
       });
@@ -450,10 +418,6 @@
           datepicker.open();
           expect(datepicker.$.clear.clientHeight).to.equal(0);
         });
-
-        it('should not be focusable', function() {
-          expect(datepicker.$.inputcontainer.tabIndex).to.equal(-1);
-        });
       });
 
       describe('Readonly', function() {
@@ -478,7 +442,7 @@
         });
 
         it('should be focusable', function() {
-          expect(datepicker.$.inputcontainer.tabIndex).to.equal(0);
+          expect(datepicker.$.input.tabIndex).to.equal(0);
         });
       });
 

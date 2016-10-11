@@ -11,7 +11,8 @@
   vaadin.elements.datepicker.DatePickerBehaviorImpl = {
     observers: [
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-      '_validateInput(_selectedDate, _minDate, _maxDate)'
+      '_validateInput(_selectedDate, _minDate, _maxDate)',
+      '_focusedDateChanged(_focusedDate, i18n.formatDate)'
     ],
 
     properties: {
@@ -21,6 +22,8 @@
       _selectedDate: {
         type: Date
       },
+
+      _focusedDate: Date,
 
       /**
        * The value for this element.
@@ -127,11 +130,22 @@
         // Date object in 'MM/DD/YYYY' -format
       },
 
+      // A function to parse the given text to a `Date`
+      // object. Must properly parse (at least) text
+      // formatted by `formatDate`.
+      // Setting the property to null will disable
+      // keyboard input feature.
+      parseDate: function(text) {
+        // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
+        // a Date object
+      }
+
       // A function to format given `monthName` and
       // `fullYear` integer as calendar title string.
       formatTitle: function(monthName, fullYear) {
         return monthName + ' ' + fullYear;
       }
+
     }
 
        *
@@ -151,6 +165,33 @@
             cancel: 'Cancel',
             formatDate: function(d) {
               return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+            },
+            parseDate: function(text) {
+              var parts = text.split('/');
+              var today = new Date();
+              var date, month = today.getMonth(), year = today.getFullYear();
+
+              if (parts.length === 3) {
+                year = parseInt(parts[2]);
+                if (parts[2].length === 2 && year >= 0) {
+                  year += year < 50 ? 2000 : 1900;
+                }
+                month = parseInt(parts[0]) - 1;
+                date = parseInt(parts[1]);
+              } else if (parts.length === 2) {
+                month = parseInt(parts[0]) - 1;
+                date = parseInt(parts[1]);
+              } else if (parts.length === 1) {
+                date = parseInt(parts[0]);
+              }
+
+              if (date !== undefined) {
+                var result = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+                result.setFullYear(year);
+                result.setMonth(month);
+                result.setDate(date);
+                return result;
+              }
             },
             formatTitle: function(monthName, fullYear) {
               return monthName + ' ' + fullYear;
@@ -201,6 +242,20 @@
       _maxDate: {
         type: Date,
         value: null
+      },
+
+      _forwardKeysToOverlay: Boolean,
+
+      _cachedInputValue: String,
+
+      _noInput: {
+        type: Boolean,
+        computed: '_isNoInput(_fullscreen, i18n, i18n.*, _ios)'
+      },
+
+      _ios: {
+        type: Boolean,
+        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/)
       }
     },
 
@@ -231,6 +286,7 @@
       // inside the overlay
       if (!this.disabled && !this.readonly && (!e || Polymer.dom(e).path.indexOf(this.$.overlay) < 0)) {
         this.$.dropdown.open();
+        this._forwardKeysToOverlay = false;
       }
     },
 
@@ -263,15 +319,27 @@
       return date;
     },
 
+    _isNoInput: function() {
+      return this._fullscreen || !this.i18n.parseDate || this._ios;
+    },
+
     _formatISO: function(date) {
       return date instanceof Date ?
         (new Date(date.getTime() - date.getTimezoneOffset() * 60000)).toISOString().split('T')[0] :
         '';
     },
 
-    _selectedDateChanged: function(selectedDate) {
+    _selectedDateChanged: function(selectedDate, formatDate) {
       this.value = this._formatISO(selectedDate);
-      this._inputValue = selectedDate ? this.i18n.formatDate(selectedDate) : '';
+      this._focusedDate = selectedDate;
+      this._cachedInputValue = this._inputValue = selectedDate ? formatDate(selectedDate) : '';
+    },
+
+    _focusedDateChanged: function(focusedDate, formatDate) {
+      if (!this._ignoreFocusedDateChange && !this._noInput && this.opened) {
+        this._inputValue = focusedDate ? formatDate(focusedDate) : '';
+        this._input().setSelectionRange(0, this._inputValue.length);
+      }
     },
 
     _hasValue: function(value) {
@@ -343,6 +411,10 @@
       this.$.overlay.initialPosition = this._selectedDate ||
         this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
       this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
+      // Have a default focused date
+      this._ignoreFocusedDateChange = true;
+      this.$.overlay.focusedDate = this.$.overlay.focusedDate || this.$.overlay.initialPosition;
+      this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
       // We cannot use iron-resize event because 1- we fire it, 2- it's fired
@@ -354,10 +426,10 @@
         this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
       }
 
-      // focus to enable keyboard navigation
-      this.$.overlay.focus();
-
+      // focus to enable keyboard navigation and keyboard input
+      this._focus();
       this.updateStyles();
+
     },
 
     // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -382,8 +454,6 @@
       window.removeEventListener('scroll', this._boundOnScroll, true);
       window.removeEventListener('resize', this._boundOnScroll, true);
 
-      this._focus();
-
       if (this._touchPrevented) {
         this._touchPrevented.forEach(function(prevented) {
           prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
@@ -392,6 +462,30 @@
       }
 
       this.updateStyles();
+      this._forwardKeysToOverlay = false;
+
+      // Select the parsed input or focused date
+      this._ignoreFocusedDateChange = true;
+      if (this.i18n.parseDate) {
+        var inputValue = this._inputValue;
+        var parsedDate = this.i18n.parseDate(inputValue);
+        if (this._isValidDate(parsedDate)) {
+          this._selectedDate = parsedDate;
+        } else {
+          this._selectedDate = null;
+          this._inputValue = inputValue;
+        }
+      } else if (this._focusedDate) {
+        this._selectedDate = this._focusedDate;
+      }
+      this._ignoreFocusedDateChange = false;
+
+      var input = window.unwrap(this.inputElement);
+      if ((this.shadowRoot && this.shadowRoot.activeElement === input) || document.activeElement === input) {
+        input.selectionStart = input.selectionEnd;
+      }
+
+      this.validate();
     },
 
     detached: function() {
@@ -415,7 +509,11 @@
     },
 
     _focus: function() {
-      this.inputElement.focus();
+      if (this._noInput) {
+        this.$.overlay.focus();
+      } else {
+        this.inputElement.focus();
+      }
     },
 
     _preventDefault: function(e) {
@@ -426,7 +524,7 @@
      * Keyboard Navigation
      */
     _eventKey: function(e) {
-      var keys = ['down', 'up'];
+      var keys = ['down', 'up', 'enter', 'esc', 'tab'];
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -436,17 +534,75 @@
       }
     },
 
+    _isValidDate: function(d) {
+      return d && !isNaN(d.getTime());
+    },
+
     _onKeydown: function(e) {
+      if (this._noInput) {
+        // The input element cannot be readonly as it would conflict with
+        // the required attribute. Both are not allowed on an input element.
+        // Therefore we prevent default on most keydown events.
+        var allowedKeys = [
+          9 // tab
+        ];
+        if (allowedKeys.indexOf(e.keyCode) === -1) {
+          e.preventDefault();
+        }
+      }
+
       switch (this._eventKey(e)) {
         case 'down':
         case 'up':
           // prevent scrolling the page with arrows
           e.preventDefault();
-
-          if (!this.opened) {
-            this.open();
+          if (!this._forwardKeysToOverlay) {
+            if (this.opened) {
+              this._cachedInputValue = this._inputValue;
+              this._forwardKeysToOverlay = true;
+            } else {
+              this.open();
+            }
           }
           break;
+        case 'enter':
+          if (this.$.overlay.focusedDate) {
+            this._selectedDate = this.$.overlay.focusedDate;
+          }
+          this.close();
+          break;
+        case 'esc':
+          if (this._forwardKeysToOverlay) {
+            // The keys are forwarded to ovelay, revert the input text to the cached value
+            this._inputValue = this._cachedInputValue;
+            this._userInputValueChanged();
+
+            if (!this._inputValue) {
+              // Default to today
+              this.$.overlay.focusedDate = new Date();
+            }
+          } else {
+            var newInputValue = this._selectedDate ? this.i18n.formatDate(this._selectedDate) : '';
+            if (newInputValue !== this._inputValue) {
+              this.open();
+              this.$.overlay.focusedDate = this._selectedDate || new Date();
+            } else {
+              this._focusedDate = this._selectedDate;
+            }
+            this._inputValue = newInputValue;
+          }
+
+          this._forwardKeysToOverlay = false;
+          break;
+
+          case 'tab':
+            this.close();
+            return;
+
+      }
+
+      if (this.opened && this._forwardKeysToOverlay) {
+        this.$.overlay._onKeydown(e);
       }
     },
 
@@ -458,7 +614,25 @@
 
     _dateAllowed: function(date, min, max) {
       return (!min || date >= min) && (!max || date <= max);
+    },
+
+    _userInputValueChanged: function() {
+      var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
+      if (this._isValidDate(parsedDate)) {
+        this._ignoreFocusedDateChange = true;
+        this._focusedDate = parsedDate;
+        this._ignoreFocusedDateChange = false;
+      } else {
+        this._forwardKeysToOverlay = false;
+      }
+
+      if (!this.opened) {
+        this.open();
+        // iOS needs a refit after input blur animation has finished
+        this.$.dropdown.async(this.$.dropdown.refit, 500);
+      }
     }
+
   };
 
   /** @polymerBehavior vaadin.elements.datepicker.DatePickerBehavior */

@@ -241,7 +241,7 @@
         <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
         <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
-      <iron-icon id="toggle" icon="event" on-tap="_close"></iron-icon>
+      <iron-icon id="toggle" icon="event" on-tap="_cancel"></iron-icon>
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
@@ -274,10 +274,10 @@
     </div>
 
     <div id="footer" on-touchend="_preventDefault">
-      <paper-button id="todayButton" on-tap="_scrollToCurrentMonth">
+      <paper-button id="todayButton" on-tap="_scrollToCurrentMonth" tabindex="-1">
         [[i18n.today]]
       </paper-button>
-      <paper-button id="cancelButton" on-tap="_close">
+      <paper-button id="cancelButton" on-tap="_cancel" tabindex="-1">
         [[i18n.cancel]]
       </paper-button>
     </div>
@@ -306,6 +306,7 @@
          */
         focusedDate: {
           type: Date,
+          notify: true,
           observer: '_focusedDateChanged'
         },
 
@@ -450,9 +451,6 @@
         }
 
         this.scrollToDate(new Date(), true);
-
-        // focus for keyboard navigation.
-        this.focus();
       },
 
       _showClear: function(selectedDate) {
@@ -628,6 +626,11 @@
         this.fire('close');
       },
 
+      _cancel: function() {
+        this.focusedDate = this.selectedDate;
+        this._close();
+      },
+
       _preventDefault: function(e) {
         e.preventDefault();
       },
@@ -653,6 +656,7 @@
         var eventKey = this._eventKey(e);
         if (eventKey) {
           e.preventDefault();
+          e.stopPropagation();
 
           switch (eventKey) {
             case 'down':
@@ -668,9 +672,6 @@
               this._moveFocusByDays(-1);
               break;
             case 'enter':
-              if (this.focusedDate) {
-                this.selectedDate = this.focusedDate;
-              }
               this._close();
               break;
             case 'space':

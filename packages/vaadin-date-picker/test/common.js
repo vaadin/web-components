@@ -1,5 +1,6 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
+var android = /(android)/i.test(navigator.userAgent);
 
 function getDefaultI18n() {
   return {

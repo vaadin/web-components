@@ -130,7 +130,7 @@ If you want to replace the default input field with a custom implementation, you
         fill: rgba(0, 0, 0, .86);
       }
 
-      #input {
+      #input[no-input] {
         pointer-events: none;
       }
 
@@ -168,22 +168,22 @@ If you want to replace the default input field with a custom implementation, you
 
     <paper-input-container id="inputcontainer"
         auto-validate$="[[autoValidate]]"
-        tabindex$="[[_tabindex(disabled)]]"
         invalid$="[[invalid]]"
         disabled$="[[disabled]]">
       <label id="label">[[label]]</label>
       <input id="input"
           is="iron-input"
           autocomplete="off"
-          tabindex="-1"
           type="text"
           on-focus="_focus"
-          on-keydown="_onKeyDown"
+          value="{{_userInputValue::input}}"
           name$="[[name]]"
           invalid="{{invalid}}"
           required$="[[required]]"
           validator="[[validator]]"
-          disabled$="[[disabled]]" />
+          disabled$="[[disabled]]"
+          readonly$="[[readonly]]"
+          no-input$="[[_noInput]]" />
       <div suffix id="clear" on-tap="_clear">
         <iron-icon icon="clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
@@ -213,7 +213,7 @@ If you want to replace the default input field with a custom implementation, you
           selected-date="{{_selectedDate}}"
           class="dropdown-content"
           on-close="close"
-          focused-date="[[focusedDate]]"
+          focused-date="{{_focusedDate}}"
           show-week-numbers="[[showWeekNumbers]]"
           min-date="[[_minDate]]"
           max-date="[[_maxDate]]"
@@ -265,8 +265,14 @@ If you want to replace the default input field with a custom implementation, you
         /**
          * The error message to display when the input is invalid.
          */
-        errorMessage: String
+        errorMessage: String,
+
+        _userInputValue: String
       },
+
+      observers: [
+        '_userInputValueChanged(_userInputValue)'
+      ],
 
       // TODO: revisit this in order to use validatable-behavior for both the full and
       // the light component. Consider auto-validate, and validate(value) signature.
@@ -275,7 +281,9 @@ If you want to replace the default input field with a custom implementation, you
        * it with the iron-input validation.
        */
       _getValidity: function() {
-        return this.inputElement.validate() && (!this._selectedDate || this._dateAllowed(this._selectedDate, this._minDate, this._maxDate));
+        var inputValid = !this._inputValue || (this._selectedDate && this._inputValue === this.i18n.formatDate(this._selectedDate));
+        var minMaxValid = !this._selectedDate || this._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+        return this.inputElement.validate() && inputValid && minMaxValid;
       },
 
       _clear: function(e) {
@@ -287,22 +295,6 @@ If you want to replace the default input field with a custom implementation, you
       _toggle: function(e) {
         e.stopPropagation();
         this[this.$.dropdown.opened ? 'close' : 'open']();
-      },
-
-      _tabindex: function(disabled) {
-        return disabled ? -1 : 0;
-      },
-
-      _onKeyDown: function(e) {
-        // The input element cannot be readonly as it would conflict with
-        // the required attribute. Both are not allowed on an input element.
-        // Therefore we prevent default on most keydown events.
-        var allowedKeys = [
-          9 // tab
-        ];
-        if (allowedKeys.indexOf(e.keyCode) === -1) {
-          e.preventDefault();
-        }
       },
 
       _input: function() {
