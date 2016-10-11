@@ -1,0 +1,41 @@
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+
+<dom-module id="vaadin-device-detector">
+  <template>
+    <iron-media-query query="min-device-width: 750px" query-matches="{{wide}}"></iron-media-query>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-device-detector',
+
+      properties: {
+        phone: {
+          type: Boolean,
+          computed: '_phone(wide, touch)',
+          notify: true
+        },
+
+        touch: {
+          type: Boolean,
+          value: function() {
+            try {
+              document.createEvent('TouchEvent');
+              return true;
+            } catch (err) {
+              return false;
+            }
+          }
+        },
+
+        wide: {
+          type: Boolean,
+          notify: true
+        }
+      },
+
+      _phone: function(wide, touch) {
+        return !wide && touch;
+      }
+    });
+  </script>
+</dom-module>

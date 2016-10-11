@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-device-detector.html">
+  <script src="../../web-component-tester/browser.js"></script>
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-device-detector></vaadin-device-detector>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('device detection', function() {
+      var detector, iphone, ipad, android;
+
+      before(function() {
+        detector = fixture('default');
+
+        iphone = !!navigator.userAgent.match(/iPhone/i);
+        ipad = !!navigator.userAgent.match(/iPad/i);
+        android = !!navigator.userAgent.match(/android/i);
+      });
+
+      it('should detect wide screen', function() {
+        expect(detector.wide).to.eql(!iphone && !android);
+      });
+
+      it('should detect touch support', function() {
+        expect(detector.touch).to.eql(iphone || ipad || android);
+      });
+
+      it('should detect phone', function() {
+        expect(detector.phone).to.eql(iphone || android);
+      });
+    });
+  </script>
+
+</body>
+
+</html>
