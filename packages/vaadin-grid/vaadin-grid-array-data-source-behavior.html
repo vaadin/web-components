@@ -1,0 +1,37 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.ArrayDataSourceBehavior = {
+
+    properties: {
+
+      /**
+       * An array containing the items which will be stamped to the column template
+       * instances.
+       */
+      items: Array
+
+    },
+
+    observers: [
+      '_itemsChanged(items, items.*)'
+    ],
+
+    _itemsChanged: function(items, splices) {
+      this.size = (items || []).length;
+      this.dataSource = this.dataSource || this._arrayDataSource;
+      this.clearCache();
+    },
+
+    _arrayDataSource: function(opts, cb) {
+      var items = this.items || [];
+      var start = opts.page * opts.pageSize;
+      var end = start + opts.pageSize;
+      var slice = items.slice(start, end);
+      cb(slice, items.length);
+    }
+
+  };
+</script>

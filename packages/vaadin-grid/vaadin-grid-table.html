@@ -201,7 +201,7 @@
       '_columnsChanged(columns.*, frozenColumns, _physicalItems)',
       '_sizeChanged(size, bindData)',
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)',
-      '_physicalItemsChanged(_physicalCount, columns, frozenColumns)'
+      '_physicalItemsChanged(_physicalCount, columns, frozenColumns, _physicalItems)'
     ],
 
     // The following values aim at avoiding having 2 overlapping semi-invisible
@@ -241,10 +241,10 @@
       }.bind(this));
     },
 
-    _physicalItemsChanged: function(count, columns, frozenColumns) {
+    _physicalItemsChanged: function(count, columns, frozenColumns, _physicalItems) {
       // observing _physicalCount instead of _physicalItems.length because grid
       // seems to startup somewhat faster without using this.push('_physicalItems')...
-      this._physicalItems.forEach(function(row) {
+      _physicalItems.forEach(function(row) {
         row.columns = columns;
         row.frozenColumns = frozenColumns;
       });
