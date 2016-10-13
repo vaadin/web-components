@@ -1,0 +1,155 @@
+<link rel="import" href="vaadin-grid-cell-click-behavior.html">
+
+<dom-module id="vaadin-grid-sorter">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      #indicators {
+        position: relative;
+        padding-right: 8px;
+      }
+
+      #indicators[direction=desc] #direction {
+        transform: rotateZ(180deg);
+      }
+
+      #indicators:not([direction]) {
+        opacity: 0.2;
+      }
+
+      #order {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateY(-4px) scale(0.7);
+      }
+
+    </style>
+
+    <content></content>
+    <div id="indicators" direction$="[[direction]]">
+      <div id="direction">▼</div>
+      <div id="order">[[_getDisplayOrder(_order)]]</div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-sorter',
+
+      properties: {
+
+        path: String,
+
+        direction: {
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value: null
+        },
+
+        _order: Number
+
+      },
+
+      observers: [
+        '_propertiesChanged(path, direction, isAttached)'
+      ],
+
+      behaviors: [
+        vaadin.elements.grid.CellClickBehavior
+      ],
+
+      _propertiesChanged: function(path, direction, isAttached) {
+        if (isAttached) {
+          this.fire('sorter-changed');
+        }
+      },
+
+      _getDisplayOrder: function(order) {
+        return order === null ? '' : order + 1;
+      },
+
+      _cellClick: function(e) {
+        if (this.direction === 'asc') {
+          this.direction = 'desc';
+        } else if (this.direction === 'desc') {
+          this.direction = null;
+        } else {
+          this.direction = 'asc';
+        }
+      }
+
+    });
+  </script>
+</dom-module>
+
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.SortBehavior = {
+
+    properties: {
+
+      _sorters: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      }
+
+    },
+
+    listeners: {
+      'sorter-changed': '_onSorterChanged'
+    },
+
+    _onSorterChanged: function(e) {
+      var sorter = e.target;
+
+      this._removeArrayItem(this._sorters, sorter);
+      if (sorter.direction) {
+        this._sorters.unshift(sorter);
+      }
+
+      sorter._order = null;
+      this._sorters.forEach(function(sorter, index) {
+        sorter._order = this._sorters.length > 1 ? index : null;
+      }, this);
+
+      e.stopPropagation();
+
+      this.fire('sort-order-changed', {
+        sortOrder: this._mapSorters()
+      });
+
+      if (this.dataSource) {
+        this.clearCache();
+      }
+    },
+
+    _mapSorters: function() {
+      return this._sorters.map(function(sorter) {
+        return {
+          path: sorter.path,
+          direction: sorter.direction
+        };
+      });
+    },
+
+    _removeArrayItem: function(array, item) {
+      var index = array.indexOf(item);
+      if (index > -1) {
+        array.splice(index, 1);
+      }
+    },
+
+  };
+</script>
