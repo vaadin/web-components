@@ -10,24 +10,27 @@
       properties: {
         column: Object,
         expanded: Boolean,
+        flex: Number,
         instance: Object,
         index: Number,
         item: Object,
         selected: Boolean,
         template: Object,
         target: Object,
+        width: String,
 
         _forwardedParentProps: Object
       },
 
       observers: ['_columnChanged(column)',
-        '_templateChanged(template, target)',
         '_expandedChanged(expanded, instance)',
+        '_flexChanged(flex)',
         '_indexChanged(index, instance)',
         '_itemChanged(item, instance)',
         '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)',
         '_selectedChanged(selected, instance)',
-        '_toggleContent(isAttached, _cellContent)'
+        '_toggleContent(isAttached, _cellContent)',
+        '_widthChanged(width)'
       ],
 
       created: function() {
@@ -40,16 +43,24 @@
       },
 
       _columnChanged: function(column) {
+        this.flex = column.flex;
+        this.headerTemplate = column.headerTemplate;
+        this.footerTemplate = column.footerTemplate;
         this.template = column.template;
-        this.listen(column, 'template-changed', '_columnTemplateChanged');
+        this.width = column.width;
+        this.listen(column, 'property-changed', '_columnPropChanged');
       },
 
-      _columnTemplateChanged: function(e) {
-        this.template = e.detail.value;
+      _columnPropChanged: function(e) {
+        this[e.detail.path] = e.detail.value;
       },
 
       _expandedChanged: function(expanded, instance) {
         instance.notifyPath('expanded', expanded);
+      },
+
+      _flexChanged: function(flex) {
+        this.style.flexGrow = flex;
       },
 
       _indexChanged: function(index, instance) {
@@ -74,6 +85,10 @@
             Polymer.dom(this.target).removeChild(cellContent);
           }
         }
+	    },
+
+      _widthChanged: function(width) {
+        this.style.flexBasis = width;
       },
 
       _templateChanged: function(template, target) {
@@ -91,6 +106,7 @@
 
         this.instance = this.stamp(null);
         template.instances = template.instances || [];
+        this._templateInstances = template.instances;
         template.instances.push(this.instance);
 
         // use the same forwardedParentProps instance for all cells using the same template.
@@ -186,36 +202,11 @@
           var prop = parentProps.path.substring(parentProps.path.indexOf('.') + 1);
           var value = parentProps.value;
 
-          this.template.instances.forEach(function(inst) {
+          this._templateInstances.forEach(function(inst) {
             inst.notifyPath(prop, value);
           });
         }
       }
-    };
-
-    var vaadinGridRowContainerCellBehavior = {
-      observers: ['_rowIndexChanged(rowIndex, _rowContainerObjects)'],
-
-      properties: {
-        colspan: {
-          type: Number,
-          notify: true
-        },
-        rowIndex: Number,
-        _rowContainerObjects: Array
-      },
-
-      _rowContainerObjectsChanged: function(e) {
-        this._rowContainerObjects = e.detail.value;
-      },
-
-      _rowIndexChanged: function(rowIndex, rowContainerObjects) {
-        if (rowContainerObjects[rowIndex]) {
-          this.template = rowContainerObjects[rowIndex].template;
-          this.colspan = rowContainerObjects[rowIndex].colspan;
-        }
-      }
-
     };
 
     Polymer({
@@ -229,10 +220,13 @@
         vaadin.elements.grid.CellClickBehavior
       ],
 
+      observers: ['_templateChanged(template, target)'],
+
       _cellClick: function() {
         this.fire('cell-click', {
           model: this.instance
         });
+
       }
 
     });
@@ -242,17 +236,16 @@
 
       extends: 'th',
 
+      properties: {
+        headerTemplate: Object
+      },
+
       behaviors: [
         Polymer.Templatizer,
-        vaadinGridTableCellBehavior,
-        vaadinGridRowContainerCellBehavior
+        vaadinGridTableCellBehavior
       ],
 
-      _columnChanged: function(column) {
-        this._rowContainerObjects = column.headers;
-        this.listen(column, 'headers-changed', '_rowContainerObjectsChanged');
-      }
-
+      observers: ['_templateChanged(headerTemplate, target)']
     });
 
     Polymer({
@@ -260,17 +253,16 @@
 
       extends: 'td',
 
+      properties: {
+        footerTemplate: Object
+      },
+
       behaviors: [
         Polymer.Templatizer,
-        vaadinGridTableCellBehavior,
-        vaadinGridRowContainerCellBehavior
+        vaadinGridTableCellBehavior
       ],
 
-      _columnChanged: function(column) {
-        this._rowContainerObjects = column.footers;
-        this.listen(column, 'footers-changed', '_rowContainerObjectsChanged');
-      }
-
+      observers: ['_templateChanged(footerTemplate, target)']
     });
   })();
 </script>

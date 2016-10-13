@@ -221,10 +221,9 @@
     },
 
     observers: [
-      '_columnsChanged(columns.*, frozenColumns, _physicalItems)',
+      '_columnsChanged(columns, frozenColumns, _physicalItems, _physicalCount)',
       '_sizeChanged(size, bindData)',
-      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)',
-      '_physicalItemsChanged(_physicalCount, columns, frozenColumns, _physicalItems)'
+      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)'
     ],
 
     // The following values aim at avoiding having 2 overlapping semi-invisible
@@ -246,31 +245,16 @@
       });
     },
 
-    _columnsChanged: function(e, frozenColumns, physicalItems) {
-      if (e.path === 'columns') {
-        physicalItems.forEach(function(row) {
-          row.columns = e.value;
-          row.frozenColumns = frozenColumns;
-        });
-      } else if (e.path.indexOf('columns.#' === 0)) {
-        physicalItems.forEach(function(row) {
-          row.notifyPath(e.path, e.value);
-        });
-      }
+    _columnsChanged: function(columns, frozenColumns, physicalItems, count) {
+      physicalItems.forEach(function(row) {
+        row.columns = columns;
+        row.frozenColumns = frozenColumns;
+      });
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
         this.$.outerscroller.style.paddingTop = this.$.items.style.borderTopWidth = this.$.header.clientHeight + 'px';
         this.$.outerscroller.style.paddingBottom = this.$.items.style.borderBottomWidth = this.$.footer.clientHeight + 'px';
       }.bind(this));
-    },
-
-    _physicalItemsChanged: function(count, columns, frozenColumns, _physicalItems) {
-      // observing _physicalCount instead of _physicalItems.length because grid
-      // seems to startup somewhat faster without using this.push('_physicalItems')...
-      _physicalItems.forEach(function(row) {
-        row.columns = columns;
-        row.frozenColumns = frozenColumns;
-      });
     },
 
     /**

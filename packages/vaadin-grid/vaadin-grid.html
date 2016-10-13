@@ -88,11 +88,7 @@
     },
 
     _columnsChanged: function(e) {
-      if (e.path === 'columns') { //new array is set
-        e.value.forEach(function(col) {
-          col.grid = this;
-        }.bind(this));
-      } else if (e.path === 'columns.splices' || //array is spliced
+      if (e.path === 'columns.splices' || //array is spliced
         (e.path.indexOf('columns.#') === 0 && e.path.split('.').length === 2)) { //column is replaced with set
         // TODO: implement splice support that will add and remove only affected cells.
         // meanwhile, deal with splices as the whole array would change.

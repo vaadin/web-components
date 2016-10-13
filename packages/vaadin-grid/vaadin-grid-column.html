@@ -13,46 +13,16 @@
       is: 'vaadin-grid-column',
 
       properties: {
-        headers: {
-          type: Array,
-          notify: true,
+        headerTemplate: {
+          type: Object,
           value: function() {
-            var headerTemplates = Polymer.dom(this).querySelectorAll('template[is=header]');
-            if (headerTemplates) {
-              return headerTemplates.map(function(t) {
-                var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
-
-                if (this.dataHost) {
-                  // set dataHost to the context where template has been defined
-                  t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-                }
-
-                return { template: t, colspan: colspan };
-              }.bind(this));
-            } else {
-              return [];
-            }
+            return this._findTemplate('header');
           }
         },
-        footers: {
-          type: Array,
-          notify: true,
+        footerTemplate: {
+          type: Object,
           value: function() {
-            var headerTemplates = Polymer.dom(this).querySelectorAll('template[is=footer]');
-            if (headerTemplates) {
-              return headerTemplates.map(function(t) {
-                var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
-
-                if (this.dataHost) {
-                  // set dataHost to the context where template has been defined
-                  t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-                }
-
-                return { template: t, colspan: colspan };
-              }.bind(this));
-            } else {
-              return [];
-            }
+            return this._findTemplate('footer');
           }
         },
         instances: {
@@ -67,14 +37,8 @@
         },
         template: {
           type: Object,
-          notify: true,
           value: function() {
-            var template = Polymer.dom(this).querySelector('template:not([is=header])');
-            if (this.dataHost) {
-              // set dataHost to the context where template has been defined
-              template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-            }
-            return template;
+            return this._findTemplate(null);
           }
         },
         width: {
@@ -85,32 +49,46 @@
         flex: {
           type: Number,
           value: 1
-        },
-
-        /**
-         * Reference to the parent <vaadin-grid> element
-         */
-        grid: Object
+        }
       },
 
-      observers: ['_flexChanged(grid, flex)', '_widthChanged(grid, width)'],
+      observers: ['_headerTemplateChanged(headerTemplate)', '_flexChanged(flex)',
+                  '_footerTemplateChanged(footerTemplate)', '_widthChanged(width)',
+                  '_templateChanged(template)'],
 
-      ready: function() {
-        // when using Polymer bindings, default values trickle down using observers.
-        // we're not using bindings between columns and cells so we need to use
-        // and fire notifications manually.
-        this.fire('headers-changed', {value: this.headers});
-        this.fire('footers-changed', {value: this.footers});
+      _findTemplate: function(type) {
+        var template = Polymer.dom(this).children.filter(function(el) {
+          return el.localName === 'template' && el.getAttribute('is') === type;
+        })[0];
+
+        if (template) {
+          if (this.dataHost) {
+            // set dataHost to the context where template has been defined
+            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+          }
+
+          return template;
+        }
       },
 
-      _flexChanged: function(grid, flex) {
-        var index = grid.columns.indexOf(this);
-        grid.notifyPath('columns.' + index + '.flex', flex);
+      _headerTemplateChanged: function(headerTemplate) {
+        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate}, {bubbles: false});
       },
 
-      _widthChanged: function(grid, width) {
-        var index = grid.columns.indexOf(this);
-        grid.notifyPath('columns.' + index + '.width', width);
+      _flexChanged: function(flex) {
+        this.fire('property-changed', {path: 'flex', value: flex}, {bubbles: false});
+      },
+
+      _footerTemplateChanged: function(footerTemplate) {
+        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate}, {bubbles: false});
+      },
+
+      _widthChanged: function(width) {
+        this.fire('property-changed', {path: 'width', value: width}, {bubbles: false});
+      },
+
+      _templateChanged: function(template) {
+        this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
       }
     });
   </script>
