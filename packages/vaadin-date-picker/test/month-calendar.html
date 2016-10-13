@@ -219,7 +219,7 @@
         });
 
         function getWeekNumbers(cal) {
-          return Polymer.dom(cal.$.monthGrid).querySelectorAll('.weekSeparator').map(function(elem) {
+          return Polymer.dom(cal.$.monthGrid).querySelectorAll('.weeknumber').map(function(elem) {
             return parseInt(elem.textContent, 10);
           });
         }
