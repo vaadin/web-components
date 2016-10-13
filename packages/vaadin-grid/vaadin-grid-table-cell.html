@@ -1,48 +1,6 @@
-<dom-module id="vaadin-grid-table-cell-styles">
-  <template>
-    <style>
-       ::content>div {
-        padding: 8px;
-        width: 100%;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        white-space: nowrap;
-      }
-
-       :host {
-        flex-shrink: 0;
-        flex-grow: 1;
-        flex-basis: 100px;
-        box-sizing: border-box;
-        display: flex;
-        overflow: hidden;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-table-cell">
-  <template>
-    <style include="vaadin-grid-table-cell-styles"></style>
-    <content></content>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-table-header-cell">
-  <template>
-    <style include="vaadin-grid-table-cell-styles"></style>
-    <content></content>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-table-footer-cell">
-  <template>
-    <style include="vaadin-grid-table-cell-styles"></style>
-    <content></content>
-  </template>
-</dom-module>
+<dom-module id="vaadin-grid-table-cell"></dom-module>
+<dom-module id="vaadin-grid-table-header-cell"></dom-module>
+<dom-module id="vaadin-grid-table-footer-cell"></dom-module>
 
 <script>
   (function() {
@@ -66,7 +24,8 @@
         '_indexChanged(index, instance)',
         '_itemChanged(item, instance)',
         '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)',
-        '_selectedChanged(selected, instance)'
+        '_selectedChanged(selected, instance)',
+        '_toggleContent(isAttached, _cellContent)'
       ],
 
       created: function() {
@@ -105,6 +64,16 @@
         instance.notifyPath('selected', selected);
       },
 
+      _toggleContent: function(isAttached, cellContent) {
+        if (Polymer.Settings.useShadow) {
+          if (isAttached) {
+            Polymer.dom(this.target).appendChild(cellContent);
+          } else if (cellContent.parentNode) {
+            Polymer.dom(this.target).removeChild(cellContent);
+          }
+        }
+      },
+
       _templateChanged: function(template, target) {
         this.templatize(template);
 
@@ -133,34 +102,33 @@
         }
 
         this.style.height = '';
-        var item = document.createElement('div');
-        var itemClass = 'item-' + target.childElementCount;
-        item.classList.add(itemClass);
+        this._cellContent = document.createElement('div');
+        this._cellContent.setAttribute('class', 'cell-content');
 
         if (Polymer.Settings.useShadow) {
-
-          Polymer.dom(target).appendChild(item);
+          // Shadow
+          target._contentIndex = target._contentIndex + 1 || 0;
+          this._cellContent.setAttribute('cell-content-id', target._contentIndex);
 
           var content = document.createElement('content');
-          content.setAttribute('select', '.' + itemClass);
+          content.setAttribute('select', '[cell-content-id="' + target._contentIndex +'"]');
           Polymer.dom(this).appendChild(content);
-
         } else {
           // Non-shadow
 
           // Can't use Polymer.dom.appendChild here as using it will "fix"
           // the item later with the style scope of vaadin-grid-table
-          this.appendChild(item);
+          this.appendChild(this._cellContent);
 
           // wait until item is really attached to DOM. (Polymer.dom.flush())
           // not helping here for some reason.
           this.async(function() {
             if (this.target.domHost) {
-              Polymer.StyleTransformer.dom(item, this.target.domHost.tagName.toLowerCase(), false, false);
+              Polymer.StyleTransformer.dom(this._cellContent, this.target.domHost.tagName.toLowerCase(), false, false);
             }
           });
         }
-        Polymer.dom(item).appendChild(this.instance.root);
+        Polymer.dom(this._cellContent).appendChild(this.instance.root);
       },
 
       _forwardInstanceProp: function(inst, prop, value) {
