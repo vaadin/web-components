@@ -38,12 +38,8 @@
         @apply(--vaadin-date-picker-calendar-cell);
       }
 
-      :host([week-numbers]) #monthGrid {
-        padding-left: 5%;
-      }
-
       :host([week-numbers]) #monthGrid div {
-        padding: 3px 0;
+        width: calc(12.5% - 2px);
       }
 
       #monthGrid div:not(:empty) {
@@ -59,6 +55,12 @@
         padding: 8px 0;
         @apply(--paper-font-caption);
         @apply(--vaadin-date-picker-calendar-weekday-cell);
+      }
+
+      #monthGrid div.weekday:empty,
+      #monthGrid div.weeknumber {
+        width: calc(10% - 2px);
+        padding-right: 1.25%;
       }
 
       #monthGrid div[today] {
@@ -93,30 +95,22 @@
         @apply(--vaadin-date-picker-calendar-cell-disabled);
       }
 
-      #monthGrid .weekSeparator {
-        position: relative;
-        width: 100%;
-        height: 1px;
-        padding: 0;
-        font-size: 70%;
-        line-height: 0;
-        background: rgba(0, 0, 0, .08);
-        color: rgba(0, 0, 0, .4);
-        pointer-events: none;
-        margin: 2px 0 2px 0;
-        text-indent: -5%;
-        @apply(--vaadin-date-picker-calendar-week-separator);
+      #monthGrid div.weeknumber {
+        cursor: default;
+        color: rgba(0, 0, 0, 0.4);
+        @apply(--paper-font-caption);
+        @apply(--vaadin-date-picker-calendar-weeknumber-cell);
       }
     </style>
 
     <div id="title">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek)]]">
+      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdaysShort, i18n.firstDayOfWeek, showWeekNumbers)]]">
         <div class="weekday">[[item]]</div>
       </template>
       <template is="dom-repeat" items="[[_days]]">
         <template is="dom-if" if="[[_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek, index)]]">
-          <span class="weekSeparator">[[_getWeekNumber(item, _days)]]</span>
+          <div class="weeknumber">[[_getWeekNumber(item, _days)]]</div>
         </template>
         <div today$="[[_isToday(item)]]" selected$="[[_dateEquals(item, selectedDate)]]" focused$="[[_dateEquals(item, focusedDate)]]" date="[[item]]" disabled$="[[!_dateAllowed(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
       </template>
@@ -150,7 +144,8 @@
         focusedDate: Date,
 
         showWeekNumbers: {
-          type: Boolean
+          type: Boolean,
+          value: false
         },
 
         i18n: {
@@ -215,8 +210,15 @@
         date.setDate(date.getDate() + delta);
       },
 
-      _getWeekDayNames: function(weekDayNames, firstDayOfWeek) {
-        return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
+      _getWeekDayNames: function(weekDayNames, firstDayOfWeek, showWeekNumbers) {
+        var _weekDayNames = weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
+
+        // Add extra space in the beginning of weekday names
+        if (showWeekNumbers && firstDayOfWeek === 1) {
+          _weekDayNames.unshift('');
+        }
+
+        return _weekDayNames;
       },
 
       _getDate: function(date) {
