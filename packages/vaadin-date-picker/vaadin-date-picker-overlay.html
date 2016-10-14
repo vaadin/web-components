@@ -8,8 +8,10 @@
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
+<link rel="import" href="vaadin-date-picker-helper.html">
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -233,9 +235,20 @@
         flex-shrink: 0;
         @apply(--vaadin-date-picker-footer);
       }
+
+      #announcer {
+        display: inline-block;
+        position: fixed;
+        clip: rect(0px, 0px, 0px, 0px);
+        clip-path: inset(100%);
+      }
     </style>
 
-    <div id="header" on-touchend="_preventDefault">
+    <div id="announcer" role="alert" aria-live="polite">
+      [[i18n.calendar]]
+    </div>
+
+    <div id="header" on-touchend="_preventDefault" aria-hidden="true">
       <paper-input-container>
         <label>[[label]]</label>
         <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
@@ -244,7 +257,7 @@
       <iron-icon id="toggle" icon="event" on-tap="_cancel"></iron-icon>
     </div>
 
-    <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller">
+    <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
       [[_yearAfterXMonths(_visibleMonthIndex)]]
       <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="chevron-right"></iron-icon>
     </div>
@@ -267,13 +280,13 @@
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25">
         <template>
-          <div>[[_yearAfterXYears(index)]]</div>
-          <div style="font-size: 18px; line-height: 56px; opacity: 0.3;">•</div>
+          <div role="button">[[_yearAfterXYears(index)]]</div>
+          <div style="font-size: 18px; line-height: 56px; opacity: 0.3;" aria-hidden="true">•</div>
         </template>
       </vaadin-infinite-scroller>
     </div>
 
-    <div id="footer" on-touchend="_preventDefault">
+    <div id="footer" on-touchend="_preventDefault" role="toolbar">
       <paper-button id="todayButton" on-tap="_scrollToCurrentMonth" tabindex="-1">
         [[i18n.today]]
       </paper-button>
@@ -370,6 +383,27 @@
         this._translateX = this._yearScrollerWidth;
         this.toggleClass('animate', true);
         this.setScrollDirection('y', this.$.scrollers);
+        Polymer.IronA11yAnnouncer.requestAvailability();
+      },
+
+      announceFocusedDate: function() {
+        var focusedDate = this._currentlyFocusedDate();
+        var announce = [];
+        if (vaadin.elements.datepicker.DatePickerHelper._dateEquals(focusedDate, new Date())) {
+          announce.push(this.i18n.today);
+        }
+        announce = announce.concat([
+          this.i18n.weekdays[focusedDate.getDay()],
+          focusedDate.getDate(),
+          this.i18n.monthNames[focusedDate.getMonth()],
+          focusedDate.getFullYear()
+        ]);
+        if (this.showWeekNumbers && this.i18n.firstDayOfWeek === 1) {
+          announce.push(this.i18n.week);
+          announce.push(vaadin.elements.datepicker.DatePickerHelper._getISOWeekNumber(focusedDate));
+        }
+        this.fire('iron-announce', {text: announce.join(' ')});
+        return;
       },
 
       /**
@@ -675,7 +709,7 @@
               this._close();
               break;
             case 'space':
-              if (this._dateEquals(this.focusedDate, this.selectedDate)) {
+              if (vaadin.elements.datepicker.DatePickerHelper._dateEquals(this.focusedDate, this.selectedDate)) {
                 this.selectedDate = '';
               } else {
                 this.selectedDate = this.focusedDate;
@@ -694,16 +728,6 @@
               this._moveFocusByMonths(e.shiftKey ? -12 : -1);
               break;
           }
-        }
-      },
-
-      _dateEquals: function(date1, date2) {
-        if (date1 && date2) {
-          return date1.getFullYear() === date2.getFullYear() &&
-            date1.getMonth() === date2.getMonth() &&
-            date1.getDate() === date2.getDate();
-        } else {
-          return false;
         }
       },
 

@@ -36,11 +36,15 @@
 
             var datepicker = document.querySelector('vaadin-date-picker#finnish');
             datepicker.i18n = {
+              week: 'viikko',
+              calendar: 'kalenteri',
+              clear: 'tyhjennä',
               today: 'tänään',
               cancel: 'peruuta',
               firstDayOfWeek: 1,
               monthNames:
                'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'),
+              weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
               weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
               formatDate: function(date) {
                 return Sugar.Date.format(date, '{short}');

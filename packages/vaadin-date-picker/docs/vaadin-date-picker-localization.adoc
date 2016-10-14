@@ -16,11 +16,15 @@ The [vaadinelement]#vaadin-date-picker# element can be localized through the [pr
 [source,javascript]
 ----
 document.getElementById('my-picker').i18n = {
+  week: 'viikko',
+  calendar: 'kalenteri',
+  clear: 'tyhjennä',
   today: 'tänään',
   cancel: 'peruuta',
   firstDayOfWeek: 1,
   monthNames: ['tammikuu','helmikuu','maaliskuu','huhtikuu','toukokuu','kesäkuu',
                'heinäkuu','elokuu','syyskuu','lokakuu','marraskuu','joulukuu'],
+  weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
   weekdaysShort: ['su','ma','ti','ke','to','pe','la'],
   formatDate: function(d) {
     return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
@@ -45,8 +49,12 @@ document.getElementById('my-picker').i18n = {
 ----
 
 * [propertyname]#i18n.monthNames# – An array of month names starting from January.
-* [propertyname]#i18n.weekdaysShort# – An array of short weekday names starting from Sunday.
+* [propertyname]#i18n.weekdays# – An array of weekday names starting from Sunday. Used in screen reader announcements.
+* [propertyname]#i18n.weekdaysShort# – An array of short weekday names starting from Sunday. Displayed in the calendar.
 * [propertyname]#i18n.firstDayOfWeek# – An integer indicating the first day of the week (0 = Sunday, 1 = Monday, etc.).
+* [propertyname]#i18n.week# – Used in screen reader announcements along with week numbers, if they are displayed.
+* [propertyname]#i18n.calendar# – Translation of the Calendar icon button title.
+* [propertyname]#i18n.clear# – Translation of the Clear icon button title.
 * [propertyname]#i18n.today# – Translation of the Today shortcut button text.
 * [propertyname]#i18n.cancel# – Translation of the Cancel button text.
 * [propertyname]#i18n.formatDate# – A function to format given [classname]#Date# object as [classname]#String#.
@@ -82,6 +90,9 @@ document.querySelector('vaadin-date-picker').i18n = {
   monthNames: moment.months(),
   weekdaysShort: moment.weekdaysShort(),
   firstDayOfWeek: moment.localeData().firstDayOfWeek(),
+  week: 'Viikko',
+  calendar: 'Kalenteri',
+  clear: 'Tyhjennä',
   today: 'Tänään',
   cancel: 'Peruuta',
   formatDate: function(d) {

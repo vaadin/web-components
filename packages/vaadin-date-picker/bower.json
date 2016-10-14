@@ -33,7 +33,8 @@
     "paper-styles": "polymerelements/paper-styles#^1.1.3",
     "iron-media-query": "polymerelements/iron-media-query#^1.0.8",
     "paper-ripple": "polymerelements/paper-ripple#^1.0.5",
-    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.1.1"
+    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.1.1",
+    "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.1.0",
