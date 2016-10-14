@@ -18,7 +18,7 @@ On a desktop browser the input field can also be used for setting the [vaadinele
 
 When a date is selected, the user can clear the value with a button on the right side of the selection label.
 The dropdown footer has a today button for quickly jumping to the current month.
-It does not select a date but only scrolls the calendar view.
+If the calendar view is already positioned on the current month, then the today button selects today and closes the dropdown.
 A cancel button in the footer allows closing the dropdown without affecting the value.
 
 == Keyboard Navigation Overview

@@ -287,7 +287,7 @@
     </div>
 
     <div id="footer" on-touchend="_preventDefault" role="toolbar">
-      <paper-button id="todayButton" on-tap="_scrollToCurrentMonth" tabindex="-1">
+      <paper-button id="todayButton" on-tap="_onTodayTap" tabindex="-1">
         [[i18n.today]]
       </paper-button>
       <paper-button id="cancelButton" on-tap="_cancel" tabindex="-1">
@@ -476,6 +476,18 @@
       _formatDisplayed: function(date, formatDate) {
         if (date) {
           return formatDate(date);
+        }
+      },
+
+      _onTodayTap: function() {
+        var today = new Date();
+        if (this.$.scroller.position === this._differenceInMonths(today, this._originDate)) {
+          // Select today only if the month scroller is positioned exactly
+          // at the beginning of the current month
+          this.selectedDate = today;
+          this._close();
+        } else {
+          this._scrollToCurrentMonth();
         }
       },
 

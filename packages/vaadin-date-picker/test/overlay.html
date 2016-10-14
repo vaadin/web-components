@@ -181,6 +181,39 @@
             });
           });
         });
+
+        it('should close the overlay and select today if on current month when tapping on today button', function(done) {
+          var today = new Date();
+          overlay.scrollToDate(today);
+          var spy = sinon.spy();
+          overlay.addEventListener('close', spy);
+
+          waitUntilScrolledTo(overlay, today, function() {
+            tap(overlay.$.todayButton);
+
+            expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
+            expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
+            expect(overlay.selectedDate.getDate()).to.equal(today.getDate());
+            expect(spy.calledOnce).to.be.true;
+            done();
+          });
+        });
+
+        it('should not close the overlay and not select today if not on current month when tapping on today button', function(done) {
+          var today = new Date();
+          overlay.scrollToDate(today);
+          var spy = sinon.spy();
+          overlay.addEventListener('close', spy);
+
+          waitUntilScrolledTo(overlay, today, function() {
+            overlay.$.scroller.$.scroller.scrollTop -= 1;
+            tap(overlay.$.todayButton);
+
+            expect(overlay.selectedDate).to.be.undefined;
+            expect(spy.called).to.be.false;
+            done();
+          });
+        });
       });
     });
   </script>
