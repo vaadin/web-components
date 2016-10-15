@@ -142,7 +142,7 @@
 
         comboBox.close();
 
-        expect(comboBox._filter).to.be.empty;
+        expect(comboBox.filter).to.be.empty;
       });
 
       it('should filter boolean', function() {
@@ -201,7 +201,7 @@
 
         setInputValue('foo');
 
-        expect(getFilteredItems()).to.be.null;
+        expect(getFilteredItems()).to.be.undefined;
       });
 
       it('should hide overlay when filtered items length is 0', function() {

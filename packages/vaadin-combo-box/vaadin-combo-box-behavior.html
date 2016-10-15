@@ -61,9 +61,13 @@
         value: -1
       },
 
-      _filter: {
+      /**
+       * String used for filtering items.
+       */
+      filter: {
         type: String,
-        value: ''
+        value: '',
+        notify: true
       },
 
       /**
@@ -117,7 +121,7 @@
     },
 
     observers: [
-      '_filterChanged(_filter, itemValuePath, itemLabelPath)',
+      '_filterChanged(filter, itemValuePath, itemLabelPath)',
       '_itemsChanged(items.splices)',
       '_setItems(items, itemValuePath, itemLabelPath)'
     ],
@@ -354,7 +358,7 @@
 
       this._clearSelectionRange();
 
-      this._filter = '';
+      this.filter = '';
     },
 
     /**
@@ -363,13 +367,13 @@
     _inputValueChanged: function(e) {
       // Handle only input events from our inputElement.
       if (Polymer.dom(e).path.indexOf(this.inputElement) !== -1) {
-        if (this._filter === this._inputElementValue) {
+        if (this.filter === this._inputElementValue) {
           // Filter and input value might get out of sync, while keyboard navigating for example.
           // Afterwards, input value might be changed to the same value as used in filtering.
           // In situation like these, we need to make sure all the filter changes handlers are run.
-          this._filterChanged(this._filter);
+          this._filterChanged(this.filter);
         } else {
-          this._filter = this._inputElementValue;
+          this.filter = this._inputElementValue;
         }
 
         if (!this.opened) {
@@ -410,8 +414,8 @@
     },
 
     _revertInputValue: function() {
-      if (this._filter !== '') {
-        this._inputElementValue = this._filter;
+      if (this.filter !== '') {
+        this._inputElementValue = this.filter;
       } else {
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       }
@@ -496,7 +500,7 @@
      * @return {boolean}
      */
     _isValidValue: function(value) {
-      /* jshint ignore:start */ //IE11 doesn't support Number.isNaN() 
+      /* jshint ignore:start */ //IE11 doesn't support Number.isNaN()
       return value !== NaN && value !== undefined && value !== null;
       /* jshint ignore:end */
     },

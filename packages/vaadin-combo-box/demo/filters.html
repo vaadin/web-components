@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Filter Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><a href="objects.html">Object Items</a></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+        <li><b>Custom Filters</b></li>
+      </ul>
+    </nav>
+
+    <h3>Ajax Filtering</h3>
+    <p>
+      By default, <code>vaadin-combo-box</code> provides a basic filtering feature that removes those items that does not match the user input.<br />
+      You can listen to changes in the `filter` property, and set the items collection based on any criteria.<br />
+    </p>
+    <p>In this example we link `&lt;iron-ajax>` and `&lt;vaadin-combo-box>` elements in order to update items
+      based on AJAX requests sent to the <a href="https://developer.github.com/v3/search/">Github Search</a> service.</p>
+
+      <demo-snippet>
+        <template>
+          <dom-module id="github-search">
+            <template>
+              <iron-ajax id='ajax'
+                url="https://api.github.com/search/repositories?sort=starts&q={{filter}}"
+                handle-as="json" method="get" last-response={{ajaxResponse}}>
+              </iron-ajax>
+
+              <vaadin-combo-box id="box" value="{{url}}" items="{{ajaxResponse.items}}"
+                item-label-path="full_name" item-value-path="html_url"
+                filter="{{filter}}">
+              </vaadin-combo-box>
+
+            <a href="[[url]]" target="_blank">[[url]]</a>
+          </template>
+
+          <script>
+            Polymer({
+              is: "github-search",
+
+              observers: ['_onFilter(filter)'],
+
+              _onFilter: function(filter) {
+                // Not using the `auto` feature in `<iron-ajax>` to avoid reaching github rate limit
+                if (filter) {
+                  this.debounce('filter', function() {
+                    this.$.ajax.generateRequest();
+                  }.bind(this), 500);
+                }
+              },
+            });
+          </script>
+        </dom-module>
+
+        <github-search></github-search>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+
+</html>

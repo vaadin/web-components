@@ -1,0 +1,38 @@
+---
+title: Filtering Items
+order: 8
+layout: page
+---
+
+
+[[vaadin-combo-box.filter]]
+== Filtering Items
+
+By default, [vaadinelement]#vaadin-combo-box# filters items matching the input that the user types.
+The search algorithm used is a simple case insensitive search of the string typed.
+
+[source,html]
+----
+<vaadin-combo-box
+  label="Element"
+  items='["Bohrium", "Boron", "Bromine", "Cadmium", "Caesium", "Calcium"]'
+  value="Bromine">
+</vaadin-combo-box>
+----
+
+== Custom Filters
+
+Additionally the developer can bind the the `filter` property and update items based in any criteria.
+In the following example, we use AJAX to query a server, and display only the returned items.
+
+[source,html]
+----
+<iron-ajax id='ajax' auto
+   url="https://api.github.com/search/repositories?sort=starts&q={{filter}}"
+   handle-as="json" method="get" last-response={{ajaxResponse}}></iron-ajax>
+
+<vaadin-combo-box id="box" items="{{ajaxResponse.items}}"
+   item-label-path="full_name" item-value-path="html_url"
+   filter="{{filter}}">
+</vaadin-combo-box>
+----
