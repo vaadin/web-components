@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Object Items Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><b>Object Items</b></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+      </ul>
+    </nav>
+
+    <h3>Label and Value</h3>
+    <p>
+      When using objects, <code>vaadin-combo-box</code> needs to know which properties are to be used as the display and string values.
+    </p>
+    <p>
+      By default, <code>label</code> and <code>value</code> properties are used from the item <code>Object</code> as the display value and the <code>vaadin-combo-box</code> value, respectively. In the absence of these properties, <code>toString()</code> function for the <code>Object</code> is used to translate it into a <code>String</code>.
+    </p>
+    <p>Notice that the <code>value</code> property of the <code>vaadin-combo-box</code> would always contain the string value, whenever <code>Object</code>s or <code>Strings</code> are used for items. Use the <code>selectedItem</code> property to access the selected item object directly.</p>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box class="numbers-box" label="Number"></vaadin-combo-box>
+        <p>Selected item: <span id="selected-item"></span>.</p>
+        <p>Value: <span id="value"></span>.</p>
+
+        <script>
+          var combobox = document.querySelector('.numbers-box');
+          combobox.items = [
+            {label: 'One', value: 1},
+            {label: 'Two', value: 2},
+            {label: 'Three', value: 3}
+          ];
+
+          combobox.addEventListener('selected-item-changed', function() {
+            document.querySelector('#selected-item').innerHTML = JSON.stringify(combobox.selectedItem);
+          });
+
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#value').innerHTML = combobox.value;
+          });
+
+          combobox.value = 1;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Custom Properties for Item Label and Value</h3>
+    <p>
+      You can override the default property paths by defining <code>item-label-path</code> and <code>item-value-path</code> properties.
+    </p>
+
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box class="elements-box" label="Element" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
+        <p>Selected element name: <span id="element-name"></span>.</p>
+        <p>Value: <span id="element-value"></span>.</p>
+
+        <script>
+          var combobox = document.querySelector('.elements-box');
+
+          // elementsJson is an Array of Objects. Item object format:
+          //   {name: 'Hydrogen', symbol: 'H', number: 1}
+          combobox.items = elementsJson;
+
+          combobox.addEventListener('selected-item-changed', function() {
+            document.querySelector('#element-name').innerHTML = combobox.selectedItem && combobox.selectedItem.name;
+          });
+
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#element-value').innerHTML = combobox.value;
+          });
+
+          combobox.value = 'C';
+        </script>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+
+</html>

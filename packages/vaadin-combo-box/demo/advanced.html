@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Advanced Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><a href="objects.html">Object Items</a></li>
+        <li><b>Advanced Usage</b></li>
+      </ul>
+    </nav>
+
+    <h3>Custom Values</h3>
+    <p>
+      Users can be allowed also to input their own custom values. By default, this feature is disabled, so it
+      needs to be explicitly enabled.
+    </p>
+    <p>
+      When enabled, custom input values are always accepted and used as the <code>value</code> of the combo box.
+      If you need to cancel the automatic assignment, you can provide your own listener for the <code>custom-value-set</code> event
+      that prevents the default behavior.
+    </p>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="demo1" label="Element" allow-custom-value></vaadin-combo-box>
+        <p>Selected value: <span id="selected-value2"></span></p>
+
+        <script>
+            var combobox = document.querySelector('#demo1');
+            combobox.items = elements;
+
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#selected-value2').innerHTML = combobox.value;
+            });
+
+            combobox.addEventListener('custom-value-set', function(e) {
+              // Prevents setting the value property automatically.
+              e.preventDefault();
+
+              combobox.value = e.detail;
+              document.querySelector('#selected-value2').innerHTML = 'custom value "' + e.detail + '" set!';
+            });
+
+            combobox.value = 'Carbon';
+        </script>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Custom Icons</h3>
+    <p>
+      The most basic customization option is to replace the toggle and clear buttons.
+      You can do this by adding child elements to the <code>vaadin-combo-box</code> with class names <code>toggle-button</code> and <code>clear-button</code> respectively.
+    </p>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="demo2" label="Custom Icons">
+          <paper-icon-button icon="remove-circle" class="clear-button"></paper-icon-button>
+          <paper-icon-button icon="search" class="toggle-button"></paper-icon-button>
+        </vaadin-combo-box>
+        <script>
+          var combobox = document.querySelector('#demo2');
+          // Array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Custom Input with iron-input</h3>
+    <p>
+      If you need more customization options, you can also replace the default input element with your own.
+      In this case you need to use <code>vaadin-combo-box-light</code> element instead of the <code>vaadin-combo-box</code>.
+      See the example below on how to replace the default input with an <a href="https://elements.polymer-project.org/elements/iron-input"><code>iron-input</code></a>.
+    </p>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box-light id="demo3">
+          <input is="iron-input">
+        </vaadin-combo-box-light>
+        <script>
+          var combobox = document.querySelector('#demo3');
+          // Array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+
+    <h3>Custom Input with paper-input</h3>
+    <p>
+      To add a custom input that is a bit similar to the default one, you can for example use <a href="https://elements.polymer-project.org/elements/paper-input"><code>paper-input</code></a>.
+      See the example below, which uses also <code>prefix</code> and <code>suffix</code> attributes to help with the positioning of the custom content.
+    </p>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box-light id="demo4" attr-for-value="value">
+          <paper-input label="Elements" class="input">
+            <iron-icon icon="toll" prefix></iron-icon>
+            <paper-button suffix class="clear-button">Clear</paper-button>
+            <paper-button suffix class="toggle-button">Toggle</paper-button>
+          </paper-input>
+        </vaadin-combo-box-light>
+        <script>
+          var combobox = document.querySelector('#demo4');
+          // Array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+
+</html>

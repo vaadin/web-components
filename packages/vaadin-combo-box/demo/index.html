@@ -1,25 +1,106 @@
 <!doctype html>
 <html>
+
 <head>
-  <title>vaadin-combo-box Code Examples</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="../../elements-demo-resources/demo.css">
-  <script src="../../elements-demo-resources/ga.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Basic Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
 </head>
-<body>
 
-  <section>
-    <h1>vaadin-combo-box <span>Code Examples</span></h1>
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><b>Basic Examples</b></li>
+        <li><a href="objects.html">Object Items</a></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+      </ul>
+    </nav>
 
-    <ul class="toc">
-      <li><a href="overview.html">Overview</a></li>
-      <li><a href="basic.html">Basic Usage</a></li>
-      <li><a href="value-handling.html">Value Handling</a></li>
-      <li><a href="object-items.html">Using Objects as Items</a></li>
-      <li><a href="custom-input.html">Custom Input</a></li>
-    </ul>
-  </section>
+    <h3>Configuration</h3>
+    <p>
+      The data items displayed by <code>vaadin-combo-box</code> can be set and accessed using the
+      <code>items</code> property. The <code>items</code> may be assigned with data-binding, using an attribute or the
+      JavaScript property directly. An array of <code>String</code> or <code>Object</code> values is currently supported.
+      Use the <code>label</code> attribute to provide a label for the element.
+    </p>
+    <p>
+      Typing some text into the <code>vaadin-combo-box</code>'s input field will filter
+      the values defined in the <code>items</code> property and show only items that
+      <code>contain</code> the value in the input field. If the typed value doesn't
+      match any of shown items, closing the <code>vaadin-combo-box</code> will select the typed value.
+    </p>
 
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id='demo1' label="Element"></vaadin-combo-box>
+        <script>
+          var combobox = document.querySelector('#demo1');
+          // The elements is an array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Selecting a value</h3>
+    <p>
+      Selecting a value from the dropdown list changes <code>vaadin-combo-box</code>'s
+      <code>value</code> property and triggers a <code>value-changed</code> event.
+      Changing the <code>value</code> property explicitly also updates the visible fields.
+    </p>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="demo2" label="Element"></vaadin-combo-box>
+        <p>Selected value: <span id="selected-value"></span>.</p>
+
+        <script>
+            var combobox = document.querySelector('#demo2');
+            combobox.items = elements;
+
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#selected-value').innerHTML = combobox.value;
+            });
+            combobox.value = 'Carbon';
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Using as a form field</h3>
+    <p>
+      The <code>vaadin-combo-box</code> element is also extended with
+      <a href="https://elements.polymer-project.org/elements/iron-form-element-behavior"><code>IronFormElementBehavior</code></a>
+      so it can be used as a field in an <a href="https://elements.polymer-project.org/elements/iron-form"><code>iron-form</code></a>.
+      See the code below for an example on how it works.
+    </p>
+
+    <demo-snippet>
+      <template>
+        <form is="iron-form" method="post" demo>
+          <vaadin-combo-box name='name' required label="Element"></vaadin-combo-box>
+          <button>Submit</button>
+        </form>
+
+        <script>
+          var form = document.querySelector('form');
+          var combobox = form.querySelector('vaadin-combo-box');
+          combobox.items = elements;
+
+          form.addEventListener('iron-form-submit', function() {
+            alert('Form submitted with name: ' + form.serialize().name);
+            return false;
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+  </div>
 </body>
+
 </html>

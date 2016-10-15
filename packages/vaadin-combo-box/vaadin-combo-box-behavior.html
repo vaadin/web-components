@@ -63,7 +63,8 @@
 
       _filter: {
         type: String,
-        value: ''
+        value: '',
+        notify: true
       },
 
       /**
@@ -360,7 +361,6 @@
     /**
      *  Filtering and items handling
      */
-
     _inputValueChanged: function(e) {
       // Handle only input events from our inputElement.
       if (Polymer.dom(e).path.indexOf(this.inputElement) !== -1) {
