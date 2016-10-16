@@ -1,0 +1,74 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  vaadin.elements.grid.FilterBehavior = {
+    properties: {
+      filters: {
+        value: function() {
+          return [];
+        }
+      }
+    },
+
+    listeners: {
+      'filter-changed': '_filterChanged'
+    },
+
+    _filterChanged: function(e) {
+      if (this.filters.indexOf(e.target) === -1) {
+        this.push('filters', e.target);
+      }
+
+      this.clearCache();
+    },
+
+    _filters: function() {
+      return this.filters.map(function(el) {
+        return {path: el.path, value: el.value};
+      });
+    },
+  };
+</script>
+
+<dom-module id="vaadin-grid-filter">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <content>
+      <input id="filter">
+    </content>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-filter',
+
+      properties: {
+        path: String,
+        value: String
+      },
+
+      listeners: {
+        'input': '_onInput'
+      },
+
+      observers: ['_filterChanged(isAttached, path, value)'],
+
+      _onInput: function(e) {
+        this.debounce('input', function() {
+          this.value = e.target.value;
+        }, 200);
+      },
+
+      _filterChanged: function(isAttached, path, value) {
+        if (isAttached) {
+          this.fire('filter-changed');
+        }
+      }
+    });
+  </script>
+</dom-module>
