@@ -24,7 +24,9 @@
       var nearestThursdayDiff = 4 - dayOfWeek; // 4 is thursday
       var nearestThursday = new Date(date.getTime() + nearestThursdayDiff * 24 * 3600 * 1000);
 
-      var firstOfJanuary = new Date(nearestThursday.getFullYear(), 0, 1);
+      var firstOfJanuary = new Date(0, 0);
+      firstOfJanuary.setFullYear(nearestThursday.getFullYear());
+
       var timeDiff = nearestThursday.getTime() - firstOfJanuary.getTime();
 
       // Rounding the result, as the division doesn't result in an integer

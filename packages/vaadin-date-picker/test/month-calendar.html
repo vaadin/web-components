@@ -295,6 +295,19 @@
             done();
           });
         });
+
+        it('should render correct week numbers for May 99', function(done) {
+          var month = new Date(0, 4, 1);
+          month.setFullYear(99);
+
+          monthCalendar.month = month;
+
+          monthCalendar.async(function() {
+            var weekNumbers = getWeekNumbers(monthCalendar);
+            expect(weekNumbers).to.eql([18, 19, 20, 21, 22]);
+            done();
+          });
+        });
       });
 
     });
