@@ -240,8 +240,19 @@
 
     _prefillFocusedItemLabel: function() {
       if (this._focusedIndex > -1) {
-        this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
+        // Temporarily set aria-atomic="true" to prevent partial value changes
+        // announce. Makes OSX VoiceOver to announce the complete value instead.
+        var oldAriaAtomic = this.inputElement.getAttribute('aria-atomic');
+        this.inputElement.setAttribute('aria-atomic', true);
+
+        this._inputElementValue =  this._getItemLabel(this.$.overlay._focusedItem);
         this._setSelectionRange();
+
+        if (oldAriaAtomic !== null) {
+          this.inputElement.setAttribute('aria-atomic', oldAriaAtomic);
+        } else {
+          this.inputElement.removeAttribute('aria-atomic');
+        }
       }
     },
 

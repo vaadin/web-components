@@ -145,11 +145,9 @@ Custom property | Description | Default
           autocomplete="off"
           autocapitalize="none"
           bind-value="{{_inputElementValue}}"
-          aria-labelledby="label"
-          aria-activedescendant$="[[_ariaActiveIndex]]"
+          aria-label$="[[label]]"
           aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-autocomplete="list"
-          aria-owns="overlay"
           disabled$="[[disabled]]"
           invalid="{{invalid}}"
           prevent-invalid-input="[[preventInvalidInput]]"
@@ -173,6 +171,7 @@ Custom property | Description | Default
         <paper-icon-button
             id="clearIcon"
             tabindex="-1"
+            aria-label="Clear"
             icon="vaadin-combo-box:clear"
             on-down="_preventDefault"
             class="clear-button small">
@@ -184,7 +183,8 @@ Custom property | Description | Default
             id="toggleIcon"
             tabindex="-1"
             icon="vaadin-combo-box:arrow-drop-down"
-            aria-controls="overlay"
+            aria-label="Toggle"
+            aria-expanded$="[[_getAriaExpanded(opened)]]"
             on-down="_preventDefault"
             class="toggle-button rotate-on-open">
         </paper-icon-button>
@@ -197,7 +197,6 @@ Custom property | Description | Default
 
     <vaadin-combo-box-overlay
         id="overlay"
-        _aria-active-index="{{_ariaActiveIndex}}"
         position-target="[[_getPositionTarget()]]"
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
