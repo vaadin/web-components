@@ -108,10 +108,10 @@
         if (Polymer.Settings.useShadow) {
           // Shadow
           target._contentIndex = target._contentIndex + 1 || 0;
-          this._cellContent.setAttribute('cell-content-id', target._contentIndex);
+          this._cellContent.setAttribute('data-cell-content-id', target._contentIndex);
 
           var content = document.createElement('content');
-          content.setAttribute('select', '[cell-content-id="' + target._contentIndex +'"]');
+          content.setAttribute('select', '[data-cell-content-id="' + target._contentIndex +'"]');
           Polymer.dom(this).appendChild(content);
         } else {
           // Non-shadow
