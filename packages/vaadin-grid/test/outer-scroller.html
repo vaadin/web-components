@@ -138,23 +138,6 @@
           node.dispatchEvent(e);
         }
 
-        var scrollbarWidth = (function() {
-          // Create the measurement node
-          var scrollDiv = document.createElement("div");
-          scrollDiv.style.width = '100px';
-          scrollDiv.style.height = '100px';
-          scrollDiv.style.overflow = 'scroll';
-          scrollDiv.style.position = 'absolute';
-          scrollDiv.style.top = '-9999px';
-          document.body.appendChild(scrollDiv);
-          // Get the scrollbar width
-          var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-
-          // Delete the DIV
-          document.body.removeChild(scrollDiv);
-          return scrollbarWidth;
-        })();
-
         function outerScrollerInUse() {
           return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
         }
@@ -170,7 +153,7 @@
 
         it('should not passtrough iff scrollbars exist (vertical scrollbar hover)', function(done) {
           scroller.addEventListener('mousemove', function() {
-            expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
+            expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
             done();
           });
           move(tableRect.width, 1);
@@ -178,7 +161,7 @@
 
         it('should not passtrough iff scrollbars exist (horizontal scrollbar hover)', function(done) {
           scroller.addEventListener('mousemove', function() {
-            expect(outerScrollerInUse()).to.be[scrollbarWidth > 0 ? 'true' : 'false'];
+            expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
             done();
           });
           move(1, tableRect.height);

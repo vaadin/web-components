@@ -11,6 +11,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
   var defaultCellWidth = 100;
 
+  function getScrollbarWidth() {
+    // Create the measurement node
+    var scrollDiv = document.createElement("div");
+    scrollDiv.style.width = '100px';
+    scrollDiv.style.height = '100px';
+    scrollDiv.style.overflow = 'scroll';
+    scrollDiv.style.position = 'absolute';
+    scrollDiv.style.top = '-9999px';
+    document.body.appendChild(scrollDiv);
+    // Get the scrollbar width
+    var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+    // Delete the DIV
+    document.body.removeChild(scrollDiv);
+    return scrollbarWidth;
+  }
+
   function infiniteDataSource(opts, callback) {
     callback(Array.apply(null, Array(opts.pageSize)).map(function(item, index) { return {value: 'foo' + index}; } ));
   }
