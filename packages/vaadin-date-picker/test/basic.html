@@ -183,6 +183,13 @@
         expect(datepicker.$.input.bindValue).to.equal('12/31/1999');
       });
 
+      it('should format display correctly with sub 100 years', function() {
+        datepicker.value = '+000001-02-01';
+        expect(datepicker.$.input.bindValue).to.equal('2/1/0001');
+        datepicker.value = '+000099-02-01';
+        expect(datepicker.$.input.bindValue).to.equal('2/1/0099');
+      });
+
       it('should not show clear icon', function() {
         datepicker.open();
         datepicker.value = '2000-02-01';

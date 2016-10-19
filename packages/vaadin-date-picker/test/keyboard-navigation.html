@@ -476,6 +476,39 @@
 
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
+
+          it('should focus two-digit years while navigating days', function() {
+            var date = new Date(99, 0, 1);
+            date.setFullYear(99);
+            overlay.focusedDate = date;
+
+            arrowRight(overlay);
+
+            date.setDate(2);
+            expect(overlay.focusedDate).to.eql(date);
+          });
+
+          it('should focus two-digit years while navigating months', function() {
+            var date = new Date(99, 0, 1);
+            date.setFullYear(99);
+            overlay.focusedDate = date;
+
+            pageDown();
+
+            date.setMonth(1);
+            expect(overlay.focusedDate).to.eql(date);
+          });
+
+          it('should focus two-digit years while navigating in month', function() {
+            var date = new Date(99, 0, 1);
+            date.setFullYear(99);
+            overlay.focusedDate = date;
+
+            end();
+
+            date.setDate(31);
+            expect(overlay.focusedDate).to.eql(date);
+          });
         });
       });
     }

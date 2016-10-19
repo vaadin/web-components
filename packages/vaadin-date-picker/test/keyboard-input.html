@@ -519,6 +519,12 @@
             expect(result.getFullYear()).to.equal(2020);
           });
 
+          it('should parse three digits with short year 3', function() {
+            inputText('6/20/1');
+            var result = focusedDate();
+            expect(result.getFullYear()).to.equal(2001);
+          });
+
           it('should parse three digits with negative year', function() {
             inputText('6/20/-1');
             var result = focusedDate();
