@@ -152,14 +152,17 @@ If you want to replace the default input field with a custom implementation, you
       :host(:not([opened])) #clear,
       :host(:not([has-value])) #clear,
       :host([readonly]) #clear,
-      :host([disabled]) #clear,
-      #input::-ms-clear {
+      :host([disabled]) #clear {
         display: none;
       }
 
       #input {
         box-sizing: border-box;
         padding-right: 28px;
+      }
+
+      #input::-ms-clear {
+        display: none;
       }
 
       :host([opened][has-value]) #input {
