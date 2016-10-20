@@ -85,9 +85,12 @@
 
       it('should open on long-touch on ios', function(done) {
         menu._ios = true;
-        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+        var xy = middleOfNode(menu.listenOn);
+        makeSoloTouchEvent('touchstart', xy, menu.listenOn);
+
         menu.async(function() {
           expect(menu._opened).to.eql(true);
+          expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
           done();
         }, 1000);
       });

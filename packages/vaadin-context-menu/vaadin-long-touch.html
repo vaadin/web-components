@@ -13,13 +13,11 @@
       emits: ['vaadin-long-touch'],
 
       info: {
-        x: 0,
-        y: 0
+        sourceEvent: null
       },
 
       reset: function() {
-        this.info.x = 0;
-        this.info.y = 0;
+        this.info.sourceEvent = null;
         this.info.fired = false;
         if (this.info.touchJob) {
           this.info.touchJob.stop();
@@ -28,8 +26,7 @@
       },
 
       touchstart: function(e) {
-        this.info.x = e.changedTouches[0].clientX;
-        this.info.y = e.changedTouches[0].clientY;
+        this.info.sourceEvent = e;
         this.info.touchJob = Polymer.Debounce(this.info.touchJob, function() {
           var t = Polymer.Gestures.findOriginalTarget(e);
           var ct = e.changedTouches[0];
@@ -39,8 +36,9 @@
 
       touchmove: function(e) {
         var moveThreshold = 15;
-        if (Math.abs(this.info.x - e.changedTouches[0].clientX) > moveThreshold ||
-            Math.abs(this.info.y - e.changedTouches[0].clientY) > moveThreshold) {
+        var startTouch = this.info.sourceEvent.changedTouches[0];
+        if (Math.abs(startTouch.clientX - e.changedTouches[0].clientX) > moveThreshold ||
+            Math.abs(startTouch.clientY - e.changedTouches[0].clientY) > moveThreshold) {
           this.info.touchJob.stop();
         }
       },
@@ -58,8 +56,9 @@
 
       fire: function(target, touch) {
         Polymer.Gestures.fire(target, 'vaadin-long-touch', {
-          clientX: touch.clientX,
-          clientY: touch.clientY
+          clientX: this.info.sourceEvent.changedTouches[0].clientX,
+          clientY: this.info.sourceEvent.changedTouches[0].clientY,
+          sourceEvent: this.info.sourceEvent
         });
 
         this.info.fired = true;

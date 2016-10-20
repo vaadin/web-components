@@ -13,8 +13,9 @@
   <body>
     <test-fixture id="default">
       <template>
-        <vaadin-context-menu></vaadin-context-menu>
-        <div id="target"></div>
+        <vaadin-context-menu>
+          <div id="target">FOOOO</div>
+        </vaadin-context-menu>
       </template>
     </test-fixture>
 
@@ -23,7 +24,7 @@
         var menu;
 
         beforeEach(function() {
-          menu = fixture('default')[0];
+          menu = fixture('default');
         });
 
         function contextmenu(x, y) {
@@ -88,7 +89,7 @@
             contextmenu(10, 10);
           });
 
-          it('should be positioned on custom event', function(done) {
+          it('should be positioned on detailed mouse event', function(done) {
             menu.listenOn.addEventListener('iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
@@ -98,6 +99,63 @@
             menu.openOn = 'foobar';
 
             menu.fire('foobar', {sourceEvent: {clientX: 10, clientY: 20}}, {
+              node: menu.listenOn
+            });
+          });
+
+          it('should be positioned by gesture event', function(done) {
+            menu.listenOn.addEventListener('iron-overlay-opened', function() {
+              expect(menu.$.overlay.x).to.eql(5);
+              expect(menu.$.overlay.y).to.eql(5);
+              done();
+            });
+
+            menu.openOn = 'foobar';
+
+            menu.fire('foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}}, {
+              node: menu.listenOn
+            });
+          });
+
+          it('should be positioned by detailed gesture event', function(done) {
+            menu.listenOn.addEventListener('iron-overlay-opened', function() {
+              expect(menu.$.overlay.x).to.eql(5);
+              expect(menu.$.overlay.y).to.eql(5);
+              done();
+            });
+
+            menu.openOn = 'foobar';
+
+            menu.fire('foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}}, {
+              node: menu.listenOn
+            });
+          });
+
+          it('should be positioned by touch event', function(done) {
+            menu.listenOn.addEventListener('iron-overlay-opened', function() {
+              expect(menu.$.overlay.x).to.eql(10);
+              expect(menu.$.overlay.y).to.eql(20);
+              done();
+            });
+
+            menu.openOn = 'touchstart';
+
+            var event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
+            event.touches = event.changedTouches = event.targetTouches = [{clientX: 10, clientY: 20}];
+
+            menu.children[0].dispatchEvent(event);
+          });
+
+          it('should be positioned by detailed touch event', function(done) {
+            menu.listenOn.addEventListener('iron-overlay-opened', function() {
+              expect(menu.$.overlay.x).to.eql(10);
+              expect(menu.$.overlay.y).to.eql(20);
+              done();
+            });
+
+            menu.openOn = 'foobar';
+
+            menu.fire('foobar', {sourceEvent: {changedTouches: [{clientX: 10, clientY: 20}]}}, {
               node: menu.listenOn
             });
           });
