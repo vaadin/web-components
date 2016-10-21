@@ -35,7 +35,7 @@
         scroller.active = true;
       });
 
-      afterEach(function (done) {
+      afterEach(function(done) {
         Polymer.Base.async(done, 1000);
       });
 
@@ -112,6 +112,28 @@
           done();
         });
         scroller.position = 10;
+      });
+
+      it('should not animate on second attach', function(done) {
+        var spy = sinon.spy();
+        scroller.addEventListener('animationstart', spy);
+        var parent = scroller.parentNode;
+        parent.removeChild(scroller);
+        parent.appendChild(scroller);
+        setTimeout(function() {
+          expect(spy.called).to.be.false;
+          done();
+        }, 100);
+
+      });
+
+      it('should have an instance stamped to every wrapper', function(done) {
+        scroller._buffers.forEach(function(buffer, bufferIndex) {
+          [].forEach.call(buffer.children, function(itemWrapper, index) {
+            expect(itemWrapper.firstElementChild).to.be.ok;
+          }.bind(this));
+        }, this);
+        done();
       });
 
     });
