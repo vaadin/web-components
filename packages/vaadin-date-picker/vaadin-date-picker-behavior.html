@@ -187,7 +187,12 @@
             today: 'Today',
             cancel: 'Cancel',
             formatDate: function(d) {
-              return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+              var year = d.getFullYear();
+              var yearString = year.toString();
+              if (yearString.length < 3 && year >= 0) {
+                yearString = (year < 10 ? '000' : '00') + year;
+              }
+              return (d.getMonth() + 1) + '/' + d.getDate() + '/' + yearString;
             },
             parseDate: function(text) {
               var parts = text.split('/');
@@ -196,7 +201,7 @@
 
               if (parts.length === 3) {
                 year = parseInt(parts[2]);
-                if (parts[2].length === 2 && year >= 0) {
+                if (parts[2].length < 3 && year >= 0) {
                   year += year < 50 ? 2000 : 1900;
                 }
                 month = parseInt(parts[0]) - 1;
