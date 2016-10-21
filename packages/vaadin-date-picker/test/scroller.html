@@ -16,16 +16,27 @@
   so in order to be able to test vaadin-infinite-scroller in isolation we're
   using the same instance in this suite -->
   <vaadin-infinite-scroller id="scroller" item-height="30" buffer-size="80">
-    <template>[[index]]</template>
+    <template><div>[[index]]</div></template>
   </vaadin-infinite-scroller>
 
   <script>
     describe('vaadin-infinite-scroller', function() {
       var scroller;
 
-      beforeEach(function(done) {
+      before(function(done) {
         scroller = document.querySelector('#scroller');
-        Polymer.Base.async(done, 1);
+
+        scroller.addEventListener('animationend', function() {
+          scroller.debounce('animations-finished', function() {
+            Polymer.Base.async(done, 1);
+          }, 1);
+        });
+
+        scroller.active = true;
+      });
+
+      afterEach(function (done) {
+        Polymer.Base.async(done, 1000);
       });
 
       function verifyPosition() {

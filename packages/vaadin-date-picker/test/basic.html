@@ -385,7 +385,14 @@
           datepicker.set('i18n.clear', 'Tyhjennä');
           datepicker.set('i18n.today', 'Tänään');
           datepicker.set('i18n.cancel', 'Peruuta');
-          datepicker.async(done);
+
+          datepicker.$.overlay.$.scroller.addEventListener('animationend', function() {
+            datepicker.debounce('animations-finished', function() {
+              done();
+            }, 1);
+          });
+          datepicker.open();
+
         });
 
         it('should notify i18n mutation to children', function() {

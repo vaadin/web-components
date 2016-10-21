@@ -132,6 +132,16 @@
         });
 
         describe('title announcer', function() {
+
+          beforeEach(function(done) {
+            overlay.$.scroller.addEventListener('animationend', function() {
+              overlay.debounce('animations-finished', function() {
+                done();
+              }, 1);
+            });
+            overlay.initialPosition = new Date();
+          });
+
           // Title announcer notifies the user when the overlay opens with
           // an explicit “<alert> Calender” announce.
 
@@ -178,11 +188,15 @@
           var yearScrollerContents;
 
           beforeEach(function(done) {
-            Polymer.Base.async(function() {
-              yearScrollerContents = Polymer.dom(overlay.$.yearScroller.root)
-                .querySelectorAll('.buffer > div > *');
-              done();
-            }, 1);
+            var scroller = overlay.$.yearScroller;
+            scroller.active = true;
+            scroller.addEventListener('animationend', function() {
+              scroller.debounce('animations-finished', function() {
+                yearScrollerContents = Polymer.dom(overlay.$.yearScroller.root)
+                  .querySelectorAll('.buffer > div > *');
+                done();
+              }, 100);
+            });
           });
 
           it('should contain button role for years', function() {
