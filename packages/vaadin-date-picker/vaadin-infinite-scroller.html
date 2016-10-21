@@ -101,7 +101,22 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _bufferHeight: Number,
 
-      _mayHaveMomentum: Boolean
+      _mayHaveMomentum: Boolean,
+
+      _initialized: Boolean,
+
+      active: Boolean
+    },
+
+    observers: [
+      '_activated(active)'
+    ],
+
+    _activated: function(active) {
+      if (active && !this._initialized) {
+        this._createPool();
+        this._initialized = true;
+      }
     },
 
     ready: function() {
@@ -112,12 +127,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       var template = Polymer.dom(this).querySelector('template');
       this.templatize(template);
-      this._createPool();
-
-      this.async(function() {
-        this._reset();
-        this.flushDebouncer('updateAllClones');
-      }, 1);
     },
 
     _translateBuffer: function(up) {
@@ -217,16 +226,30 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     _createPool: function() {
+      var container = this.getBoundingClientRect();
       this._buffers.forEach(function(buffer) {
         for (var i = 0; i < this.bufferSize; i++) {
           var itemWrapper = document.createElement('div');
           itemWrapper.style.height = this.itemHeight + 'px';
-          itemWrapper.instance = this.stamp({});
+          itemWrapper.instance = {};
 
           Polymer.dom(buffer).appendChild(itemWrapper);
-          Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
+
+          // TODO: Only scedule first set here, rest by animation end of the first set!
+          var stampDelay = this._isVisible(itemWrapper, container) ? 1 : 300;
+          this.async(this._stampInstance.bind(this, itemWrapper), stampDelay);
         }
       }, this);
+    },
+
+    _stampInstance: function(itemWrapper) {
+      var tmpInstance = itemWrapper.instance;
+      itemWrapper.instance = this.stamp({});
+      Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
+
+      Object.keys(tmpInstance).forEach(function(prop) {
+        itemWrapper.instance[prop] = tmpInstance[prop];
+      });
     },
 
     _updateClones: function(viewPortOnly) {
