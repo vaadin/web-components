@@ -189,4 +189,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
   }
+
+  function getHeaderCellContent(grid, row, col) {
+    var container = grid.$.scroller.$.header;
+    return getContainerCellContent(container, row, col);
+  }
+
+  function getBodyCellContent(grid, row, col) {
+    var container = grid.$.scroller.$.items;
+    return getContainerCellContent(container, row, col);
+  }
+
+  function getContainerCellContent(container, row, col) {
+    var rows = getRows(container);
+    var cells = getRowCells(rows[row]);
+    return getCellContent(cells[col]);
+  }
 </script>
