@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-table.html">
 <link rel="import" href="vaadin-grid-column.html">
+<link rel="import" href="vaadin-grid-column-group.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-array-data-source-behavior.html">
@@ -83,7 +84,9 @@
     },
 
     ready: function() {
-      this.columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+      this.columns = Polymer.dom(this).children.filter(function(el) {
+        return el.localName.indexOf('vaadin-grid-column') === 0;
+      });
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template[is=row-details]');
     },
 

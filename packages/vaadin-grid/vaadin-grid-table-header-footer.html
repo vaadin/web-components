@@ -9,13 +9,68 @@
 
       observers: ['_columnsChanged(columns, frozenColumns)', '_rowsChanged(_rows)'],
 
+      // <vaadin-grid-column 1></vaadin-grid-column>
+      // <vaadin-grid-column-group g1>
+      //   <vaadin-grid-column 2></vaadin-grid-column>
+      //   <vaadin-grid-column 3></vaadin-grid-column>
+      //   <vaadin-grid-column-group g2>
+      //     <vaadin-grid-column 4></vaadin-grid-column>
+      //     <vaadin-grid-column 5></vaadin-grid-column>
+      //   </vaadin-grid-column-group>
+      // </vaadin-grid-column-group>
+
       _columnsChanged: function(columns, frozenColumns) {
+        //1st level [column1, group1] -> 2 td cells
+        //2nd level [column1, column2, column3, group2] -> 4 td cells
+        //3rd level [column1, column2, column3, column4, column5] -> 5 td cells
+
         var row = this._createRow();
         row.frozenColumns = frozenColumns;
         row.target = this.domHost.domHost;
         row.columns = columns;
 
-        this._rows = [row];
+        var row2 = this._createRow();
+        row2.frozenColumns = frozenColumns;
+        row2.target = this.domHost.domHost;
+        row2.columns = this._xxxColumns(row.columns);
+
+        var row3 = this._createRow();
+        row3.frozenColumns = frozenColumns;
+        row3.target = this.domHost.domHost;
+        row3.columns = this._xxxColumns(row2.columns);
+
+        this._rows = [row, row2, row3];
+      },
+
+      _xxxColumns: function(columns) {
+        return columns.map(function(col) {
+          var children = this._childColumns(col);
+          return children.length > 0 ? children : [col];
+        }.bind(this)).reduce(function(prev, curr) {
+          return prev.concat(curr);
+        }, []);
+      },
+
+      _xxxColumns2: function(columns) {
+        return columns.map(function(col) {
+          var children = this._childColumns(col);
+
+          return children.length > 0 ? children.reduce(function(prev, curr) {
+            return prev.concat(curr);
+          }, []) : col;
+        }.bind(this));
+      },
+
+      _childColumns: function(column) {
+        return Polymer.dom(column).children.filter(function(el) {
+          return /vaadin-grid-column/.test(el.localName);
+        });
+      },
+
+      _hasChildColumns: function(columns) {
+        return columns.filter(function(col) {
+          return this._childColumns(col).length > 0;
+        }.bind(this)).length > 0;
       },
 
       _rowsChanged: function(rows) {

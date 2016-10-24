@@ -1,0 +1,111 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-grid-column-group">
+  <script>
+    Polymer({
+      is: 'vaadin-grid-column-group',
+
+      properties: {
+        // TODO: needs a light dom observer
+        _childColumns: {
+          value: function() {
+            return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          }
+        },
+        _flex: Number,
+        footerTemplate: {
+          type: Object,
+          value: function() {
+            return this._findTemplate('footer');
+          }
+        },
+        headerTemplate: {
+          type: Object,
+          value: function() {
+            return this._findTemplate('header');
+          }
+        },
+
+        _width: String
+      },
+
+      observers: [
+        '_flexChanged(_flex)',
+        '_footerTemplateChanged(footerTemplate)',
+        '_headerTemplateChanged(headerTemplate)',
+        '_widthChanged(_width)'
+      ],
+
+      listeners: {
+        'property-changed': '_columnPropChanged'
+      },
+
+      ready: function() {
+        this._updateFlexAndWidth();
+      },
+
+      _findTemplate: function(type) {
+        var template = Polymer.dom(this).children.filter(function(el) {
+          return el.localName === 'template' && el.getAttribute('is') === type;
+        })[0];
+        if (template) {
+          if (this.dataHost) {
+            // set dataHost to the context where template has been defined
+            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+          }
+
+          return template;
+        }
+      },
+
+      _columnPropChanged: function(e) {
+        if (e.target !== this && e.detail.path.match(/headerTemplate|footerTemplate/)) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        }
+
+        if (e.detail.path.match(/flex|width/)) {
+          this._updateFlexAndWidth();
+        }
+      },
+
+      _updateFlexAndWidth: function() {
+        this.width = 'calc(' + this._childColumns.reduce(function(prev, curr) {
+          return prev += ' + ' + (curr.width || '0');
+        }, '').substring(3) + ')';
+
+        this.flex = this._childColumns.reduce(function(prev, curr) {
+          return prev + curr.flex;
+        }, 0);
+      },
+
+      _footerTemplateChanged: function(template) {
+        this.fire('property-changed', {
+          path: 'footerTemplate',
+          value: template
+        });
+      },
+
+      _headerTemplateChanged: function(template) {
+        this.fire('property-changed', {
+          path: 'headerTemplate',
+          value: template
+        });
+      },
+
+      _flexChanged: function(flex) {
+        this.fire('property-changed', {
+          path: 'flex',
+          value: flex
+        });
+      },
+
+      _widthChanged: function(width) {
+        this.fire('property-changed', {
+          path: 'width',
+          value: width
+        });
+      }
+    });
+  </script>
+</dom-module>
