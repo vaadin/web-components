@@ -23,19 +23,7 @@
       </ul>
     </nav>
 
-    <h3>Configuration</h3>
-    <p>
-      The data items displayed by <code>vaadin-combo-box</code> can be set and accessed using the
-      <code>items</code> property. The <code>items</code> may be assigned with data-binding, using an attribute or the
-      JavaScript property directly. An array of <code>String</code> or <code>Object</code> values is currently supported.
-      Use the <code>label</code> attribute to provide a label for the element.
-    </p>
-    <p>
-      Typing some text into the <code>vaadin-combo-box</code>'s input field will filter
-      the values defined in the <code>items</code> property and show only items that
-      <code>contain</code> the value in the input field. If the typed value doesn't
-      match any of shown items, closing the <code>vaadin-combo-box</code> will select the typed value.
-    </p>
+    <h3>Configuring the Combo Box</h3>
 
     <demo-snippet>
       <template>
@@ -48,13 +36,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Selecting a value</h3>
-    <p>
-      Selecting a value from the dropdown list changes <code>vaadin-combo-box</code>'s
-      <code>value</code> property and triggers a <code>value-changed</code> event.
-      Changing the <code>value</code> property explicitly also updates the visible fields.
-    </p>
-
+    <h3>Selecting a Value</h3>
     <demo-snippet>
       <template>
         <vaadin-combo-box id="demo2" label="Element"></vaadin-combo-box>
@@ -72,14 +54,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Using as a form field</h3>
-    <p>
-      The <code>vaadin-combo-box</code> element is also extended with
-      <a href="https://elements.polymer-project.org/elements/iron-form-element-behavior"><code>IronFormElementBehavior</code></a>
-      so it can be used as a field in an <a href="https://elements.polymer-project.org/elements/iron-form"><code>iron-form</code></a>.
-      See the code below for an example on how it works.
-    </p>
-
+    <h3>Using as a Form Field</h3>
     <demo-snippet>
       <template>
         <form is="iron-form" method="post" demo>
