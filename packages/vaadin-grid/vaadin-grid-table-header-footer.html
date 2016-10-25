@@ -9,33 +9,18 @@
 
       observers: ['_columnsChanged(columns, frozenColumns)', '_rowsChanged(_rows)'],
 
-      // <vaadin-grid-column 1></vaadin-grid-column>
-      // <vaadin-grid-column-group g1>
-      //   <vaadin-grid-column 2></vaadin-grid-column>
-      //   <vaadin-grid-column 3></vaadin-grid-column>
-      //   <vaadin-grid-column-group g2>
-      //     <vaadin-grid-column 4></vaadin-grid-column>
-      //     <vaadin-grid-column 5></vaadin-grid-column>
-      //   </vaadin-grid-column-group>
-      // </vaadin-grid-column-group>
-      //1st level [column1, group1] -> 2 td cells
-      //2nd level [column1, column2, column3, group2] -> 4 td cells
-      //3rd level [column1, column2, column3, column4, column5] -> 5 td cells
-
       _columnsChanged: function(columns, frozenColumns) {
-        for(cols = columns, rows = [];;) {
+        var rows = [];
+        for(var i=0;i<columns.length;i++) {
           var row = this._createRow();
           row.frozenColumns = frozenColumns;
           row.target = this.domHost.domHost;
-          row.columns = cols;
-          row._isLast = this._isLastRow(cols);
+          row._isColumnRow = i == columns.length - 1;
+          row.columns = columns[i];
           rows.push(row);
-          if (row._isLast) {
-            break;
-          }
-          cols = this._childrenColumns(cols);
         }
-        this._rows = rows;
+
+        this._rows = this.localName === 'thead' ? rows : rows.reverse();
       },
 
      _isLastRow: function(columns) {

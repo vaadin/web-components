@@ -130,16 +130,20 @@
         border: 1px solid var(--vaadin-grid-border-color);
       }
 
-      thead tr:last-child th {
+      thead tr:last-child th:not([empty]) {
         border-bottom: 1px solid var(--vaadin-grid-border-color);
       }
-      tfoot tr:first-child td {
+      tfoot tr:first-child td:not([empty]) {
         border-top: 1px solid var(--vaadin-grid-border-color);
       }
 
       td, th {
         border-bottom: 1px solid var(--vaadin-grid-border-color);
         text-align: left;
+      }
+
+      td[empty], th[empty] {
+        border-bottom: none;
       }
 
       tr[odd] td {
@@ -247,7 +251,7 @@
 
     _columnsChanged: function(columns, frozenColumns, physicalItems, count) {
       physicalItems.forEach(function(row) {
-        row.columns = columns;
+        row.columns = columns[columns.length - 1];
         row.frozenColumns = frozenColumns;
       });
 

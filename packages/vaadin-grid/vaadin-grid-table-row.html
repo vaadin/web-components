@@ -107,6 +107,7 @@
           var cell = this._createCell();
           cell.index = this.index;
           cell.target = this.target;
+          cell._isColumnRow = this._isColumnRow;
           cell.column = column;
 
           Polymer.dom(this).appendChild(cell);

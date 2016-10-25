@@ -59,7 +59,7 @@
       },
 
       _columnPropChanged: function(e) {
-        if (e.target !== this && e.detail.path.match(/headerTemplate|footerTemplate/)) {
+        if (e.target !== this) {
           e.stopPropagation();
           e.stopImmediatePropagation();
         }
@@ -70,11 +70,11 @@
       },
 
       _updateFlexAndWidth: function() {
-        this.width = 'calc(' + this._childColumns.reduce(function(prev, curr) {
+        this._width = 'calc(' + this._childColumns.reduce(function(prev, curr) {
           return prev += ' + ' + (curr.width || '0');
         }, '').substring(3) + ')';
 
-        this.flex = this._childColumns.reduce(function(prev, curr) {
+        this._flex = this._childColumns.reduce(function(prev, curr) {
           return prev + curr.flex;
         }, 0);
       },

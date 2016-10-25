@@ -240,12 +240,24 @@
         headerTemplate: Object
       },
 
+      hostAttributes: {
+        'empty': ''
+      },
+
       behaviors: [
         Polymer.Templatizer,
         vaadinGridTableCellBehavior
       ],
 
-      observers: ['_templateChanged(headerTemplate, target)']
+      observers: ['_headerTemplateChanged(headerTemplate, target)'],
+
+      _headerTemplateChanged: function(headerTemplate, target) {
+        if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+          this._templateChanged(headerTemplate, target);
+          // TODO: add a mixin when we theming is sorted out.
+          this.removeAttribute('empty');
+        }
+      }
     });
 
     Polymer({
@@ -262,7 +274,19 @@
         vaadinGridTableCellBehavior
       ],
 
-      observers: ['_templateChanged(footerTemplate, target)']
+      hostAttributes: {
+        'empty': ''
+      },
+
+      observers: ['_footerTemplateChanged(footerTemplate, target)'],
+
+      _footerTemplateChanged: function(footerTemplate, target) {
+        if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+          this._templateChanged(footerTemplate, target);
+          // TODO: add a mixin when we theming is sorted out.
+          this.removeAttribute('empty');
+        }
+      }
     });
   })();
 </script>
