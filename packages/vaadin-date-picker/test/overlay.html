@@ -24,7 +24,14 @@
       beforeEach(function(done) {
         overlay = fixture('overlay');
         overlay.i18n = getDefaultI18n();
-        waitUntilScrolledTo(overlay, new Date(), done);
+
+        overlay.initialPosition = new Date();
+        overlay.$.scroller.addEventListener('animationend', function() {
+          overlay.debounce('animations-finished', function() {
+            waitUntilScrolledTo(overlay, new Date(), done);
+          }, 1);
+        });
+
       });
 
       it('should stop scroll events from bubbling outside the overlay', function() {

@@ -39,6 +39,15 @@ This program is available under Apache License Version 2.0, available at https:/
       padding-right: 40px;
       @apply(--vaadin-infinite-scroller-buffer);
     }
+
+    :host(:not([init-animation-done])) .buffer > * {
+      animation: fadein 0.2s;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
   </style>
 
   <template>
@@ -101,7 +110,50 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _bufferHeight: Number,
 
-      _mayHaveMomentum: Boolean
+      _mayHaveMomentum: Boolean,
+
+      _initialized: Boolean,
+
+      active: Boolean
+    },
+
+    observers: [
+      '_activated(active)'
+    ],
+
+    _activated: function(active) {
+      if (active && !this._initialized) {
+        this._createPool();
+        this._initialized = true;
+      }
+    },
+
+    listeners: {
+      'animationstart': '_animationStart',
+      'animationend': '_animationEnd'
+    },
+
+    _animationEnd: function() {
+      this.toggleAttribute('init-animation-done', true);
+    },
+
+    _animationStart: function() {
+      if (!this._initDone) {
+        // Once the first set of items start fading in, stamp the rest
+        this.debounce('finish-init', function() {
+          this._buffers.forEach(function(buffer, bufferIndex) {
+            [].forEach.call(buffer.children, function(itemWrapper, index) {
+              this._ensureStampedInstance(itemWrapper);
+            }.bind(this));
+          }, this);
+
+          if (!this._buffers[0].translateY) {
+            this._reset();
+          }
+        }, 1);
+
+        this._initDone = true;
+      }
     },
 
     ready: function() {
@@ -112,12 +164,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       var template = Polymer.dom(this).querySelector('template');
       this.templatize(template);
-      this._createPool();
-
-      this.async(function() {
-        this._reset();
-        this.flushDebouncer('updateAllClones');
-      }, 1);
     },
 
     _translateBuffer: function(up) {
@@ -217,16 +263,38 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     _createPool: function() {
+      var container = this.getBoundingClientRect();
       this._buffers.forEach(function(buffer) {
         for (var i = 0; i < this.bufferSize; i++) {
           var itemWrapper = document.createElement('div');
           itemWrapper.style.height = this.itemHeight + 'px';
-          itemWrapper.instance = this.stamp({});
+          itemWrapper.instance = {};
 
           Polymer.dom(buffer).appendChild(itemWrapper);
-          Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
+
+          this.async(function(itemWrapper, container) {
+            // Only stamp the visible instances first
+            if (this._isVisible(itemWrapper, container)) {
+              this._ensureStampedInstance(itemWrapper);
+            }
+          }.bind(this, itemWrapper, container), 1); // Wait for first reset
+
         }
       }, this);
+    },
+
+    _ensureStampedInstance: function(itemWrapper) {
+      if (itemWrapper.firstElementChild) {
+        return;
+      }
+
+      var tmpInstance = itemWrapper.instance;
+      itemWrapper.instance = this.stamp({});
+      Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
+
+      Object.keys(tmpInstance).forEach(function(prop) {
+        itemWrapper.instance[prop] = tmpInstance[prop];
+      });
     },
 
     _updateClones: function(viewPortOnly) {
