@@ -43,6 +43,13 @@
         return window.getComputedStyle(element).position === 'fixed';
       }
 
+      it('should have the right amount of scrollbars/scrollers', function() {
+        var scrollbars = 0;
+        scrollbars += window.getComputedStyle(scroller.$.table).overflow === 'hidden' ? 0 : 1;
+        scrollbars += window.getComputedStyle(scroller.$.outerscroller).overflow === 'hidden' ? 0 : 1;
+        expect(scrollbars).to.equal(getScrollbarWidth() > 0 ? 2 : 1);
+      });
+
       it('should/should not have fixed container elements depending on scrolling mode', function() {
         expect(isFixed(scroller.$.items)).to.equal(fixedContainers);
         expect(isFixed(scroller.$.header)).to.equal(fixedContainers);
