@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Object Items Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><b>Object Items</b></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+      </ul>
+    </nav>
+
+    <h3>Default Label and Value</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="numbers-box" label="Number"></vaadin-combo-box>
+        <p>Selected item: <span id="selected-item"></span>.</p>
+        <p>Value: <span id="value"></span>.</p>
+
+        <script>
+          var combobox = document.querySelector('#numbers-box');
+          combobox.items = [
+            {label: 'One', value: 1},
+            {label: 'Two', value: 2},
+            {label: 'Three', value: 3}
+          ];
+
+          combobox.addEventListener('selected-item-changed', function() {
+            document.querySelector('#selected-item').innerHTML = JSON.stringify(combobox.selectedItem);
+          });
+
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#value').innerHTML = combobox.value;
+          });
+
+          combobox.value = 1;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Setting Label and Value Path</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="elements-box" label="Element" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
+        <p>Selected element name: <span id="element-name"></span>.</p>
+        <p>Value: <span id="element-value"></span>.</p>
+
+        <script>
+          var combobox = document.querySelector('#elements-box');
+
+          // elementsJson is an Array of Objects. Item object format:
+          //   {name: 'Hydrogen', symbol: 'H', number: 1}
+          combobox.items = elementsJson;
+
+          combobox.addEventListener('selected-item-changed', function() {
+            document.querySelector('#element-name').innerHTML = combobox.selectedItem && combobox.selectedItem.name;
+          });
+
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#element-value').innerHTML = combobox.value;
+          });
+
+          combobox.value = 'C';
+        </script>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Advanced Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><a href="objects.html">Object Items</a></li>
+        <li><b>Advanced Usage</b></li>
+      </ul>
+    </nav>
+
+    <h3>Typing Custom Values</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="demo1" label="Element" allow-custom-value></vaadin-combo-box>
+        <p>Selected value: <span id="selected-value2"></span></p>
+
+        <script>
+            var combobox = document.querySelector('#demo1');
+            combobox.items = elements;
+
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#selected-value2').innerHTML = combobox.value;
+            });
+
+            combobox.addEventListener('custom-value-set', function(e) {
+              // Prevents setting the value property automatically.
+              e.preventDefault();
+
+              combobox.value = e.detail;
+              document.querySelector('#selected-value2').innerHTML = 'custom value "' + e.detail + '" set!';
+            });
+
+            combobox.value = 'Carbon';
+        </script>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Configuring Icons</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="demo2" label="Custom Icons">
+          <paper-icon-button icon="remove-circle" class="clear-button"></paper-icon-button>
+          <paper-icon-button icon="search" class="toggle-button"></paper-icon-button>
+        </vaadin-combo-box>
+        <script>
+          var combobox = document.querySelector('#demo2');
+          // Array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Replacing the Input with an &lt;iron-input></h3>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box-light id="demo3">
+          <input is="iron-input">
+        </vaadin-combo-box-light>
+        <script>
+          var combobox = document.querySelector('#demo3');
+          // Array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+
+    <h3>Replacing the Input with a &lt;paper-input></h3>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box-light id="demo4" attr-for-value="value">
+          <paper-input label="Elements" class="input">
+            <iron-icon icon="toll" prefix></iron-icon>
+            <paper-button suffix class="clear-button">Clear</paper-button>
+            <paper-button suffix class="toggle-button">Toggle</paper-button>
+          </paper-input>
+        </vaadin-combo-box-light>
+        <script>
+          var combobox = document.querySelector('#demo4');
+          // Array of String values.
+          combobox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+
+</html>
