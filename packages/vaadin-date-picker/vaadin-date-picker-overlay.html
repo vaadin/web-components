@@ -287,7 +287,7 @@
     </div>
 
     <div id="footer" on-touchend="_preventDefault" role="toolbar">
-      <paper-button id="todayButton" on-tap="_onTodayTap" tabindex="-1">
+      <paper-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap" tabindex="-1">
         [[i18n.today]]
       </paper-button>
       <paper-button id="cancelButton" on-tap="_cancel" tabindex="-1">
@@ -828,6 +828,15 @@
 
       _dateAllowed: function(date, min, max) {
         return (!min || date >= min) && (!max || date <= max);
+      },
+
+      _isTodayAllowed: function(min, max) {
+        var today = new Date();
+        var todayMidnight = new Date(0, 0);
+        todayMidnight.setFullYear(today.getFullYear());
+        todayMidnight.setMonth(today.getMonth());
+        todayMidnight.setDate(today.getDate());
+        return this._dateAllowed(todayMidnight, min, max);
       },
 
       _getClosestDate: function(date, dates) {
