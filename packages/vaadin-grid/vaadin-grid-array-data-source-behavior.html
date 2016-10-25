@@ -26,11 +26,36 @@
     },
 
     _arrayDataSource: function(opts, cb) {
-      var items = this.items || [];
+      var items = (this.items || []).slice(0);
+      items.sort(this._multiSort.bind(this));
+
       var start = opts.page * opts.pageSize;
       var end = start + opts.pageSize;
       var slice = items.slice(start, end);
       cb(slice, items.length);
+    },
+
+    _multiSort: function(a, b) {
+      return (this._sorters || []).map(function(sort) {
+        if (sort.direction === 'asc') {
+          return this._compare(Polymer.Base.get(sort.path, a), Polymer.Base.get(sort.path, b));
+        } else if (sort.direction === 'desc') {
+          return this._compare(Polymer.Base.get(sort.path, b), Polymer.Base.get(sort.path, a));
+        }
+        return 0;
+      }, this).reduce(function firstNonZeroValue(p, n) {
+        return p ? p : n;
+      }, 0);
+    },
+
+    _compare: function(a, b) {
+      if (a < b) {
+        return -1;
+      }
+      if (a > b) {
+        return 1;
+      }
+      return 0;
     }
 
   };

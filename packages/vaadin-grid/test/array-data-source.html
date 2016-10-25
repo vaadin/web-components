@@ -91,12 +91,6 @@
         expect(grid.size).to.equal(0);
       });
 
-      it('should handle string values', function() {
-        grid.items = 'FOO';
-        expect(grid.size).to.equal(3);
-        expect(getCell(0, 0).item).to.equal('F');
-      });
-
       it('should set array data source', function() {
         expect(grid.dataSource).to.equal(grid._arrayDataSource);
       });

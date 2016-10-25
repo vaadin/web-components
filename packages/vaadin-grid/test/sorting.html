@@ -1,0 +1,244 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="sorter">
+    <template>
+      <vaadin-grid-sorter path="path">
+        <span class="title">title</span><button>Button</button>
+      </vaadin-grid-sorter>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="grid">
+    <template>
+      <vaadin-grid style="width: 200px; height: 200px;">
+        <vaadin-grid-column>
+          <template is="header">
+            <vaadin-grid-sorter path="first" direction="asc">
+              <span class="title">first</span>
+            </vaadin-grid-sorter>
+          </template>
+          <template>[[item.first]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template is="header">
+            <span class="title">last</span>
+            <vaadin-grid-sorter path="last" direction="desc">
+            </vaadin-grid-sorter>
+          </template>
+          <template>[[item.last]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('sorting', function() {
+
+      describe('sorter', function() {
+        var sorter, title, button, indicators, directionIndicator, orderIndicator;
+
+        function click(element) {
+          Polymer.Base.fire('click', {}, {
+            node: element,
+            bubbles: true
+          });
+        }
+
+        beforeEach(function() {
+          sorter = fixture('sorter');
+          title = Polymer.dom(sorter).querySelector('.title');
+          button = Polymer.dom(sorter).querySelector('button');
+          indicators = Polymer.dom(sorter.root).querySelector('#indicators');
+          directionIndicator = Polymer.dom(sorter.root).querySelector('#direction');
+          orderIndicator = Polymer.dom(sorter.root).querySelector('#order');
+        });
+
+        it('should have default direction', function() {
+          expect(sorter.direction).to.equal(null);
+        });
+
+        it('should toggle direction', function() {
+          click(title);
+          expect(sorter.direction).to.equal('asc');
+          click(title);
+          expect(sorter.direction).to.equal('desc');
+          click(title);
+          expect(sorter.direction).to.equal(null);
+        });
+
+        it('should not toggle on focusable click', function() {
+          click(button);
+          expect(sorter.direction).to.equal(null);
+        });
+
+        it('should fire a sorter-changed event', function(done) {
+          sorter.addEventListener('sorter-changed', function() {
+            done();
+          });
+          sorter.direction = 'asc';
+        });
+
+        it('should show order indicator', function() {
+          expect(orderIndicator.innerText).to.equal('');
+          sorter._order = 0;
+          expect(orderIndicator.innerText).to.equal('1');
+          sorter._order = 4;
+          expect(orderIndicator.innerText).to.equal('5');
+        });
+
+        it('should show direction indicator', function() {
+          expect(indicators.getAttribute('direction')).to.equal(null);
+          sorter.direction = 'asc';
+          expect(indicators.getAttribute('direction')).to.equal('asc');
+          sorter.direction = 'desc';
+          expect(indicators.getAttribute('direction')).to.equal('desc');
+        });
+
+      });
+
+      describe('grid', function() {
+        var grid, sorterFirst, sorterLast;
+
+        beforeEach(function() {
+          grid = fixture('grid');
+          sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+          sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
+
+          grid.items = [{
+            first: 'foo',
+            last: 'bar'
+          }, {
+            first: 'foo',
+            last: 'baz'
+          }, {
+            first: 'bar',
+            last: 'bar'
+          }];
+        });
+
+        it('should be clickable', function() {
+          var title = Polymer.dom(sorterFirst).querySelector('.title');
+          expect(window.getComputedStyle(title).cursor).to.equal('pointer');
+        });
+
+        it('should fire a sort-order-changed event', function(done) {
+          grid.addEventListener('sort-order-changed', function(e) {
+            var sortOrder = e.detail.sortOrder;
+            expect(sortOrder[0].path).to.equal('first');
+            expect(sortOrder[0].direction).to.equal('desc');
+            expect(sortOrder[1].path).to.equal('last');
+            expect(sortOrder[1].direction).to.equal('desc');
+            done();
+          });
+          sorterFirst.direction = 'desc';
+        });
+
+        it('should ignore sorter', function(done) {
+          grid.addEventListener('sort-order-changed', function(e) {
+            var sortOrder = e.detail.sortOrder;
+            expect(sortOrder).to.have.length(1);
+            expect(sortOrder[0].path).to.equal('last');
+            expect(sortOrder[0].direction).to.equal('desc');
+            done();
+          });
+          sorterFirst.direction = '';
+        });
+
+        it('should show order indicators', function() {
+          expect(sorterFirst._order).to.equal(1);
+          expect(sorterLast._order).to.equal(0);
+        });
+
+        it('should not show order indicators for one sorter', function() {
+          sorterLast.direction = '';
+          expect(sorterFirst._order).to.equal(null);
+          expect(sorterLast._order).to.equal(null);
+        });
+
+        it('should not show order indicators', function() {
+          sorterFirst.direction = '';
+          sorterLast.direction = '';
+          expect(sorterFirst._order).to.equal(null);
+          expect(sorterLast._order).to.equal(null);
+        });
+
+        describe('array data source', function() {
+
+          it('should sort automatically', function() {
+            expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('bar');
+            expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('foo');
+
+            expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('baz');
+            expect(getBodyCellContent(grid, 1, 1).innerText).to.equal('bar');
+            expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('bar');
+          });
+
+          it('should sort automatically on sort', function() {
+            sorterFirst.direction = '';
+            expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
+          });
+
+        });
+
+        describe('data source', function() {
+
+          beforeEach(function() {
+            grid.dataSource = sinon.spy(grid.dataSource);
+            grid.clearCache();
+          });
+
+          it('should request with default sorting', function() {
+            var lastCall = grid.dataSource.lastCall;
+            var params = lastCall.args[0];
+            expect(params.sortOrder).to.eql([{
+              path: 'last',
+              direction: 'desc'
+            }, {
+              path: 'first',
+              direction: 'asc'
+            }]);
+          });
+
+          it('should request new data on sort', function() {
+            sorterFirst.direction = 'desc';
+            var lastCall = grid.dataSource.lastCall;
+            var params = lastCall.args[0];
+            expect(params.sortOrder).to.eql([{
+              path: 'first',
+              direction: 'desc'
+            }, {
+              path: 'last',
+              direction: 'desc'
+            }]);
+          });
+
+        });
+
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

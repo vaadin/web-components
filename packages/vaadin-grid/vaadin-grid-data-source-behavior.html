@@ -162,23 +162,25 @@
       var firstVisiblePage = this._getPageForIndex(this.$.scroller.firstVisibleIndex + this.$.scroller._vidxOffset);
 
       return [firstVisiblePage].concat(
-       this.$.scroller._physicalItems
-        .filter(function(row) { return row.index; })
-        .map(function(row) {
-        return this._getPageForIndex(row.index);
-      }.bind(this)))
-      .reduce(function(prev, curr) {
-        if (prev.indexOf(curr) === -1) {
-          prev.push(curr);
-        }
+          this.$.scroller._physicalItems
+          .filter(function(row) {
+            return row.index;
+          })
+          .map(function(row) {
+            return this._getPageForIndex(row.index);
+          }.bind(this)))
+        .reduce(function(prev, curr) {
+          if (prev.indexOf(curr) === -1) {
+            prev.push(curr);
+          }
 
-        return prev;
-      }, []);
+          return prev;
+        }, []);
     },
 
     _updateItems: function(page, items) {
-      for(var i=0;i<this.pageSize;i++) {
-        var index = page*this.pageSize + i;
+      for (var i = 0; i < this.pageSize; i++) {
+        var index = page * this.pageSize + i;
         var row = this.$.scroller._virtualIndexToItem[index];
         if (row) {
           this._updateItem(row, items[i]);
@@ -204,12 +206,15 @@
     },
 
     _loadPage: function(page) {
-      if (this._cache[page]) {
-      } else {
+      if (this._cache[page]) {} else {
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page] && this.dataSource) {
           this._pendingRequests[page] = true;
-          var opts = {page: page, pageSize: this.pageSize};
+          var opts = {
+            page: page,
+            pageSize: this.pageSize,
+            sortOrder: this._mapSorters()
+          };
           this.dataSource(opts, function(items) {
             this._cache[page] = items;
             delete this._pendingRequests[page];
