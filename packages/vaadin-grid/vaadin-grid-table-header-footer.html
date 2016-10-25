@@ -18,53 +18,41 @@
       //     <vaadin-grid-column 5></vaadin-grid-column>
       //   </vaadin-grid-column-group>
       // </vaadin-grid-column-group>
+      //1st level [column1, group1] -> 2 td cells
+      //2nd level [column1, column2, column3, group2] -> 4 td cells
+      //3rd level [column1, column2, column3, column4, column5] -> 5 td cells
 
       _columnsChanged: function(columns, frozenColumns) {
-        //1st level [column1, group1] -> 2 td cells
-        //2nd level [column1, column2, column3, group2] -> 4 td cells
-        //3rd level [column1, column2, column3, column4, column5] -> 5 td cells
-
-        var row = this._createRow();
-        row.frozenColumns = frozenColumns;
-        row.target = this.domHost.domHost;
-        row.columns = columns;
-
-        var row2 = this._createRow();
-        row2.frozenColumns = frozenColumns;
-        row2.target = this.domHost.domHost;
-        row2.columns = this._xxxColumns(row.columns);
-
-        var row3 = this._createRow();
-        row3.frozenColumns = frozenColumns;
-        row3.target = this.domHost.domHost;
-        row3.columns = this._xxxColumns(row2.columns);
-
-        this._rows = [row, row2, row3];
+        for(cols = columns, rows = [];;) {
+          var row = this._createRow();
+          row.frozenColumns = frozenColumns;
+          row.target = this.domHost.domHost;
+          row.columns = cols;
+          row._isLast = this._isLastRow(cols);
+          rows.push(row);
+          if (row._isLast) {
+            break;
+          }
+          cols = this._childrenColumns(cols);
+        }
+        this._rows = rows;
       },
 
-      _xxxColumns: function(columns) {
+     _isLastRow: function(columns) {
+       return columns.reduce(function(prev, col) {
+          return prev && /vaadin-grid-column$/.test(col.localName);
+       }, true);
+     },
+
+      _childrenColumns: function(columns) {
         return columns.map(function(col) {
-          var children = this._childColumns(col);
+          var children = Polymer.dom(col).children.filter(function(el) {
+            return /vaadin-grid-column/.test(el.localName);
+          });
           return children.length > 0 ? children : [col];
         }.bind(this)).reduce(function(prev, curr) {
           return prev.concat(curr);
         }, []);
-      },
-
-      _xxxColumns2: function(columns) {
-        return columns.map(function(col) {
-          var children = this._childColumns(col);
-
-          return children.length > 0 ? children.reduce(function(prev, curr) {
-            return prev.concat(curr);
-          }, []) : col;
-        }.bind(this));
-      },
-
-      _childColumns: function(column) {
-        return Polymer.dom(column).children.filter(function(el) {
-          return /vaadin-grid-column/.test(el.localName);
-        });
       },
 
       _hasChildColumns: function(columns) {
