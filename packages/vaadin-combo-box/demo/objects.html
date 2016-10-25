@@ -27,12 +27,12 @@
 
     <demo-snippet>
       <template>
-        <vaadin-combo-box class="numbers-box" label="Number"></vaadin-combo-box>
+        <vaadin-combo-box id="numbers-box" label="Number"></vaadin-combo-box>
         <p>Selected item: <span id="selected-item"></span>.</p>
         <p>Value: <span id="value"></span>.</p>
 
         <script>
-          var combobox = document.querySelector('.numbers-box');
+          var combobox = document.querySelector('#numbers-box');
           combobox.items = [
             {label: 'One', value: 1},
             {label: 'Two', value: 2},
@@ -56,12 +56,12 @@
 
     <demo-snippet>
       <template>
-        <vaadin-combo-box class="elements-box" label="Element" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
+        <vaadin-combo-box id="elements-box" label="Element" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
         <p>Selected element name: <span id="element-name"></span>.</p>
         <p>Value: <span id="element-value"></span>.</p>
 
         <script>
-          var combobox = document.querySelector('.elements-box');
+          var combobox = document.querySelector('#elements-box');
 
           // elementsJson is an Array of Objects. Item object format:
           //   {name: 'Hydrogen', symbol: 'H', number: 1}
