@@ -439,7 +439,7 @@
       }
 
       return arr.filter((function(item) {
-        filter = filter.toString().toLowerCase() || '';
+        filter = filter ? filter.toString().toLowerCase() : '';
 
         // Check if item contains input value.
         return this._getItemLabel(item).toString().toLowerCase()
