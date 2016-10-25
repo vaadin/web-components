@@ -99,7 +99,7 @@
 
     ready: function() {
       var columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
-      this.columns = columns.length > 0 ? columns : [this.$.column];
+      this.columns = columns.length > 0 ? [columns] : [[this.$.column]];
     },
 
     _itemHeightChanged: function(itemHeight) {

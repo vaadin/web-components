@@ -1,0 +1,112 @@
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid-column-group.html">
+  <link rel="import" href="../vaadin-grid-column.html">
+</head>
+<body>
+
+  <dom-module id="x-grid">
+    <template>
+      <vaadin-grid id="grid" columns="{{columns}}" size="100">
+        <vaadin-grid-column>
+          <template>cell</template>
+          <template is="header">header1</template>
+          <template is="header" colspan="2">header2</template>
+          <template is="footer">footer1</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>cell</template>
+          <template is="header">header3</template>
+          <template is="header">header4</template>
+          <template is="footer">footer2</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+    document.addEventListener('WebComponentsReady', function() {
+      Polymer({
+        is: 'x-grid'
+      });
+    });
+    </script>
+  </dom-module>
+
+  <test-fixture id="grid">
+    <template>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="group">
+    <template>
+      <vaadin-grid-column-group>
+        <template is="header"></template>
+        <template is="footer"></template>
+        <vaadin-grid-column flex="1" width="20%">
+          <template is="header"></template>
+          <template></template>
+        </vaadin-grid-column>
+        <vaadin-grid-column flex="2" width="200px">
+          <template is="header"></template>
+          <template></template>
+        </vaadin-grid-column>
+      </vaadin-grid-column-group>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    describe('column group', function() {
+      var group;
+      var columns;
+      beforeEach(function(done) {
+        group = fixture('group');
+        columns = group.querySelectorAll('vaadin-grid-column');
+
+        group.async(done, 100);
+      });
+
+      it('should sum child column flex', function() {
+        expect(group._flex).to.eql(3);
+      });
+
+      it('should sum child column widths', function() {
+        expect(group._width).to.eql('calc(20% + 200px)');
+      });
+
+      it('should react to child column flex changes', function() {
+        columns[0].flex = 3;
+
+        expect(group._flex).to.eql(5);
+      });
+
+      it('should react to child column width changes', function() {
+        columns[0].width = '10%';
+
+        expect(group._width).to.eql('calc(10% + 200px)');
+      });
+
+      it('should stop property-changed from a child from propagating', function() {
+        var spy = sinon.spy();
+        group.addEventListener('property-changed', spy);
+
+        columns[0].width = '10%';
+
+        // should only have property-changed from the group.
+        expect(spy.callCount).to.eql(1);
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -253,6 +253,7 @@
 
       _headerTemplateChanged: function(headerTemplate, target) {
         if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+          // debugger;
           this._templateChanged(headerTemplate, target);
           // TODO: add a mixin when we theming is sorted out.
           this.removeAttribute('empty');

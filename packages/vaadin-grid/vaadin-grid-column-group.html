@@ -59,12 +59,17 @@
       },
 
       _columnPropChanged: function(e) {
-        if (e.target !== this) {
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-        }
-
         if (e.detail.path.match(/flex|width/)) {
+          if (e.target !== this) {
+            // stop width/flex changes from child columns/groups from bubbling
+            // to the cell of this group.
+            // TODO: header and footer templates don't bubble by default,
+            // as this handler won't catch property change events that have been fired before
+            // the event listener has been registered.
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+          }
+
           this._updateFlexAndWidth();
         }
       },
@@ -83,14 +88,14 @@
         this.fire('property-changed', {
           path: 'footerTemplate',
           value: template
-        });
+        }, {bubbles: false});
       },
 
       _headerTemplateChanged: function(template) {
         this.fire('property-changed', {
           path: 'headerTemplate',
           value: template
-        });
+        }, {bubbles: false});
       },
 
       _flexChanged: function(flex) {

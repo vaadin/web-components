@@ -72,7 +72,7 @@
       },
 
       _headerTemplateChanged: function(headerTemplate) {
-        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
+        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate}, {bubbles: false});
       },
 
       _flexChanged: function(flex) {
@@ -80,7 +80,7 @@
       },
 
       _footerTemplateChanged: function(footerTemplate) {
-        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
+        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate}, {bubbles: false});
       },
 
       _widthChanged: function(width) {

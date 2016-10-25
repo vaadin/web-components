@@ -23,29 +23,6 @@
         this._rows = this.localName === 'thead' ? rows : rows.reverse();
       },
 
-     _isLastRow: function(columns) {
-       return columns.reduce(function(prev, col) {
-          return prev && /vaadin-grid-column$/.test(col.localName);
-       }, true);
-     },
-
-      _childrenColumns: function(columns) {
-        return columns.map(function(col) {
-          var children = Polymer.dom(col).children.filter(function(el) {
-            return /vaadin-grid-column/.test(el.localName);
-          });
-          return children.length > 0 ? children : [col];
-        }.bind(this)).reduce(function(prev, curr) {
-          return prev.concat(curr);
-        }, []);
-      },
-
-      _hasChildColumns: function(columns) {
-        return columns.filter(function(col) {
-          return this._childColumns(col).length > 0;
-        }.bind(this)).length > 0;
-      },
-
       _rowsChanged: function(rows) {
         Polymer.dom(this).innerHTML = '';
 
