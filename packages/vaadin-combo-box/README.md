@@ -6,13 +6,11 @@
 
 <!---
 ```
-<custom-element-demo>
+<custom-element-demo height="300">
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-combo-box.html">
-    <div style="height: 300px; width: 400px; padding: 3px 10px;">
-      <next-code-block></next-code-block>
-    </div>
+    <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
