@@ -1,17 +1,18 @@
 <link rel="import" href="../polymer/polymer.html">
 
 <dom-module id="vaadin-grid-column">
-  <template>
-    <style>
-      :host {
-        display: none;
-      }
-    </style>
-  </template>
-  <script>
-    Polymer({
-      is: 'vaadin-grid-column',
+</dom-module>
 
+<dom-module id="vaadin-grid-column-group">
+</dom-module>
+
+<script>
+  (function(){
+
+    /**
+     * @polymerBehavior vaadinGridColumnBehavior
+     */
+    var vaadinGridColumnBehavior = {
       properties: {
         headerTemplate: {
           type: Object,
@@ -40,7 +41,54 @@
           value: function() {
             return this._findTemplate(null);
           }
-        },
+        }
+      },
+
+      observers: [
+        '_footerTemplateChanged(footerTemplate)',
+        '_headerTemplateChanged(headerTemplate)',
+      ],
+
+      _findTemplate: function(type) {
+        var template = Polymer.dom(this).children.filter(function(el) {
+          return el.localName === 'template' && el.getAttribute('is') === type;
+        })[0];
+        if (template) {
+          if (this.dataHost) {
+            // set dataHost to the context where template has been defined
+            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+          }
+          return template;
+        }
+      },
+
+      _headerTemplateChanged: function(headerTemplate) {
+        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate}, {bubbles: false});
+      },
+
+      _footerTemplateChanged: function(footerTemplate) {
+        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate}, {bubbles: false});
+      },
+
+      _flexChanged: function(flex) {
+        this.fire('property-changed', {path: 'flex', value: flex});
+      },
+
+      _widthChanged: function(width) {
+        this.fire('property-changed', {path: 'width', value: width});
+      },
+
+      _templateChanged: function(template) {
+        this.fire('property-changed', {path: 'template', value: template});
+      }
+    };
+
+    Polymer({
+      is: 'vaadin-grid-column',
+
+      behaviors: [vaadinGridColumnBehavior],
+
+      properties: {
         width: {
           type: String,
           value: '100px'
@@ -52,44 +100,61 @@
         }
       },
 
-      observers: ['_headerTemplateChanged(headerTemplate)', '_flexChanged(flex)',
-                  '_footerTemplateChanged(footerTemplate)', '_widthChanged(width)',
-                  '_templateChanged(template)'],
+      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)']
+    });
 
-      _findTemplate: function(type) {
-        var template = Polymer.dom(this).children.filter(function(el) {
-          return el.localName === 'template' && el.getAttribute('is') === type;
-        })[0];
+    Polymer({
+      is: 'vaadin-grid-column-group',
 
-        if (template) {
-          if (this.dataHost) {
-            // set dataHost to the context where template has been defined
-            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+      behaviors: [vaadinGridColumnBehavior],
+
+      properties: {
+        // TODO: needs a light dom observer
+        _childColumns: {
+          value: function() {
+            return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          }
+        },
+        _flex: Number,
+
+        _width: String
+      },
+
+      observers: ['_flexChanged(_flex)', '_widthChanged(_width)'],
+
+      listeners: {
+        'property-changed': '_columnPropChanged'
+      },
+
+      ready: function() {
+        this._updateFlexAndWidth();
+      },
+
+      _columnPropChanged: function(e) {
+        if (e.detail.path.match(/flex|width/)) {
+          if (e.target !== this) {
+            // stop width/flex changes from child columns/groups from bubbling
+            // to the cell of this group.
+            // TODO: header and footer templates don't bubble by default,
+            // as this handler won't catch property change events that have been fired before
+            // the event listener has been registered.
+            e.stopPropagation();
+            e.stopImmediatePropagation();
           }
 
-          return template;
+          this._updateFlexAndWidth();
         }
       },
 
-      _headerTemplateChanged: function(headerTemplate) {
-        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate}, {bubbles: false});
-      },
+      _updateFlexAndWidth: function() {
+        this._width = 'calc(' + this._childColumns.reduce(function(prev, curr) {
+          return prev += ' + ' + (curr.width || '0');
+        }, '').substring(3) + ')';
 
-      _flexChanged: function(flex) {
-        this.fire('property-changed', {path: 'flex', value: flex});
-      },
-
-      _footerTemplateChanged: function(footerTemplate) {
-        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate}, {bubbles: false});
-      },
-
-      _widthChanged: function(width) {
-        this.fire('property-changed', {path: 'width', value: width});
-      },
-
-      _templateChanged: function(template) {
-        this.fire('property-changed', {path: 'template', value: template});
+        this._flex = this._childColumns.reduce(function(prev, curr) {
+          return prev + curr.flex;
+        }, 0);
       }
     });
-  </script>
-</dom-module>
+  })();
+</script>
