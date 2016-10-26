@@ -3,6 +3,7 @@
 <dom-module id="vaadin-grid-table-cell"></dom-module>
 <dom-module id="vaadin-grid-table-header-cell"></dom-module>
 <dom-module id="vaadin-grid-table-footer-cell"></dom-module>
+<dom-module id="vaadin-grid-sizer-cell"></dom-module>
 
 <script>
   (function() {
@@ -288,6 +289,12 @@
           this.removeAttribute('empty');
         }
       }
+    });
+
+    Polymer({
+      is: 'vaadin-grid-sizer-cell',
+
+      behaviors: [vaadinGridTableCellBehavior]
     });
   })();
 </script>
