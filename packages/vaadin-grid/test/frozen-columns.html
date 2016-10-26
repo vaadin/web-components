@@ -17,8 +17,8 @@
 
   <test-fixture id="frozen-columns">
     <template>
-      <vaadin-grid frozen-columns="1" style="width: 200px; height: 400px;" size="1000">
-        <vaadin-grid-column>
+      <vaadin-grid style="width: 200px; height: 400px;" size="1000">
+        <vaadin-grid-column frozen>
           <template>foo</template>
           <template is="header">foo</template>
         </vaadin-grid-column>
@@ -68,7 +68,7 @@
           });
 
           it('should have the correct last-frozen cell in a row', function() {
-            scroller.frozenColumns = 2;
+            scroller.columns[0][1].frozen = true;
             containerRows = getRows(containerElement);
             var cells = getRowCells(containerRows[0]);
             expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
@@ -104,7 +104,7 @@
             scroller.$.table.addEventListener('scroll', function() {
               expect(cells[0].style.transform).to.eql('translate3d(' + defaultCellWidth + 'px, 0px, 0px)');
 
-              scroller.frozenColumns = 0;
+              scroller.columns[0][0].frozen = false;
               cells = getRowCells(getRows(containerElement)[0]);
               scroller.flushDebouncer('cache-elements');
 
@@ -121,7 +121,7 @@
             scroller.$.table.addEventListener('scroll', function() {
               expect(cells[1].style.transform).to.eql('');
 
-              scroller.frozenColumns = 2;
+              scroller.columns[0][1].frozen = true;
               cells = getRowCells(getRows(containerElement)[0]);
               scroller.flushDebouncer('cache-elements');
 

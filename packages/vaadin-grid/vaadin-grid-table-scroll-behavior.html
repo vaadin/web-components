@@ -61,7 +61,10 @@
       },
 
       // Cached array of frozen cells
-      _frozenCells: Array
+      _frozenCells: {
+        type: Array,
+        value: []
+      }
     },
 
     ready: function() {

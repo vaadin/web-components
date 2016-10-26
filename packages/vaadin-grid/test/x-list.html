@@ -38,7 +38,7 @@
       <template id="cell">[[index]]</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]" bind-data=[[bindData]]>
+    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]"  bind-data=[[bindData]]>
       <content></content>
     </vaadin-grid-table>
   </template>
@@ -51,11 +51,6 @@
     properties: {
 
       columns: Array,
-
-      frozenColumns: {
-        type: Number,
-        value: 0
-      },
 
       data: {
         type: Array
