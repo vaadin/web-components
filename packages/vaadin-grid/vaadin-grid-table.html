@@ -159,9 +159,9 @@
         <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
         </div>
       </caption>
-      <thead id="header" is="vaadin-grid-table-header" columns="[[columns]]" frozen-columns="[[frozenColumns]]"></thead>
+      <thead id="header" is="vaadin-grid-table-header" columns="[[columns]]"></thead>
       <tbody id="items"></tbody>
-      <tfoot id="footer" is="vaadin-grid-table-footer" columns="[[columns]]" frozen-columns="[[frozenColumns]]"></tfoot>
+      <tfoot id="footer" is="vaadin-grid-table-footer" columns="[[columns]]"></tfoot>
     </table>
 
     <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]" ios$=[[ios]]>
@@ -186,13 +186,14 @@
       navigator.userAgent.match(/Edge/) ? vaadin.elements.grid.TableEdgeBehavior : vaadin.elements.grid.TableScrollBehavior
     ],
 
+    listeners: {
+      'property-changed': '_columnPropChanged'
+    },
+
     properties: {
       size: Number,
 
       columns: Array,
-      frozenColumns: {
-        value: 0
-      },
 
       bindData: Function,
 
@@ -224,7 +225,7 @@
     },
 
     observers: [
-      '_columnsChanged(columns, frozenColumns, _physicalItems, _physicalCount)',
+      '_columnsChanged(columns, _physicalItems, _physicalCount)',
       '_sizeChanged(size, bindData)',
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)'
     ],
@@ -240,6 +241,22 @@
 
       if (/footerTemplate/.test(e.detail.path)) {
         this.toggleAttribute('has-templates', true, this.$.footer);
+      }
+
+      if (/frozen/.test(e.detail.path)) {
+        this._frozenCellsChanged();
+
+        var lastFrozen = 0;
+        var columns = this.columns[this.columns.length - 1];
+
+        columns.forEach(function(col, index) {
+          col.lastFrozen = false;
+          if (col.frozen) {
+            lastFrozen = index;
+          }
+        });
+
+        columns[lastFrozen].lastFrozen = true;
       }
 
       e.stopPropagation();
@@ -265,10 +282,9 @@
       });
     },
 
-    _columnsChanged: function(columns, frozenColumns, physicalItems, count) {
+    _columnsChanged: function(columns, physicalItems, count) {
       physicalItems.forEach(function(row) {
         row.columns = columns[columns.length - 1];
-        row.frozenColumns = frozenColumns;
       });
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {

@@ -12,6 +12,14 @@
         column: Object,
         expanded: Boolean,
         flex: Number,
+        frozen: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
+        lastFrozen: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
         instance: Object,
         index: Number,
         item: Object,
@@ -45,6 +53,8 @@
 
       _columnChanged: function(column) {
         this.flex = column.flex;
+        this.frozen = column.frozen;
+        this.lastFrozen = column.lastFrozen;
         this.headerTemplate = column.headerTemplate;
         this.footerTemplate = column.footerTemplate;
         this.template = column.template;

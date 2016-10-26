@@ -64,10 +64,6 @@
       _frozenCells: Array
     },
 
-    observers: [
-      '_frozenCellsChanged(columns, frozenColumns, _physicalCount)'
-    ],
-
     ready: function() {
       this.scrollTarget = this.$.table;
       this.listen(this.$.table, 'wheel', '_onWheel');

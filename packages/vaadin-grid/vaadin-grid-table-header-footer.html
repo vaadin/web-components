@@ -3,17 +3,15 @@
     var vaadinGridTableRowContainerBehavior = {
       properties: {
         columns: Array,
-        frozenColumns: Number,
         _rows: Array
       },
 
-      observers: ['_columnsChanged(columns, frozenColumns)', '_rowsChanged(_rows)'],
+      observers: ['_columnsChanged(columns)', '_rowsChanged(_rows)'],
 
-      _columnsChanged: function(columns, frozenColumns) {
+      _columnsChanged: function(columns) {
         var rows = [];
         for(var i=0;i<columns.length;i++) {
           var row = this._createRow();
-          row.frozenColumns = frozenColumns;
           row.target = this.domHost.domHost;
           row._isColumnRow = i == columns.length - 1;
           row.columns = columns[i];

@@ -31,12 +31,25 @@
           value: function() {
             return [];
           }
+        },
+
+        frozen: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        lastFrozen: {
+          type: Boolean,
+          value: false,
+          notify: true
         }
       },
 
       observers: [
         '_footerTemplateChanged(footerTemplate)',
         '_headerTemplateChanged(headerTemplate)',
+        '_lastFrozenChanged(lastFrozen)'
       ],
 
       _findTemplate: function(type) {
@@ -66,6 +79,13 @@
 
       _widthChanged: function(width) {
         this.fire('property-changed', {path: 'width', value: width});
+      },
+
+      _lastFrozenChanged: function(lastFrozen) {
+        // Note that this property gets bubbled through column-groups and
+        // all the way up the header cells of group columns. So that's the
+        // reason why column-groups don't have this property at all.
+        this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
       }
     };
 
@@ -93,7 +113,11 @@
         }
       },
 
-      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)'],
+      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)'],
+
+      _frozenChanged: function(frozen) {
+        this.fire('property-changed', {path: 'frozen', value: frozen});
+      },
 
       _templateChanged: function(template) {
         this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
@@ -117,7 +141,7 @@
         _width: String
       },
 
-      observers: ['_flexChanged(_flex)', '_widthChanged(_width)'],
+      observers: ['_flexChanged(_flex)', '_widthChanged(_width)', '_frozenChanged(_childColumns, frozen)'],
 
       listeners: {
         'property-changed': '_columnPropChanged'
@@ -128,7 +152,7 @@
       },
 
       _columnPropChanged: function(e) {
-        if (e.target !== this) {
+        if (e.target !== this && !/frozen/.test(e.detail.path)) {
           // stop width/flex changes from child columns/groups from bubbling
           // to the cell of this group.
           // TODO: header and footer templates don't bubble by default,
@@ -138,8 +162,12 @@
           e.stopImmediatePropagation();
         }
 
-        if (e.detail.path.match(/flex|width/)) {
+        if (/flex|width/.test(e.detail.path)) {
           this._updateFlexAndWidth();
+        }
+
+        if (/frozen/.test(e.detail.path)) {
+          this.frozen = e.detail.value;
         }
       },
 
@@ -151,7 +179,13 @@
         this._flex = this._childColumns.reduce(function(prev, curr) {
           return prev + curr.flex;
         }, 0);
-      }
+      },
+
+      _frozenChanged: function(childColumns, frozen) {
+        childColumns.forEach(function(col) {
+          col.frozen = frozen;
+        });
+      },
     });
   })();
 </script>
