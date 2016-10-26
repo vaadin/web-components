@@ -135,6 +135,43 @@
           upload._uploadFile(file);
         });
 
+        it('should fire the upload-before with configurable form data name', function(done) {
+          function MockFormData() {
+            this.data = [];
+          }
+          MockFormData.prototype.append = function(name, value, filename) {
+            this.data.push({name: name, value: value, filename: filename});
+          };
+          var OriginalFormData = window.FormData;
+          window.FormData = MockFormData;
+
+          upload.addEventListener('upload-before', function(e) {
+            expect(e.detail.file.formDataName).to.equal('file');
+            e.detail.file.formDataName = 'my-attachment';
+
+            // Monkey-patch xhr.send to check the form data name param
+            e.detail.xhr.send = function(formData) {
+              expect(formData.data[0].name).to.equal('my-attachment');
+              expect(formData.data[0].value).to.eql(file);
+              done();
+            };
+          });
+
+          upload._uploadFile(file);
+
+          window.FormData = OriginalFormData;
+        });
+
+        it('should use formDataName property as a default form data name', function(done) {
+          upload.addEventListener('upload-before', function(e) {
+            expect(e.detail.file.formDataName).to.equal('attachment');
+            done();
+          });
+
+          upload.formDataName = 'attachment';
+          upload._uploadFile(file);
+        });
+
         it('should not open xhr if `upload-before` event is cancelled', function() {
           upload.addEventListener('upload-before', function(e) {
             e.preventDefault();

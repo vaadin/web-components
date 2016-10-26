@@ -31,6 +31,7 @@ Communication between the [elementname]#vaadin-upload# element and the server-si
 | [propertyname]#method# | `POST` | HTTP method used to send the files. Only POST and PUT are allowed.
 | [propertyname]#headers# | `{}` | A JSON map with key/values to send to the server in the `Headers`
 | [propertyname]#timeout# | `0` | Time limit in seconds to upload the file
+| [propertyname]#formDataName# | `file` | The `name` property used in the Content-Disposition header.
 |======================
 
 [source,html]
@@ -62,6 +63,16 @@ uploader.addEventListener('upload-before', function(e) {
   if (e.detail.file.size > 10240) {
     e.detail.file.error = 'File too big.'
   }
+});
+----
++
+The `upload-before` event allows you to customize the `name` in the Content-Disposition upload request header for each uploaded file individually:
++
+[source,javascript]
+----
+uploader.addEventListener('upload-before', function(e) {
+  // Use the filename as a FormData name for the file
+  e.detail.file.formDataName = e.detail.file.name;
 });
 ----
 
