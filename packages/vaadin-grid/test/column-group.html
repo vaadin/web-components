@@ -140,6 +140,19 @@
 
         expect(spy.callCount).to.eql(0);
       });
+
+      it('should get frozen when child column freezes', function() {
+        columns[0].frozen = true;
+
+        expect(group.frozen).to.be.true;
+      });
+
+      it('should propagate frozen to child columns', function() {
+        group.frozen = true;
+
+        expect(columns[0].frozen).to.be.true;
+        expect(columns[1].frozen).to.be.true;
+      });
     });
   </script>
 

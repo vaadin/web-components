@@ -200,7 +200,7 @@ body {
             </app-toolbar>
           </app-header>
 
-          <vaadin-grid id="component" size="[[size]]" frozen-columns="[[frozenColumns]]" row-count="2">
+          <vaadin-grid id="component" size="[[size]]" row-count="2">
             <vaadin-grid-column width="[[width]]px">
               <template>
                 <div class="elItem" style$="[[_getStyle(index, height)]]">#[[index]]</div>
@@ -280,6 +280,17 @@ body {
           width: {
             value: 100
           }
+        },
+
+        observers: [
+          '_onFrozenChanged(frozenColumns)'
+        ],
+
+        _onFrozenChanged: function(f) {
+          this.$.component.columns[this.$.component.columns.length - 1]
+          .forEach(function(c, i) {
+            c.toggleAttribute('frozen', i < f);
+          })
         },
 
         iconForItem: function(item) {
