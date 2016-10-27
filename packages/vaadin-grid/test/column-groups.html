@@ -183,7 +183,7 @@
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(el) {
-            expect(el.hasAttribute('empty')).to.be.true;
+            expect(el.matches(':empty')).to.be.true;
           });
         });
 
@@ -192,7 +192,7 @@
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(el) {
-            expect(el.hasAttribute('empty')).to.be.true;
+            expect(el.matches(':empty')).to.be.true;
           });
         });
       });
@@ -277,7 +277,7 @@
             [2, 2],
             [2, 3]
           ].forEach(function(a) {
-            expect(getHeaderCell(a[0], a[1]).hasAttribute('empty')).to.be.true;
+            expect(getHeaderCell(a[0], a[1]).matches(':empty')).to.be.true;
           })
         });
 
@@ -292,7 +292,7 @@
             [0, 2],
             [0, 3]
           ].forEach(function(a) {
-            expect(getFooterCell(a[0], a[1]).hasAttribute('empty')).to.be.true;
+            expect(getFooterCell(a[0], a[1]).matches(':empty')).to.be.true;
           })
         });
 

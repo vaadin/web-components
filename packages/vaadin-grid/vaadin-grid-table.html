@@ -127,29 +127,23 @@
       /* Theme styles */
       :host {
         box-sizing: border-box;
-        @apply(--vaadin-grid-table);
+        border: 1px solid var(--vaadin-grid-border-color);
       }
 
-      thead tr:last-child th {
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06),
-                    0 2px 0 rgba(0, 0, 0, 0.075),
-                    0 3px 0 rgba(0, 0, 0, 0.05),
-                    0 4px 0 rgba(0, 0, 0, 0.015);
+      thead[has-templates] tr:last-child th {
+        border-bottom: 1px solid var(--vaadin-grid-border-color);
       }
 
-      tfoot tr:first-child td {
-        box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+      tfoot[has-templates] tr:first-child td {
+        border-top: 1px solid var(--vaadin-grid-border-color);
       }
 
-      tbody tr {
+      tbody tr td {
         border-bottom: 1px solid var(--vaadin-grid-border-color);
       }
 
       td, th {
         text-align: left;
-      }
-
-      td[empty], th[empty] {
       }
 
       tr[odd] td {
@@ -234,6 +228,23 @@
       '_sizeChanged(size, bindData)',
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)'
     ],
+
+    listeners: {
+      'property-changed': '_columnPropChanged'
+    },
+
+    _columnPropChanged: function(e) {
+      if (/headerTemplate/.test(e.detail.path)) {
+        this.toggleAttribute('has-templates', true, this.$.header);
+      }
+
+      if (/footerTemplate/.test(e.detail.path)) {
+        this.toggleAttribute('has-templates', true, this.$.footer);
+      }
+
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    },
 
     // The following values aim at avoiding having 2 overlapping semi-invisible
     // scrollbars visible at the same time when scrollbar width is 0

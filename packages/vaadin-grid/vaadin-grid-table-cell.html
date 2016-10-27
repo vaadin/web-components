@@ -241,10 +241,6 @@
         headerTemplate: Object
       },
 
-      hostAttributes: {
-        'empty': ''
-      },
-
       behaviors: [
         Polymer.Templatizer,
         vaadinGridTableCellBehavior
@@ -254,10 +250,7 @@
 
       _headerTemplateChanged: function(headerTemplate, target) {
         if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
-          // debugger;
           this._templateChanged(headerTemplate, target);
-          // TODO: add a mixin when we theming is sorted out.
-          this.removeAttribute('empty');
         }
       }
     });
@@ -276,17 +269,11 @@
         vaadinGridTableCellBehavior
       ],
 
-      hostAttributes: {
-        'empty': ''
-      },
-
       observers: ['_footerTemplateChanged(footerTemplate, target)'],
 
       _footerTemplateChanged: function(footerTemplate, target) {
         if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
           this._templateChanged(footerTemplate, target);
-          // TODO: add a mixin when we theming is sorted out.
-          this.removeAttribute('empty');
         }
       }
     });
