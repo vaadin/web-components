@@ -61,21 +61,21 @@
         <p>Value: <span id="element-value"></span>.</p>
 
         <script>
-          var combobox = document.querySelector('#elements-box');
+          var combobox2 = document.querySelector('#elements-box');
 
           // elementsJson is an Array of Objects. Item object format:
           //   {name: 'Hydrogen', symbol: 'H', number: 1}
-          combobox.items = elementsJson;
+          combobox2.items = elementsJson;
 
-          combobox.addEventListener('selected-item-changed', function() {
-            document.querySelector('#element-name').innerHTML = combobox.selectedItem && combobox.selectedItem.name;
+          combobox2.addEventListener('selected-item-changed', function() {
+            document.querySelector('#element-name').innerHTML = combobox2.selectedItem && combobox2.selectedItem.name;
           });
 
-          combobox.addEventListener('value-changed', function() {
-            document.querySelector('#element-value').innerHTML = combobox.value;
+          combobox2.addEventListener('value-changed', function() {
+            document.querySelector('#element-value').innerHTML = combobox2.value;
           });
 
-          combobox.value = 'C';
+          combobox2.value = 'C';
         </script>
       </template>
     </demo-snippet>
