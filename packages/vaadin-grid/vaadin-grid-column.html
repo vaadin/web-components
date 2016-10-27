@@ -31,16 +31,6 @@
           value: function() {
             return [];
           }
-        },
-        name: {
-          type: String,
-          value: ''
-        },
-        template: {
-          type: Object,
-          value: function() {
-            return this._findTemplate(null);
-          }
         }
       },
 
@@ -76,10 +66,6 @@
 
       _widthChanged: function(width) {
         this.fire('property-changed', {path: 'width', value: width});
-      },
-
-      _templateChanged: function(template) {
-        this.fire('property-changed', {path: 'template', value: template});
       }
     };
 
@@ -97,10 +83,21 @@
         flex: {
           type: Number,
           value: 1
+        },
+
+        template: {
+          type: Object,
+          value: function() {
+            return this._findTemplate(null);
+          }
         }
       },
 
-      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)']
+      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)'],
+
+      _templateChanged: function(template) {
+        this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
+      }
     });
 
     Polymer({

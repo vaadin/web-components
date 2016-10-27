@@ -96,14 +96,49 @@
         expect(group._width).to.eql('calc(10% + 200px)');
       });
 
-      it('should stop property-changed from a child from propagating', function() {
+      it('should stop width from a child from propagating', function() {
         var spy = sinon.spy();
         group.addEventListener('property-changed', spy);
 
         columns[0].width = '10%';
 
-        // should only have property-changed from the group.
         expect(spy.callCount).to.eql(1);
+      });
+
+      it('should stop flex from a child from propagating', function() {
+        var spy = sinon.spy();
+        group.addEventListener('property-changed', spy);
+
+        columns[0].flex = 2;
+
+        expect(spy.callCount).to.eql(1);
+      });
+
+      it('should stop header template from a child from propagating', function() {
+        var spy = sinon.spy();
+        group.addEventListener('property-changed', spy);
+
+        columns[0].headerTemplate = document.createElement('template');
+
+        expect(spy.callCount).to.eql(0);
+      });
+
+      it('should stop footer template from a child from propagating', function() {
+        var spy = sinon.spy();
+        group.addEventListener('property-changed', spy);
+
+        columns[0].footerTemplate = document.createElement('template');
+
+        expect(spy.callCount).to.eql(0);
+      });
+
+      it('should stop template from a child from propagating', function() {
+        var spy = sinon.spy();
+        group.addEventListener('property-changed', spy);
+
+        columns[0].template = document.createElement('template');
+
+        expect(spy.callCount).to.eql(0);
       });
     });
   </script>
