@@ -127,27 +127,32 @@
       /* Theme styles */
       :host {
         box-sizing: border-box;
-        border: 1px solid var(--vaadin-grid-border-color);
+        @apply(--vaadin-grid-table);
       }
 
-      thead tr:last-child th:not([empty]) {
-        border-bottom: 1px solid var(--vaadin-grid-border-color);
+      thead {
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06),
+                    0 2px 0 rgba(0, 0, 0, 0.075),
+                    0 3px 0 rgba(0, 0, 0, 0.05),
+                    0 4px 0 rgba(0, 0, 0, 0.015);
       }
-      tfoot tr:first-child td:not([empty]) {
-        border-top: 1px solid var(--vaadin-grid-border-color);
+
+      tfoot {
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      tbody tr {
+        border-bottom: 1px solid var(--vaadin-grid-border-color);
       }
 
       td, th {
-        border-bottom: 1px solid var(--vaadin-grid-border-color);
         text-align: left;
       }
 
       td[empty], th[empty] {
-        border-bottom: none;
       }
 
       tr[odd] td {
-        /*background-color: #f9f9f9;*/
       }
 
       [last-frozen] {
