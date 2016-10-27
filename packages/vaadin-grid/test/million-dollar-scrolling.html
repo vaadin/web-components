@@ -130,7 +130,7 @@
 
           it('should be able to scroll to end', function(done) {
             scrollToEnd(grid, function() {
-              expect(getLastItemFromList(grid.$.scroller.$.table).textContent).to.contain('item' + (grid.size - 1));
+              expect(getLastItemFromList(grid.$.scroller).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });
@@ -150,7 +150,7 @@
             this.timeout(1000000);
 
             simulateScrollToEnd(function() {
-              expect(getLastItemFromList(grid.$.scroller.$.table).textContent).to.contain('item' + (grid.size - 1));
+              expect(getLastItemFromList(grid.$.scroller).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });

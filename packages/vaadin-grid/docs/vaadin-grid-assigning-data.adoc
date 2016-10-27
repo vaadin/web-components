@@ -12,7 +12,7 @@ We will go through the basics of using the [propertyname]#items# API to generate
 For more advanced data assignment topics, see <<vaadin-grid-lazy-loading#vaadin-grid.lazy-loading, "Lazy Loading and Remote Data">>.
 
 [[figure.vaadin-grid.data.overview]]
-.A [vaadinelement]#vaadin-grid# displaying data with three columns
+.Data with three columns
 image::img/vaadin-grid-assigning-data.png[]
 
 [[vaadin-grid.items.property]]
@@ -27,16 +27,16 @@ You can do this declaratively with the body [elementname]#template# of a [elemen
 ----
 <vaadin-grid>
   <vaadin-grid-column>
-    <template class="header">First</template>
-    <template class="body">[[user.name.first]]<template>
+    <template is="header">First</template>
+    <template>[[user.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
-    <template class="header">Last</template>
-    <template class="body">[[user.name.last]]<template>
+    <template is="header">Last</template>
+    <template>[[user.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
-    <template class="header">Email</template>
-    <template class="body">[[user.email]]<template>
+    <template is="header">Email</template>
+    <template>[[user.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----

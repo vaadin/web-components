@@ -60,16 +60,18 @@
         this._multiSelectionColumn.grid = this;
         this.listen(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
 
-        this.unshift('columns', this._multiSelectionColumn.$.column);
+        this.columns = columns.map(function(cols) {
+          cols.unshift(this._multiSelectionColumn.$.column);
+          return cols.slice(0);
+        }.bind(this));
       } else if(!multiSelection && this._multiSelectionColumn) {
         this.unlisten(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
 
-        var index = columns.indexOf(this._multiSelectionColumn.$.column);
-        if (index > -1) {
-          this.splice('columns', index, 1);
-        }
-
         this._multiSelectionColumn = undefined;
+        this.columns = columns.map(function(cols) {
+          cols.shift();
+          return cols.slice(0);
+        }.bind(this));
       }
     },
 

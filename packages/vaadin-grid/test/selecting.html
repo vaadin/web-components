@@ -101,7 +101,7 @@
         });
 
         it('should have multi selection column', function() {
-          expect(grid.columns.length).to.equal(3);
+          expect(grid.columns[0].length).to.equal(3);
         });
 
         it('should adjust frozen columns', function() {
@@ -150,7 +150,7 @@
       describe('single selection', function() {
 
         it('should not have multi selection column', function() {
-          expect(grid.columns.length).to.eql(2);
+          expect(grid.columns[0].length).to.eql(2);
         });
 
         it('should select multiple rows', function() {

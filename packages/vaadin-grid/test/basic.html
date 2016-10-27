@@ -168,16 +168,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       list.size = 100;
 
       flush(function() {
-        assert.equal(getFirstItemFromList(list.$.items).textContent, '0');
+        assert.equal(getFirstItemFromList(list).textContent, '0');
 
         list.size = 0;
 
         flush(function() {
-          assert.notEqual(getFirstItemFromList(list.$.items).textContent, '0');
+          assert.notEqual(getFirstItemFromList(list).textContent, '0');
           list.size = 100;
 
           flush(function() {
-            assert.equal(getFirstItemFromList(list.$.items).textContent, '0');
+            assert.equal(getFirstItemFromList(list).textContent, '0');
             done();
           });
         });

@@ -83,16 +83,43 @@
     },
 
     ready: function() {
-      this.columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+      var rootColumns = Polymer.dom(this).children.filter(function(el) {
+        return el.localName.indexOf('vaadin-grid-column') === 0;
+      });
+
+      var columns = [];
+      for(var c = rootColumns;;) {
+        columns.push(c);
+        if (this._isLastRow(c)) {
+          break;
+        }
+        c = this._childrenColumns(c);
+      }
+
+      this.columns = columns;
+
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template[is=row-details]');
     },
 
+    _isLastRow: function(columns) {
+      return columns.reduce(function(prev, col) {
+         return prev && /vaadin-grid-column$/.test(col.localName);
+      }, true);
+    },
+
+    _childrenColumns: function(columns) {
+      return columns.map(function(col) {
+        var children = Polymer.dom(col).children.filter(function(el) {
+          return /vaadin-grid-column/.test(el.localName);
+        });
+        return children.length > 0 ? children : [col];
+      }.bind(this)).reduce(function(prev, curr) {
+        return prev.concat(curr);
+      }, []);
+    },
+
     _columnsChanged: function(e) {
-      if (e.path === 'columns') { //new array is set
-        e.value.forEach(function(col) {
-          col.grid = this;
-        }.bind(this));
-      } else if (e.path === 'columns.splices' || //array is spliced
+      if (e.path === 'columns.splices' || //array is spliced
         (e.path.indexOf('columns.#') === 0 && e.path.split('.').length === 2)) { //column is replaced with set
         // TODO: implement splice support that will add and remove only affected cells.
         // meanwhile, deal with splices as the whole array would change.

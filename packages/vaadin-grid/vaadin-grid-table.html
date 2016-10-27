@@ -130,27 +130,30 @@
         border: 1px solid var(--vaadin-grid-border-color);
       }
 
-      thead tr:last-child th {
+      thead[has-templates] tr:last-child th {
         border-bottom: 1px solid var(--vaadin-grid-border-color);
       }
-      tfoot tr:first-child td {
+
+      tfoot[has-templates] tr:first-child td {
         border-top: 1px solid var(--vaadin-grid-border-color);
       }
 
-      td, th {
+      tbody tr td {
         border-bottom: 1px solid var(--vaadin-grid-border-color);
+      }
+
+      td, th {
         text-align: left;
       }
 
       tr[odd] td {
-        /*background-color: #f9f9f9;*/
       }
 
       [last-frozen] {
         border-right: 1px solid var(--vaadin-grid-border-color);
       }
     </style>
-
+    <content select="vaadin-grid-column, vaadin-grid-column-group"></content>
     <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>
         <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
@@ -221,11 +224,27 @@
     },
 
     observers: [
-      '_columnsChanged(columns.*, frozenColumns, _physicalItems)',
+      '_columnsChanged(columns, frozenColumns, _physicalItems, _physicalCount)',
       '_sizeChanged(size, bindData)',
-      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)',
-      '_physicalItemsChanged(_physicalCount, columns, frozenColumns, _physicalItems)'
+      '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)'
     ],
+
+    listeners: {
+      'property-changed': '_columnPropChanged'
+    },
+
+    _columnPropChanged: function(e) {
+      if (/headerTemplate/.test(e.detail.path)) {
+        this.toggleAttribute('has-templates', true, this.$.header);
+      }
+
+      if (/footerTemplate/.test(e.detail.path)) {
+        this.toggleAttribute('has-templates', true, this.$.footer);
+      }
+
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    },
 
     // The following values aim at avoiding having 2 overlapping semi-invisible
     // scrollbars visible at the same time when scrollbar width is 0
@@ -246,31 +265,16 @@
       });
     },
 
-    _columnsChanged: function(e, frozenColumns, physicalItems) {
-      if (e.path === 'columns') {
-        physicalItems.forEach(function(row) {
-          row.columns = e.value;
-          row.frozenColumns = frozenColumns;
-        });
-      } else if (e.path.indexOf('columns.#' === 0)) {
-        physicalItems.forEach(function(row) {
-          row.notifyPath(e.path, e.value);
-        });
-      }
+    _columnsChanged: function(columns, frozenColumns, physicalItems, count) {
+      physicalItems.forEach(function(row) {
+        row.columns = columns[columns.length - 1];
+        row.frozenColumns = frozenColumns;
+      });
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
         this.$.outerscroller.style.paddingTop = this.$.items.style.borderTopWidth = this.$.header.clientHeight + 'px';
         this.$.outerscroller.style.paddingBottom = this.$.items.style.borderBottomWidth = this.$.footer.clientHeight + 'px';
       }.bind(this));
-    },
-
-    _physicalItemsChanged: function(count, columns, frozenColumns, _physicalItems) {
-      // observing _physicalCount instead of _physicalItems.length because grid
-      // seems to startup somewhat faster without using this.push('_physicalItems')...
-      _physicalItems.forEach(function(row) {
-        row.columns = columns;
-        row.frozenColumns = frozenColumns;
-      });
     },
 
     /**

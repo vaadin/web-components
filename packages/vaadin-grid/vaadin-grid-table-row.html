@@ -34,7 +34,7 @@
       },
 
       observers: [
-        '_columnsChanged(columns.*, target)',
+        '_columnsChanged(columns, target)',
         '_indexChanged(index, cells)',
         '_itemChanged(item, cells)',
         '_itemChangedForDetails(item, _rowDetailsCell)',
@@ -98,56 +98,24 @@
         }
       },
 
-      _updateCells: function() {
-        var size = this.cells.length;
-        if (this.columns.length == size) {
-          for (var i = 0, colspan; i < size; i += colspan) {
-            var cell = this.cells[i];
-            colspan = cell.colspan || 1;
-            var width = this.columns[i].width;
-            var flex = this.columns[i].flex;
+      _columnsChanged: function(columns, target) {
+        Polymer.dom(this).innerHTML = '';
 
-            // Visit colspanned cells to hide them, and increase parent width and flex.
-            for (var j = i + 1; j < i + colspan; j++) {
-              this.cells[j].style.display = 'none';
+        var cells = [];
 
-              width += ' + ' + this.columns[j].width;
-              flex += this.columns[j].flex;
-            }
+        columns.forEach(function(column, columnIndex) {
+          var cell = this._createCell();
+          cell.index = this.index;
+          cell.target = this.target;
+          cell._isColumnRow = this._isColumnRow;
+          cell.column = column;
 
-            cell.style.flexBasis = 'calc(' + width + ')';
-            cell.style.flexGrow = flex;
-            cell.style.display = '';
-          }
-        }
-      },
+          Polymer.dom(this).appendChild(cell);
+          cells.push(cell);
 
-      _columnsChanged: function(e, target) {
-        if (e.path === 'columns') {
-          Polymer.dom(this).innerHTML = '';
+        }.bind(this));
 
-          var cells = [];
-          var spanning = 0;
-
-          e.value.forEach(function(column, columnIndex) {
-            var cell = this._createCell();
-            cell.index = this.index;
-            cell.target = this.target;
-            cell.column = column;
-
-            this.listen(cell, 'colspan-changed', '_updateCells');
-
-            Polymer.dom(this).appendChild(cell);
-            cells.push(cell);
-
-          }.bind(this));
-
-          this.cells = cells;
-          this._updateCells();
-        } else if (e.path.indexOf('columns.#') === 0) {
-          // TODO: optimize to update only affected cells.
-          this._updateCells();
-        }
+        this.cells = cells;
       },
 
       _frozenColumnsChanged: function(frozenColumns, cells) {
@@ -193,23 +161,6 @@
       }
     };
 
-    var vaadinGridTableRowContainerRowBehavior = {
-
-      properties: {
-        rowIndex: Object
-      },
-
-      observers: [
-        '_rowIndexChanged(columns, target, rowIndex)'
-      ],
-
-      _rowIndexChanged: function() {
-        this.cells.forEach(function(cell) {
-          cell.rowIndex = this.rowIndex;
-        }, this);
-      },
-    };
-
     Polymer({
       is: 'vaadin-grid-table-row',
 
@@ -226,8 +177,7 @@
       is: 'vaadin-grid-table-header-row',
 
       behaviors: [
-        vaadinGridTableRowBehavior,
-        vaadinGridTableRowContainerRowBehavior
+        vaadinGridTableRowBehavior
       ],
 
       _createCell: function() {
@@ -240,8 +190,7 @@
       is: 'vaadin-grid-table-footer-row',
 
       behaviors: [
-        vaadinGridTableRowBehavior,
-        vaadinGridTableRowContainerRowBehavior
+        vaadinGridTableRowBehavior
       ],
 
       _createCell: function() {

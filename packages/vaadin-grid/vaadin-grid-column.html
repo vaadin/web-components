@@ -1,58 +1,29 @@
 <link rel="import" href="../polymer/polymer.html">
 
 <dom-module id="vaadin-grid-column">
-  <template>
-    <style>
-      :host {
-        display: none;
-      }
-    </style>
-  </template>
-  <script>
-    Polymer({
-      is: 'vaadin-grid-column',
+</dom-module>
 
+<dom-module id="vaadin-grid-column-group">
+</dom-module>
+
+<script>
+  (function(){
+
+    /**
+     * @polymerBehavior vaadinGridColumnBehavior
+     */
+    var vaadinGridColumnBehavior = {
       properties: {
-        headers: {
-          type: Array,
-          notify: true,
+        headerTemplate: {
+          type: Object,
           value: function() {
-            var headerTemplates = Polymer.dom(this).querySelectorAll('template[is=header]');
-            if (headerTemplates) {
-              return headerTemplates.map(function(t) {
-                var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
-
-                if (this.dataHost) {
-                  // set dataHost to the context where template has been defined
-                  t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-                }
-
-                return { template: t, colspan: colspan };
-              }.bind(this));
-            } else {
-              return [];
-            }
+            return this._findTemplate('header');
           }
         },
-        footers: {
-          type: Array,
-          notify: true,
+        footerTemplate: {
+          type: Object,
           value: function() {
-            var headerTemplates = Polymer.dom(this).querySelectorAll('template[is=footer]');
-            if (headerTemplates) {
-              return headerTemplates.map(function(t) {
-                var colspan = t.hasAttribute('colspan') && parseInt(t.getAttribute('colspan')) || 0;
-
-                if (this.dataHost) {
-                  // set dataHost to the context where template has been defined
-                  t._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-                }
-
-                return { template: t, colspan: colspan };
-              }.bind(this));
-            } else {
-              return [];
-            }
+            return this._findTemplate('footer');
           }
         },
         instances: {
@@ -60,23 +31,50 @@
           value: function() {
             return [];
           }
-        },
-        name: {
-          type: String,
-          value: ''
-        },
-        template: {
-          type: Object,
-          notify: true,
-          value: function() {
-            var template = Polymer.dom(this).querySelector('template:not([is=header])');
-            if (this.dataHost) {
-              // set dataHost to the context where template has been defined
-              template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-            }
-            return template;
+        }
+      },
+
+      observers: [
+        '_footerTemplateChanged(footerTemplate)',
+        '_headerTemplateChanged(headerTemplate)',
+      ],
+
+      _findTemplate: function(type) {
+        var template = Polymer.dom(this).children.filter(function(el) {
+          return el.localName === 'template' && el.getAttribute('is') === type;
+        })[0];
+        if (template) {
+          if (this.dataHost) {
+            // set dataHost to the context where template has been defined
+            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
           }
-        },
+          return template;
+        }
+      },
+
+      _headerTemplateChanged: function(headerTemplate) {
+        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
+      },
+
+      _footerTemplateChanged: function(footerTemplate) {
+        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
+      },
+
+      _flexChanged: function(flex) {
+        this.fire('property-changed', {path: 'flex', value: flex});
+      },
+
+      _widthChanged: function(width) {
+        this.fire('property-changed', {path: 'width', value: width});
+      }
+    };
+
+    Polymer({
+      is: 'vaadin-grid-column',
+
+      behaviors: [vaadinGridColumnBehavior],
+
+      properties: {
         width: {
           type: String,
           value: '100px'
@@ -87,31 +85,73 @@
           value: 1
         },
 
-        /**
-         * Reference to the parent <vaadin-grid> element
-         */
-        grid: Object
+        template: {
+          type: Object,
+          value: function() {
+            return this._findTemplate(null);
+          }
+        }
       },
 
-      observers: ['_flexChanged(grid, flex)', '_widthChanged(grid, width)'],
+      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)'],
 
-      ready: function() {
-        // when using Polymer bindings, default values trickle down using observers.
-        // we're not using bindings between columns and cells so we need to use
-        // and fire notifications manually.
-        this.fire('headers-changed', {value: this.headers});
-        this.fire('footers-changed', {value: this.footers});
-      },
-
-      _flexChanged: function(grid, flex) {
-        var index = grid.columns.indexOf(this);
-        grid.notifyPath('columns.' + index + '.flex', flex);
-      },
-
-      _widthChanged: function(grid, width) {
-        var index = grid.columns.indexOf(this);
-        grid.notifyPath('columns.' + index + '.width', width);
+      _templateChanged: function(template) {
+        this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
       }
     });
-  </script>
-</dom-module>
+
+    Polymer({
+      is: 'vaadin-grid-column-group',
+
+      behaviors: [vaadinGridColumnBehavior],
+
+      properties: {
+        // TODO: needs a light dom observer
+        _childColumns: {
+          value: function() {
+            return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          }
+        },
+        _flex: Number,
+
+        _width: String
+      },
+
+      observers: ['_flexChanged(_flex)', '_widthChanged(_width)'],
+
+      listeners: {
+        'property-changed': '_columnPropChanged'
+      },
+
+      attached: function() {
+        this._updateFlexAndWidth();
+      },
+
+      _columnPropChanged: function(e) {
+        if (e.target !== this) {
+          // stop width/flex changes from child columns/groups from bubbling
+          // to the cell of this group.
+          // TODO: header and footer templates don't bubble by default,
+          // as this handler won't catch property change events that have been fired before
+          // the event listener has been registered.
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        }
+
+        if (e.detail.path.match(/flex|width/)) {
+          this._updateFlexAndWidth();
+        }
+      },
+
+      _updateFlexAndWidth: function() {
+        this._width = 'calc(' + this._childColumns.reduce(function(prev, curr) {
+          return prev += ' + ' + (curr.width || '0');
+        }, '').substring(3) + ')';
+
+        this._flex = this._childColumns.reduce(function(prev, curr) {
+          return prev + curr.flex;
+        }, 0);
+      }
+    });
+  })();
+</script>

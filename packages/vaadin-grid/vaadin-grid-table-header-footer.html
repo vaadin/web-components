@@ -7,24 +7,20 @@
         _rows: Array
       },
 
-      observers: ['_columnsChanged(columns.*, frozenColumns)', '_rowsChanged(_rows)'],
+      observers: ['_columnsChanged(columns, frozenColumns)', '_rowsChanged(_rows)'],
 
-      _columnsChanged: function(e) {
-        if (e.path === 'columns') {
-          this._rows = Array.apply(null, Array(this._rowCount(e.value))).map(function(item, index) {
-            var row = this._createRow();
-            row.rowIndex = index;
-            row.frozenColumns = this.frozenColumns;
-            row.target = this.domHost.domHost;
-            row.columns = e.value;
-
-            return row;
-          }.bind(this));
-        } else if (e.path.indexOf('columns.#') === 0) {
-          this._rows.forEach(function(row) {
-            row.notifyPath(e.path, e.value);
-          });
+      _columnsChanged: function(columns, frozenColumns) {
+        var rows = [];
+        for(var i=0;i<columns.length;i++) {
+          var row = this._createRow();
+          row.frozenColumns = frozenColumns;
+          row.target = this.domHost.domHost;
+          row._isColumnRow = i == columns.length - 1;
+          row.columns = columns[i];
+          rows.push(row);
         }
+
+        this._rows = this.localName === 'thead' ? rows : rows.reverse();
       },
 
       _rowsChanged: function(rows) {
@@ -43,12 +39,6 @@
 
       _createRow: function() {
         return document.createElement('tr', 'vaadin-grid-table-header-row');
-      },
-
-      _rowCount: function(columns) {
-        return Math.max.apply(Math, columns.map(function(column) {
-          return Polymer.dom(column).querySelectorAll('[is="header"]').length;
-        }));
       }
     });
 
@@ -59,12 +49,6 @@
 
       _createRow: function() {
         return document.createElement('tr', 'vaadin-grid-table-footer-row');
-      },
-
-      _rowCount: function(columns) {
-        return Math.max.apply(Math, columns.map(function(column) {
-          return Polymer.dom(column).querySelectorAll('[is="footer"]').length;
-        }));
       }
     });
   })();
