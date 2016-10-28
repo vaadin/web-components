@@ -35,7 +35,7 @@
 
     <template id="cell">[[index]]</template>
 
-    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns="[[frozenColumns]]">
+    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" grup-tree="[[columnTree]]">
     </vaadin-grid-table>
 
     <content></content>
@@ -57,12 +57,7 @@
 
     properties: {
 
-      columns: Array,
-
-      frozenColumns: {
-        type: Number,
-        value: 0
-      },
+      columnTree: Array,
 
       data: {
         type: Array
@@ -92,7 +87,7 @@
     },
 
     ready: function() {
-      this.columns = [{width: '100px', template: this.$.cell, headers: []}];
+      this.columnTree = [{width: '100px', template: this.$.cell, headers: []}];
     },
 
     get list() {

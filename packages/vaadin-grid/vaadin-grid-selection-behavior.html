@@ -5,6 +5,9 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
+  /**
+   * @polymerBehavior vaadin.elements.grid.SelectionBehavior
+   */
   vaadin.elements.grid.SelectionBehavior = {
 
     properties: {
@@ -46,7 +49,7 @@
     },
 
     observers: [
-      '_multiSelectionChanged(multiSelection, columns)',
+      '_multiSelectionChanged(multiSelection, _columnTree)',
       '_selectedItemsChanged(selectedItems.*)'
     ],
 
@@ -60,7 +63,7 @@
         this._multiSelectionColumn.grid = this;
         this.listen(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
 
-        this.columns = columns.map(function(cols) {
+        this._columnTree = columns.map(function(cols) {
           cols.unshift(this._multiSelectionColumn.$.column);
           return cols.slice(0);
         }.bind(this));
@@ -68,7 +71,7 @@
         this.unlisten(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
 
         this._multiSelectionColumn = undefined;
-        this.columns = columns.map(function(cols) {
+        this._columnTree = columns.map(function(cols) {
           cols.shift();
           return cols.slice(0);
         }.bind(this));
