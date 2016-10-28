@@ -246,17 +246,12 @@
       if (/frozen/.test(e.detail.path)) {
         this._frozenCellsChanged();
 
-        var lastFrozen = 0;
-        var columns = this.columns[this.columns.length - 1];
-
-        columns.forEach(function(col, index) {
+        var columnsRow = this.columns[this.columns.length - 1];
+        var lastFrozen = columnsRow.reduce(function(prev, col, index) {
           col.lastFrozen = false;
-          if (col.frozen) {
-            lastFrozen = index;
-          }
-        });
-
-        columns[lastFrozen].lastFrozen = true;
+          return col.frozen ? index : prev;
+        }, 0);
+        columnsRow[lastFrozen].lastFrozen = true;
       }
 
       e.stopPropagation();
