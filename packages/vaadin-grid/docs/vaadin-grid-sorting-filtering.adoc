@@ -82,8 +82,6 @@ Toggling the sorting of a [elementname]#vaadin-grid-sorter# changes its [propert
 Namely the first two refer to ascending and descending sort order.
 Empty value means the [elementname]#vaadin-grid-sorter# doesn't affect the sorting.
 
-Whenever the [vaadinelement]#vaadin-grid#'s sort order changes, it fires a 'sort-order-changed' -event whose [propertyname]#detail.sortOrder# is an array of the new order.
-
 A predefined sorting order can also be achieved by decorating the [elementname]#vaadin-grid-sorter#'s with initial [propertyname]#direction# values:
 
 [source,html]
@@ -124,6 +122,75 @@ grid.dataSource = function(params, callback) {
   '&per_page=' + params.pageSize +
   // Include the sort order to the request
   '&sort_order=' + JSON.stringify(params.sortOrder);
+
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      var response = JSON.parse(xhr.responseText);
+      callback(response.employees);
+    }
+  };
+
+  xhr.open('GET', url, true);
+  xhr.send();
+};
+----
+
+[[vaadin-grid.filtering]]
+== Filtering Data
+
+Filtering helpers behave similarly to [vaadinelement]#vaadin-grid#'s sorting helpers.
+
+Place a [elementname]#vaadin-grid-filter# element with a [propertyname]#path# defined into a header/footer cell to show an input field that automatically filters the [vaadinelement]#vaadin-grid#'s data when using an array data source.
+
+The element helps in filtering with custom data sources also since they automatically include filtering information to the data source callback parameters.
+
+[source,html]
+----
+<vaadin-grid>
+  <vaadin-grid-column>
+    <template class="header">First</template>
+    <template class="body">[[user.name.first]]<template>
+  </vaadin-grid-column>
+  <vaadin-grid-column>
+    <template class="header">Last</template>
+    <template class="body">[[user.name.last]]<template>
+  </vaadin-grid-column>
+  <vaadin-grid-column>
+    <template class="header">
+      <vaadin-grid-filter path="user.email"></vaadin-grid-filter>
+    </template>
+    <template class="body">[[user.email]]<template>
+  </vaadin-grid-column>
+</vaadin-grid>
+----
+
+The code snippet above produces a three-column [vaadinelement]#vaadin-grid# with a filtering input that targets the data items' [propertyname]#user.email# property.
+
+By default the [elementname]#vaadin-grid-filter# shows a plain text input field but you can place anything inside and as long as it fires an [propertyname]#input# event and has a [propertyname]#value# property, it works as a filter.
+The following example uses a [elementname]#paper-input# as a filter field.
+
+[source,html]
+----
+<vaadin-grid-filter path="user.email">
+  <paper-input></paper-input>
+</vaadin-grid-filter>
+----
+
+[[vaadin-grid.filtering.custom.datasource]]
+== Filtering Data with a Custom Data Source
+
+While filtering works with array data sources out-of-the-box, custom data sources need to provide pre-filtered data to the [vaadinelement]#vaadin-grid#.
+
+Whenever the value of a [elementname]#vaadin-grid-filter# changes (for example when a user types something) the [propertyname]#dataSource# is asked for fresh data with filtering information included in the request.
+
+[source,javascript]
+----
+grid.dataSource = function(params, callback) {
+  var url = 'https://my.data/data?page=' + params.page +
+  '&per_page=' + params.pageSize +
+  // Include the filtering information to the request
+  '&filters=' + JSON.stringify(params.filters);
 
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
