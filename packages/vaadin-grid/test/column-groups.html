@@ -47,7 +47,7 @@
           <template>body-0</template>
         </vaadin-grid-column>
 
-        <vaadin-grid-column-group>
+        <vaadin-grid-column-group frozen>
           <template is="header">group-0</template>
           <template is="header">group-0-1</template>
 
@@ -93,7 +93,7 @@
             </vaadin-grid-column>
           </vaadin-grid-column-group>
 
-          <vaadin-grid-column-group>
+          <vaadin-grid-column-group frozen>
             <template is="header">group-3</template>
             <template is="footer">group-3</template>
             <vaadin-grid-column>
@@ -142,11 +142,11 @@
       var grid, scroller, header, body, footer, headerRows, footerRows;
 
       function getFooterCellContent(row, col) {
-        return getCellContent(getFooterCell(row, col)).innerHTML.trim();
+        return getFooterCell(row, col).textContent.trim();
       }
 
       function getHeaderCellContent(row, col) {
-        return getCellContent(getHeaderCell(row, col)).innerHTML.trim();
+        return getHeaderCell(row, col).textContent.trim();
       }
 
       function getHeaderCell(row, col) {
@@ -227,10 +227,16 @@
           });
         });
 
-        // Disabled until we implement frozen in columns
-        // it('should have a frozen column', function() {
-        //   expect(getHeaderCell(0, 0).getAttribute('frozen')).to.equal('');
-        // });
+        it('should have a frozen column', function() {
+          expect(getHeaderCell(0, 0).hasAttribute('frozen')).to.be.true;
+          expect(getHeaderCell(1, 0).hasAttribute('frozen')).to.be.true;
+        });
+
+        it('should have a frozen group', function() {
+          expect(getHeaderCell(0, 1).hasAttribute('frozen')).to.be.true;
+          expect(getHeaderCell(1, 1).hasAttribute('frozen')).to.be.true;
+          expect(getHeaderCell(1, 2).hasAttribute('frozen')).to.be.true;
+        });
       });
 
 
@@ -245,7 +251,6 @@
           //  | group-0             | group-1                                  |          |
           init('nested');
         });
-
         it('should have right content in header', function() {
           expect(getHeaderCellContent(0, 0)).to.equal('group-0');
           expect(getHeaderCellContent(0, 1)).to.equal('group-1');
@@ -269,30 +274,40 @@
         it('should contain empty cells in headers', function() {
           [
             [0, 2],
-            [1, 0],
-            [1, 1],
-            [1, 4],
-            [2, 0],
-            [2, 1],
-            [2, 2],
-            [2, 3]
+            [1, 0], [1, 1], [1, 4],
+            [2, 0], [2, 1], [2, 2], [2, 3]
           ].forEach(function(a) {
             expect(getHeaderCell(a[0], a[1]).matches(':empty')).to.be.true;
-          })
+          });
         });
 
         it('should contain empty cells in footers but reversed', function() {
           [
             [2, 2],
-            [1, 0],
-            [1, 1],
-            [1, 4],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [0, 3]
+            [1, 0], [1, 1], [1, 4],
+            [0, 0], [0, 1], [0, 2], [0, 3]
           ].forEach(function(a) {
             expect(getFooterCell(a[0], a[1]).matches(':empty')).to.be.true;
+          });
+        });
+
+        it('frozen in a group should propagate frozen attribute up and down in headers', function() {
+          [
+            [0, 1],
+            [1, 2], [1, 3],
+            [2, 2], [2, 3], [2, 4], [2, 5]
+          ].forEach(function(a) {
+            expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
+          })
+        });
+
+        it('frozen in a group should propagate frozen attribute up and down in footers', function() {
+          [
+            [0, 2], [0, 3], [0, 4], [0, 5],
+            [1, 2], [1, 3],
+            [2, 1]
+          ].forEach(function(a) {
+            expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
           })
         });
 

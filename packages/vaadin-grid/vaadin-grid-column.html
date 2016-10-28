@@ -35,13 +35,11 @@
 
         frozen: {
           type: Boolean,
-          value: false,
           notify: true
         },
 
         lastFrozen: {
           type: Boolean,
-          value: false,
           notify: true
         }
       },
@@ -66,11 +64,11 @@
       },
 
       _headerTemplateChanged: function(headerTemplate) {
-        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
+        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate}, {bubbles: false});
       },
 
       _footerTemplateChanged: function(footerTemplate) {
-        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
+        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate}, {bubbles: false});
       },
 
       _flexChanged: function(flex) {
@@ -153,11 +151,7 @@
 
       _columnPropChanged: function(e) {
         if (e.target !== this && !/frozen/.test(e.detail.path)) {
-          // stop width/flex changes from child columns/groups from bubbling
-          // to the cell of this group.
-          // TODO: header and footer templates don't bubble by default,
-          // as this handler won't catch property change events that have been fired before
-          // the event listener has been registered.
+          // Only `frozen` should bubble up so as groups freeze themselves and children
           e.stopPropagation();
           e.stopImmediatePropagation();
         }
