@@ -420,7 +420,7 @@
     },
 
     _valueChanged: function(value) {
-      this.hasValue = !!value;
+      this.hasValue = this._isValidValue(value);
 
       var valueIndex = this._indexOfValue(value);
       var item = valueIndex > -1 && this.items[valueIndex];
@@ -479,15 +479,26 @@
 
     _indexOfValue: function(value, items) {
       items = items || this.items;
-      if (items && value) {
+      if (items && this._isValidValue(value)) {
         for (var i = 0; i < items.length; i++) {
-          if (this._getItemValue(items[i]).toString() === value.toString()) {
+          if (this._getItemValue(items[i]) === value) {
             return i;
           }
         }
       }
 
       return -1;
+    },
+
+    /**
+     * Checks if the value is supported as an item value in this control.
+     *
+     * @return {boolean}
+     */
+    _isValidValue: function(value) {
+      /* jshint ignore:start */ //IE11 doesn't support Number.isNaN() 
+      return value !== NaN && value !== undefined && value !== null;
+      /* jshint ignore:end */
     },
 
     _selectedItemChanged: function(event, detail) {

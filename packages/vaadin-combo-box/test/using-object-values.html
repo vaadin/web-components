@@ -37,6 +37,22 @@
           label: 'baz',
           custom: 'bashcsdfsa',
           value: 'qux'
+        }, {
+          label: 'zero',
+          custom: 'zero-custom',
+          value: 0
+        }, {
+          label: 'false',
+          custom: 'false-custom',
+          value: false
+        }, {
+          label: 'empty string',
+          custom: 'empty-string-custom',
+          value: ''
+        }, {
+          label: 'zero as a string',
+          custom: 'zero-string-custom',
+          value: '0'
         }];
       });
 
@@ -120,6 +136,38 @@
 
         expect(combobox.$.input.bindValue).to.eql('foo');
         expect(combobox.value).to.eql('bar');
+      });
+
+      it('should set the value even if the value is zero (number)', function() {
+        combobox.$.overlay.$.selector.selectItem(2);
+
+        expect(combobox.$.input.bindValue).to.eql('zero');
+        expect(combobox.value).to.eql(0);
+      });
+
+      it('should set the value even if the value is false (boolean)', function() {
+        combobox.$.overlay.$.selector.selectItem(3);
+
+        expect(combobox.$.input.bindValue).to.eql('false');
+        expect(combobox.value).to.eql(false);
+      });
+
+      it('should set the value even if the value is an empty string', function() {
+        combobox.$.overlay.$.selector.selectItem(4);
+
+        expect(combobox.$.input.bindValue).to.eql('empty string');
+        expect(combobox.value).to.eql('');
+        expect(combobox.hasValue).to.eql(true);
+      });
+
+      it('should distinguish between 0 (number) and "0" (string) values', function() {
+        combobox.$.overlay.$.selector.selectItem(2);
+        expect(combobox.$.input.bindValue).to.eql('zero');
+        expect(combobox.value).to.eql(0);
+
+        combobox.$.overlay.$.selector.selectItem(5);
+        expect(combobox.$.input.bindValue).to.eql('zero as a string');
+        expect(combobox.value).to.eql('0');
       });
 
       it('should set the input value from item label if item is found', function() {
