@@ -63,7 +63,9 @@
       },
 
       _columnPropChanged: function(e) {
-        this[e.detail.path] = e.detail.value;
+        if (e.target == this.column) {
+          this[e.detail.path] = e.detail.value;
+        }
       },
 
       _expandedChanged: function(expanded, instance) {

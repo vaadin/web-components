@@ -64,11 +64,11 @@
       },
 
       _headerTemplateChanged: function(headerTemplate) {
-        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate}, {bubbles: false});
+        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
       },
 
       _footerTemplateChanged: function(footerTemplate) {
-        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate}, {bubbles: false});
+        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
       },
 
       _flexChanged: function(flex) {
@@ -80,9 +80,6 @@
       },
 
       _lastFrozenChanged: function(lastFrozen) {
-        // Note that this property gets bubbled through column-groups and
-        // all the way up the header cells of group columns. So that's the
-        // reason why column-groups don't have this property at all.
         this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
       }
     };
@@ -118,6 +115,7 @@
       },
 
       _templateChanged: function(template) {
+        // We bubble false for optimisation
         this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
       }
     });
@@ -150,18 +148,12 @@
       },
 
       _columnPropChanged: function(e) {
-        if (e.target !== this && !/frozen/.test(e.detail.path)) {
-          // Only `frozen` should bubble up so as groups freeze themselves and children
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-        }
-
         if (/flex|width/.test(e.detail.path)) {
           this._updateFlexAndWidth();
         }
 
-        if (/frozen/.test(e.detail.path)) {
-          this.frozen = e.detail.value;
+        if (/frozen|lastFrozen/.test(e.detail.path)) {
+          this[e.detail.path] = e.detail.value;
         }
       },
 
@@ -179,6 +171,7 @@
         childColumns.forEach(function(col) {
           col.frozen = frozen;
         });
+        this.fire('property-changed', {path: 'frozen', value: frozen});
       },
     });
   })();

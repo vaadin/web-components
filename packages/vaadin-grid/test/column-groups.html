@@ -49,11 +49,9 @@
 
         <vaadin-grid-column-group frozen>
           <template is="header">group-0</template>
-          <template is="header">group-0-1</template>
 
           <vaadin-grid-column>
             <template is="header">header-1</template>
-            <template is="header">header-1-1</template>
             <template>body-1</template>
           </vaadin-grid-column>
           <vaadin-grid-column>
@@ -203,6 +201,16 @@
           //  |          | group-0             |
           //  | header-0 | header-1 | header-2 |
           init('1column1group');
+        });
+
+        it('the group header cell should ignore changes from child columns', function() {
+          var cell_group0 = getHeaderCell(0, 1);
+          var cell_header1 = getHeaderCell(1, 1);
+
+          cell_group0._flexChanged = sinon.spy();
+          cell_header1.column.flex = 3;
+
+          expect(cell_group0._flexChanged.callCount).to.eql(1);
         });
 
         it('should have right amount of rows', function() {
