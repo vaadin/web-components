@@ -213,12 +213,27 @@ Custom property | Description | Default
 
             this.$.overlay.resetFit();
 
-            var sourceEvent = e.detail && e.detail.sourceEvent;
-            this.$.overlay.x = sourceEvent && sourceEvent.clientX || e.clientX;
-            this.$.overlay.y = sourceEvent && sourceEvent.clientY || e.clientY;
+            this.$.overlay.x = this._getEventCoordinate(e, 'x');
+            this.$.overlay.y = this._getEventCoordinate(e, 'y');
 
             this._opened = true;
           }
+        }
+      },
+
+      _getEventCoordinate: function(event, coord) {
+        if (event.detail) {
+          if (event.detail[coord]) {
+            // Polymer gesture events, get coordinate from detail
+            return event.detail[coord];
+          } else if (event.detail.sourceEvent) {
+            // Unwrap detailed event
+            return this._getEventCoordinate(event.detail.sourceEvent, coord);
+          }
+        } else {
+          // Native mouse or touch event
+          var prop = 'client' + coord.toUpperCase();
+          return event.changedTouches ? event.changedTouches[0][prop] : event[prop];
         }
       },
 
