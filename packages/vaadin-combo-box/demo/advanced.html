@@ -11,6 +11,14 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
+  <link rel="import" href="../vaadin-combo-box-light.html">
+
+  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../iron-input/iron-input.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
 <body unresolved>
@@ -31,22 +39,22 @@
         <p>Selected value: <span id="selected-value2"></span></p>
 
         <script>
-            var combobox = document.querySelector('#demo1');
-            combobox.items = elements;
+          var combobox = document.querySelector('#demo1');
+          combobox.items = elements;
 
-            combobox.addEventListener('value-changed', function() {
-              document.querySelector('#selected-value2').innerHTML = combobox.value;
-            });
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#selected-value2').innerHTML = combobox.value;
+          });
 
-            combobox.addEventListener('custom-value-set', function(e) {
-              // Prevents setting the value property automatically.
-              e.preventDefault();
+          combobox.addEventListener('custom-value-set', function(e) {
+            // Prevents setting the value property automatically.
+            e.preventDefault();
 
-              combobox.value = e.detail;
-              document.querySelector('#selected-value2').innerHTML = 'custom value "' + e.detail + '" set!';
-            });
+            combobox.value = e.detail;
+            document.querySelector('#selected-value2').innerHTML = 'custom value "' + e.detail + '" set!';
+          });
 
-            combobox.value = 'Carbon';
+          combobox.value = 'Carbon';
         </script>
 
       </template>
@@ -80,7 +88,6 @@
         </script>
       </template>
     </demo-snippet>
-
 
     <h3>Replacing the Input with a &lt;paper-input></h3>
     <demo-snippet>

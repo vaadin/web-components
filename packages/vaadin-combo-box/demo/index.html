@@ -11,6 +11,8 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
+
+  <link rel="import" href="../../iron-form/iron-form.html">
 </head>
 
 <body unresolved>
@@ -43,13 +45,13 @@
         <p>Selected value: <span id="selected-value"></span>.</p>
 
         <script>
-            var combobox = document.querySelector('#demo2');
-            combobox.items = elements;
+          var combobox = document.querySelector('#demo2');
+          combobox.items = elements;
 
-            combobox.addEventListener('value-changed', function() {
-              document.querySelector('#selected-value').innerHTML = combobox.value;
-            });
-            combobox.value = 'Carbon';
+          combobox.addEventListener('value-changed', function() {
+            document.querySelector('#selected-value').innerHTML = combobox.value;
+          });
+          combobox.value = 'Carbon';
         </script>
       </template>
     </demo-snippet>
