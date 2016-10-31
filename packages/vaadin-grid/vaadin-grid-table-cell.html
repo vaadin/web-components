@@ -261,7 +261,7 @@
       observers: ['_headerTemplateChanged(headerTemplate, target)'],
 
       _headerTemplateChanged: function(headerTemplate, target) {
-        if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+        if (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group') {
           this._templateChanged(headerTemplate, target);
         }
       }
@@ -284,7 +284,7 @@
       observers: ['_footerTemplateChanged(footerTemplate, target)'],
 
       _footerTemplateChanged: function(footerTemplate, target) {
-        if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+        if (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group') {
           this._templateChanged(footerTemplate, target);
         }
       }

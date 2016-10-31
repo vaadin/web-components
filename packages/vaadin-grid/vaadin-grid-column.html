@@ -38,7 +38,7 @@
           notify: true
         },
 
-        lastFrozen: {
+        _lastFrozen: {
           type: Boolean,
           notify: true
         }
@@ -47,7 +47,7 @@
       observers: [
         '_footerTemplateChanged(footerTemplate)',
         '_headerTemplateChanged(headerTemplate)',
-        '_lastFrozenChanged(lastFrozen)'
+        '_lastFrozenChanged(_lastFrozen)'
       ],
 
       _findTemplate: function(type) {
@@ -152,8 +152,12 @@
           this._updateFlexAndWidth();
         }
 
-        if (/frozen|lastFrozen/.test(e.detail.path)) {
-          this[e.detail.path] = e.detail.value;
+        if (e.detail.path === 'frozen') {
+          this.frozen = e.detail.value;
+        }
+
+        if (e.detail.path === 'lastFrozen') {
+          this._lastFrozen = e.detail.value;
         }
       },
 

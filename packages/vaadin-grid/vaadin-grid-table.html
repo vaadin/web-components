@@ -235,23 +235,23 @@
     },
 
     _columnPropChanged: function(e) {
-      if (/headerTemplate/.test(e.detail.path)) {
+      if (e.detail.path === 'headerTemplate') {
         this.toggleAttribute('has-templates', true, this.$.header);
       }
 
-      if (/footerTemplate/.test(e.detail.path)) {
+      if (e.detail.path === 'footerTemplate') {
         this.toggleAttribute('has-templates', true, this.$.footer);
       }
 
-      if (/frozen/.test(e.detail.path)) {
+      if ('frozen' === e.detail.path) {
         this._frozenCellsChanged();
 
         var columnsRow = this.columns[this.columns.length - 1];
         var lastFrozen = columnsRow.reduce(function(prev, col, index) {
-          col.lastFrozen = false;
+          col._lastFrozen = false;
           return col.frozen ? index : prev;
         }, 0);
-        columnsRow[lastFrozen].lastFrozen = true;
+        columnsRow[lastFrozen]._lastFrozen = true;
       }
 
       e.stopPropagation();
