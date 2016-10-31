@@ -45,6 +45,16 @@
         expect(scrollSpy.called).not.to.be.true;
       });
 
+      it('should stop tap events from bubbling outside the overlay', function() {
+        var tapSpy = sinon.spy();
+        document.addEventListener('tap', tapSpy);
+        overlay.$.scroller.dispatchEvent(new CustomEvent('tap', {
+          bubbles: true
+        }));
+        document.removeEventListener('tap', tapSpy);
+        expect(tapSpy.called).not.to.be.true;
+      });
+
       it('should return correct month', function() {
         overlay._originDate = new Date(2016, 2, 31);
         expect(overlay._dateAfterXMonths(11).getMonth()).to.equal(1);
