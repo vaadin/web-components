@@ -27,15 +27,15 @@ You can do this declaratively with the body [elementname]#template# of a [elemen
 ----
 <vaadin-grid>
   <vaadin-grid-column>
-    <template is="header">First</template>
+    <template class="header">First</template>
     <template>[[user.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
-    <template is="header">Last</template>
+    <template class="header">Last</template>
     <template>[[user.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
-    <template is="header">Email</template>
+    <template class="header">Email</template>
     <template>[[user.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>

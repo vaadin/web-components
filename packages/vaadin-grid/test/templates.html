@@ -21,13 +21,13 @@
       <vaadin-grid size="100" id="grid" style="height: 300px" data-source="[[dataSource]]">
         <vaadin-grid-column>
           <template>[[_format(index)]] [[parentProp]]</template>
-          <template is="header">[[_format('header1')]] [[parentProp]]</template>
+          <template class="header">[[_format('header1')]] [[parentProp]]</template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template>
             <paper-input on-value-changed="_valueChanged" value="{{parentProp}}"></paper-input>
           </template>
-          <template is="header">
+          <template class="header">
             <paper-input on-invalid-changed="_invalidChanged" value="{{parentProp}}"></paper-input>
           </template>
         </vaadin-grid-column>
@@ -35,7 +35,7 @@
           <template>
             <paper-input value="{{parentPath.foo}}"></paper-input>
           </template>
-          <template is="header">
+          <template class="header">
             <paper-input value="{{parentPath.foo}}"></paper-input>
           </template>
         </vaadin-grid-column>

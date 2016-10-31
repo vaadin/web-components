@@ -43,19 +43,19 @@
     <template>
       <vaadin-grid size="1000">
         <vaadin-grid-column frozen>
-          <template is="header">header-0</template>
+          <template class="header">header-0</template>
           <template>body-0</template>
         </vaadin-grid-column>
 
         <vaadin-grid-column-group frozen>
-          <template is="header">group-0</template>
+          <template class="header">group-0</template>
 
           <vaadin-grid-column>
-            <template is="header">header-1</template>
+            <template class="header">header-1</template>
             <template>body-1</template>
           </vaadin-grid-column>
           <vaadin-grid-column>
-            <template is="header">header-2</template>
+            <template class="header">header-2</template>
             <template>body-2</template>
           </vaadin-grid-column>
         </vaadin-grid-column-group>
@@ -67,8 +67,8 @@
     <template>
       <vaadin-grid size="1000">
         <vaadin-grid-column-group>
-          <template is="header">group-0</template>
-          <template is="footer">group-0</template>
+          <template class="header">group-0</template>
+          <template class="footer">group-0</template>
           <vaadin-grid-column>
             <template>body-0</template>
           </vaadin-grid-column>
@@ -78,11 +78,11 @@
         </vaadin-grid-column-group>
 
         <vaadin-grid-column-group>
-          <template is="header">group-1</template>
-          <template is="footer">group-1</template>
+          <template class="header">group-1</template>
+          <template class="footer">group-1</template>
           <vaadin-grid-column-group>
-            <template is="header">group-2</template>
-            <template is="footer">group-2</template>
+            <template class="header">group-2</template>
+            <template class="footer">group-2</template>
             <vaadin-grid-column>
               <template>body-2</template>
             </vaadin-grid-column>
@@ -92,24 +92,24 @@
           </vaadin-grid-column-group>
 
           <vaadin-grid-column-group frozen>
-            <template is="header">group-3</template>
-            <template is="footer">group-3</template>
+            <template class="header">group-3</template>
+            <template class="footer">group-3</template>
             <vaadin-grid-column>
               <template>body-4</template>
-              <template is="header">header-4</template>
-              <template is="footer">footer-4</template>
+              <template class="header">header-4</template>
+              <template class="footer">footer-4</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
               <template>body-5</template>
-              <template is="header">header-5</template>
-              <template is="footer">footer-5</template>
+              <template class="header">header-5</template>
+              <template class="footer">footer-5</template>
             </vaadin-grid-column>
           </vaadin-grid-column-group>
         </vaadin-grid-column-group>
         <vaadin-grid-column>
           <template>body-6</template>
-          <template is="header">header-6</template>
-          <template is="footer">footer-6</template>
+          <template class="header">header-6</template>
+          <template class="footer">footer-6</template>
         </vaadin-grid-column>
       </vaadin-grid>
     </template>
@@ -119,14 +119,15 @@
     <template>
       <vaadin-grid style="height: 400px; width: 400px;" size="1000">
         <template is="dom-repeat">
+        <template is="dom-repeat">
           <vaadin-grid-column-group>
-            <template is="header">group</template>
+            <template class="header">group</template>
             <vaadin-grid-column>
-              <template is="header">header-1</template>
+              <template class="header">header-1</template>
               <template>body-1</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
-              <template is="header">header-2</template>
+              <template class="header">header-2</template>
               <template>body-2</template>
             </vaadin-grid-column>
           </vaadin-grid-column-group>

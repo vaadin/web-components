@@ -11,13 +11,13 @@ layout: page
 == Defining a Template
 
 In order to use row details, a template must be defined.
-The row details template has to be set as a direct child of [vaadinelement]#vaadin-grid# and it must have `is="row-details"` attribute.
+The row details template has to be set as a direct child of [vaadinelement]#vaadin-grid# and it must have `class="row-details"`.
 The same variables can be used inside the template as in cell templates, namely [propertyname]#index#, [propertyname]#item#, [propertyname]#selected# and [propertyname]#expanded#.
 
 [source,html]
 ----
 <vaadin-grid>
-  <template is="row-details">
+  <template class="row-details">
     These are the details for [[item.value]]!
   </template>
   <vaadin-grid-column>
@@ -47,7 +47,7 @@ After details have been expanded for a row, you can use [propertyname]#expandedI
 [source,html]
 ----
 <vaadin-grid expanded-items="{{expandedItems}}">
-  <template is="row-details">
+  <template class="row-details">
     These are the details for [[item.value]]!
   </template>
   <vaadin-grid-column>
@@ -86,7 +86,7 @@ to access the item.
 [source,html]
 ----
 <vaadin-grid id="grid" on-cell-click="_onCellClick">
-  <template is="row-details">
+  <template class="row-details">
     These are the details for [[item.value]]!
   </template>
   <vaadin-grid-column>
@@ -116,7 +116,7 @@ A variable [propertyname]#expanded# is available inside the row detail template.
 [source,html]
 ----
 <vaadin-grid>
-  <template is="row-details">
+  <template class="row-details">
     These are the details for [[item.value]]!
   </template>
   <vaadin-grid-column>
@@ -143,7 +143,7 @@ Same way as with other templates, their contents can be fully styled by placing 
   }
 </style>
 <vaadin-grid>
-  <template is="row-details">
+  <template class="row-details">
     <div class="details">
       These are the details for [[item.value]]!
     </div>
