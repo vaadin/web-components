@@ -338,131 +338,63 @@
 
         describe('esc behavior', function() {
 
+          it('should close the overlay on esc', function(done) {
+            datepicker.addEventListener('iron-overlay-closed', function() {
+              done();
+            });
+            open(function() {
+              esc();
+            });
+          });
+
           it('should revert input value on esc', function(done) {
+            datepicker.value = '2000-01-01';
             open(function() {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
               esc();
-              expect(target.value).to.equal('1/2/2000');
-              expect(focusedDate().getDate()).to.equal(2);
-              expect(datepicker.opened).to.be.true;
+              expect(target.value).to.equal('1/1/2000');
               done();
             });
           });
 
-          it('should empty on esc', function(done) {
-            var openedListener = function() {
-              datepicker.removeEventListener('iron-overlay-opened', openedListener);
-              esc();
-              datepicker.async(function() {
-                expect(target.value).to.equal('');
-                expect(datepicker.opened).to.be.true;
-                done();
-              }, 100);
-            };
-            datepicker.addEventListener('iron-overlay-opened', openedListener);
-            inputText('1/2/2000');
-          });
-
-          it('should revert selected value on second esc', function(done) {
-            datepicker.value = '2000-01-01';
-
-            var originalInputValue = target.value;
-            var openedListener = function() {
-              datepicker.removeEventListener('iron-overlay-opened', openedListener);
-              esc();
-              datepicker.async(function() {
-                esc();
-              }, 100);
-
-              datepicker.addEventListener('iron-overlay-closed', function() {
-                expect(target.value).to.equal(originalInputValue);
-                done();
-              });
-            };
-            datepicker.addEventListener('iron-overlay-opened', openedListener);
-            inputText('1/2/2000');
-
-          });
-
-          it('should restore focus to today on esc', function(done) {
-            var todayFormatted = datepicker.i18n.formatDate(new Date());
-
+          it('should revert input value on esc (empty)', function(done) {
+            datepicker.value = '';
             open(function() {
-              arrowDown();
-              esc();
-              datepicker.async(function() {
-                expect(target.value).to.equal(todayFormatted);
-                expect(datepicker.opened).to.be.true;
-                done();
-              }, 100);
-            });
-          });
-
-          it('should restore focus to selected date on esc', function(done) {
-            datepicker.value = '2000-01-01';
-
-            open(function() {
-              arrowDown();
-              esc();
-              datepicker.async(function() {
-                expect(target.value).to.equal('1/1/2000');
-                expect(datepicker.opened).to.be.true;
-                done();
-              }, 100);
-            });
-          });
-
-          it('should restore focus to selected date on esc after typing', function(done) {
-            datepicker.value = '2000-01-01';
-
-            open(function() {
-              target.bindValue = '';
               inputText('1/2/2000');
-              esc();
-              datepicker.async(function() {
-                expect(focusedDate().getDate()).to.eql(1);
-                done();
-              }, 100);
-            });
-          });
-
-          it('should restore focus to today date on esc after typing', function(done) {
-            open(function() {
-              target.bindValue = '';
-              inputText('1/2/2000');
-              esc();
-              datepicker.async(function() {
-                expect(focusedDate().getDate()).to.eql(new Date().getDate());
-                done();
-              }, 100);
-            });
-          });
-
-          it('should close after refocusing', function(done) {
-            open(function() {
+              arrowDown();
               arrowDown();
               esc();
-              arrowDown();
-              esc();
-              esc();
-              expect(target.value).to.be.empty;
-              esc();
-              expect(datepicker.opened).to.be.false;
+              expect(target.value).to.equal('');
               done();
             });
           });
 
-          it('should not select a value', function(done) {
+          it('should not change value on esc', function(done) {
+            datepicker.value = '2000-01-01';
+            datepicker.addEventListener('iron-overlay-closed', function() {
+              expect(datepicker.value).to.equal('2000-01-01');
+              done();
+            });
             open(function() {
-              datepicker.addEventListener('iron-overlay-closed', function() {
-                expect(datepicker.value).to.equal('');
-                done();
-              });
+              inputText('1/2/2000');
+              arrowDown();
               arrowDown();
               esc();
-              esc();
+            });
+          });
+
+          it('should not change value on esc (empty)', function(done) {
+            datepicker.value = '';
+            datepicker.addEventListener('iron-overlay-closed', function() {
+              expect(datepicker.value).to.equal('');
+              done();
+            });
+            open(function() {
+              inputText('1/2/2000');
+              arrowDown();
+              arrowDown();
               esc();
             });
           });
