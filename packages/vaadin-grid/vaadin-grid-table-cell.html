@@ -59,6 +59,11 @@
         this.footerTemplate = column.footerTemplate;
         this.template = column.template;
         this.width = column.width;
+
+        if (column._childColumns) {
+          this.colSpan = column._childColumns.length;
+        }
+
         this.listen(column, 'property-changed', '_columnPropChanged');
       },
 

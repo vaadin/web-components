@@ -137,7 +137,10 @@
         _width: String
       },
 
-      observers: ['_flexChanged(_flex)', '_widthChanged(_width)', '_frozenChanged(_childColumns, frozen)'],
+      observers: ['_childColumnsChanged(_childColumns)',
+                  '_flexChanged(_flex)',
+                  '_widthChanged(_width)',
+                  '_frozenChanged(_childColumns, frozen)'],
 
       listeners: {
         'property-changed': '_columnPropChanged'
@@ -159,6 +162,12 @@
         if (e.detail.path === 'lastFrozen') {
           this._lastFrozen = e.detail.value;
         }
+      },
+
+      _childColumnsChanged: function(childColumns) {
+        // explicitly firing 'colSpan' change for the header cells.
+        // if needed, can be decoupled from cell by firing a 'childColumns' instead.
+        this.fire('property-changed', {path: 'colSpan', value: childColumns.length});
       },
 
       _updateFlexAndWidth: function() {
