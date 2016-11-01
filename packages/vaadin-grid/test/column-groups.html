@@ -213,6 +213,18 @@
           expect(cell_group0._flexChanged.callCount).to.eql(1);
         });
 
+        it('should set colSpan to spanned header cells', function() {
+          var cell = getHeaderCell(0, 1);
+
+          expect(cell.colSpan).to.eql(2);
+        });
+
+        it('should not set colSpan to non-spanned header cells', function() {
+          var cell = getHeaderCell(0, 0);
+
+          expect(cell.hasAttribute('colspan')).to.be.false;
+        });
+
         it('should have right amount of rows', function() {
           expect(headerRows).to.have.length(2);
         });
