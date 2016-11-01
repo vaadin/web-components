@@ -139,21 +139,21 @@
           <x-data-source data-source="{{dataSource}}"></x-data-source>
           <vaadin-grid id="basic-binding" data-source="[[dataSource]]" size="10000">
             <vaadin-grid-column width="50px">
-              <template is="header">#</template>
+              <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px">
-              <template is="header"></template>
+              <template class="header"></template>
               <template>
                 <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column width="calc(50% - 100px)">
-              <template is="header">First Name</template>
+              <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="calc(50% - 100px)">
-              <template is="header">Last Name</template>
+              <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
           </vaadin-grid>
@@ -188,19 +188,19 @@
           <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
           <vaadin-grid id="two-way-binding" on-item-changed="_log" data-source="[[dataSource]]" size="10000">
             <vaadin-grid-column>
-              <template is="header">First Name</template>
+              <template class="header">First Name</template>
               <template>
                 <paper-input value="{{item.user.name.first}}" disabled="[[!editing]]"></paper-input>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column>
-              <template is="header">Last Name</template>
+              <template class="header">Last Name</template>
               <template>
                 <paper-input value="{{item.user.name.last}}" disabled="[[!editing]]"></paper-input>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column width="200px">
-              <template is="header">Email</template>
+              <template class="header">Email</template>
               <template>
                 <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
               </template>
@@ -229,21 +229,21 @@
           <x-data-source data-source="{{dataSource}}"></x-data-source>
           <vaadin-grid id="click-events" data-source="[[dataSource]]" size="10000" on-cell-click="_log">
             <vaadin-grid-column width="50px">
-              <template is="header">#</template>
+              <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px">
-              <template is="header"></template>
+              <template class="header"></template>
               <template>
                 <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column width="calc(50% - 100px)">
-              <template is="header">First Name</template>
+              <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="calc(50% - 100px)">
-              <template is="header">Last Name</template>
+              <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
           </vaadin-grid>
@@ -283,26 +283,26 @@
           </style>
           <x-data-source data-source="{{dataSource}}"></x-data-source>
           <vaadin-grid id="example2" data-source="[[dataSource]]" size="10000">
-            <template is="row-details">
+            <template class="row-details">
               <div class="details">
                 <iron-image src="[[item.user.picture.large]]"></iron-image>
                 <p>Hi! My name is [[item.user.name.first]]!</p>
               </div>
             </template>
             <vaadin-grid-column width="50px">
-              <template is="header">#</template>
+              <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
-              <template is="header">First Name</template>
+              <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
-              <template is="header">Last Name</template>
+              <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="100px">
-              <template is="header"></template>
+              <template class="header"></template>
               <template>
                 <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
               </template>
@@ -321,111 +321,32 @@
           </style>
           <x-data-source data-source="{{dataSource}}"></x-data-source>
           <vaadin-grid id="example2" data-source="[[dataSource]]" size="10000" multi-selection>
-            <template is="row-details">
+            <template class="row-details">
               <div class="details">
                 <iron-image src="[[item.user.picture.large]]"></iron-image>
                 <p>Hi! My name is [[item.user.name.first]]!</p>
               </div>
             </template>
             <vaadin-grid-column width="50px">
-              <template is="header">#</template>
+              <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
-              <template is="header">First Name</template>
+              <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
-              <template is="header">Last Name</template>
+              <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="100px">
-              <template is="header"></template>
+              <template class="header"></template>
               <template>
                 <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
               </template>
             </vaadin-grid-column>
           </vaadin-grid>
         </template>
-      </template>
-    </demo-snippet>
-
-    <h3>Column Hiding</h3>
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          x-column-hiding {
-            --primary-color: #00b4f0;
-          }
-        </style>
-        <dom-module id="x-column-hiding">
-          <template>
-          <style>
-          :host {
-            --paper-menu-selected-item: {
-              color: var(--primary-color);
-            };
-          }
-          </style>
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid id="grid" size="100" data-source="[[dataSource]]" columns="{{columns}}">
-            <vaadin-grid-column>
-              <template is="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template is="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="200px">
-              <template is="header">Email</template>
-              <template>[[item.user.email]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="75px" flex="0">
-              <template is="header">
-                <paper-menu-button>
-                  <paper-icon-button icon="menu" class="dropdown-trigger"></paper-icon-button>
-                  <paper-menu class="dropdown-content" multi selected-values="{{hiddenColumns}}">
-                    <paper-item>First Name</paper-item>
-                    <paper-item>Last Name</paper-item>
-                    <paper-item>Email</paper-item>
-                  </paper-menu>
-                </paper-menu-button>
-              </template>
-              <template></template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        </template>
-        <script>
-        Polymer({
-          is: 'x-column-hiding',
-
-          properties: {
-            columns: Array,
-            hiddenColumns: Array
-          },
-
-          observers: ['_hiddenColumnsChanged(hiddenColumns.*)'],
-
-          ready: function() {
-            this._columns = Polymer.dom(this.root).querySelectorAll('vaadin-grid-column');
-            this.hiddenColumns = [];
-          },
-
-          _hiddenColumnsChanged: function(e) {
-            this._columns[3].flex = this.hiddenColumns.length > 0 ? 0 : 1;
-            if (e.path === 'hiddenColumns.splices') {
-              this.columns = this._columns.filter(function(col, index) {
-                return this.hiddenColumns.indexOf(index) === -1;
-              }.bind(this));
-
-              this.$.grid.$.scroller.notifyResize();
-            }
-          }
-        });
-      </script>
-    </dom-module>
-    <x-column-hiding></x-column-hiding>
       </template>
     </demo-snippet>
   </div>

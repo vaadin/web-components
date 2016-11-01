@@ -17,13 +17,13 @@
         headerTemplate: {
           type: Object,
           value: function() {
-            return this._findTemplate('header');
+            return this._findTemplate('template.header');
           }
         },
         footerTemplate: {
           type: Object,
           value: function() {
-            return this._findTemplate('footer');
+            return this._findTemplate('template.footer');
           }
         },
         instances: {
@@ -50,9 +50,9 @@
         '_lastFrozenChanged(_lastFrozen)'
       ],
 
-      _findTemplate: function(type) {
+      _findTemplate: function(selector) {
         var template = Polymer.dom(this).children.filter(function(el) {
-          return el.localName === 'template' && el.getAttribute('is') === type;
+          return el.matches(selector);
         })[0];
         if (template) {
           if (this.dataHost) {
@@ -103,7 +103,7 @@
         template: {
           type: Object,
           value: function() {
-            return this._findTemplate(null);
+            return this._findTemplate('template:not(.header):not(.footer)');
           }
         }
       },

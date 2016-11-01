@@ -55,17 +55,17 @@
             <template>
               [[index]]
             </template>
-            <template is="header">
+            <template class="header">
               Index
             </template>
           </vaadin-grid-column>
 
           <vaadin-grid-column-group>
 
-            <template is="header">
+            <template class="header">
               TG1
             </template>
-            <template is="footer">
+            <template class="footer">
               TGF1
             </template>
 
@@ -73,10 +73,10 @@
               <template>
                 <span class="elItem">[[item.user.name.first]]</span>
               </template>
-              <template is="header">
+              <template class="header">
                 <vaadin-grid-sorter path="user.name.first">TC1</vaadin-grid-sorter>
               </template>
-              <template is="footer">
+              <template class="footer">
                 TCF1
               </template>
             </vaadin-grid-column>
@@ -85,10 +85,10 @@
               <template>
                 <paper-input value="{{item.user.name.last}}"></paper-input>
               </template>
-              <template is="header">
+              <template class="header">
                 TC2
               </template>
-              <template is="footer">
+              <template class="footer">
                 <vaadin-grid-filter path="user.name.last"></vaadin-grid-filter>
               </template>
             </vaadin-grid-column>
@@ -100,7 +100,7 @@
               <template>
                 <div>[[item.user.name.first]].[[item.user.name.last]]@gmail.com</div>
               </template>
-              <template is="header">
+              <template class="header">
                 TC3
               </template>
             </vaadin-grid-column>
@@ -110,7 +110,7 @@
                 <template>
                   [[item.user.username]]
                 </template>
-                <template is="header">
+                <template class="header">
                   <vaadin-grid-sorter path="user.username">TC1</vaadin-grid-sorter>
                 </template>
               </vaadin-grid-column>
@@ -118,7 +118,7 @@
                 <template>
                   <progress value="[[index]]" max="25"></progress>
                 </template>
-                <template is="header">
+                <template class="header">
                   TC5
                 </template>
               </vaadin-grid-column>
@@ -126,15 +126,15 @@
                 <template>
                   <paper-checkbox checked="{{expanded}}">Details</paper-checkbox>
                 </template>
-                <template is="header">
+                <template class="header">
                   TC6
                 </template>
               </vaadin-grid-column>
-              <template is="header">
+              <template class="header">
                 <vaadin-grid-filter path="user.username"></vaadin-grid-filter>
               </template>
             </vaadin-grid-column-group>
-            <template is="header">
+            <template class="header">
               TG2
             </template>
           </vaadin-grid-column-group>

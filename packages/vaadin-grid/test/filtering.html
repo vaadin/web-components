@@ -27,14 +27,14 @@
     <template>
       <vaadin-grid>
         <vaadin-grid-column>
-          <template is="header">
+          <template class="header">
             <vaadin-grid-filter path="first" value="bar"></vaadin-grid-filter>
             <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
           </template>
           <template>[[item.first]]</template>
         </vaadin-grid-column>
         <vaadin-grid-column>
-          <template is="header">
+          <template class="header">
             <vaadin-grid-filter path="last" value="qux"></vaadin-grid-filter>
           </template>
           <template>[[item.last]]</template>

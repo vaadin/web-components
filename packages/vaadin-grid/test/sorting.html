@@ -28,7 +28,7 @@
     <template>
       <vaadin-grid style="width: 200px; height: 200px;">
         <vaadin-grid-column>
-          <template is="header">
+          <template class="header">
             <vaadin-grid-sorter path="first" direction="asc">
               <span class="title">first</span>
             </vaadin-grid-sorter>
@@ -36,7 +36,7 @@
           <template>[[item.first]]</template>
         </vaadin-grid-column>
         <vaadin-grid-column>
-          <template is="header">
+          <template class="header">
             <span class="title">last</span>
             <vaadin-grid-sorter path="last" direction="desc">
             </vaadin-grid-sorter>
