@@ -2,7 +2,6 @@
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
@@ -12,6 +11,7 @@
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
+<link rel="import" href="vaadin-date-picker-icons.html">
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -252,14 +252,14 @@
       <paper-input-container>
         <label>[[label]]</label>
         <input id="input" readonly is="iron-input" autocomplete="off" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
-        <iron-icon id="clear" suffix on-tap="_clear" icon="clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
+        <iron-icon id="clear" suffix on-tap="_clear" icon="vaadin-date-picker:clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
-      <iron-icon id="toggle" icon="event" on-tap="_cancel"></iron-icon>
+      <iron-icon id="toggle" icon="vaadin-date-picker:event" on-tap="_cancel"></iron-icon>
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
       [[_yearAfterXMonths(_visibleMonthIndex)]]
-      <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="chevron-right"></iron-icon>
+      <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="vaadin-date-picker:chevron-right"></iron-icon>
     </div>
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-scroll="_stopPropagation" on-track="_track">
