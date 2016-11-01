@@ -129,10 +129,6 @@
 
       e.stopPropagation();
 
-      this.fire('sort-order-changed', {
-        sortOrder: this._mapSorters()
-      });
-
       if (this.dataSource) {
         this.clearCache();
       }

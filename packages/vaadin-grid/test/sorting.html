@@ -137,27 +137,12 @@
           expect(window.getComputedStyle(title).cursor).to.equal('pointer');
         });
 
-        it('should fire a sort-order-changed event', function(done) {
-          grid.addEventListener('sort-order-changed', function(e) {
-            var sortOrder = e.detail.sortOrder;
-            expect(sortOrder[0].path).to.equal('first');
-            expect(sortOrder[0].direction).to.equal('desc');
-            expect(sortOrder[1].path).to.equal('last');
-            expect(sortOrder[1].direction).to.equal('desc');
-            done();
-          });
-          sorterFirst.direction = 'desc';
-        });
-
-        it('should ignore sorter', function(done) {
-          grid.addEventListener('sort-order-changed', function(e) {
-            var sortOrder = e.detail.sortOrder;
-            expect(sortOrder).to.have.length(1);
-            expect(sortOrder[0].path).to.equal('last');
-            expect(sortOrder[0].direction).to.equal('desc');
-            done();
-          });
+        it('should ignore sorter', function() {
           sorterFirst.direction = '';
+          var sortOrder = grid._mapSorters();
+          expect(sortOrder).to.have.length(1);
+          expect(sortOrder[0].path).to.equal('last');
+          expect(sortOrder[0].direction).to.equal('desc');
         });
 
         it('should show order indicators', function() {

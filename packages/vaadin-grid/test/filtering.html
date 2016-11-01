@@ -1,0 +1,162 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../vaadin-grid-filter-behavior.html">
+</head>
+
+<body>
+
+  <test-fixture id="filter">
+    <template>
+      <vaadin-grid-filter path="foo" value="bar">
+        <input>
+      </vaadin-grid-filter>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="grid">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column>
+          <template is="header">
+            <vaadin-grid-filter path="first" value="bar"></vaadin-grid-filter>
+            <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
+          </template>
+          <template>[[item.first]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template is="header">
+            <vaadin-grid-filter path="last" value="qux"></vaadin-grid-filter>
+          </template>
+          <template>[[item.last]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('filter', function() {
+      var filter;
+
+      beforeEach(function() {
+        filter = fixture('filter');
+      });
+
+      it('should fire `filter-changed` on value change', function(done) {
+        filter.addEventListener('filter-changed', function(e) {
+          done();
+        });
+
+        filter.value = 'foo';
+      });
+
+      it('should fire `filter-changed` on path change', function(done) {
+        filter.addEventListener('filter-changed', function(e) {
+          done();
+        });
+
+        filter.path = 'bar';
+      });
+
+      it('should update value after `input` event from a child', function(done) {
+        filter.addEventListener('filter-changed', function(e) {
+          expect(filter.value).to.eql('foo');
+          done();
+        });
+
+        var input = filter.children[0];
+
+        input.value = 'foo';
+        Polymer.Base.fire('input', {}, {node: input});
+      });
+    });
+
+    describe('filtering', function() {
+      var grid;
+
+      beforeEach(function() {
+        grid = fixture('grid');
+      });
+
+      it('should have filters', function() {
+        expect(grid._filters.length).to.eql(2);
+        expect(grid._filters[0].path).to.eql('first');
+        expect(grid._filters[1].path).to.eql('last');
+      });
+
+      it('should pass filters to dataSource', function(done) {
+        grid.size = 10;
+
+        grid.dataSource = function(opts) {
+          expect(opts.filters[0]).to.eql({path: 'first', value: 'bar'});
+          expect(opts.filters[1]).to.eql({path: 'last', value: 'qux'});
+
+          if (!done._called) {
+            done._called = true;
+            done();
+          }
+        };
+      });
+
+      it('should clear cache and fetch data when filters change', function() {
+        grid.items = ['foo', 'bar'];
+        grid.clearCache = sinon.spy();
+
+        grid._filters[0].value = '';
+
+        expect(grid.clearCache.callCount).to.eql(1);
+      });
+
+    });
+
+    describe('array data source', function() {
+
+      var grid;
+
+      beforeEach(function() {
+        grid = fixture('grid');
+        grid._filters[0].value = '';
+        grid._filters[1].value = '';
+        grid.items = [{
+          first: 'foo',
+          last: 'bar'
+        }, {
+          first: 'foo',
+          last: 'baz'
+        }, {
+          first: 'bar',
+          last: 'bar'
+        }];
+      });
+
+      it('should filter automatically', function() {
+        expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
+        expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+        expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
+        grid._filters[0].value = 'r';
+        expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
+      });
+
+      it('should sort filtered items', function() {
+        grid._filters[1].value = 'r';
+        grid.querySelector('vaadin-grid-sorter').direction = 'asc';
+        expect(grid.size).to.equal(2);
+        expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
+        expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

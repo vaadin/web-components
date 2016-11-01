@@ -216,7 +216,8 @@
           var opts = {
             page: page,
             pageSize: this.pageSize,
-            sortOrder: this._mapSorters()
+            sortOrder: this._mapSorters(),
+            filters: this._mapFilters()
           };
           this.dataSource(opts, function(items) {
             this._cache[page] = items;
