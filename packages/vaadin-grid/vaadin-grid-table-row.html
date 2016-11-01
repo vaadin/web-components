@@ -15,7 +15,6 @@
         cells: {
           value: []
         },
-        frozenColumns: Number,
         target: Object,
 
         expanded: {
@@ -38,7 +37,6 @@
         '_indexChanged(index, cells)',
         '_itemChanged(item, cells)',
         '_itemChangedForDetails(item, _rowDetailsCell)',
-        '_frozenColumnsChanged(frozenColumns, cells)',
         '_rowDetailsChanged(expanded, rowDetailsTemplate, target)',
         '_rowDetailsCellIndexChanged(_rowDetailsCell, index)',
         '_rowDetailsCellChanged(_rowDetailsCell, target)',
@@ -61,7 +59,7 @@
           rowDetailsCell.setAttribute('detailscell', true);
           // Using a frozen cell as the details cell works as a handy way of
           // making it float in place
-          rowDetailsCell.setAttribute('frozen', true);
+          rowDetailsCell.frozen = true;
           rowDetailsCell.target = target;
           rowDetailsCell.template = rowDetailsTemplate;
           Polymer.dom(this.root).appendChild(rowDetailsCell);
@@ -116,13 +114,6 @@
         }.bind(this));
 
         this.cells = cells;
-      },
-
-      _frozenColumnsChanged: function(frozenColumns, cells) {
-        cells.forEach(function(cell, i) {
-          cell.toggleAttribute('frozen', i < frozenColumns);
-          cell.toggleAttribute('last-frozen', i === frozenColumns - 1);
-        });
       },
 
       _indexChanged: function(index, cells, _rowDetailsCell) {

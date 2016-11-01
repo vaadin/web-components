@@ -12,6 +12,14 @@
         column: Object,
         expanded: Boolean,
         flex: Number,
+        frozen: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
+        lastFrozen: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
         instance: Object,
         index: Number,
         item: Object,
@@ -45,6 +53,8 @@
 
       _columnChanged: function(column) {
         this.flex = column.flex;
+        this.frozen = column.frozen;
+        this.lastFrozen = column.lastFrozen;
         this.headerTemplate = column.headerTemplate;
         this.footerTemplate = column.footerTemplate;
         this.template = column.template;
@@ -53,7 +63,9 @@
       },
 
       _columnPropChanged: function(e) {
-        this[e.detail.path] = e.detail.value;
+        if (e.target == this.column) {
+          this[e.detail.path] = e.detail.value;
+        }
       },
 
       _expandedChanged: function(expanded, instance) {
@@ -249,7 +261,7 @@
       observers: ['_headerTemplateChanged(headerTemplate, target)'],
 
       _headerTemplateChanged: function(headerTemplate, target) {
-        if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+        if (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group') {
           this._templateChanged(headerTemplate, target);
         }
       }
@@ -272,7 +284,7 @@
       observers: ['_footerTemplateChanged(footerTemplate, target)'],
 
       _footerTemplateChanged: function(footerTemplate, target) {
-        if (this._isColumnRow || /vaadin-grid-column-group/.test(this.column.localName)) {
+        if (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group') {
           this._templateChanged(footerTemplate, target);
         }
       }

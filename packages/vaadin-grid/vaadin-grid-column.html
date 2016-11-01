@@ -31,12 +31,23 @@
           value: function() {
             return [];
           }
+        },
+
+        frozen: {
+          type: Boolean,
+          notify: true
+        },
+
+        _lastFrozen: {
+          type: Boolean,
+          notify: true
         }
       },
 
       observers: [
         '_footerTemplateChanged(footerTemplate)',
         '_headerTemplateChanged(headerTemplate)',
+        '_lastFrozenChanged(_lastFrozen)'
       ],
 
       _findTemplate: function(type) {
@@ -66,6 +77,10 @@
 
       _widthChanged: function(width) {
         this.fire('property-changed', {path: 'width', value: width});
+      },
+
+      _lastFrozenChanged: function(lastFrozen) {
+        this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
       }
     };
 
@@ -93,9 +108,14 @@
         }
       },
 
-      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)'],
+      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)'],
+
+      _frozenChanged: function(frozen) {
+        this.fire('property-changed', {path: 'frozen', value: frozen});
+      },
 
       _templateChanged: function(template) {
+        // We bubble false for optimisation
         this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
       }
     });
@@ -117,7 +137,7 @@
         _width: String
       },
 
-      observers: ['_flexChanged(_flex)', '_widthChanged(_width)'],
+      observers: ['_flexChanged(_flex)', '_widthChanged(_width)', '_frozenChanged(_childColumns, frozen)'],
 
       listeners: {
         'property-changed': '_columnPropChanged'
@@ -128,18 +148,16 @@
       },
 
       _columnPropChanged: function(e) {
-        if (e.target !== this) {
-          // stop width/flex changes from child columns/groups from bubbling
-          // to the cell of this group.
-          // TODO: header and footer templates don't bubble by default,
-          // as this handler won't catch property change events that have been fired before
-          // the event listener has been registered.
-          e.stopPropagation();
-          e.stopImmediatePropagation();
+        if (/flex|width/.test(e.detail.path)) {
+          this._updateFlexAndWidth();
         }
 
-        if (e.detail.path.match(/flex|width/)) {
-          this._updateFlexAndWidth();
+        if (e.detail.path === 'frozen') {
+          this.frozen = e.detail.value;
+        }
+
+        if (e.detail.path === 'lastFrozen') {
+          this._lastFrozen = e.detail.value;
         }
       },
 
@@ -151,7 +169,14 @@
         this._flex = this._childColumns.reduce(function(prev, curr) {
           return prev + curr.flex;
         }, 0);
-      }
+      },
+
+      _frozenChanged: function(childColumns, frozen) {
+        childColumns.forEach(function(col) {
+          col.frozen = frozen;
+        });
+        this.fire('property-changed', {path: 'frozen', value: frozen});
+      },
     });
   })();
 </script>
