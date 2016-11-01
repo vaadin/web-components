@@ -38,7 +38,7 @@
       <template id="cell">[[index]]</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" columns="[[columns]]"  bind-data=[[bindData]]>
+    <vaadin-grid-table  style$="[[_computedListHeight(listHeight)]]" size="[[size]]" id="scroller" column-tree="[[columnTree]]"  bind-data=[[bindData]]>
       <content></content>
     </vaadin-grid-table>
   </template>
@@ -50,7 +50,7 @@
 
     properties: {
 
-      columns: Array,
+      columnTree: Array,
 
       data: {
         type: Array
@@ -94,7 +94,7 @@
 
     ready: function() {
       var columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
-      this.columns = columns.length > 0 ? [columns] : [[this.$.column]];
+      this.columnTree = columns.length > 0 ? [columns] : [[this.$.column]];
     },
 
     _itemHeightChanged: function(itemHeight) {

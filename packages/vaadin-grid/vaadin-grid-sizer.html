@@ -29,7 +29,7 @@
       extends: 'div',
 
       properties: {
-        columns: Array,
+        columnTree: Array,
 
         scrollHeight: Number,
 
@@ -37,12 +37,12 @@
       },
 
       observers: [
-        '_columnsChanged(columns)',
+        '_columnTreeChanged(columnTree)',
         '_scrollHeightChanged(scrollHeight)'
       ],
 
-      _columnsChanged: function(columns) {
-        this._columns = columns[columns.length - 1];
+      _columnTreeChanged: function(columnTree) {
+        this._columns = columnTree[columnTree.length - 1];
       },
 
       _scrollHeightChanged: function(scrollHeight) {

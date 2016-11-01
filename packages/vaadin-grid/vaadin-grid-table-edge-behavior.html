@@ -31,6 +31,9 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
+  /**
+   * @polymerBehavior vaadin.elements.grid.TableEdgeBehaviorImpl
+   */
   vaadin.elements.grid.TableEdgeBehaviorImpl = {
 
     hostAttributes: {
@@ -51,6 +54,9 @@
     }
   };
 
+  /**
+   * @polymerBehavior vaadin.elements.grid.TableEdgeBehavior
+   */
   vaadin.elements.grid.TableEdgeBehavior = [
     vaadin.elements.grid.GridTableScrollBehavior, vaadin.elements.grid.TableEdgeBehaviorImpl
   ];

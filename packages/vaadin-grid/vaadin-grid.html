@@ -24,7 +24,9 @@
     }
   </style>
   <template>
-    <vaadin-grid-table loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]" id="scroller" columns="[[columns]]" frozen-columns=[[_frozenColumns]] content-target=[[_getContentTarget()]] row-details-template=[[rowDetailsTemplate]]>
+    <vaadin-grid-table id="scroller" loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]"
+        column-tree="[[_columnTree]]" frozen-columns=[[_frozenColumns]] content-target=[[_getContentTarget()]]
+        row-details-template=[[rowDetailsTemplate]]>
       <content></content>
     </vaadin-grid-table>
   </template>
@@ -36,7 +38,7 @@
 
     properties: {
 
-      columns: {
+      _columnTree: {
         type: Array,
         notify: true
       },
@@ -60,7 +62,7 @@
       vaadin.elements.grid.SortBehavior
     ],
 
-    observers: ['_columnsChanged(columns.*)'],
+    observers: ['_columnTreeChanged(_columnTree.*)'],
 
     _updateItem: function(row, item) {
       row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
@@ -73,25 +75,21 @@
       return this;
     },
 
-    _isFrozenColumn: function(column) {
-      return this.columns.indexOf(column) < this.frozenColumns;
-    },
-
     ready: function() {
       var rootColumns = Polymer.dom(this).children.filter(function(el) {
         return el.localName.indexOf('vaadin-grid-column') === 0;
       });
 
-      var columns = [];
+      var _columnTree = [];
       for(var c = rootColumns;;) {
-        columns.push(c);
+        _columnTree.push(c);
         if (this._isLastRow(c)) {
           break;
         }
         c = this._childrenColumns(c);
       }
 
-      this.columns = columns;
+      this._columnTree = _columnTree;
 
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template[is=row-details]');
     },
@@ -113,12 +111,12 @@
       }, []);
     },
 
-    _columnsChanged: function(e) {
-      if (e.path === 'columns.splices' || //array is spliced
-        (e.path.indexOf('columns.#') === 0 && e.path.split('.').length === 2)) { //column is replaced with set
+    _columnTreeChanged: function(e) {
+      if (e.path === '_columnTree.splices' || //array is spliced
+        (e.path.indexOf('_columnTree.#') === 0 && e.path.split('.').length === 2)) { //column is replaced using `set()`
         // TODO: implement splice support that will add and remove only affected cells.
         // meanwhile, deal with splices as the whole array would change.
-        this.columns = this.columns.slice(0);
+        this._columnTree = this._columnTree.slice(0);
       }
     }
   });

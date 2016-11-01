@@ -156,16 +156,16 @@
     <content select="vaadin-grid-column, vaadin-grid-column-group"></content>
     <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>
-        <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]">
+        <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" column-tree="[[columnTree]]">
         </div>
       </caption>
-      <thead id="header" is="vaadin-grid-table-header" columns="[[columns]]"></thead>
+      <thead id="header" is="vaadin-grid-table-header" column-tree="[[columnTree]]"></thead>
       <tbody id="items"></tbody>
-      <tfoot id="footer" is="vaadin-grid-table-footer" columns="[[columns]]"></tfoot>
+      <tfoot id="footer" is="vaadin-grid-table-footer" column-tree="[[columnTree]]"></tfoot>
     </table>
 
     <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]" ios$=[[ios]]>
-      <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" columns="[[columns]]"></div>
+      <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
     </vaadin-grid-table-outer-scroller>
 
   </template>
@@ -193,7 +193,7 @@
     properties: {
       size: Number,
 
-      columns: Array,
+      columnTree: Array,
 
       bindData: Function,
 
@@ -225,7 +225,7 @@
     },
 
     observers: [
-      '_columnsChanged(columns, _physicalItems, _physicalCount)',
+      '_columnTreeChanged(columnTree, _physicalItems, _physicalCount)',
       '_sizeChanged(size, bindData)',
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCount)'
     ],
@@ -246,7 +246,7 @@
       if ('frozen' === e.detail.path) {
         this._frozenCellsChanged();
 
-        var columnsRow = this.columns[this.columns.length - 1];
+        var columnsRow = this.columnTree[this.columnTree.length - 1];
         var lastFrozen = columnsRow.reduce(function(prev, col, index) {
           col._lastFrozen = false;
           return col.frozen ? index : prev;
@@ -277,9 +277,9 @@
       });
     },
 
-    _columnsChanged: function(columns, physicalItems, count) {
+    _columnTreeChanged: function(columnTree, physicalItems, count) {
       physicalItems.forEach(function(row) {
-        row.columns = columns[columns.length - 1];
+        row.columns = columnTree[columnTree.length - 1];
       });
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
