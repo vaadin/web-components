@@ -127,6 +127,51 @@
             expect(grid.$.scroller.$.footer._rows[0].cells[0].style.flexBasis).to.eql('200px');
           });
         });
+
+        describe('hidden', function() {
+          it('should default to undefined', function() {
+            expect(column.hidden).to.eql(undefined);
+          });
+
+          it('should not be bound to column-group header cells', function() {
+            column.hidden = true;
+
+            expect(grid.$.scroller.$.header._rows[0].cells[0].style.display).to.eql('');
+          });
+
+          it('should bind colSpan to column-group header cells', function() {
+            expect(grid.$.scroller.$.header._rows[0].cells[0].colSpan).to.eql(2);
+
+            column.hidden = true;
+
+            expect(grid.$.scroller.$.header._rows[0].cells[0].colSpan).to.eql(1);
+          });
+
+          it('should not be bound to column header cells', function() {
+            column.hidden = true;
+
+            expect(window.getComputedStyle(grid.$.scroller.$.header._rows[1].cells[0]).display).to.eql('none');
+          });
+
+          it('should be bound to row cells', function() {
+            column.hidden = true;
+
+            expect(window.getComputedStyle(grid.$.scroller._physicalItems[0].cells[0]).display).to.eql('none');
+          });
+
+          it('should be bound to row cells on multiSelection', function() {
+            grid.multiSelection = true;
+            column.hidden = true;
+
+            expect(window.getComputedStyle(grid.$.scroller._physicalItems[0].cells[1]).display).to.eql('none');
+          });
+
+          it('should be bound to footer cells', function() {
+            column.hidden = true;
+
+            expect(window.getComputedStyle(grid.$.scroller.$.footer._rows[0].cells[0]).display).to.eql('none');
+          });
+        });
       });
 
       describe('cell template', function() {

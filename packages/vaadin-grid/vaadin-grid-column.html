@@ -105,10 +105,14 @@
           value: function() {
             return this._findTemplate('template:not(.header):not(.footer)');
           }
+        },
+
+        hidden: {
+          type: Boolean
         }
       },
 
-      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)'],
+      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
 
       _frozenChanged: function(frozen) {
         this.fire('property-changed', {path: 'frozen', value: frozen});
@@ -117,6 +121,10 @@
       _templateChanged: function(template) {
         // We bubble false for optimisation
         this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
+      },
+
+      _hiddenChanged: function(hidden) {
+        this.fire('property-changed', {path: 'hidden', value: hidden});
       }
     });
 
@@ -134,25 +142,46 @@
         },
         _flex: Number,
 
-        _width: String
+        _width: String,
+
+        _visibleChildColumns: Array,
+
+        hidden: {
+          type: Boolean,
+          notify: true,
+          readOnly: true
+        },
+
+        colSpan: {
+          type: Number,
+          notify: true,
+          readOnly: true
+        }
       },
 
-      observers: ['_childColumnsChanged(_childColumns)',
+      observers: ['_updateVisibleChildColumns(_childColumns)',
                   '_flexChanged(_flex)',
                   '_widthChanged(_width)',
-                  '_frozenChanged(_childColumns, frozen)'],
+                  '_frozenChanged(_childColumns, frozen)',
+                  '_hiddenChanged(hidden)',
+                  '_visibleChildColumnsChanged(_visibleChildColumns)',
+                  '_colSpanChanged(colSpan)'],
 
       listeners: {
         'property-changed': '_columnPropChanged'
       },
 
       attached: function() {
-        this._updateFlexAndWidth();
+        this._updateFlexAndWidth(this._visibleChildColumns);
       },
 
       _columnPropChanged: function(e) {
-        if (/flex|width/.test(e.detail.path)) {
-          this._updateFlexAndWidth();
+        if (e.detail.path === 'hidden') {
+          this._updateVisibleChildColumns(this._childColumns);
+        }
+
+        if (/flex|width|hidden/.test(e.detail.path)) {
+          this._updateFlexAndWidth(this._visibleChildColumns);
         }
 
         if (e.detail.path === 'frozen') {
@@ -164,18 +193,18 @@
         }
       },
 
-      _childColumnsChanged: function(childColumns) {
-        // explicitly firing 'colSpan' change for the header cells.
-        // if needed, can be decoupled from cell by firing a 'childColumns' instead.
-        this.fire('property-changed', {path: 'colSpan', value: childColumns.length});
+      _updateVisibleChildColumns: function(childColumns) {
+        this._visibleChildColumns = childColumns.filter(function(col) {
+          return !col.hidden;
+        });
       },
 
-      _updateFlexAndWidth: function() {
-        this._width = 'calc(' + this._childColumns.reduce(function(prev, curr) {
+      _updateFlexAndWidth: function(visibleChildColumns) {
+        this._width = 'calc(' + visibleChildColumns.reduce(function(prev, curr) {
           return prev += ' + ' + (curr.width || '0');
         }, '').substring(3) + ')';
 
-        this._flex = this._childColumns.reduce(function(prev, curr) {
+        this._flex = visibleChildColumns.reduce(function(prev, curr) {
           return prev + curr.flex;
         }, 0);
       },
@@ -186,6 +215,19 @@
         });
         this.fire('property-changed', {path: 'frozen', value: frozen});
       },
+
+      _hiddenChanged: function(hidden) {
+        this.fire('property-changed', {path: 'hidden', value: hidden});
+      },
+
+      _visibleChildColumnsChanged: function(visibleChildColumns) {
+        this._setColSpan(visibleChildColumns.length);
+        this._setHidden(this.colSpan === 0);
+      },
+
+      _colSpanChanged: function(colSpan) {
+        this.fire('property-changed', {path: 'colSpan', value: colSpan});
+      }
     });
   })();
 </script>
