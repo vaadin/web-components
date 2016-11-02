@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-grid – Column Properties</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../iron-image/iron-image.html">
+  <link rel="import" href="../../paper-menu/paper-menu.html">
+  <link rel="import" href="../../paper-item/paper-item.html">
+  <link rel="import" href="../../paper-menu-button/paper-menu-button.html">
+  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../iron-media-query/iron-media-query.html">
+  <link rel="import" href="../../paper-slider/paper-slider.html">
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Templating</a></li>
+        <li><a href="selection.html">Selection</a></li>
+        <li><b>Column Properties</b></li>
+        <li><a href="sorting-filtering.html">Sorting and Filtering</a></li>
+      </ul>
+    </nav>
+
+    <style is="custom-style">
+      :root {
+        --iron-image-height: 30px;
+        --iron-image-width: 30px;
+      }
+
+      paper-checkbox {
+        margin-bottom: 20px;
+      }
+    </style>
+
+    <h3>Freezing Columns</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
+          <vaadin-grid data-source="[[dataSource]]" size="200">
+            <vaadin-grid-column width="50px" frozen="[[frozen]]">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px" frozen="[[frozen]]">
+              <template class="header"></template>
+              <template>
+                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="33%">
+              <template class="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="33%">
+              <template class="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="33%">
+              <template class="header">Email</template>
+              <template>[[item.user.email]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Hiding Columns</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
+          <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
+          <vaadin-grid data-source="[[dataSource]]" size="200">
+            <vaadin-grid-column width="50px" hidden="[[hidden]]">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px" hidden="[[hidden]]">
+              <template class="header"></template>
+              <template>
+                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="33%">
+              <template class="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="33%">
+              <template class="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="33%">
+              <template class="header">Email</template>
+              <template>[[item.user.email]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Resizing Columns</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="x-grid">
+          <template>
+            <style>
+            .resize-handler {
+              pointer-events: none;
+              position: relative;
+              user-select: none;
+            }
+
+            .resize-handler::after {
+              position: absolute;
+              right: -8px;
+              top: -8px;
+              bottom: -8px;
+              content: '';
+
+              pointer-events: auto;
+              border-right: 4px solid #ddd;
+              cursor: col-resize;
+            }
+            </style>
+            <x-data-source data-source="{{dataSource}}"></x-data-source>
+            <paper-slider min="10" max="500" immediate-value="{{width}}" value="[[width]]">Resize First Name</paper-slider>
+            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+              <vaadin-grid-column width="50px" frozen="[[frozen]]">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="50px" frozen="[[frozen]]">
+                <template class="header"></template>
+                <template>
+                  <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="[[width]]px">
+                <template class="header">
+                  <div class="resize-handler" on-track="_resize">First Name</div>
+                </template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="33%">
+                <template class="header">Last Name</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="33%">
+                <template class="header">Email</template>
+                <template>[[item.user.email]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          </template>
+          <script>
+            Polymer({
+              is: 'x-grid',
+
+              properties: {
+                width: {
+                  type: Number,
+                  value: 100
+                }
+              },
+
+              _resize: function(e) {
+                this.width = this.width + (e.detail.ddx || 0);
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+      <x-grid></x-grid>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>
