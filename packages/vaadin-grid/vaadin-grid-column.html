@@ -51,9 +51,9 @@
       ],
 
       _findTemplate: function(selector) {
-        var template = Polymer.dom(this).children.filter(function(el) {
-          return el.matches(selector);
-        })[0];
+        var template = Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
+          return el.parentElement === this;
+        }.bind(this))[0];
         if (template) {
           if (this.dataHost) {
             // set dataHost to the context where template has been defined
