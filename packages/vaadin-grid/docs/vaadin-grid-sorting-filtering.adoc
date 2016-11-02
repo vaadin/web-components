@@ -56,11 +56,11 @@ So let's define a simple [vaadinelement]#vaadin-grid# with three columns.
 <vaadin-grid>
   <vaadin-grid-column>
     <template class="header">First</template>
-    <template>[[user.name.first]]<template>
+    <template>[[item.user.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">Last</template>
-    <template>[[user.name.last]]<template>
+    <template>[[item.user.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">
@@ -68,7 +68,7 @@ So let's define a simple [vaadinelement]#vaadin-grid# with three columns.
         Email
       </vaadin-grid-sorter>
     </template>
-    <template>[[user.email]]<template>
+    <template>[[item.user.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
@@ -91,7 +91,7 @@ A predefined sorting order can also be achieved by decorating the [elementname]#
     <vaadin-grid-sorter path="user.name.last" direction="asc">
       Last name
     </vaadin-grid-sorter>
-    <template>[[user.name.last]]<template>
+    <template>[[item.user.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">
@@ -99,7 +99,7 @@ A predefined sorting order can also be achieved by decorating the [elementname]#
         Email
       </vaadin-grid-sorter>
     </template>
-    <template>[[user.email]]<template>
+    <template>[[item.user.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
@@ -150,17 +150,17 @@ The element helps in filtering with custom data sources also since they automati
 <vaadin-grid>
   <vaadin-grid-column>
     <template class="header">First</template>
-    <template>[[user.name.first]]<template>
+    <template>[[item.user.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">Last</template>
-    <template>[[user.name.last]]<template>
+    <template>[[item.user.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">
       <vaadin-grid-filter path="user.email"></vaadin-grid-filter>
     </template>
-    <template>[[user.email]]<template>
+    <template>[[item.user.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
