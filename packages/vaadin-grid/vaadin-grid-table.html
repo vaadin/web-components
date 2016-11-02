@@ -116,6 +116,10 @@
         z-index: 1;
       }
 
+      [hidden] {
+        display: none;
+      }
+
       caption {
         position: absolute;
         display: block;
@@ -243,15 +247,12 @@
         this.toggleAttribute('has-templates', true, this.$.footer);
       }
 
-      if ('frozen' === e.detail.path) {
+      if (/frozen|hidden/.test(e.detail.path)) {
         this._frozenCellsChanged();
+      }
 
-        var columnsRow = this.columnTree[this.columnTree.length - 1];
-        var lastFrozen = columnsRow.reduce(function(prev, col, index) {
-          col._lastFrozen = false;
-          return col.frozen ? index : prev;
-        }, 0);
-        columnsRow[lastFrozen]._lastFrozen = true;
+      if (e.detail.path === 'hidden') {
+        this.notifyResize();
       }
 
       e.stopPropagation();
@@ -278,6 +279,8 @@
     },
 
     _columnTreeChanged: function(columnTree, physicalItems, count) {
+      this._frozenCellsChanged();
+
       physicalItems.forEach(function(row) {
         row.columns = columnTree[columnTree.length - 1];
       });

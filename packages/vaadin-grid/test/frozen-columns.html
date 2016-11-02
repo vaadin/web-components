@@ -38,14 +38,24 @@
     describe('frozen columns', function() {
       var grid;
       var scroller;
+      var columns;
 
       beforeEach(function(done) {
         grid = fixture('frozen-columns');
         grid.dataSource = infiniteDataSource;
         scroller = grid.$.scroller;
+        columns = grid.querySelectorAll('vaadin-grid-column');
 
         Polymer.Base.async(done, 1);
 
+      });
+
+      it('should have last frozen only when there are frozen columns', function() {
+        expect(columns[0]._lastFrozen).to.be.true;
+
+        columns[0].frozen = false;
+
+        expect(columns[0]._lastFrozen).to.be.false;
       });
 
       ['thead', 'tbody'].forEach(function(container) {
@@ -130,6 +140,23 @@
             });
             scroller.$.table.scrollLeft = defaultCellWidth;
 
+          });
+
+          it('should have the correct last-frozen cell in a row with hidden columns', function() {
+            scroller.columnTree[0][1].frozen = scroller.columnTree[0][2].frozen = true;
+
+            containerRows = getRows(containerElement);
+            var cells = getRowCells(containerRows[0]);
+
+            expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+            expect(cells[1].hasAttribute('last-frozen')).not.to.be.true;
+            expect(cells[2].hasAttribute('last-frozen')).to.be.trues;
+
+            scroller.columnTree[0][2].hidden = true;
+
+            expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
+            expect(cells[1].hasAttribute('last-frozen')).to.be.true;
+            expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
           });
         });
       });

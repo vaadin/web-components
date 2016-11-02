@@ -114,6 +114,45 @@
         expect(columns[0].frozen).to.be.true;
         expect(columns[1].frozen).to.be.true;
       });
+
+      it('should hide group column', function() {
+        columns[0].hidden = true;
+        columns[1].hidden = true;
+
+        expect(group.hidden).to.be.true;
+      });
+
+      it('should not change hidden property when child columns are visible', function() {
+        columns[0].hidden = true;
+
+        expect(group.hidden).to.be.false;
+      });
+
+      it('should notify header cell for hidden', function(done) {
+
+        group.addEventListener('property-changed', function(e) {
+          if (e.detail.path === 'hidden' && e.target === columns[0]) {
+            expect(e.detail.value).to.be.true;
+            done();
+          }
+        });
+
+        columns[0].hidden = true;
+
+        expect(group.hidden).to.be.false;
+      });
+
+      it('should calculate column group width after hiding a column', function() {
+        columns[0].hidden = true;
+
+        expect(group._width).to.eql('calc(200px)');
+      });
+
+      it('should calculate column group flex after hiding a column', function() {
+        columns[0].hidden = true;
+
+        expect(group._flex).to.eql(2);
+      });
     });
   </script>
 

@@ -24,6 +24,10 @@
           type: Boolean,
           reflectToAttribute: true
         },
+        hidden: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
         instance: Object,
         index: Number,
         item: Object,
@@ -43,7 +47,8 @@
         '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)',
         '_selectedChanged(selected, instance)',
         '_toggleContent(isAttached, _cellContent)',
-        '_widthChanged(width)'
+        '_widthChanged(width)',
+        '_visibleChildColumnsChanged(_visibleChildColumns)'
       ],
 
       created: function() {
@@ -63,9 +68,11 @@
         this.footerTemplate = column.footerTemplate;
         this.template = column.template;
         this.width = column.width;
+        this.hidden = column.hidden;
 
-        if (column._childColumns) {
-          this.colSpan = column._childColumns.length;
+        // Assigning undefined to element.colSpan will set colSpan attribute to 0
+        if (column.colSpan) {
+          this.colSpan = column.colSpan;
         }
 
         this.listen(column, 'property-changed', '_columnPropChanged');
