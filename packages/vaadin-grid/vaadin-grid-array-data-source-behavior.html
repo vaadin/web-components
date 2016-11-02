@@ -34,7 +34,9 @@
       items = this._filter(items);
       this.size = items.length;
 
-      items.sort(this._multiSort.bind(this));
+      if (opts.sortOrder.length) {
+        items = items.sort(this._multiSort.bind(this));
+      }
 
       var start = opts.page * opts.pageSize;
       var end = start + opts.pageSize;
@@ -43,7 +45,7 @@
     },
 
     _multiSort: function(a, b) {
-      return (this._sorters || []).map(function(sort) {
+      return this._sorters.map(function(sort) {
         if (sort.direction === 'asc') {
           return this._compare(Polymer.Base.get(sort.path, a), Polymer.Base.get(sort.path, b));
         } else if (sort.direction === 'desc') {

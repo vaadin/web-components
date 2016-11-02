@@ -157,8 +157,8 @@
         });
 
         it('should not show order indicators', function() {
-          sorterFirst.direction = '';
-          sorterLast.direction = '';
+          sorterFirst.direction = null;
+          sorterLast.direction = null;
           expect(sorterFirst._order).to.equal(null);
           expect(sorterLast._order).to.equal(null);
         });
@@ -176,10 +176,19 @@
           });
 
           it('should sort automatically on sort', function() {
-            sorterFirst.direction = '';
+            sorterFirst.direction = null;
             expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
             expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
+          });
+
+          it('should not sort the items if sorters is empty', function() {
+            sorterFirst.direction = null;
+            sorterLast.direction = null;
+            grid.items = buildDataSet(1000);
+            var bodyRows = getRows(grid.$.scroller.$.items);
+            var cells = getRowCells(bodyRows[0]);
+            expect(cells[0].item).to.equal(grid.items[0]);
           });
 
         });
