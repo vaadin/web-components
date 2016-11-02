@@ -168,6 +168,18 @@
         this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
         this._translateStationaryElements();
       });
+      this._updateLastFrozen();
+    },
+
+    _updateLastFrozen: function() {
+      var columnsRow = this.columnTree[this.columnTree.length - 1];
+      var lastFrozen = columnsRow.reduce(function(prev, col, index) {
+        col._lastFrozen = false;
+        return col.frozen && !col.hidden ? index : prev;
+      }, undefined);
+      if (lastFrozen !== undefined) {
+        columnsRow[lastFrozen]._lastFrozen = true;
+      }
     },
 
     _translateStationaryElements: function() {

@@ -93,7 +93,7 @@
 
       this._columnTree = _columnTree;
 
-      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details');
+      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
     },
 
     _isLastRow: function(columns) {
