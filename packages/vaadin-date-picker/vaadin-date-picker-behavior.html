@@ -308,11 +308,9 @@
     /**
      * Opens the dropdown.
      */
-    open: function(e) {
+    open: function() {
       this._updateAlignmentAndPosition();
-      // Prevent dropdown.open() being called when input is disabled or read-only, or tapped
-      // inside the overlay
-      if (!this.disabled && !this.readonly && (!e || Polymer.dom(e).path.indexOf(this.$.overlay) < 0)) {
+      if (!this.disabled && !this.readonly) {
         this.$.dropdown.open();
         this._forwardKeysToOverlay = false;
       }

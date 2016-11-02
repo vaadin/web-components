@@ -262,7 +262,7 @@
       <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="vaadin-date-picker:chevron-right"></iron-icon>
     </div>
 
-    <div id="scrollers" desktop$="[[_desktopMode]]" on-scroll="_stopPropagation" on-track="_track">
+    <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
       <div id="fade"></div>
       <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]">
         <template>
@@ -302,7 +302,9 @@
       is: 'vaadin-date-picker-overlay',
 
       listeners: {
-        'keydown': '_onKeydown'
+        'keydown': '_onKeydown',
+        'scroll': '_stopPropagation',
+        'tap': '_stopPropagation'
       },
 
       properties: {
