@@ -14,7 +14,7 @@
         padding-right: 8px;
       }
 
-      #indicators[direction=asc] #direction {
+      #indicators[direction=desc] #direction {
         transform: rotateZ(180deg);
       }
 
@@ -33,7 +33,7 @@
 
     <content></content>
     <div id="indicators" direction$="[[direction]]">
-      <div id="direction">▼</div>
+      <div id="direction">▲</div>
       <div id="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 
