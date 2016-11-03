@@ -280,6 +280,7 @@
 
     _columnTreeChanged: function(columnTree, physicalItems, count) {
       this._frozenCellsChanged();
+      this._hasTemplatesChanged(columnTree);
 
       physicalItems.forEach(function(row) {
         row.columns = columnTree[columnTree.length - 1];
@@ -289,6 +290,20 @@
         this.$.outerscroller.style.paddingTop = this.$.items.style.borderTopWidth = this.$.header.clientHeight + 'px';
         this.$.outerscroller.style.paddingBottom = this.$.items.style.borderBottomWidth = this.$.footer.clientHeight + 'px';
       }.bind(this));
+    },
+
+    _hasTemplatesChanged: function(columnTree) {
+      var hasHeaders = false;
+      var hasFooters = false;
+      columnTree.forEach(function(row) {
+        return row.forEach(function(col) {
+          hasHeaders = hasHeaders || col.headerTemplate;
+          hasFooters = hasFooters || col.footerTemplate;
+        });
+      });
+
+      this.toggleAttribute('has-templates', hasHeaders, this.$.header);
+      this.toggleAttribute('has-templates', hasFooters, this.$.footer);
     },
 
     /**

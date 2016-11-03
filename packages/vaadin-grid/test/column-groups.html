@@ -20,7 +20,6 @@
 </head>
 
 <body>
-
   <test-fixture id="no-headers">
     <template>
       <vaadin-grid size="1000">
@@ -119,7 +118,6 @@
     <template>
       <vaadin-grid style="height: 400px; width: 400px;" size="1000">
         <template is="dom-repeat">
-        <template is="dom-repeat">
           <vaadin-grid-column-group>
             <template class="header">group</template>
             <vaadin-grid-column>
@@ -186,6 +184,13 @@
           });
         });
 
+        it('should not have a border below the header', function() {
+          var cells = Polymer.dom(header).querySelectorAll('th');
+          var cellOnLastRow = cells[cells.length - 1];
+
+          expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('none');
+        });
+
         it('should have empty footer', function() {
           var cells = Polymer.dom(footer).querySelectorAll('td');
           expect(cells).not.to.be.empty;
@@ -193,6 +198,13 @@
           cells.forEach(function(el) {
             expect(el.matches(':empty')).to.be.true;
           });
+        });
+
+        it('should not have a border above the footer', function() {
+          var cells = Polymer.dom(footer).querySelectorAll('td');
+          var cellOnFirstRow = cells[0];
+
+          expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('none');
         });
       });
 
@@ -272,6 +284,21 @@
           //  | group-0             | group-1                                  |          |
           init('nested');
         });
+
+        it('should have a border below the header', function() {
+          var cells = Polymer.dom(header).querySelectorAll('th');
+          var cellOnLastRow = cells[cells.length - 1];
+
+          expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
+        });
+
+        it('should have a border above the footer', function() {
+          var cells = Polymer.dom(footer).querySelectorAll('td');
+          var cellOnFirstRow = cells[0];
+
+          expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
+        });
+
         it('should have right content in header', function() {
           expect(getHeaderCellContent(0, 0)).to.equal('group-0');
           expect(getHeaderCellContent(0, 1)).to.equal('group-1');
