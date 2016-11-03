@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-grid – Selection</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Templating</a></li>
+        <li><b>Selection</b></li>
+        <li><a href="columns.html">Column Properties</a></li>
+        <li><a href="sorting-filtering.html">Sorting and Filtering</a></li>
+      </ul>
+    </nav>
+
+    <h3>Multi-Selection</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid data-source="[[dataSource]]" size="200" multi-selection>
+            <vaadin-grid-column width="50px">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Selection using Templates</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid data-source="[[dataSource]]" size="200">
+            <vaadin-grid-column width="50px">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template>
+                <paper-button raised focused="{{selected}}">Select</paper-button>
+              </template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Selection using Clicks</h3>
+    <demo-snippet>
+      <template>
+        <x-selection></x-selection>
+        <dom-module id="x-selection">
+          <template>
+            <x-data-source data-source="{{dataSource}}"></x-data-source>
+            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+              <vaadin-grid-column width="50px">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          </template>
+          <script>
+            Polymer({
+              is: 'x-selection',
+
+              listeners: {
+                'cell-click': '_onCellClick'
+              },
+
+              _onCellClick: function(e) {
+                this.$.grid.selectedItems = [];
+                this.$.grid.selectItem(e.detail.model.item);
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>

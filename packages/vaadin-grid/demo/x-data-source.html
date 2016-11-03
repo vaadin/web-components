@@ -1,3 +1,50 @@
+
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="x-data-source">
+  <script>
+    Polymer({
+      is: 'x-data-source',
+
+      properties: {
+        dataSource: {
+          notify: true,
+          value: function() {
+            return function(opts, callback) {
+              var items = new Array(opts.pageSize).fill(0).map(function(item, index) {
+                return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
+              });
+
+              callback(items);
+            };
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>
+
+<dom-module id="x-array-data-source">
+  <script>
+    Polymer({
+      is: 'x-array-data-source',
+
+      properties: {
+        items: {
+          notify: true,
+          value: function() {
+            var items = new Array(200).fill(0).map(function(item, index) {
+              return window.getJSON('http://randomuser.me?index=' + (index));
+            });
+
+            return items;
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>
+
 <script>
 (function() {
   window.getJSON = function(url, callback) {

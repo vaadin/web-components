@@ -2,142 +2,51 @@
 <html>
 
 <head>
-  <title>vaadin-grid 2.0 demos</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-grid – Templating</title>
+
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-
-  <link rel="import" href="getjson.html">
-  <link rel="import" href="../vaadin-grid.html">
 
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../paper-input/paper-input.html">
   <link rel="import" href="../../iron-image/iron-image.html">
-
   <link rel="import" href="../../paper-menu/paper-menu.html">
   <link rel="import" href="../../paper-item/paper-item.html">
   <link rel="import" href="../../paper-menu-button/paper-menu-button.html">
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
 
-
-  <style is="custom-style" include="demo-pages-shared-styles">
-    :root {
-      --font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
-    }
-
-    html, body {
-      background: #33383a;
-      font-weight: 400;
-      font-size: 16px;
-      color: rgba(0,0,0,0.8);
-      width: 100%;
-    }
-
-    h3 {
-      color: #e5e8e8;
-      text-transform: uppercase;
-      font-weight: 200;
-      font-size: 2em;
-      letter-spacing: 0.3em;
-      text-align: center;
-      margin: 2em 0 2em;
-    }
-
-    .vertical-section-container {
-      max-width: 60%;
-    }
-
-    .centered {
-      max-width: 60%;
-    }
-
-    demo-snippet {
-      overflow: hidden;
-      /*background: #fff;*/
-      --demo-snippet-demo: {
-        padding: 50px;
-      }
-    }
-
-    vaadin-grid {
-      height: 500px;
-    }
-  </style>
+  <link rel="import" href="common.html">
 </head>
 
 <body unresolved>
-  <style is="custom-style">
-    vaadin-grid {
-      --primary-color: #00b4f0;
-      --paper-input-container-input: {
-        font-family: var(--font-family);
-
-      };
-
-      --paper-font-common-base: {
-        font-family: var(--font-family);
-      };
-    }
-
-    paper-checkbox {
-      --primary-color: #00b4f0;
-      --paper-font-common-base: {
-        font-family: var(--font-family);
-        color: inherit;
-      };
-
-    }
-  </style>
   <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><b>Templating</b></li>
+        <li><a href="selection.html">Selection</a></li>
+        <li><a href="columns.html">Column Properties</a></li>
+        <li><a href="sorting-filtering.html">Sorting and Filtering</a></li>
+      </ul>
+    </nav>
 
-    <dom-module id="x-data-source">
-      <script>
-        document.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'x-data-source',
-
-            properties: {
-              dataSource: {
-                notify: true,
-                value: function() {
-                  return function(opts, callback) {
-                    var items = new Array(opts.pageSize).fill(0).map(function(item, index) {
-                      return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
-                    });
-
-                    callback(items);
-                  };
-                }
-              }
-            }
-          });
-        });
-      </script>
-    </dom-module>
+    <style is="custom-style">
+      :root {
+        --iron-image-height: 30px;
+        --iron-image-width: 30px;
+      }
+    </style>
 
     <h3>Basic Binding</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <style is="custom-style">
-            #basic-binding {
-              --iron-image-width: 30px;
-              --iron-image-height: 30px;
-            }
-
-            #basic-binding iron-image {
-              position: absolute;
-              top: 3px;
-              height: 30px;
-            }
-          </style>
           <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid id="basic-binding" data-source="[[dataSource]]" size="10000">
+
+          <vaadin-grid data-source="[[dataSource]]" size="200">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -164,88 +73,98 @@
     <h3>Two-Way Binding</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <style is="custom-style">
-            #two-way-binding {
-              margin-top: 20px;
-            }
+        <x-two-way-binding></x-two-way-binding>
+        <dom-module id="x-two-way-binding">
+          <template>
+            <style>
+              paper-checkbox {
+                margin-bottom: 20px;
+              }
 
-            #two-way-binding paper-input {
-              margin-top: -25px;
-            }
+              input[readonly] {
+                border: none;
+              }
+              input {
+                font: inherit;
+              }
+            </style>
+            <x-data-source data-source="{{dataSource}}"></x-data-source>
 
-            #two-way-binding {
-              --paper-input-container-underline-disabled: {
-                display: none;
-              };
+            <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
 
-              --paper-input-container-disabled: {
-                opacity: 1;
-              };
-            }
-          </style>
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
-          <vaadin-grid id="two-way-binding" on-item-changed="_log" data-source="[[dataSource]]" size="10000">
-            <vaadin-grid-column>
-              <template class="header">First Name</template>
-              <template>
-                <paper-input value="{{item.user.name.first}}" disabled="[[!editing]]"></paper-input>
-              </template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">Last Name</template>
-              <template>
-                <paper-input value="{{item.user.name.last}}" disabled="[[!editing]]"></paper-input>
-              </template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="200px">
-              <template class="header">Email</template>
-              <template>
-                <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
-              </template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        </template>
+            <vaadin-grid on-item-changed="_log" data-source="[[dataSource]]" size="10000">
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>
+                  <input value="{{item.user.name.first::input}}" readonly$="[[!editing]]">
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>
+                  <input value="{{item.user.name.last::input}}" readonly$="[[!editing]]">
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="200px">
+                <template class="header">Email</template>
+                <template>
+                  <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
+                </template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          </template>
+          <script>
+            Polymer({
+              is: 'x-two-way-binding'
+            });
+          </script>
+        </dom-module>
       </template>
     </demo-snippet>
 
-    <h3>Handling Click Events</h3>
+    <h3>Column Grouping</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <style is="custom-style">
-            #click-events {
-              --iron-image-width: 30px;
-              --iron-image-height: 30px;
-            }
-
-            #click-events iron-image {
-              position: absolute;
-              top: 3px;
-              height: 30px;
-            }
-          </style>
           <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid id="click-events" data-source="[[dataSource]]" size="10000" on-cell-click="_log">
-            <vaadin-grid-column width="50px">
+          <vaadin-grid data-source="[[dataSource]]" size="200">
+            <vaadin-grid-column width="30px" flex="0">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="50px">
+            <vaadin-grid-column width="50px" flex="0">
               <template class="header"></template>
               <template>
                 <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="calc(50% - 100px)">
-              <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="calc(50% - 100px)">
-              <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
-            </vaadin-grid-column>
+            <vaadin-grid-column-group>
+              <template class="header">Name</template>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">First</template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">Last</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+
+            <vaadin-grid-column-group>
+              <template class="header">Location</template>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">City</template>
+                <template>[[item.user.location.city]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">State</template>
+                <template>[[item.user.location.state]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="200px">
+                <template class="header">Street</template>
+                <template>[[item.user.location.street]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
           </vaadin-grid>
         </template>
       </template>
@@ -255,25 +174,20 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <style is="custom-style">
-            #example2 .details {
-              height: 100px;
+          <style>
+            #grid-row-details .details {
               padding: 10px;
-
               display: flex;
               justify-content: space-around;
               align-items: center;
-
-              --iron-image-width: 80px;
-              --iron-image-height: 80px;
-
+              box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
               font-size: 20px;
             }
-
-            #example2 .details iron-image {
+            #grid-row-details img {
+              width: 80px;
+              height: 80px;
             }
-
-            #example2 {
+            #grid-row-details {
               --primary-color: #00b4f0;
               --paper-font-common-base: {
                 font-family: var(--font-family);
@@ -282,13 +196,16 @@
             }
           </style>
           <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid id="example2" data-source="[[dataSource]]" size="10000">
+
+          <vaadin-grid id="grid-row-details" data-source="[[dataSource]]" size="200">
+
             <template class="row-details">
               <div class="details">
-                <iron-image src="[[item.user.picture.large]]"></iron-image>
+                <img src="[[item.user.picture.large]]"></img>
                 <p>Hi! My name is [[item.user.name.first]]!</p>
               </div>
             </template>
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -312,43 +229,8 @@
       </template>
     </demo-snippet>
 
-    <h3>Selection</h3>
-    <demo-snippet>
-      <template>
-        <template is="dom-bind">
-          <style is="custom-style">
 
-          </style>
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid id="example2" data-source="[[dataSource]]" size="10000" multi-selection>
-            <template class="row-details">
-              <div class="details">
-                <iron-image src="[[item.user.picture.large]]"></iron-image>
-                <p>Hi! My name is [[item.user.name.first]]!</p>
-              </div>
-            </template>
-            <vaadin-grid-column width="50px">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="100px">
-              <template class="header"></template>
-              <template>
-                <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
-              </template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        </template>
-      </template>
-    </demo-snippet>
+
   </div>
 </body>
 

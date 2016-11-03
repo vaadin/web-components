@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-grid – Sorting and Filtering</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Templating</a></li>
+        <li><a href="selection.html">Selection</a></li>
+        <li><a href="columns.html">Column Properties</a></li>
+        <li><b>Sorting and Filtering</b></li>
+      </ul>
+    </nav>
+
+    <h3>Sorting</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <vaadin-grid items="[[items]]">
+            <vaadin-grid-column width="50px">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">
+                <vaadin-grid-sorter path="user.name.first">First Name</vaadin-grid-sorter>
+              </template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">
+                <vaadin-grid-sorter path="user.name.last">Last Name</vaadin-grid-sorter>
+              </template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Filtering</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <vaadin-grid items="[[items]]">
+            <vaadin-grid-column width="50px">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">
+                <vaadin-grid-filter path="user.name.first">
+                  <input placeholder="First Name">
+                </vaadin-grid-filter>
+              </template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">
+                <vaadin-grid-filter path="user.name.last">
+                  <input placeholder="Last Name">
+                </vaadin-grid-filter>
+              </template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>
