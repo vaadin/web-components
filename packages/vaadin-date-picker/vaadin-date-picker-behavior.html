@@ -506,7 +506,7 @@
       }
       this._ignoreFocusedDateChange = false;
 
-      var input = window.unwrap(this.inputElement);
+      var input = window.unwrap ? window.unwrap(this.inputElement) : this.inputElement;
       if ((this.shadowRoot && this.shadowRoot.activeElement === input) || document.activeElement === input) {
         input.selectionStart = input.selectionEnd;
       }
