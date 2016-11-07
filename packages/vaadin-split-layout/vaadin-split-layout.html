@@ -69,7 +69,7 @@ for the `iron-resize` event.
 <dom-module id="vaadin-split-layout">
   <template>
     <style>
-      :host {
+      :host(:not([vertical])) {
         @apply(--layout-horizontal);
       }
 
@@ -83,17 +83,20 @@ for the `iron-resize` event.
       }
 
       #splitter {
-        @apply(--layout-vertical);
         @apply(--layout-center-justified);
         @apply(--layout-flex-none);
         overflow: visible;
         min-height: 8px;
         min-width: 8px;
         background: #ccc;
+      }
+
+      :host(:not([vertical])) > #splitter {
+        @apply(--layout-vertical);
         cursor: ew-resize;
       }
 
-      :host([vertical]) #splitter {
+      :host([vertical]) > #splitter {
         @apply(--layout-horizontal);
         cursor: ns-resize;
       }
@@ -110,11 +113,11 @@ for the `iron-resize` event.
         display: none;
       }
 
-      :host([vertical]) #handle-icon-horizontal {
+      :host([vertical]) > #splitter > #handle-icon-horizontal {
         display: none;
       }
 
-      :host([vertical]) #handle-icon-vertical {
+      :host([vertical]) > #splitter > #handle-icon-vertical {
         display: block;
       }
     </style>
