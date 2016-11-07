@@ -7,50 +7,50 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer.html">
 
 <dom-module id="vaadin-infinite-scroller">
-  <style>
-    :host {
-      display: block;
-      overflow: hidden;
-      height: 500px;
-    }
-
-    #scroller {
-      position: relative;
-      height: 100%;
-      overflow: auto;
-      margin-right: -40px;
-      -webkit-overflow-scrolling: touch;
-      -ms-overflow-style: none;
-      overflow-x: hidden;
-    }
-
-    #scroller.notouchscroll {
-      -webkit-overflow-scrolling: auto;
-    }
-
-    #scroller::-webkit-scrollbar {
-      display: none;
-    }
-
-    .buffer {
-      position: absolute;
-      width: 100%;
-      box-sizing: border-box;
-      padding-right: 40px;
-      @apply(--vaadin-infinite-scroller-buffer);
-    }
-
-    :host(:not([init-animation-done])) .buffer > * {
-      animation: fadein 0.2s;
-    }
-
-    @keyframes fadein {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: block;
+        overflow: hidden;
+        height: 500px;
+      }
+
+      #scroller {
+        position: relative;
+        height: 100%;
+        overflow: auto;
+        margin-right: -40px;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+        overflow-x: hidden;
+      }
+
+      #scroller.notouchscroll {
+        -webkit-overflow-scrolling: auto;
+      }
+
+      #scroller::-webkit-scrollbar {
+        display: none;
+      }
+
+      .buffer {
+        position: absolute;
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 40px;
+        @apply(--vaadin-infinite-scroller-buffer);
+      }
+
+      :host(:not([init-animation-done])) .buffer > * {
+        animation: fadein 0.2s;
+      }
+
+      @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+    </style>
+
     <div id="scroller">
       <div class="buffer"></div>
       <div class="buffer"></div>
