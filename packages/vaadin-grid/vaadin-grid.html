@@ -83,9 +83,10 @@
       });
 
       var _columnTree = [];
+
       for(var c = rootColumns;;) {
         _columnTree.push(c);
-        if (this._isLastRow(c)) {
+        if (!this._hasColumnGroups(c)) {
           break;
         }
         c = this._childrenColumns(c);
@@ -96,18 +97,26 @@
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
     },
 
-    _isLastRow: function(columns) {
-      return columns.reduce(function(prev, col) {
-         return prev && /vaadin-grid-column$/.test(col.localName);
-      }, true);
+    _hasColumnGroups: function(columns) {
+      for(var i = 0; i < columns.length; i++) {
+        if (columns[i].localName === 'vaadin-grid-column-group') {
+          return true;
+        }
+      }
+
+      return false;
     },
 
     _childrenColumns: function(columns) {
       return columns.map(function(col) {
-        var children = Polymer.dom(col).children.filter(function(el) {
-          return /vaadin-grid-column/.test(el.localName);
-        });
-        return children.length > 0 ? children : [col];
+        if (col.localName === 'vaadin-grid-column-group') {
+          var children = Polymer.dom(col).children.filter(function(el) {
+            return /vaadin-grid-column/.test(el.localName);
+          });
+          return children;
+        } else {
+          return [col];
+        }
       }.bind(this)).reduce(function(prev, curr) {
         return prev.concat(curr);
       }, []);
