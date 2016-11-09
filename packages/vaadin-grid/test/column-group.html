@@ -81,6 +81,12 @@
         expect(group._width).to.eql('calc(20% + 200px)');
       });
 
+      it('should strip nested `calc` keywords', function() {
+        columns[0].width = 'calc(50% + 10px)';
+
+        expect(group._width).to.eql('calc((50% + 10px) + 200px)');
+      });
+
       it('should react to child column flex changes', function() {
         columns[0].flex = 3;
 

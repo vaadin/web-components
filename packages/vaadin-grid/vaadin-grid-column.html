@@ -201,7 +201,7 @@
 
       _updateFlexAndWidth: function(visibleChildColumns) {
         this._width = 'calc(' + visibleChildColumns.reduce(function(prev, curr) {
-          return prev += ' + ' + (curr.width || '0');
+          return prev += ' + ' + (curr.width || '0').replace('calc', '');
         }, '').substring(3) + ')';
 
         this._flex = visibleChildColumns.reduce(function(prev, curr) {
