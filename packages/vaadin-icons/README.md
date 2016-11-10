@@ -3,7 +3,7 @@
 
 # &lt;vaadin-icons&gt;
 
-[&lt;vaadin-icons&gt;](https://vaadin.com/elements/-/element/vaadin-icons) is a set of 500+ icons which can be used together with the Polymer [`<iron-icon>`](https://elements.polymer-project.org/elements/iron-icon) component.
+[&lt;vaadin-icons&gt;](https://vaadin.com/elements/-/element/vaadin-icons) is a set of 600+ icons which can be used together with the Polymer [`<iron-icon>`](https://elements.polymer-project.org/elements/iron-icon) component.
 It is compatible with [`<iron-iconset>`](https://elements.polymer-project.org/elements/iron-iconset), as well as any other component using `<iron-icon>` and exposing the `icon` property
 
 `<vaadin-icons>` is part of the [vaadin-core-elements](https://vaadin/elements) element bundle.
