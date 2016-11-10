@@ -11,7 +11,7 @@
           notify: true,
           value: function() {
             return function(opts, callback) {
-              var items = new Array(opts.pageSize).fill(0).map(function(item, index) {
+              var items = Array.apply( null, { length: opts.pageSize } ).map(function(item, index) {
                 return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
               });
 
@@ -33,7 +33,7 @@
         items: {
           notify: true,
           value: function() {
-            var items = new Array(200).fill(0).map(function(item, index) {
+            var items = Array.apply( null, { length: 200 } ).map(function(item, index) {
               return window.getJSON('http://randomuser.me?index=' + (index));
             });
 

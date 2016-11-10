@@ -114,8 +114,10 @@
             </vaadin-grid>
           </template>
           <script>
-            Polymer({
-              is: 'x-two-way-binding'
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-two-way-binding'
+              });
             });
           </script>
         </dom-module>
@@ -174,7 +176,7 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <style>
+          <style is="custom-style">
             #grid-row-details .details {
               padding: 10px;
               display: flex;
