@@ -19,7 +19,6 @@
   "license": "Apache-2.0",
   "ignore": [
     "**/.*",
-    "assets",
     "node_modules",
     "bower_components",
     "test",
