@@ -377,7 +377,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:img/png/minus.png[] | [propertyname]#minus# | minus | e7f6 | Form | line, bar, minimize, collapse, remove
 | image:img/png/minus-circle.png[] | [propertyname]#minus-circle# | minus-circle | e7f4 | Form | minimize, collapse, remove, no-entry
 | image:img/png/minus-circle-o.png[] | [propertyname]#minus-circle-o# | minus-circle-o | e7f3 | Form | minimize, collapse, remove, no-entry
-| image:img/png/minus-square-left-o.png[] | [propertyname]#minus-square-left-o# | minus-square-left-o | e7f5 | Form | minimize, collapse, remove
+| image:img/png/minus-square-o.png[] | [propertyname]#minus-square-o# | minus-square-o | e7f5 | Form | minimize, collapse, remove
 | image:img/png/mobile.png[] | [propertyname]#mobile# | mobile | e7f7 | Devices, Item | phone, iphone, smartphone
 | image:img/png/modal.png[] | [propertyname]#modal# | modal | e7f8 | Web application | layout, html, internet, web page, site, pop-up
 | image:img/png/modal-list.png[] | [propertyname]#modal-list# | modal-list | e72b | Web application | layout, html, internet, web page, site, pop-up
@@ -427,7 +427,7 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:img/png/plus-circle.png[] | [propertyname]#plus-circle# | plus-circle | e7ff | Form | add, expand
 | image:img/png/plus-circle-o.png[] | [propertyname]#plus-circle-o# | plus-circle-o | e7fe | Form | add, expand
 | image:img/png/plus-minus.png[] | [propertyname]#plus-minus# | plus-minus | e603 | Ledger, Shopping | calculator
-| image:img/png/plus-square-left-o.png[] | [propertyname]#plus-square-left-o# | plus-square-left-o | e800 | Form | add, expand
+| image:img/png/plus-square-o.png[] | [propertyname]#plus-square-o# | plus-square-o | e800 | Form | add, expand
 | image:img/png/pointer.png[] | [propertyname]#pointer# | pointer | e66b | Web application | tap, hand
 | image:img/png/power-off.png[] | [propertyname]#power-off# | power-off | e78f | Web application | end, logout, log out, sign out, shut down, start, power-on
 | image:img/png/presentation.png[] | [propertyname]#presentation# | presentation | e6bf | Office | multimedia, powerpoint, keynote
@@ -571,4 +571,110 @@ The following table lists the icons currently available in the [vaadinelement]#v
 | image:img/png/close-circle-o.png[] | [propertyname]#close-circle-o# | close-circle-o | e810 | Web application | x, delete, remove
 | image:img/png/youtube.png[] | [propertyname]#youtube# | youtube | e6e5 | Brand, Social, Media | video, clip, movie
 | image:img/png/youtube-square.png[] | [propertyname]#youtube-square# | youtube-square | e6e4 | Brand, Social, Media | video, clip, movie
+| image:img/png/diploma.png[] | [propertyname]#diploma# | diploma | e964 | Education | degree, school, certificate
+| image:img/png/chevron-down-small.png[] | [propertyname]#chevron-down-small# | chevron-down-small | e965 | Directions | caret
+| image:img/png/chevron-left-small.png[] | [propertyname]#chevron-left-small# | chevron-left-small | e966 | Directions | caret, previous
+| image:img/png/chevron-right-small.png[] | [propertyname]#chevron-right-small# | chevron-right-small | e967 | Directions | caret, next
+| image:img/png/chevron-up-small.png[] | [propertyname]#chevron-up-small# | chevron-up-small | e968 | Directions | caret
+| image:img/png/diploma-scroll.png[] | [propertyname]#diploma-scroll# | diploma-scroll | e969 | Education | degree, school, certificate
+| image:img/png/workplace.png[] | [propertyname]#workplace# | workplace | e900 | Location, Office | structure, headquarters, office, work, building
+| image:img/png/cash.png[] | [propertyname]#cash# | cash | e901 | Shopping, Ledger | dollar, money, bills, currency
+| image:img/png/academy-cap.png[] | [propertyname]#academy-cap# | academy-cap | e902 | Education | degree, college, school
+| image:img/png/alarm.png[] | [propertyname]#alarm# | alarm | e903 | Scheduling, Item | clock, woke up, wake up, time
+| image:img/png/alt-a.png[] | [propertyname]#alt-a# | alt-a | e904 | Keyboard | key, option, shortcut, type
+| image:img/png/alt.png[] | [propertyname]#alt# | alt | e905 | Keyboard | key, option, shortcut, type
+| image:img/png/ambulance.png[] | [propertyname]#ambulance# | ambulance | e906 | Medical, Transportation | emergency, rescue, vehicle, patient
+| image:img/png/backspace-a.png[] | [propertyname]#backspace-a# | backspace-a | e907 | Keyboard | key, delete, back, shortcut, type
+| image:img/png/backspace.png[] | [propertyname]#backspace# | backspace | e908 | Keyboard | key, delete, back, shortcut, type
+| image:img/png/bar-chart-h.png[] | [propertyname]#bar-chart-h# | bar-chart-h | e909 | Charts | graph, diagram, column-chart, horizontal
+| image:img/png/bar-chart-v.png[] | [propertyname]#bar-chart-v# | bar-chart-v | e90a | Charts | graph, diagram, column-chart, vertical
+| image:img/png/bed.png[] | [propertyname]#bed# | bed | e90b | Item | sleep, pillow
+| image:img/png/buss.png[] | [propertyname]#buss# | buss | e90c | Transportation | vehicle, car, charter, coach
+| image:img/png/chart-3d.png[] | [propertyname]#chart-3d# | chart-3d | e90d | Charts | graph, diagram, column-chart
+| image:img/png/chart-grid.png[] | [propertyname]#chart-grid# | chart-grid | e90e | Charts | graph, diagram, table
+| image:img/png/chart-timeline.png[] | [propertyname]#chart-timeline# | chart-timeline | e90f | Charts | graph, diagram, column-chart, linear
+| image:img/png/clipboard-check.png[] | [propertyname]#clipboard-check# | clipboard-check | e910 | Office | document, file, confirm, assign, agreed, ok
+| image:img/png/close-small.png[] | [propertyname]#close-small# | close-small | e911 | Web application, Form | delete, remove, x
+| image:img/png/cluster.png[] | [propertyname]#cluster# | cluster | e912 | Social, Item | share, network, web, structure
+| image:img/png/coin-piles.png[] | [propertyname]#coin-piles# | coin-piles | e913 | Ledger, Shopping | money, currency, dollar, bills, cash
+| image:img/png/coins.png[] | [propertyname]#coins# | coins | e914 | Ledger, Shopping | money, currency, dollar, bills, cash
+| image:img/png/compile.png[] | [propertyname]#compile# | compile | e915 | Web application, Media | compress, compose
+| image:img/png/close-big.png[] | [propertyname]#close-big# | close-big | e916 | Web application | closed, disabled
+| image:img/png/ctrl-a.png[] | [propertyname]#ctrl-a# | ctrl-a | e917 | Keyboard | key, shortcut, type, control
+| image:img/png/ctrl.png[] | [propertyname]#ctrl# | ctrl | e918 | Keyboard | key, shortcut, type, control
+| image:img/png/cursor-o.png[] | [propertyname]#cursor-o# | cursor-o | e919 | Web application | pointer, click, mouse
+| image:img/png/cursor.png[] | [propertyname]#cursor# | cursor | e91a | Web application | pointer, click, mouse
+| image:img/png/del-a.png[] | [propertyname]#del-a# | del-a | e91b | Keyboard | key, shortcut, type, delete, remove
+| image:img/png/del.png[] | [propertyname]#del# | del | e91c | Keyboard | key, shortcut, type, delete, remove
+| image:img/png/diamond-o.png[] | [propertyname]#diamond-o# | diamond-o | e91d | Item | luxury, gem, ruby, jewelry
+| image:img/png/diamond.png[] | [propertyname]#diamond# | diamond | e91e | Item | luxury, gem, ruby, jewelry
+| image:img/png/ellipsis-dots-h.png[] | [propertyname]#ellipsis-dots-h# | ellipsis-dots-h | e91f | Web application | navigation, horizontal, more, additional
+| image:img/png/ellipsis-dots-v.png[] | [propertyname]#ellipsis-dots-v# | ellipsis-dots-v | e920 | Web application | navigation, vertical, more, additional
+| image:img/png/enter-arrow.png[] | [propertyname]#enter-arrow# | enter-arrow | e921 | Keyboard | key, shortcut, type, return, ok
+| image:img/png/enter.png[] | [propertyname]#enter# | enter | e922 | Keyboard | key, shortcut, type, return, ok
+| image:img/png/envelopes-o.png[] | [propertyname]#envelopes-o# | envelopes-o | e923 | Office, Item | mail, letter, email
+| image:img/png/envelopes.png[] | [propertyname]#envelopes# | envelopes | e924 | Office, Item | mail, letter, email
+| image:img/png/esc-a.png[] | [propertyname]#esc-a# | esc-a | e925 | Keyboard | key, shortcut, type, escape, stop, close, cancel
+| image:img/png/esc.png[] | [propertyname]#esc# | esc | e926 | Keyboard | key, shortcut, type, escape, stop, close, cancel
+| image:img/png/euro.png[] | [propertyname]#euro# | euro | e927 | Ledger, Shopping | money, currency, payment
+| image:img/png/family.png[] | [propertyname]#family# | family | e928 | People | users, child, human, person, group
+| image:img/png/file-add.png[] | [propertyname]#file-add# | file-add | e929 | File types | document, attachment, new, plus, page
+| image:img/png/file-remove.png[] | [propertyname]#file-remove# | file-remove | e92a | File types | document, attachment, destroy, delete, x, page
+| image:img/png/file-search.png[] | [propertyname]#file-search# | file-search | e92b | File types | document, attachment, find, inspect, looking glass, page
+| image:img/png/flight-landing.png[] | [propertyname]#flight-landing# | flight-landing | e92c | Transportation | travel, airplane, fly, arrive, arrival, vacation
+| image:img/png/flight-takeoff.png[] | [propertyname]#flight-takeoff# | flight-takeoff | e92d | Transportation | travel, airplane, fly, departure, vacation
+| image:img/png/folder-add.png[] | [propertyname]#folder-add# | folder-add | e92e | File types | document, file, container, new, plus
+| image:img/png/folder-remove.png[] | [propertyname]#folder-remove# | folder-remove | e92f | File types | document, file, container, delete, destroy, x
+| image:img/png/folder-search.png[] | [propertyname]#folder-search# | folder-search | e930 | File types | document, file, container, find, inspect, looking glass
+| image:img/png/funnel.png[] | [propertyname]#funnel# | funnel | e931 | Charts | graph, diagram, filter, limit, define
+| image:img/png/globe-wire.png[] | [propertyname]#globe-wire# | globe-wire | e932 | Web application | earth, internet, web, global, world
+| image:img/png/hammer.png[] | [propertyname]#hammer# | hammer | e933 | Tools, Item | nail, knock, building, construction
+| image:img/png/handshake.png[] | [propertyname]#handshake# | handshake | e934 | People | agreement, deal, partnership, business
+| image:img/png/headset.png[] | [propertyname]#headset# | headset | e935 | Devices, Media | headphones, microphone, skype, sound, audio, voice
+| image:img/png/hospital.png[] | [propertyname]#hospital# | hospital | e936 | Location, Medical | doctor, emergency, healthcare, structure, building
+| image:img/png/hourglass-empty.png[] | [propertyname]#hourglass-empty# | hourglass-empty | e937 | Scheduling, Item | timer, measurement, stopwatch
+| image:img/png/hourglass-end.png[] | [propertyname]#hourglass-end# | hourglass-end | e938 | Scheduling, Item | timer, measurement, stopwatch
+| image:img/png/hourglass-start.png[] | [propertyname]#hourglass-start# | hourglass-start | e939 | Scheduling, Item | timer, measurement, stopwatch
+| image:img/png/hourglass.png[] | [propertyname]#hourglass# | hourglass | e93a | Scheduling, Item | timer, measurement, stopwatch
+| image:img/png/line-bar-chart.png[] | [propertyname]#line-bar-chart# | line-bar-chart | e93b | Charts | graph, diagram, column-chart, dashboard
+| image:img/png/line-chart.png[] | [propertyname]#line-chart# | line-chart | e93c | Charts | graph, diagram
+| image:img/png/mobile-browser.png[] | [propertyname]#mobile-browser# | mobile-browser | e93d | Web application, Devices | layout, html, internet, smartphone, responsive, web, page, site
+| image:img/png/mobile-retro.png[] | [propertyname]#mobile-retro# | mobile-retro | e93e | Devices, Item | cellphone, old
+| image:img/png/money-deposit.png[] | [propertyname]#money-deposit# | money-deposit | e93f | Ledger, Shopping | dollar, finance, banking, atm
+| image:img/png/money-exchange.png[] | [propertyname]#money-exchange# | money-exchange | e940 | Ledger, Shopping | dollar, finance, banking, buy, purchase
+| image:img/png/money-withdraw.png[] | [propertyname]#money-withdraw# | money-withdraw | e941 | Ledger, Shopping | dollar, finance, banking, atm
+| image:img/png/morning.png[] | [propertyname]#morning# | morning | e942 | Weather, Sign | sunrise, sunset, horizon, summer, time
+| image:img/png/newspaper.png[] | [propertyname]#newspaper# | newspaper | e943 | Items | journal, press, magazine
+| image:img/png/nurse.png[] | [propertyname]#nurse# | nurse | e944 | Medical, People | healthcare, medic
+| image:img/png/office.png[] | [propertyname]#office# | office | e945 | Location, Office | structure, headquarters, building, work
+| image:img/png/option-a.png[] | [propertyname]#option-a# | option-a | e946 | Keyboard | key, shortcut, type, command, modifier, Mac, OS X
+| image:img/png/option.png[] | [propertyname]#option# | option | e947 | Keyboard | key, shortcut, type, command, modifier, Mac, OS X
+| image:img/png/phone-landline.png[] | [propertyname]#phone-landline# | phone-landline | e948 | Devices | telephone, call, dial, contact
+| image:img/png/pie-bar-chart.png[] | [propertyname]#pie-bar-chart# | pie-bar-chart | e949 | Charts | graph, diagram, column-chart, dashboard
+| image:img/png/piggy-bank-coin.png[] | [propertyname]#piggy-bank-coin# | piggy-bank-coin | e94a | Ledger, Shopping | money, currency, banking, finance
+| image:img/png/piggy-bank.png[] | [propertyname]#piggy-bank# | piggy-bank | e94b | Ledger, Shopping | money, currency, banking, finance
+| image:img/png/pyramid-chart.png[] | [propertyname]#pyramid-chart# | pyramid-chart | e94c | Charts | graph, diagram, growing, levels
+| image:img/png/records.png[] | [propertyname]#records# | records | e94d | Office | documents, archive, files, filing, scoresheets
+| image:img/png/scale-unbalance.png[] | [propertyname]#scale-unbalance# | scale-unbalance | e94e | Item | measure, weight, evaluate
+| image:img/png/scale.png[] | [propertyname]#scale# | scale | e94f | Item | measure, weight, evaluate
+| image:img/png/scatter-chart.png[] | [propertyname]#scatter-chart# | scatter-chart | e950 | Charts | graph, diagram, points, measurements
+| image:img/png/shift-arrow.png[] | [propertyname]#shift-arrow# | shift-arrow | e951 | Keyboard | key, shortcut, type, modifier
+| image:img/png/shift.png[] | [propertyname]#shift# | shift | e952 | Keyboard | key, shortcut, type, modifier
+| image:img/png/shop.png[] | [propertyname]#shop# | shop | e953 | Location, Shopping | buy, commerce, store, supermarket
+| image:img/png/spark-line.png[] | [propertyname]#spark-line# | spark-line | e954 | Charts | graph, diagram, stock market
+| image:img/png/spline-area-chart.png[] | [propertyname]#spline-area-chart# | spline-area-chart | e955 | Charts | graph, diagram, line
+| image:img/png/spline-chart.png[] | [propertyname]#spline-chart# | spline-chart | e956 | Charts | graph, diagram, line
+| image:img/png/stock.png[] | [propertyname]#stock# | stock | e957 | Item | boxes, packages, warehouse, storing, pallet
+| image:img/png/stopwatch.png[] | [propertyname]#stopwatch# | stopwatch | e958 | Scheduling, Item | time, tracking, measurement, hours
+| image:img/png/storage.png[] | [propertyname]#storage# | storage | e959 | Location | boxes, packages, warehouse, storing, stock
+| image:img/png/sun-down.png[] | [propertyname]#sun-down# | sun-down | e95a | Weather, Sign | evening, time, daytime
+| image:img/png/sun-rise.png[] | [propertyname]#sun-rise# | sun-rise | e95b | Weather, Sign | morning, time, daytime
+| image:img/png/tab-a.png[] | [propertyname]#tab-a# | tab-a | e95c | Keyboard | key, shortcut, type, tabulator, indent
+| image:img/png/tab.png[] | [propertyname]#tab# | tab | e95d | Keyboard | key, shortcut, type, tabulator, indent
+| image:img/png/timer.png[] | [propertyname]#timer# | timer | e95e | Scheduling, Item | time, tracking, measurement, hours, stopwatch
+| image:img/png/touch.png[] | [propertyname]#touch# | touch | e95f | Web application | tap, click, pointer, finger
+| image:img/png/trendind-down.png[] | [propertyname]#trendind-down# | trendind-down | e960 | Charts | graph, diagram, line-chart, table, lower
+| image:img/png/trending-up.png[] | [propertyname]#trending-up# | trending-up | e961 | Charts | graph, diagram, line-chart, table, rise
+| image:img/png/user-star.png[] | [propertyname]#user-star# | user-star | e962 | People | favorite, save
+| image:img/png/wallet.png[] | [propertyname]#wallet# | wallet | e963 | Item | money, currency, cash, coins
 |======================
