@@ -6,7 +6,7 @@
 [<img src="screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
 
 
-[Vaadin Icons](https://vaadin.com/icons) is a set of 600+ icons design for web applications. Free to use, anywhere!
+[Vaadin Icons](https://vaadin.com/icons) is a set of 600+ icons designed for web applications. Free to use, anywhere!
 
 Visit **https://vaadin.com/icons** for more information and instructions how to get started using them.
 
