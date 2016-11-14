@@ -123,10 +123,7 @@
     },
 
     _getColumnTree: function() {
-      var rootColumns = Polymer.dom(this).children.filter(function(el) {
-        return el.localName.indexOf('vaadin-grid-column') === 0;
-      });
-
+      var rootColumns = this.queryAllEffectiveChildren('vaadin-grid-column, vaadin-grid-column-group');
       var _columnTree = [];
 
       for (var c = rootColumns;;) {
