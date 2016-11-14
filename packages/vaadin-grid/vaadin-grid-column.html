@@ -173,6 +173,7 @@
 
       attached: function() {
         this._updateFlexAndWidth(this._visibleChildColumns);
+        this._addNodeObserver();
       },
 
       _columnPropChanged: function(e) {
@@ -180,7 +181,7 @@
           this._updateVisibleChildColumns(this._childColumns);
         }
 
-        if (/flex|width|hidden/.test(e.detail.path)) {
+        if (/flex|width|hidden|_childColumns/.test(e.detail.path)) {
           this._updateFlexAndWidth(this._visibleChildColumns);
         }
 
@@ -197,6 +198,10 @@
         this._visibleChildColumns = childColumns.filter(function(col) {
           return !col.hidden;
         });
+      },
+
+      _childColumnsChanged: function(childColumns) {
+        this.fire('property-changed', {path: '_childColumns', value: childColumns});
       },
 
       _updateFlexAndWidth: function(visibleChildColumns) {
@@ -227,6 +232,18 @@
 
       _colSpanChanged: function(colSpan) {
         this.fire('property-changed', {path: 'colSpan', value: colSpan});
+      },
+
+      _addNodeObserver: function() {
+        this._observer = Polymer.dom(this).observeNodes(function(info) {
+          var columns = function(node) {
+            return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+          };
+          if (info.addedNodes.filter(columns).length > 0 ||
+            info.removedNodes.filter(columns).length > 0) {
+            this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          }
+        }.bind(this));
       }
     });
   })();

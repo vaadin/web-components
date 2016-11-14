@@ -66,6 +66,10 @@
 
     observers: ['_columnTreeChanged(_columnTree.*)'],
 
+    listeners: {
+      'property-changed': '_stopPropagation'
+    },
+
     _updateItem: function(row, item) {
       row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
       row.item = item;
@@ -78,27 +82,14 @@
     },
 
     ready: function() {
-      var rootColumns = Polymer.dom(this).children.filter(function(el) {
-        return el.localName.indexOf('vaadin-grid-column') === 0;
-      });
-
-      var _columnTree = [];
-
-      for(var c = rootColumns;;) {
-        _columnTree.push(c);
-        if (!this._hasColumnGroups(c)) {
-          break;
-        }
-        c = this._childrenColumns(c);
-      }
-
-      this._columnTree = _columnTree;
-
-      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
+      this._columnTree = this._getColumnTree();
+      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details');
+      
+      this._addNodeObserver();
     },
 
     _hasColumnGroups: function(columns) {
-      for(var i = 0; i < columns.length; i++) {
+      for (var i = 0; i < columns.length; i++) {
         if (columns[i].localName === 'vaadin-grid-column-group') {
           return true;
         }
@@ -129,6 +120,68 @@
         // meanwhile, deal with splices as the whole array would change.
         this._columnTree = this._columnTree.slice(0);
       }
+    },
+
+    _getColumnTree: function() {
+      var rootColumns = Polymer.dom(this).children.filter(function(el) {
+        return el.localName.indexOf('vaadin-grid-column') === 0;
+      });
+
+      var _columnTree = [];
+
+      for (var c = rootColumns;;) {
+        _columnTree.push(c);
+        if (!this._hasColumnGroups(c)) {
+          break;
+        }
+        c = this._childrenColumns(c);
+      }
+
+      return _columnTree;
+    },
+
+    _addNodeObserver: function() {
+      this._observer = Polymer.dom(this).observeNodes(function(info) {
+        var rootColumns = function(node) {
+          return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+        };
+        if (info.addedNodes.filter(rootColumns).length > 0 ||
+          info.removedNodes.filter(rootColumns).length > 0) {
+          var columnTree = this._getColumnTree();
+          if (!this._arrayEquals(columnTree, this._columnTree)) {
+            this._columnTree = columnTree;
+          }
+        }
+      }.bind(this));
+    },
+
+    _stopPropagation: function(e) {
+      e.stopPropagation();
+    },
+
+    _arrayEquals: function(arr1, arr2) {
+      if (!arr1 || !arr2) {
+        return false;
+      }
+
+      if (arr1.length !== arr2.length) {
+        return false;
+      }
+
+      for (var i = 0, l = arr1.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
+          // recurse into the nested arrays
+          if (!this._arrayEquals(arr1[i], arr2[i])) {
+            return false;
+          }
+        }
+        else if (arr1[i] != arr2[i]) {
+          return false;
+        }
+      }
+      return true;
+
     }
   });
 </script>
