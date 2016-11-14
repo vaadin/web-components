@@ -67,7 +67,7 @@
     observers: ['_columnTreeChanged(_columnTree.*)'],
 
     listeners: {
-      'property-changed': '_stopPropagation'
+      'property-changed': '_columnPropChanged'
     },
 
     _updateItem: function(row, item) {
@@ -155,7 +155,11 @@
       }.bind(this));
     },
 
-    _stopPropagation: function(e) {
+    _columnPropChanged: function(e) {
+      if (e.detail.path === '_childColumns') {
+        this._columnTree = this._getColumnTree();
+      }
+
       e.stopPropagation();
     },
 
