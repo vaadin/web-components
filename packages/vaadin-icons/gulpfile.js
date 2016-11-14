@@ -43,7 +43,7 @@ gulp.task('docs:table', () => {
   console.log('|======================');
   console.log('| Icon | Name | Ligature | Unicode | Categories | Tags');
   iconData.forEach((icon) => {
-    console.log(`| image:img/png/${icon.name}.png[] | [propertyname]#${icon.name}# | ${icon.name} | ${icon.code} | ${icon.categories.join(', ')} | ${icon.meta.join(', ')}`);
+    console.log(`| image:../assets/png/${icon.name}.png[] | [propertyname]#${icon.name}# | ${icon.name} | ${icon.code} | ${icon.categories.join(', ')} | ${icon.meta.join(', ')}`);
   });
   console.log('|======================');
 });
