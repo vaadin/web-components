@@ -50,7 +50,7 @@
       }
 
       it('should default to position 0', function() {
-        expect(scroller.position).to.equal(0);
+        expect(parseInt(scroller.position, 10)).to.equal(0);
       });
 
       it('should have correct item height', function() {
@@ -68,7 +68,7 @@
             done();
           } else {
             scroller.$.scroller.scrollTop += scroller.itemHeight * 3.7;
-            scroller.async(scrollDown, 20);
+            scroller.async(scrollDown, 1);
           }
         }
 
