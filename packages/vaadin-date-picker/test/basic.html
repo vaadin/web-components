@@ -100,6 +100,21 @@
         tap(datepicker.$.label);
       });
 
+      it('should pass the placeholder attribute to the input tag', function() {
+        var placeholder = 'Pick a date';
+        datepicker.set('placeholder', placeholder);
+        expect(datepicker.$.input.placeholder).to.be.equal(placeholder);
+      });
+
+      // label and placeholder will go on top of each other if always-float-label isn't set
+      // This is the similar behavior as paper-input has:
+      // PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
+      it('should set always-float-label when placeholder is provided', function() {
+        expect(datepicker.$.inputcontainer.alwaysFloatLabel).to.be.false;
+        datepicker.set('placeholder', 'Pick a date');
+        expect(datepicker.$.inputcontainer.alwaysFloatLabel).to.be.true;
+      });
+
       it('should scroll to today by default', function(done) {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         datepicker.addEventListener('iron-overlay-opened', function() {

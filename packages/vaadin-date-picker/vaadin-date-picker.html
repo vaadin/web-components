@@ -175,7 +175,8 @@ If you want to replace the default input field with a custom implementation, you
         auto-validate$="[[autoValidate]]"
         invalid$="[[invalid]]"
         disabled$="[[disabled]]"
-        role="application">
+        role="application"
+        always-float-label="[[_computeAlwaysFloatLabel(placeholder)]]">
       <label id="label" aria-hidden="true">[[label]]</label>
       <input id="input"
           is="iron-input"
@@ -184,6 +185,7 @@ If you want to replace the default input field with a custom implementation, you
           on-focus="_focus"
           value="{{_userInputValue::input}}"
           name$="[[name]]"
+          placeholder$="[[placeholder]]"
           aria-label$="[[label]]"
           invalid="{{invalid}}"
           required$="[[required]]"
@@ -270,6 +272,11 @@ If you want to replace the default input field with a custom implementation, you
         },
 
         /**
+         * A placeholder string in addition to the label. If this is set, the label will always float.
+         */
+        placeholder: String,
+
+        /**
          * The error message to display when the input is invalid.
          */
         errorMessage: String,
@@ -307,6 +314,15 @@ If you want to replace the default input field with a custom implementation, you
 
       _input: function() {
         return this.$.input;
+      },
+
+      /**
+       * label and placeholder will go on top of each other if always-float-label isn't set
+       * This is the similar behavior as paper-input has:
+       * PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
+       */
+      _computeAlwaysFloatLabel: function(placeholder) {
+        return Boolean(placeholder);
       },
 
       set _inputValue(value) {
