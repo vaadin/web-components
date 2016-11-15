@@ -559,7 +559,7 @@
      * Keyboard Navigation
      */
     _eventKey: function(e) {
-      var keys = ['down', 'up', 'enter', 'esc', 'tab'];
+      var keys = ['down', 'up', 'left', 'right', 'enter', 'esc', 'tab'];
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -597,6 +597,12 @@
             } else {
               this.open();
             }
+          }
+          break;
+        case 'left':
+        case 'right':
+          if (this._inputValue === '' && !this._forwardKeysToOverlay && this.opened) {
+            this._forwardKeysToOverlay = true;
           }
           break;
         case 'enter':
