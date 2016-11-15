@@ -71,8 +71,6 @@
       vaadin.elements.grid.FilterBehavior
     ],
 
-    observers: ['_columnTreeChanged(_columnTree.*)'],
-
     listeners: {
       'property-changed': '_columnPropChanged'
     },
@@ -93,7 +91,7 @@
     },
 
     ready: function() {
-      this._columnTree = this._getColumnTree();
+      this._updateColumnTree();
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details');
 
       this._addNodeObserver();
@@ -124,15 +122,6 @@
       }, []);
     },
 
-    _columnTreeChanged: function(e) {
-      if (e.path === '_columnTree.splices' || //array is spliced
-        (e.path.indexOf('_columnTree.#') === 0 && e.path.split('.').length === 2)) { //column is replaced using `set()`
-        // TODO: implement splice support that will add and remove only affected cells.
-        // meanwhile, deal with splices as the whole array would change.
-        this._columnTree = this._columnTree.slice(0);
-      }
-    },
-
     _getColumnTree: function() {
       var rootColumns = this.queryAllEffectiveChildren('vaadin-grid-column, vaadin-grid-column-group');
       var _columnTree = [];
@@ -153,7 +142,10 @@
     },
 
     _updateColumnTree: function() {
-      this._columnTree = this._getColumnTree();
+      var columnTree = this._getColumnTree();
+      if (!this._arrayEquals(columnTree, this._columnTree)) {
+        this._columnTree = columnTree;
+      }
     },
 
     _addNodeObserver: function() {
@@ -163,17 +155,14 @@
         };
         if (info.addedNodes.filter(rootColumns).length > 0 ||
           info.removedNodes.filter(rootColumns).length > 0) {
-          var columnTree = this._getColumnTree();
-          if (!this._arrayEquals(columnTree, this._columnTree)) {
-            this._columnTree = columnTree;
-          }
+          this._updateColumnTree();
         }
       }.bind(this));
     },
 
     _columnPropChanged: function(e) {
       if (e.detail.path === '_childColumns') {
-        this._columnTree = this._getColumnTree();
+        this._updateColumnTree();
       }
 
       e.stopPropagation();

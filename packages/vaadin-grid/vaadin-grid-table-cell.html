@@ -62,6 +62,12 @@
         };
       },
 
+      detached: function() {
+        if (this.column) {
+          this.unlisten(this.column, 'property-changed', '_columnPropChanged');
+        }
+      },
+
       _columnChanged: function(column) {
         this.flex = column.flex;
         this.frozen = column.frozen;
@@ -72,7 +78,7 @@
         this.width = column.width;
         this.hidden = column.hidden;
         this._childColumns = column._childColumns;
-        
+
         // Assigning undefined to element.colSpan will set colSpan attribute to 0
         if (column.colSpan) {
           this.colSpan = column.colSpan;
