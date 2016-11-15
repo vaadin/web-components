@@ -272,8 +272,6 @@
         value: null
       },
 
-      _forwardKeysToOverlay: Boolean,
-
       _noInput: {
         type: Boolean,
         computed: '_isNoInput(_fullscreen, i18n, i18n.*, _ios)'
@@ -292,7 +290,10 @@
     listeners: {
       'tap': 'open',
       'touchend': '_preventDefault',
-      'keydown': '_onKeydown'
+      'keydown': '_onKeydown',
+      'close': '_close',
+      'date-tap': '_close',
+      'focus-input': '_focusAndSelect'
     },
 
     ready: function() {
@@ -310,8 +311,15 @@
       this._updateAlignmentAndPosition();
       if (!this.disabled && !this.readonly) {
         this.$.dropdown.open();
-        this._forwardKeysToOverlay = false;
       }
+    },
+
+    _close: function(e) {
+      if (e) {
+        e.stopPropagation();
+      }
+      this.inputElement.focus();
+      this.close();
     },
 
     /**
@@ -362,7 +370,6 @@
     _focusedDateChanged: function(focusedDate, formatDate) {
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(focusedDate) : '';
-        this._input().setSelectionRange(0, this._inputValue.length);
       }
     },
 
@@ -497,7 +504,6 @@
       }
 
       this.updateStyles();
-      this._forwardKeysToOverlay = false;
 
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
@@ -551,6 +557,13 @@
       }
     },
 
+    _focusAndSelect: function() {
+      if (!this._noInput) {
+        this._focus();
+        this.inputElement.setSelectionRange(0, this._inputValue.length);
+      }
+    },
+
     _preventDefault: function(e) {
       e.preventDefault();
     },
@@ -591,18 +604,20 @@
         case 'up':
           // prevent scrolling the page with arrows
           e.preventDefault();
-          if (!this._forwardKeysToOverlay) {
-            if (this.opened) {
-              this._forwardKeysToOverlay = true;
-            } else {
-              this.open();
-            }
+
+          if (this.opened) {
+            this.$.overlay.focus();
+            this.$.overlay._onKeydown(e);
+          } else {
+            this.open();
           }
+
           break;
         case 'left':
         case 'right':
-          if (this._inputValue === '' && !this._forwardKeysToOverlay && this.opened) {
-            this._forwardKeysToOverlay = true;
+          if (this._inputValue === '' && this.opened) {
+            this.$.overlay.focus();
+            this.$.overlay._onKeydown(e);
           }
           break;
         case 'enter':
@@ -613,16 +628,23 @@
           break;
         case 'esc':
           this._focusedDate = this._selectedDate;
-          this.close();
+          this._close();
           break;
         case 'tab':
-          this.close();
-          return;
+          if (this.opened) {
+            e.preventDefault();
+            // Clear the selection range (remains visible on IE)
+            this.inputElement.setSelectionRange(0, 0);
+            if (e.shiftKey) {
+              this.$.overlay.focusCancel();
+            } else {
+              this.$.overlay.focus();
+            }
+
+          }
+          break;
       }
 
-      if (this.opened && this._forwardKeysToOverlay) {
-        this.$.overlay._onKeydown(e);
-      }
     },
 
     _validateInput: function(date, min, max) {
@@ -637,8 +659,6 @@
         this._ignoreFocusedDateChange = true;
         this._focusedDate = parsedDate;
         this._ignoreFocusedDateChange = false;
-      } else {
-        this._forwardKeysToOverlay = false;
       }
 
       if (!this.opened) {

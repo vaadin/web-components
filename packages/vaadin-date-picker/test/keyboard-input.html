@@ -218,7 +218,6 @@
           datepicker.addEventListener('iron-overlay-opened', function() {
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/8/2000');
-            expect(getSelectionText()).to.equal('1/8/2000');
             done();
           });
           arrowDown();
@@ -290,19 +289,6 @@
           });
           open(function() {
             arrowDown();
-            datepicker.close();
-          });
-        });
-
-        it('should not clear selection on close (not focused)', function(done) {
-          datepicker.addEventListener('iron-overlay-closed', function() {
-            expect(target.selectionStart).not.to.equal(target.selectionEnd);
-            done();
-          });
-          open(function() {
-            arrowDown();
-            target.blur();
-            window.focus();
             datepicker.close();
           });
         });
@@ -498,6 +484,79 @@
             expect(result.getFullYear()).to.equal(2009);
             expect(result.getMonth()).to.equal(8);
             expect(result.getDate()).to.equal(9);
+          });
+
+        });
+
+        describe('focus modes', function() {
+
+          it('should be tabbable', function() {
+            expect(parseInt(datepicker.$.overlay.getAttribute('tabindex'), 10)).to.equal(0);
+          });
+
+          it('should focus the input on esc', function() {
+            arrowDown();
+            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            esc();
+            expect(spy.called).to.be.true;
+          });
+
+          it('should focus the input on date tap', function() {
+            arrowDown();
+            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            datepicker.$.overlay.fire('date-tap');
+            expect(spy.called).to.be.true;
+          });
+
+          it('should focus the input on date cancel', function() {
+            it('should focus the input on date tap', function() {
+              arrowDown();
+              var spy = sinon.spy(datepicker.inputElement, 'focus');
+              MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
+              expect(spy.called).to.be.true;
+            });
+          });
+
+          it('should focus cancel on input shift tab', function(done) {
+            var spy = sinon.spy(datepicker.$.overlay.$.cancelButton, 'focus');
+            open(function() {
+              MockInteractions.pressAndReleaseKeyOn(datepicker.inputElement, 9, 'shift');
+              expect(spy.called).to.be.true;
+              done();
+            });
+          });
+
+          it('should focus input in cancel tab', function(done) {
+            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            open(function() {
+              MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
+              expect(spy.called).to.be.true;
+              done();
+            });
+          });
+
+          it('should mark overlay focused on button blur', function() {
+            expect(datepicker.$.overlay._focused).not.to.be.ok;
+            MockInteractions.blur(datepicker.$.overlay.$.cancelButton);
+            expect(datepicker.$.overlay._focused).to.be.true;
+          });
+
+          it('should mark overlay unfocused on button focus', function() {
+            MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
+            expect(datepicker.$.overlay._focused).to.be.false;
+          });
+
+          it('should cancel on cancel enter', function(done) {
+            datepicker.value = '2000-01-01';
+            datepicker.addEventListener('iron-overlay-closed', function() {
+              expect(datepicker.value).to.equal('2000-01-01');
+              done();
+            });
+            open(function() {
+              arrowDown();
+              datepicker.$.overlay.$.cancelButton.focus();
+              MockInteractions.pressEnter(datepicker.$.overlay.$.cancelButton);
+            });
           });
 
         });

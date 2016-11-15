@@ -19,6 +19,7 @@ This program is available under Apache License Version 2.0, available at https:/
         position: relative;
         height: 100%;
         overflow: auto;
+        outline: none;
         margin-right: -40px;
         -webkit-overflow-scrolling: touch;
         -ms-overflow-style: none;
@@ -164,6 +165,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
       var template = Polymer.dom(this).querySelector('template');
       this.templatize(template);
+
+      // Firefox interprets elements with overflow:auto as focusable
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
+      var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+      if (isFirefox) {
+        this.$.scroller.tabIndex = -1;
+      }
     },
 
     _translateBuffer: function(up) {

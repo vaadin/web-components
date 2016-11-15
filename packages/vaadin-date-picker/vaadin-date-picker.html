@@ -44,6 +44,8 @@ Custom property | Description | Default
 `--vaadin-date-picker-calendar-cell-today-selected` | Mixin applied to a month calendar selected today cell | `{}`
 `--vaadin-date-picker-calendar-cell-disabled` | Mixin applied to a month calendar disabled cell | `{}`
 `--vaadin-date-picker-calendar-weeknumber-cell` | Mixin applied to a month calendar weeknumber cell | `{}`
+`--vaadin-date-picker-calendar-focused-cell-focused` | Mixin applied to a focused month calendar focused cell | `{}`
+
 
 See paper-input-container documentation for styling the included input fields
 
@@ -218,10 +220,8 @@ If you want to replace the default input field with a custom implementation, you
           id="overlay" i18n="[[i18n]]"
           fullscreen$="[[_fullscreen]]"
           label="[[label]]"
-          on-date-tap="close"
           selected-date="{{_selectedDate}}"
           class="dropdown-content"
-          on-close="close"
           focused-date="{{_focusedDate}}"
           show-week-numbers="[[showWeekNumbers]]"
           min-date="[[_minDate]]"

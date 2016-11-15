@@ -113,13 +113,6 @@
           expect(datepickerLight.$.overlay.getAttribute('role')).to.equal('dialog');
         });
 
-        it('should not have tabindex attribute', function() {
-          // tabindex makes the overlay focusable, breaks iOS VoiceOver mode:
-          // the VoiceOver cursor always jumps to the (focused) overlay
-          // when a user taps inside to hear what is under the finger.
-          expect(parseInt(datepicker.$.overlay.getAttribute('tabindex'), 10)).to.be.NaN;
-          expect(parseInt(datepickerLight.$.overlay.getAttribute('tabindex'), 10)).to.be.NaN;
-        });
       });
 
       describe('overlay contents', function() {
