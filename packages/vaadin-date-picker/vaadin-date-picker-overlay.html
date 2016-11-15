@@ -771,7 +771,7 @@
             }
           } else {
             // Move to closest allowed date
-            this.focusedDate = this._getClosestDate(focus, [this.minDate, this.maxDate]);
+            this.focusedDate = vaadin.elements.datepicker.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
             this._focusedMonthDate = this.focusedDate.getDate();
           }
         }
@@ -804,7 +804,7 @@
             }
           } else {
             // Move to closest allowed date
-            this.focusedDate = this._getClosestDate(focus, [this.minDate, this.maxDate]);
+            this.focusedDate = vaadin.elements.datepicker.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
             this._focusedMonthDate = this.focusedDate.getDate();
           }
         }
@@ -832,7 +832,7 @@
             this._focusedMonthDate = this[property].getDate();
           } else {
             // Move to closest allowed date
-            this.focusedDate = this._getClosestDate(focusedDate, [this.minDate, this.maxDate]);
+            this.focusedDate = vaadin.elements.datepicker.DatePickerHelper._getClosestDate(focusedDate, [this.minDate, this.maxDate]);
             this._focusedMonthDate = this.focusedDate.getDate();
           }
         }
@@ -849,17 +849,6 @@
         todayMidnight.setMonth(today.getMonth());
         todayMidnight.setDate(today.getDate());
         return this._dateAllowed(todayMidnight, min, max);
-      },
-
-      _getClosestDate: function(date, dates) {
-        return dates.filter(function(date) {
-           return date !== undefined;
-         })
-         .reduce(function(closestDate, candidate) {
-           var candidateDiff = Math.abs(date.getTime() - candidate.getTime());
-           var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
-           return candidateDiff < closestDateDiff ? candidate : closestDate;
-         });
       },
 
       _stopPropagation: function(e) {
