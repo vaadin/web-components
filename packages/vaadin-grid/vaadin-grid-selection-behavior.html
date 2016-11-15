@@ -49,7 +49,7 @@
     },
 
     observers: [
-      '_multiSelectionChanged(multiSelection, _columnTree)',
+      '_multiSelectionChanged(multiSelection, _columnTreeProcessors)',
       '_selectedItemsChanged(selectedItems.*)'
     ],
 
@@ -57,24 +57,31 @@
       'template-instance-changed': '_templateInstanceChangedSelection'
     },
 
-    _multiSelectionChanged: function(multiSelection, columns) {
+    ready: function() {
+      this._addColumnTreeProcessor(this._addMultiSelectionColumn);
+    },
+
+    _addMultiSelectionColumn: function(columnTree) {
+      return columnTree.map(function(columns) {
+        if (this._multiSelectionColumn) {
+          columns.unshift(this._multiSelectionColumn.$.column);
+        }
+        return columns.slice(0);
+      }.bind(this));
+    },
+
+    _multiSelectionChanged: function(multiSelection) {
       if (multiSelection && !this._multiSelectionColumn) {
         this._multiSelectionColumn = document.createElement('vaadin-grid-multi-select-column');
         this._multiSelectionColumn.grid = this;
         this.listen(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
 
-        this._columnTree = columns.map(function(cols) {
-          cols.unshift(this._multiSelectionColumn.$.column);
-          return cols.slice(0);
-        }.bind(this));
+        this._updateColumnTree();
       } else if(!multiSelection && this._multiSelectionColumn) {
         this.unlisten(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
-
         this._multiSelectionColumn = undefined;
-        this._columnTree = columns.map(function(cols) {
-          cols.shift();
-          return cols.slice(0);
-        }.bind(this));
+
+        this._updateColumnTree();
       }
     },
 

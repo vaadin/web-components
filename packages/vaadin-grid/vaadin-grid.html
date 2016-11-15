@@ -52,6 +52,13 @@
         value: function() {
           return this._getItem.bind(this);
         }
+      },
+
+      _columnTreeProcessors: {
+        type: Array,
+        value: function() {
+          return [];
+        }
       }
     },
 
@@ -70,6 +77,10 @@
       'property-changed': '_columnPropChanged'
     },
 
+    _addColumnTreeProcessor: function(proc) {
+      this._columnTreeProcessors.push(proc);
+    },
+
     _updateItem: function(row, item) {
       row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
       row.item = item;
@@ -84,7 +95,7 @@
     ready: function() {
       this._columnTree = this._getColumnTree();
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details');
-      
+
       this._addNodeObserver();
     },
 
@@ -134,7 +145,15 @@
         c = this._childrenColumns(c);
       }
 
+      this._columnTreeProcessors.forEach(function(proc) {
+        _columnTree = proc.call(this, _columnTree);
+      }.bind(this));
+
       return _columnTree;
+    },
+
+    _updateColumnTree: function() {
+      this._columnTree = this._getColumnTree();
     },
 
     _addNodeObserver: function() {
