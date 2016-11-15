@@ -63,6 +63,32 @@
      */
     _dateAllowed: function(date, min, max) {
       return (!min || date >= min) && (!max || date <= max);
-    }
+    },
+
+    /**
+     * Get closest date from array of dates.
+     *
+     * @param {Date} date The date to compare dates with
+     * @param {Array} dates Array of date objects
+     * @return {Date} Closest date
+     */
+    _getClosestDate: function(date, dates) {
+      return dates.filter(function(date) {
+         return date !== undefined;
+       })
+       .reduce(function(closestDate, candidate) {
+         if (!candidate) {
+           return closestDate;
+         }
+
+         if (!closestDate) {
+           return candidate;
+         }
+
+         var candidateDiff = Math.abs(date.getTime() - candidate.getTime());
+         var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
+         return candidateDiff < closestDateDiff ? candidate : closestDate;
+       });
+    },
   };
 </script>

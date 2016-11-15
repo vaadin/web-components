@@ -499,6 +499,44 @@
           datepicker.value = '2016-12-31';
           expect(datepicker.invalid).to.be.equal(false);
         });
+
+        it('should scroll to min date when today is not allowed', function(done) {
+          datepicker.max = null;
+          datepicker.min = '2100-01-01';
+          var minDate = new Date(2100, 0, 1);
+
+          var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            expect(spy.firstCall.args[0]).to.eql(minDate);
+            done();
+          });
+          datepicker.open();
+        });
+
+        it('should scroll to max date when today is not allowed', function(done) {
+          datepicker.min = null;
+          datepicker.max = '2000-01-01';
+          var maxDate = new Date(2000, 0, 1);
+
+          var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            expect(spy.firstCall.args[0]).to.eql(maxDate);
+            done();
+          });
+          datepicker.open();
+        });
+
+        it('should scroll to initial position even when not allowed', function(done) {
+          datepicker.initialPosition = '2015-01-01';
+          var initialPositionDate = new Date(2015, 0, 1);
+
+          var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            expect(spy.firstCall.args[0]).to.eql(initialPositionDate);
+            done();
+          });
+          datepicker.open();
+        });
       });
 
     });

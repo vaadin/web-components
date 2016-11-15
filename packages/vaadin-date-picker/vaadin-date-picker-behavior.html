@@ -434,8 +434,19 @@
     },
 
     _onOverlayOpened: function() {
-      this.$.overlay.initialPosition = this._selectedDate ||
-        this.$.overlay.initialPosition || this._parseDate(this.initialPosition) || new Date();
+      var parsedInitialPosition = this._parseDate(this.initialPosition);
+
+      var initialPosition = this._selectedDate || this.$.overlay.initialPosition ||
+        parsedInitialPosition || new Date();
+
+      if (parsedInitialPosition ||
+        vaadin.elements.datepicker.DatePickerHelper._dateAllowed(initialPosition, this._minDate, this._maxDate)) {
+        this.$.overlay.initialPosition = initialPosition;
+      } else {
+        this.$.overlay.initialPosition =
+          vaadin.elements.datepicker.DatePickerHelper._getClosestDate(initialPosition, [this._minDate, this._maxDate]);
+      }
+
       this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
       // Have a default focused date
       this._ignoreFocusedDateChange = true;
