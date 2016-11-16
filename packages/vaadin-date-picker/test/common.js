@@ -25,6 +25,24 @@ function getDefaultI18n() {
   };
 }
 
+function listenForEvent(elem, type, callback) {
+  var listener = function() {
+    elem.removeEventListener(type, listener);
+    callback();
+  };
+  elem.addEventListener(type, listener);
+}
+
+function open(datepicker, callback) {
+  listenForEvent(datepicker, 'iron-overlay-opened', callback);
+  datepicker.open();
+}
+
+function close(datepicker, callback) {
+  listenForEvent(datepicker, 'iron-overlay-closed', callback);
+  datepicker.close();
+}
+
 function tap(element) {
   Polymer.Base.fire('tap', {}, {
     bubbles: true,

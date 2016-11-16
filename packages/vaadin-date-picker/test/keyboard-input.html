@@ -535,30 +535,6 @@
             });
           });
 
-          it('should mark overlay focused on button blur', function() {
-            expect(datepicker.$.overlay._focused).not.to.be.ok;
-            MockInteractions.blur(datepicker.$.overlay.$.cancelButton);
-            expect(datepicker.$.overlay._focused).to.be.true;
-          });
-
-          it('should mark overlay unfocused on button focus', function() {
-            MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
-            expect(datepicker.$.overlay._focused).to.be.false;
-          });
-
-          it('should cancel on cancel enter', function(done) {
-            datepicker.value = '2000-01-01';
-            datepicker.addEventListener('iron-overlay-closed', function() {
-              expect(datepicker.value).to.equal('2000-01-01');
-              done();
-            });
-            open(function() {
-              arrowDown();
-              datepicker.$.overlay.$.cancelButton.focus();
-              MockInteractions.pressEnter(datepicker.$.overlay.$.cancelButton);
-            });
-          });
-
         });
 
       });
