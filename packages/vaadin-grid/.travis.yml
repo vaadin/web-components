@@ -1,8 +1,13 @@
-sudo: false
+sudo: require
+dist: trusty
 language: node_js
 node_js: "5.3"
 addons:
-  firefox: "46.0"
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 cache:
   directories:
       - node_modules
@@ -14,5 +19,5 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 script:
-  - wct --local=firefox
+  - wct --local=chrome
 after_success: "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
