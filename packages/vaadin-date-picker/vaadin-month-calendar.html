@@ -48,7 +48,12 @@
         color: var(--primary-text-color);
         @apply(--vaadin-date-picker-calendar-date-cell);
       }
-      
+
+      #monthGrid div:not(:empty):not([disabled]):active {
+        background: var(--light-primary-color);
+        border-radius: 2px;
+      }
+
       #monthGrid div.weekday {
         text-transform: uppercase;
         color: var(--secondary-text-color);
