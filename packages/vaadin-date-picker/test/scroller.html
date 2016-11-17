@@ -26,10 +26,8 @@
       before(function(done) {
         scroller = document.querySelector('#scroller');
 
-        scroller.addEventListener('animationend', function() {
-          scroller.debounce('animations-finished', function() {
-            Polymer.Base.async(done, 1);
-          }, 1);
+        Polymer.RenderStatus.afterNextRender(scroller, function() {
+          Polymer.Base.async(done, 1);
         });
 
         scroller.active = true;

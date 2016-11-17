@@ -384,12 +384,13 @@
           datepicker.set('i18n.today', 'Tänään');
           datepicker.set('i18n.cancel', 'Peruuta');
 
-          datepicker.$.overlay.$.scroller.addEventListener('animationend', function() {
-            datepicker.debounce('animations-finished', function() {
-              done();
-            }, 1);
+          open(datepicker, function() {
+            Polymer.RenderStatus.afterNextRender(datepicker.$.overlay.$.scroller, function() {
+              Polymer.Base.async(function() {
+                done();
+              }, 1);
+            });
           });
-          datepicker.open();
 
         });
 

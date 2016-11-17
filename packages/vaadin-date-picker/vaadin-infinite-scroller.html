@@ -130,7 +130,6 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     listeners: {
-      'animationstart': '_animationStart',
       'animationend': '_animationEnd'
     },
 
@@ -138,20 +137,18 @@ This program is available under Apache License Version 2.0, available at https:/
       this.toggleAttribute('init-animation-done', true);
     },
 
-    _animationStart: function() {
+    _finishInit: function() {
       if (!this._initDone) {
         // Once the first set of items start fading in, stamp the rest
-        this.debounce('finish-init', function() {
-          this._buffers.forEach(function(buffer, bufferIndex) {
-            [].forEach.call(buffer.children, function(itemWrapper, index) {
-              this._ensureStampedInstance(itemWrapper);
-            }.bind(this));
-          }, this);
+        this._buffers.forEach(function(buffer, bufferIndex) {
+          [].forEach.call(buffer.children, function(itemWrapper, index) {
+            this._ensureStampedInstance(itemWrapper);
+          }.bind(this));
+        }, this);
 
-          if (!this._buffers[0].translateY) {
-            this._reset();
-          }
-        }, 1);
+        if (!this._buffers[0].translateY) {
+          this._reset();
+        }
 
         this._initDone = true;
       }
@@ -286,6 +283,8 @@ This program is available under Apache License Version 2.0, available at https:/
               this._ensureStampedInstance(itemWrapper);
             }
           }.bind(this, itemWrapper, container), 1); // Wait for first reset
+
+          Polymer.RenderStatus.afterNextRender(itemWrapper, this._finishInit.bind(this));
 
         }
       }, this);
