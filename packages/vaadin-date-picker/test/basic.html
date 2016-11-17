@@ -259,14 +259,15 @@
         });
 
         it('should realign on window scroll', function(done) {
-          var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
+          sinon.stub(datepicker, '_updateAlignmentAndPosition', function() {
+            if (!done._called) {
+              done._called = true;
+              done();
+            }
+          });
           Polymer.Base.fire('scroll', {}, {
             node: window
           });
-          datepicker.async(function() {
-            expect(spy.called).to.be.true;
-            done();
-          }, 100);
         });
 
         it('should realign on container scroll', function(done) {
@@ -275,16 +276,15 @@
           var container = fixture('datepicker-wrapped');
           var datepickerWrapped = container.querySelector('vaadin-date-picker');
 
-          datepickerWrapped.addEventListener('iron-overlay-opened', function() {
-            var spy = sinon.spy(datepickerWrapped, '_updateAlignmentAndPosition');
+          open(datepickerWrapped, function() {
+            sinon.stub(datepickerWrapped, '_updateAlignmentAndPosition', function() {
+              if (!done._called) {
+                done._called = true;
+                done();
+              }
+            });
             container.scrollTop += 100;
-
-            datepickerWrapped.async(function() {
-              expect(spy.called).to.be.true;
-              done();
-            }, 100);
           });
-          datepickerWrapped.open();
         });
 
         it('should not realign on year/month scroll', function(done) {
