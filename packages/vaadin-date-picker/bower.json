@@ -36,7 +36,7 @@
     "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#^1.0.5"
   },
   "devDependencies": {
-    "web-component-tester": "^4.1.0",
+    "web-component-tester": "4.0.3",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.1.5",
     "iron-component-page": "polymerelements/iron-component-page#^1.1.0",
     "iron-form": "PolymerElements/iron-form#^1.0.15",
