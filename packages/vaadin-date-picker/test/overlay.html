@@ -27,10 +27,8 @@
         overlay.i18n = getDefaultI18n();
 
         overlay.initialPosition = new Date();
-        overlay.$.scroller.addEventListener('animationend', function() {
-          overlay.debounce('animations-finished', function() {
-            waitUntilScrolledTo(overlay, new Date(), done);
-          }, 1);
+        Polymer.RenderStatus.afterNextRender(overlay.$.scroller, function() {
+          waitUntilScrolledTo(overlay, new Date(), done);
         });
 
       });
@@ -83,6 +81,7 @@
         overlay.scrollToDate(date);
         waitUntilScrolledTo(overlay, date, function() {
           var offset = overlay.$.yearScroller.clientHeight / 2;
+          overlay.$.yearScroller.flushDebouncer('updateAllClones');
           expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.equal('2000');
           done();
         });

@@ -14,7 +14,7 @@
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
       '_validateInput(_selectedDate, _minDate, _maxDate)',
       '_focusedDateChanged(_focusedDate, i18n.formatDate)',
-      '_announceFocusedDate(_focusedDate, opened)'
+      '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
     ],
 
     properties: {
@@ -272,10 +272,6 @@
         value: null
       },
 
-      _forwardKeysToOverlay: Boolean,
-
-      _cachedInputValue: String,
-
       _noInput: {
         type: Boolean,
         computed: '_isNoInput(_fullscreen, i18n, i18n.*, _ios)'
@@ -284,6 +280,10 @@
       _ios: {
         type: Boolean,
         value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/)
+      },
+
+      _ignoreAnnounce: {
+        value: true
       }
     },
 
@@ -294,7 +294,10 @@
     listeners: {
       'tap': 'open',
       'touchend': '_preventDefault',
-      'keydown': '_onKeydown'
+      'keydown': '_onKeydown',
+      'close': '_close',
+      'date-tap': '_close',
+      'focus-input': '_focusAndSelect'
     },
 
     ready: function() {
@@ -312,8 +315,15 @@
       this._updateAlignmentAndPosition();
       if (!this.disabled && !this.readonly) {
         this.$.dropdown.open();
-        this._forwardKeysToOverlay = false;
       }
+    },
+
+    _close: function(e) {
+      if (e) {
+        e.stopPropagation();
+      }
+      this.inputElement.focus();
+      this.close();
     },
 
     /**
@@ -358,13 +368,12 @@
     _selectedDateChanged: function(selectedDate, formatDate) {
       this.value = this._formatISO(selectedDate);
       this._focusedDate = selectedDate;
-      this._cachedInputValue = this._inputValue = selectedDate ? formatDate(selectedDate) : '';
+      this._inputValue = selectedDate ? formatDate(selectedDate) : '';
     },
 
     _focusedDateChanged: function(focusedDate, formatDate) {
-      if (!this._ignoreFocusedDateChange && !this._noInput && this.opened) {
+      if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(focusedDate) : '';
-        this._input().setSelectionRange(0, this._inputValue.length);
       }
     },
 
@@ -467,6 +476,8 @@
       this._focus();
 
       this.updateStyles();
+
+      this._ignoreAnnounce = false;
     },
 
     // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -488,6 +499,8 @@
     },
 
     _onOverlayClosed: function() {
+      this._ignoreAnnounce = true;
+
       window.removeEventListener('scroll', this._boundOnScroll, true);
       window.removeEventListener('resize', this._boundOnScroll, true);
 
@@ -499,7 +512,6 @@
       }
 
       this.updateStyles();
-      this._forwardKeysToOverlay = false;
 
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
@@ -553,6 +565,13 @@
       }
     },
 
+    _focusAndSelect: function() {
+      if (!this._noInput) {
+        this._focus();
+        this.inputElement.setSelectionRange(0, this._inputValue.length);
+      }
+    },
+
     _preventDefault: function(e) {
       e.preventDefault();
     },
@@ -561,7 +580,7 @@
      * Keyboard Navigation
      */
     _eventKey: function(e) {
-      var keys = ['down', 'up', 'enter', 'esc', 'tab'];
+      var keys = ['down', 'up', 'left', 'right', 'enter', 'esc', 'tab'];
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -593,13 +612,20 @@
         case 'up':
           // prevent scrolling the page with arrows
           e.preventDefault();
-          if (!this._forwardKeysToOverlay) {
-            if (this.opened) {
-              this._cachedInputValue = this._inputValue;
-              this._forwardKeysToOverlay = true;
-            } else {
-              this.open();
-            }
+
+          if (this.opened) {
+            this.$.overlay.focus();
+            this.$.overlay._onKeydown(e);
+          } else {
+            this.open();
+          }
+
+          break;
+        case 'left':
+        case 'right':
+          if (this._inputValue === '' && this.opened) {
+            this.$.overlay.focus();
+            this.$.overlay._onKeydown(e);
           }
           break;
         case 'enter':
@@ -609,38 +635,24 @@
           this.close();
           break;
         case 'esc':
-          if (this._forwardKeysToOverlay) {
-            // The keys are forwarded to ovelay, revert the input text to the cached value
-            this._inputValue = this._cachedInputValue;
-            this._userInputValueChanged();
-
-            if (!this._inputValue) {
-              // Default to today
-              this.$.overlay.focusedDate = new Date();
-            }
-          } else {
-            var newInputValue = this._selectedDate ? this.i18n.formatDate(this._selectedDate) : '';
-            if (newInputValue !== this._inputValue) {
-              this.open();
-              this.$.overlay.focusedDate = this._selectedDate || new Date();
-            } else {
-              this._focusedDate = this._selectedDate;
-            }
-            this._inputValue = newInputValue;
-          }
-
-          this._forwardKeysToOverlay = false;
+          this._focusedDate = this._selectedDate;
+          this._close();
           break;
+        case 'tab':
+          if (this.opened) {
+            e.preventDefault();
+            // Clear the selection range (remains visible on IE)
+            this.inputElement.setSelectionRange(0, 0);
+            if (e.shiftKey) {
+              this.$.overlay.focusCancel();
+            } else {
+              this.$.overlay.focus();
+            }
 
-          case 'tab':
-            this.close();
-            return;
-
+          }
+          break;
       }
 
-      if (this.opened && this._forwardKeysToOverlay) {
-        this.$.overlay._onKeydown(e);
-      }
     },
 
     _validateInput: function(date, min, max) {
@@ -655,8 +667,6 @@
         this._ignoreFocusedDateChange = true;
         this._focusedDate = parsedDate;
         this._ignoreFocusedDateChange = false;
-      } else {
-        this._forwardKeysToOverlay = false;
       }
 
       if (!this.opened) {
@@ -666,11 +676,9 @@
       }
     },
 
-    _announceFocusedDate: function(_focusedDate, opened) {
-      if (opened) {
-        this.debounce('_announceFocusedDate', function() {
-          this.$.overlay.announceFocusedDate();
-        }, 1);
+    _announceFocusedDate: function(_focusedDate, opened, _ignoreAnnounce) {
+      if (opened && !_ignoreAnnounce) {
+        this.$.overlay.announceFocusedDate();
       }
     }
   };

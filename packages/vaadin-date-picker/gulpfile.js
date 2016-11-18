@@ -68,8 +68,8 @@ function testSauce(browsers, done) {
 
 gulp.task('test:desktop', function(done) {
   testSauce([
-    'Windows 10/chrome@48',
-    'Windows 10/firefox@44',
+    'Windows 10/chrome@50',
+    'Windows 10/firefox@47',
     'Windows 10/microsoftedge@13',
     'Windows 10/internet explorer@11',
     'OS X 10.11/safari@9.0'], done);
@@ -116,8 +116,8 @@ gulp.task('test:desktop:shadow', function(done) {
   args.dom = 'shadow';
 
   testSauce([
-    'Windows 10/chrome@48',
-    'Windows 10/firefox@44',
+    'Windows 10/chrome@50',
+    'Windows 10/firefox@47',
     'Windows 10/microsoftedge@13',
     //'Windows 10/internet explorer@11', // shadow polyfill seems to have issues in IE11.
     'OS X 10.11/safari@9.0'], done);

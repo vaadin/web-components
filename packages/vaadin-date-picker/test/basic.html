@@ -50,54 +50,46 @@
         expect(spy.calledOnce).to.be.true;
       });
 
+      it('should open with open call', function(done) {
+        open(datepicker, function() {
+          done();
+        });
+      });
+
       it('should notify opened changed on open', function(done) {
-        datepicker.addEventListener('opened-changed', function() {
+        open(datepicker, function() {
           expect(datepicker.opened).to.be.true;
           done();
         });
-        datepicker.open();
       });
 
       it('should notify opened changed on close', function(done) {
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          datepicker.addEventListener('opened-changed', function() {
+        open(datepicker, function() {
+          listenForEvent(datepicker, 'opened-changed', function() {
             expect(datepicker.opened).to.be.false;
             done();
           });
           datepicker.close();
         });
-        datepicker.open();
-      });
-
-      it('should open with open call', function(done) {
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          done();
-        });
-        datepicker.open();
       });
 
       it('should close with close call', function(done) {
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          datepicker.close();
+        open(datepicker, function() {
+          close(datepicker, function() {
+            expect(datepicker.opened).to.be.false;
+            done();
+          });
         });
-        datepicker.addEventListener('iron-overlay-closed', function() {
-          done();
-        });
-        datepicker.open();
       });
 
       it('should open on input tap', function(done) {
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          done();
-        });
+        listenForEvent(datepicker, 'iron-overlay-opened', done);
         tap(datepicker.$.input);
       });
 
       it('should open on label tap', function(done) {
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          done();
-        });
-        tap(datepicker.$.label);
+        listenForEvent(datepicker, 'iron-overlay-opened', done);
+        tap(datepicker.$.input);
       });
 
       it('should pass the placeholder attribute to the input tag', function() {
@@ -117,11 +109,10 @@
 
       it('should scroll to today by default', function(done) {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
-        datepicker.addEventListener('iron-overlay-opened', function() {
+        open(datepicker, function() {
           expect(monthsEqual(spy.firstCall.args[0], new Date())).to.be.true;
           done();
         });
-        datepicker.open();
       });
 
       it('should scroll to initial position', function(done) {
@@ -129,11 +120,10 @@
         var initialPositionDate = new Date(2016, 0, 1);
 
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
-        datepicker.addEventListener('iron-overlay-opened', function() {
+        open(datepicker, function() {
           expect(spy.firstCall.args[0]).to.eql(initialPositionDate);
           done();
         });
-        datepicker.open();
       });
 
       it('should remember the original initial position on reopen', function(done) {
@@ -156,24 +146,21 @@
       it('should scroll to selected value by default', function(done) {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         datepicker.value = '2000-02-01';
-        datepicker.addEventListener('iron-overlay-opened', function() {
+        open(datepicker, function() {
           expect(monthsEqual(spy.firstCall.args[0], new Date(2000, 1, 1))).to.be.true;
           done();
         });
-        datepicker.open();
       });
 
       it('should close on overlay date tap', function(done) {
-        datepicker.addEventListener('iron-overlay-closed', function() {
-          done();
-        });
-        datepicker.addEventListener('iron-overlay-opened', function() {
+        listenForEvent(datepicker, 'iron-overlay-closed', done);
+
+        open(datepicker, function() {
           Polymer.Base.fire('date-tap', {}, {
             bubbles: true,
             node: datepicker.$.overlay
           });
         });
-        datepicker.open();
       });
 
       it('should not have label defined by default', function() {
@@ -215,7 +202,12 @@
 
       it('should show clear icon', function(done) {
         datepicker.value = '2000-02-01';
-        datepicker.addEventListener('iron-overlay-opened', function() {
+        Polymer.Base.fire('date-tap', {}, {
+          bubbles: true,
+          node: datepicker.$.overlay
+        });
+
+        open(datepicker, function() {
           if (isFullscreen(datepicker)) {
             expect(datepicker.$.overlay.$.clear.clientHeight).not.to.equal(0);
           } else {
@@ -223,35 +215,31 @@
           }
           done();
         });
-        datepicker.open();
       });
 
       it('should open by tapping the calendar icon', function(done) {
+        listenForEvent(datepicker, 'iron-overlay-opened', done);
         tap(datepicker.$.calendar);
-        datepicker.addEventListener('iron-overlay-opened', function() {
-          done();
-        });
       });
 
       it('should scroll to a date on open', function(done) {
         // We must scroll to a date on every open because at least IE11 seems to reset
         // scrollTop while the dropdown is closed. This will result in all kind of problems.
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
-        var openTimes = 0;
-        datepicker.addEventListener('iron-overlay-opened', function() {
+
+        open(datepicker, function() {
           expect(spy.called).to.be.true;
+
           spy.reset();
-          if (openTimes === 2) {
-            done();
-          } else if (openTimes < 2) {
-            datepicker.close();
-          }
-          openTimes++;
+          close(datepicker, function() {
+
+            open(datepicker, function() {
+              expect(spy.called).to.be.true;
+              done();
+            });
+          });
+          datepicker.close();
         });
-        datepicker.addEventListener('iron-overlay-closed', function() {
-          datepicker.open();
-        });
-        datepicker.open();
       });
 
       it('should not change datepicker width', function() {
@@ -267,23 +255,19 @@
       describe('window scroll realign', function() {
 
         beforeEach(function(done) {
-          datepicker.addEventListener('iron-overlay-opened', function() {
-            datepicker.async(done, 100);
-          });
-          datepicker.async(function() {
-            datepicker.open();
-          }, 100);
+          open(datepicker, done);
         });
 
         it('should realign on window scroll', function(done) {
-          var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
+          sinon.stub(datepicker, '_updateAlignmentAndPosition', function() {
+            if (!done._called) {
+              done._called = true;
+              done();
+            }
+          });
           Polymer.Base.fire('scroll', {}, {
             node: window
           });
-          datepicker.async(function() {
-            expect(spy.called).to.be.true;
-            done();
-          }, 100);
         });
 
         it('should realign on container scroll', function(done) {
@@ -292,16 +276,15 @@
           var container = fixture('datepicker-wrapped');
           var datepickerWrapped = container.querySelector('vaadin-date-picker');
 
-          datepickerWrapped.addEventListener('iron-overlay-opened', function() {
-            var spy = sinon.spy(datepickerWrapped, '_updateAlignmentAndPosition');
+          open(datepickerWrapped, function() {
+            sinon.stub(datepickerWrapped, '_updateAlignmentAndPosition', function() {
+              if (!done._called) {
+                done._called = true;
+                done();
+              }
+            });
             container.scrollTop += 100;
-
-            datepickerWrapped.async(function() {
-              expect(spy.called).to.be.true;
-              done();
-            }, 100);
           });
-          datepickerWrapped.open();
         });
 
         it('should not realign on year/month scroll', function(done) {
@@ -401,12 +384,13 @@
           datepicker.set('i18n.today', 'Tänään');
           datepicker.set('i18n.cancel', 'Peruuta');
 
-          datepicker.$.overlay.$.scroller.addEventListener('animationend', function() {
-            datepicker.debounce('animations-finished', function() {
-              done();
-            }, 1);
+          open(datepicker, function() {
+            Polymer.RenderStatus.afterNextRender(datepicker.$.overlay.$.scroller, function() {
+              Polymer.Base.async(function() {
+                done();
+              }, 1);
+            });
           });
-          datepicker.open();
 
         });
 
