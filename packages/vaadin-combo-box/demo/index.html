@@ -45,13 +45,13 @@
         <p>Selected value: <span id="selected-value"></span>.</p>
 
         <script>
-          var combobox = document.querySelector('#demo2');
-          combobox.items = elements;
+          var combobox2 = document.querySelector('#demo2');
+          combobox2.items = elements;
 
-          combobox.addEventListener('value-changed', function() {
-            document.querySelector('#selected-value').innerHTML = combobox.value;
+          combobox2.addEventListener('value-changed', function() {
+            document.querySelector('#selected-value').innerHTML = combobox2.value;
           });
-          combobox.value = 'Carbon';
+          combobox2.value = 'Carbon';
         </script>
       </template>
     </demo-snippet>
@@ -66,8 +66,8 @@
 
         <script>
           var form = document.querySelector('form');
-          var combobox = form.querySelector('vaadin-combo-box');
-          combobox.items = elements;
+          var combobox3 = form.querySelector('vaadin-combo-box');
+          combobox3.items = elements;
 
           form.addEventListener('iron-form-submit', function() {
             alert('Form submitted with name: ' + form.serialize().name);
