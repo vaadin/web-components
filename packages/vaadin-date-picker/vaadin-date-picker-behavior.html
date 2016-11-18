@@ -14,7 +14,7 @@
       '_selectedDateChanged(_selectedDate, i18n.formatDate)',
       '_validateInput(_selectedDate, _minDate, _maxDate)',
       '_focusedDateChanged(_focusedDate, i18n.formatDate)',
-      '_announceFocusedDate(_focusedDate, opened)'
+      '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
     ],
 
     properties: {
@@ -280,6 +280,10 @@
       _ios: {
         type: Boolean,
         value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/)
+      },
+
+      _ignoreAnnounce: {
+        value: true
       }
     },
 
@@ -472,6 +476,8 @@
       this._focus();
 
       this.updateStyles();
+
+      this._ignoreAnnounce = false;
     },
 
     // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -493,6 +499,8 @@
     },
 
     _onOverlayClosed: function() {
+      this._ignoreAnnounce = true;
+
       window.removeEventListener('scroll', this._boundOnScroll, true);
       window.removeEventListener('resize', this._boundOnScroll, true);
 
@@ -668,11 +676,9 @@
       }
     },
 
-    _announceFocusedDate: function(_focusedDate, opened) {
-      if (opened) {
-        this.debounce('_announceFocusedDate', function() {
-          this.$.overlay.announceFocusedDate();
-        }, 1);
+    _announceFocusedDate: function(_focusedDate, opened, _ignoreAnnounce) {
+      if (opened && !_ignoreAnnounce) {
+        this.$.overlay.announceFocusedDate();
       }
     }
   };

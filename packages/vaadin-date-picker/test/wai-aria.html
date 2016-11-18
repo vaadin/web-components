@@ -436,20 +436,22 @@
           datepicker.open();
         });
 
-        it('should debounce announcements', function(done) {
-          var announceSpy = sinon.spy();
-          document.body.addEventListener('iron-announce', announceSpy);
+        if (!ios) {
+          it('should announce once', function(done) {
+            var announceSpy = sinon.spy();
+            document.body.addEventListener('iron-announce', announceSpy);
 
-          datepicker._focusedDate = new Date(2016, 1, 1);
-          datepicker.open();
-          datepicker._focusedDate = new Date(2016, 1, 2);
+            datepicker._focusedDate = new Date(2016, 1, 1);
+            datepicker.open();
+            datepicker._focusedDate = new Date(2016, 1, 2);
 
-          Polymer.Base.async(function() {
-            expect(announceSpy.callCount).to.be.equal(1);
-            document.body.removeEventListener('iron-announce', announceSpy);
-            done();
-          }, 100);
-        });
+            Polymer.Base.async(function() {
+              expect(announceSpy.callCount).to.be.equal(1);
+              document.body.removeEventListener('iron-announce', announceSpy);
+              done();
+            }, 100);
+          });
+        }
 
         describe('i18n', function() {
           beforeEach(function() {
