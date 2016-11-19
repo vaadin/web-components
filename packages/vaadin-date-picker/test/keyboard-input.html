@@ -527,11 +527,45 @@
           });
 
           it('should focus input in cancel tab', function(done) {
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
             open(function() {
+              var spy = sinon.spy(datepicker.inputElement, 'focus');
+              MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
               expect(spy.called).to.be.true;
               done();
+            });
+          });
+
+          it('should not reveal the focused date on tap', function(done) {
+            open(function() {
+              var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
+              MockInteractions.tap(datepicker.$.overlay);
+              MockInteractions.focus(datepicker.$.overlay);
+              Polymer.Base.async(function() {
+                expect(spy.called).to.be.false;
+                done();
+              }, 1);
+            });
+          });
+
+          it('should reveal the focused date on tab focus from input', function(done) {
+            open(function() {
+              var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
+              MockInteractions.pressAndReleaseKeyOn(datepicker.inputElement, 9);
+              expect(spy.called).to.be.true;
+              done();
+            });
+          });
+
+          it('should reveal the focused date on shift-tab focus from today button', function(done) {
+            open(function() {
+              var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
+              MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.todayButton, 9, 'shift');
+              MockInteractions.focus(datepicker.$.overlay);
+              Polymer.Base.async(function() {
+                expect(spy.called).to.be.true;
+                done();
+              }, 1);
             });
           });
 

@@ -438,8 +438,15 @@
       },
 
       _focusedDateChanged: function(focusedDate, oldFocusedDate) {
-        if (focusedDate) {
-          var diff = this._differenceInMonths(focusedDate, this._originDate);
+        this.revealDate(focusedDate);
+      },
+
+      /**
+       * Scrolls the month and year scrollers enough to reveal the given date.
+       */
+      revealDate: function(date) {
+        if (date) {
+          var diff = this._differenceInMonths(date, this._originDate);
           var scrolledAboveViewport = this.$.scroller.position > diff;
 
           var visibleItems = this.$.scroller.clientHeight / this.$.scroller.itemHeight;
@@ -455,11 +462,6 @@
 
       _onOverlayFocus: function() {
         this._focused = true;
-        this.debounce('overlay-focus', function() {
-          if (this._focused) {
-            this._focusedDateChanged(this.focusedDate);
-          }
-        }, 1);
       },
 
       _onOverlayBlur: function() {
@@ -745,9 +747,12 @@
             // Return focus back to the input field
             e.preventDefault();
             this.fire('focus-input');
-            this._focused = false;
           } else {
-            this._focused = !this._buttonFocused();
+            this.async(function() {
+              if (this._focused) {
+                this.revealDate(this.focusedDate);
+              }
+            }, 1);
           }
         } else if (eventKey) {
           e.preventDefault();
