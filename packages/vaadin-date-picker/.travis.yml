@@ -6,10 +6,12 @@ cache:
   directories:
     - node_modules
 install: travis_retry npm install && npm install -g bower && bower install
+env:
+  - TEST_SUITE=mobile
+  - TEST_SUITE=desktop
+  - TEST_SUITE=mobile:shadow
+  - TEST_SUITE=desktop:shadow
 script:
   - gulp lint:js
   - gulp lint:html
-  - travis_retry gulp test:mobile
-  - travis_retry gulp test:desktop
-  - travis_retry gulp test:mobile:shadow
-  - travis_retry gulp test:desktop:shadow
+  - travis_retry gulp test:$TEST_SUITE
