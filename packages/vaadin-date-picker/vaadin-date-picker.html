@@ -215,7 +215,8 @@ If you want to replace the default input field with a custom implementation, you
         on-iron-overlay-opened="_onOverlayOpened"
         on-iron-overlay-closed="_onOverlayClosed"
         on-iron-overlay-canceled="_preventCancelOnComponentAccess"
-        opened="{{opened}}">
+        opened="{{opened}}"
+        no-auto-focus>
       <vaadin-date-picker-overlay
           id="overlay" i18n="[[i18n]]"
           fullscreen$="[[_fullscreen]]"

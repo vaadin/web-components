@@ -41,6 +41,10 @@
         target.fire('input');
         expect(datepicker.$.dropdown.opened).to.be.true;
       });
+
+      it('should not auto focus overlay', function() {
+        expect(datepicker.$.dropdown.noAutoFocus).to.equal(true);
+      });
     });
   </script>
 
