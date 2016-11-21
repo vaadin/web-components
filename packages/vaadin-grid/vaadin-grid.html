@@ -4,6 +4,7 @@
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-array-data-source-behavior.html">
+<link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
 <link rel="import" href="vaadin-grid-selection-behavior.html">
 <link rel="import" href="vaadin-grid-sort-behavior.html">
 <link rel="import" href="vaadin-grid-filter-behavior.html">
@@ -52,19 +53,13 @@
         value: function() {
           return this._getItem.bind(this);
         }
-      },
-
-      _columnTreeProcessors: {
-        type: Array,
-        value: function() {
-          return [];
-        }
       }
     },
 
     behaviors: [
       vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.DataSourceBehavior,
+      vaadin.elements.grid.DynamicColumnsBehavior,
       vaadin.elements.grid.ArrayDataSourceBehavior,
       vaadin.elements.grid.SelectionBehavior,
       vaadin.elements.grid.SortBehavior,
@@ -73,10 +68,6 @@
 
     listeners: {
       'property-changed': '_columnPropChanged'
-    },
-
-    _addColumnTreeProcessor: function(proc) {
-      this._columnTreeProcessors.push(proc);
     },
 
     _updateItem: function(row, item) {
@@ -93,71 +84,6 @@
     ready: function() {
       this._updateColumnTree();
       this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details');
-
-      this._addNodeObserver();
-    },
-
-    _hasColumnGroups: function(columns) {
-      for (var i = 0; i < columns.length; i++) {
-        if (columns[i].localName === 'vaadin-grid-column-group') {
-          return true;
-        }
-      }
-
-      return false;
-    },
-
-    _childrenColumns: function(columns) {
-      return columns.map(function(col) {
-        if (col.localName === 'vaadin-grid-column-group') {
-          var children = Polymer.dom(col).children.filter(function(el) {
-            return /vaadin-grid-column/.test(el.localName);
-          });
-          return children;
-        } else {
-          return [col];
-        }
-      }.bind(this)).reduce(function(prev, curr) {
-        return prev.concat(curr);
-      }, []);
-    },
-
-    _getColumnTree: function() {
-      var rootColumns = this.queryAllEffectiveChildren('vaadin-grid-column, vaadin-grid-column-group');
-      var _columnTree = [];
-
-      for (var c = rootColumns;;) {
-        _columnTree.push(c);
-        if (!this._hasColumnGroups(c)) {
-          break;
-        }
-        c = this._childrenColumns(c);
-      }
-
-      this._columnTreeProcessors.forEach(function(proc) {
-        _columnTree = proc.call(this, _columnTree);
-      }.bind(this));
-
-      return _columnTree;
-    },
-
-    _updateColumnTree: function() {
-      var columnTree = this._getColumnTree();
-      if (!this._arrayEquals(columnTree, this._columnTree)) {
-        this._columnTree = columnTree;
-      }
-    },
-
-    _addNodeObserver: function() {
-      this._observer = Polymer.dom(this).observeNodes(function(info) {
-        var rootColumns = function(node) {
-          return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
-        };
-        if (info.addedNodes.filter(rootColumns).length > 0 ||
-          info.removedNodes.filter(rootColumns).length > 0) {
-          this._updateColumnTree();
-        }
-      }.bind(this));
     },
 
     _columnPropChanged: function(e) {
@@ -166,27 +92,6 @@
       }
 
       e.stopPropagation();
-    },
-
-    _arrayEquals: function(arr1, arr2) {
-      if (!arr1 || !arr2 || arr1.length != arr2.length) {
-        return false;
-      }
-
-      for (var i = 0, l = arr1.length; i < l; i++) {
-        // Check if we have nested arrays
-        if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
-          // recurse into the nested arrays
-          if (!this._arrayEquals(arr1[i], arr2[i])) {
-            return false;
-          }
-        }
-        else if (arr1[i] != arr2[i]) {
-          return false;
-        }
-      }
-      return true;
-
     }
   });
 </script>
