@@ -252,6 +252,10 @@
         expect(datepicker.clientWidth).to.equal(width);
       });
 
+      it('should not auto focus overlay', function() {
+        expect(datepicker.$.dropdown.noAutoFocus).to.equal(true);
+      });
+
       describe('window scroll realign', function() {
 
         beforeEach(function(done) {
