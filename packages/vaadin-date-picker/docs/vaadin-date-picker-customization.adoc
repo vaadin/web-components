@@ -16,7 +16,7 @@ And they are numerated starting on Mondays, hence, the date picker only shows we
 ----
 <vaadin-date-picker show-week-numbers></vaadin-date-picker>
 <script>
-  document.querySelector('vaadin-date-picker').i18n.firstDayOfWeek = 1;
+  document.querySelector('vaadin-date-picker').set('i18n.firstDayOfWeek', 1);
 </script>
 ----
 
