@@ -23,6 +23,7 @@
   <script>
     describe('mobile support', function() {
       var menu;
+      var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       beforeEach(function() {
         menu = fixture('default')[0];
@@ -83,77 +84,79 @@
         expect(styles.transform).not.to.contain('translate');
       });
 
-      it('should open on long-touch on ios', function(done) {
-        menu._ios = true;
-        var xy = middleOfNode(menu.listenOn);
-        makeSoloTouchEvent('touchstart', xy, menu.listenOn);
+      if (ios) {
+        it('should open on long-touch on ios', function(done) {
+          var xy = middleOfNode(menu.listenOn);
+          makeSoloTouchEvent('touchstart', xy, menu.listenOn);
 
-        menu.async(function() {
-          expect(menu._opened).to.eql(true);
-          expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
-          done();
-        }, 1000);
-      });
+          menu.async(function() {
+            expect(menu._opened).to.eql(true);
+            expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
+            done();
+          }, 1000);
+        });
 
-      it('should not open on normal tap', function(done) {
-        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+        it('should not open on normal tap', function(done) {
+          makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-        menu.async(function() {
-          makeSoloTouchEvent('tap', null, menu.listenOn);
-        }, 100);
+          menu.async(function() {
+            makeSoloTouchEvent('tap', null, menu.listenOn);
+          }, 100);
 
-        menu.async(function() {
-          expect(menu._opened).to.eql(false);
-          done();
-        }, 1000);
-      });
+          menu.async(function() {
+            expect(menu._opened).to.eql(false);
+            done();
+          }, 1000);
+        });
 
-      it('should not stop `tap` bubbling in the middle of a long touch', function(done) {
-        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+        it('should not stop `tap` bubbling in the middle of a long touch', function(done) {
+          makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-        menu.async(function() {
-          var evt = menu.fire('tap', null, {
-            node: menu.listenOn,
-            cancelable: true,
-            bubbles: true
-          });
+          menu.async(function() {
+            var evt = menu.fire('tap', null, {
+              node: menu.listenOn,
+              cancelable: true,
+              bubbles: true
+            });
 
-          expect(evt.defaultPrevented).to.eql(false);
+            expect(evt.defaultPrevented).to.eql(false);
 
-          done();
-        }, 100);
-      });
+            done();
+          }, 100);
+        });
 
-      it('should not stop `tap` bubbling after a long touch', function(done) {
-        makeSoloTouchEvent('touchstart', null, menu.listenOn);
+        it('should not stop `tap` bubbling after a long touch', function(done) {
+          makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-        menu.async(function() {
-          var evt = menu.fire('tap', null, {
-            node: menu.listenOn,
-            cancelable: true,
-            bubbles: true
-          });
+          menu.async(function() {
+            var evt = menu.fire('tap', null, {
+              node: menu.listenOn,
+              cancelable: true,
+              bubbles: true
+            });
 
-          expect(evt.defaultPrevented).to.eql(true);
+            expect(evt.defaultPrevented).to.eql(true);
 
-          done();
-        }, 1000);
-      });
+            done();
+          }, 1000);
+        });
 
-      it('should not open when touch moving', function(done) {
-        var xy = middleOfNode(menu.listenOn);
-        makeSoloTouchEvent('touchstart', xy, menu.listenOn);
+        it('should not open when touch moving', function(done) {
+          var xy = middleOfNode(menu.listenOn);
+          makeSoloTouchEvent('touchstart', xy, menu.listenOn);
 
-        menu.async(function() {
-          xy.x += 16; // threshold is 15px from start
-          makeSoloTouchEvent('touchmove', xy, menu.listenOn);
-        }, 100);
+          menu.async(function() {
+            xy.x += 16; // threshold is 15px from start
+            makeSoloTouchEvent('touchmove', xy, menu.listenOn);
+          }, 100);
 
-        menu.async(function() {
-          expect(menu._opened).to.eql(false);
-          done();
-        }, 1000);
-      });
+          menu.async(function() {
+            expect(menu._opened).to.eql(false);
+            done();
+          }, 1000);
+        });
+
+      }
     });
   </script>
 

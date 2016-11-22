@@ -3,17 +3,18 @@
 <script>
   (function() {
     Polymer.Gestures.register({
-      name: 'vaadin-long-touch',
-      deps: ['touchstart', 'touchmove', 'tap'],
+      name: 'vaadin-contextmenu',
+      deps: ['touchstart', 'touchmove', 'tap', 'contextmenu'],
       flow: {
-        start: ['touchstart'],
-        end: ['tap']
+        start: ['touchstart', 'contextmenu'],
+        end: ['tap', 'contextmenu']
       },
 
-      emits: ['vaadin-long-touch'],
+      emits: ['vaadin-contextmenu'],
 
       info: {
-        sourceEvent: null
+        sourceEvent: null,
+        _ios: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
       },
 
       reset: function() {
@@ -30,7 +31,9 @@
         this.info.touchJob = Polymer.Debounce(this.info.touchJob, function() {
           var t = Polymer.Gestures.findOriginalTarget(e);
           var ct = e.changedTouches[0];
-          this.fire(t, ct);
+          if (this.info._ios) {
+            this.fire(t, ct.clientX, ct.clientY);
+          }
         }.bind(this), 500); //default setting for Android and iOS.
       },
 
@@ -41,6 +44,11 @@
             Math.abs(startTouch.clientY - e.changedTouches[0].clientY) > moveThreshold) {
           this.info.touchJob.stop();
         }
+      },
+
+      contextmenu: function(e) {
+        this.info.sourceEvent = e;
+        this.fire(e.target, e.clientX, e.clientY);
       },
 
       // tap is fired on touchend – this is the easiest way to stop it from bubbling.
@@ -54,10 +62,10 @@
         }
       },
 
-      fire: function(target, touch) {
-        Polymer.Gestures.fire(target, 'vaadin-long-touch', {
-          clientX: this.info.sourceEvent.changedTouches[0].clientX,
-          clientY: this.info.sourceEvent.changedTouches[0].clientY,
+      fire: function(target, x, y) {
+        Polymer.Gestures.fire(target, 'vaadin-contextmenu', {
+          x: x,
+          y: y,
           sourceEvent: this.info.sourceEvent
         });
 

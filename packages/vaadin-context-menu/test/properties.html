@@ -85,16 +85,16 @@
             it('should update listeners when set', function() {
               menu.openOn = 'foobar';
 
-              expect(menu.unlisten.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(1);
+              expect(menu.unlisten.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(1);
               expect(menu.listen.withArgs(menu.listenOn, 'foobar').callCount).to.eql(1);
             });
 
             it('should not add listener when set to empty', function() {
               menu.openOn = '';
 
-              expect(menu.unlisten.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(1);
+              expect(menu.unlisten.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(1);
               expect(menu.listen.withArgs(menu.listenOn, '').callCount).to.eql(0);
-              expect(menu.listen.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(0);
+              expect(menu.listen.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(0);
             });
           });
         });
@@ -169,8 +169,8 @@
 
               menu.listenOn = document.body;
 
-              expect(menu.unlisten.withArgs(oldTarget, 'contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(document.body, 'contextmenu').callCount).to.eql(1);
+              expect(menu.unlisten.withArgs(oldTarget, 'vaadin-contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(document.body, 'vaadin-contextmenu').callCount).to.eql(1);
             });
 
             it('should not target listeners when set to null', function() {
@@ -178,8 +178,8 @@
 
               menu.listenOn = null;
 
-              expect(menu.unlisten.withArgs(oldTarget, 'contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, 'contextmenu').callCount).to.eql(0);
+              expect(menu.unlisten.withArgs(oldTarget, 'vaadin-contextmenu').callCount).to.eql(1);
+              expect(menu.listen.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(0);
             });
           });
         });
