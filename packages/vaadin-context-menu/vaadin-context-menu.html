@@ -222,7 +222,7 @@ Custom property | Description | Default
       },
 
       _getEventCoordinate: function(event, coord) {
-        if (event.detail) {
+        if (event.detail instanceof Object) {
           if (event.detail[coord]) {
             // Polymer gesture events, get coordinate from detail
             return event.detail[coord];
