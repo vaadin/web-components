@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
-<link rel="import" href="vaadin-long-touch.html">
+<link rel="import" href="vaadin-contextmenu-event.html">
 
 <!--
 
@@ -68,7 +68,7 @@ Custom property | Description | Default
          */
         openOn: {
           type: String,
-          value: 'contextmenu'
+          value: 'vaadin-contextmenu'
         },
 
         /**
@@ -104,10 +104,6 @@ Custom property | Description | Default
               target: true
             };
           }
-        },
-
-        _ios: {
-          value: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
         }
       },
 
@@ -125,7 +121,6 @@ Custom property | Description | Default
       _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
         if (this._oldListenOn && this._oldOpenOn) {
           this.unlisten(this._oldListenOn, this._oldOpenOn, 'open');
-          this.unlisten(this._oldListenOn, 'vaadin-long-touch', '_onLongTouch');
 
           this._oldListenOn.style.webkitTouchCallout = '';
           this._oldListenOn.style.webkitUserSelect = '';
@@ -136,7 +131,6 @@ Custom property | Description | Default
 
         if (listenOn && openOn && isAttached) {
           this.listen(listenOn, openOn, 'open');
-          this.listen(listenOn, 'vaadin-long-touch', '_onLongTouch');
 
           // note: these styles don't seem to work in Firefox on iOS.
           listenOn.style.webkitTouchCallout = 'none';
@@ -185,14 +179,6 @@ Custom property | Description | Default
           })[0];
         } else {
           return Polymer.dom(e).localTarget;
-        }
-      },
-
-      _onLongTouch: function(e) {
-        // on Android, a `contextmenu` is fired natively. However, it's important
-        // to have the long-touch listener to prevent `tap` event from bubbling.
-        if (this._ios) {
-          this.open(e);
         }
       },
 

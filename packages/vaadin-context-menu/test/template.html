@@ -38,7 +38,7 @@
         });
 
         it('should bind target property', function() {
-          menu.fire('contextmenu', {}, {
+          menu.fire('vaadin-contextmenu', {}, {
             node: target
           });
 
@@ -46,7 +46,7 @@
         });
 
         it('should bind detail property', function() {
-          menu.fire('contextmenu', {foo: 'bar'}, {
+          menu.fire('vaadin-contextmenu', {foo: 'bar'}, {
             node: target
           });
 

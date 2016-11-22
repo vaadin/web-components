@@ -49,7 +49,7 @@
         });
 
         it('should use target as default context', function() {
-          menu.fire('contextmenu', {}, {
+          menu.fire('vaadin-contextmenu', {}, {
             node: target
           });
 
@@ -58,7 +58,7 @@
 
         it('should use details as context details', function() {
           var detail = {};
-          menu.fire('contextmenu', detail, {
+          menu.fire('vaadin-contextmenu', detail, {
             node: target
           });
 
