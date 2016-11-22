@@ -1,0 +1,753 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+  <style>
+    vaadin-grid {
+      height: 400px;
+      width: 800px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <dom-module id="grid-wrapper">
+    <template>
+      <vaadin-grid id="grid" size="1000">
+        <content></content>
+        <vaadin-grid-column-group>
+          <template class="header">wrapper group header</template>
+          <template class="footer">wrapper group footer</template>
+          <content select="[in-group]"></content>
+          <vaadin-grid-column>
+            <template class="header">wrapper column header</template>
+            <template class="footer">wrapper column footer</template>
+            <template>wrapper column body [[item.value]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', function() {
+        Polymer({is: 'grid-wrapper'});
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="column">
+    <template>
+      <vaadin-grid-column>
+        <template class="header">some header</template>
+        <template class="footer">some footer</template>
+        <template>some body [[item.value]]</template>
+      </vaadin-grid-column>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="group">
+    <template>
+      <vaadin-grid-column-group>
+        <template class="header">some group header</template>
+        <template class="footer">some group footer</template>
+        <vaadin-grid-column>
+          <template class="header">some foo header</template>
+          <template class="footer">some foo footer</template>
+          <template>some foo body [[item.value]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">some bar header</template>
+          <template class="footer">some bar footer</template>
+          <template>some bar body [[item.value]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid-column-group>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="columns">
+    <template>
+      <vaadin-grid size="1000">
+        <vaadin-grid-column>
+          <template class="header">first header</template>
+          <template class="footer">first footer</template>
+          <template>first body [[item.value]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">second header</template>
+          <template class="footer">second footer</template>
+          <template>second body [[item.value]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="plain-groups">
+    <template>
+      <vaadin-grid size="1000">
+        <vaadin-grid-column-group>
+          <template class="header">first group header</template>
+          <template class="footer">first group footer</template>
+          <vaadin-grid-column>
+            <template class="header">first foo header</template>
+            <template class="footer">first foo footer</template>
+            <template>first foo body [[item.value]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">first bar header</template>
+            <template class="footer">first bar footer</template>
+            <template>first bar body [[item.value]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+        <vaadin-grid-column-group>
+          <template class="header">second group header</template>
+          <template class="footer">second group footer</template>
+          <vaadin-grid-column>
+            <template class="header">second foo header</template>
+            <template class="footer">second foo footer</template>
+            <template>second foo body [[item.value]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">second bar header</template>
+            <template class="footer">second bar footer</template>
+            <template>second bar body [[item.value]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="nested-groups">
+    <template>
+      <vaadin-grid size="1000">
+        <vaadin-grid-column-group>
+          <template class="header">group header</template>
+          <template class="footer">group footer</template>
+          <vaadin-grid-column-group>
+            <template class="header">first nested group header</template>
+            <template class="footer">first nested group footer</template>
+            <vaadin-grid-column>
+              <template class="header">first foo header</template>
+              <template class="footer">first foo footer</template>
+              <template>first foo body [[item.value]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">first bar header</template>
+              <template class="footer">first bar footer</template>
+              <template>first bar body [[item.value]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column-group>
+            <template class="header">second nested group header</template>
+            <template class="footer">second nested group footer</template>
+            <vaadin-grid-column>
+              <template class="header">second foo header</template>
+              <template class="footer">second foo footer</template>
+              <template>second foo body [[item.value]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">second bar header</template>
+              <template class="footer">second bar footer</template>
+              <template>second bar body [[item.value]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="dom-repeat-columns">
+    <template is="dom-template">
+      <vaadin-grid id="grid" size="1000">
+        <template is="dom-repeat" id="repeater" items="[[columns]]" as="column">
+          <vaadin-grid-column>
+            <template class="header">grid repeats column [[column]] header</template>
+            <template class="footer">grid repeats column [[column]] footer</template>
+            <template>grid repeats column [[column]] body [[item.value]]</template>
+          </vaadin-grid-column>
+        </template>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="dom-repeat-columns-in-group">
+    <template is="dom-template">
+      <vaadin-grid size="1000">
+        <vaadin-grid-column-group>
+          <template is="dom-repeat" items="[[columns]]" as="column">
+            <vaadin-grid-column>
+              <template class="header">group repeats column [[column]] header</template>
+              <template class="footer">group repeats column [[column]] footer</template>
+              <template>group repeats column [[column]] body [[item.value]]</template>
+            </vaadin-grid-column>
+          </template>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="dom-repeat-groups">
+    <template is="dom-template">
+      <vaadin-grid size="1000">
+        <template is="dom-repeat" items="[[columns]]" as="column">
+          <vaadin-grid-column-group>
+            <vaadin-grid-column>
+              <template class="header">grid repeats group [[column]] header</template>
+              <template class="footer">grid repeats group [[column]] footer</template>
+              <template>grid repeats group [[column]] body [[item.value]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </template>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="dom-repeat-groups-in-group">
+    <template is="dom-template">
+      <vaadin-grid size="1000">
+        <vaadin-grid-column-group>
+          <template is="dom-repeat" items="[[columns]]" as="column">
+            <vaadin-grid-column-group>
+              <vaadin-grid-column>
+                <template class="header">group repeats group [[column]] header</template>
+                <template class="footer">group repeats group [[column]] footer</template>
+                <template>group repeats group [[column]] body [[item.value]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </template>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="effective-children-columns">
+    <template is="dom-template">
+      <grid-wrapper>
+        <vaadin-grid-column in-group$="[[inGroup]]">
+          <template class="header">foo header</template>
+          <template class="footer">foo footer</template>
+          <template>foo body [[item.value]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column in-group$="[[inGroup]]">
+          <template class="header">bar header</template>
+          <template class="footer">bar footer</template>
+          <template>bar body [[item.value]]</template>
+        </vaadin-grid-column>
+      </grid-wrapper>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="effective-children-groups">
+    <template is="dom-template">
+      <grid-wrapper>
+        <vaadin-grid-column-group in-group$="[[inGroup]]">
+          <template class="header">first group header</template>
+          <template class="footer">first group footer</template>
+          <vaadin-grid-column>
+            <template class="header">first foo header</template>
+            <template class="footer">first foo footer</template>
+            <template>first foo body [[item.value]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">first bar header</template>
+            <template class="footer">first bar footer</template>
+            <template>first bar body [[item.value]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+        <vaadin-grid-column-group in-group$="[[inGroup]]">
+          <template class="header">second group header</template>
+          <template class="footer">second group footer</template>
+          <vaadin-grid-column>
+            <template class="header">second foo header</template>
+            <template class="footer">second foo footer</template>
+            <template>second foo body [[item.value]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">second bar header</template>
+            <template class="footer">second bar footer</template>
+            <template>second bar body [[item.value]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </grid-wrapper>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('light dom observing', function() {
+      var wrapper, grid, scroller, header, body, footer, repeater;
+
+      function init(fixtureName, data) {
+        grid = fixture(fixtureName, data);
+        if (grid.$.grid) {
+          // unwrap the <grid-wrapper>
+          wrapper = grid;
+          grid = grid.$.grid || grid;
+        }
+        repeater = Polymer.dom(grid).querySelector('template[is="dom-repeat"]');
+        scroller = grid.$.scroller;
+        header = scroller.$.header;
+        body = scroller.$.items;
+        footer = scroller.$.footer;
+        grid.dataSource = infiniteDataSource;
+      }
+
+      function expectFirstColumnHeader(columnName, level) {
+        level = level || 0;
+        expect(getCellContent(getRows(header)[level].cells[0]).textContent)
+          .to.contain(columnName + ' header');
+      }
+
+      function expectFirstColumnFooter(columnName, level) {
+        level = level || 0;
+        var lastLevel = getRows(header).length - 1;
+        expect(getCellContent(getRows(footer)[lastLevel - level].cells[0]).textContent)
+          .to.contain(columnName + ' footer');
+      }
+
+      function expectFirstColumnBody(columnName) {
+        expect(getCellContent(getRows(body)[0].cells[0]).textContent)
+          .to.contain(columnName + ' body foo0');
+        expect(getCellContent(getRows(body)[1].cells[0]).textContent)
+          .to.contain(columnName + ' body foo1');
+        expect(getCellContent(getRows(body)[2].cells[0]).textContent)
+          .to.contain(columnName + ' body foo2');
+      }
+
+      function expectFirstColumn(columnName, level) {
+        expectFirstColumnHeader(columnName, level);
+        expectFirstColumnFooter(columnName, level);
+        expectFirstColumnBody(columnName);
+      }
+
+      function expectNumberOfColumns(number) {
+        var lastLevel = getRows(header).length - 1;
+        expect(getRows(header)[lastLevel].cells.length).to.be.equal(number);
+        expect(getRows(body)[0].cells.length).to.be.equal(number);
+        expect(getRows(footer)[0].cells.length).to.be.equal(number);
+      }
+
+      describe('generic operations', function() {
+        describe('columns inside grid', function() {
+          beforeEach(function() {
+            init('columns');
+          });
+
+          it('should support adding late', function(done) {
+            var column = fixture('column');
+            Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumn('some');
+              done();
+            });
+          });
+
+          it('should support removing late', function(done) {
+            var column = Polymer.dom(grid).querySelector('vaadin-grid-column');
+            Polymer.dom(grid).removeChild(column);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumn('second');
+              done();
+            });
+          });
+
+          describe('multiSelection', function() {
+            beforeEach(function() {
+              grid.multiSelection = true;
+            });
+
+            function expectFirstMultiSelectionColumn() {
+              expect(getCellContent(getRows(header)[0].cells[0]).firstElementChild.localName)
+                .to.equal('paper-checkbox');
+              expect(getCellContent(getRows(body)[0].cells[0]).firstElementChild.localName)
+                .to.equal('paper-checkbox');
+              expect(getCellContent(getRows(body)[1].cells[0]).firstElementChild.localName)
+                .to.equal('paper-checkbox');
+              expect(getCellContent(getRows(body)[2].cells[0]).firstElementChild.localName)
+                .to.equal('paper-checkbox');
+            }
+
+            it('should add multiSelection column if enabled', function(done) {
+              grid.async(function() {
+                expectFirstMultiSelectionColumn();
+                done();
+              });
+            });
+
+            it('should maintain multiSelection column when column is added', function(done) {
+              var column = Polymer.dom(grid).querySelector('vaadin-grid-column');
+              Polymer.dom(grid).removeChild(column);
+              Polymer.dom.flush();
+
+              grid.async(function() {
+                expectFirstMultiSelectionColumn();
+                done();
+              });
+            });
+
+            it('should maintain multiSelection column when column is removed', function(done) {
+              var column = fixture('column');
+              Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
+              Polymer.dom.flush();
+
+              grid.async(function() {
+                expectFirstMultiSelectionColumn();
+                done();
+              });
+            });
+          });
+        });
+
+        describe('columns inside group', function() {
+          var firstGroup;
+
+          beforeEach(function() {
+            init('plain-groups');
+            firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
+          });
+
+          it('should support adding late', function(done) {
+            var column = fixture('column');
+            Polymer.dom(firstGroup).insertBefore(column, Polymer.dom(firstGroup).firstChild);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumn('some', 1);
+              done();
+            });
+          });
+
+          it('should support removing late', function(done) {
+            var column = Polymer.dom(firstGroup).querySelector('vaadin-grid-column');
+            Polymer.dom(firstGroup).removeChild(column);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumn('first bar', 1);
+              done();
+            });
+          });
+        });
+
+        describe('groups inside grid', function() {
+          beforeEach(function() {
+            init('plain-groups');
+          });
+
+          it('should support adding late', function(done) {
+            var group = fixture('group');
+            Polymer.dom(grid).insertBefore(group, Polymer.dom(grid).firstChild);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumnHeader('some group', 0);
+              expectFirstColumnFooter('some group', 0);
+              expectFirstColumn('some foo', 1);
+              done();
+            });
+          });
+
+          it('should support removing late', function(done) {
+            var group = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
+            Polymer.dom(grid).removeChild(group);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumnHeader('second group', 0);
+              expectFirstColumnFooter('second group', 0);
+              expectFirstColumn('second foo', 1);
+              done();
+            });
+          });
+        });
+
+        describe('groups inside group', function() {
+          var firstGroup;
+
+          beforeEach(function() {
+            init('nested-groups');
+            firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
+          });
+
+          it('should support adding late', function(done) {
+            var group = fixture('group');
+            Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumnHeader('some group', 1);
+              expectFirstColumnFooter('some group', 1);
+              expectFirstColumn('some foo', 2);
+              done();
+            });
+          });
+
+          it('should support removing late', function(done) {
+            var group = Polymer.dom(firstGroup).querySelector('vaadin-grid-column-group');
+            Polymer.dom(firstGroup).removeChild(group);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumnHeader('second nested group', 1);
+              expectFirstColumnFooter('second nested group', 1);
+              expectFirstColumn('second foo', 2);
+              done();
+            });
+          });
+        });
+      });
+
+      function shouldSupportDomRepeat(prefix, columnsLevel) {
+        it('should provide initial state', function(done) {
+          grid.async(function() {
+            // expectFirstColumn(prefix + ' a', columnsLevel);
+            // FIXME: Relaxed template check due to dom-repeat issue.
+            // See: https://github.com/vaadin/vaadin-grid/issues/531
+            expectFirstColumn('', columnsLevel);
+            expectNumberOfColumns(3);
+            done();
+          });
+        });
+
+        it('should add columns late', function(done) {
+          repeater.unshift('items', 'd');
+          repeater.render();
+
+          grid.async(function() {
+            // expectFirstColumn(prefix + ' d', columnsLevel);
+            // FIXME: Relaxed template check due to dom-repeat issue.
+            // See: https://github.com/vaadin/vaadin-grid/issues/531
+            expectFirstColumn('', columnsLevel);
+            expectNumberOfColumns(4);
+            done();
+          });
+        });
+
+        it('should remove columns late', function(done) {
+          repeater.shift('items');
+          repeater.render();
+
+          grid.async(function() {
+            // expectFirstColumn(prefix + ' b', columnsLevel);
+            // FIXME: Relaxed template check due to dom-repeat issue.
+            // See: https://github.com/vaadin/vaadin-grid/issues/531
+            expectFirstColumn('', columnsLevel);
+            expectNumberOfColumns(2);
+            done();
+          });
+        });
+      }
+
+      describe('dom-repeat', function() {
+        beforeEach(function() {
+          columns = 'a b c'.split(' ');
+        });
+
+        describe('columns inside grid', function() {
+          beforeEach(function() {
+            init('dom-repeat-columns', {columns: columns});
+          });
+
+          shouldSupportDomRepeat('grid repeats column');
+        });
+
+        describe('columns inside group', function() {
+          beforeEach(function() {
+            init('dom-repeat-columns-in-group', {columns: columns});
+          });
+
+          shouldSupportDomRepeat('group repeats column', 1);
+        });
+
+        describe('groups inside grid', function() {
+          beforeEach(function() {
+            init('dom-repeat-groups', {columns: columns});
+          });
+
+          shouldSupportDomRepeat('grid repeats group', 1);
+        });
+
+        describe('groups inside group', function() {
+          beforeEach(function() {
+            init('dom-repeat-groups-in-group', {columns: columns});
+          });
+
+          shouldSupportDomRepeat('group repeats group', 2);
+        });
+      });
+
+      describe('effective children', function() {
+        function shouldSupportEffectiveChildren(inGroup) {
+          describe('children mutations', function() {
+            describe('with columns', function() {
+              beforeEach(function() {
+                init('effective-children-columns', {inGroup: inGroup});
+              });
+
+              it('should provide initial state', function(done) {
+                grid.async(function() {
+                  expectFirstColumn('foo', 1);
+                  expectNumberOfColumns(3);
+                  done();
+                });
+              });
+
+              it('should support adding late', function(done) {
+                var column = fixture('column');
+                Polymer.dom(wrapper).insertBefore(column, Polymer.dom(wrapper).firstChild);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('some', 1);
+                  expectNumberOfColumns(4);
+                  done();
+                });
+              });
+
+              it('should support removing late', function(done) {
+                var column = Polymer.dom(wrapper).querySelector('vaadin-grid-column');
+                Polymer.dom(wrapper).removeChild(column);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('bar', 1);
+                  expectNumberOfColumns(2);
+                  done();
+                });
+              });
+            });
+
+            describe('with groups', function() {
+              var firstGroup;
+
+              beforeEach(function() {
+                init('effective-children-groups', {inGroup: inGroup});
+                firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
+              });
+
+              it('should provide initial state', function(done) {
+                grid.async(function() {
+                  expectFirstColumn('first foo', 1);
+                  expectNumberOfColumns(5);
+                  done();
+                });
+              });
+
+              it('should support adding late', function(done) {
+                var group = fixture('group');
+                Polymer.dom(wrapper).insertBefore(group, Polymer.dom(wrapper).firstChild);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('some foo', 1);
+                  expectNumberOfColumns(7);
+                  done();
+                });
+              });
+
+              it('should support removing late', function(done) {
+                Polymer.dom(wrapper).removeChild(firstGroup);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('second foo', 1);
+                  expectNumberOfColumns(3);
+                  done();
+                });
+              });
+            });
+          });
+
+          describe('nested group mutations', function() {
+            var firstGroup;
+
+            beforeEach(function() {
+              init('effective-children-groups', {inGroup: inGroup});
+              firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
+            });
+
+            describe('with columns', function() {
+              it('should support adding late', function(done) {
+                var column = fixture('column');
+                Polymer.dom(firstGroup).insertBefore(column, Polymer.dom(firstGroup).firstChild);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('some', 1);
+                  expectNumberOfColumns(6);
+                  done();
+                });
+              });
+
+              it('should support removing late', function(done) {
+                var column = Polymer.dom(firstGroup).querySelector('vaadin-grid-column');
+                Polymer.dom(firstGroup).removeChild(column);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('first bar', 1);
+                  expectNumberOfColumns(4);
+                  done();
+                });
+              });
+            });
+
+            describe('with groups', function() {
+              it('should support adding late', function(done) {
+                var group = fixture('group');
+                Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectFirstColumn('some foo', 2);
+                  expectNumberOfColumns(7);
+                  done();
+                });
+              });
+
+              it('should support removing late', function(done) {
+                var group = fixture('group');
+                Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
+                Polymer.dom.flush();
+
+                grid.async(function() {
+                  expectNumberOfColumns(7);
+                  Polymer.dom(firstGroup).removeChild(group);
+                  Polymer.dom.flush();
+
+                  grid.async(function() {
+                    expectFirstColumn('first foo', 1);
+                    expectNumberOfColumns(5);
+                    done();
+                  });
+                });
+              });
+            });
+          });
+        }
+
+        describe('of grid', function() {
+          shouldSupportEffectiveChildren(false);
+        });
+
+        describe('of group', function() {
+          shouldSupportEffectiveChildren(true);
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>

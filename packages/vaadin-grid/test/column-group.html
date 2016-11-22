@@ -74,29 +74,29 @@
       });
 
       it('should sum child column flex', function() {
-        expect(group._flex).to.eql(3);
+        expect(group.flex).to.eql(3);
       });
 
       it('should sum child column widths', function() {
-        expect(group._width).to.eql('calc(20% + 200px)');
+        expect(group.width).to.eql('calc(20% + 200px)');
       });
 
       it('should strip nested `calc` keywords', function() {
         columns[0].width = 'calc(50% + 10px)';
 
-        expect(group._width).to.eql('calc((50% + 10px) + 200px)');
+        expect(group.width).to.eql('calc((50% + 10px) + 200px)');
       });
 
       it('should react to child column flex changes', function() {
         columns[0].flex = 3;
 
-        expect(group._flex).to.eql(5);
+        expect(group.flex).to.eql(5);
       });
 
       it('should react to child column width changes', function() {
         columns[0].width = '10%';
 
-        expect(group._width).to.eql('calc(10% + 200px)');
+        expect(group.width).to.eql('calc(10% + 200px)');
       });
 
       it('should stop template from a child from propagating', function() {
@@ -151,13 +151,13 @@
       it('should calculate column group width after hiding a column', function() {
         columns[0].hidden = true;
 
-        expect(group._width).to.eql('calc(200px)');
+        expect(group.width).to.eql('calc(200px)');
       });
 
       it('should calculate column group flex after hiding a column', function() {
         columns[0].hidden = true;
 
-        expect(group._flex).to.eql(2);
+        expect(group.flex).to.eql(2);
       });
     });
   </script>

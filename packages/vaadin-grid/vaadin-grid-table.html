@@ -194,10 +194,6 @@
       navigator.userAgent.match(/Edge/) ? vaadin.elements.grid.TableEdgeBehavior : vaadin.elements.grid.TableScrollBehavior
     ],
 
-    listeners: {
-      'property-changed': '_columnPropChanged'
-    },
-
     properties: {
       size: Number,
 
@@ -229,7 +225,6 @@
           return scrollbarWidth;
         }
       }
-
     },
 
     observers: [
@@ -258,9 +253,6 @@
       if (e.detail.path === 'hidden') {
         this.notifyResize();
       }
-
-      e.stopPropagation();
-      e.stopImmediatePropagation();
     },
 
     // The following values aim at avoiding having 2 overlapping semi-invisible

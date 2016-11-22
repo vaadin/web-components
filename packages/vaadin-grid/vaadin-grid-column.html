@@ -134,15 +134,21 @@
       behaviors: [vaadinGridColumnBehavior],
 
       properties: {
-        // TODO: needs a light dom observer
         _childColumns: {
           value: function() {
             return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
           }
         },
-        _flex: Number,
 
-        _width: String,
+        flex: {
+          type: Number,
+          readOnly: true
+        },
+
+        width: {
+          type: String,
+          readOnly: true
+        },
 
         _visibleChildColumns: Array,
 
@@ -160,8 +166,9 @@
       },
 
       observers: ['_updateVisibleChildColumns(_childColumns)',
-                  '_flexChanged(_flex)',
-                  '_widthChanged(_width)',
+                  '_childColumnsChanged(_childColumns)',
+                  '_flexChanged(flex)',
+                  '_widthChanged(width)',
                   '_frozenChanged(_childColumns, frozen)',
                   '_hiddenChanged(hidden)',
                   '_visibleChildColumnsChanged(_visibleChildColumns)',
@@ -173,6 +180,11 @@
 
       attached: function() {
         this._updateFlexAndWidth(this._visibleChildColumns);
+        this._addNodeObserver();
+      },
+
+      detached: function() {
+        Polymer.dom(this).unobserveNodes(this._observer);
       },
 
       _columnPropChanged: function(e) {
@@ -180,7 +192,7 @@
           this._updateVisibleChildColumns(this._childColumns);
         }
 
-        if (/flex|width|hidden/.test(e.detail.path)) {
+        if (/flex|width|hidden|_childColumns/.test(e.detail.path)) {
           this._updateFlexAndWidth(this._visibleChildColumns);
         }
 
@@ -199,14 +211,18 @@
         });
       },
 
-      _updateFlexAndWidth: function(visibleChildColumns) {
-        this._width = 'calc(' + visibleChildColumns.reduce(function(prev, curr) {
-          return prev += ' + ' + (curr.width || '0').replace('calc', '');
-        }, '').substring(3) + ')';
+      _childColumnsChanged: function(childColumns) {
+        this.fire('property-changed', {path: '_childColumns', value: childColumns});
+      },
 
-        this._flex = visibleChildColumns.reduce(function(prev, curr) {
+      _updateFlexAndWidth: function(visibleChildColumns) {
+        this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
+          return prev += ' + ' + (curr.width || '0').replace('calc', '');
+        }, '').substring(3) + ')');
+
+        this._setFlex(visibleChildColumns.reduce(function(prev, curr) {
           return prev + curr.flex;
-        }, 0);
+        }, 0));
       },
 
       _frozenChanged: function(childColumns, frozen) {
@@ -227,6 +243,18 @@
 
       _colSpanChanged: function(colSpan) {
         this.fire('property-changed', {path: 'colSpan', value: colSpan});
+      },
+
+      _addNodeObserver: function() {
+        this._observer = Polymer.dom(this).observeNodes(function(info) {
+          var columns = function(node) {
+            return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+          };
+          if (info.addedNodes.filter(columns).length > 0 ||
+            info.removedNodes.filter(columns).length > 0) {
+            this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          }
+        }.bind(this));
       }
     });
   })();

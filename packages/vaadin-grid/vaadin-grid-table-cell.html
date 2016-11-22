@@ -36,10 +36,12 @@
         target: Object,
         width: String,
 
-        _forwardedParentProps: Object
+        _forwardedParentProps: Object,
+        _childColumns: Array
       },
 
       observers: ['_columnChanged(column)',
+        '_cellAttached(column, isAttached)',
         '_expandedChanged(expanded, instance)',
         '_flexChanged(flex)',
         '_indexChanged(index, instance)',
@@ -48,7 +50,8 @@
         '_selectedChanged(selected, instance)',
         '_toggleContent(isAttached, _cellContent)',
         '_widthChanged(width)',
-        '_visibleChildColumnsChanged(_visibleChildColumns)'
+        '_visibleChildColumnsChanged(_visibleChildColumns)',
+        '_childColumnsChanged(_childColumns)'
       ],
 
       created: function() {
@@ -69,6 +72,7 @@
         this.template = column.template;
         this.width = column.width;
         this.hidden = column.hidden;
+        this._childColumns = column._childColumns;
 
         // Assigning undefined to element.colSpan will set colSpan attribute to 0
         if (column.colSpan) {
@@ -76,6 +80,16 @@
         }
 
         this.listen(column, 'property-changed', '_columnPropChanged');
+      },
+
+      _cellAttached: function(column, isAttached) {
+        // Cells get detached when the column tree changes and new cells are created.
+        // Also, cells get detached and attached during row reordering after scrolling.
+        if (isAttached) {
+          this.listen(column, 'property-changed', '_columnPropChanged');
+        } else {
+          this.unlisten(column, 'property-changed', '_columnPropChanged');
+        }
       },
 
       _columnPropChanged: function(e) {
@@ -104,6 +118,10 @@
 
       _selectedChanged: function(selected, instance) {
         instance.notifyPath('selected', selected);
+      },
+
+      _childColumnsChanged: function(childColumns) {
+        this.colSpan = childColumns.length;
       },
 
       _toggleContent: function(isAttached, cellContent) {
