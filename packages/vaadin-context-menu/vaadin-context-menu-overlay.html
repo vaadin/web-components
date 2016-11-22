@@ -36,7 +36,7 @@
       is: 'vaadin-context-menu-overlay',
 
       observers: [
-        '_positionChanged(x, y)', 'phoneChanged(phone)'
+        '_positionChanged(x, y)', '_phoneChanged(phone)'
       ],
 
       properties: {
@@ -74,7 +74,7 @@
         e.stopPropagation();
       },
 
-      phoneChanged: function(phone) {
+      _phoneChanged: function(phone) {
         this.withBackdrop = phone;
       },
 
