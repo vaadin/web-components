@@ -41,6 +41,7 @@
       },
 
       observers: ['_columnChanged(column)',
+        '_cellAttached(column, isAttached)',
         '_expandedChanged(expanded, instance)',
         '_flexChanged(flex)',
         '_indexChanged(index, instance)',
@@ -62,12 +63,6 @@
         };
       },
 
-      detached: function() {
-        if (this.column) {
-          this.unlisten(this.column, 'property-changed', '_columnPropChanged');
-        }
-      },
-
       _columnChanged: function(column) {
         this.flex = column.flex;
         this.frozen = column.frozen;
@@ -85,6 +80,16 @@
         }
 
         this.listen(column, 'property-changed', '_columnPropChanged');
+      },
+
+      _cellAttached: function(column, isAttached) {
+        // Cells get detached when the column tree changes and new cells are created.
+        // Also, cells get detached and attached during row reordering after scrolling.
+        if (isAttached) {
+          this.listen(column, 'property-changed', '_columnPropChanged');
+        } else {
+          this.unlisten(column, 'property-changed', '_columnPropChanged');
+        }
       },
 
       _columnPropChanged: function(e) {
