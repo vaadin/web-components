@@ -371,14 +371,12 @@
         it('should announce focused date changes when opened', function(done) {
           datepicker.open();
 
-          Polymer.Base.async(function() {
-            waitForAnnounce(function(text) {
-              expect(text).to.equal('Tuesday 2 February 2016');
-              done();
-            });
+          waitForAnnounce(function(text) {
+            expect(text).to.equal('Tuesday 2 February 2016');
+            done();
+          });
 
-            datepicker._focusedDate = new Date(2016, 1, 2);
-          }, 100);
+          datepicker._focusedDate = new Date(2016, 1, 2);
         });
 
         it('should not announce focused date changes when closed', function(done) {
@@ -387,11 +385,9 @@
 
           datepicker._focusedDate = new Date(2016, 1, 2);
 
-          Polymer.Base.async(function() {
-            expect(announceSpy.called).to.be.false;
-            document.body.removeEventListener('iron-announce', announceSpy);
-            done();
-          }, 100);
+          expect(announceSpy.called).to.be.false;
+          document.body.removeEventListener('iron-announce', announceSpy);
+          done();
         });
 
         it('should announce value on open', function(done) {
@@ -449,7 +445,7 @@
               expect(announceSpy.callCount).to.be.equal(1);
               document.body.removeEventListener('iron-announce', announceSpy);
               done();
-            }, 100);
+            }, 1);
           });
         }
 
