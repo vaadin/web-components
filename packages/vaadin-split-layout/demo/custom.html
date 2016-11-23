@@ -27,6 +27,7 @@
           .custom1 {
             --vaadin-split-layout-split: {
               background: var(--primary-color);
+              border-radius: 10px;
             }
             --vaadin-split-layout-icon: {
               color: var(--light-primary-color);
@@ -59,6 +60,40 @@
         <vaadin-split-layout vertical vertical-icon="vaadin-split-layout:line-h" class="custom2">
           <div>Top layout content</div>
           <div>Bottom layout content</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Thin Lines</h3>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom3 {
+            --vaadin-split-layout-split: {
+              background: var(--primary-color);
+              min-width: 1px;
+              min-height: 1px;
+              border: solid 3px var(--light-primary-color);
+              sizing-box: border;
+            }
+            --vaadin-split-layout-icon: {
+              display: none;
+            }
+            --vaadin-split-layout-content: {
+              background: var(--light-primary-color);
+              color: var(--paper-indigo-700);
+            }
+          }
+        </style>
+        <vaadin-split-layout horizontal-icon="vaadin-split-layout:line-v" class="custom3">
+          <vaadin-split-layout vertical horizontal-icon="vaadin-split-layout:line-v" class="custom3">
+            <div>First layout content</div>
+            <div>Second layout content</div>
+          </vaadin-split-layout>
+          <vaadin-split-layout vertical  horizontal-icon="vaadin-split-layout:line-v" class="custom3">
+            <div>Third layout content</div>
+            <div>Fourth layout content</div>
+          </vaadin-split-layout>
         </vaadin-split-layout>
       </template>
     </demo-snippet>

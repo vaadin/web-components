@@ -91,7 +91,7 @@ Custom property | Description | Default
         flex-direction: column;
       }
 
-      :host ::content > * {
+      :host ::content > *:not(#splitter) {
         flex: 1 1 auto;
         overflow: auto;
         @apply(--vaadin-split-layout-content);
@@ -120,15 +120,17 @@ Custom property | Description | Default
       }
 
       iron-icon {
-        margin: -8px;
+        position: absolute;
         @apply(--vaadin-split-layout-icon);
       }
 
       #handle-icon-horizontal {
+        margin-left: -8px;
         @apply(--vaadin-split-layout-icon-horizontal);
       }
 
       #handle-icon-vertical {
+        margin-top: -8px;
         @apply(--vaadin-split-layout-icon-vertical);
       }
     </style>
