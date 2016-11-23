@@ -74,7 +74,6 @@
               min-width: 1px;
               min-height: 1px;
               border: solid 3px var(--light-primary-color);
-              sizing-box: border;
             }
             --vaadin-split-layout-icon: {
               display: none;
@@ -85,16 +84,43 @@
             }
           }
         </style>
-        <vaadin-split-layout horizontal-icon="vaadin-split-layout:line-v" class="custom3">
-          <vaadin-split-layout vertical horizontal-icon="vaadin-split-layout:line-v" class="custom3">
+        <vaadin-split-layout class="custom3">
+          <vaadin-split-layout vertical>
             <div>First layout content</div>
             <div>Second layout content</div>
           </vaadin-split-layout>
-          <vaadin-split-layout vertical  horizontal-icon="vaadin-split-layout:line-v" class="custom3">
+          <vaadin-split-layout vertical>
             <div>Third layout content</div>
             <div>Fourth layout content</div>
           </vaadin-split-layout>
         </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Using Custom Content as Icons</h3>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom4 {
+            --vaadin-split-layout-split: {
+              min-width: 0px;
+            }
+            --vaadin-split-layout-icon-horizontal: {
+              height: 100px;
+              border: solid 1px var(--paper-indigo-700);
+              border-radius: 5px;
+              background: var(--paper-indigo-300);
+              @apply(--layout);
+              @apply(--layout-center-center);
+            }
+          }
+        </style>
+        <vaadin-split-layout class="custom4">
+            <div>First layout content</div>
+            <div>Second layout content</div>
+            <div class="icon-horizontal">
+              .
+            </div>
       </template>
     </demo-snippet>
 

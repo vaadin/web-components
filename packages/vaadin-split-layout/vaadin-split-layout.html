@@ -101,6 +101,7 @@ Custom property | Description | Default
         display: flex;
         justify-content: center;
         flex: none;
+        position: relative;
         overflow: visible;
         min-height: 8px;
         min-width: 8px;
@@ -119,25 +120,30 @@ Custom property | Description | Default
         @apply(--vaadin-split-layout-split-vertical);
       }
 
-      iron-icon {
+      .icon-horizontal,
+      :host ::content .icon-horizontal {
         position: absolute;
         @apply(--vaadin-split-layout-icon);
-      }
-
-      #handle-icon-horizontal {
         margin-left: -8px;
         @apply(--vaadin-split-layout-icon-horizontal);
       }
 
-      #handle-icon-vertical {
+      .icon-vertical,
+      :host ::content .icon-vertical {
+        position: absolute;
+        @apply(--vaadin-split-layout-icon);
         margin-top: -8px;
         @apply(--vaadin-split-layout-icon-vertical);
       }
     </style>
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <iron-icon id="handle-icon-horizontal" hidden$="[[vertical]]" icon="[[horizontalIcon]]"></iron-icon>
-      <iron-icon id="handle-icon-vertical" hidden$="[[!vertical]]" icon="[[verticalIcon]]"></iron-icon>
+      <content select=".icon-horizontal">
+        <iron-icon class="icon-horizontal" hidden$="[[vertical]]" icon="[[horizontalIcon]]"></iron-icon>
+      </content>
+      <content select=".icon-vertical">
+        <iron-icon class="icon-vertical" hidden$="[[!vertical]]" icon="[[verticalIcon]]"></iron-icon>
+      </content>
     </div>
     <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
   </template>
