@@ -1,110 +1,105 @@
 <!doctype html>
 <html>
-  <head>
-    <title>vaadin-split-layout demo</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+<head>
+  <title>vaadin-split-layout demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>vaadin-split-layout Basic Examples</title>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../vaadin-split-layout.html">
+  <link rel="import" href="common.html">
+</head>
 
-    <style is="custom-style" include="demo-pages-shared-styles">
-      .centered {
-        max-width: 600px;
-      }
+<body unresolved>
+  <div class="vertical-section-container centered">
 
-      vaadin-split-layout {
-        height: 160px;
-        background: #eee;
-      }
-    </style>
-  </head>
-  <body>
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><b>Basic Examples</b></li>
+        <li><a href="custom.html">Customisation</a></li>
+      </ul>
+    </nav>
 
-    <div class="vertical-section-container centered">
-      <h3>Horizontal Split Layout (Default)</h3>
-      <demo-snippet>
-        <template>
-          <vaadin-split-layout>
-            <div>First layout content</div>
-            <div>Second layout content</div>
-          </vaadin-split-layout>
-        </template>
-      </demo-snippet>
+    <h3>Horizontal Split Layout (Default)</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout>
+          <div>First layout content</div>
+          <div>Second layout content</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
 
-      <h3>Vertical Split Layout</h3>
-      <demo-snippet>
-        <template>
+    <h3>Vertical Split Layout</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout vertical>
+          <div>Top layout content</div>
+          <div>Bottom layout content</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Layout Combination</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout>
+          <div>First layout content</div>
           <vaadin-split-layout vertical>
-            <div>Top layout content</div>
-            <div>Bottom layout content</div>
+            <div>Second layout content</div>
+            <div>Third layout content</div>
           </vaadin-split-layout>
-        </template>
-      </demo-snippet>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
 
-      <h3>Layout Combination</h3>
-      <demo-snippet>
-        <template>
-          <vaadin-split-layout>
-            <div>First layout content</div>
-            <vaadin-split-layout vertical>
-              <div>Second layout content</div>
-              <div>Third layout content</div>
-            </vaadin-split-layout>
-          </vaadin-split-layout>
-        </template>
-      </demo-snippet>
+    <h3>Specifying Initial Sizes</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout>
+          <div style="width: 75%;">First layout content</div>
+          <div style="width: 25%;">Second layout content</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
 
-      <h3>Specifying Initial Sizes</h3>
-      <demo-snippet>
-        <template>
-          <vaadin-split-layout>
-            <div style="width: 75%;">First layout content</div>
-            <div style="width: 25%;">Second layout content</div>
-          </vaadin-split-layout>
-        </template>
-      </demo-snippet>
+    <h3>Specifying Min- and Max- Sizes</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout>
+          <div style="min-width: 50px; max-width: 150px;">First</div>
+          <div>Second</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
 
-      <h3>Specifying Min- and Max- Sizes</h3>
-      <demo-snippet>
-        <template>
-          <vaadin-split-layout>
-            <div style="min-width: 50px; max-width: 150px;">First</div>
-            <div>Second</div>
-          </vaadin-split-layout>
-        </template>
-      </demo-snippet>
+    <h3>Resize Notification for the Nested Elements</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout>
+          <div>First</div>
+          <custom-resizable>Second</custom-resizable>
+        </vaadin-split-layout>
+        <script>
+        window.addEventListener('WebComponentsReady', function(e) {
+          Polymer({
+            is: 'custom-resizable',
+            behaviors: [
+              Polymer.IronResizableBehavior
+            ],
+            listeners: {
+              'iron-resize': '_onIronResize'
+            },
+            _onIronResize: function() {
+              console.log('Resized');
+            }
+          });
+        });
+        </script>
+      </template>
+    </demo-snippet>
 
-      <h3>Resize Notification for the Nested Elements</h3>
-      <demo-snippet>
-        <template>
-          <vaadin-split-layout>
-            <div>First</div>
-            <custom-resizable>Second</custom-resizable>
-          </vaadin-split-layout>
-          <script>
-            window.addEventListener('WebComponentsReady', function(e) {
-              Polymer({
-                is: 'custom-resizable',
-                behaviors: [
-                  Polymer.IronResizableBehavior
-                ],
-                listeners: {
-                  'iron-resize': '_onIronResize'
-                },
-                _onIronResize: function() {
-                  console.log('Resized');
-                }
-              });
-            });
-          </script>
-        </template>
-      </demo-snippet>
-
-    </div>
-
-  </body>
+  </div>
+</body>
 </html>

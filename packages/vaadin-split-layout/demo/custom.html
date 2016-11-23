@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <title>vaadin-split-layout demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>vaadin-split-layout Customising</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><b>Customisation</b></li>
+      </ul>
+    </nav>
+
+    <h3>Customising Vertical Splitter</h3>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom1 {
+            --vaadin-split-layout-split: {
+              background: var(--primary-color);
+            }
+            --vaadin-split-layout-icon: {
+              color: var(--light-primary-color);
+            }
+            --vaadin-split-layout-content: {
+              background: white;
+            }
+          }
+        </style>
+        <vaadin-split-layout horizontal-icon="vaadin-split-layout:line-v" class="custom1">
+          <div>First layout content</div>
+          <div>Second layout content</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Customising Horizontal Splitter</h3>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom2 {
+            --vaadin-split-layout-split: {
+              background: var(--paper-indigo-700);
+            }
+            --vaadin-split-layout-icon: {
+              color: var(--paper-grey-300);
+            }
+          }
+        </style>
+        <vaadin-split-layout vertical vertical-icon="vaadin-split-layout:line-h" class="custom2">
+          <div>Top layout content</div>
+          <div>Bottom layout content</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+</html>
