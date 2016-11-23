@@ -135,14 +135,30 @@ Custom property | Description | Default
         margin-top: -8px;
         @apply(--vaadin-split-layout-icon-vertical);
       }
+
+      :host([vertical]) ::content .icon-horizontal {
+        display: none;
+      }
+
+      :host(:not([vertical])) ::content .icon-vertical {
+        display: none;
+      }
+
+      .icon-vertical,
+      :host ::content .icon-vertical {
+        position: absolute;
+        @apply(--vaadin-split-layout-icon);
+        margin-top: -8px;
+        @apply(--vaadin-split-layout-icon-vertical);
+      }
     </style>
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
       <content select=".icon-horizontal">
-        <iron-icon class="icon-horizontal" hidden$="[[vertical]]" icon="[[horizontalIcon]]"></iron-icon>
+        <iron-icon class="icon-horizontal" icon="vaadin-split-layout:more-v"></iron-icon>
       </content>
       <content select=".icon-vertical">
-        <iron-icon class="icon-vertical" hidden$="[[!vertical]]" icon="[[verticalIcon]]"></iron-icon>
+        <iron-icon class="icon-vertical" icon="vaadin-split-layout:more-h"></iron-icon>
       </content>
     </div>
     <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
@@ -165,24 +181,6 @@ Custom property | Description | Default
           type: Boolean,
           reflectToAttribute: true,
           value: false
-        },
-
-        /**
-         * The name of the icon to use for the horizontal splitter.
-         * The name should be of the form: `iconset_name:icon_name`.
-         */
-        verticalIcon: {
-          type: String,
-          value: 'vaadin-split-layout:more-h'
-        },
-
-        /**
-         * The name of the icon to use for the horizontal splitter.
-         * The name should be of the form: `iconset_name:icon_name`.
-         */
-        horizontalIcon: {
-          type: String,
-          value: 'vaadin-split-layout:more-v'
         }
       },
 
