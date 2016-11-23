@@ -55,12 +55,14 @@ The following custom properties are available for styling:
 Custom property | Description | Default
 :----------------|:-------------|----------:
 `--vaadin-split-layout-content`|A mixin that is applied to each container element|`{}`
-`--vaadin-split-layout-split`|A mixin that is applied to the splitter|`{}`
-`--vaadin-split-layout-split-horizontal`|A mixin that is applied to horizontal splitters|`{}`
-`--vaadin-split-layout-split-vertical`|A mixin that is applied to vertical splitters|`{}`
+`--vaadin-split-layout-content-primary`|A mixin that is applied to the primary container|`{}`
+`--vaadin-split-layout-content-secondary`|A mixin that is applied to the secondary container|`{}`
+`--vaadin-split-layout-splitter`|A mixin that is applied to the splitter|`{}`
+`--vaadin-split-layout-splitter-horizontal`|A mixin that is applied to horizontal splitter|`{}`
+`--vaadin-split-layout-splitter-vertical`|A mixin that is applied to vertical splitter|`{}`
 `--vaadin-split-layout-icon`|A mixin that is applied to the icon of the splitter|`{}`
-`--vaadin-split-layout-icon-horizontal`|A mixin that is applied to the icon of horizontal splitters|`{}`
-`--vaadin-split-layout-icon-vertical`|A mixin that is applied to the icon of vertical splitters|`{}`
+`--vaadin-split-layout-icon-horizontal`|A mixin that is applied to the icon of horizontal splitter|`{}`
+`--vaadin-split-layout-icon-vertical`|A mixin that is applied to the icon of vertical splitter|`{}`
 
 @element vaadin-split-layout
 @demo demo/index.html
@@ -75,8 +77,6 @@ Custom property | Description | Default
 <svg><defs>
 <g id="line-h"><path d="M0 11h32v2h-32v-2z"/></g>
 <g id="line-v"><path d="M11 0h2v32h-2v-32z"/></g>
-<g id="more-h"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
-<g id="more-v"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
 
@@ -91,7 +91,7 @@ Custom property | Description | Default
         flex-direction: column;
       }
 
-      :host ::content > *:not(#splitter) {
+      :host > ::content > *:not(#splitter) {
         flex: 1 1 auto;
         overflow: auto;
         @apply(--vaadin-split-layout-content);
@@ -103,62 +103,57 @@ Custom property | Description | Default
         flex: none;
         position: relative;
         overflow: visible;
-        min-height: 8px;
         min-width: 8px;
-        background: #ccc;
-        @apply(--vaadin-split-layout-split);
+        min-height: 8px;
+        background: var(--divider-color, #ccc);
+        @apply(--vaadin-split-layout-splitter);
       }
 
       :host(:not([vertical])) > #splitter {
         flex-direction: column;
         cursor: ew-resize;
-        @apply(--vaadin-split-layout-split-horizontal);
+        @apply(--vaadin-split-layout-splitter-horizontal);
       }
 
       :host([vertical]) > #splitter {
         cursor: ns-resize;
-        @apply(--vaadin-split-layout-split-vertical);
+        @apply(--vaadin-split-layout-splitter-vertical);
       }
 
-      .icon-horizontal,
-      :host ::content .icon-horizontal {
+      :host > #splitter > ::content.icon-horizontal,
+      :host > #splitter > ::content.icon-vertical {
         position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--primary-background-color, #000);
         @apply(--vaadin-split-layout-icon);
-        margin-left: -8px;
+      }
+
+      :host > #splitter > ::content.icon-horizontal {
         @apply(--vaadin-split-layout-icon-horizontal);
       }
 
-      .icon-vertical,
-      :host ::content .icon-vertical {
-        position: absolute;
-        @apply(--vaadin-split-layout-icon);
-        margin-top: -8px;
+      :host > #splitter > ::content.icon-vertical {
         @apply(--vaadin-split-layout-icon-vertical);
       }
 
-      :host([vertical]) ::content .icon-horizontal {
+      :host([vertical]) > #splitter > ::content.icon-horizontal {
         display: none;
       }
 
-      :host(:not([vertical])) ::content .icon-vertical {
+      :host(:not([vertical])) > #splitter > ::content.icon-vertical {
         display: none;
       }
 
-      .icon-vertical,
-      :host ::content .icon-vertical {
-        position: absolute;
-        @apply(--vaadin-split-layout-icon);
-        margin-top: -8px;
-        @apply(--vaadin-split-layout-icon-vertical);
-      }
     </style>
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
       <content select=".icon-horizontal">
-        <iron-icon class="icon-horizontal" icon="vaadin-split-layout:more-v"></iron-icon>
+        <iron-icon class="icon-horizontal" icon="vaadin-split-layout:line-v"></iron-icon>
       </content>
       <content select=".icon-vertical">
-        <iron-icon class="icon-vertical" icon="vaadin-split-layout:more-h"></iron-icon>
+        <iron-icon class="icon-vertical" icon="vaadin-split-layout:line-h"></iron-icon>
       </content>
     </div>
     <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
@@ -194,18 +189,19 @@ Custom property | Description | Default
 
       _processChildren: function() {
         var children = this.getEffectiveChildren();
-        this._primaryChild = children[0];
-        this._secondaryChild = children[1];
-        children.forEach(function(child, i) {
-          var layout = i === 0 ? 'primary' :
-                      i === 1 ? 'secondary' :
-                      null;
-          if (layout) {
-            Polymer.dom(child).setAttribute('vaadin-split-layout', layout);
+        var layouts = children.filter(function(child, i) {
+          return !child.classList.contains('icon-vertical') && !child.classList.contains('icon-horizontal');
+        }).forEach(function(child, i) {
+          if (i == 0) {
+            this._primaryChild = child;
+            Polymer.dom(child).setAttribute('vaadin-split-layout', 'primary');
+          } else if (i == 1) {
+            this._secondaryChild = child;
+            Polymer.dom(child).setAttribute('vaadin-split-layout', 'secondary');
           } else {
             Polymer.dom(child).removeAttribute('vaadin-split-layout');
           }
-        });
+        }.bind(this));
       },
 
       _setFlexBasis: function(element, flexBasis, containerSize) {
