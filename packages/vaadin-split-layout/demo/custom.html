@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>vaadin-split-layout Customizing</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 
   <link rel="import" href="common.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
@@ -22,7 +22,7 @@
       </ul>
     </nav>
 
-    <h3>Customizing the Vertical Splitter</h3>
+    <h3>Customizing the Vertical Splitter with `iron-icon`</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -84,7 +84,8 @@
       </template>
     </demo-snippet>
 
-    <h3>Thin Lines</h3>
+    <h3>Drawing Thin Lines</h3>
+    <p>Notice the usage of the margin to increase the drop area</p>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -95,7 +96,7 @@
               min-width: 1px;
               min-height: 1px;
               background: var(--dark-theme-divider-color);
-              border: solid 3px var(--dark-theme-background-color);
+              border: solid 5px var(--dark-theme-background-color);
             }
             --vaadin-split-layout-icon: {
               display: none;
@@ -119,7 +120,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Using Custom Content as Icons</h3>
+    <h3>Using a Custom DOM Content for the Icon</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -152,17 +153,17 @@
         <style is="custom-style">
           .custom5-1 {
             --vaadin-split-layout-icon: {
-              color: red;
+              background-color: red;
             }
           }
           .custom5-2 {
             --vaadin-split-layout-icon: {
-              color: yellow;
+              background-color: yellow;
             }
           }
           .custom5-3 {
             --vaadin-split-layout-icon: {
-              color: blue;
+              background-color: blue;
             }
           }
         </style>

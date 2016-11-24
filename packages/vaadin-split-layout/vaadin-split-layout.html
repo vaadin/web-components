@@ -126,15 +126,33 @@ Custom property | Description | Default
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: var(--primary-background-color, #000);
-        @apply(--vaadin-split-layout-icon);
+      }
+
+      :host > #splitter > ::content.icon-horizontal-default {
+        background-color: var(--primary-background-color, #000);
+        background-clip: content-box;
+        border-left: solid 11px transparent;
+        border-right: solid 11px transparent;
+        width: 2px;
+        height: 24px;
       }
 
       :host > #splitter > ::content.icon-horizontal {
+        @apply(--vaadin-split-layout-icon);
         @apply(--vaadin-split-layout-icon-horizontal);
       }
 
+      :host > #splitter > ::content.icon-vertical-default {
+        background-color: var(--primary-background-color, #000);
+        background-clip: content-box;
+        border-top: solid 11px transparent;
+        border-bottom: solid 11px transparent;
+        width: 24px;
+        height: 2px;
+      }
+
       :host > #splitter > ::content.icon-vertical {
+        @apply(--vaadin-split-layout-icon);
         @apply(--vaadin-split-layout-icon-vertical);
       }
 
@@ -150,10 +168,10 @@ Custom property | Description | Default
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
       <content select=".icon-horizontal">
-        <iron-icon class="icon-horizontal" icon="vaadin-split-layout:line-v"></iron-icon>
+        <div class="icon-horizontal icon-horizontal-default"></div>
       </content>
       <content select=".icon-vertical">
-        <iron-icon class="icon-vertical" icon="vaadin-split-layout:line-h"></iron-icon>
+        <div class="icon-vertical icon-vertical-default"></div>
       </content>
     </div>
     <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
