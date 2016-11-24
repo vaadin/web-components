@@ -69,13 +69,13 @@
           touch-device$="[[touchDevice]]"
           role="listbox"
           on-touchend="_preventDefault"
-          selected-item="{{_selectedItem}}"
           items="[[_items]]"
+          on-selected-item-changed="_onSelected"
           selection-enabled
           scroll-target="[[_getScroller()]]">
         <template>
           <div class="item"
-              selected$="[[selected]]"
+              selected$="[[_isItemSelected(item, _selectedItem)]]"
               role$="[[_getAriaRole(index)]]"
               aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
               focused$="[[_isItemFocused(_focusedIndex,index)]]">
@@ -114,8 +114,7 @@
       },
 
       _selectedItem: {
-        type: String,
-        notify: true
+        type: Object
       },
 
       _items: {
@@ -159,6 +158,14 @@
       if (focusedIndex >= 0) {
         return this._items[focusedIndex];
       }
+    },
+
+    _isItemSelected: function(item, selectedItem) {
+      return item === selectedItem;
+    },
+
+    _onSelected: function(e) {
+      this.fire('selection-changed', {item: e.detail.value});
     },
 
     /**

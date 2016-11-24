@@ -59,7 +59,8 @@
 
       combobox.open();
 
-      expect(selector.selectedItem).to.equal('foo');
+      expect(combobox.selectedItem).to.equal('foo');
+      expect(combobox.$.overlay._selectedItem).to.equal('foo');
       expect(input.bindValue).to.equal('foo');
     });
 
@@ -105,7 +106,7 @@
     it('should close the dropdown when reselecting the current value', function() {
       combobox.value = 'foo';
       combobox.open();
-      combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
+      combobox.$.overlay.$.selector.$.items.children[0].click();
       expect(combobox.opened).to.be.false;
     });
 

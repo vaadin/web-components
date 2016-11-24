@@ -156,15 +156,15 @@
       it('should show initial selection', function() {
         comboBox.value = 'foo';
         comboBox.open();
-        expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
+
+        expect(comboBox.$.overlay._selectedItem).to.eql('foo');
       });
 
       it('should not lose the selected value', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
-        expect(comboBox.$.overlay.$.selector.selectedItems).to.be.null;
-        setInputValue('');
-        expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
+
+        expect(comboBox.$.overlay._selectedItem).to.eql('foo');
       });
 
       it('should ignore case', function() {
@@ -201,7 +201,7 @@
 
         setInputValue('foo');
 
-        expect(getFilteredItems()).to.be.undefined;
+        expect(getFilteredItems()).to.be.null;
       });
 
       it('should hide overlay when filtered items length is 0', function() {
