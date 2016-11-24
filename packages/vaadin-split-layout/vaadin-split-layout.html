@@ -54,15 +54,7 @@ The following custom properties are available for styling:
 
 Custom property | Description | Default
 :----------------|:-------------|----------:
-`--vaadin-split-layout-content`|A mixin that is applied to each container element|`{}`
-`--vaadin-split-layout-content-primary`|A mixin that is applied to the primary container|`{}`
-`--vaadin-split-layout-content-secondary`|A mixin that is applied to the secondary container|`{}`
 `--vaadin-split-layout-splitter`|A mixin that is applied to the splitter|`{}`
-`--vaadin-split-layout-splitter-horizontal`|A mixin that is applied to horizontal splitter|`{}`
-`--vaadin-split-layout-splitter-vertical`|A mixin that is applied to vertical splitter|`{}`
-`--vaadin-split-layout-icon`|A mixin that is applied to the icon of the splitter|`{}`
-`--vaadin-split-layout-icon-horizontal`|A mixin that is applied to the icon of horizontal splitter|`{}`
-`--vaadin-split-layout-icon-vertical`|A mixin that is applied to the icon of vertical splitter|`{}`
 
 @element vaadin-split-layout
 @demo demo/index.html
@@ -73,18 +65,15 @@ Custom property | Description | Default
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
-<iron-iconset-svg size="24" name="vaadin-split-layout">
-<svg><defs>
-<g id="line-h"><path d="M0 11h32v2h-32v-2z"/></g>
-<g id="line-v"><path d="M11 0h2v32h-2v-32z"/></g>
-</defs></svg>
-</iron-iconset-svg>
-
 <dom-module id="vaadin-split-layout">
   <template>
     <style>
       :host {
-        display: flex;
+        overflow: hidden;
+      }
+
+      :host(:not([vertical])) {
+        @apply(--layout-horizontal);
       }
 
       :host([vertical]) {
@@ -94,7 +83,6 @@ Custom property | Description | Default
       :host > ::content > *:not(#splitter) {
         flex: 1 1 auto;
         overflow: auto;
-        @apply(--vaadin-split-layout-content);
       }
 
       #splitter {
@@ -106,72 +94,41 @@ Custom property | Description | Default
         min-width: 8px;
         min-height: 8px;
         background: var(--divider-color, #ccc);
+        fill: var(--primary-background-color, #fff);
         @apply(--vaadin-split-layout-splitter);
       }
 
       :host(:not([vertical])) > #splitter {
         flex-direction: column;
         cursor: ew-resize;
-        @apply(--vaadin-split-layout-splitter-horizontal);
       }
 
       :host([vertical]) > #splitter {
         cursor: ns-resize;
-        @apply(--vaadin-split-layout-splitter-vertical);
       }
 
-      :host > #splitter > ::content.icon-horizontal,
-      :host > #splitter > ::content.icon-vertical {
+      #handle,
+      #splitter ::content > .splitter-icon {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
 
-      :host > #splitter > ::content.icon-horizontal-default {
-        background-color: var(--primary-background-color, #000);
-        background-clip: content-box;
-        border-left: solid 11px transparent;
-        border-right: solid 11px transparent;
-        width: 2px;
-        height: 24px;
+      #handle {
+        padding: 0 11px;
       }
 
-      :host > #splitter > ::content.icon-horizontal {
-        @apply(--vaadin-split-layout-icon);
-        @apply(--vaadin-split-layout-icon-horizontal);
+      :host([vertical]) > #splitter > #handle {
+        transform: translate(-50%, -50%) rotate(90deg);
       }
-
-      :host > #splitter > ::content.icon-vertical-default {
-        background-color: var(--primary-background-color, #000);
-        background-clip: content-box;
-        border-top: solid 11px transparent;
-        border-bottom: solid 11px transparent;
-        width: 24px;
-        height: 2px;
-      }
-
-      :host > #splitter > ::content.icon-vertical {
-        @apply(--vaadin-split-layout-icon);
-        @apply(--vaadin-split-layout-icon-vertical);
-      }
-
-      :host([vertical]) > #splitter > ::content.icon-horizontal {
-        display: none;
-      }
-
-      :host(:not([vertical])) > #splitter > ::content.icon-vertical {
-        display: none;
-      }
-
     </style>
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <content select=".icon-horizontal">
-        <div class="icon-horizontal icon-horizontal-default"></div>
-      </content>
-      <content select=".icon-vertical">
-        <div class="icon-vertical icon-vertical-default"></div>
+      <content select=".splitter-icon">
+        <svg id="handle" width="2" height="24">
+          <rect width="100%" height="100%"></rect>
+        </svg>
       </content>
     </div>
     <content select="[vaadin-split-layout=secondary]" id="secondary"></content>

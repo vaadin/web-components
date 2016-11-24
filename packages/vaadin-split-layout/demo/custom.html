@@ -51,35 +51,41 @@
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .custom2 {
+          .custom2:not([vertical]) {
             --vaadin-split-layout-splitter: {
               min-width: 6px;
               min-height: 4px;
-            }
-            --vaadin-split-layout-splitter-horizontal: {
               background: var(--paper-blue-grey-100);
-              margin-top: 10px;
-              margin-bottom: 10px;
-            }
-            --vaadin-split-layout-splitter-vertical: {
+            };
+          }
+
+          .custom2[vertical] {
+            --vaadin-split-layout-splitter: {
+              min-width: 6px;
+              min-height: 4px;
               background: var(--paper-grey-900);
-              margin-left: 15px;
-              margin-right: 15px;
-            }
-            --vaadin-split-layout-icon-horizontal: {
-              color: var(--paper-grey-600);
-            }
-            --vaadin-split-layout-icon-vertical: {
-              color: var(--paper-grey-300);
-            }
+            };
+          }
+
+          .custom2 iron-icon[icon="more-vert"] {
+            color: var(--paper-grey-600);
+          }
+
+          .custom2 iron-icon[icon="more-horiz"] {
+            color: var(--paper-grey-300);
+          }
+
+          .custom2[vertical] iron-icon[icon="more-vert"],
+          .custom2:not([vertical]) iron-icon[icon="more-horiz"] {
+            display: none;
           }
         </style>
         <button onClick="var s = document.querySelector('.custom2'); s.vertical = !s.vertical;">Toggle</button>
         <vaadin-split-layout vertical class="custom2">
           <div>Top layout content</div>
           <div>Bottom layout content</div>
-          <iron-icon class="icon-horizontal" icon="more-vert"></iron-icon>
-          <iron-icon class="icon-vertical" icon="more-horiz"></iron-icon>
+          <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
+          <iron-icon class="splitter-icon" icon="more-horiz"></iron-icon>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
