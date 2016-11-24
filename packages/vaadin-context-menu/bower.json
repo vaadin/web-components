@@ -1,23 +1,24 @@
 {
   "name": "vaadin-context-menu",
+  "version": "0.3.1",
+  "description": "Vaadin Context Menu",
   "homepage": "https://github.com/vaadin/vaadin-context-menu",
   "keywords": [
     "web-components",
     "web-component",
     "polymer",
     "vaadin",
+    "context-menu",
     "context",
     "menu"
   ],
-  "description": "",
-  "main": "",
+  "main": "vaadin-context-menu.html",
   "license": "Apache-2.0",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ],
   "dependencies": {
     "polymer": "^1.6.1",
@@ -35,6 +36,5 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#master",
     "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.0.0",
     "vaadin-grid": "^1.1.2"
-  },
-  "version": "0.3.1"
+  }
 }

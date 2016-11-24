@@ -6,9 +6,18 @@
 
 <!---
 ```
-<custom-element-demo>
+<custom-element-demo height="260">
   <template>
+    <style>
+     vaadin-context-menu {
+       font-family: sans-serif;
+     }
+    </style>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../paper-menu/paper-menu.html">
+    <link rel="import" href="../paper-item/paper-item.html">
+    <link rel="import" href="../paper-item/paper-item-body.html">
+    <link rel="import" href="../iron-icons/iron-icons.html">
     <link rel="import" href="vaadin-context-menu.html">
     <next-code-block></next-code-block>
   </template>
@@ -16,30 +25,20 @@
 ```
 -->
 ```html
-<vaadin-context-menu selector="a">
+<vaadin-context-menu selector="#opener">
   <template>
-    <style>
-      div[role="menu"] {
-        padding: 16px 0;
-        background: #fff;
-      }
-
-      div[role="option"] {
-        min-height: 32px;
-        padding: 0 24px;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-      }
-
-      div[role="option"]:hover {
-        background: #d6d6d6;
-      }
-    </style>
-    <div role="menu">
-      <div role="option">Item 1</div>
-      <div role="option">Item 2</div>
-    </div>
+    <paper-menu>
+      <paper-item>Item 1</paper-item>
+      <paper-item>Item 2</paper-item>
+      <paper-item>Item 3</paper-item>
+      <paper-item>
+        <iron-icon icon="warning"></iron-icon>
+        <paper-item-body two-line>
+          <div>Item 4 - Line 1</div>
+          <div secondary>Item 4 - Line 2</div>
+        </paper-item-body>
+      </paper-item>
+    </paper-menu>
   </template>
   Right click on this <a id="opener" href="#">link</a> to open the context menu.
 </vaadin-context-menu>
