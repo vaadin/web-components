@@ -284,7 +284,9 @@
 
       _ignoreAnnounce: {
         value: true
-      }
+      },
+
+      _focusOverlayOnOpen: Boolean
     },
 
     created: function() {
@@ -472,8 +474,12 @@
         this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
       }
 
-      // focus to enable keyboard navigation and keyboard input
-      this._focus();
+      if (this._focusOverlayOnOpen) {
+        this.$.overlay.focus();
+        this._focusOverlayOnOpen = false;
+      } else {
+        this._focus();
+      }
 
       this.updateStyles();
 
@@ -580,7 +586,7 @@
      * Keyboard Navigation
      */
     _eventKey: function(e) {
-      var keys = ['down', 'up', 'left', 'right', 'enter', 'esc', 'tab'];
+      var keys = ['down', 'up', 'enter', 'esc', 'tab'];
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
@@ -617,16 +623,10 @@
             this.$.overlay.focus();
             this.$.overlay._onKeydown(e);
           } else {
+            this._focusOverlayOnOpen = true;
             this.open();
           }
 
-          break;
-        case 'left':
-        case 'right':
-          if (this._inputValue === '' && this.opened) {
-            this.$.overlay.focus();
-            this.$.overlay._onKeydown(e);
-          }
           break;
         case 'enter':
           if (this.$.overlay.focusedDate) {
