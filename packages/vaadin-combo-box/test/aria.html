@@ -107,7 +107,7 @@
       });
 
       it('should change the input value with atomic change', function(done) {
-        getSelector().selectedItem = 'foo';
+        getSelector().$.items.querySelector('div').click();
 
         getInput().addEventListener('bind-value-changed', function() {
           expect(getInput().getAttribute('aria-atomic')).to.equal('true');

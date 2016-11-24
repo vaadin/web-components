@@ -49,7 +49,9 @@
     });
 
     it('should select by using the selector', function() {
-      selector.selectedItem = 'foo';
+      combobox.open();
+      selector.$.items.querySelector('div').click();
+
       expect(combobox.value).to.equal('foo');
       expect(input.bindValue).to.equal('foo');
     });

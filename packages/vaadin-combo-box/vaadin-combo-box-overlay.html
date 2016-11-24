@@ -70,11 +70,9 @@
           role="listbox"
           on-touchend="_preventDefault"
           items="[[_items]]"
-          on-selected-item-changed="_onSelected"
-          selection-enabled
           scroll-target="[[_getScroller()]]">
         <template>
-          <div class="item"
+          <div class="item" on-tap="_onTap"
               selected$="[[_isItemSelected(item, _selectedItem)]]"
               role$="[[_getAriaRole(index)]]"
               aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
@@ -164,8 +162,8 @@
       return item === selectedItem;
     },
 
-    _onSelected: function(e) {
-      this.fire('selection-changed', {item: e.detail.value});
+    _onTap: function(e) {
+      this.fire('selection-changed', {item: this._items[e.model.index]});
     },
 
     /**

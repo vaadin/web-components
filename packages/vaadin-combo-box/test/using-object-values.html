@@ -56,17 +56,21 @@
         }];
       });
 
-      it('should use the default label property on input field', function() {
-        combobox.open();
+      function selectItem(index) {
+        combobox.$.overlay.$.selector.$.items.querySelectorAll('div')[index].click();
+      }
 
-        combobox.$.overlay.$.selector.selectItem(0);
+      beforeEach(function() {
+        combobox.open();
+      });
+
+      it('should use the default label property on input field', function() {
+        selectItem(0);
 
         expect(inputValue()).to.eql('foo');
       });
 
       it('should use the default label property in overlay items', function(done) {
-        combobox.open();
-
         Polymer.Base.async(function() {
           expect(combobox.$.overlay.$.selector.querySelector('.item').textContent).to.contain('foo');
           done();
@@ -82,9 +86,7 @@
       });
 
       it('should use the default value property', function() {
-        combobox.open();
-
-        combobox.$.overlay.$.selector.selectItem(0);
+        selectItem(0);
 
         expect(combobox.value).to.eql('bar');
 
@@ -92,9 +94,8 @@
 
       it('should use the provided value property', function() {
         combobox.itemValuePath = 'custom';
-        combobox.open();
 
-        combobox.$.overlay.$.selector.selectItem(1);
+        selectItem(1);
 
         expect(combobox.value).to.eql('bashcsdfsa');
       });
@@ -106,7 +107,7 @@
           return 'default';
         };
 
-        combobox.$.overlay.$.selector.selectItem(0);
+        selectItem(0);
 
         expect(combobox.$.input.bindValue).to.eql('default');
         expect(combobox.value).to.eql('default');
@@ -118,7 +119,7 @@
           return 'default';
         };
 
-        combobox.$.overlay.$.selector.selectItem(0);
+        selectItem(0);
 
         expect(combobox.$.input.bindValue).to.eql('default');
         expect(combobox.value).to.eql('default');
@@ -132,28 +133,28 @@
       });
 
       it('should set the value', function() {
-        combobox.$.overlay.$.selector.selectItem(0);
+        selectItem(0);
 
         expect(combobox.$.input.bindValue).to.eql('foo');
         expect(combobox.value).to.eql('bar');
       });
 
       it('should set the value even if the value is zero (number)', function() {
-        combobox.$.overlay.$.selector.selectItem(2);
+        selectItem(2);
 
         expect(combobox.$.input.bindValue).to.eql('zero');
         expect(combobox.value).to.eql(0);
       });
 
       it('should set the value even if the value is false (boolean)', function() {
-        combobox.$.overlay.$.selector.selectItem(3);
+        selectItem(3);
 
         expect(combobox.$.input.bindValue).to.eql('false');
         expect(combobox.value).to.eql(false);
       });
 
       it('should set the value even if the value is an empty string', function() {
-        combobox.$.overlay.$.selector.selectItem(4);
+        selectItem(4);
 
         expect(combobox.$.input.bindValue).to.eql('empty string');
         expect(combobox.value).to.eql('');
@@ -161,11 +162,11 @@
       });
 
       it('should distinguish between 0 (number) and "0" (string) values', function() {
-        combobox.$.overlay.$.selector.selectItem(2);
+        selectItem(2);
         expect(combobox.$.input.bindValue).to.eql('zero');
         expect(combobox.value).to.eql(0);
 
-        combobox.$.overlay.$.selector.selectItem(5);
+        selectItem(5);
         expect(combobox.$.input.bindValue).to.eql('zero as a string');
         expect(combobox.value).to.eql('0');
       });
