@@ -115,7 +115,7 @@
     // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
     _outsideClickListener: function(event) {
       var eventPath = Polymer.dom(event).path;
-      if (eventPath.indexOf(this) === -1) {
+      if (eventPath.indexOf(this) === -1 && eventPath.indexOf(this.$.overlay)) {
         this.opened = false;
       }
     },

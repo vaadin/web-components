@@ -216,6 +216,24 @@
         });
       }
 
+      if (touchDevice) {
+        it('should not close when tapping on the overlay', function() {
+          combobox.open();
+
+          combobox.$.overlay.fire('tap');
+
+          expect(combobox.opened).to.be.true;
+        });
+      } else {
+        it('should not close when clicking on the overlay', function() {
+          combobox.open();
+
+          combobox.$.overlay.click();
+
+          expect(combobox.opened).to.be.true;
+        });
+      }
+
       it('should close on clicking icon', function() {
         combobox.open();
 

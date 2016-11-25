@@ -6,6 +6,7 @@
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-overlay-behavior.html">
+<link rel="import" href="vaadin-spinner.html">
 
 <dom-module id="vaadin-combo-box-overlay">
   <style>
@@ -52,6 +53,11 @@
       text-overflow: ellipsis;
     }
 
+    :host([loading]) {
+      /* roughly the size of a list with one item */
+      height: 58px;
+    }
+
     #selector:not([touch-device]) .item:hover,
     #selector .item[focused] {
       background: #eee;
@@ -63,6 +69,7 @@
   </style>
 
   <template>
+    <vaadin-spinner active="[[loading]]"></vaadin-spinner>
     <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation">
       <iron-list
           id="selector"
@@ -109,6 +116,15 @@
             return false;
           }
         }
+      },
+
+      /*
+       * `true` when new items are being loaded.
+       */
+      loading: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       },
 
       _selectedItem: {
@@ -163,7 +179,7 @@
     },
 
     _onTap: function(e) {
-      this.fire('selection-changed', {item: this._items[e.model.index]});
+      this.fire('selection-changed', {item: e.model.item});
     },
 
     /**

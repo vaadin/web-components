@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Remote and Custom Filtering</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><a href="objects.html">Object Items</a></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+        <li><b>Remote and Custom Filtering</b></li>
+      </ul>
+    </nav>
+
+    <dom-module id="iron-ajax">
+      <template>
+        <style>
+           :host {
+            display: block;
+          }
+        </style>
+
+      </template>
+      <script>
+        document.addEventListener('WebComponentsReady', function() {
+          Polymer({
+            is: 'iron-ajax',
+
+            properties: {
+              url: {
+                type: String,
+                observer: '_urlChanged'
+              },
+
+              lastResponse: {
+                type: Object,
+                notify: true
+              },
+
+              loading: {
+                type: Boolean,
+                notify: true
+              },
+
+              debounceDuration: Number
+            },
+
+            _urlChanged: function(url) {
+              var urlParts = url.split('?filter=');
+              var filter = urlParts[1];
+
+              this.loading = true;
+
+              this.debounce('loading', function() {
+                this.loading = false;
+                this.lastResponse = elements.filter(function(el) {
+                  return el.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                });
+              }, this.debounceDuration);
+            }
+          });
+        });
+      </script>
+    </dom-module>
+
+    <h3>Remote Data Source</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <iron-ajax url="http://example.org/?filter=[[filter]]" handle-as="json" last-response="{{response}}" loading="{{loading}}" debounce-duration="500" auto>
+          </iron-ajax>
+
+          <vaadin-combo-box filtered-items="[[response]]" filter="{{filter}}" loading="[[loading]]">
+          </vaadin-combo-box>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Custom Filtering</h3>
+
+    <demo-snippet>
+      <template>
+        <custom-filter></custom-filter>
+        <dom-module id="custom-filter">
+          <template>
+            <vaadin-combo-box filtered-items="[[items]]" on-filter-changed="_filterChanged">
+            </vaadin-combo-box>
+          </template>
+          <script>
+            Polymer({
+              is: 'custom-filter',
+
+              properties: {
+                items: Array,
+              },
+
+              _filterChanged: function(e) {
+                // case-sensitive starts-with filtering
+                this.items = elements.filter(function(el) {
+                  return el.indexOf(e.detail.value) === 0;
+                });
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>
