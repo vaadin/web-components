@@ -1,3 +1,9 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
 <link rel="import" href="vaadin-contextmenu-event.html">
@@ -11,9 +17,9 @@ The following custom properties and mixins are available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-context-menu-overlay`     | Mixin applied to the overlay                                     | `{}`
-`--vaadin-context-menu-content`     | Mixin applied to the content                                     | `{}`
+`--vaadin-context-menu-content`     | Mixin applied to the overlay contents                            | `{}`
 
-
+@element vaadin-context-menu
 @demo demo/index.html
 -->
 
@@ -49,10 +55,12 @@ Custom property | Description | Default
       properties: {
 
         /**
-         * CSS selector that can be used to select any of the parent elements
-         * of the element the context menu was opened on.
+         * CSS selector that can be used to target any child element
+         * of the context menu to listen for `openOn` events.
          */
-        selector: String,
+        selector: {
+          type: String
+        },
 
         /**
          * True if the overlay is currently displayed.
@@ -73,9 +81,10 @@ Custom property | Description | Default
 
         /**
          * The target element that's listened to for context menu opening events.
-         * By default the vaadin-context-menu listens to the target's 'contextmenu'
+         * By default the vaadin-context-menu listens to the target's `vaadin-contextmenu`
          * events.
-         * @type {!Element}
+         * @type {HTMLElement}
+         * @default self
          */
         listenOn: {
           type: Object,
@@ -164,7 +173,7 @@ Custom property | Description | Default
       },
 
       /**
-       * Close the overlay.
+       * Closes the overlay.
        */
       close: function() {
         this._opened = false;
@@ -183,8 +192,8 @@ Custom property | Description | Default
       },
 
       /**
-       * Open the overlay.
-       * @param {Event} Event used as the context for the menu. Overlay wont open without it.
+       * Opens the overlay.
+       * @param {Event} e used as the context for the menu. Overlay coordinates are taken from this event.
        */
       open: function(e) {
         if (!!e) {

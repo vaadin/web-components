@@ -10,7 +10,6 @@ layout: page
 [vaadinelement]#vaadin-context-menu# is a Polymer element implementing a menu in an overlay which by default is opened by a context click or a long press touch event.
 
 [[figure.vaadin-context-menu.overview]]
-[vaadinelement]#vaadin-context-menu#
 image::img/vaadin-context-menu.png[width="400"]
 
 [[vaadin-context-menu.getting-started]]
@@ -18,9 +17,13 @@ image::img/vaadin-context-menu.png[width="400"]
 
 [vaadinelement]#vaadin-context-menu# uses a [propertyname]#template# element inside to determine the contents for the overlay.
 
-By default, [vaadinelement]#vaadin-context-menu# itself is used as the target to listen to [propertyname]#contextmenu# events.
-In practice, any child of the target element will respond to [propertyname]#contextmenu# events for opening the menu.
+By default, [vaadinelement]#vaadin-context-menu# itself is used as the target to listen to [propertyname]#vaadin-contextmenu# events.
+In practice, any child of the target element will respond to [propertyname]#vaadin-contextmenu# events for opening the menu.
 This event can be customized as explained in the following chapters.
+
+[NOTE]
+[propertyname]#vaadin-contextmenu# is a custom event which acts like the native [propertyname]#contextmenu# event, but works also in iOS
+where the native [propertyname]#contextmenu# event is not supported.
 
 [source,html]
 ----
@@ -92,7 +95,7 @@ When styling the overlay contents, place a [propertyname]#style# element inside 
 [[vaadin-context-menu.opening]]
 = Opening
 
-By default, the overlay opens when the [propertyname]#listenOn# element receives a [propertyname]#contextmenu# event.
+By default, the overlay opens when the [propertyname]#listenOn# element receives a [propertyname]#vaadin-contextmenu# event.
 
 To replace it by any other event, use [propertyname]#openOn#.
 
@@ -108,8 +111,8 @@ To replace it by any other event, use [propertyname]#openOn#.
 </vaadin-context-menu>
 ----
 
-Overlay can be also opened programmatically by calling the [methodname]#open(event)#. It accepts an
-argument with the original event, so as the context menu can calculate its position in the UI.
+Overlay can be also opened programmatically by calling the [methodname]#open(event)#. It takes an
+event as the argument, which is used to position the overlay correctly.
 
 [source,html]
 ----
