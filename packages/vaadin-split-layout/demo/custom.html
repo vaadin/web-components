@@ -31,23 +31,24 @@
               background: var(--primary-color);
               border-radius: 4px;
             }
-            --vaadin-split-layout-icon: {
-              color: var(--primary-background-color);
-            }
-            --vaadin-split-layout-content: {
-              background: white;
-            }
+          }
+          .custom1 .content {
+            background: white;
+          }
+          iron-icon {
+            color: var(--primary-background-color);
           }
         </style>
         <vaadin-split-layout class="custom1">
-          <div>First layout content</div>
-          <div>Second layout content</div>
-          <iron-icon class="icon-horizontal" icon="more-vert"></iron-icon>
+          <div class="content">First layout content</div>
+          <div class="content">Second layout content</div>
+          <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
 
     <h3>Toggling Direction, and Customizing Each Splitter</h3>
+    <p>Notice that you have to call the `updateStyles` after toggling the direction when having different CSS for vertical and horizontal splitters.</p>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -56,6 +57,7 @@
               min-width: 6px;
               min-height: 4px;
               background: var(--paper-blue-grey-100);
+              margin: 10px 0;
             };
           }
 
@@ -64,6 +66,7 @@
               min-width: 6px;
               min-height: 4px;
               background: var(--paper-grey-900);
+              margin: 0 20px;
             };
           }
 
@@ -80,7 +83,7 @@
             display: none;
           }
         </style>
-        <button onClick="var s = document.querySelector('.custom2'); s.vertical = !s.vertical;">Toggle</button>
+        <button onClick="var s = document.querySelector('.custom2'); s.vertical = !s.vertical; s.updateStyles();">Toggle</button>
         <vaadin-split-layout vertical class="custom2">
           <div>Top layout content</div>
           <div>Bottom layout content</div>
@@ -91,7 +94,7 @@
     </demo-snippet>
 
     <h3>Drawing Thin Lines</h3>
-    <p>Notice the usage of the margin to increase the drop area</p>
+    <p>Notice the usage of a transparent border to increase the draggable area</p>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -102,26 +105,28 @@
               min-width: 1px;
               min-height: 1px;
               background: var(--dark-theme-divider-color);
-              border: solid 5px var(--dark-theme-background-color);
+              border: solid 5px transparent;
+              background-clip: content-box;
             }
             --vaadin-split-layout-icon: {
               display: none;
             }
-            --vaadin-split-layout-content: {
-              background: var(--dark-theme-background-color);
-              color: var(--dark-theme-text-color);
-            }
+            background: var(--dark-theme-background-color);
+            color: var(--dark-theme-text-color);
           }
         </style>
         <vaadin-split-layout class="custom3-1">
           <vaadin-split-layout vertical class="custom3-2">
             <div>First layout content</div>
             <div>Second layout content</div>
+            <div class="splitter-icon"></div>
           </vaadin-split-layout>
           <vaadin-split-layout vertical class="custom3-3">
             <div>Third layout content</div>
             <div>Fourth layout content</div>
+            <div class="splitter-icon"></div>
           </vaadin-split-layout>
+          <div class="splitter-icon"></div>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
@@ -134,19 +139,19 @@
             --vaadin-split-layout-splitter: {
               min-width: 0px;
             }
-            --vaadin-split-layout-icon: {
-              height: 100px;
-              border: solid 1px var(--paper-indigo-700);
-              border-radius: 5px;
-              background: var(--paper-indigo-300);
-              color: white;
-              @apply(--layout);
-              @apply(--layout-center-center);
-            }
+          }
+          .custom4 .splitter-icon {
+            height: 100px;
+            border: solid 1px var(--paper-indigo-700);
+            border-radius: 5px;
+            background: var(--paper-indigo-300);
+            color: white;
+            @apply(--layout);
+            @apply(--layout-center-center);
           }
         </style>
         <vaadin-split-layout class="custom4">
-          <div class="icon-horizontal">&middot;</div>
+          <div class="splitter-icon">&middot;</div>
           <div>First layout content</div>
           <div>Second layout content</div>
         </vaadin-split-layout>
@@ -158,18 +163,18 @@
       <template>
         <style is="custom-style">
           .custom5-1 {
-            --vaadin-split-layout-icon: {
-              background-color: red;
+            --vaadin-split-layout-splitter: {
+              fill: red;
             }
           }
           .custom5-2 {
-            --vaadin-split-layout-icon: {
-              background-color: yellow;
+            --vaadin-split-layout-splitter: {
+              fill: yellow;
             }
           }
           .custom5-3 {
-            --vaadin-split-layout-icon: {
-              background-color: blue;
+            --vaadin-split-layout-splitter: {
+              fill: blue;
             }
           }
         </style>

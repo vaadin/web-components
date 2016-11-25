@@ -85,7 +85,7 @@ Custom property | Description | Default
         overflow: auto;
       }
 
-      #splitter {
+      :host > #splitter {
         display: flex;
         justify-content: center;
         flex: none;
@@ -165,7 +165,7 @@ Custom property | Description | Default
       _processChildren: function() {
         var children = this.getEffectiveChildren();
         var layouts = children.filter(function(child, i) {
-          return !child.classList.contains('icon-vertical') && !child.classList.contains('icon-horizontal');
+          return !child.classList.contains('splitter-icon');
         }).forEach(function(child, i) {
           if (i == 0) {
             this._primaryChild = child;
