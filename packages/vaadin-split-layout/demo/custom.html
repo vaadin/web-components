@@ -4,11 +4,12 @@
   <title>vaadin-split-layout demo</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>vaadin-split-layout Customizing</title>
+  <title>vaadin-split-layout Customization</title>
   <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 
   <link rel="import" href="common.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
 
 </head>
 
@@ -47,8 +48,8 @@
       </template>
     </demo-snippet>
 
-    <h3>Toggling Direction, and Customizing Each Splitter</h3>
-    <p>Notice that you have to call the `updateStyles` after toggling the direction when having different CSS for vertical and horizontal splitters.</p>
+    <h3>Customizing Different Modes Separately</h3>
+    <p>Notice that if you want different styles for each direction, yoy have to call to `updateStyles` after toggling it.</p>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -83,10 +84,12 @@
             display: none;
           }
         </style>
-        <button onClick="var s = document.querySelector('.custom2'); s.vertical = !s.vertical; s.updateStyles();">Toggle</button>
+        <paper-button onClick="var s = document.querySelector('.custom2'); s.vertical = !s.vertical; s.updateStyles();" raised>
+          Toggle Direction
+        </paper-button>
         <vaadin-split-layout vertical class="custom2">
-          <div>Top layout content</div>
-          <div>Bottom layout content</div>
+          <div>First layout content</div>
+          <div>Second layout content</div>
           <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
           <iron-icon class="splitter-icon" icon="more-horiz"></iron-icon>
         </vaadin-split-layout>
@@ -94,7 +97,7 @@
     </demo-snippet>
 
     <h3>Drawing Thin Lines</h3>
-    <p>Notice the usage of a transparent border to increase the draggable area</p>
+    <p>Notice the usage of a transparent border to increase the drag area</p>
     <demo-snippet>
       <template>
         <style is="custom-style">
@@ -177,15 +180,31 @@
               fill: blue;
             }
           }
+          .custom5-4 {
+            --vaadin-split-layout-splitter: {
+              fill: green;
+            }
+          }
+          .custom5-5 {
+            --vaadin-split-layout-splitter: {
+              fill: brown;
+            }
+          }
         </style>
         <vaadin-split-layout class="custom5-1">
-          <vaadin-split-layout vertical class="custom5-2">
+          <vaadin-split-layout vertical style="width: 33%" class="custom5-2">
             <div>First layout content</div>
             <div>Second layout content</div>
           </vaadin-split-layout>
-          <vaadin-split-layout vertical class="custom5-3">
-            <div>Third layout content</div>
-            <div>Fourth layout content</div>
+          <vaadin-split-layout style="width: 66%" class="custom5-3">
+            <vaadin-split-layout vertical class="custom5-4">
+              <div>Third layout content</div>
+              <div>Fourth layout content</div>
+            </vaadin-split-layout>
+            <vaadin-split-layout vertical class="custom5-5">
+              <div>Fifth layout content</div>
+              <div>Sixth layout content</div>
+            </vaadin-split-layout>
           </vaadin-split-layout>
         </vaadin-split-layout>
       </template>

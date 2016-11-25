@@ -33,6 +33,7 @@
     "iron-test-helpers": "^1.2.5",
     "iron-icon": "^1.0.9",
     "iron-icons": "^1.2.0",
+    "paper-button": "^1.0.14",
     "elements-demo-resources": "vaadin/elements-demo-resources#master"
   }
 }
