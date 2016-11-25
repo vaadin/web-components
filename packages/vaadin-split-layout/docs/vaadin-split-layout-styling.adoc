@@ -1,0 +1,130 @@
+---
+title: Horizontal and Vertical Layouts
+order: 5
+layout: page
+---
+
+[[vaadin-split-layout.styling]]
+= Styling
+
+The [vaadinelement]#vaadin-split-layout# element is composed of four elements: the splitter, the handle, and two contents.
+
+The [vaadinelement]#vaadin-split-layout# exposes the `vertical` attribute and the `--vaadin-split-layout-splitter` mixin, so as they can be used for customizing styles.
+
+== Content Customization
+
+The content is defined in your light dom, therefore, you can style it by using normal CSS selectors in your application.
+
+[source,html]
+----
+<style is="custom-style">
+  .my-split-layout:not([vertical]) > div {
+    background: var(--paper-blue-grey-500);
+  }
+  .my-split-layout[vertical] > div {
+    background: var(--paper-blue-grey-100);
+  }
+</style>
+<vaadin-split-layout vertical class="my-split-layout">
+  <div>First content</div>
+  <div>Second content</div>
+</vaadin-split-layout>
+----
+
+== Splitter Customization
+
+In order to configure the Spliter, use the `--vaadin-split-layout-splitter`.
+
+[source,html]
+----
+<style is="custom-style">
+  .my-split-layout {
+    --vaadin-split-layout-splitter: {
+      min-width: 6px;
+      min-height: 4px;
+      background: var(--paper-indigo-300);
+    };
+  }
+</style>
+<vaadin-split-layout vertical class="my-split-layout">
+  <div>First content</div>
+  <div>Second content</div>
+</vaadin-split-layout>
+----
+
+If you need to configure `vertical` and `horizontal` layouts separatly for the same component, you need to add the `vertical` attribute to your selectors.
+
+[source,html]
+----
+<style is="custom-style">
+  .my-split-layout:not([vertical]) {
+    --vaadin-split-layout-splitter: {
+      background: var(--paper-indigo-300);
+      margin: 10px 0;
+    };
+  }
+  .my-split-layout[vertical] {
+    --vaadin-split-layout-splitter: {
+      background: var(--paper-indigo-100);
+      margin: 0 20px;
+    };
+  }
+</style>
+<vaadin-split-layout vertical class="my-split-layout">
+  <div>First content</div>
+  <div>Second content</div>
+</vaadin-split-layout>
+----
+
+[NOTE]
+If you are dynamicaly changing the direction of one [vaadinelement]#vaadin-split-layout# element, and you have different styles for each, you might have to call the `element.updateStyles()` method.
+
+== Handle Customization
+
+By default, [vaadinelement]#vaadin-split-layout# includes an SVG image for the splitter handle.
+
+You can change some of its properties via the `--vaadin-split-layout-splitter` mixin, for instance for changing the color use the SVG `fill` property:
+
+[source,html]
+----
+<style is="custom-style">
+  .my-split-layout {
+    --vaadin-split-layout-splitter: {
+      fill: green;
+    };
+  }
+</style>
+<vaadin-split-layout vertical class="my-split-layout">
+  <div>First content</div>
+  <div>Second content</div>
+</vaadin-split-layout>
+----
+
+You can customize the handle by replacing the default content by your own implementation. You just have to mark your handle element with the class name `splitter-icon`.
+
+[source,html]
+----
+<vaadin-split-layout vertical class="my-split-layout">
+  <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
+  <div>First content</div>
+  <div>Second content</div>
+</vaadin-split-layout>
+----
+
+In order to have different icons for vertical and horizontal layouts, add two icons to your ligt-dom and use CSS to show or hide them.
+
+[source,html]
+----
+<style is="custom-style">
+  .my-split-layout[vertical] iron-icon[icon="more-vert"],
+  .my-split-layout:not([vertical]) iron-icon[icon="more-horiz"] {
+    display: none;
+  }
+</style>
+<vaadin-split-layout vertical class="my-split-layout">
+  <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
+  <iron-icon class="splitter-icon" icon="more-horiz"></iron-icon>
+  <div>First content</div>
+  <div>Second content</div>
+</vaadin-split-layout>
+----

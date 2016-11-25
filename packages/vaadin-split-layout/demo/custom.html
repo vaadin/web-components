@@ -23,37 +23,49 @@
       </ul>
     </nav>
 
-    <h3>Customizing the Vertical Splitter with `iron-icon`</h3>
+    <h3>Customizing the Splitter</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .custom1 {
+          .custom-1 {
             --vaadin-split-layout-splitter: {
               background: var(--primary-color);
               border-radius: 4px;
-            }
+            };
           }
-          .custom1 .content {
+          .custom-1 .content {
             background: white;
           }
-          iron-icon {
-            color: var(--primary-background-color);
-          }
         </style>
-        <vaadin-split-layout class="custom1">
+        <vaadin-split-layout class="custom-1">
           <div class="content">First layout content</div>
           <div class="content">Second layout content</div>
-          <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
 
-    <h3>Customizing Different Modes Separately</h3>
-    <p>Notice that if you want different styles for each direction, yoy have to call to `updateStyles` after toggling it.</p>
+    <h3>Replacing the Handle with an Icon</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .custom2:not([vertical]) {
+          .custom-2 iron-icon {
+            color: var(--primary-background-color);
+          }
+        </style>
+        <vaadin-split-layout class="custom-2">
+          <div class="content">First layout content</div>
+          <div class="content">Second layout content</div>
+          <iron-icon class="splitter-handle" icon="more-vert"></iron-icon>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Customizing Vertical and Horizontal Layouts Separately</h3>
+    <p>Notice that if you want different styles for horizontal and vertical layouts, you have to call to `updateStyles` after toggling it.</p>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom-3:not([vertical]) {
             --vaadin-split-layout-splitter: {
               min-width: 6px;
               min-height: 4px;
@@ -61,8 +73,7 @@
               margin: 10px 0;
             };
           }
-
-          .custom2[vertical] {
+          .custom-3[vertical] {
             --vaadin-split-layout-splitter: {
               min-width: 6px;
               min-height: 4px;
@@ -70,80 +81,118 @@
               margin: 0 20px;
             };
           }
-
-          .custom2 iron-icon[icon="more-vert"] {
+          .custom-3 iron-icon[icon="more-vert"] {
             color: var(--paper-grey-600);
           }
-
-          .custom2 iron-icon[icon="more-horiz"] {
+          .custom-3 iron-icon[icon="more-horiz"] {
             color: var(--paper-grey-300);
           }
-
-          .custom2[vertical] iron-icon[icon="more-vert"],
-          .custom2:not([vertical]) iron-icon[icon="more-horiz"] {
+          .custom-3[vertical] iron-icon[icon="more-vert"],
+          .custom-3:not([vertical]) iron-icon[icon="more-horiz"] {
             display: none;
           }
         </style>
-        <paper-button onClick="var s = document.querySelector('.custom2'); s.vertical = !s.vertical; s.updateStyles();" raised>
-          Toggle Direction
+        <paper-button onClick="var s = document.querySelector('.custom-3'); s.vertical = !s.vertical; s.updateStyles();" raised>
+          Toggle Layout
         </paper-button>
-        <vaadin-split-layout vertical class="custom2">
+        <vaadin-split-layout vertical class="custom-3">
           <div>First layout content</div>
           <div>Second layout content</div>
-          <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
-          <iron-icon class="splitter-icon" icon="more-horiz"></iron-icon>
+          <iron-icon class="splitter-handle" icon="more-vert"></iron-icon>
+          <iron-icon class="splitter-handle" icon="more-horiz"></iron-icon>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
 
-    <h3>Drawing Thin Lines</h3>
-    <p>Notice the usage of a transparent border to increase the drag area</p>
+    <h3>Customizing Nested Layouts</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .custom3-1,
-          .custom3-2,
-          .custom3-3 {
+          .custom-4-2 {
+            --vaadin-split-layout-splitter: {
+              fill: yellow;
+            };
+          }
+          .custom-4-3 {
+            --vaadin-split-layout-splitter: {
+              fill: blue;
+            };
+          }
+          .custom-4-4 {
+            --vaadin-split-layout-splitter: {
+              fill: green;
+            };
+          }
+          .custom-4-5 {
+            --vaadin-split-layout-splitter: {
+              fill: brown;
+            };
+          }
+        </style>
+        <vaadin-split-layout class="custom-4-1">
+          <iron-icon class="splitter-handle" icon="radio-button-unchecked"></iron-icon>
+          <vaadin-split-layout vertical style="width: 33%" class="custom-4-2">
+            <div>First layout content</div>
+            <div>Second layout content</div>
+
+          </vaadin-split-layout>
+          <vaadin-split-layout style="width: 66%" class="custom-4-3">
+            <vaadin-split-layout vertical class="custom-4-4">
+              <div>Third layout content</div>
+              <div>Fourth layout content</div>
+            </vaadin-split-layout>
+            <vaadin-split-layout vertical class="custom-4-5">
+              <div>Fifth layout content</div>
+              <div>Sixth layout content</div>
+            </vaadin-split-layout>
+          </vaadin-split-layout>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Thin Lines</h3>
+    <p>Notice the usage of a transparent border to increase the drag area, and the `fill: none` attribute to hide the handle.</p>
+    <demo-snippet>
+      <template>
+        <style is="custom-style">
+          .custom-5-1,
+          .custom-5-2,
+          .custom-5-3 {
             --vaadin-split-layout-splitter: {
               min-width: 1px;
               min-height: 1px;
               background: var(--dark-theme-divider-color);
               border: solid 5px transparent;
               background-clip: content-box;
-            }
-            --vaadin-split-layout-icon: {
-              display: none;
-            }
+              fill: none;
+            };
             background: var(--dark-theme-background-color);
             color: var(--dark-theme-text-color);
           }
         </style>
-        <vaadin-split-layout class="custom3-1">
-          <vaadin-split-layout vertical class="custom3-2">
+        <vaadin-split-layout class="custom-5-1">
+          <vaadin-split-layout vertical class="custom-5-2">
             <div>First layout content</div>
             <div>Second layout content</div>
-            <div class="splitter-icon"></div>
           </vaadin-split-layout>
-          <vaadin-split-layout vertical class="custom3-3">
+          <vaadin-split-layout vertical class="custom-5-3">
             <div>Third layout content</div>
             <div>Fourth layout content</div>
-            <div class="splitter-icon"></div>
           </vaadin-split-layout>
-          <div class="splitter-icon"></div>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
 
-    <h3>Using a Custom DOM Content for the Icon</h3>
+    <h3>Custom Handle</h3>
     <demo-snippet>
       <template>
         <style is="custom-style">
-          .custom4 {
+          .custom-6 {
             --vaadin-split-layout-splitter: {
               min-width: 0px;
-            }
+            };
           }
-          .custom4 .splitter-icon {
+          .custom-6 .splitter-handle {
             height: 100px;
             border: solid 1px var(--paper-indigo-700);
             border-radius: 5px;
@@ -153,59 +202,10 @@
             @apply(--layout-center-center);
           }
         </style>
-        <vaadin-split-layout class="custom4">
-          <div class="splitter-icon">&middot;</div>
+        <vaadin-split-layout class="custom-6">
+          <div class="splitter-handle">&middot;</div>
           <div>First layout content</div>
           <div>Second layout content</div>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
-
-    <h3>Customizing Nested Layouts</h3>
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          .custom5-1 {
-            --vaadin-split-layout-splitter: {
-              fill: red;
-            }
-          }
-          .custom5-2 {
-            --vaadin-split-layout-splitter: {
-              fill: yellow;
-            }
-          }
-          .custom5-3 {
-            --vaadin-split-layout-splitter: {
-              fill: blue;
-            }
-          }
-          .custom5-4 {
-            --vaadin-split-layout-splitter: {
-              fill: green;
-            }
-          }
-          .custom5-5 {
-            --vaadin-split-layout-splitter: {
-              fill: brown;
-            }
-          }
-        </style>
-        <vaadin-split-layout class="custom5-1">
-          <vaadin-split-layout vertical style="width: 33%" class="custom5-2">
-            <div>First layout content</div>
-            <div>Second layout content</div>
-          </vaadin-split-layout>
-          <vaadin-split-layout style="width: 66%" class="custom5-3">
-            <vaadin-split-layout vertical class="custom5-4">
-              <div>Third layout content</div>
-              <div>Fourth layout content</div>
-            </vaadin-split-layout>
-            <vaadin-split-layout vertical class="custom5-5">
-              <div>Fifth layout content</div>
-              <div>Sixth layout content</div>
-            </vaadin-split-layout>
-          </vaadin-split-layout>
         </vaadin-split-layout>
       </template>
     </demo-snippet>

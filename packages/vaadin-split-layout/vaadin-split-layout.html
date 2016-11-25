@@ -61,35 +61,30 @@ Custom property | Description | Default
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <dom-module id="vaadin-split-layout">
   <template>
     <style>
       :host {
-        overflow: hidden;
-      }
-
-      :host(:not([vertical])) {
-        @apply(--layout-horizontal);
+        display: flex;
+        overflow: hidden !important;
+        transform: translateZ(0);
       }
 
       :host([vertical]) {
         flex-direction: column;
       }
 
-      :host > ::content > *:not(#splitter) {
+      :host ::content > * {
         flex: 1 1 auto;
         overflow: auto;
       }
 
       :host > #splitter {
-        display: flex;
-        justify-content: center;
         flex: none;
         position: relative;
+        z-index: 1;
         overflow: visible;
         min-width: 8px;
         min-height: 8px;
@@ -99,7 +94,6 @@ Custom property | Description | Default
       }
 
       :host(:not([vertical])) > #splitter {
-        flex-direction: column;
         cursor: ew-resize;
       }
 
@@ -108,26 +102,22 @@ Custom property | Description | Default
       }
 
       #handle,
-      #splitter ::content > .splitter-icon {
+      #splitter ::content > .splitter-handle {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
 
-      #handle {
-        padding: 0 11px;
-      }
-
-      :host([vertical]) > #splitter > #handle {
+      :host([vertical]) > #splitter #handle {
         transform: translate(-50%, -50%) rotate(90deg);
       }
     </style>
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <content select=".splitter-icon">
-        <svg id="handle" width="2" height="24">
-          <rect width="100%" height="100%"></rect>
+      <content select=".splitter-handle">
+        <svg id="handle" width="40" height="40">
+          <rect x="19" y="8" width="2" height="24"></rect>
         </svg>
       </content>
     </div>
@@ -165,7 +155,7 @@ Custom property | Description | Default
       _processChildren: function() {
         var children = this.getEffectiveChildren();
         var layouts = children.filter(function(child, i) {
-          return !child.classList.contains('splitter-icon');
+          return !child.classList.contains('splitter-handle');
         }).forEach(function(child, i) {
           if (i == 0) {
             this._primaryChild = child;
