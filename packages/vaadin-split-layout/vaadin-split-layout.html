@@ -54,7 +54,6 @@ for the `iron-resize` event.
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
@@ -69,22 +68,23 @@ for the `iron-resize` event.
 <dom-module id="vaadin-split-layout">
   <template>
     <style>
-      :host(:not([vertical])) {
-        @apply(--layout-horizontal);
+      :host {
+        display: flex;
       }
 
       :host([vertical]) {
-        @apply(--layout-vertical);
+        flex-direction: column;
       }
 
       :host ::content > * {
-        @apply(--layout-flex-auto);
+        flex: 1 1 auto;
         overflow: auto;
       }
 
       #splitter {
-        @apply(--layout-center-justified);
-        @apply(--layout-flex-none);
+        display: flex;
+        justify-content: center;
+        flex: none;
         overflow: visible;
         min-height: 8px;
         min-width: 8px;
@@ -92,12 +92,11 @@ for the `iron-resize` event.
       }
 
       :host(:not([vertical])) > #splitter {
-        @apply(--layout-vertical);
+        flex-direction: column;
         cursor: ew-resize;
       }
 
       :host([vertical]) > #splitter {
-        @apply(--layout-horizontal);
         cursor: ns-resize;
       }
 
