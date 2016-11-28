@@ -50,26 +50,26 @@ when the splitter is dragged. In order to define a resizable and receive that
 notification in a nested element, include `IronResizableBehavior` and listen
 for the `iron-resize` event.
 
+The following custom properties are available for styling:
+
+Custom property | Description | Default
+:----------------|:-------------|----------:
+`--vaadin-split-layout-splitter`|A mixin that is applied to the splitter|`{}`
+
 @element vaadin-split-layout
+@demo demo/index.html
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-
-<iron-iconset-svg size="24" name="vaadin-split-layout">
-<svg><defs>
-<g id="more-horiz"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
-<g id="more-vert"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
-</defs></svg>
-</iron-iconset-svg>
 
 <dom-module id="vaadin-split-layout">
   <template>
     <style>
       :host {
         display: flex;
+        overflow: hidden !important;
+        transform: translateZ(0);
       }
 
       :host([vertical]) {
@@ -81,18 +81,19 @@ for the `iron-resize` event.
         overflow: auto;
       }
 
-      #splitter {
-        display: flex;
-        justify-content: center;
+      :host > #splitter {
         flex: none;
+        position: relative;
+        z-index: 1;
         overflow: visible;
-        min-height: 8px;
         min-width: 8px;
-        background: #ccc;
+        min-height: 8px;
+        background: var(--divider-color, #ccc);
+        fill: var(--primary-background-color, #fff);
+        @apply(--vaadin-split-layout-splitter);
       }
 
       :host(:not([vertical])) > #splitter {
-        flex-direction: column;
         cursor: ew-resize;
       }
 
@@ -100,30 +101,25 @@ for the `iron-resize` event.
         cursor: ns-resize;
       }
 
-      iron-icon {
-        margin: -8px;
+      #handle,
+      #splitter ::content > .splitter-handle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
-      #handle-icon-horizontal {
-        display: block;
-      }
-
-      #handle-icon-vertical {
-        display: none;
-      }
-
-      :host([vertical]) > #splitter > #handle-icon-horizontal {
-        display: none;
-      }
-
-      :host([vertical]) > #splitter > #handle-icon-vertical {
-        display: block;
+      :host([vertical]) > #splitter #handle {
+        transform: translate(-50%, -50%) rotate(90deg);
       }
     </style>
     <content select="[vaadin-split-layout=primary]" id="primary"></content>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <iron-icon id="handle-icon-horizontal" icon="vaadin-split-layout:more-vert"></iron-icon>
-      <iron-icon id="handle-icon-vertical" icon="vaadin-split-layout:more-horiz"></iron-icon>
+      <content select=".splitter-handle">
+        <svg id="handle" width="40" height="40">
+          <rect x="19" y="8" width="2" height="24"></rect>
+        </svg>
+      </content>
     </div>
     <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
   </template>
@@ -158,18 +154,19 @@ for the `iron-resize` event.
 
       _processChildren: function() {
         var children = this.getEffectiveChildren();
-        this._primaryChild = children[0];
-        this._secondaryChild = children[1];
-        children.forEach(function(child, i) {
-          var layout = i === 0 ? 'primary' :
-                      i === 1 ? 'secondary' :
-                      null;
-          if (layout) {
-            Polymer.dom(child).setAttribute('vaadin-split-layout', layout);
+        var layouts = children.filter(function(child, i) {
+          return !child.classList.contains('splitter-handle');
+        }).forEach(function(child, i) {
+          if (i == 0) {
+            this._primaryChild = child;
+            Polymer.dom(child).setAttribute('vaadin-split-layout', 'primary');
+          } else if (i == 1) {
+            this._secondaryChild = child;
+            Polymer.dom(child).setAttribute('vaadin-split-layout', 'secondary');
           } else {
             Polymer.dom(child).removeAttribute('vaadin-split-layout');
           }
-        });
+        }.bind(this));
       },
 
       _setFlexBasis: function(element, flexBasis, containerSize) {
