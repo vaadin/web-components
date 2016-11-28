@@ -1,0 +1,13 @@
+{
+  "globals": {
+    "sinon": false,
+    "WCT": false,
+    "describe": false,
+    "expect": false,
+    "it": false,
+    "beforeEach": false,
+    "fixture": false,
+    "MockInteractions": false,
+    "MockTouchInteractions": false
+  }
+}
