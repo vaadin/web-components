@@ -155,6 +155,16 @@
 
             expect(focusedDate()).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
           });
+
+          it('should not lose focused date after deselecting', function() {
+            var _focused = focusedDate();
+            datepicker.open();
+            target = overlay;
+            space();
+            space();
+
+            expect(focusedDate()).to.equal(_focused);
+          });
         });
 
         describe('overlay', function() {
@@ -164,6 +174,7 @@
             overlay.i18n = getDefaultI18n();
             target = overlay;
 
+            overlay.initialPosition = new Date();
             overlay.focusedDate = new Date(2000, 0, 1);
             overlay.async(function() {
               overlay.scrollToDate(overlay.focusedDate);
@@ -223,8 +234,9 @@
 
           it('should deselect selected date with space', function() {
             space();
+            space();
 
-            expect(datepicker.value).to.be.empty;
+            expect(overlay.selectedDate).to.be.empty;
           });
 
           it('should focus first day of the month with home', function() {

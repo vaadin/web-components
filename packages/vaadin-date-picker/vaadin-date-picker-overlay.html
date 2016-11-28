@@ -783,10 +783,12 @@
               }
               break;
             case 'space':
-              if (vaadin.elements.datepicker.DatePickerHelper._dateEquals(this.focusedDate, this.selectedDate)) {
+              var focusedDate = this.focusedDate;
+              if (vaadin.elements.datepicker.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
                 this.selectedDate = '';
+                this.focusedDate = focusedDate;
               } else {
-                this.selectedDate = this.focusedDate;
+                this.selectedDate = focusedDate;
               }
               break;
             case 'home':
