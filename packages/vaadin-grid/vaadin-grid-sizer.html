@@ -8,7 +8,7 @@
         position: relative;
         width: 100%;
         visibility: hidden;
-        transform: translateY(-100%);
+        line-height: 0;
       }
 
       .cell {
@@ -31,22 +31,22 @@
       properties: {
         columnTree: Array,
 
-        scrollHeight: Number,
+        top: Number,
 
         _columns: Array
       },
 
       observers: [
         '_columnTreeChanged(columnTree)',
-        '_scrollHeightChanged(scrollHeight)'
+        '_topChanged(top)'
       ],
 
       _columnTreeChanged: function(columnTree) {
         this._columns = columnTree[columnTree.length - 1];
       },
 
-      _scrollHeightChanged: function(scrollHeight) {
-        this.style.top = scrollHeight + 'px';
+      _topChanged: function(top) {
+        this.style.top = top + 'px';
       }
     });
   </script>

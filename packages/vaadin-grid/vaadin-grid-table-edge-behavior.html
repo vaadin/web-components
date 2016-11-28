@@ -42,7 +42,7 @@
 
     _translateStationaryElements: function() {
       this.$.items.style.transform =
-        this._getTranslate3d(-this._scrollLeft || 0, -this._scrollPosition || 0);
+        this._getTranslate3d(-this._scrollLeft || 0, -this._scrollTop || 0);
 
       this.$.footer.style.transform = this.$.header.style.transform =
         this._getTranslate3d(-this._scrollLeft || 0, 0);
