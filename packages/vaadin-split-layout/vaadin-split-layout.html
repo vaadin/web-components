@@ -175,9 +175,7 @@ Custom property | Description | Default
           // Pure zero does not play well in Safari
           flexBasis = 0.000001;
         }
-        ['-ms-flex', '-webkit-flex', 'flex'].forEach(function(prop) {
-          element.style[prop] = '1 1 ' + flexBasis + 'px';
-        });
+        element.style.flex = '1 1 ' + flexBasis + 'px';
       },
 
       _onHandleTrack: function(event) {
