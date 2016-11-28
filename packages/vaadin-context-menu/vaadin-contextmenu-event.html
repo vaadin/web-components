@@ -30,10 +30,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this.info.touchJob.stop();
         }
         this.info.touchJob = null;
+        this.info.touchStartCoords = null;
       },
 
       touchstart: function(e) {
         this.info.sourceEvent = e;
+        this.info.touchStartCoords = {
+          x: e.changedTouches[0].clientX,
+          y: e.changedTouches[0].clientY
+        };
+
         this.info.touchJob = Polymer.Debounce(this.info.touchJob, function() {
           var t = Polymer.Gestures.findOriginalTarget(e);
           var ct = e.changedTouches[0];
@@ -45,9 +51,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       touchmove: function(e) {
         var moveThreshold = 15;
-        var startTouch = this.info.sourceEvent.changedTouches[0];
-        if (Math.abs(startTouch.clientX - e.changedTouches[0].clientX) > moveThreshold ||
-            Math.abs(startTouch.clientY - e.changedTouches[0].clientY) > moveThreshold) {
+        var touchStartCoords = this.info.touchStartCoords;
+        if (Math.abs(touchStartCoords.x - e.changedTouches[0].clientX) > moveThreshold ||
+            Math.abs(touchStartCoords.y - e.changedTouches[0].clientY) > moveThreshold) {
           this.info.touchJob.stop();
         }
       },
