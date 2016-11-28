@@ -10,7 +10,6 @@
     "gulp-html-extract": "^0.1.0",
     "gulp-eslint": "^3.0.1",
     "eslint-plugin-html": "^1.7.0",
-    "gulp-sourcemaps": "^1.6.0",
     "web-component-tester": "4.0.3",
     "yargs": "^3.27.0"
   },

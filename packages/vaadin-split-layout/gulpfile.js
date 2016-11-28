@@ -5,7 +5,6 @@ var wct = require('web-component-tester').test;
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
-var sourcemaps = require('gulp-sourcemaps');
 
 function cleanDone(done) {
   return function(error) {
