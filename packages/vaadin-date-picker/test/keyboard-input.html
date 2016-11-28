@@ -107,14 +107,6 @@
           expect(datepicker.opened).to.be.true;
         });
 
-        it('should focus the input on open', function(done) {
-          var spy = sinon.spy(datepicker, '_focus');
-          open(function() {
-            expect(spy.called).to.be.true;
-            done();
-          });
-        });
-
         it('should not focus with unparseable date', function() {
           inputChar('j');
 
@@ -322,33 +314,20 @@
 
         });
 
-        describe('arrow keys', function() {
-
-          it('should forward up/down to overlay', function(done) {
-            open(function() {
-              arrowUp();
-              expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
-              done();
-            });
+        it('should not forward up/down to overlay when closed', function(done) {
+          datepicker.addEventListener('iron-overlay-opened', function() {
+            expect(datepicker._focusedDate.getDate()).to.eql(new Date().getDate());
+            done();
           });
+          arrowUp();
+        });
 
-          it('should not forward left/right to overlay when input has text', function(done) {
-            datepicker.value = '2000-01-01';
-            open(function() {
-              arrowLeft();
-              expect(datepicker._focusedDate.getDate()).to.eql(1);
-              done();
-            });
+        it('should forward up/down to overlay', function(done) {
+          open(function() {
+            arrowUp();
+            expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
+            done();
           });
-
-          it('should forward left/right to overlay when input is empty', function(done) {
-            open(function() {
-              arrowLeft();
-              expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
-              done();
-            });
-          });
-
         });
 
         describe('esc behavior', function() {
@@ -567,6 +546,23 @@
                 done();
               }, 1);
             });
+          });
+
+          it('should not focus overlay on key-input', function(done) {
+            var listener1 = function() {
+              datepicker.removeEventListener('iron-overlay-opened', listener1);
+              datepicker.close();
+              var spy = sinon.spy(datepicker.$.overlay, 'focus');
+
+              datepicker.addEventListener('iron-overlay-opened', function() {
+                expect(spy.called).to.be.false;
+                done();
+              });
+              inputText('1');
+
+            };
+            datepicker.addEventListener('iron-overlay-opened', listener1);
+            arrowUp();
           });
 
         });
