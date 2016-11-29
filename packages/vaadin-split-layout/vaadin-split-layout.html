@@ -154,7 +154,7 @@ Custom property | Description | Default
 
       _processChildren: function() {
         var children = this.getEffectiveChildren();
-        var layouts = children.filter(function(child, i) {
+        children.filter(function(child) {
           return !child.classList.contains('splitter-handle');
         }).forEach(function(child, i) {
           if (i === 0) {
