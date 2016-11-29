@@ -63,7 +63,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.fire(e.target, e.clientX, e.clientY);
       },
 
-      // tap is fired on touchend – this is the easiest way to stop it from bubbling.
+      // tap is fired on touchend – this is the easiest way to stop it from bubbling.
       tap: function(e) {
         if (this.info.touchJob) {
           this.info.touchJob.stop();
