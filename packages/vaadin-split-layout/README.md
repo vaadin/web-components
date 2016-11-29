@@ -6,6 +6,43 @@
 
 [&lt;vaadin-split-layout&gt;](https://vaadin.com/elements/-/element/vaadin-split-layout) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
+<!---
+```
+<custom-element-demo height="218">
+  <template>
+    <style>
+     vaadin-split-layout {
+       height: 200px;
+     }
+     vaadin-split-layout > div {
+       font-family: sans-serif;
+       background: #e0e0e0;
+       display:flex;
+       justify-content:center;
+       align-items:center;
+     }
+    </style>
+    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="vaadin-split-layout.html">
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
+```html
+<vaadin-split-layout>
+  <vaadin-split-layout vertical>
+    <div>First layout content</div>
+    <div>Second layout content</div>
+  </vaadin-split-layout>
+  <vaadin-split-layout vertical>
+    <div>Third layout content</div>
+    <div>Fourth layout content</div>
+  </vaadin-split-layout>
+</vaadin-split-layout>
+```
+
+
 <!--- ## Getting started --->
 
 <!--- Visit https://vaadin.com/elements/-/element/vaadin-split-layout for features, demos and documentation. --->
