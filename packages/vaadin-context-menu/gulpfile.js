@@ -2,8 +2,7 @@ var args = require('yargs').argv;
 var chalk = require('chalk');
 var wct = require('web-component-tester').test;
 var gulp = require('gulp');
-var jscs = require('gulp-jscs');
-var jshint = require('gulp-jshint');
+var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
 
 function cleanDone(done) {
@@ -83,12 +82,9 @@ gulp.task('lint:js', function() {
         '*.js',
         'test/*.js'
       ])
-      .pipe(jshint())
-      .pipe(jshint.reporter())
-      .pipe(jshint.reporter('fail'))
-      .pipe(jscs())
-      .pipe(jscs.reporter())
-      .pipe(jscs.reporter('fail'));
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
 });
 
 gulp.task('lint:html', function() {
@@ -101,12 +97,9 @@ gulp.task('lint:html', function() {
         sel: 'script, code-example code',
         strip: true
       }))
-      .pipe(jshint())
-      .pipe(jshint.reporter())
-      .pipe(jshint.reporter('fail'))
-      .pipe(jscs())
-      .pipe(jscs.reporter())
-      .pipe(jscs.reporter('fail'));
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
 });
 
 gulp.task('test:desktop:shadow', function(done) {
