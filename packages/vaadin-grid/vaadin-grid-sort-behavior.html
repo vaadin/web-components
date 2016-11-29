@@ -14,11 +14,8 @@
         padding-right: 8px;
       }
 
-      #indicators[direction=desc] #direction {
-        transform: rotateZ(180deg);
-      }
-
-      #indicators:not([direction]) {
+      :host(:not([direction])) #order,
+      :host(:not([direction])) #indicators:before {
         opacity: 0.2;
       }
 
@@ -27,13 +24,22 @@
         right: 0;
         top: 0;
         transform: translateY(-4px) scale(0.7);
+        @apply(--vaadin-grid-sorter-order);
       }
 
+      #indicators:before {
+        content: "▲";
+        display: block;
+        @apply(--vaadin-grid-sorter-indicator);
+      }
+
+      :host([direction=desc]) #indicators:before {
+        transform: rotateZ(180deg);
+      }
     </style>
 
     <content></content>
-    <div id="indicators" direction$="[[direction]]">
-      <div id="direction">▲</div>
+    <div id="indicators">
       <div id="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 

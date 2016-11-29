@@ -7,15 +7,30 @@
       is: 'x-data-source',
 
       properties: {
+
+        loading: {
+          type: Boolean,
+          notify: true
+        },
+
+        delay: {
+          type: Number,
+          value: 0
+        },
+
         dataSource: {
           notify: true,
           value: function() {
+            var _this = this;
             return function(opts, callback) {
               var items = Array.apply( null, { length: opts.pageSize } ).map(function(item, index) {
                 return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
               });
-
-              callback(items);
+              _this.loading = true;
+              setTimeout(function() {
+                callback(items);
+                _this.loading = false;
+              }, _this.delay);
             };
           }
         }

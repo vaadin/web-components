@@ -1,0 +1,469 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-grid – Theming</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Templating</a></li>
+        <li><a href="selection.html">Selection</a></li>
+        <li><a href="columns.html">Column Properties</a></li>
+        <li><a href="sorting-filtering.html">Sorting and Filtering</a></li>
+        <li><b>Theming</b></li>
+      </ul>
+    </nav>
+
+    <h3>Theming Example 1</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+
+          <style is="custom-style">
+            vaadin-grid#valo-grid {
+              position: relative;
+              font: 300 16px/1.55 "Open Sans", sans-serif;
+              -webkit-font-smoothing: antialiased;
+              border-color: #d4d4d4;
+
+              --vaadin-grid-cell: {
+                border-color: #d4d4d4 !important;
+                padding: 0 18px;
+                line-height: 38px;
+                min-height: 38px;
+                border-right: 1px solid #d4d4d4;
+                box-sizing: border-box;
+              }
+
+              --vaadin-grid-header-cell: {
+                border-bottom: 1px solid #d4d4d4;
+                background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
+                min-height: 38px;
+              }
+
+              --vaadin-grid-footer-cell: {
+                background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
+              }
+
+              --vaadin-grid-cell-last-frozen: {
+                box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
+              }
+
+              --vaadin-grid-body-row-active-cell: {
+                background-image: linear-gradient(to bottom,#1b87e3 2%, #166ed5 98%);
+                color: #c8dbed;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+                border-right-color: #1d69b4;
+              }
+
+              --vaadin-grid-body-row-odd-cell: {
+                background-color: #f5f5f5;
+              }
+
+              --vaadin-grid-loading-spinner: {
+                display: none;
+              }
+
+              --vaadin-grid-body-cell: {
+                transition: opacity 0.2s;
+              }
+
+              --vaadin-grid-loading-body-cell: {
+                opacity: 0.2;
+              }
+
+            }
+
+            vaadin-grid#valo-grid vaadin-grid-sorter {
+
+              --vaadin-grid-sorter-indicator: {
+                content: "⬆";
+                transition: all 0.3s;
+              }
+            }
+
+            vaadin-grid#valo-grid vaadin-grid-filter {
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 0;
+              bottom: 0px;
+              padding: 5px;
+            }
+
+            vaadin-grid#valo-grid .grouptitle {
+              text-align: center;
+              font-weight: bold;
+            }
+
+            vaadin-grid#valo-grid input {
+              width: 100%;
+              box-sizing: border-box;
+            }
+
+            @keyframes loading-expand {
+              0% {
+                transform: scaleX(0);
+              },
+              100% {
+                transform: scaleX(1);
+              }
+            }
+
+            vaadin-grid#valo-grid:before {
+              content: "";
+              width: 100%;
+              position: absolute;
+              height: 4px;
+              background:var(--primary-color);
+              z-index: 1;
+              opacity: 0.5;
+              transform-origin: left;
+              opacity: 0;
+              transition: opacity 0.2s;
+            }
+
+            vaadin-grid#valo-grid[loading]:before {
+              opacity: 1;
+              animation: loading-expand 1s linear;
+            }
+
+          </style>
+
+          <x-data-source data-source="{{dataSource}}" loading="{{_loading}}" delay="1000"></x-data-source>
+
+          <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]">
+
+            <vaadin-grid-column-group frozen>
+              <template class="header"></template>
+
+              <vaadin-grid-column-group frozen>
+                <template class="header">Username</template>
+
+                <vaadin-grid-column width="150px" flex="0" frozen>
+                  <template class="header">
+                    <vaadin-grid-filter path="user.username">
+                      <input placeholder="Filter">
+                    </vaadin-grid-filter>
+                  </template>
+                  <template>[[item.user.username]]</template>
+                  <template class="footer">Footer</template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+            </vaadin-grid-column-group>
+
+            <vaadin-grid-column-group>
+              <template class="header">
+                <div class="grouptitle">Name</div>
+              </template>
+
+              <vaadin-grid-column-group>
+                <template class="header">
+                  <vaadin-grid-sorter path="user.name.first">
+                    First Name
+                  </vaadin-grid-sorter>
+                </template>
+
+                <vaadin-grid-column width="200px" flex="0">
+                  <template class="header"></template>
+                  <template>[[item.user.name.first]]</template>
+                  <template class="footer"></template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+              <vaadin-grid-column-group>
+                <template class="header">
+                  <vaadin-grid-sorter path="user.name.last">
+                    Last Name
+                  </vaadin-grid-sorter>
+                </template>
+                <vaadin-grid-column width="200px" flex="0">
+                  <template class="header"></template>
+                  <template>[[item.user.name.last]]</template>
+                  <template class="footer"></template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+            </vaadin-grid-column-group>
+
+            <vaadin-grid-column-group>
+              <template class="header">
+                <div class="grouptitle">Location</div>
+              </template>
+
+              <vaadin-grid-column-group>
+                <template class="header">City</template>
+
+                <vaadin-grid-column width="200px" flex="0">
+                  <template class="header"></template>
+                  <template>[[item.user.name.first]]</template>
+                  <template class="footer"></template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+              <vaadin-grid-column-group>
+                <template class="header">State</template>
+                <vaadin-grid-column width="200px" flex="0">
+                  <template class="header"></template>
+                  <template>[[item.user.name.last]]</template>
+                  <template class="footer"></template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+            </vaadin-grid-column-group>
+
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Theming Example 2</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind" id="theming2-template">
+          <style is="custom-style">
+            vaadin-grid#transparent-header {
+              font: 500 13px "Open Sans", sans-serif;
+              color: rgb(148, 154, 171);
+              border-color: rgb(223, 232, 239);
+
+              --vaadin-grid-cell: {
+                border-color: rgb(223, 232, 239) !important;
+                padding: 0 13px;
+              }
+
+              --vaadin-grid-body-cell: {
+                height: 65px;
+              }
+
+              --vaadin-grid-header-cell: {
+                background: rgba(235, 238, 246, 0.9);
+                border-bottom: 1px solid rgba(208, 217, 225, 0.9);
+                border-top: 1px solid rgba(248, 250, 252, 0.9);
+                min-height: 35px;
+
+                background-image: linear-gradient(rgba(108, 160, 218,0), rgba(108, 160, 218,0.15));
+                background-size: 1px 100%;
+                background-position: 100% 0%;
+                background-repeat: no-repeat;
+              }
+
+              --vaadin-grid-body-row-selected-cell: {
+                background-color: rgb(131, 183, 236);
+                color: #fff;
+                border-bottom-color: rgb(108, 160, 218);
+              }
+
+              --vaadin-grid-body-row-odd-cell: {
+                background-color: rgb(251, 252, 254);
+              }
+
+              --vaadin-grid-body-row-hover-cell: {
+                background-color: rgb(235, 238, 246);
+              }
+
+              --vaadin-grid-body-row-details-cell: {
+                text-align: center;
+              }
+
+            }
+
+            vaadin-grid#transparent-header input[type=checkbox] {
+              height: 16px;
+              width: 16px;
+            }
+
+            vaadin-grid#transparent-header .image {
+              height: 40px;
+              width: 40px;
+              display: inline-block;
+              border-radius: 50%;
+              vertical-align: middle;
+              margin-right: 15px;
+            }
+
+            vaadin-grid#transparent-header .header-content {
+              display: flex;
+              padding: 16px;
+              justify-content: space-between;
+            }
+
+            vaadin-grid#transparent-header .details-cell {
+              background: #fff;
+              width: 100%;
+            }
+          </style>
+
+          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <vaadin-grid id="transparent-header" items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
+            <template class="row-details">
+              <div class="details-cell">
+                <h1>Hi, I'm [[item.user.name.first]]</h1>
+              </div>
+            </template>
+
+            <vaadin-grid-column-group>
+              <template class="header">
+                <div class="header-content">
+                  <b>1-200 of 15,554</b>
+                  <input placeholder="Search profiles">
+                </div>
+              </template>
+
+              <vaadin-grid-column width="45px" flex="0">
+                <template>
+                  <input type="checkbox" checked="{{selected::change}}">
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">Name</template>
+                <template>
+                  <div>
+                    <img class="image" src="[[item.user.picture.thumbnail]]">
+                    <span>[[item.user.name.first]]&nbsp;[[item.user.name.last]]</span>
+                  </div>
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">Email</template>
+                <template>[[item.user.email]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">City</template>
+                <template>[[item.user.location.city]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">State</template>
+                <template>[[item.user.location.state]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+
+          </vaadin-grid>
+        </template>
+        <script>
+          var theming2Template = document.querySelector("#theming2-template");
+
+          theming2Template._activeItemChanged = function(e) {
+            var grid = e.target;
+            this._clickedItem = grid.activeItem ? grid.activeItem : this._clickedItem;
+
+            if (grid.expandedItems.indexOf(this._clickedItem) > -1) {
+              grid.collapseItem(this._clickedItem);
+            } else {
+              grid.expandItem(this._clickedItem);
+            }
+          };
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Theming Example 3</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            vaadin-grid#rounded-rows {
+              font: 300 14px "Open Sans", sans-serif;
+              color: rgb(222, 230, 233);
+              background: rgb(80, 91, 102);
+              border: none;
+              padding: 8px;
+
+
+              --vaadin-grid-cell: {
+                background: rgb(80, 91, 102);
+                border: none !important;
+              }
+
+              --vaadin-grid-body-cell: {
+                padding: 0;
+                padding-bottom: 10px;
+              }
+
+              --vaadin-grid-header-cell: {
+                text-transform: uppercase;
+                padding: 0 15px;
+              }
+
+            }
+
+            vaadin-grid#rounded-rows .bodycell {
+              padding: 15px;
+              background: rgb(90, 103, 116);
+              border-top: 1px solid rgb(105, 118, 132);
+              border-bottom: 1px solid rgb(105, 118, 132);
+            }
+
+            vaadin-grid#rounded-rows .left {
+              border-left: 1px solid rgb(105, 118, 132);
+              border-radius: 3px 0 0 3px;
+              margin-left: 8px;
+            }
+
+            vaadin-grid#rounded-rows .right {
+              margin-right: 8px;
+              border-right: 1px solid rgb(105, 118, 132);
+              border-radius: 0 3px 3px 0;
+            }
+
+          </style>
+
+          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <vaadin-grid id="rounded-rows" items="[[items]]" size="200">
+
+            <vaadin-grid-column>
+              <template class="header">Name</template>
+              <template>
+                <div class="bodycell left">[[item.user.name.first]]</div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+              <template class="header">Email</template>
+              <template>
+                <div class="bodycell">[[item.user.email]]</div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+              <template class="header">City</template>
+              <template>
+                <div class="bodycell">[[item.user.location.city]]</div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+              <template class="header">State</template>
+              <template>
+                <div class="bodycell right">[[item.user.location.state]]</div>
+              </template>
+            </vaadin-grid-column>
+
+          </vaadin-grid>
+        </template>
+
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+
+</html>

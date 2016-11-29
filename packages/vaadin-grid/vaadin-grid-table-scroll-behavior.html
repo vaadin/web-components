@@ -97,6 +97,11 @@
         value: function() {
           return [];
         }
+      },
+
+      scrolling: {
+        type: Boolean,
+        reflectToAttribute: true
       }
     },
 
@@ -189,7 +194,9 @@
     },
 
     _scheduleReorder: function() {
+      this.scrolling = true;
       this.debounce('reorderrows', function() {
+        this.scrolling = false;
         var tbody = Polymer.dom(this.$.items);
         var items = tbody.querySelectorAll('tr');
         var _adjustedVirtualStart = this._virtualStart + this._vidxOffset;

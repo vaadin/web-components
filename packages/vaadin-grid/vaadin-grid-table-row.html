@@ -115,6 +115,7 @@
           cell.index = this.index;
           cell.target = this.target;
           cell._isColumnRow = this._isColumnRow;
+          cell.toggleAttribute('lastcolumn', columnIndex === columns.length - 1);
           cell.column = column;
 
           Polymer.dom(this).appendChild(cell);
@@ -126,7 +127,6 @@
       },
 
       _indexChanged: function(index, cells, _rowDetailsCell) {
-        this.toggleAttribute('odd', index % 2);
         cells.forEach(function(cell) {
           cell.index = index;
         });

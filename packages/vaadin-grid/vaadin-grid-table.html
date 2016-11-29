@@ -10,14 +10,15 @@
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-selection-behavior.html">
+<link rel="import" href="vaadin-grid-theme.html">
 <link rel="import" href="iron-list-behavior.html">
+
 
 <dom-module id="vaadin-grid-table">
   <template>
     <style include="vaadin-grid-table-scroll-styles"></style>
     <style include="vaadin-grid-row-details-styles"></style>
     <style include="vaadin-grid-data-source-styles"></style>
-    <style include="vaadin-grid-selection-styles"></style>
 
     <style>
       :host {
@@ -61,7 +62,6 @@
         display: block;
         overflow: auto;
         box-sizing: border-box;
-        background: #fff;
       }
 
       [overflow-hidden] {
@@ -75,37 +75,24 @@
       thead th,
       tfoot td {
         top: 0;
-        background-color: #fff;
-        font-weight: 500;
       }
 
       td, th {
-        background-color: #fff;
-        padding: 0 !important;
+        padding: 0;
         flex-shrink: 0;
         flex-grow: 1;
-        width: 100px;
         box-sizing: border-box;
         display: flex;
-        overflow: hidden;
       }
 
-      /* Selector for non-shadow */
-      td::content > .cell-content,
-      th::content > .cell-content,
-      /* Selector for shadow */
-      ::content > .cell-content {
-         padding: 8px;
+      td ::content > .cell-content,
+      th ::content > .cell-content {
          width: 100%;
-         box-sizing: border-box;
-         display: flex;
+         display: inline-flex;
          justify-content: center;
          flex-direction: column;
          white-space: nowrap;
-       }
-
-      tr:hover td {
-        /*background-color: lightgrey;*/
+         overflow: hidden;
       }
 
       tr:not([hidden]) {
@@ -134,37 +121,11 @@
       ::content > vaadin-grid-column-group {
         display: none;
       }
-
-      /* Theme styles */
-      :host {
-        box-sizing: border-box;
-        border: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      thead[has-templates] tr:last-child th {
-        border-bottom: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      tfoot[has-templates] tr:first-child td {
-        border-top: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      tbody tr td {
-        border-bottom: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      td, th {
-        text-align: left;
-      }
-
-      tr[odd] td {
-      }
-
-      [last-frozen] {
-        border-right: 1px solid var(--vaadin-grid-border-color);
-      }
     </style>
+    <style include="vaadin-grid-theme-styles"></style>
+
     <content select="vaadin-grid-column, vaadin-grid-selection-column, vaadin-grid-column-group"></content>
+
     <div id="spinner"></div>
     <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>
@@ -367,6 +328,8 @@
         }
         el.index = vidx + this._vidxOffset;
         this._virtualIndexToItem[el.index] = el;
+        el.toggleAttribute('odd', el.index % 2);
+        el.toggleAttribute('lastrow', el.index === this.size - 1);
         el.toggleAttribute('hidden', el.index >= this.size);
         this.bindData(el.index, el);
       }, itemSet);
