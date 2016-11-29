@@ -140,8 +140,8 @@ This program is available under Apache License Version 2.0, available at https:/
     _finishInit: function() {
       if (!this._initDone) {
         // Once the first set of items start fading in, stamp the rest
-        this._buffers.forEach(function(buffer, bufferIndex) {
-          [].forEach.call(buffer.children, function(itemWrapper, index) {
+        this._buffers.forEach(function(buffer) {
+          [].forEach.call(buffer.children, function(itemWrapper) {
             this._ensureStampedInstance(itemWrapper);
           }.bind(this));
         }, this);
@@ -179,7 +179,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._buffers.reverse();
     },
 
-    _scroll: function(e, doUpdateClones) {
+    _scroll: function() {
       var scrollTop = this.$.scroller.scrollTop;
       if (scrollTop < this._bufferHeight || scrollTop > this._initialScroll * 2 - this._bufferHeight) {
         // Scrolled near the end/beginning of the scrollable area -> reset.

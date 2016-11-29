@@ -126,8 +126,8 @@
       });
 
       it('should have an instance stamped to every wrapper', function(done) {
-        scroller._buffers.forEach(function(buffer, bufferIndex) {
-          [].forEach.call(buffer.children, function(itemWrapper, index) {
+        scroller._buffers.forEach(function(buffer) {
+          [].forEach.call(buffer.children, function(itemWrapper) {
             expect(itemWrapper.firstElementChild).to.be.ok;
           }.bind(this));
         }, this);
