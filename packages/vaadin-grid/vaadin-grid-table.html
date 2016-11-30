@@ -34,8 +34,12 @@
       }
 
       #items {
-        @apply(--iron-list-items-container);
         position: relative;
+      }
+
+      #items,
+      #fixedsizer,
+      #outersizer {
         border-top: 0 solid transparent;
         border-bottom: 0 solid transparent;
       }
@@ -165,7 +169,7 @@
     <div id="spinner"></div>
     <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>
-        <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" column-tree="[[columnTree]]">
+        <div id="fixedsizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]">
         </div>
       </caption>
       <thead id="header" is="vaadin-grid-table-header" column-tree="[[columnTree]]"></thead>
@@ -174,7 +178,7 @@
     </table>
 
     <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]" ios$=[[ios]]>
-      <div is="vaadin-grid-sizer" scroll-height="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
+      <div id="outersizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
     </vaadin-grid-table-outer-scroller>
 
   </template>
@@ -284,8 +288,13 @@
       });
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
-        this.$.outerscroller.style.paddingTop = this.$.items.style.borderTopWidth = this.$.header.clientHeight + 'px';
-        this.$.outerscroller.style.paddingBottom = this.$.items.style.borderBottomWidth = this.$.footer.clientHeight + 'px';
+        var headerHeight = this.$.header.clientHeight + 'px';
+        var footerHeight = this.$.footer.clientHeight + 'px';
+
+        [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
+          element.style.borderTopWidth = headerHeight;
+          element.style.borderBottomWidth = footerHeight;
+        });
       }.bind(this));
     },
 
