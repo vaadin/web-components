@@ -70,7 +70,7 @@ See the [contribution instructions](https://github.com/vaadin/vaadin-core-elemen
 
 ## Development
 
-See the [development instructions](https://github.com/vaadin/vaadin-core-elements#development) which apply to all Vaadin core elements.
+See the [development instructions](https://github.com/vaadin/vaadin-core-elements/blob/master/DEVELOPMENT.md) which apply to all Vaadin core elements.
 
 ## License
 
