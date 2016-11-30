@@ -126,7 +126,16 @@
         expect(combobox.value).to.eql('default');
       });
 
-      it('should set the selected item', function() {
+      it('should set the selected item when open', function() {
+        combobox.value = 'bar';
+
+        expect(combobox.selectedItem).to.eql(combobox.items[0]);
+        expect(combobox.$.input.bindValue).to.eql('foo');
+      });
+
+      it('should set the selected item when closed', function() {
+        combobox.opened = false;
+
         combobox.value = 'bar';
 
         expect(combobox.selectedItem).to.eql(combobox.items[0]);

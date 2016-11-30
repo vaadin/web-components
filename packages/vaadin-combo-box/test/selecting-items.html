@@ -45,7 +45,20 @@
         bubbles: true
       }));
       document.removeEventListener('tap', tapSpy);
-      expect(tapSpy.called).not.to.be.true;
+      expect(tapSpy.calledOnce).not.to.be.true;
+    });
+
+    it('should fire `selection-changed` when tapped on an item', function() {
+      combobox.opened = true;
+      var spy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', spy);
+
+      Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item').dispatchEvent(new CustomEvent('tap', {
+        bubbles: true
+      }));
+
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.args[0][0].detail.item).to.eql(combobox.items[0]);
     });
 
     it('should select by using JS api', function() {

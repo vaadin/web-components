@@ -11,8 +11,8 @@
   vaadin.elements.combobox.ComboBoxBehaviorImpl = {
     properties: {
       /**
-       * An array of values to be filtered for as options in the dropdown. The
-       * options can be of either `String` or `Object` type.
+       * A full set of items to filter the visible options from.
+       * The items can be of either `String` or `Object` type.
        */
       items: {
         type: Array
@@ -30,8 +30,9 @@
       },
 
       /**
-       * An array of values to be displayed in the list of options. The
-       * options can be of either `String` or `Object` type.
+       * A subset of items, filtered based on the user input. Filtered items
+       * can be assigned directly to omit the internal filtering functionality.
+       * The items can be of either `String` or `Object` type.
        */
       filteredItems: {
         type: Array
@@ -65,7 +66,7 @@
       },
 
       /*
-       * When set to `true`, as loading spinner is displayed on top of the list of options.
+       * When set to `true`, a loading spinner is displayed on top of the list of options.
        */
       loading: {
         type: Boolean,
@@ -78,7 +79,7 @@
       },
 
       /**
-       * String used for filtering items.
+       * Filtering string the user has typed into the input field.
        */
       filter: {
         type: String,
@@ -346,7 +347,7 @@
     },
 
     _onOpened: function() {
-      this.$.overlay.hidden = !this._hasItems(this.$.overlay._items);
+      this.$.overlay.hidden = !this._hasItems(this.$.overlay._items) && !this.loading;
 
       // With iron-list v1.3.9, calling `notifyResize()` no longer renders
       // the items synchonously. It is required to have the items rendered

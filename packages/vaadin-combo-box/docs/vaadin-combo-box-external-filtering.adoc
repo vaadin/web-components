@@ -19,7 +19,8 @@ how to customize the filtering on the client side.
 == Custom Filtering
 
 By default, the internal client side filtering is run every time the user types something
-into the input field. To bypass that, you can set an pre-filtered array of items into [propertyname]#filteredItems#.
+into the input field. To bypass that, you should set an pre-filtered array of items
+into [propertyname]#filteredItems# instead of using [propertyname]#items#.
 
 When you want to customize filtering on the client side, you can listen for changes
 on the [propertyname]#filter# and update [propertyname]#filteredItems# based on any criteria.
