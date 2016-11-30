@@ -196,7 +196,7 @@ Custom property | Description | Default
        * @param {Event} e used as the context for the menu. Overlay coordinates are taken from this event.
        */
       open: function(e) {
-        if (!!e) {
+        if (e) {
           this._context = {
             detail: e.detail,
             target: this._contextTarget(e)
