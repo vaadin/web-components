@@ -169,7 +169,7 @@
       });
 
       expect(combobox.value).to.eql('');
-      expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
+      expect(combobox.$.overlay._selectedItem).to.be.null;
     });
 
     it('should close the dropdown after clearing a selection', function() {

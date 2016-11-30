@@ -462,7 +462,7 @@
         this._inputElementValue = this.allowCustomValue ? value : '';
         this._setSelectedItem(null);
         this._focusedIndex = -1;
-        this.$.overlay.$.selector.clearSelection();
+        this.$.overlay._selectedItem = null;
       }
 
       this.fire('change', undefined, {bubbles: true});
