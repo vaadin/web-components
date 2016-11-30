@@ -73,15 +73,24 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       },
 
-      _preventDefault: function(e) {
-        // note: at least in Chrome, even though preventDefault() is called,
-        // the e.target still loses focus.
-        e.preventDefault();
-        e.stopPropagation();
-      },
-
       _phoneChanged: function(phone) {
         this.withBackdrop = phone;
+        if (phone) {
+          // Prevent scrolling body when swiping the backdrop
+          this.backdropElement.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+          });
+          // Prevent scrolling body when swiping the overlay, but
+          // only in the case of scroll position is at the edges.
+          this.addEventListener('touchstart', function(e) {
+            if (!this.scrollTop) {
+              this.scrollTop++;
+            }
+            if (this.scrollHeight == this.offsetHeight + this.scrollTop) {
+              this.scrollTop--;
+            }
+          });
+        }
       },
 
       // monkey patching iron-overlay-behavior to cancel overriding transform styles.
