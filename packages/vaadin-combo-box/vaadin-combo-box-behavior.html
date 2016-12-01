@@ -429,11 +429,7 @@
     },
 
     _loadingChanged: function(loading) {
-      this.$.overlay.$.scroller.hidden = loading;
-
       if (loading) {
-        this.$.overlay.hidden = false;
-        this.$.overlay.notifyResize();
         this._focusedIndex = -1;
       }
     },

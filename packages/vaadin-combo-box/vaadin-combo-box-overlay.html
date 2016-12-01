@@ -55,6 +55,7 @@
 
     :host([loading]) {
       /* roughly the size of a list with one item */
+      display: block !important;
       height: 58px;
     }
 
@@ -70,7 +71,7 @@
 
   <template>
     <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-    <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation">
+    <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation" hidden$="[[loading]]">
       <iron-list
           id="selector"
           touch-device$="[[touchDevice]]"
@@ -124,7 +125,8 @@
       loading: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'notifyResize'
       },
 
       _selectedItem: {
