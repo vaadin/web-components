@@ -65,7 +65,7 @@
             delete input.value;
             input.value = 'foo';
 
-            input.addEventListener('click', function(event) {
+            input.addEventListener('click', function() {
               expect(input.value).to.be.empty;
             });
 

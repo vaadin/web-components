@@ -66,7 +66,7 @@
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
       }
-      var total = file && file.size || 1024, done = 0;
+      var total = file && file.size || 1024, done = 0;
       function start() {
         setTimeout(progress, 1000);
       }

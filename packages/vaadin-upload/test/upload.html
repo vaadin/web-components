@@ -18,7 +18,7 @@
 
   <script>
     describe('Uploader', function() {
-      var upload, file, headers;
+      var upload, file;
       beforeEach(function() {
         upload = fixture('upload');
         upload.target = 'http://foo.com/bar';
@@ -126,7 +126,7 @@
 
             // Monkey-patch xhr.open to check the url param passed into
             var originalOpen = e.detail.xhr.open;
-            e.detail.xhr.open = function(method, url, async) {
+            e.detail.xhr.open = function(method, url) {
               expect(url).to.equal(modifiedUrl);
               originalOpen.apply(this, arguments);
               done();
@@ -337,7 +337,7 @@
               upload._abortFileUpload(e.detail.file);
             }
           });
-          upload.addEventListener('file-remove', function(e) {
+          upload.addEventListener('file-remove', function() {
             Polymer.Base.async(function() {
               expect(upload.files.length).to.be.equal(1);
               done();
