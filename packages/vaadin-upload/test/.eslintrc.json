@@ -1,0 +1,25 @@
+{
+  "globals": {
+    "sinon": false,
+    "chai": false,
+    "WCT": false,
+    "describe": false,
+    "describeIf": false,
+    "describeSkipIf": false,
+    "expect": false,
+    "it": false,
+    "before": false,
+    "beforeEach": false,
+    "fixture": false,
+    "xhrCreator": false,
+    "createFiles": false,
+    "createFile": false,
+    "ieOrEdge": false,
+    "touchDevice": false,
+    "System": false,
+    "Uint8Array": false,
+    "MockHttpRequest": false,
+    "MockInteractions": false,
+    "MockTouchInteractions": false
+  }
+}
