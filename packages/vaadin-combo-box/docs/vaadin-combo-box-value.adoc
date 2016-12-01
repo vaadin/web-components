@@ -12,7 +12,7 @@ layout: page
 
 You need to provide the set of items which the user can select with the [propertyname]#items# property.
 Current selection is indicated by the [propertyname]#value# and [propertyname]#selectedItem# properties.
-You can set or change the selection programmatically by setting the [propertyname]#value# property.
+You can set or change the selection programmatically by setting the [propertyname]#value# or [propertyname]#selectedItem# property.
 Doing so also updates the visible fields.
 
 When setting the items declaratively, notice that the attribute value needs to be a valid JSON string. You need to use single quotes for the attribute value and double quotes inside the value (in the JSON string). Alternatively, you can escape the double quotes inside the value.

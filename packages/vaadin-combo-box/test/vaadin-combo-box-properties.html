@@ -86,6 +86,7 @@
 
       describe('allow custom value property', function() {
         beforeEach(function() {
+          comboBox.items = [];
           comboBox.allowCustomValue = true;
         });
 
@@ -154,11 +155,24 @@
       });
 
       describe('selectedItem property', function() {
+        beforeEach(function() {
+          comboBox.items = ['foo'];
+        });
+
         it('should have null by default', function() {
           expect(comboBox.selectedItem).to.be.null;
         });
 
+        it('should set value and input', function() {
+          comboBox.selectedItem = 'foo';
+
+          expect(comboBox.value).to.eql('foo');
+          expect(comboBox.$.input.bindValue).to.eql('foo');
+        });
+
         it('should default back to null when value set to undefined', function() {
+          comboBox.value = 'foo';
+
           comboBox.value = undefined;
 
           expect(comboBox.selectedItem).to.be.null;
@@ -171,7 +185,6 @@
         });
 
         it('should be null after clearing the value', function() {
-          comboBox.items = ['foo'];
           comboBox.value = 'foo';
 
           comboBox._clear();

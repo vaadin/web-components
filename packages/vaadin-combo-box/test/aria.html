@@ -90,11 +90,11 @@
 
       it('should set selection aria attributes when focusing an item', function() {
         comboBox.value = 'foo';
-        arrowDown();
+        arrowDown(); // 'focus moves to 2nd item'
 
         expect(getItemElement(0).getAttribute('role')).to.equal('option');
-        expect(getItemElement(0).getAttribute('aria-selected')).to.equal('true');
-        expect(getItemElement(1).getAttribute('aria-selected')).to.equal('false');
+        expect(getItemElement(0).getAttribute('aria-selected')).to.equal('false');
+        expect(getItemElement(1).getAttribute('aria-selected')).to.equal('true');
       });
 
       it('should change the input value with atomic change', function(done) {
