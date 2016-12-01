@@ -100,12 +100,12 @@ You can change some of its properties via the `--vaadin-split-layout-splitter` m
 </vaadin-split-layout>
 ----
 
-You can customize the handle by replacing the default content by your own implementation. You just have to mark your handle element with the class name `splitter-icon`.
+You can customize the handle by replacing the default content by your own implementation. You just have to mark your handle element with the class name `splitter-handle`.
 
 [source,html]
 ----
 <vaadin-split-layout vertical class="my-split-layout">
-  <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
+  <iron-icon class="splitter-handle" icon="more-vert"></iron-icon>
   <div>First content</div>
   <div>Second content</div>
 </vaadin-split-layout>
@@ -122,8 +122,8 @@ In order to have different icons for vertical and horizontal layouts, add two ic
   }
 </style>
 <vaadin-split-layout vertical class="my-split-layout">
-  <iron-icon class="splitter-icon" icon="more-vert"></iron-icon>
-  <iron-icon class="splitter-icon" icon="more-horiz"></iron-icon>
+  <iron-icon class="splitter-handle" icon="more-vert"></iron-icon>
+  <iron-icon class="splitter-handle" icon="more-horiz"></iron-icon>
   <div>First content</div>
   <div>Second content</div>
 </vaadin-split-layout>
