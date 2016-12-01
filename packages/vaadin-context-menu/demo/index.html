@@ -33,14 +33,19 @@
     <demo-snippet>
       <template>
         <template is="dom-bind" id="container">
-          <vaadin-context-menu selector="a">
+          <style is='custom-style'>
+            .demo-1 {
+              --vaadin-context-menu-overlay: {
+                height: 300px;
+              };
+            }
+            iron-icon {
+              margin-right: 16px;
+            }
+          </style>
+          <vaadin-context-menu class="demo-1" selector="a">
             <template>
-              <style>
-                paper-menu {
-                  width: 100%;
-                }
-              </style>
-              <paper-menu on-iron-select="_selectedItemChanged">
+              <paper-menu class="demo-1" on-iron-select="_selectedItemChanged">
                 <paper-item>Item 1</paper-item>
                 <paper-item>Item 2</paper-item>
                 <paper-item>Item 3</paper-item>
@@ -51,6 +56,11 @@
                     <div secondary>Item 4 - Line 2</div>
                   </paper-item-body>
                 </paper-item>
+                <paper-item>Item 5</paper-item>
+                <paper-item>Item 6</paper-item>
+                <paper-item>Item 7</paper-item>
+                <paper-item>Item 8</paper-item>
+                <paper-item>Item 9</paper-item>
               </paper-menu>
             </template>
             Right click on this <a id="opener" href="#">link</a> to open the context menu.
@@ -86,6 +96,7 @@
                   font-size: 16px;
                   display: flex;
                   align-items: center;
+                  justify-content: top;
                 }
 
                 div[role="option"]:hover {

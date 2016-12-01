@@ -26,11 +26,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host([phone]) {
-        /* width set to make it possible for the user make the contents fit whole screen */
         width: 100vw;
+        max-height: calc(100vh - 48px);
+        overflow: auto;
+        bottom: 24px;
+        padding: 0 24px;
         top: auto !important;
-        bottom: 0;
-        padding: 24px;
+
         transform: none !important;
       }
     </style>
