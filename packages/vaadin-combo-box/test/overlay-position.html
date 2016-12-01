@@ -70,9 +70,6 @@
       var ev = document.createEvent('Event');
       ev.initEvent('resize', true, true);
       window.dispatchEvent(ev);
-    } else { // Old IE
-      var event = document.createEventObject();
-      element.fireEvent('onresize', event);
     }
   }
 

@@ -22,7 +22,6 @@
   describe('selecting a value', function() {
     var combobox;
     var input;
-    var selector;
     var valueChangedSpy;
     var selectedItemChangedSpy;
 
@@ -30,7 +29,6 @@
       combobox = fixture('combobox');
       combobox.items = ['foo', 'bar'];
       input = combobox.$$('input');
-      selector = combobox.$.overlay.$.selector;
       valueChangedSpy = sinon.spy();
       combobox.addEventListener('value-changed', valueChangedSpy);
 
