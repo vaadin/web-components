@@ -6,6 +6,7 @@
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-overlay-behavior.html">
+<link rel="import" href="vaadin-spinner.html">
 
 <dom-module id="vaadin-combo-box-overlay">
   <style>
@@ -52,6 +53,12 @@
       text-overflow: ellipsis;
     }
 
+    :host([loading]) {
+      /* roughly the size of a list with one item */
+      display: block !important;
+      height: 58px;
+    }
+
     #selector:not([touch-device]) .item:hover,
     #selector .item[focused] {
       background: #eee;
@@ -63,19 +70,18 @@
   </style>
 
   <template>
-    <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation">
+    <vaadin-spinner active="[[loading]]"></vaadin-spinner>
+    <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation" hidden$="[[loading]]">
       <iron-list
           id="selector"
           touch-device$="[[touchDevice]]"
           role="listbox"
           on-touchend="_preventDefault"
-          selected-item="{{_selectedItem}}"
           items="[[_items]]"
-          selection-enabled
           scroll-target="[[_getScroller()]]">
         <template>
-          <div class="item"
-              selected$="[[selected]]"
+          <div class="item" on-tap="_onTap"
+              selected$="[[_isItemSelected(item, _selectedItem)]]"
               role$="[[_getAriaRole(index)]]"
               aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
               focused$="[[_isItemFocused(_focusedIndex,index)]]">
@@ -113,9 +119,18 @@
         }
       },
 
+      /*
+       * `true` when new items are being loaded.
+       */
+      loading: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: 'notifyResize'
+      },
+
       _selectedItem: {
-        type: String,
-        notify: true
+        type: Object
       },
 
       _items: {
@@ -159,6 +174,14 @@
       if (focusedIndex >= 0) {
         return this._items[focusedIndex];
       }
+    },
+
+    _isItemSelected: function(item, selectedItem) {
+      return item === selectedItem;
+    },
+
+    _onTap: function(e) {
+      this.fire('selection-changed', {item: e.model.item});
     },
 
     /**

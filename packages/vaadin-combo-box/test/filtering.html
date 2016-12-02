@@ -142,7 +142,7 @@
 
         comboBox.close();
 
-        expect(comboBox._filter).to.be.empty;
+        expect(comboBox.filter).to.be.empty;
       });
 
       it('should filter boolean', function() {
@@ -156,15 +156,15 @@
       it('should show initial selection', function() {
         comboBox.value = 'foo';
         comboBox.open();
-        expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
+
+        expect(comboBox.$.overlay._selectedItem).to.eql('foo');
       });
 
       it('should not lose the selected value', function() {
         comboBox.value = 'foo';
         setInputValue('bar');
-        expect(comboBox.$.overlay.$.selector.selectedItems).to.be.null;
-        setInputValue('');
-        expect(comboBox.$.overlay.$.selector.selectedItems).to.contain('foo');
+
+        expect(comboBox.$.overlay._selectedItem).to.eql('foo');
       });
 
       it('should ignore case', function() {
@@ -208,6 +208,76 @@
         setInputValue('THIS IS NOT FOUND');
 
         expect(comboBox.opened && comboBox.$.overlay.hidden).to.be.true;
+      });
+    });
+
+    describe('external filtering', function() {
+      beforeEach(function() {
+        comboBox.items = undefined;
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+      });
+
+      it('should set items to filteredItems', function() {
+        comboBox.items = ['foo'];
+
+        expect(comboBox.filteredItems).to.eql(['foo']);
+      });
+
+      it('should not filter items', function() {
+        setInputValue('foo');
+
+        expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
+      });
+
+      it('should remove focus while loading', function() {
+        setInputValue('foo');
+        comboBox.filteredItems = ['foo'];
+        expect(comboBox._focusedIndex).to.eql(0);
+
+        comboBox.loading = true;
+
+        expect(comboBox._focusedIndex).to.eql(-1);
+      });
+
+      it('should focus on filtered value', function() {
+        setInputValue('bar');
+        expect(comboBox._focusedIndex).to.eql(-1);
+
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+
+        expect(comboBox._focusedIndex).to.eql(1);
+      });
+
+      it('should focus on value when filter is empty', function() {
+        comboBox.value = 'bar';
+
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+
+        expect(comboBox._focusedIndex).to.eql(1);
+      });
+
+      it('should not hide the overlay while loading', function() {
+        setInputValue('foo');
+
+        comboBox.loading = true;
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox.$.overlay.hidden).to.be.false;
+      });
+
+      it('should hide the scroller while loading', function() {
+        setInputValue('foo');
+
+        comboBox.loading = true;
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox.$.overlay.$.scroller.hidden).to.be.true;
+      });
+
+      it('should refresh items after reassignment', function() {
+        comboBox.filteredItems = ['foo'];
+
+        expect(getFilteredItems()).to.eql(['foo']);
       });
     });
   });

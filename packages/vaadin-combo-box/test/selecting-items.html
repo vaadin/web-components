@@ -45,13 +45,20 @@
         bubbles: true
       }));
       document.removeEventListener('tap', tapSpy);
-      expect(tapSpy.called).not.to.be.true;
+      expect(tapSpy.calledOnce).not.to.be.true;
     });
 
-    it('should select by using the selector', function() {
-      selector.selectedItem = 'foo';
-      expect(combobox.value).to.equal('foo');
-      expect(input.bindValue).to.equal('foo');
+    it('should fire `selection-changed` when tapped on an item', function() {
+      combobox.opened = true;
+      var spy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', spy);
+
+      Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item').dispatchEvent(new CustomEvent('tap', {
+        bubbles: true
+      }));
+
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.args[0][0].detail.item).to.eql(combobox.items[0]);
     });
 
     it('should select by using JS api', function() {
@@ -59,7 +66,8 @@
 
       combobox.open();
 
-      expect(selector.selectedItem).to.equal('foo');
+      expect(combobox.selectedItem).to.equal('foo');
+      expect(combobox.$.overlay._selectedItem).to.equal('foo');
       expect(input.bindValue).to.equal('foo');
     });
 
@@ -105,14 +113,14 @@
     it('should close the dropdown when reselecting the current value', function() {
       combobox.value = 'foo';
       combobox.open();
-      combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
+      combobox.$.overlay.fire('selection-changed', {items: [combobox.items[0]]});
       expect(combobox.opened).to.be.false;
     });
 
     it('should not fire an event when reselecting the current value', function() {
       combobox.value = 'foo';
       valueChangedSpy.reset();
-      combobox.$.overlay.$.selector.toggleSelectionForItem('foo');
+      combobox.$.overlay.fire('selection-changed', {items: [combobox.items[0]]});
       expect(valueChangedSpy.callCount).to.equal(0);
     });
 
@@ -161,7 +169,7 @@
       });
 
       expect(combobox.value).to.eql('');
-      expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
+      expect(combobox.$.overlay._selectedItem).to.be.null;
     });
 
     it('should close the dropdown after clearing a selection', function() {
@@ -206,6 +214,7 @@
 
     it('should clear the selection when closing the overlay and input is cleared', function() {
       combobox.value = 'foo';
+      combobox.open();
 
       combobox.$.input.bindValue = '';
       combobox.$.input.fire('input');

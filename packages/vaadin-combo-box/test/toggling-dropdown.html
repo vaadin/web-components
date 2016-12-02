@@ -216,6 +216,14 @@
         });
       }
 
+      it('should not close when tapping on the overlay', function() {
+        combobox.open();
+
+        combobox.$.overlay.fire('tap');
+
+        expect(combobox.opened).to.be.true;
+      });
+
       it('should close on clicking icon', function() {
         combobox.open();
 

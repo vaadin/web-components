@@ -11,8 +11,8 @@
   vaadin.elements.combobox.ComboBoxBehaviorImpl = {
     properties: {
       /**
-       * An array of values to be displayed as options in the dropdown. The
-       * options can be of either `String` or `Object` type.
+       * A full set of items to filter the visible options from.
+       * The items can be of either `String` or `Object` type.
        */
       items: {
         type: Array
@@ -27,6 +27,15 @@
       allowCustomValue: {
         type: Boolean,
         value: false
+      },
+
+      /**
+       * A subset of items, filtered based on the user input. Filtered items
+       * can be assigned directly to omit the internal filtering functionality.
+       * The items can be of either `String` or `Object` type.
+       */
+      filteredItems: {
+        type: Array
       },
 
       /**
@@ -56,14 +65,26 @@
         reflectToAttribute: true
       },
 
+      /*
+       * When set to `true`, a loading spinner is displayed on top of the list of options.
+       */
+      loading: {
+        type: Boolean,
+        value: false
+      },
+
       _focusedIndex: {
         type: Number,
         value: -1
       },
 
-      _filter: {
+      /**
+       * Filtering string the user has typed into the input field.
+       */
+      filter: {
         type: String,
-        value: ''
+        value: '',
+        notify: true
       },
 
       /**
@@ -117,16 +138,18 @@
     },
 
     observers: [
-      '_filterChanged(_filter, itemValuePath, itemLabelPath)',
-      '_itemsChanged(items.splices)',
-      '_setItems(items, itemValuePath, itemLabelPath)'
+      '_filterChanged(filter, itemValuePath, itemLabelPath)',
+      '_itemsChanged(items.*, itemValuePath, itemLabelPath)',
+      '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
+      '_loadingChanged(loading)'
     ],
 
     listeners: {
       'vaadin-dropdown-opened': '_onOpened',
       'vaadin-dropdown-closed': '_onClosed',
       'keydown': '_onKeyDown',
-      'tap': '_onTap'
+      'tap': '_onTap',
+      'overlay.selection-changed': '_overlaySelectedItemChanged'
     },
 
     ready: function() {
@@ -324,7 +347,7 @@
     },
 
     _onOpened: function() {
-      this.$.overlay.hidden = !this._hasItems(this.$.overlay._items);
+      this.$.overlay.hidden = !this._hasItems(this.$.overlay._items) && !this.loading;
 
       // With iron-list v1.3.9, calling `notifyResize()` no longer renders
       // the items synchonously. It is required to have the items rendered
@@ -337,7 +360,9 @@
 
     _onClosed: function() {
       if (this._focusedIndex > -1) {
-        this.$.overlay._selectItem(this._focusedIndex);
+        var focusedItem = this.$.overlay._items[this._focusedIndex];
+        this.value = this._getItemValue(focusedItem);
+        // make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       } else if (this._inputElementValue === '') {
         this._clear();
@@ -354,7 +379,7 @@
 
       this._clearSelectionRange();
 
-      this._filter = '';
+      this.filter = '';
     },
 
     /**
@@ -363,13 +388,15 @@
     _inputValueChanged: function(e) {
       // Handle only input events from our inputElement.
       if (Polymer.dom(e).path.indexOf(this.inputElement) !== -1) {
-        if (this._filter === this._inputElementValue) {
+        if (this.filter === this._inputElementValue) {
           // Filter and input value might get out of sync, while keyboard navigating for example.
           // Afterwards, input value might be changed to the same value as used in filtering.
           // In situation like these, we need to make sure all the filter changes handlers are run.
-          this._filterChanged(this._filter);
+          this._filterChanged(this.filter);
         } else {
-          this._filter = this._inputElementValue;
+          this._userDefinedFilter = true;
+          this.filter = this._inputElementValue;
+          this._userDefinedFilter = false;
         }
 
         if (!this.opened) {
@@ -396,22 +423,20 @@
     },
 
     _filterChanged: function(filter) {
-      this.unlisten(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
+      if (this.items) {
+        this.filteredItems = this._filterItems(this.items, filter);
+      }
+    },
 
-      this._setItems(this._filterItems(this.items, filter));
-      this._focusedIndex = this.$.overlay.indexOfLabel(filter);
-
-      this.listen(this.$.overlay, '_selected-item-changed', '_selectedItemChanged');
-
-      // async needed to reposition correctly after filtering
-      this.async(function() {
-        this.$.overlay.notifyResize();
-      }.bind(this));
+    _loadingChanged: function(loading) {
+      if (loading) {
+        this._focusedIndex = -1;
+      }
     },
 
     _revertInputValue: function() {
-      if (this._filter !== '') {
-        this._inputElementValue = this._filter;
+      if (this.filter !== '') {
+        this._inputElementValue = this.filter;
       } else {
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       }
@@ -422,24 +447,53 @@
     _valueChanged: function(value) {
       this.hasValue = this._isValidValue(value);
 
-      var valueIndex = this._indexOfValue(value);
-      var item = valueIndex > -1 && this.items[valueIndex];
-      if (this.$.overlay._items && item && this.$.overlay._items.indexOf(item) > -1) {
-        this.$.overlay._selectItem(item);
+      var valueIndex = this._indexOfValue(value, this.filteredItems);
+      var item = valueIndex > -1 && this.filteredItems[valueIndex];
+      if (item) {
+        this.$.overlay._selectedItem = item;
+        this._inputElementValue = this._getItemLabel(item);
+        this._setSelectedItem(item);
+        this._focusedIndex = valueIndex;
       } else {
         this._inputElementValue = this.allowCustomValue ? value : '';
         this._setSelectedItem(null);
         this._focusedIndex = -1;
-        this.$.overlay.$.selector.clearSelection();
+        this.$.overlay._selectedItem = null;
       }
 
       this.fire('change', undefined, {bubbles: true});
       this.close();
     },
 
-    _itemsChanged: function(change) {
-      if (change && change.indexSplices) {
-        this._setItems(change.indexSplices[0].object);
+    _itemsChanged: function(e) {
+      if (e.path === 'items' || e.path === 'items.splices') {
+        this.filteredItems = this.items ? this.items.slice(0) : this.items;
+
+        var valueIndex = this._indexOfValue(this.value, this.items);
+        this._focusedIndex = valueIndex;
+
+        var item = valueIndex > -1 && this.items[valueIndex];
+        if (item) {
+          this.$.overlay._selectedItem = item;
+          this._inputElementValue = this._getItemLabel(item);
+          this._setSelectedItem(item);
+        }
+      }
+    },
+
+    _filteredItemsChanged: function(e) {
+      if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
+        this._setOverlayItems(this.filteredItems);
+
+        this._focusedIndex = (this.opened || this._userDefinedFilter) ?
+            this.$.overlay.indexOfLabel(this.filter) :
+            this._indexOfValue(this.value, this.filteredItems);
+
+        // async needed to reposition correctly after filtering
+        // (especially when aligned on top of input)
+        this.async(function() {
+          this.$.overlay.notifyResize();
+        }, 1);
       }
     },
 
@@ -457,17 +511,12 @@
       }).bind(this));
     },
 
-    _setItems: function(items) {
+    _setOverlayItems: function(items) {
       //TODO: There is something wrong with observers and using set function
       // see here: https://github.com/Polymer/polymer/issues/3254
       //As a workaround setting/notifying the observer with the value undefined helps
       this.$.overlay.notifyPath('_items', undefined);
       this.$.overlay.set('_items', items);
-
-      var valueIndex = this._indexOfValue(this.value, items);
-      if (valueIndex > -1) {
-        this.$.overlay._selectItem(valueIndex);
-      }
 
       this.$.overlay.hidden = !this._hasItems(items);
       this.$.overlay.notifyResize();
@@ -478,7 +527,6 @@
     },
 
     _indexOfValue: function(value, items) {
-      items = items || this.items;
       if (items && this._isValidValue(value)) {
         for (var i = 0; i < items.length; i++) {
           if (this._getItemValue(items[i]) === value) {
@@ -496,22 +544,25 @@
      * @return {boolean}
      */
     _isValidValue: function(value) {
-      /* jshint ignore:start */ //IE11 doesn't support Number.isNaN() 
+      /* jshint ignore:start */ //IE11 doesn't support Number.isNaN()
       return value !== NaN && value !== undefined && value !== null;
       /* jshint ignore:end */
     },
 
-    _selectedItemChanged: function(event, detail) {
-      if (detail.value !== null) {
-        this._setSelectedItem(detail.value);
-        this._inputElementValue = this._getItemLabel(this.selectedItem);
-        this.value = this._getItemValue(this.selectedItem);
-        this._focusedIndex = this.$.overlay._items.indexOf(detail.value);
+    _overlaySelectedItemChanged: function(event, detail) {
+      var selectedItem = detail.item;
+      if (selectedItem !== null) {
+        this.value = this._getItemValue(selectedItem);
+      } else {
+        this.value = '';
       }
 
       if (this.opened) {
         this.close();
       }
+
+      //stop this private event from leaking outside.
+      event.stopPropagation();
     },
 
     /**

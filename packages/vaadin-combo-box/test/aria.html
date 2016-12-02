@@ -98,7 +98,7 @@
       });
 
       it('should set selection aria attributes when focusing an item', function() {
-        getSelector().selectedItem = 'foo';
+        comboBox.value = 'foo';
         arrowDown();
 
         expect(getItemElement(0).getAttribute('role')).to.equal('option');
@@ -107,7 +107,7 @@
       });
 
       it('should change the input value with atomic change', function(done) {
-        getSelector().selectedItem = 'foo';
+        comboBox.$.overlay.fire('selection-changed', {item: 'foo'});
 
         getInput().addEventListener('bind-value-changed', function() {
           expect(getInput().getAttribute('aria-atomic')).to.equal('true');
@@ -121,7 +121,7 @@
       it('should preserve aria-atomic attribute in the input', function() {
         getInput().setAttribute('aria-atomic', 'false');
 
-        getSelector().selectedItem = 'foo';
+        comboBox.value = 'foo';
         arrowDown();
         arrowDown();
 
@@ -129,7 +129,7 @@
       });
 
       it('should clean-up aria-atomic attribute in the input if was not set', function() {
-        getSelector().selectedItem = 'foo';
+        comboBox.value = 'foo';
         arrowDown();
         arrowDown();
 
