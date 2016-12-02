@@ -438,7 +438,7 @@ Custom property | Description | Default
       var unitSizes = [60, 60, 24, Infinity];
       var timeValues = [0];
 
-      for (var i = 0, unitSize; i < unitSizes.length && time > 0; i++) {
+      for (var i = 0; i < unitSizes.length && time > 0; i++) {
         timeValues[i] = time % unitSizes[i];
         time = Math.floor(time / unitSizes[i]);
       }
@@ -558,7 +558,7 @@ Custom property | Description | Default
     },
 
     // Override for tests
-    _createXhr: function(file) {
+    _createXhr: function() {
       return new XMLHttpRequest();
     },
 
@@ -578,7 +578,7 @@ Custom property | Description | Default
       }
     },
 
-    _setStatus: function(file, total, loaded, elapsed, progress) {
+    _setStatus: function(file, total, loaded, elapsed) {
       file.elapsed = elapsed;
       file.elapsedStr = this._formatTime(file.elapsed, this._splitTimeByUnits(file.elapsed));
       file.remaining = Math.ceil(elapsed * (total / loaded - 1));
@@ -630,7 +630,7 @@ Custom property | Description | Default
       }.bind(this);
 
       // More reliable than xhr.onload
-      xhr.onreadystatechange = function(e) {
+      xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
           clearTimeout(stalledId);
           file.indeterminate = file.uploading = false;
@@ -754,7 +754,7 @@ Custom property | Description | Default
       this.splice('files', this.files.indexOf(file), 1);
     },
 
-    _onAddFilesClick: function(event) {
+    _onAddFilesClick: function() {
       if (document.createEvent) {
         this.$.fileInput.value = '';
         this.$.fileInput.click();

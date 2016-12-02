@@ -1,3 +1,4 @@
+/* exported ios, touchDevice, ieOrEdge, describeIf, createFiles, xhrCreator */
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var touchDevice = (function() {
   try {
@@ -66,10 +67,10 @@ function createFiles(arraySize, fileSize, contentType) {
  */
 var xhrCreator = function(c) {
   c = c || {};
-  cfg = {
+  var cfg = {
     size: c.size || 100,
-    connectTime: c.connectTime || 10,
-    uploadTime: c.uploadTime || 10,
+    connectTime: c.connectTime || 10,
+    uploadTime: c.uploadTime || 10,
     stepTime: c.stepTime || 5,
     serverTime: c.serverTime || 10,
     serverMessage: c.message || '{"message": "ok"}',
