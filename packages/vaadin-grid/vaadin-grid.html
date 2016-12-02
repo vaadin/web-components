@@ -28,7 +28,7 @@
   </style>
   <template>
     <vaadin-grid-table id="scroller" loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]"
-        column-tree="[[_columnTree]]" frozen-columns=[[_frozenColumns]] content-target=[[_getContentTarget()]]
+        column-tree="[[_columnTree]]" content-target=[[_getContentTarget()]]
         row-details-template=[[rowDetailsTemplate]]>
       <content></content>
     </vaadin-grid-table>
