@@ -132,7 +132,7 @@
             Polymer.dom(this.target).removeChild(cellContent);
           }
         }
-	    },
+      },
 
       _widthChanged: function(width) {
         this.style.flexBasis = width;
@@ -176,7 +176,7 @@
           this._cellContent.setAttribute('data-cell-content-id', target._contentIndex);
 
           var content = document.createElement('content');
-          content.setAttribute('select', '[data-cell-content-id="' + target._contentIndex +'"]');
+          content.setAttribute('select', '[data-cell-content-id="' + target._contentIndex + '"]');
           Polymer.dom(this).appendChild(content);
         } else {
           // Non-shadow
@@ -295,8 +295,10 @@
       observers: ['_headerTemplateChanged(headerTemplate, target)'],
 
       _headerTemplateChanged: function(headerTemplate, target) {
-        if (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group') {
+        if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._templateChanged(headerTemplate, target);
+        } else {
+          this._templateChanged(document.createElement('template'), target);
         }
       }
     });
@@ -318,8 +320,10 @@
       observers: ['_footerTemplateChanged(footerTemplate, target)'],
 
       _footerTemplateChanged: function(footerTemplate, target) {
-        if (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group') {
+        if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._templateChanged(footerTemplate, target);
+        } else {
+          this._templateChanged(document.createElement('template'), target);
         }
       }
     });
