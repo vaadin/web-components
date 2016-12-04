@@ -1,5 +1,3 @@
-<link rel="import" href="../paper-checkbox/paper-checkbox.html">
-
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
@@ -180,38 +178,3 @@
 
   };
 </script>
-
-<dom-module id="vaadin-grid-selection-styles">
-  <template>
-    <style>
-      tbody tr[selected] td {
-        background-color: rgb(243, 243, 243);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-multi-select-column">
-  <template>
-    <vaadin-grid-column id="column" width="52px" flex="0" frozen>
-      <template class="header">
-        <paper-checkbox style="padding-left: 8px" checked="{{selectAll}}"></paper-checkbox>
-      </template>
-      <template>
-        <paper-checkbox style="padding-left: 8px" checked="{{selected}}"></paper-checkbox>
-      </template>
-    </vaadin-grid-column>
-  </template>
-  <script>
-    Polymer({
-      is: 'vaadin-grid-multi-select-column',
-
-      properties: {
-        selectAll: {
-          notify: true
-        },
-      }
-
-    });
-  </script>
-</dom-module>
