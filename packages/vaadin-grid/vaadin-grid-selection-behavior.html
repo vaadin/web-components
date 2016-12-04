@@ -57,6 +57,16 @@
 
     ready: function() {
       this._addColumnTreeProcessor(this._addMultiSelectionColumn);
+      this._addColumnTreeProcessor(this._addSelectAllListener);
+    },
+
+    _addSelectAllListener: function(columnTree) {
+      columnTree[0].forEach(function(column) {
+        if (!column._selectAllHandler && column.localName == 'vaadin-grid-column-selection') {
+          column._selectAllHandler = this.listen(column, 'select-all-changed', '_onSelectAllChanged');
+        }
+      }.bind(this));
+      return columnTree;
     },
 
     _addMultiSelectionColumn: function(columnTree) {

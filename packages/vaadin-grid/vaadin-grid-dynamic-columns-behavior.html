@@ -50,7 +50,9 @@
     },
 
     _getColumnTree: function() {
-      var rootColumns = this.queryAllEffectiveChildren('vaadin-grid-column, vaadin-grid-column-group');
+      var rootColumns = this.queryAllEffectiveChildren(
+        'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-column-selection');
+
       var _columnTree = [];
 
       for (var c = rootColumns;;) {
