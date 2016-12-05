@@ -32,7 +32,9 @@
       <template>
         <template is="dom-bind">
           <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid data-source="[[dataSource]]" size="200" multi-selection>
+          <vaadin-grid data-source="[[dataSource]]" size="200">
+            <vaadin-grid-column-selection>
+            </vaadin-grid-column-selection>
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>

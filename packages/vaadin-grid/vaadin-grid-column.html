@@ -4,6 +4,19 @@
 <dom-module id="vaadin-grid-column">
 </dom-module>
 
+<dom-module id="vaadin-grid-column-group">
+</dom-module>
+
+<dom-module id="vaadin-grid-selection-styles">
+  <template>
+    <style>
+      tbody tr[selected] td {
+        background-color: rgb(243, 243, 243);
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-grid-column-selection">
   <template>
     <template class="header">
@@ -13,9 +26,6 @@
       <paper-checkbox style="padding-left: 8px" checked="{{selected}}"></paper-checkbox>
     </template>
   </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-column-group">
 </dom-module>
 
 <script>

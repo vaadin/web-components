@@ -11,14 +11,6 @@
     properties: {
 
       /**
-       * When `true`, a multi-selection column is automatically added as the first column.
-       */
-      multiSelection: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * This is the currently selected item, or `null`
        * if no item is selected.
        */
@@ -37,17 +29,10 @@
         value: function() {
           return [];
         }
-      },
-
-      _frozenColumns: {
-        computed: '_getFrozenColumns(frozenColumns, multiSelection)'
-      },
-
-      _multiSelectColumn: Object
+      }
     },
 
     observers: [
-      '_multiSelectionChanged(multiSelection, _columnTreeProcessors)',
       '_selectedItemsChanged(selectedItems.*)'
     ],
 
@@ -56,7 +41,6 @@
     },
 
     ready: function() {
-      this._addColumnTreeProcessor(this._addMultiSelectionColumn);
       this._addColumnTreeProcessor(this._addSelectAllListener);
     },
 
@@ -67,30 +51,6 @@
         }
       }.bind(this));
       return columnTree;
-    },
-
-    _addMultiSelectionColumn: function(columnTree) {
-      return columnTree.map(function(columns) {
-        if (this._multiSelectionColumn) {
-          columns.unshift(this._multiSelectionColumn.$.column);
-        }
-        return columns.slice(0);
-      }.bind(this));
-    },
-
-    _multiSelectionChanged: function(multiSelection) {
-      if (multiSelection && !this._multiSelectionColumn) {
-        this._multiSelectionColumn = document.createElement('vaadin-grid-multi-select-column');
-        this._multiSelectionColumn.grid = this;
-        this.listen(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
-
-        this._updateColumnTree();
-      } else if(!multiSelection && this._multiSelectionColumn) {
-        this.unlisten(this._multiSelectionColumn, 'select-all-changed', '_onSelectAllChanged');
-        this._multiSelectionColumn = undefined;
-
-        this._updateColumnTree();
-      }
     },
 
     _templateInstanceChangedSelection: function(e) {
@@ -172,10 +132,6 @@
           row.selected = this._isSelected(row.item);
         }.bind(this));
       }
-    },
-
-    _getFrozenColumns: function () {
-      return this.frozenColumns + (this.multiSelection ? 1 : 0);
     },
 
     _getSelectedItem: function() {
