@@ -1,0 +1,22 @@
+{
+  "globals": {
+    "sinon": false,
+    "WCT": false,
+    "ios": false,
+    "chrome": false,
+    "safari": false,
+    "getItemArray": false,
+    "before": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "describe": false,
+    "describeIf": false,
+    "describeSkipIf": false,
+    "expect": false,
+    "it": false,
+    "fixture": false,
+    "System": false,
+    "MockInteractions": false,
+    "touchDevice": false
+  }
+}

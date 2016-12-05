@@ -1,0 +1,23 @@
+{
+  "extends": "eslint:recommended",
+  "rules": {
+    "no-console": 0
+  },
+  "env": {
+    "browser": true
+  },
+  "plugins": [
+    "html"
+  ],
+  "globals": {
+    "require": false,
+    "module": false,
+    "vaadin": false,
+    "elements": false,
+    "elementsJson": false,
+    "CustomElements": false,
+    "HTMLImports": false,
+    "Polymer": false,
+    "WeakMap": false
+  }
+}
