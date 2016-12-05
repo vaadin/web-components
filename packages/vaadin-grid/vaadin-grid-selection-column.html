@@ -1,0 +1,71 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="vaadin-grid-column.html">
+
+<dom-module id="vaadin-grid-selection-column">
+  <template>
+    <template class="header">
+      <paper-checkbox style="padding-left: 8px" checked="{{selectAll}}"></paper-checkbox>
+    </template>
+    <template>
+      <paper-checkbox style="padding-left: 8px" checked="{{selected}}"></paper-checkbox>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-grid-selection-column',
+
+    // TODO: remove all common code with vaadin-grid-column when we agree what should include
+    // the public API of vaadin.elements.grid.vaadinGridColumnBehavior 
+    behaviors: [vaadin.elements.grid.vaadinGridColumnBehavior],
+
+    properties: {
+      width: {
+        type: String,
+        value: '52px'
+      },
+
+      flex: {
+        type: Number,
+        value: 0
+      },
+
+      template: {
+        type: Object,
+        value: function() {
+          return this._findTemplate('template:not(.header):not(.footer)');
+        }
+      },
+
+      hidden: {
+        type: Boolean
+      },
+
+      selectAll: {
+        notify: true
+      }
+    },
+
+    observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
+
+    _frozenChanged: function(frozen) {
+      this.fire('property-changed', {path: 'frozen', value: frozen});
+    },
+
+    _templateChanged: function(template) {
+      // We bubble false for optimisation
+      this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
+    },
+
+    _hiddenChanged: function(hidden) {
+      this.fire('property-changed', {path: 'hidden', value: hidden});
+    },
+
+    _selectFirstTemplate: function(selector) {
+      return Polymer.dom(this).querySelectorAll(selector)[0]
+          || Polymer.dom(this.root).querySelectorAll(selector)[0];
+    }
+  });
+</script>

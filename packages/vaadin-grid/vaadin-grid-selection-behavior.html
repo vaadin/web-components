@@ -46,7 +46,7 @@
 
     _addSelectAllListener: function(columnTree) {
       columnTree[0].forEach(function(column) {
-        if (!column._selectAllHandler && column.localName == 'vaadin-grid-column-selection') {
+        if (!column._selectAllHandler && column.localName == 'vaadin-grid-selection-column') {
           column._selectAllHandler = this.listen(column, 'select-all-changed', '_onSelectAllChanged');
         }
       }.bind(this));
@@ -144,3 +144,13 @@
 
   };
 </script>
+
+<dom-module id="vaadin-grid-selection-styles">
+  <template>
+    <style>
+      tbody tr[selected] td {
+        background-color: rgb(243, 243, 243);
+      }
+    </style>
+  </template>
+</dom-module>

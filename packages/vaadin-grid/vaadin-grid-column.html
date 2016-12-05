@@ -7,310 +7,261 @@
 <dom-module id="vaadin-grid-column-group">
 </dom-module>
 
-<dom-module id="vaadin-grid-selection-styles">
-  <template>
-    <style>
-      tbody tr[selected] td {
-        background-color: rgb(243, 243, 243);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-column-selection">
-  <template>
-    <template class="header">
-      <paper-checkbox style="padding-left: 8px" checked="{{selectAll}}"></paper-checkbox>
-    </template>
-    <template>
-      <paper-checkbox style="padding-left: 8px" checked="{{selected}}"></paper-checkbox>
-    </template>
-  </template>
-</dom-module>
-
 <script>
-  (function(){
-    /**
-     * @polymerBehavior vaadinGridColumnBaseBehavior
-     */
-    var vaadinGridColumnBaseBehavior = {
-      properties: {
-        headerTemplate: {
-          type: Object,
-          value: function() {
-            return this._findTemplate('template.header') || null;
-          }
-        },
-        footerTemplate: {
-          type: Object,
-          value: function() {
-            return this._findTemplate('template.footer') || null;
-          }
-        },
-        instances: {
-          type: Array,
-          value: function() {
-            return [];
-          }
-        },
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
 
-        frozen: {
-          type: Boolean,
-          notify: true
-        },
+  /**
+   * @polymerBehavior vaadin.elements.grid.vaadinGridColumnBehavior
+   */
+   vaadin.elements.grid.vaadinGridColumnBehavior = {
+     properties: {
+       headerTemplate: {
+         type: Object,
+         value: function() {
+           return this._findTemplate('template.header') || null;
+         }
+       },
+       footerTemplate: {
+         type: Object,
+         value: function() {
+           return this._findTemplate('template.footer') || null;
+         }
+       },
+       instances: {
+         type: Array,
+         value: function() {
+           return [];
+         }
+       },
 
-        _lastFrozen: {
-          type: Boolean,
-          notify: true
-        }
-      },
+       frozen: {
+         type: Boolean,
+         notify: true
+       },
 
-      observers: [
-        '_footerTemplateChanged(footerTemplate)',
-        '_headerTemplateChanged(headerTemplate)',
-        '_lastFrozenChanged(_lastFrozen)'
-      ],
+       _lastFrozen: {
+         type: Boolean,
+         notify: true
+       }
+     },
 
-      _selectFirstTemplate: function(selector) {
-        return Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
-          return el.parentElement === this;
-        }.bind(this))[0]
-      },
+     observers: [
+       '_footerTemplateChanged(footerTemplate)',
+       '_headerTemplateChanged(headerTemplate)',
+       '_lastFrozenChanged(_lastFrozen)'
+     ],
 
-      _findTemplate: function(selector) {
-        var template = this._selectFirstTemplate(selector);
-        if (template) {
-          if (this.dataHost) {
-            // set dataHost to the context where template has been defined
-            template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
-          }
-        }
-        return template;
-      },
+     _selectFirstTemplate: function(selector) {
+       return Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
+         return el.parentElement === this;
+       }.bind(this))[0]
+     },
 
-      _headerTemplateChanged: function(headerTemplate) {
-        this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
-      },
+     _findTemplate: function(selector) {
+       var template = this._selectFirstTemplate(selector);
+       if (template) {
+         if (this.dataHost) {
+           // set dataHost to the context where template has been defined
+           template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
+         }
+       }
+       return template;
+     },
 
-      _footerTemplateChanged: function(footerTemplate) {
-        this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
-      },
+     _headerTemplateChanged: function(headerTemplate) {
+       this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
+     },
 
-      _flexChanged: function(flex) {
-        this.fire('property-changed', {path: 'flex', value: flex});
-      },
+     _footerTemplateChanged: function(footerTemplate) {
+       this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
+     },
 
-      _widthChanged: function(width) {
-        this.fire('property-changed', {path: 'width', value: width});
-      },
+     _flexChanged: function(flex) {
+       this.fire('property-changed', {path: 'flex', value: flex});
+     },
 
-      _lastFrozenChanged: function(lastFrozen) {
-        this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
-      }
-    };
+     _widthChanged: function(width) {
+       this.fire('property-changed', {path: 'width', value: width});
+     },
 
-    /**
-     * @polymerBehavior vaadinGridColumnBehavior
-     */
-    var vaadinGridColumnBehavior = {
-      properties: {
-        width: {
-          type: String,
-          value: '100px'
-        },
+     _lastFrozenChanged: function(lastFrozen) {
+       this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
+     }
+   };
 
-        flex: {
-          type: Number,
-          value: 1
-        },
+   Polymer({
+     is: 'vaadin-grid-column',
 
-        template: {
-          type: Object,
-          value: function() {
-            return this._findTemplate('template:not(.header):not(.footer)');
-          }
-        },
+     behaviors: [vaadin.elements.grid.vaadinGridColumnBehavior],
 
-        hidden: {
-          type: Boolean
-        }
-      },
+     properties: {
+       width: {
+         type: String,
+         value: '100px'
+       },
 
-      observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
+       flex: {
+         type: Number,
+         value: 1
+       },
 
-      _frozenChanged: function(frozen) {
-        this.fire('property-changed', {path: 'frozen', value: frozen});
-      },
+       template: {
+         type: Object,
+         value: function() {
+           return this._findTemplate('template:not(.header):not(.footer)');
+         }
+       },
 
-      _templateChanged: function(template) {
-        // We bubble false for optimisation
-        this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
-      },
+       hidden: {
+         type: Boolean
+       }
+     },
 
-      _hiddenChanged: function(hidden) {
-        this.fire('property-changed', {path: 'hidden', value: hidden});
-      }
-    };
+     observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
 
-    Polymer({
-      is: 'vaadin-grid-column',
+     _frozenChanged: function(frozen) {
+       this.fire('property-changed', {path: 'frozen', value: frozen});
+     },
 
-      behaviors: [vaadinGridColumnBaseBehavior, vaadinGridColumnBehavior],
-    });
+     _templateChanged: function(template) {
+       // We bubble false for optimisation
+       this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
+     },
 
-    Polymer({
-      is: 'vaadin-grid-column-selection',
+     _hiddenChanged: function(hidden) {
+       this.fire('property-changed', {path: 'hidden', value: hidden});
+     }
+   });
 
-      behaviors: [vaadinGridColumnBaseBehavior, vaadinGridColumnBehavior],
+   Polymer({
+     is: 'vaadin-grid-column-group',
 
-      properties: {
-        width: {
-          type: String,
-          value: '52px'
-        },
-        flex: {
-          type: Number,
-          value: 0
-        },
-        selectAll: {
-          notify: true
-        }
-      },
+     behaviors: [vaadin.elements.grid.vaadinGridColumnBehavior],
 
-      _selectFirstTemplate: function(selector) {
-        return Polymer.dom(this).querySelectorAll(selector)[0]
-            || Polymer.dom(this.root).querySelectorAll(selector)[0];
-      }
-    });
+     properties: {
+       _childColumns: {
+         value: function() {
+           return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+         }
+       },
 
-    Polymer({
-      is: 'vaadin-grid-column-group',
+       flex: {
+         type: Number,
+         readOnly: true
+       },
 
-      behaviors: [vaadinGridColumnBaseBehavior],
+       width: {
+         type: String,
+         readOnly: true
+       },
 
-      properties: {
-        _childColumns: {
-          value: function() {
-            return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
-          }
-        },
+       _visibleChildColumns: Array,
 
-        flex: {
-          type: Number,
-          readOnly: true
-        },
+       hidden: {
+         type: Boolean,
+         notify: true,
+         readOnly: true
+       },
 
-        width: {
-          type: String,
-          readOnly: true
-        },
+       colSpan: {
+         type: Number,
+         notify: true,
+         readOnly: true
+       }
+     },
 
-        _visibleChildColumns: Array,
+     observers: ['_updateVisibleChildColumns(_childColumns)',
+     '_childColumnsChanged(_childColumns)',
+     '_flexChanged(flex)',
+     '_widthChanged(width)',
+     '_frozenChanged(_childColumns, frozen)',
+     '_hiddenChanged(hidden)',
+     '_visibleChildColumnsChanged(_visibleChildColumns)',
+     '_colSpanChanged(colSpan)'],
 
-        hidden: {
-          type: Boolean,
-          notify: true,
-          readOnly: true
-        },
+     listeners: {
+       'property-changed': '_columnPropChanged'
+     },
 
-        colSpan: {
-          type: Number,
-          notify: true,
-          readOnly: true
-        }
-      },
+     attached: function() {
+       this._updateFlexAndWidth(this._visibleChildColumns);
+       this._addNodeObserver();
+     },
 
-      observers: ['_updateVisibleChildColumns(_childColumns)',
-                  '_childColumnsChanged(_childColumns)',
-                  '_flexChanged(flex)',
-                  '_widthChanged(width)',
-                  '_frozenChanged(_childColumns, frozen)',
-                  '_hiddenChanged(hidden)',
-                  '_visibleChildColumnsChanged(_visibleChildColumns)',
-                  '_colSpanChanged(colSpan)'],
+     detached: function() {
+       Polymer.dom(this).unobserveNodes(this._observer);
+     },
 
-      listeners: {
-        'property-changed': '_columnPropChanged'
-      },
+     _columnPropChanged: function(e) {
+       if (e.detail.path === 'hidden') {
+         this._updateVisibleChildColumns(this._childColumns);
+       }
 
-      attached: function() {
-        this._updateFlexAndWidth(this._visibleChildColumns);
-        this._addNodeObserver();
-      },
+       if (/flex|width|hidden|_childColumns/.test(e.detail.path)) {
+         this._updateFlexAndWidth(this._visibleChildColumns);
+       }
 
-      detached: function() {
-        Polymer.dom(this).unobserveNodes(this._observer);
-      },
+       if (e.detail.path === 'frozen') {
+         this.frozen = e.detail.value;
+       }
 
-      _columnPropChanged: function(e) {
-        if (e.detail.path === 'hidden') {
-          this._updateVisibleChildColumns(this._childColumns);
-        }
+       if (e.detail.path === 'lastFrozen') {
+         this._lastFrozen = e.detail.value;
+       }
+     },
 
-        if (/flex|width|hidden|_childColumns/.test(e.detail.path)) {
-          this._updateFlexAndWidth(this._visibleChildColumns);
-        }
+     _updateVisibleChildColumns: function(childColumns) {
+       this._visibleChildColumns = childColumns.filter(function(col) {
+         return !col.hidden;
+       });
+     },
 
-        if (e.detail.path === 'frozen') {
-          this.frozen = e.detail.value;
-        }
+     _childColumnsChanged: function(childColumns) {
+       this.fire('property-changed', {path: '_childColumns', value: childColumns});
+     },
 
-        if (e.detail.path === 'lastFrozen') {
-          this._lastFrozen = e.detail.value;
-        }
-      },
+     _updateFlexAndWidth: function(visibleChildColumns) {
+       this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
+         return prev += ' + ' + (curr.width || '0').replace('calc', '');
+       }, '').substring(3) + ')');
 
-      _updateVisibleChildColumns: function(childColumns) {
-        this._visibleChildColumns = childColumns.filter(function(col) {
-          return !col.hidden;
-        });
-      },
+       this._setFlex(visibleChildColumns.reduce(function(prev, curr) {
+         return prev + curr.flex;
+       }, 0));
+     },
 
-      _childColumnsChanged: function(childColumns) {
-        this.fire('property-changed', {path: '_childColumns', value: childColumns});
-      },
+     _frozenChanged: function(childColumns, frozen) {
+       childColumns.forEach(function(col) {
+         col.frozen = frozen;
+       });
+       this.fire('property-changed', {path: 'frozen', value: frozen});
+     },
 
-      _updateFlexAndWidth: function(visibleChildColumns) {
-        this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
-          return prev += ' + ' + (curr.width || '0').replace('calc', '');
-        }, '').substring(3) + ')');
+     _hiddenChanged: function(hidden) {
+       this.fire('property-changed', {path: 'hidden', value: hidden});
+     },
 
-        this._setFlex(visibleChildColumns.reduce(function(prev, curr) {
-          return prev + curr.flex;
-        }, 0));
-      },
+     _visibleChildColumnsChanged: function(visibleChildColumns) {
+       this._setColSpan(visibleChildColumns.length);
+       this._setHidden(this.colSpan === 0);
+     },
 
-      _frozenChanged: function(childColumns, frozen) {
-        childColumns.forEach(function(col) {
-          col.frozen = frozen;
-        });
-        this.fire('property-changed', {path: 'frozen', value: frozen});
-      },
+     _colSpanChanged: function(colSpan) {
+       this.fire('property-changed', {path: 'colSpan', value: colSpan});
+     },
 
-      _hiddenChanged: function(hidden) {
-        this.fire('property-changed', {path: 'hidden', value: hidden});
-      },
-
-      _visibleChildColumnsChanged: function(visibleChildColumns) {
-        this._setColSpan(visibleChildColumns.length);
-        this._setHidden(this.colSpan === 0);
-      },
-
-      _colSpanChanged: function(colSpan) {
-        this.fire('property-changed', {path: 'colSpan', value: colSpan});
-      },
-
-      _addNodeObserver: function() {
-        this._observer = Polymer.dom(this).observeNodes(function(info) {
-          var columns = function(node) {
-            return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
-          };
-          if (info.addedNodes.filter(columns).length > 0 ||
-            info.removedNodes.filter(columns).length > 0) {
-            this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
-          }
-        }.bind(this));
-      }
-    });
-  })();
+     _addNodeObserver: function() {
+       this._observer = Polymer.dom(this).observeNodes(function(info) {
+         var columns = function(node) {
+           return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+         };
+         if (info.addedNodes.filter(columns).length > 0 ||
+         info.removedNodes.filter(columns).length > 0) {
+           this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+         }
+       }.bind(this));
+     }
+   });
 </script>
