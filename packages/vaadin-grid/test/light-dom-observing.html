@@ -361,52 +361,6 @@
               done();
             });
           });
-
-          describe('multiSelection', function() {
-            beforeEach(function() {
-              grid.multiSelection = true;
-            });
-
-            function expectFirstMultiSelectionColumn() {
-              expect(getCellContent(getRows(header)[0].cells[0]).firstElementChild.localName)
-                .to.equal('paper-checkbox');
-              expect(getCellContent(getRows(body)[0].cells[0]).firstElementChild.localName)
-                .to.equal('paper-checkbox');
-              expect(getCellContent(getRows(body)[1].cells[0]).firstElementChild.localName)
-                .to.equal('paper-checkbox');
-              expect(getCellContent(getRows(body)[2].cells[0]).firstElementChild.localName)
-                .to.equal('paper-checkbox');
-            }
-
-            it('should add multiSelection column if enabled', function(done) {
-              grid.async(function() {
-                expectFirstMultiSelectionColumn();
-                done();
-              });
-            });
-
-            it('should maintain multiSelection column when column is added', function(done) {
-              var column = Polymer.dom(grid).querySelector('vaadin-grid-column');
-              Polymer.dom(grid).removeChild(column);
-              Polymer.dom.flush();
-
-              grid.async(function() {
-                expectFirstMultiSelectionColumn();
-                done();
-              });
-            });
-
-            it('should maintain multiSelection column when column is removed', function(done) {
-              var column = fixture('column');
-              Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
-              Polymer.dom.flush();
-
-              grid.async(function() {
-                expectFirstMultiSelectionColumn();
-                done();
-              });
-            });
-          });
         });
 
         describe('columns inside group', function() {

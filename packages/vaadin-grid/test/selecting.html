@@ -28,6 +28,20 @@
       </vaadin-grid>
     </template>
   </test-fixture>
+  <test-fixture id="multiselect">
+    <template>
+      <vaadin-grid style="width: 200px; height: 200px;" size="10000" selection-enabled>
+        <vaadin-grid-column-selection>
+        </vaadin-grid-column-selection>
+        <vaadin-grid-column>
+          <template>foo</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template>bar</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
 
   <script>
     describe('selection', function() {
@@ -35,75 +49,106 @@
       var rows;
       var cachedItems;
 
-      beforeEach(function() {
-        grid = fixture('default');
-        grid.dataSource = infiniteDataSource;
-        cachedItems = grid._cache[0];
-        rows = getRows(grid.$.scroller.$.items);
-        grid.selectedItems = [cachedItems[0]];
-        Polymer.dom.flush();
+      afterEach(function() {
+        if (grid) {
+          grid.parentElement.removeChild(grid);
+        }
       });
 
-      describe('selectedItems', function() {
-
-        it('should set selected attribute', function() {
-          expect(rows[0].hasAttribute('selected')).to.be.true;
-          expect(rows[1].hasAttribute('selected')).to.be.false;
-        });
-
-        it('should reflect changes', function() {
-          grid.push('selectedItems', cachedItems[1]);
-          expect(rows[1].hasAttribute('selected')).to.be.true;
-        });
-
-        it('should bind to cells', function() {
-          var cells = getRowCells(rows[0]);
-          expect(cells[0].instance.selected).to.be.true;
-          expect(cells[1].instance.selected).to.be.true;
-          expect(getRowCells(rows[1])[0].instance.selected).to.be.false;
-        });
-
-        it('should reflect cell instance value', function() {
-          var cells = getRowCells(rows[0]);
-          cells[0].instance.selected = false;
-          expect(cells[0].instance.selected).to.be.false;
-          expect(grid.selectedItems).to.be.empty;
-        });
-
-        it('should notify', function(done) {
-          grid.addEventListener('selected-items-changed', function() {
-            done();
-          });
-          grid.selectedItems = [cachedItems[1]];
-        });
-
-      });
-
-      describe('select functions', function() {
-
-        it('should select item', function() {
-          expect(grid._isSelected(cachedItems[1])).to.be.false;
-          grid.selectItem(cachedItems[1]);
-          expect(grid._isSelected(cachedItems[1])).to.be.true;
-        });
-
-        it('should deselect item', function() {
-          expect(grid._isSelected(cachedItems[0])).to.be.true;
-          grid.deselectItem(cachedItems[0]);
-          expect(grid._isSelected(cachedItems[0])).to.be.false;
-        });
-
-      });
-
-      describe('multi selection', function() {
+      describe('single-selection', function() {
 
         beforeEach(function() {
-          grid.multiSelection = true;
+          grid = fixture('default');
+          grid.dataSource = infiniteDataSource;
+          cachedItems = grid._cache[0];
+          rows = getRows(grid.$.scroller.$.items);
+          grid.selectedItems = [cachedItems[0]];
           Polymer.dom.flush();
         });
 
-        it('should have multi selection column', function() {
+        describe('selectedItems', function() {
+          it('should set selected attribute', function() {
+            expect(rows[0].hasAttribute('selected')).to.be.true;
+            expect(rows[1].hasAttribute('selected')).to.be.false;
+          });
+
+          it('should reflect changes', function() {
+            grid.push('selectedItems', cachedItems[1]);
+            expect(rows[1].hasAttribute('selected')).to.be.true;
+          });
+
+          it('should bind to cells', function() {
+            var cells = getRowCells(rows[0]);
+            expect(cells[0].instance.selected).to.be.true;
+            expect(cells[1].instance.selected).to.be.true;
+            expect(getRowCells(rows[1])[0].instance.selected).to.be.false;
+          });
+
+          it('should reflect cell instance value', function() {
+            var cells = getRowCells(rows[0]);
+            cells[0].instance.selected = false;
+            expect(cells[0].instance.selected).to.be.false;
+            expect(grid.selectedItems).to.be.empty;
+          });
+
+          it('should notify', function(done) {
+            grid.addEventListener('selected-items-changed', function() {
+              done();
+            });
+            grid.selectedItems = [cachedItems[1]];
+          });
+        });
+
+        describe('select functions', function() {
+          it('should select item', function() {
+            expect(grid._isSelected(cachedItems[1])).to.be.false;
+            grid.selectItem(cachedItems[1]);
+            expect(grid._isSelected(cachedItems[1])).to.be.true;
+          });
+
+          it('should deselect item', function() {
+            expect(grid._isSelected(cachedItems[0])).to.be.true;
+            grid.deselectItem(cachedItems[0]);
+            expect(grid._isSelected(cachedItems[0])).to.be.false;
+          });
+
+          it('should select multiple rows', function() {
+            grid.selectItem(cachedItems[1]);
+            grid.selectItem(cachedItems[2]);
+            expect(grid._isSelected(cachedItems[1])).to.be.true;
+            expect(grid._isSelected(cachedItems[2])).to.be.true;
+          });
+
+          it('should reflect the last selected item', function () {
+            expect(grid.selectedItem).to.equal(cachedItems[0]);
+            grid.selectItem(cachedItems[1]);
+            expect(grid.selectedItem).to.equal(cachedItems[1]);
+            grid.deselectItem(cachedItems[1]);
+            expect(grid.selectedItem).to.eql(cachedItems[0]);
+          });
+        });
+      });
+
+      describe('multi selection', function() {
+        var headerRows;
+
+        beforeEach(function() {
+          grid = fixture('multiselect');
+          grid.dataSource = infiniteDataSource;
+          cachedItems = grid._cache[0];
+          rows = getRows(grid.$.scroller.$.items);
+          headerRows = getRows(grid.$.scroller.$.header);
+
+          grid.selectedItems = [cachedItems[0]];
+          Polymer.dom.flush();
+        });
+
+        it('should have a multi selection column', function() {
           expect(grid._columnTree[0].length).to.equal(3);
+          var cells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
+          var content = getCellContent(cells[0]);
+          var selectAllCheckbox = content.querySelector('*');
+          expect(selectAllCheckbox).to.be.ok;
         });
 
         it('should select multiple rows', function() {
@@ -111,11 +156,6 @@
           grid.selectItem(cachedItems[2]);
           expect(grid._isSelected(cachedItems[1])).to.be.true;
           expect(grid._isSelected(cachedItems[2])).to.be.true;
-        });
-
-        it('should reset selection', function() {
-          grid.selectedItems.inverted = true;
-          expect(grid.selectedItems).to.be.empty;
         });
 
         it('should invert selection', function() {
@@ -126,7 +166,7 @@
         });
 
         it('should change inverted selection', function () {
-          expect(grid.selectedItems.inverted).to.be.false;
+          expect(grid.selectedItems.inverted).to.be.undefined;
           var cells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
           var content = getCellContent(cells[0]);
           var selectAllCheckbox = content.querySelector('*');
@@ -142,32 +182,7 @@
           selectCheckbox.checked = true;
           expect(grid._isSelected(cachedItems[1])).to.be.true;
         });
-
       });
-
-      describe('single selection', function() {
-
-        it('should not have multi selection column', function() {
-          expect(grid._columnTree[0].length).to.eql(2);
-        });
-
-        it('should select multiple rows', function() {
-          grid.selectItem(cachedItems[1]);
-          grid.selectItem(cachedItems[2]);
-          expect(grid._isSelected(cachedItems[1])).to.be.true;
-          expect(grid._isSelected(cachedItems[2])).to.be.true;
-        });
-
-        it('should reflect the last selected item', function () {
-          expect(grid.selectedItem).to.equal(cachedItems[0]);
-          grid.selectItem(cachedItems[1]);
-          expect(grid.selectedItem).to.equal(cachedItems[1]);
-          grid.deselectItem(cachedItems[1]);
-          expect(grid.selectedItem).to.eql(cachedItems[0]);
-        });
-      });
-
-
     });
   </script>
 
