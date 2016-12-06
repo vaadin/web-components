@@ -1,14 +1,13 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <dom-module id="vaadin-grid-selection-column">
   <template>
     <template class="header">
-      <paper-checkbox style="padding-left: 8px" checked="{{selectAll}}"></paper-checkbox>
+      <input style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selectAll::change}}" />
     </template>
     <template>
-      <paper-checkbox style="padding-left: 8px" checked="{{selected}}"></paper-checkbox>
+      <input style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selected::change}}" />
     </template>
   </template>
 </dom-module>
