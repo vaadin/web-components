@@ -17,9 +17,10 @@
   Polymer({
     is: 'vaadin-grid-selection-column',
 
-    // TODO: remove all common code with vaadin-grid-column when we agree what should include
-    // the public API of vaadin.elements.grid.vaadinGridColumnBehavior 
-    behaviors: [vaadin.elements.grid.vaadinGridColumnBehavior],
+    behaviors: [
+      vaadin.elements.grid.vaadinGridColumnBaseBehavior,
+      vaadin.elements.grid.vaadinGridColumnBehavior
+    ],
 
     properties: {
       width: {
@@ -32,35 +33,9 @@
         value: 0
       },
 
-      template: {
-        type: Object,
-        value: function() {
-          return this._findTemplate('template:not(.header):not(.footer)');
-        }
-      },
-
-      hidden: {
-        type: Boolean
-      },
-
       selectAll: {
         notify: true
       }
-    },
-
-    observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
-
-    _frozenChanged: function(frozen) {
-      this.fire('property-changed', {path: 'frozen', value: frozen});
-    },
-
-    _templateChanged: function(template) {
-      // We bubble false for optimisation
-      this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
-    },
-
-    _hiddenChanged: function(hidden) {
-      this.fire('property-changed', {path: 'hidden', value: hidden});
     },
 
     _selectFirstTemplate: function(selector) {
