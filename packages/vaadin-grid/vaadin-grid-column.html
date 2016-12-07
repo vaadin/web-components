@@ -17,13 +17,13 @@
         headerTemplate: {
           type: Object,
           value: function() {
-            return this._findTemplate('template.header');
+            return this._findTemplate('template.header') || null;
           }
         },
         footerTemplate: {
           type: Object,
           value: function() {
-            return this._findTemplate('template.footer');
+            return this._findTemplate('template.footer') || null;
           }
         },
         instances: {

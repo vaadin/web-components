@@ -139,11 +139,11 @@
       var grid, scroller, header, body, footer, headerRows, footerRows;
 
       function getFooterCellContent(row, col) {
-        return getFooterCell(row, col).textContent.trim();
+        return getCellContent(getFooterCell(row, col)).textContent.trim();
       }
 
       function getHeaderCellContent(row, col) {
-        return getHeaderCell(row, col).textContent.trim();
+        return getCellContent(getHeaderCell(row, col)).textContent.trim();
       }
 
       function getHeaderCell(row, col) {
@@ -179,7 +179,8 @@
           var cells = Polymer.dom(header).querySelectorAll('th');
           expect(cells).not.to.be.empty;
 
-          cells.forEach(function(el) {
+          cells.forEach(function(cell) {
+            var el = getCellContent(cell);
             expect(el.matches(':empty')).to.be.true;
           });
         });
@@ -187,15 +188,16 @@
         it('should not have a border below the header', function() {
           var cells = Polymer.dom(header).querySelectorAll('th');
           var cellOnLastRow = cells[cells.length - 1];
-
-          expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('none');
+          var el = getCellContent(cellOnLastRow);
+          expect(window.getComputedStyle(el).borderBottomStyle).to.eql('none');
         });
 
         it('should have empty footer', function() {
           var cells = Polymer.dom(footer).querySelectorAll('td');
           expect(cells).not.to.be.empty;
 
-          cells.forEach(function(el) {
+          cells.forEach(function(cell) {
+            var el = getCellContent(cell);
             expect(el.matches(':empty')).to.be.true;
           });
         });
@@ -203,8 +205,8 @@
         it('should not have a border above the footer', function() {
           var cells = Polymer.dom(footer).querySelectorAll('td');
           var cellOnFirstRow = cells[0];
-
-          expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('none');
+          var el = getCellContent(cellOnFirstRow);
+          expect(window.getComputedStyle(el).borderTopStyle).to.eql('none');
         });
       });
 
@@ -319,23 +321,17 @@
           expect(getFooterCellContent(2, 1)).to.equal('group-1');
         });
 
-        it('should contain empty cells in headers', function() {
-          [
-            [0, 2],
-            [1, 0], [1, 1], [1, 4],
-            [2, 0], [2, 1], [2, 2], [2, 3]
-          ].forEach(function(a) {
-            expect(getHeaderCell(a[0], a[1]).matches(':empty')).to.be.true;
+        it('should have cell content wrappers in all header cells', function() {
+          Polymer.dom(header).querySelectorAll('th').forEach(function(a) {
+            var content = getCellContent(a);
+            expect(content.matches('.cell-content')).to.be.true;
           });
         });
 
-        it('should contain empty cells in footers but reversed', function() {
-          [
-            [2, 2],
-            [1, 0], [1, 1], [1, 4],
-            [0, 0], [0, 1], [0, 2], [0, 3]
-          ].forEach(function(a) {
-            expect(getFooterCell(a[0], a[1]).matches(':empty')).to.be.true;
+        it('should have cell content wrappers in all footer cells', function() {
+          Polymer.dom(footer).querySelectorAll('td').forEach(function(a) {
+            var content = getCellContent(a);
+            expect(content.matches('.cell-content')).to.be.true;
           });
         });
 
