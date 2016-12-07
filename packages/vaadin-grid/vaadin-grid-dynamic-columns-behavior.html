@@ -7,21 +7,8 @@
    * @polymerBehavior vaadin.elements.grid.DynamicColumnsBehavior
    */
   vaadin.elements.grid.DynamicColumnsBehavior = {
-    properties: {
-      _columnTreeProcessors: {
-        type: Array,
-        value: function() {
-          return [];
-        }
-      }
-    },
-
     ready: function() {
       this._addNodeObserver();
-    },
-
-    _addColumnTreeProcessor: function(proc) {
-      this._columnTreeProcessors.push(proc);
     },
 
     _hasColumnGroups: function(columns) {
@@ -62,10 +49,6 @@
         }
         c = this._childrenColumns(c);
       }
-
-      this._columnTreeProcessors.forEach(function(proc) {
-        _columnTree = proc.call(this, _columnTree);
-      }.bind(this));
 
       return _columnTree;
     },
