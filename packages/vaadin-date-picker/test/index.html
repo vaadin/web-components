@@ -10,7 +10,7 @@
 
 <body>
   <script>
-    var shadow = document.location.search.indexOf('dom=shadow') > -1;
+    var shadow = document.location.search.indexOf('dom=shadow') > -1 || location.href.split('/').pop() === 'shadow.html';
     WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
@@ -26,7 +26,7 @@
       'late-upgrade.html',
       'wai-aria.html',
       'angular2.html'
-    ]);
+    ].map(function(item) { return item + (shadow ? '?dom=shadow' : ''); }));
   </script>
 </body>
 
