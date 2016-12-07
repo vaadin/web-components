@@ -33,20 +33,11 @@
     },
 
     observers: [
-      '_selectedItemsChanged(selectedItems.*)',
-      '_columnTreeChanged(_columnTree.0)'
+      '_selectedItemsChanged(selectedItems.*)'
     ],
 
     listeners: {
       'template-instance-changed': '_templateInstanceChangedSelection'
-    },
-
-    _columnTreeChanged: function() {
-      this._columnTree[0].forEach(function(column, i) {
-        if (!column._selectAllHandler && column.localName == 'vaadin-grid-selection-column') {
-          column._selectAllHandler = this.listen(column, 'select-all-changed', '_onSelectAllChanged');
-        }
-      }.bind(this));
     },
 
     _templateInstanceChangedSelection: function(e) {
@@ -62,12 +53,6 @@
     _isSelected: function(item) {
       var selected = this.selectedItems && this.selectedItems.indexOf(item) > -1;
       return (this.selectedItems && this.selectedItems.inverted) ? !selected : selected;
-    },
-
-    _onSelectAllChanged: function(e) {
-      var selectedItems = [];
-      selectedItems.inverted = e.detail.value;
-      this.selectedItems = selectedItems;
     },
 
     /**

@@ -3,12 +3,12 @@
 
 <dom-module id="vaadin-grid-selection-column">
   <template>
-    <template class="header">
-      <input style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selectAll::change}}" />
-    </template>
-    <template>
-      <input style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selected::change}}" />
-    </template>
+      <template class="header">
+        <input hidden$="[[!_grid.items]]" style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selectAll::change}}" />
+      </template>
+      <template>
+        <input style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selected::change}}" />
+      </template>
   </template>
 </dom-module>
 
@@ -33,13 +33,38 @@
       },
 
       selectAll: {
+        type: Boolean,
+        value: false,
         notify: true
+      },
+
+      _grid: Object
+    },
+
+    observers: [
+      '_onSelectAllChanged(selectAll, _grid)',
+    ],
+
+    attached: function() {
+      this._grid = this._findGrid(this);
+    },
+
+    _findGrid: function(elm) {
+      while (elm && elm.localName != 'vaadin-grid') {
+        elm = elm.parentElement;
       }
+      return elm;
     },
 
     _selectFirstTemplate: function(selector) {
       return Polymer.dom(this).querySelectorAll(selector)[0]
           || Polymer.dom(this.root).querySelectorAll(selector)[0];
-    }
+    },
+
+    _onSelectAllChanged: function(selectAll, grid) {
+      var selectedItems = [];
+      selectedItems.inverted = selectAll;
+      grid.selectedItems = selectedItems;
+    },
   });
 </script>
