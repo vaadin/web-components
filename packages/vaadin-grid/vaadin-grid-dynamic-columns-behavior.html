@@ -25,7 +25,7 @@
       return columns.map(function(col) {
         if (col.localName === 'vaadin-grid-column-group') {
           var children = Polymer.dom(col).children.filter(function(el) {
-            return /vaadin-grid-column/.test(el.localName);
+            return /^vaadin-grid-(column|selection)/.test(el.localName);
           });
           return children;
         } else {
@@ -63,7 +63,7 @@
     _addNodeObserver: function() {
       this._observer = Polymer.dom(this).observeNodes(function(info) {
         var rootColumns = function(node) {
-          return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+          return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
         };
         if (info.addedNodes.filter(rootColumns).length > 0 ||
           info.removedNodes.filter(rootColumns).length > 0) {

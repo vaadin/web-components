@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-checkbox/paper-checkbox.html">
 
 <dom-module id="vaadin-grid-column">
 </dom-module>
@@ -151,7 +150,7 @@
       properties: {
         _childColumns: {
           value: function() {
-            return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+            return Polymer.dom(this).querySelectorAll('vaadin-grid-column, vaadin-grid-selection-column');
           }
         },
 

@@ -50,7 +50,7 @@
       while (elm && elm.localName != 'vaadin-grid') {
         elm = elm.parentElement;
       }
-      return elm;
+      return elm || undefined;
     },
 
     _selectFirstTemplate: function(selector) {

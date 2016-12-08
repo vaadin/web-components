@@ -18,13 +18,6 @@
               callback(items);
             };
           }
-        },
-
-        items: {
-          notify: true,
-          value: function() {
-            return window.users.results;
-          }
         }
       }
     });
@@ -40,11 +33,7 @@
         items: {
           notify: true,
           value: function() {
-            var items = Array.apply( null, { length: 200 } ).map(function(item, index) {
-              return window.getJSON('http://randomuser.me?index=' + (index));
-            });
-
-            return items;
+            return window.users.results;
           }
         }
       }

@@ -11,6 +11,8 @@
 
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../vaadin-grid-selection-column.html">
+
   <style>
     vaadin-grid {
       height: 400px;
@@ -51,6 +53,16 @@
         <template class="footer">some footer</template>
         <template>some body [[item.value]]</template>
       </vaadin-grid-column>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="selection-column">
+    <template>
+      <vaadin-grid-selection-column>
+        <template class="header">some header</template>
+        <template>some body [[item.value]]</template>
+        <template class="footer">some footer</template>
+      </vaadin-grid-selection-column>
     </template>
   </test-fixture>
 
@@ -342,6 +354,17 @@
 
           it('should support adding late', function(done) {
             var column = fixture('column');
+            Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
+            Polymer.dom.flush();
+
+            grid.async(function() {
+              expectFirstColumn('some');
+              done();
+            });
+          });
+
+          it('should support adding selection column late', function(done) {
+            var column = fixture('selection-column');
             Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
             Polymer.dom.flush();
 

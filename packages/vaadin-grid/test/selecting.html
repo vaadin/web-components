@@ -19,7 +19,7 @@
 
   <test-fixture id="default">
     <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000" selection-enabled>
+      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
         <vaadin-grid-column>
           <template>foo</template>
         </vaadin-grid-column>
@@ -31,125 +31,80 @@
   </test-fixture>
   <test-fixture id="multiselect">
     <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000" selection-enabled>
+      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
         <vaadin-grid-selection-column>
         </vaadin-grid-selection-column>
-        <vaadin-grid-column>
-          <template>foo</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template>bar</template>
-        </vaadin-grid-column>
+        <vaadin-grid-selection-column>
+          <template class="header">header</template>
+          <template>body</template>
+        </vaadin-grid-selection-column>
+        <vaadin-grid-column-group>
+          <vaadin-grid-selection-column>
+          </vaadin-grid-selection-column>
+        </vaadin-grid-column-group>
       </vaadin-grid>
     </template>
   </test-fixture>
 
   <script>
+    var grid;
+    var rows;
+    var cachedItems;
+
     describe('selection', function() {
-      var grid;
-      var rows;
-      var cachedItems;
-
-      afterEach(function() {
-        if (grid) {
-          grid.parentElement.removeChild(grid);
-        }
+      beforeEach(function() {
+        grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
+        cachedItems = grid._cache[0];
+        rows = getRows(grid.$.scroller.$.items);
+        grid.selectedItems = [cachedItems[0]];
+        Polymer.dom.flush();
       });
 
-      describe('single-selection', function() {
+      it('should set selected attribute', function() {
+        expect(rows[0].hasAttribute('selected')).to.be.true;
+        expect(rows[1].hasAttribute('selected')).to.be.false;
+      });
 
-        beforeEach(function() {
-          grid = fixture('default');
-          grid.dataSource = infiniteDataSource;
-          cachedItems = grid._cache[0];
-          rows = getRows(grid.$.scroller.$.items);
-          grid.selectedItems = [cachedItems[0]];
-          Polymer.dom.flush();
+      it('should bind to cells', function() {
+        var cells = getRowCells(rows[0]);
+        expect(cells[0].instance.selected).to.be.true;
+        expect(cells[1].instance.selected).to.be.true;
+        expect(getRowCells(rows[1])[0].instance.selected).to.be.false;
+      });
+
+      it('should reflect cell instance value', function() {
+        var cells = getRowCells(rows[0]);
+        cells[0].instance.selected = false;
+        expect(cells[0].instance.selected).to.be.false;
+        expect(grid.selectedItems).to.be.empty;
+      });
+
+      describe('selectedItems', function() {
+        it('should reflect changes', function() {
+          grid.push('selectedItems', cachedItems[1]);
+          expect(rows[1].hasAttribute('selected')).to.be.true;
         });
 
-        describe('selectedItems', function() {
-          it('should set selected attribute', function() {
-            expect(rows[0].hasAttribute('selected')).to.be.true;
-            expect(rows[1].hasAttribute('selected')).to.be.false;
+        it('should notify', function(done) {
+          grid.addEventListener('selected-items-changed', function() {
+            done();
           });
-
-          it('should reflect changes', function() {
-            grid.push('selectedItems', cachedItems[1]);
-            expect(rows[1].hasAttribute('selected')).to.be.true;
-          });
-
-          it('should bind to cells', function() {
-            var cells = getRowCells(rows[0]);
-            expect(cells[0].instance.selected).to.be.true;
-            expect(cells[1].instance.selected).to.be.true;
-            expect(getRowCells(rows[1])[0].instance.selected).to.be.false;
-          });
-
-          it('should reflect cell instance value', function() {
-            var cells = getRowCells(rows[0]);
-            cells[0].instance.selected = false;
-            expect(cells[0].instance.selected).to.be.false;
-            expect(grid.selectedItems).to.be.empty;
-          });
-
-          it('should notify', function(done) {
-            grid.addEventListener('selected-items-changed', function() {
-              done();
-            });
-            grid.selectedItems = [cachedItems[1]];
-          });
-        });
-
-        describe('select functions', function() {
-          it('should select item', function() {
-            expect(grid._isSelected(cachedItems[1])).to.be.false;
-            grid.selectItem(cachedItems[1]);
-            expect(grid._isSelected(cachedItems[1])).to.be.true;
-          });
-
-          it('should deselect item', function() {
-            expect(grid._isSelected(cachedItems[0])).to.be.true;
-            grid.deselectItem(cachedItems[0]);
-            expect(grid._isSelected(cachedItems[0])).to.be.false;
-          });
-
-          it('should select multiple rows', function() {
-            grid.selectItem(cachedItems[1]);
-            grid.selectItem(cachedItems[2]);
-            expect(grid._isSelected(cachedItems[1])).to.be.true;
-            expect(grid._isSelected(cachedItems[2])).to.be.true;
-          });
-
-          it('should reflect the last selected item', function () {
-            expect(grid.selectedItem).to.equal(cachedItems[0]);
-            grid.selectItem(cachedItems[1]);
-            expect(grid.selectedItem).to.equal(cachedItems[1]);
-            grid.deselectItem(cachedItems[1]);
-            expect(grid.selectedItem).to.eql(cachedItems[0]);
-          });
+          grid.selectedItems = [cachedItems[1]];
         });
       });
 
-      describe('multi selection', function() {
-        var headerRows;
-
-        beforeEach(function() {
-          grid = fixture('multiselect');
-          grid.dataSource = infiniteDataSource;
-          cachedItems = grid._cache[0];
-          rows = getRows(grid.$.scroller.$.items);
-          headerRows = getRows(grid.$.scroller.$.header);
-
-          grid.selectedItems = [cachedItems[0]];
-          Polymer.dom.flush();
+      describe('select functions', function() {
+        it('should select item', function() {
+          expect(grid._isSelected(cachedItems[1])).to.be.false;
+          grid.selectItem(cachedItems[1]);
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
         });
 
-        it('should have a multi selection column', function() {
-          expect(grid._columnTree[0].length).to.equal(3);
-          var cells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
-          var content = getCellContent(cells[0]);
-          var selectAllCheckbox = content.querySelector('*');
-          expect(selectAllCheckbox).to.be.ok;
+        it('should deselect item', function() {
+          expect(grid._isSelected(cachedItems[0])).to.be.true;
+          grid.deselectItem(cachedItems[0]);
+          expect(grid._isSelected(cachedItems[0])).to.be.false;
         });
 
         it('should select multiple rows', function() {
@@ -158,17 +113,115 @@
           expect(grid._isSelected(cachedItems[1])).to.be.true;
           expect(grid._isSelected(cachedItems[2])).to.be.true;
         });
+      });
+    });
 
-        it('should select an item', function () {
-          var cells = getRowCells(rows[1]);
-          var content = getCellContent(cells[0]);
-          var selectCheckbox = content.querySelector('*');
-          // Native checkboxes do not fire change event when setting the checked property.
-          selectCheckbox.click();
-          Polymer.Base.async(function() {
-            expect(grid._isSelected(cachedItems[1])).to.be.true;
-          }, 0);
-        });
+    describe('multi selection column', function() {
+      var headerRows;
+      var firstHeaderCellContent, firstBodyCellContent;
+      var selectionColumn;
+
+      beforeEach(function() {
+        grid = fixture('multiselect');
+        grid.items = ['foo', 'bar', 'baz'];
+        selectionColumn = grid._columnTree[0][0];
+        cachedItems = grid._cache[0];
+        rows = getRows(grid.$.scroller.$.items);
+        headerRows = getRows(grid.$.scroller.$.header);
+
+        firstHeaderCellContent = getCellContent(getRowCells(headerRows[1])[0]);
+        firstBodyCellContent = getCellContent(getRowCells(rows[0])[0]);
+        Polymer.dom.flush();
+      });
+
+      it('should have a checkbox in the body cell', function() {
+        expect(firstBodyCellContent.children[0].localName).to.eql('input');
+        expect(firstBodyCellContent.children[0].type).to.eql('checkbox');
+      });
+
+      it('should select item when checkbox is checked', function() {
+        var selectCheckbox = firstBodyCellContent.children[0];
+
+        selectCheckbox.click();
+
+        expect(grid._isSelected(cachedItems[0])).to.be.true;
+      });
+
+      it('should have bound the body checkbox to selected items', function() {
+        var selectCheckbox = firstBodyCellContent.children[0];
+
+        grid.push('selectedItems', cachedItems[0]);
+
+        expect(selectCheckbox.checked).to.be.true;
+      });
+
+      it('should have a select all checkbox in the header', function() {
+        expect(firstHeaderCellContent.children[0].localName).to.eql('input');
+        expect(firstHeaderCellContent.children[0].type).to.eql('checkbox');
+      });
+
+      it('should set selectAll when header checkbox is clicked', function() {
+        var selectCheckbox = firstHeaderCellContent.children[0];
+
+        selectCheckbox.click();
+
+        expect(selectionColumn.selectAll).to.be.true;
+      });
+
+      it('should select all items when select all is set', function() {
+        selectionColumn.selectAll = true;
+
+        expect(grid.selectedItems).to.eql(grid.items);
+      });
+
+      it('should deselect all items when select all is unset', function() {
+        selectionColumn.selectAll = true;
+
+        selectionColumn.selectAll = false;
+
+        expect(grid.selectedItems).to.be.empty;
+      });
+
+      it('should set a copy of items when all items are selected', function() {
+        selectionColumn.selectAll = true;
+
+        grid.pop('selectedItems');
+
+        expect(grid.items).not.to.eql(grid.selectedItems);
+      });
+
+      it('should not set selection when data source is used', function() {
+        grid.items = undefined;
+        grid.dataSource = infiniteDataSource;
+
+        selectionColumn.selectAll = true;
+
+        expect(grid.selectedItems).to.be.empty;
+      });
+
+      it('should hide select all checkbox when data source is used', function() {
+        grid.items = undefined;
+        grid.dataSource = infiniteDataSource;
+
+        var selectCheckbox = firstHeaderCellContent.children[0];
+
+        expect(selectCheckbox.hidden).to.be.true;
+      });
+
+      it('should be possible to override the body template', function() {
+        var secondCell = getCellContent(getRowCells(rows[0])[1]);
+
+        expect(secondCell.innerHTML).to.eql('body');
+      });
+
+      it('should be possible to override the header template', function() {
+        var secondCell = getCellContent(getRowCells(headerRows[1])[1]);
+
+        expect(secondCell.innerHTML).to.eql('header');
+      });
+
+      it('should have grid reference also when column is nested inside a group', function() {
+        expect(grid._columnTree[1][2]._grid).to.eql(grid);
       });
     });
   </script>

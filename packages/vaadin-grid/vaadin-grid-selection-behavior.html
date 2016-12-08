@@ -11,16 +11,6 @@
     properties: {
 
       /**
-       * This is the currently selected item, or `null`
-       * if no item is selected.
-       */
-      selectedItem: {
-        type: Object,
-        notify: true,
-        computed: '_getSelectedItem(selectedItems.*)'
-      },
-
-      /**
        * An array that contains the selected items.
        */
       selectedItems: {
@@ -101,16 +91,7 @@
           row.selected = this._isSelected(row.item);
         }.bind(this));
       }
-    },
-
-    _getSelectedItem: function() {
-      if (this.selectedItems && this.selectedItems.length > 0) {
-        return this.selectedItems[this.selectedItems.length - 1];
-      } else {
-        return null;
-      }
     }
-
   };
 </script>
 
