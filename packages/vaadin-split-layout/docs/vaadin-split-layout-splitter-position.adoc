@@ -1,0 +1,34 @@
+---
+title: Initial Splitter Position
+order: 4
+layout: page
+---
+
+[[vaadin-split-layout.splitter-position]]
+= Initial Splitter Position
+
+The initial splitter position is determined from the sizes of the content elements inside the split layout. Therefore, changing [propertyname]#width# on the content elements affects the initial splitter position for the horizontal layouts, while [propertyname]#height# affects the vertical ones.
+
+[IMPORTANT]
+====
+When the total size of the content elements does not match the layout, the content elements are scaled proportionally.
+====
+
+You can customize the initial splitter position by resizing the content elements. For example, using inline styles:
+
+[source,html]
+----
+<vaadin-split-layout>
+  <div style="width: 75%;">First content element</div>
+  <div style="height: 25%;">Second content element</div>
+</vaadin-split-layout>
+----
+
+[[figure.vaadin-split-layout.sizes.initial]]
+.A screenshot of [vaadinelement]#vaadin-split-layout# with custom initial sizes
+image::img/vaadin-split-layout-splitter-position.png[width="560"]
+
+[NOTE]
+====
+When setting initial sizes with relative units, such as percentages, it is recommended to assing the size for both content elements.
+====

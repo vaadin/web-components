@@ -1,0 +1,22 @@
+---
+title: Size Limits
+order: 5
+layout: page
+---
+
+[[vaadin-split-layout.limits]]
+= Size Limits
+
+By default, the user can resize the split until one of the content elements is collapsed.
+
+You can set the limit for the resizing and prevent collapsing of the content elements by specifying a `min-` or a `max-` style property corresponding to the layout: `min-width` and `max-width` have effect for the horizontal layout, `min-height` and `max-height` for the vertical layout.
+
+It is usually enough to set the limits on just one content element, either a first one or a second one.
+
+[source,html]
+----
+<vaadin-split-layout>
+  <div style="min-width: 50px; max-width: 150px;">First</div>
+  <div>Second</div>
+</vaadin-split-layout>
+----

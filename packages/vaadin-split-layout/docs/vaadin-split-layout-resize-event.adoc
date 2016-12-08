@@ -1,6 +1,6 @@
 ---
 title: Resize Event and Notification
-order: 4
+order: 6
 layout: page
 ---
 
