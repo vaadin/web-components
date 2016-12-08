@@ -264,7 +264,7 @@
         return this._dateEquals(new Date(), date);
       },
 
-      _getDays: function(month, firstDayOfWeek, minDate, maxDate) {
+      _getDays: function(month, firstDayOfWeek) {
         // First day of the month (at midnight).
         var date = new Date(0, 0);
         date.setFullYear(month.getFullYear());

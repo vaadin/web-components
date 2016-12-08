@@ -223,7 +223,6 @@
       });
 
       describe('month calendar contents', function() {
-        var monthCalenar;
 
         beforeEach(function(done) {
           monthCalendar = fixture('month-calendar');
@@ -351,7 +350,7 @@
 
         it('should request availability from IronA11yAnnouncer', function(done) {
           var spy = sinon.spy(Polymer.IronA11yAnnouncer, 'requestAvailability');
-          var datepicker = fixture('datepicker');
+          fixture('datepicker');
           Polymer.Base.async(function() {
             expect(spy.called).to.be.true;
             done();

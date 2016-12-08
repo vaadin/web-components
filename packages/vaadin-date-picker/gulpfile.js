@@ -1,7 +1,6 @@
 'use strict';
 var gulp = require('gulp');
-var jscs = require('gulp-jscs');
-var jshint = require('gulp-jshint');
+var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
 var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
@@ -12,12 +11,9 @@ gulp.task('lint:js', function() {
         '*.js',
         'test/*.js'
       ])
-      .pipe(jshint())
-      .pipe(jshint.reporter())
-      .pipe(jshint.reporter('fail'))
-      .pipe(jscs())
-      .pipe(jscs.reporter())
-      .pipe(jscs.reporter('fail'));
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
 });
 
 gulp.task('lint:html', function() {
@@ -29,12 +25,9 @@ gulp.task('lint:html', function() {
       .pipe(htmlExtract({
         sel: 'script, code-example code'
       }))
-      .pipe(jshint())
-      .pipe(jshint.reporter())
-      .pipe(jshint.reporter('fail'))
-      .pipe(jscs())
-      .pipe(jscs.reporter())
-      .pipe(jscs.reporter('fail'));
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
 });
 
 gulp.task('typings', function() {

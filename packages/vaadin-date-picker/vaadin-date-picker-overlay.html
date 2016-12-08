@@ -437,7 +437,7 @@
         this._scrollToPosition(this._differenceInMonths(date, this._originDate), animate);
       },
 
-      _focusedDateChanged: function(focusedDate, oldFocusedDate) {
+      _focusedDateChanged: function(focusedDate) {
         this.revealDate(focusedDate);
       },
 
@@ -735,8 +735,7 @@
       },
 
       _onKeydown: function(e) {
-        var focus = this._currentlyFocusedDate(),
-            dateToFocus;
+        var focus = this._currentlyFocusedDate();
 
         var eventKey = this._eventKey(e);
         if (eventKey === 'tab') {
