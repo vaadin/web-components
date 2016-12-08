@@ -4,14 +4,13 @@
     "no-console": 0
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "plugins": [
     "html"
   ],
   "globals": {
-    "require": false,
-    "module": false,
     "CustomElements": false,
     "HTMLImports": false,
     "Polymer": false,
