@@ -296,10 +296,13 @@
 
       _headerTemplateChanged: function(headerTemplate, target) {
         if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
+          this._isEmpty = false;
           this._templateChanged(headerTemplate, target);
         } else {
+          this._isEmpty = true;
           this._templateChanged(document.createElement('template'), target);
         }
+        this.fire('cell-empty-changed');
       }
     });
 
@@ -322,9 +325,12 @@
       _footerTemplateChanged: function(footerTemplate, target) {
         if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._templateChanged(footerTemplate, target);
+          this._isEmpty = false;
         } else {
           this._templateChanged(document.createElement('template'), target);
+          this._isEmpty = true;
         }
+        this.fire('cell-empty-changed');
       }
     });
 
