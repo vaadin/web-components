@@ -117,6 +117,7 @@
 
         beforeEach(function() {
           grid = fixture('grid');
+          Polymer.dom.flush();
           sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
           sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
 

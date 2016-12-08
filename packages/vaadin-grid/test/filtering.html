@@ -85,6 +85,7 @@
 
       beforeEach(function() {
         grid = fixture('grid');
+        Polymer.dom.flush();
       });
 
       it('should have filters', function() {
@@ -124,6 +125,7 @@
 
       beforeEach(function() {
         grid = fixture('grid');
+        Polymer.dom.flush();
         grid._filters[0].value = '';
         grid._filters[1].value = '';
         grid.items = [{

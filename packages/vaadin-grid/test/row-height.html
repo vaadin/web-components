@@ -120,6 +120,7 @@
 
         scroller = grid.$.scroller;
         rows = getRows(scroller.$.items);
+        Polymer.dom.flush();
         defaultHeight = getRowCells(getRows(grid.$.scroller.$.header)[0])[0].clientHeight + 1;
         grid.dataSource = function(info, callback) {
           setTimeout(function() {
