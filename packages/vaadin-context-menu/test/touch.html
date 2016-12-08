@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
   <title></title>
 
   <link rel="import" href="../../test-fixture/test-fixture.html">
@@ -15,18 +17,23 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-context-menu target-selector="#target"></vaadin-context-menu>
-      <div id="target"></div>
+      <vaadin-context-menu selector="#target">
+        <div id="target">Target</div>
+        <template>
+          <div>Menu Content</div>
+        </template>
+      </vaadin-context-menu>
     </template>
   </test-fixture>
 
   <script>
     describe('mobile support', function() {
-      var menu;
+      var menu, target;
       var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       beforeEach(function() {
-        menu = fixture('default')[0];
+        menu = fixture('default');
+        target = Polymer.dom(menu).querySelector('#target');
         menu.$.overlay.phone = true;
       });
 
@@ -75,19 +82,20 @@
         expect(menu.$.overlay.withBackdrop).to.eql(true);
       });
 
-      it('should align to bottom of the viewport', function() {
-        var styles = window.getComputedStyle(menu.$.overlay);
-
-        expect(styles.bottom).to.eql('24px');
-        expect(styles.top).to.eql('auto');
-        expect(styles.left).to.eql('auto');
-        expect(styles.transform).not.to.contain('translate');
+      it('should align to bottom of the viewport', function(done) {
+        menu._opened = true;
+        Polymer.Base.async(function() {
+          var styles = window.getComputedStyle(menu.$.overlay);
+          expect(styles.bottom).to.eql('24px');
+          expect(styles.transform).not.to.contain('translate');
+          done();
+        }, 1000);
       });
 
       if (ios) {
         it('should open on long-touch on ios', function(done) {
-          var xy = middleOfNode(menu.listenOn);
-          makeSoloTouchEvent('touchstart', xy, menu.listenOn);
+          var xy = middleOfNode(target);
+          makeSoloTouchEvent('touchstart', xy, target);
 
           menu.async(function() {
             expect(menu._opened).to.eql(true);
