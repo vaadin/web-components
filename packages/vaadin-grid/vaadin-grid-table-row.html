@@ -87,6 +87,12 @@
         this.target.$.scroller._frozenCellsChanged();
       },
 
+      _updateRowVisibility: function() {
+        this.hidden = this.cells.every(function(cell) {
+          return cell._isEmpty;
+        });
+      },
+
       _rowDetailsCellChanged: function(_rowDetailsCell, target) {
         // paddingBottom must be set before update() is called!
         // make sure observers are in the correct order!
@@ -175,6 +181,14 @@
         vaadinGridTableRowBehavior
       ],
 
+      observers: [
+        '_updateRowVisibility(columns)'
+      ],
+
+      listeners: {
+        'cell-empty-changed': '_updateRowVisibility'
+      },
+
       _createCell: function() {
         return document.createElement('th', 'vaadin-grid-table-header-cell');
       }
@@ -187,6 +201,14 @@
       behaviors: [
         vaadinGridTableRowBehavior
       ],
+
+      observers: [
+        '_updateRowVisibility(columns)'
+      ],
+
+      listeners: {
+        'cell-empty-changed': '_updateRowVisibility'
+      },
 
       _createCell: function() {
         return document.createElement('td', 'vaadin-grid-table-footer-cell');

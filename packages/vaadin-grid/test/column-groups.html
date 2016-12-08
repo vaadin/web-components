@@ -134,6 +134,12 @@
     </template>
   </test-fixture>
 
+  <vaadin-grid-column id="extra">
+    <template class="footer">
+      Foobar
+    </template>
+  </vaadin-grid-column>
+
   <script>
     describe('column groups', function() {
       var grid, scroller, header, body, footer, headerRows, footerRows;
@@ -208,14 +214,24 @@
           var el = getCellContent(cellOnFirstRow);
           expect(window.getComputedStyle(el).borderTopStyle).to.eql('none');
         });
+
+        it('should have no visible header rows', function() {
+          headerRows.forEach(function(row) {
+            expect(row.hidden).to.be.true;
+          });
+        });
+
       });
 
       describe('1 column 1 group', function() {
+        var extraColumn;
 
         beforeEach(function() {
           //  |          | group-0             |
           //  | header-0 | header-1 | header-2 |
           init('1column1group');
+
+          extraColumn = document.querySelector('#extra').cloneNode(true);
         });
 
         it('the group header cell should ignore changes from child columns', function() {
@@ -271,6 +287,33 @@
           expect(getHeaderCell(0, 1).hasAttribute('frozen')).to.be.true;
           expect(getHeaderCell(1, 1).hasAttribute('frozen')).to.be.true;
           expect(getHeaderCell(1, 2).hasAttribute('frozen')).to.be.true;
+        });
+
+        it('should have no hidden header rows', function() {
+          headerRows.forEach(function(row) {
+            expect(row.hidden).to.be.false;
+          });
+        });
+
+        it('should have no visible footer rows', function() {
+          footerRows.forEach(function(row) {
+            expect(row.hidden).to.be.true;
+          });
+        });
+
+        it('should have visible footer rows after adding extra column', function() {
+          Polymer.dom(grid).appendChild(extraColumn);
+          Polymer.dom.flush();
+          expect(getRows(footer)[0].hidden).to.be.false;
+          expect(getRows(footer)[1].hidden).to.be.true;
+        });
+
+        it('should not have visible footer rows after removing extra column', function() {
+          Polymer.dom(grid).appendChild(extraColumn);
+          Polymer.dom.flush();
+          Polymer.dom(grid).removeChild(extraColumn);
+          Polymer.dom.flush();
+          expect(getRows(footer)[0].hidden).to.be.true;
         });
       });
 
