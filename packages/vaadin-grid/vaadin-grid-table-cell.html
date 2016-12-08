@@ -37,7 +37,10 @@
         width: String,
 
         _forwardedParentProps: Object,
-        _childColumns: Array
+        _childColumns: Array,
+
+        _cellContent: Object,
+        _insertionPoint: Object
       },
 
       observers: ['_columnChanged(column)',
@@ -48,7 +51,7 @@
         '_itemChanged(item, instance)',
         '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)',
         '_selectedChanged(selected, instance)',
-        '_toggleContent(isAttached, _cellContent)',
+        '_toggleContent(isAttached, _cellContent, _insertionPoint)',
         '_widthChanged(width)',
         '_visibleChildColumnsChanged(_visibleChildColumns)',
         '_childColumnsChanged(_childColumns)'
@@ -124,13 +127,18 @@
         this.colSpan = childColumns.length;
       },
 
-      _toggleContent: function(isAttached, cellContent) {
-        if (Polymer.Settings.useShadow) {
-          if (isAttached) {
+      _toggleContent: function(isAttached, cellContent, insertionPoint) {
+        if (isAttached) {
+          if (!Polymer.dom(cellContent).parentNode) {
             Polymer.dom(this.target).appendChild(cellContent);
-          } else if (cellContent.parentNode) {
-            Polymer.dom(this.target).removeChild(cellContent);
+            Polymer.dom(this).appendChild(insertionPoint);
           }
+        } else {
+          this.debounce('remove-content', function() {
+            if (!this.isAttached && cellContent.parentNode) {
+              Polymer.dom(this.target).removeChild(cellContent);
+            }
+          }, 1);
         }
       },
 
@@ -167,33 +175,15 @@
         }
 
         this.style.height = '';
+
         this._cellContent = document.createElement('div');
         this._cellContent.setAttribute('class', 'cell-content');
-
-        if (Polymer.Settings.useShadow) {
-          // Shadow
-          target._contentIndex = target._contentIndex + 1 || 0;
-          this._cellContent.setAttribute('data-cell-content-id', target._contentIndex);
-
-          var content = document.createElement('content');
-          content.setAttribute('select', '[data-cell-content-id="' + target._contentIndex + '"]');
-          Polymer.dom(this).appendChild(content);
-        } else {
-          // Non-shadow
-
-          // Can't use Polymer.dom.appendChild here as using it will "fix"
-          // the item later with the style scope of vaadin-grid-table
-          this.appendChild(this._cellContent);
-
-          // wait until item is really attached to DOM. (Polymer.dom.flush())
-          // not helping here for some reason.
-          this.async(function() {
-            if (this.target.domHost) {
-              Polymer.StyleTransformer.dom(this._cellContent, this.target.domHost.tagName.toLowerCase(), false, false);
-            }
-          });
-        }
+        target._contentIndex = target._contentIndex + 1 || 0;
+        this._cellContent.setAttribute('data-cell-content-id', target._contentIndex);
         Polymer.dom(this._cellContent).appendChild(this.instance.root);
+
+        this._insertionPoint = document.createElement('content');
+        this._insertionPoint.setAttribute('select', '[data-cell-content-id="' + target._contentIndex + '"]');
       },
 
       _forwardInstanceProp: function(inst, prop, value) {
