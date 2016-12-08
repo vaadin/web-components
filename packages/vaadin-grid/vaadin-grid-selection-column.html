@@ -3,12 +3,12 @@
 
 <dom-module id="vaadin-grid-selection-column">
   <template>
-      <template class="header">
-        <input hidden$="[[!_grid.items]]" style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selectAll::change}}" />
-      </template>
-      <template>
-        <input style="transform: scale(1.5) translateX(50%)" type="checkbox" checked="{{selected::change}}" />
-      </template>
+    <template class="header">
+      <input hidden$="[[!_grid.items]]" type="checkbox" checked="{{selectAll::change}}" />
+    </template>
+    <template>
+      <input type="checkbox" checked="{{selected::change}}" />
+    </template>
   </template>
 </dom-module>
 
@@ -59,9 +59,7 @@
     },
 
     _onSelectAllChanged: function(selectAll, grid) {
-      var selectedItems = [];
-      selectedItems.inverted = selectAll;
-      grid.selectedItems = selectedItems;
-    },
+      grid.selectedItems = selectAll && grid.items ? grid.items.slice() : [];
+    }
   });
 </script>

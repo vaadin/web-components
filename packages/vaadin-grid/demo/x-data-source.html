@@ -18,6 +18,13 @@
               callback(items);
             };
           }
+        },
+
+        items: {
+          notify: true,
+          value: function() {
+            return window.users.results;
+          }
         }
       }
     });

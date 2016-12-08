@@ -159,29 +159,15 @@
           expect(grid._isSelected(cachedItems[2])).to.be.true;
         });
 
-        it('should invert selection', function() {
-          grid.selectedItems.inverted = true;
-          grid.push('selectedItems', cachedItems[0]);
-          expect(grid._isSelected(cachedItems[0])).to.be.false;
-          expect(grid._isSelected(cachedItems[1])).to.be.true;
-        });
-
-        it('should change inverted selection', function () {
-          expect(grid.selectedItems.inverted).to.be.undefined;
-          var cells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
-          var content = getCellContent(cells[0]);
-          var selectAllCheckbox = content.querySelector('*');
-          selectAllCheckbox.checked = true;
-          expect(grid.selectedItems.inverted).to.be.true;
-        });
-
         it('should select an item', function () {
           var cells = getRowCells(rows[1]);
           var content = getCellContent(cells[0]);
           var selectCheckbox = content.querySelector('*');
-          selectCheckbox.checked = true;
-          selectCheckbox.checked = true;
-          expect(grid._isSelected(cachedItems[1])).to.be.true;
+          // Native checkboxes do not fire change event when setting the checked property.
+          selectCheckbox.click();
+          Polymer.Base.async(function() {
+            expect(grid._isSelected(cachedItems[1])).to.be.true;
+          }, 0);
         });
       });
     });

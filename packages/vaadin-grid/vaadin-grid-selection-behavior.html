@@ -51,8 +51,7 @@
     },
 
     _isSelected: function(item) {
-      var selected = this.selectedItems && this.selectedItems.indexOf(item) > -1;
-      return (this.selectedItems && this.selectedItems.inverted) ? !selected : selected;
+      return this.selectedItems.indexOf(item) > -1;
     },
 
     /**
@@ -70,12 +69,7 @@
     },
 
     _selectItem: function(item) {
-      if (this.selectedItems.inverted) {
-        var index;
-        if ((index = this.selectedItems.indexOf(item)) > -1) {
-          this.splice('selectedItems', index, 1);
-        }
-      } else {
+      if (!this._isSelected(item)) {
         this.push('selectedItems', item);
       }
     },
@@ -96,14 +90,8 @@
 
     _deselectItem: function(item) {
       var index = this.selectedItems.indexOf(item);
-      if (this.selectedItems.inverted) {
-        if (index === -1) {
-          this.push('selectedItems', item);
-        }
-      } else {
-        if (index > -1) {
-          this.splice('selectedItems', index, 1);
-        }
+      if (index > -1) {
+        this.splice('selectedItems', index, 1);
       }
     },
 

@@ -32,8 +32,8 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid data-source="[[dataSource]]" size="200">
+          <x-data-source items="{{items}}"></x-data-source>
+          <vaadin-grid items="{{items}}">
             <vaadin-grid-selection-column>
             </vaadin-grid-selection-column>
             <vaadin-grid-column width="50px">
