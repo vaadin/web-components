@@ -219,8 +219,8 @@
           Array.prototype.slice.call(dates, 0, 7).map(function(date, index) {
             var label = date.getAttribute('aria-label');
             expect(label).to.equal((index + 1) + ' helmikuu 2016, ' + [
-                'maanantai', 'tiistai', 'keskiviikko', 'torstai',
-                'perjantai', 'lauantai', 'sunnuntai'
+              'maanantai', 'tiistai', 'keskiviikko', 'torstai',
+              'perjantai', 'lauantai', 'sunnuntai'
             ][index]);
           });
         });

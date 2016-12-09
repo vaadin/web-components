@@ -291,7 +291,9 @@
       _getWeekNumber: function(date, days) {
         if (!date) {
           // Get the first non-null date from the days array.
-          date = days.reduce(function(acc, d) { return (!acc && d ? d : acc); });
+          date = days.reduce(function(acc, d) {
+            return (!acc && d ? d : acc);
+          });
         }
 
         return vaadin.elements.datepicker.DatePickerHelper._getISOWeekNumber(date);

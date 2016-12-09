@@ -1,17 +1,14 @@
 {
-  "extends": "eslint:recommended",
-  "rules": {
-    "quotes": ["error", "single"]
-  },
+  "extends": ["vaadin"],
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "plugins": [
     "html"
   ],
   "globals": {
     "vaadin": false,
-    "require": false,
     "CustomElements": false,
     "HTMLImports": false,
     "Polymer": false,
