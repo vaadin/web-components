@@ -19,7 +19,7 @@
   <test-fixture id="default">
     <template>
       <vaadin-grid style="width: 50px; height: 400px;" size="1000">
-        <vaadin-grid-column frozen>
+        <vaadin-grid-column>
           <template>[[index]]</template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -41,6 +41,14 @@
 
       function isFixed(element) {
         return window.getComputedStyle(element).position === 'fixed';
+      }
+
+      function wheel(deltaX, deltaY) {
+        var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+        e.deltaY = deltaY;
+        e.deltaX = deltaX;
+        scroller.$.table.dispatchEvent(e);
+        return e;
       }
 
       it('should have the right amount of scrollbars/scrollers', function() {
@@ -67,6 +75,31 @@
         if (fixedContainers) {
           expect(window.getComputedStyle(scroller.$.table).transform).to.equal('none');
         }
+      });
+
+      it('should only cancel wheel events when scrolling is possible - vertical', function(done) {
+        expect(wheel(0, -1).defaultPrevented).to.be.false;
+        expect(wheel(0, 1).defaultPrevented).to.be.true;
+
+        scrollToEnd(grid, function() {
+          expect(wheel(0, 1).defaultPrevented).to.be.false;
+          expect(wheel(0, -1).defaultPrevented).to.be.true;
+          done();
+        }.bind(this));
+
+      });
+
+
+      it('should only cancel wheel events when scrolling is possible - horizontal', function() {
+        expect(wheel(-1, 0).defaultPrevented).to.be.false;
+        expect(wheel(1, 0).defaultPrevented).to.be.true;
+
+        var table = scroller.$.table;
+        table.scrollLeft = table.scrollWidth - table.offsetWidth;
+
+        expect(wheel(1, 0).defaultPrevented).to.be.false;
+        expect(wheel(-1, 0).defaultPrevented).to.be.true;
+
       });
 
     });
