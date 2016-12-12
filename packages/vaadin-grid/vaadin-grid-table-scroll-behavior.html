@@ -114,6 +114,8 @@
 
     _onWheel: function(e) {
       var table = this.$.table;
+      var momentum = Math.abs(e.deltaX) + Math.abs(e.deltaY);
+
       if (
         (e.deltaY > 0 && table.scrollTop < table.scrollHeight - table.offsetHeight) ||
         (e.deltaY < 0 && table.scrollTop > 0) ||
@@ -124,7 +126,14 @@
         table.scrollTop += e.deltaY;
         table.scrollLeft += e.deltaX;
         this._scrollHandler();
+
+        this._ignoreNewWheel = this.debounce('ignore-new-wheel', function() {
+          this._ignoreNewWheel = null;
+        }, 500);
+      } else if (momentum <= this._previousMomentum || this._ignoreNewWheel) {
+        e.preventDefault();
       }
+      this._previousMomentum = momentum;
     },
 
     _adjustVirtualIndexOffset: function(delta) {
