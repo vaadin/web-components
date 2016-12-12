@@ -336,6 +336,11 @@
      */
     _clear: function() {
       this.selectedItem = null;
+
+      if (this.allowCustomValue) {
+        this.value = '';
+      }
+
       this.close();
     },
 
@@ -453,9 +458,9 @@
       }
 
       if (selectedItem === null) {
-        this.hasValue = false;
-        this.value = '';
-        this._inputElementValue = '';
+        this.value = this.allowCustomValue ? this.value : '';
+        this.hasValue = this.value !== '';
+        this._inputElementValue = this.value;
       } else {
         this.hasValue = true;
         this.value = this._getItemValue(selectedItem);
@@ -475,6 +480,8 @@
         if (!item && this.allowCustomValue) {
           this._inputElementValue = value;
         }
+
+        this.hasValue = this.value !== '';
       } else {
         this.selectedItem = null;
       }
