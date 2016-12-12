@@ -28,7 +28,7 @@
       </ul>
     </nav>
 
-    <h3>Multi-Selection</h3>
+    <h3>Multi-Selection with Array Items</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
@@ -117,6 +117,70 @@
                 this.$.grid.selectedItems = item ? [item] : [];
               }
             });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+
+    <h3>Select All with Data Source</h3>
+    <demo-snippet>
+      <template>
+        <datasource-select-all></datasource-select-all>
+        <dom-module id="datasource-select-all">
+          <template>
+            <style>
+            </style>
+            <x-data-source data-source="{{dataSource}}"></x-data-source>
+            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+              <vaadin-grid-column width="40px" flex="0" >
+                <template class="header">
+                  <input type="checkbox" checked="{{inverted::change}}" />
+                </template>
+                <template>
+                  <input type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          </template>
+          <script>
+          document.addEventListener('WebComponentsReady', function() {
+            Polymer({
+              is: 'datasource-select-all',
+
+              properties: {
+                inverted: {
+                  type: Boolean,
+                  value: false
+                }
+              },
+
+              observers: ['_resetSelection(inverted)'],
+
+              _resetSelection: function(inverted) {
+                this.$.grid.selectedItems = [];
+              },
+
+              _selectItem: function(e) {
+                if (e.target.checked === this.inverted) {
+                  this.$.grid.deselectItem(e.model.item);
+                } else {
+                  this.$.grid.selectItem(e.model.item);
+                }
+              },
+
+              _isSelected: function(selectAll, selected) {
+                return this.inverted != selected;
+              }
+            });
+          });
           </script>
         </dom-module>
       </template>
