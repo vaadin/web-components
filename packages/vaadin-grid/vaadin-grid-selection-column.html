@@ -59,7 +59,7 @@
     },
 
     _onSelectAllChanged: function(selectAll, grid) {
-      grid.selectedItems = selectAll && grid.items ? grid.items.slice() : [];
+      grid.selectedItems = selectAll && grid.items ? grid._filter(grid.items) : [];
     }
   });
 </script>

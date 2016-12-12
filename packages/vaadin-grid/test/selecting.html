@@ -174,6 +174,15 @@
         expect(grid.selectedItems).to.eql(grid.items);
       });
 
+      it('should take filter into account when selecting all items', function() {
+        grid.items = [{value: 'foo'}, {value: 'bar'}];
+        grid._filters = [{path: 'value', value: 'f'}];
+
+        selectionColumn.selectAll = true;
+
+        expect(grid.selectedItems).to.eql([grid.items[0]]);
+      });
+
       it('should deselect all items when select all is unset', function() {
         selectionColumn.selectAll = true;
 
