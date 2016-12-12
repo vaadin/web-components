@@ -72,16 +72,27 @@
       }
     },
 
+    listeners: {
+      'table.wheel': '_onWheel'
+    },
+
     ready: function() {
       this.scrollTarget = this.$.table;
-      this.listen(this.$.table, 'wheel', '_onWheel');
     },
 
     _onWheel: function(e) {
-      e.preventDefault();
-      this.$.table.scrollTop += e.deltaY;
-      this.$.table.scrollLeft += e.deltaX;
-      this._scrollHandler();
+      var table = this.$.table;
+      if (
+        (e.deltaY > 0 && table.scrollTop < table.scrollHeight - table.offsetHeight) ||
+        (e.deltaY < 0 && table.scrollTop > 0) ||
+        (e.deltaX > 0 && table.scrollLeft < table.scrollWidth - table.offsetWidth) ||
+        (e.deltaX < 0 && table.scrollLeft > 0)
+      ) {
+        e.preventDefault();
+        table.scrollTop += e.deltaY;
+        table.scrollLeft += e.deltaX;
+        this._scrollHandler();
+      }
     },
 
     _adjustVirtualIndexOffset: function(delta) {
