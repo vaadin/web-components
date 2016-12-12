@@ -6,7 +6,7 @@
   /**
    * @polymerBehavior vaadin.elements.grid.IronListBehavior
    */
-  vaadin.elements.grid.IronListBehavior = (function() {
+  vaadin.elements.grid.IronListBehavior = [(function() {
 
     var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
     var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
@@ -44,12 +44,6 @@
           value: 'index'
         }
       },
-
-      behaviors: [
-        Polymer.Templatizer,
-        Polymer.IronResizableBehavior,
-        Polymer.IronScrollTargetBehavior
-      ],
 
       /**
        * The ratio of hidden tiles that should remain in the scroll direction.
@@ -745,5 +739,9 @@
       }
     });
 
-  })();
+  })(),
+    Polymer.Templatizer,
+    Polymer.IronResizableBehavior,
+    Polymer.IronScrollTargetBehavior
+  ];
 </script>
