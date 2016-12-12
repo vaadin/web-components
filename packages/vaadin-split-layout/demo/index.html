@@ -25,8 +25,8 @@
     <demo-snippet>
       <template>
         <vaadin-split-layout>
-          <div>First layout content</div>
-          <div>Second layout content</div>
+          <div>First content element</div>
+          <div>Second content element</div>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
@@ -35,8 +35,8 @@
     <demo-snippet>
       <template>
         <vaadin-split-layout vertical>
-          <div>Top layout content</div>
-          <div>Bottom layout content</div>
+          <div>Top content element</div>
+          <div>Bottom content element</div>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
@@ -45,21 +45,57 @@
     <demo-snippet>
       <template>
         <vaadin-split-layout>
-          <div>First layout content</div>
+          <div>First content element</div>
           <vaadin-split-layout vertical>
-            <div>Second layout content</div>
-            <div>Third layout content</div>
+            <div>Second content element</div>
+            <div>Third content element</div>
           </vaadin-split-layout>
         </vaadin-split-layout>
       </template>
     </demo-snippet>
 
-    <h3>Specifying Initial Sizes</h3>
+    <h3>Split Layout Element Height</h3>
+
+    <h4>Using Fixed Height</h4>
+    <demo-snippet>
+      <template>
+        <vaadin-split-layout style="height: 200px;">
+          <div>First content element</div>
+          <div>Second content element</div>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+    <h4>Using Relative Height</h4>
+    <demo-snippet>
+      <template>
+        <div style="height: 20vh;">
+          <vaadin-split-layout style="height: 100%;">
+            <div>First</div>
+            <div>Second</div>
+          </vaadin-split-layout>
+        </div>
+      </template>
+    </demo-snippet>
+
+    <h4>Using Flexbox Layout</h4>
+    <demo-snippet>
+      <template>
+        <div style="height: 160px; display: flex;">
+          <vaadin-split-layout style="flex: 1;">
+            <div>First</div>
+            <div>Second</div>
+          </vaadin-split-layout>
+        </div>
+      </template>
+    </demo-snippet>
+
+    <h3>Initial Splitter Position</h3>
     <demo-snippet>
       <template>
         <vaadin-split-layout>
-          <div style="width: 75%;">First layout content</div>
-          <div style="width: 25%;">Second layout content</div>
+          <div style="width: 75%;">First content element</div>
+          <div style="width: 25%;">Second content element</div>
         </vaadin-split-layout>
       </template>
     </demo-snippet>

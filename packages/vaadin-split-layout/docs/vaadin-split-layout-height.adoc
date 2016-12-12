@@ -1,0 +1,44 @@
+---
+title: Split Layout Element Height
+order: 3
+layout: page
+---
+
+[[vaadin-split-layout.height]]
+= Split Layout Element Height
+
+`<vaadin-split-layout>` element itself is a flex container, it behaves like a block element. It does not inherit the parent height by default, but rather sets its height depending on the content.
+
+You can use CSS to set the fixed height for the split layout, as usual with any block element:
+
+[source,html]
+----
+<vaadin-split-layout style="height: 200px;">
+  <div>First content element</div>
+  <div>Second content element</div>
+</vaadin-split-layout>
+----
+
+It is possible to define percentage height as well. Note that you have to set the parent height in order to make percentages work correctly. In the following example, the [elementname]#body# is resized to fill the entire viewport, and the [vaadinelement]#vaadin-split-layout# element is set to take 100% height of the [elementname]#body#:
+
+[source,html]
+----
+<body style="height: 100vh; margin: 0;">
+  <vaadin-split-layout style="height: 100%;">
+    <div>First</div>
+    <div>Second</div>
+  </vaadin-split-layout>
+</body>
+----
+
+Alternatively, you can use flexbox layout to make [vaadinelement]#vaadin-split-layout# fill up the parent:
+
+[source,html]
+----
+<body style="height: 100vh; margin: 0; display: flex;">
+  <vaadin-split-layout style="flex: 1;">
+    <div>First</div>
+    <div>Second</div>
+  </vaadin-split-layout>
+</body>
+----
