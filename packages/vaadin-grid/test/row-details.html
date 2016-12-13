@@ -131,6 +131,17 @@
         expect(grid.$.scroller._frozenCells).to.be.empty;
       });
 
+      it('should remove unused nodes from the light DOM', function(done) {
+        expandRow(1);
+        var childCount = Polymer.dom(grid).children.length;
+        collapseRow(1);
+        Polymer.Base.async(function() {
+          expect(Polymer.dom(grid).children.length).to.equal(childCount - 1);
+          done();
+        }, 1);
+      });
+
+
     });
   </script>
 

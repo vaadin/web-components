@@ -34,6 +34,13 @@
         // the shadow root.
         // Also, atleast iOS doesn't seem to focus links or buttons.
         var focusableElements = ['A', 'BUTTON'];
+
+        // Polymer.dom(e).localTarget usually returns <content> element in shady
+        // DOM. We'll get and use the cell-content wrapper in that case.
+        if (target.getDistributedNodes) {
+          target = Polymer.dom(target).getDistributedNodes()[0];
+        }
+
         return target.contains(Polymer.dom(document.activeElement).node) || focusableElements.indexOf(target.tagName) > -1;
       }
     }

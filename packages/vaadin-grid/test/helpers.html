@@ -199,12 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getCellContent(cell) {
-    if (Polymer.Settings.useShadow) {
-      return cell.getContentChildren('content')[0];
-    } else {
-      return cell.firstElementChild;
-    }
-
+    return cell.getContentChildren('content')[0];
   }
 
   function getHeaderCellContent(grid, row, col) {

@@ -12,6 +12,8 @@
 
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../../paper-slider/paper-slider.html">
+
 </head>
 
 <body>
@@ -19,23 +21,30 @@
   <dom-module id="test-component">
     <template>
       <style>
-         :host {
+        :host {
           display: block;
         }
 
-        div {
+        .cell-content {
           line-height: 50px;
         }
 
-        .cellcontent {
+        .my-content {
           color: rgb(255, 0, 0);
+        }
+
+        #slider {
+          --paper-slider-input: {
+            color: rgb(0, 255, 0);
+          }
         }
       </style>
 
       <vaadin-grid style="height: 400px;" size="1000" data-source="[[dataSource]]" id="grid">
         <vaadin-grid-column>
           <template>
-            <b class="cellcontent">[[index]]</b>
+            <b class="my-content">[[index]]</b>
+            <paper-slider editable id="slider"></paper-slider>
           </template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -64,34 +73,106 @@
     </template>
   </test-fixture>
 
+  <template is="dom-bind">
+    <style is="custom-style">
+      #dom-bind-grid .my-content {
+        color: rgb(255, 0, 0);
+      }
+    </style>
+
+    <vaadin-grid style="height: 400px;" size="1000" data-source="[[dataSource]]" id="dom-bind-grid">
+      <vaadin-grid-column>
+        <template>
+          <b class="my-content">[[index]]</b>
+        </template>
+      </vaadin-grid-column>
+    </vaadin-grid>
+  </template>
+
+
+
   <script>
     describe('style scope', function() {
-      var component;
-      var wrapper;
-      var content;
 
-      beforeEach(function(done) {
-        component = fixture('default');
-        // TODO: Need identifiers for the content wrappers
-        if (Polymer.Settings.useShadow) {
-          wrapper = Polymer.dom(component.$.grid).querySelector('div');
-        } else {
-          // Can't use Polymer.dom for querying in shady since the wrapper isn't
-          // appended with Polymer.dom eihter
-          wrapper = component.$.grid.$.scroller.$.items.querySelector('div');
+      describe('component', function() {
+
+        var component;
+        var wrapper;
+        var content;
+        var sliderInput;
+
+        beforeEach(function(done) {
+          component = fixture('default');
+          wrapper = Polymer.dom(component.$.grid).querySelector('.cell-content');
+          content = wrapper.querySelector('.my-content');
+
+          sliderInput = component.$$('paper-slider').$$('paper-input');
+          Polymer.Base.async(done, 1);
+        });
+
+        it('should target cell content', function() {
+          expect(window.getComputedStyle(wrapper).lineHeight).to.equal('50px');
+        });
+
+        it('should target cell wrapper', function() {
+          expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
+        });
+
+        it('should polyfill style mixins to child web-components', function() {
+          expect(window.getComputedStyle(sliderInput).color).to.equal('rgb(0, 255, 0)');
+        });
+
+        it('should not have vaadin-grid-table scope', function() {
+          expect(content.classList.contains('vaadin-grid-table')).to.be.false;
+        });
+
+      });
+
+      describe('dom-bind', function() {
+        var grid;
+
+        beforeEach(function() {
+          grid = document.querySelector('#dom-bind-grid');
+        });
+
+        if (!Polymer.Settings.useShadow) {
+          // Only test non-shadow
+          var scroller;
+          var table;
+          var tbody;
+
+          beforeEach(function() {
+            scroller = grid.$.scroller;
+            table = scroller.$.table;
+            tbody = scroller.$.items;
+          });
+
+          it('should not lose scope on reorder', function(done) {
+            var row = tbody.children[0];
+            var content = row.querySelector('.my-content');
+
+            expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
+
+            table.addEventListener('scroll', function () {
+              scroller.flushDebouncer('reorderrows');
+              expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
+              done();
+            });
+
+            // Deliberately mess the row order...
+            tbody.appendChild(row);
+            // ...and schedule a reorder
+            table.scrollTop += 1;
+
+          });
+
+          it('should not have vaadin-grid-table scope', function() {
+            var row = tbody.children[25];
+            var content = row.querySelector('.my-content');
+            expect(content.classList.contains('vaadin-grid-table')).to.be.false;
+          });
         }
-        content = wrapper.querySelector('.cellcontent');
-        Polymer.Base.async(done, 1);
       });
-
-      it('should target cell content', function() {
-        expect(window.getComputedStyle(wrapper).lineHeight).to.equal('50px');
-      });
-
-      it('should target cell wrapper', function() {
-        expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
-      });
-
     });
   </script>
 

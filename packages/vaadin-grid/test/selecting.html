@@ -41,6 +41,7 @@
         cachedItems = grid._cache[0];
         rows = getRows(grid.$.scroller.$.items);
         grid.selectedItems = [cachedItems[0]];
+        Polymer.dom.flush();
       });
 
       describe('selectedItems', function() {
@@ -98,6 +99,7 @@
 
         beforeEach(function() {
           grid.multiSelection = true;
+          Polymer.dom.flush();
         });
 
         it('should have multi selection column', function() {

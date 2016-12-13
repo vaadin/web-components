@@ -195,6 +195,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });
 
+    test('reorder should not affect light dom', function() {
+      list.size = 100000;
+      var wrappers = Polymer.dom(container).querySelectorAll('.cell-content');
+
+      [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+        list.$.table.scrollTop = 5000 + list._physicalAverage * steps;
+        list._scrollHandler();
+        list.flushDebouncer('_debounceTemplate');
+        list.flushDebouncer('reorderrows');
+
+        var newWrappers = Polymer.dom(container).querySelectorAll('.cell-content');
+        // Expect the light dom order unchanged
+        expect(newWrappers).to.eql(wrappers);
+      });
+    });
+
   });
 </script>
 
