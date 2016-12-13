@@ -107,8 +107,10 @@
         });
 
         it('have a splitter in between', function() {
-          expect(splitLayout.$.splitter.previousElementSibling).to.equal(first);
-          expect(splitLayout.$.splitter.nextElementSibling).to.equal(second);
+          var previous = splitLayout.$.splitter.previousElementSibling;
+          var next = splitLayout.$.splitter.nextElementSibling;
+          expect(Polymer.dom(previous).getDistributedNodes()[0] || previous).to.equal(first);
+          expect(Polymer.dom(next).getDistributedNodes()[0] || next).to.equal(second);
         });
 
       });

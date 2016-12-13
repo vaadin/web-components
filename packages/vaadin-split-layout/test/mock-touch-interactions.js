@@ -48,7 +48,7 @@
         clientY: xy.y
       };
 
-      return HAS_NEW_TOUCH ? window.Touch(touchInit) : touchInit;
+      return HAS_NEW_TOUCH ? new window.Touch(touchInit) : touchInit;
     });
   }
 
