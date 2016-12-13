@@ -1,0 +1,33 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  /**
+   * @polymerBehavior vaadin.elements.grid.ActiveItemBehavior
+   */
+  vaadin.elements.grid.ActiveItemBehavior = {
+
+    properties: {
+      /*
+       * The item user has last interacted with. Turns to `null` after user deactivates
+       * the item by re-interacting with the currently active item.
+       */
+       activeItem: {
+         type: Object,
+         notify: true
+       }
+    },
+
+    listeners: {
+      'cell-click': '_activateItem'
+    },
+
+    _activateItem: function(e) {
+      var clickedItem = e.detail.model.item;
+
+      this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+    }
+  };
+  </script>
+</dom-module>
