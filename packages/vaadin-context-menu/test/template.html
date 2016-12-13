@@ -29,28 +29,37 @@
           target = document.querySelector('#target');
         });
 
-        it('should stamp template on open', function() {
+        it('should stamp template on open', function(done) {
           expect(menu.$.overlay.textContent).not.to.contain('FOOBAR');
 
-          menu._opened = true;
+          menu.addEventListener('iron-overlay-opened', function() {
+            expect(menu.$.overlay.textContent).to.contain('FOOBAR');
+            done();
+          });
 
-          expect(menu.$.overlay.textContent).to.contain('FOOBAR');
+          menu._opened = true;
         });
 
-        it('should bind target property', function() {
+        it('should bind target property', function(done) {
+          menu.addEventListener('iron-overlay-opened', function() {
+            expect(menu.$.overlay.textContent).to.contain('target');
+            done();
+          });
+
           menu.fire('vaadin-contextmenu', {}, {
             node: target
           });
-
-          expect(menu.$.overlay.textContent).to.contain('target');
         });
 
         it('should bind detail property', function() {
+          menu.addEventListener('iron-overlay-opened', function() {
+            expect(menu.$.overlay.textContent).to.contain('bar');
+            done();
+          });
+
           menu.fire('vaadin-contextmenu', {foo: 'bar'}, {
             node: target
           });
-
-          expect(menu.$.overlay.textContent).to.contain('bar');
         });
       });
     </script>

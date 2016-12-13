@@ -17,7 +17,6 @@ The following custom properties and mixins are available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-context-menu-overlay`     | Mixin applied to the overlay                                     | `{}`
-`--vaadin-context-menu-content`     | Mixin applied to the overlay contents                            | `{}`
 
 @element vaadin-context-menu
 @demo demo/index.html
@@ -33,15 +32,10 @@ Custom property | Description | Default
       vaadin-context-menu-overlay {
         @apply(--vaadin-context-menu-overlay);
       }
-
-      .dropdown-content {
-        @apply(--vaadin-context-menu-content);
-      }
     </style>
 
     <content></content>
     <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
-      <div class="dropdown-content" id="content"></div>
     </vaadin-context-menu-overlay>
 
   </template>
@@ -120,7 +114,7 @@ Custom property | Description | Default
                   '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'],
 
       _onOverlayOpened: function() {
-        var child = Polymer.dom(this.$.content).querySelector(':not(style)');
+        var child = Polymer.dom(this.$.overlay).querySelector(':not(style)');
         if (child) {
           child.focus();
         }
@@ -243,13 +237,13 @@ Custom property | Description | Default
       },
 
       _contentTemplateChanged: function(template) {
-        Polymer.dom(this.$.content).innerHTML = '';
+        Polymer.dom(this.$.overlay).innerHTML = '';
         if (template) {
           this.templatize(template);
 
           this._instance = this.stamp({});
 
-          Polymer.dom(this.$.content).appendChild(this._instance.root);
+          Polymer.dom(this.$.overlay).appendChild(this._instance.root);
         }
       }
     });

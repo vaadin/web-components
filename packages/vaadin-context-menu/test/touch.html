@@ -84,12 +84,13 @@
 
       it('should align to bottom of the viewport', function(done) {
         menu._opened = true;
-        Polymer.Base.async(function() {
+
+        menu.addEventListener('iron-overlay-opened', function() {
           var styles = window.getComputedStyle(menu.$.overlay);
           expect(styles.bottom).to.eql('24px');
           expect(styles.transform).not.to.contain('translate');
           done();
-        }, 1000);
+        });
       });
 
       if (ios) {
@@ -97,11 +98,11 @@
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          menu.async(function() {
+          menu.addEventListener('iron-overlay-opened', function() {
             expect(menu._opened).to.eql(true);
             expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
             done();
-          }, 1000);
+          });
         });
 
         it('should not open on normal tap', function(done) {
