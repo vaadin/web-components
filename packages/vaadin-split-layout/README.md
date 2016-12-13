@@ -4,6 +4,8 @@
 
 # &lt;vaadin-split-layout&gt;
 
+### [Live demo](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-split-layout/demo/)
+
 [&lt;vaadin-split-layout&gt;](https://vaadin.com/elements/-/element/vaadin-split-layout) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
 <!---
@@ -43,17 +45,38 @@
 ```
 
 
-<!--- ## Getting started --->
-
-<!--- Visit https://vaadin.com/elements/-/element/vaadin-split-layout for features, demos and documentation. --->
-
 ## Contributing
 
-See the [contribution instructions](https://github.com/vaadin/vaadin-core-elements#contributing) which apply to all Vaadin core elements.
+1. Fork the `<vaadin-split-layout>` repository.
 
-## Development
+1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-See the [development instructions](https://github.com/vaadin/vaadin-core-elements/blob/master/DEVELOPMENT.md) which apply to all Vaadin core elements.
+1. When in the `vaadin-split-layout` directory, run `npm install` to install dependencies.
+
+
+## Running demos and tests in browser
+
+1. Install [polyserve](https://www.npmjs.com/package/polyserve): `npm install -g polyserve`
+
+1. When in the `vaadin-split-layout` directory, run `polyserve --open`, browser will automatically open the component API documentation.
+
+1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
+
+  - http://127.0.0.1:8080/components/vaadin-split-layout/demo
+  - http://127.0.0.1:8080/components/vaadin-split-layout/test
+
+
+## Running tests from the command line
+
+1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
+
+1. When in the `vaadin-split-layout` directory, run `wct` or `npm test`, browser will automatically open the component API documentation.
+
+
+## Following the coding style
+
+We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+
 
 ## License
 
