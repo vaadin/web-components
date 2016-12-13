@@ -96,36 +96,6 @@
         expect(getItemElement(0).getAttribute('aria-selected')).to.equal('false');
         expect(getItemElement(1).getAttribute('aria-selected')).to.equal('true');
       });
-
-      it('should change the input value with atomic change', function(done) {
-        comboBox.$.overlay.fire('selection-changed', {item: 'foo'});
-
-        getInput().addEventListener('bind-value-changed', function() {
-          expect(getInput().getAttribute('aria-atomic')).to.equal('true');
-          done();
-        });
-
-        arrowDown();
-        arrowDown();
-      });
-
-      it('should preserve aria-atomic attribute in the input', function() {
-        getInput().setAttribute('aria-atomic', 'false');
-
-        comboBox.value = 'foo';
-        arrowDown();
-        arrowDown();
-
-        expect(getInput().getAttribute('aria-atomic')).to.equal('false');
-      });
-
-      it('should clean-up aria-atomic attribute in the input if was not set', function() {
-        comboBox.value = 'foo';
-        arrowDown();
-        arrowDown();
-
-        expect(getInput().hasAttribute('aria-atomic')).to.be.false;
-      });
     });
 
   });

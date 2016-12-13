@@ -263,19 +263,13 @@
 
     _prefillFocusedItemLabel: function() {
       if (this._focusedIndex > -1) {
-        // Temporarily set aria-atomic="true" to prevent partial value changes
+        // Reset the input value asyncronously to prevent partial value changes
         // announce. Makes OSX VoiceOver to announce the complete value instead.
-        var oldAriaAtomic = this.inputElement.getAttribute('aria-atomic');
-        this.inputElement.setAttribute('aria-atomic', true);
-
-        this._inputElementValue =  this._getItemLabel(this.$.overlay._focusedItem);
-        this._setSelectionRange();
-
-        if (oldAriaAtomic !== null) {
-          this.inputElement.setAttribute('aria-atomic', oldAriaAtomic);
-        } else {
-          this.inputElement.removeAttribute('aria-atomic');
-        }
+        this._inputElementValue = '';
+        this.async(function() {
+          this._inputElementValue =  this._getItemLabel(this.$.overlay._focusedItem);
+          this._setSelectionRange();
+        }, 1); // 1ms delay needed for OSX VoiceOver to realise input value was reset
       }
     },
 
