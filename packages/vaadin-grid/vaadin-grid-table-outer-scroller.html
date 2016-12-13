@@ -9,9 +9,7 @@
         position: absolute;
         top: 0;
         box-sizing: border-box;
-        /*z-index: 1;*/
         overflow: auto;
-        /*transform: translateZ(0);*/
       }
 
       :host([passthrough]) {
@@ -43,11 +41,6 @@
         passthrough: {
           reflectToAttribute: true,
           value: true
-        },
-
-        scrolling: {
-          type: Boolean,
-          reflectToAttribute: true
         }
       },
 
@@ -85,8 +78,6 @@
           this.scrollLeft = this.domHost._scrollLeft;
         }
         this._syncingScrollTarget = false;
-
-        this._scrolling();
       },
 
       _syncScrollTarget: function() {
@@ -98,16 +89,8 @@
           this.domHost._scrollHandler();
         }
         this._syncingOuterScroller = false;
-
-        this._scrolling();
-      },
-
-      _scrolling: function() {
-        this.scrolling = true;
-        this.debounce('scrolling-stopped', function() {
-          this.scrolling = false;
-        }, 100);
       }
+
     });
   </script>
 </dom-module>
