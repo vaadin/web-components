@@ -92,7 +92,6 @@
        */
       selectedItem: {
         type: Object,
-        readOnly: true,
         notify: true
       },
 
@@ -141,7 +140,8 @@
       '_filterChanged(filter, itemValuePath, itemLabelPath)',
       '_itemsChanged(items.*, itemValuePath, itemLabelPath)',
       '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
-      '_loadingChanged(loading)'
+      '_loadingChanged(loading)',
+      '_selectedItemChanged(selectedItem)'
     ],
 
     listeners: {
@@ -335,7 +335,13 @@
      * Clears the current value.
      */
     _clear: function() {
-      this.value = '';
+      this.selectedItem = null;
+
+      if (this.allowCustomValue) {
+        this.value = '';
+      }
+
+      this.close();
     },
 
     /**
@@ -361,7 +367,7 @@
     _onClosed: function() {
       if (this._focusedIndex > -1) {
         var focusedItem = this.$.overlay._items[this._focusedIndex];
-        this.value = this._getItemValue(focusedItem);
+        this.selectedItem = focusedItem;
         // make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       } else if (this._inputElementValue === '') {
@@ -370,7 +376,9 @@
         if (this.allowCustomValue) {
           var e = this.fire('custom-value-set', this._inputElementValue, {cancelable: true});
           if (!e.defaultPrevented) {
-            this.value = this._inputElementValue;
+            var customValue = this._inputElementValue;
+            this.selectedItem = null;
+            this.value = customValue;
           }
         } else {
           this._inputElementValue = this._getItemLabel(this.selectedItem);
@@ -444,25 +452,41 @@
       this._clearSelectionRange();
     },
 
-    _valueChanged: function(value) {
-      this.hasValue = this._isValidValue(value);
+    _selectedItemChanged: function(selectedItem) {
+      if (!this.filteredItems) {
+        return;
+      }
 
-      var valueIndex = this._indexOfValue(value, this.filteredItems);
-      var item = valueIndex > -1 && this.filteredItems[valueIndex];
-      if (item) {
-        this.$.overlay._selectedItem = item;
-        this._inputElementValue = this._getItemLabel(item);
-        this._setSelectedItem(item);
-        this._focusedIndex = valueIndex;
+      if (selectedItem === null) {
+        this.value = this.allowCustomValue ? this.value : '';
+        this.hasValue = this.value !== '';
+        this._inputElementValue = this.value;
       } else {
-        this._inputElementValue = this.allowCustomValue ? value : '';
-        this._setSelectedItem(null);
-        this._focusedIndex = -1;
-        this.$.overlay._selectedItem = null;
+        this.hasValue = true;
+        this.value = this._getItemValue(selectedItem);
+        this._inputElementValue = this._getItemLabel(selectedItem);
+      }
+
+      this.$.overlay._selectedItem = selectedItem;
+      this._focusedIndex = this.filteredItems.indexOf(selectedItem);
+    },
+
+    _valueChanged: function(value) {
+      if (this._isValidValue(value)) {
+        var valueIndex = this._indexOfValue(value, this.filteredItems);
+        var item = valueIndex > -1 && this.filteredItems[valueIndex];
+        this.selectedItem = item ? item : null;
+
+        if (!item && this.allowCustomValue) {
+          this._inputElementValue = value;
+        }
+
+        this.hasValue = this.value !== '';
+      } else {
+        this.selectedItem = null;
       }
 
       this.fire('change', undefined, {bubbles: true});
-      this.close();
     },
 
     _itemsChanged: function(e) {
@@ -474,9 +498,7 @@
 
         var item = valueIndex > -1 && this.items[valueIndex];
         if (item) {
-          this.$.overlay._selectedItem = item;
-          this._inputElementValue = this._getItemLabel(item);
-          this._setSelectedItem(item);
+          this.selectedItem = item;
         }
       }
     },
@@ -548,12 +570,7 @@
     },
 
     _overlaySelectedItemChanged: function(event, detail) {
-      var selectedItem = detail.item;
-      if (selectedItem !== null) {
-        this.value = this._getItemValue(selectedItem);
-      } else {
-        this.value = '';
-      }
+      this.selectedItem = detail.item;
 
       if (this.opened) {
         this.close();

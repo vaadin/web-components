@@ -71,7 +71,9 @@
 
     it('should close the dropdown on selection', function() {
       combobox.open();
-      combobox.value = 'foo';
+
+      combobox.$.overlay.$.selector.querySelector('.item').click();
+
       expect(combobox.opened).to.equal(false);
     });
 
@@ -168,6 +170,7 @@
 
       expect(combobox.value).to.eql('');
       expect(combobox.$.overlay._selectedItem).to.be.null;
+      expect(combobox.selectedItem).to.be.null;
     });
 
     it('should close the dropdown after clearing a selection', function() {
@@ -212,7 +215,6 @@
 
     it('should clear the selection when closing the overlay and input is cleared', function() {
       combobox.value = 'foo';
-      combobox.open();
 
       combobox.$.input.bindValue = '';
       combobox.$.input.fire('input');
@@ -220,7 +222,31 @@
       combobox.close();
 
       expect(combobox.value).to.be.empty;
-      expect(combobox.$.overlay.$.selector.selectedItem).to.be.null;
+      expect(combobox.selectedItem).to.be.null;
+      expect(combobox.hasValue).to.be.false;
+    });
+
+    it('should select a custom value', function() {
+      combobox.value = 'foobar';
+
+      combobox.close();
+
+      expect(combobox.value).to.eql('foobar');
+      expect(combobox.selectedItem).to.be.null;
+      expect(combobox._inputElementValue).to.eql('foobar');
+      expect(combobox.hasValue).to.be.true;
+    });
+
+    it('should clear the custom value on clear', function() {
+      combobox.value = 'foobar';
+
+      combobox.$.input.bindValue = '';
+      combobox.$.input.fire('input');
+
+      combobox.close();
+
+      expect(combobox.value).to.be.empty;
+      expect(combobox.selectedItem).to.be.null;
     });
   });
 </script>

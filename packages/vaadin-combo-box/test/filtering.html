@@ -265,6 +265,14 @@
         expect(comboBox.$.overlay.hidden).to.be.false;
       });
 
+      it('should not show the overlay while closed and loading', function() {
+        comboBox.opened = false;
+
+        comboBox.loading = true;
+
+        expect(window.getComputedStyle(comboBox.$.overlay).display).to.eql('none');
+      });
+
       it('should hide the scroller while loading', function() {
         setInputValue('foo');
 

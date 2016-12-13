@@ -53,6 +53,12 @@
           label: 'zero as a string',
           custom: 'zero-string-custom',
           value: '0'
+        }, {
+          label: 'duplicate value 1',
+          value: 'duplicate'
+        }, {
+          label: 'duplicate value 2',
+          value: 'duplicate'
         }];
       });
 
@@ -185,6 +191,20 @@
         combobox.value = 'bar';
 
         expect(combobox.$.input.bindValue).to.eql('foo');
+      });
+
+      it('should select first of duplicate values', function() {
+        combobox.value = 'duplicate';
+
+        expect(combobox.selectedItem).to.eql(combobox.items[6]);
+      });
+
+      it('should select correct duplicate value', function() {
+        selectItem(7);
+
+        expect(combobox.selectedItem).to.eql(combobox.items[7]);
+        expect(combobox.value).to.eql('duplicate');
+        expect(combobox.$.input.bindValue).to.eql('duplicate value 2');
       });
 
       describe('when custom values are not allowed', function() {
