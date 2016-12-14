@@ -87,7 +87,7 @@
 
         menu.addEventListener('iron-overlay-opened', function() {
           var styles = window.getComputedStyle(menu.$.overlay);
-          expect(styles.bottom).to.eql('24px');
+          expect(styles.bottom).to.eql('0px');
           expect(styles.transform).not.to.contain('translate');
           done();
         });

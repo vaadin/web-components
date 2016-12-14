@@ -28,13 +28,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([phone]) {
         /* width set to make it possible for the user make the contents fit whole screen */
-        /* need to substract borders so as scroll is not misplaced */
-        width: calc(100vw - 48px);
-        /* Ideally should be 100vh - 2*24px but iOS phone has issues when the addr-bar activates */
+        width: 100vw;
+        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
         max-height: 80vh;
-        /* For iOS otherwise position absolute, but breaks chrome */
+        /* Needed for iOS */
         top: auto !important;
-        bottom: 24px;
+        bottom: 0px;
+        /* leave a space around the overlay */
+        margin: 24px;
+        /* Override desktop translate */
         transform: none !important;
       }
     </style>
