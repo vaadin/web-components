@@ -109,9 +109,11 @@ Custom property | Description | Default
         }
       },
 
-      observers: ['_contentTemplateChanged(_contentTemplate)',
-                  '_openedChanged(_opened)',
-                  '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'],
+      observers: [
+        '_contentTemplateChanged(_contentTemplate)',
+        '_openedChanged(_opened)',
+        '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'
+      ],
 
       _onOverlayOpened: function() {
         var child = Polymer.dom(this.$.overlay).querySelector(':not(style)');

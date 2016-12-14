@@ -1,124 +1,32 @@
-var args = require('yargs').argv;
-var chalk = require('chalk');
-var wct = require('web-component-tester').test;
+'use strict';
+
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
 
-function cleanDone(done) {
-  return function(error) {
-    if (error) {
-      // Pretty error for gulp.
-      error = new Error(chalk.red(error.message || error));
-      error.showStack = false;
-    }
-    done(error);
-  };
-}
-
-function localAddress() {
-  var ip, tun, ifaces = require('os').networkInterfaces();
-  Object.keys(ifaces).forEach(function(ifname) {
-    ifaces[ifname].forEach(function(iface) {
-      if ('IPv4' == iface.family && !iface.internal) {
-        if (!ip) {
-          ip = iface.address;
-        }
-        if (/tun/.test(ifname)) {
-          tun = iface.address;
-        }
-      }
-    });
-  });
-  return tun || ip;
-}
-
-function test(options, done) {
-  wct(options, cleanDone(done));
-}
-
-function testSauce(browsers, done) {
-  test(
-    {
-      expanded: true,
-      browserOptions: {
-        name: localAddress() + ' / ' + new Date(),
-        build: 'vaadin-context-menu'
-      },
-      plugins: {
-        sauce: {
-          username: args.sauceUsername,
-          accessKey: args.sauceAccessKey,
-          browsers: browsers
-        }
-      },
-      extraScripts: args.dom === 'shadow' ? ['test/enable-shadow-dom.js'] : [],
-      root: '.',
-      webserver: {
-        port: 2000,
-        hostname: localAddress()
-      }
-    }, done);
-}
-
-gulp.task('test:desktop', function(done) {
-  testSauce([
-    'Windows 10/chrome@48',
-    'Windows 10/firefox@44',
-    'Windows 10/microsoftedge@13',
-    'Windows 10/internet explorer@11',
-    'OS X 10.11/safari@9.0'], done);
-});
-
-gulp.task('test:mobile', function(done) {
-  testSauce([
-    'OS X 10.11/iphone@9.2',
-    'OS X 10.11/ipad@9.2',
-    'Linux/android@5.1'], done);
-});
+gulp.task('lint', ['lint:js', 'lint:html']);
 
 gulp.task('lint:js', function() {
   return gulp.src([
-        '*.js',
-        'test/*.js'
-      ])
-      .pipe(eslint())
-      .pipe(eslint.format())
-      .pipe(eslint.failAfterError());
+    '*.js',
+    'test/*.js'
+  ])
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
 });
 
 gulp.task('lint:html', function() {
   return gulp.src([
-        '*.html',
-        'demo/*.html',
-        'test/*.html'
-      ])
-      .pipe(htmlExtract({
-        sel: 'script, code-example code',
-        strip: true
-      }))
-      .pipe(eslint())
-      .pipe(eslint.format())
-      .pipe(eslint.failAfterError());
-});
-
-gulp.task('test:desktop:shadow', function(done) {
-  args.dom = 'shadow';
-
-  testSauce([
-    'Windows 10/chrome@48',
-    'Windows 10/firefox@44',
-    'Windows 10/microsoftedge@13',
-    'Windows 10/internet explorer@11',
-    'OS X 10.11/safari@9.0'
-    ], done);
-});
-
-gulp.task('test:mobile:shadow', function(done) {
-  args.dom = 'shadow';
-
-  testSauce([
-    'OS X 10.11/iphone@9.2',
-    'OS X 10.11/ipad@9.2',
-    'Linux/android@5.1'], done);
+    '*.html',
+    'demo/*.html',
+    'test/*.html'
+  ])
+  .pipe(htmlExtract({
+    sel: 'script, code-example code',
+    strip: true
+  }))
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
 });
