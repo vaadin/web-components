@@ -5,7 +5,7 @@
 
 # &lt;vaadin-upload&gt;
 
-### [Live demo](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-upload/demo/)
+[Live demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-upload/demo/)
 
 [&lt;vaadin-upload&gt;](https://vaadin.com/elements/-/element/vaadin-upload) is a  [Polymer](http://polymer-project.org) element for uploading multiple files, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
@@ -66,7 +66,7 @@
 
 ## Contributing
 
-1. Fork the `<vaadin-upload>` repository.
+1. Fork the `vaadin-upload` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
@@ -95,6 +95,14 @@
 ## Following the coding style
 
 We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+
+
+## Creating a pull request
+
+  - Make sure your code is compliant with our code linters: `gulp lint`
+  - Check that tests are passing: `npm test`
+  - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
+  - Wait for response from one of Vaadin Elements team members
 
 
 ## License
