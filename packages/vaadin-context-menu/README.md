@@ -1,8 +1,11 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-context-menu.svg) [![Build Status](https://travis-ci.org/vaadin/vaadin-context-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-context-menu) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+![Bower version](https://img.shields.io/bower/v/vaadin-context-menu.svg) 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://beta.webcomponents.org/element/vaadin/vaadin-context-menu)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-context-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-context-menu) 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # &lt;vaadin-context-menu&gt;
 
-[Live demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-context-menu/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-context-menu/demo/)
 
 [&lt;vaadin-context-menu&gt;](https://vaadin.com/elements/-/element/vaadin-context-menu) is a [Polymer](http://polymer-project.org) element providing a contextual menu, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
