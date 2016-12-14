@@ -38,6 +38,28 @@
         transform: none;
       }
 
+      :host([fixed-sections]) {
+        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
+        a containing block. The object acts as a containing block for fixed positioned descendants. */
+        transform: translateZ(0);
+        overflow: hidden;
+      }
+
+      :host([fixed-sections]) thead,
+      :host([fixed-sections]) tfoot {
+        position: fixed;
+      }
+
+      :host([fixed-sections]) tbody#items {
+        position: fixed;
+        width: 100%;
+        will-change: transform;
+      }
+
+      :host([fixed-sections]) table {
+        transform: none;
+      }
+
     </style>
   </template>
 </dom-module>
@@ -63,6 +85,12 @@
         reflectToAttribute: true
       },
 
+      fixedSections: {
+        type: Boolean,
+        reflectToAttribute: true,
+        computed: '_hasFixedSections(scrollbarWidth)'
+      },
+
       // Cached array of frozen cells
       _frozenCells: {
         type: Array,
@@ -78,6 +106,10 @@
 
     ready: function() {
       this.scrollTarget = this.$.table;
+    },
+
+    _hasFixedSections: function(scrollbarWidth) {
+      return navigator.userAgent.match(/Edge/) && scrollbarWidth === 0;
     },
 
     _onWheel: function(e) {
@@ -194,7 +226,15 @@
     },
 
     _translateStationaryElements: function() {
-      this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
+      if (this.fixedSections) {
+        this.$.items.style.transform =
+        this._getTranslate3d(-this._scrollLeft || 0, -this._scrollTop || 0);
+
+        this.$.footer.style.transform = this.$.header.style.transform =
+        this._getTranslate3d(-this._scrollLeft || 0, 0);
+      } else {
+        this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
+      }
 
       var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
       for (var i = 0; i < this._frozenCells.length; i++) {

@@ -5,7 +5,6 @@
 <link rel="import" href="vaadin-grid-sizer.html">
 <link rel="import" href="vaadin-grid-table-outer-scroller.html">
 <link rel="import" href="vaadin-grid-table-header-footer.html">
-<link rel="import" href="vaadin-grid-table-edge-behavior.html">
 <link rel="import" href="vaadin-grid-table-cell.html">
 <link rel="import" href="vaadin-grid-table-row.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
@@ -16,7 +15,6 @@
 <dom-module id="vaadin-grid-table">
   <template>
     <style include="vaadin-grid-table-scroll-styles"></style>
-    <style include="vaadin-grid-table-edge-styles"></style>
     <style include="vaadin-grid-row-details-styles"></style>
     <style include="vaadin-grid-data-source-styles"></style>
     <style include="vaadin-grid-selection-styles"></style>
@@ -192,11 +190,10 @@
 
     behaviors: [
       vaadin.elements.grid.IronListBehavior,
+      vaadin.elements.grid.TableScrollBehavior,
       Polymer.Templatizer,
       Polymer.IronResizableBehavior,
-      Polymer.IronScrollTargetBehavior,
-
-      navigator.userAgent.match(/Edge/) ? vaadin.elements.grid.TableEdgeBehavior : vaadin.elements.grid.TableScrollBehavior
+      Polymer.IronScrollTargetBehavior
     ],
 
     properties: {
