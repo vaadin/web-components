@@ -76,16 +76,14 @@ grid.push('expandedItems', item); //expands row details for 'item'
 [NOTE]
 When modifying [propertyname]#expandedItems#, remember to use the array mutation methods from Polymer.Base
 
-[[vaadin-grid.row-details.clicking]]
-== Expanding and Collapsing Items on Click
+[[vaadin-grid.row-details.activeitem]]
+== Expanding and Collapsing Items on activation
 
-You can listen to [propertyname]#cell-click# event which is fired when a user clicks on a *non-focusable* element
-inside a cell. Event details contain a reference to the instance model of the cell which can be used
-to access the item.
+You can listen to [propertyname]#active-item-changed# event which is fired whenever a user activates a row in the grid. Then you can access the last activated item by using the `activeItem` of the grid.
 
 [source,html]
 ----
-<vaadin-grid id="grid" on-cell-click="_onCellClick">
+<vaadin-grid id="grid" active-item-changed="_onActiveItemChanged">
   <template class="row-details">
     These are the details for [[item.value]]!
   </template>
@@ -95,14 +93,10 @@ to access the item.
 </vaadin-grid>
 <script>
   ...
-    _onCellClick: function(e) {
-      var item = e.detail.model.item;
+    _onActiveItemChanged: function(e) {
+      var item = e.detail.value;
 
-      if (this.$.grid.expandedItems.indexOf(item) < -1) {
-        this.$.grid.expandItem(item);
-      } else {
-        this.$.grid.collapseItem(item);
-      }
+      this.$.grid.expandedItems = item ? [item] : [];
     }
   ...
 </script>
