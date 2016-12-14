@@ -16,6 +16,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: block;
         -webkit-overflow-scrolling: touch;
         -webkit-user-select: none;
+        overflow: auto;
       }
 
       :host(:not([phone])) {
@@ -28,9 +29,14 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([phone]) {
         /* width set to make it possible for the user make the contents fit whole screen */
         width: 100vw;
+        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
+        max-height: 80vh;
+        /* Needed for iOS */
         top: auto !important;
-        bottom: 0;
-        padding: 24px;
+        bottom: 0px;
+        /* leave a space around the overlay */
+        margin: 24px;
+        /* Override desktop translate */
         transform: none !important;
       }
     </style>
@@ -46,7 +52,6 @@ This program is available under Apache License Version 2.0, available at https:/
       ],
 
       properties: {
-
         /**
          * Position of the overlay on horizontal axis.
          */
@@ -71,13 +76,6 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean,
           reflectToAttribute: true
         }
-      },
-
-      _preventDefault: function(e) {
-        // note: at least in Chrome, even though preventDefault() is called,
-        // the e.target still loses focus.
-        e.preventDefault();
-        e.stopPropagation();
       },
 
       _phoneChanged: function(phone) {
