@@ -231,50 +231,75 @@
         expect(comboBox.value).to.equal('baz');
       });
 
-      it('should prefill the input field when navigating down', function() {
+      it('should reset the input value synchronously when keyboard navigating', function() {
         arrowDown();
 
-        expect(getInput().bindValue).to.eql('baz');
+        expect(getInput().bindValue).to.eql('');
       });
 
-      it('should select the input field text when navigating down', function() {
+      it('should prefill the input field when navigating down', function(done) {
         arrowDown();
 
-        expect(getInput().selectionStart).to.eql(0);
-        expect(getInput().selectionEnd).to.eql(3);
+        comboBox.async(function() {
+          expect(getInput().bindValue).to.eql('baz');
+          done();
+        }, 1);
       });
 
-      it('should prefill the input field when navigating up', function() {
+      it('should select the input field text when navigating down', function(done) {
+        arrowDown();
+
+        comboBox.async(function() {
+          expect(getInput().selectionStart).to.eql(0);
+          expect(getInput().selectionEnd).to.eql(3);
+          done();
+        }, 1);
+      });
+
+      it('should prefill the input field when navigating up', function(done) {
         arrowUp();
 
-        expect(getInput().bindValue).to.eql('foo');
+        comboBox.async(function() {
+          expect(getInput().bindValue).to.eql('foo');
+          done();
+        }, 1);
       });
 
-      it('should not prefill the input when there are no items to navigate', function() {
+      it('should not prefill the input when there are no items to navigate', function(done) {
         filter('invalid filter');
 
         arrowDown();
 
-        expect(getInput().bindValue).to.eql('invalid filter');
+        comboBox.async(function() {
+          expect(getInput().bindValue).to.eql('invalid filter');
+          done();
+        }, 1);
       });
 
-      it('should select the input field text when navigating up', function() {
+      it('should select the input field text when navigating up', function(done) {
         arrowUp();
 
-        expect(getInput().selectionStart).to.eql(0);
-        expect(getInput().selectionEnd).to.eql(3);
+        comboBox.async(function() {
+          expect(getInput().selectionStart).to.eql(0);
+          expect(getInput().selectionEnd).to.eql(3);
+          done();
+        }, 1);
       });
 
-      it('should revert back to filter with espace', function() {
+      it('should revert back to filter with espace', function(done) {
         filter('b');
 
         arrowDown();
 
-        expect(getInput().bindValue).to.eql('bar');
+        comboBox.async(function() {
+          expect(getInput().bindValue).to.eql('bar');
 
-        esc();
+          esc();
 
-        expect(getInput().bindValue).to.eql('b');
+          expect(getInput().bindValue).to.eql('b');
+          done();
+        }, 1);
+
       });
 
       it('should remove selection from the input value when reverting', function() {
