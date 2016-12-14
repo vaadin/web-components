@@ -17,6 +17,7 @@ env:
       "Linux/android@5.1"
     ]'
 script:
+  - set -e
   - gulp lint
   - travis_retry wct
   - travis_retry wct --dom=shadow
