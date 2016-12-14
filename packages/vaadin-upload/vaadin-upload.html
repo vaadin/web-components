@@ -271,10 +271,10 @@ Custom property | Description | Default
        * Limit of files to upload, by default it is unlimited. If the value is
        * set to one, native file browser will prevent selecting multiple files.
        */
-       maxFiles: {
-         type: Number,
-         value: Infinity
-       },
+      maxFiles: {
+        type: Number,
+        value: Infinity
+      },
 
       /**
        * Specifies the types of files that the server accepts.
@@ -413,9 +413,9 @@ Custom property | Description | Default
     },
 
     listeners: {
-      dragover: '_onDragover',
-      dragleave: '_onDragleave',
-      drop: '_onDrop',
+      'dragover': '_onDragover',
+      'dragleave': '_onDragleave',
+      'drop': '_onDrop',
       'file-retry': '_onFileRetry',
       'file-abort': '_onFileAbort',
       'file-remove': '_onFileRemove',
@@ -698,15 +698,15 @@ Custom property | Description | Default
     },
 
     _abortFileUpload: function(file) {
-       var evt = this.fire('upload-abort', {file: file, xhr: file.xhr}, {cancelable: true});
-       if (!evt.defaultPrevented) {
-         file.abort = true;
-         if (file.xhr) {
-           file.xhr.abort();
-         }
-         this._notifyFileChanges(file);
-       }
-     },
+      var evt = this.fire('upload-abort', {file: file, xhr: file.xhr}, {cancelable: true});
+      if (!evt.defaultPrevented) {
+        file.abort = true;
+        if (file.xhr) {
+          file.xhr.abort();
+        }
+        this._notifyFileChanges(file);
+      }
+    },
 
     _notifyFileChanges: function(file) {
       var p = 'files.' + this.files.indexOf(file) + '.';

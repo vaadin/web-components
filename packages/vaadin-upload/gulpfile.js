@@ -10,26 +10,26 @@ gulp.task('lint', ['lint:js', 'lint:html']);
 
 gulp.task('lint:js', function() {
   return gulp.src([
-        '*.js',
-        'test/*.js'
-      ])
-      .pipe(eslint())
-      .pipe(eslint.format())
-      .pipe(eslint.failAfterError('fail'));
+    '*.js',
+    'test/*.js'
+  ])
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError('fail'));
 });
 
 gulp.task('lint:html', function() {
   return gulp.src([
-        '*.html',
-        'demo/*.html',
-        'test/*.html'
-      ])
-      .pipe(htmlExtract({
-        sel: 'script, code-example code'
-      }))
-      .pipe(eslint())
-      .pipe(eslint.format())
-      .pipe(eslint.failAfterError('fail'));
+    '*.html',
+    'demo/*.html',
+    'test/*.html'
+  ])
+  .pipe(htmlExtract({
+    sel: 'script, code-example code'
+  }))
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError('fail'));
 });
 
 gulp.task('typings', function() {

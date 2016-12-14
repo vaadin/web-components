@@ -1,8 +1,5 @@
 {
-  "extends": "eslint:recommended",
-  "rules": {
-    "no-console": 0
-  },
+  "extends": "vaadin",
   "env": {
     "browser": true,
     "node": true
@@ -11,9 +8,6 @@
     "html"
   ],
   "globals": {
-    "CustomElements": false,
-    "HTMLImports": false,
-    "Polymer": false,
-    "WeakMap": false
+    "Polymer": false
   }
 }

@@ -33,7 +33,7 @@ var fileCounter = 0;
 function createFile(fileSize, contentType) {
   var array = [];
   for (var i = 0; i < (fileSize || 512); i++) {
-      array.push('A');
+    array.push('A');
   }
   var file = new Blob([new Uint8Array(array)],
      {type: contentType || 'application/x-octet-stream'});
