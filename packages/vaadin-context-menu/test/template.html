@@ -51,7 +51,7 @@
           });
         });
 
-        it('should bind detail property', function() {
+        it('should bind detail property', function(done) {
           menu.addEventListener('iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('bar');
             done();
