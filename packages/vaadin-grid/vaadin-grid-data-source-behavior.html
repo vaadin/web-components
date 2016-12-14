@@ -17,7 +17,7 @@
 <dom-module id="vaadin-grid-data-source-theme-styles">
   <template>
     <style>
-      :host([loading]) #items tr td ::content > .cell-content {
+      :host([loading]) tbody tr .vaadin-grid-cell.vaadin-grid-cell ::content > .cell-content {
         opacity: 0.1;
         @apply(--vaadin-grid-loading-body-cell);
       }
