@@ -46,11 +46,11 @@
           it('should close on item tap', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
               MockInteractions.tap(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
-              expect(menu._opened).to.eql(false);
+              expect(menu.opened).to.eql(false);
               done();
             });
 
-            menu._opened = true;
+            menu._setOpened(true);
           });
 
           it('should close on keyboard selection', function(done) {
@@ -63,7 +63,7 @@
               done();
             });
 
-            menu._opened = true;
+            menu._setOpened(true);
           });
 
           it('should focus the child element', function(done) {
@@ -77,7 +77,7 @@
               done();
             });
 
-            menu._opened = true;
+            menu._setOpened(true);
           });
 
           it('should focus the child element on `contextmenu` event', function(done) {

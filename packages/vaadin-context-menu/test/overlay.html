@@ -67,12 +67,12 @@
               done();
             });
 
-            menu._opened = true;
+            menu._setOpened(true);
           });
 
           it('should open on `contextmenu` event', function(done) {
             menu.addEventListener('iron-overlay-opened', function() {
-              expect(menu._opened).to.eql(true);
+              expect(menu.opened).to.eql(true);
               done();
             });
 
@@ -167,12 +167,12 @@
               done();
             });
 
-            menu._opened = true;
+            menu._setOpened(true);
           });
 
           it('should close on outside tap', function(done) {
             menu.addEventListener('iron-overlay-closed', function() {
-              expect(menu._opened).to.eql(false);
+              expect(menu.opened).to.eql(false);
               done();
             });
 
@@ -185,7 +185,7 @@
           it('should close on `click`', function() {
             menu.$.overlay.click();
 
-            expect(menu._opened).to.eql(false);
+            expect(menu.opened).to.eql(false);
           });
 
           it('should close on custom event', function() {
@@ -193,7 +193,7 @@
 
             menu.$.overlay.fire('foobar');
 
-            expect(menu._opened).to.eql(false);
+            expect(menu.opened).to.eql(false);
           });
 
           it('should disable close on empty `closeOn`', function() {
@@ -201,7 +201,7 @@
 
             menu.$.overlay.click();
 
-            expect(menu._opened).to.eql(true);
+            expect(menu.opened).to.eql(true);
           });
         });
       });
