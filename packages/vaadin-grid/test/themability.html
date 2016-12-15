@@ -107,6 +107,23 @@
         expect(getColor(bodyRowCells[0])).to.equal(color2);
       });
 
+      it('should override last column cells right border', function() {
+        grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff';
+        grid.updateStyles();
+
+        var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[0])).borderRightStyle;
+        expect(borderRight).to.equal('solid');
+        borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
+        expect(borderRight).to.equal('none');
+      });
+
+      it('should override last column cells right border', function() {
+        grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff !important';
+        grid.updateStyles();
+
+        var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
+        expect(borderRight).to.equal('solid');
+      });
     });
   </script>
 
