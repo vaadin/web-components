@@ -40,11 +40,11 @@
         target: Object,
         width: String,
 
-        _forwardedParentProps: Object,
         _childColumns: Array,
 
         _cellContent: Object,
-        _insertionPoint: Object
+        _insertionPoint: Object,
+        _templatizer: Object
       },
 
       observers: ['_columnChanged(column)',
@@ -53,22 +53,14 @@
         '_flexChanged(flex)',
         '_indexChanged(index, instance)',
         '_itemChanged(item, instance)',
-        '_forwardedParentPropsChanged(_forwardedParentProps.*, instance)',
+        '_instanceChanged(instance, target)',
         '_selectedChanged(selected, instance)',
         '_toggleContent(isAttached, _cellContent, _insertionPoint)',
+        '_toggleInstance(isAttached, _templatizer, instance)',
         '_widthChanged(width)',
         '_visibleChildColumnsChanged(_visibleChildColumns)',
         '_childColumnsChanged(_childColumns)'
       ],
-
-      created: function() {
-        this._instanceProps = {
-          expanded: true,
-          index: true,
-          item: true,
-          selected: true
-        };
-      },
 
       _columnChanged: function(column) {
         this.flex = column.flex;
@@ -106,7 +98,8 @@
       },
 
       _expandedChanged: function(expanded, instance) {
-        instance.notifyPath('expanded', expanded);
+        instance.__expanded__ = expanded;
+        instance.expanded = expanded;
       },
 
       _flexChanged: function(flex) {
@@ -114,17 +107,16 @@
       },
 
       _indexChanged: function(index, instance) {
-        instance.notifyPath('index', index);
+        instance.index = index;
       },
 
       _itemChanged: function(item, instance) {
-        // use assignment here instead of notifyPath to avoid triggering
-        // forwardInstancePath for path "item" on cells unnecessarily.
         instance.item = item;
       },
 
       _selectedChanged: function(selected, instance) {
-        instance.notifyPath('selected', selected);
+        instance.__selected__ = selected;
+        instance.selected = selected;
       },
 
       _childColumnsChanged: function(childColumns) {
@@ -146,38 +138,24 @@
         }
       },
 
+      _toggleInstance: function(isAttached, templatizer, instance) {
+        if (isAttached) {
+          templatizer.addInstance(instance);
+        } else {
+          templatizer.removeInstance(instance);
+        }
+      },
+
       _widthChanged: function(width) {
         this.style.flexBasis = width;
       },
 
-      _templateChanged: function(template, target) {
-        this.templatize(template);
+      _templateChanged: function(template) {
+        this.instance = template.templatizer.createInstance();
+        this._templatizer = template.templatizer;
+      },
 
-        // fix _rootDataHost to the context where template has been defined
-        if (template._rootDataHost) {
-          this._getRootDataHost = function() {
-            return template._rootDataHost;
-          };
-        }
-
-        // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
-        this._parentProps = this._parentProps || {};
-
-        this.instance = this.stamp(null);
-        template.instances = template.instances || [];
-        this._templateInstances = template.instances;
-        template.instances.push(this.instance);
-
-        // use the same forwardedParentProps instance for all cells using the same template.
-        template.forwardedParentProps = template.forwardedParentProps || {};
-        this._forwardedParentProps = template.forwardedParentProps;
-
-        // initializing new template instance with previously forwarded parent props.
-        // could be done with observers, but this is simpler.
-        for (var key in this._forwardedParentProps) {
-          this.instance[key] = this._forwardedParentProps[key];
-        }
-
+      _instanceChanged: function(instance, target) {
         this.style.height = '';
 
         this._cellContent = document.createElement('div');
@@ -189,65 +167,6 @@
         this._insertionPoint = document.createElement('content');
         this._insertionPoint.setAttribute('select', '[data-cell-content-id="' + target._contentIndex + '"]');
       },
-
-      _forwardInstanceProp: function(inst, prop, value) {
-        // fire notification event only when a prop is changed through a user-action.
-        // e.g. 'expanded' is different from the originally bound '__expanded__' value.
-        if (this.parentElement &&
-          this.parentElement['__' + prop + '__'] !== undefined &&
-          this.parentElement['__' + prop + '__'] !== value) {
-
-          this.fire('template-instance-changed', {
-            prop: prop,
-            value: value,
-            inst: inst
-          });
-        }
-      },
-
-      _forwardInstancePath: function(inst, path, value) {
-        // TODO: assuming we're currently just listening to [[item.xxxx]] properties
-        // which affect only cells on the current row.
-        if (path.indexOf('item.') === 0) {
-          this.parentElement.iterateCells(function(cell) {
-            if (cell.instance) {
-              cell.instance.notifyPath(path, value);
-            }
-          });
-
-          // instance.notifyPath above will call _forwardInstancePath recursively,
-          // so need to debounce to avoid firing the same event multiple times.
-          this.parentElement.debounce('item-changed', function() {
-            // stripping 'item.' from path.
-            this.parentElement.fire('item-changed', {
-              item: inst.item,
-              path: path.substring(5),
-              value: value
-            });
-          }.bind(this));
-        }
-      },
-
-      _forwardParentProp: function(prop, value) {
-        // _forwardParentProp might be called during this.stamp() before
-        // this.instance is set. We need to delay it until instance is set.
-        this.set('_forwardedParentProps.' + prop, value);
-      },
-
-      _forwardParentPath: function(path, value) {
-        this.set('_forwardedParentProps.' + path, value);
-      },
-
-      _forwardedParentPropsChanged: function(parentProps) {
-        if (parentProps.path !== '_forwardedParentProps') {
-          var prop = parentProps.path.substring(parentProps.path.indexOf('.') + 1);
-          var value = parentProps.value;
-
-          this._templateInstances.forEach(function(inst) {
-            inst.notifyPath(prop, value);
-          });
-        }
-      }
     };
 
     Polymer({
@@ -256,20 +175,17 @@
       extends: 'td',
 
       behaviors: [
-        Polymer.Templatizer,
         vaadinGridTableCellBehavior,
         vaadin.elements.grid.CellClickBehavior
       ],
 
-      observers: ['_templateChanged(template, target)'],
+      observers: ['_templateChanged(template)'],
 
       _cellClick: function() {
         this.fire('cell-click', {
           model: this.instance
         });
-
       }
-
     });
 
     Polymer({
@@ -282,20 +198,21 @@
       },
 
       behaviors: [
-        Polymer.Templatizer,
         vaadinGridTableCellBehavior
       ],
 
-      observers: ['_headerTemplateChanged(headerTemplate, target)'],
+      observers: ['_headerTemplateChanged(headerTemplate)'],
 
-      _headerTemplateChanged: function(headerTemplate, target) {
+      _headerTemplateChanged: function(headerTemplate) {
         if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
-          this._templateChanged(headerTemplate, target);
+          this.instance = headerTemplate.templatizer.createInstance();
+          this._templatizer = headerTemplate.templatizer;
         } else {
           this._isEmpty = true;
-          this._templateChanged(document.createElement('template'), target);
+          this.instance = {root: document.createElement('div')};
         }
+
         this.fire('cell-empty-changed');
       }
     });
@@ -310,20 +227,21 @@
       },
 
       behaviors: [
-        Polymer.Templatizer,
         vaadinGridTableCellBehavior
       ],
 
-      observers: ['_footerTemplateChanged(footerTemplate, target)'],
+      observers: ['_footerTemplateChanged(footerTemplate)'],
 
-      _footerTemplateChanged: function(footerTemplate, target) {
+      _footerTemplateChanged: function(footerTemplate) {
         if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
-          this._templateChanged(footerTemplate, target);
           this._isEmpty = false;
+          this.instance = footerTemplate.templatizer.createInstance();
+          this._templatizer = footerTemplate.templatizer;
         } else {
-          this._templateChanged(document.createElement('template'), target);
           this._isEmpty = true;
+          this.instance = {root: document.createElement('div')};
         }
+
         this.fire('cell-empty-changed');
       }
     });
