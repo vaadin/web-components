@@ -44,6 +44,8 @@
 </vaadin-split-layout>
 ```
 
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/elements/-/element/vaadin-split-layout)
+
 
 ## Contributing
 
