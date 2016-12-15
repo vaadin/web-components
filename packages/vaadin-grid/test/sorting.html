@@ -103,11 +103,11 @@
         });
 
         it('should show direction indicator', function() {
-          expect(indicators.getAttribute('direction')).to.equal(null);
+          expect(sorter.getAttribute('direction')).to.equal(null);
           sorter.direction = 'asc';
-          expect(indicators.getAttribute('direction')).to.equal('asc');
+          expect(sorter.getAttribute('direction')).to.equal('asc');
           sorter.direction = 'desc';
-          expect(indicators.getAttribute('direction')).to.equal('desc');
+          expect(sorter.getAttribute('direction')).to.equal('desc');
         });
 
       });
@@ -115,7 +115,7 @@
       describe('grid', function() {
         var grid, sorterFirst, sorterLast;
 
-        beforeEach(function() {
+        beforeEach(function(done) {
           grid = fixture('grid');
           Polymer.dom.flush();
           sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
@@ -131,6 +131,7 @@
             first: 'bar',
             last: 'bar'
           }];
+          setTimeout(done, 1);
         });
 
         it('should be clickable', function() {
@@ -184,12 +185,14 @@
           });
 
           it('should not sort the items if sorters is empty', function() {
+            debugger;
             sorterFirst.direction = null;
             sorterLast.direction = null;
             grid.items = buildDataSet(1000);
             var bodyRows = getRows(grid.$.scroller.$.items);
             var cells = getRowCells(bodyRows[0]);
             expect(cells[0].item).to.equal(grid.items[0]);
+            debugger;
           });
 
         });

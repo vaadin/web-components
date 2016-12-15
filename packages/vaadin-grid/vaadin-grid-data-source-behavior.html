@@ -3,13 +3,9 @@
     <style>
       :host(:not([has-data])) tbody tr::after {
         visibility: hidden;
-        content: '-';
+        content: "-";
         width: 0;
-
-         /* Must use the same padding (+border-top) as the cell wrapper itself.
-         FIXME: Use the vertical paddings on the cell directly (not the wrapper).
-         Then this could be removed.*/
-        padding: 9px 0 8px;
+        padding: 8px 0;
       }
     </style>
   </template>

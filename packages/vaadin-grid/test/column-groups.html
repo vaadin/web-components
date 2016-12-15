@@ -142,7 +142,7 @@
 
   <script>
     describe('column groups', function() {
-      var grid, scroller, header, body, footer, headerRows, footerRows;
+      var grid, scroller, header, body, footer, headerRows, footerRows, bodyRows;
 
       function getFooterCellContent(row, col) {
         return getCellContent(getFooterCell(row, col)).textContent.trim();
@@ -191,13 +191,6 @@
           });
         });
 
-        it('should not have a border below the header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('th');
-          var cellOnLastRow = cells[cells.length - 1];
-          var el = getCellContent(cellOnLastRow);
-          expect(window.getComputedStyle(el).borderBottomStyle).to.eql('none');
-        });
-
         it('should have empty footer', function() {
           var cells = Polymer.dom(footer).querySelectorAll('td');
           expect(cells).not.to.be.empty;
@@ -205,13 +198,6 @@
           cells.forEach(function(cell) {
             expect(cell._isEmpty).to.be.true;
           });
-        });
-
-        it('should not have a border above the footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('td');
-          var cellOnFirstRow = cells[0];
-          var el = getCellContent(cellOnFirstRow);
-          expect(window.getComputedStyle(el).borderTopStyle).to.eql('none');
         });
 
         it('should have no visible header rows', function() {
@@ -332,14 +318,14 @@
 
         it('should have a border below the header', function() {
           var cells = Polymer.dom(header).querySelectorAll('th');
-          var cellOnLastRow = cells[cells.length - 1];
+          var cellOnLastRow = getCellContent(cells[cells.length - 1]);
 
           expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
         });
 
         it('should have a border above the footer', function() {
           var cells = Polymer.dom(footer).querySelectorAll('td');
-          var cellOnFirstRow = cells[0];
+          var cellOnFirstRow = getCellContent(cells[0]);
 
           expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
         });
@@ -400,6 +386,7 @@
 
         it('should have last row fully visible when scrolled to end', function(done) {
           scrollToEnd(grid, function() {
+            scroller.flushDebouncer('vaadin-grid-scrolling');
             bodyRows = getRows(body);
             var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
             var footerTop = footer.getBoundingClientRect().top;

@@ -121,7 +121,10 @@
         scroller = grid.$.scroller;
         rows = getRows(scroller.$.items);
         Polymer.dom.flush();
-        defaultHeight = getRowCells(getRows(grid.$.scroller.$.header)[0])[0].clientHeight + 1;
+        grid.customStyle['--vaadin-grid-cell'] = 'border: none !important';
+        grid.updateStyles();
+        defaultHeight = getRows(grid.$.scroller.$.header)[0].clientHeight;
+
         grid.dataSource = function(info, callback) {
           setTimeout(function() {
             var startIndex = info.pageSize * info.page;
