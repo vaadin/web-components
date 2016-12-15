@@ -17,10 +17,6 @@
 <dom-module id="vaadin-grid-data-source-theme-styles">
   <template>
     <style>
-      :host([loading]) tbody tr .vaadin-grid-cell.vaadin-grid-cell ::content > .cell-content {
-        opacity: 0.1;
-        @apply(--vaadin-grid-loading-body-cell);
-      }
 
       /* Anim */
       @keyframes vaadin-grid-spin-360 {
@@ -57,6 +53,19 @@
         -webkit-animation: vaadin-grid-spin-360 400ms linear infinite;
         animation: vaadin-grid-spin-360 400ms linear infinite;
       }
+
+      :host([loading]):before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        pointer-events: none;
+        @apply(--vaadin-grid-loading-backdrop);
+      }
+
     </style>
   </template>
 </dom-module>

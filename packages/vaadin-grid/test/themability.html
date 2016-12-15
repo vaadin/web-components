@@ -107,14 +107,6 @@
         expect(getColor(bodyRowCells[0])).to.equal(color2);
       });
 
-      it('should override loading cell styles', function() {
-        grid.selectedItems = grid.items;
-        grid.loading = true;
-        setColor('--vaadin-grid-body-row-selected-cell', color1);
-        setColor('--vaadin-grid-loading-body-cell', color2);
-        expect(getColor(bodyRowCells[0])).to.equal(color2);
-      });
-
     });
   </script>
 
