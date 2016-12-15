@@ -4,7 +4,7 @@
 
 # &lt;vaadin-split-layout&gt;
 
-### [Live demo](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-split-layout/demo/)
+[Live demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-split-layout/demo/)
 
 [&lt;vaadin-split-layout&gt;](https://vaadin.com/elements/-/element/vaadin-split-layout) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
@@ -47,7 +47,7 @@
 
 ## Contributing
 
-1. Fork the `<vaadin-split-layout>` repository.
+1. Fork the `vaadin-split-layout` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
@@ -76,6 +76,14 @@
 ## Following the coding style
 
 We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
+
+
+## Creating a pull request
+
+  - Make sure your code is compliant with our code linters: `gulp lint`
+  - Check that tests are passing: `npm test`
+  - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
+  - Wait for response from one of Vaadin Elements team members
 
 
 ## License
