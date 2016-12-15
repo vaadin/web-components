@@ -21,102 +21,148 @@
       </ul>
     </nav>
 
-    <h3>Context Menu Advanded Usage</h3>
-    <p>
-      Right-Click on the table to open a context menu that will allow you hide and show columns in the grid.
-      Note that this context menu is fully customized using CSS and Polymer mixins.
-    </p>
+    <h3>Opening and Closing Events</h3>
     <demo-snippet>
       <template>
-        <grid-example></grid-example>
-        <dom-module id="grid-example">
-          <style>
-            :host {
-              --vaadin-context-menu-overlay: {
-                box-shadow: none;
-                border: 1px solid var(--primary-color);
-                width: 110px;
-                padding: 0;
-              };
-              --paper-menu-selected-item: {
-                font-weight: normal;
-              };
-              --paper-item: {
-                min-height: 24px;
-                padding: 0 10px;
-                cursor: default;
-              }
-              --paper-menu-background-color: #e1f3fc;
-            }
-
-            paper-item::before {
-              position: relative !important;
-              content: "✔" !important;
-              margin-right: 10px;
-              background: transparent !important;
-              opacity: 0 !important;
-            }
-            paper-item.iron-selected::before {
-              opacity: 0.8 !important;
-            }
-          </style>
+        <vaadin-context-menu selector="button" open-on="click" close-on="none">
           <template>
-            <vaadin-grid id="grid" frozen-columns="1" items="[[_items()]]" columns="{{columns}}">
-              <table>
-                <colgroup>
-                  <col name="name" resizable>
-                  <col name="surname" resizable>
-                  <col name="activity">
-                  <col name="target">
-                  <col name="effort">
-                </colgroup>
-              </table>
-            </vaadin-grid>
-            <vaadin-context-menu id="menu" close-on="">
-              <template>
-                <paper-menu multi selected-values="{{selectedValues}}">
-                  <paper-item>Name</paper-item>
-                  <paper-item>Surname</paper-item>
-                  <paper-item>Activity</paper-item>
-                  <paper-item>Target</paper-item>
-                  <paper-item>Effort</paper-item>
-                </paper-menu>
-              </template>
-            </vaadin-context-menu>
-        </template>
-      </dom-module>
-      <script>
-        window.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'grid-example',
-            properties: {
-              selectedValues: {
-                type: Array,
-                value: [0, 1, 2, 3, 4]
-              }
-            },
-            observers: [
-              '_selectedChanged(selectedValues.splices)'
-            ],
-            ready: function() {
-              this.$.menu.listenOn = this.$.grid;
-            },
-            _items: function() {
-              return getRandomItems();
-            },
-            _selectedChanged: function() {
-              for (var i = 0; this.columns && i < this.columns.length; i++) {
-                this.columns[i].hidden = this.selectedValues.indexOf(i) === -1;
-              }
-            }
-          });
-        });
-      </script>
+            <paper-menu>
+              <paper-item>First menu item</paper-item>
+              <paper-item>Second menu item</paper-item>
+            </paper-menu>
+          </template>
 
+          <button>Show Context Menu</button>
+        </vaadin-context-menu>
       </template>
-
     </demo-snippet>
 
+    <h3>Using with Vaadin Grid</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="my-grid-view">
+          <template>
+            <vaadin-context-menu open-on="detailed-vaadin-contextmenu">
+              <template>
+                <paper-menu>
+                  <paper-item on-tap="_add">Add</paper-item>
+                  <template is="dom-if" if="[[_isGridBody(detail)]]">
+                    <paper-item detail="[[detail]]" on-tap="_remove">Remove</paper-item>
+                  </template>
+                </paper-menu>
+              </template>
+
+              <vaadin-grid id="grid" items="[[items]]">
+                <table>
+                  <colgroup>
+                    <col name="name">
+                    <col name="surname">
+                    <col name="effort">
+                  </colgroup>
+                </table>
+              </vaadin-grid>
+            </vaadin-context-menu>
+          </template>
+
+          <script>
+            Polymer({
+              is: 'my-grid-view',
+
+              properties: {
+                items: {
+                  type: Array,
+                  value: function() {
+                    return getItems();
+                  }
+                }
+              },
+
+              ready: function() {
+                this.$.grid.detailedEvents = ['vaadin-contextmenu'];
+              },
+
+              _isGridBody: function(detail) {
+                return detail.section === 'body';
+              },
+
+              _add: function() {
+                this.unshift('items', getNewItem());
+              },
+
+              _remove: function(e) {
+                this.splice('items', e.target.detail.row, 1);
+              }
+            });
+          </script>
+        </dom-module>
+
+        <my-grid-view></my-grid-view>
+      </template>
+    </demo-snippet>
+
+    <h3>Basic HTML Menu</h3>
+    <demo-snippet>
+      <template>
+        <style>
+          .my-menu {
+            padding: 8px 0;
+            background: #fff;
+          }
+
+          .my-menu-item {
+            display: block;
+            padding: 8px 24px;
+            text-decoration: none;
+            color: #000;
+          }
+
+          .my-menu-item:hover {
+            background: #eee;
+          }
+        </style>
+
+        <vaadin-context-menu>
+          <template>
+            <div class="my-menu">
+              <a href="#" class="my-menu-item">First menu item</a>
+              <a href="#" class="my-menu-item">Second menu item</a>
+            </div>
+          </template>
+
+          <p>
+            This paragraph has a context menu built using basic HTML elements
+            and global CSS styles.
+          </p>
+        </vaadin-context-menu>
+      </template>
+    </demo-snippet>
+
+    <h3>Long Menus</h3>
+    <demo-snippet>
+      <template>
+        <template id="app" is="dom-bind">
+          <vaadin-context-menu>
+            <template>
+              <paper-menu>
+                <template is="dom-repeat" items="[[menuItems]]">
+                  <paper-item>Menu Item</paper-item>
+                </template>
+              </paper-menu>
+            </template>
+
+            <p>
+              This paragraph has a context menu that cannot fit inside
+              the viewport. The context menu has scrolling for the menu items.
+            </p>
+          </vaadin-context-menu>
+        </template>
+        <script>
+          document.addEventListener('WebComponentsReady', function() {
+            document.querySelector('#app').menuItems = new Array(30);
+          });
+        </script>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>

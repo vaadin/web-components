@@ -22,97 +22,174 @@
       </ul>
     </nav>
 
-    <h3>Context Menu Basic Usage</h3>
-    <p>
-      In this example you can see how to use
-      <code>paper-menu</code>,
-      <code>paper-items</code>
-      and
-      <code>paper-item-body</code> elements to configure the content of the context menu.
-    </p>
+    <h3>Basic Usage</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind" id="container">
-          <style is='custom-style'>
-            iron-icon {
-              margin-right: 16px;
-            }
-          </style>
-          <vaadin-context-menu class="demo-1" selector="a">
-            <template>
-              <paper-menu class="demo-1" on-iron-select="_selectedItemChanged">
-                <paper-item>Item 1</paper-item>
-                <paper-item>Item 2</paper-item>
-                <paper-item>Item 3</paper-item>
-                <paper-item>
-                  <iron-icon icon="warning"></iron-icon>
-                  <paper-item-body two-line>
-                    <div>Item 4 - Line 1</div>
-                    <div secondary>Item 4 - Line 2</div>
-                  </paper-item-body>
-                </paper-item>
-                <paper-item>Item 5</paper-item>
-                <paper-item>Item 6</paper-item>
-                <paper-item>Item 7</paper-item>
-                <paper-item>Item 8</paper-item>
-                <paper-item>Item 9</paper-item>
-                <paper-item>Item 10</paper-item>
-                <paper-item>Item 11</paper-item>
-                <paper-item>Item 12</paper-item>
-              </paper-menu>
-            </template>
-            Right click on this <a id="opener" href="#">link</a> to open the context menu.
-          </vaadin-context-menu>
-          <script>
-            var container = document.querySelector('#container');
-            container._selectedItemChanged = function(e) {
-              console.log('Selected Item: ' + e.target.indexOf(e.detail.item));
-            };
-          </script>
-        </template>
+        <vaadin-context-menu>
+          <template>
+            <paper-menu>
+              <paper-item>First menu item</paper-item>
+              <paper-item>Second menu item</paper-item>
+            </paper-menu>
+          </template>
+
+          <p>This paragraph has the context menu provided in the above template.</p>
+          <p>Another paragraph with the context menu.</p>
+        </vaadin-context-menu>
       </template>
     </demo-snippet>
 
-    <h3>Customized Items</h3>
-    <p>
-      In the following example we use plain HTML elements as items in the context menu.
-    </p>
+    <h3>Custom Listener</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <vaadin-context-menu selector="#opener" open-on="click">
-            <template>
-              <style>
-                div[role="menu"] {
-                  padding: 16px 0;
-                  background: #fff;
-                }
+        <vaadin-context-menu id="customListener">
+          <template>
+            <paper-menu>
+              <paper-item>First menu item</paper-item>
+              <paper-item>Second menu item</paper-item>
+            </paper-menu>
+          </template>
+        </vaadin-context-menu>
 
-                div[role="option"] {
-                  min-height: 32px;
-                  padding: 0 24px;
-                  font-size: 16px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: top;
-                }
+        <div id="menuListener">The element that listens for the context menu.</div>
 
-                div[role="option"]:hover {
-                  background: #d6d6d6;
+        <script>
+          var contextMenu = document.querySelector('vaadin-context-menu#customListener');
+          contextMenu.listenOn = document.querySelector('#menuListener');
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Filtering Menu Targets</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-context-menu selector=".has-menu">
+          <template>
+            <paper-menu>
+              <paper-item>First menu item</paper-item>
+              <paper-item>Second menu item</paper-item>
+            </paper-menu>
+          </template>
+
+          <p class="has-menu">This paragraph opens the context menu.</p>
+          <p>This paragraph does not open the context menu.</p>
+        </vaadin-context-menu>
+      </template>
+    </demo-snippet>
+
+    <h3>Accessing the Menu Target</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-context-menu selector="li">
+          <template>
+            <paper-menu>
+              <paper-item>The menu target: [[target.textContent]]</paper-item>
+            </paper-menu>
+          </template>
+
+          <ul>
+            <li>Foo</li>
+            <li>Bar</li>
+            <li>Baz</li>
+          </ul>
+        </vaadin-context-menu>
+      </template>
+    </demo-snippet>
+
+    <h3>Menu Item Events</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="my-list-view">
+          <template>
+            <vaadin-context-menu selector="li">
+              <template>
+                <paper-menu>
+                  <paper-item on-tap="_appendItem">Append item</paper-item>
+                  <paper-item list-item="[[target]]" on-tap="_removeItem">Remove item</paper-item>
+                </paper-menu>
+              </template>
+
+              <ul>
+                <template is="dom-repeat" items="[[items]]">
+                  <li index="[[index]]">[[item]]</li>
+                </template>
+              </ul>
+            </vaadin-context-menu>
+          </template>
+
+          <script>
+            Polymer({
+              is: 'my-list-view',
+
+              properties: {
+                items: {
+                  type: Array,
+                  value: function() {
+                    return ['Foo', 'Bar', 'Baz'];
+                  }
                 }
-              </style>
-              <div role="menu">
-                <div on-tap="_log" role="option">Item 1</div>
-                <div on-tap="_log" role="option">Item 2</div>
-              </div>
-            </template>
-            <button id="opener">Open</button>
-          </vaadin-context-menu>
-        </template>
+              },
+
+              _appendItem: function() {
+                this.push('items', 'New item');
+              },
+
+              _removeItem: function(e) {
+                var menuItem = e.target; // `<paper-item>`
+                var listItem = menuItem.listItem; // `<li>`
+                this.splice('items', listItem.index, 1);
+              }
+            });
+          </script>
+        </dom-module>
+
+        <my-list-view></my-list-view>
+      </template>
+    </demo-snippet>
+
+    <h3>JavaScript API</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-context-menu id="buttonMenu">
+          <template>
+            <paper-menu>
+              <paper-item>First menu item</paper-item>
+              <paper-item>Second menu item</paper-item>
+            </paper-menu>
+          </template>
+        </vaadin-context-menu>
+
+        <button id="menuOpener">Toggle Context Menu</button>
+
+        <script>
+          document.querySelector('#menuOpener').addEventListener('click', function(event) {
+            var menu = document.querySelector('#buttonMenu');
+            if (!menu.opened) {
+              menu.open(event);
+            } else {
+              menu.close();
+            }
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Selected Item Style</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-context-menu>
+          <template>
+            <paper-menu selected-class="no-selected-styles-please">
+              <paper-item>First menu item</paper-item>
+              <paper-item>Second menu item</paper-item>
+            </paper-menu>
+          </template>
+
+          <p>The context menu of this paragraph does not change the items look when opened again.</p>
+        </vaadin-context-menu>
       </template>
     </demo-snippet>
 
   </div>
 </body>
-
 </html>

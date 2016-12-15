@@ -1,0 +1,52 @@
+---
+title: Item Events
+order: 3
+layout: page
+---
+
+[[vaadin-context-menu.item-events]]
+= Item Events
+
+In order to handle menu item events, such as [eventname]#click# or [eventname]#tap#, use Polymer [attributename]#on-[replaceable]#event## annotations to setup listeners in your component ([elementname]#my-list-view#):
+
+[source,html]
+----
+<dom-module id="my-list-view">
+  <template>
+    <vaadin-context-menu>
+      <template>
+        <paper-menu>
+          <paper-item on-tap="_appendItem">Append item</paper-item>
+        </paper-menu>
+      </template>
+
+      <ul>
+        <template is="dom-repeat" items="[[items]]">
+          <li index="[[index]]">[[item]]</li>
+        </template>
+      </ul>
+    </vaadin-context-menu>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-list-view',
+
+      properties: {
+        items: {
+          type: Array,
+          value: function() {
+            return ['Foo', 'Bar', 'Baz'];
+          }
+        }
+      },
+
+      _appendItem: function() {
+        this.push('items', 'New item');
+      }
+    });
+  </script>
+</dom-module>
+
+<my-list-view></my-list-view>
+----

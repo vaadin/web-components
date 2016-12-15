@@ -9,10 +9,116 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-contextmenu-event.html">
 
 <!--
+`<vaadin-context-menu>` is a Polymer element that opens an overlay with the provided menu template on each context menu event.
 
-`<vaadin-context-menu>` is a component for contextual menus bound to UI elements.
 
-The following custom properties and mixins are available for styling:
+### Menu Template
+
+The `<vaadin-context-menu>` element expects a child template with the overlay contents.
+
+You can use any elements in the template to build the actual menu. It is recommended to use `<paper-menu>` and `<paper-item>` for the basic single-level menu use case:
+
+```html
+<vaadin-context-menu>
+  <template>
+    <paper-menu>
+      <paper-item>First menu item</paper-item>
+      <paper-item>Second menu item</paper-item>
+    </paper-menu>
+  </template>
+</vaadin-context-menu>
+```
+
+### “vaadin-contextmenu” Gesture Event
+
+`vaadin-contextmenu` is a gesture event (a custom event fired by Polymer), which is dispatched after either `contextmenu` and long touch events. This enables support for both mouse and touch environments in a uniform way.
+
+`<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu` event by default.
+
+### Menu Listener
+
+By default, the `<vaadin-context-menu>` element listens for the menu opening event on itself. In order to have a context menu on your content, wrap your content with the `<vaadin-context-menu>` element, and add a template element with a menu. Example:
+
+```html
+<vaadin-context-menu>
+  <template>
+    <paper-menu>
+      <paper-item>First menu item</paper-item>
+      <paper-item>Second menu item</paper-item>
+    </paper-menu>
+  </template>
+
+  <p>This paragraph has the context menu provided in the above template.</p>
+  <p>Another paragraph with the context menu.</p>
+</vaadin-context-menu>
+```
+
+In case if you do not want to wrap the page content, you can listen for events on an element outside the `<vaadin-context-menu>` by setting the `listenOn` property:
+
+```html
+<vaadin-context-menu id="customListener">
+  <template>
+    <paper-menu>
+      ...
+    </paper-menu>
+  </template>
+</vaadin-context-menu>
+
+<div id="menuListener">The element that listens for the context menu.</div>
+
+<script>
+  var contextMenu = document.querySelector('vaadin-context-menu#customListener');
+  contextMenu.listenOn = document.querySelector('#menuListener');
+</script>
+```
+
+### Filtering Menu Targets
+
+By default, the listener element and all its descendants open the context menu. You can filter the menu targets to a smaller set of elements inside the listener element by setting the `selector` property.
+
+In the following example, only the elements matching `.has-menu` will open the context menu:
+
+```html
+<vaadin-context-menu selector=".has-menu">
+  <template>
+    <paper-menu>
+      ...
+    </paper-menu>
+  </template>
+
+  <p class="has-menu">This paragraph opens the context menu</p>
+  <p>This paragraph does not open the context menu</p>
+</vaadin-context-menu>
+```
+
+### Menu Context
+
+You can bind to the following properties in the menu template:
+
+- `target` is the menu opening event target, which is the element that the user has called the context menu for
+- `detail` is the menu opening event detail
+
+In the following example, the menu item text is composed with the contents of the element that opened the menu:
+
+```html
+<vaadin-context-menu selector="li">
+  <template>
+    <paper-menu>
+      <paper-item>The menu target: [[target.textContent]]</paper-item>
+    </paper-menu>
+  </template>
+
+  <ul>
+    <li>Foo</li>
+    <li>Bar</li>
+    <li>Baz</li>
+  </ul>
+</vaadin-context-menu>
+```
+
+### Styling
+
+The following custom CSS mixins are available for styling the overlay:
 
 Custom property | Description | Default
 ----------------|-------------|----------

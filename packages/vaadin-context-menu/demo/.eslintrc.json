@@ -4,6 +4,7 @@
     "no-unused-vars": 0
   },
   "globals": {
-    "getRandomItems": false
+    "getItems": false,
+    "getNewItem": false
   }
 }
