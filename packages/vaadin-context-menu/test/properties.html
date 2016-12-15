@@ -99,6 +99,27 @@
           });
         });
 
+        describe('opened', function() {
+          var menu;
+          beforeEach(function() {
+            menu = fixture('external')[0];
+          });
+
+          it('should be read-only', function() {
+            expect(menu.opened).to.eql(false);
+
+            menu.opened = true;
+            expect(menu.opened).to.eql(false);
+          });
+
+          it('should be set using the private setter', function() {
+            expect(menu.opened).to.eql(false);
+
+            menu._setOpened(true);
+            expect(menu.opened).to.be.true;
+          });
+        });
+
         describe('closeOn', function() {
           var menu;
           beforeEach(function() {
