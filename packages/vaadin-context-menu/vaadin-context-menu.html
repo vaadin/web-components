@@ -35,7 +35,8 @@ Custom property | Description | Default
     </style>
 
     <content></content>
-    <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{_overlayOpened}}">
+    <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
+        on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed">
     </vaadin-context-menu-overlay>
 
   </template>
@@ -113,7 +114,6 @@ Custom property | Description | Default
       observers: [
         '_contentTemplateChanged(_contentTemplate)',
         '_openedChanged(opened)',
-        '_openedChanged(_overlayOpened)',
         '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'
       ],
 
@@ -122,6 +122,10 @@ Custom property | Description | Default
         if (child) {
           child.focus();
         }
+      },
+
+      _onOverlayClosed: function() {
+        this._setOpened(false);
       },
 
       _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
@@ -157,8 +161,6 @@ Custom property | Description | Default
       },
 
       _openedChanged: function(opened) {
-        this._setOpened(opened);
-        this._overlayOpened = opened;
         if (opened) {
           this._contentTemplate = Polymer.dom(this).children.filter(function(el) {
             return el.localName === 'template';
