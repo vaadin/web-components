@@ -1,0 +1,71 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column>
+          <template class="header"></template>
+          <template>[[item]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('active item', function() {
+      var grid;
+
+      beforeEach(function() {
+        grid = fixture('default');
+        grid.items = ['foo', 'bar'];
+      });
+
+      function clickItem(rowIndex) {
+        return grid.$.scroller.$.items.children[rowIndex].children[0].click();
+      }
+
+      it('should not have a default value', function() {
+        expect(grid.activeItem).to.be.undefined;
+      });
+
+      it('should activate on click', function() {
+        clickItem(0);
+
+        expect(grid.activeItem).to.eql('foo');
+      });
+
+      it('should activate another on click', function() {
+        clickItem(0);
+
+        clickItem(1);
+
+        expect(grid.activeItem).to.eql('bar');
+      });
+
+      it('should deactive on click', function() {
+        clickItem(0);
+
+        clickItem(0);
+
+        expect(grid.activeItem).to.be.null;
+      });
+    });
+  </script>
+
+</body>
+
+</html>

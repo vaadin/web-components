@@ -78,14 +78,14 @@
       </template>
     </demo-snippet>
 
-    <h3>Selection using Clicks</h3>
+    <h3>Selection using Active Item</h3>
     <demo-snippet>
       <template>
         <x-selection></x-selection>
         <dom-module id="x-selection">
           <template>
             <x-data-source data-source="{{dataSource}}"></x-data-source>
-            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+            <vaadin-grid id="grid" data-source="[[dataSource]]" active-item="{{activeItem}}" size="200">
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
@@ -104,13 +104,14 @@
             Polymer({
               is: 'x-selection',
 
-              listeners: {
-                'cell-click': '_onCellClick'
+              properties: {
+                activeItem: {
+                  observer: '_activeItemChanged'
+                }
               },
 
-              _onCellClick: function(e) {
-                this.$.grid.selectedItems = [];
-                this.$.grid.selectItem(e.detail.model.item);
+              _activeItemChanged: function(item) {
+                this.$.grid.selectedItems = item ? [item] : [];
               }
             });
           </script>

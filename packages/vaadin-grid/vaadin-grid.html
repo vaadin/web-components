@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-table.html">
 <link rel="import" href="vaadin-grid-column.html">
+<link rel="import" href="vaadin-grid-active-item-behavior.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-array-data-source-behavior.html">
@@ -57,6 +58,7 @@
     },
 
     behaviors: [
+      vaadin.elements.grid.ActiveItemBehavior,
       vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.DataSourceBehavior,
       vaadin.elements.grid.DynamicColumnsBehavior,
