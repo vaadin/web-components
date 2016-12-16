@@ -1,6 +1,6 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-context-menu.svg) 
+![Bower version](https://img.shields.io/bower/v/vaadin-context-menu.svg)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://beta.webcomponents.org/element/vaadin/vaadin-context-menu)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-context-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-context-menu) 
+[![Build Status](https://travis-ci.org/vaadin/vaadin-context-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-context-menu)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # &lt;vaadin-context-menu&gt;
@@ -18,7 +18,7 @@
        font-family: sans-serif;
      }
     </style>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="../paper-menu/paper-menu.html">
     <link rel="import" href="../paper-item/paper-item.html">
     <link rel="import" href="../paper-item/paper-item-body.html">
