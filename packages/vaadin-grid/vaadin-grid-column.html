@@ -13,9 +13,9 @@
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.vaadinGridColumnBaseBehavior
+   * @polymerBehavior vaadin.elements.grid.ColumnBaseBehavior
    */
-  vaadin.elements.grid.vaadinGridColumnBaseBehavior = {
+  vaadin.elements.grid.ColumnBaseBehavior = {
     properties: {
       headerTemplate: {
         type: Object,
@@ -92,9 +92,9 @@
   };
 
   /**
-   * @polymerBehavior vaadin.elements.grid.vaadinGridColumnBehaviorImpl
+   * @polymerBehavior vaadin.elements.grid.ColumnBehaviorImpl
    */
-  vaadin.elements.grid.vaadinGridColumnBehaviorImpl = {
+  vaadin.elements.grid.ColumnBehaviorImpl = {
     properties: {
       width: {
         type: String,
@@ -135,23 +135,23 @@
   }
 
   /**
-   * @polymerBehavior vaadin.elements.grid.vaadinGridColumnBehavior
+   * @polymerBehavior vaadin.elements.grid.ColumnBehavior
    */
-  vaadin.elements.grid.vaadinGridColumnBehavior = [
-    vaadin.elements.grid.vaadinGridColumnBaseBehavior,
-    vaadin.elements.grid.vaadinGridColumnBehaviorImpl
+  vaadin.elements.grid.ColumnBehavior = [
+    vaadin.elements.grid.ColumnBaseBehavior,
+    vaadin.elements.grid.ColumnBehaviorImpl
   ];
 
   Polymer({
     is: 'vaadin-grid-column',
 
-    behaviors: [vaadin.elements.grid.vaadinGridColumnBehavior]
+    behaviors: [vaadin.elements.grid.ColumnBehavior]
   });
 
   Polymer({
     is: 'vaadin-grid-column-group',
 
-    behaviors: [vaadin.elements.grid.vaadinGridColumnBaseBehavior],
+    behaviors: [vaadin.elements.grid.ColumnBaseBehavior],
 
     properties: {
       _childColumns: {
