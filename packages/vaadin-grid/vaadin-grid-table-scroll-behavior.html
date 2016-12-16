@@ -72,9 +72,9 @@
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.TableScrollBehavior
+   * @polymerBehavior vaadin.elements.grid.TableScrollBehaviorImpl
    */
-  vaadin.elements.grid.TableScrollBehavior = [Polymer.IronScrollTargetBehavior, {
+  vaadin.elements.grid.TableScrollBehaviorImpl = {
 
     properties: {
 
@@ -380,6 +380,14 @@
       return 'translate3d(' + x + 'px,' + y + 'px, 0)';
     },
 
-  }];
+  };
+
+  /**
+   * @polymerBehavior vaadin.elements.grid.TableScrollBehavior
+   */
+  vaadin.elements.grid.TableScrollBehavior = [
+    Polymer.IronScrollTargetBehavior,
+    vaadin.elements.grid.TableScrollBehaviorImpl
+  ];
 
 </script>
