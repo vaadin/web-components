@@ -42,9 +42,10 @@
     "paper-item": "^1.2.1",
     "paper-slider": "^1.0.12",
     "app-layout": "polymerelements/app-layout#^0.10.2",
-    "iron-icons": "^1.1.3",
+    "iron-icons": "PolymerElements/iron-icons#^1.2.0",
     "iron-media-query": "^1.0.8",
-    "paper-button": "^1.0.14"
+    "paper-button": "^1.0.14",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.12"
   },
   "dependencies": {
     "polymer": "^1.6.1",

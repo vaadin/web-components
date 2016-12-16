@@ -11,6 +11,10 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
+  <link rel="import" href="../vaadin-grid-selection-column.html">
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
 
 </head>
 
@@ -27,7 +31,153 @@
       </ul>
     </nav>
 
-    <h3>Theming Example 1</h3>
+    <h3>Material Design</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            vaadin-grid#material {
+
+              font-family: Roboto, sans-serif;
+              --divider-color: #dbdbdb;
+
+              --vaadin-grid-cell: {
+                padding: 0;
+              }
+
+              --vaadin-grid-header-cell: {
+                height: 64px;
+                color: rgba(0, 0, 0, 0.54);
+                font-size: 12px;
+              }
+
+              --vaadin-grid-body-cell: {
+                height: 48px;
+                color: rgba(0, 0, 0, 0.87);
+                font-size: 13px;
+              }
+
+              --vaadin-grid-body-row-hover-cell: {
+                background-color: #EEEEEE;
+              }
+
+              --vaadin-grid-body-row-selected-cell: {
+                background-color: #F5F5F5;
+              }
+
+            }
+
+            vaadin-grid#material .cell {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              padding-right: 56px;
+            }
+
+            vaadin-grid#material .cell.last {
+              padding-right: 24px;
+            }
+
+            vaadin-grid#material .cell.numeric {
+              text-align: right;
+            }
+
+            vaadin-grid#material paper-checkbox {
+              --primary-color: #3f51b5;
+              margin: 0 24px;
+            }
+
+            vaadin-grid#material vaadin-grid-sorter {
+
+              --vaadin-grid-sorter-indicator: {
+                display: none !important;
+              };
+            }
+
+            vaadin-grid#material vaadin-grid-sorter .cell {
+              flex: 1;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            vaadin-grid#material vaadin-grid-sorter iron-icon {
+              transform: scale(0.8) translateZ(0);
+              transition: all 0.3s;
+            }
+
+            vaadin-grid#material vaadin-grid-sorter:not([direction]) iron-icon {
+              color: rgba(0, 0, 0, 0.38);
+            }
+
+            vaadin-grid#material vaadin-grid-sorter[direction] {
+              color: rgba(0, 0, 0, 0.87);
+            }
+
+            vaadin-grid#material vaadin-grid-sorter[direction=desc] iron-icon {
+              transform: scale(0.8) rotate(180deg) translateZ(0);
+            }
+
+          </style>
+
+          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <vaadin-grid id="material" items="[[items]]" size="200">
+
+            <vaadin-grid-selection-column width="66px" flex="0" select-all="[[selectAll]]">
+              <template class="header">
+                <paper-checkbox checked="{{selectAll}}"></paper-checkbox>
+              </template>
+              <template>
+                <paper-checkbox checked="{{selected}}"></paper-checkbox>
+              </template>
+            </vaadin-grid-selection-column>
+
+            <vaadin-grid-column width="100px" flex="0">
+              <template class="header">
+                <div class="cell">Name</div>
+              </template>
+              <template>
+                <div class="cell">[[item.user.name.first]]</div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column flex="2">
+              <template class="header">
+                <div class="cell">Email</div>
+              </template>
+              <template>
+                <div class="cell">[[item.user.email]]</div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+              <template class="header">
+                <vaadin-grid-sorter path="user.location.city">
+                  <div class="cell">
+                    <span>City</span><iron-icon icon="icons:arrow-upward"></iron-icon>
+                  </div>
+                </vaadin-grid-sorter>
+              </template>
+              <template>
+                <div class="cell">[[item.user.location.city]]</div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column width="100px" flex="0">
+              <template class="header">
+                <div class="cell numeric last">Zip Code</div>
+              </template>
+              <template>
+                <div class="cell numeric last">[[item.user.location.zip]]</div>
+              </template>
+            </vaadin-grid-column>
+
+          </vaadin-grid>
+        </template>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Valo</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
@@ -37,13 +187,11 @@
               position: relative;
               font: 300 16px/1.55 "Open Sans", sans-serif;
               -webkit-font-smoothing: antialiased;
-              border-color: #d4d4d4;
+              --divider-color: #d4d4d4;
 
               --vaadin-grid-cell: {
-                border-color: #d4d4d4 !important;
                 padding: 0 18px;
-                line-height: 38px;
-                min-height: 38px;
+                height: 38px;
                 border-right: 1px solid #d4d4d4;
                 box-sizing: border-box;
               }
@@ -51,7 +199,6 @@
               --vaadin-grid-header-cell: {
                 border-bottom: 1px solid #d4d4d4;
                 background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
-                min-height: 38px;
               }
 
               --vaadin-grid-footer-cell: {
@@ -88,10 +235,17 @@
             }
 
             vaadin-grid#valo-grid vaadin-grid-sorter {
+              align-items: center;
 
               --vaadin-grid-sorter-indicator: {
-                content: "⬆";
-                transition: all 0.3s;
+                content: "";
+                padding: 0;
+                border: 6px solid transparent;
+                border-bottom-color: #000;
+              }
+
+              --vaadin-grid-sorter-order: {
+                display: none;
               }
             }
 
@@ -128,7 +282,7 @@
               width: 100%;
               position: absolute;
               height: 4px;
-              background:var(--primary-color);
+              background: var(--primary-color);
               z-index: 1;
               opacity: 0.5;
               transform-origin: left;
@@ -143,6 +297,10 @@
 
           </style>
 
+          <!--
+          This demo uses a dummy lazy data source that doesn't support filtering/sorting so while visible,
+          accessing the filters/sorters in this demo don't have any actual effect on the data
+          -->
           <x-data-source data-source="{{dataSource}}" loading="{{_loading}}" delay="1000"></x-data-source>
 
           <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]">
@@ -231,18 +389,17 @@
       </template>
     </demo-snippet>
 
-    <h3>Theming Example 2</h3>
+    <h3>Transparent Header</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind" id="theming2-template">
+        <template is="dom-bind" id="transparent-template">
           <style is="custom-style">
             vaadin-grid#transparent-header {
               font: 500 13px "Open Sans", sans-serif;
               color: rgb(148, 154, 171);
-              border-color: rgb(223, 232, 239);
+              --divider-color: rgb(223, 232, 239);
 
               --vaadin-grid-cell: {
-                border-color: rgb(223, 232, 239) !important;
                 padding: 0 13px;
               }
 
@@ -359,9 +516,9 @@
           </vaadin-grid>
         </template>
         <script>
-          var theming2Template = document.querySelector("#theming2-template");
+          var transparentTemplate = document.querySelector("#transparent-template");
 
-          theming2Template._activeItemChanged = function(e) {
+          transparentTemplate._activeItemChanged = function(e) {
             var grid = e.target;
             this._clickedItem = grid.activeItem ? grid.activeItem : this._clickedItem;
 
@@ -375,7 +532,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Theming Example 3</h3>
+    <h3>Rounded Rows</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
@@ -386,30 +543,30 @@
               background: rgb(80, 91, 102);
               border: none;
               padding: 8px;
-
+              --divider-color: transparent;
 
               --vaadin-grid-cell: {
                 background: rgb(80, 91, 102);
-                border: none !important;
               }
 
               --vaadin-grid-body-cell: {
-                padding: 0;
-                padding-bottom: 10px;
+                padding: 0 0 10px;
               }
 
               --vaadin-grid-header-cell: {
                 text-transform: uppercase;
-                padding: 0 15px;
+                padding: 16px;
               }
 
             }
 
             vaadin-grid#rounded-rows .bodycell {
-              padding: 15px;
+              padding: 16px;
               background: rgb(90, 103, 116);
               border-top: 1px solid rgb(105, 118, 132);
               border-bottom: 1px solid rgb(105, 118, 132);
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
             vaadin-grid#rounded-rows .left {

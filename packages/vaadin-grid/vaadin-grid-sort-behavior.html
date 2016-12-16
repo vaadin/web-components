@@ -11,7 +11,6 @@
 
       #indicators {
         position: relative;
-        padding-right: 8px;
       }
 
       :host(:not([direction])) #order,
@@ -30,6 +29,7 @@
       #indicators:before {
         content: "▲";
         display: block;
+        padding: 0 8px;
         @apply(--vaadin-grid-sorter-indicator);
       }
 
