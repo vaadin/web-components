@@ -1,3 +1,13 @@
+<dom-module id="vaadin-grid-active-item-theme-styles">
+  <template>
+    <style>
+      table tr[active] .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        @apply(--vaadin-grid-body-row-active-cell);
+      }
+    </style>
+  </template>
+</dom-module>
+
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
@@ -23,11 +33,22 @@
       'cell-click': '_activateItem'
     },
 
+    observers: [
+      '_activeItemChanged(activeItem)'
+    ],
+
     _activateItem: function(e) {
       var clickedItem = e.detail.model.item;
 
       this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+    },
+
+    _activeItemChanged: function() {
+      if (this.$.scroller._physicalItems) {
+        this.$.scroller._physicalItems.forEach(function(row) {          
+          this._updateItem(row, row.item);
+        }.bind(this));
+      }
     }
   };
   </script>
-</dom-module>

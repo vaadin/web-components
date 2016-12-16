@@ -30,8 +30,8 @@
   </style>
   <template>
     <vaadin-grid-table id="scroller" loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]"
-        column-tree="[[_columnTree]]" content-target=[[_getContentTarget()]]
-        row-details-template=[[rowDetailsTemplate]]>
+        column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
+        row-details-template="[[rowDetailsTemplate]]">
       <content></content>
     </vaadin-grid-table>
   </template>
@@ -79,6 +79,7 @@
       row.item = item;
       row.selected = this._isSelected(item);
       row.expanded = this._isExpanded(item);
+      row.toggleAttribute('active', item !== null && item == this.activeItem);
     },
 
     _getContentTarget: function() {

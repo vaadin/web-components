@@ -107,6 +107,13 @@
         expect(getColor(bodyRowCells[0])).to.equal(color2);
       });
 
+      it('should override active cell styles', function() {
+        grid.activeItem = grid.items[1];
+        setColor('--vaadin-grid-cell-last-frozen', color1);
+        setColor('--vaadin-grid-body-row-active-cell', color2);
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
+      });
+
       it('should override last column cells right border', function() {
         grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff';
         grid.updateStyles();
