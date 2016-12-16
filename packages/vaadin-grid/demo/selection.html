@@ -10,8 +10,9 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../vaadin-grid-selection-column.html">
+
 
   <link rel="import" href="common.html">
 </head>
@@ -27,12 +28,14 @@
       </ul>
     </nav>
 
-    <h3>Multi-Selection</h3>
+    <h3>Multi-Selection with Array Items</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid data-source="[[dataSource]]" size="200" multi-selection>
+          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <vaadin-grid items="[[items]]">
+            <vaadin-grid-selection-column>
+            </vaadin-grid-selection-column>
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -114,6 +117,70 @@
                 this.$.grid.selectedItems = item ? [item] : [];
               }
             });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+
+    <h3>Select All with Data Source</h3>
+    <demo-snippet>
+      <template>
+        <datasource-select-all></datasource-select-all>
+        <dom-module id="datasource-select-all">
+          <template>
+            <style>
+            </style>
+            <x-data-source data-source="{{dataSource}}"></x-data-source>
+            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+              <vaadin-grid-column width="40px" flex="0" >
+                <template class="header">
+                  <input type="checkbox" checked="{{inverted::change}}" />
+                </template>
+                <template>
+                  <input type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+          </template>
+          <script>
+          document.addEventListener('WebComponentsReady', function() {
+            Polymer({
+              is: 'datasource-select-all',
+
+              properties: {
+                inverted: {
+                  type: Boolean,
+                  value: false
+                }
+              },
+
+              observers: ['_resetSelection(inverted)'],
+
+              _resetSelection: function(inverted) {
+                this.$.grid.selectedItems = [];
+              },
+
+              _selectItem: function(e) {
+                if (e.target.checked === this.inverted) {
+                  this.$.grid.deselectItem(e.model.item);
+                } else {
+                  this.$.grid.selectItem(e.model.item);
+                }
+              },
+
+              _isSelected: function(inverted, selected) {
+                return inverted != selected;
+              }
+            });
+          });
           </script>
         </dom-module>
       </template>

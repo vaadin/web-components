@@ -130,6 +130,7 @@
       }
 
       ::content > vaadin-grid-column,
+      ::content > vaadin-grid-selection-column,
       ::content > vaadin-grid-column-group {
         display: none;
       }
@@ -163,7 +164,7 @@
         border-right: 1px solid var(--vaadin-grid-border-color);
       }
     </style>
-    <content select="vaadin-grid-column, vaadin-grid-column-group"></content>
+    <content select="vaadin-grid-column, vaadin-grid-selection-column, vaadin-grid-column-group"></content>
     <div id="spinner"></div>
     <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>

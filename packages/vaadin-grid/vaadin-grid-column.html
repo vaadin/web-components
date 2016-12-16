@@ -7,12 +7,9 @@
 </dom-module>
 
 <script>
-  (function(){
+  (function() {
 
-    /**
-     * @polymerBehavior vaadinGridColumnBehavior
-     */
-    var vaadinGridColumnBehavior = {
+    var vaadinGridColumnBaseBehavior = {
       properties: {
         headerTemplate: {
           type: Object,
@@ -50,17 +47,21 @@
         '_lastFrozenChanged(_lastFrozen)'
       ],
 
-      _findTemplate: function(selector) {
-        var template = Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
+      _selectFirstTemplate: function(selector) {
+        return Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
           return el.parentElement === this;
-        }.bind(this))[0];
+        }.bind(this))[0]
+      },
+
+      _findTemplate: function(selector) {
+        var template = this._selectFirstTemplate(selector);
         if (template) {
           if (this.dataHost) {
             // set dataHost to the context where template has been defined
             template._rootDataHost = this.dataHost._rootDataHost || this.dataHost;
           }
-          return template;
         }
+        return template;
       },
 
       _headerTemplateChanged: function(headerTemplate) {
@@ -84,11 +85,7 @@
       }
     };
 
-    Polymer({
-      is: 'vaadin-grid-column',
-
-      behaviors: [vaadinGridColumnBehavior],
-
+    var vaadinGridColumnBehaviorImpl = {
       properties: {
         width: {
           type: String,
@@ -126,17 +123,34 @@
       _hiddenChanged: function(hidden) {
         this.fire('property-changed', {path: 'hidden', value: hidden});
       }
+    }
+
+    window.vaadin = window.vaadin || {};
+    vaadin.elements = vaadin.elements || {};
+    vaadin.elements.grid = vaadin.elements.grid || {};
+    /**
+     * @polymerBehavior vaadin.elements.grid.vaadinGridColumnBehavior
+     */
+    vaadin.elements.grid.vaadinGridColumnBehavior = [
+      vaadinGridColumnBaseBehavior,
+      vaadinGridColumnBehaviorImpl
+    ];
+
+    Polymer({
+      is: 'vaadin-grid-column',
+
+      behaviors: [vaadin.elements.grid.vaadinGridColumnBehavior]
     });
 
     Polymer({
       is: 'vaadin-grid-column-group',
 
-      behaviors: [vaadinGridColumnBehavior],
+      behaviors: [vaadinGridColumnBaseBehavior],
 
       properties: {
         _childColumns: {
           value: function() {
-            return Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+            return Polymer.dom(this).querySelectorAll('vaadin-grid-column, vaadin-grid-selection-column');
           }
         },
 
@@ -166,13 +180,13 @@
       },
 
       observers: ['_updateVisibleChildColumns(_childColumns)',
-                  '_childColumnsChanged(_childColumns)',
-                  '_flexChanged(flex)',
-                  '_widthChanged(width)',
-                  '_frozenChanged(_childColumns, frozen)',
-                  '_hiddenChanged(hidden)',
-                  '_visibleChildColumnsChanged(_visibleChildColumns)',
-                  '_colSpanChanged(colSpan)'],
+      '_childColumnsChanged(_childColumns)',
+      '_flexChanged(flex)',
+      '_widthChanged(width)',
+      '_frozenChanged(_childColumns, frozen)',
+      '_hiddenChanged(hidden)',
+      '_visibleChildColumnsChanged(_visibleChildColumns)',
+      '_colSpanChanged(colSpan)'],
 
       listeners: {
         'property-changed': '_columnPropChanged'
@@ -251,11 +265,13 @@
             return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
           };
           if (info.addedNodes.filter(columns).length > 0 ||
-            info.removedNodes.filter(columns).length > 0) {
+          info.removedNodes.filter(columns).length > 0) {
             this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
           }
         }.bind(this));
       }
     });
-  })();
+
+  }());
+
 </script>

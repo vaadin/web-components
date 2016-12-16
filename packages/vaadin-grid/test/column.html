@@ -81,13 +81,6 @@
             expect(grid.$.scroller._physicalItems[0].cells[0].style.flexGrow).to.eql('2');
           });
 
-          it('should be bound to row cells on multiSelection', function() {
-            grid.multiSelection = true;
-            column.flex = 2;
-
-            expect(grid.$.scroller._physicalItems[0].cells[1].style.flexGrow).to.eql('2');
-          });
-
           it('should be bound to footer cells', function() {
             column.flex = 2;
 
@@ -112,13 +105,6 @@
             column.width = '200px';
 
             expect(grid.$.scroller._physicalItems[0].cells[0].style.flexBasis).to.eql('200px');
-          });
-
-          it('should be bound to row cells on multiSelection', function() {
-            grid.multiSelection = true;
-            column.width = '200px';
-
-            expect(grid.$.scroller._physicalItems[0].cells[1].style.flexBasis).to.eql('200px');
           });
 
           it('should be bound to footer cells', function() {
@@ -157,13 +143,6 @@
             column.hidden = true;
 
             expect(window.getComputedStyle(grid.$.scroller._physicalItems[0].cells[0]).display).to.eql('none');
-          });
-
-          it('should be bound to row cells on multiSelection', function() {
-            grid.multiSelection = true;
-            column.hidden = true;
-
-            expect(window.getComputedStyle(grid.$.scroller._physicalItems[0].cells[1]).display).to.eql('none');
           });
 
           it('should be bound to footer cells', function() {

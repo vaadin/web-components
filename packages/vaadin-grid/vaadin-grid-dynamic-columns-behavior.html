@@ -7,21 +7,8 @@
    * @polymerBehavior vaadin.elements.grid.DynamicColumnsBehavior
    */
   vaadin.elements.grid.DynamicColumnsBehavior = {
-    properties: {
-      _columnTreeProcessors: {
-        type: Array,
-        value: function() {
-          return [];
-        }
-      }
-    },
-
     ready: function() {
       this._addNodeObserver();
-    },
-
-    _addColumnTreeProcessor: function(proc) {
-      this._columnTreeProcessors.push(proc);
     },
 
     _hasColumnGroups: function(columns) {
@@ -38,7 +25,7 @@
       return columns.map(function(col) {
         if (col.localName === 'vaadin-grid-column-group') {
           var children = Polymer.dom(col).children.filter(function(el) {
-            return /vaadin-grid-column/.test(el.localName);
+            return /^vaadin-grid-(column|selection)/.test(el.localName);
           });
           return children;
         } else {
@@ -50,7 +37,9 @@
     },
 
     _getColumnTree: function() {
-      var rootColumns = this.queryAllEffectiveChildren('vaadin-grid-column, vaadin-grid-column-group');
+      var rootColumns = this.queryAllEffectiveChildren(
+        'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column');
+
       var _columnTree = [];
 
       for (var c = rootColumns;;) {
@@ -60,10 +49,6 @@
         }
         c = this._childrenColumns(c);
       }
-
-      this._columnTreeProcessors.forEach(function(proc) {
-        _columnTree = proc.call(this, _columnTree);
-      }.bind(this));
 
       return _columnTree;
     },
@@ -78,7 +63,7 @@
     _addNodeObserver: function() {
       this._observer = Polymer.dom(this).observeNodes(function(info) {
         var rootColumns = function(node) {
-          return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+          return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
         };
         if (info.addedNodes.filter(rootColumns).length > 0 ||
           info.removedNodes.filter(rootColumns).length > 0) {

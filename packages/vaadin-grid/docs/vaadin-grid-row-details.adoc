@@ -79,7 +79,7 @@ When modifying [propertyname]#expandedItems#, remember to use the array mutation
 [[vaadin-grid.row-details.activeitem]]
 == Expanding and Collapsing Items on activation
 
-You can listen to [propertyname]#active-item-changed# event which is fired whenever a user activates a row in the grid. Then you can access the last activated item by using the `activeItem` of the grid.
+You can listen to [propertyname]#active-item-changed# event which is fired whenever a user activates a row in the grid. Then you can access the last activated item by using the [propertyname]#activeItem# of the grid.
 
 [source,html]
 ----
