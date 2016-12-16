@@ -65,7 +65,7 @@
 
             menu.click();
 
-            expect(menu._opened).to.eql(true);
+            expect(menu.opened).to.eql(true);
           });
 
           it('should not open on `contextmenu`', function() {
@@ -73,7 +73,7 @@
 
             menu.fire('contextmenu', {}, {node: menu});
 
-            expect(menu._opened).to.eql(false);
+            expect(menu.opened).to.eql(false);
           });
 
           describe('event listener', function() {
@@ -99,11 +99,32 @@
           });
         });
 
+        describe('opened', function() {
+          var menu;
+          beforeEach(function() {
+            menu = fixture('external')[0];
+          });
+
+          it('should be read-only', function() {
+            expect(menu.opened).to.eql(false);
+
+            menu.opened = true;
+            expect(menu.opened).to.eql(false);
+          });
+
+          it('should be set using the private setter', function() {
+            expect(menu.opened).to.eql(false);
+
+            menu._setOpened(true);
+            expect(menu.opened).to.be.true;
+          });
+        });
+
         describe('closeOn', function() {
           var menu;
           beforeEach(function() {
             menu = fixture('external')[0];
-            menu._opened = true;
+            menu._setOpened(true);
           });
 
           it('should not close on `click`', function() {
@@ -111,7 +132,7 @@
 
             menu.$.overlay.click();
 
-            expect(menu._opened).to.eql(true);
+            expect(menu.opened).to.eql(true);
           });
 
           it('should close on custom event', function() {
@@ -119,7 +140,7 @@
 
             menu.fire('foobar', {}, {node: menu.$.overlay});
 
-            expect(menu._opened).to.eql(false);
+            expect(menu.opened).to.eql(false);
           });
         });
 
@@ -137,7 +158,7 @@
               node: target
             });
 
-            expect(menu._opened).to.eql(true);
+            expect(menu.opened).to.eql(true);
           });
 
           it('should select context target on external target', function() {

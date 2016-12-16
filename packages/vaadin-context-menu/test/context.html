@@ -97,7 +97,7 @@
             node: foo.$.content
           });
 
-          expect(menu._opened).to.eql(false);
+          expect(menu.opened).to.eql(false);
         });
 
         it('should not prevent default if no context available', function() {
@@ -117,7 +117,7 @@
             node: another
           });
 
-          expect(menu._opened).to.be.true;
+          expect(menu.opened).to.be.true;
         });
       });
     </script>

@@ -83,7 +83,7 @@
       });
 
       it('should align to bottom of the viewport', function(done) {
-        menu._opened = true;
+        menu._setOpened(true);
 
         menu.addEventListener('iron-overlay-opened', function() {
           var styles = window.getComputedStyle(menu.$.overlay);
@@ -99,7 +99,7 @@
           makeSoloTouchEvent('touchstart', xy, target);
 
           menu.addEventListener('iron-overlay-opened', function() {
-            expect(menu._opened).to.eql(true);
+            expect(menu.opened).to.eql(true);
             expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
             done();
           });
@@ -113,7 +113,7 @@
           }, 100);
 
           menu.async(function() {
-            expect(menu._opened).to.eql(false);
+            expect(menu.opened).to.eql(false);
             done();
           }, 1000);
         });
@@ -160,7 +160,7 @@
           }, 100);
 
           menu.async(function() {
-            expect(menu._opened).to.eql(false);
+            expect(menu.opened).to.eql(false);
             done();
           }, 1000);
         });

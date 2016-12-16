@@ -35,7 +35,8 @@ Custom property | Description | Default
     </style>
 
     <content></content>
-    <vaadin-context-menu-overlay id="overlay" on-iron-overlay-opened="_onOverlayOpened" opened="{{_opened}}">
+    <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
+        on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed">
     </vaadin-context-menu-overlay>
 
   </template>
@@ -58,10 +59,11 @@ Custom property | Description | Default
         /**
          * True if the overlay is currently displayed.
          */
-        _opened: {
+        opened: {
           type: Boolean,
           value: false,
-          notify: true
+          notify: true,
+          readOnly: true
         },
 
         /**
@@ -111,7 +113,7 @@ Custom property | Description | Default
 
       observers: [
         '_contentTemplateChanged(_contentTemplate)',
-        '_openedChanged(_opened)',
+        '_openedChanged(opened)',
         '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'
       ],
 
@@ -120,6 +122,10 @@ Custom property | Description | Default
         if (child) {
           child.focus();
         }
+      },
+
+      _onOverlayClosed: function() {
+        this._setOpened(false);
       },
 
       _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
@@ -171,7 +177,7 @@ Custom property | Description | Default
        * Closes the overlay.
        */
       close: function() {
-        this._opened = false;
+        this._setOpened(false);
       },
 
       _contextTarget: function(e) {
@@ -206,7 +212,7 @@ Custom property | Description | Default
             this.$.overlay.x = this._getEventCoordinate(e, 'x');
             this.$.overlay.y = this._getEventCoordinate(e, 'y');
 
-            this._opened = true;
+            this._setOpened(true);
           }
         }
       },
