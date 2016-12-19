@@ -1,12 +1,16 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.IronListBehavior
+   * @polymerBehavior vaadin.elements.grid.IronListBehaviorImpl
    */
-  vaadin.elements.grid.IronListBehavior = [(function() {
+  vaadin.elements.grid.IronListBehaviorImpl = (function() {
 
     var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
     var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
@@ -738,10 +742,15 @@
         return idx >= this.firstVisibleIndex && idx <= this.lastVisibleIndex;
       }
     });
+  })();
 
-  })(),
+  /**
+   * @polymerBehavior vaadin.elements.grid.IronListBehavior
+   */
+  vaadin.elements.grid.IronListBehavior = [
     Polymer.Templatizer,
     Polymer.IronResizableBehavior,
-    Polymer.IronScrollTargetBehavior
+    Polymer.IronScrollTargetBehavior,
+    vaadin.elements.grid.IronListBehaviorImpl
   ];
 </script>
