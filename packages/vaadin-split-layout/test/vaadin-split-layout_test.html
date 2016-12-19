@@ -5,10 +5,9 @@
     <title>vaadin-split-layout test</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <script src="./../../iron-test-helpers/mock-interactions.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <script src="./mock-touch-interactions.js"></script>
     <link rel="import" href="../vaadin-split-layout.html">
   </head>
@@ -42,12 +41,12 @@
           MockTouchInteractions.touchstart(node, xy);
           for (var i = 0; i <= steps; i++) {
             MockTouchInteractions.makeSoloTouchEvent(
-                'touchmove',
-                {
-                  x: xy.x + dx * i / steps,
-                  y: xy.y + dy * i / steps
-                },
-                node
+              'touchmove',
+              {
+                x: xy.x + dx * i / steps,
+                y: xy.y + dy * i / steps
+              },
+              node
             );
           }
           MockTouchInteractions.touchend(node, {x: xy.x + dx, y: xy.y + dy});
@@ -108,8 +107,10 @@
         });
 
         it('have a splitter in between', function() {
-          expect(splitLayout.$.splitter.previousElementSibling).to.equal(first);
-          expect(splitLayout.$.splitter.nextElementSibling).to.equal(second);
+          var previous = splitLayout.$.splitter.previousElementSibling;
+          var next = splitLayout.$.splitter.nextElementSibling;
+          expect(Polymer.dom(previous).getDistributedNodes()[0] || previous).to.equal(first);
+          expect(Polymer.dom(next).getDistributedNodes()[0] || next).to.equal(second);
         });
 
       });

@@ -48,7 +48,7 @@
         clientY: xy.y
       };
 
-      return HAS_NEW_TOUCH ? window.Touch(touchInit) : touchInit;
+      return HAS_NEW_TOUCH ? new window.Touch(touchInit) : touchInit;
     });
   }
 
@@ -76,9 +76,11 @@
     if (HAS_NEW_TOUCH) {
       event = new TouchEvent(type, touchEventInit);
     } else {
-      event = new CustomEvent(type, { bubbles: true, cancelable: true });
+      event = new CustomEvent(type, {bubbles: true, cancelable: true});
       for (var property in touchEventInit) {
-        event[property] = touchEventInit[property];
+        if (touchEventInit.hasOwnProperty(property)) {
+          event[property] = touchEventInit[property];
+        }
       }
     }
 
