@@ -1,3 +1,22 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+
+### Styling
+The following custom properties and mixins are available for styling:
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-grid-sorter-arrow` | Mixin applied to the arrow | `{}`
+`--vaadin-grid-sorter-order` | Mixin applied to the order | `{}`
+
+@element vaadin-grid
+@demo demo/index.html
+-->
+
 <link rel="import" href="vaadin-grid-cell-click-behavior.html">
 
 <dom-module id="vaadin-grid-sorter">
@@ -6,6 +25,7 @@
       :host {
         display: inline-flex;
         justify-content: space-between;
+        align-items: center;
         cursor: pointer;
       }
 
@@ -30,7 +50,7 @@
         content: "▲";
         display: block;
         padding: 0 8px;
-        @apply(--vaadin-grid-sorter-indicator);
+        @apply(--vaadin-grid-sorter-arrow);
       }
 
       :host([direction=desc]) #indicators:before {
