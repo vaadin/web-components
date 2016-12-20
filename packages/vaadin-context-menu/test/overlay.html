@@ -27,14 +27,16 @@
           menu = fixture('default');
         });
 
-        function contextmenu(x, y) {
+        function contextmenu(x, y, shiftKey) {
+          shiftKey = shiftKey || false;
           var e;
           try {
             e = new MouseEvent('contextmenu', {
               bubbles: true,
               cancelable: true,
               clientX: x,
-              clientY: y
+              clientY: y,
+              shiftKey: shiftKey
             });
           } catch (err) {
             // For IE11
@@ -47,7 +49,7 @@
               x, y,
               false, /* ctrlKey */
               false, /* altKey */
-              false, /* shiftKey */
+              shiftKey, /* shiftKey */
               false, /* metaKey */
               0,     /* button */
               null   /* relatedTarget*/
@@ -55,6 +57,7 @@
           }
 
           menu.listenOn.dispatchEvent(e);
+          return e;
         }
 
         describe('opening', function() {
@@ -157,6 +160,18 @@
 
             menu.fire('foobar', {sourceEvent: {changedTouches: [{clientX: 10, clientY: 20}]}}, {
               node: menu.listenOn
+            });
+          });
+
+          describe('with shift key', function() {
+            it('should not open on `contextmenu` event', function() {
+              contextmenu(0, 0, true);
+              expect(menu.opened).to.eql(false);
+            });
+
+            it('should not prevent default of `contextmenu` event', function() {
+              var event = contextmenu(0, 0, true);
+              expect(event.defaultPrevented).to.not.eql(true);
             });
           });
         });
