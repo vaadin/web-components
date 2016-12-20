@@ -142,11 +142,11 @@
             <x-data-source data-source="{{dataSource}}"></x-data-source>
             <paper-slider min="10" max="500" immediate-value="{{width}}" value="[[width]]">Resize First Name</paper-slider>
             <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
-              <vaadin-grid-column width="50px" frozen="[[frozen]]">
+              <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
-              <vaadin-grid-column width="50px" frozen="[[frozen]]">
+              <vaadin-grid-column width="50px">
                 <template class="header"></template>
                 <template>
                   <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
