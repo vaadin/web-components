@@ -129,7 +129,7 @@
         scroller._buffers.forEach(function(buffer) {
           [].forEach.call(buffer.children, function(itemWrapper) {
             expect(itemWrapper.firstElementChild).to.be.ok;
-          }.bind(this));
+          });
         }, this);
         done();
       });

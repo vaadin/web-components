@@ -74,8 +74,8 @@
      */
     _getClosestDate: function(date, dates) {
       return dates.filter(function(date) {
-         return date !== undefined;
-       })
+        return date !== undefined;
+      })
        .reduce(function(closestDate, candidate) {
          if (!candidate) {
            return closestDate;
@@ -89,6 +89,6 @@
          var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
          return candidateDiff < closestDateDiff ? candidate : closestDate;
        });
-    },
+    }
   };
 </script>
