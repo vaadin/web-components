@@ -49,11 +49,11 @@
       <vaadin-grid-column-group>
         <template class="header"></template>
         <template class="footer"></template>
-        <vaadin-grid-column flex-grow="1" flex-shrink="2" width="20%">
+        <vaadin-grid-column flex-grow="1" width="20%">
           <template class="header"></template>
           <template></template>
         </vaadin-grid-column>
-        <vaadin-grid-column flex-grow="2" flex-shrink="1" width="200px">
+        <vaadin-grid-column flex-grow="2" width="200px">
           <template class="header"></template>
           <template></template>
         </vaadin-grid-column>
@@ -75,7 +75,6 @@
 
       it('should sum child column flex-grow', function() {
         expect(group.flexGrow).to.eql(3);
-        expect(group.flexShrink).to.eql(3);
       });
 
       it('should sum child column widths', function() {
@@ -92,12 +91,6 @@
         columns[0].flexGrow = 3;
 
         expect(group.flexGrow).to.eql(5);
-      });
-
-      it('should react to child column flex-shrink changes', function() {
-        columns[0].flexShrink = 3;
-
-        expect(group.flexShrink).to.eql(4);
       });
 
       it('should react to child column width changes', function() {
@@ -165,12 +158,6 @@
         columns[0].hidden = true;
 
         expect(group.flexGrow).to.eql(2);
-      });
-
-      it('should calculate column group flexShrink after hiding a column', function() {
-        columns[0].hidden = true;
-
-        expect(group.flexShrink).to.eql(1);
       });
     });
   </script>
