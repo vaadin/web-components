@@ -1,0 +1,70 @@
+---
+title: Opening and Closing
+order: 4
+layout: page
+---
+
+[[vaadin-context-menu.contextmenu-event]]
+= Opening Event
+
+By default, [vaadinelement]#vaadin-context-menu# opens the menu overlay on the [eventname]#vaadin-contextmenu# event.
+
+[eventname]#vaadin-contextmenu# is a gesture event (a custom event fired by Polymer), that is dispatched after both [eventname]#contextmenu# and long touch events. This enables support for both mouse and touch environments in a uniform way.
+
+[[vaadin-context-menu.close-event]]
+= Closing Event
+
+[vaadinelement]#vaadin-context-menu# closes the menu overlay when the user clicks on a menu item. Additionally, the menu overlay is closed after clicking outside the overlay or by pressing the pass:[<kbd>Esc</kbd>] button.
+
+[[vaadin-context-menu.open-on]]
+= Overriding Opening and Closing Events
+
+You can override the default events used for opening and closing the menu by using the [propertyname]#openOn# and the [propertyname]#closeOn# properties, respectively. In the following example, the context menu opens with a left mouse click on the button. In addition, the closing event name is set to [code]#"none"#, which is never dispatched, therefore the menu will not automatically close after clicking a menu item:
+
+[source,html]
+----
+<vaadin-context-menu selector="button" open-on="click" close-on="none">
+  <template>
+    <paper-menu>
+      <paper-item>First menu item</paper-item>
+      <paper-item>Second menu item</paper-item>
+    </paper-menu>
+  </template>
+
+  <button>Show Context Menu</button>
+</vaadin-context-menu>
+----
+
+[[vaadin-context-menu.open-method]]
+= JavaScript API
+
+It is also possible to open and close the menu with JavaScript API. You can call the [methodname]#open([parameter]#e: Event#)# and [methodname]#close()# methods directly. Use the [propertyname]#opened# property to check if the menu was already opened.
+
+In the following example, the menu is toggled with a button click:
+
+[source,html]
+----
+<vaadin-context-menu id="buttonMenu">
+  <template>
+    <paper-menu>
+      <paper-item>First menu item</paper-item>
+      <paper-item>Second menu item</paper-item>
+    </paper-menu>
+  </template>
+</vaadin-context-menu>
+
+<button id="menuOpener">Toggle Context Menu</button>
+
+<script>
+  document.querySelector('#menuOpener').addEventListener('click', function(event) {
+    var menu = document.querySelector('#buttonMenu');
+    if (!menu.opened) {
+      menu.open(event);
+    } else {
+      menu.close();
+    }
+  });
+</script>
+----
+
+NOTE: The `open(e: Event)` method requires an `Event` argument to extract the menu context and coordinates from.
