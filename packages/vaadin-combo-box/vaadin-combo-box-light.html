@@ -48,13 +48,13 @@ two `<paper-button>`s to act as the clear and toggle controls.
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
 
 <dom-module id="vaadin-combo-box-light">
-  <style include="vaadin-combo-box-shared-styles">
-    :host > #overlay {
-      display: none;
-    }
-  </style>
-
   <template>
+    <style include="vaadin-combo-box-shared-styles">
+      :host > #overlay {
+        display: none;
+      }
+    </style>
+
     <content></content>
 
     <vaadin-combo-box-overlay

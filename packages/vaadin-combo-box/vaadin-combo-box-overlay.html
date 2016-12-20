@@ -9,67 +9,67 @@
 <link rel="import" href="vaadin-spinner.html">
 
 <dom-module id="vaadin-combo-box-overlay">
-  <style>
-    :host {
-      position: absolute;
-      @apply(--shadow-elevation-2dp);
-      background: #fff;
-      border-radius: 0 0 2px 2px;
-      top: 0;
-      left: 0;
-
-      /**
-      * Keep the vaadin-combo-box-overlay above paper-dialogs.
-      * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
-      */
-      z-index: 200;
-      overflow: hidden;
-    }
-
-    #scroller {
-      overflow: auto;
-      max-height: var(--vaadin-combo-box-overlay-max-height, 65vh);
-
-      /* Fixes item background from getting on top of scrollbars on Safari */
-      transform: translate3d(0,0,0);
-
-      /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
-      -webkit-overflow-scrolling: touch;
-    }
-
-    #selector {
-      --iron-list-items-container: {
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-      };
-    }
-
-    #selector .item {
-      cursor: pointer;
-      padding: 13px 16px;
-      color: var(--primary-text-color);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    :host([opened][loading]) {
-      /* roughly the size of a list with one item */
-      display: block !important;
-      height: 58px;
-    }
-
-    #selector:not([touch-device]) .item:hover,
-    #selector .item[focused] {
-      background: #eee;
-    }
-
-    #selector .item[selected] {
-      color: var(--primary-color);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        position: absolute;
+        @apply(--shadow-elevation-2dp);
+        background: #fff;
+        border-radius: 0 0 2px 2px;
+        top: 0;
+        left: 0;
+
+        /**
+        * Keep the vaadin-combo-box-overlay above paper-dialogs.
+        * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
+        */
+        z-index: 200;
+        overflow: hidden;
+      }
+
+      #scroller {
+        overflow: auto;
+        max-height: var(--vaadin-combo-box-overlay-max-height, 65vh);
+
+        /* Fixes item background from getting on top of scrollbars on Safari */
+        transform: translate3d(0,0,0);
+
+        /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #selector {
+        --iron-list-items-container: {
+          border-top: 8px solid transparent;
+          border-bottom: 8px solid transparent;
+        };
+      }
+
+      #selector .item {
+        cursor: pointer;
+        padding: 13px 16px;
+        color: var(--primary-text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      :host([opened][loading]) {
+        /* roughly the size of a list with one item */
+        display: block !important;
+        height: 58px;
+      }
+
+      #selector:not([touch-device]) .item:hover,
+      #selector .item[focused] {
+        background: #eee;
+      }
+
+      #selector .item[selected] {
+        color: var(--primary-color);
+      }
+    </style>
+
     <vaadin-spinner active="[[loading]]"></vaadin-spinner>
     <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation" hidden$="[[loading]]">
       <iron-list
