@@ -91,8 +91,12 @@
       this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
     },
 
-    _flexChanged: function(flex) {
-      this.fire('property-changed', {path: 'flex', value: flex});
+    _flexGrowChanged: function(flexGrow) {
+      this.fire('property-changed', {path: 'flexGrow', value: flexGrow});
+    },
+
+    _flexShrinkChanged: function(flexShrink) {
+      this.fire('property-changed', {path: 'flexShrink', value: flexShrink});
     },
 
     _widthChanged: function(width) {
@@ -114,9 +118,14 @@
         value: '100px'
       },
 
-      flex: {
+      flexGrow: {
         type: Number,
         value: 1
+      },
+
+      flexShrink: {
+        type: Number,
+        value: 0
       },
 
       template: {
@@ -131,7 +140,12 @@
       }
     },
 
-    observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
+    observers: ['_flexGrowChanged(flexGrow)',
+    '_flexShrinkChanged(flexShrink)',
+    '_widthChanged(width)',
+    '_templateChanged(template)',
+    '_frozenChanged(frozen)',
+    '_hiddenChanged(hidden)'],
 
     _frozenChanged: function(frozen) {
       this.fire('property-changed', {path: 'frozen', value: frozen});
@@ -153,7 +167,7 @@
     _hiddenChanged: function(hidden) {
       this.fire('property-changed', {path: 'hidden', value: hidden});
     }
-  }
+  },
 
   /**
    * @polymerBehavior vaadin.elements.grid.ColumnBehavior
@@ -181,7 +195,17 @@
         }
       },
 
-      flex: {
+      flexGrow: {
+        type: Number,
+        readOnly: true
+      },
+
+      minWidth: {
+        type: String,
+        readOnly: true
+      },
+
+      flexShrink: {
         type: Number,
         readOnly: true
       },
@@ -208,12 +232,14 @@
 
     observers: ['_updateVisibleChildColumns(_childColumns)',
     '_childColumnsChanged(_childColumns)',
-    '_flexChanged(flex)',
+    '_flexGrowChanged(flexGrow)',
+    '_flexShrinkChanged(flexShrink)',
     '_widthChanged(width)',
     '_frozenChanged(_childColumns, frozen)',
     '_hiddenChanged(hidden)',
     '_visibleChildColumnsChanged(_visibleChildColumns)',
-    '_colSpanChanged(colSpan)'],
+    '_colSpanChanged(colSpan)',
+    '_minWidthChanged(minWidth)'],
 
     listeners: {
       'property-changed': '_columnPropChanged'
@@ -226,6 +252,10 @@
 
     detached: function() {
       Polymer.dom(this).unobserveNodes(this._observer);
+    },
+
+    _minWidthChanged: function(minWidth) {
+      this.fire('property-changed', {path: 'minWidth', value: minWidth});
     },
 
     _columnPropChanged: function(e) {
@@ -261,9 +291,19 @@
         return prev += ' + ' + (curr.width || '0').replace('calc', '');
       }, '').substring(3) + ')');
 
-      this._setFlex(visibleChildColumns.reduce(function(prev, curr) {
-        return prev + curr.flex;
+      this._setFlexGrow(visibleChildColumns.reduce(function(prev, curr) {
+        return prev + curr.flexGrow;
       }, 0));
+      this._setFlexShrink(visibleChildColumns.reduce(function(prev, curr) {
+        return prev + curr.flexShrink;
+      }, 0));
+
+      this._setMinWidth('calc(' + visibleChildColumns.filter(function(column) {
+        return column.flexShrink === 0;
+      }).reduce(function(prev, curr) {
+        return prev += ' + ' + (curr.width || '0').replace('calc', '');
+      },'').substring(3) + ')');
+
     },
 
     _frozenChanged: function(childColumns, frozen) {
