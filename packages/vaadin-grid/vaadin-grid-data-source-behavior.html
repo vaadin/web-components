@@ -65,6 +65,10 @@
    */
   vaadin.elements.grid.DataSourceBehavior = {
 
+    listeners: {
+      'item-changed': '_templateItemChanged'
+    },
+
     properties: {
 
       /**
@@ -101,6 +105,25 @@
           return {};
         }
       },
+    },
+
+    _templateItemChanged: function(e) {
+      var item = e.detail.item;
+
+      // TODO: We could avoid iterating rows by fixing _physicalIndexForKey mapping
+      // in iron-list-behavior so that vidx could be used to fetch the correct row element.
+      Polymer.dom(this.$.scroller.$.items).children.forEach(function(row) {
+        if (row.item === item) {
+          row.iterateCells(function(cell) {
+            // replacing the whole item instead of updating just the updated path
+            // to prevent _forwardInstancePath from firing duplicate `item-changed`
+            // events on all the sibling cells.
+            // main goal is just to get the [[item.xxx]] bindings up-to-date.
+            cell.instance.item = null;
+            cell.instance.item = item;
+          });
+        }
+      });
     },
 
     _getCachedItem: function(index) {

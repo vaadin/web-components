@@ -86,7 +86,7 @@
 
     ready: function() {
       this._updateColumnTree();
-      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details');
+      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
     },
 
     _columnPropChanged: function(e) {

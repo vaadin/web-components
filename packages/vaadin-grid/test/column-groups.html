@@ -187,8 +187,7 @@
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(cell) {
-            var el = getCellContent(cell);
-            expect(el.matches(':empty')).to.be.true;
+            expect(cell._isEmpty).to.be.true;
           });
         });
 
@@ -204,8 +203,7 @@
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(cell) {
-            var el = getCellContent(cell);
-            expect(el.matches(':empty')).to.be.true;
+            expect(cell._isEmpty).to.be.true;
           });
         });
 

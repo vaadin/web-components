@@ -78,7 +78,6 @@
           }
         }
 
-        this.__expanded__ = expanded;
         this.iterateCells(function(cell) {
           cell.expanded = expanded;
         });
@@ -148,14 +147,12 @@
       },
 
       _selectedChanged: function(selected, cells) {
-        this.__selected__ = selected;
         cells.forEach(function(cell) {
           cell.selected = selected;
         });
       },
 
       _selectedChangedForDetails: function(selected, rowDetails) {
-        this.__selected__ = selected;
         if (rowDetails) {
           rowDetails.selected = selected;
         }
