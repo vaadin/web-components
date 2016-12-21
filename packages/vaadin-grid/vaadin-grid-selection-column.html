@@ -70,6 +70,10 @@
     },
 
     _onSelectAllChanged: function(selectAll, grid) {
+      if (this._selectAllChangeLock) {
+        return;
+      }
+
       if (!selectAll && this._indeterminate) {
         this.selectAll = true;
         return;
@@ -90,6 +94,11 @@
       } else {
         // Any other status is indeterminated
         this._indeterminate = true;
+
+        // iOS needs indeterminated + checked at the same time
+        this._selectAllChangeLock = true;
+        this.selectAll = true;
+        this._selectAllChangeLock = false;
       }
     }
   });

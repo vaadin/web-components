@@ -244,6 +244,16 @@
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
+      // iOS needs both to show the indeterminate status
+      it('should have indeterminate and select-all when an item is selected', function() {
+        expect(selectionColumn.selectAll).to.be.false;
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+
+        firstBodyCheckbox.click();
+        expect(selectionColumn.selectAll).to.be.true;
+        expect(selectAllCheckbox.indeterminate).to.be.true;
+      });
+
       it('should have indeterminate true when an item is deselected', function() {
         selectAllCheckbox.click();
         expect(selectAllCheckbox.indeterminate).to.be.false;
