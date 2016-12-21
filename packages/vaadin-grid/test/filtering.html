@@ -15,11 +15,27 @@
 
 <body>
 
+  <dom-module id="filter-wrapper">
+    <template>
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
+      <vaadin-grid-filter path="foo" value="[[_filterValue]]" id="filter">
+        <input value="{{_filterValue::input}}">
+      </vaadin-grid-filter>
+    </template>
+    <script>
+      Polymer({
+        is: 'filter-wrapper'
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="filter">
     <template>
-      <vaadin-grid-filter path="foo" value="bar">
-        <input>
-      </vaadin-grid-filter>
+      <filter-wrapper></filter-wrapper>
     </template>
   </test-fixture>
 
@@ -28,14 +44,16 @@
       <vaadin-grid>
         <vaadin-grid-column>
           <template class="header">
-            <vaadin-grid-filter path="first" value="bar"></vaadin-grid-filter>
+            <vaadin-grid-filter path="first" value="bar">
+            </vaadin-grid-filter>
             <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
           </template>
           <template>[[item.first]]</template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template class="header">
-            <vaadin-grid-filter path="last" value="qux"></vaadin-grid-filter>
+            <vaadin-grid-filter path="last" value="qux">
+            </vaadin-grid-filter>
           </template>
           <template>[[item.last]]</template>
         </vaadin-grid-column>
@@ -44,11 +62,14 @@
   </test-fixture>
 
   <script>
+
     describe('filter', function() {
       var filter;
+      var filterWrapper;
 
       beforeEach(function() {
-        filter = fixture('filter');
+        filterWrapper = fixture('filter');
+        filter = filterWrapper.$.filter;
       });
 
       it('should fire `filter-changed` on value change', function(done) {
@@ -60,14 +81,16 @@
       });
 
       it('should fire `filter-changed` on path change', function(done) {
+        filter.value = 'foo';
+        filter.flushDebouncer('filter-changed');
+
         filter.addEventListener('filter-changed', function(e) {
           done();
         });
-
         filter.path = 'bar';
       });
 
-      it('should update value after `input` event from a child', function(done) {
+      it('should update value', function(done) {
         filter.addEventListener('filter-changed', function(e) {
           expect(filter.value).to.eql('foo');
           done();
@@ -80,18 +103,31 @@
       });
     });
 
+    function flushFilters(grid) {
+      Polymer.dom(grid).querySelectorAll('vaadin-grid-filter').forEach(function(filter) {
+        filter.flushDebouncer('filter-changed');
+      });
+    }
+
     describe('filtering', function() {
       var grid;
 
       beforeEach(function() {
         grid = fixture('grid');
         Polymer.dom.flush();
+        flushFilters(grid);
       });
 
       it('should have filters', function() {
         expect(grid._filters.length).to.eql(2);
         expect(grid._filters[0].path).to.eql('first');
         expect(grid._filters[1].path).to.eql('last');
+      });
+
+      it('should have default inputs', function() {
+        grid._filters.forEach(function(filter) {
+          expect(filter.getContentChildren('content')[0].tagName).to.equal('INPUT');
+        });
       });
 
       it('should pass filters to dataSource', function(done) {
@@ -108,13 +144,10 @@
         };
       });
 
-      it('should clear cache and fetch data when filters change', function() {
+      it('should clear cache and fetch data when filters change', function(done) {
         grid.items = ['foo', 'bar'];
-        grid.clearCache = sinon.spy();
-
+        sinon.stub(grid, 'clearCache', done);
         grid._filters[0].value = '';
-
-        expect(grid.clearCache.callCount).to.eql(1);
       });
 
     });
@@ -126,8 +159,10 @@
       beforeEach(function() {
         grid = fixture('grid');
         Polymer.dom.flush();
+        flushFilters(grid);
         grid._filters[0].value = '';
         grid._filters[1].value = '';
+        flushFilters(grid);
         grid.items = [{
           first: 'foo',
           last: 'bar'
@@ -145,6 +180,7 @@
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
         grid._filters[0].value = 'r';
+        flushFilters(grid);
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
       });
 

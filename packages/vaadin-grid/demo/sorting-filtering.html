@@ -66,16 +66,16 @@
             </vaadin-grid-column>
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter path="user.name.first">
-                  <input placeholder="First Name">
+                <vaadin-grid-filter path="user.name.first" value="[[_filterFirstName]]">
+                  <input placeholder="First Name" value="{{_filterFirstName::input}}">
                 </vaadin-grid-filter>
               </template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter path="user.name.last">
-                  <input placeholder="Last Name">
+                <vaadin-grid-filter path="user.name.last" value="[[_filterLastName]]">
+                  <input placeholder="Last Name" value="{{_filterLastName::input}}">
                 </vaadin-grid-filter>
               </template>
               <template>[[item.user.name.last]]</template>

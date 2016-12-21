@@ -167,13 +167,14 @@ The element helps in filtering with custom data sources also since they automati
 
 The code snippet above produces a three-column [vaadinelement]#vaadin-grid# with a filtering input that targets the data items' [propertyname]#user.email# property.
 
-By default the [elementname]#vaadin-grid-filter# shows a plain text input field but you can place anything inside and as long as it fires an [propertyname]#input# event and has a [propertyname]#value# property, it works as a filter.
+By default, the [elementname]#vaadin-grid-filter# shows a plain text input field, but you can replace it by including another element inside the [elementname]#vaadin-grid-filter#.
+The replacing element needs to be properly bound to the [elementname]#vaadin-grid-filter#'s [propertyname]#value# property to make it work as a filtering input.
 The following example uses a [elementname]#paper-input# as a filter field.
 
 [source,html]
 ----
-<vaadin-grid-filter path="user.email">
-  <paper-input></paper-input>
+<vaadin-grid-filter path="user.email" value="[[_emailFilter]]">
+  <paper-input value={{_emailFilter}}></paper-input>
 </vaadin-grid-filter>
 ----
 
