@@ -15,6 +15,7 @@
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../paper-styles/color.html">
 
 </head>
 
@@ -39,7 +40,7 @@
             vaadin-grid#material {
 
               font-family: Roboto, sans-serif;
-              --divider-color: #dbdbdb;
+              --divider-color: rgba(0, 0, 0, var(--dark-divider-opacity));
 
               --vaadin-grid-cell: {
                 padding: 0;
@@ -47,22 +48,22 @@
 
               --vaadin-grid-header-cell: {
                 height: 64px;
-                color: rgba(0, 0, 0, 0.54);
+                color: rgba(0, 0, 0, var(--dark-secondary-opacity));
                 font-size: 12px;
               }
 
               --vaadin-grid-body-cell: {
                 height: 48px;
-                color: rgba(0, 0, 0, 0.87);
+                color: rgba(0, 0, 0, var(--dark-primary-opacity));
                 font-size: 13px;
               }
 
               --vaadin-grid-body-row-hover-cell: {
-                background-color: #EEEEEE;
+                background-color: var(--paper-grey-200);
               }
 
               --vaadin-grid-body-row-selected-cell: {
-                background-color: #F5F5F5;
+                background-color: var(--paper-grey-100);
               }
 
             }
@@ -82,7 +83,7 @@
             }
 
             vaadin-grid#material paper-checkbox {
-              --primary-color: #3f51b5;
+              --primary-color: var(--paper-indigo-500);
               margin: 0 24px;
             }
 
@@ -106,11 +107,11 @@
             }
 
             vaadin-grid#material vaadin-grid-sorter:not([direction]) iron-icon {
-              color: rgba(0, 0, 0, 0.38);
+              color: rgba(0, 0, 0, var(--dark-disabled-opacity));
             }
 
             vaadin-grid#material vaadin-grid-sorter[direction] {
-              color: rgba(0, 0, 0, 0.87);
+              color: rgba(0, 0, 0, var(--dark-primary-opacity));
             }
 
             vaadin-grid#material vaadin-grid-sorter[direction=desc] iron-icon {
