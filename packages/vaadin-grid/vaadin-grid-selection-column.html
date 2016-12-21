@@ -4,7 +4,7 @@
 <dom-module id="vaadin-grid-selection-column">
   <template>
     <template class="header">
-      <input id="all" hidden$="[[!_grid.items]]" type="checkbox" checked="{{selectAll::change}}" indeterminate="[[_indeterminate]]"/>
+      <input hidden$="[[!_grid.items]]" type="checkbox" checked="{{selectAll::change}}" indeterminate="[[_indeterminate]]"/>
     </template>
     <template>
       <input type="checkbox" checked="{{selected::change}}" />
@@ -41,20 +41,19 @@
     },
 
     observers: [
-      '_onSelectAllChanged(selectAll, _grid)',
-      '_onSelectItemsChanged(selectedItems)'
+      '_onSelectAllChanged(selectAll, _grid)'
     ],
 
-    dettached: function() {
+    detached: function() {
       if (this._grid) {
-        this.unlisten(this._grid, 'selected-items-changed', '_onSelectItemsChanged');
+        this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
     },
 
     attached: function() {
       this._grid = this._findGrid(this);
       if (this._grid) {
-        this.listen(this._grid, 'selected-items-changed', '_onSelectItemsChanged');
+        this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
     },
 
@@ -71,7 +70,6 @@
     },
 
     _onSelectAllChanged: function(selectAll, grid) {
-      // We always select-all when comming from an undeterminated state (classic grid behavior)
       if (!selectAll && this._indeterminate) {
         this.selectAll = true;
         return;
@@ -80,7 +78,7 @@
       grid.selectedItems = selectAll && grid.items ? grid._filter(grid.items) : [];
     },
 
-    _onSelectItemsChanged: function(e) {
+    _onSelectedItemsChanged: function(e) {
       if (!this._grid.selectedItems.length) {
         // Unselect-all and remove indeterminate when user manually deselects all checkboxes
         this._indeterminate = false;

@@ -125,7 +125,6 @@
       beforeEach(function() {
         grid = fixture('multiselect');
         grid.items = ['foo', 'bar', 'baz'];
-        delete grid.dataSource;
 
         selectionColumn = grid._columnTree[0][0];
         cachedItems = grid._cache[0];
