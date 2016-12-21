@@ -120,10 +120,13 @@
       var headerRows;
       var firstHeaderCellContent, firstBodyCellContent;
       var selectionColumn;
+      var selectAllCheckbox, firstBodyCheckbox;
 
       beforeEach(function() {
         grid = fixture('multiselect');
         grid.items = ['foo', 'bar', 'baz'];
+        delete grid.dataSource;
+
         selectionColumn = grid._columnTree[0][0];
         cachedItems = grid._cache[0];
         rows = getRows(grid.$.scroller.$.items);
@@ -131,16 +134,20 @@
 
         firstHeaderCellContent = getCellContent(getRowCells(headerRows[1])[0]);
         firstBodyCellContent = getCellContent(getRowCells(rows[0])[0]);
+
+        selectAllCheckbox = firstHeaderCellContent.children[0];
+        firstBodyCheckbox = firstBodyCellContent.children[0];
+
         Polymer.dom.flush();
       });
 
       it('should have a checkbox in the body cell', function() {
-        expect(firstBodyCellContent.children[0].localName).to.eql('input');
-        expect(firstBodyCellContent.children[0].type).to.eql('checkbox');
+        expect(firstBodyCheckbox.localName).to.eql('input');
+        expect(firstBodyCheckbox.type).to.eql('checkbox');
       });
 
       it('should select item when checkbox is checked', function() {
-        var selectCheckbox = firstBodyCellContent.children[0];
+        var selectCheckbox = firstBodyCheckbox;
 
         selectCheckbox.click();
 
@@ -148,7 +155,7 @@
       });
 
       it('should have bound the body checkbox to selected items', function() {
-        var selectCheckbox = firstBodyCellContent.children[0];
+        var selectCheckbox = firstBodyCheckbox;
 
         grid.push('selectedItems', cachedItems[0]);
 
@@ -156,14 +163,12 @@
       });
 
       it('should have a select all checkbox in the header', function() {
-        expect(firstHeaderCellContent.children[0].localName).to.eql('input');
-        expect(firstHeaderCellContent.children[0].type).to.eql('checkbox');
+        expect(selectAllCheckbox.localName).to.eql('input');
+        expect(selectAllCheckbox.type).to.eql('checkbox');
       });
 
       it('should set selectAll when header checkbox is clicked', function() {
-        var selectCheckbox = firstHeaderCellContent.children[0];
-
-        selectCheckbox.click();
+        selectAllCheckbox.click();
 
         expect(selectionColumn.selectAll).to.be.true;
       });
@@ -212,9 +217,7 @@
         grid.items = undefined;
         grid.dataSource = infiniteDataSource;
 
-        var selectCheckbox = firstHeaderCellContent.children[0];
-
-        expect(selectCheckbox.hidden).to.be.true;
+        expect(selectAllCheckbox.hidden).to.be.true;
       });
 
       it('should be possible to override the body template', function() {
@@ -232,6 +235,48 @@
       it('should have grid reference also when column is nested inside a group', function() {
         expect(grid._columnTree[1][2]._grid).to.eql(grid);
       });
+
+      it('should not have indeterminate when nothing is selected', function() {
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+      });
+
+      it('should have indeterminate when an item is selected', function() {
+        firstBodyCheckbox.click();
+        expect(selectAllCheckbox.indeterminate).to.be.true;
+      });
+
+      it('should have indeterminate true when an item is deselected', function() {
+        selectAllCheckbox.click();
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+
+        firstBodyCheckbox.click();
+        expect(selectAllCheckbox.indeterminate).to.be.true;
+      });
+
+      it('should select-all when all items are selected', function() {
+        rows.forEach(function(row) {
+          var cellContent = getCellContent(getRowCells(row)[0]);
+          var checkbox = cellContent.children[0];
+          checkbox.click();
+        })
+
+        expect(selectionColumn.selectAll).to.be.true;
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+      });
+
+      it('should deselect-all when all items are deselected', function() {
+        selectAllCheckbox.click();
+
+        rows.forEach(function(row) {
+          var cellContent = getCellContent(getRowCells(row)[0]);
+          var checkbox = cellContent.children[0];
+          checkbox.click();
+        })
+
+        expect(selectionColumn.selectAll).to.be.false;
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+      });
+
     });
   </script>
 
