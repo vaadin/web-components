@@ -180,6 +180,7 @@
               _resetSelection: function(inverted) {
                 this.$.grid.selectedItems = [];
                 this.updateStyles();
+                this.indeterminate = false;
               },
 
               _selectItem: function(e) {

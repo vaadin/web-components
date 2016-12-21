@@ -262,6 +262,23 @@
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
+      it('should have indeterminate false if selectedItems contains all items, no matter the order', function() {
+        grid.set('selectedItems', ['baz', 'foo', 'bar', 'hi']);
+
+        expect(selectionColumn.selectAll).to.be.true;
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+      });
+
+      it('should have select-all false if selectedItems does not contain all items', function() {
+        selectAllCheckbox.click();
+        expect(selectionColumn.selectAll).to.be.true;
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+
+        grid.set('selectedItems', ['baz', 'foo', 'hi']);
+        expect(selectAllCheckbox.indeterminate).to.be.true;
+        expect(selectionColumn.selectAll).to.be.true;
+      });
+
       it('should select-all when all items are selected', function() {
         rows.forEach(function(row) {
           var cellContent = getCellContent(getRowCells(row)[0]);
