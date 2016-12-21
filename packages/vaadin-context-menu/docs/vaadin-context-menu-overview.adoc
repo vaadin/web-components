@@ -21,7 +21,9 @@ layout: page
 </vaadin-context-menu>
 ----
 
-:screenshot:
+[[figure.vaadin-context-menu.overview]]
+.[vaadinelement]#vaadin-context-menu#
+image::img/vaadin-context-menu.png[width="189"]
 
 == Features
 

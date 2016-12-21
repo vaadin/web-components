@@ -72,7 +72,9 @@ In the following example, the grid has the [eventname]#vaadin-contextmenu# detai
 <my-grid-view></my-grid-view>
 ----
 
-:screenshot:
+[[figure.vaadin-context-menu.on-grid]]
+.[vaadinelement]#vaadin-context-menu# used on [vaadinelement]#vaadin-grid#
+image::img/vaadin-context-menu-on-grid.png[width="312"]
 
 NOTE: The [propertyname]#detail# property from the grid detailed event becomes available in the menu template bindings. In the above example, the [propertyname]#detail# is used to show the “Remove” menu item only in the grid body context menu, and also in to find out the grid row index the [methodname]#_remove# menu item click handler ([propertyname]#e.target.detail.row#).
 

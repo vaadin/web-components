@@ -29,7 +29,9 @@ By default, the [vaadinelement]#vaadin-context-menu# element itself listens for 
 </vaadin-context-menu>
 ----
 
-:screenshot:
+[[figure.vaadin-context-menu.on-content]]
+.[vaadinelement]#vaadin-context-menu# targeted on the text paragraphs
+image::img/vaadin-context-menu-on-content.png[width="355"]
 
 [[vaadin-context-menu.listen-on]]
 == Without Wrapping
