@@ -192,8 +192,6 @@
           callback(items);
         };
 
-        grid.clearCache();
-
         grid.async(function() {
           expect(getFirstCell().textContent).to.contain('foo0');
           done();
@@ -202,7 +200,6 @@
 
       it('should clear item cache', function(done) {
         container.dataSource = sinon.spy(infiniteDataSource);
-        grid.clearCache();
 
         grid.async(function() {
           expect(container.dataSource.called).to.be.true;
@@ -230,8 +227,6 @@
             done();
           });
         };
-
-        grid.clearCache();
       });
     });
   </script>
