@@ -185,14 +185,12 @@
           });
 
           it('should not sort the items if sorters is empty', function() {
-            debugger;
             sorterFirst.direction = null;
             sorterLast.direction = null;
             grid.items = buildDataSet(1000);
             var bodyRows = getRows(grid.$.scroller.$.items);
             var cells = getRowCells(bodyRows[0]);
             expect(cells[0].item).to.equal(grid.items[0]);
-            debugger;
           });
 
         });

@@ -2,8 +2,11 @@
   <template>
     <style>
       :host(:not([has-data])) tbody tr::after {
-        visibility: hidden;
+        /* A placeholder for empty rows.
+        Content must include (any) text so it derives any possible style
+        rules affecting text height. */
         content: "-";
+        visibility: hidden;
         width: 0;
         padding: 8px 0;
       }
@@ -50,7 +53,7 @@
         animation: vaadin-grid-spin-360 400ms linear infinite;
       }
 
-      :host([loading]):before {
+      :host([loading])::before {
         content: "";
         position: absolute;
         top: 0;

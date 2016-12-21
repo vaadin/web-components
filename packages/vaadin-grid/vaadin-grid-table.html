@@ -211,7 +211,12 @@
       <tfoot id="footer" is="vaadin-grid-table-footer" column-tree="[[columnTree]]"></tfoot>
     </table>
 
-    <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]" ios$="[[ios]]" scrolling$="[[scrolling]]">
+    <vaadin-grid-table-outer-scroller
+        id="outerscroller"
+        scroll-target="[[scrollTarget]]"
+        overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
+        ios$="[[ios]]"
+        scrolling$="[[scrolling]]">
       <div id="outersizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
     </vaadin-grid-table-outer-scroller>
 

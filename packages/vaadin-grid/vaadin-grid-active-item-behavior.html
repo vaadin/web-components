@@ -45,10 +45,10 @@
 
     _activeItemChanged: function() {
       if (this.$.scroller._physicalItems) {
-        this.$.scroller._physicalItems.forEach(function(row) {          
+        this.$.scroller._physicalItems.forEach(function(row) {
           this._updateItem(row, row.item);
         }.bind(this));
       }
     }
   };
-  </script>
+</script>

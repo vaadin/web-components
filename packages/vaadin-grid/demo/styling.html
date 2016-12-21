@@ -44,27 +44,27 @@
 
               --vaadin-grid-cell: {
                 padding: 0;
-              }
+              };
 
               --vaadin-grid-header-cell: {
                 height: 64px;
                 color: rgba(0, 0, 0, var(--dark-secondary-opacity));
                 font-size: 12px;
-              }
+              };
 
               --vaadin-grid-body-cell: {
                 height: 48px;
                 color: rgba(0, 0, 0, var(--dark-primary-opacity));
                 font-size: 13px;
-              }
+              };
 
               --vaadin-grid-body-row-hover-cell: {
                 background-color: var(--paper-grey-200);
-              }
+              };
 
               --vaadin-grid-body-row-selected-cell: {
                 background-color: var(--paper-grey-100);
-              }
+              };
 
             }
 
@@ -88,7 +88,6 @@
             }
 
             vaadin-grid#material vaadin-grid-sorter {
-
               --vaadin-grid-sorter-arrow: {
                 display: none !important;
               };
@@ -195,43 +194,43 @@
                 height: 38px;
                 border-right: 1px solid #d4d4d4;
                 box-sizing: border-box;
-              }
+              };
 
               --vaadin-grid-header-cell: {
                 border-bottom: 1px solid #d4d4d4;
                 background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
-              }
+              };
 
               --vaadin-grid-footer-cell: {
                 background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
-              }
+              };
 
               --vaadin-grid-cell-last-frozen: {
                 box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
-              }
+              };
 
               --vaadin-grid-body-row-active-cell: {
                 background-image: linear-gradient(to bottom,#1b87e3 2%, #166ed5 98%);
                 color: #c8dbed;
                 text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
                 border-right-color: #1d69b4;
-              }
+              };
 
               --vaadin-grid-body-row-odd-cell: {
                 background-color: #f5f5f5;
-              }
+              };
 
               --vaadin-grid-loading-spinner: {
                 display: none;
-              }
+              };
 
               --vaadin-grid-body-cell: {
                 transition: opacity 0.2s;
-              }
+              };
 
               --vaadin-grid-loading-body-cell: {
                 opacity: 0.2;
-              }
+              };
 
             }
 
@@ -243,11 +242,11 @@
                 padding: 0;
                 border: 6px solid transparent;
                 border-bottom-color: #000;
-              }
+              };
 
               --vaadin-grid-sorter-order: {
                 display: none;
-              }
+              };
             }
 
             vaadin-grid#valo-grid vaadin-grid-filter {
@@ -278,7 +277,7 @@
               }
             }
 
-            vaadin-grid#valo-grid:before {
+            vaadin-grid#valo-grid::before {
               content: "";
               width: 100%;
               position: absolute;
@@ -291,7 +290,7 @@
               transition: opacity 0.2s;
             }
 
-            vaadin-grid#valo-grid[loading]:before {
+            vaadin-grid#valo-grid[loading]::before {
               opacity: 1;
               animation: loading-expand 1s linear;
             }
@@ -402,11 +401,11 @@
 
               --vaadin-grid-cell: {
                 padding: 0 13px;
-              }
+              };
 
               --vaadin-grid-body-cell: {
                 height: 65px;
-              }
+              };
 
               --vaadin-grid-header-cell: {
                 background: rgba(235, 238, 246, 0.9);
@@ -418,25 +417,25 @@
                 background-size: 1px 100%;
                 background-position: 100% 0%;
                 background-repeat: no-repeat;
-              }
+              };
 
               --vaadin-grid-body-row-selected-cell: {
                 background-color: rgb(131, 183, 236);
                 color: #fff;
                 border-bottom-color: rgb(108, 160, 218);
-              }
+              };
 
               --vaadin-grid-body-row-odd-cell: {
                 background-color: rgb(251, 252, 254);
-              }
+              };
 
               --vaadin-grid-body-row-hover-cell: {
                 background-color: rgb(235, 238, 246);
-              }
+              };
 
               --vaadin-grid-body-row-details-cell: {
                 text-align: center;
-              }
+              };
 
             }
 
@@ -548,16 +547,16 @@
 
               --vaadin-grid-cell: {
                 background: rgb(80, 91, 102);
-              }
+              };
 
               --vaadin-grid-body-cell: {
                 padding: 0 0 10px;
-              }
+              };
 
               --vaadin-grid-header-cell: {
                 text-transform: uppercase;
                 padding: 16px;
-              }
+              };
 
             }
 

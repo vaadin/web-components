@@ -34,7 +34,7 @@ Custom property | Description | Default
       }
 
       :host(:not([direction])) #order,
-      :host(:not([direction])) #indicators:before {
+      :host(:not([direction])) #indicators::before {
         opacity: 0.2;
       }
 
@@ -46,14 +46,14 @@ Custom property | Description | Default
         @apply(--vaadin-grid-sorter-order);
       }
 
-      #indicators:before {
+      #indicators::before {
         content: "▲";
         display: block;
         padding: 0 8px;
         @apply(--vaadin-grid-sorter-arrow);
       }
 
-      :host([direction=desc]) #indicators:before {
+      :host([direction=desc]) #indicators::before {
         transform: rotateZ(180deg);
       }
     </style>

@@ -18,7 +18,7 @@ This section explains how to customize the [vaadinelement]#vaadin-grid#'s appear
 See the link:https://cdn.vaadin.com/vaadin-core-elements/preview/vaadin-grid/demo/styling.html[live demos] for more thorough examples on how the grid can be modified to comply link:https://material.io/guidelines/components/data-tables.html[Material Design] specification, how to define data rows with rounded borders and more.
 
 [[vaadin-grid.styling.mixins]]
-== Theming With Style Mixins
+== Styling With Style Mixins
 
 The vaadin-grid bundles a set of pre-defined style mixins intended for easy styling of the grid's cells in various different states and contexts.
 
@@ -104,7 +104,7 @@ image::img/vaadin-grid-styling-sorter.png[width="450"]
 
 
 [[vaadin-grid.styling.templates]]
-== Custom Theming With Column Templates
+== Custom Styling With Column Templates
 
 In addition to the style mixins, column templates provide a handy means for making specific style adjustments to [vaadinelement]#vaadin-grid# cells.
 Since the cell content doesn't get hidden inside the [vaadinelement]#vaadin-grid#'s shadow root, it can be targeted with standard CSS selectors.
