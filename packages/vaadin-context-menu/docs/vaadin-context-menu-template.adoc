@@ -26,4 +26,6 @@ You can use any elements in the template to build the actual menu. It is recomme
 </vaadin-context-menu>
 ----
 
-:screenshot:
+[[figure.vaadin-context-menu.on-content]]
+.[vaadinelement]#vaadin-context-menu# built with [elementname]#paper-menu# and [elementname]#paper-item# elements
+image::img/vaadin-context-menu-on-content.png[width="355"]
