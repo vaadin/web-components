@@ -19,7 +19,7 @@
       properties: {
         column: Object,
         expanded: Boolean,
-        flex: Number,
+        flexGrow: Number,
         frozen: {
           type: Boolean,
           reflectToAttribute: true
@@ -50,7 +50,7 @@
       observers: ['_columnChanged(column)',
         '_cellAttached(column, isAttached)',
         '_expandedChanged(expanded, instance)',
-        '_flexChanged(flex)',
+        '_flexGrowChanged(flexGrow)',
         '_indexChanged(index, instance)',
         '_itemChanged(item, instance)',
         '_instanceChanged(instance, target)',
@@ -63,7 +63,7 @@
       ],
 
       _columnChanged: function(column) {
-        this.flex = column.flex;
+        this.flexGrow = column.flexGrow;
         this.frozen = column.frozen;
         this.lastFrozen = column._lastFrozen;
         this.headerTemplate = column.headerTemplate;
@@ -102,8 +102,8 @@
         instance.expanded = expanded;
       },
 
-      _flexChanged: function(flex) {
-        this.style.flexGrow = flex;
+      _flexGrowChanged: function(flexGrow) {
+        this.style.flexGrow = flexGrow;
       },
 
       _indexChanged: function(index, instance) {
@@ -147,7 +147,7 @@
       },
 
       _widthChanged: function(width) {
-        this.style.flexBasis = width;
+        this.style.width = width;
       },
 
       _templateChanged: function(template) {

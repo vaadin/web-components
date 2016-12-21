@@ -63,11 +63,11 @@
       describe('properties', function() {
         describe('flex', function() {
           it('should have default value', function() {
-            expect(column.flex).to.eql(1);
+            expect(column.flexGrow).to.eql(1);
           });
 
           it('should be bound to header cells', function() {
-            column.flex = 2;
+            column.flexGrow = 2;
 
             var header = grid.$.scroller.$.header;
 
@@ -76,13 +76,13 @@
           });
 
           it('should be bound to row cells', function() {
-            column.flex = 2;
+            column.flexGrow = 2;
 
             expect(grid.$.scroller._physicalItems[0].cells[0].style.flexGrow).to.eql('2');
           });
 
           it('should be bound to footer cells', function() {
-            column.flex = 2;
+            column.flexGrow = 2;
 
             expect(grid.$.scroller.$.footer._rows[0].cells[0].style.flexGrow).to.eql('2');
           });
@@ -98,19 +98,19 @@
 
             var header = grid.$.scroller.$.header;
 
-            expect(header._rows[0].cells[0].style.flexBasis).to.eql('calc(20% + 100px)');
+            expect(header._rows[0].cells[0].style.width).to.eql('calc(20% + 100px)');
           });
 
           it('should be bound to row cells', function() {
             column.width = '200px';
 
-            expect(grid.$.scroller._physicalItems[0].cells[0].style.flexBasis).to.eql('200px');
+            expect(grid.$.scroller._physicalItems[0].cells[0].style.width).to.eql('200px');
           });
 
           it('should be bound to footer cells', function() {
             column.width = '200px';
 
-            expect(grid.$.scroller.$.footer._rows[0].cells[0].style.flexBasis).to.eql('200px');
+            expect(grid.$.scroller.$.footer._rows[0].cells[0].style.width).to.eql('200px');
           });
         });
 

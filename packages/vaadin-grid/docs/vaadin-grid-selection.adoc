@@ -56,7 +56,7 @@ NOTE: that you have to explicitly import the element in your component in order 
 [[figure.vaadin-grid.selection.column]]
 image::img/vaadin-grid-selection-column.png[width="450"]
 
-In addition, you can customize the selection column by changing its [propertyname]#width#, [propertyname]#flex# and [propertyname]#frozen# properties, or by providing your own templates.
+In addition, you can customize the selection column by changing its [propertyname]#width#, [propertyname]#flexGrow# and [propertyname]#frozen# properties, or by providing your own templates.
 
 [source,html]
 ----
@@ -66,7 +66,7 @@ In addition, you can customize the selection column by changing its [propertynam
     <template>[[item]]</template>
   </vaadin-grid-column>
 
-  <vaadin-grid-selection-column width="40px" flex="0" select-all="[[selectAll]]">
+  <vaadin-grid-selection-column width="40px" flex-grow="0" select-all="[[selectAll]]">
     <template class="header">
       <paper-checkbox checked="{{selectAll}}"></paper-checkbox>
     </template>
@@ -122,7 +122,7 @@ For instance in the next example, we implement a single selection model by setti
         <template>[[item]]</template>
       </vaadin-grid-column>
 
-      <vaadin-grid-column width="40px" flex="0">
+      <vaadin-grid-column width="40px" flex-grow="0">
         <template>
           <input type="checkbox" on-change="_onSelectionChange" checked="[[selected]]"></input>
         </template>

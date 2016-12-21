@@ -51,7 +51,7 @@
             <paper-input value="{{item.user.name.last}}"></paper-input>
           </template>
 
-          <vaadin-grid-column width="45px" flex="0" frozen>
+          <vaadin-grid-column width="45px" flex-grow="0" frozen>
             <template>
               [[index]]
             </template>
@@ -69,7 +69,25 @@
               TGF1
             </template>
 
-            <vaadin-grid-column width="20%">
+            <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0">
+              <template>
+                <span class="elItem">[[item.user.name.first]]</span>
+              </template>
+              <template class="header">
+                <vaadin-grid-sorter path="user.name.first">TC1</vaadin-grid-sorter>
+              </template>
+              <template class="footer">
+                TCF1
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column-group>
+
+              <template class="header">
+                Waat
+              </template>
+
+            <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0">
               <template>
                 <span class="elItem">[[item.user.name.first]]</span>
               </template>
@@ -92,6 +110,8 @@
                 <vaadin-grid-filter path="user.name.last"></vaadin-grid-filter>
               </template>
             </vaadin-grid-column>
+
+            </vaadin-grid-column-group>
 
           </vaadin-grid-column-group>
 

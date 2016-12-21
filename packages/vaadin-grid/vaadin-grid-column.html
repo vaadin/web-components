@@ -91,8 +91,8 @@
       this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
     },
 
-    _flexChanged: function(flex) {
-      this.fire('property-changed', {path: 'flex', value: flex});
+    _flexGrowChanged: function(flexGrow) {
+      this.fire('property-changed', {path: 'flexGrow', value: flexGrow});
     },
 
     _widthChanged: function(width) {
@@ -114,7 +114,7 @@
         value: '100px'
       },
 
-      flex: {
+      flexGrow: {
         type: Number,
         value: 1
       },
@@ -131,7 +131,11 @@
       }
     },
 
-    observers: ['_flexChanged(flex)', '_widthChanged(width)', '_templateChanged(template)', '_frozenChanged(frozen)', '_hiddenChanged(hidden)'],
+    observers: ['_flexGrowChanged(flexGrow)',
+    '_widthChanged(width)',
+    '_templateChanged(template)',
+    '_frozenChanged(frozen)',
+    '_hiddenChanged(hidden)'],
 
     _frozenChanged: function(frozen) {
       this.fire('property-changed', {path: 'frozen', value: frozen});
@@ -153,7 +157,7 @@
     _hiddenChanged: function(hidden) {
       this.fire('property-changed', {path: 'hidden', value: hidden});
     }
-  }
+  },
 
   /**
    * @polymerBehavior vaadin.elements.grid.ColumnBehavior
@@ -181,7 +185,7 @@
         }
       },
 
-      flex: {
+      flexGrow: {
         type: Number,
         readOnly: true
       },
@@ -208,7 +212,7 @@
 
     observers: ['_updateVisibleChildColumns(_childColumns)',
     '_childColumnsChanged(_childColumns)',
-    '_flexChanged(flex)',
+    '_flexGrowChanged(flexGrow)',
     '_widthChanged(width)',
     '_frozenChanged(_childColumns, frozen)',
     '_hiddenChanged(hidden)',
@@ -233,7 +237,7 @@
         this._updateVisibleChildColumns(this._childColumns);
       }
 
-      if (/flex|width|hidden|_childColumns/.test(e.detail.path)) {
+      if (/flexGrow|width|hidden|_childColumns/.test(e.detail.path)) {
         this._updateFlexAndWidth(this._visibleChildColumns);
       }
 
@@ -261,8 +265,8 @@
         return prev += ' + ' + (curr.width || '0').replace('calc', '');
       }, '').substring(3) + ')');
 
-      this._setFlex(visibleChildColumns.reduce(function(prev, curr) {
-        return prev + curr.flex;
+      this._setFlexGrow(visibleChildColumns.reduce(function(prev, curr) {
+        return prev + curr.flexGrow;
       }, 0));
     },
 
