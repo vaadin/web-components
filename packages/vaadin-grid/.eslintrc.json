@@ -1,0 +1,14 @@
+{
+  "extends": "vaadin",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "html"
+  ],
+  "globals": {
+    "vaadin": false,
+    "Polymer": false
+  }
+}
