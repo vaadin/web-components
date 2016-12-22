@@ -25,7 +25,7 @@
 
   <dom-module id="grid-wrapper">
     <template>
-      <vaadin-grid id="grid" size="1000">
+      <vaadin-grid id="grid" size="10">
         <content></content>
         <vaadin-grid-column-group>
           <template class="header">wrapper group header</template>
@@ -87,7 +87,7 @@
 
   <test-fixture id="columns">
     <template>
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column>
           <template class="header">first header</template>
           <template class="footer">first footer</template>
@@ -104,7 +104,7 @@
 
   <test-fixture id="plain-groups">
     <template>
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column-group>
           <template class="header">first group header</template>
           <template class="footer">first group footer</template>
@@ -139,7 +139,7 @@
 
   <test-fixture id="nested-groups">
     <template>
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column-group>
           <template class="header">group header</template>
           <template class="footer">group footer</template>
@@ -178,7 +178,7 @@
 
   <test-fixture id="dom-repeat-columns">
     <template is="dom-template">
-      <vaadin-grid id="grid" size="1000">
+      <vaadin-grid id="grid" size="10">
         <template is="dom-repeat" id="repeater" items="[[columns]]" as="column">
           <vaadin-grid-column>
             <template class="header">grid repeats column [[column]] header</template>
@@ -192,7 +192,7 @@
 
   <test-fixture id="dom-repeat-columns-in-group">
     <template is="dom-template">
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column-group>
           <template is="dom-repeat" items="[[columns]]" as="column">
             <vaadin-grid-column>
@@ -208,7 +208,7 @@
 
   <test-fixture id="dom-repeat-groups">
     <template is="dom-template">
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <template is="dom-repeat" items="[[columns]]" as="column">
           <vaadin-grid-column-group>
             <vaadin-grid-column>
@@ -224,7 +224,7 @@
 
   <test-fixture id="dom-repeat-groups-in-group">
     <template is="dom-template">
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column-group>
           <template is="dom-repeat" items="[[columns]]" as="column">
             <vaadin-grid-column-group>
