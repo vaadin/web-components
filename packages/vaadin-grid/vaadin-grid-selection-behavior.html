@@ -95,11 +95,12 @@
   };
 </script>
 
-<dom-module id="vaadin-grid-selection-styles">
+<dom-module id="vaadin-grid-selection-themability-styles">
   <template>
     <style>
-      tbody tr[selected] td {
-        background-color: rgb(243, 243, 243);
+      table tr[selected] .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        background-color: var(--paper-grey-100, rgb(243, 243, 243));
+        @apply(--vaadin-grid-body-row-selected-cell);
       }
     </style>
   </template>

@@ -62,6 +62,10 @@
         '_childColumnsChanged(_childColumns)'
       ],
 
+      created: function() {
+        this.classList.add('vaadin-grid-cell');
+      },
+
       _columnChanged: function(column) {
         this.flexGrow = column.flexGrow;
         this.frozen = column.frozen;

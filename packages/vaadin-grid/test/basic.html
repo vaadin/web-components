@@ -186,7 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         list.$.table.scrollTop = 5000 + list._physicalAverage * steps;
         list._scrollHandler();
         list.flushDebouncer('_debounceTemplate');
-        list.flushDebouncer('reorderrows');
+        list.flushDebouncer('vaadin-grid-scrolling');
         // Expect the physical rows to be in order after scrolling
         var rows = Polymer.dom(list.$.items).querySelectorAll('tr');
         for (var i = 1; i < rows.length; i++) {

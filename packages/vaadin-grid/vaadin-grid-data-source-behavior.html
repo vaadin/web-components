@@ -1,9 +1,21 @@
 <dom-module id="vaadin-grid-data-source-styles">
   <template>
     <style>
-      :host([loading]) #items tr {
-        opacity: 0.1;
+      :host(:not([has-data])) tbody tr::after {
+        /* A placeholder for empty rows.
+        Content must include (any) text so it derives any possible style
+        rules affecting text height. */
+        content: "-";
+        visibility: hidden;
+        width: 0;
+        padding: 8px 0;
       }
+    </style>
+  </template>
+</dom-module>
+<dom-module id="vaadin-grid-data-source-themability-styles">
+  <template>
+    <style>
 
       /* Anim */
       @keyframes vaadin-grid-spin-360 {
@@ -32,6 +44,7 @@
         width: 16px;
         pointer-events: none;
         opacity: 0;
+        @apply(--vaadin-grid-loading-spinner);
       }
 
       :host([loading]) #spinner  {
@@ -40,16 +53,18 @@
         animation: vaadin-grid-spin-360 400ms linear infinite;
       }
 
-      :host(:not([has-data])) tbody tr::after {
-        visibility: hidden;
-        content: '-';
-        width: 0;
-
-         /* Must use the same padding (+border-top) as the cell wrapper itself.
-         FIXME: Use the vertical paddings on the cell directly (not the wrapper).
-         Then this could be removed.*/
-        padding: 9px 0 8px;
+      :host([loading])::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        pointer-events: none;
+        @apply(--vaadin-grid-loading-backdrop);
       }
+
     </style>
   </template>
 </dom-module>

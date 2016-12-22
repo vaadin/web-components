@@ -1,0 +1,139 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid style="width: 200px; height: 400px;">
+        <vaadin-grid-column frozen>
+          <template class="header">h0</template>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">h1</template>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('selectors', function() {
+      var grid;
+      var headerRowCells;
+      var footerRowCells;
+      var bodyRowCells;
+
+      var color1 = 'rgb(255, 0, 0)';
+      var color2 = 'rgb(0, 255, 0)';
+
+      beforeEach(function() {
+        grid = fixture('default');
+        grid.items = buildDataSet(2);
+        var scroller = grid.$.scroller;
+        headerRowCells = getRowCells(getRows(scroller.$.header)[0]);
+        bodyRowCells =  getRowCells(getRows(scroller.$.items)[1]);
+        footerRowCells = getRowCells(getRows(scroller.$.footer)[0]);
+      });
+
+      function setColor(prop, borderColor) {
+        grid.customStyle[prop] = 'border-color: ' + borderColor;
+        grid.updateStyles();
+      }
+
+      function getColor(cell, prop) {
+        prop = prop || 'borderBottomColor';
+        return window.getComputedStyle(getCellContent(cell))[prop];
+      }
+
+      it('should override default border colors', function() {
+        setColor('--vaadin-grid-cell', color1);
+        expect(getColor(headerRowCells[0], 'borderBottomColor')).to.equal(color1);
+        expect(getColor(footerRowCells[0], 'borderTopColor')).to.equal(color1);
+        expect(getColor(bodyRowCells[0], 'borderBottomColor')).to.equal(color1);
+        expect(getColor(bodyRowCells[0], 'borderRightColor')).to.equal(color1);
+      });
+
+      it('should override header cell styles', function() {
+        setColor('--vaadin-grid-cell', color1);
+        setColor('--vaadin-grid-header-cell', color2);
+        expect(getColor(headerRowCells[0])).to.equal(color2);
+      });
+
+      it('should override footer cell styles', function() {
+        setColor('--vaadin-grid-cell', color1);
+        setColor('--vaadin-grid-footer-cell', color2);
+        expect(getColor(footerRowCells[0])).to.equal(color2);
+      });
+
+      it('should override body cell styles', function() {
+        setColor('--vaadin-grid-cell', color1);
+        setColor('--vaadin-grid-body-cell', color2);
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
+      });
+
+      it('should override odd row cell styles', function() {
+        setColor('--vaadin-grid-body-cell', color1);
+        setColor('--vaadin-grid-body-row-odd-cell', color2);
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
+      });
+
+      it('should override last frozen cell styles', function() {
+        setColor('--vaadin-grid-body-row-odd-cell', color1);
+        setColor('--vaadin-grid-cell-last-frozen', color2);
+        expect(getColor(headerRowCells[0])).to.equal(color2);
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
+        expect(getColor(footerRowCells[0])).to.equal(color2);
+      });
+
+      it('should override selected cell styles', function() {
+        grid.selectedItems = grid.items;
+        setColor('--vaadin-grid-cell-last-frozen', color1);
+        setColor('--vaadin-grid-body-row-selected-cell', color2);
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
+      });
+
+      it('should override active cell styles', function() {
+        grid.activeItem = grid.items[1];
+        setColor('--vaadin-grid-cell-last-frozen', color1);
+        setColor('--vaadin-grid-body-row-active-cell', color2);
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
+      });
+
+      it('should override last column cells right border', function() {
+        grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff';
+        grid.updateStyles();
+
+        var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[0])).borderRightStyle;
+        expect(borderRight).to.equal('solid');
+        borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
+        expect(borderRight).to.equal('none');
+      });
+
+      it('should override last column cells right border', function() {
+        grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff !important';
+        grid.updateStyles();
+
+        var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
+        expect(borderRight).to.equal('solid');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

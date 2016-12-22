@@ -1,3 +1,22 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+
+### Styling
+The following custom properties and mixins are available for styling:
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-grid-sorter-arrow` | Mixin applied to the arrow | `{}`
+`--vaadin-grid-sorter-order` | Mixin applied to the order | `{}`
+
+@element vaadin-grid
+@demo demo/index.html
+-->
+
 <link rel="import" href="vaadin-grid-cell-click-behavior.html">
 
 <dom-module id="vaadin-grid-sorter">
@@ -6,19 +25,16 @@
       :host {
         display: inline-flex;
         justify-content: space-between;
+        align-items: center;
         cursor: pointer;
       }
 
       #indicators {
         position: relative;
-        padding-right: 8px;
       }
 
-      #indicators[direction=desc] #direction {
-        transform: rotateZ(180deg);
-      }
-
-      #indicators:not([direction]) {
+      :host(:not([direction])) #order,
+      :host(:not([direction])) #indicators::before {
         opacity: 0.2;
       }
 
@@ -27,13 +43,23 @@
         right: 0;
         top: 0;
         transform: translateY(-4px) scale(0.7);
+        @apply(--vaadin-grid-sorter-order);
       }
 
+      #indicators::before {
+        content: "▲";
+        display: block;
+        padding: 0 8px;
+        @apply(--vaadin-grid-sorter-arrow);
+      }
+
+      :host([direction=desc]) #indicators::before {
+        transform: rotateZ(180deg);
+      }
     </style>
 
     <content></content>
-    <div id="indicators" direction$="[[direction]]">
-      <div id="direction">▲</div>
+    <div id="indicators">
       <div id="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 

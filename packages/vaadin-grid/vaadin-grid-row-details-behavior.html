@@ -8,11 +8,21 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        background: #fff !important;
       }
     </style>
   </template>
 </dom-module>
+<dom-module id="vaadin-grid-row-details-themability-styles">
+  <template>
+    <style>
+      td[detailscell] ::content > .cell-content {
+        background: #fff;
+        @apply(--vaadin-grid-body-row-details-cell);
+      }
+    </style>
+  </template>
+</dom-module>
+
 
 <script>
   window.vaadin = window.vaadin || {};

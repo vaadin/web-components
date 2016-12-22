@@ -83,13 +83,15 @@
     function simulateScrollToEnd(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
-      table.addEventListener('scroll', function () {
+      var listener = function () {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
         } else {
+          table.removeEventListener('scroll', listener);
           Polymer.Base.async(done, 100);
         }
-      });
+      };
+      table.addEventListener('scroll', listener);
       table.scrollTop += 2500;
     }
 

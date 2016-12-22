@@ -26,7 +26,7 @@
         }
 
         .cell-content {
-          line-height: 50px;
+          color: rgb(0, 255, 0);
         }
 
         .my-content {
@@ -111,7 +111,7 @@
         });
 
         it('should target cell content', function() {
-          expect(window.getComputedStyle(wrapper).lineHeight).to.equal('50px');
+          expect(window.getComputedStyle(wrapper).color).to.equal('rgb(0, 255, 0)');
         });
 
         it('should target cell wrapper', function() {

@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
 <link rel="import" href="vaadin-grid-table-scroll-behavior.html">
 <link rel="import" href="vaadin-grid-sizer.html">
 <link rel="import" href="vaadin-grid-table-outer-scroller.html">
@@ -10,15 +9,11 @@
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-selection-behavior.html">
+<link rel="import" href="vaadin-grid-active-item-behavior.html">
 <link rel="import" href="iron-list-behavior.html">
 
-<dom-module id="vaadin-grid-table">
+<dom-module id="vaadin-grid-table-styles">
   <template>
-    <style include="vaadin-grid-table-scroll-styles"></style>
-    <style include="vaadin-grid-row-details-styles"></style>
-    <style include="vaadin-grid-data-source-styles"></style>
-    <style include="vaadin-grid-selection-styles"></style>
-
     <style>
       :host {
         display: block;
@@ -61,7 +56,6 @@
         display: block;
         overflow: auto;
         box-sizing: border-box;
-        background: #fff;
       }
 
       [overflow-hidden] {
@@ -75,37 +69,24 @@
       thead th,
       tfoot td {
         top: 0;
-        background-color: #fff;
-        font-weight: 500;
       }
 
       td, th {
-        background-color: #fff;
-        padding: 0 !important;
+        padding: 0;
         flex-shrink: 0;
         flex-grow: 1;
-        width: 100px;
         box-sizing: border-box;
         display: flex;
-        overflow: hidden;
       }
 
-      /* Selector for non-shadow */
-      td::content > .cell-content,
-      th::content > .cell-content,
-      /* Selector for shadow */
-      ::content > .cell-content {
-         padding: 8px;
+      td ::content > .cell-content,
+      th ::content > .cell-content {
          width: 100%;
-         box-sizing: border-box;
-         display: flex;
+         display: inline-flex;
          justify-content: center;
          flex-direction: column;
          white-space: nowrap;
-       }
-
-      tr:hover td {
-        /*background-color: lightgrey;*/
+         overflow: hidden;
       }
 
       tr:not([hidden]) {
@@ -134,39 +115,93 @@
       ::content > vaadin-grid-column-group {
         display: none;
       }
-
-      /* Theme styles */
-      :host {
-        box-sizing: border-box;
-        border: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      thead[has-templates] tr:last-child th {
-        border-bottom: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      tfoot[has-templates] tr:first-child td {
-        border-top: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      tbody tr td {
-        border-bottom: 1px solid var(--vaadin-grid-border-color);
-      }
-
-      td, th {
-        text-align: left;
-      }
-
-      tr[odd] td {
-      }
-
-      [last-frozen] {
-        border-right: 1px solid var(--vaadin-grid-border-color);
-      }
     </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-table-themability-styles">
+  <template>
+    <style>
+
+      /* Default borders */
+
+      thead tr:last-child th ::content > .cell-content {
+        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      tfoot tr:first-child td ::content > .cell-content {
+        border-top: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      tbody tr:not([lastrow]) td ::content > .cell-content {
+        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      [last-frozen] ::content > .cell-content {
+        border-right: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      /* Cells */
+
+      table tr .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        background: #fff;
+        text-align: left;
+        padding: 8px;
+        box-sizing: border-box;
+        @apply(--vaadin-grid-cell);
+      }
+
+      table thead .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        font-weight: 500;
+        @apply(--vaadin-grid-header-cell);
+      }
+
+      table tfoot .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        font-weight: 500;
+        @apply(--vaadin-grid-footer-cell);
+      }
+
+      table tbody .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        @apply(--vaadin-grid-body-cell);
+      }
+
+      tbody [odd] .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+        @apply(--vaadin-grid-body-row-odd-cell);
+      }
+
+      table tr .vaadin-grid-cell:not([detailscell])[last-frozen] ::content > .cell-content {
+        @apply(--vaadin-grid-cell-last-frozen);
+      }
+
+      :host(:not([scrolling])) tbody tr:hover .vaadin-grid-cell ::content > .cell-content {
+        @apply(--vaadin-grid-body-row-hover-cell);
+      }
+
+      table tr .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::content > .cell-content {
+        border-right: none;
+      }
+
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-table">
+  <template>
+    <style include="vaadin-grid-table-scroll-styles"></style>
+    <style include="vaadin-grid-row-details-styles"></style>
+    <style include="vaadin-grid-data-source-styles"></style>
+    <style include="vaadin-grid-table-styles"></style>
+
+    <style include="vaadin-grid-table-themability-styles"></style>
+    <style include="vaadin-grid-selection-themability-styles"></style>
+    <style include="vaadin-grid-active-item-themability-styles"></style>
+    <style include="vaadin-grid-data-source-themability-styles"></style>
+    <style include="vaadin-grid-row-details-themability-styles"></style>
+
     <content select="vaadin-grid-column, vaadin-grid-selection-column, vaadin-grid-column-group"></content>
+
     <div id="spinner"></div>
-    <table id="table" class="table table-striped" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
+    <table id="table" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
       <caption>
         <div id="fixedsizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]">
         </div>
@@ -176,7 +211,12 @@
       <tfoot id="footer" is="vaadin-grid-table-footer" column-tree="[[columnTree]]"></tfoot>
     </table>
 
-    <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]" ios$=[[ios]]>
+    <vaadin-grid-table-outer-scroller
+        id="outerscroller"
+        scroll-target="[[scrollTarget]]"
+        overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
+        ios$="[[ios]]"
+        scrolling$="[[scrolling]]">
       <div id="outersizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
     </vaadin-grid-table-outer-scroller>
 
@@ -193,8 +233,7 @@
       vaadin.elements.grid.IronListBehavior,
       vaadin.elements.grid.TableScrollBehavior,
       Polymer.Templatizer,
-      Polymer.IronResizableBehavior,
-      Polymer.IronScrollTargetBehavior
+      Polymer.IronResizableBehavior
     ],
 
     properties: {
@@ -367,124 +406,11 @@
         }
         el.index = vidx + this._vidxOffset;
         this._virtualIndexToItem[el.index] = el;
+        el.toggleAttribute('odd', el.index % 2);
+        el.toggleAttribute('lastrow', el.index === this.size - 1);
         el.toggleAttribute('hidden', el.index >= this.size);
         this.bindData(el.index, el);
       }, itemSet);
-    },
-
-    /**
-     * Update the models, the position of the
-     * items in the viewport and recycle tiles as needed.
-     */
-    _scrollHandler: function(e) {
-      // clamp the `scrollTop` value
-      var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
-      var delta = scrollTop - this._scrollPosition;
-      var tileHeight, tileTop, kth, recycledTileSet, scrollBottom, physicalBottom;
-      var ratio = this._ratio;
-      var recycledTiles = 0;
-      var hiddenContentSize = this._hiddenContentSize;
-      var currentRatio = ratio;
-      var movingUp = [];
-
-      // track the last `scrollTop`
-      this._scrollPosition = scrollTop;
-
-      // clear cached visible indexes
-      this._firstVisibleIndexVal = null;
-      this._lastVisibleIndexVal = null;
-
-      scrollBottom = this._scrollBottom;
-      physicalBottom = this._physicalBottom;
-
-      // random access
-      if (Math.abs(delta) > this._physicalSize) {
-        this._physicalTop += delta;
-        recycledTiles =  Math.round(delta / this._physicalAverage);
-      }
-      // scroll up
-      else if (delta < 0) {
-        var topSpace = scrollTop - this._physicalTop;
-        var virtualStart = this._virtualStart;
-
-        recycledTileSet = [];
-
-        kth = this._physicalEnd;
-        currentRatio = topSpace / hiddenContentSize;
-
-        // move tiles from bottom to top
-        while (
-            // approximate `currentRatio` to `ratio`
-            currentRatio < ratio &&
-            // recycle less physical items than the total
-            recycledTiles < this._physicalCount &&
-            // ensure that these recycled tiles are needed
-            virtualStart - recycledTiles > 0 &&
-            // ensure that the tile is not visible
-            physicalBottom - this._getPhysicalSizeIncrement(kth) > scrollBottom
-        ) {
-
-          tileHeight = this._getPhysicalSizeIncrement(kth);
-          currentRatio += tileHeight / hiddenContentSize;
-          physicalBottom -= tileHeight;
-          recycledTileSet.push(kth);
-          recycledTiles++;
-          kth = (kth === 0) ? this._physicalCount - 1 : kth - 1;
-        }
-
-        movingUp = recycledTileSet;
-        recycledTiles = -recycledTiles;
-      }
-      // scroll down
-      else if (delta > 0) {
-        var bottomSpace = physicalBottom - scrollBottom;
-        var virtualEnd = this._virtualEnd;
-        var lastVirtualItemIndex = this._virtualCount-1;
-
-        recycledTileSet = [];
-
-        kth = this._physicalStart;
-        currentRatio = bottomSpace / hiddenContentSize;
-
-        // move tiles from top to bottom
-        while (
-            // approximate `currentRatio` to `ratio`
-            currentRatio < ratio &&
-            // recycle less physical items than the total
-            recycledTiles < this._physicalCount &&
-            // ensure that these recycled tiles are needed
-            virtualEnd + recycledTiles < lastVirtualItemIndex &&
-            // ensure that the tile is not visible
-            this._physicalTop + this._getPhysicalSizeIncrement(kth) < scrollTop
-          ) {
-
-          tileHeight = this._getPhysicalSizeIncrement(kth);
-          currentRatio += tileHeight / hiddenContentSize;
-
-          this._physicalTop += tileHeight;
-          recycledTileSet.push(kth);
-          recycledTiles++;
-          kth = (kth + 1) % this._physicalCount;
-        }
-      }
-
-      if (this._virtualCount < this.size) {
-        this._adjustVirtualIndexOffset(delta);
-      }
-
-      if (recycledTiles === 0) {
-        // Try to increase the pool if the list's client height isn't filled up with physical items
-        if (physicalBottom < scrollBottom || this._physicalTop > scrollTop) {
-          this._increasePoolIfNeeded();
-        }
-      } else {
-        this._virtualStart = this._virtualStart + recycledTiles;
-        this._physicalStart = this._physicalStart + recycledTiles;
-        this._update(recycledTileSet, movingUp);
-      }
-
-      this._translateStationaryElements();
-      this._scheduleReorder();
     }
 
   });
