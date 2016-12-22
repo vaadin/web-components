@@ -130,6 +130,11 @@
         <dom-module id="datasource-select-all">
           <template>
             <style>
+              #grid {
+                --vaadin-grid-body-row-selected-cell: {
+                  background-color: var(--primary-background-color);
+                };
+              }
             </style>
             <x-data-source data-source="{{dataSource}}"></x-data-source>
             <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
