@@ -151,7 +151,7 @@
       // clamp the `scrollTop` value
       var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
       var delta = scrollTop - this._scrollPosition;
-      var tileHeight, tileTop, kth, recycledTileSet, scrollBottom, physicalBottom;
+      var tileHeight, kth, recycledTileSet, scrollBottom, physicalBottom;
       var ratio = this._ratio;
       var recycledTiles = 0;
       var hiddenContentSize = this._hiddenContentSize;
@@ -171,10 +171,9 @@
       // random access
       if (Math.abs(delta) > this._physicalSize) {
         this._physicalTop += delta;
-        recycledTiles =  Math.round(delta / this._physicalAverage);
-      }
+        recycledTiles = Math.round(delta / this._physicalAverage);
       // scroll up
-      else if (delta < 0) {
+      } else if (delta < 0) {
         var topSpace = scrollTop - this._physicalTop;
         var virtualStart = this._virtualStart;
 
@@ -205,9 +204,8 @@
 
         movingUp = recycledTileSet;
         recycledTiles = -recycledTiles;
-      }
       // scroll down
-      else if (delta > 0) {
+      } else if (delta > 0) {
         var bottomSpace = physicalBottom - scrollBottom;
         var virtualEnd = this._virtualEnd;
         var lastVirtualItemIndex = this._virtualCount-1;

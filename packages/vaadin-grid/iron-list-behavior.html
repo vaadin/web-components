@@ -15,7 +15,6 @@
     var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
     var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
     var DEFAULT_PHYSICAL_COUNT = 25;
-    var SECRET_TABINDEX = -100;
 
     return ({
 
@@ -531,7 +530,7 @@
        *
        * @param {!Array<number>=} itemSet
        */
-       _updateMetrics: function(itemSet) {
+      _updateMetrics: function(itemSet) {
         // Make sure we distributed all the physical items
         // so we can measure them
         Polymer.dom.flush();
@@ -634,7 +633,7 @@
 
         // amortize height adjustment, so it won't trigger repaints very often
         if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._optPhysicalSize) {
-          this.$.items.style.height = this._estScrollHeight + 'px'
+          this.$.items.style.height = this._estScrollHeight + 'px';
           this._scrollHeight = this._estScrollHeight;
         }
       },
@@ -660,7 +659,7 @@
         this._updateMetrics();
 
         // estimate new physical offset
-        var estPhysicalTop = Math.floor(this._virtualStart / this._itemsPerRow)  * this._physicalAverage;
+        var estPhysicalTop = Math.floor(this._virtualStart / this._itemsPerRow) * this._physicalAverage;
         this._physicalTop = estPhysicalTop;
 
         var currentTopItem = this._physicalStart;

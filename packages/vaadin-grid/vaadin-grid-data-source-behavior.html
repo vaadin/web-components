@@ -250,7 +250,7 @@
     },
 
     _loadPage: function(page) {
-      if (this._cache[page]) {} else {
+      if (!this._cache[page]) {
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page] && this.dataSource) {
           this._pendingRequests[page] = true;

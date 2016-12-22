@@ -68,7 +68,7 @@
       it('should invoke frozen element translate handler', function(done) {
         var spy = sinon.spy(scroller, '_translateStationaryElements');
         outerScroller.scrollLeft = 1;
-        setTimeout(function () {
+        setTimeout(function() {
           expect(spy.called).to.be.true;
           done();
         }, 200);
@@ -117,7 +117,9 @@
           var has = false;
           try {
             has = Boolean(new MouseEvent('x'));
-          } catch (_) {}
+          } catch (_) {
+            // continue regardless of error
+          }
           return has;
         })();
 
@@ -142,12 +144,12 @@
               0,    /* screenX */
               0,    /* screenY */
               props.clientX, props.clientY,
-              false, /*ctrlKey */
-              false, /*altKey */
-              false, /*shiftKey */
-              false, /*metaKey */
-              0,     /*button */
-              null   /*relatedTarget*/);
+              false, /* ctrlKey */
+              false, /* altKey */
+              false, /* shiftKey */
+              false, /* metaKey */
+              0,     /* button */
+              null   /* relatedTarget*/);
           }
           node.dispatchEvent(e);
         }

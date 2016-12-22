@@ -42,7 +42,7 @@
 
       var _columnTree = [];
 
-      for (var c = rootColumns;;) {
+      for (var c = rootColumns; ; ) {
         _columnTree.push(c);
         if (!this._hasColumnGroups(c)) {
           break;
@@ -84,8 +84,7 @@
           if (!this._arrayEquals(arr1[i], arr2[i])) {
             return false;
           }
-        }
-        else if (arr1[i] != arr2[i]) {
+        } else if (arr1[i] != arr2[i]) {
           return false;
         }
       }
