@@ -39,5 +39,5 @@
     "demo": "demo/**/*",
     "test": "test/**/*"
   },
-  "version": "4.0.0-alpha4"
+  "version": "4.0.0-beta1"
 }
