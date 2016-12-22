@@ -129,13 +129,13 @@
 
       _toggleContent: function(isAttached, cellContent, insertionPoint) {
         if (isAttached) {
-          if (!Polymer.dom(cellContent).parentNode) {
+          if (Polymer.dom(cellContent).parentNode !== this.target) {
             Polymer.dom(this.target).appendChild(cellContent);
-            Polymer.dom(this).appendChild(insertionPoint);
           }
+          Polymer.dom(this).appendChild(insertionPoint);
         } else {
           this.debounce('remove-content', function() {
-            if (!this.isAttached && cellContent.parentNode) {
+            if (!this.isAttached && Polymer.dom(cellContent).parentNode === this.target) {
               Polymer.dom(this.target).removeChild(cellContent);
             }
           }, 1);
