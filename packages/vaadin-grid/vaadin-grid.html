@@ -58,7 +58,7 @@ Custom property | Description | Default
 
   </style>
   <template>
-    <vaadin-grid-table id="scroller" loading$=[[loading]] bind-data="[[_bindData]]" size="[[size]]"
+    <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
         row-details-template="[[rowDetailsTemplate]]">
       <content></content>

@@ -110,7 +110,7 @@
       /**
        * `true` while data is being requested from the data source.
        */
-      loading: Boolean,
+      _loading: Boolean,
 
       _cache: {
         value: function() {
@@ -162,7 +162,7 @@
       //
       var uncachedPages = this._uncachedPagesForPhysicalItems();
       if (uncachedPages.length > 0) {
-        this.loading = true;
+        this._loading = true;
         // avoid debounce during scroll to mitigate scrollbar flickering on iOS.
         // debouncing only when data is needed to be fetched. eager loading
         // should somewhat prevent from getting here when scrolling slowly.
@@ -265,7 +265,7 @@
             delete this._pendingRequests[page];
             this._updateItems(page, items);
 
-            this.loading = this._pendingRequests.length > 0;
+            this._loading = this._pendingRequests.length > 0;
           }.bind(this));
         }
       }
