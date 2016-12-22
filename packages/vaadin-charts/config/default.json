@@ -37,16 +37,6 @@
     ],
     "doc": "*.md",
     "demo": "demo/**/*",
-    "directives": [
-      "directives/vaadin-charts.js",
-      "directives/vaadin-charts.js.map",
-      "directives/vaadin-charts.ts"
-    ],
-    "react": [
-      "react/index.js",
-      "react/ShadyDOMChildrenOperations.js",
-      "react/ShadyDOMLazyTree.js"
-    ],
     "test": "test/**/*"
   },
   "version": "4.0.0-alpha4"
