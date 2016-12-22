@@ -87,7 +87,10 @@
        *
        * `params.pageSize` Current page size
        */
-      dataSource: Function,
+      dataSource: {
+        type: Function,
+        observer: '_dataSourceChanged'
+      },
 
       /**
        * `true` while data is being requested from the data source.
@@ -273,6 +276,12 @@
 
     _pageSizeChanged: function(pageSize, oldPageSize) {
       if (oldPageSize !== undefined && pageSize !== oldPageSize) {
+        this.clearCache();
+      }
+    },
+
+    _dataSourceChanged: function(dataSource, oldDataSource) {
+      if (oldDataSource !== undefined) {
         this.clearCache();
       }
     }
