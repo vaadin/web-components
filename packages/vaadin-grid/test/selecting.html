@@ -19,7 +19,7 @@
 
   <test-fixture id="default">
     <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
+      <vaadin-grid style="width: 200px; height: 200px;" size="10">
         <vaadin-grid-column>
           <template>foo</template>
         </vaadin-grid-column>
@@ -31,7 +31,7 @@
   </test-fixture>
   <test-fixture id="multiselect">
     <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
+      <vaadin-grid style="width: 200px; height: 200px;">
         <vaadin-grid-selection-column>
         </vaadin-grid-selection-column>
         <vaadin-grid-selection-column>
@@ -235,22 +235,24 @@
         expect(grid._columnTree[1][2]._grid).to.eql(grid);
       });
 
-      it('should not have indeterminate when nothing is selected', function() {
+      it('should be unchecked when nothing is selected', function() {
         expect(selectAllCheckbox.indeterminate).to.be.false;
+        expect(selectAllCheckbox.checked).to.be.false;
       });
 
       it('should have indeterminate when an item is selected', function() {
         firstBodyCheckbox.click();
+
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
       // iOS needs both to show the indeterminate status
       it('should have indeterminate and select-all when an item is selected', function() {
-        expect(selectionColumn.selectAll).to.be.false;
+        expect(selectAllCheckbox.checked).to.be.false;
         expect(selectAllCheckbox.indeterminate).to.be.false;
 
         firstBodyCheckbox.click();
-        expect(selectionColumn.selectAll).to.be.true;
+        expect(selectAllCheckbox.checked).to.be.true;
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
@@ -275,8 +277,50 @@
         expect(selectAllCheckbox.indeterminate).to.be.false;
 
         grid.set('selectedItems', ['baz', 'foo', 'hi']);
+        expect(selectionColumn.selectAll).to.be.false;
         expect(selectAllCheckbox.indeterminate).to.be.true;
+      });
+
+      it('should not have selectAll after selecting a single item', function() {
+        firstBodyCheckbox.click();
+
+        expect(selectionColumn.selectAll).to.be.false;
+      });
+
+      it('should not have selectAll after deselecting a single item', function() {
+        selectAllCheckbox.click();
+
+        firstBodyCheckbox.click();
+
+        expect(selectionColumn.selectAll).to.be.false;
+      });
+
+      it('should have selectAll after selecting all manually', function() {
+        selectAllCheckbox.click();
+        firstBodyCheckbox.click();
+
+        firstBodyCheckbox.click();
+
         expect(selectionColumn.selectAll).to.be.true;
+        expect(selectAllCheckbox.indeterminate).to.be.false;
+      });
+
+      it('should not reassign selectedItems array when selecting all manually', function() {
+        selectAllCheckbox.click();
+        firstBodyCheckbox.click();
+
+        var details = [];
+        var spy = sinon.spy(function(e) {
+          // event object gets reused so need to store the details before asserting.
+          details.push(e.detail);
+        });
+        grid.addEventListener('selected-items-changed', spy);
+
+        firstBodyCheckbox.click();
+
+        expect(details.length).to.eql(2); // should have 3rd event with path 'selectedItems'
+        expect(details[0].path).to.eql('selectedItems.splices');
+        expect(details[1].path).to.eql('selectedItems.length');
       });
 
       it('should select-all when all items are selected', function() {
@@ -284,7 +328,7 @@
           var cellContent = getCellContent(getRowCells(row)[0]);
           var checkbox = cellContent.children[0];
           checkbox.click();
-        })
+        });
 
         expect(selectionColumn.selectAll).to.be.true;
         expect(selectAllCheckbox.indeterminate).to.be.false;
@@ -297,7 +341,7 @@
           var cellContent = getCellContent(getRowCells(row)[0]);
           var checkbox = cellContent.children[0];
           checkbox.click();
-        })
+        });
 
         expect(selectionColumn.selectAll).to.be.false;
         expect(selectAllCheckbox.indeterminate).to.be.false;

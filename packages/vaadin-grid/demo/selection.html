@@ -143,7 +143,7 @@
             <vaadin-grid id="grid" data-source="[[dataSource]]" inverted$="[[inverted]]" size="200">
               <vaadin-grid-column width="40px" flex-grow="0" >
                 <template class="header">
-                  <input type="checkbox" checked="{{inverted::change}}" indeterminate="[[indeterminate]]"/>
+                  <input type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
                 </template>
                 <template>
                   <input type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
@@ -181,6 +181,15 @@
                 this.$.grid.selectedItems = [];
                 this.updateStyles();
                 this.indeterminate = false;
+              },
+
+              _invert: function(e) {
+                this.inverted = !this.inverted;
+              },
+
+               // iOS needs indeterminated + checked at the same time
+              _isChecked: function(inverted, indeterminate) {
+                return indeterminate || inverted;
               },
 
               _selectItem: function(e) {

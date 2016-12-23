@@ -3,8 +3,8 @@
 
 <dom-module id="vaadin-grid-selection-column">
   <template>
-    <template class="header">
-      <input hidden$="[[!_grid.items]]" type="checkbox" checked="{{selectAll::change}}" indeterminate="[[_indeterminate]]"/>
+    <template class="header" id="defaultHeaderTemplate">
+      <input hidden$="[[!_grid.items]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"/>
     </template>
     <template>
       <input type="checkbox" checked="{{selected::change}}" />
@@ -37,16 +37,7 @@
 
       _grid: Object,
 
-      _indeterminate: Boolean,
-
-      _indeterminateDisabled: {
-        value: function() {
-          // in IE when clicking on indeterminated checkbox it does not switch checked, it
-          // just removes indeterminate flag without emiting any notification.
-          // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/944049/
-          return /Trident|Edge/i.test(navigator.userAgent);
-        }
-      }
+      _indeterminate: Boolean
     },
 
     observers: [
@@ -66,6 +57,15 @@
       }
     },
 
+    _headerTemplateChanged: function(headerTemplate) {
+      // needed to override the dataHost correctly in case internal template is used.
+      var templatizer = new vaadin.elements.grid.Templatizer(headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost);
+      templatizer._instanceProps = {};
+      templatizer.template = headerTemplate;
+
+      this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
+    },
+
     _findGrid: function(elm) {
       while (elm && elm.localName != 'vaadin-grid') {
         elm = elm.parentElement;
@@ -83,11 +83,6 @@
         return;
       }
 
-      if (!selectAll && this._indeterminate) {
-        this.selectAll = true;
-        return;
-      }
-
       grid.selectedItems = selectAll && grid.items ? grid._filter(grid.items) : [];
     },
 
@@ -98,25 +93,28 @@
       return i == b.length;
     },
 
-    _onSelectedItemsChanged: function(e) {
-      if (!this._grid.selectedItems.length) {
-        // Unselect-all and remove indeterminate when user manually deselects all checkboxes
-        this._indeterminate = false;
-        this.selectAll = false;
-      } else if (this._arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
-        // Select-all and remove indeterminate when user manually selects all checkboxes
-        this._indeterminate = false;
-        this.selectAll = true;
-      } else {
-        // Any other status is indeterminated
-        this._indeterminate = !this._indeterminateDisabled;
+    _onSelectAll: function(e) {
+      this.selectAll = this._indeterminate || !this.selectAll;
+    },
 
-        // - iOS needs indeterminated + checked at the same time
-        // - For browsers not supporting indeterminate, set checked to false
-        this._selectAllChangeLock = true;
-        this.selectAll = !this._indeterminateDisabled;
-        this._selectAllChangeLock = false;
+    // iOS needs indeterminated + checked at the same time
+    _isChecked: function(selectAll, indeterminate) {
+      return indeterminate || selectAll;
+    },
+
+    _onSelectedItemsChanged: function(e) {
+      this._selectAllChangeLock = true;
+      if (!this._grid.selectedItems.length) {
+        this.selectAll = false;
+        this._indeterminate = false;
+      } else if (this._arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
+        this.selectAll = true;
+        this._indeterminate = false;
+      } else {
+        this.selectAll = false;
+        this._indeterminate = true;
       }
+      this._selectAllChangeLock = false;
     }
   });
 </script>
