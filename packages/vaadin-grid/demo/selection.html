@@ -129,10 +129,18 @@
         <datasource-select-all></datasource-select-all>
         <dom-module id="datasource-select-all">
           <template>
-            <style>
+            <style is="custom-style">
+              #grid[inverted] {
+                --vaadin-grid-body-cell: {
+                  background-color: var(--paper-grey-100);
+                };
+                --vaadin-grid-body-row-selected-cell: {
+                  background-color: var(--primary-background-color);
+                };
+              }
             </style>
             <x-data-source data-source="{{dataSource}}"></x-data-source>
-            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+            <vaadin-grid id="grid" data-source="[[dataSource]]" inverted$="[[inverted]]" size="200">
               <vaadin-grid-column width="40px" flex-grow="0" >
                 <template class="header">
                   <input type="checkbox" checked="{{inverted::change}}" />
@@ -167,6 +175,7 @@
 
               _resetSelection: function(inverted) {
                 this.$.grid.selectedItems = [];
+                this.updateStyles();
               },
 
               _selectItem: function(e) {
