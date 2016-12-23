@@ -175,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var itemKey;
       var y = listRect.top;
       while (y < listHeight) {
-        item = document.elementFromPoint(listRect.left + 100, y + 2);
+        var item = document.elementFromPoint(listRect.left + 100, y + 2);
         itemKey = item.textContent || item.innerText;
 
         if (item.parentNode && item.parentNode._templateInstance) {

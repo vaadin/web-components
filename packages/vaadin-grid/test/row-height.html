@@ -104,7 +104,7 @@
   <script>
     describe('rows', function() {
 
-      var grid, scroller, rows, defaultHeight, wrappers;
+      var grid, scroller, header, rows, defaultHeight, wrappers;
       var dataSourceDelay = 200;
 
       function init(fixtureName) {
@@ -119,11 +119,12 @@
         grid.addEventListener('items-assigned', listener);
 
         scroller = grid.$.scroller;
+        header = scroller.$.header;
         rows = getRows(scroller.$.items);
         Polymer.dom.flush();
         grid.customStyle['--vaadin-grid-cell'] = 'border: none !important';
         grid.updateStyles();
-        defaultHeight = getRows(grid.$.scroller.$.header)[0].clientHeight;
+        defaultHeight = getRows(header)[0].clientHeight;
 
         grid.dataSource = function(info, callback) {
           setTimeout(function() {

@@ -54,24 +54,15 @@
   </test-fixture>
 
   <script>
-    function getCell(index) {
+    function getCell(grid, index) {
       return grid.$.scroller.$.items.querySelectorAll('td')[index];
     }
 
-    function getFirstCell() {
-      return getCell(0);
+    function getFirstCell(grid) {
+      return getCell(grid, 0);
     }
 
-    function getHeaderCell(index) {
-      return grid.$.scroller.$.header.querySelectorAll('th')[index];
-    }
-
-    function getFirstHeaderCell() {
-      return getHeaderCell(0);
-    }
-
-
-    function simulateScrollToStart(done) {
+    function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
 
@@ -88,7 +79,7 @@
       table.scrollTop -= 2500;
     }
 
-    function simulateScrollToEnd(done) {
+    function simulateScrollToEnd(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
 
@@ -103,10 +94,6 @@
 
       table.addEventListener('scroll', handler);
       table.scrollTop += 2500;
-    }
-
-    function scrollToEnd() {
-      grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight;
     }
 
     describe('data-source', function() {
@@ -151,7 +138,7 @@
 
         grid.async(function() {
           container.dataSource.reset();
-          simulateScrollToEnd(function() {
+          simulateScrollToEnd(grid, function() {
             grid.async(function() {
               // 9 is last page out of 100 items / 10 per page.
               var pages = container.dataSource.getCalls().map(function(call) {
@@ -168,9 +155,9 @@
         grid.pageSize = 10;
         // wait first to initially load first pages.
         grid.async(function() {
-          simulateScrollToEnd(function() {
+          simulateScrollToEnd(grid, function() {
             container.dataSource.reset();
-            simulateScrollToStart(function() {
+            simulateScrollToStart(grid, function() {
               grid.async(function() {
                 var pages = container.dataSource.getCalls().map(function(call) {
                   return call.args[0].page;
@@ -194,7 +181,7 @@
         };
 
         grid.async(function() {
-          expect(getFirstCell().textContent).to.contain('foo0');
+          expect(getFirstCell(grid).textContent).to.contain('foo0');
           done();
         }, loadDebounceTime);
       });
