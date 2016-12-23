@@ -50,7 +50,7 @@
       value: {
         type: String,
         observer: '_valueChanged',
-        //notify: true already set in IronFormBehavior, setting this to true will make two value-changed events(?)
+        // notify: true already set in IronFormBehavior, setting this to true will make two value-changed events(?)
         notify: false
       },
 
@@ -267,7 +267,7 @@
         // announce. Makes OSX VoiceOver to announce the complete value instead.
         this._inputElementValue = '';
         this.async(function() {
-          this._inputElementValue =  this._getItemLabel(this.$.overlay._focusedItem);
+          this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
           this._setSelectionRange();
         }, 1); // 1ms delay needed for OSX VoiceOver to realise input value was reset
       }
@@ -410,18 +410,10 @@
     _clearSelectionRange: function() {
       // Setting selection range focuses and/or moves the caret in some browsers,
       // and there's no need to modify the selection range if the input isn't focused anyway.
-      //
-      // Notice also that document.activeElement doesn't return elements from inside shadow root
-      // and therefore we're using _focusedInput method here.
-      if (this._focusedInput() === this.inputElement && this.inputElement.setSelectionRange) {
+      if (document.activeElement === this.inputElement && this.inputElement.setSelectionRange) {
         var caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
         this.inputElement.setSelectionRange(caretIndex, caretIndex);
       }
-    },
-
-    _focusedInput: function() {
-      // Use either light DOM input or one from local DOM.
-      return Polymer.dom(this).querySelector('input:focus') || Polymer.dom(this.root).querySelector('input:focus');
     },
 
     _filterChanged: function(filter) {
@@ -528,9 +520,9 @@
     },
 
     _setOverlayItems: function(items) {
-      //TODO: There is something wrong with observers and using set function
+      // TODO: There is something wrong with observers and using set function
       // see here: https://github.com/Polymer/polymer/issues/3254
-      //As a workaround setting/notifying the observer with the value undefined helps
+      // As a workaround setting/notifying the observer with the value undefined helps
       this.$.overlay.notifyPath('_items', undefined);
       this.$.overlay.set('_items', items);
 
@@ -570,7 +562,7 @@
         this.close();
       }
 
-      //stop this private event from leaking outside.
+      // stop this private event from leaking outside.
       event.stopPropagation();
     },
 
