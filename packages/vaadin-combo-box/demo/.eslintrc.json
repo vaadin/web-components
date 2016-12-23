@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "no-unused-vars": 0
+  },
+  "globals": {
+    "elements": false,
+    "elementsJson": false
+  }
+}
+
