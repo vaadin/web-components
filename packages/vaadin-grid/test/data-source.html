@@ -173,8 +173,8 @@
       it('should bind item to templates', function(done) {
         container.dataSource = function(opts, callback) {
           var items = [];
-          for (var i=0; i<opts.pageSize; i++) {
-            items.push('foo' + (opts.page*opts.pageSize + i));
+          for (var i = 0; i < opts.pageSize; i++) {
+            items.push('foo' + (opts.page * opts.pageSize + i));
           }
 
           callback(items);

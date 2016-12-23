@@ -119,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         setTimeout(function() {
           var rowHeight = getFirstItemFromList(list).offsetHeight;
           var viewportHeight = list.offsetHeight;
-          var itemsPerViewport = viewportHeight/rowHeight;
+          var itemsPerViewport = viewportHeight / rowHeight;
 
           assert.equal(list.firstVisibleIndex, Math.floor(list.size - itemsPerViewport));
 
