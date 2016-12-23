@@ -153,7 +153,7 @@
 
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
 
-            table.addEventListener('scroll', function () {
+            table.addEventListener('scroll', function() {
               scroller.flushDebouncer('reorderrows');
               expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
               done();

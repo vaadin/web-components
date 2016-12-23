@@ -1,23 +1,18 @@
-sudo: require
+sudo: false
 dist: trusty
 language: node_js
-node_js: "5.3"
+node_js: stable
+
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  google-chrome: latest
+
 cache:
   directories:
-      - node_modules
-install:
-      - travis_retry npm install
-      - npm install -g coveralls@2.11.3
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+    - node_modules
+
 script:
-  - wct --local=chrome
-after_success: "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
+  - gulp lint
+  - travis_retry xvfb-run wct --local=chrome
+
+after_success:
+  - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"

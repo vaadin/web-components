@@ -22,7 +22,7 @@
 <body>
   <test-fixture id="no-headers">
     <template>
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column>
           <template>body-0</template>
         </vaadin-grid-column>
@@ -40,7 +40,7 @@
 
   <test-fixture id="1column1group">
     <template>
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column frozen>
           <template class="header">header-0</template>
           <template>body-0</template>
@@ -64,7 +64,7 @@
 
   <test-fixture id="nested">
     <template>
-      <vaadin-grid size="1000">
+      <vaadin-grid size="10">
         <vaadin-grid-column-group>
           <template class="header">group-0</template>
           <template class="footer">group-0</template>
@@ -116,7 +116,7 @@
 
   <test-fixture id="repeat">
     <template>
-      <vaadin-grid style="height: 400px; width: 400px;" size="1000">
+      <vaadin-grid style="height: 400px; width: 400px;" size="10">
         <template is="dom-repeat">
           <vaadin-grid-column-group>
             <template class="header">group</template>
@@ -220,13 +220,13 @@
         });
 
         it('the group header cell should ignore changes from child columns', function() {
-          var cell_group0 = getHeaderCell(0, 1);
-          var cell_header1 = getHeaderCell(1, 1);
+          var cellGroup0 = getHeaderCell(0, 1);
+          var cellHeader1 = getHeaderCell(1, 1);
 
-          cell_group0._flexGrowChanged = sinon.spy();
-          cell_header1.column.flexGrow = 3;
+          cellGroup0._flexGrowChanged = sinon.spy();
+          cellHeader1.column.flexGrow = 3;
 
-          expect(cell_group0._flexGrowChanged.callCount).to.eql(1);
+          expect(cellGroup0._flexGrowChanged.callCount).to.eql(1);
         });
 
         it('should set colSpan to spanned header cells', function() {
@@ -308,7 +308,7 @@
           //  | group-0             | group-1                                  |          |
           //  |           |         | group-2            | group-3             |          |
           //  |           |         |          |         | header-4 | header-5 | header-6 |
-          ///////////////////////////////////////////////////////////////////////////////////
+          //  -----------------------------------------------------------------------------
           //  |           |         |          |         | footer-4 | footer-5 | footer-6 |
           //  |           |         | group-2            | group-3             |          |
           //  | group-0             | group-1                                  |          |
@@ -371,7 +371,7 @@
             [2, 2], [2, 3], [2, 4], [2, 5]
           ].forEach(function(a) {
             expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
-          })
+          });
         });
 
         it('frozen in a group should propagate frozen attribute up and down in footers', function() {
@@ -381,7 +381,7 @@
             [2, 1]
           ].forEach(function(a) {
             expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
-          })
+          });
         });
 
         it('should have last row fully visible when scrolled to end', function(done) {

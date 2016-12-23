@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function getScrollbarWidth() {
     // Create the measurement node
-    var scrollDiv = document.createElement("div");
+    var scrollDiv = document.createElement('div');
     scrollDiv.style.width = '100px';
     scrollDiv.style.height = '100px';
     scrollDiv.style.overflow = 'scroll';
@@ -29,7 +29,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function infiniteDataSource(opts, callback) {
-    callback(Array.apply(null, Array(opts.pageSize)).map(function(item, index) { return {value: 'foo' + index}; } ));
+    callback(Array.apply(null, Array(opts.pageSize)).map(function(item, index) {
+      return {
+        value: 'foo' + index
+      };
+    }));
   }
 
   function findElementInList(container, selector) {
@@ -61,12 +65,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function scrollToEnd(grid, callback) {
     var table = grid.$.scroller.$.table;
-    var listener = function () {
-      grid.async(function () {
+    var listener = function() {
+      grid.async(function() {
         table.scrollTop = table.scrollHeight;
       }, 1);
 
-      grid.debounce('scroll-done', function () {
+      grid.debounce('scroll-done', function() {
         // Ensure rows are in order
         grid.flushDebouncer('reorderrows');
         table.removeEventListener('scroll', listener);

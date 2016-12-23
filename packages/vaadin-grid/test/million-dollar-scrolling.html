@@ -70,7 +70,7 @@
     function simulateScrollToStart(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
-      table.addEventListener('scroll', function () {
+      table.addEventListener('scroll', function() {
         if (grid.$.scroller.$.table.scrollTop > 0) {
           table.scrollTop -= 2500;
         } else {
@@ -83,7 +83,7 @@
     function simulateScrollToEnd(done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
-      var listener = function () {
+      var listener = function() {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
         } else {
@@ -122,7 +122,8 @@
           it('should be able to scroll to half-way', function(done) {
             var viewportHeight = 300;
             var itemHeight = 30;
-            grid.$.scroller.$.table.scrollTop = Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
+            grid.$.scroller.$.table.scrollTop =
+              Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
 
             Polymer.Base.async(function() {
               expect(getCell(0).index).to.be.closeTo(grid.size / 2, 10);

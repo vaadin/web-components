@@ -263,7 +263,7 @@
       scrollbarWidth: {
         value: function() {
           // Create the measurement node
-          var scrollDiv = document.createElement("div");
+          var scrollDiv = document.createElement('div');
           scrollDiv.style.width = '100px';
           scrollDiv.style.height = '100px';
           scrollDiv.style.overflow = 'scroll';
@@ -322,12 +322,12 @@
     // scrollbars visible at the same time when scrollbar width is 0
     // (OSX's "show scrollbars: when scrolling").
     // 1. hide the outerscroller altogether when scrollbar width is 0
-    _hideOuterScroller: function (scrollbarWidth, safari) {
+    _hideOuterScroller: function(scrollbarWidth, safari) {
       return scrollbarWidth === 0 && !safari;
     },
     // 2. Safari (on desktop and IOS) requires outer scroller to work properly
     // so in that case we hide the table's scrollbar instead.
-    _hideTableOverflow: function (scrollbarWidth, safari) {
+    _hideTableOverflow: function(scrollbarWidth, safari) {
       return scrollbarWidth === 0 && safari;
     },
 
@@ -380,7 +380,7 @@
         var row = document.createElement('tr', 'vaadin-grid-table-row');
         row.target = this.domHost;
         physicalItems[i] = row;
-        row.setAttribute('hidden', ''); //hidden by default, removed when data is bound.
+        row.setAttribute('hidden', ''); // hidden by default, removed when data is bound.
         Polymer.dom(this.$.items).appendChild(row);
       }
 

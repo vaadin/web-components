@@ -17,7 +17,7 @@
 
   <test-fixture id="frozen-columns">
     <template>
-      <vaadin-grid style="width: 200px; height: 400px;" size="1000">
+      <vaadin-grid style="width: 200px; height: 400px;" size="10">
         <vaadin-grid-column frozen>
           <template>foo</template>
           <template class="header">foo</template>
@@ -89,7 +89,7 @@
           it('should not move while content scrolls horizontally', function(done) {
             var initialContainerRect = containerElement.getBoundingClientRect();
             var borderTopWidth = containerElement.style.borderTopWidth || '0';
-            var containerTop = parseInt(borderTopWidth) + initialContainerRect.top + 2 ;
+            var containerTop = parseInt(borderTopWidth) + initialContainerRect.top + 2;
             var cells = getRowCells(containerRows[0]);
 
             scroller.$.table.addEventListener('scroll', function() {

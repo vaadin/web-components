@@ -75,7 +75,7 @@
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
 
-      var handler = function () {
+      var handler = function() {
         if (grid.$.scroller.$.table.scrollTop > 0) {
           table.scrollTop -= 2500;
         } else {
@@ -92,7 +92,7 @@
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
 
-      var handler = function () {
+      var handler = function() {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
         } else {
@@ -137,7 +137,7 @@
         grid.pageSize = 10;
 
         grid.async(function() {
-          //assuming grid has about 30 items
+          // assuming grid has about 30 items
           expect(container.dataSource.callCount).to.eql(3);
           expect(container.dataSource.firstCall.args[0].page).to.eql(0);
           expect(container.dataSource.secondCall.args[0].page).to.eql(1);
@@ -154,9 +154,10 @@
           simulateScrollToEnd(function() {
             grid.async(function() {
               // 9 is last page out of 100 items / 10 per page.
-              var pages = container.dataSource.getCalls()
-                  .map(function(call) { return call.args[0].page; });
-                expect(pages).to.contain.members([7,8,9]);
+              var pages = container.dataSource.getCalls().map(function(call) {
+                return call.args[0].page;
+              });
+              expect(pages).to.contain.members([7, 8, 9]);
               done();
             }, loadDebounceTime);
           });
@@ -185,7 +186,7 @@
       it('should bind item to templates', function(done) {
         container.dataSource = function(opts, callback) {
           var items = [];
-          for (var i=0;i<opts.pageSize;i++) {
+          for (var i=0; i<opts.pageSize; i++) {
             items.push('foo' + (opts.page*opts.pageSize + i));
           }
 
@@ -203,7 +204,7 @@
 
         grid.async(function() {
           expect(container.dataSource.called).to.be.true;
-          var oldFirstItem = grid._cache[0]
+          var oldFirstItem = grid._cache[0];
           expect(oldFirstItem).to.be.ok;
 
           container.dataSource.reset();
