@@ -3,8 +3,8 @@
 
 <dom-module id="vaadin-grid-selection-column">
   <template>
-    <template class="header">
-      <input hidden$="[[!_grid.items]]" type="checkbox" checked="{{selectAll::change}}" />
+    <template class="header" id="defaultHeaderTemplate">
+      <input hidden$="[[!_grid.items]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"/>
     </template>
     <template>
       <input type="checkbox" checked="{{selected::change}}" />
@@ -35,15 +35,35 @@
         notify: true
       },
 
-      _grid: Object
+      _grid: Object,
+
+      _indeterminate: Boolean
     },
 
     observers: [
-      '_onSelectAllChanged(selectAll, _grid)',
+      '_onSelectAllChanged(selectAll, _grid)'
     ],
+
+    detached: function() {
+      if (this._grid) {
+        this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
+      }
+    },
 
     attached: function() {
       this._grid = this._findGrid(this);
+      if (this._grid) {
+        this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
+      }
+    },
+
+    _headerTemplateChanged: function(headerTemplate) {
+      // needed to override the dataHost correctly in case internal template is used.
+      var templatizer = new vaadin.elements.grid.Templatizer(headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost);
+      templatizer._instanceProps = {};
+      templatizer.template = headerTemplate;
+
+      this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
     },
 
     _findGrid: function(elm) {
@@ -59,7 +79,42 @@
     },
 
     _onSelectAllChanged: function(selectAll, grid) {
+      if (this._selectAllChangeLock) {
+        return;
+      }
+
       grid.selectedItems = selectAll && grid.items ? grid._filter(grid.items) : [];
+    },
+
+    // Return true if array `a` contains all the items in `b`
+    // We need this when sorting or to preserve selection after filtering.
+    _arrayContains: function(a, b) {
+      for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++);
+      return i == b.length;
+    },
+
+    _onSelectAll: function(e) {
+      this.selectAll = this._indeterminate || !this.selectAll;
+    },
+
+    // iOS needs indeterminated + checked at the same time
+    _isChecked: function(selectAll, indeterminate) {
+      return indeterminate || selectAll;
+    },
+
+    _onSelectedItemsChanged: function(e) {
+      this._selectAllChangeLock = true;
+      if (!this._grid.selectedItems.length) {
+        this.selectAll = false;
+        this._indeterminate = false;
+      } else if (this._arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
+        this.selectAll = true;
+        this._indeterminate = false;
+      } else {
+        this.selectAll = false;
+        this._indeterminate = true;
+      }
+      this._selectAllChangeLock = false;
     }
   });
 </script>
