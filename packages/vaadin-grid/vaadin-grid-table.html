@@ -115,6 +115,17 @@
       ::content > vaadin-grid-column-group {
         display: none;
       }
+
+      /* Style overrides required to make copying the selection to clipboard work properly (on Safari) */
+      :host([copying]) tr {
+        opacity: 0 !important;
+        position: static !important;
+        display: table-row !important;
+      }
+      :host([copying]) td,
+      :host([copying]) th {
+        display: table-cell !important;
+      }
     </style>
   </template>
 </dom-module>
@@ -276,7 +287,8 @@
     ],
 
     listeners: {
-      'property-changed': '_columnPropChanged'
+      'property-changed': '_columnPropChanged',
+      'copy': '_onCopy'
     },
 
     _columnPropChanged: function(e) {
@@ -294,6 +306,15 @@
 
       if (e.detail.path === 'hidden') {
         this.notifyResize();
+      }
+    },
+
+    _onCopy: function() {
+      if (this.safari) {
+        this.toggleAttribute('copying', true);
+        this.async(function() {
+          this.toggleAttribute('copying', false);
+        }, 1);
       }
     },
 
