@@ -27,8 +27,10 @@
       </vaadin-grid-filter>
     </template>
     <script>
-      Polymer({
-        is: 'filter-wrapper'
+      document.addEventListener('WebComponentsReady', function() {
+        Polymer({
+          is: 'filter-wrapper'
+        });
       });
     </script>
   </dom-module>

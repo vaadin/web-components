@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         overflow: hidden;
       }
     </style>
-    
+
     <iron-list style$="[[_computedListSize(listSize)]]" items="[[data]]" as="item" id="list" grid>
       <template>
         <div class="item">
@@ -39,42 +39,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </dom-module>
 
 <script>
-  Polymer({
-    is: 'x-grid',
+  document.addEventListener('WebComponentsReady', function() {
+    Polymer({
+      is: 'x-grid',
 
-    properties: {
-      data: {
-        type: Array
+      properties: {
+        data: {
+          type: Array
+        },
+
+        itemSize: {
+          type: Number,
+          value: 100
+        },
+
+        listSize: {
+          type: Number,
+          value: 300
+        },
+
+        pre: {
+          type: Boolean
+        },
       },
 
-      itemSize: {
-        type: Number,
-        value: 100
+      get list() {
+        return this.$.list;
       },
 
-      listSize: {
-        type: Number,
-        value: 300
+      _computeItemSize: function(item) {
+        var css = this.pre ? 'white-space:pre;' : '';
+        css += 'height: ' + (this.itemSize) + 'px;';
+        css += 'width: ' + (this.itemSize) + 'px;';
+        return css;
       },
 
-      pre: {
-        type: Boolean
-      },
-    },
-
-    get list() {
-      return this.$.list;
-    },
-
-    _computeItemSize: function(item) {
-      var css = this.pre ? 'white-space:pre;' : '';
-      css += 'height: ' + (this.itemSize) + 'px;';
-      css += 'width: ' + (this.itemSize) + 'px;';
-      return css;
-    },
-
-    _computedListSize: function(listHeight) {
-      return 'height: ' + (listHeight) + 'px;' + 'width: ' + (listHeight) + 'px;';
-    }
+      _computedListSize: function(listHeight) {
+        return 'height: ' + (listHeight) + 'px;' + 'width: ' + (listHeight) + 'px;';
+      }
+    });
   });
 </script>
