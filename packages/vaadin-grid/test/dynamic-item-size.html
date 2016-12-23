@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         list.size = 100;
 
         flush(function() {
-          var firstItem = getFirstItemFromList(list);
+          var firstItem = getFirstVisibleItem(list);
 
           expect(firstItem.offsetHeight).to.equal(100);
 

@@ -21,16 +21,18 @@
     "infiniteDataSource": false,
     "getRows": false,
     "getRowCells": false,
+    "getCell": false,
+    "getFirstCell": false,
     "getCellContent": false,
     "getBodyCellContent": false,
     "getHeaderCellContent": false,
-    "getFirstItemFromList": false,
-    "getLastItemFromList": false,
-    "getItemFromPoint": false,
+    "getFirstVisibleItem": false,
+    "getLastVisibleItem": false,
     "simulateScroll": false,
     "getScrollbarWidth": false,
     "scrollToEnd": false,
     "isFullOfItems": false,
+    "isVisible": false,
     "defaultCellWidth": false
   }
 }

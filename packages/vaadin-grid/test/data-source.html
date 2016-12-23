@@ -54,14 +54,6 @@
   </test-fixture>
 
   <script>
-    function getCell(grid, index) {
-      return grid.$.scroller.$.items.querySelectorAll('td')[index];
-    }
-
-    function getFirstCell(grid) {
-      return getCell(grid, 0);
-    }
-
     function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
@@ -181,7 +173,7 @@
         };
 
         grid.async(function() {
-          expect(getFirstCell(grid).textContent).to.contain('foo0');
+          expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
           done();
         }, loadDebounceTime);
       });

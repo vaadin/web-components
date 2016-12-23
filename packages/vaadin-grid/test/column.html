@@ -155,14 +155,14 @@
 
       describe('cell template', function() {
         it('should read template from light DOM', function() {
-          expect(grid.$.scroller._physicalItems[0].cells[0].textContent).to.contain('cell');
+          expect(getCellContent(grid.$.scroller._physicalItems[0].cells[0]).textContent).to.contain('cell');
         });
       });
 
       describe('header templates', function() {
         it('should read templates from light DOM', function() {
-          expect(grid.$.scroller.$.header._rows[0].cells[0].textContent).to.contain('group header1');
-          expect(grid.$.scroller.$.header._rows[1].cells[0].textContent).to.contain('header1');
+          expect(getCellContent(grid.$.scroller.$.header._rows[0].cells[0]).textContent).to.contain('group header1');
+          expect(getCellContent(grid.$.scroller.$.header._rows[1].cells[0]).textContent).to.contain('header1');
         });
       });
     });

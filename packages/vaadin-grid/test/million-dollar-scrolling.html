@@ -50,10 +50,6 @@
   </test-fixture>
 
   <script>
-    function getCell(grid, index) {
-      return grid.$.scroller.$.items.querySelectorAll('td')[index];
-    }
-
     function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
@@ -113,14 +109,14 @@
               Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
 
             Polymer.Base.async(function() {
-              expect(getCell(grid, 0).index).to.be.closeTo(grid.size / 2, 10);
+              expect(getFirstCell(grid).index).to.be.closeTo(grid.size / 2, 10);
               done();
             }, 300);
           });
 
           it('should be able to scroll to end', function(done) {
             scrollToEnd(grid, function() {
-              expect(getLastItemFromList(grid.$.scroller).textContent).to.contain('item' + (grid.size - 1));
+              expect(getCellContent(getLastVisibleItem(grid.$.scroller)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });
@@ -130,7 +126,7 @@
             this.timeout(1000000);
 
             simulateScrollToStart(grid, function() {
-              expect(getFirstItemFromList(grid.$.scroller).textContent).to.contain('item0');
+              expect(getCellContent(getFirstVisibleItem(grid.$.scroller)).textContent).to.contain('item0');
               done();
             });
           });
@@ -140,7 +136,7 @@
             this.timeout(1000000);
 
             simulateScrollToEnd(grid, function() {
-              expect(getLastItemFromList(grid.$.scroller).textContent).to.contain('item' + (grid.size - 1));
+              expect(getCellContent(getLastVisibleItem(grid.$.scroller)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });
