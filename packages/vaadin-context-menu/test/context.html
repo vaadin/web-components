@@ -29,10 +29,16 @@
     <test-fixture id="default">
       <template>
         <vaadin-context-menu>
+          <template>
+            <paper-menu id="menu">
+              <paper-item>The menu target: [[target.textContent]]</paper-item>
+            </paper-menu>
+          </template>
           <div id="target">
+            Foo
             <x-foo></x-foo>
           </div>
-          <div id="another"></div>
+          <div id="another">Bar</div>
         </vaadin-context-menu>
       </template>
     </test-fixture>
@@ -54,6 +60,14 @@
           });
 
           expect(menu._context.target).to.eql(target);
+          expect(Polymer.dom(menu.$.overlay).textContent).to.contain(target.textContent);
+
+          menu.fire('vaadin-contextmenu', {}, {
+            node: another
+          });
+
+          expect(menu._context.target).to.eql(another);
+          expect(Polymer.dom(menu.$.overlay).textContent).to.contain(another.textContent);
         });
 
         it('should use details as context details', function() {
