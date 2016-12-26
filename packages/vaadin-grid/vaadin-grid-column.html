@@ -135,12 +135,17 @@
       '_flexGrowChanged(flexGrow)',
       '_widthChanged(width)',
       '_templateChanged(template)',
-      '_frozenChanged(frozen)',
+      '_frozenChanged(frozen, isAttached)',
       '_hiddenChanged(hidden)'
     ],
 
-    _frozenChanged: function(frozen) {
-      this.fire('property-changed', {path: 'frozen', value: frozen});
+    _frozenChanged: function(frozen, isAttached) {
+      // since `frozen` is defined in ColumnBaseBehavior, this observer is triggered
+      // normally before the column is actually attached to the DOM.
+      // For events to bubble in Safari 9, element needs to be attached.
+      if (isAttached) {
+        this.fire('property-changed', {path: 'frozen', value: frozen});
+      }
     },
 
     _templateChanged: function(template) {

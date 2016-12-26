@@ -114,6 +114,19 @@
         expect(group.frozen).to.be.true;
       });
 
+      // this test is aimed for Safari 9, see #552
+      it('should propagate frozen from children when attached', function() {
+        var parent = group.parentElement;
+        Polymer.dom(parent).removeChild(group);
+
+        columns[0].frozen = true;
+
+        Polymer.dom(parent).appendChild(group);
+        Polymer.dom.flush();
+
+        expect(group.frozen).to.be.true;
+      });
+
       it('should propagate frozen to child columns', function() {
         group.frozen = true;
 
