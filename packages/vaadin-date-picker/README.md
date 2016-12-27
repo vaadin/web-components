@@ -11,7 +11,7 @@
 
 <!--
 ```
-<custom-element-demo>
+<custom-element-demo height="550">
   <template>
     <link rel="import" href="vaadin-date-picker.html">
     <next-code-block></next-code-block>
