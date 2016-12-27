@@ -46,6 +46,7 @@
 
     detached: function() {
       if (this._grid) {
+        this.unlisten(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
     },
@@ -53,6 +54,7 @@
     attached: function() {
       this._grid = this._findGrid(this);
       if (this._grid) {
+        this.listen(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
     },

@@ -42,6 +42,14 @@
           <vaadin-grid-selection-column>
           </vaadin-grid-selection-column>
         </vaadin-grid-column-group>
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-filter path="value" value="[[filter]]">
+              <input id="filter" value="{{filter::input}}">
+            </vaadin-grid-filter>
+          </template>
+          <template></template>
+        </vaadin-grid-column>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -345,6 +353,21 @@
 
         expect(selectionColumn.selectAll).to.be.false;
         expect(selectAllCheckbox.indeterminate).to.be.false;
+      });
+
+      it('should update select all when filters change', function(done) {
+        grid.items = [{value: 'foo'}, {value: 'bar'}];
+
+        firstBodyCheckbox.click();
+
+        var filter = grid.querySelector('#filter');
+        filter.value = 'foo';
+        Polymer.Base.fire('input', {}, {node: filter});
+
+        grid.async(function() {
+          expect(selectionColumn.selectAll).to.be.true;
+          done();
+        }, 200); // filter-changed has a 200ms debounce
       });
 
     });
