@@ -182,9 +182,8 @@
     ];
 
     /* exported `elements` for demos */
-    var elements = [];
-    elementsJson.forEach(function(e) {
-      elements.push(e.name);
+    var elements = elementsJson.map(function(e) {
+      return e.name;
     });
 
   </script>

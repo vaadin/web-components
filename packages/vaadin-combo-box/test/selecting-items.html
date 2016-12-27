@@ -25,10 +25,17 @@
     var valueChangedSpy;
     var selectedItemChangedSpy;
 
+    function dispatchTap(elm) {
+      elm.dispatchEvent(new CustomEvent('tap', {
+        bubbles: true
+      }));
+    }
+
     beforeEach(function() {
       combobox = fixture('combobox');
       combobox.items = ['foo', 'bar'];
       input = combobox.$$('input');
+
       valueChangedSpy = sinon.spy();
       combobox.addEventListener('value-changed', valueChangedSpy);
 
@@ -57,6 +64,84 @@
 
       expect(spy.calledOnce).to.be.true;
       expect(spy.args[0][0].detail.item).to.eql(combobox.items[0]);
+    });
+
+    it('should fire `selection-changed` in short touch gestures', function(done) {
+      combobox.opened = true;
+
+      var spy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', spy);
+
+      var xy = MockInteractions.middleOfNode(combobox.$.overlay.$.scroller);
+      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
+
+      combobox.async(function() {
+        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
+        dispatchTap(firstItem);
+
+        expect(spy.calledOnce).to.be.true;
+        done();
+      }, 200);
+    });
+
+    it('should not fire `selection-changed` in long touch gestures', function(done) {
+      combobox.opened = true;
+
+      var spy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', spy);
+
+      var xy = MockInteractions.middleOfNode(combobox.$.overlay.$.scroller);
+      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
+
+      combobox.async(function() {
+        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
+        dispatchTap(firstItem);
+
+        expect(spy.calledOnce).to.be.false;
+        done();
+      }, 350);
+    });
+
+    it('should not fire `selection-changed` after scrolling for grace period of 300ms', function(done) {
+      // We need more items to increase scroller
+      var items = [];
+      for (var i = 1; i < 50; i++) items.push(i);
+      combobox.items = items;
+
+      var spy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', spy);
+
+      // open the combo box, and move the scroll
+      combobox.opened = true;
+      combobox.$.overlay.$.selector.scrollToIndex(20);
+
+      combobox.async(function() {
+        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
+        dispatchTap(firstItem);
+
+        expect(spy.calledOnce).to.be.false;
+        done();
+      }, 200);
+    });
+
+    it('should fire `selection-changed` after the scrolling grace period', function(done) {
+      var items = [];
+      for (var i = 1; i < 50; i++) items.push(i);
+      combobox.items = items;
+
+      var spy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', spy);
+
+      combobox.opened = true;
+      combobox.$.overlay.$.selector.scrollToIndex(20);
+
+      combobox.async(function() {
+        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
+        dispatchTap(firstItem);
+
+        expect(spy.calledOnce).to.be.true;
+        done();
+      }, 350);
     });
 
     it('should select by using JS api', function() {
