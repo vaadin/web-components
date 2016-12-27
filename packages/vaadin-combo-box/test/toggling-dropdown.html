@@ -224,6 +224,14 @@
         expect(combobox.opened).to.be.true;
       });
 
+      it('should not close popup when clicking on any overlay children', function() {
+        combobox.open();
+
+        combobox.$.overlay.$.scroller.click();
+
+        expect(combobox.opened).to.be.true;
+      });
+
       it('should close on clicking icon', function() {
         combobox.open();
 
