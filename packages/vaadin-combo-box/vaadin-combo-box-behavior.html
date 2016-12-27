@@ -552,7 +552,7 @@
      * @return {boolean}
      */
     _isValidValue: function(value) {
-      return value !== NaN && value !== undefined && value !== null; // eslint-disable-line use-isnan
+      return value !== undefined && value !== null;
     },
 
     _overlaySelectedItemChanged: function(event, detail) {
