@@ -64,7 +64,7 @@
       it('should stamp the details template', function() {
         expandRow(1);
         var cells = getRowCells(bodyRows[1]);
-        expect(cells[1].textContent.trim()).to.equal('1-details');
+        expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
       });
 
       it('should have correct bounds', function() {

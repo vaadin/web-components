@@ -94,20 +94,12 @@
   </test-fixture>
 
   <script>
-    function getCell(index) {
-      return grid.$.scroller.$.items.querySelectorAll('td')[index];
-    }
-
-    function getFirstCell() {
-      return getCell(0);
-    }
-
-    function getHeaderCell(index) {
+    function getHeaderCell(grid, index) {
       return grid.$.scroller.$.header.querySelectorAll('th')[index];
     }
 
-    function getFirstHeaderCell() {
-      return getHeaderCell(0);
+    function getFirstHeaderCell(grid) {
+      return getHeaderCell(grid, 0);
     }
 
     describe('templating', function() {
@@ -127,7 +119,7 @@
           done();
         });
 
-        getCell(0).click();
+        getCell(grid, 0).click();
       });
 
       it('should not fire an event when a focusable element is clicked', function(done) {
@@ -135,7 +127,7 @@
           done('Should not come here!');
         });
 
-        var input = getCell(1).querySelector('paper-input');
+        var input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
         input.focus();
         input.click();
 
@@ -144,11 +136,11 @@
 
       describe('using functions inside templates', function() {
         it('should work inside cell templates', function() {
-          expect(getFirstCell().textContent).to.contain('foo0');
+          expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
         });
 
         it('should header templates', function() {
-          expect(getFirstHeaderCell().textContent).to.contain('fooheader1');
+          expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('fooheader1');
         });
       });
 
@@ -158,12 +150,12 @@
         });
 
         it('should bind inside cell templates', function() {
-          expect(getCell(0).textContent).to.contain('foobar');
-          expect(getCell(5).textContent).to.contain('foobar');
+          expect(getCellContent(getCell(grid, 0)).textContent).to.contain('foobar');
+          expect(getCellContent(getCell(grid, 5)).textContent).to.contain('foobar');
         });
 
         it('should two-way bind parent properties inside cell templates', function() {
-          var input = getCell(1).querySelector('paper-input');
+          var input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
           expect(input.value).to.eql('foobar');
 
           input.value = 'value';
@@ -172,11 +164,11 @@
         });
 
         it('should bind inside header templates', function() {
-          expect(getFirstHeaderCell().textContent).to.contain('foobar');
+          expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('foobar');
         });
 
         it('should two-way bind parent properties inside header templates', function() {
-          var input = getHeaderCell(1).querySelector('paper-input');
+          var input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
           expect(input.value).to.eql('foobar');
 
           input.value = 'value';
@@ -187,7 +179,7 @@
 
       describe('using event handlers inside templates', function() {
         it('should add event listeners inside cell templates', function() {
-          var input = getCell(1).querySelector('paper-input');
+          var input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
 
           input.value = 'foo';
 
@@ -195,7 +187,7 @@
         });
 
         it('should add event listeners inside header templates', function() {
-          var input = getHeaderCell(1).querySelector('paper-input');
+          var input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
 
           input.invalid = 'foo';
 
@@ -209,12 +201,12 @@
         });
 
         it('should bind inside cell templates', function() {
-          expect(getCell(2).querySelector('paper-input').value).to.contain('bar');
-          expect(getCell(7).querySelector('paper-input').value).to.contain('bar');
+          expect(getCellContent(getCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
+          expect(getCellContent(getCell(grid, 7)).querySelector('paper-input').value).to.contain('bar');
         });
 
         it('should two-way bind parent path inside cell templates', function() {
-          var input = getCell(2).querySelector('paper-input');
+          var input = getCellContent(getCell(grid, 2)).querySelector('paper-input');
           expect(input.value).to.eql('bar');
 
           input.value = 'value';
@@ -223,11 +215,11 @@
         });
 
         it('should bind inside header templates', function() {
-          expect(getHeaderCell(2).querySelector('paper-input').value).to.contain('bar');
+          expect(getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
         });
 
         it('should two-way bind parent path inside header templates', function() {
-          var input = getHeaderCell(2).querySelector('paper-input');
+          var input = getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input');
           expect(input.value).to.eql('bar');
 
           input.value = 'value';
@@ -239,24 +231,24 @@
       describe('using instance paths inside templates', function() {
         var input;
         beforeEach(function() {
-          input = getCell(3).querySelector('paper-input');
+          input = getCellContent(getCell(grid, 3)).querySelector('paper-input');
           expect(input.value).to.eql('foo0');
         });
 
         it('should two-way bind instance path inside cell templates', function() {
           input.value = 'bar0';
 
-          expect(getCell(3).instance.item.value).to.eql('bar0');
+          expect(getCell(grid, 3).instance.item.value).to.eql('bar0');
         });
 
         it('should notify other cell templates for instance path changes', function() {
           input.value = 'bar0';
 
-          expect(getCell(4).textContent).to.contain('bar0');
+          expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
         });
 
         it('should fire an event when item path changes', function(done) {
-          var item = getCell(0).instance.item;
+          var item = getCell(grid, 0).instance.item;
           grid.addEventListener('item-changed', function(e) {
             expect(e.detail.item).to.eql(item);
             expect(e.detail.path).to.eql('value');

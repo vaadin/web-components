@@ -93,15 +93,8 @@
             var cells = getRowCells(containerRows[0]);
 
             scroller.$.table.addEventListener('scroll', function() {
-              var scrollingCellContent = getItemFromPoint(
-                initialContainerRect.left + defaultCellWidth * 1.5, containerTop);
-
-              expect(scrollingCellContent).to.equal(getCellContent(cells[2]));
-
-              var frozenCellContent = getItemFromPoint(
-                initialContainerRect.left + defaultCellWidth * 0.5, containerTop);
-              expect(frozenCellContent).to.equal(getCellContent(cells[0]));
-
+              expect(isVisible(cells[0])).to.equal(true);
+              expect(isVisible(cells[2])).to.equal(true);
               done();
             });
 

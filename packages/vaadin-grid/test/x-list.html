@@ -45,79 +45,81 @@
 </dom-module>
 
 <script>
-  Polymer({
-    is: 'x-list',
+  document.addEventListener('WebComponentsReady', function() {
+    Polymer({
+      is: 'x-list',
 
-    properties: {
+      properties: {
 
-      columnTree: Array,
+        columnTree: Array,
 
-      data: {
-        type: Array
-      },
+        data: {
+          type: Array
+        },
 
-      size: {
-        value: 100
-      },
+        size: {
+          value: 100
+        },
 
-      // height + cell border
-      itemHeight: {
-        type: Number,
-        value: 100 + 1,
-        reflectToAttribute: true,
-        observer: '_itemHeightChanged'
-      },
+        // height + cell border
+        itemHeight: {
+          type: Number,
+          value: 100 + 1,
+          reflectToAttribute: true,
+          observer: '_itemHeightChanged'
+        },
 
-      listHeight: {
-        type: Number,
-        value: 300
-      },
+        listHeight: {
+          type: Number,
+          value: 300
+        },
 
-      pre: {
-        type: Boolean
-      },
+        pre: {
+          type: Boolean
+        },
 
-      primitive: {
-        value: false,
-        type: Boolean
-      },
+        primitive: {
+          value: false,
+          type: Boolean
+        },
 
-      bindData: {
-        value: function() {
-          return function(index, row) {
+        bindData: {
+          value: function() {
+            return function(index, row) {
 
-          };
+            };
+          }
         }
+
+      },
+
+      ready: function() {
+        var columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+        this.columnTree = columns.length > 0 ? [columns] : [[this.$.column]];
+      },
+
+      _itemHeightChanged: function(itemHeight) {
+        this.customStyle['--cell-height'] = (itemHeight + 'px');
+        this.updateStyles();
+      },
+
+      get list() {
+        return this.$.scroller;
+      },
+
+      _computedItemHeight: function(item) {
+        var css = this.pre ? 'white-space:pre;' : '';
+        if (item.height) {
+          css += this.itemHeight === 0 ? '' : 'height: ' + (item.height) + 'px;';
+        } else if (this.itemHeight) {
+          css += 'height: ' + (this.itemHeight) + 'px;';
+        }
+        return css;
+      },
+
+      _computedListHeight: function(listHeight) {
+        return 'height: ' + (listHeight) + 'px;';
       }
-
-    },
-
-    ready: function() {
-      var columns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
-      this.columnTree = columns.length > 0 ? [columns] : [[this.$.column]];
-    },
-
-    _itemHeightChanged: function(itemHeight) {
-      this.customStyle['--cell-height'] = (itemHeight + 'px');
-      this.updateStyles();
-    },
-
-    get list() {
-      return this.$.scroller;
-    },
-
-    _computedItemHeight: function(item) {
-      var css = this.pre ? 'white-space:pre;' : '';
-      if (item.height) {
-        css += this.itemHeight === 0 ? '' : 'height: ' + (item.height) + 'px;';
-      } else if (this.itemHeight) {
-        css += 'height: ' + (this.itemHeight) + 'px;';
-      }
-      return css;
-    },
-
-    _computedListHeight: function(listHeight) {
-      return 'height: ' + (listHeight) + 'px;';
-    }
+    });
   });
 </script>

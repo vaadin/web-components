@@ -117,9 +117,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         list.scrollToIndex(99);
 
         setTimeout(function() {
-          var rowHeight = getFirstItemFromList(list).offsetHeight;
+          var rowHeight = getFirstVisibleItem(list).offsetHeight;
           var viewportHeight = list.offsetHeight;
-          var itemsPerViewport = viewportHeight/rowHeight;
+          var itemsPerViewport = viewportHeight / rowHeight;
 
           assert.equal(list.firstVisibleIndex, Math.floor(list.size - itemsPerViewport));
 
@@ -164,16 +164,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       list.size = 100;
 
       flush(function() {
-        assert.equal(getFirstItemFromList(list).textContent, '0');
+        assert.equal(getCellContent(getFirstVisibleItem(list)).textContent, '0');
 
         list.size = 0;
 
         flush(function() {
-          assert.notEqual(getFirstItemFromList(list).textContent, '0');
+          assert.equal(getFirstVisibleItem(list), null);
           list.size = 100;
 
           flush(function() {
-            assert.equal(getFirstItemFromList(list).textContent, '0');
+            assert.equal(getCellContent(getFirstVisibleItem(list)).textContent, '0');
             done();
           });
         });

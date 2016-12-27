@@ -50,24 +50,7 @@
   </test-fixture>
 
   <script>
-    function getCell(index) {
-      return grid.$.scroller.$.items.querySelectorAll('td')[index];
-    }
-
-    function getFirstCell() {
-      return getCell(0);
-    }
-
-    function getHeaderCell(index) {
-      return grid.$.scroller.$.header.querySelectorAll('th')[index];
-    }
-
-    function getFirstHeaderCell() {
-      return getHeaderCell(0);
-    }
-
-
-    function simulateScrollToStart(done) {
+    function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
       table.addEventListener('scroll', function() {
@@ -80,7 +63,7 @@
       table.scrollTop -= 2500;
     }
 
-    function simulateScrollToEnd(done) {
+    function simulateScrollToEnd(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
       var table = grid.$.scroller.$.table;
       var listener = function() {
@@ -126,14 +109,14 @@
               Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
 
             Polymer.Base.async(function() {
-              expect(getCell(0).index).to.be.closeTo(grid.size / 2, 10);
+              expect(getFirstCell(grid).index).to.be.closeTo(grid.size / 2, 10);
               done();
             }, 300);
           });
 
           it('should be able to scroll to end', function(done) {
             scrollToEnd(grid, function() {
-              expect(getLastItemFromList(grid.$.scroller).textContent).to.contain('item' + (grid.size - 1));
+              expect(getCellContent(getLastVisibleItem(grid.$.scroller)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });
@@ -142,8 +125,8 @@
             grid.$.scroller.$.table.scrollTop = 20000;
             this.timeout(1000000);
 
-            simulateScrollToStart(function() {
-              expect(getFirstItemFromList(grid.$.scroller).textContent).to.contain('item0');
+            simulateScrollToStart(grid, function() {
+              expect(getCellContent(getFirstVisibleItem(grid.$.scroller)).textContent).to.contain('item0');
               done();
             });
           });
@@ -152,8 +135,8 @@
             grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight - 20000;
             this.timeout(1000000);
 
-            simulateScrollToEnd(function() {
-              expect(getLastItemFromList(grid.$.scroller).textContent).to.contain('item' + (grid.size - 1));
+            simulateScrollToEnd(grid, function() {
+              expect(getCellContent(getLastVisibleItem(grid.$.scroller)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });

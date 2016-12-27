@@ -11,6 +11,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
   var defaultCellWidth = 100;
 
+  function getCell(grid, index) {
+    return grid.$.scroller.$.items.querySelectorAll('td')[index];
+  }
+
+  function getFirstCell(grid) {
+    return getCell(grid, 0);
+  }
+
   function getScrollbarWidth() {
     // Create the measurement node
     var scrollDiv = document.createElement('div');
@@ -119,31 +127,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return Math.floor(index / grid._itemsPerRow);
   }
 
-  function getNthItemFromGrid(grid, n, itemSize) {
-    itemSize = itemSize || 100;
-    var gridRect = grid.getBoundingClientRect();
-    var x = gridRect.left + ((n % grid._itemsPerRow) * itemSize) + (itemSize / 2);
-    var y = gridRect.top + (Math.floor(n / grid._itemsPerRow) * itemSize) + (itemSize / 2);
-
-    return getItemFromPoint(x, y);
-  }
-
-  function getFirstItemFromList(list) {
-    var listRect = list.getBoundingClientRect();
-    var top = listRect.top;
-    if (list.$ && list.$.header) {
-      top = list.$.header.getBoundingClientRect().bottom;
+  function getFirstVisibleItem(list) {
+    var visibleRows = getVisibleItems(list);
+    if (visibleRows.length) {
+      return visibleRows[0];
     }
-    return getItemFromPoint(listRect.left + defaultCellWidth * 0.5, top + 1);
+    return null;
   }
 
-  function getLastItemFromList(list) {
-    var listRect = list.getBoundingClientRect();
-    return getItemFromPoint(listRect.left + defaultCellWidth * 0.5, listRect.top + listRect.height - 1);
+  function getLastVisibleItem(list) {
+    var visibleRows = getVisibleItems(list);
+    if (visibleRows.length) {
+      return visibleRows.pop();
+    }
+    return null;
   }
 
-  function getItemFromPoint(x, y) {
-    return document.elementFromPoint(x, y);
+  function getVisibleItems(list) {
+    var rows = getRows(list.$.items);
+    var visibleRows = [];
+    for (var i = 0; i < rows.length; i++) {
+      if (isVisible(rows[i])) {
+        visibleRows.push(rows[i]);
+      }
+    }
+    return visibleRows;
+  }
+
+  // http://stackoverflow.com/a/15203639/1331425
+  function isVisible(el) {
+    var top = el.offsetTop;
+    var left = el.offsetLeft;
+    var width = el.offsetWidth;
+    var height = el.offsetHeight;
+
+    while(el.offsetParent) {
+      el = el.offsetParent;
+      top += el.offsetTop;
+      left += el.offsetLeft;
+    }
+
+    return (
+      top < (window.pageYOffset + window.innerHeight) &&
+      left < (window.pageXOffset + window.innerWidth) &&
+      (top + height) > window.pageYOffset &&
+      (left + width) > window.pageXOffset
+    );
   }
 
   function isFullOfItems(list) {
@@ -175,7 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var itemKey;
       var y = listRect.top;
       while (y < listHeight) {
-        item = document.elementFromPoint(listRect.left + 100, y + 2);
+        var item = document.elementFromPoint(listRect.left + 100, y + 2);
         itemKey = item.textContent || item.innerText;
 
         if (item.parentNode && item.parentNode._templateInstance) {
@@ -190,10 +219,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     };
   }
 
-  function getNthItemRowStart(grid, n) {
-    return n - (n % grid._itemsPerRow);
-  }
-
   function getRows(container) {
     return Polymer.dom(container).querySelectorAll('tr');
   }
@@ -203,7 +228,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getCellContent(cell) {
-    return cell.getContentChildren('content')[0];
+    return cell ? cell.getContentChildren('content')[0] : null;
   }
 
   function getHeaderCellContent(grid, row, col) {

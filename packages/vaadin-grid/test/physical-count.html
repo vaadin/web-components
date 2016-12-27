@@ -52,11 +52,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           var lastItem = list._physicalItems[list.lastVisibleIndex];
           var lastItemHeight = lastItem.offsetHeight;
-          var expectedFinalItem = Math.ceil(container.listHeight/list._physicalAverage) - 1;
+          var expectedFinalItem = Math.ceil(container.listHeight / list._physicalAverage) - 1;
 
           assert.equal(list.offsetHeight, container.listHeight);
           assert.isTrue(isFullOfItems(list));
-          assert.equal(lastItem.textContent, expectedFinalItem);
+          assert.equal(getCellContent(lastItem).textContent, expectedFinalItem);
           done();
         }, 100);
       });

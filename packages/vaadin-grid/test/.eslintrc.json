@@ -1,6 +1,38 @@
 {
   "rules": {
-    "no-unused-vars": 0,
-    "no-undef": 0
+    "no-unused-vars": 0
+  },
+  "globals": {
+    "WCT": false,
+    "HTMLImports": false,
+    "sinon": false,
+    "suite": false,
+    "suiteSetup": false,
+    "setup": false,
+    "fixture": false,
+    "describe": false,
+    "it": false,
+    "assert": false,
+    "expect": false,
+    "test": false,
+    "flush": false,
+    "beforeEach": false,
+    "buildDataSet": false,
+    "infiniteDataSource": false,
+    "getRows": false,
+    "getRowCells": false,
+    "getCell": false,
+    "getFirstCell": false,
+    "getCellContent": false,
+    "getBodyCellContent": false,
+    "getHeaderCellContent": false,
+    "getFirstVisibleItem": false,
+    "getLastVisibleItem": false,
+    "simulateScroll": false,
+    "getScrollbarWidth": false,
+    "scrollToEnd": false,
+    "isFullOfItems": false,
+    "isVisible": false,
+    "defaultCellWidth": false
   }
 }

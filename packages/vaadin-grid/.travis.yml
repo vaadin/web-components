@@ -13,6 +13,7 @@ cache:
 script:
   - gulp lint
   - travis_retry xvfb-run wct --local=chrome
+  - travis_retry xvfb-run wct --local=chrome --dom=shadow
 
 after_success:
   - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"

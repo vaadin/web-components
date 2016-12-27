@@ -648,7 +648,7 @@
       scrollToIndex: function(idx) {
         Polymer.dom.flush();
 
-        idx = Math.min(Math.max(idx, 0), this._virtualCount-1);
+        idx = Math.min(Math.max(idx, 0), this._virtualCount - 1);
         // update the virtual start only when needed
         if (!this._isIndexRendered(idx) || idx >= this._maxVirtualStart) {
           this._virtualStart = idx - 1;
