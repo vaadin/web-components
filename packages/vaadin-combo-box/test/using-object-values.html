@@ -59,6 +59,10 @@
         }, {
           label: 'duplicate value 2',
           value: 'duplicate'
+        }, {
+          label: 'missing value 1'
+        }, {
+          label: 'missing value 2'
         }];
       });
 
@@ -200,11 +204,27 @@
       });
 
       it('should select correct duplicate value', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('selected-item-changed', spy);
+
         selectItem(7);
 
         expect(combobox.selectedItem).to.eql(combobox.items[7]);
         expect(combobox.value).to.eql('duplicate');
         expect(combobox.$.input.bindValue).to.eql('duplicate value 2');
+        expect(spy.callCount).to.eql(1);
+      });
+
+      it('should select correct with missing value', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('selected-item-changed', spy);
+
+        selectItem(9);
+
+        expect(combobox.selectedItem).to.eql(combobox.items[9]);
+        expect(combobox.value).to.eql(combobox.items[9].toString());
+        expect(combobox.$.input.bindValue).to.eql('missing value 2');
+        expect(spy.callCount).to.eql(1);
       });
 
       describe('when custom values are not allowed', function() {

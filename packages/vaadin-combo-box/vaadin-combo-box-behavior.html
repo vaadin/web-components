@@ -92,7 +92,10 @@
        */
       selectedItem: {
         type: Object,
-        notify: true
+        notify: true,
+        value: function() {
+          return null;
+        }
       },
 
       /**
@@ -227,8 +230,8 @@
     },
 
     _getItemValue: function(item) {
-      var value = this.get(this.itemValuePath, item);
-      if (value === undefined || value === null) {
+      var value = item ? this.get(this.itemValuePath, item) : undefined;
+      if (value === undefined) {
         value = item ? item.toString() : '';
       }
       return value;
@@ -361,7 +364,9 @@
     _onClosed: function() {
       if (this._focusedIndex > -1) {
         var focusedItem = this.$.overlay._items[this._focusedIndex];
-        this.selectedItem = focusedItem;
+        if (this.selectedItem !== focusedItem) {
+          this.selectedItem = focusedItem;
+        }
         // make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       } else if (this._inputElementValue === '') {
@@ -444,12 +449,19 @@
       }
 
       if (selectedItem === null) {
-        this.value = this.allowCustomValue ? this.value : '';
+        if (!this.allowCustomValue) {
+          this.value = '';
+        }
+
         this.hasValue = this.value !== '';
         this._inputElementValue = this.value;
       } else {
+        var value = this._getItemValue(selectedItem);
+        if (this.value !== value) {
+          this.value = value;
+        }
+
         this.hasValue = true;
-        this.value = this._getItemValue(selectedItem);
         this._inputElementValue = this._getItemLabel(selectedItem);
       }
 
@@ -459,9 +471,12 @@
 
     _valueChanged: function(value) {
       if (this._isValidValue(value)) {
-        var valueIndex = this._indexOfValue(value, this.filteredItems);
-        var item = valueIndex > -1 && this.filteredItems[valueIndex];
-        this.selectedItem = item ? item : null;
+        if (this._getItemValue(this.selectedItem) !== value) {
+          var valueIndex = this._indexOfValue(value, this.filteredItems);
+          this.selectedItem = valueIndex >= 0 ? this.filteredItems[valueIndex] : null;
+        } else {
+          var item = this.selectedItem;
+        }
 
         if (!item && this.allowCustomValue) {
           this._inputElementValue = value;
@@ -556,7 +571,9 @@
     },
 
     _overlaySelectedItemChanged: function(event, detail) {
-      this.selectedItem = detail.item;
+      if (this.selectedItem !== detail.item) {
+        this.selectedItem = detail.item;
+      }
 
       if (this.opened) {
         this.close();

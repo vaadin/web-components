@@ -230,8 +230,8 @@
      * @return {String}
      */
     getItemLabel: function(item) {
-      var label = this.get(this._itemLabelPath, item);
-      if (label === undefined || label === null) {
+      var label = item ? this.get(this._itemLabelPath, item) : undefined;
+      if (label === undefined) {
         label = item ? item.toString() : '';
       }
       return label;
