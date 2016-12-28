@@ -11,13 +11,14 @@
   <link rel="import" href="../polymer/polymer.html">
   <link rel="import" href="../iron-component-page/iron-component-page.html">
   <link rel="import" href="vaadin-grid.html">
+  <link rel="import" href="vaadin-grid-selection-column.html">
 </head>
 
 <body>
   <vaadin-grid-docs></vaadin-grid-docs>
   <dom-module id="vaadin-grid-docs">
     <template>
-      <iron-component-page id="docs" src="vaadin-grid.html" on-doc-elements-changed="_filterElements" on-doc-behaviors-changed="_filterBehaviors"></iron-component-page>
+      <iron-component-page id="docs" src="index.html" on-doc-elements-changed="_filterElements" on-doc-behaviors-changed="_filterBehaviors"></iron-component-page>
     </template>
     <script>
       document.addEventListener('WebComponentsReady', function() {
