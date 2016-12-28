@@ -76,7 +76,7 @@
     if (HAS_NEW_TOUCH) {
       event = new TouchEvent(type, touchEventInit);
     } else {
-      event = new CustomEvent(type, { bubbles: true, cancelable: true });
+      event = new CustomEvent(type, {bubbles: true, cancelable: true});
       for (var property in touchEventInit) {
         event[property] = touchEventInit[property];
       }

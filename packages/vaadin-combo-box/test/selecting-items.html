@@ -8,7 +8,6 @@
 
   <link rel="import" href="common.html">
   <script src="common.js"></script>
-  <script src="mock-touch-interactions.js"></script>
 </head>
 
 <body>
@@ -142,7 +141,7 @@
 
         expect(spy.calledOnce).to.be.true;
         done();
-      }, 350);
+      }, 500);
     });
 
     it('should select by using JS api', function() {

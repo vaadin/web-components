@@ -59,8 +59,8 @@
   <!-- Common JS code for all examples -->
   <script>
 
-    /* exported `elementsJson` for demos */
-    window.elementsJson = [
+    /* exported elementsJson */
+    var elementsJson = [
       {name: 'Hydrogen', symbol: 'H', number: 1},
       {name: 'Helium', symbol: 'He', number: 2},
       {name: 'Lithium', symbol: 'Li', number: 3},
@@ -181,8 +181,8 @@
       {name: 'Ununoctium', symbol: 'Uuo', number: 118}
     ];
 
-    /* exported `elements` for demos */
-    window.elements = elementsJson.map(function(e) {
+    /* exported elements */
+    var elements = elementsJson.map(function(e) {
       return e.name;
     });
 
