@@ -65,7 +65,6 @@
               --vaadin-grid-body-row-selected-cell: {
                 background-color: var(--paper-grey-100);
               };
-
             }
 
             vaadin-grid#material .cell {
@@ -198,11 +197,11 @@
 
               --vaadin-grid-header-cell: {
                 border-bottom: 1px solid #d4d4d4;
-                background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
+                background-image: linear-gradient(to bottom, #fafafa 2%, #efefef 98%);
               };
 
               --vaadin-grid-footer-cell: {
-                background-image: linear-gradient(to bottom,#fafafa 2%, #efefef 98%);
+                background-image: linear-gradient(to bottom, #fafafa 2%, #efefef 98%);
               };
 
               --vaadin-grid-cell-last-frozen: {
@@ -210,7 +209,7 @@
               };
 
               --vaadin-grid-body-row-active-cell: {
-                background-image: linear-gradient(to bottom,#1b87e3 2%, #166ed5 98%);
+                background-image: linear-gradient(to bottom, #1b87e3 2%, #166ed5 98%);
                 color: #c8dbed;
                 text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
                 border-right-color: #1d69b4;
@@ -231,7 +230,6 @@
               --vaadin-grid-loading-body-cell: {
                 opacity: 0.2;
               };
-
             }
 
             vaadin-grid#valo-grid vaadin-grid-sorter {
@@ -254,7 +252,7 @@
               left: 0;
               right: 0;
               top: 0;
-              bottom: 0px;
+              bottom: 0;
               padding: 5px;
             }
 
@@ -271,7 +269,8 @@
             @keyframes loading-expand {
               0% {
                 transform: scaleX(0);
-              },
+              }
+
               100% {
                 transform: scaleX(1);
               }
@@ -284,7 +283,6 @@
               height: 4px;
               background: var(--primary-color);
               z-index: 1;
-              opacity: 0.5;
               transform-origin: left;
               opacity: 0;
               transition: opacity 0.2s;
@@ -413,7 +411,7 @@
                 border-top: 1px solid rgba(248, 250, 252, 0.9);
                 min-height: 35px;
 
-                background-image: linear-gradient(rgba(108, 160, 218,0), rgba(108, 160, 218,0.15));
+                background-image: linear-gradient(rgba(108, 160, 218, 0), rgba(108, 160, 218, 0.15));
                 background-size: 1px 100%;
                 background-position: 100% 0%;
                 background-repeat: no-repeat;
@@ -436,7 +434,6 @@
               --vaadin-grid-body-row-details-cell: {
                 text-align: center;
               };
-
             }
 
             vaadin-grid#transparent-header input[type=checkbox] {
@@ -557,7 +554,6 @@
                 text-transform: uppercase;
                 padding: 16px;
               };
-
             }
 
             vaadin-grid#rounded-rows .bodycell {
