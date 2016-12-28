@@ -28,15 +28,15 @@ You can do this declaratively with the body [elementname]#template# of a [elemen
 <vaadin-grid>
   <vaadin-grid-column>
     <template class="header">First</template>
-    <template>[[user.name.first]]<template>
+    <template>[[item.user.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">Last</template>
-    <template>[[user.name.last]]<template>
+    <template>[[item.user.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">Email</template>
-    <template>[[user.email]]<template>
+    <template>[[item.user.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
@@ -103,6 +103,6 @@ To synchronize [vaadinelement]#vaadin-grid# with the array, invoke [methodname]#
 user.email = 'amber.crawford@example.co.uk';
 
 // Explicitly notify the grid of changed data to make it update
-grid.notifyPath('items.0.email', user.email);
+grid.notifyPath('items.0.user.email', user.email);
 
 ----
