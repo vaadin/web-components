@@ -34,16 +34,25 @@ When the grid is configured with an array of items as the data source, it provid
     behaviors: [vaadin.elements.grid.ColumnBehavior],
 
     properties: {
+      /**
+       * Width of the cells for this column.
+       */
       width: {
         type: String,
         value: '52px'
       },
 
-      flex: {
+      /**
+       * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+       */
+      flexGrow: {
         type: Number,
         value: 0
       },
 
+      /**
+       * When true it selects all the items.
+       */
       selectAll: {
         type: Boolean,
         value: false,

@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <!--
 
-A `vaadin-grid-column` is used to configure how a column in [vaadinelement]#vaadin-grid# should look like by using HTML templates.
+A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
 A column can have a template for each of the three table sections: header, body and footer.
 
 The `class` attribute is used to differentiate header and footer templates from the body template.
@@ -87,6 +87,10 @@ The `class` attribute is used to differentiate header and footer templates.
         }
       },
 
+      /**
+       * When true, the column is frozen. When a column inside of a column group is frozen,
+       * all of the sibling columns inside the group will get frozen also.
+       */
       frozen: {
         type: Boolean,
         notify: true
@@ -159,11 +163,17 @@ The `class` attribute is used to differentiate header and footer templates.
    */
   vaadin.elements.grid.ColumnBehaviorImpl = {
     properties: {
+      /**
+       * Width of the cells for this column.
+       */
       width: {
         type: String,
         value: '100px'
       },
 
+      /**
+       * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+       */
       flexGrow: {
         type: Number,
         value: 1
@@ -179,6 +189,9 @@ The `class` attribute is used to differentiate header and footer templates.
         }
       },
 
+      /**
+       * When set to true, the cells for this column are hidden.
+       */
       hidden: {
         type: Boolean
       }
@@ -246,11 +259,17 @@ The `class` attribute is used to differentiate header and footer templates.
         }
       },
 
+      /**
+       * Flex grow ratio for the column group as the sum of the ratios of its child columns.
+       */
       flexGrow: {
         type: Number,
         readOnly: true
       },
 
+      /**
+       * Width of the column group as the sum of the widths of its child columns.
+       */
       width: {
         type: String,
         readOnly: true
@@ -258,12 +277,18 @@ The `class` attribute is used to differentiate header and footer templates.
 
       _visibleChildColumns: Array,
 
+      /**
+       * `true` when all of its child columns are hidden.
+       */
       hidden: {
         type: Boolean,
         notify: true,
         readOnly: true
       },
 
+      /**
+       * Represents the number of child columns of this group.
+       */
       colSpan: {
         type: Number,
         notify: true,

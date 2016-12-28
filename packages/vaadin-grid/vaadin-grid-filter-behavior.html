@@ -43,7 +43,10 @@ and handlers for filtering the grid data.
         /**
          * Current filter value.
          */
-        value: String
+        value: {
+          type: String,
+          notify: true
+        }
       },
 
       observers: ['_filterChanged(path, value, isAttached)'],
@@ -56,12 +59,6 @@ and handlers for filtering the grid data.
         }
       }
     });
-
-    /**
-     * Fired when the filter value has changed.
-     *
-     * @event filter-changed
-     */
   </script>
 </dom-module>
 
