@@ -66,12 +66,20 @@ The `class` attribute is used to differentiate header and footer templates.
    */
   vaadin.elements.grid.ColumnBaseBehavior = {
     properties: {
+
+      /**
+       * @private
+       */
       headerTemplate: {
         type: Object,
         value: function() {
           return this._findTemplate('template.header') || null;
         }
       },
+
+      /**
+       * @private
+       */
       footerTemplate: {
         type: Object,
         value: function() {
@@ -161,6 +169,9 @@ The `class` attribute is used to differentiate header and footer templates.
         value: 1
       },
 
+      /**
+       * @private
+       */
       template: {
         type: Object,
         value: function() {
