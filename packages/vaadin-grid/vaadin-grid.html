@@ -6,8 +6,38 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <!--
 
+`vaadin-grid` is a free, high quality data grid / data table Polymer element, part of the Vaadin Core Elements.
+
+### Quick Start
+
+ - Use the <a href="#vaadin-grid-column">vaadin-grid-column</a> and <a href="#vaadin-grid-column">vaadin-grid-column-group</a> elements to configure the grid.
+
+ - Then assign your data array to the `items` property.
+
+
+#### Example:
+
+    <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"}, {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
+      <vaadin-grid-column-group>
+        <vaadin-grid-column>
+          <template class="header">Name</template>
+          <template>[[item.name]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">Surname</template>
+          <template>[[item.surname]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid-column-group>
+
+      <vaadin-grid-column>
+        <template class="header">Role</template>
+        <template>[[item.role]]</template>
+      </vaadin-grid-column>
+    </vaadin-grid>
+
 ### Styling
 The following custom properties and mixins are available for styling:
+
 Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-grid-cell` | Mixin applied to all cells | `{}`
