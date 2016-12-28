@@ -95,7 +95,7 @@ Custom property | Description | Default
   <template>
     <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
-        row-details-template="[[rowDetailsTemplate]]">
+        row-details-template="[[_rowDetailsTemplate]]">
       <content></content>
     </vaadin-grid-table>
   </template>
@@ -119,7 +119,7 @@ Custom property | Description | Default
        */
       size: Number,
 
-      rowDetailsTemplate: Object,
+      _rowDetailsTemplate: Object,
 
       _bindData: {
         value: function() {
@@ -157,7 +157,7 @@ Custom property | Description | Default
 
     ready: function() {
       this._updateColumnTree();
-      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
+      this._rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
     },
 
     _columnPropChanged: function(e) {
