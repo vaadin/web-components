@@ -60,7 +60,7 @@
   <script>
 
     /* exported `elementsJson` for demos */
-    var elementsJson = [
+    window.elementsJson = [
       {name: 'Hydrogen', symbol: 'H', number: 1},
       {name: 'Helium', symbol: 'He', number: 2},
       {name: 'Lithium', symbol: 'Li', number: 3},
@@ -182,7 +182,7 @@
     ];
 
     /* exported `elements` for demos */
-    var elements = elementsJson.map(function(e) {
+    window.elements = elementsJson.map(function(e) {
       return e.name;
     });
 

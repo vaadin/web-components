@@ -74,7 +74,7 @@
       combobox.$.overlay.addEventListener('selection-changed', spy);
 
       var xy = MockInteractions.middleOfNode(combobox.$.overlay.$.scroller);
-      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
+      window.MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
 
       combobox.async(function() {
         var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
@@ -92,7 +92,7 @@
       combobox.$.overlay.addEventListener('selection-changed', spy);
 
       var xy = MockInteractions.middleOfNode(combobox.$.overlay.$.scroller);
-      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
+      window.MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
 
       combobox.async(function() {
         var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
