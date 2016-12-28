@@ -81,12 +81,18 @@
       return this.expandedItems && this.expandedItems.indexOf(item) !== -1;
     },
 
+    /**
+     * Expand the details part of a given item.
+     */
     expandItem: function(item) {
       if (!this._isExpanded(item)) {
         this.push('expandedItems', item);
       }
     },
 
+    /**
+     * Collapse the details part of a given item.
+     */
     collapseItem: function(item) {
       if (this._isExpanded(item)) {
         this.splice('expandedItems', this.expandedItems.indexOf(item), 1);

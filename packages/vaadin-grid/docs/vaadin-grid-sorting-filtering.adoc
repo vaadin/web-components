@@ -9,7 +9,7 @@ layout: page
 
 This section will cover the basics of utilizing the [vaadinelement]#vaadin-grid#'s sorting and filtering helpers.
 Using the helpers will automatically affect the [vaadinelement]#vaadin-grid#'s visible data when using an array data source as described in <<vaadin-grid-assigning-data#vaadin-grid.items.property, "Assigning the Grid Items">>.
-The helpers are useful with custom data sources also since they provide provide out-of-the-box UI controls, visual feedback and hook to the data source callback parameters.
+The helpers are useful with custom data sources also since they provide out-of-the-box UI controls, visual feedback and hook to the data source callback parameters.
 
 [[figure.vaadin-grid.sorting.overview]]
 .A [vaadinelement]#vaadin-grid# displaying three sorting indicators

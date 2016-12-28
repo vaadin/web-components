@@ -12,8 +12,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
  - Use the <a href="#vaadin-grid-column">vaadin-grid-column</a> and <a href="#vaadin-grid-column">vaadin-grid-column-group</a> elements to configure the grid.
 
- - Then assign your data array to the `items` property.
+ - Then assign an array to the <a href="#vaadin-grid:property-items">items</a> property to visualize your data.
 
+ - In addition, you have some helper elements such as
+<a href="#vaadin-grid-filter">vaadin-grid-filter</a>,
+<a href="#vaadin-grid-sorter">vaadin-grid-sorter</a> and
+<a href="#vaadin-grid-selection-column">vaadin-grid-selection-column</a>
+to easily customize the grid.
 
 #### Example:
 
@@ -107,6 +112,11 @@ Custom property | Description | Default
         notify: true
       },
 
+
+      /**
+       * Estimated size of the grid data (number of items).
+       * When using function data sources, it always needs to be set manually.
+       */
       size: Number,
 
       rowDetailsTemplate: Object,
@@ -157,5 +167,16 @@ Custom property | Description | Default
 
       e.stopPropagation();
     }
+
+    /**
+     * Fired when a cell is clicked or taped.
+     *
+     * Note: that this event is used internally by helpers and behaviors, the correct way to handle
+     * user interactions with the grid is by using the `active-item` property instead.
+     *
+     * @event cell-click
+     * @param {Object} detail
+     *  @param {Object} detail.model the internal model bound to the cell element.
+     */
   });
 </script>
