@@ -202,7 +202,7 @@
               <template is="dom-repeat" items="[[columns]]" as="column">
                 <vaadin-grid-column>
                   <template class="header">[[column]]</template>
-                  <template>[[_itemProperty(item, column)]]</template>
+                  <template>[[get(column, item)]]</template>
                 </vaadin-grid-column>
               </template>
             </vaadin-grid>
@@ -216,11 +216,7 @@
               },
 
               ready: function() {
-                this.columns = ['name.first', 'name.last', 'email'];
-              },
-
-              _itemProperty: function(item, column) {
-                return this.get('user.' + column, item);
+                this.columns = ['user.name.first', 'user.name.last', 'user.email'];
               }
             });
           </script>
