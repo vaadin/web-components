@@ -19,5 +19,4 @@ env:
 script:
   - gulp lint
   - travis_retry wct
-  # temporarily disabled (#37)
-  # - travis_retry wct --dom=shadow
+  - travis_retry wct --dom=shadow
