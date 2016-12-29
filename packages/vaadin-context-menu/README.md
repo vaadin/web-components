@@ -21,8 +21,6 @@
     <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="../paper-menu/paper-menu.html">
     <link rel="import" href="../paper-item/paper-item.html">
-    <link rel="import" href="../paper-item/paper-item-body.html">
-    <link rel="import" href="../iron-icons/iron-icons.html">
     <link rel="import" href="vaadin-context-menu.html">
     <next-code-block></next-code-block>
   </template>
@@ -30,26 +28,20 @@
 ```
 -->
 ```html
-<vaadin-context-menu selector="#opener">
+<vaadin-context-menu>
   <template>
     <paper-menu>
-      <paper-item>Item 1</paper-item>
-      <paper-item>Item 2</paper-item>
-      <paper-item>Item 3</paper-item>
-      <paper-item>
-        <iron-icon icon="warning"></iron-icon>
-        <paper-item-body two-line>
-          <div>Item 4 - Line 1</div>
-          <div secondary>Item 4 - Line 2</div>
-        </paper-item-body>
-      </paper-item>
+      <paper-item>First menu item</paper-item>
+      <paper-item>Second menu item</paper-item>
     </paper-menu>
   </template>
-  Right click on this <a id="opener" href="#">link</a> to open the context menu.
+
+  <p>This paragraph has the context menu provided in the above template.</p>
+  <p>Another paragraph with the context menu.</p>
 </vaadin-context-menu>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/screenshot.png" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/-/element/vaadin-context-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/docs/img/vaadin-context-menu-on-content.png" width="355" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/-/element/vaadin-context-menu)
 
 
 ## Contributing
