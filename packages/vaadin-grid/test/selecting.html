@@ -227,6 +227,12 @@
         expect(selectAllCheckbox.hidden).to.be.true;
       });
 
+      it('should show select all checkbox when items is set', function() {
+        grid.items = ['foo'];
+
+        expect(selectAllCheckbox.hidden).to.be.false;
+      });
+
       it('should be possible to override the body template', function() {
         var secondCell = getCellContent(getRowCells(rows[0])[1]);
 
@@ -369,7 +375,6 @@
           done();
         }, 200); // filter-changed has a 200ms debounce
       });
-
     });
   </script>
 

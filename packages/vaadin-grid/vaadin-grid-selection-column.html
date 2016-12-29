@@ -4,7 +4,7 @@
 <dom-module id="vaadin-grid-selection-column">
   <template>
     <template class="header" id="defaultHeaderTemplate">
-      <input hidden$="[[!_grid.items]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"/>
+      <input hidden$="[[_selectAllHidden]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"/>
     </template>
     <template>
       <input type="checkbox" checked="{{selected::change}}" />
@@ -37,7 +37,9 @@
 
       _grid: Object,
 
-      _indeterminate: Boolean
+      _indeterminate: Boolean,
+
+      _selectAllHidden: Boolean
     },
 
     observers: [
@@ -46,6 +48,7 @@
 
     detached: function() {
       if (this._grid) {
+        this.unlisten(this._grid, 'data-source-changed', '_onDataSourceChanged');
         this.unlisten(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
@@ -54,6 +57,7 @@
     attached: function() {
       this._grid = this._findGrid(this);
       if (this._grid) {
+        this.listen(this._grid, 'data-source-changed', '_onDataSourceChanged');
         this.listen(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
@@ -117,6 +121,10 @@
         this._indeterminate = true;
       }
       this._selectAllChangeLock = false;
+    },
+
+    _onDataSourceChanged: function(e) {
+      this._selectAllHidden = !this._grid.items;
     }
   });
 </script>
