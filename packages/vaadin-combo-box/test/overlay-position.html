@@ -90,7 +90,7 @@
 
       wh = window.innerHeight;
       ww = window.innerWidth;
-      horiCenter =  ww * 0.5;
+      horiCenter = ww * 0.5;
       vertTop = 0;
       vertBottom = wh;
 
@@ -156,7 +156,7 @@
 
         comboBox.open();
 
-        expect(dropContentRect().left).to.equal(inputContentRect().left);
+        expect(Math.round(dropContentRect().left)).to.equal(Math.round(inputContentRect().left));
 
         expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });

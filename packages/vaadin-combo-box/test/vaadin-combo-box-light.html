@@ -46,14 +46,6 @@
           expect(comboBox._inputElementValue).to.eql('foo');
           expect(ironInput.value).to.eql('foo');
         });
-
-        // Safari window doesn't have focus in SauceLabs which prevents input fields from focusing also.
-        if (!safari) {
-          it('should find the focused input', function() {
-            ironInput.focus();
-            expect(comboBox._focusedInput()).to.eql(ironInput);
-          });
-        }
       });
 
       it('should prevent default on overlay down', function() {

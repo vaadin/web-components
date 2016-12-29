@@ -88,8 +88,11 @@
     });
 
     describe('navigating the items after overlay opened', function() {
-      beforeEach(function() {
-        arrowDown();
+      beforeEach(function(done) {
+        comboBox.async(function() {
+          arrowDown();
+          done();
+        });
       });
 
       it('should focus on the first item with arrow down', function() {
@@ -146,9 +149,12 @@
     });
 
     describe('selecting items', function() {
-      beforeEach(function() {
-        comboBox.value = 'bar';
-        arrowDown();
+      beforeEach(function(done) {
+        comboBox.async(function() {
+          comboBox.value = 'bar';
+          arrowDown();
+          done();
+        });
       });
 
       it('should select focused item with enter', function() {
@@ -318,19 +324,16 @@
         expect(getInput().bindValue).to.eql('bar');
       });
 
-      // Safari window doesn't have focus in SauceLabs which prevents input fields from focusing also.
-      // iPad and iPhone simulators have the same issue. As a note, touch devices seem to clear the selection
-      // natively when blurring an input.
-      if (!safari && !touchDevice) {
-        it('should remove selection from the input value selecting value', function() {
-          arrowDown();
+      it('should remove selection from the input value selecting value', function() {
+        arrowDown();
 
-          enter();
+        enter();
 
+        comboBox.async(function() {
           expect(getInput().selectionStart).to.eql(3);
           expect(getInput().selectionEnd).to.eql(3);
         });
-      }
+      });
     });
 
     // TODO: these tests are here to prevent possible regressions with using

@@ -28,7 +28,6 @@
 
 
 <script>
-  var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
   describe('toggling the dropdown', function() {
     var combobox;
     var comboboxLight;
@@ -159,17 +158,18 @@
 
             expect(focusedInput).to.be.null;
           });
-        } else if (!safari) { // TODO: Sauce Labs bug doesn't allow Safari in OS X to focus.
+        } else {
           it('should focus input on dropdown open', function() {
-            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input');
+            expect(focusedInput).to.equal(combobox.root.activeElement || document.activeElement);
             expect(focusedInput).to.equal(combobox.$.input);
           });
 
           it('should refocus the input field when closed from icon', function() {
             tapToggleIcon();
 
-            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
-
+            var focusedInput = Polymer.dom(combobox.root).querySelector('input');
+            expect(focusedInput).to.equal(combobox.root.activeElement || document.activeElement);
             expect(focusedInput).to.eql(combobox.$.input);
           });
         }

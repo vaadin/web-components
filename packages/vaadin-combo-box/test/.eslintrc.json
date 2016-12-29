@@ -1,10 +1,12 @@
 {
+  "rules": {
+    "no-unused-vars": 0
+  },
   "globals": {
     "sinon": false,
     "WCT": false,
     "ios": false,
     "chrome": false,
-    "safari": false,
     "getItemArray": false,
     "before": false,
     "beforeEach": false,
@@ -16,6 +18,7 @@
     "it": false,
     "fixture": false,
     "System": false,
+    "HTMLImports": false,
     "MockInteractions": false,
     "touchDevice": false
   }

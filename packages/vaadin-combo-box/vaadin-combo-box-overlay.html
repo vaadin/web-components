@@ -323,7 +323,7 @@
       var firstItemIndex = this.$.selector._physicalStart;
       var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
 
-      var viewportHeight = this.$.selector._viewportHeight || this.$.selector._viewportSize; //Changed in v1.3.0.
+      var viewportHeight = this.$.selector._viewportHeight || this.$.selector._viewportSize; // Changed in v1.3.0.
 
       if (firstItemHeight && viewportHeight) {
         var visibleItems = (viewportHeight - this._viewportTotalPadding) / firstItemHeight;
