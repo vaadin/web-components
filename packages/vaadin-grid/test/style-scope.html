@@ -154,9 +154,12 @@
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
 
             table.addEventListener('scroll', function() {
-              scroller.flushDebouncer('reorderrows');
-              expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
-              done();
+              scroller.flushDebouncer('vaadin-grid-scrolling');
+              // it takes a microtask before the cell contents are reattached.
+              scroller.async(function() {
+                expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
+                done();
+              });
             });
 
             // Deliberately mess the row order...

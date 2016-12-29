@@ -203,7 +203,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         list.$.table.scrollTop = 5000 + list._physicalAverage * steps;
         list._scrollHandler();
         list.flushDebouncer('_debounceTemplate');
-        list.flushDebouncer('reorderrows');
+        list.flushDebouncer('vaadin-grid-scrolling');
 
         var newWrappers = Polymer.dom(container).querySelectorAll('.cell-content');
         // Expect the light dom order unchanged

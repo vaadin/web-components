@@ -80,13 +80,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       grid.debounce('scroll-done', function() {
         // Ensure rows are in order
-        grid.flushDebouncer('reorderrows');
+        grid.flushDebouncer('vaadin-grid-scrolling');
         table.removeEventListener('scroll', listener);
         callback();
       }, 100);
     };
+
     table.addEventListener('scroll', listener);
-    table.scrollTop = table.scrollHeight;
+    grid.async(function() {
+      table.scrollTop = table.scrollHeight;
+    }, 1);
   }
 
   function simulateScroll(config) {
