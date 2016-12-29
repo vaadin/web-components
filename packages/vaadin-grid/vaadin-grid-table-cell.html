@@ -205,9 +205,9 @@
         vaadinGridTableCellBehavior
       ],
 
-      observers: ['_headerTemplateChanged(headerTemplate)'],
+      observers: ['_headerTemplateChanged(headerTemplate, isAttached)'],
 
-      _headerTemplateChanged: function(headerTemplate) {
+      _headerTemplateChanged: function(headerTemplate, isAttached) {
         if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
           this.instance = headerTemplate.templatizer.createInstance();
@@ -217,7 +217,10 @@
           this.instance = {root: document.createElement('div')};
         }
 
-        this.fire('cell-empty-changed');
+        // Safari 9 doesn't bubble events while not attached to the DOM. #552
+        if (isAttached) {
+          this.fire('cell-empty-changed');
+        }
       }
     });
 
@@ -234,9 +237,9 @@
         vaadinGridTableCellBehavior
       ],
 
-      observers: ['_footerTemplateChanged(footerTemplate)'],
+      observers: ['_footerTemplateChanged(footerTemplate, isAttached)'],
 
-      _footerTemplateChanged: function(footerTemplate) {
+      _footerTemplateChanged: function(footerTemplate, isAttached) {
         if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
           this.instance = footerTemplate.templatizer.createInstance();
@@ -246,7 +249,10 @@
           this.instance = {root: document.createElement('div')};
         }
 
-        this.fire('cell-empty-changed');
+        // Safari 9 doesn't bubble events while not attached to the DOM. #552
+        if (isAttached) {
+          this.fire('cell-empty-changed');
+        }
       }
     });
 
