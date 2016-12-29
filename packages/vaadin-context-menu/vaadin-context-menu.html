@@ -220,6 +220,7 @@ Custom property | Description | Default
       observers: [
         '_contentTemplateChanged(_contentTemplate)',
         '_openedChanged(opened)',
+        '_contextChanged(_context, _instance)',
         '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'
       ],
 
@@ -271,12 +272,12 @@ Custom property | Description | Default
           this._contentTemplate = Polymer.dom(this).children.filter(function(el) {
             return el.localName === 'template';
           })[0];
-
-          if (this._context && this._instance) {
-            this._instance.detail = this._context.detail;
-            this._instance.target = this._context.target;
-          }
         }
+      },
+
+      _contextChanged: function(context, instance) {
+        instance.detail = context.detail;
+        instance.target = context.target;
       },
 
       /**
