@@ -17,32 +17,29 @@
     // yet at the point when tap event is being executed.
     _onClick: function(e) {
       // Prevent item action if cell itself is not focused.
-      if (!this._isFocusable(Polymer.dom(e).localTarget)) {
-        if (this._cellClick) {
-          this._cellClick(e);
-        }
-      }
-    },
-
-    _isFocusable: function(target) {
-      if (Polymer.Settings.useNativeShadow) {
-        // https://nemisj.com/focusable/
-        // tabIndex is not reliable in IE.
-        return target.tabIndex >= 0;
-      } else {
-        // unreliable with Shadow, document.activeElement doesn't go inside
-        // the shadow root.
-        // Also, atleast iOS doesn't seem to focus links or buttons.
-        var focusableElements = ['A', 'BUTTON'];
-
+      if (this._cellClick) {
+        var target = Polymer.dom(e).localTarget;
         // Polymer.dom(e).localTarget usually returns <content> element in shady
         // DOM. We'll get and use the cell-content wrapper in that case.
         if (target.getDistributedNodes) {
           target = Polymer.dom(target).getDistributedNodes()[0];
         }
 
-        return target.contains(Polymer.dom(document.activeElement).node) || focusableElements.indexOf(target.tagName) > -1;
+        var path = Polymer.dom(e).path;
+        var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(target) + 1);
+        if (!target.contains(this.target && this.target.root.activeElement || document.activeElement) &&
+            !elementsClicked.some(this._isFocusable)) {
+          this._cellClick(e);
+        }
       }
+    },
+
+    _isFocusable: function(target) {
+      return target.matches &&
+             target.matches(':not([disabled])') &&
+             (target.matches('[tabindex]') ||
+             target.matches('button, input, select, textarea, object, iframe, label') ||
+             target.matches('a[href], area[href]'));
     }
   };
 </script>

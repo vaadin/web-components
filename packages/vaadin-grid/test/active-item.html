@@ -21,6 +21,12 @@
           <template class="header"></template>
           <template>[[item]]</template>
         </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header"></template>
+          <template>
+            <button>OK</button>
+          </template>
+        </vaadin-grid-column>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -36,6 +42,10 @@
 
       function clickItem(rowIndex) {
         return grid.$.scroller.$.items.children[rowIndex].children[0].click();
+      }
+
+      function clickButton(rowIndex) {
+        return grid.querySelectorAll('button')[rowIndex].click();
       }
 
       it('should not have a default value', function() {
@@ -62,6 +72,12 @@
         clickItem(0);
 
         expect(grid.activeItem).to.be.null;
+      });
+
+      it('should not activate on a native button', function() {
+        clickButton(0);
+
+        expect(grid.activeItem).to.be.undefined;
       });
     });
   </script>
