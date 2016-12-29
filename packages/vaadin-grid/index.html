@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +10,42 @@
   <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
   <link rel="import" href="../polymer/polymer.html">
   <link rel="import" href="../iron-component-page/iron-component-page.html">
+  <link rel="import" href="vaadin-grid.html">
+  <link rel="import" href="vaadin-grid-selection-column.html">
 </head>
 
 <body>
-  <iron-component-page src="vaadin-grid.html"></iron-component-page>
+  <vaadin-grid-docs></vaadin-grid-docs>
+  <dom-module id="vaadin-grid-docs">
+    <template>
+      <iron-component-page id="docs" src="index.html" on-doc-elements-changed="_filterElements" on-doc-behaviors-changed="_filterBehaviors"></iron-component-page>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', function() {
+        Polymer({
+          is: 'vaadin-grid-docs',
+
+          _filterBehaviors: function(e) {
+            this.$.docs.docBehaviors.forEach(function(beh, index) {
+              // blacklist internal APIs
+              if (/iron|Iron|TableScroll|vaadinGridTable/.test(beh.is)) {
+                this.$.docs.splice('docBehaviors', index, 1);
+              }
+            }.bind(this));
+          },
+
+          _filterElements: function(e) {
+            this.$.docs.docElements.forEach(function(el, index) {
+              // whitelist public elements
+              if (!/vaadin-grid$|column|filter|sorter/.test(el.is)) {
+                this.$.docs.splice('docElements', index, 1);
+              }
+            }.bind(this));
+          }
+        });
+      });
+    </script>
+  </dom-module>
 </body>
+
 </html>

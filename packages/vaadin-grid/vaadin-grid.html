@@ -6,8 +6,43 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <!--
 
+`vaadin-grid` is a free, high quality data grid / data table Polymer element, part of the Vaadin Core Elements.
+
+### Quick Start
+
+ - Use the <a href="#vaadin-grid-column">vaadin-grid-column</a> and <a href="#vaadin-grid-column">vaadin-grid-column-group</a> elements to configure the grid.
+
+ - Then assign an array to the <a href="#vaadin-grid:property-items">items</a> property to visualize your data.
+
+ - In addition, you have some helper elements such as
+<a href="#vaadin-grid-filter">vaadin-grid-filter</a>,
+<a href="#vaadin-grid-sorter">vaadin-grid-sorter</a> and
+<a href="#vaadin-grid-selection-column">vaadin-grid-selection-column</a>
+to easily customize the grid.
+
+#### Example:
+
+    <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"}, {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
+      <vaadin-grid-column-group>
+        <vaadin-grid-column>
+          <template class="header">Name</template>
+          <template>[[item.name]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">Surname</template>
+          <template>[[item.surname]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid-column-group>
+
+      <vaadin-grid-column>
+        <template class="header">Role</template>
+        <template>[[item.role]]</template>
+      </vaadin-grid-column>
+    </vaadin-grid>
+
 ### Styling
 The following custom properties and mixins are available for styling:
+
 Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-grid-cell` | Mixin applied to all cells | `{}`
@@ -60,7 +95,7 @@ Custom property | Description | Default
   <template>
     <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
-        row-details-template="[[rowDetailsTemplate]]">
+        row-details-template="[[_rowDetailsTemplate]]">
       <content></content>
     </vaadin-grid-table>
   </template>
@@ -77,9 +112,14 @@ Custom property | Description | Default
         notify: true
       },
 
+
+      /**
+       * Estimated size of the grid data (number of items).
+       * When using function data sources, it always needs to be set manually.
+       */
       size: Number,
 
-      rowDetailsTemplate: Object,
+      _rowDetailsTemplate: Object,
 
       _bindData: {
         value: function() {
@@ -117,7 +157,7 @@ Custom property | Description | Default
 
     ready: function() {
       this._updateColumnTree();
-      this.rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
+      this._rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
     },
 
     _columnPropChanged: function(e) {
@@ -127,5 +167,13 @@ Custom property | Description | Default
 
       e.stopPropagation();
     }
+
+    /**
+     * Fired when a non-focusable element inside a cell is clicked.
+     *
+     * @event cell-click
+     * @param {Object} detail
+     *  @param {Object} detail.model the internal model bound to the cell element.
+     */
   });
 </script>
