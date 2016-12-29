@@ -71,12 +71,16 @@
     </style>
 
     <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-    <div id="scroller" scroller="[[_getScroller()]]" on-tap="_stopPropagation" hidden$="[[loading]]">
+    <div id="scroller" scroller="[[_getScroller()]]"
+        on-tap="_stopPropagation"
+        on-touchstart="_onTouchStart"
+        on-touchend="_preventDefault"
+        on-scroll="_onScroll"
+        hidden$="[[loading]]">
       <iron-list
           id="selector"
           touch-device$="[[touchDevice]]"
           role="listbox"
-          on-touchend="_preventDefault"
           items="[[_items]]"
           scroll-target="[[_getScroller()]]">
         <template>
@@ -157,7 +161,11 @@
       _itemValuePath: {
         type: String,
         value: 'value'
-      }
+      },
+
+      _notTapping: Boolean,
+
+      _ignoreTaps: Boolean
     },
 
     ready: function() {
@@ -181,7 +189,23 @@
     },
 
     _onTap: function(e) {
-      this.fire('selection-changed', {item: e.model.item});
+      if (!this._notTapping && !this._ignoreTaps) {
+        this.fire('selection-changed', {item: e.model.item});
+      }
+    },
+
+    _onTouchStart: function() {
+      this._notTapping = false;
+      this.async(function() {
+        this._notTapping = true;
+      }, 300);
+    },
+
+    _onScroll: function() {
+      this._ignoreTaps = true;
+      this.debounce('restore-taps', function() {
+        this._ignoreTaps = false;
+      }, 300);
     },
 
     /**
@@ -346,7 +370,9 @@
     },
 
     _preventDefault: function(e) {
-      e.preventDefault();
+      if (e.cancelable) {
+        e.preventDefault();
+      }
     },
 
     _stopPropagation: function(e) {
