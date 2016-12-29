@@ -10,6 +10,9 @@
 
 <body>
   <script>
+    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
+    WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
+
     var shadow = document.location.search.indexOf('dom=shadow') > -1;
     WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
 

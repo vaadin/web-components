@@ -6,6 +6,7 @@
   <title>vaadin-combo basic tests</title>
   <script src="../../web-component-tester/browser.js"></script>
 
+
   <link rel="import" href="common.html">
   <script src="common.js"></script>
 </head>
@@ -72,8 +73,7 @@
       var spy = sinon.spy();
       combobox.$.overlay.addEventListener('selection-changed', spy);
 
-      var xy = MockInteractions.middleOfNode(combobox.$.overlay.$.scroller);
-      window.MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
+      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
 
       combobox.async(function() {
         var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
@@ -90,8 +90,7 @@
       var spy = sinon.spy();
       combobox.$.overlay.addEventListener('selection-changed', spy);
 
-      var xy = MockInteractions.middleOfNode(combobox.$.overlay.$.scroller);
-      window.MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller, xy);
+      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
 
       combobox.async(function() {
         var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
