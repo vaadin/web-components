@@ -1,22 +1,18 @@
 sudo: false
+dist: trusty
 language: node_js
 node_js: stable
-env:
-  # desktop
-  - SAUCE_BROWSERS='[
-      "Windows 10/chrome@54",
-      "Windows 10/firefox@50",
-      "Windows 10/microsoftedge@13",
-      "Windows 10/internet explorer@11",
-      "OS X 10.11/safari@9.0"
-    ]'
-  # mobile
-  - SAUCE_BROWSERS='[
-      "OS X 10.11/iphone@9.2",
-      "OS X 10.11/ipad@9.2",
-      "Linux/android@5.1"
-    ]'
+
+cache:
+  directories:
+    - bower_components
+    - node_modules
+
+addons:
+  firefox: latest
+  google-chrome: latest
+
 script:
   - gulp lint
-  - travis_retry wct
-  - travis_retry wct --dom=shadow
+  - travis_retry xvfb-run wct
+  - travis_retry xvfb-run wct --dom=shadow
