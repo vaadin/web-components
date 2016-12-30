@@ -48,17 +48,10 @@
      * Selects the given item.
      *
      * @method selectItem
-     * @param {Object} item The item object
+     * @param {number|Object} item The item index or the item object
      */
     selectItem: function(item) {
-      if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
-        this._selectItem(this.items[item]);
-      } else {
-        this._selectItem(item);
-      }
-    },
-
-    _selectItem: function(item) {
+      item = this._takeItem(item);
       if (!this._isSelected(item)) {
         this.push('selectedItems', item);
       }
@@ -68,21 +61,26 @@
      * Deselects the given item if it is already selected.
      *
      * @method deselect
-     * @param {Object} item The item object
+     * @param {number|Object} item The item index or the item object
      */
     deselectItem: function(item) {
-      if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
-        this._deselectItem(this.items[item]);
-      } else {
-        this._deselectItem(item);
-      }
-    },
-
-    _deselectItem: function(item) {
+      item = this._takeItem(item);
       var index = this.selectedItems.indexOf(item);
       if (index > -1) {
         this.splice('selectedItems', index, 1);
       }
+    },
+
+    /**
+     * Returns item object itself or by the item index.
+     *
+     * @param {number|Object} item The item index or the item object
+     */
+    _takeItem: function(item) {
+      if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
+        return this.items[item];
+      }
+      return item;
     },
 
     _selectedItemsChanged: function(e) {
