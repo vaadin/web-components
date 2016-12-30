@@ -77,7 +77,7 @@
     _forwardInstancePath: function(inst, path, value) {
       // TODO: assuming we're currently just listening to [[item.xxxx]] properties
       // which affect only cells on the current row.
-      if (path.indexOf('item.') === 0) {
+      if (path.indexOf('item.') === 0 && !this._suppressItemChangeEvent) {
         this.fire('item-changed', {
           item: inst.item,
           // stripping 'item.' from path.

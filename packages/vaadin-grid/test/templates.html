@@ -259,6 +259,16 @@
 
           input.value = 'bar0';
         });
+
+        it('should fire exactly one event when item path changes', function() {
+          var item = getCell(grid, 0).instance.item;
+          var spy = sinon.spy();
+          grid.addEventListener('item-changed', spy);
+
+          input.value = 'bar0';
+
+          expect(spy.callCount).to.eql(1);
+        });
       });
     });
   </script>
