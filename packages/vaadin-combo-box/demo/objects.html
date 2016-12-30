@@ -81,6 +81,36 @@
       </template>
     </demo-snippet>
 
+    <h3>Object Items with the Same Value</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="country-synonyms-box" label="Element"></vaadin-combo-box>
+        <p>Selected Item: <span id="country-selected-item"></span>.</p>
+        <p>Value: <span id="country-value"></span>.</p>
+
+        <script>
+          var countrySynonymsBox = document.querySelector('#country-synonyms-box');
+
+          countrySynonymsBox.items = [
+            {value: 'US', label: 'United States of America'},
+            {value: 'US', label: 'U.S.A.'}
+          ];
+
+          countrySynonymsBox.addEventListener('selected-item-changed', function() {
+            var selectedItemAsString = JSON.stringify(countrySynonymsBox.selectedItem);
+            document.querySelector('#country-selected-item').innerText = selectedItemAsString;
+          });
+
+          countrySynonymsBox.addEventListener('value-changed', function() {
+            document.querySelector('#country-value').innerText = countrySynonymsBox.value;
+          });
+
+          countrySynonymsBox.value = 'US'; // selects first matching item
+        </script>
+      </template>
+    </demo-snippet>
+
   </div>
 </body>
 
