@@ -4,16 +4,18 @@ language: node_js
 node_js: stable
 
 addons:
+  firefox: latest
   google-chrome: latest
 
 cache:
   directories:
+    - bower_components
     - node_modules
 
 script:
   - gulp lint
-  - travis_retry xvfb-run wct --local=chrome
-  - travis_retry xvfb-run wct --local=chrome --dom=shadow
+  - travis_retry xvfb-run wct --local=chrome --local=firefox
+  - travis_retry xvfb-run wct --local=chrome --local=firefox --dom=shadow
 
 after_success:
   - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
