@@ -72,6 +72,22 @@
     },
 
     /**
+     * Toggles the selected state of the given item.
+     *
+     * @method toggle
+     * @param {number|Object} item The item index or the item object
+     */
+    _toggleItem: function(item) {
+      item = this._takeItem(item);
+      var index = this.selectedItems.indexOf(item);
+      if (index === -1) {
+        this.selectItem(item);
+      } else {
+        this.deselectItem(item);
+      }
+    },
+
+    /**
      * Returns item object itself or by the item index.
      *
      * @param {number|Object} item The item index or the item object
