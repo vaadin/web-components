@@ -59,9 +59,23 @@ When the grid is configured with an array of items as the data source, it provid
         notify: true
       },
 
+      /**
+       * When true it adds the active item to selectedItems.
+       */
+      autoSelect: {
+        type: Boolean,
+        value: false,
+      },
+
       _grid: Object,
 
       _indeterminate: Boolean,
+
+      /*
+       * The previous state of activeItem. When activeItem turns to `null`,
+       * previousActiveItem will have an Object with just unselected activeItem
+       */
+      _previousActiveItem: Object,
 
       _selectAllHidden: Boolean
     },
@@ -72,6 +86,7 @@ When the grid is configured with an array of items as the data source, it provid
 
     detached: function() {
       if (this._grid) {
+        this.unlisten(this._grid, 'active-item-changed', '_onActiveItemChanged');
         this.unlisten(this._grid, 'data-source-changed', '_onDataSourceChanged');
         this.unlisten(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
@@ -81,6 +96,7 @@ When the grid is configured with an array of items as the data source, it provid
     attached: function() {
       this._grid = this._findGrid(this);
       if (this._grid) {
+        this.listen(this._grid, 'active-item-changed', '_onActiveItemChanged');
         this.listen(this._grid, 'data-source-changed', '_onDataSourceChanged');
         this.listen(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
@@ -130,6 +146,15 @@ When the grid is configured with an array of items as the data source, it provid
     // iOS needs indeterminated + checked at the same time
     _isChecked: function(selectAll, indeterminate) {
       return indeterminate || selectAll;
+    },
+
+    _onActiveItemChanged: function(e) {
+      var activeItem = e.detail.value;
+      if (this.autoSelect) {
+        var item = activeItem || this._previousActiveItem;
+        this._grid._toggleItem(item);
+      }
+      this._previousActiveItem = activeItem;
     },
 
     _onSelectedItemsChanged: function(e) {
