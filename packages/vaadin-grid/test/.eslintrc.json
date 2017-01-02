@@ -33,6 +33,7 @@
     "scrollToEnd": false,
     "isFullOfItems": false,
     "isVisible": false,
-    "defaultCellWidth": false
+    "defaultCellWidth": false,
+    "firefox": false
   }
 }

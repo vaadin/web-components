@@ -488,13 +488,11 @@
       function shouldSupportDomRepeat(prefix, columnsLevel) {
         it('should provide initial state', function(done) {
           grid.async(function() {
-            // expectFirstColumn(prefix + ' a', columnsLevel);
-            // FIXME: Relaxed template check due to dom-repeat issue.
-            // See: https://github.com/vaadin/vaadin-grid/issues/531
+            expectFirstColumn(prefix + ' a', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(3);
             done();
-          });
+          }, 1);
         });
 
         it('should add columns late', function(done) {
@@ -502,9 +500,7 @@
           repeater.render();
 
           grid.async(function() {
-            // expectFirstColumn(prefix + ' d', columnsLevel);
-            // FIXME: Relaxed template check due to dom-repeat issue.
-            // See: https://github.com/vaadin/vaadin-grid/issues/531
+            expectFirstColumn(prefix + ' d', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(4);
             done();
@@ -516,9 +512,7 @@
           repeater.render();
 
           grid.async(function() {
-            // expectFirstColumn(prefix + ' b', columnsLevel);
-            // FIXME: Relaxed template check due to dom-repeat issue.
-            // See: https://github.com/vaadin/vaadin-grid/issues/531
+            expectFirstColumn(prefix + ' b', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(2);
             done();
