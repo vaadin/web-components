@@ -32,11 +32,11 @@
   <test-fixture id="multiselect">
     <template>
       <vaadin-grid style="width: 200px; height: 200px;">
-        <vaadin-grid-selection-column>
+        <vaadin-grid-selection-column auto-select>
         </vaadin-grid-selection-column>
         <vaadin-grid-selection-column>
           <template class="header">header</template>
-          <template>body</template>
+          <template>[[item]]</template>
         </vaadin-grid-selection-column>
         <vaadin-grid-column-group>
           <vaadin-grid-selection-column>
@@ -161,6 +161,27 @@
         expect(grid._isSelected(cachedItems[0])).to.be.true;
       });
 
+      it('should add the item to selectedItems when row is clicked and auto-select is enabled', function() {
+        var cell = getRowCells(rows[1])[1];
+        cell.click();
+        expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
+      });
+
+      it('should remove the item from selectedItems when row is clicked and auto-select is enabled', function() {
+        grid.selectItem(1);
+        var cell = getRowCells(rows[1])[1];
+        cell.click();
+        expect(grid.selectedItems).to.eql([]);
+      });
+
+      it('should toggle the item in selectedItems when row is clicked and auto-select is enabled', function() {
+        var cell = getRowCells(rows[1])[1];
+        cell.click();
+        expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
+        cell.click();
+        expect(grid.selectedItems).to.eql([]);
+      });
+
       it('should have bound the body checkbox to selected items', function() {
         var selectCheckbox = firstBodyCheckbox;
 
@@ -236,7 +257,7 @@
       it('should be possible to override the body template', function() {
         var secondCell = getCellContent(getRowCells(rows[0])[1]);
 
-        expect(secondCell.innerHTML).to.eql('body');
+        expect(secondCell.innerHTML).to.eql(secondCell.textContent);
       });
 
       it('should be possible to override the header template', function() {
