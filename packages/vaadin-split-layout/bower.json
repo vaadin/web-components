@@ -19,18 +19,37 @@
     "url": "git://github.com/vaadin/vaadin-split-layout"
   },
   "dependencies": {
-    "polymer": "^1.7.0",
-    "iron-resizable-behavior": "^1.0.5"
+    "polymer": "Polymer/polymer#2.0-preview",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview"
   },
   "devDependencies": {
-    "iron-component-page": "^1.1.7",
-    "iron-demo-helpers": "^1.2.5",
-    "web-component-tester": "^5.0.0",
-    "webcomponentsjs": "^0.7.23",
-    "iron-test-helpers": "^1.2.5",
-    "iron-icon": "^1.0.9",
-    "iron-icons": "^1.2.0",
-    "paper-button": "^1.0.14",
-    "elements-demo-resources": "vaadin/elements-demo-resources#master"
+    "webcomponentsjs": "#v1",
+    "iron-component-page": "PolymerElements/iron-component-page#2.0-preview",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#2.0-preview",
+    "iron-icon": "PolymerElements/iron-icon#2.0-preview",
+    "iron-icons": "PolymerElements/iron-icons#2.0-preview",
+    "paper-button": "PolymerElements/paper-button#2.0-preview",
+    "web-component-tester": "Polymer/web-component-tester#^5.0.0",
+    "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.7.0",
+        "iron-resizable-behavior": "^1.0.5"
+      },
+      "devDependencies": {
+        "iron-component-page": "^1.1.7",
+        "iron-demo-helpers": "^1.2.5",
+        "web-component-tester": "^5.0.0",
+        "webcomponentsjs": "^0.7.23",
+        "iron-test-helpers": "^1.2.5",
+        "iron-icon": "^1.0.9",
+        "iron-icons": "^1.2.0",
+        "paper-button": "^1.0.14",
+        "elements-demo-resources": "vaadin/elements-demo-resources#master"
+      }
+    }
   }
 }
