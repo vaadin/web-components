@@ -39,14 +39,14 @@
 
       :host(:not([grid])) #items > ::content > * {
         width: 100%;
-      };
+      }
 
       #items > tr {
         box-sizing: border-box;
         margin: 0;
         position: absolute;
         /* iron-list expects top to be 0. Might cause issues */
-        /*top: 0;*/
+        /* top: 0; */
         will-change: transform;
       }
 
@@ -71,7 +71,8 @@
         top: 0;
       }
 
-      td, th {
+      td,
+      th {
         padding: 0;
         flex-shrink: 0;
         flex-grow: 1;
@@ -122,6 +123,7 @@
         position: static !important;
         display: table-row !important;
       }
+
       :host([copying]) td,
       :host([copying]) th {
         display: table-cell !important;
