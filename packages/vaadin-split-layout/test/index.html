@@ -10,14 +10,15 @@
 
 <body>
   <script>
+    // Needed to load here in iOS
     WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
     WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
-
-    var shadow = document.location.search.indexOf('dom=shadow') > -1;
-    WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
+    // non-lite polyfill #v1 cause problems
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
-      'vaadin-split-layout_test.html'
+      'vaadin-split-layout_test.html',
+      'vaadin-split-layout_test.html?wc-shadydom=true'
     ]);
   </script>
 </body>

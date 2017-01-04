@@ -3,11 +3,6 @@ dist: trusty
 language: node_js
 node_js: stable
 
-cache:
-  directories:
-    - bower_components
-    - node_modules
-
 addons:
   firefox: latest
   google-chrome: latest
@@ -16,4 +11,7 @@ script:
   - gulp lint
   - gemini test test/visual
   - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct
-  - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct --dom=shadow
+  - rm -rf bower_components
+  - cp bower-2.0.json bower.json
+  - bower install --quiet --no-color
+  - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct
