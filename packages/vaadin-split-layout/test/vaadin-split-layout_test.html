@@ -118,8 +118,11 @@
           splitLayout = fixture('split-layout');
         });
 
-        it('has overflow visible', function() {
-          expect(getComputedStyle(splitLayout.$.splitter).overflow).to.equal('visible');
+        it('has overflow visible', function(done) {
+          splitLayout.async(function() {
+            expect(getComputedStyle(splitLayout.$.splitter).overflow).to.equal('visible');
+            done();
+          }, 1);
         });
 
       });

@@ -228,7 +228,7 @@ element:
         transform: translate(-50%, -50%) rotate(90deg);
       }
     </style>
-    <slot name="primary"></slot>
+    <slot id="primary" name="primary"></slot>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
       <slot name="handle">
         <svg id="handle" width="40" height="40">
@@ -236,7 +236,7 @@ element:
         </svg>
       </slot>
     </div>
-    <slot name="secondary"></slot>
+    <slot id="secondary" name="secondary"></slot>
   </template>
 
   <script>
