@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
+var wct = require('web-component-tester').test;
 
 gulp.task('lint', ['lint:js', 'lint:html']);
 
@@ -29,4 +30,14 @@ gulp.task('lint:html', function() {
   .pipe(eslint())
   .pipe(eslint.format())
   .pipe(eslint.failAfterError());
+});
+
+gulp.task('test', ['lint'], function(done) {
+  wct({
+    plugins: {
+      local: {
+        browsers: ['chrome']
+      }
+    }
+  }, done);
 });
