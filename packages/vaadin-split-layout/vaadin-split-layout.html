@@ -190,7 +190,8 @@ element:
         flex-direction: column;
       }
 
-      :host ::content > * {
+      :host ::content > *,
+      :host ::slotted(*) {
         flex: 1 1 auto;
         overflow: auto;
       }
@@ -204,7 +205,7 @@ element:
         min-height: 8px;
         background: var(--divider-color, #ccc);
         fill: var(--primary-background-color, #fff);
-        @apply(--vaadin-split-layout-splitter);
+        @apply --vaadin-split-layout-splitter;
       }
 
       :host(:not([vertical])) > #splitter {
@@ -216,7 +217,7 @@ element:
       }
 
       #handle,
-      #splitter ::content > .splitter-handle {
+      #splitter ::slotted([slot=handle]) {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -227,15 +228,15 @@ element:
         transform: translate(-50%, -50%) rotate(90deg);
       }
     </style>
-    <content select="[vaadin-split-layout=primary]" id="primary"></content>
+    <slot name="primary"></slot>
     <div id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <content select=".splitter-handle">
+      <slot name="handle">
         <svg id="handle" width="40" height="40">
           <rect x="19" y="8" width="2" height="24"></rect>
         </svg>
-      </content>
+      </slot>
     </div>
-    <content select="[vaadin-split-layout=secondary]" id="secondary"></content>
+    <slot name="secondary"></slot>
   </template>
 
   <script>
@@ -269,16 +270,20 @@ element:
       _processChildren: function() {
         var children = this.getEffectiveChildren();
         children.filter(function(child) {
-          return !child.classList.contains('splitter-handle');
+          if (child.classList.contains('splitter-handle')) {
+            Polymer.dom(child).setAttribute('slot', 'handle');
+            return false;
+          }
+          return true;
         }).forEach(function(child, i) {
           if (i === 0) {
             this._primaryChild = child;
-            Polymer.dom(child).setAttribute('vaadin-split-layout', 'primary');
+            Polymer.dom(child).setAttribute('slot', 'primary');
           } else if (i == 1) {
             this._secondaryChild = child;
-            Polymer.dom(child).setAttribute('vaadin-split-layout', 'secondary');
+            Polymer.dom(child).setAttribute('slot', 'secondary');
           } else {
-            Polymer.dom(child).removeAttribute('vaadin-split-layout');
+            Polymer.dom(child).removeAttribute('slot');
           }
         }.bind(this));
       },
