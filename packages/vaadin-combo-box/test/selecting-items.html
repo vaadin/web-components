@@ -197,14 +197,14 @@
     it('should close the dropdown when reselecting the current value', function() {
       combobox.value = 'foo';
       combobox.open();
-      combobox.$.overlay.fire('selection-changed', {items: [combobox.items[0]]});
+      combobox.$.overlay.fire('selection-changed', {item: combobox.items[0]});
       expect(combobox.opened).to.be.false;
     });
 
     it('should not fire an event when reselecting the current value', function() {
       combobox.value = 'foo';
       valueChangedSpy.reset();
-      combobox.$.overlay.fire('selection-changed', {items: [combobox.items[0]]});
+      combobox.$.overlay.fire('selection-changed', {item: combobox.items[0]});
       expect(valueChangedSpy.callCount).to.equal(0);
     });
 
@@ -331,6 +331,16 @@
 
       expect(combobox.value).to.be.empty;
       expect(combobox.selectedItem).to.be.null;
+    });
+
+    it('should allow changing value to existing item when custom value is set', function() {
+      combobox.value = 'foobar';
+
+      combobox.close();
+
+      combobox.value = 'foo';
+      expect(combobox.value).to.eql('foo');
+      expect(combobox.selectedItem).to.eql('foo');
     });
   });
 </script>

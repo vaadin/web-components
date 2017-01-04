@@ -63,6 +63,18 @@
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
+    afterEach(function(done) {
+      /*
+        The following prevents test errors in MSIE 11.
+
+        The input element is asynchronously prefilled with item label
+        when navigating with keyboard. In IE11, the async callbacks
+        could be called after the test is already done, and the test
+        fixture is destroyed, causing errors.
+      */
+      Polymer.Base.async(done, 1);
+    });
+
     describe('opening the overlay', function() {
       it('should open the overlay with arrow down and not focus any item', function() {
         arrowDown();
