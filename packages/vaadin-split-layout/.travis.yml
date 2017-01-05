@@ -14,5 +14,6 @@ addons:
 
 script:
   - gulp lint
+  - gemini test test/visual
   - travis_retry xvfb-run wct
   - travis_retry xvfb-run wct --dom=shadow

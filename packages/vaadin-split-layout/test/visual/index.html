@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../bower_components/polymer/polymer.html" rel="import">
+  <link href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html" rel="import">
+  <link href="../../vaadin-split-layout.html" rel="import">
+
+  <style is="custom-style">
+    vaadin-split-layout {
+      height: 100px;
+      width: 200px;
+    }
+
+    #customized {
+      --vaadin-split-layout-splitter: {
+        background: #000;
+        fill: #ff0;
+      };
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <vaadin-split-layout id="default">
+    <div></div>
+    <div></div>
+  </vaadin-split-layout>
+
+  <vaadin-split-layout id="customized">
+    <div style="width: 25%"></div>
+    <vaadin-split-layout vertical style="width: 75%">
+      <div></div>
+      <div></div>
+    </vaadin-split-layout>
+  </vaadin-split-layout>
+
+</body>
+
+</html>

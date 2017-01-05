@@ -1,0 +1,56 @@
+rootUrl: http://127.0.0.1:3000/test/visual
+gridUrl: http://127.0.0.1:4444/wd/hub
+screenshotsDir: ./test/visual/screens
+
+system:
+  plugins:
+    express:
+      port: 3000
+    sauce: true
+
+browsers:
+  chrome:
+    desiredCapabilities:
+      browserName: "chrome"
+      version: "54.0"
+      platform: "Windows 10"
+
+  firefox:
+    desiredCapabilities:
+      browserName: "firefox"
+      version: "47.0"
+      platform: "Windows 10"
+
+  ie:
+    desiredCapabilities:
+      browserName: "internet explorer"
+      version: "11.0"
+      platform: "Windows 10"
+
+  edge:
+    desiredCapabilities:
+      browserName: "microsoftedge"
+      version: "13"
+      platform: "Windows 10"
+
+
+  # The following setups don't currently work due to selenium driver issues
+  # Need to revisit later
+  #
+  # safari:
+  #   desiredCapabilities:
+  #     browserName: "safari"
+  #     version: "9.0"
+  #     platform: "OS X 10.11"
+  #
+  # iphone:
+  #   desiredCapabilities:
+  #     browserName: "iphone"
+  #     version: "9.2"
+  #     platform: "OS X 10.11"
+  #
+  # android:
+  #   desiredCapabilities:
+  #     browserName: "android"
+  #     version: "5.1"
+  #     platform: "Linux"
