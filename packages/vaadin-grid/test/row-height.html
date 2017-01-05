@@ -249,14 +249,14 @@
           scroller.async(function() {
             expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
             done();
-          }, 100);
+          }, 300);
         });
       });
 
       it('should not misalign on resize (outer-scroller)', function(done) {
         init('default-content');
         scrollToEnd(grid, function() {
-          scroller.$.outerscroller.addEventListener('scroll', function() {
+          var scrollDone = function() {
             // Simulate a (window) resize
             grid.style.width = '200px';
             scroller.fire('iron-resize');
@@ -264,9 +264,12 @@
             scroller.async(function() {
               expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
               done();
-            }, 100);
-          });
+            }, 300);
 
+            scroller.$.outerscroller.removeEventListener('scroll', scrollDone);
+          };
+
+          scroller.$.outerscroller.addEventListener('scroll', scrollDone);
           // Scroll with the outer-scroller
           scroller.$.outerscroller.scrollTop = 100;
         });

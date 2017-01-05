@@ -219,9 +219,9 @@
         <div id="fixedsizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]">
         </div>
       </caption>
-      <thead id="header" is="vaadin-grid-table-header" column-tree="[[columnTree]]"></thead>
+      <thead id="header" target="[[target]]" is="vaadin-grid-table-header" column-tree="[[columnTree]]"></thead>
       <tbody id="items"></tbody>
-      <tfoot id="footer" is="vaadin-grid-table-footer" column-tree="[[columnTree]]"></tfoot>
+      <tfoot id="footer" target="[[target]]" is="vaadin-grid-table-footer" column-tree="[[columnTree]]"></tfoot>
     </table>
 
     <vaadin-grid-table-outer-scroller
@@ -279,7 +279,9 @@
           document.body.removeChild(scrollDiv);
           return scrollbarWidth;
         }
-      }
+      },
+
+      target: Object
     },
 
     observers: [

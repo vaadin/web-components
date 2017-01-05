@@ -92,6 +92,7 @@
 
 
   <script>
+  document.addEventListener('WebComponentsReady', function() {
     describe('style scope', function() {
 
       describe('component', function() {
@@ -104,7 +105,7 @@
         beforeEach(function(done) {
           component = fixture('default');
           wrapper = Polymer.dom(component.$.grid).querySelector('.cell-content');
-          content = wrapper.querySelector('.my-content');
+          content = Polymer.dom(component.$.grid).querySelector('.my-content');
 
           sliderInput = component.$$('paper-slider').$$('paper-input');
           Polymer.Base.async(done, 1);
@@ -177,6 +178,7 @@
         }
       });
     });
+  });
   </script>
 
 </body>

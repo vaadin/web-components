@@ -158,6 +158,7 @@ Custom property | Description | Default
     ready: function() {
       this._updateColumnTree();
       this._rowDetailsTemplate = Polymer.dom(this).querySelector('template.row-details') || undefined;
+      this.$.scroller.target = this;
     },
 
     _columnPropChanged: function(e) {
