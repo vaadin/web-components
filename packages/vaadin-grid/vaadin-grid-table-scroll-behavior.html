@@ -115,6 +115,29 @@
       this.scrollTarget = this.$.table;
     },
 
+    /**
+     * Scroll to a specific index (also scaled indexes) in the virtual list.
+     */
+    scrollToScaledIndex: function(idx) {
+      this._pendingScrollToScaledIndex = null;
+      if (!this.$.items.style.borderTopWidth) {
+        // Schedule another scroll to be invoked once init is complete
+        this._pendingScrollToScaledIndex = idx;
+      }
+
+      idx = Math.min(Math.max(idx, 0), this.size - 1);
+      this.$.table.scrollTop = idx / this.size * this.$.table.scrollHeight;
+      this._scrollHandler();
+      this.scrollToIndex(idx - this._vidxOffset);
+
+      // TODO: This is a hack to get around offset issues when scrolling to bottom.
+      // Revisit iron-list-behavior for cleaner fix.
+      if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
+        this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
+      }
+
+    },
+
     _hasFixedSections: function(scrollbarWidth) {
       return navigator.userAgent.match(/Edge/) && scrollbarWidth === 0;
     },
@@ -376,7 +399,7 @@
 
     _getTranslate3d: function(x, y) {
       return 'translate3d(' + x + 'px,' + y + 'px, 0)';
-    },
+    }
 
   };
 

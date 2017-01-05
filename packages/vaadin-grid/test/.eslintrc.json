@@ -34,6 +34,7 @@
     "isFullOfItems": false,
     "isVisible": false,
     "defaultCellWidth": false,
-    "firefox": false
+    "firefox": false,
+    "listenOnce": false
   }
 }
