@@ -756,10 +756,18 @@ Custom property | Description | Default
     },
 
     _onAddFilesClick: function() {
-      if (document.createEvent) {
-        this.$.fileInput.value = '';
-        this.$.fileInput.click();
+      if (Polymer.Gestures.resetMouseCanceller) {
+        /*
+          With Polymer v1.7.1, the ghost-click prevention cancels the synthetic
+          file input click in iOS Safari. This prevents the cancelling.
+
+          See also: https://github.com/Polymer/polymer/issues/4242
+        */
+        Polymer.Gestures.resetMouseCanceller();
       }
+
+      this.$.fileInput.value = '';
+      this.$.fileInput.click();
     },
 
     _onFileInputChange: function(event) {

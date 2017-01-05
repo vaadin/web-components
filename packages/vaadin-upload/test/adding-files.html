@@ -57,6 +57,14 @@
             expect(clickSpy).to.be.calledOnce;
           });
 
+          it('should reset Polymer mouse canceller on click', function() {
+            var spy = sinon.spy(Polymer.Gestures, 'resetMouseCanceller');
+
+            upload.$.addFiles.fire('tap');
+
+            expect(spy).to.be.called;
+          });
+
           it('should reset input.value before dialog', function() {
             var input = upload.$.fileInput;
             // jshint ignore:start
