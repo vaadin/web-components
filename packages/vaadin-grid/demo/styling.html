@@ -230,6 +230,11 @@
               --vaadin-grid-loading-body-cell: {
                 opacity: 0.2;
               };
+
+              --vaadin-grid-focused-cell-highlight: {
+                opacity: 1;
+                border: 2px solid #1b87e3;
+              };
             }
 
             vaadin-grid#valo-grid vaadin-grid-sorter {
@@ -302,7 +307,6 @@
           <x-data-source data-source="{{dataSource}}" loading="{{_loading}}" delay="1000"></x-data-source>
 
           <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]">
-
             <vaadin-grid-column-group frozen>
               <template class="header"></template>
 

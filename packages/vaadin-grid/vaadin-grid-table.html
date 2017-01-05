@@ -9,7 +9,7 @@
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-selection-behavior.html">
-<link rel="import" href="vaadin-grid-active-item-behavior.html">
+<link rel="import" href="vaadin-grid-keyboard-navigation-behavior.html">
 <link rel="import" href="iron-list-behavior.html">
 
 <dom-module id="vaadin-grid-table-styles">
@@ -207,7 +207,7 @@
 
     <style include="vaadin-grid-table-themability-styles"></style>
     <style include="vaadin-grid-selection-themability-styles"></style>
-    <style include="vaadin-grid-active-item-themability-styles"></style>
+    <style include="vaadin-grid-navigation-themability-styles"></style>
     <style include="vaadin-grid-data-source-themability-styles"></style>
     <style include="vaadin-grid-row-details-themability-styles"></style>
 
@@ -220,7 +220,7 @@
         </div>
       </caption>
       <thead id="header" target="[[target]]" is="vaadin-grid-table-header" column-tree="[[columnTree]]"></thead>
-      <tbody id="items"></tbody>
+      <tbody id="items" is="vaadin-grid-table-body"></tbody>
       <tfoot id="footer" target="[[target]]" is="vaadin-grid-table-footer" column-tree="[[columnTree]]"></tfoot>
     </table>
 
@@ -232,6 +232,12 @@
         scrolling$="[[scrolling]]">
       <div id="outersizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
     </vaadin-grid-table-outer-scroller>
+
+    <!--
+      in native Shadow, we move the footer focus trap to light DOM.
+      It needs to be injected/slotted back inside the shadow root in order to be focusable.
+     -->
+    <content select="#footerFocusTrap"></content>
 
   </template>
 </dom-module>

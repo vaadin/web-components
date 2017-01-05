@@ -55,8 +55,21 @@ Custom property | Description | Default
 `--vaadin-grid-body-row-selected-cell` | Mixin applied to body cells on selected rows | `{}`
 `--vaadin-grid-body-row-active-cell` | Mixin applied to body cells on active row | `{}`
 `--vaadin-grid-body-row-details-cell` | Mixin applied to cells on details rows | `{}`
+`--vaadin-grid-focused-cell-highlight` | Mixin applied to cells with keyboard focus | `{}`
 `--vaadin-grid-loading-spinner` | Mixin applied to the loading spinner | `{}`
 `--vaadin-grid-loading-backdrop` | Mixin applied to the loading backdrop | `{}`
+
+### Keyboard Navigation
+
+Key | Action
+----|--------
+<kbd>Tab</kbd> | Moves the keyboard focus from header -> body -> footer
+<kbd>Shift</kbd>+<kbd>Tab</kbd> | Moves the keyboard focus from header <- body <- footer
+<kbd>Down</kbd> | Moves the keyboard focus to the cell on the next row
+<kbd>Up</kbd> | Moves the keyboard focus to the cell on the previous row
+<kbd>Right</kbd> | Moves the keyboard focus to the next cell
+<kbd>Left</kbd> | Moves the keyboard focus to the previous cell
+<kbd>Space</kbd> | Activates the item on the focused body cell
 
 @element vaadin-grid
 @demo demo/index.html
@@ -65,7 +78,7 @@ Custom property | Description | Default
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-table.html">
 <link rel="import" href="vaadin-grid-column.html">
-<link rel="import" href="vaadin-grid-active-item-behavior.html">
+<link rel="import" href="vaadin-grid-keyboard-navigation-behavior.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-array-data-source-behavior.html">
@@ -86,6 +99,10 @@ Custom property | Description | Default
       -webkit-tap-highlight-color: transparent;
     }
 
+    :host(:focus) {
+      outline: none;
+    }
+
     #scroller {
       height: 100%;
       width: 100%;
@@ -93,11 +110,15 @@ Custom property | Description | Default
 
   </style>
   <template>
+    <div id="headerFocusTrap" tabindex="0" on-focus="_onHeaderFocus"></div>
+
     <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
         row-details-template="[[_rowDetailsTemplate]]">
       <content></content>
     </vaadin-grid-table>
+
+    <div id="footerFocusTrap" tabindex="0" on-focus="_onFooterFocus"></div>
   </template>
 </dom-module>
 
@@ -129,7 +150,8 @@ Custom property | Description | Default
     },
 
     behaviors: [
-      vaadin.elements.grid.ActiveItemBehavior,
+      Polymer.IronA11yKeysBehavior,
+      vaadin.elements.grid.KeyboardNavigationBehavior,
       vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.DataSourceBehavior,
       vaadin.elements.grid.DynamicColumnsBehavior,
@@ -149,6 +171,7 @@ Custom property | Description | Default
       row.selected = this._isSelected(item);
       row.expanded = this._isExpanded(item);
       row.toggleAttribute('active', item !== null && item == this.activeItem);
+      row.focused = row.index === this.$.scroller.$.items._focusedRowIndex;
     },
 
     _getContentTarget: function() {

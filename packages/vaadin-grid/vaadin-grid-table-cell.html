@@ -20,6 +20,10 @@
         column: Object,
         expanded: Boolean,
         flexGrow: Number,
+        focused: {
+          type: Boolean,
+          reflectToAttribute: true
+        },
         frozen: {
           type: Boolean,
           reflectToAttribute: true
@@ -202,7 +206,8 @@
       },
 
       behaviors: [
-        vaadinGridTableCellBehavior
+        vaadinGridTableCellBehavior,
+        vaadin.elements.grid.CellClickBehavior
       ],
 
       observers: ['_headerTemplateChanged(headerTemplate, isAttached)'],
@@ -234,7 +239,8 @@
       },
 
       behaviors: [
-        vaadinGridTableCellBehavior
+        vaadinGridTableCellBehavior,
+        vaadin.elements.grid.CellClickBehavior
       ],
 
       observers: ['_footerTemplateChanged(footerTemplate, isAttached)'],
