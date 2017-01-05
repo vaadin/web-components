@@ -79,7 +79,9 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       _phoneChanged: function(phone) {
-        this.withBackdrop = phone;
+        if (!phone) {
+          this.backdropElement.style.opacity = 0;
+        }
       },
 
       // monkey patching iron-overlay-behavior to cancel overriding transform styles.
