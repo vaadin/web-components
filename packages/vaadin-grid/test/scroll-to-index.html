@@ -114,6 +114,25 @@
           });
         });
 
+        it('should have correct indexes after scrolling', function(done) {
+          var listener = function() {
+            scroller.flushDebouncer('vaadin-grid-scrolling');
+            // Check that the rows are in order
+            var rows = Polymer.dom(scroller.$.items).querySelectorAll('tr');
+            for (var i = 1; i < rows.length; i++) {
+              expect(rows[i].index).to.equal(rows[i - 1].index + 1);
+            }
+            done();
+          };
+
+          scroller.async(function() {
+            scroller.scrollToScaledIndex(100);
+            listenOnce(scroller.$.table, 'scroll', listener);
+            scroller.$.table.scrollTop -= 1;
+          }, 100);
+
+        });
+
       });
 
     });
