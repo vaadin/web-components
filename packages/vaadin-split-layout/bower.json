@@ -23,15 +23,19 @@
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview"
   },
   "devDependencies": {
-    "webcomponentsjs": "#v1",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#v1",
     "iron-component-page": "PolymerElements/iron-component-page#2.0-preview",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
+    "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#2.0-preview",
+    "test-fixture": "PolymerElements/test-fixture#custom-elements-v1",
     "iron-icon": "PolymerElements/iron-icon#2.0-preview",
     "iron-icons": "PolymerElements/iron-icons#2.0-preview",
     "paper-button": "PolymerElements/paper-button#2.0-preview",
     "web-component-tester": "Polymer/web-component-tester#^5.0.0",
     "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview"
+  },
+  "resolutions": {
+    "test-fixture": "custom-elements-v1"
   },
   "variants": {
     "1.x": {
