@@ -16,15 +16,15 @@
 
 <custom-style>
 <style include="demo-pages-shared-styles">
-  :root {
+  html {
     --primary-color: #00B4F0;
     --light-primary-color: #7CD8F7;
     --dark-primary-color: #0078A0;
     --error-color: #E61E6E;
   }
 
-  div[vaadin-split-layout],
-  custom-resizable {
+  vaadin-split-layout > div,
+  vaadin-split-layout > custom-resizable {
     @apply --layout;
     @apply --layout-center-center;
   }
@@ -36,13 +36,13 @@
 
   nav {
     display: block;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
   }
 
   nav.vertical-section {
-    margin-left: 0;
-    margin-right: 0;
-    padding-top: 8px;
-    padding-bottom: 0;
+    margin: 0 0 20px 0;
+    padding: 8px 20px 0 20px;
+    text-transform: uppercase;
   }
 
   nav > ul {
