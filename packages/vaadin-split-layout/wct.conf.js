@@ -11,10 +11,10 @@ module.exports = {
       context.options.plugins.sauce.browsers = [
         // desktop
         'Windows 10/chrome@54',
-        // 'Windows 10/firefox@50',
-        // 'Windows 10/microsoftedge@13',
+        'Windows 10/firefox@50',
+        'Windows 10/microsoftedge@14',
         // 'Windows 10/internet explorer@11',
-        // 'OS X 10.11/safari@9.0',
+        'OS X 10.11/safari@10.0',
         // mobile
         // 'OS X 10.11/iphone@9.2',
         // 'OS X 10.11/ipad@9.2',
