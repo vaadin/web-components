@@ -7,7 +7,6 @@
     "it": false,
     "beforeEach": false,
     "fixture": false,
-    "MockInteractions": false,
-    "MockTouchInteractions": false
+    "MockInteractions": false
   }
 }
