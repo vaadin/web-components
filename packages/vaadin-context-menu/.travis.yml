@@ -14,5 +14,5 @@ addons:
 
 script:
   - gulp lint
-  - travis_retry xvfb-run wct
-  - travis_retry xvfb-run wct --dom=shadow
+  - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct
+  - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct --dom=shadow
