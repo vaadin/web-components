@@ -164,12 +164,12 @@
 
         this._cellContent = document.createElement('div');
         this._cellContent.setAttribute('class', 'cell-content');
-        target._contentIndex = target._contentIndex + 1 || 0;
-        this._cellContent.setAttribute('data-cell-content-id', target._contentIndex);
+        var contentId = target._contentIndex = target._contentIndex + 1 || 0;
+        this._cellContent.setAttribute('data-cell-content-id', contentId);
         Polymer.dom(this._cellContent).appendChild(this.instance.root);
 
         this._insertionPoint = document.createElement('content');
-        this._insertionPoint.setAttribute('select', '[data-cell-content-id="' + target._contentIndex + '"]');
+        this._insertionPoint.setAttribute('select', '[data-cell-content-id="' + contentId + '"]');
       },
     };
 
