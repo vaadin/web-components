@@ -153,6 +153,7 @@ Custom property | Description | Default
 
     _onSorterChanged: function(e) {
       var sorter = e.target;
+      var _sortersBefore = this._mapSorters();
 
       this._removeArrayItem(this._sorters, sorter);
       if (sorter.direction) {
@@ -166,7 +167,10 @@ Custom property | Description | Default
 
       e.stopPropagation();
 
-      if (this.dataSource) {
+      if (JSON.stringify(_sortersBefore) === JSON.stringify(this._mapSorters())) {
+        // No need to clear cache if sorters didn't change
+        return;
+      } else if (this.dataSource) {
         this.clearCache();
       }
     },
