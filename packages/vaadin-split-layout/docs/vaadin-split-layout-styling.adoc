@@ -17,11 +17,13 @@ The content elements are direct children of the split layout element. Therefore,
 
 [source,html]
 ----
-<style is="custom-style">
-  .my-split-layout > div {
-    background: var(--paper-grey-100);
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    .my-split-layout > div {
+      background: var(--paper-grey-100);
+    }
+  </style>
+</custom-style>
 <vaadin-split-layout class="my-split-layout">
   <div>First content element</div>
   <div>Second content element</div>
@@ -38,15 +40,17 @@ In order to configure the splitter, use the `--vaadin-split-layout-splitter` cus
 
 [source,html]
 ----
-<style is="custom-style">
-  .my-split-layout {
-    --vaadin-split-layout-splitter: {
-      min-width: 6px;
-      min-height: 4px;
-      background: var(--paper-indigo-500);
-    };
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    .my-split-layout {
+      --vaadin-split-layout-splitter: {
+        min-width: 6px;
+        min-height: 4px;
+        background: var(--paper-indigo-500);
+      };
+    }
+  </style>
+</custom-style>
 <vaadin-split-layout class="my-split-layout">
   <div>First content element</div>
   <div>Second content element</div>
@@ -69,20 +73,22 @@ If you need to configure `vertical` and `horizontal` layouts separatly for the s
 
 [source,html]
 ----
-<style is="custom-style">
-  .my-split-layout:not([vertical]) {
-    --vaadin-split-layout-splitter: {
-      background: var(--paper-indigo-500);
-      margin: 10px 0;
-    };
-  }
-  .my-split-layout[vertical] {
-    --vaadin-split-layout-splitter: {
-      background: var(--paper-indigo-100);
-      margin: 0 20px;
-    };
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    .my-split-layout:not([vertical]) {
+      --vaadin-split-layout-splitter: {
+        background: var(--paper-indigo-500);
+        margin: 10px 0;
+      };
+    }
+    .my-split-layout[vertical] {
+      --vaadin-split-layout-splitter: {
+        background: var(--paper-indigo-100);
+        margin: 0 20px;
+      };
+    }
+  </style>
+</custom-style>
 <vaadin-split-layout vertical class="my-split-layout">
   <div>First content element</div>
   <div>Second content element</div>
@@ -102,13 +108,15 @@ You can change some of its properties via the `--vaadin-split-layout-splitter` m
 
 [source,html]
 ----
-<style is="custom-style">
-  .my-split-layout {
-    --vaadin-split-layout-splitter: {
-      fill: black;
-    };
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    .my-split-layout {
+      --vaadin-split-layout-splitter: {
+        fill: black;
+      };
+    }
+  </style>
+</custom-style>
 <vaadin-split-layout vertical class="my-split-layout">
   <div>First content element</div>
   <div>Second content element</div>
@@ -125,13 +133,15 @@ In order to hide the handle, use `fill: none;` in the splitter mixin:
 
 [source,html]
 ----
-<style is="custom-style">
-  .no-handle {
-    --vaadin-split-layout-splitter: {
-      fill: none;
-    };
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    .no-handle {
+      --vaadin-split-layout-splitter: {
+        fill: none;
+      };
+    }
+  </style>
+</custom-style>
 <vaadin-split-layout class="no-handle">
   <div>First content element</div>
   <div>Second content element</div>
@@ -163,12 +173,14 @@ In order to have different icons for vertical and horizontal layouts, add two ic
 
 [source,html]
 ----
-<style is="custom-style">
-  .my-split-layout[vertical] iron-icon[icon="more-vert"],
-  .my-split-layout:not([vertical]) iron-icon[icon="more-horiz"] {
-    display: none;
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    .my-split-layout[vertical] iron-icon[icon="more-vert"],
+    .my-split-layout:not([vertical]) iron-icon[icon="more-horiz"] {
+      display: none;
+    }
+  </style>
+</custom-style>
 <vaadin-split-layout vertical class="my-split-layout">
   <iron-icon class="splitter-handle" icon="more-vert"></iron-icon>
   <iron-icon class="splitter-handle" icon="more-horiz"></iron-icon>

@@ -149,13 +149,15 @@ color of the handle by using the `fill` property in the splitter styles mixin.
 For example, set `fill: none;` to hide the handle:
 
 ```html
-<style is="custom-style">
-  vaadin-split-layout {
-    --vaadin-split-layout-splitter: {
-      fill: none;
-    };
-  }
-</style>
+<custom-style>
+  <style is="custom-style">
+    vaadin-split-layout {
+      --vaadin-split-layout-splitter: {
+        fill: none;
+      };
+    }
+  </style>
+</custom-style>
 ```
 
 You can also replace the default splitter handle with a custom handle element
