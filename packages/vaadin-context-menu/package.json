@@ -12,6 +12,8 @@
     "gulp": "latest",
     "gulp-html-extract": "^0.2.0",
     "gulp-eslint": "^3.0.1",
+    "gulp-stylelint": "^3.7.0",
+    "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
     "web-component-tester": "^5.0.0",
     "yargs": "^5.0.0"
   },
