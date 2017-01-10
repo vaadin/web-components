@@ -49,7 +49,7 @@
         @apply(--vaadin-date-picker-calendar-date-cell);
       }
 
-      #monthGrid div:not(:empty):not([disabled]):active {
+      #monthGrid div:not(:empty):not([disabled]):not(.weekday):not(.weeknumber):active {
         background: var(--light-primary-color);
         border-radius: 2px;
       }
