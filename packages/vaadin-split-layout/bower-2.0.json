@@ -1,0 +1,59 @@
+{
+  "name": "vaadin-split-layout",
+  "description": "Vaadin Split Layout",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "Vaadin",
+    "split-panel",
+    "split-layout"
+  ],
+  "main": "vaadin-split-layout.html",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vaadin/vaadin-split-layout"
+  },
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0-preview",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#v1",
+    "iron-component-page": "PolymerElements/iron-component-page#2.0-preview",
+    "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview",
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#2.0-preview",
+    "test-fixture": "PolymerElements/test-fixture#custom-elements-v1",
+    "iron-icon": "PolymerElements/iron-icon#2.0-preview",
+    "iron-icons": "PolymerElements/iron-icons#2.0-preview",
+    "paper-button": "PolymerElements/paper-button#2.0-preview",
+    "web-component-tester": "Polymer/web-component-tester#^5.0.0",
+    "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview"
+  },
+  "resolutions": {
+    "test-fixture": "custom-elements-v1"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.7.0",
+        "iron-resizable-behavior": "^1.0.5"
+      },
+      "devDependencies": {
+        "iron-component-page": "^1.1.7",
+        "iron-demo-helpers": "^1.2.5",
+        "web-component-tester": "^5.0.0",
+        "webcomponentsjs": "^0.7.23",
+        "iron-test-helpers": "^1.2.5",
+        "iron-icon": "^1.0.9",
+        "iron-icons": "^1.2.0",
+        "paper-button": "^1.0.14",
+        "elements-demo-resources": "vaadin/elements-demo-resources#master"
+      }
+    }
+  }
+}
