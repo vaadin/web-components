@@ -35,7 +35,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      document.addEventListener('WebComponentsReady', function() {
         Polymer({
           is: 'x-grid',
 
@@ -52,6 +52,8 @@
       <x-grid></x-grid>
     </template>
   </test-fixture>
+
+  <x-grid style="visibility: hidden;"></x-grid>
 
   <script>
     function simulateScrollToStart(grid, done) {
