@@ -30,6 +30,7 @@
     "iron-iconset-svg": "polymerelements/iron-iconset-svg#~1.0.6"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#~1.1.4"
+    "iron-component-page": "polymerelements/iron-component-page#~1.1.4",
+    "elements-demo-resources": "vaadin/elements-demo-resources#master"
   }
 }
