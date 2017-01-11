@@ -57,9 +57,11 @@
 
     _expandedItemsChanged: function(expandedItems, dataSource) {
       this._flushItemsDebouncer();
-      this.$.scroller._physicalItems.forEach(function(row) {
-        row.expanded = this._isExpanded(row.item);
-      }.bind(this));
+      if (this.$.scroller._physicalItems) {
+        this.$.scroller._physicalItems.forEach(function(row) {
+          row.expanded = this._isExpanded(row.item);
+        }.bind(this));
+      }
     },
 
     _rowDetailsTemplateChanged: function(rowDetailsTemplate) {

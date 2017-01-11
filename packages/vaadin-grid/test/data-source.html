@@ -53,6 +53,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="grid">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <x-grid style="visibility: hidden;"></x-grid>
 
   <script>
@@ -210,6 +220,22 @@
           });
         };
       });
+    });
+
+    describe('set manually', function() {
+
+      var grid;
+
+      beforeEach(function() {
+        grid = fixture('grid');
+      });
+
+      it('should work with data source set before size', function() {
+        grid.dataSource = infiniteDataSource;
+        grid.size = 3;
+        expect(getRows(grid.$.scroller.$.items)).to.have.length(3);
+      });
+
     });
   </script>
 
