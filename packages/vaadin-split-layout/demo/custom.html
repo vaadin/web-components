@@ -26,11 +26,13 @@
     <h3>Styling the Content Elements</h3>
     <demo-snippet>
       <template>
-        <style>
-          .my-split-layout > div {
-            background: var(--paper-grey-100);
-          }
-        </style>
+        <cutsom-style>
+          <style is="custom-style">
+            .my-split-layout > div {
+              background: var(--paper-grey-100);
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="my-split-layout">
           <div>First content element</div>
           <div>Second content element</div>
@@ -42,15 +44,17 @@
     <h3>Customizing the Splitter</h3>
     <demo-snippet>
       <template>
-        <style>
-          .custom-1 {
-            --vaadin-split-layout-splitter: {
-              min-width: 6px;
-              min-height: 4px;
-              background: var(--paper-indigo-500);
-            };
-          }
-        </style>
+        <cutsom-style>
+          <style is="custom-style">
+            .custom-1 {
+              --vaadin-split-layout-splitter: {
+                min-width: 6px;
+                min-height: 4px;
+                background: var(--paper-indigo-500);
+              };
+            }
+          </style>
+        </cutsom-style>
         <vaadin-split-layout class="custom-1">
           <div>First content element</div>
           <div>Second content element</div>
@@ -61,13 +65,15 @@
     <h3>Changing the Handle Color</h3>
     <demo-snippet>
       <template>
-        <style>
-          .custom-2 {
-            --vaadin-split-layout-splitter: {
-              fill: black;
-            };
-          }
-        </style>
+        <cutsom-style>
+          <style is="custom-style">
+            .custom-2 {
+              --vaadin-split-layout-splitter: {
+                fill: black;
+              };
+            }
+          </style>
+        </cutsom-style>
         <vaadin-split-layout class="custom-2">
           <div>First content element</div>
           <div>Second content element</div>
