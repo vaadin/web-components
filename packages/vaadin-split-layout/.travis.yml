@@ -3,6 +3,10 @@ dist: trusty
 language: node_js
 node_js: stable
 
+cache:
+  directories:
+    - node_modules
+
 addons:
   firefox: latest
   google-chrome: latest
@@ -13,5 +17,6 @@ script:
   - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct
   - rm -rf bower_components
   - cp bower-2.0.json bower.json
+  - cp wct.conf-2.0.js wct.conf.js
   - bower install --quiet --no-color
   - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct
