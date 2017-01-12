@@ -19,6 +19,16 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="split-layout-with-custom-handle">
+      <template>
+        <vaadin-split-layout>
+          <div id="first">some content</div>
+          <div id="second">some content</div>
+          <div id="handle" class="splitter-handle">handle</div>
+        </vaadin-split-layout>
+      </template>
+    </test-fixture>
+
     <script>
       var touchDevice = (function() {
         try {
@@ -112,14 +122,32 @@
 
       });
 
+      describe('handle', function() {
+        beforeEach(function() {
+          splitLayout = fixture('split-layout-with-custom-handle');
+        });
+
+        it('has custom handle element', function(done) {
+          splitLayout.async(function() {
+            var slot = Polymer.dom(splitLayout.$.splitter).firstElementChild;
+            var children = Polymer.dom(slot).getDistributedNodes();
+            expect(children[0].localName).to.equal('div');
+            done();
+          }, 1);
+        });
+      });
+
       describe('splitter', function() {
 
         beforeEach(function() {
           splitLayout = fixture('split-layout');
         });
 
-        it('has overflow visible', function() {
-          expect(getComputedStyle(splitLayout.$.splitter).overflow).to.equal('visible');
+        it('has overflow visible', function(done) {
+          splitLayout.async(function() {
+            expect(getComputedStyle(splitLayout.$.splitter).overflow).to.equal('visible');
+            done();
+          }, 1);
         });
 
       });

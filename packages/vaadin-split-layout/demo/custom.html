@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>vaadin-split-layout Customization</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
@@ -26,11 +26,13 @@
     <h3>Styling the Content Elements</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .my-split-layout > div {
-            background: var(--paper-grey-100);
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .my-split-layout > div {
+              background: var(--paper-grey-100);
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="my-split-layout">
           <div>First content element</div>
           <div>Second content element</div>
@@ -42,15 +44,17 @@
     <h3>Customizing the Splitter</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-1 {
-            --vaadin-split-layout-splitter: {
-              min-width: 6px;
-              min-height: 4px;
-              background: var(--paper-indigo-500);
-            };
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-1 {
+              --vaadin-split-layout-splitter: {
+                min-width: 6px;
+                min-height: 4px;
+                background: var(--paper-indigo-500);
+              };
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-1">
           <div>First content element</div>
           <div>Second content element</div>
@@ -61,13 +65,15 @@
     <h3>Changing the Handle Color</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-2 {
-            --vaadin-split-layout-splitter: {
-              fill: black;
-            };
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-2 {
+              --vaadin-split-layout-splitter: {
+                fill: black;
+              };
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-2">
           <div>First content element</div>
           <div>Second content element</div>
@@ -78,13 +84,15 @@
     <h3>Hiding the Handle</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-3 {
-            --vaadin-split-layout-splitter: {
-              fill: none;
-            };
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-3 {
+              --vaadin-split-layout-splitter: {
+                fill: none;
+              };
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-3">
           <div>First content element</div>
           <div>Second content element</div>
@@ -95,11 +103,13 @@
     <h3>Replacing the Handle with an Icon</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-4 iron-icon {
-            color: var(--primary-background-color);
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-4 iron-icon {
+              color: var(--primary-background-color);
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-4">
           <div class="content">First content element</div>
           <div class="content">Second content element</div>
@@ -112,34 +122,36 @@
     <p>Notice that if you want different styles for horizontal and vertical layouts, you have to call to `updateStyles` after toggling it.</p>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-5:not([vertical]) {
-            --vaadin-split-layout-splitter: {
-              min-width: 6px;
-              min-height: 4px;
-              background: var(--paper-blue-grey-100);
-              margin: 10px 0;
-            };
-          }
-          .custom-5[vertical] {
-            --vaadin-split-layout-splitter: {
-              min-width: 6px;
-              min-height: 4px;
-              background: var(--paper-grey-900);
-              margin: 0 20px;
-            };
-          }
-          .custom-5 iron-icon[icon="more-vert"] {
-            color: var(--paper-grey-600);
-          }
-          .custom-5 iron-icon[icon="more-horiz"] {
-            color: var(--paper-grey-300);
-          }
-          .custom-5[vertical] iron-icon[icon="more-vert"],
-          .custom-5:not([vertical]) iron-icon[icon="more-horiz"] {
-            display: none;
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-5:not([vertical]) {
+              --vaadin-split-layout-splitter: {
+                min-width: 6px;
+                min-height: 4px;
+                background: var(--paper-blue-grey-100);
+                margin: 10px 0;
+              };
+            }
+            .custom-5[vertical] {
+              --vaadin-split-layout-splitter: {
+                min-width: 6px;
+                min-height: 4px;
+                background: var(--paper-grey-900);
+                margin: 0 20px;
+              };
+            }
+            .custom-5 iron-icon[icon="more-vert"] {
+              color: var(--paper-grey-600);
+            }
+            .custom-5 iron-icon[icon="more-horiz"] {
+              color: var(--paper-grey-300);
+            }
+            .custom-5[vertical] iron-icon[icon="more-vert"],
+            .custom-5:not([vertical]) iron-icon[icon="more-horiz"] {
+              display: none;
+            }
+          </style>
+        </custom-style>
         <paper-button onClick="var s = document.querySelector('.custom-5'); s.vertical = !s.vertical; s.updateStyles();" raised>
           Toggle Layout
         </paper-button>
@@ -155,28 +167,30 @@
     <h3>Customizing Nested Layouts</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-6-2 {
-            --vaadin-split-layout-splitter: {
-              fill: yellow;
-            };
-          }
-          .custom-6-3 {
-            --vaadin-split-layout-splitter: {
-              fill: blue;
-            };
-          }
-          .custom-6-4 {
-            --vaadin-split-layout-splitter: {
-              fill: green;
-            };
-          }
-          .custom-6-5 {
-            --vaadin-split-layout-splitter: {
-              fill: brown;
-            };
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-6-2 {
+              --vaadin-split-layout-splitter: {
+                fill: yellow;
+              };
+            }
+            .custom-6-3 {
+              --vaadin-split-layout-splitter: {
+                fill: blue;
+              };
+            }
+            .custom-6-4 {
+              --vaadin-split-layout-splitter: {
+                fill: green;
+              };
+            }
+            .custom-6-5 {
+              --vaadin-split-layout-splitter: {
+                fill: brown;
+              };
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-6-1">
           <iron-icon class="splitter-handle" icon="radio-button-unchecked"></iron-icon>
           <vaadin-split-layout vertical style="width: 33%" class="custom-6-2">
@@ -202,22 +216,24 @@
     <p>Notice the usage of a transparent border to increase the drag area, and the `fill: none` attribute to hide the handle.</p>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-7-1,
-          .custom-7-2,
-          .custom-7-3 {
-            --vaadin-split-layout-splitter: {
-              min-width: 1px;
-              min-height: 1px;
-              background: var(--dark-theme-divider-color);
-              border: solid 5px transparent;
-              background-clip: content-box;
-              fill: none;
-            };
-            background: var(--dark-theme-background-color);
-            color: var(--dark-theme-text-color);
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-7-1,
+            .custom-7-2,
+            .custom-7-3 {
+              --vaadin-split-layout-splitter: {
+                min-width: 1px;
+                min-height: 1px;
+                background: var(--dark-theme-divider-color);
+                border: solid 5px transparent;
+                background-clip: content-box;
+                fill: none;
+              };
+              background: var(--dark-theme-background-color);
+              color: var(--dark-theme-text-color);
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-7-1">
           <vaadin-split-layout vertical class="custom-7-2">
             <div>First content element</div>
@@ -234,22 +250,24 @@
     <h3>Custom Handle</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-8 {
-            --vaadin-split-layout-splitter: {
-              min-width: 0px;
-            };
-          }
-          .custom-8 .splitter-handle {
-            height: 100px;
-            border: solid 1px var(--paper-indigo-700);
-            border-radius: 5px;
-            background: var(--paper-indigo-300);
-            color: white;
-            @apply(--layout);
-            @apply(--layout-center-center);
-          }
-        </style>
+        <custom-style>
+          <style is="custom-style">
+            .custom-8 {
+              --vaadin-split-layout-splitter: {
+                min-width: 0px;
+              };
+            }
+            .custom-8 .splitter-handle {
+              height: 100px;
+              border: solid 1px var(--paper-indigo-700);
+              border-radius: 5px;
+              background: var(--paper-indigo-300);
+              color: white;
+              @apply(--layout);
+              @apply(--layout-center-center);
+            }
+          </style>
+        </custom-style>
         <vaadin-split-layout class="custom-8">
           <div class="splitter-handle">&middot;</div>
           <div>First content element</div>

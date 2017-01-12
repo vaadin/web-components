@@ -1,6 +1,6 @@
 {
   "name": "vaadin-split-layout",
-  "version": "1.0.0-alpha1",
+  "version": "1.0.0-beta1",
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "repository": "vaadin/vaadin-split-layout",
@@ -14,8 +14,7 @@
     "gulp": "latest",
     "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.1.0",
-    "web-component-tester": "^5.0.0",
-    "yargs": "^3.27.0"
+    "web-component-tester": "^5.0.0"
   },
   "scripts": {
     "postinstall": "node_modules/.bin/bower install"
