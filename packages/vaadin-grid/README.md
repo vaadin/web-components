@@ -1,5 +1,5 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-grid.svg)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://beta.webcomponents.org/element/vaadin/vaadin-grid)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-grid)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-grid.svg?branch=2.0-dev)](https://travis-ci.org/vaadin/vaadin-grid)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-grid/badge.svg?branch=2.0-dev)](https://coveralls.io/github/vaadin/vaadin-grid?branch=2.0-dev)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
