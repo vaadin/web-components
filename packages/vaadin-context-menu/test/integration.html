@@ -48,6 +48,21 @@
           MockInteractions.tap(button);
           expect(menu.opened).to.eql(true);
         });
+
+        it('should place the backdrop above all other document elements', function(done) {
+          MockInteractions.tap(button);
+          menu.async(function() {
+            var buttonRect = button.getBoundingClientRect();
+            MockInteractions.tap(
+              // this should be backdrop, as it placed above the button
+              document.elementFromPoint(buttonRect.left, buttonRect.top)
+            );
+          }, 80);
+          menu.addEventListener('iron-overlay-closed', function() {
+            expect(menu.opened).to.eql(false);
+            done();
+          });
+        });
       });
     </script>
 
