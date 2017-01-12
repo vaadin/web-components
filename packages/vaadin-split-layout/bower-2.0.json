@@ -27,7 +27,7 @@
     "iron-component-page": "PolymerElements/iron-component-page#2.0-preview",
     "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#2.0-preview",
-    "test-fixture": "PolymerElements/test-fixture#custom-elements-v1",
+    "test-fixture": "PolymerElements/test-fixture#^2.0.0",
     "iron-icon": "PolymerElements/iron-icon#2.0-preview",
     "iron-icons": "PolymerElements/iron-icons#2.0-preview",
     "paper-button": "PolymerElements/paper-button#2.0-preview",
@@ -35,7 +35,7 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview"
   },
   "resolutions": {
-    "test-fixture": "custom-elements-v1"
+    "test-fixture": "^2.0.0"
   },
   "variants": {
     "1.x": {
