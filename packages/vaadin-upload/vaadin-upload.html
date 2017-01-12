@@ -57,7 +57,7 @@ Custom property | Description | Default
 
       :host(:not([nodrop])) {
         border: 1px dashed;
-        border-color: var(--divider-color,  #666);
+        border-color: var(--divider-color, #666);
         border-radius: 3px;
         overflow: hidden;
         padding: 16px;
@@ -77,6 +77,7 @@ Custom property | Description | Default
         display: none;
         z-index: 10;
       }
+
       :host([dragover])::before {
         display: block;
       }
@@ -130,7 +131,7 @@ Custom property | Description | Default
         @apply(--paper-font-button);
         padding: .43em .57em;
         background: var(--primary-color, #00B4F0);
-        color: var(--primary-font-color, #FFFFFF);
+        color: var(--primary-font-color, #FFF);
         @apply(--vaadin-upload-button-add);
       }
 
