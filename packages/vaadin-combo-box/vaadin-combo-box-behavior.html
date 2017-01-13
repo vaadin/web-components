@@ -345,7 +345,7 @@
      * Reverts back to original value.
      */
     cancel: function() {
-      this._inputElementValue = this._getItemLabel(this.selectedItem);
+      this._revertInputValueToValue();
       this.close();
     },
 
@@ -437,10 +437,18 @@
       if (this.filter !== '') {
         this._inputElementValue = this.filter;
       } else {
-        this._inputElementValue = this._getItemLabel(this.selectedItem);
+        this._revertInputValueToValue();
       }
 
       this._clearSelectionRange();
+    },
+
+    _revertInputValueToValue: function() {
+      if (this.allowCustomValue && !this.selectedItem) {
+        this._inputElementValue = this.value;
+      } else {
+        this._inputElementValue = this._getItemLabel(this.selectedItem);
+      }
     },
 
     _selectedItemChanged: function(selectedItem) {
