@@ -57,7 +57,7 @@
               // this should be backdrop, as it placed above the button
               document.elementFromPoint(buttonRect.left, buttonRect.top)
             );
-          }, 100);
+          }, 200);
           menu.addEventListener('iron-overlay-closed', function() {
             expect(menu.opened).to.eql(false);
             done();
