@@ -9,7 +9,6 @@
   ],
   "globals": {
     "vaadin": false,
-    "Polymer": false,
-    "MockInteractions": false
+    "Polymer": false
   }
 }

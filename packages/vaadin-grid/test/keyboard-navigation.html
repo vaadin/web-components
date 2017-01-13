@@ -49,8 +49,26 @@
         body = grid.$.scroller.$.items;
         footer = grid.$.scroller.$.footer;
 
+        // stubbing out focusing to make sure it works even if the browser
+        // window doesn't have focus.
         headerTrap = grid.$.headerFocusTrap;
+        sinon.stub(headerTrap, 'focus', function(e) {
+          Polymer.Base.fire('focus', {}, {
+            node: headerTrap
+          });
+        });
+
         footerTrap = grid.$.footerFocusTrap;
+        sinon.stub(footerTrap, 'focus', function(e) {
+          Polymer.Base.fire('focus', {}, {
+            node: footerTrap
+          });
+        });
+      });
+
+      afterEach(function() {
+        headerTrap.focus.restore();
+        footerTrap.focus.restore();
       });
 
       function clickItem(rowIndex) {
@@ -259,7 +277,6 @@
           expect(trap.tabIndex).to.eql(0);
         });
 
-        // Note! focus doesn't shift when inspector is open.
         it('should be possible to tab through grid', function() {
           // assuming grid has been tabbed into.
           headerTrap.focus();
@@ -268,13 +285,12 @@
           tab(); // focus body
           tab(); // focus footer
 
-          expect(footerTrap.matches('div:focus')).to.be.true;
+          expect(footerTrap.focus.callCount).to.eql(1);
 
           tab(); // focus outside (only virtual focus moves in test)
           expect(grid._virtualFocus).to.be.null;
         });
 
-        // Note! focus doesn't shift when inspector is open.
         it('should be possible to shift-tab back from body to header', function() {
           // assuming grid has been tabbed into.
           headerTrap.focus();
@@ -282,11 +298,10 @@
           tab(); // focus body
           shiftTab(); // focus header
 
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(2);
           expect(grid._virtualFocus).to.eql(header);
         });
 
-        // Note! focus doesn't shift when inspector is open.
         it('should be possible to tab back from body to footer', function() {
           // assuming grid has been tabbed into.
           footerTrap.focus();
@@ -294,11 +309,10 @@
           shiftTab(); // focus body
           tab(); // focus footer
 
-          expect(footerTrap.matches('div:focus')).to.be.true;
+          expect(footerTrap.focus.callCount).to.eql(2);
           expect(grid._virtualFocus).to.eql(footer);
         });
 
-        // Note! focus doesn't shift when inspector is open.
         it('should be possible to shift-tab through grid', function() {
           // assuming grid has been tabbed into.
           footerTrap.focus();
@@ -307,7 +321,7 @@
           shiftTab(); // focus body
           shiftTab(); // focus header
 
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(1);
 
           shiftTab(); // focus outside (only virtual focus moves in test)
           expect(grid._virtualFocus).to.be.null;
@@ -378,7 +392,7 @@
           shiftTab();
           shiftTab();
 
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside header to header on tab', function() {
@@ -387,7 +401,7 @@
           tab();
 
           expect(grid._virtualFocus).to.eql(header);
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside header to header on shift-tab', function() {
@@ -395,7 +409,7 @@
 
           shiftTab();
 
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside body to header on tab', function() {
@@ -403,7 +417,7 @@
 
           tab();
 
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside body to header on shift-tab', function() {
@@ -411,7 +425,7 @@
 
           shiftTab();
 
-          expect(headerTrap.matches('div:focus')).to.be.true;
+          expect(headerTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside footer to footer on tab', function() {
@@ -419,7 +433,7 @@
 
           tab();
 
-          expect(footerTrap.matches('div:focus')).to.be.true;
+          expect(footerTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside footer to footer on shift-tab', function() {
@@ -427,7 +441,7 @@
 
           shiftTab();
 
-          expect(footerTrap.matches('div:focus')).to.be.true;
+          expect(footerTrap.focus.callCount).to.eql(1);
         });
 
         it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {

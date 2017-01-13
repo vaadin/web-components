@@ -35,6 +35,8 @@
     "isVisible": false,
     "defaultCellWidth": false,
     "firefox": false,
-    "listenOnce": false
+    "listenOnce": false,
+    "MockInteractions": false,
+    "afterEach": false
   }
 }
