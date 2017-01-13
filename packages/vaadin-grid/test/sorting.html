@@ -227,8 +227,13 @@
             }]);
           });
 
-        });
+          it('should request new data on change in existing sorters', function() {
+            grid.dataSource.reset();
+            sorterLast.direction = 'asc';
+            expect(grid.dataSource.called).to.be.true;
+          });
 
+        });
 
       });
 
