@@ -111,7 +111,9 @@
         grid.activeItem = grid.items[1];
         setColor('--vaadin-grid-cell-last-frozen', color1);
         setColor('--vaadin-grid-body-row-active-cell', color2);
-        expect(getColor(bodyRowCells[0])).to.equal(color2);
+
+        expect(getColor(bodyRowCells[0])).to.equal(color1); // last frozen overrides active
+        expect(getColor(bodyRowCells[1])).to.equal(color2);
       });
 
       it('should override last column cells right border', function() {
