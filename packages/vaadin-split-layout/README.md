@@ -73,7 +73,7 @@
 
 1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
 
-1. When in the `vaadin-split-layout` directory, run `wct` or `npm test`, browser will automatically open the component API documentation.
+1. When in the `vaadin-split-layout` directory, run `wct` or `npm test`
 
 
 ## Following the coding style

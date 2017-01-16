@@ -18,7 +18,6 @@ module.exports = {
         // mobile
         'OS X 10.11/iphone@9.2',
         'OS X 10.11/ipad@9.2',
-        'Linux/android@5.1'
       ];
     }
   }
