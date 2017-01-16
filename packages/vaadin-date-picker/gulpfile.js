@@ -1,7 +1,9 @@
 'use strict';
+
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
+var stylelint = require('gulp-stylelint');
 var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
 var typings = require('gulp-typings');
@@ -30,6 +32,22 @@ gulp.task('lint:html', function() {
   .pipe(eslint())
   .pipe(eslint.format())
   .pipe(eslint.failAfterError());
+});
+
+gulp.task('lint:css', function() {
+  return gulp.src([
+    '*.html',
+    'demo/*.html',
+    'test/*.html'
+  ])
+  .pipe(htmlExtract({
+    sel: 'style'
+  }))
+  .pipe(stylelint({
+    reporters: [
+      {formatter: 'string', console: true}
+    ]
+  }));
 });
 
 gulp.task('typings', function() {
