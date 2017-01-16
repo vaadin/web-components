@@ -33,6 +33,11 @@
             <input>
           </template>
         </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header"></template>
+          <template>[[index]] [[item]]</template>
+          <template class="footer"></template>
+        </vaadin-grid-column>
       </vaadin-grid>
       <input id="focusable">
     </template>
@@ -525,7 +530,7 @@
 
           right();
 
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(1);
+          expect(grid._virtualFocus._focusedCellIndex).to.eql(2);
         });
 
         it('should focus cell below with down', function() {
@@ -617,6 +622,22 @@
             left();
 
             expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+          });
+
+          it('should scroll cell visible under from frozen cells with left arrow', function(done) {
+            grid.style.width = '200px'; // column default min width is 100px
+            grid.style.border = 'none';
+            grid._columnTree[0][0].frozen = true;
+
+            clickItem(0);
+            right();
+            right();
+
+            grid.async(function() {
+              left();
+              expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+              done();
+            });
           });
 
           it('should scroll cells visible with left arrow on footer', function() {
