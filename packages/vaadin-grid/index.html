@@ -45,7 +45,7 @@
           _filterBehaviors: function(e) {
             this.$.docs.docBehaviors.forEach(function(beh, index) {
               // blacklist internal APIs
-              if (/iron|Iron|TableScroll|vaadinGridTable|FocusableCellContainer/.test(beh.is)) {
+              if (/iron|Iron|Table|FocusableCellContainer/.test(beh.is)) {
                 this.$.docs.splice('docBehaviors', index, 1);
               }
             }.bind(this));

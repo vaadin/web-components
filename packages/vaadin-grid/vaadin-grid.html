@@ -99,6 +99,10 @@ Key | Action
       -webkit-tap-highlight-color: transparent;
     }
 
+    :host(:focus) {
+      outline: none;
+    }
+
     #scroller {
       height: 100%;
       width: 100%;
@@ -117,6 +121,10 @@ Key | Action
 <script>
   Polymer({
     is: 'vaadin-grid',
+
+    hostAttributes: {
+      'tabindex': -1
+    },
 
     properties: {
 
@@ -154,7 +162,14 @@ Key | Action
     ],
 
     listeners: {
-      'property-changed': '_columnPropChanged'
+      'property-changed': '_columnPropChanged',
+      'focus': '_onFocus'
+    },
+
+    _onFocus: function(e) {
+      // in native shadow, scroller cannot be focused by clicking so we'll
+      // propagate the focus from vaadin-grid to it.
+      this.$.scroller.focus();
     },
 
     _updateItem: function(row, item) {

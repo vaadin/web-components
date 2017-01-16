@@ -573,7 +573,7 @@
           expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
         });
 
-        describe('vertical scrolling', function() {
+        describe('horizontal scrolling', function() {
           beforeEach(function() {
             grid.style.width = '100px'; // column default min width is 100px
           });
@@ -652,7 +652,7 @@
           });
         });
 
-        describe('horizontal scrolling', function() {
+        describe('vertical scrolling', function() {
           beforeEach(function() {
             grid.size = 200;
             grid.dataSource = infiniteDataSource;
