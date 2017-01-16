@@ -143,6 +143,13 @@ Custom property | Description | Default
         value: function() {
           return [];
         }
+      },
+
+      _previousSorters: {
+        type: Array,
+        value: function() {
+          return [];
+        }
       }
 
     },
@@ -153,7 +160,6 @@ Custom property | Description | Default
 
     _onSorterChanged: function(e) {
       var sorter = e.target;
-      var _sortersBefore = this._mapSorters();
 
       this._removeArrayItem(this._sorters, sorter);
       if (sorter.direction) {
@@ -167,12 +173,13 @@ Custom property | Description | Default
 
       e.stopPropagation();
 
-      if (JSON.stringify(_sortersBefore) === JSON.stringify(this._mapSorters())) {
+      if (this.dataSource &&
         // No need to clear cache if sorters didn't change
-        return;
-      } else if (this.dataSource) {
+        JSON.stringify(this._previousSorters) !== JSON.stringify(this._mapSorters())) {
         this.clearCache();
       }
+
+      this._previousSorters = this._mapSorters();
     },
 
     _mapSorters: function() {
