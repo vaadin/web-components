@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="vaadin-grid-active-item-behavior.html">
 <link rel="import" href="vaadin-grid-table-scroll-behavior.html">
 <link rel="import" href="vaadin-grid-sizer.html">
 <link rel="import" href="vaadin-grid-table-outer-scroller.html">
@@ -9,7 +10,7 @@
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-selection-behavior.html">
-<link rel="import" href="vaadin-grid-keyboard-navigation-behavior.html">
+<link rel="import" href="vaadin-grid-table-keyboard-behavior.html">
 <link rel="import" href="iron-list-behavior.html">
 
 <dom-module id="vaadin-grid-table-styles">
@@ -205,11 +206,14 @@
     <style include="vaadin-grid-data-source-styles"></style>
     <style include="vaadin-grid-table-styles"></style>
 
+    <style include="vaadin-grid-active-item-themability-styles"></style>
     <style include="vaadin-grid-table-themability-styles"></style>
     <style include="vaadin-grid-selection-themability-styles"></style>
     <style include="vaadin-grid-navigation-themability-styles"></style>
     <style include="vaadin-grid-data-source-themability-styles"></style>
     <style include="vaadin-grid-row-details-themability-styles"></style>
+
+    <div id="headerFocusTrap" tabindex="0" on-focus="_onHeaderFocus"></div>
 
     <content select="vaadin-grid-column, vaadin-grid-selection-column, vaadin-grid-column-group"></content>
 
@@ -238,7 +242,7 @@
       It needs to be injected/slotted back inside the shadow root in order to be focusable.
      -->
     <content select="#footerFocusTrap"></content>
-
+    <div id="footerFocusTrap" tabindex="0" on-focus="_onFooterFocus"></div>
   </template>
 </dom-module>
 
@@ -251,6 +255,7 @@
     behaviors: [
       vaadin.elements.grid.IronListBehavior,
       vaadin.elements.grid.TableScrollBehavior,
+      vaadin.elements.grid.TableKeyboardBehavior,
       Polymer.Templatizer,
       Polymer.IronResizableBehavior
     ],

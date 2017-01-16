@@ -78,7 +78,7 @@ Key | Action
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-table.html">
 <link rel="import" href="vaadin-grid-column.html">
-<link rel="import" href="vaadin-grid-keyboard-navigation-behavior.html">
+<link rel="import" href="vaadin-grid-active-item-behavior.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
 <link rel="import" href="vaadin-grid-data-source-behavior.html">
 <link rel="import" href="vaadin-grid-array-data-source-behavior.html">
@@ -99,10 +99,6 @@ Key | Action
       -webkit-tap-highlight-color: transparent;
     }
 
-    :host(:focus) {
-      outline: none;
-    }
-
     #scroller {
       height: 100%;
       width: 100%;
@@ -110,15 +106,11 @@ Key | Action
 
   </style>
   <template>
-    <div id="headerFocusTrap" tabindex="0" on-focus="_onHeaderFocus"></div>
-
     <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
         row-details-template="[[_rowDetailsTemplate]]">
       <content></content>
     </vaadin-grid-table>
-
-    <div id="footerFocusTrap" tabindex="0" on-focus="_onFooterFocus"></div>
   </template>
 </dom-module>
 
@@ -151,7 +143,7 @@ Key | Action
 
     behaviors: [
       Polymer.IronA11yKeysBehavior,
-      vaadin.elements.grid.KeyboardNavigationBehavior,
+      vaadin.elements.grid.ActiveItemBehavior,
       vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.DataSourceBehavior,
       vaadin.elements.grid.DynamicColumnsBehavior,
@@ -191,13 +183,5 @@ Key | Action
 
       e.stopPropagation();
     }
-
-    /**
-     * Fired when a non-focusable element inside a cell is clicked.
-     *
-     * @event cell-click
-     * @param {Object} detail
-     *  @param {Object} detail.model the internal model bound to the cell element.
-     */
   });
 </script>

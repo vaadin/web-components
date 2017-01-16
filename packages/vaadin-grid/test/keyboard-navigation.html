@@ -45,25 +45,26 @@
 
   <script>
     describe('keyboard navigation', function() {
-      var grid, header, footer, body, headerTrap, footerTrap;
+      var grid, scroller, header, footer, body, headerTrap, footerTrap;
       beforeEach(function() {
         grid = fixture('default')[0];
         grid.items = ['foo', 'bar'];
 
+        scroller = grid.$.scroller;
         header = grid.$.scroller.$.header;
         body = grid.$.scroller.$.items;
         footer = grid.$.scroller.$.footer;
 
         // stubbing out focusing to make sure it works even if the browser
         // window doesn't have focus.
-        headerTrap = grid.$.headerFocusTrap;
+        headerTrap = grid.$.scroller.$.headerFocusTrap;
         sinon.stub(headerTrap, 'focus', function(e) {
           Polymer.Base.fire('focus', {}, {
             node: headerTrap
           });
         });
 
-        footerTrap = grid.$.footerFocusTrap;
+        footerTrap = grid.$.scroller.$.footerFocusTrap;
         sinon.stub(footerTrap, 'focus', function(e) {
           Polymer.Base.fire('focus', {}, {
             node: footerTrap
@@ -95,31 +96,31 @@
       }
 
       function tab() {
-        var event = MockInteractions.keyDownOn(grid, 9);
+        var event = MockInteractions.keyDownOn(scroller, 9);
       }
 
       function shiftTab() {
-        MockInteractions.keyDownOn(grid, 9, 'shift');
+        MockInteractions.keyDownOn(scroller, 9, 'shift');
       }
 
       function left() {
-        MockInteractions.keyDownOn(grid, 37);
+        MockInteractions.keyDownOn(scroller, 37);
       }
 
       function up() {
-        MockInteractions.keyDownOn(grid, 38);
+        MockInteractions.keyDownOn(scroller, 38);
       }
 
       function right() {
-        MockInteractions.keyDownOn(grid, 39);
+        MockInteractions.keyDownOn(scroller, 39);
       }
 
       function down() {
-        MockInteractions.keyDownOn(grid, 40);
+        MockInteractions.keyDownOn(scroller, 40);
       }
 
       function space() {
-        MockInteractions.keyDownOn(grid, 32);
+        MockInteractions.keyDownOn(scroller, 32);
       }
 
       function getFirstHeaderCell() {
@@ -158,20 +159,20 @@
 
       describe('navigation mode', function() {
         it('should not be in navigation mode by default', function() {
-          expect(grid._navigating).to.be.false;
+          expect(scroller._navigating).to.be.false;
         });
 
         it('should not enable navigation mode when cell is clicked', function() {
           clickFirstHeaderCell();
 
-          expect(grid._navigating).to.be.false;
+          expect(scroller._navigating).to.be.false;
         });
 
         it('should enable navigation mode when tabbed into header', function() {
           // simulating tabbing into header
           headerTrap.focus();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should enable navigation mode when tabbed inside header', function() {
@@ -179,14 +180,14 @@
 
           tab();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should enable navigation mode when tabbed into footer', function() {
           // simulating tabbing into header
           footerTrap.focus();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should enable navigation mode when tabbed inside footer', function() {
@@ -194,16 +195,16 @@
 
           tab();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should disable navigation mode when cell content is focused', function() {
-          grid._navigating = true;
+          scroller._navigating = true;
 
           focusHeaderInput();
 
-          expect(grid._navigating).to.be.false;
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._navigating).to.be.false;
+          expect(scroller._virtualFocus).to.eql(header);
         });
 
         it('should enable navigation mode when tabbed inside focused input in header', function() {
@@ -211,8 +212,8 @@
 
           tab();
 
-          expect(grid._navigating).to.be.true;
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._navigating).to.be.true;
+          expect(scroller._virtualFocus).to.eql(header);
         });
 
         it('should enable navigation mode when tabbed inside focused input in body', function() {
@@ -220,8 +221,8 @@
 
           tab();
 
-          expect(grid._navigating).to.be.true;
-          expect(grid._virtualFocus).to.eql(body);
+          expect(scroller._navigating).to.be.true;
+          expect(scroller._virtualFocus).to.eql(body);
         });
 
         it('should enable navigation mode when tabbed inside focused input in footer', function() {
@@ -229,8 +230,8 @@
 
           tab();
 
-          expect(grid._navigating).to.be.true;
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._navigating).to.be.true;
+          expect(scroller._virtualFocus).to.eql(footer);
         });
 
         it('should enable navigation mode when shift-tabbed inside focused input in header', function() {
@@ -238,8 +239,8 @@
 
           shiftTab();
 
-          expect(grid._navigating).to.be.true;
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._navigating).to.be.true;
+          expect(scroller._virtualFocus).to.eql(header);
         });
 
         it('should enable navigation mode when shift-tabbed inside focused input in body', function() {
@@ -247,8 +248,8 @@
 
           shiftTab();
 
-          expect(grid._navigating).to.be.true;
-          expect(grid._virtualFocus).to.eql(body);
+          expect(scroller._navigating).to.be.true;
+          expect(scroller._virtualFocus).to.eql(body);
         });
 
         it('should enable navigation mode when shift-tabbed inside focused input in footer', function() {
@@ -256,28 +257,28 @@
 
           shiftTab();
 
-          expect(grid._navigating).to.be.true;
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._navigating).to.be.true;
+          expect(scroller._virtualFocus).to.eql(footer);
         });
       });
 
       describe('navigating with tab', function() {
         beforeEach(function() {
-          grid._navigating = true;
+          scroller._navigating = true;
         });
 
         it('should have a focus trap as the very first child', function() {
           expect(grid.tabIndex).not.to.eql(0);
 
           // header focus trap needs to be the first element in Shadow DOM.
-          var trap = Polymer.dom(grid.root).querySelector(':not(style)');
+          var trap = Polymer.dom(scroller.root).querySelector(':not(style)');
 
           expect(trap.tabIndex).to.eql(0);
         });
 
         it('should have a focus trap as the very last child', function() {
           // footer focus trap needs to be the last element in Light DOM.
-          var trap = grid.lastElementChild;
+          var trap = Polymer.Settings.useNativeShadow ? grid.lastElementChild : scroller.lastElementChild;
 
           expect(trap.tabIndex).to.eql(0);
         });
@@ -285,7 +286,7 @@
         it('should be possible to tab through grid', function() {
           // assuming grid has been tabbed into.
           headerTrap.focus();
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._virtualFocus).to.eql(header);
 
           tab(); // focus body
           tab(); // focus footer
@@ -293,7 +294,7 @@
           expect(footerTrap.focus.callCount).to.eql(1);
 
           tab(); // focus outside (only virtual focus moves in test)
-          expect(grid._virtualFocus).to.be.null;
+          expect(scroller._virtualFocus).to.be.null;
         });
 
         it('should be possible to shift-tab back from body to header', function() {
@@ -304,7 +305,7 @@
           shiftTab(); // focus header
 
           expect(headerTrap.focus.callCount).to.eql(2);
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._virtualFocus).to.eql(header);
         });
 
         it('should be possible to tab back from body to footer', function() {
@@ -315,13 +316,13 @@
           tab(); // focus footer
 
           expect(footerTrap.focus.callCount).to.eql(2);
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._virtualFocus).to.eql(footer);
         });
 
         it('should be possible to shift-tab through grid', function() {
           // assuming grid has been tabbed into.
           footerTrap.focus();
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._virtualFocus).to.eql(footer);
 
           shiftTab(); // focus body
           shiftTab(); // focus header
@@ -329,70 +330,70 @@
           expect(headerTrap.focus.callCount).to.eql(1);
 
           shiftTab(); // focus outside (only virtual focus moves in test)
-          expect(grid._virtualFocus).to.be.null;
+          expect(scroller._virtualFocus).to.be.null;
         });
 
         it('should set virtual focus to header on header cell click', function() {
           clickFirstHeaderCell();
 
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._virtualFocus).to.eql(header);
         });
 
         it('should set virtual focus to body on body cell click', function() {
           clickItem(0);
 
-          expect(grid._virtualFocus).to.eql(body);
+          expect(scroller._virtualFocus).to.eql(body);
         });
 
         it('should set virtual focus to footer on footer cell click', function() {
           clickFirstFooterCell();
 
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._virtualFocus).to.eql(footer);
         });
 
         it('should move virtual focus from header to body on tab', function() {
-          grid._virtualFocus = header;
+          scroller._virtualFocus = header;
 
           tab();
 
-          expect(grid._virtualFocus).to.eql(body);
+          expect(scroller._virtualFocus).to.eql(body);
         });
 
         it('should move virtual focus from body to footer on tab', function() {
-          grid._virtualFocus = body;
+          scroller._virtualFocus = body;
 
           tab();
 
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._virtualFocus).to.eql(footer);
         });
 
         it('should move actual focus from header to footer on tab', function() {
-          grid._virtualFocus = header;
+          scroller._virtualFocus = header;
 
           tab();
           tab();
 
-          expect(grid._virtualFocus).to.eql(footer);
+          expect(scroller._virtualFocus).to.eql(footer);
         });
 
         it('should move virtual focus from footer to body on shift-tab', function() {
-          grid._virtualFocus = footer;
+          scroller._virtualFocus = footer;
 
           shiftTab();
 
-          expect(grid._virtualFocus).to.eql(body);
+          expect(scroller._virtualFocus).to.eql(body);
         });
 
         it('should move virtual focus from body to header on shift-tab', function() {
-          grid._virtualFocus = body;
+          scroller._virtualFocus = body;
 
           shiftTab();
 
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._virtualFocus).to.eql(header);
         });
 
         it('should move actual focus to from footer to header on shift-tab', function() {
-          grid._virtualFocus = footer;
+          scroller._virtualFocus = footer;
 
           shiftTab();
           shiftTab();
@@ -405,7 +406,7 @@
 
           tab();
 
-          expect(grid._virtualFocus).to.eql(header);
+          expect(scroller._virtualFocus).to.eql(header);
           expect(headerTrap.focus.callCount).to.eql(1);
         });
 
@@ -452,18 +453,18 @@
         it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
           footer.children[0].hidden = true;
 
-          grid._virtualFocus = body;
+          scroller._virtualFocus = body;
 
           tab();
 
-          expect(grid._virtualFocus).to.be.null;
+          expect(scroller._virtualFocus).to.be.null;
         });
 
         it('should not move virtual focus to footer on shift-tab when no footer rows exist', function() {
           footer.children[0].hidden = true;
           footerTrap.focus();
 
-          expect(grid._virtualFocus).to.eql(body);
+          expect(scroller._virtualFocus).to.eql(body);
         });
       });
 
@@ -473,7 +474,7 @@
 
           down();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should navigate on down when navigation mode is off', function() {
@@ -481,7 +482,7 @@
 
           down();
 
-          expect(grid._virtualFocus._focusedRowIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
         });
 
         it('should enable navigation mode on up', function() {
@@ -489,7 +490,7 @@
 
           up();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should navigate on up when navigation mode is off', function() {
@@ -497,7 +498,7 @@
 
           up();
 
-          expect(grid._virtualFocus._focusedRowIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
         });
 
         it('should enable navigation mode on left', function() {
@@ -505,16 +506,16 @@
 
           left();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should navigate on left when navigation mode is off', function() {
           clickFirstBodyInput(0);
-          grid._virtualFocus._focusedCellIndex = 1;
+          scroller._virtualFocus._focusedCellIndex = 1;
 
           left();
 
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
         });
 
         it('should enable navigation mode on right', function() {
@@ -522,7 +523,7 @@
 
           right();
 
-          expect(grid._navigating).to.be.true;
+          expect(scroller._navigating).to.be.true;
         });
 
         it('should navigate on right when navigation mode is off', function() {
@@ -530,7 +531,7 @@
 
           right();
 
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(2);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
         });
 
         it('should focus cell below with down', function() {
@@ -539,8 +540,8 @@
 
           down();
 
-          expect(grid._virtualFocus._focusedRowIndex).to.eql(1);
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
         });
 
         it('should focus cell above with up', function() {
@@ -549,8 +550,8 @@
 
           up();
 
-          expect(grid._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
         });
 
         it('should focus cell left with left', function() {
@@ -558,8 +559,8 @@
 
           left();
 
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(0);
-          expect(grid._virtualFocus._focusedRowIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
         });
 
         it('should focus cell right with right', function() {
@@ -568,8 +569,8 @@
 
           right();
 
-          expect(grid._virtualFocus._focusedCellIndex).to.eql(1);
-          expect(grid._virtualFocus._focusedRowIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
         });
 
         describe('vertical scrolling', function() {
@@ -745,7 +746,7 @@
         it('should have focused first cell in header by default', function() {
           expect(header.hasAttribute('focused')).to.be.false;
 
-          grid._virtualFocus = header;
+          scroller._virtualFocus = header;
 
           var firstRow = header.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
@@ -757,7 +758,7 @@
         it('should have focused first cell in body by default', function() {
           expect(body.hasAttribute('focused')).to.be.false;
 
-          grid._virtualFocus = body;
+          scroller._virtualFocus = body;
 
           var firstRow = body.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
@@ -769,7 +770,7 @@
         it('should have focused first cell in footer by default', function() {
           expect(footer.hasAttribute('focused')).to.be.false;
 
-          grid._virtualFocus = footer;
+          scroller._virtualFocus = footer;
 
           var firstRow = footer.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
