@@ -49,7 +49,7 @@
 
       #toolbar iron-icon {
         fill: var(--primary-color);
-        padding: 0px;
+        padding: 0;
         transition: transform 200ms;
         will-change: transform;
         --iron-icon-width: 20px;
@@ -144,12 +144,12 @@
         }
       }
 
-      #yearScroller:before {
+      #yearScroller::before {
         content: '';
         display: block;
         background: transparent;
-        width: 0px;
-        height: 0px;
+        width: 0;
+        height: 0;
         position: absolute;
         left: 0;
         top: 50%;
@@ -230,7 +230,7 @@
         @apply(--paper-font-body2);
         background: var(--primary-background-color);
         z-index: 2;
-        box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.50);
+        box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.5);
         color: var(--primary-color);
         flex-shrink: 0;
         @apply(--vaadin-date-picker-footer);
@@ -245,7 +245,7 @@
       #announcer {
         display: inline-block;
         position: fixed;
-        clip: rect(0px, 0px, 0px, 0px);
+        clip: rect(0, 0, 0, 0);
         clip-path: inset(100%);
       }
     </style>
