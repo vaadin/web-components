@@ -45,8 +45,9 @@
         observer: '_virtualFocusChanged'
       },
 
-      _navigating: {
+      navigating: {
         type: Boolean,
+        reflectToAttribute: true,
         value: false
       }
     },
@@ -60,10 +61,6 @@
       'cell-focus': '_onCellFocus',
       'cell-content-focus': '_onCellContentFocus'
     },
-
-    observers: [
-      '_navigatingChanged(_navigating)'
-    ],
 
     keyBindings: {
       'tab': '_focusNext',
@@ -82,17 +79,13 @@
     },
 
     _onHeaderFocus: function(e) {
-      this._navigating = true;
+      this.navigating = true;
       this._virtualFocus = this.$.header;
     },
 
     _onFooterFocus: function(e) {
-      this._navigating = true;
+      this.navigating = true;
       this._virtualFocus = this._isFooterVisible() ? this.$.footer : this.$.items;
-    },
-
-    _navigatingChanged: function(navigating) {
-      this.toggleAttribute('navigating', navigating, this);
     },
 
     _virtualFocusChanged: function(virtualFocus, oldVirtualFocus) {
@@ -107,7 +100,7 @@
     },
 
     _focusNext: function(e) {
-      if (this._navigating) {
+      if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.header:
             this._virtualFocus = this.$.items;
@@ -148,7 +141,7 @@
     },
 
     _focusPrev: function(e) {
-      if (this._navigating) {
+      if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.footer:
             this._virtualFocus = this.$.items;
@@ -188,7 +181,7 @@
       e.preventDefault();
 
       this._virtualFocus.focusDown();
-      this._navigating = true;
+      this.navigating = true;
 
       if (this._virtualFocus === this.$.items) {
         this._ensureVirtualFocusInViewport();
@@ -199,7 +192,7 @@
       e.preventDefault();
 
       this._virtualFocus.focusUp();
-      this._navigating = true;
+      this.navigating = true;
 
       if (this._virtualFocus === this.$.items) {
         this._ensureVirtualFocusInViewport();
@@ -210,7 +203,7 @@
       e.preventDefault();
 
       this._virtualFocus.focusRight();
-      this._navigating = true;
+      this.navigating = true;
 
       this._ensureVirtualFocusInViewport();
     },
@@ -219,13 +212,13 @@
       e.preventDefault();
 
       this._virtualFocus.focusLeft();
-      this._navigating = true;
+      this.navigating = true;
 
       this._ensureVirtualFocusInViewport();
     },
 
     _space: function(e) {
-      if (this._navigating && this._virtualFocus === this.$.items) {
+      if (this.navigating && this._virtualFocus === this.$.items) {
         e.preventDefault();
 
         this.fire('cell-activate', {model: this._virtualFocus._focusedCell.instance});
@@ -233,7 +226,7 @@
     },
 
     _onCellContentFocus: function(e) {
-      this._navigating = false; // TODO: go to "interaction" mode.
+      this.navigating = false; // TODO: go to "interaction" mode.
     },
 
     _onCellFocus: function(e) {

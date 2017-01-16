@@ -159,20 +159,20 @@
 
       describe('navigation mode', function() {
         it('should not be in navigation mode by default', function() {
-          expect(scroller._navigating).to.be.false;
+          expect(scroller.navigating).to.be.false;
         });
 
         it('should not enable navigation mode when cell is clicked', function() {
           clickFirstHeaderCell();
 
-          expect(scroller._navigating).to.be.false;
+          expect(scroller.navigating).to.be.false;
         });
 
         it('should enable navigation mode when tabbed into header', function() {
           // simulating tabbing into header
           headerTrap.focus();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should enable navigation mode when tabbed inside header', function() {
@@ -180,14 +180,14 @@
 
           tab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should enable navigation mode when tabbed into footer', function() {
           // simulating tabbing into header
           footerTrap.focus();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should enable navigation mode when tabbed inside footer', function() {
@@ -195,15 +195,15 @@
 
           tab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should disable navigation mode when cell content is focused', function() {
-          scroller._navigating = true;
+          scroller.navigating = true;
 
           focusHeaderInput();
 
-          expect(scroller._navigating).to.be.false;
+          expect(scroller.navigating).to.be.false;
           expect(scroller._virtualFocus).to.eql(header);
         });
 
@@ -212,7 +212,7 @@
 
           tab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(header);
         });
 
@@ -221,7 +221,7 @@
 
           tab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(body);
         });
 
@@ -230,7 +230,7 @@
 
           tab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(footer);
         });
 
@@ -239,7 +239,7 @@
 
           shiftTab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(header);
         });
 
@@ -248,7 +248,7 @@
 
           shiftTab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(body);
         });
 
@@ -257,14 +257,14 @@
 
           shiftTab();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(footer);
         });
       });
 
       describe('navigating with tab', function() {
         beforeEach(function() {
-          scroller._navigating = true;
+          scroller.navigating = true;
         });
 
         it('should have a focus trap as the very first child', function() {
@@ -474,7 +474,7 @@
 
           down();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should navigate on down when navigation mode is off', function() {
@@ -490,7 +490,7 @@
 
           up();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should navigate on up when navigation mode is off', function() {
@@ -506,7 +506,7 @@
 
           left();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should navigate on left when navigation mode is off', function() {
@@ -523,7 +523,7 @@
 
           right();
 
-          expect(scroller._navigating).to.be.true;
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should navigate on right when navigation mode is off', function() {
