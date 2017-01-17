@@ -8,22 +8,9 @@
       }
 
       :host([navigating]) [focused] > tr[focused] > [focused] ::content > .cell-content {
-        position: relative;
-      }
+        box-shadow: inset 0 0 0 3px rgba(0,0,0,0.3);
 
-      :host([navigating]) [focused] > tr[focused] > [focused] ::content > .cell-content::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        border: 3px solid black;
-        opacity: 0.3;
-        pointer-events: none;
-
-        @apply(--vaadin-grid-focused-cell-highlight);
+        @apply(--vaadin-grid-focused-cell);
       }
     </style>
   </template>
