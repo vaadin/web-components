@@ -210,6 +210,34 @@
         expect(comboBox.opened).to.equal(true);
       });
 
+      it('should revert to the custom value after filtering', function() {
+        comboBox.allowCustomValue = true;
+        comboBox.value = 'foobar';
+        filter('bar');
+        esc();
+        expect(getInput().bindValue).to.eql('bar');
+        esc();
+        expect(getInput().bindValue).to.equal('foobar');
+      });
+
+      it('should revert a non-listed value to the custom value after filtering', function() {
+        comboBox.allowCustomValue = true;
+        comboBox.value = 'foobar';
+        filter('barbaz');
+        esc();
+        expect(getInput().bindValue).to.equal('foobar');
+      });
+
+      it('should revert to the custom value after keyboar navigation', function() {
+        comboBox.allowCustomValue = true;
+        comboBox.value = 'foobar';
+        arrowDown();
+        esc();
+        expect(getInput().bindValue).to.eql('foobar');
+        esc();
+        expect(getInput().bindValue).to.equal('foobar');
+      });
+
       it('should close the overlay with enter', function() {
         enter();
 
