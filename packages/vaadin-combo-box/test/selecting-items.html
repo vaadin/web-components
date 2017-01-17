@@ -19,6 +19,14 @@
   </template>
 </test-fixture>
 
+<test-fixture id="combobox-custom-clear">
+  <template>
+    <vaadin-combo-box>
+      <div class="clear-button">CLEAR</div>
+    </vaadin-combo-box>
+  </template>
+</test-fixture>
+
 <script>
   describe('selecting a value', function() {
     var combobox;
@@ -216,57 +224,74 @@
     });
   });
 
-  describe('clearing a selection', function() {
-    var combobox;
-    var clearIcon;
-    beforeEach(function() {
-      combobox = fixture('combobox');
-      combobox.items = ['foo', 'bar'];
+  ['default', 'custom'].forEach(function(button) {
 
-      combobox.value = 'foo';
+    describe('clearing a selection - ' + button + ' clear icon', function() {
+      var combobox;
+      var clearIcon;
+      beforeEach(function() {
+        combobox = fixture(button === 'default' ? 'combobox' : 'combobox-custom-clear');
+        combobox.items = ['foo', 'bar'];
 
-      clearIcon = combobox.$.clearIcon;
-    });
+        combobox.value = 'foo';
 
-    it('should show the clearing icon only when dropdown is open', function() {
-      expect(window.getComputedStyle(clearIcon).display).to.eql('none');
-
-      combobox.open();
-
-      expect(window.getComputedStyle(clearIcon).display).to.contain('block');
-    });
-
-    it('should not show clearing icon when nothing is selected', function() {
-      combobox.open();
-
-      combobox.value = '';
-
-      expect(window.getComputedStyle(clearIcon).display).to.eql('none');
-    });
-
-    it('should clear the selection when tapping on the icon', function() {
-      combobox.open();
-
-      Polymer.Base.fire('tap', {}, {
-        bubbles: true,
-        node: clearIcon
+        clearIcon = combobox._clearElement;
       });
 
-      expect(combobox.value).to.eql('');
-      expect(combobox.$.overlay._selectedItem).to.be.null;
-      expect(combobox.selectedItem).to.be.null;
-    });
+      it('should show the clearing icon only when dropdown is open', function() {
+        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
 
-    it('should close the dropdown after clearing a selection', function() {
-      combobox.open();
+        combobox.open();
 
-      Polymer.Base.fire('tap', {}, {
-        bubbles: true,
-        node: clearIcon
+        expect(window.getComputedStyle(clearIcon).display).to.contain('block');
       });
 
-      expect(combobox.opened).to.eql(false);
+      it('should not show clearing icon when nothing is selected', function() {
+        combobox.open();
+
+        combobox.value = '';
+
+        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
+      });
+
+      it('should clear the selection when tapping on the icon', function() {
+        combobox.open();
+
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: clearIcon
+        });
+
+        expect(combobox.value).to.eql('');
+        expect(combobox.$.overlay._selectedItem).to.be.null;
+        expect(combobox.selectedItem).to.be.null;
+      });
+
+      it('should close the dropdown after clearing a selection', function() {
+        combobox.open();
+
+        Polymer.Base.fire('tap', {}, {
+          bubbles: true,
+          node: clearIcon
+        });
+
+        expect(combobox.opened).to.eql(false);
+      });
+
+      it('should cancel down event to avoid input blur', function() {
+        combobox.open();
+
+        var event = Polymer.Base.fire('down', {}, {
+          bubbles: true,
+          node: clearIcon,
+          cancelable: true
+        });
+
+        expect(event.defaultPrevented).to.eql(true);
+      });
+
     });
+
   });
 
   describe('selecting a custom value', function() {
