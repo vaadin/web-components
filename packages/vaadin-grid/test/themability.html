@@ -132,6 +132,16 @@
         var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
         expect(borderRight).to.equal('solid');
       });
+
+      it('should override focused cell styles', function() {
+        grid._virtualFocus = grid.$.scroller.$.items;
+        grid._virtualFocus._focusedRowIndex = 1;
+        grid._navigating = true;
+
+        setColor('--vaadin-grid-focused-cell', color1);
+
+        expect(getColor(bodyRowCells[0])).to.equal(color1);
+      });
     });
   </script>
 
