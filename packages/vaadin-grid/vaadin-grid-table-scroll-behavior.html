@@ -153,13 +153,15 @@
       var elementRect = element.getBoundingClientRect();
 
       // Vertical
-      var maxBottom = this.$.footer.getBoundingClientRect().top;
-      var minTop = this.$.header.getBoundingClientRect().bottom;
+      if (this._virtualFocus === this.$.items) {
+        var maxBottom = this.$.footer.getBoundingClientRect().top;
+        var minTop = this.$.header.getBoundingClientRect().bottom;
 
-      if (elementRect.bottom > maxBottom) {
-        this.$.table.scrollTop += (elementRect.bottom - maxBottom);
-      } else if (elementRect.top < minTop) {
-        this.$.table.scrollTop += (elementRect.top - minTop);
+        if (elementRect.bottom > maxBottom) {
+          this.$.table.scrollTop += (elementRect.bottom - maxBottom);
+        } else if (elementRect.top < minTop) {
+          this.$.table.scrollTop += (elementRect.top - minTop);
+        }
       }
 
       // Horizontal

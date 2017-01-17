@@ -177,7 +177,7 @@ Key | Action
       row.item = item;
       row.selected = this._isSelected(item);
       row.expanded = this._isExpanded(item);
-      row.toggleAttribute('active', item !== null && item == this.activeItem);
+      row.active = item !== null && item == this.activeItem;
       row.focused = row.index === this.$.scroller.$.items._focusedRowIndex;
     },
 

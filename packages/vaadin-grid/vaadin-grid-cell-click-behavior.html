@@ -31,7 +31,7 @@
     // yet at the point when tap event is being executed.
     _onClick: function(e) {
       // this event is only supposed to be fired from cells.
-      if (this.is !== 'vaadin-grid-sorter') {
+      if (this.localName !== 'vaadin-grid-sorter') {
         this.fire('cell-focus', {cell: this});
       }
 
