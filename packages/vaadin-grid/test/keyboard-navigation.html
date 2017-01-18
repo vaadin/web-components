@@ -168,6 +168,14 @@
           expect(scroller.navigating).to.be.false;
         });
 
+        it('should disable navigation mode when blurred', function() {
+          scroller.navigating = true;
+
+          scroller.fire('blur');
+
+          expect(scroller.navigating).to.be.false;
+        });
+
         it('should enable navigation mode when tabbed into header', function() {
           // simulating tabbing into header
           headerTrap.focus();
