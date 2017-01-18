@@ -8,7 +8,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
 var typings = require('gulp-typings');
 
-gulp.task('lint', ['lint:js', 'lint:html']);
+gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 
 gulp.task('lint:js', function() {
   return gulp.src([
