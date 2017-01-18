@@ -3,13 +3,14 @@
 <dom-module id="vaadin-grid-navigation-themability-styles">
   <template>
     <style>
-      :host(:focus) {
+      :host(:focus),
+      #headerFocusTrap:focus,
+      #footerFocusTrap:focus {
         outline: none;
       }
 
-      :host([navigating]) [focused] > tr[focused] > [focused] ::content > .cell-content {
+       :host([navigating]) [focused] > tr[focused] > [focused] ::content > .cell-content {
         box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.3);
-
         @apply(--vaadin-grid-focused-cell);
       }
     </style>
@@ -22,9 +23,75 @@
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehaviorImpl
+   * @polymerBehavior vaadin.elements.grid.KeyboardNavigationBehaviorImpl
    */
-  vaadin.elements.grid.TableKeyboardBehaviorImpl = {
+  vaadin.elements.grid.KeyboardNavigationBehaviorImpl = {
+    hostAttributes: {
+      // keys can be listened only when vaadin-grid is focusable
+      'tabindex': -1
+    },
+
+    keyBindings: {
+      'tab': '_focusNext',
+      'shift+tab': '_focusPrev',
+      'down': '_focusDown',
+      'up': '_focusUp',
+      'right': '_focusRight',
+      'left': '_focusLeft',
+      'space': '_space'
+    },
+
+    attached: function() {
+      this.addEventListener('blur', this._onBlur, true);
+    },
+
+    detached: function() {
+      this.removeEventListener('blur', this._onBlur, true);
+    },
+
+    _onBlur: function(e) {
+      this.$.scroller.navigating = false;
+    },
+
+    _focusNext: function(e) {
+      this.$.scroller._focusNext(e);
+    },
+
+    _focusPrev: function(e) {
+      this.$.scroller._focusPrev(e);
+    },
+
+    _focusDown: function(e) {
+      this.$.scroller._focusDown(e);
+    },
+
+    _focusUp: function(e) {
+      this.$.scroller._focusUp(e);
+    },
+
+    _focusRight: function(e) {
+      this.$.scroller._focusRight(e);
+    },
+
+    _focusLeft: function(e) {
+      this.$.scroller._focusLeft(e);
+    },
+
+    _space: function(e) {
+      this.$.scroller._space(e);
+    },
+  };
+
+  /**
+   * @polymerBehavior vaadin.elements.grid.KeyboardNavigationBehavior
+   */
+  vaadin.elements.grid.KeyboardNavigationBehavior = [vaadin.elements.grid.KeyboardNavigationBehaviorImpl, Polymer.IronA11yKeysBehavior];
+
+
+  /**
+   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehavior
+   */
+  vaadin.elements.grid.TableKeyboardBehavior = {
 
     properties: {
       _virtualFocus: {
@@ -39,25 +106,9 @@
       }
     },
 
-    hostAttributes: {
-      // keys can be listened only when vaadin-grid is focusable
-      'tabindex': -1
-    },
-
     listeners: {
-      'blur': '_onBlur',
       'cell-focus': '_onCellFocus',
       'cell-content-focus': '_onCellContentFocus'
-    },
-
-    keyBindings: {
-      'tab': '_focusNext',
-      'shift+tab': '_focusPrev',
-      'down': '_focusDown',
-      'up': '_focusUp',
-      'right': '_focusRight',
-      'left': '_focusLeft',
-      'space': '_space'
     },
 
     _isFooterVisible: function() {
@@ -209,12 +260,10 @@
       if (this.navigating && this._virtualFocus === this.$.items) {
         e.preventDefault();
 
-        this.fire('cell-activate', {model: this._virtualFocus._focusedCell.instance});
+        this.fire('cell-activate', {
+          model: this._virtualFocus._focusedCell.instance
+        });
       }
-    },
-
-    _onBlur: function(e) {
-      this.navigating = false;
     },
 
     _onCellContentFocus: function(e) {
@@ -234,11 +283,49 @@
 
       this._virtualFocus._focusedRowIndex = rowIndex;
       this._virtualFocus._focusedCellIndex = Polymer.dom(row).children.indexOf(cell);
+    },
+
+
+    _ensureVirtualFocusInViewport: function() {
+      var scaledVirtualStart = this._vidxOffset + this._virtualStart;
+      var focusedIndex = this._virtualFocus._focusedRowIndex;
+
+      if (this._virtualFocus === this.$.items && ((focusedIndex < scaledVirtualStart) ||
+          (focusedIndex > scaledVirtualStart + this._physicalCount))) {
+        this.scrollToScaledIndex(focusedIndex);
+      } else {
+        this._ensureElementInViewport(this._virtualFocus._focusedCell);
+      }
+    },
+
+    _ensureElementInViewport: function(element) {
+      var elementRect = element.getBoundingClientRect();
+
+      // Vertical
+      if (this._virtualFocus === this.$.items) {
+        var maxBottom = this.$.footer.getBoundingClientRect().top;
+        var minTop = this.$.header.getBoundingClientRect().bottom;
+
+        if (elementRect.bottom > maxBottom) {
+          this.$.table.scrollTop += (elementRect.bottom - maxBottom);
+        } else if (elementRect.top < minTop) {
+          this.$.table.scrollTop += (elementRect.top - minTop);
+        }
+      }
+
+      // Horizontal
+      var maxRight = this.$.table.getBoundingClientRect().right;
+      var minLeft = this.$.table.getBoundingClientRect().left;
+      var lastFrozen = this._virtualFocus._focusedRow.querySelector('[last-frozen]');
+      if (lastFrozen) {
+        minLeft = lastFrozen.getBoundingClientRect().right;
+      }
+
+      if (elementRect.right > maxRight) {
+        this.$.table.scrollLeft += (elementRect.right - maxRight);
+      } else if (elementRect.left < minLeft) {
+        this.$.table.scrollLeft += (elementRect.left - minLeft);
+      }
     }
   };
-
-  /**
-   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehavior
-   */
-  vaadin.elements.grid.TableKeyboardBehavior = [vaadin.elements.grid.TableKeyboardBehaviorImpl, Polymer.IronA11yKeysBehavior];
 </script>

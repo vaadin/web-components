@@ -137,48 +137,6 @@
       }
     },
 
-    _ensureVirtualFocusInViewport: function() {
-      var scaledVirtualStart = this._vidxOffset + this._virtualStart;
-      var focusedIndex = this._virtualFocus._focusedRowIndex;
-
-      if (this._virtualFocus === this.$.items && ((focusedIndex < scaledVirtualStart) ||
-        (focusedIndex > scaledVirtualStart + this._physicalCount))) {
-        this.scrollToScaledIndex(focusedIndex);
-      } else {
-        this._ensureElementInViewport(this._virtualFocus._focusedCell);
-      }
-    },
-
-    _ensureElementInViewport: function(element) {
-      var elementRect = element.getBoundingClientRect();
-
-      // Vertical
-      if (this._virtualFocus === this.$.items) {
-        var maxBottom = this.$.footer.getBoundingClientRect().top;
-        var minTop = this.$.header.getBoundingClientRect().bottom;
-
-        if (elementRect.bottom > maxBottom) {
-          this.$.table.scrollTop += (elementRect.bottom - maxBottom);
-        } else if (elementRect.top < minTop) {
-          this.$.table.scrollTop += (elementRect.top - minTop);
-        }
-      }
-
-      // Horizontal
-      var maxRight = this.$.table.getBoundingClientRect().right;
-      var minLeft = this.$.table.getBoundingClientRect().left;
-      var lastFrozen = this._virtualFocus._focusedRow.querySelector('[last-frozen]');
-      if (lastFrozen) {
-        minLeft = lastFrozen.getBoundingClientRect().right;
-      }
-
-      if (elementRect.right > maxRight) {
-        this.$.table.scrollLeft += (elementRect.right - maxRight);
-      } else if (elementRect.left < minLeft) {
-        this.$.table.scrollLeft += (elementRect.left - minLeft);
-      }
-    },
-
     _hasFixedSections: function(scrollbarWidth) {
       return navigator.userAgent.match(/Edge/) && scrollbarWidth === 0;
     },
