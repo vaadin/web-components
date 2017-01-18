@@ -682,6 +682,18 @@
 
             expect(grid.$.scroller.$.table.scrollTop).to.be.above(0);
           });
+
+          it('should scroll the focused item visible when focus is set to body', function(done) {
+            grid.$.scroller.$.table.scrollTop = 500;
+
+            grid.async(function() {
+              grid.$.scroller._virtualFocus = grid.$.scroller.$.items;
+
+              expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
+
+              done();
+            });
+          });
         });
       });
 

@@ -135,6 +135,10 @@
         virtualFocus.focused = true;
         virtualFocus._focusedRowIndex = virtualFocus._focusedRowIndex || 0;
         virtualFocus._focusedCellIndex = virtualFocus._focusedCellIndex || 0;
+
+        if (virtualFocus === this.$.items) {
+          this._ensureVirtualFocusInViewport();
+        }
       }
     },
 
