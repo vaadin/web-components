@@ -33,13 +33,19 @@
     },
 
     keyBindings: {
-      'tab': '_focusNext',
-      'shift+tab': '_focusPrev',
+      'ctrl+home': '_focusFirst',
+      'ctrl+end': '_focusLast',
       'down': '_focusDown',
-      'up': '_focusUp',
-      'right': '_focusRight',
+      'end': '_focusEnd',
+      'home': '_focusHome',
       'left': '_focusLeft',
-      'space': '_space'
+      'pagedown': '_focusPageDown',
+      'pageup': '_focusPageUp',
+      'right': '_focusRight',
+      'shift+tab': '_focusPrev',
+      'space': '_space',
+      'tab': '_focusNext',
+      'up': '_focusUp'
     },
 
     attached: function() {
@@ -52,6 +58,10 @@
 
     _onBlur: function(e) {
       this.$.scroller.navigating = false;
+    },
+
+    _focusEnd: function(e) {
+      this.$.scroller._focusEnd(e);
     },
 
     _focusNext: function(e) {
@@ -76,6 +86,26 @@
 
     _focusLeft: function(e) {
       this.$.scroller._focusLeft(e);
+    },
+
+    _focusHome: function(e) {
+      this.$.scroller._focusHome(e);
+    },
+
+    _focusFirst: function(e) {
+      this.$.scroller._focusFirst(e);
+    },
+
+    _focusLast: function(e) {
+      this.$.scroller._focusLast(e);
+    },
+
+    _focusPageDown: function(e) {
+      this.$.scroller._focusPageDown(e);
+    },
+
+    _focusPageUp: function(e) {
+      this.$.scroller._focusPageUp(e);
     },
 
     _space: function(e) {
@@ -234,6 +264,52 @@
       }
     },
 
+    _scrollPageDown: function() {
+      var headerRect = this.$.header.getBoundingClientRect();
+      var footerRect = this.$.footer.getBoundingClientRect();
+
+      this.$.table.scrollTop += footerRect.top - headerRect.bottom;
+      this._scrollHandler();
+    },
+
+    _focusPageDown: function(e) {
+      e.preventDefault();
+
+      if (this._virtualFocus === this.$.items) {
+        var prevLastVisible = this.lastVisibleIndex;
+        this._scrollPageDown();
+        this._virtualFocus._focusedRowIndex += (this.lastVisibleIndex - prevLastVisible) ||
+         (this.lastVisibleIndex - this._virtualFocus._focusedRowIndex);
+        this._ensureVirtualFocusInViewport();
+      } else {
+        this._virtualFocus.focusPageDown();
+      }
+      this.navigating = true;
+    },
+
+    _scrollPageUp: function() {
+      var headerRect = this.$.header.getBoundingClientRect();
+      var footerRect = this.$.footer.getBoundingClientRect();
+
+      this.$.table.scrollTop -= footerRect.top - headerRect.bottom;
+      this._scrollHandler();
+    },
+
+    _focusPageUp: function(e) {
+      e.preventDefault();
+
+      if (this._virtualFocus === this.$.items) {
+        var prevLastVisibleIndex = this.lastVisibleIndex;
+        this._scrollPageUp();
+        this._virtualFocus._focusedRowIndex -= (prevLastVisibleIndex - this.lastVisibleIndex) ||
+         this._virtualFocus._focusedRowIndex;
+        this._ensureVirtualFocusInViewport();
+      } else {
+        this._virtualFocus.focusPageUp();
+      }
+      this.navigating = true;
+    },
+
     _focusUp: function(e) {
       e.preventDefault();
 
@@ -258,6 +334,42 @@
       e.preventDefault();
 
       this._virtualFocus.focusLeft();
+      this.navigating = true;
+
+      this._ensureVirtualFocusInViewport();
+    },
+
+    _focusHome: function(e) {
+      e.preventDefault();
+
+      this._virtualFocus.focusHome();
+      this.navigating = true;
+
+      this._ensureVirtualFocusInViewport();
+    },
+
+    _focusEnd: function(e) {
+      e.preventDefault();
+
+      this._virtualFocus.focusEnd();
+      this.navigating = true;
+
+      this._ensureVirtualFocusInViewport();
+    },
+
+    _focusFirst: function(e) {
+      e.preventDefault();
+
+      this._virtualFocus.focusFirst();
+      this.navigating = true;
+
+      this._ensureVirtualFocusInViewport();
+    },
+
+    _focusLast: function(e) {
+      e.preventDefault();
+
+      this._virtualFocus.focusLast();
       this.navigating = true;
 
       this._ensureVirtualFocusInViewport();
