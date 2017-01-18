@@ -51,11 +51,16 @@
     _visibleCellIndexes: function() {
       var indexes = [];
       if (this._focusedRow && this._focusedRow.children) {
-        for(var i = 0; i < this._focusedRow.children.length; i++) {
-          if (!this._focusedRow.children[i].hidden) {
+        var children = this._focusedRow.children;
+        for(var i = 0; i < children.length; i++) {
+          if (!children[i].hidden) {
             indexes.push(i);
           }
         }
+
+        indexes.sort(function(i1, i2) {
+          return children[i1].column._order < children[i2].column._order ? -1 : 1;
+        }.bind(this));
       }
 
       return indexes;

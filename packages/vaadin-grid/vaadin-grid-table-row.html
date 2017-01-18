@@ -76,6 +76,7 @@
           rowDetailsCell.frozen = true;
           rowDetailsCell.target = target;
           rowDetailsCell.template = rowDetailsTemplate;
+          rowDetailsCell.toggleAttribute('lastcolumn', true);
           Polymer.dom(this.root).appendChild(rowDetailsCell);
           Polymer.dom.flush();
           this._rowDetailsCell = rowDetailsCell;
@@ -125,7 +126,6 @@
           cell.index = this.index;
           cell.target = this.target;
           cell._isColumnRow = this._isColumnRow;
-          cell.toggleAttribute('lastcolumn', columnIndex === columns.length - 1);
           cell.column = column;
 
           Polymer.dom(this).appendChild(cell);
@@ -166,7 +166,16 @@
         if (rowDetails) {
           rowDetails.selected = selected;
         }
+      },
+
+      updateLastColumn: function() {
+        this.cells.slice(0).sort(function(a, b) {
+          return a.column._order - b.column._order;
+        }).forEach(function(cell, cellIndex, children) {
+          cell.toggleAttribute('lastcolumn', cellIndex === children.length - 1);
+        });
       }
+
     };
 
     Polymer({
