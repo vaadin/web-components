@@ -213,7 +213,9 @@
     <style include="vaadin-grid-data-source-themability-styles"></style>
     <style include="vaadin-grid-row-details-themability-styles"></style>
 
-    <div id="headerFocusTrap" tabindex="0" on-focus="_onHeaderFocus"></div>
+    <!-- trap needs to have content in order for Safari to scroll the page when focused -->
+    <div id="headerFocusTrap" tabindex="0" on-focus="_onHeaderFocus" style="position: absolute;z-index: -1">&nbsp;</div>
+    <div id="bodyFocusTrap" tabindex="-1" on-focus="_onBodyFocus" style="position: absolute;z-index: -1">&nbsp;</div>
 
     <content select="vaadin-grid-column, vaadin-grid-selection-column, vaadin-grid-column-group"></content>
 
@@ -242,7 +244,7 @@
       It needs to be injected/slotted back inside the shadow root in order to be focusable.
      -->
     <content select="#footerFocusTrap"></content>
-    <div id="footerFocusTrap" tabindex="0" on-focus="_onFooterFocus"></div>
+    <div id="footerFocusTrap" tabindex="0" on-focus="_onFooterFocus" style="position: absolute;z-index: -1">&nbsp;</div>
   </template>
 </dom-module>
 

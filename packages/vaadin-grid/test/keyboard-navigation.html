@@ -45,7 +45,7 @@
 
   <script>
     describe('keyboard navigation', function() {
-      var grid, scroller, header, footer, body, headerTrap, footerTrap;
+      var grid, scroller, header, footer, body, headerTrap, bodyTrap, footerTrap;
       beforeEach(function() {
         grid = fixture('default')[0];
         grid.items = ['foo', 'bar'];
@@ -64,6 +64,13 @@
           });
         });
 
+        bodyTrap = grid.$.scroller.$.bodyFocusTrap;
+        sinon.stub(bodyTrap, 'focus', function(e) {
+          Polymer.Base.fire('focus', {}, {
+            node: bodyTrap
+          });
+        });
+
         footerTrap = grid.$.scroller.$.footerFocusTrap;
         sinon.stub(footerTrap, 'focus', function(e) {
           Polymer.Base.fire('focus', {}, {
@@ -74,6 +81,7 @@
 
       afterEach(function() {
         headerTrap.focus.restore();
+        bodyTrap.focus.restore();
         footerTrap.focus.restore();
       });
 
@@ -375,7 +383,7 @@
           expect(scroller._virtualFocus).to.eql(footer);
         });
 
-        it('should move actual focus from header to footer on tab', function() {
+        it('should move virtual focus from header to footer on tab', function() {
           scroller._virtualFocus = header;
 
           tab();
@@ -400,13 +408,13 @@
           expect(scroller._virtualFocus).to.eql(header);
         });
 
-        it('should move actual focus to from footer to header on shift-tab', function() {
+        it('should move actual focus to from footer to body on shift-tab', function() {
           scroller._virtualFocus = footer;
 
           shiftTab();
           shiftTab();
 
-          expect(headerTrap.focus.callCount).to.eql(1);
+          expect(bodyTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside header to header on tab', function() {
@@ -426,20 +434,20 @@
           expect(headerTrap.focus.callCount).to.eql(1);
         });
 
-        it('should move actual focus from input inside body to header on tab', function() {
+        it('should move actual focus from input inside body to body trap on tab', function() {
           clickFirstBodyInput(0);
 
           tab();
 
-          expect(headerTrap.focus.callCount).to.eql(1);
+          expect(bodyTrap.focus.callCount).to.eql(1);
         });
 
-        it('should move actual focus from input inside body to header on shift-tab', function() {
+        it('should move actual focus from input inside body to body trap on shift-tab', function() {
           clickFirstBodyInput(0);
 
           shiftTab();
 
-          expect(headerTrap.focus.callCount).to.eql(1);
+          expect(bodyTrap.focus.callCount).to.eql(1);
         });
 
         it('should move actual focus from input inside footer to footer on tab', function() {

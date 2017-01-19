@@ -5,6 +5,7 @@
     <style>
       :host(:focus),
       #headerFocusTrap:focus,
+      #bodyFocusTrap:focus,
       #footerFocusTrap:focus {
         outline: none;
       }
@@ -122,6 +123,11 @@
       this._virtualFocus = this.$.header;
     },
 
+    _onBodyFocus: function(e) {
+      this.navigating = true;
+      this._virtualFocus = this.$.items;
+    },
+
     _onFooterFocus: function(e) {
       this.navigating = true;
       this._virtualFocus = this._isFooterVisible() ? this.$.footer : this.$.items;
@@ -146,7 +152,7 @@
       if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.header:
-            this._virtualFocus = this.$.items;
+            this.$.bodyFocusTrap.focus();
             e.preventDefault();
             break;
 
@@ -171,8 +177,7 @@
             break;
 
           case this.$.items:
-            this.$.headerFocusTrap.focus();
-            this._virtualFocus = this.$.items;
+            this.$.bodyFocusTrap.focus();
             break;
 
           case this.$.footer:
@@ -187,12 +192,11 @@
       if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.footer:
-            this._virtualFocus = this.$.items;
+            this.$.bodyFocusTrap.focus();
             e.preventDefault();
             break;
           case this.$.items:
             this.$.headerFocusTrap.focus();
-            this._virtualFocus = this.$.header;
             e.preventDefault();
             break;
           case this.$.header:
@@ -205,8 +209,7 @@
             this.$.footerFocusTrap.focus();
             break;
           case this.$.items:
-            this.$.headerFocusTrap.focus();
-            this._virtualFocus = this.$.items;
+            this.$.bodyFocusTrap.focus();
             break;
           case this.$.header:
             this.$.headerFocusTrap.focus();

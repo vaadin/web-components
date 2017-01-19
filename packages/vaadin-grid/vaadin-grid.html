@@ -100,7 +100,8 @@ Key | Action
       -webkit-tap-highlight-color: transparent;
     }
 
-    :host(:focus) {
+    :host(:focus),
+    ::content #footerFocusTrap:focus {
       outline: none;
     }
 
