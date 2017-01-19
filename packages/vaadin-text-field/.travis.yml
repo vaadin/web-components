@@ -1,0 +1,17 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js: stable
+
+cache:
+  directories:
+    - node_modules
+
+addons:
+  firefox: latest
+  google-chrome: latest
+
+script:
+  - gulp lint
+  - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct -l chrome -l firefox
+  - travis_retry xvfb-run -s '-screen 0 1024x768x24' wct -l chrome -l firefox --dom=shadow
