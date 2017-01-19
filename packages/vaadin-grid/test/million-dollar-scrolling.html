@@ -102,16 +102,16 @@
             });
           });
 
-          it('should be able to scroll to half-way', function(done) {
+          it('should be able to scroll to half-way', function() {
             var viewportHeight = 300;
             var itemHeight = 30;
             grid.$.scroller.$.table.scrollTop =
               Math.floor(grid.$.scroller.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
 
-            Polymer.Base.async(function() {
-              expect(getFirstCell(grid).index).to.be.closeTo(grid.size / 2, 10);
-              done();
-            }, 300);
+            grid.$.scroller._scrollHandler();
+            grid.$.scroller.flushDebouncer('vaadin-grid-scrolling');
+
+            expect(getFirstCell(grid).index).to.be.closeTo(grid.size / 2, 20);
           });
 
           it('should be able to scroll to end', function(done) {

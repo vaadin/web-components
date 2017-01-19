@@ -233,24 +233,21 @@
         };
       });
 
-      it('should not misalign on resize (wheel)', function(done) {
+      it('should not misalign on resize (wheel)', function() {
         init('default-content');
-        scrollToEnd(grid, function() {
-          // Simulate a wheel event that doesn't cause a scroll event
-          var e = new CustomEvent('wheel', {bubbles: true});
-          e.deltaY = 0;
-          e.deltaX = -100;
-          scroller.$.table.dispatchEvent(e);
+        scrollToEnd(grid);
 
-          // Simulate a (window) resize
-          grid.style.width = '200px';
-          scroller.fire('iron-resize');
+        // Simulate a wheel event that doesn't cause a scroll event
+        var e = new CustomEvent('wheel', {bubbles: true});
+        e.deltaY = -100;
+        e.deltaX = 0;
+        scroller.$.table.dispatchEvent(e);
 
-          scroller.async(function() {
-            expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
-            done();
-          }, 300);
-        });
+        // Simulate a (window) resize
+        grid.style.width = '200px';
+        scroller.fire('iron-resize');
+
+        expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
       });
 
       it('should not misalign on resize (outer-scroller)', function(done) {

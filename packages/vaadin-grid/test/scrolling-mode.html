@@ -77,32 +77,30 @@
         }
       });
 
-      it('should only cancel wheel events when scrolling is possible - vertical', function(done) {
+      it('should only cancel wheel events when scrolling is possible - vertical', function() {
         expect(wheel(0, -1).defaultPrevented).to.be.false;
         expect(wheel(0, 1).defaultPrevented).to.be.true;
 
         scroller._previousMomentum = 0;
-        scrollToEnd(grid, function() {
-          Polymer.Base.async(function() {
-            expect(wheel(0, 1).defaultPrevented).to.be.false;
-            expect(wheel(0, -1).defaultPrevented).to.be.true;
-            done();
-          }, 750); // Wait until wheel cancel period finishes
-        });
+        scrollToEnd(grid);
+
+        grid.$.scroller.flushDebouncer('ignore-new-wheel');
+
+        expect(wheel(0, 1).defaultPrevented).to.be.false;
+        expect(wheel(0, -1).defaultPrevented).to.be.true;
       });
 
-      it('should only cancel wheel events when scrolling is possible - horizontal', function(done) {
+      it('should only cancel wheel events when scrolling is possible - horizontal', function() {
         expect(wheel(-1, 0).defaultPrevented).to.be.false;
         expect(wheel(1, 0).defaultPrevented).to.be.true;
 
         var table = scroller.$.table;
         table.scrollLeft = table.scrollWidth - table.offsetWidth;
         scroller._previousMomentum = 0;
-        Polymer.Base.async(function() {
-          expect(wheel(1, 0).defaultPrevented).to.be.false;
-          expect(wheel(-1, 0).defaultPrevented).to.be.true;
-          done();
-        }, 500); // Wait until wheel cancel period finishes
+        grid.$.scroller.flushDebouncer('ignore-new-wheel');
+
+        expect(wheel(1, 0).defaultPrevented).to.be.false;
+        expect(wheel(-1, 0).defaultPrevented).to.be.true;
       });
 
       it('should prevent default during cancel period', function() {

@@ -81,24 +81,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function scrollToEnd(grid, callback) {
-    var table = grid.$.scroller.$.table;
-    var listener = function() {
-      grid.async(function() {
-        table.scrollTop = table.scrollHeight;
-      }, 1);
+    grid.$.scroller.scrollToScaledIndex(grid.size - 1);
 
-      grid.debounce('scroll-done', function() {
-        // Ensure rows are in order
-        grid.flushDebouncer('vaadin-grid-scrolling');
-        table.removeEventListener('scroll', listener);
-        callback();
-      }, 100);
-    };
-
-    table.addEventListener('scroll', listener);
-    grid.async(function() {
-      table.scrollTop = table.scrollHeight;
-    }, 1);
+    // Ensure rows are in order
+    grid.$.scroller.flushDebouncer('vaadin-grid-scrolling');
+    if (callback) {
+      callback();
+    }
   }
 
   function simulateScroll(config) {
