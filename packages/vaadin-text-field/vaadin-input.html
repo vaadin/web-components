@@ -28,10 +28,26 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    Polymer({
+  class VaadinInput extends Polymer.Element {
+    static get is() {
+      return 'vaadin-input';
+    }
 
-      is: 'vaadin-input'
+    static get config() {
+      return {
+        properties: {
+        },
+        observers: [
+        ]
+      };
+    }
 
-    });
+    connectedCallback() {
+      super.connectedCallback();
+      window.console.log('connected');
+    }
+  }
+
+  customElements.define(VaadinInput.is, VaadinInput);
   </script>
 </dom-module>
