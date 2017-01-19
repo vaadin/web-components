@@ -6,6 +6,7 @@
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-overlay-behavior.html">
+<link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
 
 <dom-module id="vaadin-combo-box-overlay">
@@ -45,7 +46,7 @@
         };
       }
 
-      #selector .item {
+      #selector vaadin-combo-box-item {
         cursor: pointer;
         padding: 13px 16px;
         color: var(--primary-text-color);
@@ -60,12 +61,12 @@
         height: 58px;
       }
 
-      #selector:not([touch-device]) .item:hover,
-      #selector .item[focused] {
+      #selector:not([touch-device]) vaadin-combo-box-item:hover,
+      #selector vaadin-combo-box-item[focused] {
         background: #eee;
       }
 
-      #selector .item[selected] {
+      #selector vaadin-combo-box-item[selected] {
         color: var(--primary-color);
       }
     </style>
@@ -84,13 +85,15 @@
           items="[[_items]]"
           scroll-target="[[_getScroller()]]">
         <template>
-          <div class="item" on-tap="_onTap"
+          <vaadin-combo-box-item
+              on-tap="_onTap"
+              item="[[item]]"
+              label="[[getItemLabel(item)]]"
               selected$="[[_isItemSelected(item, _selectedItem)]]"
               role$="[[_getAriaRole(index)]]"
               aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
               focused$="[[_isItemFocused(_focusedIndex,index)]]">
-            [[getItemLabel(item)]]
-          </div>
+          </vaadin-combo-box-item>
         </template>
       </iron-list>
     </div>
@@ -165,7 +168,7 @@
 
       _notTapping: Boolean,
 
-      _ignoreTaps: Boolean
+      _ignoreTaps: Boolean,
     },
 
     ready: function() {
