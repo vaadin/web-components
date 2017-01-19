@@ -67,7 +67,7 @@
       var spy = sinon.spy();
       combobox.$.overlay.addEventListener('selection-changed', spy);
 
-      Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item').dispatchEvent(new CustomEvent('tap', {
+      Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
         bubbles: true
       }));
 
@@ -84,7 +84,7 @@
       MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
 
       combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
+        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(spy.calledOnce).to.be.true;
@@ -101,7 +101,7 @@
       MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
 
       combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
+        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(spy.calledOnce).to.be.false;
@@ -120,15 +120,25 @@
 
       // open the combo box, and move the scroll
       combobox.opened = true;
+
+      function listener() {
+        // Ensure the listener is invoked only once. Otherwise, `done()` might
+        // be called multiple times, which produces error for the test.
+        combobox.$.overlay.$.scroller.removeEventListener('scroll', listener);
+
+        combobox.async(function() {
+          var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+          dispatchTap(firstItem);
+
+          expect(spy.calledOnce).to.be.false;
+          done();
+        }, 200);
+      }
+
+      // Scroll start could delay, for example, with full SD polyfill
+      combobox.$.overlay.$.scroller.addEventListener('scroll', listener);
+
       combobox.$.overlay.$.selector.scrollToIndex(20);
-
-      combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
-        dispatchTap(firstItem);
-
-        expect(spy.calledOnce).to.be.false;
-        done();
-      }, 200);
     });
 
     it('should fire `selection-changed` after the scrolling grace period', function(done) {
@@ -140,15 +150,25 @@
       combobox.$.overlay.addEventListener('selection-changed', spy);
 
       combobox.opened = true;
+
+      function listener() {
+        // Ensure the listener is invoked only once. Otherwise, `done()` might
+        // be called multiple times, which produces error for the test.
+        combobox.$.overlay.$.scroller.removeEventListener('scroll', listener);
+
+        combobox.async(function() {
+          var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+          dispatchTap(firstItem);
+
+          expect(spy.calledOnce).to.be.true;
+          done();
+        }, 500);
+      }
+
+      // Scroll start could delay, for example, with full SD polyfill
+      combobox.$.overlay.$.scroller.addEventListener('scroll', listener);
+
       combobox.$.overlay.$.selector.scrollToIndex(20);
-
-      combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('.item');
-        dispatchTap(firstItem);
-
-        expect(spy.calledOnce).to.be.true;
-        done();
-      }, 500);
     });
 
     it('should select by using JS api', function() {
@@ -164,7 +184,7 @@
     it('should close the dropdown on selection', function() {
       combobox.open();
 
-      combobox.$.overlay.$.selector.querySelector('.item').click();
+      combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item').click();
 
       expect(combobox.opened).to.equal(false);
     });

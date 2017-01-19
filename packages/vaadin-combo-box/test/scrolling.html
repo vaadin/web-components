@@ -78,27 +78,33 @@
 
           var selectedItemRect = selectedItem.getBoundingClientRect();
           var overlayRect = combobox.$.overlay.getBoundingClientRect();
-          expect(selectedItemRect.left).to.be.at.least(overlayRect.left);
-          expect(selectedItemRect.top).to.be.at.least(overlayRect.top);
-          expect(selectedItemRect.right).to.be.at.most(overlayRect.right);
-          expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom);
+          expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
+          expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
+          expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);
+          expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
         }
 
-        it('should make selected item visible after open', function() {
+        it('should make selected item visible after open', function(done) {
           combobox.value = combobox.items[50];
           combobox.open();
 
-          expectSelectedItemPositionToBeVisible();
+          combobox.async(function() {
+            expectSelectedItemPositionToBeVisible();
+            done();
+          }, 1);
         });
 
-        it('should make selected item visible after reopen', function() {
+        it('should make selected item visible after reopen', function(done) {
           combobox.open();
 
           combobox.value = combobox.items[50];
           combobox.close();
           combobox.open();
 
-          expectSelectedItemPositionToBeVisible();
+          combobox.async(function() {
+            expectSelectedItemPositionToBeVisible();
+            done();
+          }, 1);
         });
       });
     });

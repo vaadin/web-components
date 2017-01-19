@@ -14,18 +14,6 @@
   'use strict';
 
 
-  var HAS_NEW_TOUCH = (function() {
-    var has = false;
-    try {
-      has = Boolean(new TouchEvent('x'));
-    } catch (_) {
-      // continue regardless of error
-    }
-
-    return has;
-  })();
-
-
   var middleOfNode = global.MockInteractions.middleOfNode;
 
 
@@ -40,6 +28,10 @@
   function makeTouches(xyList, node) {
     var id = 0;
 
+    if (window.ShadowDOMPolyfill && window.ShadowDOMPolyfill.isWrapper(node)) {
+      node = window.ShadowDOMPolyfill.unwrap(node);
+    }
+
     return xyList.map(function(xy) {
       var touchInit = {
         identifier: id++,
@@ -48,7 +40,7 @@
         clientY: xy.y
       };
 
-      return HAS_NEW_TOUCH ? new window.Touch(touchInit) : touchInit;
+      return window.Touch ? new window.Touch(touchInit) : touchInit;
     });
   }
 
@@ -73,13 +65,9 @@
     };
     var event;
 
-    if (HAS_NEW_TOUCH) {
-      event = new TouchEvent(type, touchEventInit);
-    } else {
-      event = new CustomEvent(type, {bubbles: true, cancelable: true});
-      for (var property in touchEventInit) {
-        event[property] = touchEventInit[property];
-      }
+    event = new CustomEvent(type, {bubbles: true, cancelable: true});
+    for (var property in touchEventInit) {
+      event[property] = touchEventInit[property];
     }
 
     node.dispatchEvent(event);

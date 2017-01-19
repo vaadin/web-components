@@ -112,7 +112,7 @@
         expect(comboBox._focusedIndex).to.eql(0);
       });
 
-      it('should not scroll to selected value when filtering', function() {
+      it('should not scroll to selected value when filtering', function(done) {
         comboBox.value = 'baz';
 
         var spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
@@ -120,7 +120,11 @@
         setInputValue('ba');
         setInputValue('b');
 
-        expect(spy.callCount).to.eql(1); // scrolls once on open
+        // first scroll after open is async
+        comboBox.async(function() {
+          expect(spy.callCount).to.eql(1); // scrolls once on open
+          done();
+        });
       });
     });
 

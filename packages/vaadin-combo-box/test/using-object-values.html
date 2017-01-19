@@ -82,10 +82,11 @@
       });
 
       it('should use the default label property in overlay items', function(done) {
-        Polymer.Base.async(function() {
-          expect(combobox.$.overlay.$.selector.querySelector('.item').textContent).to.contain('foo');
+        combobox.async(function() {
+          var firstItem = combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item');
+          expect(Polymer.dom(firstItem.root).textContent).to.contain('foo');
           done();
-        });
+        }, 1);
       });
 
       it('should use the provided label property', function() {
