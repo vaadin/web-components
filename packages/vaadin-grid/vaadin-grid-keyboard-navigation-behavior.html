@@ -413,7 +413,6 @@
     _onEnter: function(e) {
       if(!this.interacting) {
         e.preventDefault();
-        this.interacting = true;
         this._focusOnFocusTarget();
       }
     },
@@ -428,10 +427,10 @@
 
     _onF2: function(e) {
       e.preventDefault();
-      this.interacting = !this.interacting;
-      if (this.interacting) {
+      if (!this.interacting) {
         this._focusOnFocusTarget();
       } else {
+        this.interacting = false;
         this.domHost.focus();
       }
     },

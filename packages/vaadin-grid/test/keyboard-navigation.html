@@ -968,11 +968,24 @@
           MockInteractions.keyDownOn(grid, 113 + 1);
         }
 
+        var input;
+
         beforeEach(function() {
           clickItem(0);
+
+          var cell = getCell(0, 1);
+          input = getCellContent(cell).children[0];
+
+          sinon.stub(input, 'focus', function(e) {
+            Polymer.Base.fire('focus', {}, {
+              node: input
+            });
+          });
         });
 
         it('should enter interaction mode with enter', function() {
+          right();
+
           enter();
 
           expect(scroller.interacting).to.be.true;
@@ -1053,7 +1066,7 @@
 
         it('should not navigate with arrow up when in interaction mode', function() {
           clickItem(1);
-          enter();
+          scroller.interacting = true;
 
           up();
 
@@ -1062,7 +1075,7 @@
         });
 
         it('should not navigate with arrow down when in interaction mode', function() {
-          enter();
+          scroller.interacting = true;
 
           down();
 
@@ -1072,7 +1085,7 @@
 
         it('should not navigate with arrow left when in interaction mode', function() {
           right();
-          enter();
+          scroller.interacting = true;
 
           left();
 
@@ -1081,7 +1094,7 @@
         });
 
         it('should not navigate with arrow right when in interaction mode', function() {
-          enter();
+          scroller.interacting = true;
 
           right();
 
@@ -1091,7 +1104,7 @@
 
         it('should not navigate with home when in interaction mode', function() {
           right();
-          enter();
+          scroller.interacting = true;
 
           home();
 
@@ -1101,7 +1114,7 @@
 
         it('should not navigate with ctrl+home when in interaction mode', function() {
           right();
-          enter();
+          scroller.interacting = true;
 
           ctrlHome();
 
@@ -1110,7 +1123,7 @@
         });
 
         it('should not navigate with end when in interaction mode', function() {
-          enter();
+          scroller.interacting = true;
 
           end();
 
@@ -1119,7 +1132,7 @@
         });
 
         it('should not navigate with ctrl+end when in interaction mode', function() {
-          enter();
+          scroller.interacting = true;
 
           ctrlEnd();
 
@@ -1128,7 +1141,7 @@
         });
 
         it('should not navigate with page down when in interaction mode', function() {
-          enter();
+          scroller.interacting = true;
 
           pageDown();
 
@@ -1138,7 +1151,7 @@
 
         it('should not navigate with page up when in interaction mode', function() {
           clickItem(1);
-          enter();
+          scroller.interacting = true;
 
           pageUp();
 
@@ -1156,12 +1169,15 @@
         });
 
         it('should enter interaction mode with F2', function() {
+          right();
+
           f2();
 
           expect(scroller.interacting).to.be.true;
         });
 
         it('should exit interaction mode with F2', function() {
+          right();
           f2();
 
           f2();
@@ -1171,6 +1187,7 @@
 
         it('should remove focus from cell when exiting interaction mode with f2', function() {
           grid.focus = sinon.spy();
+          right();
           f2();
 
           f2();
@@ -1179,7 +1196,7 @@
         });
 
         it('should exit interaction mode with escape', function() {
-          enter();
+          scroller.interacting = true;
 
           escape();
 
@@ -1188,7 +1205,7 @@
 
         it('should remove focus from cell with escape', function() {
           grid.focus = sinon.spy();
-          enter();
+          scroller.interacting = true;
 
           escape();
 
