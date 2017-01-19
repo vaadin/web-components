@@ -37,16 +37,35 @@
     },
 
     focusLeft: function() {
-      this._focusedCellIndex = Math.max(0, this._focusedCellIndex - 1);
+      var visibleCells = this._visibleCellIndexes();
+      if (visibleCells.length > 0) {
+        var current = visibleCells.indexOf(this._focusedCellIndex);
+        this._focusedCellIndex = visibleCells[Math.max(0, current - 1)];
+      }
     },
 
     focusDown: function() {
       this._focusedRowIndex = Math.min(this._focusedRowIndex + 1, this.children.length - 1);
     },
 
+    _visibleCellIndexes: function() {
+      var indexes = [];
+      if (this._focusedRow && this._focusedRow.children) {
+        for(var i = 0; i < this._focusedRow.children.length; i++) {
+          if (!this._focusedRow.children[i].hidden) {
+            indexes.push(i);
+          }
+        }
+      }
+
+      return indexes;
+    },
+
     focusRight: function() {
-      if (this._focusedRow) {
-        this._focusedCellIndex = Math.min(this._focusedCellIndex + 1, this._focusedRow.children.length - 1);
+      var visibleCells = this._visibleCellIndexes();
+      if (visibleCells.length > 0) {
+        var current = visibleCells.indexOf(this._focusedCellIndex);
+        this._focusedCellIndex = visibleCells[Math.min(current + 1, visibleCells.length - 1)];
       }
     },
 

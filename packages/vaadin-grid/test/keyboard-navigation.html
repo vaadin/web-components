@@ -581,6 +581,49 @@
           expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
         });
 
+        describe('with hidden columns', function() {
+          beforeEach(function() {
+          });
+
+          it('should skip over hidden column with right arrow', function() {
+            grid._columnTree[0][1].hidden = true;
+            clickItem(0);
+
+            right();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+          });
+
+          it('should skip over hidden column with left arrow', function() {
+            grid._columnTree[0][1].hidden = true;
+            clickItem(0);
+            right();
+
+            left();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
+
+          it('should not navigate to hidden column with right arrow', function() {
+            grid._columnTree[0][0].hidden = true;
+            clickItem(0);
+
+            left();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
+
+          it('should not navigate to hidden column with right arrow', function() {
+            grid._columnTree[0][2].hidden = true;
+            clickItem(0);
+
+            right();
+            right();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
+        });
+
         describe('horizontal scrolling', function() {
           beforeEach(function() {
             grid.style.width = '100px'; // column default min width is 100px
