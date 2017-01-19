@@ -30,6 +30,21 @@ When the selected `value` is changed, a `value-changed` event is triggered.
 This element is also extended with the `IronFormElementBehavior` to
 enable usage within an `iron-form`.
 
+### Item Template
+
+`<vaadin-combo-box>` supports using custom item template provided in the light
+DOM:
+
+```html
+<vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
+  <template>
+    [[item.label]] <b>[[item.value]</b>
+  </template>
+</vaadin-combo-box>
+```
+
+See the [Item Template Live Demos](demo/item-template.html) for more examples.
+
 ### Styling
 There are custom properties and mixins you can use to style the component:
 
