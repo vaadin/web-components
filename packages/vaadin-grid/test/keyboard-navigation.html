@@ -250,62 +250,8 @@
           expect(scroller.navigating).to.be.true;
         });
 
-        it('should enable navigation mode when tabbed inside focused input in header', function() {
-          focusHeaderInput();
-
-          tab();
-
-          expect(scroller.navigating).to.be.true;
-          expect(scroller._virtualFocus).to.eql(header);
-        });
-
-        it('should enable navigation mode when tabbed inside focused input in body', function() {
-          clickFirstBodyInput(0);
-
-          tab();
-
-          expect(scroller.navigating).to.be.true;
-          expect(scroller._virtualFocus).to.eql(body);
-        });
-
-        it('should enable navigation mode when tabbed inside focused input in footer', function() {
-          focusFooterInput();
-
-          tab();
-
-          expect(scroller.navigating).to.be.true;
-          expect(scroller._virtualFocus).to.eql(footer);
-        });
-
-        it('should enable navigation mode when shift-tabbed inside focused input in header', function() {
-          focusHeaderInput();
-
-          shiftTab();
-
-          expect(scroller.navigating).to.be.true;
-          expect(scroller._virtualFocus).to.eql(header);
-        });
-
-        it('should enable navigation mode when shift-tabbed inside focused input in body', function() {
-          clickFirstBodyInput(0);
-
-          shiftTab();
-
-          expect(scroller.navigating).to.be.true;
-          expect(scroller._virtualFocus).to.eql(body);
-        });
-
-        it('should enable navigation mode when shift-tabbed inside focused input in footer', function() {
-          focusFooterInput();
-
-          shiftTab();
-
-          expect(scroller.navigating).to.be.true;
-          expect(scroller._virtualFocus).to.eql(footer);
-        });
-
         it('should enable navigation mode with page down', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           pageDown();
 
@@ -313,7 +259,7 @@
         });
 
         it('should enable navigation mode with page up', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           pageUp();
 
@@ -321,7 +267,7 @@
         });
 
         it('should enable navigation mode with home', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           home();
 
@@ -329,7 +275,7 @@
         });
 
         it('should enable navigation mode with end', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           end();
 
@@ -476,55 +422,6 @@
           expect(bodyTrap.focus.callCount).to.eql(1);
         });
 
-        it('should move actual focus from input inside header to header on tab', function() {
-          focusHeaderInput();
-
-          tab();
-
-          expect(scroller._virtualFocus).to.eql(header);
-          expect(headerTrap.focus.callCount).to.eql(1);
-        });
-
-        it('should move actual focus from input inside header to header on shift-tab', function() {
-          focusHeaderInput();
-
-          shiftTab();
-
-          expect(headerTrap.focus.callCount).to.eql(1);
-        });
-
-        it('should move actual focus from input inside body to body trap on tab', function() {
-          clickFirstBodyInput(0);
-
-          tab();
-
-          expect(bodyTrap.focus.callCount).to.eql(1);
-        });
-
-        it('should move actual focus from input inside body to body trap on shift-tab', function() {
-          clickFirstBodyInput(0);
-
-          shiftTab();
-
-          expect(bodyTrap.focus.callCount).to.eql(1);
-        });
-
-        it('should move actual focus from input inside footer to footer on tab', function() {
-          focusFooterInput();
-
-          tab();
-
-          expect(footerTrap.focus.callCount).to.eql(1);
-        });
-
-        it('should move actual focus from input inside footer to footer on shift-tab', function() {
-          focusFooterInput();
-
-          shiftTab();
-
-          expect(footerTrap.focus.callCount).to.eql(1);
-        });
-
         it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
           footer.children[0].hidden = true;
 
@@ -570,7 +467,7 @@
 
       describe('navigating with keys', function() {
         it('should enable navigation mode on down', function() {
-          focusHeaderInput();
+          clickItem(0);
 
           down();
 
@@ -578,7 +475,7 @@
         });
 
         it('should navigate on down when navigation mode is off', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           down();
 
@@ -586,7 +483,7 @@
         });
 
         it('should enable navigation mode on up', function() {
-          focusHeaderInput();
+          clickItem(0);
 
           up();
 
@@ -594,7 +491,7 @@
         });
 
         it('should navigate on up when navigation mode is off', function() {
-          clickFirstBodyInput(1);
+          clickItem(1);
 
           up();
 
@@ -602,7 +499,7 @@
         });
 
         it('should enable navigation mode on left', function() {
-          focusHeaderInput();
+          clickItem(0);
 
           left();
 
@@ -610,7 +507,7 @@
         });
 
         it('should navigate on left when navigation mode is off', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
           scroller._virtualFocus._focusedCellIndex = 1;
 
           left();
@@ -619,7 +516,7 @@
         });
 
         it('should enable navigation mode on right', function() {
-          focusHeaderInput();
+          clickItem(0);
 
           right();
 
@@ -627,35 +524,36 @@
         });
 
         it('should navigate on right when navigation mode is off', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           right();
 
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
         });
 
         it('should focus cell below with down', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
           tab();
 
           down();
 
           expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
         });
 
         it('should focus cell above with up', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
           down();
 
           up();
 
           expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
         });
 
         it('should focus cell left with left', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
+          right();
 
           left();
 
@@ -664,8 +562,7 @@
         });
 
         it('should focus cell right with right', function() {
-          clickFirstBodyInput(0);
-          left();
+          clickItem(0);
 
           right();
 
@@ -732,7 +629,7 @@
         });
 
         it('should focus first cell with home', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
           right();
 
           home();
@@ -741,7 +638,7 @@
         });
 
         it('should focus first cell on first row with ctrl+home', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
           right();
 
           ctrlHome();
@@ -751,7 +648,7 @@
         });
 
         it('should focus last cell with end', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           end();
 
@@ -760,7 +657,7 @@
 
 
         it('should focus last cell on last row with ctrl+end', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
 
           ctrlEnd();
 
@@ -945,7 +842,7 @@
 
       describe('activating items', function() {
         it('should activate on space', function() {
-          clickFirstBodyInput(0);
+          scroller._virtualFocus = body;
           tab();
 
           space();
@@ -954,10 +851,8 @@
         });
 
         it('should activate item another on space', function() {
-          clickFirstBodyInput(0);
+          clickItem(0);
           tab();
-
-          space();
 
           down();
           space();
@@ -966,10 +861,9 @@
         });
 
         it('should deactive item on space', function() {
-          clickFirstBodyInput(0);
+          clickItem(0); // activates first item on click
           tab();
 
-          space();
           space();
 
           expect(grid.activeItem).to.be.null;
