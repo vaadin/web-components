@@ -116,55 +116,55 @@
       }
 
       function tab() {
-        var event = MockInteractions.keyDownOn(scroller, 9);
+        var event = MockInteractions.keyDownOn(grid, 9);
       }
 
       function shiftTab() {
-        MockInteractions.keyDownOn(scroller, 9, 'shift');
+        MockInteractions.keyDownOn(grid, 9, 'shift');
       }
 
       function left() {
-        MockInteractions.keyDownOn(scroller, 37);
+        MockInteractions.keyDownOn(grid, 37);
       }
 
       function up() {
-        MockInteractions.keyDownOn(scroller, 38);
+        MockInteractions.keyDownOn(grid, 38);
       }
 
       function right() {
-        MockInteractions.keyDownOn(scroller, 39);
+        MockInteractions.keyDownOn(grid, 39);
       }
 
       function down() {
-        MockInteractions.keyDownOn(scroller, 40);
+        MockInteractions.keyDownOn(grid, 40);
       }
 
       function space() {
-        MockInteractions.keyDownOn(scroller, 32);
+        MockInteractions.keyDownOn(grid, 32);
       }
 
       function pageUp() {
-        MockInteractions.keyDownOn(scroller, 33);
+        MockInteractions.keyDownOn(grid, 33);
       }
 
       function pageDown() {
-        MockInteractions.keyDownOn(scroller, 34);
+        MockInteractions.keyDownOn(grid, 34);
       }
 
       function end() {
-        MockInteractions.keyDownOn(scroller, 35);
+        MockInteractions.keyDownOn(grid, 35);
       }
 
       function ctrlEnd() {
-        MockInteractions.keyDownOn(scroller, 35, 'ctrl');
+        MockInteractions.keyDownOn(grid, 35, 'ctrl');
       }
 
       function home() {
-        MockInteractions.keyDownOn(scroller, 36);
+        MockInteractions.keyDownOn(grid, 36);
       }
 
       function ctrlHome() {
-        MockInteractions.keyDownOn(scroller, 36, 'ctrl');
+        MockInteractions.keyDownOn(grid, 36, 'ctrl');
       }
 
       function getFirstHeaderCell() {
@@ -954,18 +954,18 @@
 
       describe('interaction mode', function() {
         function enter() {
-          MockInteractions.keyDownOn(scroller, 13);
+          MockInteractions.keyDownOn(grid, 13);
         }
 
         function escape() {
-          MockInteractions.keyDownOn(scroller, 27);
+          MockInteractions.keyDownOn(grid, 27);
         }
 
         function f2() {
           // keycode is 113, but needs to be increment by one until
           // https://github.com/PolymerElements/iron-a11y-keys-behavior/pull/64
           // is merged.
-          MockInteractions.keyDownOn(scroller, 113 + 1);
+          MockInteractions.keyDownOn(grid, 113 + 1);
         }
 
         beforeEach(function() {
@@ -1169,6 +1169,15 @@
           expect(scroller.interacting).to.be.false;
         });
 
+        it('should remove focus from cell when exiting interaction mode with f2', function() {
+          grid.focus = sinon.spy();
+          f2();
+
+          f2();
+
+          expect(grid.focus.callCount).to.eql(1);
+        });
+
         it('should exit interaction mode with escape', function() {
           enter();
 
@@ -1177,8 +1186,19 @@
           expect(scroller.interacting).to.be.false;
         });
 
-        it('should enter interaction mode when cell contents are focused', function() {
+        it('should remove focus from cell with escape', function() {
+          grid.focus = sinon.spy();
+          enter();
 
+          escape();
+
+          expect(grid.focus.callCount).to.eql(1);
+        });
+
+        it('should enter interaction mode when cell contents are focused', function() {
+          clickFirstBodyInput(0);
+
+          expect(scroller.interacting).to.be.true;
         });
       });
     });
