@@ -1,0 +1,84 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+
+  <style is="custom-style">
+    vaadin-grid {
+      height: 200px;
+      width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <test-fixture id="trivialGrid">
+    <template>
+      <div hidden>
+        <vaadin-grid hidden size="1">
+          <vaadin-grid-column>
+            <template class="header">foo</template>
+            <template>[[index]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      <div>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('hidden grid', function() {
+      var container, grid;
+
+      beforeEach(function(done) {
+        container = fixture('trivialGrid');
+        grid = container.firstElementChild;
+        grid.dataSource = infiniteDataSource;
+        flush(done);
+      });
+
+      it('should be hidden', function(done) {
+        flush(function() {
+          expect(grid.offsetWidth).to.equal(0);
+          expect(grid.offsetHeight).to.equal(0);
+          done();
+        });
+      });
+
+      describe('revealed', function(done) {
+
+        beforeEach(function(done) {
+          grid.$.scroller.addEventListener('animationend', function() {
+            Polymer.RenderStatus.afterNextRender(grid, done);
+          });
+          container.removeAttribute('hidden');
+        });
+
+        it('should have content on appear', function() {
+          expect(grid.isAttached).to.be.true;
+          expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('0');
+        });
+
+        it('should measure header on appear', function() {
+          var contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
+          var headerRect = grid.$.scroller.$.header.getBoundingClientRect();
+          expect(contentRect.top).to.be.closeTo(headerRect.bottom, 1);
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

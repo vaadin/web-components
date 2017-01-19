@@ -15,9 +15,17 @@
 <dom-module id="vaadin-grid-table-styles">
   <template>
     <style>
+
+      @keyframes appear {
+        to {
+          opacity: 1;
+        }
+      }
+
       :host {
         display: block;
         position: relative;
+        animation: 0 appear;
       }
 
       @media only screen and (-webkit-max-device-pixel-ratio: 1) {
@@ -292,7 +300,16 @@
 
     listeners: {
       'property-changed': '_columnPropChanged',
-      'copy': '_onCopy'
+      'copy': '_onCopy',
+      'animationend': '_onAnimationEnd'
+    },
+
+    _onAnimationEnd: function(e) {
+      if (/appear/.test(e.animationName)) {
+        this._render();
+        this._updateHeaderFooterMetrics();
+        e.stopPropagation();
+      }
     },
 
     _columnPropChanged: function(e) {
@@ -349,6 +366,10 @@
         row.columns = columnTree[columnTree.length - 1];
       });
 
+      this._updateHeaderFooterMetrics();
+    },
+
+    _updateHeaderFooterMetrics: function() {
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
         var headerHeight = this.$.header.clientHeight + 'px';
         var footerHeight = this.$.footer.clientHeight + 'px';
