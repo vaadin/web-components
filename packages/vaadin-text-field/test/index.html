@@ -10,11 +10,11 @@
 
 <body>
   <script>
-    var shadow = document.location.search.indexOf('dom=shadow') > -1;
-    WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
+    window.WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
-    WCT.loadSuites([
-      'sample-test.html'
+    window.WCT.loadSuites([
+      'sample-test.html',
+      'sample-test.html?wc-shadydom=true'
     ]);
   </script>
 </body>
