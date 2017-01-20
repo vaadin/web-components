@@ -122,7 +122,17 @@
         var cells = [];
 
         columns.forEach(function(column, columnIndex) {
-          var cell = this._createCell();
+          // Get a cached cell instance if one is available
+          var cacheName = '_' + this.is.replace(/-/g, '_') + '_cells';
+          var cache = column[cacheName] = column[cacheName] || [];
+          var cell = cache.filter(function(cell) {
+            return !Polymer.dom(cell).parentNode;
+          })[0];
+          if (!cell) {
+            cell = this._createCell();
+            cache.push(cell);
+          }
+
           cell.index = this.index;
           cell.target = this.target;
           cell._isColumnRow = this._isColumnRow;
