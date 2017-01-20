@@ -46,6 +46,24 @@
       </template>
     </demo-snippet>
 
+    <h3>Focused and Selected Flags</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
+          <template>
+            <b>[[item]]</b><br>
+            selected: [[selected]], focused: [[focused]]
+          </template>
+        </vaadin-combo-box>
+
+        <script>
+          var elementsSelectedBox = document.querySelector('#elements-selected-box');
+          elementsSelectedBox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
     <h3>Styling Items with Custom Item Element</h3>
 
     <demo-snippet>
@@ -57,6 +75,10 @@
             <style>
               :host {
                 display: flex;
+              }
+
+              :host([selected]) {
+                color: var(--accent-color, deeppink);
               }
 
               span {
@@ -95,7 +117,7 @@
 
         <vaadin-combo-box id="elements-my-item-box" label="Element" item-label-path="name" item-value-path="symbol">
           <template>
-            <my-item index="[[index]]" item="[[item]]"></my-item>
+            <my-item index="[[index]]" item="[[item]]" selected$="[[selected]]"></my-item>
           </template>
         </vaadin-combo-box>
 

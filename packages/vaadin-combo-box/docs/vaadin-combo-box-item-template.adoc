@@ -50,7 +50,37 @@ The following properties are available for item template bindings:
 |[propertyname]#item#
 |[classname]#String# or [classname]#Object#
 |The item reference
+
+|[propertyname]#selected#
+|[classname]#Boolean#
+|True when item is selected
+
+|[propertyname]#focused#
+|[classname]#Boolean#
+|True when item is focused
 |===
+
+[[vaadin-combo-box.item-template.states]]
+== Selected and Focused Flags
+
+You can use [propertyname]#selected# and [propertyname]#focused# flags in the item template to read the item state.
+
+[source,html]
+----
+<vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
+  <template>
+    <b>[[item]]</b><br>
+    selected: [[selected]], focused: [[focused]]
+  </template>
+</vaadin-combo-box>
+
+<script>
+  var elementsSelectedBox = document.querySelector('#elements-selected-box');
+  elementsSelectedBox.items = elements;
+</script>
+----
+
+The above example shows the item states by binding to [propertyname]#selected# and [propertyname]#focused# template properties in the item text.
 
 [[vaadin-combo-box.item-template.custom-element]]
 == Styling Items with Custom Item Element

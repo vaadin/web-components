@@ -90,10 +90,10 @@
               index="[[index]]"
               item="[[item]]"
               label="[[getItemLabel(item)]]"
-              selected$="[[_isItemSelected(item, _selectedItem)]]"
+              selected="[[_isItemSelected(item, _selectedItem)]]"
               role$="[[_getAriaRole(index)]]"
               aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-              focused$="[[_isItemFocused(_focusedIndex,index)]]">
+              focused="[[_isItemFocused(_focusedIndex,index)]]">
           </vaadin-combo-box-item>
         </template>
       </iron-list>
