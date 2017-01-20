@@ -1185,14 +1185,14 @@
           expect(scroller.interacting).to.be.false;
         });
 
-        it('should remove focus from cell when exiting interaction mode with f2', function() {
-          grid.focus = sinon.spy();
+        it('should remove focus from cell when exiting interaction mode with F2', function() {
           right();
-          f2();
+          enter();
+          scroller.navigating = false;
 
           f2();
 
-          expect(grid.focus.callCount).to.eql(1);
+          expect(bodyTrap.focus.callCount).to.eql(1);
         });
 
         it('should exit interaction mode with escape', function() {
@@ -1207,9 +1207,35 @@
           grid.focus = sinon.spy();
           scroller.interacting = true;
 
+          escape(); // revert to navigation first
           escape();
 
           expect(grid.focus.callCount).to.eql(1);
+        });
+
+        it('should revert to navigation from interaction mode with escape', function() {
+          scroller.interacting = true;
+
+          escape();
+
+          expect(scroller.navigating).to.be.true;
+        });
+
+        it('should revert to navigation from interaction mode with F2', function() {
+          scroller.interacting = true;
+
+          f2();
+
+          expect(scroller.navigating).to.be.true;
+        });
+
+        it('should cancel navigation mode with escape', function() {
+          scroller.navigating = true;
+          scroller.interacting = false;
+
+          escape();
+
+          expect(scroller.navigating).to.be.true;
         });
 
         it('should enter interaction mode when cell contents are focused', function() {

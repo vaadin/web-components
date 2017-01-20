@@ -419,8 +419,9 @@
 
     _onEscape: function(e) {
       if (this.interacting) {
-        e.preventDefault();
         this.interacting = false;
+        this._onTab(e); // revert to navigation
+      } else if (this.navigating) {
         this.domHost.focus();
       }
     },
@@ -431,7 +432,7 @@
         this._focusOnFocusTarget();
       } else {
         this.interacting = false;
-        this.domHost.focus();
+        this._onTab(e); // revert to navigation
       }
     },
 
