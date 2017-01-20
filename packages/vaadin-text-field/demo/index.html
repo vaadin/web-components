@@ -16,12 +16,66 @@
 
     <demo-navigation></demo-navigation>
 
-    <h3>Sample example</h3>
+    <iframe name="demo-iframe0" style="width: 0px; height: 0px; border: none"></iframe>
+    <form action="blank" method="get" target="demo-iframe0">
+      Password: <input type="password" name="pw" pattern=".{6,}" title="Six or more characters">
+      <input type="submit">
+    </form>
+
+    <h3>Data binding</h3>
     <demo-snippet>
       <template>
-        <vaadin-input></vaadin-input>
+        <dom-bind id="demo-bind1">
+          <template>
+            <vaadin-input id="input1" value="{{value}}"></vaadin-input>
+            <vaadin-input id="input2" value="{{value}}"></vaadin-input>
+            <span>[[value]]</span>
+          </template>
+        </dom-bind>
+
+        <script>
+         window.addEventListener('WebComponentsReady', function() {
+           var domBind = document.querySelector('#demo-bind1');
+           var input = domBind.$.input1;
+           input.value = 'foo';
+         });
+        </script>
       </template>
     </demo-snippet>
+
+    <h3>Properties</h3>
+    <demo-snippet>
+      <template>
+        <iframe name="demo-iframe1" style="width: 0px; height: 0px; border: none"></iframe>
+        <form id="demo-form1" action="blank" method="get" target="demo-iframe1">
+          <div>autocapitalize=off</div><vaadin-input autocapitalize=off></vaadin-input>
+          <div>autocomplete</div><vaadin-input autocomplete></vaadin-input>
+          <div>autocorrect</div><vaadin-input autocorrect></vaadin-input>
+          <div>autofocus</div><vaadin-input autofocus></vaadin-input>
+          <div>disabled</div><vaadin-input disabled></vaadin-input>
+          <div>maxlength=6</div><vaadin-input maxlength=6></vaadin-input>
+          <div>minlength=3</div><vaadin-input minlength=3></vaadin-input>
+          <div>name=foo</div><vaadin-input name=foo></vaadin-input>
+          <div>pattern="^\d+$"</div><vaadin-input pattern="^\d+$"></vaadin-input>
+          <div>placeholder</div><vaadin-input placeholder="bar"></vaadin-input>
+          <div>readonly</div><vaadin-input readonly></vaadin-input>
+          <div>required</div><vaadin-input required></vaadin-input>
+          <div>value=baz</div><vaadin-input value="baz"></vaadin-input>
+          <vaadin-input type="password" name="pw" pattern=".{6,}" title="Six or more characters"></vaadin-input>
+          <button type="submit">Send</button>
+        </form>
+        <script>
+         window.addEventListener('WebComponentsReady', function() {
+           var form = document.querySelector('#demo-form1');
+          //  form.onsubmit = function() {
+          //    return true;
+          //  };
+         });
+        </script>
+      </template>
+    </demo-snippet>
+
+
   </div>
 </body>
 </html>

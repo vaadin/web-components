@@ -41,6 +41,8 @@ This program is available under Apache License Version 2.0, available at https:/
       required$="{{required}}"
       tabindex="{{tabindex}}"
       value="{{value::input}}"
+      type="{{type}}"
+      title="{{title}}"
     />
   </template>
 
@@ -104,6 +106,12 @@ This program is available under Apache License Version 2.0, available at https:/
           required: {
             type: Boolean,
             notify: true
+          },
+          title: {
+            type: String
+          },
+          type: {
+            type: String
           },
           tabindex: {
             type: Number,
