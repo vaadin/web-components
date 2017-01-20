@@ -209,7 +209,11 @@
     },
 
     _onTab: function(e) {
-      if (this.navigating && !this.interacting) {
+      if (this.interacting) {
+        return;
+      }
+
+      if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.header:
             this.$.bodyFocusTrap.focus();
@@ -230,7 +234,7 @@
             this._virtualFocus = null;
             break;
         }
-      } else if (!this.interacting) {
+      } else {
         switch (this._virtualFocus) {
           case this.$.header:
             this.$.headerFocusTrap.focus();
@@ -249,7 +253,11 @@
     },
 
     _onShiftTab: function(e) {
-      if (this.navigating && !this.interacting) {
+      if (this.interacting) {
+        return;
+      }
+
+      if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.footer:
             this.$.bodyFocusTrap.focus();
@@ -263,7 +271,7 @@
             this._virtualFocus = null;
             break;
         }
-      } else if (!this.interacting) {
+      } else {
         switch (this._virtualFocus) {
           case this.$.footer:
             this.$.footerFocusTrap.focus();
@@ -284,16 +292,16 @@
     },
 
     _onArrowDown: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusDown();
-        this.navigating = true;
+      if(this.interacting) {
+        return;
       }
 
-      if (this._virtualFocus === this.$.items) {
-        this._ensureVirtualFocusInViewport();
-      }
+      e.preventDefault();
+
+      this._virtualFocus.focusDown();
+      this.navigating = true;
+
+      this._ensureVirtualFocusInViewport();
     },
 
     _scrollPageDown: function() {
@@ -305,20 +313,22 @@
     },
 
     _onPageDown: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        if (this._virtualFocus === this.$.items) {
-          var prevLastVisible = this.lastVisibleIndex;
-          this._scrollPageDown();
-          this._virtualFocus._focusedRowIndex += (this.lastVisibleIndex - prevLastVisible) ||
-           (this.lastVisibleIndex - this._virtualFocus._focusedRowIndex);
-          this._ensureVirtualFocusInViewport();
-        } else {
-          this._virtualFocus.focusPageDown();
-        }
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      if (this._virtualFocus === this.$.items) {
+        var prevLastVisible = this.lastVisibleIndex;
+        this._scrollPageDown();
+        this._virtualFocus._focusedRowIndex += (this.lastVisibleIndex - prevLastVisible) ||
+         (this.lastVisibleIndex - this._virtualFocus._focusedRowIndex);
+        this._ensureVirtualFocusInViewport();
+      } else {
+        this._virtualFocus.focusPageDown();
+      }
+      this.navigating = true;
     },
 
     _scrollPageUp: function() {
@@ -330,74 +340,86 @@
     },
 
     _onPageUp: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        if (this._virtualFocus === this.$.items) {
-          var prevLastVisibleIndex = this.lastVisibleIndex;
-          this._scrollPageUp();
-          this._virtualFocus._focusedRowIndex -= (prevLastVisibleIndex - this.lastVisibleIndex) ||
-           this._virtualFocus._focusedRowIndex;
-          this._ensureVirtualFocusInViewport();
-        } else {
-          this._virtualFocus.focusPageUp();
-        }
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      if (this._virtualFocus === this.$.items) {
+        var prevLastVisibleIndex = this.lastVisibleIndex;
+        this._scrollPageUp();
+        this._virtualFocus._focusedRowIndex -= (prevLastVisibleIndex - this.lastVisibleIndex) ||
+         this._virtualFocus._focusedRowIndex;
+        this._ensureVirtualFocusInViewport();
+      } else {
+        this._virtualFocus.focusPageUp();
+      }
+      this.navigating = true;
     },
 
     _onArrowUp: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusUp();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
 
-      if (this._virtualFocus === this.$.items) {
-        this._ensureVirtualFocusInViewport();
-      }
+      e.preventDefault();
+
+      this._virtualFocus.focusUp();
+      this.navigating = true;
+
+      this._ensureVirtualFocusInViewport();
     },
 
     _onArrowRight: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusRight();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      this._virtualFocus.focusRight();
+      this.navigating = true;
 
       this._ensureVirtualFocusInViewport();
     },
 
     _onArrowLeft: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusLeft();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      this._virtualFocus.focusLeft();
+      this.navigating = true;
 
       this._ensureVirtualFocusInViewport();
     },
 
     _onHome: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusHome();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      this._virtualFocus.focusHome();
+      this.navigating = true;
+
       this._ensureVirtualFocusInViewport();
     },
 
     _onEnd: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusEnd();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      this._virtualFocus.focusEnd();
+      this.navigating = true;
+
       this._ensureVirtualFocusInViewport();
     },
 
@@ -437,22 +459,28 @@
     },
 
     _onCtrlHome: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusFirst();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      this._virtualFocus.focusFirst();
+      this.navigating = true;
+
       this._ensureVirtualFocusInViewport();
     },
 
     _onCtrlEnd: function(e) {
-      if (!this.interacting) {
-        e.preventDefault();
-
-        this._virtualFocus.focusLast();
-        this.navigating = true;
+      if (this.interacting) {
+        return;
       }
+
+      e.preventDefault();
+
+      this._virtualFocus.focusLast();
+      this.navigating = true;
+
       this._ensureVirtualFocusInViewport();
     },
 
