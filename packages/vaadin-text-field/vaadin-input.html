@@ -22,9 +22,26 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: block;
+        display: inline-block;
       }
     </style>
+    <input id="input"
+      autocapitalize$="{{autocapitalize}}"
+      autocomplete$="{{autocomplete}}"
+      autocorrect$="{{autocorrect}}"
+      autofocus$="{{autofocus}}"
+      disabled$="{{disabled}}"
+      list="{{list}}"
+      maxlength="{{maxlength}}"
+      minlength="{{minlength}}"
+      name="{{name}}"
+      pattern="{{pattern}}"
+      placeholder="{{placeholder}}"
+      readonly$="{{readonly}}"
+      required$="{{required}}"
+      tabindex="{{tabindex}}"
+      value="{{value::input}}"
+    />
   </template>
 
   <script>
@@ -36,15 +53,96 @@ This program is available under Apache License Version 2.0, available at https:/
     static get config() {
       return {
         properties: {
+          autocapitalize: {
+            type: String,
+            notify: true
+          },
+          autocomplete: {
+            type: Boolean,
+            notify: true
+          },
+          autocorrect: {
+            type: Boolean,
+            notify: true
+          },
+          autofocus: {
+            type: Boolean,
+            notify: true
+          },
+          disabled: {
+            type: Boolean,
+            notify: true
+          },
+          list: {
+            type: String,
+            notify: true
+          },
+          maxlength: {
+            type: Number,
+            notify: true
+          },
+          minlength: {
+            type: Number,
+            notify: true
+          },
+          name: {
+            type: String,
+            notify: true
+          },
+          pattern: {
+            type: String,
+            notify: true
+          },
+          placeholder: {
+            type: String,
+            notify: true
+          },
+          readonly: {
+            type: Boolean,
+            notify: true
+          },
+          required: {
+            type: Boolean,
+            notify: true
+          },
+          tabindex: {
+            type: Number,
+            notify: true
+          },
+          value: {
+            type: String,
+            observer: '_valueChanged',
+            notify: true
+          },
+          bindValue: {
+            type: String,
+            observer: '_bindValueChanged'
+          }
         },
+
         observers: [
-        ]
+          '_bindValueChanged(bindValue)'
+        ],
+
+        listeners: {
+          'input': '_onInput',
+          'keypress': '_onKeypress'
+        },
       };
     }
 
-    connectedCallback() {
-      super.connectedCallback();
-      window.console.log('connected');
+    ready() {
+      super.ready();
+      this.bindValue = this.value;
+    }
+
+    _valueChanged(value) {
+      this.bindValue = value;
+    }
+
+    _bindValueChanged(bindValue) {
+      this.value = bindValue;
+      this.dispatchEvent(new CustomEvent('bind-value-changed'), {bubbles: true});
     }
   }
 
