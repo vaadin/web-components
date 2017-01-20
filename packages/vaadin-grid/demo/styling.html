@@ -65,6 +65,11 @@
               --vaadin-grid-body-row-selected-cell: {
                 background-color: var(--paper-grey-100);
               };
+
+              --vaadin-grid-focused-cell: {
+                box-shadow: none;
+                font-weight: bold;
+              };
             }
 
             vaadin-grid#material .cell {
@@ -230,6 +235,10 @@
               --vaadin-grid-loading-body-cell: {
                 opacity: 0.2;
               };
+
+              --vaadin-grid-focused-cell: {
+                box-shadow: inset 0 0 0 2px rgba(27, 135, 227, 1);
+              };
             }
 
             vaadin-grid#valo-grid vaadin-grid-sorter {
@@ -302,7 +311,6 @@
           <x-data-source data-source="{{dataSource}}" loading="{{_loading}}" delay="1000"></x-data-source>
 
           <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]">
-
             <vaadin-grid-column-group frozen>
               <template class="header"></template>
 
@@ -553,6 +561,11 @@
               --vaadin-grid-header-cell: {
                 text-transform: uppercase;
                 padding: 16px;
+              };
+
+              --vaadin-grid-focused-cell: {
+                box-shadow: none;
+                font-weight: bold;
               };
             }
 

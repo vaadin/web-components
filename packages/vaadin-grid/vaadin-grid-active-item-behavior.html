@@ -30,7 +30,7 @@
     },
 
     listeners: {
-      'cell-click': '_activateItem'
+      'cell-activate': '_activateItem'
     },
 
     observers: [
@@ -41,6 +41,8 @@
       var clickedItem = e.detail.model.item;
 
       this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+
+      e.stopImmediatePropagation();
     },
 
     _activeItemChanged: function() {

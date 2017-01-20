@@ -111,6 +111,7 @@
         grid.activeItem = grid.items[1];
         setColor('--vaadin-grid-cell-last-frozen', color1);
         setColor('--vaadin-grid-body-row-active-cell', color2);
+
         expect(getColor(bodyRowCells[0])).to.equal(color2);
       });
 
@@ -130,6 +131,17 @@
 
         var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
         expect(borderRight).to.equal('solid');
+      });
+
+      it('should override focused cell styles', function() {
+        grid.$.scroller._virtualFocus = grid.$.scroller.$.items;
+        grid.$.scroller._virtualFocus._focusedRowIndex = 1;
+        grid.$.scroller.navigating = true;
+
+        setColor('--vaadin-grid-body-row-selected-cell', color1);
+        setColor('--vaadin-grid-focused-cell', color2);
+
+        expect(getColor(bodyRowCells[0])).to.equal(color2);
       });
     });
   </script>

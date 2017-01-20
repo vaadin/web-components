@@ -69,6 +69,13 @@
           info.removedNodes.filter(rootColumns).length > 0) {
           this._updateColumnTree();
         }
+
+        // in native Shadow, tab order goes first through shadow root, then moves over
+        // to light children. We need to make sure footer focus trap is always
+        // the very last element that can be tabbed into.
+        if (Polymer.Settings.useNativeShadow) {
+          Polymer.dom(this).appendChild(this.$.scroller.$.footerFocusTrap);
+        }
       }.bind(this));
     },
 

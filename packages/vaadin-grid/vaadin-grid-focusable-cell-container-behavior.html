@@ -1,0 +1,76 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  /**
+   * @polymerBehavior vaadin.elements.grid.FocusableCellContainerBehavior
+   */
+  vaadin.elements.grid.FocusableCellContainerBehavior = {
+    properties: {
+      focused: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+      _focusedRow: Object,
+      _focusedRowIndex: Number,
+      _focusedCell: Object,
+      _focusedCellIndex: Number
+    },
+
+    observers: ['_focusedCellChanged(_focusedRowIndex, _focusedCellIndex)'],
+
+    _focusedCellChanged: function(rowIndex, cellIndex) {
+      Polymer.dom(this).children.forEach(function(row, i) {
+        row.focused = i === rowIndex;
+
+        if (row.focused) {
+          this._focusedRow = row;
+          this._focusedCellIndex = Math.min(cellIndex, row.children.length - 1);
+          this._focusedCell = row.children[this._focusedCellIndex];
+        }
+
+        row.cells.forEach(function(cell, j) {
+          cell.focused = j === this._focusedCellIndex;
+        }.bind(this));
+      }.bind(this));
+    },
+
+    focusLeft: function() {
+      var visibleCells = this._visibleCellIndexes();
+      if (visibleCells.length > 0) {
+        var current = visibleCells.indexOf(this._focusedCellIndex);
+        this._focusedCellIndex = visibleCells[Math.max(0, current - 1)];
+      }
+    },
+
+    focusDown: function() {
+      this._focusedRowIndex = Math.min(this._focusedRowIndex + 1, this.children.length - 1);
+    },
+
+    _visibleCellIndexes: function() {
+      var indexes = [];
+      if (this._focusedRow && this._focusedRow.children) {
+        for(var i = 0; i < this._focusedRow.children.length; i++) {
+          if (!this._focusedRow.children[i].hidden) {
+            indexes.push(i);
+          }
+        }
+      }
+
+      return indexes;
+    },
+
+    focusRight: function() {
+      var visibleCells = this._visibleCellIndexes();
+      if (visibleCells.length > 0) {
+        var current = visibleCells.indexOf(this._focusedCellIndex);
+        this._focusedCellIndex = visibleCells[Math.min(current + 1, visibleCells.length - 1)];
+      }
+    },
+
+    focusUp: function() {
+      this._focusedRowIndex = Math.max(0, this._focusedRowIndex - 1);
+    }
+  };
+</script>

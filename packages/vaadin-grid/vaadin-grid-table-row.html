@@ -14,6 +14,11 @@
       extends: 'tr',
 
       properties: {
+        active: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        },
         columns: Array,
         index: Number,
         cells: {
@@ -23,6 +28,11 @@
 
         expanded: {
           value: false
+        },
+
+        focused: {
+          type: Boolean,
+          reflectToAttribute: true
         },
 
         item: Object,

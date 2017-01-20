@@ -58,6 +58,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return null;
   }
 
+  function listenOnce(element, eventName, callback) {
+    var listener = function(e) {
+      element.removeEventListener(eventName, listener);
+      callback(e);
+    };
+    element.addEventListener(eventName, listener);
+  }
+
   function buildItem(index) {
     return {
       index: index

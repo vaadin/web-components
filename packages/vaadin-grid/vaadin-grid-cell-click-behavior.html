@@ -12,10 +12,29 @@
       'click': '_onClick'
     },
 
+    attached: function() {
+      this._cellContentFocusHandler = function(e) {
+        this.fire('cell-content-focus', {cell: this});
+      }.bind(this);
+
+      // we need to capture focus events originating from elements inside this cell,
+      // capture mode seems to be required in order it to work.
+      this.addEventListener('focus', this._cellContentFocusHandler, true);
+    },
+
+    detached: function() {
+      this.removeEventListener('focus', this._cellContentFocusHandler, true);
+    },
+
     // we need to listen to click instead of tap because on mobile safari, the
     // document.activeElement has not been updated (focus has not been shifted)
     // yet at the point when tap event is being executed.
     _onClick: function(e) {
+      // this event is only supposed to be fired from cells.
+      if (this.localName !== 'vaadin-grid-sorter') {
+        this.fire('cell-focus', {cell: this});
+      }
+
       // Prevent item action if cell itself is not focused.
       if (this._cellClick) {
         var target = Polymer.dom(e).localTarget;
