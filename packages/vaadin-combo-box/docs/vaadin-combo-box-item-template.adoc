@@ -20,8 +20,8 @@ In order to give a custom markup for items, you can provide a custom item templa
     item-label-path="name"
     item-value-path="symbol">
   <template>
-    [[item.number]] <b>[[item.symbol]]</b><br>
-    [[item.name]]
+    <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
+    array index: [[index]]
   </template>
 </vaadin-combo-box>
 
@@ -36,8 +36,23 @@ In order to give a custom markup for items, you can provide a custom item templa
 
 In the above example, the [vaadinelement]#vaadin-combo-box# element has the custom item template, that renders [propertyname]#number#, [propertyname]#symbol#, and [propertyname]#name# keys from the given object items.
 
-[[vaadin-combo-box.item-template.custom-element]]
+=== Item Template Variables
 
+The following properties are available for item template bindings:
+
+|===
+|Property name |Type |Description
+
+|[propertyname]#index#
+|[classname]#Number#
+|Index of the item in the [propertyname]#items# array
+
+|[propertyname]#item#
+|[classname]#String# or [classname]#Object#
+|The item reference
+|===
+
+[[vaadin-combo-box.item-template.custom-element]]
 == Styling Items with Custom Item Element
 
 If styling the custom item template contents is necessary, you apply styles by defining a custom item element for your template and item styles.
@@ -60,24 +75,26 @@ The following example demonstrates defining a custom element. The [elementname]#
       }
 
       #symbol {
-        flex: 0 0 2em;
+        flex: 0 0 4em;
         font-weight: bold;
       }
 
-      #number {
+      #index {
         text-align: right;
       }
     </style>
 
-    <span id="symbol">[[item.symbol]]</span>
+    <span id="symbol">
+      <sub>[[item.number]]</sub>[[item.symbol]]
+    </span>
     <span>[[item.name]]</span>
-    <span id="number">[[item.number]]</span>
+    <span id="index">[[index]]</span>
   </template>
 
   <script>
     Polymer({
       is: 'my-item',
-      properties: {item: Object}
+      properties: {index: Number, item: Object}
     });
   </script>
 </dom-module>
@@ -89,13 +106,9 @@ Then you can use the previously defined [elementname]#my-item# element in the it
 ----
 <link rel="import" href="my-item.html">
 
-<vaadin-combo-box
-    id="elements-my-item-box"
-    label="Element"
-    item-label-path="name"
-    item-value-path="symbol">
+<vaadin-combo-box id="elements-my-item-box" label="Element" item-label-path="name" item-value-path="symbol">
   <template>
-    <my-item item="[[item]]"></my-item>
+    <my-item index="[[index]]" item="[[item]]"></my-item>
   </template>
 </vaadin-combo-box>
 

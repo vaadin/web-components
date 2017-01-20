@@ -87,6 +87,7 @@
         <template>
           <vaadin-combo-box-item
               on-tap="_onTap"
+              index="[[index]]"
               item="[[item]]"
               label="[[getItemLabel(item)]]"
               selected$="[[_isItemSelected(item, _selectedItem)]]"

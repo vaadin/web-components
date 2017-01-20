@@ -15,6 +15,7 @@
     <template>
       <vaadin-combo-box id="combobox" items="[[items]]">
         <template>
+          index: [[index]]
           item: [[item]]
           parentProperty: [[parentProperty]]
           parentProperty.foo: [[parentProperty.foo]]
@@ -55,6 +56,7 @@
       });
 
       it('should render items using template', function() {
+        expect(Polymer.dom(firstItem.root).innerHTML).to.contain('index: 0');
         expect(Polymer.dom(firstItem.root).innerHTML).to.contain('item: foo');
       });
 
