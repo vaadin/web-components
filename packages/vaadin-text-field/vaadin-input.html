@@ -17,6 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="vaadin-form-element-behavior.html">
 
 <dom-module id="vaadin-input">
   <template>
@@ -47,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-  class VaadinInput extends Polymer.Element {
+  class VaadinInput extends VaadinFormElementBehavior(Polymer.Element) {
     static get is() {
       return 'vaadin-input';
     }
