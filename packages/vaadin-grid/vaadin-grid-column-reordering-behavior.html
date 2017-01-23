@@ -92,6 +92,8 @@
         // Need to set any data to enable D&D on Firefox
         e.dataTransfer.setData('text', '');
         e.dataTransfer.effectAllowed = 'move';
+
+        this._autoScroller();
       }
     },
 
@@ -113,6 +115,26 @@
         this._isSwappableByPosition(targetColumn, e.clientX)) {
         this._swapColumnOrders(this._draggedColumn, targetColumn);
       }
+
+      this._lastDragClientX = e.clientX;
+    },
+
+    _autoScroller: function() {
+      if (this._lastDragClientX) {
+        var rightDiff = this._lastDragClientX - this.getBoundingClientRect().right + 50;
+        var leftDiff = this.getBoundingClientRect().left - this._lastDragClientX + 50;
+
+        if (rightDiff > 0) {
+          this.$.table.scrollLeft += rightDiff / 10;
+        } else if (leftDiff > 0) {
+          this.$.table.scrollLeft -= leftDiff / 10;
+        }
+        this._scrollHandler();
+      }
+
+      if (this._draggedColumn) {
+        this.async(this._autoScroller, 10);
+      }
     },
 
     _onDragEnd: function(e) {
@@ -120,6 +142,7 @@
       this._draggedColumn._reorderStatus = '';
       this._setSiblingsReorderStatus(this._draggedColumn, '');
       this._draggedColumn = null;
+      this._lastDragClientX = null;
     },
 
     _isSwapAllowed: function(column1, column2) {
