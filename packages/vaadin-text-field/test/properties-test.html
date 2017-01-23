@@ -5,6 +5,7 @@
   <title>vaadin-input tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../vaadin-input.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
 </head>
 
 <body>
@@ -15,9 +16,13 @@
   </test-fixture>
 
   <script>
+    function fireNativeInputEvent(input) {
+      var ev = new Event('input', {bubbles: true, cancelable: true, composed: true});
+      input.dispatchEvent(ev);
+    }
+
     describe('properties', function() {
-      var vinput;
-      var input;
+      var vinput, input;
 
       function testSetter(prop, value) {
         vinput[prop] = value;
@@ -72,6 +77,18 @@
           });
         });
 
+      it('setting bindValue sets value', function() {
+        vinput.bindValue = 'foo';
+        expect(input.value).to.be.equal('foo');
+      });
+
+      it('setting value updates bindValue', function() {
+        input.value = 'foo';
+        fireNativeInputEvent(input);
+        expect(vinput.bindValue).to.be.equal('foo');
+      });
+
     });
+
   </script>
 </body>
