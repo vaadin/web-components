@@ -6,6 +6,7 @@
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-overlay-behavior.html">
+<link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
 
 <dom-module id="vaadin-combo-box-overlay">
@@ -45,7 +46,7 @@
         };
       }
 
-      #selector .item {
+      #selector vaadin-combo-box-item {
         cursor: pointer;
         padding: 13px 16px;
         color: var(--primary-text-color);
@@ -60,12 +61,12 @@
         height: 58px;
       }
 
-      #selector:not([touch-device]) .item:hover,
-      #selector .item[focused] {
+      #selector:not([touch-device]) vaadin-combo-box-item:hover,
+      #selector vaadin-combo-box-item[focused] {
         background: #eee;
       }
 
-      #selector .item[selected] {
+      #selector vaadin-combo-box-item[selected] {
         color: var(--primary-color);
       }
     </style>
@@ -84,13 +85,16 @@
           items="[[_items]]"
           scroll-target="[[_getScroller()]]">
         <template>
-          <div class="item" on-tap="_onTap"
-              selected$="[[_isItemSelected(item, _selectedItem)]]"
+          <vaadin-combo-box-item
+              on-tap="_onTap"
+              index="[[index]]"
+              item="[[item]]"
+              label="[[getItemLabel(item)]]"
+              selected="[[_isItemSelected(item, _selectedItem)]]"
               role$="[[_getAriaRole(index)]]"
               aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-              focused$="[[_isItemFocused(_focusedIndex,index)]]">
-            [[getItemLabel(item)]]
-          </div>
+              focused="[[_isItemFocused(_focusedIndex,index)]]">
+          </vaadin-combo-box-item>
         </template>
       </iron-list>
     </div>
@@ -165,7 +169,7 @@
 
       _notTapping: Boolean,
 
-      _ignoreTaps: Boolean
+      _ignoreTaps: Boolean,
     },
 
     ready: function() {
@@ -256,33 +260,40 @@
     },
 
     _scrollIntoView: function(index) {
-      if (this._visibleItemsCount() === undefined) {
+      var visibleItemsCount = this._visibleItemsCount();
+      if (visibleItemsCount === undefined) {
         // Scroller is not visible. Moving is unnecessary.
         return;
       }
 
       var targetIndex = index;
 
-      if (index > this._lastVisibleIndex()) {
+      if (index > this.$.selector.lastVisibleIndex - 1) {
         // Index is below the bottom, scrolling down. Make the item appear at the bottom.
-        targetIndex = index - this._visibleItemsCount() + 1;
-
-        // From iron-list 1.2.4, scrolling to an index guarantees that the item
-        // is visible into the viewport, but does not gurarantee that it is at the
-        // first position. Jumping first to the item we want to be at the bottom,
-        // fixes the problem.
-        this.$.selector.scrollToIndex(index);
+        targetIndex = index - visibleItemsCount + 1;
       } else if (index > this.$.selector.firstVisibleIndex) {
         // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
         // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
         targetIndex = this.$.selector.firstVisibleIndex;
       }
       this.$.selector.scrollToIndex(Math.max(0, targetIndex));
+
+      // Sometimes the item is partly below the bottom edge, detect and adjust.
+      var item = this._items[index];
+      if (item === undefined) return;
+      var pidx = this.$.selector._getPhysicalIndex(item),
+        physicalItem = this.$.selector._physicalItems[pidx];
+      if (!physicalItem) return;
+      var physicalItemRect = physicalItem.getBoundingClientRect(),
+        scrollerRect = this.$.scroller.getBoundingClientRect(),
+        scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
+      if (scrollTopAdjust > 0) {
+        this.$.scroller.scrollTop += scrollTopAdjust;
+      }
     },
 
     ensureItemsRendered: function() {
       this.$.selector.flushDebouncer('_debounceTemplate');
-      this.$.selector._render && this.$.selector._render();
     },
 
     adjustScrollPosition: function() {
@@ -320,17 +331,15 @@
     },
 
     updateViewportBoundaries: function() {
-      this._cachedViewportTotalPadding = undefined;
+      this._cachedViewportTotalPaddingBottom = undefined;
       this.$.selector.updateViewportBoundaries();
     },
 
-    get _viewportTotalPadding() {
-      if (this._cachedViewportTotalPadding === undefined) {
+    get _viewportTotalPaddingBottom() {
+      if (this._cachedViewportTotalPaddingBottom === undefined) {
         var itemsStyle = window.getComputedStyle(this._unwrapIfNeeded(this.$.selector.$.items));
-        this._cachedViewportTotalPadding = [
-          itemsStyle.paddingTop,
+        this._cachedViewportTotalPaddingBottom = [
           itemsStyle.paddingBottom,
-          itemsStyle.borderTopWidth,
           itemsStyle.borderBottomWidth
         ].map(function(v) {
           return parseInt(v, 10);
@@ -339,27 +348,17 @@
         });
       }
 
-      return this._cachedViewportTotalPadding;
+      return this._cachedViewportTotalPaddingBottom;
     },
 
-    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
     _visibleItemsCount: function() {
-      var firstItemIndex = this.$.selector._physicalStart;
-      var firstItemHeight = this.$.selector._physicalSizes[firstItemIndex];
-
-      var viewportHeight = this.$.selector._viewportHeight || this.$.selector._viewportSize; // Changed in v1.3.0.
-
-      if (firstItemHeight && viewportHeight) {
-        var visibleItems = (viewportHeight - this._viewportTotalPadding) / firstItemHeight;
-        return Math.floor(visibleItems);
-      }
-    },
-
-    // TODO: PR for iron-list: https://github.com/PolymerElements/iron-list/pull/150
-    _lastVisibleIndex: function() {
-      if (this._visibleItemsCount()) {
-        return this.$.selector.firstVisibleIndex + this._visibleItemsCount() - 1;
-      }
+      // Ensure items are rendered
+      this.$.selector.flushDebouncer('_debounceTemplate');
+      // Ensure items are positioned
+      this.$.selector.scrollToIndex(this.$.selector.firstVisibleIndex);
+      // Ensure viewport boundaries are up-to-date
+      this.updateViewportBoundaries();
+      return this.$.selector.lastVisibleIndex - this.$.selector.firstVisibleIndex + 1;
     },
 
     _selectItem: function(item) {

@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-combo-box Object Items Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <nav class="vertical-section">
+      <ul class="layout horizontal wrap">
+        <li><a href="index.html">Basic Examples</a></li>
+        <li><a href="objects.html">Object Items</a></li>
+        <li><b>Item Template</b></li>
+        <li><a href="external-filtering.html">Remote and Custom Filtering</a></li>
+        <li><a href="advanced.html">Advanced Usage</a></li>
+      </ul>
+    </nav>
+
+    <h3>Custom Item Template</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol">
+          <template>
+            <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
+            array index: [[index]]
+          </template>
+        </vaadin-combo-box>
+
+        <script>
+          var elementsTemplateBox = document.querySelector('#elements-template-box');
+
+          // elementsJson is an Array of Objects. Item object format:
+          //   {name: 'Hydrogen', symbol: 'H', number: 1}
+          elementsTemplateBox.items = elementsJson;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Focused and Selected Flags</h3>
+
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
+          <template>
+            <b>[[item]]</b><br>
+            selected: [[selected]], focused: [[focused]]
+          </template>
+        </vaadin-combo-box>
+
+        <script>
+          var elementsSelectedBox = document.querySelector('#elements-selected-box');
+          elementsSelectedBox.items = elements;
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Styling Items with Custom Item Element</h3>
+
+    <demo-snippet>
+      <template>
+        <!-- Step 1: Define a custom element with your template and item styles -->
+
+        <dom-module id="my-item">
+          <template>
+            <style>
+              :host {
+                display: flex;
+              }
+
+              :host([selected]) {
+                color: var(--accent-color, deeppink);
+              }
+
+              span {
+                flex: 1 0 100px;
+                padding: 0 8px;
+              }
+
+              #symbol {
+                flex: 0 0 4em;
+                font-weight: bold;
+              }
+
+              #index {
+                text-align: right;
+              }
+            </style>
+
+            <span id="symbol">
+              <sub>[[item.number]]</sub>[[item.symbol]]
+            </span>
+            <span>[[item.name]]</span>
+            <span id="index">[[index]]</span>
+          </template>
+
+          <script>
+            HTMLImports.whenReady(function() {
+              Polymer({
+                is: 'my-item',
+                properties: {index: Number, item: Object}
+              });
+            });
+          </script>
+        </dom-module>
+
+        <!-- Step 2: Use your custom element in the item itemplate of <vaadin-combo-box> -->
+
+        <vaadin-combo-box id="elements-my-item-box" label="Element" item-label-path="name" item-value-path="symbol">
+          <template>
+            <my-item index="[[index]]" item="[[item]]" selected$="[[selected]]"></my-item>
+          </template>
+        </vaadin-combo-box>
+
+        <script>
+          var elementsMyItemBox = document.querySelector('#elements-my-item-box');
+          elementsMyItemBox.items = elementsJson;
+        </script>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>

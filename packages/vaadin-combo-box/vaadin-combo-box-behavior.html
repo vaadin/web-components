@@ -136,7 +136,10 @@
 
       _inputElementValue: String,
 
-      _closeOnBlurIsPrevented: Boolean
+      _closeOnBlurIsPrevented: Boolean,
+
+      _templatized: Boolean,
+      _itemTemplate: Boolean
     },
 
     observers: [
@@ -357,8 +360,10 @@
       // before we update the overlay and the list positions and sizes.
       this.$.overlay.ensureItemsRendered();
 
-      this.$.overlay.notifyResize();
-      this.$.overlay.adjustScrollPosition();
+      // Ensure metrics are up-to-date
+      this.$.overlay.updateViewportBoundaries();
+      this.$.overlay.async(this.$.overlay.adjustScrollPosition);
+      this.$.overlay.async(this.$.overlay.notifyResize, 1);
     },
 
     _onClosed: function() {
@@ -602,6 +607,39 @@
       }
     },
 
+    get _instanceProps() {
+      return {
+        item: true,
+        index: true,
+        selected: true,
+        focused: true
+      };
+    },
+
+    _ensureTemplatized: function() {
+      if (!this._templatized) {
+        this._templatized = true;
+        this._itemTemplate = Polymer.dom(this).querySelector('template');
+        if (this._itemTemplate) {
+          this.templatize(this._itemTemplate);
+        }
+      }
+    },
+
+    _forwardParentProp: function(prop, value) {
+      var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
+      Array.prototype.forEach.call(items, function(item) {
+        item._itemTemplateInstance[prop] = value;
+      });
+    },
+
+    _forwardParentPath: function(path, value) {
+      var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
+      Array.prototype.forEach.call(items, function(item) {
+        item._itemTemplateInstance.notifyPath(path, value, true);
+      });
+    },
+
     _preventDefault: function(e) {
       e.preventDefault();
     },
@@ -614,6 +652,7 @@
   /** @polymerBehavior vaadin.elements.combobox.ComboBoxBehavior */
   vaadin.elements.combobox.ComboBoxBehavior = [
     Polymer.IronFormElementBehavior,
+    Polymer.Templatizer,
     vaadin.elements.combobox.DropdownBehavior,
     vaadin.elements.combobox.ComboBoxBehaviorImpl
   ];

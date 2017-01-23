@@ -386,9 +386,9 @@
 
         Polymer.Base.async(function() {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
-          expect(comboBox.$.overlay._lastVisibleIndex()).to.eql(3);
+          expect(comboBox.$.overlay.$.selector.lastVisibleIndex).to.eql(3);
           done();
-        });
+        }, 1);
       });
 
       it('should calculate items correctly when some items are hidden', function(done) {
@@ -402,9 +402,9 @@
         comboBox.open();
 
         Polymer.Base.async(function() {
-          expect(comboBox.$.overlay._lastVisibleIndex()).to.eql(comboBox.$.overlay._visibleItemsCount() - 1);
+          expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay.$.selector.lastVisibleIndex + 1);
           done();
-        });
+        }, 1);
       });
     });
 
@@ -422,7 +422,7 @@
         comboBox.open();
         selector = comboBox.$.overlay.$.selector;
 
-        Polymer.Base.async(done);
+        Polymer.Base.async(done, 1);
       });
 
       it('should scroll down after reaching the last visible item', function() {

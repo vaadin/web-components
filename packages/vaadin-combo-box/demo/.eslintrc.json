@@ -4,7 +4,8 @@
   },
   "globals": {
     "elements": false,
-    "elementsJson": false
+    "elementsJson": false,
+    "HTMLImports": false
   }
 }
 

@@ -86,10 +86,15 @@
   describe('overlay', function() {
     beforeEach(function(done) {
       comboBox = fixture('combobox');
+      var comboBoxRect = comboBox.getBoundingClientRect();
       comboBox.items = getItemArray(20);
 
-      wh = window.innerHeight;
-      ww = window.innerWidth;
+      var win = comboBox.ownerDocument.defaultView;
+      // Subtract the combo-box size from the coordinates range in order not to
+      // move it outside the viewport boundaries when changing top and left.
+      // Otherwise it is not nice for debugging.
+      wh = win.innerHeight - comboBoxRect.height;
+      ww = win.innerWidth - comboBoxRect.width;
       horiCenter = ww * 0.5;
       vertTop = 0;
       vertBottom = wh;
