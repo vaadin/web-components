@@ -1,15 +1,10 @@
-var args = require('yargs').argv;
-
 module.exports = {
-  extraScripts: args.dom === 'shadow' ? ['test/enable-shadow-dom.js'] : [],
   registerHooks: function(context) {
-    // The Good
     var crossPlatforms = [
       'Windows 10/chrome@55',
       'Windows 10/firefox@50'
     ];
 
-    // The Bad
     var otherPlatforms = [
       'OS X 10.11/iphone@9.3',
       'OS X 10.11/ipad@9.3',

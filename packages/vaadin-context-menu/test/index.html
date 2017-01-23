@@ -8,18 +8,25 @@
   </head>
   <body>
     <script>
-      var shadow = document.location.search.indexOf('dom=shadow') > -1;
-      WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
+      WCT._config.environmentScripts.push('webcomponentsjs/webcomponents.js');
 
       WCT.loadSuites([
         'context.html',
+        'context.html?dom=shadow',
         'device-detector.html',
+        'device-detector.html?dom=shadow',
         'integration.html',
+        'integration.html?dom=shadow',
         'selection.html',
+        'selection.html?dom=shadow',
         'properties.html',
+        'properties.html?dom=shadow',
         'overlay.html',
+        'overlay.html?dom=shadow',
         'template.html',
-        'touch.html'
+        'template.html?dom=shadow',
+        'touch.html',
+        'touch.html?dom=shadow'
       ]);
     </script>
   </body>

@@ -14,8 +14,7 @@
     "gulp-eslint": "^3.0.1",
     "gulp-stylelint": "^3.7.0",
     "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
-    "web-component-tester": "^5.0.0",
-    "yargs": "^5.0.0"
+    "web-component-tester": "^5.0.0"
   },
   "scripts": {
     "postinstall": "node_modules/.bin/bower install"
