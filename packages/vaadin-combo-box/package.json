@@ -31,7 +31,6 @@
     "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
     "systemjs": "0.19.27",
     "web-component-tester": "^5.0.0",
-    "yargs": "latest",
     "zone.js": "^0.6.17"
   },
   "scripts": {

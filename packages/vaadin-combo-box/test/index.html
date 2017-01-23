@@ -13,25 +13,39 @@
     WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
     WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
 
-    var shadow = document.location.search.indexOf('dom=shadow') > -1;
-    WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
       'vaadin-combo-box-properties.html',
+      'vaadin-combo-box-properties.html?dom=shadow',
       'toggling-dropdown.html',
+      'toggling-dropdown.html?dom=shadow',
       'overlay-position.html',
+      'overlay-position.html?dom=shadow',
       'selecting-items.html',
+      'selecting-items.html?dom=shadow',
       'form-input.html',
+      'form-input.html?dom=shadow',
       'filtering.html',
+      'filtering.html?dom=shadow',
       'keyboard.html',
+      'keyboard.html?dom=shadow',
       'scrolling.html',
+      'scrolling.html?dom=shadow',
       'aria.html',
+      'aria.html?dom=shadow',
       'using-object-values.html',
+      'using-object-values.html?dom=shadow',
       'data-binding.html',
+      'data-binding.html?dom=shadow',
       'late-upgrade.html',
+      'late-upgrade.html?dom=shadow',
       'vaadin-combo-box-light.html',
+      'vaadin-combo-box-light.html?dom=shadow',
       'item-template.html',
-      'angular2.html'
+      'item-template.html?dom=shadow',
+      'angular2.html',
+      'angular2.html?dom=shadow'
     ]);
   </script>
 </body>
