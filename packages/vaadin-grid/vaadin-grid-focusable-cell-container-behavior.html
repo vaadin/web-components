@@ -60,7 +60,7 @@
 
         indexes.sort(function(i1, i2) {
           return children[i1].column._order < children[i2].column._order ? -1 : 1;
-        }.bind(this));
+        });
       }
 
       return indexes;
