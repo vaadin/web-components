@@ -33,8 +33,7 @@
     "systemjs": "^0.19.27",
     "web-component-tester": "4.0.3",
     "web-component-tester-istanbul": "https://github.com/t2ym/web-component-tester-istanbul/tarball/0.10.1",
-    "zone.js": "^0.6.12",
-    "yargs": "latest"
+    "zone.js": "^0.6.12"
   },
   "scripts": {
     "postinstall": "node_modules/.bin/bower install"
