@@ -25,6 +25,19 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: inline-block;
       }
+      input {
+        outline: none;
+        border: solid 1px #d8d8d8;
+      }
+      input:focus {
+        border-bottom: solid 1px deepskyblue;
+      }
+      input:invalid {
+        background: #fbefef;
+      }
+      input:focus:invalid {
+        border-bottom: solid 1px red;
+      }
     </style>
     <input id="input"
       autocapitalize$="{{autocapitalize}}"
@@ -33,128 +46,153 @@ This program is available under Apache License Version 2.0, available at https:/
       autofocus$="{{autofocus}}"
       disabled$="{{disabled}}"
       list="{{list}}"
-      maxlength="{{maxlength}}"
-      minlength="{{minlength}}"
+      maxlength$="{{maxlength}}"
+      minlength$="{{minlength}}"
       name="{{name}}"
       pattern="{{pattern}}"
       placeholder="{{placeholder}}"
       readonly$="{{readonly}}"
       required$="{{required}}"
-      tabindex="{{tabindex}}"
+      tabindex$="{{tabindex}}"
       value="{{value::input}}"
-      type="{{type}}"
+      type$="{{type}}"
       title="{{title}}"
     />
   </template>
 
   <script>
-  class VaadinInput extends VaadinFormElementBehavior(Polymer.Element) {
-    static get is() {
-      return 'vaadin-input';
-    }
+    class VaadinInput extends window.VaadinFormElementBehavior(Polymer.Element) {
+      static get is() {
+        return 'vaadin-input';
+      }
 
-    static get config() {
-      return {
-        properties: {
-          autocapitalize: {
-            type: String,
-            notify: true
+      static get config() {
+        return {
+          properties: {
+            autocapitalize: {
+              type: String,
+              notify: true
+            },
+            autocomplete: {
+              type: Boolean,
+              notify: true
+            },
+            autocorrect: {
+              type: Boolean,
+              notify: true
+            },
+            autofocus: {
+              type: Boolean,
+              notify: true
+            },
+            disabled: {
+              type: Boolean,
+              notify: true
+            },
+            list: {
+              type: String,
+              notify: true
+            },
+            maxlength: {
+              type: Number,
+              notify: true
+            },
+            minlength: {
+              type: Number,
+              notify: true
+            },
+            name: {
+              type: String,
+              notify: true
+            },
+            pattern: {
+              type: String,
+              notify: true
+            },
+            placeholder: {
+              type: String,
+              notify: true
+            },
+            readonly: {
+              type: Boolean,
+              notify: true
+            },
+            required: {
+              type: Boolean,
+              notify: true
+            },
+            title: {
+              type: String
+            },
+            type: {
+              type: String,
+              default: 'text'
+            },
+            tabindex: {
+              type: Number,
+              notify: true
+            },
+            value: {
+              type: String,
+              observer: '_valueChanged',
+              notify: true
+            },
+            bindValue: {
+              type: String,
+              observer: '_bindValueChanged'
+            },
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true
+            }
           },
-          autocomplete: {
-            type: Boolean,
-            notify: true
-          },
-          autocorrect: {
-            type: Boolean,
-            notify: true
-          },
-          autofocus: {
-            type: Boolean,
-            notify: true
-          },
-          disabled: {
-            type: Boolean,
-            notify: true
-          },
-          list: {
-            type: String,
-            notify: true
-          },
-          maxlength: {
-            type: Number,
-            notify: true
-          },
-          minlength: {
-            type: Number,
-            notify: true
-          },
-          name: {
-            type: String,
-            notify: true
-          },
-          pattern: {
-            type: String,
-            notify: true
-          },
-          placeholder: {
-            type: String,
-            notify: true
-          },
-          readonly: {
-            type: Boolean,
-            notify: true
-          },
-          required: {
-            type: Boolean,
-            notify: true
-          },
-          title: {
-            type: String
-          },
-          type: {
-            type: String
-          },
-          tabindex: {
-            type: Number,
-            notify: true
-          },
-          value: {
-            type: String,
-            observer: '_valueChanged',
-            notify: true
-          },
-          bindValue: {
-            type: String,
-            observer: '_bindValueChanged'
+
+          observers: [
+            '_bindValueChanged(bindValue)'
+          ]
+        };
+      }
+
+      ready() {
+        super.ready();
+        this.bindValue = this.value;
+        this.invalid = this._isInvalid();
+      }
+
+      _valueChanged(value) {
+        this.bindValue = value;
+      }
+
+      _bindValueChanged(bindValue) {
+        this.value = bindValue;
+        this.dispatchEvent(new CustomEvent('bind-value-changed'), {bubbles: true});
+        this.invalid = this._isInvalid();
+      }
+
+      _isInvalid() {
+        return !this.validate();
+      }
+
+      /**
+       * Returns true if `value` is valid.
+       * `<iron-form>` uses this to check the validity or all its elements.
+       *
+       * @return {boolean} True if the value is valid.
+       */
+      validate() {
+        // Use input's native validity.
+        var valid = this.$.input.checkValidity();
+        // Only do extra checking if the browser thought this was valid.
+        if (valid) {
+          // Empty, required input is invalid
+          if (this.required && this.bindValue === '') {
+            valid = false;
           }
-        },
-
-        observers: [
-          '_bindValueChanged(bindValue)'
-        ],
-
-        listeners: {
-          'input': '_onInput',
-          'keypress': '_onKeypress'
-        },
-      };
+        }
+        return valid;
+      }
     }
 
-    ready() {
-      super.ready();
-      this.bindValue = this.value;
-    }
-
-    _valueChanged(value) {
-      this.bindValue = value;
-    }
-
-    _bindValueChanged(bindValue) {
-      this.value = bindValue;
-      this.dispatchEvent(new CustomEvent('bind-value-changed'), {bubbles: true});
-    }
-  }
-
-  customElements.define(VaadinInput.is, VaadinInput);
+    customElements.define(VaadinInput.is, VaadinInput);
   </script>
 </dom-module>
