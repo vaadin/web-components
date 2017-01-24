@@ -13,7 +13,15 @@
 </head>
 
 <body>
-
+  <style is="custom-style">
+    vaadin-grid {
+      height: 500px;
+      --vaadin-grid-body-cell: {
+        padding: 0;
+        height: 50px;
+      }
+    }
+  </style>
   <test-fixture id="default">
     <template>
       <vaadin-grid>
@@ -129,6 +137,30 @@
 
       function space() {
         MockInteractions.keyDownOn(scroller, 32);
+      }
+
+      function pageUp() {
+        MockInteractions.keyDownOn(scroller, 33);
+      }
+
+      function pageDown() {
+        MockInteractions.keyDownOn(scroller, 34);
+      }
+
+      function end() {
+        MockInteractions.keyDownOn(scroller, 35);
+      }
+
+      function ctrlEnd() {
+        MockInteractions.keyDownOn(scroller, 35, 'ctrl');
+      }
+
+      function home() {
+        MockInteractions.keyDownOn(scroller, 36);
+      }
+
+      function ctrlHome() {
+        MockInteractions.keyDownOn(scroller, 36, 'ctrl');
       }
 
       function getFirstHeaderCell() {
@@ -276,6 +308,38 @@
           expect(scroller.navigating).to.be.true;
           expect(scroller._virtualFocus).to.eql(footer);
         });
+
+        it('should enable navigation mode with page down', function() {
+          clickFirstBodyInput(0);
+
+          pageDown();
+
+          expect(scroller.navigating).to.be.true;
+        });
+
+        it('should enable navigation mode with page up', function() {
+          clickFirstBodyInput(0);
+
+          pageUp();
+
+          expect(scroller.navigating).to.be.true;
+        });
+
+        it('should enable navigation mode with home', function() {
+          clickFirstBodyInput(0);
+
+          home();
+
+          expect(scroller.navigating).to.be.true;
+        });
+
+        it('should enable navigation mode with end', function() {
+          clickFirstBodyInput(0);
+
+          end();
+
+          expect(scroller.navigating).to.be.true;
+        });
       });
 
       describe('navigating with tab', function() {
@@ -376,7 +440,7 @@
         });
 
         it('should move virtual focus from body to footer on tab', function() {
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           tab();
 
@@ -384,7 +448,7 @@
         });
 
         it('should move virtual focus from header to footer on tab', function() {
-          scroller._virtualFocus = header;
+          headerTrap.focus();
 
           tab();
           tab();
@@ -393,7 +457,7 @@
         });
 
         it('should move virtual focus from footer to body on shift-tab', function() {
-          scroller._virtualFocus = footer;
+          footerTrap.focus();
 
           shiftTab();
 
@@ -401,7 +465,7 @@
         });
 
         it('should move virtual focus from body to header on shift-tab', function() {
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           shiftTab();
 
@@ -409,7 +473,7 @@
         });
 
         it('should move actual focus to from footer to body on shift-tab', function() {
-          scroller._virtualFocus = footer;
+          footerTrap.focus();
 
           shiftTab();
           shiftTab();
@@ -469,7 +533,7 @@
         it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
           footer.children[0].hidden = true;
 
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           tab();
 
@@ -482,9 +546,34 @@
 
           expect(scroller._virtualFocus).to.eql(body);
         });
+
+        it('should focus on first cell when tabbing to header', function() {
+          headerTrap.focus();
+
+          expect(header._focusedCellIndex).to.eql(0);
+          expect(header._focusedRowIndex).to.eql(0);
+        });
+
+        it('should focus on first cell when tabbing to body', function() {
+          headerTrap.focus();
+
+          tab();
+
+          expect(body._focusedCellIndex).to.eql(0);
+          expect(body._focusedRowIndex).to.eql(0);
+        });
+
+        it('should focus on first cell when tabbing to footer', function() {
+          bodyTrap.focus();
+
+          tab();
+
+          expect(footer._focusedCellIndex).to.eql(0);
+          expect(footer._focusedRowIndex).to.eql(0);
+        });
       });
 
-      describe('navigating with arrow keys', function() {
+      describe('navigating with keys', function() {
         it('should enable navigation mode on down', function() {
           focusHeaderInput();
 
@@ -590,9 +679,6 @@
         });
 
         describe('with hidden columns', function() {
-          beforeEach(function() {
-          });
-
           it('should skip over hidden column with right arrow', function() {
             grid._columnTree[0][1].hidden = true;
             clickItem(0);
@@ -630,6 +716,61 @@
 
             expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
           });
+
+          it('should not navigate to hidden column with end', function() {
+            grid._columnTree[0][0].hidden = true;
+            clickItem(0);
+
+            home();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
+
+          it('should not navigate to hidden column with home', function() {
+            grid._columnTree[0][2].hidden = true;
+            clickItem(0);
+
+            end();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
+        });
+
+        it('should focus first cell with home', function() {
+          clickFirstBodyInput(0);
+          right();
+
+          home();
+
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+        });
+
+        it('should focus first cell on first row with ctrl+home', function() {
+          clickFirstBodyInput(0);
+          right();
+
+          ctrlHome();
+
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+        });
+
+        it('should focus last cell with end', function() {
+          clickFirstBodyInput(0);
+
+          end();
+
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+        });
+
+
+        it('should focus last cell on last row with ctrl+end', function() {
+          clickFirstBodyInput(0);
+
+          ctrlEnd();
+
+          expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
         });
 
         describe('horizontal scrolling', function() {
@@ -684,6 +825,23 @@
             expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
           });
 
+          it('should scroll cells visible with home', function() {
+            clickItem(0);
+            grid.$.scroller.$.table.scrollLeft = 999999999;
+
+            home();
+
+            expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+          });
+
+          it('should scroll cells visible with end', function() {
+            clickItem(0);
+
+            end();
+
+            expect(grid.$.scroller.$.table.scrollLeft).to.eql(grid.$.scroller.$.table.scrollWidth - grid.$.scroller.$.table.clientWidth);
+          });
+
           it('should scroll cell visible under from frozen cells with left arrow', function(done) {
             grid.style.width = '200px'; // column default min width is 100px
             grid.style.border = 'none';
@@ -734,11 +892,53 @@
             expect(grid.$.scroller.$.table.scrollTop).to.be.above(0);
           });
 
+          it('should scroll to the first row with ctrl+home', function(done) {
+            clickItem(0);
+            grid.$.scroller.$.table.scrollTop = 9999999999;
+
+            grid.async(function() {
+              ctrlHome();
+
+              expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
+
+              done();
+            });
+          });
+
+          it('should scroll to the last row with ctrl+end', function() {
+            clickItem(0);
+
+            ctrlEnd();
+
+            expect(grid.$.scroller.$.table.scrollTop).to.eql(grid.$.scroller.$.table.scrollHeight - grid.$.scroller.$.table.clientHeight);
+          });
+
+          it('should scroll down one page with page down', function() {
+            clickItem(0);
+
+            pageDown();
+
+            // 9 items per page.
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0 + 9);
+          });
+
+          it('should scroll up one page with page up', function(done) {
+            clickItem(0);
+            pageDown();
+
+            grid.async(function() {
+              pageUp();
+
+              expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+              done();
+            });
+          });
+
           it('should scroll the focused item visible when focus is set to body', function(done) {
             grid.$.scroller.$.table.scrollTop = 500;
 
             grid.async(function() {
-              grid.$.scroller._virtualFocus = grid.$.scroller.$.items;
+              bodyTrap.focus();
 
               expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
 
@@ -817,7 +1017,7 @@
         it('should have focused first cell in header by default', function() {
           expect(header.hasAttribute('focused')).to.be.false;
 
-          scroller._virtualFocus = header;
+          headerTrap.focus();
 
           var firstRow = header.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
@@ -829,7 +1029,7 @@
         it('should have focused first cell in body by default', function() {
           expect(body.hasAttribute('focused')).to.be.false;
 
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           var firstRow = body.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
@@ -841,7 +1041,7 @@
         it('should have focused first cell in footer by default', function() {
           expect(footer.hasAttribute('focused')).to.be.false;
 
-          scroller._virtualFocus = footer;
+          footerTrap.focus();
 
           var firstRow = footer.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;

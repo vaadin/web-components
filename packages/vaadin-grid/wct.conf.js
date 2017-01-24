@@ -14,6 +14,8 @@ module.exports = {
         '/vaadin-grid-dynamic-columns-behavior.html',
         // TODO: @limonte, revisit this in future, currently a weird istanbul bug here
         // '/vaadin-grid-filter-behavior.html',
+        '/vaadin-grid-focusable-cell-container-behavior.html',
+        '/vaadin-grid-keyboard-navigation-behavior.html',
         '/vaadin-grid-row-details-behavior.html',
         '/vaadin-grid-selection-behavior.html',
         '/vaadin-grid-selection-column.html',

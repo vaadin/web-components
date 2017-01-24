@@ -61,6 +61,11 @@
         this._focusedRowIndex = Math.max(0, this._focusedRowIndex - 1);
       },
 
+      focusLast: function() {
+        this._focusedRowIndex = this.domHost.size - 1;
+        this.focusEnd();
+      },
+
       _focusedCellChanged: function(rowIndex, cellIndex) {
         Polymer.dom(this).children.forEach(function(row) {
           row.focused = row.index === rowIndex;
