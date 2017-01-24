@@ -440,7 +440,7 @@
         });
 
         it('should move virtual focus from body to footer on tab', function() {
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           tab();
 
@@ -448,7 +448,7 @@
         });
 
         it('should move virtual focus from header to footer on tab', function() {
-          scroller._virtualFocus = header;
+          headerTrap.focus();
 
           tab();
           tab();
@@ -457,7 +457,7 @@
         });
 
         it('should move virtual focus from footer to body on shift-tab', function() {
-          scroller._virtualFocus = footer;
+          footerTrap.focus();
 
           shiftTab();
 
@@ -465,7 +465,7 @@
         });
 
         it('should move virtual focus from body to header on shift-tab', function() {
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           shiftTab();
 
@@ -473,7 +473,7 @@
         });
 
         it('should move actual focus to from footer to body on shift-tab', function() {
-          scroller._virtualFocus = footer;
+          footerTrap.focus();
 
           shiftTab();
           shiftTab();
@@ -533,7 +533,7 @@
         it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
           footer.children[0].hidden = true;
 
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           tab();
 
@@ -545,6 +545,31 @@
           footerTrap.focus();
 
           expect(scroller._virtualFocus).to.eql(body);
+        });
+
+        it('should focus on first cell when tabbing to header', function() {
+          headerTrap.focus();
+
+          expect(header._focusedCellIndex).to.eql(0);
+          expect(header._focusedRowIndex).to.eql(0);
+        });
+
+        it('should focus on first cell when tabbing to body', function() {
+          headerTrap.focus();
+
+          tab();
+
+          expect(body._focusedCellIndex).to.eql(0);
+          expect(body._focusedRowIndex).to.eql(0);
+        });
+
+        it('should focus on first cell when tabbing to footer', function() {
+          bodyTrap.focus();
+
+          tab();
+
+          expect(footer._focusedCellIndex).to.eql(0);
+          expect(footer._focusedRowIndex).to.eql(0);
         });
       });
 
@@ -913,7 +938,7 @@
             grid.$.scroller.$.table.scrollTop = 500;
 
             grid.async(function() {
-              grid.$.scroller._virtualFocus = grid.$.scroller.$.items;
+              bodyTrap.focus();
 
               expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
 
@@ -992,7 +1017,7 @@
         it('should have focused first cell in header by default', function() {
           expect(header.hasAttribute('focused')).to.be.false;
 
-          scroller._virtualFocus = header;
+          headerTrap.focus();
 
           var firstRow = header.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
@@ -1004,7 +1029,7 @@
         it('should have focused first cell in body by default', function() {
           expect(body.hasAttribute('focused')).to.be.false;
 
-          scroller._virtualFocus = body;
+          bodyTrap.focus();
 
           var firstRow = body.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
@@ -1016,7 +1041,7 @@
         it('should have focused first cell in footer by default', function() {
           expect(footer.hasAttribute('focused')).to.be.false;
 
-          scroller._virtualFocus = footer;
+          footerTrap.focus();
 
           var firstRow = footer.children[0];
           expect(firstRow.hasAttribute('focused')).to.be.true;
