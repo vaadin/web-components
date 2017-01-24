@@ -85,6 +85,7 @@
         this.template = column.template;
         this.width = column.width;
         this.hidden = column.hidden;
+        this.resizable = column.resizable;
         this._childColumns = column._childColumns;
         this.order = column._order;
 
@@ -213,7 +214,14 @@
       extends: 'th',
 
       properties: {
-        headerTemplate: Object
+        headerTemplate: Object,
+
+        resizable: Boolean,
+
+        columnResizing: {
+          type: Boolean,
+          reflectToAttribute: true
+        }
       },
 
       behaviors: [
@@ -222,10 +230,13 @@
       ],
 
       observers: [
-        '_headerTemplateChanged(headerTemplate, isAttached)'
+        '_headerTemplateChanged(headerTemplate, isAttached)',
+        '_resizableChanged(resizable)'
       ],
 
       listeners: {
+        'track': '_onTrack',
+        'mousedown': '_cancelMouseDownOnResize',
         'mousemove': '_enableDrag',
         'mouseout': '_disableDrag'
       },
@@ -239,6 +250,36 @@
 
       _disableDrag: function() {
         this._cellContent.draggable = false;
+      },
+
+      _cancelMouseDownOnResize: function(e) {
+        if (e.target === this._resizeHandle) {
+          e.preventDefault();
+        }
+      },
+
+      _resizableChanged: function(resizable) {
+        if (resizable && this._isColumnRow) {
+          this._resizeHandle = document.createElement('div');
+          this._resizeHandle.classList.add('vaadin-grid-column-resize-handle');
+          Polymer.dom(this).appendChild(this._resizeHandle);
+        } else if (this._resizeHandle) {
+          Polymer.dom(this).removeChild(this._resizeHandle);
+        }
+      },
+
+      _onTrack: function(e) {
+        if (e.target === this._resizeHandle) {
+          this.columnResizing = true;
+          var style = window.getComputedStyle(this._cellContent);
+          var minWidth = 10 + parseInt(style.paddingLeft) + parseInt(style.paddingRight);
+          this.column.width = Math.max(minWidth, this.offsetWidth + e.detail.x - this.getBoundingClientRect().right) + 'px';
+          this.column.flexGrow = 0;
+        }
+
+        if (this.columnResizing && e.detail.state === 'end') {
+          this.columnResizing = false;
+        }
       },
 
       _headerTemplateChanged: function(headerTemplate, isAttached) {
