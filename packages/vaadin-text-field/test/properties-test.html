@@ -74,7 +74,14 @@
             });
           });
 
+        ['autocomplete'].forEach(function(prop) {
+          it('should set boolean attribute ' + prop, function() {
+            assertAttrCanBeSet(prop, 'on');
+          });
+        });
+
         ['autocomplete',
+          'autocorrect',
           'readonly',
           'required'].forEach(function(prop) {
             it('should set boolean attribute ' + prop, function() {

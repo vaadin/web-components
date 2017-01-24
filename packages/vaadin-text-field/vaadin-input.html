@@ -68,70 +68,131 @@ This program is available under Apache License Version 2.0, available at https:/
       static get config() {
         return {
           properties: {
+            /**
+             * Whether the value of the control can be automatically completed by the browser.
+             * List of available options at:
+             * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
+             */
             autocomplete: {
-              type: Boolean,
+              type: String,
               notify: true
             },
+            /**
+             * Specify that this control should have input focus when the page loads.
+             */
             autofocus: {
               type: Boolean,
               notify: true
             },
+            /**
+             * Indicates that this control is not available for interaction.
+             */
             disabled: {
               type: Boolean,
               notify: true
             },
+            /**
+             * Identifies a list of pre-defined options to suggest to the user.
+             * The value must be the id of a <datalist> element in the same document.
+             */
             list: {
               type: String,
               notify: true
             },
+            /**
+             * If the value of the type attribute is text, email, search, password, tel, or url,
+             * specifies the maximum number of characters (in Unicode code points) that the user can enter.
+             */
             maxlength: {
               type: Number,
               notify: true
             },
+            /**
+             * If the value of the type attribute is text, email, search, password, tel, or url,
+             * specifies the minimum number of characters (in Unicode code points) that the user can enter.
+             */
             minlength: {
               type: Number,
               notify: true
             },
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
             name: {
               type: String,
               notify: true
             },
+            /**
+             * A regular expression that the value is checked against. The pattern must match the entire value, not just some subset.
+             * This attribute applies when the value of the type attribute is text, search, tel, url, email, or password,
+             * otherwise it is ignored.
+             */
             pattern: {
               type: String,
               notify: true
             },
+            /**
+             * A hint to the user of what can be entered in the control.
+             */
             placeholder: {
               type: String,
               notify: true
             },
+            /**
+             * This attribute indicates that the user cannot modify the value of the control.
+             */
             readonly: {
               type: Boolean,
               notify: true
             },
+            /**
+             * Specifies that the user must fill in a value.
+             */
             required: {
               type: Boolean,
               notify: true
             },
+            /**
+             * Message to show to the user when validation fails.
+             */
             title: {
               type: String
             },
+            /**
+             * The type of the `input` element.
+             *
+             * valid options are:
+             * `text|password|submit|reset|radio|button||color|date|datetime|datetime-local|email|month|number|range|search|tel|time|url|week`
+             */
             type: {
               type: String,
               default: 'text'
             },
+            /**
+             * The position of the element in the tabbing navigation order for the current document.
+             */
             tabindex: {
               type: Number,
               notify: true
             },
+            /**
+             * The initial value of the control.
+             */
             value: {
               type: String,
               observer: '_valueChanged',
               notify: true
             },
+            /**
+             * Use this property instead of `value` for two-way data binding.
+             */
             bindValue: {
               type: String,
               observer: '_bindValueChanged'
             },
+            /**
+             * This property is set to true when the control value invalid.
+             */
             invalid: {
               type: Boolean,
               reflectToAttribute: true
