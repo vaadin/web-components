@@ -40,7 +40,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <input id="input"
-      autocapitalize$="{{autocapitalize}}"
       autocomplete$="{{autocomplete}}"
       autocorrect$="{{autocorrect}}"
       autofocus$="{{autofocus}}"
@@ -69,15 +68,7 @@ This program is available under Apache License Version 2.0, available at https:/
       static get config() {
         return {
           properties: {
-            autocapitalize: {
-              type: String,
-              notify: true
-            },
             autocomplete: {
-              type: Boolean,
-              notify: true
-            },
-            autocorrect: {
               type: Boolean,
               notify: true
             },

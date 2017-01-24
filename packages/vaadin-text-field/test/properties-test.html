@@ -45,10 +45,6 @@
           expect(input[prop]).to.be.equal(value);
         }
 
-        it('should set property autocapitalize', function() {
-          assertPropCanBeSet('autocapitalize', 'words');
-        });
-
         it('should set property type', function() {
           assertPropCanBeSet('type', 'checkbox');
         });
@@ -79,7 +75,6 @@
           });
 
         ['autocomplete',
-          'autocorrect',
           'readonly',
           'required'].forEach(function(prop) {
             it('should set boolean attribute ' + prop, function() {
