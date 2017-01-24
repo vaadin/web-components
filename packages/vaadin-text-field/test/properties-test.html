@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>vaadin-input tests</title>
+
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../vaadin-input.html">
   <link rel="import" href="../../iron-form/iron-form.html">
+
 </head>
 
 <body>
@@ -16,76 +18,93 @@
   </test-fixture>
 
   <script>
-    function fireNativeInputEvent(input) {
-      var ev = new Event('input', {bubbles: true, cancelable: true, composed: true});
-      input.dispatchEvent(ev);
-    }
 
     describe('properties', function() {
       var vinput, input;
-
-      function testSetter(prop, value) {
-        vinput[prop] = value;
-        expect(input[prop]).to.be.equal(value);
-      }
 
       beforeEach(function() {
         vinput = fixture('default');
         input = vinput.$.input;
       });
 
-      it('should set autocapitalize', function() {
-        testSetter('autocapitalize', 'words');
+      describe('native', function() {
+
+        function assertAttrCanBeSet(prop, value) {
+          vinput[prop] = value;
+          var attrval = input.getAttribute(prop);
+
+          if (value === true) {
+            expect(attrval).not.to.be.null;
+          } else if (value) {
+            expect(attrval).to.be.equal(String(value));
+          }
+        }
+
+        function assertPropCanBeSet(prop, value) {
+          vinput[prop] = value;
+          expect(input[prop]).to.be.equal(value);
+        }
+
+        it('should set property autocapitalize', function() {
+          assertPropCanBeSet('autocapitalize', 'words');
+        });
+
+        it('should set property type', function() {
+          assertPropCanBeSet('type', 'checkbox');
+        });
+
+        ['name',
+          'pattern',
+          'placeholder',
+          'value',
+          'title'].forEach(function(prop) {
+            it('should set string property ' + prop, function() {
+              assertPropCanBeSet(prop, 'foo');
+            });
+          });
+
+        ['autofocus',
+          'disabled'].forEach(function(prop) {
+            it('should set boolean property ' + prop, function() {
+              assertPropCanBeSet(prop, true);
+            });
+          });
+
+        ['maxlength',
+          'minlength',
+          'tabindex'].forEach(function(prop) {
+            it('should set numeric attribute ' + prop, function() {
+              assertAttrCanBeSet(prop, 2);
+            });
+          });
+
+        ['autocomplete',
+          'autocorrect',
+          'readonly',
+          'required'].forEach(function(prop) {
+            it('should set boolean attribute ' + prop, function() {
+              assertAttrCanBeSet(prop, true);
+            });
+          });
       });
 
-      it('should set type', function() {
-        testSetter('type', 'checkbox');
-      });
+      describe('binding', function() {
 
-      ['name',
-        'pattern',
-        'placeholder',
-        'value',
-        'title'].forEach(function(prop) {
-          it('should set ' + prop, function() {
-            testSetter(prop, 'foo');
-          });
+        function fireNativeInputEvent(input) {
+          var ev = new Event('input', {bubbles: true, cancelable: true, composed: true});
+          input.dispatchEvent(ev);
+        }
+
+        it('setting bindValue sets value', function() {
+          vinput.bindValue = 'foo';
+          expect(input.value).to.be.equal('foo');
         });
 
-      ['maxlength',
-        'minlength',
-        'tabindex'].forEach(function(prop) {
-          it('should expose ' + prop, function() {
-            testSetter(prop, 2);
-          });
+        it('setting value updates bindValue', function() {
+          input.value = 'foo';
+          fireNativeInputEvent(input);
+          expect(vinput.bindValue).to.be.equal('foo');
         });
-
-      ['autofocus',
-        'disabled'].forEach(function(prop) {
-          it('should expose ' + prop, function() {
-            testSetter(prop, true);
-          });
-        });
-
-      ['autocomplete',
-        'autocorrect',
-        'readonly',
-        'required'].forEach(function(prop) {
-          it('should expose ' + prop, function() {
-            vinput[prop] = true;
-            expect(input.getAttribute(prop)).not.to.be.null;
-          });
-        });
-
-      it('setting bindValue sets value', function() {
-        vinput.bindValue = 'foo';
-        expect(input.value).to.be.equal('foo');
-      });
-
-      it('setting value updates bindValue', function() {
-        input.value = 'foo';
-        fireNativeInputEvent(input);
-        expect(vinput.bindValue).to.be.equal('foo');
       });
 
     });
