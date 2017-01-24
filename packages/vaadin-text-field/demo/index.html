@@ -8,6 +8,7 @@
   <title>vaadin-input Basic Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="common.html">
 </head>
 
@@ -15,12 +16,6 @@
   <div class="vertical-section-container centered">
 
     <demo-navigation></demo-navigation>
-
-    <iframe name="demo-iframe0" style="width: 0px; height: 0px; border: none"></iframe>
-    <form action="blank" method="get" target="demo-iframe0">
-      Password: <input type="password" name="pw" pattern=".{6,}" title="Six or more characters">
-      <input type="submit">
-    </form>
 
     <h3>Data binding</h3>
     <demo-snippet>
@@ -43,38 +38,41 @@
       </template>
     </demo-snippet>
 
-    <h3>Properties</h3>
+    <h3>Validation</h3>
     <demo-snippet>
       <template>
-        <iframe name="demo-iframe1" style="width: 0px; height: 0px; border: none"></iframe>
-        <form id="demo-form1" action="blank" method="get" target="demo-iframe1">
-          <div>autocapitalize=off</div><vaadin-input autocapitalize=off></vaadin-input>
-          <div>autocomplete</div><vaadin-input autocomplete></vaadin-input>
-          <div>autocorrect</div><vaadin-input autocorrect></vaadin-input>
-          <div>autofocus</div><vaadin-input autofocus></vaadin-input>
-          <div>disabled</div><vaadin-input disabled></vaadin-input>
-          <div>maxlength=6</div><vaadin-input maxlength=6></vaadin-input>
-          <div>minlength=3</div><vaadin-input minlength=3></vaadin-input>
-          <div>name=foo</div><vaadin-input name=foo></vaadin-input>
-          <div>pattern="^\d+$"</div><vaadin-input pattern="^\d+$"></vaadin-input>
-          <div>placeholder</div><vaadin-input placeholder="bar"></vaadin-input>
-          <div>readonly</div><vaadin-input readonly></vaadin-input>
-          <div>required</div><vaadin-input required></vaadin-input>
-          <div>value=baz</div><vaadin-input value="baz"></vaadin-input>
-          <vaadin-input type="password" name="pw" pattern=".{6,}" title="Six or more characters"></vaadin-input>
-          <button type="submit">Send</button>
-        </form>
+        <style>
+          label {
+            width: 150px;
+            display: inline-block;
+            height: 30px;
+          }
+        </style>
+        <iron-form>
+          <h4>Registration Form</h4>
+          <form>
+            <label>User Name</label>
+            <vaadin-input type="text" minlength="4" maxlength="8" required pattern="^\w+$" autofocus></vaadin-input><br />
+            <label>Email</label>
+            <vaadin-input type="email" required></vaadin-input><br />
+            <label>Initials</label>
+            <vaadin-input minlength="3" maxlength="3"></vaadin-input><br />
+            <label>Age</label>
+            <vaadin-input pattern="^\d\d\d*$" required></vaadin-input><br />
+            <label>Password</label>
+            <vaadin-input type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"></vaadin-input><br />
+            <button onclick="_submit()">Submit</button>
+          </form>
+        </iron-form>
         <script>
-         window.addEventListener('WebComponentsReady', function() {
-           var form = document.querySelector('#demo-form1');
-          //  form.onsubmit = function() {
-          //    return true;
-          //  };
-         });
+          function _submit() {
+            if (!document.querySelector('iron-form').validate()) {
+              window.alert('Please fill all required fields with valid values');
+            }
+          }
         </script>
       </template>
     </demo-snippet>
-
 
   </div>
 </body>
