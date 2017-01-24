@@ -5,7 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <!--
-`<vaadin-input>` is a Polymer element for <element-functionality>.
+`<vaadin-input>` is a Polymer element for input control in forms.
 
 ```html
 <vaadin-input>
@@ -25,16 +25,20 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: inline-block;
       }
+
       input {
         outline: none;
         border: solid 1px #d8d8d8;
       }
+
       input:focus {
         border-bottom: solid 1px deepskyblue;
       }
+
       input:invalid {
         background: #fbefef;
       }
+
       input:focus:invalid {
         border-bottom: solid 1px red;
       }
@@ -101,7 +105,8 @@ This program is available under Apache License Version 2.0, available at https:/
             },
             /**
              * If the value of the type attribute is text, email, search, password, tel, or url,
-             * specifies the maximum number of characters (in Unicode code points) that the user can enter.
+             * specifies the maximum number of characters (in Unicode code points) that the user
+             * can enter.
              */
             maxlength: {
               type: Number,
@@ -109,7 +114,8 @@ This program is available under Apache License Version 2.0, available at https:/
             },
             /**
              * If the value of the type attribute is text, email, search, password, tel, or url,
-             * specifies the minimum number of characters (in Unicode code points) that the user can enter.
+             * specifies the minimum number of characters (in Unicode code points) that the user
+             * can enter.
              */
             minlength: {
               type: Number,
@@ -123,9 +129,10 @@ This program is available under Apache License Version 2.0, available at https:/
               notify: true
             },
             /**
-             * A regular expression that the value is checked against. The pattern must match the entire value, not just some subset.
-             * This attribute applies when the value of the type attribute is text, search, tel, url, email, or password,
-             * otherwise it is ignored.
+             * A regular expression that the value is checked against.
+             * The pattern must match the entire value, not just some subset.
+             * This attribute applies when the value of the type attribute is text, search, tel,
+             * url, email, or password, otherwise it is ignored.
              */
             pattern: {
               type: String,
@@ -160,9 +167,8 @@ This program is available under Apache License Version 2.0, available at https:/
             },
             /**
              * The type of the `input` element.
-             *
-             * valid options are:
-             * `text|password|submit|reset|radio|button||color|date|datetime|datetime-local|email|month|number|range|search|tel|time|url|week`
+             * List of available options at:
+             * http://www.w3schools.com/tags/att_input_type.asp
              */
             type: {
               type: String,

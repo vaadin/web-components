@@ -65,11 +65,11 @@
           </form>
         </iron-form>
         <script>
-          function _submit() {
+          window._submit = function() {
             if (!document.querySelector('iron-form').validate()) {
               window.alert('Please fill all required fields with valid values');
             }
-          }
+          };
         </script>
       </template>
     </demo-snippet>
