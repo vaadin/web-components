@@ -665,6 +665,16 @@
           expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
         });
 
+        it('should focus to last row element after scrolling to end', function() {
+          grid.size = 1000;
+          grid.dataSource = infiniteDataSource;
+          clickItem(0);
+
+          ctrlEnd();
+
+          expect(scroller._virtualFocus._focusedRow).to.eql(body.children[body.children.length - 1]);
+        });
+
         describe('horizontal scrolling', function() {
           beforeEach(function() {
             grid.style.width = '100px'; // column default min width is 100px

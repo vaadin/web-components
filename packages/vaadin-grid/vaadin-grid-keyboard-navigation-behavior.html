@@ -522,6 +522,8 @@
       if (this._virtualFocus === this.$.items && ((focusedIndex < scaledVirtualStart) ||
           (focusedIndex > scaledVirtualStart + this._physicalCount))) {
         this.scrollToScaledIndex(focusedIndex);
+        // force resetting _focusedCell in case element reordering has happened.
+        this._virtualFocus._focusedCellChanged(focusedIndex, this._virtualFocus._focusedCellIndex);
       } else {
         this._ensureElementInViewport(this._virtualFocus._focusedCell);
       }
@@ -534,7 +536,6 @@
       if (this._virtualFocus === this.$.items) {
         var maxBottom = this.$.footer.getBoundingClientRect().top;
         var minTop = this.$.header.getBoundingClientRect().bottom;
-
         if (elementRect.bottom > maxBottom) {
           this.$.table.scrollTop += (elementRect.bottom - maxBottom);
         } else if (elementRect.top < minTop) {
