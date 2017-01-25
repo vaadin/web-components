@@ -1,9 +1,22 @@
 {
   "name": "vaadin-split-layout",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Polymer element for partitioning a layout into resizeable areas",
+  "main": "vaadin-split-layout.html",
+  "repository": "vaadin/vaadin-split-layout",
+  "keywords": [
+    "Vaadin",
+    "split layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
-  "repository": "vaadin/vaadin-split-layout",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-split-layout/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
   "devDependencies": {
     "bower": "latest",
     "eslint-config-vaadin": "github:vaadin/eslint-config-vaadin",
