@@ -35,6 +35,8 @@
 
           if (value === true) {
             expect(attrval).not.to.be.null;
+          } else if (value === false) {
+            expect(attrval).to.be.null;
           } else if (value) {
             expect(attrval).to.be.equal(String(value));
           }
@@ -86,6 +88,7 @@
           'required'].forEach(function(prop) {
             it('should set boolean attribute ' + prop, function() {
               assertAttrCanBeSet(prop, true);
+              assertAttrCanBeSet(prop, false);
             });
           });
       });

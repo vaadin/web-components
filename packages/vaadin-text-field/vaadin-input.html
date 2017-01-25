@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="vaadin-form-element-behavior.html">
+<link rel="import" href="vaadin-form-element-mixin.html">
 
 <dom-module id="vaadin-input">
   <template>
@@ -44,27 +44,27 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <input id="input"
-      autocomplete$="{{autocomplete}}"
-      autocorrect$="{{autocorrect}}"
-      autofocus$="{{autofocus}}"
-      disabled$="{{disabled}}"
-      list="{{list}}"
-      maxlength$="{{maxlength}}"
-      minlength$="{{minlength}}"
-      name="{{name}}"
-      pattern="{{pattern}}"
-      placeholder="{{placeholder}}"
-      readonly$="{{readonly}}"
-      required$="{{required}}"
-      tabindex$="{{tabindex}}"
+      autocomplete$="[[autocomplete]]"
+      autocorrect$="[[autocorrect]]"
+      autofocus$="[[autofocus]]"
+      disabled$="[[disabled]]"
+      list="[[list]]"
+      maxlength$="[[maxlength]]"
+      minlength$="[[minlength]]"
+      name="[[name]]"
+      pattern="[[pattern]]"
+      placeholder="[[placeholder]]"
+      readonly$="[[readonly]]"
+      required$="[[required]]"
+      tabindex$="[[tabindex]]"
       value="{{value::input}}"
-      type$="{{type}}"
-      title="{{title}}"
+      type$="[[type]]"
+      title="[[title]]"
     />
   </template>
 
   <script>
-    class VaadinInput extends window.VaadinFormElementBehavior(Polymer.Element) {
+    class VaadinInput extends window.VaadinFormElementMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-input';
       }
@@ -78,39 +78,38 @@ This program is available under Apache License Version 2.0, available at https:/
              * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
              */
             autocomplete: {
-              type: String,
-              notify: true
+              type: String
             },
+
             /**
              * Specify that this control should have input focus when the page loads.
              */
             autofocus: {
-              type: Boolean,
-              notify: true
+              type: Boolean
             },
+
             /**
              * Indicates that this control is not available for interaction.
              */
             disabled: {
-              type: Boolean,
-              notify: true
+              type: Boolean
             },
+
             /**
              * Identifies a list of pre-defined options to suggest to the user.
              * The value must be the id of a <datalist> element in the same document.
              */
             list: {
-              type: String,
-              notify: true
+              type: String
             },
+
             /**
              * If the value of the type attribute is text, email, search, password, tel, or url,
              * specifies the maximum number of characters (in Unicode code points) that the user
              * can enter.
              */
             maxlength: {
-              type: Number,
-              notify: true
+              type: Number
             },
             /**
              * If the value of the type attribute is text, email, search, password, tel, or url,
@@ -118,16 +117,16 @@ This program is available under Apache License Version 2.0, available at https:/
              * can enter.
              */
             minlength: {
-              type: Number,
-              notify: true
+              type: Number
             },
+
             /**
              * The name of the control, which is submitted with the form data.
              */
             name: {
-              type: String,
-              notify: true
+              type: String
             },
+
             /**
              * A regular expression that the value is checked against.
              * The pattern must match the entire value, not just some subset.
@@ -135,52 +134,54 @@ This program is available under Apache License Version 2.0, available at https:/
              * url, email, or password, otherwise it is ignored.
              */
             pattern: {
-              type: String,
-              notify: true
+              type: String
             },
+
             /**
              * A hint to the user of what can be entered in the control.
              */
             placeholder: {
-              type: String,
-              notify: true
+              type: String
             },
+
             /**
              * This attribute indicates that the user cannot modify the value of the control.
              */
             readonly: {
-              type: Boolean,
-              notify: true
+              type: Boolean
             },
+
             /**
              * Specifies that the user must fill in a value.
              */
             required: {
-              type: Boolean,
-              notify: true
+              type: Boolean
             },
+
             /**
              * Message to show to the user when validation fails.
              */
             title: {
               type: String
             },
+
             /**
              * The type of the `input` element.
              * List of available options at:
-             * http://www.w3schools.com/tags/att_input_type.asp
+             * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-type
              */
             type: {
               type: String,
-              default: 'text'
+              value: 'text'
             },
+
             /**
              * The position of the element in the tabbing navigation order for the current document.
              */
             tabindex: {
-              type: Number,
-              notify: true
+              type: Number
             },
+
             /**
              * The initial value of the control.
              */
@@ -189,6 +190,7 @@ This program is available under Apache License Version 2.0, available at https:/
               observer: '_valueChanged',
               notify: true
             },
+
             /**
              * Use this property instead of `value` for two-way data binding.
              */
@@ -196,12 +198,14 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               observer: '_bindValueChanged'
             },
+
             /**
              * This property is set to true when the control value invalid.
              */
             invalid: {
               type: Boolean,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              notify: true
             }
           },
 
