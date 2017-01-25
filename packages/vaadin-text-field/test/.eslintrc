@@ -1,5 +1,6 @@
 {
   "globals": {
+    "WCT": false,
     "describe": false,
     "beforeEach": false,
     "fixture": false,

@@ -4,20 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>vaadin-upload tests</title>
+  <title>vaadin-input tests</title>
   <script src="../../web-component-tester/browser.js"></script>
 </head>
 
 <body>
   <script>
-    window.WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
-    window.WCT.loadSuites([
+    WCT.loadSuites([
       'properties.html',
-      'properties.html?wc-shadydom=true',
-      'validate.html',
-      'validate.html?wc-shadydom=true'
-    ]);
+      'validate.html'
+    ].reduce(function(suites, suite) {
+      return suites.concat([suite, suite + '?wc-shadydom=true']);
+    }, []));
   </script>
 </body>
 
