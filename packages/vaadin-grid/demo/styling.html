@@ -317,7 +317,7 @@
               <vaadin-grid-column-group frozen>
                 <template class="header">Username</template>
 
-                <vaadin-grid-column width="150px" flex="0" frozen>
+                <vaadin-grid-column width="150px" flex="0" frozen resizable>
                   <template class="header">
                     <vaadin-grid-filter path="user.username">
                       <input placeholder="Filter" focus-target>
@@ -342,7 +342,7 @@
                   </vaadin-grid-sorter>
                 </template>
 
-                <vaadin-grid-column width="200px" flex="0">
+                <vaadin-grid-column width="200px" flex="0" resizable>
                   <template class="header"></template>
                   <template>[[item.user.name.first]]</template>
                   <template class="footer"></template>
@@ -355,7 +355,7 @@
                     Last Name
                   </vaadin-grid-sorter>
                 </template>
-                <vaadin-grid-column width="200px" flex="0">
+                <vaadin-grid-column width="200px" flex="0" resizable>
                   <template class="header"></template>
                   <template>[[item.user.name.last]]</template>
                   <template class="footer"></template>
@@ -372,7 +372,7 @@
               <vaadin-grid-column-group>
                 <template class="header">City</template>
 
-                <vaadin-grid-column width="200px" flex="0">
+                <vaadin-grid-column width="200px" flex="0" resizable>
                   <template class="header"></template>
                   <template>[[item.user.name.first]]</template>
                   <template class="footer"></template>
@@ -442,6 +442,10 @@
               --vaadin-grid-body-row-details-cell: {
                 text-align: center;
               };
+
+              --vaadin-grid-column-resize-handle: {
+                opacity: 0;
+              };
             }
 
             vaadin-grid#transparent-header input[type=checkbox] {
@@ -486,13 +490,13 @@
                 </div>
               </template>
 
-              <vaadin-grid-column width="45px" flex="0">
+              <vaadin-grid-column width="45px" flex-grow="0">
                 <template>
                   <input type="checkbox" checked="{{selected::change}}">
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column>
+              <vaadin-grid-column resizable>
                 <template class="header">Name</template>
                 <template>
                   <div>
@@ -502,7 +506,7 @@
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column>
+              <vaadin-grid-column resizable>
                 <template class="header">Email</template>
                 <template>[[item.user.email]]</template>
               </vaadin-grid-column>

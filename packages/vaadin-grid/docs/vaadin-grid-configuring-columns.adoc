@@ -158,3 +158,17 @@ Also, columns in the frozen columns section can't be dragged to the non-frozen c
   ...
 </vaadin-grid>
 ----
+
+[[vaadin-grid.columns.resizable]]
+== Resizing Columns
+
+Switch on [vaadinelement]#vaadin-grid-column#'s [propertyname]#resizable# flag to enable resizing controls for that column.
+This will reveal a resize handle by the right edge of the column header.
+User can then grab and move the handle to resize the column.
+
+[source,html]
+----
+<vaadin-grid-column resizable>
+  <!-- I'm resizable -->
+</vaadin-grid-column>
+----
