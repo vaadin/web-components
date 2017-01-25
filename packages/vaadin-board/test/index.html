@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>vaadin-board tests</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+</head>
+
+<body>
+<script>
+//    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
+//    WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
+//    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
+    WCT.loadSuites([
+        'vaadin-board_test.html',
+    ]);
+</script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`vaadin-board`
+Responsive layout, with several features.
+
+@demo demo/index.html 
+-->
+
+<dom-module id="vaadin-board">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h2>Hello {{prop1}}</h2>
+    </template>
+
+    <script>
+        class VaadinBoard extends Polymer.Element {
+            static get is() {
+                return "vaadin-board";
+            }
+
+            static get config() {
+                return {
+                    properties: {
+                        prop1: {
+                            value: "Vaadin Board",
+                            type: String
+                        }
+                    }
+                }
+            }
+
+            constructor() {
+                super();
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+        }
+        customElements.define(VaadinBoard.is, VaadinBoard);
+    </script>
+</dom-module>
