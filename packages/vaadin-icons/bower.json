@@ -1,7 +1,6 @@
 {
   "name": "vaadin-icons",
-  "version": "2.0.0",
-  "homepage": "https://github.com/vaadin/vaadin-icons",
+  "homepage": "https://vaadin.com/icons",
   "authors": [
     "Vaadin Ltd"
   ],
@@ -13,7 +12,7 @@
     "icons",
     "vaadin-icons"
   ],
-  "description": "",
+  "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.html",
   "moduleType": [],
   "license": "Apache-2.0",

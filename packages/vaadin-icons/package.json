@@ -1,7 +1,22 @@
 {
   "name": "vaadin-icons",
+  "version": "2.0.0",
+  "description": "Collection of 600+ unique icons designed for web applications",
+  "main": "vaadin-icons.html",
+  "repository": "vaadin/vaadin-icons",
+  "keywords": [
+    "Vaadin",
+    "icons",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-icons/issues"
+  },
+  "homepage": "https://vaadin.com/icons",
   "devDependencies": {
     "cheerio": "^0.19.0",
     "gulp": "latest",
