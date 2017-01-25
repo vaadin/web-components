@@ -1,6 +1,6 @@
 {
   "name": "vaadin-combo-box",
-  "description": "Vaadin Combo Box",
+  "description": "Polymer element for displaying a list of items with filtering",
   "authors": [
     "Vaadin Ltd"
   ],
