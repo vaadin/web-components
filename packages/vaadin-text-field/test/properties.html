@@ -95,20 +95,10 @@
 
       describe('binding', function() {
 
-        function fireNativeInputEvent(input) {
-          var ev = new Event('input', {bubbles: true, cancelable: true, composed: true});
-          input.dispatchEvent(ev);
-        }
-
-        it('setting bindValue sets value', function() {
-          vinput.bindValue = 'foo';
-          expect(input.value).to.be.equal('foo');
-        });
-
-        it('setting value updates bindValue', function() {
+        it('setting input value updates value', function() {
           input.value = 'foo';
-          fireNativeInputEvent(input);
-          expect(vinput.bindValue).to.be.equal('foo');
+          input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
+          expect(vinput.value).to.be.equal('foo');
         });
       });
 

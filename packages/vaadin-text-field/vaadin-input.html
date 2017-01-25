@@ -184,19 +184,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * The initial value of the control.
+             * It can be used for two-way data binding.
              */
             value: {
               type: String,
               observer: '_valueChanged',
               notify: true
-            },
-
-            /**
-             * Use this property instead of `value` for two-way data binding.
-             */
-            bindValue: {
-              type: String,
-              observer: '_bindValueChanged'
             },
 
             /**
@@ -207,27 +200,17 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true,
               notify: true
             }
-          },
+          }
 
-          observers: [
-            '_bindValueChanged(bindValue)'
-          ]
         };
       }
 
       ready() {
         super.ready();
-        this.bindValue = this.value;
         this.invalid = this._isInvalid();
       }
 
       _valueChanged(value) {
-        this.bindValue = value;
-      }
-
-      _bindValueChanged(bindValue) {
-        this.value = bindValue;
-        this.dispatchEvent(new CustomEvent('bind-value-changed'), {bubbles: true});
         this.invalid = this._isInvalid();
       }
 
@@ -242,16 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @return {boolean} True if the value is valid.
        */
       validate() {
-        // Use input's native validity.
-        var valid = this.$.input.checkValidity();
-        // Only do extra checking if the browser thought this was valid.
-        if (valid) {
-          // Empty, required input is invalid
-          if (this.required && this.bindValue === '') {
-            valid = false;
-          }
-        }
-        return valid;
+        return this.$.input.checkValidity();
       }
     }
 

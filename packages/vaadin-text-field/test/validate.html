@@ -14,7 +14,7 @@
   <test-fixture id="default">
     <template>
       <iron-form id="iform">
-        <form is="iron-form">
+        <form>
           <vaadin-input name="foo"></vaadin-input>
         </form>
       </iron-form>
@@ -38,6 +38,11 @@
         var inputFocusSpy = window.sinon.spy(vinput, 'validate');
         iform.submit();
         expect(inputFocusSpy.called).to.be.true;
+      });
+
+      it('should serialize correctly', function() {
+        vinput.value = 'bar';
+        expect(iform.serializeForm().foo).to.equal('bar');
       });
 
       it('should pass if not required', function() {
