@@ -50,6 +50,23 @@
         datepicker.async(done, 1);
       });
 
+      it('should set body `pointer-events: none` on open and restore initial value on close', function(done) {
+        document.body.style.pointerEvents = 'painted';
+
+        datepicker.addEventListener('iron-overlay-opened', function() {
+          expect(getComputedStyle(document.body).pointerEvents).to.be.equal('none');
+          expect(getComputedStyle(datepicker).pointerEvents).to.be.equal('auto');
+          datepicker._close();
+        });
+
+        datepicker.addEventListener('iron-overlay-closed', function() {
+          expect(getComputedStyle(document.body).pointerEvents).to.be.equal('painted');
+          done();
+        });
+
+        datepicker.open();
+      });
+
       it('should not close on calendar icon down', function(done) {
         datepicker.addEventListener('iron-overlay-opened', function() {
           MockInteractions.down(datepicker.$.calendar);
