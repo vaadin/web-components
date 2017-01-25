@@ -1,10 +1,22 @@
 {
   "name": "vaadin-context-menu",
-  "version": "0.3.1",
+  "version": "1.0.0",
+  "description": "Polymer element for showing context dependent items for any element on the page",
   "main": "vaadin-context-menu.html",
   "repository": "vaadin/vaadin-context-menu",
+  "keywords": [
+    "Vaadin",
+    "context menu",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-context-menu/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
   "devDependencies": {
     "bower": "latest",
     "eslint-plugin-html": "^1.7.0",
