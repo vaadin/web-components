@@ -291,14 +291,16 @@
           });
         });
 
-        it('should not realign on year/month scroll', function(done) {
-          var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
-          datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;
-          datepicker.async(function() {
-            expect(spy.called).to.be.false;
-            done();
-          }, 1);
-        });
+        if (!ios) { // https://github.com/vaadin/vaadin-date-picker/issues/330
+          it('should not realign on year/month scroll', function(done) {
+            var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
+            datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;
+            datepicker.async(function() {
+              expect(spy.called).to.be.false;
+              done();
+            }, 1);
+          });
+        }
 
         it('should not realign once closed', function(done) {
           datepicker.addEventListener('iron-overlay-closed', function() {
