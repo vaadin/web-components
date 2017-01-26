@@ -1,6 +1,6 @@
 {
   "name": "vaadin-date-picker",
-  "description": "Vaadin Date Picker",
+  "description": "Polymer element providing a date selection field with scrollable month calendar",
   "authors": [
     "Vaadin Ltd"
   ],
