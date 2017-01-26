@@ -16,11 +16,11 @@
       }
 
       .vaadin-grid-cell[reorder-status="dragging"] {
-        background: var(--primary-color);
+        background: var(--primary-color, #000);
       }
 
-      .vaadin-grid-cell[reorder-status="dragging"] ::content > .cell-content {
-        opacity: 0.8;
+      .vaadin-grid-cell[reorder-status="dragging"] ::content > .cell-content.cell-content {
+        opacity: 0.95;
       }
     </style>
   </template>
