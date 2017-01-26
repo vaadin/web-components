@@ -68,7 +68,7 @@
             <vaadin-grid-column>
               <template class="header">
                 <vaadin-grid-filter path="user.name.first" value="[[_filterFirstName]]">
-                  <input placeholder="First Name" value="{{_filterFirstName::input}}">
+                  <input placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
               <template>[[item.user.name.first]]</template>
@@ -76,7 +76,7 @@
             <vaadin-grid-column>
               <template class="header">
                 <vaadin-grid-filter path="user.name.last" value="[[_filterLastName]]">
-                  <input placeholder="Last Name" value="{{_filterLastName::input}}">
+                  <input placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
               <template>[[item.user.name.last]]</template>

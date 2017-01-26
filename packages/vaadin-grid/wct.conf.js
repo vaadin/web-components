@@ -1,6 +1,7 @@
 module.exports = {
   plugins: {
     'local': true,
+    'random-output': true,
     'istanbul': {
       'dir': './coverage',
       'reporters': ['text-summary', 'lcov'],

@@ -10,7 +10,7 @@
         outline: none;
       }
 
-       :host([navigating]) [focused] > tr[focused] > [focused] ::content > .cell-content {
+      :host([navigating]:not([interacting])) [focused] > tr[focused] > [focused] ::content > .cell-content {
         box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.3);
         @apply(--vaadin-grid-focused-cell);
       }
@@ -33,19 +33,22 @@
     },
 
     keyBindings: {
-      'ctrl+home': '_focusFirst',
-      'ctrl+end': '_focusLast',
-      'down': '_focusDown',
-      'end': '_focusEnd',
-      'home': '_focusHome',
-      'left': '_focusLeft',
-      'pagedown': '_focusPageDown',
-      'pageup': '_focusPageUp',
-      'right': '_focusRight',
-      'shift+tab': '_focusPrev',
-      'space': '_space',
-      'tab': '_focusNext',
-      'up': '_focusUp'
+      'ctrl+home': '_onCtrlHome',
+      'ctrl+end': '_onCtrlEnd',
+      'down': '_onArrowDown',
+      'end': '_onEnd',
+      'enter': '_onEnter',
+      'esc': '_onEscape',
+      'f2': '_onF2',
+      'home': '_onHome',
+      'left': '_onArrowLeft',
+      'pagedown': '_onPageDown',
+      'pageup': '_onPageUp',
+      'right': '_onArrowRight',
+      'shift+tab': '_onShiftTab',
+      'space': '_onSpace',
+      'tab': '_onTab',
+      'up': '_onArrowUp'
     },
 
     attached: function() {
@@ -58,58 +61,71 @@
 
     _onBlur: function(e) {
       this.$.scroller.navigating = false;
+      this.$.scroller.interacting = false;
     },
 
-    _focusEnd: function(e) {
-      this.$.scroller._focusEnd(e);
+    _onEnd: function(e) {
+      this.$.scroller._onEnd(e);
     },
 
-    _focusNext: function(e) {
-      this.$.scroller._focusNext(e);
+    _onEnter: function(e) {
+      this.$.scroller._onEnter(e);
     },
 
-    _focusPrev: function(e) {
-      this.$.scroller._focusPrev(e);
+    _onEscape: function(e) {
+      this.$.scroller._onEscape(e);
     },
 
-    _focusDown: function(e) {
-      this.$.scroller._focusDown(e);
+    _onF2: function(e) {
+      this.$.scroller._onF2(e);
     },
 
-    _focusUp: function(e) {
-      this.$.scroller._focusUp(e);
+    _onTab: function(e) {
+      this.$.scroller._onTab(e);
     },
 
-    _focusRight: function(e) {
-      this.$.scroller._focusRight(e);
+    _onShiftTab: function(e) {
+      this.$.scroller._onShiftTab(e);
     },
 
-    _focusLeft: function(e) {
-      this.$.scroller._focusLeft(e);
+    _onArrowDown: function(e) {
+      this.$.scroller._onArrowDown(e);
     },
 
-    _focusHome: function(e) {
-      this.$.scroller._focusHome(e);
+    _onArrowUp: function(e) {
+      this.$.scroller._onArrowUp(e);
     },
 
-    _focusFirst: function(e) {
-      this.$.scroller._focusFirst(e);
+    _onArrowRight: function(e) {
+      this.$.scroller._onArrowRight(e);
     },
 
-    _focusLast: function(e) {
-      this.$.scroller._focusLast(e);
+    _onArrowLeft: function(e) {
+      this.$.scroller._onArrowLeft(e);
     },
 
-    _focusPageDown: function(e) {
-      this.$.scroller._focusPageDown(e);
+    _onHome: function(e) {
+      this.$.scroller._onHome(e);
     },
 
-    _focusPageUp: function(e) {
-      this.$.scroller._focusPageUp(e);
+    _onCtrlHome: function(e) {
+      this.$.scroller._onCtrlHome(e);
     },
 
-    _space: function(e) {
-      this.$.scroller._space(e);
+    _onCtrlEnd: function(e) {
+      this.$.scroller._onCtrlEnd(e);
+    },
+
+    _onPageDown: function(e) {
+      this.$.scroller._onPageDown(e);
+    },
+
+    _onPageUp: function(e) {
+      this.$.scroller._onPageUp(e);
+    },
+
+    _onSpace: function(e) {
+      this.$.scroller._onSpace(e);
     },
   };
 
@@ -128,6 +144,12 @@
       _virtualFocus: {
         type: Object,
         observer: '_virtualFocusChanged'
+      },
+
+      interacting: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
       },
 
       navigating: {
@@ -150,6 +172,7 @@
 
     _onHeaderFocus: function(e) {
       this.navigating = true;
+      this.interacting = false;
       this.$.header._focusedCellIndex = this.$.header._focusedCellIndex || 0;
       this.$.header._focusedRowIndex = this.$.header._focusedRowIndex || 0;
       this._virtualFocus = this.$.header;
@@ -157,6 +180,7 @@
 
     _onBodyFocus: function(e) {
       this.navigating = true;
+      this.interacting = false;
       this.$.items._focusedCellIndex = this.$.items._focusedCellIndex || 0;
       this.$.items._focusedRowIndex = this.$.items._focusedRowIndex || 0;
       this._virtualFocus = this.$.items;
@@ -164,6 +188,7 @@
 
     _onFooterFocus: function(e) {
       this.navigating = true;
+      this.interacting = false;
       var container = this._isFooterVisible() ? this.$.footer : this.$.items;
       container._focusedCellIndex = container._focusedCellIndex || 0;
       container._focusedRowIndex = container._focusedRowIndex || 0;
@@ -183,7 +208,11 @@
       }
     },
 
-    _focusNext: function(e) {
+    _onTab: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.header:
@@ -223,7 +252,11 @@
       }
     },
 
-    _focusPrev: function(e) {
+    _onShiftTab: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       if (this.navigating) {
         switch (this._virtualFocus) {
           case this.$.footer:
@@ -258,15 +291,17 @@
       return this.firstVisibleIndex > index;
     },
 
-    _focusDown: function(e) {
+    _onArrowDown: function(e) {
+      if(this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusDown();
       this.navigating = true;
 
-      if (this._virtualFocus === this.$.items) {
-        this._ensureVirtualFocusInViewport();
-      }
+      this._ensureVirtualFocusInViewport();
     },
 
     _scrollPageDown: function() {
@@ -277,7 +312,11 @@
       this._scrollHandler();
     },
 
-    _focusPageDown: function(e) {
+    _onPageDown: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       if (this._virtualFocus === this.$.items) {
@@ -300,7 +339,11 @@
       this._scrollHandler();
     },
 
-    _focusPageUp: function(e) {
+    _onPageUp: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       if (this._virtualFocus === this.$.items) {
@@ -315,18 +358,24 @@
       this.navigating = true;
     },
 
-    _focusUp: function(e) {
+    _onArrowUp: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusUp();
       this.navigating = true;
 
-      if (this._virtualFocus === this.$.items) {
-        this._ensureVirtualFocusInViewport();
-      }
+      this._ensureVirtualFocusInViewport();
     },
 
-    _focusRight: function(e) {
+    _onArrowRight: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusRight();
@@ -335,7 +384,11 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _focusLeft: function(e) {
+    _onArrowLeft: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusLeft();
@@ -344,7 +397,11 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _focusHome: function(e) {
+    _onHome: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusHome();
@@ -353,7 +410,11 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _focusEnd: function(e) {
+    _onEnd: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusEnd();
@@ -362,7 +423,46 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _focusFirst: function(e) {
+    _moveFocusToFocusTarget: function() {
+      var content = this._virtualFocus._focusedCell._cellContent;
+
+      var focusTarget = content.querySelector('[focus-target]') || content.firstElementChild;
+      if (focusTarget) {
+        focusTarget.focus();
+      }
+    },
+
+    _onEnter: function(e) {
+      if(!this.interacting) {
+        e.preventDefault();
+        this._moveFocusToFocusTarget();
+      }
+    },
+
+    _onEscape: function(e) {
+      if (this.interacting) {
+        this.interacting = false;
+        this._onTab(e); // revert to navigation
+      } else if (this.navigating) {
+        this.domHost.focus();
+      }
+    },
+
+    _onF2: function(e) {
+      e.preventDefault();
+      if (!this.interacting) {
+        this._moveFocusToFocusTarget();
+      } else {
+        this.interacting = false;
+        this._onTab(e); // revert to navigation
+      }
+    },
+
+    _onCtrlHome: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusFirst();
@@ -371,7 +471,11 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _focusLast: function(e) {
+    _onCtrlEnd: function(e) {
+      if (this.interacting) {
+        return;
+      }
+
       e.preventDefault();
 
       this._virtualFocus.focusLast();
@@ -380,8 +484,8 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _space: function(e) {
-      if (this.navigating && this._virtualFocus === this.$.items) {
+    _onSpace: function(e) {
+      if (this.navigating && !this.interacting && this._virtualFocus === this.$.items) {
         e.preventDefault();
 
         this.fire('cell-activate', {
@@ -391,7 +495,8 @@
     },
 
     _onCellContentFocus: function(e) {
-      this.navigating = false; // TODO: go to "interaction" mode.
+      this.interacting = true;
+      this._onCellFocus(e);
     },
 
     _onCellFocus: function(e) {
@@ -417,6 +522,8 @@
       if (this._virtualFocus === this.$.items && ((focusedIndex < scaledVirtualStart) ||
           (focusedIndex > scaledVirtualStart + this._physicalCount))) {
         this.scrollToScaledIndex(focusedIndex);
+        // force resetting _focusedCell in case element reordering has happened.
+        this._virtualFocus._focusedCellChanged(focusedIndex, this._virtualFocus._focusedCellIndex);
       } else {
         this._ensureElementInViewport(this._virtualFocus._focusedCell);
       }
@@ -429,7 +536,6 @@
       if (this._virtualFocus === this.$.items) {
         var maxBottom = this.$.footer.getBoundingClientRect().top;
         var minTop = this.$.header.getBoundingClientRect().bottom;
-
         if (elementRect.bottom > maxBottom) {
           this.$.table.scrollTop += (elementRect.bottom - maxBottom);
         } else if (elementRect.top < minTop) {
