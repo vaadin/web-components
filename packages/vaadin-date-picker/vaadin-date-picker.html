@@ -76,6 +76,10 @@ If you want to replace the default input field with a custom implementation, you
         display: block;
       }
 
+      :host([opened]) {
+        pointer-events: auto;
+      }
+
       #overlay {
         height: 100vh;
         width: 420px;

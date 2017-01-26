@@ -286,7 +286,15 @@
         value: true
       },
 
-      _focusOverlayOnOpen: Boolean
+      _focusOverlayOnOpen: Boolean,
+
+      /**
+       * When datepicker is opened, we're setting body pointer-events to none
+       * to make the datepicker behave in "modal" way. This variable keeps the
+       * previous state of body pointer-events to restore it when datepicker is
+       * closed.
+       */
+      _documentPointerEvents: String
     },
 
     created: function() {
@@ -483,6 +491,11 @@
 
       this.updateStyles();
 
+      // Set body pointer-events to 'none' to disable mouse interactions with
+      // other document nodes (datepicker is "modal")
+      this._documentPointerEvents = document.body.style.pointerEvents;
+      document.body.style.pointerEvents = 'none';
+
       this._ignoreAnnounce = false;
     },
 
@@ -518,6 +531,9 @@
       }
 
       this.updateStyles();
+
+      // Restore the initial body pointer-events
+      document.body.style.pointerEvents = this._documentPointerEvents;
 
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
