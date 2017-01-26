@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vaadin/vaadin-board.svg?branch=master)]
+
 # \<vaadin-board\>
 
 Responsive layout, with several features.
