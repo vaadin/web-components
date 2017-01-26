@@ -1,0 +1,48 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.
+
+```html
+<vaadin-form-layout>
+</vaadin-form-layout>
+```
+
+@element vaadin-form-layout
+@demo demo/index.html
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-form-layout">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+    if (!window.Vaadin) window.Vaadin = {};
+
+    class Vaadin.FormLayoutElement extends Polymer.Element {
+      static get is() {
+        return 'vaadin-form-layout';
+      }
+
+      static get config() {
+        return {
+          properties: {
+          }
+        };
+      }
+    }
+
+    customElements.define(Vaadin.FormLayoutElement.is, Vaadin.FormLayoutElement);
+  </script>
+</dom-module>
