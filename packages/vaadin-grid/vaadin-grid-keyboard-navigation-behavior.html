@@ -423,7 +423,7 @@
       this._ensureVirtualFocusInViewport();
     },
 
-    _focusOnFocusTarget: function() {
+    _moveFocusToFocusTarget: function() {
       var content = this._virtualFocus._focusedCell._cellContent;
 
       var focusTarget = content.querySelector('[focus-target]') || content.firstElementChild;
@@ -435,7 +435,7 @@
     _onEnter: function(e) {
       if(!this.interacting) {
         e.preventDefault();
-        this._focusOnFocusTarget();
+        this._moveFocusToFocusTarget();
       }
     },
 
@@ -451,7 +451,7 @@
     _onF2: function(e) {
       e.preventDefault();
       if (!this.interacting) {
-        this._focusOnFocusTarget();
+        this._moveFocusToFocusTarget();
       } else {
         this.interacting = false;
         this._onTab(e); // revert to navigation
