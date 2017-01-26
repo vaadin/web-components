@@ -22,6 +22,7 @@
         <vaadin-grid-column>
           <template>[[_format(index)]] [[parentProp]]</template>
           <template class="header">[[_format('header1')]] [[parentProp]]</template>
+          <template class="footer">Footer</template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template>
@@ -134,12 +135,34 @@
         grid.async(done, 100);
       });
 
+      it('should not restamp header templates on attach', function() {
+        var parent = grid.parentNode;
+        parent.removeChild(grid);
+
+        parent.appendChild(grid);
+        Polymer.dom.flush();
+
+        expect(grid.$.scroller.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
+        expect(grid.$.scroller.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
+      });
+
+      it('should not restamp footer templates on attach', function() {
+        var parent = grid.parentNode;
+        parent.removeChild(grid);
+
+        parent.appendChild(grid);
+        Polymer.dom.flush();
+
+        expect(grid.$.scroller.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
+        expect(grid.$.scroller.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
+      });
+
       describe('using functions inside templates', function() {
         it('should work inside cell templates', function() {
           expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
         });
 
-        it('should header templates', function() {
+        it('should work inside header templates', function() {
           expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('fooheader1');
         });
       });

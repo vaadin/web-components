@@ -244,11 +244,11 @@
       _headerTemplateChanged: function(headerTemplate, isAttached) {
         if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
-          this.instance = headerTemplate.templatizer.createInstance();
+          this.instance = this.instance || headerTemplate.templatizer.createInstance();
           this._templatizer = headerTemplate.templatizer;
         } else {
           this._isEmpty = true;
-          this.instance = {root: document.createElement('div')};
+          this.instance = this.instance || {root: document.createElement('div')};
         }
 
         // Safari 9 doesn't bubble events while not attached to the DOM. #552
@@ -277,11 +277,11 @@
       _footerTemplateChanged: function(footerTemplate, isAttached) {
         if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
-          this.instance = footerTemplate.templatizer.createInstance();
+          this.instance = this.instance || footerTemplate.templatizer.createInstance();
           this._templatizer = footerTemplate.templatizer;
         } else {
           this._isEmpty = true;
-          this.instance = {root: document.createElement('div')};
+          this.instance = this.instance || {root: document.createElement('div')};
         }
 
         // Safari 9 doesn't bubble events while not attached to the DOM. #552
