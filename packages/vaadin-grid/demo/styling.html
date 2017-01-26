@@ -310,14 +310,14 @@
           -->
           <x-data-source data-source="{{dataSource}}" loading="{{_loading}}" delay="1000"></x-data-source>
 
-          <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]">
+          <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]" column-reordering-allowed>
             <vaadin-grid-column-group frozen>
               <template class="header"></template>
 
-              <vaadin-grid-column-group frozen>
+              <vaadin-grid-column-group frozen resizable>
                 <template class="header">Username</template>
 
-                <vaadin-grid-column width="150px" flex="0" frozen resizable>
+                <vaadin-grid-column width="150px" flex="0" frozen>
                   <template class="header">
                     <vaadin-grid-filter path="user.username">
                       <input placeholder="Filter" focus-target>
@@ -335,27 +335,27 @@
                 <div class="grouptitle">Name</div>
               </template>
 
-              <vaadin-grid-column-group>
+              <vaadin-grid-column-group resizable>
                 <template class="header">
                   <vaadin-grid-sorter path="user.name.first">
                     First Name
                   </vaadin-grid-sorter>
                 </template>
 
-                <vaadin-grid-column width="200px" flex="0" resizable>
+                <vaadin-grid-column width="200px" flex="0">
                   <template class="header"></template>
                   <template>[[item.user.name.first]]</template>
                   <template class="footer"></template>
                 </vaadin-grid-column>
               </vaadin-grid-column-group>
 
-              <vaadin-grid-column-group>
+              <vaadin-grid-column-group resizable>
                 <template class="header">
                   <vaadin-grid-sorter path="user.name.last">
                     Last Name
                   </vaadin-grid-sorter>
                 </template>
-                <vaadin-grid-column width="200px" flex="0" resizable>
+                <vaadin-grid-column width="200px" flex="0">
                   <template class="header"></template>
                   <template>[[item.user.name.last]]</template>
                   <template class="footer"></template>
@@ -369,17 +369,17 @@
                 <div class="grouptitle">Location</div>
               </template>
 
-              <vaadin-grid-column-group>
+              <vaadin-grid-column-group resizable>
                 <template class="header">City</template>
 
-                <vaadin-grid-column width="200px" flex="0" resizable>
+                <vaadin-grid-column width="200px" flex="0">
                   <template class="header"></template>
                   <template>[[item.user.name.first]]</template>
                   <template class="footer"></template>
                 </vaadin-grid-column>
               </vaadin-grid-column-group>
 
-              <vaadin-grid-column-group>
+              <vaadin-grid-column-group resizable>
                 <template class="header">State</template>
                 <vaadin-grid-column width="200px" flex="0">
                   <template class="header"></template>

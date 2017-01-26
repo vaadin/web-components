@@ -36,6 +36,24 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="group">
+    <template>
+      <vaadin-grid size="1" style="width: 300px" column-reordering-allowed>
+        <vaadin-grid-column-group resizable>
+          <template class="header">0</template>
+          <vaadin-grid-column flex-grow="0">
+            <template class="header">0</template>
+            <template>0</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column flex-grow="0">
+            <template class="header">1</template>
+            <template>1</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('column resizing', function() {
       var grid, headerCells, handle;
@@ -110,6 +128,30 @@
         Polymer.Base.fire('track', {state: 'start'}, {node: handle});
         Polymer.Base.fire('track', {state: 'end'}, {node: handle});
         expect(grid.$.scroller.hasAttribute('resizing')).to.be.false;
+      });
+
+    });
+
+    describe('column group resizing', function() {
+      var grid;
+
+      beforeEach(function(done) {
+        grid = fixture('group');
+        grid.dataSource = infiniteDataSource;
+        Polymer.RenderStatus.afterNextRender(grid, done);
+      });
+
+      it('should resize the child column', function() {
+        var headerRows = getRows(grid.$.scroller.$.header);
+        var handle = getRowCells(headerRows[0])[0]._resizeHandle;
+
+        var cell = getRowCells(headerRows[1])[1];
+        var rect = cell.getBoundingClientRect();
+        var options = {node: handle};
+        Polymer.Base.fire('track', {state: 'start'}, options);
+        Polymer.Base.fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+
+        expect(cell.clientWidth).to.equal(200);
       });
 
     });

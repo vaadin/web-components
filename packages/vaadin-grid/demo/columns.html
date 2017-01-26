@@ -116,82 +116,51 @@
       </template>
     </demo-snippet>
 
-    <h3>Reordering Columns</h3>
+    <h3>Reordering and Resizing Columns</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
           <x-data-source data-source="{{dataSource}}"></x-data-source>
           <vaadin-grid data-source="[[dataSource]]" size="200" column-reordering-allowed>
-            <vaadin-grid-column width="30px" flex-grow="0">
+            <vaadin-grid-column width="30px" flex-grow="0" resizable>
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="50px" flex-grow="0">
+            <vaadin-grid-column width="50px" flex-grow="0" resizable>
               <template class="header"></template>
               <template>
                 <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
-            <vaadin-grid-column-group>
+            <vaadin-grid-column-group resizable>
               <template class="header">Name</template>
-              <vaadin-grid-column width="calc(25% - 20px)">
+              <vaadin-grid-column width="calc(25% - 20px)" resizable>
                 <template class="header">First</template>
                 <template>[[item.user.name.first]]</template>
               </vaadin-grid-column>
-              <vaadin-grid-column width="calc(25% - 20px)">
+              <vaadin-grid-column width="calc(25% - 20px)" resizable>
                 <template class="header">Last</template>
                 <template>[[item.user.name.last]]</template>
               </vaadin-grid-column>
             </vaadin-grid-column-group>
 
-            <vaadin-grid-column-group>
+            <vaadin-grid-column-group resizable>
               <template class="header">Location</template>
-              <vaadin-grid-column width="calc(25% - 20px)">
+              <vaadin-grid-column width="calc(25% - 20px)" resizable>
                 <template class="header">City</template>
                 <template>[[item.user.location.city]]</template>
               </vaadin-grid-column>
-              <vaadin-grid-column width="calc(25% - 20px)">
+              <vaadin-grid-column width="calc(25% - 20px)" resizable>
                 <template class="header">State</template>
                 <template>[[item.user.location.state]]</template>
               </vaadin-grid-column>
-              <vaadin-grid-column width="200px">
+              <vaadin-grid-column width="200px" resizable>
                 <template class="header">Street</template>
                 <template>[[item.user.location.street]]</template>
               </vaadin-grid-column>
             </vaadin-grid-column-group>
           </vaadin-grid>
         </template>
-      </template>
-    </demo-snippet>
-
-    <h3>Resizing Columns</h3>
-    <demo-snippet>
-      <template is="dom-bind">
-        <x-data-source data-source="{{dataSource}}"></x-data-source>
-        <vaadin-grid data-source="[[dataSource]]" size="200">
-          <vaadin-grid-column width="50px" flex-grow="0">
-            <template class="header">#</template>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column width="50px" flex-grow="0">
-            <template class="header"></template>
-            <template>
-              <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
-            </template>
-          </vaadin-grid-column>
-          <vaadin-grid-column resizable>
-            <template class="header">First Name</template>
-            <template>[[item.user.name.first]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column width="33%" resizable>
-            <template class="header">Last Name</template>
-            <template>[[item.user.name.last]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column width="33%">
-            <template class="header">Email</template>
-            <template>[[item.user.email]]</template>
-          </vaadin-grid-column>
-        </vaadin-grid>
       </template>
     </demo-snippet>
 
