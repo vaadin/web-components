@@ -1,6 +1,7 @@
 module.exports = {
     verbose: false,
     testTimeout: 6 * 60 * 1000,
+    suites: ['test'],
     plugins: {
         sauce: {
             disabled: true,
