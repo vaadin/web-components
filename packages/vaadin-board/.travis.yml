@@ -6,7 +6,7 @@ before_install:
 - bower install
 - npm install -g web-component-tester
 script:
-- wct --plugin sauce test
+- xvfb-run wct --plugin sauce test
 env:
   global:
   - secure: q+Uox1dQe2TeSADXR76ytS2UjVHDRB94/2XoUf+dnMHBjo+5s7MNGxOU0pojzonoAgnjvjDY0C1YpgPHxP2a+hy/4szXzfHHtDUFMKr9kVD+zrluHpux4ubj2WFRwdSJHPP8I77ZmdeLM9w/T9ksZOV6kp2xR9+CyoejnguwsGZu0ORD1v8Yr0xEmbIvrGqovz1XeHQedACu7FDOXXJdF5L0nQ+yuTfDhJyUyeYk1CtQGbvt+7Q5vtzbSzy43gXP8Rb/TTFw2q78nDGz3uYMFy6XHZsr7MdhXqQ9SFfmvb0GTzsB7ph3tPtu9rg1mOms5liFbjqBvbuE6yuwpspCQNWkiyXbkg45ZlIG1rJxUOySDQQegPOIq8zdiOktzsnynIeCngQh/Di1twlLqBGL0Z+8rfEP+9X2+O2h1iPN8byQ0vF6BCEnwvqWSG5Vsey3FiatbZbFrX91CTKJq/5T47+u4468ogBv1vT6YhGclfl77oSX5FlHH0FdIyHMtzhrnmof2NFQ5VdxCT8kjAf+sd+QsjX4lSByKH10XxcfrwZzNZ17XEL5jlc6kUrEtKjKs8AichzfbwxC0x702iJrMqNfn+fI3To2wdOEkEtbwrUPkl4d4jwl4BXjRzxNFRlQbuTDpnLM5njW66DMZ5hHsEUT4kjinZOrPMc54hmc50I=

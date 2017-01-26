@@ -8,40 +8,40 @@ Responsive layout, with several features.
 -->
 
 <dom-module id="vaadin-board">
-    <template>
-        <style>
-            :host {
-                display: block;
-            }
-        </style>
-        <h2>Hello {{prop1}}</h2>
-    </template>
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello {{prop1}}</h2>
+  </template>
 
-    <script>
-        class VaadinBoard extends Polymer.Element {
-            static get is() {
-                return "vaadin-board";
-            }
+  <script>
+    class VaadinBoard extends Polymer.Element {
+      static get is() {
+        return "vaadin-board";
+      }
 
-            static get config() {
-                return {
-                    properties: {
-                        prop1: {
-                            value: "Vaadin Board",
-                            type: String
-                        }
-                    }
-                }
+      static get config() {
+        return {
+          properties: {
+            prop1: {
+              value: "Vaadin Board",
+              type: String
             }
-
-            constructor() {
-                super();
-            }
-
-            connectedCallback() {
-                super.connectedCallback();
-            }
+          }
         }
-        customElements.define(VaadinBoard.is, VaadinBoard);
-    </script>
+      }
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+    }
+    customElements.define(VaadinBoard.is, VaadinBoard);
+  </script>
 </dom-module>

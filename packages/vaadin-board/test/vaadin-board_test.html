@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <meta name="viewport"
+          content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     <title>vaadin-board test</title>
 
@@ -19,10 +20,17 @@
     </test-fixture>
 
     <script>
-      suite('vaadin-board', function() {
-        test('instantiating the element works', function() {
+      suite('vaadin-board', function () {
+        test('instantiating the element works', function () {
           var element = fixture('basic');
           assert.equal(element.tagName.toLowerCase(), 'vaadin-board');
+        });
+
+        test('Elements content is not empty.', function () {
+          var element = fixture('basic');
+          var content = element.root.querySelector('h2');
+          assert.isNotNull(content, "Elements content is null");
+          assert.isDefined(content, "Elements content is undefined");
         });
       });
     </script>
