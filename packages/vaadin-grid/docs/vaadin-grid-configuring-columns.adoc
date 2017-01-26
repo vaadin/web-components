@@ -140,3 +140,21 @@ Hiding is done by applying [propertyname]#hidden# to the [vaadinelement]#vaadin-
   <!-- I'm hidden -->
 </vaadin-grid-column>
 ----
+
+[[vaadin-grid.columns.reordering]]
+== Reordering Columns
+
+Switch on the [vaadinelement]#vaadin-grid#'s [propertyname]#column-reordering-allowed# flag to make the visible columns reorderable.
+
+When column reordering is allowed, the user can drag and drop columns by their header cells to change their visual order.
+
+[NOTE]
+Columns cannot be dragged from one [vaadinelement]#vaadin-grid-column-group# to another.
+Also, columns in the frozen columns section can't be dragged to the non-frozen columns' section and vice versa.
+
+[source,html]
+----
+<vaadin-grid column-reordering-allowed>
+  ...
+</vaadin-grid>
+----

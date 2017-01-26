@@ -252,24 +252,20 @@
 
       it('should not misalign on resize (outer-scroller)', function(done) {
         init('default-content');
-        scrollToEnd(grid, function() {
-          var scrollDone = function() {
-            // Simulate a (window) resize
-            grid.style.width = '200px';
-            scroller.fire('iron-resize');
+        scrollToEnd(grid);
 
-            scroller.async(function() {
-              expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
-              done();
-            }, 300);
+        listenOnce(scroller.$.outerscroller, 'scroll', function() {
+          // Simulate a (window) resize
+          grid.style.width = '200px';
+          scroller.fire('iron-resize');
 
-            scroller.$.outerscroller.removeEventListener('scroll', scrollDone);
-          };
-
-          scroller.$.outerscroller.addEventListener('scroll', scrollDone);
-          // Scroll with the outer-scroller
-          scroller.$.outerscroller.scrollTop = 100;
+          scroller.async(function() {
+            expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
+            done();
+          }, 300);
         });
+        // Scroll with the outer-scroller
+        scroller.$.outerscroller.scrollTop = 100;
       });
 
       it('should update height when hiding columns', function(done) {

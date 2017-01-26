@@ -1,0 +1,403 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
+          <vaadin-grid-column>
+            <template class="header">[[col]]</template>
+            <template>[[col]]</template>
+            <template class="footer">[[col]]</template>
+          </vaadin-grid-column>
+        </template>
+
+        <template class="row-details">
+          foo
+        </template>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="groups">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <template is="dom-repeat" items="[1, 2]" as="colgroup">
+          <vaadin-grid-column-group>
+            <template class="header">[[colgroup]]</template>
+            <template class="footer">[[colgroup]]</template>
+            <template is="dom-repeat" items="[1, 2]" as="col">
+              <vaadin-grid-column>
+                <template class="header">[[colgroup]][[col]]</template>
+                <template>[[colgroup]][[col]]</template>
+                <template class="footer">[[colgroup]][[col]]</template>
+              </vaadin-grid-column>
+            </template>
+          </vaadin-grid-column-group>
+        </template>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="differentWidths">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <vaadin-grid-column width="50px" flex-grow="0">
+          <template class="header">1</template>
+          <template>1</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column width="100px" flex-grow="0">
+          <template class="header">2</template>
+          <template>2</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="largegroup">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <vaadin-grid-column-group>
+          <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+            <vaadin-grid-column width="10px">
+              <template class="header">[[col]]</template>
+              <template>[[col]]</template>
+              <template class="footer">[[col]]</template>
+            </vaadin-grid-column>
+          </template>
+        </vaadin-grid-column-group>
+        <vaadin-grid-column width="10px">
+          <template class="header">12</template>
+          <template>12</template>
+          <template class="footer">12</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    function dragStart(source) {
+      var start = new CustomEvent('dragstart', {
+        bubbles: true
+      });
+      start.dataTransfer = {
+        setData: function() {
+          // Ignore
+        }
+      };
+      source.dispatchEvent(start);
+    }
+
+    function dragOver(source, target, clientX) {
+      dragStart(source);
+      var over = new CustomEvent('dragover', {
+        bubbles: true
+      });
+      var targetRect = target.getBoundingClientRect();
+      over.clientX = clientX || targetRect.left + targetRect.width / 2;
+      target.dispatchEvent(over);
+    }
+
+    function dragAndDropOver(source, target) {
+      dragOver(source, target);
+      var dragend = new CustomEvent('dragend', {
+        bubbles: true
+      });
+      source.dispatchEvent(dragend);
+    }
+
+    function getVisualCellContent(section, row, col) {
+      var cell = Polymer.dom(section).querySelectorAll('th, td').pop();
+      if (section.tagName === 'TFOOT') {
+        cell = Polymer.dom(section).querySelector('td');
+      }
+      var sectionRect = section.getBoundingClientRect();
+      var sectionBorder = parseInt(section.style.borderTopWidth || 0);
+      var cellWidth = cell.offsetWidth;
+      var cellHeight = cell.offsetHeight;
+      var x = sectionRect.left + (col * cellWidth) + cellWidth / 2;
+      var y = sectionRect.top + sectionBorder + (row * cellHeight) + cellHeight / 2;
+      return document.elementFromPoint(x, y);
+    }
+
+    function getVisualHeaderCellContent(grid, row, col) {
+      return getVisualCellContent(grid.$.scroller.$.header, row, col);
+    }
+
+    function getVisualColumnCellContents(grid, col) {
+      var scroller = grid.$.scroller;
+      var headerContent = getVisualCellContent(scroller.$.header, getRows(scroller.$.header).length - 1, col);
+      var footerContent = getVisualCellContent(scroller.$.footer, 0, col);
+      var bodyContent = Polymer.dom(scroller.$.items).children.map(function(row, rowIndex) {
+        return getVisualCellContent(scroller.$.items, rowIndex, col);
+      });
+      return bodyContent.concat(headerContent).concat(footerContent);
+    }
+
+    function expectVisualOrder(grid, order) {
+      order.forEach(function(order, index) {
+        getVisualColumnCellContents(grid, index).forEach(function(content) {
+          expect(parseInt(content.innerText)).to.equal(order);
+        });
+      });
+    }
+
+    function getCellByCellContent(grid, cellContent) {
+      return grid.$.scroller._getCellByCellContent(cellContent);
+    }
+
+    describe('reordering simple grid', function() {
+
+      var grid, headerContent;
+
+      beforeEach(function(done) {
+        grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          var colCount = getRowCells(getRows(grid.$.scroller.$.header)[0]).length;
+          headerContent = [];
+          for (var i = 0; i < colCount; i++) {
+            headerContent.push(getVisualHeaderCellContent(grid, 0, i));
+          }
+          done();
+        });
+      });
+
+      it('should have initial visual order', function() {
+        expectVisualOrder(grid, [1, 2, 3, 4]);
+      });
+
+      it('should be draggable if and only if grid is reorderable', function() {
+        var event = new CustomEvent('mousemove', {bubbles: true});
+        headerContent[0].dispatchEvent(event);
+        expect(headerContent[0].getAttribute('draggable')).to.equal('true');
+        grid.columnReorderingAllowed = false;
+        headerContent[0].dispatchEvent(event);
+        expect(headerContent[0].getAttribute('draggable')).to.equal('false');
+      });
+
+      it('should indicate dragged cells', function() {
+        dragStart(headerContent[0]);
+        var cell = getCellByCellContent(grid, headerContent[0]);
+        expect(cell.getAttribute('reorder-status')).to.equal('dragging');
+      });
+
+      it('should clear reorder status on dragend', function() {
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        var cell = getCellByCellContent(grid, headerContent[0]);
+        expect(cell.getAttribute('reorder-status')).to.equal('');
+        expect(grid.hasAttribute('reordering')).to.be.false;
+      });
+
+      describe('basic reordering', function() {
+
+        it('should reorder the columns', function() {
+          dragAndDropOver(headerContent[0], headerContent[1]);
+          expectVisualOrder(grid, [2, 1]);
+        });
+
+        it('should allow dropping over body cell of another column', function() {
+          dragAndDropOver(
+            headerContent[0],
+            getVisualCellContent(grid.$.scroller.$.items, 0, 1)
+          );
+          expectVisualOrder(grid, [2, 1]);
+        });
+
+        it('should reorder the columns while dragging', function() {
+          dragOver(headerContent[0], headerContent[1]);
+          expectVisualOrder(grid, [2, 1]);
+        });
+
+        it('should reorder multiple columns while dragging', function() {
+          dragOver(headerContent[0], headerContent[1]);
+          dragOver(headerContent[0], headerContent[3]);
+          expectVisualOrder(grid, [2, 4, 3, 1]);
+        });
+
+        it('should update lastcolumn attribute', function() {
+          var cell = getCellByCellContent(grid, headerContent[3]);
+          expect(cell.hasAttribute('lastcolumn')).to.be.true;
+
+          dragOver(headerContent[2], headerContent[3]);
+          cell = getCellByCellContent(grid, headerContent[2]);
+          expect(cell.hasAttribute('lastcolumn')).to.be.true;
+        });
+
+        it('should update lastcolumn attribute (details open)', function() {
+          grid.expandItem(getRows(grid.$.scroller.$.items)[0].item);
+          dragOver(headerContent[2], headerContent[3]);
+          var cell = getCellByCellContent(grid, headerContent[2]);
+          cell = getCellByCellContent(grid, headerContent[2]);
+          expect(cell.hasAttribute('lastcolumn')).to.be.true;
+        });
+
+        it('should set order to new column', function(done) {
+          dragAndDropOver(headerContent[0], headerContent[1]);
+          var col = document.createElement('vaadin-grid-column');
+          col.innerHTML = '<template></template>';
+          Polymer.dom(grid).appendChild(col);
+          Polymer.RenderStatus.afterNextRender(grid, function() {
+            expect(col._order).to.equal(50000000);
+            done();
+          });
+        });
+
+      });
+
+      describe('frozen columns', function() {
+
+        beforeEach(function() {
+          var columns = Polymer.dom(grid).querySelectorAll('vaadin-grid-column');
+          columns[0].frozen = true;
+          columns[1].frozen = true;
+        });
+
+        it('should allow reordering frozen columns', function() {
+          dragAndDropOver(headerContent[0], headerContent[1]);
+          expectVisualOrder(grid, [2, 1]);
+        });
+
+        it('should not allow reordering frozen and non-frozen columns', function() {
+          dragAndDropOver(headerContent[1], headerContent[2]);
+          expectVisualOrder(grid, [1, 2, 3, 4]);
+        });
+
+        it('should not allow reordering non-frozen and frozen columns', function() {
+          dragAndDropOver(headerContent[3], headerContent[0]);
+          expectVisualOrder(grid, [1, 2, 3, 4]);
+        });
+
+        it('should update last-frozen while dragging', function() {
+          var cell = getCellByCellContent(grid, headerContent[0]);
+          expect(cell.hasAttribute('last-frozen')).to.be.false;
+          dragOver(headerContent[0], headerContent[1]);
+          expect(cell.hasAttribute('last-frozen')).to.be.true;
+        });
+
+      });
+
+    });
+
+    describe('reordering grid with columns groups', function() {
+
+      var grid;
+
+      beforeEach(function(done) {
+        grid = fixture('groups');
+        grid.dataSource = infiniteDataSource;
+        Polymer.RenderStatus.afterNextRender(grid, done);
+      });
+
+      it('should have initial visual order', function() {
+        expectVisualOrder(grid, [11, 12, 21, 22]);
+      });
+
+      it('should reorder the sub-columns', function() {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 1, 0),
+          getVisualHeaderCellContent(grid, 1, 1)
+        );
+        expectVisualOrder(grid, [12, 11]);
+      });
+
+      it('should not allow dragging columns between groups', function() {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 1, 1),
+          getVisualHeaderCellContent(grid, 1, 2)
+        );
+        expectVisualOrder(grid, [11, 12, 21, 22]);
+      });
+
+      it('should reorder the groups', function() {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 0, 0),
+          getVisualHeaderCellContent(grid, 0, 3)
+        );
+        var firstGroupCell = getVisualHeaderCellContent(grid, 0, 0);
+        expect(firstGroupCell.innerText).to.equal('2');
+        expectVisualOrder(grid, [21, 22, 11, 12]);
+      });
+
+      it('should allow dropping group over other groups column header', function() {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 0, 0),
+          getVisualHeaderCellContent(grid, 1, 3)
+        );
+        expectVisualOrder(grid, [21, 22, 11, 12]);
+      });
+
+      it('should allow dropping group over body cell of another group', function() {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 0, 0),
+          getVisualCellContent(grid.$.scroller.$.items, 0, 3)
+        );
+        expectVisualOrder(grid, [21, 22, 11, 12]);
+      });
+
+    });
+
+    describe('reordering grid with different column widths', function() {
+
+      var grid, headerContent0, headerContent1, content0rect, content1rect;
+
+      beforeEach(function(done) {
+        grid = fixture('differentWidths');
+        grid.dataSource = infiniteDataSource;
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          headerContent0 = getHeaderCellContent(grid, 0, 0);
+          headerContent1 = getHeaderCellContent(grid, 0, 1);
+          content0rect = headerContent0.getBoundingClientRect();
+          content1rect = headerContent1.getBoundingClientRect();
+          done();
+        });
+      });
+
+      it('should not reorder', function() {
+        dragOver(headerContent0, headerContent1, content1rect.right - content0rect.width);
+        expect(headerContent1.getBoundingClientRect().left).to.equal(content1rect.left);
+      });
+
+      it('should reorder', function() {
+        dragOver(headerContent0, headerContent1, content1rect.right - content0rect.width + 1);
+        expect(headerContent1.getBoundingClientRect().left).not.to.equal(content1rect.left);
+      });
+
+    });
+
+    describe('large column group', function() {
+
+      var grid;
+
+      beforeEach(function(done) {
+        grid = fixture('largegroup');
+        grid.dataSource = infiniteDataSource;
+        Polymer.RenderStatus.afterNextRender(grid, done);
+      });
+
+      it('should support over 10 child-columns in a group', function() {
+        expectVisualOrder(grid, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

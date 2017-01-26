@@ -369,7 +369,10 @@
     },
 
     _updateLastFrozen: function() {
-      var columnsRow = this.columnTree[this.columnTree.length - 1];
+      var columnsRow = this.columnTree[this.columnTree.length - 1].slice(0);
+      columnsRow.sort(function(a, b) {
+        return a._order - b._order;
+      });
       var lastFrozen = columnsRow.reduce(function(prev, col, index) {
         col._lastFrozen = false;
         return col.frozen && !col.hidden ? index : prev;

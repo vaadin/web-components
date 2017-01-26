@@ -117,6 +117,54 @@
       </template>
     </demo-snippet>
 
+    <h3>Reordering Columns</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <vaadin-grid data-source="[[dataSource]]" size="200" column-reordering-allowed>
+            <vaadin-grid-column width="30px" flex-grow="0">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px" flex-grow="0">
+              <template class="header"></template>
+              <template>
+                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+              </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column-group>
+              <template class="header">Name</template>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">First</template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">Last</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+
+            <vaadin-grid-column-group>
+              <template class="header">Location</template>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">City</template>
+                <template>[[item.user.location.city]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="calc(25% - 20px)">
+                <template class="header">State</template>
+                <template>[[item.user.location.state]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="200px">
+                <template class="header">Street</template>
+                <template>[[item.user.location.street]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
     <h3>Resizing Columns</h3>
     <demo-snippet>
       <template>
