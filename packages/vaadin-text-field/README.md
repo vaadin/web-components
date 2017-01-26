@@ -7,7 +7,7 @@
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-input/demo/)
 
-[&lt;vaadin-input&gt;](https://vaadin.com/elements/-/element/vaadin-input) is a [Polymer](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-input&gt;](https://vaadin.com/elements/-/element/vaadin-input) is a [Polymer](http://polymer-project.org) element providing an input control in forms., part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```

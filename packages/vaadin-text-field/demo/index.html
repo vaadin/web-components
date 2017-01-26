@@ -8,6 +8,7 @@
   <title>vaadin-input Basic Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="common.html">
 </head>
 
@@ -16,12 +17,112 @@
 
     <demo-navigation></demo-navigation>
 
-    <h3>Sample example</h3>
+    <h3>Setting the Value</h3>
     <demo-snippet>
       <template>
-        <vaadin-input></vaadin-input>
+        <vaadin-input value="foo"></vaadin-input>
       </template>
     </demo-snippet>
+
+    <h3>Data Binding</h3>
+    <demo-snippet>
+      <template>
+        <dom-bind id="demo-bind1">
+          <template>
+            <vaadin-input id="input1" value="{{value}}"></vaadin-input>
+            <vaadin-input id="input2" value="{{value}}"></vaadin-input>
+            <span>[[value]]</span>
+          </template>
+        </dom-bind>
+
+        <script>
+         window.addEventListener('WebComponentsReady', function() {
+           var domBind = document.querySelector('#demo-bind1');
+           domBind.value = 'bar';
+         });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Required Input</h3>
+    <demo-snippet>
+      <template>
+        <p><vaadin-input required value="foo"></vaadin-input> is valid</p>
+        <p><vaadin-input required value=""></vaadin-input> is invalid</p>
+      </template>
+    </demo-snippet>
+
+    <h3>Minlength and Maxlength Validation</h3>
+    <demo-snippet>
+      <template>
+        <p><vaadin-input required minlength="2"></vaadin-input> type at least 2 characters</p>
+        <p><vaadin-input maxlength="4"></vaadin-input> you cannot type more than 4 characters</p>
+      </template>
+    </demo-snippet>
+
+    <h3>Pattern Validation</h3>
+    <demo-snippet>
+      <template>
+        <p><vaadin-input pattern="\d\d\d*" required></vaadin-input> type 2 numbers or more</p>
+      </template>
+    </demo-snippet>
+
+    <h3>Full Form</h3>
+    <demo-snippet>
+      <template>
+        <style>
+          label {
+            width: 150px;
+            display: inline-block;
+            height: 30px;
+            font-size: 100%;
+          }
+
+          span {
+            font-size: 80%;
+          }
+        </style>
+        <h4>Registration Form</h4>
+        <iron-form>
+          <form>
+            <p>
+              <label>User Name</label>
+              <vaadin-input type="text" minlength="4" maxlength="8" required pattern="^\w+$" autofocus></vaadin-input>
+              <span>* from 4 to 8 characters without spaces</span>
+            </p>
+            <p>
+              <label>Email</label>
+              <vaadin-input type="email" required></vaadin-input>
+              <span>*</span>
+            </p>
+            <p>
+              <label>Initials</label>
+              <vaadin-input minlength="3" maxlength="3"></vaadin-input>
+              <span>3 characters</span>
+            </p>
+            <p>
+              <label>Age</label>
+              <vaadin-input pattern="\d\d\d*" required></vaadin-input>
+              <span>* 2 digits age</span>
+            </p>
+            <p>
+              <label>Password</label>
+              <vaadin-input required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"></vaadin-input>
+              <span>* 6 characters min including uppercase and number</span>
+            </p>
+            <button onclick="_submit()">Submit</button>
+          </form>
+        </iron-form>
+        <script>
+          window._submit = function() {
+            if (!document.querySelector('iron-form').validate()) {
+              window.alert('Please fill all required fields with valid values');
+            }
+          };
+        </script>
+      </template>
+    </demo-snippet>
+
   </div>
 </body>
 </html>

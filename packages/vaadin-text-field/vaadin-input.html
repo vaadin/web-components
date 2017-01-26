@@ -5,7 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <!--
-`<vaadin-input>` is a Polymer element for <element-functionality>.
+`<vaadin-input>` is a Polymer element for input control in forms.
 
 ```html
 <vaadin-input>
@@ -17,21 +17,207 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="vaadin-form-element-mixin.html">
 
 <dom-module id="vaadin-input">
   <template>
     <style>
       :host {
-        display: block;
+        display: inline-block;
+      }
+
+      input {
+        outline: none;
+        border: solid 1px #d8d8d8;
+      }
+
+      input:focus {
+        border-bottom: solid 1px deepskyblue;
+      }
+
+      input:invalid {
+        background: #fbefef;
+      }
+
+      input:focus:invalid {
+        border-bottom: solid 1px red;
       }
     </style>
+    <input id="input"
+      autocomplete$="[[autocomplete]]"
+      autocorrect$="[[autocorrect]]"
+      autofocus$="[[autofocus]]"
+      disabled$="[[disabled]]"
+      list="[[list]]"
+      maxlength$="[[maxlength]]"
+      minlength$="[[minlength]]"
+      name="[[name]]"
+      pattern="[[pattern]]"
+      placeholder="[[placeholder]]"
+      readonly$="[[readonly]]"
+      required$="[[required]]"
+      tabindex$="[[tabindex]]"
+      value="{{value::input}}"
+      title="[[title]]"
+    />
   </template>
 
   <script>
-    Polymer({
+    class VaadinInput extends window.VaadinFormElementMixin(Polymer.Element) {
+      static get is() {
+        return 'vaadin-input';
+      }
 
-      is: 'vaadin-input'
+      static get config() {
+        return {
+          properties: {
+            /**
+             * Whether the value of the control can be automatically completed by the browser.
+             * List of available options at:
+             * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
+             */
+            autocomplete: {
+              type: String
+            },
 
-    });
+            /**
+             * Specify that this control should have input focus when the page loads.
+             */
+            autofocus: {
+              type: Boolean
+            },
+
+            /**
+             * Indicates that this control is not available for interaction.
+             */
+            disabled: {
+              type: Boolean
+            },
+
+            /**
+             * Identifies a list of pre-defined options to suggest to the user.
+             * The value must be the id of a <datalist> element in the same document.
+             */
+            list: {
+              type: String
+            },
+
+            /**
+             * If the value of the type attribute is text, email, search, password, tel, or url,
+             * specifies the maximum number of characters (in Unicode code points) that the user
+             * can enter.
+             */
+            maxlength: {
+              type: Number
+            },
+            /**
+             * If the value of the type attribute is text, email, search, password, tel, or url,
+             * specifies the minimum number of characters (in Unicode code points) that the user
+             * can enter.
+             */
+            minlength: {
+              type: Number
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: {
+              type: String
+            },
+
+            /**
+             * A regular expression that the value is checked against.
+             * The pattern must match the entire value, not just some subset.
+             * This attribute applies when the value of the type attribute is text, search, tel,
+             * url, email, or password, otherwise it is ignored.
+             */
+            pattern: {
+              type: String
+            },
+
+            /**
+             * A hint to the user of what can be entered in the control.
+             */
+            placeholder: {
+              type: String
+            },
+
+            /**
+             * This attribute indicates that the user cannot modify the value of the control.
+             */
+            readonly: {
+              type: Boolean
+            },
+
+            /**
+             * Specifies that the user must fill in a value.
+             */
+            required: {
+              type: Boolean
+            },
+
+            /**
+             * Message to show to the user when validation fails.
+             */
+            title: {
+              type: String
+            },
+
+            /**
+             * The position of the element in the tabbing navigation order for the current document.
+             */
+            tabindex: {
+              type: Number
+            },
+
+            /**
+             * The initial value of the control.
+             * It can be used for two-way data binding.
+             */
+            value: {
+              type: String,
+              observer: '_valueChanged',
+              notify: true
+            },
+
+            /**
+             * This property is set to true when the control value invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true
+            }
+          }
+
+        };
+      }
+
+      ready() {
+        super.ready();
+        this.invalid = this._isInvalid();
+      }
+
+      _valueChanged(value) {
+        this.invalid = this._isInvalid();
+      }
+
+      _isInvalid() {
+        return !this.validate();
+      }
+
+      /**
+       * Returns true if `value` is valid.
+       * `<iron-form>` uses this to check the validity or all its elements.
+       *
+       * @return {boolean} True if the value is valid.
+       */
+      validate() {
+        return this.$.input.checkValidity();
+      }
+    }
+
+    customElements.define(VaadinInput.is, VaadinInput);
   </script>
 </dom-module>
