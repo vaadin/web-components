@@ -11,26 +11,36 @@
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-board.html">
+    <link rel="import" href="../vaadin-board-row.html">
   </head>
   <body>
-    <test-fixture id="basic">
+    <test-fixture id="basic-board-row">
       <template>
-        <vaadin-board></vaadin-board>
+          <vaadin-board-row>
+            <div>top A</div>
+            <div>top B</div>
+            <div>top C</div>
+            <div>top D</div>
+          </vaadin-board-row>
       </template>
     </test-fixture>
 
     <script>
       suite('vaadin-board', function () {
-        test('instantiating the element works', function () {
-          var element = fixture('basic');
-          assert.equal(element.tagName.toLowerCase(), 'vaadin-board');
-        });
 
-        test('Elements content is not empty.', function () {
-          var element = fixture('basic');
-          var content = element.root.querySelector('h2');
-          assert.isNotNull(content, "Elements content is null");
-          assert.isDefined(content, "Elements content is undefined");
+        test('Four items take 25% each on Desktop.', function () {
+          var row = fixture('basic-board-row');
+
+          var parentWidth = 1600;
+          row.style.width = parentWidth + "px";
+
+          var children = row.querySelectorAll("div");
+          for (let i = 0; i < children.length; i++) {
+            var rect = children[i].getBoundingClientRect();
+
+            assert.equal(row.getBoundingClientRect().top, rect.top, "Row and content top are equal");
+            assert.approximately(rect.left, i * parentWidth / 4, 10);
+          }
         });
       });
     </script>

@@ -11,10 +11,12 @@ Responsive layout, with several features.
   <template>
     <style>
       :host {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
       }
     </style>
-    <h2>Hello {{prop1}}</h2>
+    <slot></slot>
   </template>
 
   <script>
