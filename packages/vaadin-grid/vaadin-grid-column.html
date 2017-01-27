@@ -375,7 +375,15 @@ The `class` attribute is used to differentiate header and footer templates.
 
         // Final scope for the child columns needs to mind both factors.
         var scope = Math.pow(10, trailingZeros - childCountDigits);
-        rootColumns.forEach(function(column, index) {
+
+        var _rootColumns = rootColumns.slice(0);
+        if (_rootColumns[0] && _rootColumns[0]._order) {
+          _rootColumns.sort(function(a, b) {
+            return a._order - b._order;
+          });
+        }
+        
+        _rootColumns.forEach(function(column, index) {
           column._order = order + ((index + 1) * scope);
         });
 

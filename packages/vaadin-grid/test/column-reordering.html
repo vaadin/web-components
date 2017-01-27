@@ -351,6 +351,18 @@
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });
 
+      it('should maintain order of child columns on parent reorder', function() {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 1, 0),
+          getVisualHeaderCellContent(grid, 1, 1)
+        );
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 0, 0),
+          getVisualHeaderCellContent(grid, 0, 3)
+        );
+        expectVisualOrder(grid, [21, 22, 12, 11]);
+      });
+
     });
 
     describe('reordering grid with different column widths', function() {
