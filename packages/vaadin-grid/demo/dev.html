@@ -51,7 +51,7 @@
             <paper-input value="{{item.user.name.last}}"></paper-input>
           </template>
 
-          <vaadin-grid-column width="45px" flex-grow="0" frozen>
+          <vaadin-grid-column width="45px" flex-grow="0" frozen resizable>
             <template>
               [[index]]
             </template>
@@ -60,7 +60,7 @@
             </template>
           </vaadin-grid-column>
 
-          <vaadin-grid-column-group>
+          <vaadin-grid-column-group resizable>
 
             <template class="header">
               TG1
@@ -116,7 +116,7 @@
           </vaadin-grid-column-group>
 
           <vaadin-grid-column-group>
-            <vaadin-grid-column width="200px">
+            <vaadin-grid-column width="200px" resizable>
               <template>
                 <div>[[item.user.name.first]].[[item.user.name.last]]@gmail.com</div>
               </template>

@@ -302,8 +302,8 @@
           -->
           <x-data-source data-source="{{dataSource}}" loading="{{_loading}}" delay="1000"></x-data-source>
 
-          <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]">
-            <vaadin-grid-column-group frozen>
+          <vaadin-grid id="valo-grid" data-source="[[dataSource]]" size="2000" loading$="[[_loading]]" column-reordering-allowed>
+            <vaadin-grid-column-group frozen resizable>
               <template class="header"></template>
 
               <vaadin-grid-column-group frozen>
@@ -322,7 +322,7 @@
 
             </vaadin-grid-column-group>
 
-            <vaadin-grid-column-group>
+            <vaadin-grid-column-group resizable>
               <template class="header">
                 <div class="grouptitle">Name</div>
               </template>
@@ -356,7 +356,7 @@
 
             </vaadin-grid-column-group>
 
-            <vaadin-grid-column-group>
+            <vaadin-grid-column-group resizable>
               <template class="header">
                 <div class="grouptitle">Location</div>
               </template>
@@ -434,6 +434,10 @@
               --vaadin-grid-body-row-details-cell: {
                 text-align: center;
               };
+
+              --vaadin-grid-column-resize-handle: {
+                opacity: 0;
+              };
             }
 
             vaadin-grid#transparent-header input[type=checkbox] {
@@ -478,13 +482,13 @@
                 </div>
               </template>
 
-              <vaadin-grid-column width="45px" flex="0">
+              <vaadin-grid-column width="45px" flex-grow="0">
                 <template>
                   <input type="checkbox" checked="{{selected::change}}">
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column>
+              <vaadin-grid-column resizable>
                 <template class="header">Name</template>
                 <template>
                   <div>
@@ -494,7 +498,7 @@
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column>
+              <vaadin-grid-column resizable>
                 <template class="header">Email</template>
                 <template>[[item.user.email]]</template>
               </vaadin-grid-column>

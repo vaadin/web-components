@@ -68,6 +68,19 @@ The `class` attribute is used to differentiate header and footer templates.
     properties: {
 
       /**
+       * When set to true, the column is user-resizable.
+       */
+      resizable: {
+        type: Boolean,
+        value: function() {
+          var parent = Polymer.dom(this).parentNode;
+          if (parent && parent.localName === 'vaadin-grid-column-group') {
+            return parent.resizable;
+          }
+        }
+      },
+
+      /**
        * @private
        */
       headerTemplate: {
@@ -201,6 +214,7 @@ The `class` attribute is used to differentiate header and footer templates.
       hidden: {
         type: Boolean
       }
+
     },
 
     observers: [
@@ -210,7 +224,8 @@ The `class` attribute is used to differentiate header and footer templates.
       '_frozenChanged(frozen, isAttached)',
       '_hiddenChanged(hidden)',
       '_orderChanged(_order)',
-      '_reorderStatusChanged(_reorderStatus)'
+      '_reorderStatusChanged(_reorderStatus)',
+      '_resizableChanged(resizable)'
     ],
 
     _frozenChanged: function(frozen, isAttached) {
@@ -245,7 +260,11 @@ The `class` attribute is used to differentiate header and footer templates.
 
     _reorderStatusChanged: function(reorderStatus) {
       this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
-    }
+    },
+
+    _resizableChanged: function(resizable) {
+      this.fire('property-changed', {path: 'resizable', value: resizable});
+    },
   };
 
   /**
@@ -324,7 +343,8 @@ The `class` attribute is used to differentiate header and footer templates.
       '_visibleChildColumnsChanged(_visibleChildColumns)',
       '_colSpanChanged(colSpan)',
       '_orderChanged(_order, _rootColumns)',
-      '_reorderStatusChanged(_reorderStatus, _rootColumns)'
+      '_reorderStatusChanged(_reorderStatus, _rootColumns)',
+      '_resizableChanged(resizable, _rootColumns)'
     ],
 
     listeners: {
@@ -397,6 +417,14 @@ The `class` attribute is used to differentiate header and footer templates.
       });
 
       this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
+    },
+
+    _resizableChanged: function(resizable, rootColumns) {
+      rootColumns.forEach(function(column) {
+        column.resizable = resizable;
+      });
+
+      this.fire('property-changed', {path: 'resizable', value: resizable});
     },
 
     _updateVisibleChildColumns: function(childColumns) {

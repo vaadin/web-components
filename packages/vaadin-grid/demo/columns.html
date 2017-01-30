@@ -20,7 +20,6 @@
   <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../iron-media-query/iron-media-query.html">
-  <link rel="import" href="../../paper-slider/paper-slider.html">
 
   <link rel="import" href="common.html">
 </head>
@@ -109,23 +108,23 @@
       </template>
     </demo-snippet>
 
-    <h3>Reordering Columns</h3>
+    <h3>Reordering and Resizing Columns</h3>
     <demo-snippet>
       <template>
         <template is="dom-bind">
           <x-data-source data-source="{{dataSource}}"></x-data-source>
           <vaadin-grid data-source="[[dataSource]]" size="200" column-reordering-allowed>
-            <vaadin-grid-column width="30px" flex-grow="0">
+            <vaadin-grid-column width="30px" flex-grow="0" resizable>
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="50px" flex-grow="0">
+            <vaadin-grid-column width="50px" flex-grow="0" resizable>
               <template class="header"></template>
               <template>
                 <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
-            <vaadin-grid-column-group>
+            <vaadin-grid-column-group resizable>
               <template class="header">Name</template>
               <vaadin-grid-column width="calc(25% - 20px)">
                 <template class="header">First</template>
@@ -137,7 +136,7 @@
               </vaadin-grid-column>
             </vaadin-grid-column-group>
 
-            <vaadin-grid-column-group>
+            <vaadin-grid-column-group resizable>
               <template class="header">Location</template>
               <vaadin-grid-column width="calc(25% - 20px)">
                 <template class="header">City</template>
@@ -147,7 +146,7 @@
                 <template class="header">State</template>
                 <template>[[item.user.location.state]]</template>
               </vaadin-grid-column>
-              <vaadin-grid-column width="200px">
+              <vaadin-grid-column width="200px" resizable>
                 <template class="header">Street</template>
                 <template>[[item.user.location.street]]</template>
               </vaadin-grid-column>
@@ -155,80 +154,6 @@
           </vaadin-grid>
         </template>
       </template>
-    </demo-snippet>
-
-    <h3>Resizing Columns</h3>
-    <demo-snippet>
-      <template>
-        <dom-module id="x-grid">
-          <template>
-            <style>
-            .resize-handler {
-              pointer-events: none;
-              position: relative;
-              user-select: none;
-            }
-
-            .resize-handler::after {
-              position: absolute;
-              right: -8px;
-              top: -8px;
-              bottom: -8px;
-              content: '';
-
-              pointer-events: auto;
-              border-right: 4px solid #ddd;
-              cursor: col-resize;
-            }
-            </style>
-            <x-data-source data-source="{{dataSource}}"></x-data-source>
-            <paper-slider min="10" max="500" immediate-value="{{width}}" value="[[width]]">Resize First Name</paper-slider>
-            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
-              <vaadin-grid-column width="50px">
-                <template class="header">#</template>
-                <template>[[index]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="50px">
-                <template class="header"></template>
-                <template>
-                  <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
-                </template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="[[width]]px">
-                <template class="header">
-                  <div class="resize-handler" on-track="_resize">First Name</div>
-                </template>
-                <template>[[item.user.name.first]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="33%">
-                <template class="header">Last Name</template>
-                <template>[[item.user.name.last]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="33%">
-                <template class="header">Email</template>
-                <template>[[item.user.email]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid>
-          </template>
-          <script>
-            Polymer({
-              is: 'x-grid',
-
-              properties: {
-                width: {
-                  type: Number,
-                  value: 100
-                }
-              },
-
-              _resize: function(e) {
-                this.width = this.width + (e.detail.ddx || 0);
-              }
-            });
-          </script>
-        </dom-module>
-      </template>
-      <x-grid></x-grid>
     </demo-snippet>
 
     <demo-snippet>
