@@ -178,6 +178,24 @@
             upload.dispatchEvent(dropEvent);
             fileAddSpy.should.not.have.been.called;
           });
+
+          it('should not set dragover property when overing', function() {
+            upload.nodrop = true;
+            expect(upload._dragover).not.to.be.ok;
+            expect(upload.hasAttribute('dragover')).to.be.false;
+            upload.dispatchEvent(createDndEvent('dragover'));
+            expect(upload._dragover).not.to.be.ok;
+            expect(upload.hasAttribute('dragover')).to.be.false;
+          });
+
+          it('should not set dragoverValid property when overing', function() {
+            upload.nodrop = true;
+            expect(upload._dragoverValid).not.to.be.ok;
+            expect(upload.hasAttribute('dragover')).to.be.false;
+            upload.dispatchEvent(createDndEvent('dragover'));
+            expect(upload._dragoverValid).not.to.be.ok;
+            expect(upload.hasAttribute('dragover')).to.be.false;
+          });
         });
       });
 
