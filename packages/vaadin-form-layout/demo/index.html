@@ -14,12 +14,27 @@
 <body>
   <div class="vertical-section-container centered">
 
-    <demo-navigation></demo-navigation>
+    <!-- <demo-navigation></demo-navigation> -->
 
-    <h3>Sample example</h3>
+    <h3>Basic Usage</h3>
     <demo-snippet>
       <template>
-        <vaadin-form-layout></vaadin-form-layout>
+        <vaadin-form-layout>
+          <vaadin-input value="Jane"></vaadin-input>
+          <vaadin-input value="Doe"></vaadin-input>
+          <vaadin-input value="jane.doe@example.com"></vaadin-input>
+        </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>With Paper Input</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout>
+          <paper-input label="First Name" value="Jane"></paper-input>
+          <paper-input label="Last Name" value="Doe"></paper-input>
+          <paper-input label="Email" value="jane.doe@example.com"></paper-input>
+        </vaadin-form-layout>
       </template>
     </demo-snippet>
   </div>
