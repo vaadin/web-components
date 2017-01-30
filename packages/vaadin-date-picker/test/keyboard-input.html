@@ -472,12 +472,10 @@
           });
 
           it('should focus the input on date cancel', function() {
-            it('should focus the input on date tap', function() {
-              arrowDown();
-              var spy = sinon.spy(datepicker.inputElement, 'focus');
-              MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
-              expect(spy.called).to.be.true;
-            });
+            arrowDown();
+            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
+            expect(spy.called).to.be.true;
           });
 
           it('should focus cancel on input shift tab', function(done) {
@@ -533,20 +531,14 @@
           });
 
           it('should not focus overlay on key-input', function(done) {
-            var listener1 = function() {
-              datepicker.removeEventListener('iron-overlay-opened', listener1);
-              datepicker.close();
-              var spy = sinon.spy(datepicker.$.overlay, 'focus');
+            var spy = sinon.spy(datepicker.$.overlay, 'focus');
 
-              datepicker.addEventListener('iron-overlay-opened', function() {
-                expect(spy.called).to.be.false;
-                done();
-              });
-              inputText('1');
+            listenForEvent(datepicker, 'iron-overlay-opened', function() {
+              expect(spy.called).to.be.false;
+              done();
+            });
 
-            };
-            datepicker.addEventListener('iron-overlay-opened', listener1);
-            arrowUp();
+            inputText('1');
           });
 
         });

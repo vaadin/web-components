@@ -92,7 +92,7 @@
       });
 
       it('should fire scroll events', function(done) {
-        scroller.addEventListener('scroll', function() {
+        listenForEvent(scroller, 'scroll', function() {
           done();
         });
         scroller.$.scroller.scrollTop += 10;
@@ -101,7 +101,7 @@
       it('should not fire scroll events', function(done) {
         var spy = sinon.spy();
         scroller.addEventListener('scroll', spy);
-        scroller.$.scroller.addEventListener('scroll', function() {
+        listenForEvent(scroller.$.scroller, 'scroll', function() {
           expect(spy.called).to.be.false;
           done();
         });
