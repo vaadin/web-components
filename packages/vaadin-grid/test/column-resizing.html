@@ -79,7 +79,7 @@
       });
 
       it('should not be resizable', function() {
-        expect(headerCells[1].resizable).to.be.false;
+        expect(headerCells[1].resizable).not.to.be.true;
       });
 
       it('should display resize handle as top-most element', function() {
@@ -139,6 +139,19 @@
         grid = fixture('group');
         grid.dataSource = infiniteDataSource;
         Polymer.RenderStatus.afterNextRender(grid, done);
+      });
+
+      it('should cascade resizable property to child columns', function() {
+        expect(grid._columnTree[1][0].resizable).to.be.true;
+        grid._columnTree[0][0].resizable = false;
+        expect(grid._columnTree[1][0].resizable).to.be.false;
+      });
+
+      it('should inherit resizable value from parent group', function() {
+        var newColumn = document.createElement('vaadin-grid-column');
+        Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
+        Polymer.dom.flush();
+        expect(newColumn.resizable).to.be.true;
       });
 
       it('should resize the child column', function() {

@@ -60,7 +60,7 @@
             </template>
           </vaadin-grid-column>
 
-          <vaadin-grid-column-group>
+          <vaadin-grid-column-group resizable>
 
             <template class="header">
               TG1
@@ -69,7 +69,7 @@
               TGF1
             </template>
 
-            <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0" resizable>
+            <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0">
               <template>
                 <span class="elItem">[[item.user.name.first]]</span>
               </template>
@@ -87,7 +87,7 @@
                 Waat
               </template>
 
-            <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0" resizable>
+            <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0">
               <template>
                 <span class="elItem">[[item.user.name.first]]</span>
               </template>
@@ -99,7 +99,7 @@
               </template>
             </vaadin-grid-column>
 
-            <vaadin-grid-column width="20%" resizable>
+            <vaadin-grid-column width="20%">
               <template>
                 <paper-input value="{{item.user.name.last}}"></paper-input>
               </template>

@@ -72,7 +72,12 @@ The `class` attribute is used to differentiate header and footer templates.
        */
       resizable: {
         type: Boolean,
-        value: false
+        value: function() {
+          var parent = Polymer.dom(this).parentNode;
+          if (parent && parent.localName === 'vaadin-grid-column-group') {
+            return parent.resizable;
+          }
+        }
       },
 
       /**
@@ -119,13 +124,8 @@ The `class` attribute is used to differentiate header and footer templates.
     observers: [
       '_footerTemplateChanged(footerTemplate)',
       '_headerTemplateChanged(headerTemplate)',
-      '_lastFrozenChanged(_lastFrozen)',
-      '_resizableChanged(resizable)'
+      '_lastFrozenChanged(_lastFrozen)'
     ],
-
-    _resizableChanged: function(resizable) {
-      this.fire('property-changed', {path: 'resizable', value: resizable});
-    },
 
     _selectFirstTemplate: function(selector) {
       return Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
@@ -224,7 +224,8 @@ The `class` attribute is used to differentiate header and footer templates.
       '_frozenChanged(frozen, isAttached)',
       '_hiddenChanged(hidden)',
       '_orderChanged(_order)',
-      '_reorderStatusChanged(_reorderStatus)'
+      '_reorderStatusChanged(_reorderStatus)',
+      '_resizableChanged(resizable)'
     ],
 
     _frozenChanged: function(frozen, isAttached) {
@@ -259,7 +260,11 @@ The `class` attribute is used to differentiate header and footer templates.
 
     _reorderStatusChanged: function(reorderStatus) {
       this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
-    }
+    },
+
+    _resizableChanged: function(resizable) {
+      this.fire('property-changed', {path: 'resizable', value: resizable});
+    },
   };
 
   /**
@@ -338,7 +343,8 @@ The `class` attribute is used to differentiate header and footer templates.
       '_visibleChildColumnsChanged(_visibleChildColumns)',
       '_colSpanChanged(colSpan)',
       '_orderChanged(_order, _rootColumns)',
-      '_reorderStatusChanged(_reorderStatus, _rootColumns)'
+      '_reorderStatusChanged(_reorderStatus, _rootColumns)',
+      '_resizableChanged(resizable, _rootColumns)'
     ],
 
     listeners: {
@@ -411,6 +417,14 @@ The `class` attribute is used to differentiate header and footer templates.
       });
 
       this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
+    },
+
+    _resizableChanged: function(resizable, rootColumns) {
+      rootColumns.forEach(function(column) {
+        column.resizable = resizable;
+      });
+
+      this.fire('property-changed', {path: 'resizable', value: resizable});
     },
 
     _updateVisibleChildColumns: function(childColumns) {
