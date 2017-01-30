@@ -197,6 +197,11 @@ This program is available under Apache License Version 2.0, available at https:/
       ready() {
         super.ready();
         this.invalid = this._isInvalid();
+
+        // Make FF take the focus (#9)
+        if (this.autofocus) {
+          this.$.input.focus();
+        }
       }
 
       _valueChanged(value) {
