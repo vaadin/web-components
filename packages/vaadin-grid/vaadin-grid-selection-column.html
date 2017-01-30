@@ -19,10 +19,10 @@ When the grid is configured with an array of items as the data provider, it prov
 <dom-module id="vaadin-grid-selection-column">
   <template>
     <template class="header" id="defaultHeaderTemplate">
-      <input hidden$="[[_selectAllHidden]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"/>
+      <input aria-label="Select All" hidden$="[[_selectAllHidden]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"/>
     </template>
     <template>
-      <input type="checkbox" checked="{{selected::change}}" />
+      <input aria-label="Select Row" type="checkbox" checked="{{selected::change}}" />
     </template>
   </template>
 </dom-module>

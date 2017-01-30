@@ -1,12 +1,10 @@
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 
 <dom-module id="vaadin-grid-navigation-themability-styles">
   <template>
     <style>
-      :host(:focus),
-      #headerFocusTrap:focus,
-      #bodyFocusTrap:focus,
-      #footerFocusTrap:focus {
+      :host(:focus) {
         outline: none;
       }
 
@@ -29,7 +27,8 @@
   vaadin.elements.grid.KeyboardNavigationBehaviorImpl = {
     hostAttributes: {
       // keys can be listened only when vaadin-grid is focusable
-      'tabindex': -1
+      'tabindex': -1,
+      'role': 'application'
     },
 
     keyBindings: {
@@ -51,15 +50,15 @@
       'up': '_onArrowUp'
     },
 
+    listeners: {
+      'focusout': '_onFocusout'
+    },
+
     attached: function() {
-      this.addEventListener('blur', this._onBlur, true);
+      Polymer.IronA11yAnnouncer.requestAvailability();
     },
 
-    detached: function() {
-      this.removeEventListener('blur', this._onBlur, true);
-    },
-
-    _onBlur: function(e) {
+    _onFocusout: function(e) {
       this.$.scroller.navigating = false;
       this.$.scroller.interacting = false;
     },
@@ -187,12 +186,16 @@
     },
 
     _onFooterFocus: function(e) {
-      this.navigating = true;
-      this.interacting = false;
-      var container = this._isFooterVisible() ? this.$.footer : this.$.items;
-      container._focusedCellIndex = container._focusedCellIndex || 0;
-      container._focusedRowIndex = container._focusedRowIndex || 0;
-      this._virtualFocus = container;
+      if (this._isFooterVisible()) {
+        this.navigating = true;
+        this.interacting = false;
+
+        this.$.footer._focusedCellIndex = this.$.footer._focusedCellIndex || 0;
+        this.$.footer._focusedRowIndex = this.$.footer._focusedRowIndex || 0;
+        this._virtualFocus = this.$.footer;
+      } else if (!this._virtualFocus) {
+        this.$.bodyFocusTrap.focus();
+      }
     },
 
     _virtualFocusChanged: function(virtualFocus, oldVirtualFocus) {
@@ -268,6 +271,7 @@
             e.preventDefault();
             break;
           case this.$.header:
+            this.$.headerFocusTrap.focus();
             this._virtualFocus = null;
             break;
         }
@@ -298,8 +302,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusDown();
       this.navigating = true;
+      this._virtualFocus.focusDown();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -319,6 +323,7 @@
 
       e.preventDefault();
 
+      this.navigating = true;
       if (this._virtualFocus === this.$.items) {
         var prevLastVisible = this.lastVisibleIndex;
         this._scrollPageDown();
@@ -328,7 +333,6 @@
       } else {
         this._virtualFocus.focusPageDown();
       }
-      this.navigating = true;
     },
 
     _scrollPageUp: function() {
@@ -346,6 +350,7 @@
 
       e.preventDefault();
 
+      this.navigating = true;
       if (this._virtualFocus === this.$.items) {
         var prevLastVisibleIndex = this.lastVisibleIndex;
         this._scrollPageUp();
@@ -355,7 +360,6 @@
       } else {
         this._virtualFocus.focusPageUp();
       }
-      this.navigating = true;
     },
 
     _onArrowUp: function(e) {
@@ -365,8 +369,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusUp();
       this.navigating = true;
+      this._virtualFocus.focusUp();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -378,8 +382,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusRight();
       this.navigating = true;
+      this._virtualFocus.focusRight();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -391,8 +395,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusLeft();
       this.navigating = true;
+      this._virtualFocus.focusLeft();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -404,8 +408,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusHome();
       this.navigating = true;
+      this._virtualFocus.focusHome();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -417,8 +421,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusEnd();
       this.navigating = true;
+      this._virtualFocus.focusEnd();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -465,8 +469,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusFirst();
       this.navigating = true;
+      this._virtualFocus.focusFirst();
 
       this._ensureVirtualFocusInViewport();
     },
@@ -478,8 +482,8 @@
 
       e.preventDefault();
 
-      this._virtualFocus.focusLast();
       this.navigating = true;
+      this._virtualFocus.focusLast();
 
       this._ensureVirtualFocusInViewport();
     },

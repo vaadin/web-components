@@ -35,6 +35,10 @@
         var item = e.detail.inst.item;
         (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
 
+        this.fire('iron-announce', {
+          text: (this._isSelected(item) ? 'Selected' : 'Deselected') + ' Row ' + (e.detail.inst.index + 1) + ' of ' + this.size
+        });
+
         // stop this internal event from propagating outside.
         e.stopPropagation();
       }

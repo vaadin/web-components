@@ -1,0 +1,70 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-grid-table-focus-trap">
+  <template>
+    <style>
+     :host(:focus),
+     .primary:focus,
+     ::content .primary:focus,
+     .secondary:focus,
+     ::content .secondary:focus {
+       outline: none;
+     }
+    </style>
+
+    <div class="primary" tabindex="0" role="gridcell"></div>
+    <div class="secondary" tabindex="-1" role="gridcell"></div>
+
+    <slot></slot>
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-table-focus-trap',
+
+      hostAttributes: {
+        'tabindex': -1,
+        'role': 'gridcell' // gridcell roles are for VoiceOver to announce "you're in a cell"
+      },
+
+      listeners: {
+        'focus': '_onFocus'
+      },
+
+      properties: {
+        activeTarget: {
+          type: String,
+          observer: '_activeTargetChanged'
+        }
+      },
+
+      ready: function() {
+        this._primary = Polymer.dom(this.root).querySelector('.primary');
+        this._secondary = Polymer.dom(this.root).querySelector('.secondary');
+
+        // In native shadow, focus traps need to be inside the same scope as
+        // the "labelled by" elements
+        if (Polymer.Settings.useNativeShadow) {
+          Polymer.dom(this).appendChild(this._primary);
+          Polymer.dom(this).appendChild(this._secondary);
+        }
+      },
+
+      _onFocus: function(e) {
+        this.parentElement.scrollIntoView();
+        this._primary.focus();
+      },
+
+      _activeTargetChanged: function(target) {
+        // moving focus seems to be the most reliable way to get different screenreaders
+        // to announce the "aria-labelledby" property
+        if (this._primary.matches(':focus')) {
+          this._secondary.setAttribute('aria-labelledby', target);
+          this._secondary.focus();
+        } else {
+          this._primary.setAttribute('aria-labelledby', target);
+          this._primary.focus();
+        }
+      }
+    });
+  </script>
+</dom-module>

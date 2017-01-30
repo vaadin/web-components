@@ -59,6 +59,14 @@
       extends: 'tbody',
       behaviors: [vaadin.elements.grid.FocusableCellContainerBehavior],
 
+      observers: ['_announceFocusedRow(_focusedRow)'],
+
+      _announceFocusedRow: function(row) {
+        this.fire('iron-announce', {
+          text: 'Row ' + (row.index + 1) + ' of ' + this.domHost.size
+        });
+      },
+
       _moveFocusToDetailsCell: function() {
         this._focusedCell.focused = false;
         this._focusedRow._rowDetailsCell.focused = true;

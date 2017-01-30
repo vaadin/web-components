@@ -237,7 +237,7 @@
           it('should disable navigation mode when blurred', function() {
             scroller.navigating = true;
 
-            scroller.fire('blur');
+            scroller.fire('focusout');
 
             expect(scroller.navigating).to.be.false;
           });
@@ -311,19 +311,17 @@
           });
 
           it('should have a focus trap as the very first child', function() {
-            expect(grid.tabIndex).not.to.eql(0);
-
-            // header focus trap needs to be the first element in Shadow DOM.
-            var trap = Polymer.dom(scroller.root).querySelector(':not(style)');
-
-            expect(trap.tabIndex).to.eql(0);
+            // header focus trap needs to be the first element
+            var trap = Polymer.dom(Polymer.Settings.useNativeShadow ? grid : scroller.root).querySelector(':not(style)');
+  
+            expect(trap.children[0].tabIndex).to.eql(0);
           });
 
           it('should have a focus trap as the very last child', function() {
-            // footer focus trap needs to be the last element in Light DOM.
+            // footer focus trap needs to be the last element
             var trap = Polymer.Settings.useNativeShadow ? grid.lastElementChild : scroller.lastElementChild;
 
-            expect(trap.tabIndex).to.eql(0);
+            expect(trap.children[0].tabIndex).to.eql(0);
           });
 
           it('should be possible to tab through grid', function() {
@@ -1141,7 +1139,7 @@
           it('should exit interaction mode when blurred', function() {
             scroller.interacting = true;
 
-            scroller.fire('blur');
+          scroller.fire('focusout');
 
             expect(scroller.interacting).to.be.false;
           });
@@ -1392,7 +1390,102 @@
           });
         });
       });
-    }
+
+      describe('a11y', function() {
+        it('should move focus when focused cell is changed', function() {
+          headerTrap.focus.restore();
+          headerTrap.focus.restore = sinon.spy();
+
+          var spy = sinon.spy();
+          headerTrap._primary.focus = spy;
+
+          headerTrap.activeTarget = 'foobar';
+
+          expect(spy.callCount).to.eql(1);
+        });
+
+        it('should set announce target when virtual focus changes to header', function() {
+          headerTrap.focus();
+
+          expect(headerTrap.activeTarget).not.to.be.empty;
+        });
+
+        it('should set announce target when virtual focus changes to body', function() {
+          bodyTrap.focus();
+
+          expect(bodyTrap.activeTarget).not.to.be.empty;
+        });
+
+        it('should set announce target when virtual focus changes to footer', function() {
+          footerTrap.focus();
+
+          expect(footerTrap.activeTarget).not.to.be.empty;
+        });
+
+        it('should announce row number on body when navigating with keys', function() {
+          var spy = sinon.spy();
+          grid.addEventListener('iron-announce', spy);
+
+          // simulate tab
+          bodyTrap.focus();
+
+          expect(spy.callCount).to.eql(1);
+          expect(spy.args[0][0].detail.text).to.eql('Row 1 of 2');
+        });
+
+        it('should announce selection using template variable', function() {
+          var spy = sinon.spy();
+          grid.addEventListener('iron-announce', spy);
+
+          getCell(0, 0).instance.selected = true;
+
+          expect(spy.callCount).to.eql(1);
+          expect(spy.args[0][0].detail.text).to.eql('Selected Row 1 of 2');
+        });
+
+        it('should announce deselection using template variable', function() {
+          var spy = sinon.spy();
+          grid.addEventListener('iron-announce', spy);
+
+          grid.selectItem(grid.items[0]);
+          getCell(0, 0).instance.selected = false;
+
+          expect(spy.callCount).to.eql(1);
+          expect(spy.args[0][0].detail.text).to.eql('Deselected Row 1 of 2');
+        });
+
+        it('should announce focused cell when focused', function(done) {
+          bodyTrap.focus();
+
+          var id = getCell(0, 0)._cellContent.id;
+
+          bodyTrap.async(function() {
+            expect(bodyTrap._primary.getAttribute('aria-labelledby') +
+              bodyTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
+            done();
+          });
+        });
+
+        it('should announce header cell when body cell is focused', function(done) {
+          bodyTrap.focus();
+
+          var id = getFirstHeaderCell(0)._cellContent.id;
+
+          bodyTrap.async(function() {
+            expect(bodyTrap._primary.getAttribute('aria-labelledby') +
+              bodyTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
+            done();
+          });
+        });
+
+        if (window.Polymer && Polymer.Settings.useNativeShadow) {
+          it('should have tabbable elements in the light DOM', function() {
+            expect(headerTrap.querySelector('.primary')).not.to.be.null;
+            expect(headerTrap.querySelector('.secondary')).not.to.be.null;
+          });
+        }
+      });
+    });
   </script>
 
 </body>
