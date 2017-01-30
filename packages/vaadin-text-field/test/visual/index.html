@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../bower_components/polymer/polymer.html" rel="import">
+  <link href="../../vaadin-input.html" rel="import">
+</head>
+
+<body>
+
+  <form style="display: inline-block">
+    <fieldset id="visual-tests">
+      <p>
+      default input: <vaadin-input></vaadin-input>
+      <p>
+      input with value: <vaadin-input value="Go Vaadin"></vaadin-input>
+      <p>
+      <custom-style>
+        <style>
+          #hidden-caret {
+            --vaadin-input: {
+              font-size: 0;
+              padding: 10px 100px;
+            }
+          }
+        </style>
+      </custom-style>
+      <!-- we can't predict if caret will be visible or not, so hide it -->
+      focused input: <vaadin-input autofocus id="hidden-caret"></vaadin-input>
+      <p>
+      disabled input: <vaadin-input disabled></vaadin-input>
+      <p>
+      input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
+      <p>
+      invalid input: <vaadin-input required></vaadin-input>
+    </fieldset>
+  </form>
+
+</body>

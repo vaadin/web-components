@@ -5,6 +5,7 @@
     "beforeEach": false,
     "fixture": false,
     "it": false,
-    "expect": false
+    "expect": false,
+    "gemini": false
   }
 }

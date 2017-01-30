@@ -6,7 +6,7 @@
   "repository": "vaadin/vaadin-input",
   "keywords": [
     "Vaadin",
-    "<element-related-keywords>",
+    "input",
     "web-components",
     "web-component",
     "polymer"
@@ -18,11 +18,12 @@
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
-    "test": "wct",
-    "postinstall": "node_modules/.bin/bower install"
+    "test": "wct"
   },
   "devDependencies": {
-    "bower": "latest",
+    "gemini": "^4.14.3",
+    "gemini-express": "^1.0.0",
+    "gemini-sauce": "^1.0.0",
     "gulp": "latest",
     "gulp-html-extract": "^0.0.3",
     "gulp-eslint": "^3.0.1",
