@@ -527,11 +527,9 @@ Custom property | Description | Default
 
     _onDragover: function(event) {
       event.preventDefault();
-      if (!this.nodrop) {
-        if (!this._dragover) {
-          this._dragoverValid = !this._maxFilesAdded();
-        }
-        if (this._dragoverValid && !this._dragover) {
+      if (!this.nodrop && !this._dragover) {
+        this._dragoverValid = !this._maxFilesAdded();
+        if (this._dragoverValid) {
           this._dragRippleAction('down', event);
         }
         this._dragover = true;
