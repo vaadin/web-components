@@ -130,6 +130,33 @@
         expect(grid.$.scroller.hasAttribute('resizing')).to.be.false;
       });
 
+      it('should not fix width for succeeding columns', function() {
+        grid._columnTree[0][1].width = '50%';
+        grid._columnTree[0][1].flexGrow = 1;
+        Polymer.Base.fire('track', {state: 'start'}, {node: handle});
+        expect(grid._columnTree[0][1].width).to.equal('50%');
+        expect(grid._columnTree[0][1].flexGrow).to.equal(1);
+      });
+
+      it('should fix width for preceding columns', function() {
+        grid._columnTree[0][1].resizable = true;
+
+        grid._columnTree[0][0].width = '50%';
+        grid._columnTree[0][0].flexGrow = 1;
+        Polymer.Base.fire('track', {state: 'start'}, {node: headerCells[1]._resizeHandle});
+        expect(grid._columnTree[0][0].width.indexOf('px')).not.to.equal(-1);
+        expect(grid._columnTree[0][0].flexGrow).to.equal(0);
+      });
+
+      it('should fix width for preceding columns after column reordering', function() {
+        dragAndDropOver(getHeaderCellContent(grid, 0, 0), getHeaderCellContent(grid, 0, 1));
+        grid._columnTree[0][1].width = '50%';
+        grid._columnTree[0][1].flexGrow = 1;
+        Polymer.Base.fire('track', {state: 'start'}, {node: handle});
+        expect(grid._columnTree[0][1].width.indexOf('px')).not.to.equal(-1);
+        expect(grid._columnTree[0][1].flexGrow).to.equal(0);
+      });
+
     });
 
     describe('column group resizing', function() {

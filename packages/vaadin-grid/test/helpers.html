@@ -249,4 +249,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var cells = getRowCells(rows[row]);
     return getCellContent(cells[col]);
   }
+
+  function dragStart(source) {
+    var start = new CustomEvent('dragstart', {
+      bubbles: true
+    });
+    start.dataTransfer = {
+      setData: function() {
+        // Ignore
+      }
+    };
+    source.dispatchEvent(start);
+  }
+
+  function dragOver(source, target, clientX) {
+    dragStart(source);
+    var over = new CustomEvent('dragover', {
+      bubbles: true
+    });
+    var targetRect = target.getBoundingClientRect();
+    over.clientX = clientX || targetRect.left + targetRect.width / 2;
+    target.dispatchEvent(over);
+  }
+
+  function dragAndDropOver(source, target) {
+    dragOver(source, target);
+    var dragend = new CustomEvent('dragend', {
+      bubbles: true
+    });
+    source.dispatchEvent(dragend);
+  }
 </script>

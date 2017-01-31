@@ -37,6 +37,9 @@
     "firefox": false,
     "listenOnce": false,
     "MockInteractions": false,
-    "afterEach": false
+    "afterEach": false,
+    "dragStart": false,
+    "dragOver": false,
+    "dragAndDropOver": false
   }
 }

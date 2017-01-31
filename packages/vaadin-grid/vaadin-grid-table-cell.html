@@ -280,8 +280,8 @@
         if (e.target === this._resizeHandle) {
           this.columnResizing = true;
 
+          // Get the target column to resize
           var column = this.column;
-          // Mind reorder
           if (column.localName === 'vaadin-grid-column-group') {
             column = column._childColumns.slice(0)
             .sort(function(a, b) {
@@ -289,14 +289,28 @@
             })
             .pop();
           }
-
           var targetCell = this._getHeaderCellByColumn(column);
+
+          // Resize the target column
           if (targetCell.offsetWidth) {
             var style = window.getComputedStyle(targetCell._cellContent);
             var minWidth = 10 + parseInt(style.paddingLeft) + parseInt(style.paddingRight);
             column.width = Math.max(minWidth, targetCell.offsetWidth + e.detail.x - targetCell.getBoundingClientRect().right) + 'px';
             column.flexGrow = 0;
           }
+
+          // Fix width and flex-grow for all preceding columns
+          var thead = this.parentElement.parentElement;
+          Polymer.dom(thead).querySelectorAll('tr:last-child th')
+          .sort(function(a, b) {
+            return a.column._order - b.column._order;
+          })
+          .forEach(function(cell, index, array) {
+            if (index < array.indexOf(targetCell)) {
+              cell.column.width = cell.offsetWidth + 'px';
+              cell.column.flexGrow = 0;
+            }
+          });
         }
 
         if (this.columnResizing && e.detail.state === 'end') {
