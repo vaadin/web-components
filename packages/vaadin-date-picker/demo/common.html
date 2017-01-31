@@ -4,53 +4,16 @@
 <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../paper-styles/default-theme.html">
 <link rel="import" href="../../elements-demo-resources/common.html">
+
+<!-- Menu Items -->
+<script>
+  window.demos = [
+    {name: 'index', title: 'Basic Examples'},
+    {name: 'advanced', title: 'Advanced Usage'}
+  ];
+</script>
+<link rel="import" href="../../elements-demo-resources/demo-navigation.html">
+
+<!-- The component to demo -->
 <link rel="import" href="../vaadin-date-picker.html">
 <link rel="import" href="../vaadin-date-picker-light.html">
-
-<!-- Common styles for all examples -->
-<style is="custom-style" include="demo-pages-shared-styles">
-  :root {
-    --primary-color: #00B4F0;
-    --light-primary-color: #7CD8F7;
-    --dark-primary-color: #0078A0;
-    --error-color: #E61E6E;
-  }
-
-  nav {
-    display: block;
-  }
-
-  nav.vertical-section {
-    margin-left: 0;
-    margin-right: 0;
-    padding-top: 8px;
-    padding-bottom: 0;
-  }
-
-  nav > ul {
-    padding: 0;
-  }
-
-  nav > ul > li {
-    padding: 0 24px 8px 0;
-    list-style: none;
-  }
-
-  nav a,
-  nav b {
-    @apply(--paper-font-button);
-  }
-
-  nav a {
-    color: var(--primary-color);
-    text-decoration: none;
-  }
-
-  nav b {
-    color: var(--secondary-text-color);
-  }
-
-  .centered {
-    max-width: 800px;
-  }
-</style>
