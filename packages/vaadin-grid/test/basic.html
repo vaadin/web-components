@@ -1,218 +1,156 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE
-The complete set of authors may be found at http://polymer.github.io/AUTHORS
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS
--->
 <html>
+
 <head>
   <meta charset="UTF-8">
-  <title>iron-list test</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="helpers.html">
-  <link rel="import" href="x-list.html">
+  <link rel="import" href="../vaadin-grid.html">
 </head>
+
 <body>
 
-  <test-fixture id="trivialList">
+  <test-fixture id="default">
     <template>
-      <x-list></x-list>
+      <vaadin-grid style="width: 200px; height: 200px;" size="1000">
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
     </template>
   </test-fixture>
 
-<script>
+  <script>
+    describe('basic features', function() {
+      var scroller, grid;
 
-  suite('basic features', function() {
-    var list, container;
+      beforeEach(function(done) {
+        grid = fixture('default');
+        grid.dataSource = infiniteDataSource;
 
-    suiteSetup(function(done) {
-      HTMLImports.whenReady(function() {
-        done();
+        scroller = grid.$.scroller;
+        Polymer.Base.async(done, 1);
       });
-    });
 
-    setup(function(done) {
-      container = fixture('trivialList');
-      list = container.list;
-      Polymer.Base.async(done, 1);
-    });
+      it('check physical item heights', function() {
+        var rowHeight = scroller._physicalItems[0].offsetHeight;
 
-    test('check physical item heights', function(done) {
-      list.size = 100;
-
-      flush(function() {
-        var rowHeight = list._physicalItems[0].offsetHeight;
-
-        list._physicalItems.forEach(function(item) {
-          assert.equal(item.offsetHeight, rowHeight);
-        });
-
-        done();
-      });
-    });
-
-    test('check visible item count', function(done) {
-      list.size = 10;
-
-      flush(function() {
-        expect(Polymer.dom(list.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
-        done();
-      });
-    });
-
-    test('first visible index', function(done) {
-      list.size = 100;
-
-      Polymer.dom.flush();
-      assert.equal(list.firstVisibleIndex, 0);
-
-      list.async(function() {
-
-        list.scroll(0, container.itemHeight * 50);
-
-        list.async(function() {
-          assert.equal(list.firstVisibleIndex, 50);
-
-          list.scrollToIndex(0);
-          list.async(function() {
-            assert.equal(list.firstVisibleIndex, 0);
-            done();
-          });
-        }, 100);
-      }, 100);
-    });
-
-    test('last visible index', function(done) {
-      var actualHeight = 100 + 1; // 100px height + border
-      list.size = 100;
-
-      list.scrollToIndex(2);
-
-      flush(function() {
-        assert.equal(list.lastVisibleIndex, Math.ceil(((list._scrollTop + container.listHeight) / actualHeight) - 1));
-        done();
-      }, 1);
-
-    });
-
-    test('scroll to index', function(done) {
-      list.size = 100;
-      container.itemHeight = 83; // magic height 83px wont have rounding errors in itemsPerViewPort
-
-      setTimeout(function() {
-        list.scrollToIndex(30);
-        assert.equal(list.firstVisibleIndex, 30);
-
-        list.scrollToIndex(0);
-        assert.equal(list.firstVisibleIndex, 0);
-
-        list.scrollToIndex(99);
-
-        setTimeout(function() {
-          var rowHeight = getFirstVisibleItem(list).offsetHeight;
-          var viewportHeight = list.offsetHeight;
-          var itemsPerViewport = viewportHeight / rowHeight;
-
-          assert.equal(list.firstVisibleIndex, Math.floor(list.size - itemsPerViewport));
-
-          // make the height of the viewport same as the height of the row
-          // and scroll to the last item
-          list.style.height = list._physicalItems[0].offsetHeight + 'px';
-
-          setTimeout(function() {
-            list.scrollToIndex(99);
-            assert.equal(list.firstVisibleIndex, 99);
-            done();
-          }, 100);
-        }, 100);
-      }, 100);
-    });
-
-    test('scroll to top', function(done) {
-      list.size = 100;
-      Polymer.dom.flush();
-      list.scrollToIndex(99);
-      Polymer.dom.flush();
-      list.scroll(0, 0);
-      setTimeout(function() {
-        assert.equal(list._scrollTop, 0, 'scrollTop = 0');
-        done();
-      }, 100);
-    });
-
-    test('scroll to a given scrollTop', function(done) {
-      list.size = 100;
-      Polymer.dom.flush();
-      list.scrollToIndex(99);
-      Polymer.dom.flush();
-      list.$.table.addEventListener('scroll', function() {
-        assert.equal(list.$.table.scrollTop, 500, 'scrollTop = 500');
-        done();
-      });
-      list.scroll(0, 500);
-    });
-
-    test('reset items', function(done) {
-      list.size = 100;
-
-      flush(function() {
-        assert.equal(getCellContent(getFirstVisibleItem(list)).textContent, '0');
-
-        list.size = 0;
-
-        flush(function() {
-          assert.equal(getFirstVisibleItem(list), null);
-          list.size = 100;
-
-          flush(function() {
-            assert.equal(getCellContent(getFirstVisibleItem(list)).textContent, '0');
-            done();
-          });
+        scroller._physicalItems.forEach(function(item) {
+          expect(item.offsetHeight).to.equal(rowHeight);
         });
       });
-    });
 
-    test('reorder rows', function() {
-      list.size = 100000;
-      [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
-        list.$.table.scrollTop = 5000 + list._physicalAverage * steps;
-        list._scrollHandler();
-        list.flushDebouncer('_debounceTemplate');
-        list.flushDebouncer('vaadin-grid-scrolling');
-        // Expect the physical rows to be in order after scrolling
-        var rows = Polymer.dom(list.$.items).querySelectorAll('tr');
-        for (var i = 1; i < rows.length; i++) {
-          expect(rows[i].index).to.equal(rows[i - 1].index + 1);
-        }
+      it('check visible item count', function() {
+        scroller.size = 10;
+        Polymer.dom.flush();
+        expect(Polymer.dom(scroller.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
       });
-    });
 
-    test('reorder should not affect light dom', function() {
-      list.size = 100000;
-      var wrappers = Polymer.dom(container).querySelectorAll('.cell-content');
-
-      [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
-        list.$.table.scrollTop = 5000 + list._physicalAverage * steps;
-        list._scrollHandler();
-        list.flushDebouncer('_debounceTemplate');
-        list.flushDebouncer('vaadin-grid-scrolling');
-
-        var newWrappers = Polymer.dom(container).querySelectorAll('.cell-content');
-        // Expect the light dom order unchanged
-        expect(newWrappers).to.eql(wrappers);
+      it('first visible index', function() {
+        expect(scroller.firstVisibleIndex).to.equal(0);
+        scroller.scroll(0, scroller._physicalAverage * 50);
+        scroller._scrollHandler();
+        expect(scroller.firstVisibleIndex).to.equal(50);
+        scroller.scrollToIndex(0);
+        scroller._scrollHandler();
+        expect(scroller.firstVisibleIndex).to.equal(0);
       });
-    });
 
-  });
-</script>
+      it('last visible index', function() {
+        var actualHeight = scroller._physicalAverage;
+        scroller.scrollToIndex(2);
+        expect(scroller.lastVisibleIndex, Math.ceil(((scroller._scrollTop + grid.offsetHeight) / actualHeight) - 1));
+      });
+
+      it('scroll to index', function() {
+        scroller.size = 100;
+
+        scroller.scrollToIndex(30);
+        expect(scroller.firstVisibleIndex).to.equal(30);
+
+        scroller.scrollToIndex(0);
+        expect(scroller.firstVisibleIndex).to.equal(0);
+
+        scroller.scrollToIndex(99);
+
+        var rowHeight = getFirstVisibleItem(scroller).offsetHeight;
+        var viewportHeight = scroller.offsetHeight;
+        var itemsPerViewport = viewportHeight / rowHeight;
+
+        expect(scroller.firstVisibleIndex, Math.floor(scroller.size - itemsPerViewport));
+        scroller.scrollToIndex(0);
+        // make the height of the viewport same as the height of the row
+        // and scroll to the last item
+        grid.style.height = scroller._physicalItems[0].offsetHeight + 'px';
+        scroller.scrollToIndex(99);
+        expect(scroller.firstVisibleIndex).to.equal(99);
+      });
+
+      it('scroll to top', function() {
+        scroller.scrollToIndex(99);
+        scroller.scroll(0, 0);
+        expect(scroller._scrollTop).to.equal(0);
+      });
+
+      it('scroll to a given scrollTop', function() {
+        scroller.scrollToIndex(99);
+        scroller.scroll(0, 500);
+        expect(scroller.$.table.scrollTop).to.equal(500);
+      });
+
+      it('reset items', function() {
+        scroller.size = 100;
+
+        Polymer.dom.flush();
+        expect(getCellContent(getFirstVisibleItem(scroller)).textContent).to.equal('0');
+
+        scroller.size = 0;
+        Polymer.dom.flush();
+        expect(getFirstVisibleItem(scroller), null);
+
+        scroller.size = 100;
+        Polymer.dom.flush();
+        expect(getCellContent(getFirstVisibleItem(scroller)).textContent).to.equal('0');
+      });
+
+      it('reorder rows', function() {
+        scroller.size = 100000;
+        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+          scroller.$.table.scrollTop = 5000 + scroller._physicalAverage * steps;
+          scroller._scrollHandler();
+          scroller.flushDebouncer('_debounceTemplate');
+          scroller.flushDebouncer('vaadin-grid-scrolling');
+          // Expect the physical rows to be in order after scrolling
+          var rows = Polymer.dom(scroller.$.items).querySelectorAll('tr');
+          for (var i = 1; i < rows.length; i++) {
+            expect(rows[i].index).to.equal(rows[i - 1].index + 1);
+          }
+        });
+      });
+
+      it('reorder should not affect light dom', function() {
+        scroller.size = 100000;
+        var wrappers = Polymer.dom(grid).querySelectorAll('.cell-content');
+
+        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+          scroller.$.table.scrollTop = 5000 + scroller._physicalAverage * steps;
+          scroller._scrollHandler();
+          scroller.flushDebouncer('_debounceTemplate');
+          scroller.flushDebouncer('vaadin-grid-scrolling');
+
+          var newWrappers = Polymer.dom(grid).querySelectorAll('.cell-content');
+          // Expect the light dom order unchanged
+          expect(newWrappers).to.eql(wrappers);
+        });
+      });
+
+    });
+  </script>
 
 </body>
+
 </html>
