@@ -36,7 +36,7 @@
         grid = fixture('default');
         grid.dataSource = infiniteDataSource;
         scroller = grid.$.scroller;
-        fixedContainers = !!navigator.userAgent.match(/Edge/);
+        fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
       });
 
       function isFixed(element) {

@@ -58,11 +58,9 @@
     },
 
     _isFocusable: function(target) {
-      return target.matches &&
-             target.matches(':not([disabled])') &&
-             (target.matches('[tabindex]') ||
-             target.matches('button, input, select, textarea, object, iframe, label') ||
-             target.matches('a[href], area[href]'));
+      var isFocusableElement = Polymer.dom(target.parentNode)
+      .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]').indexOf(target) !== -1;
+      return !target.disabled && isFocusableElement;
     }
   };
 </script>
