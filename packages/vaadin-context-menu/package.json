@@ -18,17 +18,16 @@
   },
   "homepage": "https://vaadin.com/elements",
   "devDependencies": {
-    "bower": "latest",
     "eslint-plugin-html": "^1.7.0",
-    "eslint-config-vaadin": "github:vaadin/eslint-config-vaadin",
+    "eslint-config-vaadin": "^0.1.0",
     "gulp": "latest",
     "gulp-html-extract": "^0.2.0",
     "gulp-eslint": "^3.0.1",
     "gulp-stylelint": "^3.7.0",
-    "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
+    "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^5.0.0"
   },
   "scripts": {
-    "postinstall": "node_modules/.bin/bower install"
+    "test": "wct"
   }
 }
