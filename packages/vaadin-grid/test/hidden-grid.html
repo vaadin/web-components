@@ -57,7 +57,7 @@
       describe('revealed', function(done) {
 
         beforeEach(function(done) {
-          grid.$.scroller.addEventListener('animationend', function() {
+          listenOnce(grid.$.scroller, 'animationend', function() {
             Polymer.RenderStatus.afterNextRender(grid, done);
           });
           container.removeAttribute('hidden');

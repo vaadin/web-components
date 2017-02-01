@@ -701,7 +701,7 @@
       _resizeHandler: function() {
         // iOS fires the resize event when the address bar slides up
         if (IOS && Math.abs(this._viewportHeight - this._scrollTargetHeight) < 100) {
-          return;
+          // return;
         }
         // In Desktop Safari 9.0.3, if the scroll bars are always shown,
         // changing the scroll position from a resize handler would result in

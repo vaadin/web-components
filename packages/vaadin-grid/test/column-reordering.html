@@ -228,6 +228,7 @@
         it('should reorder multiple columns while dragging', function() {
           dragOver(headerContent[0], headerContent[1]);
           dragOver(headerContent[0], headerContent[3]);
+          grid.$.scroller.flushDebouncer('vaadin-grid-scrolling');
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 

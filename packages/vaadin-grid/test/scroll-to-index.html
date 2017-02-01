@@ -104,14 +104,16 @@
         });
 
         it('should clear scheduled scroll to index after init', function(done) {
-          scroller.scrollToScaledIndex(10);
-
           scroller.$.table.addEventListener('scroll', function() {
             scroller.debounce('table-scrolling', function() {
-              expect(scroller._pendingScrollToScaledIndex).not.to.be.ok;
-              done();
+              Polymer.RenderStatus.afterNextRender(scroller, function() {
+                expect(scroller._pendingScrollToScaledIndex).not.to.be.ok;
+                done();
+              });
             }, 100);
           });
+
+          scroller.scrollToScaledIndex(10);
         });
 
         it('should have correct indexes after scrolling', function(done) {

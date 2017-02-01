@@ -387,13 +387,13 @@
         it('should have last row fully visible when scrolled to end', function(done) {
           scrollToEnd(grid);
 
-          grid.async(function() {
+          Polymer.RenderStatus.afterNextRender(grid, function() {
             bodyRows = getRows(body);
             var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
             var footerTop = footer.getBoundingClientRect().top;
             expect(lastRowBottom).to.be.closeTo(footerTop, 1);
             done();
-          }, 1);
+          });
         });
       });
     });
