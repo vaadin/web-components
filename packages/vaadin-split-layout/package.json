@@ -18,8 +18,7 @@
   },
   "homepage": "https://vaadin.com/elements",
   "devDependencies": {
-    "bower": "latest",
-    "eslint-config-vaadin": "github:vaadin/eslint-config-vaadin",
+    "eslint-config-vaadin": "^0.1.0",
     "eslint-plugin-html": "^1.7.0",
     "gemini": "^4.14.3",
     "gemini-express": "^1.0.0",
@@ -28,10 +27,10 @@
     "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.1.0",
     "gulp-stylelint": "^3.7.0",
-    "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
+    "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^5.0.0"
   },
   "scripts": {
-    "postinstall": "node_modules/.bin/bower install"
+    "test": "wct"
   }
 }
