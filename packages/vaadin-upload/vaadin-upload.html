@@ -527,14 +527,14 @@ Custom property | Description | Default
 
     _onDragover: function(event) {
       event.preventDefault();
-      if (!this._dragover) {
+      if (!this.nodrop && !this._dragover) {
         this._dragoverValid = !this._maxFilesAdded();
-      }
-      if (this._dragoverValid && !this._dragover && !this.nodrop) {
-        this._dragRippleAction('down', event);
+        if (this._dragoverValid) {
+          this._dragRippleAction('down', event);
+        }
+        this._dragover = true;
       }
       event.dataTransfer.dropEffect = !this._dragoverValid || this.nodrop ? 'none' : 'copy';
-      this._dragover = true;
     },
 
     _onDragleave: function(event) {
