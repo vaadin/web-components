@@ -59,6 +59,7 @@ two `<paper-button>`s to act as the clear and toggle controls.
 
     <vaadin-combo-box-overlay
         id="overlay"
+        opened$=[[opened]]
         position-target="[[inputElement]]"
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
@@ -107,11 +108,13 @@ two `<paper-button>`s to act as the clear and toggle controls.
       this._revertInputValue();
       this.listen(this.inputElement, 'input', '_inputValueChanged');
       this.listen(this.inputElement, 'blur', '_onBlur');
+      this._preventInputBlur();
     },
 
     detached: function() {
       this.unlisten(this.inputElement, 'input', '_inputValueChanged');
       this.unlisten(this.inputElement, 'blur', '_onBlur');
+      this._restoreInputBlur();
     },
 
     get _propertyForValue() {

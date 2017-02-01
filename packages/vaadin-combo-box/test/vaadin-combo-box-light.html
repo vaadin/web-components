@@ -1,15 +1,13 @@
 <!doctype html>
-<html>
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-combo basic tests</title>
   <script src="../../web-component-tester/browser.js"></script>
-
   <script src="common.js"></script>
   <link rel="import" href="common.html">
   <link rel="import" href="../vaadin-combo-box-light.html">
   <link rel="import" href="../../iron-input/iron-input.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
 <body>
@@ -21,6 +19,17 @@
       </vaadin-combo-box-light>
     </template>
   </test-fixture>
+
+  <test-fixture id="combobox-light-paper-input">
+    <template>
+      <vaadin-combo-box-light>
+        <paper-input>
+          <paper-button suffix class="clear-button">Clear</paper-button>
+          <paper-button suffix class="toggle-button">Toggle</paper-button>
+        </paper-input>
+      </vaadin-combo-box-light>
+    </template>
+  </demo-snippet>
 
   <script>
     describe('vaadin-combo-box-light', function() {
@@ -62,8 +71,30 @@
         expect(spy.called).to.be.false;
       });
     });
+
+    describe('vaadin-combo-box-light-paper-input', function() {
+      var comboBox, paperInput;
+
+      beforeEach(function() {
+        comboBox = fixture('combobox-light-paper-input');
+        comboBox.items = ['foo', 'bar', 'baz'];
+      });
+
+      it('should toggle overlay by tapping toggle element', function() {
+        MockInteractions.tap(comboBox._toggleElement);
+        expect(comboBox.opened).to.be.true;
+
+        MockInteractions.tap(comboBox._toggleElement);
+        expect(comboBox.opened).to.be.false;
+      });
+
+      it('should prevent default on toggle element down', function() {
+        var e = new CustomEvent('down', {bubbles: true});
+        var spy = sinon.spy(e, 'preventDefault');
+        comboBox._toggleElement.dispatchEvent(e);
+        expect(spy.called).to.be.true;
+      });
+    });
   </script>
 
 </body>
-
-</html>

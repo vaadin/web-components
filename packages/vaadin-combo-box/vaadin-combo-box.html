@@ -357,13 +357,11 @@ Custom property | Description | Default
       // Use the default toggle/clear or one replaced in light DOM.
       this._toggleElement = Polymer.dom(this).querySelector('.toggle-button') || this.$.toggleIcon;
       this._clearElement = Polymer.dom(this).querySelector('.clear-button') || this.$.clearIcon;
-      this.listen(this._toggleElement, 'down', '_preventDefault');
-      this.listen(this._clearElement, 'down', '_preventDefault');
+      this._preventInputBlur();
     },
 
     detached: function() {
-      this.unlisten(this._toggleElement, 'down', '_preventDefault');
-      this.unlisten(this._clearElement, 'down', '_preventDefault');
+      this._restoreInputBlur();
     },
 
     _computeAlwaysFloatLabel: function(alwaysFloatLabel, placeholder) {
