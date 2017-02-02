@@ -3,7 +3,7 @@
 
 # Vaadin Icons
 
-[<img src="screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
+[<img src="https://raw.github.com/vaadin/vaadin-icons/master/screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
 
 
 [Vaadin Icons](https://vaadin.com/icons) is a set of 600+ icons designed for web applications. Free to use, anywhere!
