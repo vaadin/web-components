@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<script src="resizable.js"></script>
 
 <dom-module id="vaadin-board-row">
   <template>
@@ -15,13 +16,47 @@
         flex-grow: 1;
       }
     </style>
-    <slot></slot>
+    <slot id="insertionPoint"></slot>
   </template>
 
   <script>
-    class VaadinBoardRow extends Polymer.Element {
+    class VaadinBoardRow extends Resizable(Polymer.Element){
       static get is() {
         return "vaadin-board-row";
+      }
+      constructor() {
+        super();
+        this._onIronResize = this._onIronResize.bind(this);
+        this._ONE_COLUMN_MAX_WIDTH = 600;
+        this._TWO_COLUMNS_MAX_WIDTH = 1000;
+        this._oldWidth = 0;
+        this._oldFlexBasis = '0';
+      }
+      ready() {
+        super.ready();
+        this.addEventListener('iron-resize', this._onIronResize);
+      }
+      connectedCallback() {
+        super.connectedCallback();
+        Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
+      }
+      _onIronResize(e) {
+        const width = this.getBoundingClientRect().width;
+        if (width != this._oldWidth) {
+          const nodes = this.$.insertionPoint.assignedNodes();
+          const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
+          var newFlexBasis = '25%';
+          if (width < this._ONE_COLUMN_MAX_WIDTH) {
+            newFlexBasis = '100%';
+          } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
+            newFlexBasis = '50%';
+          }
+          if (newFlexBasis != this._oldFlexBasis) {
+            filteredNodes.forEach(e=>e.style.flexBasis = newFlexBasis);
+            this._oldFlexBasis = newFlexBasis;
+          }
+          this._oldWidth = width;
+        }
       }
     }
     customElements.define(VaadinBoardRow.is, VaadinBoardRow);
