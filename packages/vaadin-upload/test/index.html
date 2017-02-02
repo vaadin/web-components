@@ -14,14 +14,11 @@
 
     WCT.loadSuites([
       'upload.html',
-      'upload.html?dom=shadow',
       'adding-files.html',
-      'adding-files.html?dom=shadow',
-      'file-list.html',
-      'file-list.html?dom=shadow',
-      'angular2.html',
-      'angular2.html?dom=shadow'
-    ]);
+      'file-list.html'
+    ].reduce(function(suites, suite) {
+      return suites.concat([suite, suite + '?dom=shadow']);
+    }, []));
   </script>
 </body>
 
