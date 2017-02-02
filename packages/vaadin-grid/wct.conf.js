@@ -45,6 +45,7 @@ module.exports = {
           // TODO: @limonte, revisit this in future, currently a weird istanbul bug here
           // '/vaadin-grid-sort-behavior.html',
           '/vaadin-grid-table-cell.html',
+          '/vaadin-grid-table-focus-trap.html',
           '/vaadin-grid-table-header-footer.html',
           '/vaadin-grid-table-outer-scroller.html',
           '/vaadin-grid-table-row.html',
