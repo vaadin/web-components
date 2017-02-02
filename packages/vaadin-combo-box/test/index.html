@@ -13,7 +13,8 @@
     WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
     WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
 
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents.js');
+    var edge = window.navigator.userAgent.indexOf('Edge') > -1; // webcomponentsjs/issues/575
+    WCT._config.environmentScripts.push(edge ? 'webcomponentsjs/webcomponents-lite.js' : 'webcomponentsjs/webcomponents.js');
 
     WCT.loadSuites([
       'vaadin-combo-box-properties.html',
