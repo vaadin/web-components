@@ -384,6 +384,25 @@
               done();
             });
           });
+
+          it('should reuse column cells', function() {
+            Polymer.dom.flush();
+            var content = getHeaderCellContent(grid, 0, 0);
+            Polymer.dom(grid).appendChild(grid._columnTree[0][0]);
+            Polymer.dom.flush();
+            expect(getHeaderCellContent(grid, 0, 1)).to.equal(content);
+          });
+
+          it('should not create new cells', function() {
+            var row = getRows(grid.$.scroller.$.items)[0];
+            var spy = sinon.spy(row, '_createCell');
+            Polymer.dom.flush();
+            var content = getHeaderCellContent(grid, 0, 0);
+            Polymer.dom(grid).appendChild(grid._columnTree[0][0]);
+            Polymer.dom.flush();
+            expect(spy.called).to.be.false;
+          });
+
         });
 
         describe('columns inside group', function() {

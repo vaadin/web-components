@@ -16,6 +16,12 @@
       observers: ['_columnTreeChanged(columnTree, target)', '_rowsChanged(_rows)'],
 
       _columnTreeChanged: function(columnTree, target) {
+        if (this._rows) {
+          this._rows.forEach(function(row) {
+            Polymer.dom(row).innerHTML = '';
+          });
+        }
+
         var rows = [];
         for(var i = 0; i < columnTree.length; i++) {
           var row = this._createRow();
