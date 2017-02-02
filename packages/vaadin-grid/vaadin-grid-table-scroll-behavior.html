@@ -142,6 +142,10 @@
     },
 
     _onWheel: function(e) {
+      if (e.ctrlKey) {
+        return;
+      }
+
       var table = this.$.table;
       var momentum = Math.abs(e.deltaX) + Math.abs(e.deltaY);
 

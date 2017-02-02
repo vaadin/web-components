@@ -59,6 +59,21 @@
         Polymer.Base.async(done, 1);
       });
 
+      it('should cancel wheel event', function() {
+        var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+        e.deltaX = 1;
+        scroller.$.table.dispatchEvent(e);
+        expect(e.defaultPrevented).to.be.true;
+      });
+
+      it('should not cancel wheel event', function() {
+        var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+        e.deltaX = 1;
+        e.ctrlKey = true;
+        scroller.$.table.dispatchEvent(e);
+        expect(e.defaultPrevented).to.be.false;
+      });
+
       it('should invoke onScroll synchronously', function() {
         var spy = sinon.spy(scroller, '_translateStationaryElements');
         outerScroller._syncScrollTarget();
