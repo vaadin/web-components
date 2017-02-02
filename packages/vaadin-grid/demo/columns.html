@@ -45,15 +45,17 @@
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
           <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
-          <vaadin-grid data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid aria-label="Freezing Columns Example" data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px" frozen="[[frozen]]">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px" frozen="[[frozen]]">
-              <template class="header"></template>
+              <template class="header">
+                <div aria-label="Picture"></div>
+              </template>
               <template>
-                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+                <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column width="33%">
@@ -80,15 +82,17 @@
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
           <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
           <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
-          <vaadin-grid data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid aria-label="Hiding Columns Example" data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px" hidden="[[hidden]]">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px" hidden="[[hidden]]">
-              <template class="header"></template>
+              <template class="header">
+                <div aria-label="Picture"></div>
+              </template>
               <template>
-                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+                <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column width="33%">
@@ -113,15 +117,17 @@
       <template>
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <vaadin-grid data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
+          <vaadin-grid aria-label="Reordering and Resizing Columns Example" data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
             <vaadin-grid-column width="30px" flex-grow="0" resizable>
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px" flex-grow="0" resizable>
-              <template class="header"></template>
+              <template class="header">
+                <div aria-label="Picture"></div>
+              </template>
               <template>
-                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+                <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column-group resizable>
@@ -163,7 +169,7 @@
         <dom-module id="x-dynamic-columns">
           <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <vaadin-grid id="grid" data-provider="[[dataProvider]]" size="200">
+            <vaadin-grid aria-label="Dynamic Columns Example" id="grid" data-provider="[[dataProvider]]" size="200">
               <template is="dom-repeat" items="[[columns]]" as="column">
                 <vaadin-grid-column>
                   <template class="header">[[column]]</template>
