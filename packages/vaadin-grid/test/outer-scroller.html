@@ -45,8 +45,32 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="scrollable-content">
+    <template>
+      <vaadin-grid style="width: 200px; height: 400px;" size="100">
+        <vaadin-grid-column>
+          <template>
+            <div style="height: 100px; overflow: auto;">
+              <div style="height: 1000px;"></div>
+            </div>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    function wheel(target, deltaX, deltaY, ctrlKey) {
+      var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+      e.deltaX = deltaX;
+      e.deltaY = deltaY;
+      e.ctrlKey = ctrlKey;
+      target.dispatchEvent(e);
+      return e;
+    }
+
     describe('outer scroller', function() {
       var grid;
       var scroller;
@@ -66,17 +90,12 @@
       });
 
       it('should cancel wheel event', function() {
-        var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
-        e.deltaX = 1;
-        scroller.$.table.dispatchEvent(e);
+        var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1);
         expect(e.defaultPrevented).to.be.true;
       });
 
       it('should not cancel wheel event', function() {
-        var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
-        e.deltaX = 1;
-        e.ctrlKey = true;
-        scroller.$.table.dispatchEvent(e);
+        var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1, true);
         expect(e.defaultPrevented).to.be.false;
       });
 
@@ -233,6 +252,42 @@
         var expectedScrollHeight = cells[0].offsetHeight;
         expect(outerScroller.scrollHeight).to.eql(expectedScrollHeight);
       });
+    });
+
+    describe('scrollable-content', function() {
+      var grid, scrollable;
+
+      beforeEach(function() {
+        grid = fixture('scrollable-content');
+        grid.dataSource = infiniteDataSource;
+        Polymer.dom.flush();
+        scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
+      });
+
+      it('should not cancel wheel events for scrollable content', function() {
+        var e = wheel(scrollable, 0, 1);
+        expect(e.defaultPrevented).to.be.false;
+      });
+
+      it('should not scroll the grid', function() {
+        var scrollTop = grid.$.scroller._scrollTop;
+        var e = wheel(scrollable, 0, 1);
+        expect(grid.$.scroller._scrollTop).to.equal(scrollTop);
+      });
+
+      it('should cancel wheel events for scrollable content (scrolled to end)', function() {
+        scrollable.scrollTop = scrollable.scrollHeight;
+        var e = wheel(scrollable, 0, 1);
+        expect(e.defaultPrevented).to.be.true;
+      });
+
+      it('should scroll the grid (scrolled to end)', function() {
+        var scrollTop = grid.$.scroller._scrollTop;
+        scrollable.scrollTop = scrollable.scrollHeight;
+        var e = wheel(scrollable, 0, 1);
+        expect(grid.$.scroller._scrollTop).to.equal(scrollTop + 1);
+      });
+
     });
   </script>
 
