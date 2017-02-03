@@ -8,6 +8,10 @@
         transition: all 0.2s !important;
       }
 
+      :host([opened]) {
+        pointer-events: auto;
+      }
+
       :host([opened]) .rotate-on-open,
       :host([opened]) ::content .rotate-on-open {
         -webkit-transform: rotate(180deg);

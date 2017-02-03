@@ -80,6 +80,16 @@
         expect(combobox.opened).to.be.true;
       });
 
+      it('should set body `pointer-events: none` on open and restore initial value on close', function() {
+        document.body.style.pointerEvents = 'painted';
+        combobox.open();
+        expect(getComputedStyle(document.body).pointerEvents).to.be.equal('none');
+        expect(getComputedStyle(combobox).pointerEvents).to.be.equal('auto');
+        expect(getComputedStyle(combobox.$.overlay).pointerEvents).to.be.equal('auto');
+        combobox.close();
+        expect(getComputedStyle(document.body).pointerEvents).to.be.equal('painted');
+      });
+
       it('should not close an open popup', function() {
         combobox.open();
 
