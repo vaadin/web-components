@@ -171,7 +171,8 @@
         } else {
           it('should focus input on dropdown open', function() {
             var focusedInput = Polymer.dom(combobox.root).querySelector('input');
-            expect(focusedInput).to.equal(combobox.root.activeElement || document.activeElement);
+            var activeElement = combobox.root.activeElement || document.activeElement;
+            expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.equal(combobox.$.input);
           });
 
@@ -179,7 +180,8 @@
             tapToggleIcon();
 
             var focusedInput = Polymer.dom(combobox.root).querySelector('input');
-            expect(focusedInput).to.equal(combobox.root.activeElement || document.activeElement);
+            var activeElement = combobox.root.activeElement || document.activeElement;
+            expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.eql(combobox.$.input);
           });
         }
