@@ -13,9 +13,10 @@
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
-      'sample-test.html'
+      'vaadin-button_test.html',
+      'control-state.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?wc-shadydom=true']);
+      return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
   </script>
 </body>

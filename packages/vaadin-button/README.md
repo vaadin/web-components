@@ -21,7 +21,7 @@
 -->
 ```html
 <vaadin-button>
-  ...
+  Vaadin Button
 </vaadin-button>
 ```
 

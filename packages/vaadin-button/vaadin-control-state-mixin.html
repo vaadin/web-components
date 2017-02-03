@@ -1,0 +1,139 @@
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  // Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
+  // implementation fails in the shadow dom, so we have this for vaadin elements.
+  Vaadin.ControlStateMixin = subclass => class VaadinControlStateMixin extends subclass {
+    static get config() {
+      var cfg = {
+        properties: {
+
+          /**
+           * If true, the element currently has focus.
+           */
+          'autofocus': {
+            type: Boolean
+          },
+
+          /**
+           * If true, the element currently has focus.
+           */
+          'focused': {
+            type: Boolean,
+            notify: true,
+            readOnly: true,
+            observer: 'focusedChanged',
+            reflectToAttribute: true
+          },
+
+          /**
+           * If true, the user cannot interact with this element.
+           */
+          'disabled': {
+            type: Boolean,
+            observer: '_disabledChanged',
+            reflectToAttribute: true
+          },
+
+          /**
+           * Internal property needed to listen to `tabindex` attribute changes.
+           *
+           * For changing the tabindex of this component use the native `tabIndex` propety.
+           * @private
+           */
+          'tabindex': {
+            type: Number,
+            value: 0,
+            reflectToAttribute: true,
+            observer: '_tabindexChanged'
+          }
+        }
+      };
+
+      if (window.ShadyDOM) {
+        // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
+        cfg.properties['tabIndex'] = cfg.properties.tabindex;
+      }
+
+      return cfg;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addEventListener('focus', e => this._focus(e));
+      this.addEventListener('blur', () => this._setFocused(false));
+
+      this.addEventListener('keydown', e => {
+        if (e.shiftKey && e.keyCode === 9) {
+          this._skipFocus = !!window.ShadyDOM;
+          this.focus();
+        }
+      });
+
+      if (this.autofocus && !this.focused) {
+        window.requestAnimationFrame(() => this.focus());
+      }
+    }
+
+    /**
+     * Any element extending this mixin is required to implement this getter.
+     * It returns the actual focusable element in the component.
+     */
+    get focusElement() {
+      window.console.warn(`Please implement the 'focusElement' property in <${this.localName}>`);
+      return this;
+    }
+
+    _focus(e) {
+      this._setFocused(true);
+
+      if (this._skipFocus) {
+        this._skipFocus = false;
+        return;
+      }
+      this.focusElement.focus();
+    }
+
+    // Native bluring in the host element does nothing because it does not have the focus.
+    // In chrome it works, but not in FF.
+    blur() {
+      this.focusElement.blur();
+    }
+
+    _disabledChanged(disabled) {
+      this.focusElement.disabled = disabled;
+      if (disabled) {
+        this._setFocused(false);
+        this.blur();
+        this.tabindex = undefined;
+      } else {
+        this.tabindex = this.focusElement.tabIndex;
+      }
+
+      // Needed for Edge, until they have support for CSS Custom Properties
+      // (already shipping in Edge Preview)
+      this.updateStyles();
+    }
+
+    _tabindexChanged(tabindex) {
+      if (tabindex !== undefined) {
+        this.focusElement.tabIndex = tabindex;
+      }
+
+      if (this.disabled) {
+        this.tabindex = tabindex = undefined;
+      }
+
+      if (window.ShadyDOM) {
+        this.setProperties({tabIndex: tabindex, tabindex: tabindex});
+      }
+    }
+
+    focusedChanged() {
+      // Needed for Edge, until they have support for CSS Custom Properties
+      // (already shipping in Edge Preview)
+      this.updateStyles();
+    }
+  };
+</script>

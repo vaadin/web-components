@@ -1,16 +1,15 @@
-gemini.suite('vaadin-element', function(rootSuite) {
+gemini.suite('vaadin-button', function(rootSuite) {
 
   rootSuite.setUrl('/');
 
-  gemini.suite('button', function(suite) {
+  gemini.suite('vaadin-button', function(suite) {
     suite
       .setCaptureElements('#visual-tests')
-      .before(function(actions, find) {
-        this.button = find('button');
+      .capture('default', {}, function(actions, find) {
+        actions.wait(3000); // hack for IE/Edge
       })
-      .capture('normal-button')
-      .capture('clicked-button', function(actions) {
-        actions.mouseDown(this.button);
+      .capture('focus-tabindex', {}, function(actions, find) {
+        actions.sendKeys(gemini.TAB);
       });
   });
 
