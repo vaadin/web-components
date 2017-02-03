@@ -27,7 +27,8 @@
       },
 
       listeners: {
-        'focus': '_onFocus'
+        'focus': '_onFocus',
+        'focusin': '_onFocusin'
       },
 
       properties: {
@@ -54,10 +55,14 @@
         this._primary.focus();
       },
 
+      _onFocusin: function(e) {
+        this._focused = e.target;
+      },
+
       _activeTargetChanged: function(target) {
         // moving focus seems to be the most reliable way to get different screenreaders
         // to announce the "aria-labelledby" property
-        if (this._primary.matches(':focus')) {
+        if (this._focused === this._primary) {
           this._secondary.setAttribute('aria-labelledby', target);
           this._secondary.focus();
         } else {
