@@ -1,0 +1,49 @@
+rootUrl: http://127.0.0.1:3000/test/visual
+gridUrl: http://127.0.0.1:4444/wd/hub
+screenshotsDir: ./test/visual/screens
+
+system:
+  plugins:
+    express:
+      port: 3000
+    sauce: true
+
+browsers:
+  chrome:
+    desiredCapabilities:
+      browserName: "chrome"
+      version: "55.0"
+      platform: "Windows 10"
+
+  firefox:
+    desiredCapabilities:
+      browserName: "firefox"
+      version: "47.0"
+      platform: "Windows 10"
+
+  edge:
+    desiredCapabilities:
+      browserName: "microsoftedge"
+      version: "14"
+      platform: "Windows 10"
+
+  # The following setups don't currently work due to Selenium SafariDriver issue
+  # https://github.com/vaadin/vaadin-element-skeleton/issues/19
+  #
+  # safari:
+  #   desiredCapabilities:
+  #     browserName: "safari"
+  #     version: "10.0"
+  #     platform: "OS X 10.11"
+  #
+  # iphone:
+  #   desiredCapabilities:
+  #     browserName: "iphone"
+  #     version: "9.2"
+  #     platform: "OS X 10.11"
+  #
+  # ipad:
+  #   desiredCapabilities:
+  #     browserName: "ipad"
+  #     version: "9.2"
+  #     platform: "OS X 10.11"

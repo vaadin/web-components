@@ -1,0 +1,46 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-button>` is a Polymer element.
+
+```html
+<vaadin-button>
+</vaadin-button>
+```
+
+@element vaadin-button
+@demo demo/index.html
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-button">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+    class VaadinElement extends Polymer.Element {
+      static get is() {
+        return 'vaadin-button';
+      }
+
+      static get config() {
+        return {
+          properties: {
+          }
+        };
+      }
+    }
+
+    customElements.define(VaadinElement.is, VaadinElement);
+  </script>
+</dom-module>

@@ -1,0 +1,39 @@
+{
+  "name": "vaadin-button",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "vaadin-button",
+  "main": "vaadin-button.html",
+  "keywords": [
+    "Vaadin",
+    "button",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
+  ],
+  "devDependencies": {
+    "web-component-tester": "^5.0.0",
+    "test-fixture": "2.0.0",
+    "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
+    "iron-component-page": "polymerelements/iron-component-page#2.0-preview",
+    "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview"
+  },
+  "resolutions": {
+    "test-fixture": "^2.0.0"
+  },
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0-preview"
+  }
+}
