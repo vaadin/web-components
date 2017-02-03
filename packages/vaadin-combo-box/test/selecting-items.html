@@ -258,12 +258,10 @@
         clearIcon = combobox._clearElement;
       });
 
-      it('should show the clearing icon only when dropdown is open', function() {
-        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
-
-        combobox.open();
-
+      it('should show the clearing icon only when combobox has value', function() {
         expect(window.getComputedStyle(clearIcon).display).to.contain('block');
+        combobox.value = '';
+        expect(window.getComputedStyle(clearIcon).display).to.contain('none');
       });
 
       it('should not show clearing icon when nothing is selected', function() {
