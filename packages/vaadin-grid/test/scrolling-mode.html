@@ -37,6 +37,7 @@
         grid.dataSource = infiniteDataSource;
         scroller = grid.$.scroller;
         fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
+        Polymer.dom.flush();
       });
 
       function isFixed(element) {
@@ -47,7 +48,7 @@
         var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
         e.deltaY = deltaY;
         e.deltaX = deltaX;
-        scroller.$.table.dispatchEvent(e);
+        getBodyCellContent(grid, 0, 0).dispatchEvent(e);
         return e;
       }
 
