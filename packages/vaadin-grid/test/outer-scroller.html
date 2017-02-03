@@ -41,6 +41,7 @@
   </test-fixture>
 
   <script>
+    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     describe('outer scroller', function() {
       var grid;
       var scroller;
@@ -122,86 +123,88 @@
 
       });
 
-      describe('passtrough pointer events', function() {
+      if (!ios) {
+        describe('passtrough pointer events', function() {
 
-        function move(x, y) {
-          makeMouseEvent('mousemove', {x: x, y: y}, scroller);
-        }
-
-        var HAS_NEW_MOUSE = (function() {
-          var has = false;
-          try {
-            has = Boolean(new MouseEvent('x'));
-          } catch (_) {
-            // continue regardless of error
+          function move(x, y) {
+            makeMouseEvent('mousemove', {x: x, y: y}, scroller);
           }
-          return has;
-        })();
 
-        function makeMouseEvent(type, xy, node) {
-          var props = {
-            bubbles: true,
-            cancelable: true,
-            clientX: xy.x,
-            clientY: xy.y,
-            // Make this a primary input.
-            buttons: 1 // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
-          };
-          var e;
-          if (HAS_NEW_MOUSE) {
-            e = new MouseEvent(type, props);
-          } else {
-            e = document.createEvent('MouseEvent');
-            e.initMouseEvent(
-              type, props.bubbles, props.cancelable,
-              null, /* view */
-              null, /* detail */
-              0,    /* screenX */
-              0,    /* screenY */
-              props.clientX, props.clientY,
-              false, /* ctrlKey */
-              false, /* altKey */
-              false, /* shiftKey */
-              false, /* metaKey */
-              0,     /* button */
-              null   /* relatedTarget*/);
-          }
-          node.dispatchEvent(e);
-        }
-
-        function outerScrollerInUse() {
-          return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
-        }
-
-        it('should passtrough pointer events', function(done) {
-          scroller.addEventListener('mousemove', function() {
-            expect(outerScrollerInUse()).to.be.false;
-            done();
-          });
-
-          move(1, 1);
-        });
-
-        it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', function(done) {
-          scroller.addEventListener('mousemove', function() {
-            expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
-            done();
-          });
-          move(tableRect.width, 1);
-        });
-
-        it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', function(done) {
-          scroller.addEventListener('mousemove', function() {
-            // TODO: @limonte revisit in future
-            if (!firefox) { // firefox has the blinking issue here (current version is 50)
-              expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
+          var HAS_NEW_MOUSE = (function() {
+            var has = false;
+            try {
+              has = Boolean(new MouseEvent('x'));
+            } catch (_) {
+              // continue regardless of error
             }
-            done();
-          });
-          move(1, tableRect.height);
-        });
+            return has;
+          })();
 
-      });
+          function makeMouseEvent(type, xy, node) {
+            var props = {
+              bubbles: true,
+              cancelable: true,
+              clientX: xy.x,
+              clientY: xy.y,
+              // Make this a primary input.
+              buttons: 1 // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
+            };
+            var e;
+            if (HAS_NEW_MOUSE) {
+              e = new MouseEvent(type, props);
+            } else {
+              e = document.createEvent('MouseEvent');
+              e.initMouseEvent(
+                type, props.bubbles, props.cancelable,
+                null, /* view */
+                null, /* detail */
+                0,    /* screenX */
+                0,    /* screenY */
+                props.clientX, props.clientY,
+                false, /* ctrlKey */
+                false, /* altKey */
+                false, /* shiftKey */
+                false, /* metaKey */
+                0,     /* button */
+                null   /* relatedTarget*/);
+            }
+            node.dispatchEvent(e);
+          }
+
+          function outerScrollerInUse() {
+            return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
+          }
+
+          it('should passtrough pointer events', function(done) {
+            scroller.addEventListener('mousemove', function() {
+              expect(outerScrollerInUse()).to.be.false;
+              done();
+            });
+
+            move(1, 1);
+          });
+
+          it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', function(done) {
+            scroller.addEventListener('mousemove', function() {
+              expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
+              done();
+            });
+            move(tableRect.width, 1);
+          });
+
+          it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', function(done) {
+            scroller.addEventListener('mousemove', function() {
+              // TODO: @limonte revisit in future
+              if (!firefox) { // firefox has the blinking issue here (current version is 50)
+                expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
+              }
+              done();
+            });
+            move(1, tableRect.height);
+          });
+
+        });
+      }
 
     });
 

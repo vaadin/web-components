@@ -353,14 +353,14 @@
         it('should have cell content wrappers in all header cells', function() {
           Polymer.dom(header).querySelectorAll('th').forEach(function(a) {
             var content = getCellContent(a);
-            expect(content.matches('.cell-content')).to.be.true;
+            expect(content.classList.contains('cell-content')).to.be.true;
           });
         });
 
         it('should have cell content wrappers in all footer cells', function() {
           Polymer.dom(footer).querySelectorAll('td').forEach(function(a) {
             var content = getCellContent(a);
-            expect(content.matches('.cell-content')).to.be.true;
+            expect(content.classList.contains('cell-content')).to.be.true;
           });
         });
 
@@ -387,13 +387,13 @@
         it('should have last row fully visible when scrolled to end', function(done) {
           scrollToEnd(grid);
 
-          grid.async(function() {
+          Polymer.RenderStatus.afterNextRender(grid, function() {
             bodyRows = getRows(body);
             var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
             var footerTop = footer.getBoundingClientRect().top;
             expect(lastRowBottom).to.be.closeTo(footerTop, 1);
             done();
-          }, 1);
+          });
         });
       });
     });

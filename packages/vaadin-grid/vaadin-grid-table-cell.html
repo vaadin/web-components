@@ -91,7 +91,7 @@
 
         // Assigning undefined to element.colSpan will set colSpan attribute to 0
         if (column.colSpan) {
-          this.colSpan = column.colSpan;
+          this.setAttribute('colspan', column.colSpan);
         }
 
         this.listen(column, 'property-changed', '_columnPropChanged');
@@ -109,7 +109,11 @@
 
       _columnPropChanged: function(e) {
         if (e.target == this.column) {
-          this[e.detail.path] = e.detail.value;
+          if (e.detail.path === 'colSpan') {
+            this.setAttribute('colspan', e.detail.value);
+          } else {
+            this[e.detail.path] = e.detail.value;
+          }
         }
       },
 
@@ -136,7 +140,7 @@
       },
 
       _childColumnsChanged: function(childColumns) {
-        this.colSpan = childColumns.length;
+        this.setAttribute('colspan', childColumns.length);
       },
 
       _toggleContent: function(isAttached, cellContent, insertionPoint) {

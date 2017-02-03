@@ -27,15 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       'data-source.html',
       'filtering.html',
       'keyboard-navigation.html',
-      // 'focus.html',
-      // 'mutations.html',
       'physical-count.html',
       'hidden-grid.html',
       'million-dollar-scrolling.html',
-      // 'selection.html',
       'dynamic-item-size.html',
-      // 'different-heights.html',
-      // 'grid.html',
       'frozen-columns.html',
       'outer-scroller.html',
       'templates.html',
@@ -50,7 +45,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       'themability.html',
       'scroll-to-index.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?dom=shadow']);
+      var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if (isChrome) {
+        // Full shadow polyfill isn't currently supported
+        return suites.concat([suite, suite + '?dom=shadow']);
+      } else {
+        return suites.concat([suite]);
+      }
     }, []));
   </script>
 </body>

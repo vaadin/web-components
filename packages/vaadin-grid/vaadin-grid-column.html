@@ -391,7 +391,7 @@ The `class` attribute is used to differentiate header and footer templates.
 
         // In an unlikely situation where a group has more than 9 child columns,
         // the child scope must have 1 digit less...
-        var childCountDigits = ~~Math.log10(rootColumns.length) + 1;
+        var childCountDigits = ~~(Math.log(rootColumns.length) / Math.log(Math.LN10)) + 1;
 
         // Final scope for the child columns needs to mind both factors.
         var scope = Math.pow(10, trailingZeros - childCountDigits);
