@@ -37,6 +37,10 @@
     },
 
     focusLeft: function() {
+      if (this._focusedCell.hasAttribute('detailscell')) {
+        return;
+      }
+
       var visibleCells = this._visibleCellIndexes();
       if (visibleCells.length > 0) {
         var current = visibleCells.indexOf(this._focusedCellIndex);
@@ -53,7 +57,7 @@
       if (this._focusedRow && this._focusedRow.children) {
         var children = this._focusedRow.children;
         for(var i = 0; i < children.length; i++) {
-          if (!children[i].hidden) {
+          if (!children[i].hidden && children[i] !== this._focusedRow._rowDetailsCell) {
             indexes.push(i);
           }
         }
@@ -75,6 +79,10 @@
     },
 
     focusRight: function() {
+      if (this._focusedCell.hasAttribute('detailscell')) {
+        return;
+      }
+
       var visibleCells = this._visibleCellIndexes();
       if (visibleCells.length > 0) {
         var current = visibleCells.indexOf(this._focusedCellIndex);
@@ -87,6 +95,10 @@
     },
 
     focusHome: function() {
+      if (this._focusedCell.hasAttribute('detailscell')) {
+        return;
+      }
+
       var visibleCells = this._visibleCellIndexes();
       if (visibleCells.length > 0) {
         this._focusedCellIndex = visibleCells[0];
@@ -94,6 +106,10 @@
     },
 
     focusEnd: function() {
+      if (this._focusedCell.hasAttribute('detailscell')) {
+        return;
+      }
+
       var visibleCells = this._visibleCellIndexes();
       if (visibleCells.length > 0) {
         this._focusedCellIndex = visibleCells[visibleCells.length - 1];
