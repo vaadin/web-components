@@ -54,1209 +54,1212 @@
   </test-fixture>
 
   <script>
-    describe('keyboard navigation', function() {
-      var grid, scroller, header, footer, body, headerTrap, bodyTrap, footerTrap;
-      beforeEach(function() {
-        grid = fixture('default')[0];
-        grid.items = ['foo', 'bar'];
-
-        scroller = grid.$.scroller;
-        header = grid.$.scroller.$.header;
-        body = grid.$.scroller.$.items;
-        footer = grid.$.scroller.$.footer;
-
-        // stubbing out focusing to make sure it works even if the browser
-        // window doesn't have focus.
-        headerTrap = grid.$.scroller.$.headerFocusTrap;
-        sinon.stub(headerTrap, 'focus', function(e) {
-          Polymer.Base.fire('focus', {}, {
-            node: headerTrap
-          });
-        });
-
-        bodyTrap = grid.$.scroller.$.bodyFocusTrap;
-        sinon.stub(bodyTrap, 'focus', function(e) {
-          Polymer.Base.fire('focus', {}, {
-            node: bodyTrap
-          });
-        });
-
-        footerTrap = grid.$.scroller.$.footerFocusTrap;
-        sinon.stub(footerTrap, 'focus', function(e) {
-          Polymer.Base.fire('focus', {}, {
-            node: footerTrap
-          });
-        });
-      });
-
-      afterEach(function() {
-        headerTrap.focus.restore();
-        bodyTrap.focus.restore();
-        footerTrap.focus.restore();
-      });
-
-      function clickItem(rowIndex) {
-        return getFirstCell(rowIndex).click();
-      }
-
-      function getCell(rowIndex, cellIndex) {
-        return grid.$.scroller.$.items.children[rowIndex].children[cellIndex];
-      }
-
-      function getFirstCell(rowIndex) {
-        return getCell(rowIndex, 0);
-      }
-
-      function clickFirstBodyInput(rowIndex) {
-        var cell = getCell(0, 1);
-
-        getCellContent(cell).children[0].click();
-
-        Polymer.Base.fire('focus', {}, {
-          node: getCellContent(cell).children[0]
-        });
-      }
-
-      function tab() {
-        var event = MockInteractions.keyDownOn(grid, 9);
-      }
-
-      function shiftTab() {
-        MockInteractions.keyDownOn(grid, 9, 'shift');
-      }
-
-      function left() {
-        MockInteractions.keyDownOn(grid, 37);
-      }
-
-      function up() {
-        MockInteractions.keyDownOn(grid, 38);
-      }
-
-      function right() {
-        MockInteractions.keyDownOn(grid, 39);
-      }
-
-      function down() {
-        MockInteractions.keyDownOn(grid, 40);
-      }
-
-      function space() {
-        MockInteractions.keyDownOn(grid, 32);
-      }
-
-      function pageUp() {
-        MockInteractions.keyDownOn(grid, 33);
-      }
-
-      function pageDown() {
-        MockInteractions.keyDownOn(grid, 34);
-      }
-
-      function end() {
-        MockInteractions.keyDownOn(grid, 35);
-      }
-
-      function ctrlEnd() {
-        MockInteractions.keyDownOn(grid, 35, 'ctrl');
-      }
-
-      function home() {
-        MockInteractions.keyDownOn(grid, 36);
-      }
-
-      function ctrlHome() {
-        MockInteractions.keyDownOn(grid, 36, 'ctrl');
-      }
-
-      function getFirstHeaderCell() {
-        return grid.$.scroller.$.header.rows[0].children[0];
-      }
-
-      function focusHeaderInput() {
-        var cell = grid.$.scroller.$.header.rows[0].children[1];
-        var contents = getCellContent(cell);
-
-        contents.children[0].click();
-
-        Polymer.Base.fire('focus', {}, {
-          node: contents.children[0]
-        });
-      }
-
-      function focusFooterInput() {
-        var cell = grid.$.scroller.$.footer.rows[0].children[1];
-        var contents = getCellContent(cell);
-
-        contents.children[0].click();
-
-        Polymer.Base.fire('focus', {}, {
-          node: contents.children[0]
-        });
-      }
-
-      function clickFirstHeaderCell() {
-        getFirstHeaderCell().click();
-      }
-
-      function clickFirstFooterCell() {
-        grid.$.scroller.$.footer.rows[0].children[0].click();
-      }
-
-      describe('navigation mode', function() {
-        it('should not be in navigation mode by default', function() {
-          expect(scroller.navigating).to.be.false;
-        });
-
-        it('should not enable navigation mode when cell is clicked', function() {
-          clickFirstHeaderCell();
-
-          expect(scroller.navigating).to.be.false;
-        });
-
-        it('should disable navigation mode when blurred', function() {
-          scroller.navigating = true;
-
-          scroller.fire('blur');
-
-          expect(scroller.navigating).to.be.false;
-        });
-
-        it('should enable navigation mode when tabbed into header', function() {
-          // simulating tabbing into header
-          headerTrap.focus();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode when tabbed inside header', function() {
-          clickFirstHeaderCell();
-
-          tab();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode when tabbed into footer', function() {
-          // simulating tabbing into header
-          footerTrap.focus();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode when tabbed inside footer', function() {
-          clickFirstFooterCell();
-
-          tab();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode with page down', function() {
-          clickItem(0);
-
-          pageDown();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode with page up', function() {
-          clickItem(0);
-
-          pageUp();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode with home', function() {
-          clickItem(0);
-
-          home();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should enable navigation mode with end', function() {
-          clickItem(0);
-
-          end();
-
-          expect(scroller.navigating).to.be.true;
-        });
-      });
-
-      describe('navigating with tab', function() {
+    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (!ios) {
+      describe('keyboard navigation', function() {
+        var grid, scroller, header, footer, body, headerTrap, bodyTrap, footerTrap;
         beforeEach(function() {
-          scroller.navigating = true;
-        });
-
-        it('should have a focus trap as the very first child', function() {
-          expect(grid.tabIndex).not.to.eql(0);
-
-          // header focus trap needs to be the first element in Shadow DOM.
-          var trap = Polymer.dom(scroller.root).querySelector(':not(style)');
-
-          expect(trap.tabIndex).to.eql(0);
-        });
-
-        it('should have a focus trap as the very last child', function() {
-          // footer focus trap needs to be the last element in Light DOM.
-          var trap = Polymer.Settings.useNativeShadow ? grid.lastElementChild : scroller.lastElementChild;
-
-          expect(trap.tabIndex).to.eql(0);
-        });
-
-        it('should be possible to tab through grid', function() {
-          // assuming grid has been tabbed into.
-          headerTrap.focus();
-          expect(scroller._virtualFocus).to.eql(header);
-
-          tab(); // focus body
-          tab(); // focus footer
-
-          expect(footerTrap.focus.callCount).to.eql(1);
-
-          tab(); // focus outside (only virtual focus moves in test)
-          expect(scroller._virtualFocus).to.be.null;
-        });
-
-        it('should be possible to shift-tab back from body to header', function() {
-          // assuming grid has been tabbed into.
-          headerTrap.focus();
-
-          tab(); // focus body
-          shiftTab(); // focus header
-
-          expect(headerTrap.focus.callCount).to.eql(2);
-          expect(scroller._virtualFocus).to.eql(header);
-        });
-
-        it('should be possible to tab back from body to footer', function() {
-          // assuming grid has been tabbed into.
-          footerTrap.focus();
-
-          shiftTab(); // focus body
-          tab(); // focus footer
-
-          expect(footerTrap.focus.callCount).to.eql(2);
-          expect(scroller._virtualFocus).to.eql(footer);
-        });
-
-        it('should be possible to shift-tab through grid', function() {
-          // assuming grid has been tabbed into.
-          footerTrap.focus();
-          expect(scroller._virtualFocus).to.eql(footer);
-
-          shiftTab(); // focus body
-          shiftTab(); // focus header
-
-          expect(headerTrap.focus.callCount).to.eql(1);
-
-          shiftTab(); // focus outside (only virtual focus moves in test)
-          expect(scroller._virtualFocus).to.be.null;
-        });
-
-        it('should set virtual focus to header on header cell click', function() {
-          clickFirstHeaderCell();
-
-          expect(scroller._virtualFocus).to.eql(header);
-        });
-
-        it('should set virtual focus to body on body cell click', function() {
-          clickItem(0);
-
-          expect(scroller._virtualFocus).to.eql(body);
-        });
-
-        it('should set virtual focus to footer on footer cell click', function() {
-          clickFirstFooterCell();
-
-          expect(scroller._virtualFocus).to.eql(footer);
-        });
-
-        it('should move virtual focus from header to body on tab', function() {
-          scroller._virtualFocus = header;
-
-          tab();
-
-          expect(scroller._virtualFocus).to.eql(body);
-        });
-
-        it('should move virtual focus from body to footer on tab', function() {
-          bodyTrap.focus();
-
-          tab();
-
-          expect(scroller._virtualFocus).to.eql(footer);
-        });
-
-        it('should move virtual focus from header to footer on tab', function() {
-          headerTrap.focus();
-
-          tab();
-          tab();
-
-          expect(scroller._virtualFocus).to.eql(footer);
-        });
-
-        it('should move virtual focus from footer to body on shift-tab', function() {
-          footerTrap.focus();
-
-          shiftTab();
-
-          expect(scroller._virtualFocus).to.eql(body);
-        });
-
-        it('should move virtual focus from body to header on shift-tab', function() {
-          bodyTrap.focus();
-
-          shiftTab();
-
-          expect(scroller._virtualFocus).to.eql(header);
-        });
-
-        it('should move actual focus to from footer to body on shift-tab', function() {
-          footerTrap.focus();
-
-          shiftTab();
-          shiftTab();
-
-          expect(bodyTrap.focus.callCount).to.eql(1);
-        });
-
-        it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
-          footer.children[0].hidden = true;
-
-          bodyTrap.focus();
-
-          tab();
-
-          expect(scroller._virtualFocus).to.be.null;
-        });
-
-        it('should not move virtual focus to footer on shift-tab when no footer rows exist', function() {
-          footer.children[0].hidden = true;
-          footerTrap.focus();
-
-          expect(scroller._virtualFocus).to.eql(body);
-        });
-
-        it('should focus on first cell when tabbing to header', function() {
-          headerTrap.focus();
-
-          expect(header._focusedCellIndex).to.eql(0);
-          expect(header._focusedRowIndex).to.eql(0);
-        });
-
-        it('should focus on first cell when tabbing to body', function() {
-          headerTrap.focus();
-
-          tab();
-
-          expect(body._focusedCellIndex).to.eql(0);
-          expect(body._focusedRowIndex).to.eql(0);
-        });
-
-        it('should focus on first cell when tabbing to footer', function() {
-          bodyTrap.focus();
-
-          tab();
-
-          expect(footer._focusedCellIndex).to.eql(0);
-          expect(footer._focusedRowIndex).to.eql(0);
-        });
-      });
-
-      describe('navigating with keys', function() {
-        it('should enable navigation mode on down', function() {
-          clickItem(0);
-
-          down();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should navigate on down when navigation mode is off', function() {
-          clickItem(0);
-
-          down();
-
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
-        });
-
-        it('should enable navigation mode on up', function() {
-          clickItem(0);
-
-          up();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should navigate on up when navigation mode is off', function() {
-          clickItem(1);
-
-          up();
-
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-        });
-
-        it('should enable navigation mode on left', function() {
-          clickItem(0);
-
-          left();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should navigate on left when navigation mode is off', function() {
-          clickItem(0);
-          scroller._virtualFocus._focusedCellIndex = 1;
-
-          left();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
-
-        it('should enable navigation mode on right', function() {
-          clickItem(0);
-
-          right();
-
-          expect(scroller.navigating).to.be.true;
-        });
-
-        it('should navigate on right when navigation mode is off', function() {
-          clickItem(0);
-
-          right();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-        });
-
-        it('should focus cell below with down', function() {
-          clickItem(0);
-          tab();
-
-          down();
-
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
-
-        it('should focus cell above with up', function() {
-          clickItem(0);
-          down();
-
-          up();
-
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
-
-        it('should focus cell left with left', function() {
-          clickItem(0);
-          right();
-
-          left();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-        });
-
-        it('should focus cell right with right', function() {
-          clickItem(0);
-
-          right();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-        });
-
-        describe('with hidden columns', function() {
-          it('should skip over hidden column with right arrow', function() {
-            grid._columnTree[0][1].hidden = true;
-            clickItem(0);
-
-            right();
-
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+          grid = fixture('default')[0];
+          grid.items = ['foo', 'bar'];
+
+          scroller = grid.$.scroller;
+          header = grid.$.scroller.$.header;
+          body = grid.$.scroller.$.items;
+          footer = grid.$.scroller.$.footer;
+
+          // stubbing out focusing to make sure it works even if the browser
+          // window doesn't have focus.
+          headerTrap = grid.$.scroller.$.headerFocusTrap;
+          sinon.stub(headerTrap, 'focus', function(e) {
+            Polymer.Base.fire('focus', {}, {
+              node: headerTrap
+            });
           });
 
-          it('should skip over hidden column with left arrow', function() {
-            grid._columnTree[0][1].hidden = true;
+          bodyTrap = grid.$.scroller.$.bodyFocusTrap;
+          sinon.stub(bodyTrap, 'focus', function(e) {
+            Polymer.Base.fire('focus', {}, {
+              node: bodyTrap
+            });
+          });
+
+          footerTrap = grid.$.scroller.$.footerFocusTrap;
+          sinon.stub(footerTrap, 'focus', function(e) {
+            Polymer.Base.fire('focus', {}, {
+              node: footerTrap
+            });
+          });
+        });
+
+        afterEach(function() {
+          headerTrap.focus.restore();
+          bodyTrap.focus.restore();
+          footerTrap.focus.restore();
+        });
+
+        function clickItem(rowIndex) {
+          return getFirstCell(rowIndex).click();
+        }
+
+        function getCell(rowIndex, cellIndex) {
+          return grid.$.scroller.$.items.children[rowIndex].children[cellIndex];
+        }
+
+        function getFirstCell(rowIndex) {
+          return getCell(rowIndex, 0);
+        }
+
+        function clickFirstBodyInput(rowIndex) {
+          var cell = getCell(0, 1);
+
+          getCellContent(cell).children[0].click();
+
+          Polymer.Base.fire('focus', {}, {
+            node: getCellContent(cell).children[0]
+          });
+        }
+
+        function tab() {
+          var event = MockInteractions.keyDownOn(grid, 9);
+        }
+
+        function shiftTab() {
+          MockInteractions.keyDownOn(grid, 9, 'shift');
+        }
+
+        function left() {
+          MockInteractions.keyDownOn(grid, 37);
+        }
+
+        function up() {
+          MockInteractions.keyDownOn(grid, 38);
+        }
+
+        function right() {
+          MockInteractions.keyDownOn(grid, 39);
+        }
+
+        function down() {
+          MockInteractions.keyDownOn(grid, 40);
+        }
+
+        function space() {
+          MockInteractions.keyDownOn(grid, 32);
+        }
+
+        function pageUp() {
+          MockInteractions.keyDownOn(grid, 33);
+        }
+
+        function pageDown() {
+          MockInteractions.keyDownOn(grid, 34);
+        }
+
+        function end() {
+          MockInteractions.keyDownOn(grid, 35);
+        }
+
+        function ctrlEnd() {
+          MockInteractions.keyDownOn(grid, 35, 'ctrl');
+        }
+
+        function home() {
+          MockInteractions.keyDownOn(grid, 36);
+        }
+
+        function ctrlHome() {
+          MockInteractions.keyDownOn(grid, 36, 'ctrl');
+        }
+
+        function getFirstHeaderCell() {
+          return grid.$.scroller.$.header.rows[0].children[0];
+        }
+
+        function focusHeaderInput() {
+          var cell = grid.$.scroller.$.header.rows[0].children[1];
+          var contents = getCellContent(cell);
+
+          contents.children[0].click();
+
+          Polymer.Base.fire('focus', {}, {
+            node: contents.children[0]
+          });
+        }
+
+        function focusFooterInput() {
+          var cell = grid.$.scroller.$.footer.rows[0].children[1];
+          var contents = getCellContent(cell);
+
+          contents.children[0].click();
+
+          Polymer.Base.fire('focus', {}, {
+            node: contents.children[0]
+          });
+        }
+
+        function clickFirstHeaderCell() {
+          getFirstHeaderCell().click();
+        }
+
+        function clickFirstFooterCell() {
+          grid.$.scroller.$.footer.rows[0].children[0].click();
+        }
+
+        describe('navigation mode', function() {
+          it('should not be in navigation mode by default', function() {
+            expect(scroller.navigating).to.be.false;
+          });
+
+          it('should not enable navigation mode when cell is clicked', function() {
+            clickFirstHeaderCell();
+
+            expect(scroller.navigating).to.be.false;
+          });
+
+          it('should disable navigation mode when blurred', function() {
+            scroller.navigating = true;
+
+            scroller.fire('blur');
+
+            expect(scroller.navigating).to.be.false;
+          });
+
+          it('should enable navigation mode when tabbed into header', function() {
+            // simulating tabbing into header
+            headerTrap.focus();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode when tabbed inside header', function() {
+            clickFirstHeaderCell();
+
+            tab();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode when tabbed into footer', function() {
+            // simulating tabbing into header
+            footerTrap.focus();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode when tabbed inside footer', function() {
+            clickFirstFooterCell();
+
+            tab();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode with page down', function() {
             clickItem(0);
-            right();
+
+            pageDown();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode with page up', function() {
+            clickItem(0);
+
+            pageUp();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode with home', function() {
+            clickItem(0);
+
+            home();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enable navigation mode with end', function() {
+            clickItem(0);
+
+            end();
+
+            expect(scroller.navigating).to.be.true;
+          });
+        });
+
+        describe('navigating with tab', function() {
+          beforeEach(function() {
+            scroller.navigating = true;
+          });
+
+          it('should have a focus trap as the very first child', function() {
+            expect(grid.tabIndex).not.to.eql(0);
+
+            // header focus trap needs to be the first element in Shadow DOM.
+            var trap = Polymer.dom(scroller.root).querySelector(':not(style)');
+
+            expect(trap.tabIndex).to.eql(0);
+          });
+
+          it('should have a focus trap as the very last child', function() {
+            // footer focus trap needs to be the last element in Light DOM.
+            var trap = Polymer.Settings.useNativeShadow ? grid.lastElementChild : scroller.lastElementChild;
+
+            expect(trap.tabIndex).to.eql(0);
+          });
+
+          it('should be possible to tab through grid', function() {
+            // assuming grid has been tabbed into.
+            headerTrap.focus();
+            expect(scroller._virtualFocus).to.eql(header);
+
+            tab(); // focus body
+            tab(); // focus footer
+
+            expect(footerTrap.focus.callCount).to.eql(1);
+
+            tab(); // focus outside (only virtual focus moves in test)
+            expect(scroller._virtualFocus).to.be.null;
+          });
+
+          it('should be possible to shift-tab back from body to header', function() {
+            // assuming grid has been tabbed into.
+            headerTrap.focus();
+
+            tab(); // focus body
+            shiftTab(); // focus header
+
+            expect(headerTrap.focus.callCount).to.eql(2);
+            expect(scroller._virtualFocus).to.eql(header);
+          });
+
+          it('should be possible to tab back from body to footer', function() {
+            // assuming grid has been tabbed into.
+            footerTrap.focus();
+
+            shiftTab(); // focus body
+            tab(); // focus footer
+
+            expect(footerTrap.focus.callCount).to.eql(2);
+            expect(scroller._virtualFocus).to.eql(footer);
+          });
+
+          it('should be possible to shift-tab through grid', function() {
+            // assuming grid has been tabbed into.
+            footerTrap.focus();
+            expect(scroller._virtualFocus).to.eql(footer);
+
+            shiftTab(); // focus body
+            shiftTab(); // focus header
+
+            expect(headerTrap.focus.callCount).to.eql(1);
+
+            shiftTab(); // focus outside (only virtual focus moves in test)
+            expect(scroller._virtualFocus).to.be.null;
+          });
+
+          it('should set virtual focus to header on header cell click', function() {
+            clickFirstHeaderCell();
+
+            expect(scroller._virtualFocus).to.eql(header);
+          });
+
+          it('should set virtual focus to body on body cell click', function() {
+            clickItem(0);
+
+            expect(scroller._virtualFocus).to.eql(body);
+          });
+
+          it('should set virtual focus to footer on footer cell click', function() {
+            clickFirstFooterCell();
+
+            expect(scroller._virtualFocus).to.eql(footer);
+          });
+
+          it('should move virtual focus from header to body on tab', function() {
+            scroller._virtualFocus = header;
+
+            tab();
+
+            expect(scroller._virtualFocus).to.eql(body);
+          });
+
+          it('should move virtual focus from body to footer on tab', function() {
+            bodyTrap.focus();
+
+            tab();
+
+            expect(scroller._virtualFocus).to.eql(footer);
+          });
+
+          it('should move virtual focus from header to footer on tab', function() {
+            headerTrap.focus();
+
+            tab();
+            tab();
+
+            expect(scroller._virtualFocus).to.eql(footer);
+          });
+
+          it('should move virtual focus from footer to body on shift-tab', function() {
+            footerTrap.focus();
+
+            shiftTab();
+
+            expect(scroller._virtualFocus).to.eql(body);
+          });
+
+          it('should move virtual focus from body to header on shift-tab', function() {
+            bodyTrap.focus();
+
+            shiftTab();
+
+            expect(scroller._virtualFocus).to.eql(header);
+          });
+
+          it('should move actual focus to from footer to body on shift-tab', function() {
+            footerTrap.focus();
+
+            shiftTab();
+            shiftTab();
+
+            expect(bodyTrap.focus.callCount).to.eql(1);
+          });
+
+          it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
+            footer.children[0].hidden = true;
+
+            bodyTrap.focus();
+
+            tab();
+
+            expect(scroller._virtualFocus).to.be.null;
+          });
+
+          it('should not move virtual focus to footer on shift-tab when no footer rows exist', function() {
+            footer.children[0].hidden = true;
+            footerTrap.focus();
+
+            expect(scroller._virtualFocus).to.eql(body);
+          });
+
+          it('should focus on first cell when tabbing to header', function() {
+            headerTrap.focus();
+
+            expect(header._focusedCellIndex).to.eql(0);
+            expect(header._focusedRowIndex).to.eql(0);
+          });
+
+          it('should focus on first cell when tabbing to body', function() {
+            headerTrap.focus();
+
+            tab();
+
+            expect(body._focusedCellIndex).to.eql(0);
+            expect(body._focusedRowIndex).to.eql(0);
+          });
+
+          it('should focus on first cell when tabbing to footer', function() {
+            bodyTrap.focus();
+
+            tab();
+
+            expect(footer._focusedCellIndex).to.eql(0);
+            expect(footer._focusedRowIndex).to.eql(0);
+          });
+        });
+
+        describe('navigating with keys', function() {
+          it('should enable navigation mode on down', function() {
+            clickItem(0);
+
+            down();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should navigate on down when navigation mode is off', function() {
+            clickItem(0);
+
+            down();
+
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
+          });
+
+          it('should enable navigation mode on up', function() {
+            clickItem(0);
+
+            up();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should navigate on up when navigation mode is off', function() {
+            clickItem(1);
+
+            up();
+
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+          });
+
+          it('should enable navigation mode on left', function() {
+            clickItem(0);
+
+            left();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should navigate on left when navigation mode is off', function() {
+            clickItem(0);
+            scroller._virtualFocus._focusedCellIndex = 1;
 
             left();
 
             expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
           });
 
-          it('should not navigate to hidden column with right arrow', function() {
-            grid._columnTree[0][0].hidden = true;
-            clickItem(0);
-
-            left();
-
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-          });
-
-          it('should not navigate to hidden column with right arrow', function() {
-            grid._columnTree[0][2].hidden = true;
+          it('should enable navigation mode on right', function() {
             clickItem(0);
 
             right();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should navigate on right when navigation mode is off', function() {
+            clickItem(0);
+
             right();
 
             expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
           });
 
-          it('should not navigate to hidden column with end', function() {
-            grid._columnTree[0][0].hidden = true;
+          it('should focus cell below with down', function() {
             clickItem(0);
+            tab();
 
-            home();
-
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-          });
-
-          it('should not navigate to hidden column with home', function() {
-            grid._columnTree[0][2].hidden = true;
-            clickItem(0);
-
-            end();
-
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-          });
-        });
-
-        it('should focus first cell with home', function() {
-          clickItem(0);
-          right();
-
-          home();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
-
-        it('should focus first cell on first row with ctrl+home', function() {
-          clickItem(0);
-          right();
-
-          ctrlHome();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-        });
-
-        it('should focus last cell with end', function() {
-          clickItem(0);
-
-          end();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
-        });
-
-
-        it('should focus last cell on last row with ctrl+end', function() {
-          clickItem(0);
-
-          ctrlEnd();
-
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
-        });
-
-        it('should focus to last row element after scrolling to end', function() {
-          grid.size = 1000;
-          grid.dataSource = infiniteDataSource;
-          clickItem(0);
-
-          ctrlEnd();
-
-          expect(scroller._virtualFocus._focusedRow).to.eql(body.children[body.children.length - 1]);
-        });
-
-        describe('horizontal scrolling', function() {
-          beforeEach(function() {
-            grid.style.width = '100px'; // column default min width is 100px
-          });
-
-          it('should scroll cells visible with right arrow on header', function() {
-            clickFirstHeaderCell();
             down();
 
-            right();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.be.at.least(100);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
           });
 
-          it('should scroll cells visible with right arrow on body', function() {
+          it('should focus cell above with up', function() {
             clickItem(0);
             down();
-
-            right();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.be.at.least(100);
-          });
-
-          it('should scroll cells visible with right arrow on footer', function() {
-            clickFirstFooterCell();
-            down();
-
-            right();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.be.at.least(100);
-          });
-
-          it('should scroll cells visible with left arrow on header', function() {
-            clickFirstHeaderCell();
-            down();
-            right();
-
-            left();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
-          });
-
-          it('should scroll cells visible with left arrow on body', function() {
-            clickItem(0);
-            down();
-            right();
-
-            left();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
-          });
-
-          it('should scroll cells visible with home', function() {
-            clickItem(0);
-            grid.$.scroller.$.table.scrollLeft = 999999999;
-
-            home();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
-          });
-
-          it('should scroll cells visible with end', function() {
-            clickItem(0);
-
-            end();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.eql(grid.$.scroller.$.table.scrollWidth - grid.$.scroller.$.table.clientWidth);
-          });
-
-          it('should scroll cell visible under from frozen cells with left arrow', function(done) {
-            grid.style.width = '200px'; // column default min width is 100px
-            grid.style.border = 'none';
-            grid._columnTree[0][0].frozen = true;
-
-            clickItem(0);
-            right();
-            right();
-
-            grid.async(function() {
-              left();
-              expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
-              done();
-            });
-          });
-
-          it('should scroll cells visible with left arrow on footer', function() {
-            clickFirstFooterCell();
-            down();
-            right();
-
-            left();
-
-            expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
-          });
-        });
-
-        describe('vertical scrolling', function() {
-          beforeEach(function() {
-            grid.size = 200;
-            grid.dataSource = infiniteDataSource;
-          });
-
-          it('should scroll rows visible with up arrow', function() {
-            clickItem(0);
-            grid.$.scroller.scrollToScaledIndex(100);
 
             up();
 
-            expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
           });
 
-          it('should scroll rows visible with down arrow', function() {
-            clickItem(grid.$.scroller.lastVisibleIndex);
-
-            down();
-
-            expect(grid.$.scroller.$.table.scrollTop).to.be.above(0);
-          });
-
-          it('should scroll to the first row with ctrl+home', function(done) {
+          it('should focus cell left with left', function() {
             clickItem(0);
-            grid.$.scroller.$.table.scrollTop = 9999999999;
+            right();
 
-            grid.async(function() {
-              ctrlHome();
+            left();
 
-              expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+          });
 
-              done();
+          it('should focus cell right with right', function() {
+            clickItem(0);
+
+            right();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+          });
+
+          describe('with hidden columns', function() {
+            it('should skip over hidden column with right arrow', function() {
+              grid._columnTree[0][1].hidden = true;
+              clickItem(0);
+
+              right();
+
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+            });
+
+            it('should skip over hidden column with left arrow', function() {
+              grid._columnTree[0][1].hidden = true;
+              clickItem(0);
+              right();
+
+              left();
+
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+            });
+
+            it('should not navigate to hidden column with right arrow', function() {
+              grid._columnTree[0][0].hidden = true;
+              clickItem(0);
+
+              left();
+
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+            });
+
+            it('should not navigate to hidden column with right arrow', function() {
+              grid._columnTree[0][2].hidden = true;
+              clickItem(0);
+
+              right();
+              right();
+
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+            });
+
+            it('should not navigate to hidden column with end', function() {
+              grid._columnTree[0][0].hidden = true;
+              clickItem(0);
+
+              home();
+
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+            });
+
+            it('should not navigate to hidden column with home', function() {
+              grid._columnTree[0][2].hidden = true;
+              clickItem(0);
+
+              end();
+
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
             });
           });
 
-          it('should scroll to the last row with ctrl+end', function() {
+          it('should focus first cell with home', function() {
+            clickItem(0);
+            right();
+
+            home();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
+
+          it('should focus first cell on first row with ctrl+home', function() {
+            clickItem(0);
+            right();
+
+            ctrlHome();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+          });
+
+          it('should focus last cell with end', function() {
+            clickItem(0);
+
+            end();
+
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+          });
+
+
+          it('should focus last cell on last row with ctrl+end', function() {
             clickItem(0);
 
             ctrlEnd();
 
-            expect(grid.$.scroller.$.table.scrollTop).to.eql(grid.$.scroller.$.table.scrollHeight - grid.$.scroller.$.table.clientHeight);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
           });
 
-          it('should scroll down one page with page down', function() {
+          it('should focus to last row element after scrolling to end', function() {
+            grid.size = 1000;
+            grid.dataSource = infiniteDataSource;
             clickItem(0);
 
-            pageDown();
+            ctrlEnd();
 
-            // 9 items per page.
-            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0 + 9);
+            expect(scroller._virtualFocus._focusedRow).to.eql(body.children[body.children.length - 1]);
           });
 
-          it('should scroll up one page with page up', function(done) {
-            clickItem(0);
-            pageDown();
+          describe('horizontal scrolling', function() {
+            beforeEach(function() {
+              grid.style.width = '100px'; // column default min width is 100px
+            });
 
-            grid.async(function() {
-              pageUp();
+            it('should scroll cells visible with right arrow on header', function() {
+              clickFirstHeaderCell();
+              down();
 
-              expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-              done();
+              right();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.be.at.least(100);
+            });
+
+            it('should scroll cells visible with right arrow on body', function() {
+              clickItem(0);
+              down();
+
+              right();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.be.at.least(100);
+            });
+
+            it('should scroll cells visible with right arrow on footer', function() {
+              clickFirstFooterCell();
+              down();
+
+              right();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.be.at.least(100);
+            });
+
+            it('should scroll cells visible with left arrow on header', function() {
+              clickFirstHeaderCell();
+              down();
+              right();
+
+              left();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+            });
+
+            it('should scroll cells visible with left arrow on body', function() {
+              clickItem(0);
+              down();
+              right();
+
+              left();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+            });
+
+            it('should scroll cells visible with home', function() {
+              clickItem(0);
+              grid.$.scroller.$.table.scrollLeft = 999999999;
+
+              home();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+            });
+
+            it('should scroll cells visible with end', function() {
+              clickItem(0);
+
+              end();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.eql(grid.$.scroller.$.table.scrollWidth - grid.$.scroller.$.table.clientWidth);
+            });
+
+            it('should scroll cell visible under from frozen cells with left arrow', function(done) {
+              grid.style.width = '200px'; // column default min width is 100px
+              grid.style.border = 'none';
+              grid._columnTree[0][0].frozen = true;
+
+              clickItem(0);
+              right();
+              right();
+
+              grid.async(function() {
+                left();
+                expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
+                done();
+              });
+            });
+
+            it('should scroll cells visible with left arrow on footer', function() {
+              clickFirstFooterCell();
+              down();
+              right();
+
+              left();
+
+              expect(grid.$.scroller.$.table.scrollLeft).to.eql(0);
             });
           });
 
-          it('should scroll the focused item visible when focus is set to body', function(done) {
-            grid.$.scroller.$.table.scrollTop = 500;
+          describe('vertical scrolling', function() {
+            beforeEach(function() {
+              grid.size = 200;
+              grid.dataSource = infiniteDataSource;
+            });
 
-            grid.async(function() {
-              bodyTrap.focus();
+            it('should scroll rows visible with up arrow', function() {
+              clickItem(0);
+              grid.$.scroller.scrollToScaledIndex(100);
+
+              up();
 
               expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
-
-              done();
             });
-          });
-        });
-      });
 
-      describe('activating items', function() {
-        it('should activate on space', function() {
-          headerTrap.focus();
-          tab();
+            it('should scroll rows visible with down arrow', function() {
+              clickItem(grid.$.scroller.lastVisibleIndex);
 
-          space();
+              down();
 
-          expect(grid.activeItem).to.eql('foo');
-        });
+              expect(grid.$.scroller.$.table.scrollTop).to.be.above(0);
+            });
 
-        it('should activate item another on space', function() {
-          clickItem(0);
-          tab();
+            it('should scroll to the first row with ctrl+home', function(done) {
+              clickItem(0);
+              grid.$.scroller.$.table.scrollTop = 9999999999;
 
-          down();
-          space();
+              grid.async(function() {
+                ctrlHome();
 
-          expect(grid.activeItem).to.eql('bar');
-        });
+                expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
 
-        it('should deactive item on space', function() {
-          clickItem(0); // activates first item on click
-          tab();
+                done();
+              });
+            });
 
-          space();
+            it('should scroll to the last row with ctrl+end', function() {
+              clickItem(0);
 
-          expect(grid.activeItem).to.be.null;
-        });
+              ctrlEnd();
 
-        it('should not have a default value', function() {
-          expect(grid.activeItem).to.be.undefined;
-        });
+              expect(grid.$.scroller.$.table.scrollTop).to.eql(grid.$.scroller.$.table.scrollHeight - grid.$.scroller.$.table.clientHeight);
+            });
 
-        it('should activate on click', function() {
-          clickItem(0);
+            it('should scroll down one page with page down', function() {
+              clickItem(0);
 
-          expect(grid.activeItem).to.eql('foo');
-        });
+              pageDown();
 
-        it('should activate another on click', function() {
-          clickItem(0);
+              // 9 items per page.
+              expect(scroller._virtualFocus._focusedRowIndex).to.eql(0 + 9);
+            });
 
-          clickItem(1);
+            it('should scroll up one page with page up', function(done) {
+              clickItem(0);
+              pageDown();
 
-          expect(grid.activeItem).to.eql('bar');
-        });
+              grid.async(function() {
+                pageUp();
 
-        it('should deactive on click', function() {
-          clickItem(0);
+                expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+                done();
+              });
+            });
 
-          clickItem(0);
+            it('should scroll the focused item visible when focus is set to body', function(done) {
+              grid.$.scroller.$.table.scrollTop = 500;
 
-          expect(grid.activeItem).to.be.null;
-        });
+              grid.async(function() {
+                bodyTrap.focus();
 
-        it('should not activate when clicking on a native input', function() {
-          clickFirstBodyInput(0);
+                expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
 
-          expect(grid.activeItem).to.be.undefined;
-        });
-      });
-
-      describe('keyboard focus', function() {
-        it('should have focused first cell in header by default', function() {
-          expect(header.hasAttribute('focused')).to.be.false;
-
-          headerTrap.focus();
-
-          var firstRow = header.children[0];
-          expect(firstRow.hasAttribute('focused')).to.be.true;
-
-          var firstCell = firstRow.children[0];
-          expect(firstCell.hasAttribute('focused')).to.be.true;
-        });
-
-        it('should have focused first cell in body by default', function() {
-          expect(body.hasAttribute('focused')).to.be.false;
-
-          bodyTrap.focus();
-
-          var firstRow = body.children[0];
-          expect(firstRow.hasAttribute('focused')).to.be.true;
-
-          var firstCell = firstRow.children[0];
-          expect(firstCell.hasAttribute('focused')).to.be.true;
-        });
-
-        it('should have focused first cell in footer by default', function() {
-          expect(footer.hasAttribute('focused')).to.be.false;
-
-          footerTrap.focus();
-
-          var firstRow = footer.children[0];
-          expect(firstRow.hasAttribute('focused')).to.be.true;
-
-          var firstCell = firstRow.children[0];
-          expect(firstCell.hasAttribute('focused')).to.be.true;
-        });
-
-        it('should focus on click', function() {
-          clickItem(1);
-
-          var cell = getFirstCell(1);
-          var row = cell.parentElement;
-          var container = row.parentElement;
-
-          expect(cell.hasAttribute('focused')).to.eql.true;
-          expect(row.hasAttribute('focused')).to.eql.true;
-          expect(container.hasAttribute('focused')).to.eql.true;
-        });
-      });
-
-      describe('interaction mode', function() {
-        function enter() {
-          MockInteractions.keyDownOn(grid, 13);
-        }
-
-        function escape() {
-          MockInteractions.keyDownOn(grid, 27);
-        }
-
-        function f2() {
-          // keycode is 113, but needs to be increment by one until
-          // https://github.com/PolymerElements/iron-a11y-keys-behavior/pull/64
-          // is merged.
-          MockInteractions.keyDownOn(grid, 113 + 1);
-        }
-
-        var input;
-
-        beforeEach(function() {
-          clickItem(0);
-
-          var cell = getCell(0, 1);
-          input = getCellContent(cell).children[0];
-
-          sinon.stub(input, 'focus', function(e) {
-            Polymer.Base.fire('focus', {}, {
-              node: input
+                done();
+              });
             });
           });
         });
 
-        it('should enter interaction mode with enter', function() {
-          right();
+        describe('activating items', function() {
+          it('should activate on space', function() {
+            headerTrap.focus();
+            tab();
 
-          enter();
+            space();
 
-          expect(scroller.interacting).to.be.true;
+            expect(grid.activeItem).to.eql('foo');
+          });
+
+          it('should activate item another on space', function() {
+            clickItem(0);
+            tab();
+
+            down();
+            space();
+
+            expect(grid.activeItem).to.eql('bar');
+          });
+
+          it('should deactive item on space', function() {
+            clickItem(0); // activates first item on click
+            tab();
+
+            space();
+
+            expect(grid.activeItem).to.be.null;
+          });
+
+          it('should not have a default value', function() {
+            expect(grid.activeItem).to.be.undefined;
+          });
+
+          it('should activate on click', function() {
+            clickItem(0);
+
+            expect(grid.activeItem).to.eql('foo');
+          });
+
+          it('should activate another on click', function() {
+            clickItem(0);
+
+            clickItem(1);
+
+            expect(grid.activeItem).to.eql('bar');
+          });
+
+          it('should deactive on click', function() {
+            clickItem(0);
+
+            clickItem(0);
+
+            expect(grid.activeItem).to.be.null;
+          });
+
+          it('should not activate when clicking on a native input', function() {
+            clickFirstBodyInput(0);
+
+            expect(grid.activeItem).to.be.undefined;
+          });
         });
 
-        it('should exit interaction mode when blurred', function() {
-          scroller.interacting = true;
+        describe('keyboard focus', function() {
+          it('should have focused first cell in header by default', function() {
+            expect(header.hasAttribute('focused')).to.be.false;
 
-          scroller.fire('blur');
+            headerTrap.focus();
 
-          expect(scroller.interacting).to.be.false;
+            var firstRow = header.children[0];
+            expect(firstRow.hasAttribute('focused')).to.be.true;
+
+            var firstCell = firstRow.children[0];
+            expect(firstCell.hasAttribute('focused')).to.be.true;
+          });
+
+          it('should have focused first cell in body by default', function() {
+            expect(body.hasAttribute('focused')).to.be.false;
+
+            bodyTrap.focus();
+
+            var firstRow = body.children[0];
+            expect(firstRow.hasAttribute('focused')).to.be.true;
+
+            var firstCell = firstRow.children[0];
+            expect(firstCell.hasAttribute('focused')).to.be.true;
+          });
+
+          it('should have focused first cell in footer by default', function() {
+            expect(footer.hasAttribute('focused')).to.be.false;
+
+            footerTrap.focus();
+
+            var firstRow = footer.children[0];
+            expect(firstRow.hasAttribute('focused')).to.be.true;
+
+            var firstCell = firstRow.children[0];
+            expect(firstCell.hasAttribute('focused')).to.be.true;
+          });
+
+          it('should focus on click', function() {
+            clickItem(1);
+
+            var cell = getFirstCell(1);
+            var row = cell.parentElement;
+            var container = row.parentElement;
+
+            expect(cell.hasAttribute('focused')).to.eql.true;
+            expect(row.hasAttribute('focused')).to.eql.true;
+            expect(container.hasAttribute('focused')).to.eql.true;
+          });
         });
 
-        it('should exit interaction mode when tabbed into', function() {
-          scroller.interacting = true;
+        describe('interaction mode', function() {
+          function enter() {
+            MockInteractions.keyDownOn(grid, 13);
+          }
 
-          headerTrap.focus();
+          function escape() {
+            MockInteractions.keyDownOn(grid, 27);
+          }
 
-          expect(scroller.interacting).to.be.false;
-        });
+          function f2() {
+            // keycode is 113, but needs to be increment by one until
+            // https://github.com/PolymerElements/iron-a11y-keys-behavior/pull/64
+            // is merged.
+            MockInteractions.keyDownOn(grid, 113 + 1);
+          }
 
-        it('should exit interaction mode when shift-tabbed into', function() {
-          scroller.interacting = true;
+          var input;
 
-          footerTrap.focus();
+          beforeEach(function() {
+            clickItem(0);
 
-          expect(scroller.interacting).to.be.false;
-        });
+            var cell = getCell(0, 1);
+            input = getCellContent(cell).children[0];
 
-        it('should focus the first element when entering interaction mode with enter', function() {
-          var cell = getCell(0, 1);
-          var input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
+            sinon.stub(input, 'focus', function(e) {
+              Polymer.Base.fire('focus', {}, {
+                node: input
+              });
+            });
+          });
 
-          right(); // focus the cell with input.
+          it('should enter interaction mode with enter', function() {
+            right();
 
-          enter();
+            enter();
 
-          expect(input.focus.callCount).to.eql(1);
-        });
+            expect(scroller.interacting).to.be.true;
+          });
 
-        it('should focus the first element when entering interaction mode with f2', function() {
-          var cell = getCell(0, 1);
-          var input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
+          it('should exit interaction mode when blurred', function() {
+            scroller.interacting = true;
 
-          right(); // focus the cell with input.
+            scroller.fire('blur');
 
-          f2();
+            expect(scroller.interacting).to.be.false;
+          });
 
-          expect(input.focus.callCount).to.eql(1);
-        });
+          it('should exit interaction mode when tabbed into', function() {
+            scroller.interacting = true;
 
-        it('should focus the next input element when tabbing in interaction mode', function() {
-          right(); // focus the cell with input.
-          enter();
+            headerTrap.focus();
 
-          tab();
+            expect(scroller.interacting).to.be.false;
+          });
 
-          // expecting virtual focus to remain in place, instead actual focus
-          // moves.
-          expect(scroller._virtualFocus).to.eql(body);
-        });
+          it('should exit interaction mode when shift-tabbed into', function() {
+            scroller.interacting = true;
 
-        it('should focus the element with `focus-target` when entering interaction mode', function() {
-          var cell = getCell(0, 1);
-          var input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
-          input.parentElement.insertBefore(document.createElement('div'), input);
-          input.setAttribute('focus-target', '');
+            footerTrap.focus();
 
-          right(); // focus the cell with input.
+            expect(scroller.interacting).to.be.false;
+          });
 
-          enter();
+          it('should focus the first element when entering interaction mode with enter', function() {
+            var cell = getCell(0, 1);
+            var input = getCellContent(cell).children[0];
+            input.focus = sinon.spy();
 
-          expect(input.focus.callCount).to.eql(1);
-        });
+            right(); // focus the cell with input.
 
-        it('should not navigate with arrow up when in interaction mode', function() {
-          clickItem(1);
-          scroller.interacting = true;
+            enter();
 
-          up();
+            expect(input.focus.callCount).to.eql(1);
+          });
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+          it('should focus the first element when entering interaction mode with f2', function() {
+            var cell = getCell(0, 1);
+            var input = getCellContent(cell).children[0];
+            input.focus = sinon.spy();
 
-        it('should not navigate with arrow down when in interaction mode', function() {
-          scroller.interacting = true;
+            right(); // focus the cell with input.
 
-          down();
+            f2();
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+            expect(input.focus.callCount).to.eql(1);
+          });
 
-        it('should not navigate with arrow left when in interaction mode', function() {
-          right();
-          scroller.interacting = true;
+          it('should focus the next input element when tabbing in interaction mode', function() {
+            right(); // focus the cell with input.
+            enter();
 
-          left();
+            tab();
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-        });
+            // expecting virtual focus to remain in place, instead actual focus
+            // moves.
+            expect(scroller._virtualFocus).to.eql(body);
+          });
 
-        it('should not navigate with arrow right when in interaction mode', function() {
-          scroller.interacting = true;
+          it('should focus the element with `focus-target` when entering interaction mode', function() {
+            var cell = getCell(0, 1);
+            var input = getCellContent(cell).children[0];
+            input.focus = sinon.spy();
+            input.parentElement.insertBefore(document.createElement('div'), input);
+            input.setAttribute('focus-target', '');
 
-          right();
+            right(); // focus the cell with input.
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+            enter();
 
-        it('should not navigate with home when in interaction mode', function() {
-          right();
-          scroller.interacting = true;
+            expect(input.focus.callCount).to.eql(1);
+          });
 
-          home();
+          it('should not navigate with arrow up when in interaction mode', function() {
+            clickItem(1);
+            scroller.interacting = true;
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-        });
+            up();
 
-        it('should not navigate with ctrl+home when in interaction mode', function() {
-          right();
-          scroller.interacting = true;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          ctrlHome();
+          it('should not navigate with arrow down when in interaction mode', function() {
+            scroller.interacting = true;
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
-        });
+            down();
 
-        it('should not navigate with end when in interaction mode', function() {
-          scroller.interacting = true;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          end();
+          it('should not navigate with arrow left when in interaction mode', function() {
+            right();
+            scroller.interacting = true;
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+            left();
 
-        it('should not navigate with ctrl+end when in interaction mode', function() {
-          scroller.interacting = true;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
 
-          ctrlEnd();
+          it('should not navigate with arrow right when in interaction mode', function() {
+            scroller.interacting = true;
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+            right();
 
-        it('should not navigate with page down when in interaction mode', function() {
-          scroller.interacting = true;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          pageDown();
+          it('should not navigate with home when in interaction mode', function() {
+            right();
+            scroller.interacting = true;
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+            home();
 
-        it('should not navigate with page up when in interaction mode', function() {
-          clickItem(1);
-          scroller.interacting = true;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
 
-          pageUp();
+          it('should not navigate with ctrl+home when in interaction mode', function() {
+            right();
+            scroller.interacting = true;
 
-          expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
-          expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
-        });
+            ctrlHome();
 
-        it('should not activate on space when in interaction mode', function() {
-          grid.activeItem = null;
-          clickFirstBodyInput(0);
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+          });
 
-          space();
+          it('should not navigate with end when in interaction mode', function() {
+            scroller.interacting = true;
 
-          expect(grid.activeItem).to.be.null;
-        });
+            end();
 
-        it('should enter interaction mode with F2', function() {
-          right();
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          f2();
+          it('should not navigate with ctrl+end when in interaction mode', function() {
+            scroller.interacting = true;
 
-          expect(scroller.interacting).to.be.true;
-        });
+            ctrlEnd();
 
-        it('should exit interaction mode with F2', function() {
-          right();
-          f2();
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          f2();
+          it('should not navigate with page down when in interaction mode', function() {
+            scroller.interacting = true;
 
-          expect(scroller.interacting).to.be.false;
-        });
+            pageDown();
 
-        it('should remove focus from cell when exiting interaction mode with F2', function() {
-          right();
-          enter();
-          scroller.navigating = false;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(0);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          f2();
+          it('should not navigate with page up when in interaction mode', function() {
+            clickItem(1);
+            scroller.interacting = true;
 
-          expect(bodyTrap.focus.callCount).to.eql(1);
-        });
+            pageUp();
 
-        it('should exit interaction mode with escape', function() {
-          scroller.interacting = true;
+            expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
+          });
 
-          escape();
+          it('should not activate on space when in interaction mode', function() {
+            grid.activeItem = null;
+            clickFirstBodyInput(0);
 
-          expect(scroller.interacting).to.be.false;
-        });
+            space();
 
-        it('should remove focus from cell with escape', function() {
-          grid.focus = sinon.spy();
-          scroller.interacting = true;
+            expect(grid.activeItem).to.be.null;
+          });
 
-          escape(); // revert to navigation first
-          escape();
+          it('should enter interaction mode with F2', function() {
+            right();
 
-          expect(grid.focus.callCount).to.eql(1);
-        });
+            f2();
 
-        it('should revert to navigation from interaction mode with escape', function() {
-          scroller.interacting = true;
+            expect(scroller.interacting).to.be.true;
+          });
 
-          escape();
+          it('should exit interaction mode with F2', function() {
+            right();
+            f2();
 
-          expect(scroller.navigating).to.be.true;
-        });
+            f2();
 
-        it('should revert to navigation from interaction mode with F2', function() {
-          scroller.interacting = true;
+            expect(scroller.interacting).to.be.false;
+          });
 
-          f2();
+          it('should remove focus from cell when exiting interaction mode with F2', function() {
+            right();
+            enter();
+            scroller.navigating = false;
 
-          expect(scroller.navigating).to.be.true;
-        });
+            f2();
 
-        it('should cancel navigation mode with escape', function() {
-          scroller.navigating = true;
-          scroller.interacting = false;
+            expect(bodyTrap.focus.callCount).to.eql(1);
+          });
 
-          escape();
+          it('should exit interaction mode with escape', function() {
+            scroller.interacting = true;
 
-          expect(scroller.navigating).to.be.true;
-        });
+            escape();
 
-        it('should enter interaction mode when cell contents are focused', function() {
-          clickFirstBodyInput(0);
+            expect(scroller.interacting).to.be.false;
+          });
 
-          expect(scroller.interacting).to.be.true;
+          it('should remove focus from cell with escape', function() {
+            grid.focus = sinon.spy();
+            scroller.interacting = true;
+
+            escape(); // revert to navigation first
+            escape();
+
+            expect(grid.focus.callCount).to.eql(1);
+          });
+
+          it('should revert to navigation from interaction mode with escape', function() {
+            scroller.interacting = true;
+
+            escape();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should revert to navigation from interaction mode with F2', function() {
+            scroller.interacting = true;
+
+            f2();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should cancel navigation mode with escape', function() {
+            scroller.navigating = true;
+            scroller.interacting = false;
+
+            escape();
+
+            expect(scroller.navigating).to.be.true;
+          });
+
+          it('should enter interaction mode when cell contents are focused', function() {
+            clickFirstBodyInput(0);
+
+            expect(scroller.interacting).to.be.true;
+          });
         });
       });
-    });
+    }
   </script>
 
 </body>
