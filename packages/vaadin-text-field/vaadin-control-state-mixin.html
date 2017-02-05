@@ -1,0 +1,108 @@
+<script>
+  // IronFormElementBehavior is not a proper 2.0 class.
+  window.VaadinControlStateMixin = subclass => class extends subclass {
+    static get config() {
+      return {
+        properties: {
+          /**
+           * If true, the element currently has focus.
+           */
+          focused: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            readOnly: true,
+            observer: '_focusedChanged',
+            reflectToAttribute: true
+          },
+
+          /**
+           * If true, the user cannot interact with this element.
+           */
+          disabled: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            observer: '_disabledChanged',
+            reflectToAttribute: true
+          },
+
+          /**
+           * The position of the element in the tabbing navigation order for the current document.
+           */
+          tabindex: {
+            type: Number,
+            reflectToAttribute: true,
+            observer: '_tabindexChanged',
+            value: 0
+          },
+
+          _oldTabIndex: {
+            type: Number
+          }
+        }
+      };
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('focus', this.focus.bind(this), true);
+      this.addEventListener('blur', this._blurHandler.bind(this), true);
+      this.addEventListener('keydown', this._keydownHandler.bind(this), true);
+    }
+
+    _disabledChanged(disabled, old) {
+      this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      this.style.pointerEvents = disabled ? 'none' : '';
+      if (disabled) {
+        this._oldTabIndex = this.tabIndex;
+        this._setFocused(false);
+        this.tabIndex = -1;
+        this.blur();
+      } else if (this._oldTabIndex !== undefined) {
+        this.tabIndex = this._oldTabIndex;
+      }
+    }
+
+    focus() {
+      if (!this._shiftTabPressed) {
+        this._setFocused(true);
+        // Forward focus to internal input
+        if (this.$.input) {
+          this.$.input.focus();
+        }
+      }
+    }
+
+    /**
+     * Handler that is called when a shift+tab keypress is detected.
+     */
+    _keydownHandler(event) {
+      if (event.shiftKey && event.keyCode == 9) {
+        var oldTabIndex = this.getAttribute('tabindex');
+        this._shiftTabPressed = true;
+        this.setAttribute('tabindex', '-1');
+        setTimeout(function() {
+          this.setAttribute('tabindex', oldTabIndex);
+          this._shiftTabPressed = false;
+        }.bind(this), 1);
+      }
+    }
+
+    /**
+     *
+     */
+    _blurHandler(event) {
+      this._setFocused(false);
+    }
+
+    /**
+     * Synchronizes tabindex with input element
+     */
+    _tabindexChanged(tabindex) {
+      if (this.$.input) {
+        this.$.input.setAttribute('tabindex', tabindex);
+      }
+    }
+  };
+</script>

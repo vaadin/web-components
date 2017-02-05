@@ -26,6 +26,7 @@ Custom property | Description | Default
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-form-element-mixin.html">
+<link rel="import" href="vaadin-control-state-mixin.html">
 
 <dom-module id="vaadin-input">
   <template>
@@ -72,7 +73,7 @@ Custom property | Description | Default
   </template>
 
   <script>
-    class VaadinInput extends window.VaadinFormElementMixin(Polymer.Element) {
+    class VaadinInput extends window.VaadinControlStateMixin(window.VaadinFormElementMixin(Polymer.Element)) {
       static get is() {
         return 'vaadin-input';
       }
@@ -94,15 +95,6 @@ Custom property | Description | Default
              */
             autofocus: {
               type: Boolean
-            },
-
-            /**
-             * Indicates that this control is not available for interaction.
-             */
-            disabled: {
-              type: Boolean,
-              reflectToAttribute: true,
-              observer: '_disabledChanged'
             },
 
             /**
@@ -173,16 +165,6 @@ Custom property | Description | Default
              */
             title: {
               type: String
-            },
-
-            /**
-             * The position of the element in the tabbing navigation order for the current document.
-             */
-            tabindex: {
-              type: Number,
-              value: 0,
-              reflectToAttribute: true,
-              observer: '_tabindexChanged'
             },
 
             /**
