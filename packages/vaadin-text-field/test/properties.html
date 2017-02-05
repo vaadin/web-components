@@ -90,11 +90,15 @@
       });
 
       describe('binding', function() {
-
         it('setting input value updates value', function() {
           input.value = 'foo';
           input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
           expect(vinput.value).to.be.equal('foo');
+        });
+
+        it('setting input value updates has-value attribute', function() {
+          vinput.value = 'foo';
+          expect(vinput.hasValue).to.be.true;
         });
       });
 

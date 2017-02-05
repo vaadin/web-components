@@ -210,9 +210,30 @@ Custom property | Description | Default
               type: Boolean,
               reflectToAttribute: true,
               notify: true
+            },
+
+            /**
+             * If true, the element currently has focus.
+             */
+            focused: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              readOnly: true,
+              reflectToAttribute: true
+            },
+
+            /**
+             * If true, the element currently has focus.
+             */
+            hasValue: {
+              type: Boolean,
+              notify: true,
+              readOnly: true,
+              computed: '_hasValue(value)',
+              reflectToAttribute: true
             }
           }
-
         };
       }
 
@@ -222,12 +243,29 @@ Custom property | Description | Default
 
         // Make FF take the focus (#9)
         if (this.autofocus) {
-          this.$.input.focus();
+          this.focus();
         }
+
+        this.$.input.addEventListener('focus', this.focus.bind(this));
+        this.$.input.addEventListener('blur', this.blur.bind(this));
+      }
+
+      focus() {
+        this._setFocused(true);
+        this.$.input.focus();
+      }
+
+      blur() {
+        this._setFocused(false);
+        this.$.input.blur();
       }
 
       _valueChanged(value) {
         this.invalid = this._isInvalid();
+      }
+
+      _hasValue(value) {
+        return value != null && value !== '';
       }
 
       _isInvalid() {

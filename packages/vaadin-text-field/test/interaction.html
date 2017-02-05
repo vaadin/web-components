@@ -1,0 +1,48 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-input tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-input.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
+
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <label>
+        <div>
+          <vaadin-input id="vaadinInput"></vaadin-input>
+        </div>
+      </label>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    describe('focus', function() {
+      var label, vaadinInput;
+
+      beforeEach(function(done) {
+        label = fixture('default');
+
+        // wait for the web component to be ready
+        window.setTimeout(function() {
+          vaadinInput = label.querySelector('#vaadinInput');
+          done();
+        }, 1);
+      });
+
+      it('should have methods focus and blur', function() {
+        vaadinInput.focus();
+        expect(vaadinInput.focused).to.be.true;
+        vaadinInput.blur();
+        expect(vaadinInput.focused).to.be.false;
+      });
+
+    });
+  </script>
+</body>
