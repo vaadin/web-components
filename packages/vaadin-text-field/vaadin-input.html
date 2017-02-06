@@ -224,7 +224,6 @@ Custom property | Description | Default
 
       ready() {
         super.ready();
-        this.invalid = this._isInvalid();
 
         // Make FF take the focus (#9)
         if (this.autofocus) {
@@ -243,6 +242,9 @@ Custom property | Description | Default
       blur() {
         this._setFocused(false);
         this.$.input.blur();
+
+        // We dont want to mark the input as invalid until the first time the user blurs.
+        this.invalid = this._isInvalid();
       }
 
       _valueChanged(value) {

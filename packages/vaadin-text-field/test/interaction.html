@@ -36,9 +36,15 @@
         }, 1);
       });
 
+      it('should focus the internal input on focus', function() {
+        vaadinInput.focus();
+        expect(vaadinInput.root.querySelector('input:focus')).to.be.ok;
+      });
+
       it('should have methods focus and blur', function() {
         vaadinInput.focus();
         expect(vaadinInput.focused).to.be.true;
+
         vaadinInput.blur();
         expect(vaadinInput.focused).to.be.false;
       });
