@@ -172,12 +172,11 @@
 
             overlay.initialPosition = new Date();
             overlay.focusedDate = new Date(2000, 0, 1);
-            overlay.async(function() {
-              overlay.scrollToDate(overlay.focusedDate);
-              waitUntilScrolledTo(overlay, overlay.focusedDate, function() {
-                done();
-              });
-            }, 1);
+
+            overlay.scrollToDate(overlay.focusedDate);
+            listenForEvent(overlay, 'scroll-animation-finished', function() {
+              Polymer.RenderStatus.afterNextRender(overlay, done);
+            });
           });
 
           it('should focus one week forward with arrow down', function() {
