@@ -1,0 +1,67 @@
+<dom-module id="theme-vaadin-input-md">
+  <template>
+    <style>
+
+      html {
+        --vaadin-material-input-primary-color: var(--primary-color, deepskyblue);
+        --vaadin-material-input-secondary-color: var(--secondary-text-color, gainsboro);
+        --vaadin-material-input-error-color: var(--error-color, red);
+      }
+
+      vaadin-input {
+        position: relative;
+        display: block;
+        height: 60px;
+
+        --vaadin-input-input: {
+          position: absolute;
+          bottom: 10px;
+
+          background: transparent;
+          width: 100%;
+          border: none;
+          outline: none;
+
+          font-size: 16px;
+        }
+
+        --vaadin-input-input-placeholder: {
+          opacity: 0.8;
+          color: var(--vaadin-material-input-secondary-color);
+        }
+      }
+
+      vaadin-input::before,
+      vaadin-input::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 6px;
+      }
+
+      vaadin-input::before {
+        height: 1px;
+        background: var(--vaadin-material-input-secondary-color);
+        bottom: 7px;
+      }
+
+      vaadin-input::after {
+        height: 2px;
+        background: var(--vaadin-material-input-primary-color);
+        transform: scalex(0);
+        transition: transform 0.25s;
+      }
+
+      vaadin-input[focused]::after {
+        transform: scalex(1);
+      }
+
+      vaadin-input[invalid]::before,
+      vaadin-input[invalid]::after {
+        background: var(--vaadin-material-input-error-color);
+      }
+    </style>
+  </template>
+</dom-module>

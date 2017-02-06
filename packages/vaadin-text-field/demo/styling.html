@@ -8,10 +8,8 @@
   <title>vaadin-input Custom Styles</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="common.html">
-
-  <link rel="import" href="theme-vaadin-input-md.html">
+  <link rel="import" href="material-vaadin-input.html">
 </head>
 
 <body>
@@ -24,10 +22,6 @@
       <template>
         <custom-style>
           <style include="theme-vaadin-input-md">
-            vaadin-input {
-              display: block;
-              margin: 10px;
-            }
           </style>
         </custom-style>
         <vaadin-input placeholder="Name (required)" required minlength="4"></vaadin-input>
