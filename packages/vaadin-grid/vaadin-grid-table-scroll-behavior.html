@@ -142,19 +142,14 @@
     },
 
     _onWheel: function(e) {
-      if (e.ctrlKey) {
+      if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
         return;
       }
 
       var table = this.$.table;
       var momentum = Math.abs(e.deltaX) + Math.abs(e.deltaY);
 
-      if (
-        (e.deltaY > 0 && table.scrollTop < table.scrollHeight - table.offsetHeight) ||
-        (e.deltaY < 0 && table.scrollTop > 0) ||
-        (e.deltaX > 0 && table.scrollLeft < table.scrollWidth - table.offsetWidth) ||
-        (e.deltaX < 0 && table.scrollLeft > 0)
-      ) {
+      if (this._canScroll(table, e.deltaX, e.deltaY)) {
         e.preventDefault();
         table.scrollTop += e.deltaY;
         table.scrollLeft += e.deltaX;
@@ -167,6 +162,29 @@
         e.preventDefault();
       }
       this._previousMomentum = momentum;
+    },
+
+    /**
+     * Determines if the element has an ancestor prior to this
+     * cell content that handles the scroll delta
+     */
+    _hasScrolledAncestor: function(el, deltaX, deltaY) {
+      if (this._canScroll(el, deltaX, deltaY)) {
+        return true;
+      } else if (!el.hasAttribute('data-cell-content-id')) {
+        return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
+      }
+    },
+
+    /**
+     * Determines if the the given scroll deltas can be applied to the element
+     * (fully or partially)
+     */
+    _canScroll: function(el, deltaX, deltaY) {
+      return (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
+      (deltaY < 0 && el.scrollTop > 0) ||
+      (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
+      (deltaX < 0 && el.scrollLeft > 0);
     },
 
     /**
