@@ -66,6 +66,8 @@ Custom property | Description | Default
       tabindex$="[[tabindex]]"
       value="{{value::input}}"
       title="[[title]]"
+      on-focus="_onInputFocus"
+      on-blur="_onInputBlur"
     />
   </template>
 
@@ -230,17 +232,20 @@ Custom property | Description | Default
         if (this.autofocus) {
           this.focus();
         }
+      }
 
-        this.$.input.addEventListener('focus', () => this._setFocused(true));
-        this.$.input.addEventListener('blur', () => {
-          this._setFocused(false);
-          // We dont want to mark the input as invalid until the first time the user blurs.
-          this.invalid = this._isInvalid();
-        });
+      _onInputFocus() {
+        this._setFocused(true);
       }
 
       focus() {
         this.$.input.focus();
+      }
+
+      _onInputBlur() {
+        this._setFocused(false);
+        // We dont want to mark the input as invalid until the first time the user blurs.
+        this.invalid = this._isInvalid();
       }
 
       blur() {
