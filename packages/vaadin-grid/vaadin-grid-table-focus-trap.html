@@ -12,8 +12,9 @@
      }
     </style>
 
-    <div class="primary" tabindex="0" role="gridcell"></div>
-    <div class="secondary" tabindex="-1" role="gridcell"></div>
+    <!-- trap needs to have content in order for Safari to scroll the page when focused -->
+    <div class="primary" tabindex="0" role="gridcell"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
+    <div class="secondary" tabindex="-1" role="gridcell"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
 
     <slot></slot>
   </template>
@@ -51,7 +52,6 @@
       },
 
       _onFocus: function(e) {
-        this.parentElement.scrollIntoView();
         this._primary.focus();
       },
 
