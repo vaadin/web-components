@@ -231,21 +231,20 @@ Custom property | Description | Default
           this.focus();
         }
 
-        this.$.input.addEventListener('focus', this.focus.bind(this));
-        this.$.input.addEventListener('blur', this.blur.bind(this));
+        this.$.input.addEventListener('focus', () => this._setFocused(true));
+        this.$.input.addEventListener('blur', () => {
+          this._setFocused(false);
+          // We dont want to mark the input as invalid until the first time the user blurs.
+          this.invalid = this._isInvalid();
+        });
       }
 
       focus() {
-        this._setFocused(true);
         this.$.input.focus();
       }
 
       blur() {
-        this._setFocused(false);
         this.$.input.blur();
-
-        // We dont want to mark the input as invalid until the first time the user blurs.
-        this.invalid = this._isInvalid();
       }
 
       _valueChanged(value) {
