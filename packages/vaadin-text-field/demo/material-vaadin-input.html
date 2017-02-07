@@ -60,6 +60,18 @@
         bottom: 7px;
         background: var(--material__vaadin-input__error-color, #e61e6e);
       }
+
+      vaadin-input[disabled] {
+        --vaadin-input__input-placeholder: {
+          opacity: 0.2;
+        };
+      }
+
+      vaadin-input[disabled]::before {
+        background: none;
+        border-bottom: dashed 1px var(--material__vaadin-input__secondary-color, #737373);
+        opacity: 0.4;
+      }
     </style>
   </template>
 </dom-module>
