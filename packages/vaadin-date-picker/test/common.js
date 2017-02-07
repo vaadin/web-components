@@ -88,7 +88,7 @@ function waitUntilScrolledTo(overlay, date, callback) {
   }
   var monthIndex = overlay._differenceInMonths(date, new Date());
   if (overlay.$.scroller.position === monthIndex) {
-    callback();
+    Polymer.RenderStatus.afterNextRender(overlay, callback);
   } else {
     setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
   }

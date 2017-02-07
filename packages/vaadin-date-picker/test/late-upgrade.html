@@ -26,6 +26,7 @@
       });
 
       it('should have preset value from property', function(done) {
+        this.timeout(30000);
         // Set the value before the element is upgraded.
         datepicker.value = '2000-01-01';
 
