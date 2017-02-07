@@ -98,8 +98,8 @@ first element in the cell will be focused. You can override the behavior by appl
 <link rel="import" href="vaadin-grid-column.html">
 <link rel="import" href="vaadin-grid-active-item-behavior.html">
 <link rel="import" href="vaadin-grid-row-details-behavior.html">
-<link rel="import" href="vaadin-grid-data-source-behavior.html">
-<link rel="import" href="vaadin-grid-array-data-source-behavior.html">
+<link rel="import" href="vaadin-grid-data-provider-behavior.html">
+<link rel="import" href="vaadin-grid-array-data-provider-behavior.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
 <link rel="import" href="vaadin-grid-selection-behavior.html">
 <link rel="import" href="vaadin-grid-sort-behavior.html">
@@ -153,7 +153,7 @@ first element in the cell will be focused. You can override the behavior by appl
 
       /**
        * Estimated size of the grid data (number of items).
-       * When using function data sources, it always needs to be set manually.
+       * When using function data providers, it always needs to be set manually.
        */
       size: Number,
 
@@ -170,9 +170,9 @@ first element in the cell will be focused. You can override the behavior by appl
       Polymer.IronA11yKeysBehavior,
       vaadin.elements.grid.ActiveItemBehavior,
       vaadin.elements.grid.RowDetailsBehavior,
-      vaadin.elements.grid.DataSourceBehavior,
+      vaadin.elements.grid.DataProviderBehavior,
       vaadin.elements.grid.DynamicColumnsBehavior,
-      vaadin.elements.grid.ArrayDataSourceBehavior,
+      vaadin.elements.grid.ArrayDataProviderBehavior,
       vaadin.elements.grid.SelectionBehavior,
       vaadin.elements.grid.SortBehavior,
       vaadin.elements.grid.FilterBehavior,

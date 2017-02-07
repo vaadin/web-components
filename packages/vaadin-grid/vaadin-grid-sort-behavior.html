@@ -173,7 +173,7 @@ Custom property | Description | Default
 
       e.stopPropagation();
 
-      if (this.dataSource &&
+      if (this.dataProvider &&
         // No need to clear cache if sorters didn't change
         JSON.stringify(this._previousSorters) !== JSON.stringify(this._mapSorters())) {
         this.clearCache();

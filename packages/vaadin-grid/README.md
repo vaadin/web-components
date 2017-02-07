@@ -23,9 +23,9 @@
 -->
 ```html
 <template is="dom-bind">
-  <x-data-source data-source="{{dataSource}}"></x-data-source>
+  <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-  <vaadin-grid data-source="[[dataSource]]" size="200">
+  <vaadin-grid data-provider="[[dataProvider]]" size="200">
 
     <vaadin-grid-column width="50px">
       <template class="header">#</template>

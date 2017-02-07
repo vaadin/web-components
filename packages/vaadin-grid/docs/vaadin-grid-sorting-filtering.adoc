@@ -8,8 +8,8 @@ layout: page
 = Sorting and Filtering
 
 This section will cover the basics of utilizing the [vaadinelement]#vaadin-grid#'s sorting and filtering helpers.
-Using the helpers will automatically affect the [vaadinelement]#vaadin-grid#'s visible data when using an array data source as described in <<vaadin-grid-assigning-data#vaadin-grid.items.property, "Assigning the Grid Items">>.
-The helpers are useful with custom data sources also since they provide out-of-the-box UI controls, visual feedback and hook to the data source callback parameters.
+Using the helpers will automatically affect the [vaadinelement]#vaadin-grid#'s visible data when using an array data provider as described in <<vaadin-grid-assigning-data#vaadin-grid.items.property, "Assigning the Grid Items">>.
+The helpers are useful with custom data providers also since they provide out-of-the-box UI controls, visual feedback and hook to the data provider callback parameters.
 
 [[figure.vaadin-grid.sorting.overview]]
 .A [vaadinelement]#vaadin-grid# displaying three sorting indicators
@@ -107,17 +107,17 @@ A predefined sorting order can also be achieved by decorating the [elementname]#
 This example will result in a two column [vaadinelement]#vaadin-grid# with both columns having a predefined sort direction.
 Clicking the column headers will again change the sort order with the last click always defining the primary sorting value.
 
-[[vaadin-grid.sorting.custom.datasource]]
-== Sorting Data with a Custom Data Source
+[[vaadin-grid.sorting.custom.dataprovider]]
+== Sorting Data with a Custom Data Provider
 
-When the data is fetched from a custom data source, the responsibility of providing correctly ordered data is on the data source itself.
-The data source is asked for fresh sorted data whenever the sorting order is changed trough any [elementname]#vaadin-grid-column#.
+When the data is fetched from a custom data provider, the responsibility of providing correctly ordered data is on the data provider itself.
+The data provider is asked for fresh sorted data whenever the sorting order is changed trough any [elementname]#vaadin-grid-column#.
 
-The effective [propertyname]#sortOrder# array will be included as one of the data source callback parameters so it can be utilized by the data provider.
+The effective [propertyname]#sortOrder# array will be included as one of the data provider callback parameters so it can be utilized by the data provider.
 
 [source,javascript]
 ----
-grid.dataSource = function(params, callback) {
+grid.dataProvider = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page +
   '&per_page=' + params.pageSize +
   // Include the sort order to the request
@@ -141,9 +141,9 @@ grid.dataSource = function(params, callback) {
 
 Filtering helpers behave similarly to [vaadinelement]#vaadin-grid#'s sorting helpers.
 
-Place a [elementname]#vaadin-grid-filter# element with a [propertyname]#path# defined into a header/footer cell to show an input field that automatically filters the [vaadinelement]#vaadin-grid#'s data when using an array data source.
+Place a [elementname]#vaadin-grid-filter# element with a [propertyname]#path# defined into a header/footer cell to show an input field that automatically filters the [vaadinelement]#vaadin-grid#'s data when using an array data provider.
 
-The element helps in filtering with custom data sources also since they automatically include filtering information to the data source callback parameters.
+The element helps in filtering with custom data providers also since they automatically include filtering information to the data provider callback parameters.
 
 [source,html]
 ----
@@ -178,16 +178,16 @@ The following example uses a [elementname]#paper-input# as a filter field.
 </vaadin-grid-filter>
 ----
 
-[[vaadin-grid.filtering.custom.datasource]]
-== Filtering Data with a Custom Data Source
+[[vaadin-grid.filtering.custom.dataprovider]]
+== Filtering Data with a Custom Data Provider
 
-While filtering works with array data sources out-of-the-box, custom data sources need to provide pre-filtered data to the [vaadinelement]#vaadin-grid#.
+While filtering works with array data providers out-of-the-box, custom data providers need to provide pre-filtered data to the [vaadinelement]#vaadin-grid#.
 
-Whenever the value of a [elementname]#vaadin-grid-filter# changes (for example when a user types something) the [propertyname]#dataSource# is asked for fresh data with filtering information included in the request.
+Whenever the value of a [elementname]#vaadin-grid-filter# changes (for example when a user types something) the [propertyname]#dataProvider# is asked for fresh data with filtering information included in the request.
 
 [source,javascript]
 ----
-grid.dataSource = function(params, callback) {
+grid.dataProvider = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page +
   '&per_page=' + params.pageSize +
   // Include the filtering information to the request

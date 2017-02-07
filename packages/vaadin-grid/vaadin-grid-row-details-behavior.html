@@ -51,11 +51,11 @@
     },
 
     observers: [
-      '_expandedItemsChanged(expandedItems.*, dataSource)',
+      '_expandedItemsChanged(expandedItems.*, dataProvider)',
       '_rowDetailsTemplateChanged(_rowDetailsTemplate)'
     ],
 
-    _expandedItemsChanged: function(expandedItems, dataSource) {
+    _expandedItemsChanged: function(expandedItems, dataProvider) {
       this._flushItemsDebouncer();
       if (this.$.scroller._physicalItems) {
         this.$.scroller._physicalItems.forEach(function(row) {

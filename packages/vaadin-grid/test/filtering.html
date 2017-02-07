@@ -132,10 +132,10 @@
         });
       });
 
-      it('should pass filters to dataSource', function(done) {
+      it('should pass filters to dataProvider', function(done) {
         grid.size = 10;
 
-        grid.dataSource = function(opts) {
+        grid.dataProvider = function(opts) {
           expect(opts.filters[0]).to.eql({path: 'first', value: 'bar'});
           expect(opts.filters[1]).to.eql({path: 'last', value: 'qux'});
 
@@ -154,7 +154,7 @@
 
     });
 
-    describe('array data source', function() {
+    describe('array data provider', function() {
 
       var grid;
 

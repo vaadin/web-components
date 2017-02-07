@@ -1,10 +1,10 @@
 
 <link rel="import" href="../../polymer/polymer.html">
 
-<dom-module id="x-data-source">
+<dom-module id="x-data-provider">
   <script>
     Polymer({
-      is: 'x-data-source',
+      is: 'x-data-provider',
 
       properties: {
 
@@ -18,7 +18,7 @@
           value: 0
         },
 
-        dataSource: {
+        dataProvider: {
           notify: true,
           value: function() {
             var _this = this;
@@ -39,10 +39,10 @@
   </script>
 </dom-module>
 
-<dom-module id="x-array-data-source">
+<dom-module id="x-array-data-provider">
   <script>
     Polymer({
-      is: 'x-array-data-source',
+      is: 'x-array-data-provider',
 
       properties: {
         items: {

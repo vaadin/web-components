@@ -37,9 +37,9 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-          <vaadin-grid data-source="[[dataSource]]" size="200">
+          <vaadin-grid data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -82,11 +82,11 @@
                 font: inherit;
               }
             </style>
-            <x-data-source data-source="{{dataSource}}"></x-data-source>
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
             <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
 
-            <vaadin-grid on-item-changed="_log" data-source="[[dataSource]]" size="10000">
+            <vaadin-grid on-item-changed="_log" data-provider="[[dataProvider]]" size="10000">
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
@@ -122,8 +122,8 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid data-source="[[dataSource]]" size="200">
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          <vaadin-grid data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="30px" flex-grow="0">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -194,9 +194,9 @@
               };
             }
           </style>
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-          <vaadin-grid id="grid-row-details" data-source="[[dataSource]]" size="200">
+          <vaadin-grid id="grid-row-details" data-provider="[[dataProvider]]" size="200">
 
             <template class="row-details">
               <div class="details">

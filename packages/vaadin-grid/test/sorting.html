@@ -165,7 +165,7 @@
           expect(sorterLast._order).to.equal(null);
         });
 
-        describe('array data source', function() {
+        describe('array data provider', function() {
 
           it('should sort automatically', function() {
             expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
@@ -195,15 +195,15 @@
 
         });
 
-        describe('data source', function() {
+        describe('data provider', function() {
 
           beforeEach(function() {
-            grid.dataSource = sinon.spy(grid.dataSource);
+            grid.dataProvider = sinon.spy(grid.dataProvider);
             grid.clearCache();
           });
 
           it('should request with default sorting', function() {
-            var lastCall = grid.dataSource.lastCall;
+            var lastCall = grid.dataProvider.lastCall;
             var params = lastCall.args[0];
             expect(params.sortOrder).to.eql([{
               path: 'last',
@@ -216,7 +216,7 @@
 
           it('should request new data on sort', function() {
             sorterFirst.direction = 'desc';
-            var lastCall = grid.dataSource.lastCall;
+            var lastCall = grid.dataProvider.lastCall;
             var params = lastCall.args[0];
             expect(params.sortOrder).to.eql([{
               path: 'first',
@@ -228,9 +228,9 @@
           });
 
           it('should request new data on change in existing sorters', function() {
-            grid.dataSource.reset();
+            grid.dataProvider.reset();
             sorterLast.direction = 'asc';
-            expect(grid.dataSource.called).to.be.true;
+            expect(grid.dataProvider.called).to.be.true;
           });
 
         });

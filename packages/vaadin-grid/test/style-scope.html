@@ -40,7 +40,7 @@
         }
       </style>
 
-      <vaadin-grid style="height: 400px;" size="1000" data-source="[[dataSource]]" id="grid">
+      <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="grid">
         <vaadin-grid-column>
           <template>
             <b class="my-content">[[index]]</b>
@@ -55,9 +55,9 @@
           is: 'test-component',
 
           properties: {
-            dataSource: {
+            dataProvider: {
               value: function() {
-                return infiniteDataSource;
+                return infiniteDataProvider;
               }
             }
           }
@@ -80,7 +80,7 @@
       }
     </style>
 
-    <vaadin-grid style="height: 400px;" size="1000" data-source="[[dataSource]]" id="dom-bind-grid">
+    <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="dom-bind-grid">
       <vaadin-grid-column>
         <template>
           <b class="my-content">[[index]]</b>

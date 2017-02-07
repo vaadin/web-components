@@ -1,4 +1,4 @@
-<dom-module id="vaadin-grid-data-source-styles">
+<dom-module id="vaadin-grid-data-provider-styles">
   <template>
     <style>
       :host(:not([has-data])) tbody tr::after {
@@ -13,7 +13,7 @@
     </style>
   </template>
 </dom-module>
-<dom-module id="vaadin-grid-data-source-themability-styles">
+<dom-module id="vaadin-grid-data-provider-themability-styles">
   <template>
     <style>
 
@@ -77,9 +77,9 @@
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.DataSourceBehavior
+   * @polymerBehavior vaadin.elements.grid.DataProviderBehavior
    */
-  vaadin.elements.grid.DataSourceBehavior = {
+  vaadin.elements.grid.DataProviderBehavior = {
 
     listeners: {
       'item-changed': '_templateItemChanged'
@@ -88,7 +88,7 @@
     properties: {
 
       /**
-       * Number of items fetched at a time from the datasource.
+       * Number of items fetched at a time from the dataprovider.
        */
       pageSize: {
         type: Number,
@@ -103,14 +103,14 @@
        *
        * `params.pageSize` Current page size
        */
-      dataSource: {
+      dataProvider: {
         type: Function,
         notify: true,
-        observer: '_dataSourceChanged'
+        observer: '_dataProviderChanged'
       },
 
       /**
-       * `true` while data is being requested from the data source.
+       * `true` while data is being requested from the data provider.
        */
       _loading: Boolean,
 
@@ -253,7 +253,7 @@
     _loadPage: function(page) {
       if (!this._cache[page]) {
         // make sure same page isn't requested multiple times.
-        if (!this._pendingRequests[page] && this.dataSource) {
+        if (!this._pendingRequests[page] && this.dataProvider) {
           this._pendingRequests[page] = true;
           var opts = {
             page: page,
@@ -261,7 +261,7 @@
             sortOrder: this._mapSorters(),
             filters: this._mapFilters()
           };
-          this.dataSource(opts, function(items) {
+          this.dataProvider(opts, function(items) {
             this._cache[page] = items;
             delete this._pendingRequests[page];
             this._updateItems(page, items);
@@ -277,7 +277,7 @@
     },
 
     /**
-     * Clears the cached pages and reloads data from datasource when needed.
+     * Clears the cached pages and reloads data from dataprovider when needed.
      */
     clearCache: function() {
       this._cache = {};
@@ -296,8 +296,8 @@
       }
     },
 
-    _dataSourceChanged: function(dataSource, oldDataSource) {
-      if (oldDataSource !== undefined) {
+    _dataProviderChanged: function(dataProvider, oldDataProvider) {
+      if (oldDataProvider !== undefined) {
         this.clearCache();
       }
     }

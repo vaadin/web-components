@@ -60,7 +60,7 @@
 
       beforeEach(function(done) {
         grid = fixture('default');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         headerCells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
         handle = headerCells[0]._resizeHandle;
         Polymer.RenderStatus.afterNextRender(grid, done);
@@ -137,7 +137,7 @@
 
       beforeEach(function(done) {
         grid = fixture('group');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, done);
       });
 

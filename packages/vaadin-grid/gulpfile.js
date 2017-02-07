@@ -22,7 +22,7 @@ gulp.task('lint:html', function() {
     '*.html',
     'demo/*.html',
     'test/*.html',
-    '!demo/x-data-source.html'
+    '!demo/x-data-provider.html'
   ])
   .pipe(htmlExtract({
     sel: 'script, code-example code'

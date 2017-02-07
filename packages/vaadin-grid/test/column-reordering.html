@@ -168,7 +168,7 @@
 
       beforeEach(function(done) {
         grid = fixture('default');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, function() {
           var colCount = getRowCells(getRows(grid.$.scroller.$.header)[0]).length;
           headerContent = [];
@@ -302,7 +302,7 @@
 
       beforeEach(function(done) {
         grid = fixture('groups');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, done);
       });
 
@@ -372,7 +372,7 @@
 
       beforeEach(function(done) {
         grid = fixture('differentWidths');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, function() {
           headerContent0 = getHeaderCellContent(grid, 0, 0);
           headerContent1 = getHeaderCellContent(grid, 0, 1);
@@ -400,7 +400,7 @@
 
       beforeEach(function(done) {
         grid = fixture('largegroup');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, done);
       });
 

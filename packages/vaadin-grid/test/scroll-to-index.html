@@ -49,7 +49,7 @@
 
           beforeEach(function() {
             var grid = fixture(scale);
-            grid.dataSource = infiniteDataSource;
+            grid.dataProvider = infiniteDataProvider;
             scroller = grid.$.scroller;
           });
 
@@ -94,7 +94,7 @@
 
         beforeEach(function() {
           var grid = fixture('large');
-          grid.dataSource = infiniteDataSource;
+          grid.dataProvider = infiniteDataProvider;
           scroller = grid.$.scroller;
         });
 
