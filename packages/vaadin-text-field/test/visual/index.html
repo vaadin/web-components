@@ -12,27 +12,29 @@
 
   <custom-style>
     <style>
-    html {
-      /* we want to use customised mixins to test them so as we don't trust the native input look */
-      --vaadin-input-input: {
+    /* we want to use customised css in test so as we don't trust the native input look */
+    vaadin-input {
+      border: solid 1px #d8d8d8;
+
+      --vaadin-input__input: {
         outline: none;
-        border: solid 1px #d8d8d8;
+        border: none;
       };
+    }
 
-      --vaadin-input-input-focus: {
-        border: solid 1px #d8d8d8;
-        border-bottom: solid 1px deepskyblue;
-      };
+    vaadin-input[focused] {
+      border: solid 1px #d8d8d8;
+      border-bottom: solid 1px deepskyblue;
+    }
 
-      --vaadin-input-input-invalid: {
-        background-color: #fbefef;
-      };
+    vaadin-input[invalid] {
+      background-color: #fbefef;
     }
     /* we can't predict if caret will be visible or not, so hide it */
     #hidden-caret {
-      --vaadin-input-input: {
+      --vaadin-input__input: {
         font-size: 0;
-        padding: 10px 100px;
+        padding: 0 100px;
       };
     }
     </style>

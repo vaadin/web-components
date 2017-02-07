@@ -36,17 +36,20 @@
         }, 1);
       });
 
-      it('should focus the internal input on focus', function() {
+      it('should focus the internal input on focus', function(done) {
         vaadinInput.focus();
+        expect(vaadinInput.focused).to.be.true;
+
         expect(vaadinInput.root.querySelector('input:focus')).to.be.ok;
       });
 
-      it('should have methods focus and blur', function() {
+      it('should have methods focus and blur', function(done) {
         vaadinInput.focus();
         expect(vaadinInput.focused).to.be.true;
 
         vaadinInput.blur();
         expect(vaadinInput.focused).to.be.false;
+        expect(vaadinInput.root.querySelector('input:focus')).not.to.be.ok;
       });
 
     });

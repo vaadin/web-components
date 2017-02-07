@@ -12,12 +12,13 @@
 <body>
 
   <custom-style>
-    <style include="theme-vaadin-input-md">
+    <style include="material-vaadin-input">
       #hidden-caret {
-        --vaadin-input-input-focus: {
-          /* To override the mixin, we need to repeat all the block from the theme file */
-          background-size: 100% 2px, 100% 1px;
-          transition: background-size 0.3s ease-out;
+        --vaadin-input__input: {
+          /* To override the mixin, we need to repeat properties from the theme file */
+          padding: 0;
+          border: none;
+          outline: none;
 
           /* Hide the caret because we can't predict whether blinking caret will be visible */
           font-size: 0px;
@@ -36,11 +37,11 @@
       <p>
       focused input: <vaadin-input autofocus id="hidden-caret"></vaadin-input>
       <p>
-      disabled input: <vaadin-input disabled></vaadin-input>
+      disabled input: <vaadin-input disabled placeholder="disabled"></vaadin-input>
       <p>
       input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
       <p>
-      invalid input: <vaadin-input required></vaadin-input>
+      invalid input: <vaadin-input required value="aa" minlength="4"></vaadin-input>
     </fieldset>
   </form>
 
