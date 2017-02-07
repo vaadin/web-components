@@ -38,7 +38,8 @@
           var headerCell = lastHeaderRow.children[index];
 
           // note: having `cell.column.name` property for announcing would maybe be a good option here?
-          this.domHost.$.bodyFocusTrap.activeTarget = headerCell._cellContent.id + ' ' + cell._cellContent.id;
+          this.domHost.$.bodyFocusTrap.activeTarget = cell.hasAttribute('detailscell') ?
+            cell._cellContent.id : headerCell._cellContent.id + ' ' + cell._cellContent.id;
 
           break;
         case 'vaadin-grid-table-footer':
