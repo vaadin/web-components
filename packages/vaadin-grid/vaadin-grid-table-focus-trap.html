@@ -13,8 +13,8 @@
     </style>
 
     <!-- trap needs to have content in order for Safari to scroll the page when focused -->
-    <div class="primary" tabindex="0" role="gridcell"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
-    <div class="secondary" tabindex="-1" role="gridcell"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
+    <div class="primary" tabindex="0" role="gridcell" on-focus="_onFocusin" on-blur="_onFocusout"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
+    <div class="secondary" tabindex="-1" role="gridcell" on-focus="_onFocusin" on-blur="_onFocusout"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
 
     <slot></slot>
   </template>
@@ -28,8 +28,7 @@
       },
 
       listeners: {
-        'focus': '_onFocus',
-        'focusin': '_onFocusin'
+        'focus': '_onFocus'
       },
 
       properties: {
@@ -56,7 +55,17 @@
       },
 
       _onFocusin: function(e) {
+        // TODO: remove this custom event after FF52 with native focusin support
+        // is in use.
+        this.fire('focusin');
+
         this._focused = e.target;
+      },
+
+      _onFocusout: function(e) {
+        // TODO: remove this custom event after FF52 with native focusout support
+        // is in use.
+        this.fire('focusout');
       },
 
       _activeTargetChanged: function(target) {

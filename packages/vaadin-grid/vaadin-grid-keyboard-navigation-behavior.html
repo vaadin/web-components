@@ -50,17 +50,8 @@
       'up': '_onArrowUp'
     },
 
-    listeners: {
-      'focusout': '_onFocusout'
-    },
-
     attached: function() {
       Polymer.IronA11yAnnouncer.requestAvailability();
-    },
-
-    _onFocusout: function(e) {
-      this.$.scroller.navigating = false;
-      this.$.scroller.interacting = false;
     },
 
     _onEnd: function(e) {
@@ -167,6 +158,11 @@
       return this.$.footer._rows.filter(function(row) {
         return !row.hidden;
       }).length > 0;
+    },
+
+    _onFocusout: function(e) {
+      this.navigating = false;
+      this.interacting = false;
     },
 
     _onHeaderFocus: function(e) {

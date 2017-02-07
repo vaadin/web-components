@@ -237,7 +237,7 @@
           it('should disable navigation mode when blurred', function() {
             scroller.navigating = true;
 
-            scroller.fire('focusout');
+            bodyTrap.fire('focusout');
 
             expect(scroller.navigating).to.be.false;
           });
@@ -1139,7 +1139,7 @@
           it('should exit interaction mode when blurred', function() {
             scroller.interacting = true;
 
-          scroller.fire('focusout');
+            bodyTrap.fire('focusout');
 
             expect(scroller.interacting).to.be.false;
           });
@@ -1172,36 +1172,36 @@
             expect(input.focus.callCount).to.eql(1);
           });
 
-        it('should exit interaction mode from focused single-line input with enter', function() {
-          var cell = getCell(0, 1);
-          var input = getCellContent(cell).children[0];
-          input.type = 'text';
+          it('should exit interaction mode from focused single-line input with enter', function() {
+            var cell = getCell(0, 1);
+            var input = getCellContent(cell).children[0];
+            input.type = 'text';
 
-          right(); // focus the cell with input.
-          enter();
+            right(); // focus the cell with input.
+            enter();
 
-          enter(input);
+            enter(input);
 
-          expect(scroller.interacting).to.be.false;
-        });
+            expect(scroller.interacting).to.be.false;
+          });
 
-        it('should not exit interaction mode from focused non-single-line input with enter', function() {
-          var cell = getCell(0, 1);
-          var input = getCellContent(cell).children[0];
-          input.type = 'button';
+          it('should not exit interaction mode from focused non-single-line input with enter', function() {
+            var cell = getCell(0, 1);
+            var input = getCellContent(cell).children[0];
+            input.type = 'button';
 
-          right(); // focus the cell with input.
-          enter();
+            right(); // focus the cell with input.
+            enter();
 
-          enter(input);
+            enter(input);
 
-          expect(scroller.interacting).to.be.true;
-        });
+            expect(scroller.interacting).to.be.true;
+          });
 
-        it('should focus the first element when entering interaction mode with f2', function() {
-          var cell = getCell(0, 1);
-          var input = getCellContent(cell).children[0];
-          input.focus = sinon.spy();
+          it('should focus the first element when entering interaction mode with f2', function() {
+            var cell = getCell(0, 1);
+            var input = getCellContent(cell).children[0];
+            input.focus = sinon.spy();
 
             right(); // focus the cell with input.
 
@@ -1511,7 +1511,7 @@
           }
         });
       });
-}
+    }
   </script>
 
 </body>

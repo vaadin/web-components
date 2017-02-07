@@ -267,11 +267,11 @@
     <style include="vaadin-grid-column-reordering-themability-styles"></style>
 
     <!-- TODO: Shadow DOM doesn't let focusin events bubble, therefore on-focus also -->
-    <vaadin-grid-table-focus-trap id="headerFocusTrap" on-focus="_onHeaderFocus" on-focusin="_onHeaderFocus">
+    <vaadin-grid-table-focus-trap id="headerFocusTrap" on-focus="_onHeaderFocus" on-focusin="_onHeaderFocus" on-focusout="_onFocusout">
     </vaadin-grid-table-focus-trap>
     <content select="#headerFocusTrap"></content>
 
-    <vaadin-grid-table-focus-trap id="bodyFocusTrap" on-focus="_onBodyFocus" on-focusin="_onBodyFocus">
+    <vaadin-grid-table-focus-trap id="bodyFocusTrap" on-focus="_onBodyFocus" on-focusin="_onBodyFocus" on-focusout="_onFocusout">
     </vaadin-grid-table-focus-trap>
     <content select="#bodyFocusTrap"></content>
 
@@ -302,7 +302,7 @@
       It needs to be injected/slotted back inside the shadow root in order to be focusable.
      -->
     <content select="#footerFocusTrap"></content>
-    <vaadin-grid-table-focus-trap id="footerFocusTrap" on-focus="_onFooterFocus" on-focusin="_onFooterFocus">
+    <vaadin-grid-table-focus-trap id="footerFocusTrap" on-focus="_onFooterFocus" on-focusin="_onFooterFocus" on-focusout="_onFocusout">
     </vaadin-grid-table-focus-trap>
   </template>
 </dom-module>
