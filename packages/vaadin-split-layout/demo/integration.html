@@ -20,19 +20,14 @@
         <custom-style>
           <style is="custom-style">
             iframe {
-              width: 100%;
-              height: 100%;
+              width: 0;
               border: none;
             }
           </style>
         </custom-style>
         <vaadin-split-layout style="height: 300px">
-          <div>
-            <iframe src="//maps.google.com/maps?q=Turku&output=embed"></iframe>
-          </div>
-          <div>
-            <iframe src="//maps.google.com/maps?q=Malta&output=embed"></iframe>
-          </div>
+          <iframe src="//maps.google.com/maps?q=Turku&amp;output=embed"></iframe>
+          <iframe src="//maps.google.com/maps?q=Malta&amp;output=embed"></iframe>
         </vaadin-split-layout>
       </template>
     </demo-snippet>

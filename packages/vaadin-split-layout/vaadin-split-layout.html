@@ -257,7 +257,10 @@ element:
           type: Boolean,
           reflectToAttribute: true,
           value: false
-        }
+        },
+
+        _previousPrimaryPointerEvents: String,
+        _previousSecondaryPointerEvents: String
       },
 
       attached: function() {
@@ -310,6 +313,11 @@ element:
             primary: this._primaryChild.getBoundingClientRect()[size],
             secondary: this._secondaryChild.getBoundingClientRect()[size]
           };
+
+          this._previousPrimaryPointerEvents = this._primaryChild.style.pointerEvents;
+          this._previousSecondaryPointerEvents = this._secondaryChild.style.pointerEvents;
+          this._primaryChild.style.pointerEvents = 'none';
+          this._secondaryChild.style.pointerEvents = 'none';
           return;
         }
 
@@ -321,6 +329,9 @@ element:
 
         if (event.detail.state === 'end') {
           delete this._startSize;
+
+          this._primaryChild.style.pointerEvents = this._previousPrimaryPointerEvents;
+          this._secondaryChild.style.pointerEvents = this._previousSecondaryPointerEvents;
         }
       },
 
