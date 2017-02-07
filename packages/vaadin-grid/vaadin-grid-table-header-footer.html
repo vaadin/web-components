@@ -59,12 +59,37 @@
       extends: 'tbody',
       behaviors: [vaadin.elements.grid.FocusableCellContainerBehavior],
 
+      _moveFocusToDetailsCell: function() {
+        this._focusedCell.focused = false;
+        this._focusedRow._rowDetailsCell.focused = true;
+        this._focusedCell = this._focusedRow._rowDetailsCell;
+      },
+
+      _focusedRowHasDetailsCell: function() {
+        return this._focusedRow &&
+          this._focusedRow._rowDetailsCell &&
+          this._focusedCell !== this._focusedRow._rowDetailsCell;
+      },
+
       focusDown: function() {
-        this._focusedRowIndex = Math.min(this._focusedRowIndex + 1, this.domHost.size - 1);
+        if (this._focusedRowHasDetailsCell()) {
+          this._moveFocusToDetailsCell();
+        } else {
+          this._focusedRowIndex = Math.min(this._focusedRowIndex + 1, this.domHost.size - 1);
+        }
       },
 
       focusUp: function() {
-        this._focusedRowIndex = Math.max(0, this._focusedRowIndex - 1);
+        if (this._focusedRow &&
+          this._focusedCell === this._focusedRow._rowDetailsCell) {
+          this._focusedCellChanged(this._focusedRowIndex, this._focusedCellIndex);
+        } else {
+          this._focusedRowIndex = Math.max(0, this._focusedRowIndex - 1);
+
+          if (this._focusedRowHasDetailsCell()) {
+            this._moveFocusToDetailsCell();
+          }
+        }
       },
 
       focusLast: function() {
@@ -81,7 +106,7 @@
             this._focusedCell = row.children[cellIndex];
           }
 
-          row.cells.forEach(function(cell, idx) {
+          row.iterateCells(function(cell, idx) {
             cell.focused = idx === cellIndex;
           });
         }.bind(this));

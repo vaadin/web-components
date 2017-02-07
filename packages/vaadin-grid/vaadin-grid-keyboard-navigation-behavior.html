@@ -512,6 +512,11 @@
       container._focusedRowIndex = rowIndex;
       container._focusedCellIndex = Polymer.dom(row).children.indexOf(cell);
       this._virtualFocus = container;
+
+      if (cell.hasAttribute('detailscell')) {
+        container._focusedCellIndex = 0;
+        container._moveFocusToDetailsCell();
+      }
     },
 
 
@@ -541,6 +546,12 @@
         } else if (elementRect.top < minTop) {
           this.$.table.scrollTop += (elementRect.top - minTop);
         }
+      }
+
+      // skip horizontal scrolling when focusing on row details cell to avoid
+      // unintentional scrolling.
+      if (element.hasAttribute('detailscell')) {
+        return;
       }
 
       // Horizontal
