@@ -437,9 +437,13 @@
     },
 
     _onEnter: function(e) {
-      if(!this.interacting) {
+      if (!this.interacting) {
         e.preventDefault();
         this._moveFocusToFocusTarget();
+      } else if (e.detail.keyboardEvent.target.localName === 'input' &&
+                 e.detail.keyboardEvent.target.type === 'text') {
+        this.interacting = false;
+        this._onTab(e); // revert to navigation
       }
     },
 
