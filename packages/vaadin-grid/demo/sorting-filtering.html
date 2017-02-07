@@ -25,7 +25,7 @@
       <template>
         <template is="dom-bind">
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
-          <vaadin-grid items="[[items]]">
+          <vaadin-grid aria-label="Sorting Example" items="[[items]]">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -52,14 +52,14 @@
       <template>
         <template is="dom-bind">
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
-          <vaadin-grid items="[[items]]">
+          <vaadin-grid aria-label="Filtering Example" items="[[items]]">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter path="user.name.first" value="[[_filterFirstName]]">
+                <vaadin-grid-filter aria-label="First Name" path="user.name.first" value="[[_filterFirstName]]">
                   <input placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
@@ -67,7 +67,7 @@
             </vaadin-grid-column>
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter path="user.name.last" value="[[_filterLastName]]">
+                <vaadin-grid-filter aria-label="Last Name" path="user.name.last" value="[[_filterLastName]]">
                   <input placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>

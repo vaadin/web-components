@@ -39,15 +39,17 @@
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-          <vaadin-grid data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid aria-label="Basic Binding Example" data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px">
-              <template class="header"></template>
+              <template class="header">
+                <div aria-label="Picture"></div>
+              </template>
               <template>
-                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+                <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column width="calc(50% - 100px)">
@@ -75,7 +77,7 @@
               }
 
               input[readonly] {
-                border: none;
+                border: 2px solid transparent;
               }
 
               input {
@@ -86,7 +88,7 @@
 
             <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
 
-            <vaadin-grid on-item-changed="_log" data-provider="[[dataProvider]]" size="10000">
+            <vaadin-grid aria-label="Two-way Binding Example" on-item-changed="_log" data-provider="[[dataProvider]]" size="10000">
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
@@ -123,15 +125,17 @@
       <template>
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <vaadin-grid data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid aria-label="Column Grouping Example" data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="30px" flex-grow="0">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
             <vaadin-grid-column width="50px" flex-grow="0">
-              <template class="header"></template>
+              <template class="header">
+                <div aria-label="Picture"></div>
+              </template>
               <template>
-                <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+                <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
             <vaadin-grid-column-group>
@@ -196,7 +200,7 @@
           </style>
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-          <vaadin-grid id="grid-row-details" data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid aria-label="Row Details Example" id="grid-row-details" data-provider="[[dataProvider]]" size="200">
 
             <template class="row-details">
               <div class="details">
@@ -220,7 +224,7 @@
             <vaadin-grid-column width="100px">
               <template class="header"></template>
               <template>
-                <paper-checkbox checked="{{expanded}}">Show Details</paper-checkbox>
+                <paper-checkbox aria-label$="Show Details for [[item.user.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
               </template>
             </vaadin-grid-column>
           </vaadin-grid>

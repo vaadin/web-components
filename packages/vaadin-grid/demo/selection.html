@@ -26,7 +26,7 @@
       <template>
         <template is="dom-bind">
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
-          <vaadin-grid items="[[items]]">
+          <vaadin-grid aria-label="Multi-Selection Example" items="[[items]]">
             <vaadin-grid-selection-column auto-select>
             </vaadin-grid-selection-column>
             <vaadin-grid-column width="50px">
@@ -51,7 +51,7 @@
       <template>
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <vaadin-grid data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid aria-label="Selection using Templates Example" data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -66,7 +66,7 @@
             </vaadin-grid-column>
             <vaadin-grid-column>
               <template>
-                <paper-button raised focused="{{selected}}">Select</paper-button>
+                <paper-button aria-label="Select Row" raised toggles active="{{selected}}">Select</paper-button>
               </template>
             </vaadin-grid-column>
           </vaadin-grid>
@@ -81,7 +81,7 @@
         <dom-module id="x-selection">
           <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <vaadin-grid id="grid" data-provider="[[dataProvider]]" active-item="{{activeItem}}" size="200">
+            <vaadin-grid aria-label="Selection using Active Item Example" id="grid" data-provider="[[dataProvider]]" active-item="{{activeItem}}" size="200">
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
@@ -132,13 +132,13 @@
               }
             </style>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <vaadin-grid id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
+            <vaadin-grid  aria-label="Select All with Data Example" id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
               <vaadin-grid-column width="40px" flex-grow="0" >
                 <template class="header">
-                  <input type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
+                  <input aria-label="Select All" type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
                 </template>
                 <template>
-                  <input type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
+                  <input aria-label="Select Row" type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
                 </template>
               </vaadin-grid-column>
               <vaadin-grid-column>

@@ -18,7 +18,35 @@
       _focusedCellIndex: Number
     },
 
-    observers: ['_focusedCellChanged(_focusedRowIndex, _focusedCellIndex)'],
+    observers: ['_announceFocusedCell(_focusedCell, focused)', '_focusedCellChanged(_focusedRowIndex, _focusedCellIndex)'],
+
+    _announceFocusedCell: function(cell, focused) {
+      // changing activeTarget steals focus so we don't want to do that while interacting with
+      // cell contents.
+      // TODO: remember to change activeTarget when navigation mode is activated back.
+      if (!this.domHost.navigating || !focused) {
+        return;
+      }
+      // note: VoiceOver doesn't work with dynamic IDs.
+      switch(this.is) {
+        case 'vaadin-grid-table-header':
+          this.domHost.$.headerFocusTrap.activeTarget = cell._cellContent.id;
+          break;
+        case 'vaadin-grid-table-body':
+          var index = Polymer.dom(cell.parentElement).querySelectorAll('td').indexOf(cell);
+          var lastHeaderRow = this.domHost.$.header.lastElementChild;
+          var headerCell = lastHeaderRow.children[index];
+
+          // note: having `cell.column.name` property for announcing would maybe be a good option here?
+          this.domHost.$.bodyFocusTrap.activeTarget = cell.hasAttribute('detailscell') ?
+            cell._cellContent.id : headerCell._cellContent.id + ' ' + cell._cellContent.id;
+
+          break;
+        case 'vaadin-grid-table-footer':
+          this.domHost.$.footerFocusTrap.activeTarget = cell._cellContent.id;
+          break;
+      }
+    },
 
     _focusedCellChanged: function(rowIndex, cellIndex) {
       Polymer.dom(this).children.forEach(function(row, i) {

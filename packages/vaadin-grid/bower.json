@@ -53,6 +53,7 @@
     "polymer": "^1.6.1",
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^1.0.5",
     "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0",
-    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.1.9"
+    "iron-a11y-keys-behavior": "^1.1.9",
+    "iron-a11y-announcer": "^1.0.5"
   }
 }
