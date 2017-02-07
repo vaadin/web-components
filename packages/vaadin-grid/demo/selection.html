@@ -25,7 +25,7 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-array-data-source items="{{items}}"></x-array-data-source>
+          <x-array-data-provider items="{{items}}"></x-array-data-provider>
           <vaadin-grid items="[[items]]">
             <vaadin-grid-selection-column auto-select>
             </vaadin-grid-selection-column>
@@ -50,8 +50,8 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid data-source="[[dataSource]]" size="200">
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          <vaadin-grid data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -80,8 +80,8 @@
         <x-selection></x-selection>
         <dom-module id="x-selection">
           <template>
-            <x-data-source data-source="{{dataSource}}"></x-data-source>
-            <vaadin-grid id="grid" data-source="[[dataSource]]" active-item="{{activeItem}}" size="200">
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+            <vaadin-grid id="grid" data-provider="[[dataProvider]]" active-item="{{activeItem}}" size="200">
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
@@ -115,11 +115,11 @@
       </template>
     </demo-snippet>
 
-    <h3>Select All with Data Source</h3>
+    <h3>Select All with Data Provider</h3>
     <demo-snippet>
       <template>
-        <datasource-select-all></datasource-select-all>
-        <dom-module id="datasource-select-all">
+        <dataprovider-select-all></dataprovider-select-all>
+        <dom-module id="dataprovider-select-all">
           <template>
             <style is="custom-style">
               #grid[inverted] {
@@ -131,8 +131,8 @@
                 };
               }
             </style>
-            <x-data-source data-source="{{dataSource}}"></x-data-source>
-            <vaadin-grid id="grid" data-source="[[dataSource]]" inverted$="[[inverted]]" size="200">
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+            <vaadin-grid id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
               <vaadin-grid-column width="40px" flex-grow="0" >
                 <template class="header">
                   <input type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
@@ -154,7 +154,7 @@
           <script>
           document.addEventListener('WebComponentsReady', function() {
             Polymer({
-              is: 'datasource-select-all',
+              is: 'dataprovider-select-all',
 
               properties: {
                 inverted: {

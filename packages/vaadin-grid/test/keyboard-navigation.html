@@ -819,7 +819,7 @@
 
           it('should focus to last row element after scrolling to end', function() {
             grid.size = 1000;
-            grid.dataSource = infiniteDataSource;
+            grid.dataProvider = infiniteDataProvider;
             clickItem(0);
 
             ctrlEnd();
@@ -926,7 +926,7 @@
           describe('vertical scrolling', function() {
             beforeEach(function() {
               grid.size = 200;
-              grid.dataSource = infiniteDataSource;
+              grid.dataProvider = infiniteDataProvider;
             });
 
             it('should scroll rows visible with up arrow', function() {

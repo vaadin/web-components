@@ -42,7 +42,7 @@
 
       beforeEach(function(done) {
         grid = fixture('frozen-columns');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         columns = grid.querySelectorAll('vaadin-grid-column');
 

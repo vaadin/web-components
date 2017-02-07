@@ -38,7 +38,7 @@ The Two-way binding [propertyname]#selected# property inside templates can be us
 You can use the [vaadinelement]#vaadin-grid-selection-column# helper element to get default templates and functionality for the selection.
 With it the user can select rows using checkboxes displayed in a column.
 
-When [vaadinelement]#vaadin-grid# is configured with an array of items as the data source, the [vaadinelement]#vaadin-grid-selection-column# provides the feature of selecting all the items by clicking on the checkbox in the header.
+When [vaadinelement]#vaadin-grid# is configured with an array of items as the data provider, the [vaadinelement]#vaadin-grid-selection-column# provides the feature of selecting all the items by clicking on the checkbox in the header.
 
 [source,html]
 ----

@@ -32,7 +32,7 @@
   </test-fixture>
 
   <script>
-    describe('array data source', function() {
+    describe('array data provider', function() {
       var grid, body;
 
       function getContent(row, column) {
@@ -91,14 +91,14 @@
         expect(grid.size).to.equal(0);
       });
 
-      it('should set array data source', function() {
-        expect(grid.dataSource).to.equal(grid._arrayDataSource);
+      it('should set array data provider', function() {
+        expect(grid.dataProvider).to.equal(grid._arrayDataProvider);
       });
 
-      it('should not override custom data source', function() {
-        var ds = grid.dataSource = function() {};
+      it('should not override custom data provider', function() {
+        var ds = grid.dataProvider = function() {};
         grid.items = [1, 2, 3];
-        expect(grid.dataSource).to.equal(ds);
+        expect(grid.dataProvider).to.equal(ds);
       });
 
       it('should handle new array of same length', function() {

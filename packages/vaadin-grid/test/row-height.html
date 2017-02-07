@@ -105,7 +105,7 @@
     describe('rows', function() {
 
       var grid, scroller, header, rows, defaultHeight, wrappers;
-      var dataSourceDelay = 200;
+      var dataProviderDelay = 200;
 
       function init(fixtureName) {
         grid = fixture(fixtureName);
@@ -126,7 +126,7 @@
         grid.updateStyles();
         defaultHeight = getRows(header)[0].clientHeight;
 
-        grid.dataSource = function(info, callback) {
+        grid.dataProvider = function(info, callback) {
           setTimeout(function() {
             var startIndex = info.pageSize * info.page;
             callback(buildDataSet(startIndex + info.pageSize).splice(startIndex));
@@ -134,7 +134,7 @@
             grid.async(function() {
               grid.fire('items-assigned');
             }, 10);
-          }, dataSourceDelay);
+          }, dataProviderDelay);
         };
         wrappers = getRowCells(rows[0]).map(function(cell) {
           return getCellContent(cell);
@@ -142,7 +142,7 @@
       }
 
       beforeEach(function(done) {
-        setTimeout(done, dataSourceDelay * 2);
+        setTimeout(done, dataProviderDelay * 2);
       });
 
       it('should have higher wrappers on each row cell', function(done) {
@@ -201,7 +201,7 @@
             var rows = getRows(scroller.$.items);
             expect(rows[0].clientHeight).to.equal(newRowHeight);
             done();
-          }, dataSourceDelay / 2);
+          }, dataProviderDelay / 2);
           scroller.$.table.scrollTop += 1000;
         };
       });
@@ -215,7 +215,7 @@
             var rows = getRows(scroller.$.items);
             expect(rows[0].clientHeight).to.equal(newRowHeight);
             done();
-          }, dataSourceDelay / 2);
+          }, dataProviderDelay / 2);
           scroller.$.table.scrollTop += 10000;
         };
       });

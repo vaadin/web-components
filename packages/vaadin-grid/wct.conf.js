@@ -29,10 +29,10 @@ module.exports = {
         'include': [
           '/iron-list-behavior.html',
           '/vaadin-grid-active-item-behavior.html',
-          '/vaadin-grid-array-data-source-behavior.html',
+          '/vaadin-grid-array-data-provider-behavior.html',
           '/vaadin-grid-cell-click-behavior.html',
           '/vaadin-grid-column.html',
-          '/vaadin-grid-data-source-behavior.html',
+          '/vaadin-grid-data-provider-behavior.html',
           '/vaadin-grid-dynamic-columns-behavior.html',
           // TODO: @limonte, revisit this in future, currently a weird istanbul bug here
           // '/vaadin-grid-filter-behavior.html',

@@ -43,9 +43,9 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
           <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
-          <vaadin-grid data-source="[[dataSource]]" size="200">
+          <vaadin-grid data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px" frozen="[[frozen]]">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -77,10 +77,10 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
           <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
           <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
-          <vaadin-grid data-source="[[dataSource]]" size="200">
+          <vaadin-grid data-provider="[[dataProvider]]" size="200">
             <vaadin-grid-column width="50px" hidden="[[hidden]]">
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -112,8 +112,8 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <x-data-source data-source="{{dataSource}}"></x-data-source>
-          <vaadin-grid data-source="[[dataSource]]" size="200" column-reordering-allowed>
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          <vaadin-grid data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
             <vaadin-grid-column width="30px" flex-grow="0" resizable>
               <template class="header">#</template>
               <template>[[index]]</template>
@@ -162,8 +162,8 @@
         <x-dynamic-columns></x-dynamic-columns>
         <dom-module id="x-dynamic-columns">
           <template>
-            <x-data-source data-source="{{dataSource}}"></x-data-source>
-            <vaadin-grid id="grid" data-source="[[dataSource]]" size="200">
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+            <vaadin-grid id="grid" data-provider="[[dataProvider]]" size="200">
               <template is="dom-repeat" items="[[columns]]" as="column">
                 <vaadin-grid-column>
                   <template class="header">[[column]]</template>

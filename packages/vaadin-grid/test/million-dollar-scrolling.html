@@ -90,7 +90,7 @@
           beforeEach(function(done) {
             container = fixture('table');
             grid = container.$.grid;
-            grid.dataSource = infiniteDataSource;
+            grid.dataProvider = infiniteDataProvider;
             grid.size = size;
             flush(function() {
               grid.$.scroller.$.table.scrollTop = grid.$.scroller.$.table.scrollHeight;

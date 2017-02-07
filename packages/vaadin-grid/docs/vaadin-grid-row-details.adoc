@@ -63,7 +63,7 @@ After details have been expanded for a row, you can use [propertyname]#expandedI
 ----
 
 [NOTE]
-Similarily to [propertyname]#selectedItems#, [propertyname]#expandedItems# will be cleared when the data source is updated.
+Similarily to [propertyname]#selectedItems#, [propertyname]#expandedItems# will be cleared when the data provider is updated.
 
 [propertyname]#expandedItems# can also be modified to expand or collapse row details. This is especially handy when you want to close all expanded details:
 

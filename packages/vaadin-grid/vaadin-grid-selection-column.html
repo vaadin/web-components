@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 `vaadin-grid-selection-column` is a helper element for the `vaadin-grid` that provides default templates and functionality for the selection.
 With it the user can select rows using checkboxes displayed in a column.
 
-When the grid is configured with an array of items as the data source, it provides the feature of selecting all the items by clicking on the checkbox in the header.
+When the grid is configured with an array of items as the data provider, it provides the feature of selecting all the items by clicking on the checkbox in the header.
 
 -->
 
@@ -87,7 +87,7 @@ When the grid is configured with an array of items as the data source, it provid
     detached: function() {
       if (this._grid) {
         this.unlisten(this._grid, 'active-item-changed', '_onActiveItemChanged');
-        this.unlisten(this._grid, 'data-source-changed', '_onDataSourceChanged');
+        this.unlisten(this._grid, 'data-provider-changed', '_onDataProviderChanged');
         this.unlisten(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
@@ -97,7 +97,7 @@ When the grid is configured with an array of items as the data source, it provid
       this._grid = this._findGrid(this);
       if (this._grid) {
         this.listen(this._grid, 'active-item-changed', '_onActiveItemChanged');
-        this.listen(this._grid, 'data-source-changed', '_onDataSourceChanged');
+        this.listen(this._grid, 'data-provider-changed', '_onDataProviderChanged');
         this.listen(this._grid, 'filter-changed', '_onSelectedItemsChanged');
         this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
       }
@@ -172,7 +172,7 @@ When the grid is configured with an array of items as the data source, it provid
       this._selectAllChangeLock = false;
     },
 
-    _onDataSourceChanged: function(e) {
+    _onDataProviderChanged: function(e) {
       this._selectAllHidden = !this._grid.items;
     }
   });

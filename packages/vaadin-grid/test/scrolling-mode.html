@@ -34,7 +34,7 @@
 
       beforeEach(function() {
         grid = fixture('default');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
         Polymer.dom.flush();

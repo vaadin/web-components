@@ -42,7 +42,7 @@
       beforeEach(function(done) {
         container = fixture('trivialGrid');
         grid = container.firstElementChild;
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         flush(done);
       });
 

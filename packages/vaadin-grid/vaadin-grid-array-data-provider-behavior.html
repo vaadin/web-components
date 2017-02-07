@@ -4,9 +4,9 @@
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.ArrayDataSourceBehavior
+   * @polymerBehavior vaadin.elements.grid.ArrayDataProviderBehavior
    */
-  vaadin.elements.grid.ArrayDataSourceBehavior = {
+  vaadin.elements.grid.ArrayDataProviderBehavior = {
 
     properties: {
 
@@ -24,11 +24,11 @@
 
     _itemsChanged: function(items, splices) {
       this.size = (items || []).length;
-      this.dataSource = this.dataSource || this._arrayDataSource;
+      this.dataProvider = this.dataProvider || this._arrayDataProvider;
       this.clearCache();
     },
 
-    _arrayDataSource: function(opts, cb) {
+    _arrayDataProvider: function(opts, cb) {
       var items = (this.items || []).slice(0);
 
       items = this._filter(items);

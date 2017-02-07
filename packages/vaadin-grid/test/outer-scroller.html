@@ -80,7 +80,7 @@
 
       beforeEach(function(done) {
         grid = fixture('default');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         outerScroller = scroller.$.outerscroller;
         outerScroller.hidden = false;
@@ -239,7 +239,7 @@
 
       beforeEach(function(done) {
         grid = fixture('content-only');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         outerScroller = scroller.$.outerscroller;
         outerScroller.hidden = false;
@@ -259,7 +259,7 @@
 
       beforeEach(function() {
         grid = fixture('scrollable-content');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
         scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
       });

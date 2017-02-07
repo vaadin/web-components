@@ -55,7 +55,7 @@
       beforeEach(function(done) {
         container = fixture('grid');
         grid = container.$.grid;
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         column = Polymer.dom(grid).querySelector('vaadin-grid-column');
         flush(done);
       });

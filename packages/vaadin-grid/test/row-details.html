@@ -33,7 +33,7 @@
 
       beforeEach(function(done) {
         grid = fixture('default');
-        grid.dataSource = infiniteDataSource;
+        grid.dataProvider = infiniteDataProvider;
         bodyRows = getRows(grid.$.scroller.$.items);
         Polymer.Base.async(done, 25);
       });
