@@ -13,47 +13,34 @@
 <body>
   <test-fixture id="default">
     <template>
-      <div>
-        <vaadin-input id="vaadinInput"></vaadin-input>
-      </div>
+      <vaadin-input id="vaadinInput"></vaadin-input>
     </template>
   </test-fixture>
 
   <script>
+    describe('focus', function() {
+      var vaadinInput;
 
-    // FF has odd focus issues, when running in travis and sauce. These tests run in local though.
-    if (!/firefox/i.test(navigator.userAgent)) {
-
-      describe('focus', function() {
-        var label, vaadinInput;
-
-        beforeEach(function(done) {
-          label = fixture('default');
-
-          // wait for the web component to be ready
-          window.setTimeout(function() {
-            vaadinInput = label.querySelector('#vaadinInput');
-            done();
-          }, 1);
-        });
-
-        it('should focus the internal input on focus', function() {
-          vaadinInput.focus();
-          expect(vaadinInput.focused).to.be.true;
-          expect(vaadinInput.root.querySelector('input:focus')).to.be.ok;
-        });
-
-        it('should have methods focus and blur', function() {
-          vaadinInput.focus();
-          expect(vaadinInput.focused).to.be.true;
-
-          vaadinInput.blur();
-          expect(vaadinInput.focused).to.be.false;
-          expect(vaadinInput.root.querySelector('input:focus')).not.to.be.ok;
-        });
-
+      beforeEach(function() {
+        vaadinInput = fixture('default');
       });
-    }
 
+      it('should focus the internal input on focus', function() {
+        var spy = window.sinon.spy(vaadinInput.$.input, 'focus');
+
+        vaadinInput.focus();
+        expect(vaadinInput.focused).to.be.true;
+        expect(spy.called).to.be.true;
+      });
+
+      it('should blur the internal input on blur', function() {
+        var spy = window.sinon.spy(vaadinInput.$.input, 'blur');
+
+        vaadinInput.focus();
+        vaadinInput.blur();
+        expect(vaadinInput.focused).to.be.false;
+        expect(spy.called).to.be.true;
+      });
+    });
   </script>
 </body>
