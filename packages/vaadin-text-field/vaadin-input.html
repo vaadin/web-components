@@ -17,8 +17,8 @@ The following mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--vaadin-input-input` | Mixin applied to the input element | `{}`
-`--vaadin-input-input-placeholder` | Mixin applied to the input's placeholder | `{}`
+`--vaadin-input__input` | Mixin applied to the input element | `{}`
+`--vaadin-input__input-placeholder` | Mixin applied to the input's placeholder | `{}`
 
 @element vaadin-input
 @demo demo/index.html
@@ -35,19 +35,19 @@ Custom property | Description | Default
       }
 
       input {
-        @apply --vaadin-input-input;
+        @apply --vaadin-input__input;
       }
 
       input::-webkit-input-placeholder {
-        @apply --vaadin-input-input-placeholder;
+        @apply --vaadin-input__input-placeholder;
       }
 
       input::-moz-placeholder {
-        @apply --vaadin-input-input-placeholder;
+        @apply --vaadin-input__input-placeholder;
       }
 
       input::placeholder {
-        @apply --vaadin-input-input-placeholder;
+        @apply --vaadin-input__input-placeholder;
       }
     </style>
     <input id="input"

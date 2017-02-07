@@ -1,34 +1,30 @@
-<dom-module id="theme-vaadin-input-md">
+<dom-module id="material-vaadin-input">
   <template>
     <style>
-
-      html {
-        --vaadin-material-input-primary-color: var(--primary-color, deepskyblue);
-        --vaadin-material-input-secondary-color: var(--secondary-text-color, gainsboro);
-        --vaadin-material-input-error-color: var(--error-color, red);
-      }
-
       vaadin-input {
         position: relative;
         display: block;
-        height: 60px;
+        padding: 12px 0;
 
-        --vaadin-input-input: {
-          position: absolute;
-          bottom: 10px;
-
-          background: transparent;
-          width: 100%;
-          border: none;
+        --vaadin-input__input: {
+          padding: 0;
+          border-radius: 0;
+          border: 0;
           outline: none;
 
-          font-size: 16px;
-        }
+          background: transparent;
+          color: inherit;
 
-        --vaadin-input-input-placeholder: {
+          width: 100%;
+
+          font-size: 16px;
+          font-family: Roboto, sans-serif;
+        };
+
+        --vaadin-input__input-placeholder: {
           opacity: 0.8;
-          color: var(--vaadin-material-input-secondary-color);
-        }
+          color: var(--material__vaadin-input__secondary-color, #737373);
+        };
       }
 
       vaadin-input::before,
@@ -38,20 +34,20 @@
         position: absolute;
         left: 0;
         right: 0;
-        bottom: 6px;
       }
 
       vaadin-input::before {
         height: 1px;
-        background: var(--vaadin-material-input-secondary-color);
         bottom: 7px;
+        background: var(--material__vaadin-input__secondary-color, #737373);
       }
 
       vaadin-input::after {
         height: 2px;
-        background: var(--vaadin-material-input-primary-color);
+        bottom: 6px;
         transform: scalex(0);
         transition: transform 0.25s;
+        background: var(--material__vaadin-input__primary-color, #00b4f0);
       }
 
       vaadin-input[focused]::after {
@@ -60,7 +56,9 @@
 
       vaadin-input[invalid]::before,
       vaadin-input[invalid]::after {
-        background: var(--vaadin-material-input-error-color);
+        height: 2px;
+        bottom: 7px;
+        background: var(--material__vaadin-input__error-color, #e61e6e);
       }
     </style>
   </template>
