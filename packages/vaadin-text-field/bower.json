@@ -32,7 +32,8 @@
     "iron-form": "2.0-preview"
   },
   "resolutions": {
-    "test-fixture": "^2.0.0"
+    "test-fixture": "^2.0.0",
+    "custom-elements": "master"
   },
   "dependencies": {
     "polymer": "Polymer/polymer#2.0-preview"
