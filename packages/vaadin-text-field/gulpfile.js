@@ -5,9 +5,9 @@ var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
 var stylelint = require('gulp-stylelint');
 var log = require('gulp-util').log;
-
 var polyserve = require('polyserve');
 var spawn = require('child_process').spawn;
+var which = require('which');
 
 var perf = {
   lighthouse: './node_modules/.bin/lighthouse',
@@ -103,7 +103,14 @@ gulp.task('perf:run:server', function() {
   polyserve.startServer({port: perf.port});
 });
 
-gulp.task('perf:run:tests', ['perf:run:server'], function(cb) {
+gulp.task('perf:env', function(cb) {
+  which('google-chrome-stable', (err, path) => {
+    process.env.LIGHTHOUSE_CHROMIUM_PATH = path;
+    cb();
+  });
+});
+
+gulp.task('perf:run:tests', ['perf:run:server', 'perf:env'], function(cb) {
   perf.tests.reduce((prev, test) => () => runTest(test.name, test.threshold, prev), cb)();
 });
 
