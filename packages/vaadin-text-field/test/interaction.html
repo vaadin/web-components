@@ -26,20 +26,27 @@
       });
 
       it('should focus the internal input on focus', function() {
-        var spy = window.sinon.spy(vaadinInput.$.input, 'focus');
+
+        // Avoid FF window focus issues by stubing native focus behavior
+        window.sinon.stub(vaadinInput.$.input, 'focus', e => {
+          vaadinInput.$.input.dispatchEvent(new CustomEvent('focus', {bubbles: true}));
+        });
 
         vaadinInput.focus();
         expect(vaadinInput.focused).to.be.true;
-        expect(spy.called).to.be.true;
       });
 
       it('should blur the internal input on blur', function() {
-        var spy = window.sinon.spy(vaadinInput.$.input, 'blur');
+        window.sinon.stub(vaadinInput.$.input, 'focus', e => {
+          vaadinInput.$.input.dispatchEvent(new CustomEvent('focus', {bubbles: true}));
+        });
+        window.sinon.stub(vaadinInput.$.input, 'blur', e => {
+          vaadinInput.$.input.dispatchEvent(new CustomEvent('blur', {bubbles: true}));
+        });
 
         vaadinInput.focus();
         vaadinInput.blur();
         expect(vaadinInput.focused).to.be.false;
-        expect(spy.called).to.be.true;
       });
     });
   </script>
