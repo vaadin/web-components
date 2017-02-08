@@ -33,46 +33,18 @@
     background: #eee;
   }
 
-  nav {
-    display: block;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  }
-
-  nav.vertical-section {
-    margin: 0 0 20px;
-    padding: 8px 20px 0;
-    text-transform: uppercase;
-  }
-
-  nav > ul {
-    padding: 0;
-  }
-
-  nav > ul > li {
-    padding: 0 24px 8px 0;
-    list-style: none;
-  }
-
-  nav a,
-  nav b {
-    @apply --paper-font-button;
-  }
-
-  nav a {
-    color: var(--primary-color);
-    text-decoration: none;
-  }
-
-  nav b {
-    color: var(--secondary-text-color);
-  }
-
-  paper-button {
-    margin-bottom: 15px;
-  }
-
   .centered {
     max-width: 600px;
   }
 </style>
 </custom-style>
+
+<!-- Menu Items -->
+<script>
+  window.demos = [
+    {name: 'index', title: 'Basic Examples'},
+    {name: 'custom', title: 'Customization'},
+    {name: 'integration', title: 'Integration'}
+  ];
+</script>
+<link rel="import" href="../../elements-demo-resources/demo-navigation.html">
