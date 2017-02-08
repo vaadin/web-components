@@ -207,7 +207,7 @@ Custom property | Description | Default
             hasValue: {
               type: Boolean,
               value: false,
-              readonly: true,
+              readOnly: true,
               reflectToAttribute: true
             },
 
@@ -258,7 +258,7 @@ Custom property | Description | Default
           this.invalid = this._isInvalid();
         }
         // We dont trust that the user asigns `true` or `0` as a String.
-        this.hasValue = value != null && value !== '';
+        this._setHasValue(value != null && value !== '');
       }
 
       _isInvalid() {

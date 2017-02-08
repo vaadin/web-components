@@ -100,6 +100,22 @@
           vinput.value = 'foo';
           expect(vinput.hasValue).to.be.true;
         });
+
+        it('setting empty value does not update has-value property', function() {
+          vinput.value = '';
+          expect(vinput.hasValue).to.be.false;
+        });
+
+        // User could accidently set a 0 or false value
+        it('setting number value updates has-value property', function() {
+          vinput.value = 0;
+          expect(vinput.hasValue).to.be.true;
+        });
+
+        it('setting boolean value updates has-value property', function() {
+          vinput.value = false;
+          expect(vinput.hasValue).to.be.true;
+        });
       });
 
     });
