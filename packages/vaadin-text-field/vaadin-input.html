@@ -250,10 +250,13 @@ Custom property | Description | Default
 
       blur() {
         this.$.input.blur();
+        this.invalid = this._isInvalid();
       }
 
       _valueChanged(value) {
-        this.invalid = this._isInvalid();
+        if (this.invalid) {
+          this.invalid = this._isInvalid();
+        }
         // We dont trust that the user asigns `true` or `0` as a String.
         this.hasValue = value != null && value !== '';
       }

@@ -4,26 +4,25 @@
       vaadin-input {
         position: relative;
         display: block;
-        padding: 12px 0;
+        padding: 16px 0 8px;
+        color: rgba(0, 0, 0, 0.87);
 
         --vaadin-input__input: {
-          padding: 0;
-          border-radius: 0;
-          border: 0;
           outline: none;
-
-          background: transparent;
-          color: inherit;
-
+          margin: 0;
+          border: 0;
+          border-radius: 0;
+          padding: 8px 0;
           width: 100%;
-
+          height: 16px;
           font-size: 16px;
           font-family: Roboto, sans-serif;
+          color: inherit;
+          background: transparent;
         };
 
         --vaadin-input__input-placeholder: {
-          opacity: 0.8;
-          color: var(--material__vaadin-input__secondary-color, #737373);
+          color: rgba(0, 0, 0, 0.38);
         };
       }
 
@@ -39,7 +38,7 @@
       vaadin-input::before {
         height: 1px;
         bottom: 7px;
-        background: var(--material__vaadin-input__secondary-color, #737373);
+        background: rgba(0, 0, 0, 0.12);
       }
 
       vaadin-input::after {
@@ -47,30 +46,34 @@
         bottom: 6px;
         transform: scaleX(0);
         transition: transform 0.25s;
-        background: var(--material__vaadin-input__primary-color, #00b4f0);
+        background: #3F51B5;
       }
 
       vaadin-input[focused]::after {
         transform: scaleX(1);
       }
 
+      vaadin-input[invalid] {
+        color: #dd2c00;
+      }
+
       vaadin-input[invalid]::before,
       vaadin-input[invalid]::after {
         height: 2px;
-        bottom: 7px;
-        background: var(--material__vaadin-input__error-color, #e61e6e);
+        bottom: 6px;
+        background: #dd2c00;
       }
 
       vaadin-input[disabled] {
+        color: rgba(0, 0, 0, 0.38);
         --vaadin-input__input-placeholder: {
-          opacity: 0.2;
+          opacity: 0;
         };
       }
 
       vaadin-input[disabled]::before {
-        background: none;
-        border-bottom: dashed 1px var(--material__vaadin-input__secondary-color, #737373);
-        opacity: 0.4;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0) 2px);
+        background-size: 4px 1px;
       }
     </style>
   </template>
