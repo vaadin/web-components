@@ -197,6 +197,20 @@
             });
           });
 
+          it('should close on backdrop contextmenu', function(done) {
+            menu.addEventListener('iron-overlay-closed', function() {
+              expect(menu.opened).to.eql(false);
+              done();
+            });
+
+            var e = new CustomEvent('contextmenu', {
+              cancelable: true,
+              bubbles: true
+            });
+            menu.$.overlay.backdropElement.dispatchEvent(e);
+            expect(e.defaultPrevented).to.be.true;
+          });
+
           it('should close on `click`', function() {
             menu.$.overlay.click();
 

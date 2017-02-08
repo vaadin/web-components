@@ -230,6 +230,12 @@ Custom property | Description | Default
         if (child) {
           child.focus();
         }
+
+        // Close context menu on backdrop right-click
+        this.$.overlay.backdropElement.addEventListener('contextmenu', function(e) {
+          this.close();
+          e.preventDefault();
+        }.bind(this), false);
       },
 
       _onOverlayClosed: function() {
