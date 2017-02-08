@@ -167,6 +167,20 @@
         expect(cell.clientWidth).to.equal(200);
       });
 
+      it('should resize the last non-hidden child column', function() {
+        grid._columnTree[1][1].hidden = true;
+        var headerRows = getRows(grid.$.scroller.$.header);
+        var handle = getRowCells(headerRows[0])[0]._resizeHandle;
+
+        var cell = getRowCells(headerRows[1])[0];
+        var rect = cell.getBoundingClientRect();
+        var options = {node: handle};
+        Polymer.Base.fire('track', {state: 'start'}, options);
+        Polymer.Base.fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
+
+        expect(cell.clientWidth).to.equal(200);
+      });
+
     });
   </script>
 
