@@ -201,6 +201,17 @@ Custom property | Description | Default
             },
 
             /**
+             * A read-only property indicating whether this input has a non empty value.
+             * It can be used for example in styling of the component.
+             */
+            hasValue: {
+              type: Boolean,
+              value: false,
+              readonly: true,
+              reflectToAttribute: true
+            },
+
+            /**
              * If true, the element currently has focus.
              */
             focused: {
@@ -208,17 +219,6 @@ Custom property | Description | Default
               value: false,
               notify: true,
               readOnly: true,
-              reflectToAttribute: true
-            },
-
-            /**
-             * If true, the element currently has focus.
-             */
-            hasValue: {
-              type: Boolean,
-              notify: true,
-              readOnly: true,
-              computed: '_hasValue(value)',
               reflectToAttribute: true
             }
           }
@@ -254,10 +254,8 @@ Custom property | Description | Default
 
       _valueChanged(value) {
         this.invalid = this._isInvalid();
-      }
-
-      _hasValue(value) {
-        return value != null && value !== '';
+        // We dont trust that the user asigns `true` or `0` as a String.
+        this.hasValue = value != null && value !== '';
       }
 
       _isInvalid() {
