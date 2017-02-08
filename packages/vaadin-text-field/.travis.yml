@@ -22,5 +22,5 @@ before_script:
 
 script:
   - ([ "$TRAVIS_EVENT_TYPE" = "pull_request" ] || gemini test test/visual)
-  - LIGHTHOUSE_CHROMIUM_PATH="`which google-chrome-stable`" xvfb-run -s '-screen 0 1024x768x24' node test/performance/test.js
+  - LIGHTHOUSE_CHROMIUM_PATH="`which google-chrome-stable`" xvfb-run -s '-screen 0 1024x768x24' gulp perf:run
   - xvfb-run -s '-screen 0 1024x768x24' wct
