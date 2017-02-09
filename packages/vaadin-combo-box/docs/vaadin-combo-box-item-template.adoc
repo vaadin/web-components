@@ -8,9 +8,12 @@ layout: page
 [[vaadin-combo-box.item-template]]
 = Using Custom Item Template
 
-By default, the items list is displayed in the overlay as a list of plain strings. For some use cases it is not enough, especially when it is required to display a few Object keys in each item.
+By default, items are displayed in the overlay as a list of plain strings. For some use cases it is not enough, especially when it is required to display a few Object keys in each item.
 
 In order to give a custom markup for items, you can provide a custom item template in the light DOM of [vaadinelement]#vaadin-combo-box#.
+
+[NOTE]
+When using object items, and item templates, it is still necesary to set the `item-label-path` property, because the value specified by this is displayed in the input field when the item is selected, and it's also used for filtering.
 
 [source,html]
 ----
