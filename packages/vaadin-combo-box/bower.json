@@ -42,6 +42,7 @@
     "iron-component-page": "polymerelements/iron-component-page#^1.1.0",
     "iron-icons": "PolymerElements/iron-icons#^1.0.3",
     "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.0.0",
-    "elements-demo-resources": "vaadin/elements-demo-resources#master"
+    "elements-demo-resources": "vaadin/elements-demo-resources#master",
+    "paper-item": "PolymerElements/paper-item#^1.2.1"
   }
 }
