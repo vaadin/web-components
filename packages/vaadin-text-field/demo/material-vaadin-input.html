@@ -7,73 +7,73 @@
         padding: 16px 0 8px;
         color: rgba(0, 0, 0, 0.87);
 
-        --vaadin-input__input: {
+        --material-input__input: {
           outline: none;
           margin: 0;
           border: 0;
           border-radius: 0;
-          padding: 8px 0;
+          padding: 8px 0 10px;
           width: 100%;
           height: 16px;
           font-size: 16px;
           font-family: Roboto, sans-serif;
           color: inherit;
-          background: transparent;
-        };
+          background-color: transparent;
+          background-image: linear-gradient(#3F51B5, #3F51B5), linear-gradient(rgba(0, 0, 0, 0.12) 0, transparent 1px);
+          background-repeat: no-repeat;
+          background-position: 50% 100%;
+
+          /*
+          This doesn’t work in Safari right now, but it’s fixed in
+          Safari Technology Preview, so we can expect it to fix itself in the
+          near future (Safari 10.2 most probably).
+          */
+          transition: background-size 0.25s;
+
+          /* Disable default invalid style in Firefox */
+          box-shadow: none;
+        }
+
+        --vaadin-input__input: {
+          @apply --material-input__input;
+          background-size: 0% 2px, 100% 2px;
+        }
 
         --vaadin-input__input-placeholder: {
           color: rgba(0, 0, 0, 0.38);
-        };
+        }
       }
 
-      vaadin-input::before,
-      vaadin-input::after {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 0;
-        right: 0;
-      }
-
-      vaadin-input::before {
-        height: 1px;
-        bottom: 7px;
-        background: rgba(0, 0, 0, 0.12);
-      }
-
-      vaadin-input::after {
-        height: 2px;
-        bottom: 6px;
-        transform: scaleX(0);
-        transition: transform 0.25s;
-        background: #3F51B5;
-      }
-
-      vaadin-input[focused]::after {
-        transform: scaleX(1);
+      vaadin-input[focused] {
+        --vaadin-input__input: {
+          @apply --material-input__input;
+          background-size: 100% 2px, 100% 2px;
+        }
       }
 
       vaadin-input[invalid] {
         color: #dd2c00;
-      }
 
-      vaadin-input[invalid]::before,
-      vaadin-input[invalid]::after {
-        height: 2px;
-        bottom: 6px;
-        background: #dd2c00;
+        --vaadin-input__input: {
+          @apply --material-input__input;
+          background-image: linear-gradient(#dd2c00, #dd2c00);
+          background-size: 100% 2px;
+        }
       }
 
       vaadin-input[disabled] {
         color: rgba(0, 0, 0, 0.38);
+
         --vaadin-input__input-placeholder: {
           opacity: 0;
-        };
-      }
+        }
 
-      vaadin-input[disabled]::before {
-        background: linear-gradient(90deg, rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0) 2px);
-        background-size: 4px 1px;
+        --vaadin-input__input: {
+          @apply --material-input__input;
+          background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0) 2px);
+          background-size: 4px 1px;
+          background-repeat: repeat-x;
+        }
       }
     </style>
   </template>

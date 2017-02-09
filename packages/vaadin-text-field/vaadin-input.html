@@ -216,10 +216,10 @@ Custom property | Description | Default
              */
             focused: {
               type: Boolean,
-              value: false,
               notify: true,
               readOnly: true,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_focusedChanged'
             }
           }
         };
@@ -244,7 +244,6 @@ Custom property | Description | Default
 
       _onInputBlur() {
         this._setFocused(false);
-        // We dont want to mark the input as invalid until the first time the user blurs.
         this.invalid = this._isInvalid();
       }
 
@@ -257,7 +256,6 @@ Custom property | Description | Default
         if (this.invalid) {
           this.invalid = this._isInvalid();
         }
-        // We dont trust that the user asigns `true` or `0` as a String.
         this._setHasValue(value != null && value !== '');
       }
 
@@ -273,6 +271,12 @@ Custom property | Description | Default
        */
       validate() {
         return this.$.input.checkValidity();
+      }
+
+      _focusedChanged() {
+        // Needed for Edge, until they have support for CSS Custom Properties
+        // (already shipping in Edge Preview)
+        this.updateStyles();
       }
     }
 
