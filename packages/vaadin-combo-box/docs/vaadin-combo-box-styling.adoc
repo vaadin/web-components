@@ -8,9 +8,11 @@ layout: page
 [[vaadin-combo-box.styling]]
 = Styling
 
-You can customize certain styles of the [vaadinelement]#vaadin-combo-box# with CSS mixins and properties.
+You can customize certain styles of the [vaadinelement]#vaadin-combo-box# by using CSS properties.
 
-[propertyname]#vaadin-combo-box-overlay-max-height# property can be used to override the default maximum height of the overlay.
+The [propertyname]#vaadin-combo-box-overlay-max-height# property overrides the default maximum height of the overlay.
+
+In addition, you can customize how items are displayed by using templates as described in the link:vaadin-combo-box-item-template.html[Custom Item Template guide].
 
 [source,html]
 ----
