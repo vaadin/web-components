@@ -84,6 +84,19 @@
         });
       });
 
+      describe('hasValue property', function() {
+        it('should be readOnly', function() {
+          expect(comboBox.hasValue).to.be.false;
+          comboBox.hasValue = true;
+          expect(comboBox.hasValue).to.be.false;
+        });
+
+        it('should be updated when setting the value', function() {
+          comboBox.value = 'foo';
+          expect(comboBox.hasValue).to.be.true;
+        });
+      });
+
       describe('allow custom value property', function() {
         beforeEach(function() {
           comboBox.items = [];

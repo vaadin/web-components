@@ -61,7 +61,7 @@
       hasValue: {
         type: Boolean,
         value: false,
-        readonly: true,
+        readOnly: true,
         reflectToAttribute: true
       },
 
@@ -475,7 +475,7 @@
           this.value = '';
         }
 
-        this.hasValue = this.value !== '';
+        this._setHasValue(this.value !== '');
         this._inputElementValue = this.value;
       } else {
         var value = this._getItemValue(selectedItem);
@@ -483,7 +483,7 @@
           this.value = value;
         }
 
-        this.hasValue = true;
+        this._setHasValue(true);
         this._inputElementValue = this._getItemLabel(selectedItem);
       }
 
@@ -504,7 +504,7 @@
           this._inputElementValue = value;
         }
 
-        this.hasValue = this.value !== '';
+        this._setHasValue(this.value !== '');
       } else {
         this.selectedItem = null;
       }
