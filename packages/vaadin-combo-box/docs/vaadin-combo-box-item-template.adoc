@@ -147,3 +147,28 @@ Then you can use the previously defined [elementname]#my-item# element in the it
   elementsMyItemBox.items = elementsJson;
 </script>
 ----
+
+
+[[vaadin-combo-box.item-template.material]]
+== Item Template with Material Design
+
+The [vaadinelement]#vaadin-combo-box#'s appearance follows Material Design guidelines.
+In case you want the overlay items to follow Material Design as well, you can utilize [elementname]#paper-item# elements like in the following snippet.
+
+[NOTE]
+If you use images in the template, make sure they have pre-defined bounds so the layout doesn't break or jump once the images are resized after loading.
+
+[source,html]
+----
+<vaadin-combo-box id="elements-paper-item" item-value-path="email" item-label-path="email">
+  <template>
+    <paper-icon-item style="padding: 0">
+      <img src="[[item.picture.thumbnail]]" style="border-radius: 50%; width: 48px; height: 48px;" item-icon>
+      <paper-item-body two-line style="min-height: 0">
+        <div style="text-transform: capitalize">[[item.name.first]] [[item.name.last]]</div>
+        <div secondary>[[item.email]]</div>
+      </paper-item-body>
+    </paper-icon-item>
+  </template>
+</vaadin-combo-box>
+----
