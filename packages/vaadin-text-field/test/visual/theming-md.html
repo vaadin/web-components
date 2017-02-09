@@ -13,35 +13,39 @@
 
   <custom-style>
     <style include="material-vaadin-input">
-      #hidden-caret {
-        --vaadin-input__input: {
-          /* To override the mixin, we need to repeat properties from the theme file */
-          padding: 0;
-          border: none;
-          outline: none;
+      fieldset {
+        font-family: sans-serif;
+        font-size: 16px;
+        width: 550px;
+        border: solid 1px grey;
+      }
 
-          /* Hide the caret because we can't predict whether blinking caret will be visible */
-          font-size: 0px;
-          padding: 10px 100px;
-        };
+      vaadin-input[focused]#hidden-caret {
+        --vaadin-input__input: {
+          @apply --material-input__input;
+          background-size: 100% 2px, 100% 2px;
+
+          font-size: 0;
+          padding: 0 100px;
+          width: 350px;
+        }
       }
     </style>
   </custom-style>
 
-  <form style="display: inline-block">
-    <fieldset id="material-design">
-      <p>
+  <form>
+    <fieldset id="theming-md-tests">
       default input: <vaadin-input></vaadin-input>
       <p>
       input with value: <vaadin-input value="Go Vaadin"></vaadin-input>
       <p>
       focused input: <vaadin-input autofocus id="hidden-caret"></vaadin-input>
       <p>
-      disabled input: <vaadin-input disabled placeholder="disabled"></vaadin-input>
+      disabled input: <vaadin-input value="disabled" disabled></vaadin-input>
       <p>
       input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
       <p>
-      invalid input: <vaadin-input required value="aa" minlength="4"></vaadin-input>
+      invalid input: <vaadin-input required invalid></vaadin-input>
     </fieldset>
   </form>
 

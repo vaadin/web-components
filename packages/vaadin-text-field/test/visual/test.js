@@ -9,17 +9,24 @@ gemini.suite('vaadin-input', function(rootSuite) {
     actions.wait(3000);
   }
 
-  gemini.suite('visual-tests', function(suite) {
+  gemini.suite('default-tests', function(suite) {
     suite
-      .setUrl('/index.html')
-      .setCaptureElements('#visual-tests')
-      .capture('visual-tests', {}, wait);
+      .setUrl('/default.html')
+      .setCaptureElements('#default-tests')
+      .capture('screenshots', {}, wait);
+  });
+
+  gemini.suite('styling-tests', function(suite) {
+    suite
+      .setUrl('/styling.html')
+      .setCaptureElements('#styling-tests')
+      .capture('screenshots', {}, wait);
   });
 
   gemini.suite('theming-tests', function(suite) {
     suite
-      .setUrl('/material-design.html')
-      .setCaptureElements('#material-design')
-      .capture('material-design', {}, wait);
+      .setUrl('/theming-md.html')
+      .setCaptureElements('#theming-md-tests')
+      .capture('screenshots', {}, wait);
   });
 });

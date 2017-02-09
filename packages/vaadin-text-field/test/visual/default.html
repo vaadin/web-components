@@ -12,36 +12,25 @@
 
   <custom-style>
     <style>
-    /* we want to use customised css in test so as we don't trust the native input look */
-    vaadin-input {
-      border: solid 1px #d8d8d8;
+      fieldset {
+        font-family: sans-serif;
+        font-size: 16px;
+        width: 550px;
+        border: solid 1px grey;        
+      }
 
-      --vaadin-input__input: {
-        outline: none;
-        border: none;
-      };
-    }
-
-    vaadin-input[focused] {
-      border: solid 1px #d8d8d8;
-      border-bottom: solid 1px deepskyblue;
-    }
-
-    vaadin-input[invalid] {
-      background-color: #fbefef;
-    }
-    /* we can't predict if caret will be visible or not, so hide it */
-    #hidden-caret {
-      --vaadin-input__input: {
-        font-size: 0;
-        padding: 0 100px;
-      };
-    }
+      #hidden-caret {
+        --vaadin-input__input: {
+          font-size: 0;
+          padding: 0 100px;
+          height: 20px;
+        };
+      }
     </style>
   </custom-style>
 
-  <form style="display: inline-block">
-    <fieldset id="visual-tests">
+  <form>
+    <fieldset id="default-tests">
       <p>
       default input: <vaadin-input></vaadin-input>
       <p>
@@ -53,7 +42,7 @@
       <p>
       input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
       <p>
-      invalid input: <vaadin-input required></vaadin-input>
+      invalid input: <vaadin-input value minlength="4"></vaadin-input>
     </fieldset>
   </form>
 
