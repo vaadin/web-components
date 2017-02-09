@@ -44,6 +44,24 @@
         </vaadin-board-row>
       </template>
     </test-fixture>
+
+    <test-fixture id="desktop-board-row-2-items">
+      <template>
+        <vaadin-board-row style="width:1200px">
+          <div>top A</div>
+          <div>top B</div>
+        </vaadin-board-row>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="tablet-board-row-2-items">
+      <template>
+        <vaadin-board-row style="width:750px">
+          <div>top A</div>
+          <div>top B</div>
+        </vaadin-board-row>
+      </template>
+    </test-fixture>
     <script>
       suite('vaadin-board', function () {
 
@@ -55,8 +73,8 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.equal(rowRect.top, rect.top, "Row and content top are equal");
-            assert.equal(rect.left, (i * rowRect.width / 4)+rowRect.left);
+            assert.approximately(rowRect.top, rect.top,1, "Row and content top are equal");
+            assert.approximately(rect.left, (i * rowRect.width / 4)+rowRect.left, 1);
           }
         });
 
@@ -68,8 +86,8 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.equal(rect.left, (i%2 * rowRect.width / 2)+rowRect.left);
-            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top, 1);
           }
         });
 
@@ -81,8 +99,34 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.equal(rect.left, rowRect.left, "Row and content left are equal");
+            assert.approximately(rect.left, rowRect.left, 1);
             assert.approximately(rect.top, (i * rowRect.height / 4)+rowRect.top, 1);
+          }
+        });
+
+        test('Two items take 50% each on Desktop.', function () {
+          var row = fixture('desktop-board-row-2-items');
+          var rowRect = row.getBoundingClientRect();
+
+          var children = row.querySelectorAll("div");
+          for (let i = 0; i < children.length; i++) {
+            var rect = children[i].getBoundingClientRect();
+
+            assert.equal(rowRect.top, rect.top, "Row and content top are equal");
+            assert.approximately(rect.left, (i * rowRect.width / 2)+rowRect.left, 1);
+          }
+        });
+
+        test('Two items take 50% each on Tablet.', function () {
+          var row = fixture('tablet-board-row-2-items');
+          var rowRect = row.getBoundingClientRect();
+
+          var children = row.querySelectorAll("div");
+          for (let i = 0; i < children.length; i++) {
+            var rect = children[i].getBoundingClientRect();
+
+            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
           }
         });
       });

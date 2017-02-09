@@ -30,7 +30,7 @@
         this._ONE_COLUMN_MAX_WIDTH = 600;
         this._TWO_COLUMNS_MAX_WIDTH = 1000;
         this._oldWidth = 0;
-        this._oldFlexBasis = '0';
+        this._oldFlexBasis = [];
       }
       ready() {
         super.ready();
@@ -40,21 +40,109 @@
         super.connectedCallback();
         Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
       }
+      /**
+       * Calculates flex basis based on colSpan and width
+       * @param{Number} colspan value of the row
+       * @param{Number} width of the row in px
+       * @param{Number} amount of nodes in the row
+       */
+      _calculateFlexBasis(colSpan, width, nodesCount) {
+        let flexBasis = 25 * colSpan;
+        if (width < this._ONE_COLUMN_MAX_WIDTH) {
+          flexBasis = 100;
+        } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
+
+          if (colSpan == 1 && nodesCount == 3) {
+            flexBasis = 33
+          }
+          else {
+            flexBasis = 50 * colSpan;
+          }
+        }
+        flexBasis = flexBasis > 100 ? 100 : flexBasis;
+        return flexBasis + '%';
+      }
+
+      _reportError() {
+        const errorMessage ="The column configuration is not valid; column count should add up to 3 or 4.";
+        console.warn(errorMessage, "check: \r\n"+this.outerHTML);
+      }
+
+      /**
+       * Parses board-cols from DOM.
+       * If there is not enough space in the row drop board cols.
+       * @param{Array} array of nodes
+       *
+       * @return{Array} array of boardCols
+       */
+      _parseBoardCols(nodes) {
+        const boardCols = nodes.map(node => {
+                    if(node.getAttribute("board-cols")) {
+                      return parseInt(node.getAttribute("board-cols"));
+                    }
+                    return 1;
+        });
+
+        let spaceLeft=4;
+        let returnBoardCols=[];
+        nodes.forEach((node,i) => {
+          spaceLeft = spaceLeft - boardCols[i];
+        });
+
+        if(spaceLeft < 0) {
+            this._reportError();
+            boardCols.forEach((node,i) =>{
+              returnBoardCols[i] = 1;
+            });
+        }
+        else {
+          returnBoardCols = boardCols.slice(0);
+        }
+
+        return returnBoardCols;
+      }
+      /**
+       * If there is not enough space in the row.
+       * Extra items are dropped from DOM.
+       * @param{Array} array of board-cols for every node
+       * @param{Array} array of nodes
+       *
+       * @return{Array} filtered array of nodes
+       */
+      _removeExtraNodesFromDOM(boardCols, nodes) {
+        let isErrorReported=false;
+        let spaceLeft=4;
+        let returnNodes=[];
+        nodes.forEach((node,i) => {
+          spaceLeft = spaceLeft - boardCols[i];
+          if(spaceLeft < 0) {
+            if(!isErrorReported) {
+              isErrorReported = true;
+              this._reportError();
+            }
+            this.removeChild(node);
+          }
+          else {
+            returnNodes[i] = node;
+          }
+        });
+        return returnNodes;
+      }
       _onIronResize(e) {
         const width = this.getBoundingClientRect().width;
         if (width != this._oldWidth) {
           const nodes = this.$.insertionPoint.assignedNodes();
+
           const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
-          var newFlexBasis = '25%';
-          if (width < this._ONE_COLUMN_MAX_WIDTH) {
-            newFlexBasis = '100%';
-          } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
-            newFlexBasis = '50%';
-          }
-          if (newFlexBasis != this._oldFlexBasis) {
-            filteredNodes.forEach(e=>e.style.flexBasis = newFlexBasis);
-            this._oldFlexBasis = newFlexBasis;
-          }
+
+          const boardCols = this._parseBoardCols(filteredNodes);
+          this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e,i) => {
+              let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, filteredNodes.length);
+              if(!this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
+                  this._oldFlexBasis[i] = newFlexBasis
+                  e.style.flexBasis = newFlexBasis;
+              }
+          });
           this._oldWidth = width;
         }
       }

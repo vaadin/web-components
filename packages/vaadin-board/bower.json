@@ -8,11 +8,10 @@
   "devDependencies": {
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "#v1",
-    "test-fixture": "PolymerElements/test-fixture#custom-elements-v1"
+    "test-fixture": "^2.0.0"
   },
   "resolutions": {
-    "polymer": "2.0-preview",
-    "webcomponentsjs": "v1",
-    "test-fixture": "custom-elements-v1"
+    "test-fixture": "^2.0.0",
+    "custom-elements": "master"
   }
 }
