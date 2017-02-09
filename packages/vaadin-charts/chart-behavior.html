@@ -159,7 +159,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Reload all the chart's series
          */
         _reloadSeries: function () {
-            var series = Polymer.dom(this).querySelectorAll('data-series');
+            var series = this.querySelectorAll('data-series');
             for (var i = 0; i < series.length; i++) {
                 series[i]._reloadConfiguration();
             }
@@ -199,10 +199,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         attached: function () {
+            Polymer.RenderStatus.afterNextRender(this, this._afterRender);
+        },
+
+        _afterRender: function() {
             if (!this.isInitialized()) {
                 this._initLocalDom();
                 this._initConfiguration();
-                Polymer.dom(this).querySelectorAll("data-series").forEach(function (ds) {
+                this.querySelectorAll("data-series").forEach(function (ds) {
                     if (ds._initialize) {
                         ds._initialize();
                     }
@@ -227,19 +231,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         ready: function () {
-
         },
 
         _initLocalDom: function () {
             var chartContainer = document.createElement('div');
             chartContainer.id = "chartContainer";
             this._updateStyles(chartContainer);
-            Polymer.dom(this.root).appendChild(chartContainer);
-            var licenseChecker = document.createElement('vaadin-license-checker');
-            licenseChecker.productName = "vaadin-charts";
-            licenseChecker.productVersion = "3";
-            licenseChecker.productCaption = "Vaadin Charts";
-            Polymer.dom(this.root).appendChild(licenseChecker);
+            this.shadowRoot.appendChild(chartContainer);
+//            var licenseChecker = document.createElement('vaadin-license-checker');
+//            licenseChecker.productName = "vaadin-charts";
+//            licenseChecker.productVersion = "3";
+//            licenseChecker.productCaption = "Vaadin Charts";
+//            Polymer.dom(this.root).appendChild(licenseChecker);
             Polymer.dom.flush();
         },
 
@@ -276,8 +279,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Initializes the chart json configuration.
          */
         _initConfiguration: function () {
-            this._cleanNode(Polymer.dom(this));
-            this._loadConfiguration(this._chartConf, Polymer.dom(this));
+            //probably not needed anymore
+            this._cleanNode(this);
+            this._loadConfiguration(this._chartConf, this);
 
             if (!this._chartConf.chart) {
                 this._chartConf.chart = {};

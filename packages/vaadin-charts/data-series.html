@@ -120,7 +120,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         },
 
         _parentChart: function () {
-            var parent = Polymer.dom(this.root).parentNode;
+            var parent = this.parentNode;
             while (parent._addSeries === undefined) {
                 parent = parent.parentNode;
             }
@@ -131,7 +131,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Load the configuration from the element attributes and the light-DOM elements.
          **/
         _loadData: function () {
-            var element = Polymer.dom(this);
+            var element = this;
 
             for (var n = 0; n < element.childNodes.length; n++) {
                 var node = element.childNodes[n];
@@ -246,7 +246,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         created: function() {
             // Make sure that seriesConf is initialized
-            this._seriesConf = this.properties._seriesConf.value();
+//            this._seriesConf = this.properties._seriesConf.value();
         },
 
         // Kind of attached but attached is not called then the element is only in the light DOM
@@ -263,9 +263,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Initializes the series json configuration.
          */
         _initConfiguration: function () {
-            var element = Polymer.dom(this);
+            var element = this;
             this._cleanNode(element);
-            this._loadFromNode(this._seriesConf, element.node);
+            this._loadFromNode(this._seriesConf, element);
             this._loadConfiguration(this._seriesConf, element);
             this._loadData();
             this._addDataPointsObserver();
@@ -273,7 +273,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         _addDataPointsObserver: function () {
             if (MutationObserver && !this._observer) {
-                var dataElements = Polymer.dom(this).querySelectorAll('data');
+                var dataElements = this.querySelectorAll('data');
                 if (dataElements && dataElements.length > 0) {
                     this._observer = new MutationObserver(
                             this._reloadData.bind(this));

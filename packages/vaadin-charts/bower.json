@@ -30,19 +30,45 @@
   ],
   "dependencies": {
     "highcharts": "highcharts/highcharts-dist#v4.2.6",
-    "polymer": "Polymer/polymer#^1.1.0",
-    "vaadin-license-checker": "vaadin/license-checker#0.9.6"
+    "polymer": "Polymer/polymer#2.0-preview"
+  },
+  "notupdated": {
+    "vaadin-license-checker": "vaadin/license-checker#0.9.6",
+    "vaadin-grid": "^1.0.0"
   },
   "devDependencies": {
-    "vaadin-grid": "^1.0.0",
     "google-code-prettify": "*",
-    "iron-selector": "PolymerElements/iron-selector#v1.0.7",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
-    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.0",
-    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^1.0.0",
-    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
-    "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
-    "web-component-tester": "*",
+    "iron-selector": "PolymerElements/iron-selector#2.0-preview",
+    "iron-ajax": "PolymerElements/iron-ajax#2.0-preview",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#2.0-preview",
+    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#2.0-preview",
+    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
+    "paper-tabs": "PolymerElements/paper-tabs#2.0-preview",
+    "web-component-tester": "^4.0.0",
     "jquery": "^2.2.2"
+  },
+  "resolutions": {
+    "mocha": "^2.3.0",
+    "webcomponentsjs": "v1",
+    "marked-element": "2.0-preview",
+    "polymer": "2.0-preview",
+    "paper-button": "2.0-preview",
+    "iron-flex-layout": "2.0-preview",
+    "paper-behaviors": "2.0-preview",
+    "iron-behaviors": "2.0-preview",
+    "iron-a11y-keys-behavior": "2.0-preview",
+    "iron-checked-element-behavior": "2.0-preview",
+    "iron-validatable-behavior": "2.0-preview",
+    "iron-meta": "2.0-preview",
+    "iron-form-element-behavior": "2.0-preview",
+    "paper-ripple": "2.0-preview",
+    "paper-styles": "2.0-preview",
+    "prism-element": "2.0-preview",
+    "iron-resizable-behavior": "2.0-preview",
+    "iron-icon": "2.0-preview",
+    "iron-iconset-svg": "2.0-preview",
+    "paper-icon-button": "2.0-preview",
+    "iron-menu-behavior": "2.0-preview",
+    "iron-selector": "2.0-preview"
   }
 }
