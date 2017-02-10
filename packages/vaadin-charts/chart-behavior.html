@@ -260,7 +260,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }, this);
             //If chart element is a flexible item the chartContainer should be flex too
             if (isFlex) {
-                chartContainer.setAttribute("style", "flex: 1; -webkit-flex: 1; -ms-flex: 1; ");
+                chartContainer.setAttribute("style", "overflow: hidden; flex: 1; -webkit-flex: 1; -ms-flex: 1; ");
                 var style = '';
                 if (this.hasAttribute("style")) {
                     style = this.getAttribute("style");
@@ -268,7 +268,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                         style += ';'
                     }
                 }
-                style += "display: -ms-flexbox; display: -webkit-flex; display: flex;";
+                style += "overflow: hidden; display: -ms-flexbox; display: -webkit-flex; display: flex;";
                 this.setAttribute("style", style);
             } else {
                 chartContainer.setAttribute("style", "height:100%; width:100%;");
