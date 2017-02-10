@@ -62,6 +62,16 @@
         </vaadin-board-row>
       </template>
     </test-fixture>
+    <test-fixture id="board-row-4-items">
+      <template>
+        <vaadin-board-row style="width:1200px">
+          <div id="first" class="top a">top A</div>
+          <div id="second" class="top b">top B</div>
+          <div class="top c">top C</div>
+          <div class="top d">top D</div>
+        </vaadin-board-row>
+      </template>
+    </test-fixture>
     <script>
       suite('vaadin-board', function () {
 
@@ -121,6 +131,21 @@
           var row = fixture('tablet-board-row-2-items');
           var rowRect = row.getBoundingClientRect();
 
+          var children = row.querySelectorAll("div");
+          for (let i = 0; i < children.length; i++) {
+            var rect = children[i].getBoundingClientRect();
+
+            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+          }
+        });
+
+        test('Changing styling of the board and calling resize triggers relayouting', function() {
+          var row = fixture('board-row-4-items');
+          row.style.width="700px";
+          row.redraw();
+
+          var rowRect = row.getBoundingClientRect();
           var children = row.querySelectorAll("div");
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();

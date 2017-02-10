@@ -34,11 +34,12 @@
       }
       ready() {
         super.ready();
-        this.addEventListener('iron-resize', this._onIronResize);
+        this.addEventListener('iron-resize', this._onIronResize(false));
+        this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
       }
       connectedCallback() {
         super.connectedCallback();
-        Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
+        Polymer.RenderStatus.afterNextRender(this, this._onIronResize(false));
       }
       /**
        * Calculates flex basis based on colSpan and width
@@ -128,9 +129,13 @@
         });
         return returnNodes;
       }
-      _onIronResize(e) {
+
+      redraw() {
+        this._onIronResize(true);
+      }
+      _onIronResize(forceResize) {
         const width = this.getBoundingClientRect().width;
-        if (width != this._oldWidth) {
+        if (forceResize || width != this._oldWidth) {
           const nodes = this.$.insertionPoint.assignedNodes();
 
           const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
@@ -138,7 +143,7 @@
           const boardCols = this._parseBoardCols(filteredNodes);
           this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e,i) => {
               let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, filteredNodes.length);
-              if(!this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
+              if(forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
                   this._oldFlexBasis[i] = newFlexBasis
                   e.style.flexBasis = newFlexBasis;
               }
