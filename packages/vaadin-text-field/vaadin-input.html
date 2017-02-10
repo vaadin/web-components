@@ -12,6 +12,14 @@ This program is available under Apache License Version 2.0, available at https:/
 </vaadin-input>
 ```
 
+### Styling
+The following mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-input__input` | Mixin applied to the input element | `{}`
+`--vaadin-input__input-placeholder` | Mixin applied to the input's placeholder | `{}`
+
 @element vaadin-input
 @demo demo/index.html
 -->
@@ -27,21 +35,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       input {
-        outline: none;
-        border: solid 1px #d8d8d8;
-        @apply(--vaadin-input);
+        @apply --vaadin-input__input;
       }
 
-      input:focus {
-        border-bottom: solid 1px deepskyblue;
+      input::-webkit-input-placeholder {
+        @apply --vaadin-input__input-placeholder;
       }
 
-      input:invalid {
-        background: #fbefef;
+      input::-moz-placeholder {
+        @apply --vaadin-input__input-placeholder;
       }
 
-      input:focus:invalid {
-        border-bottom: solid 1px red;
+      input::placeholder {
+        @apply --vaadin-input__input-placeholder;
       }
     </style>
     <input id="input"
@@ -60,6 +66,8 @@ This program is available under Apache License Version 2.0, available at https:/
       tabindex$="[[tabindex]]"
       value="{{value::input}}"
       title="[[title]]"
+      on-focus="_onInputFocus"
+      on-blur="_onInputBlur"
     />
   </template>
 
@@ -92,7 +100,8 @@ This program is available under Apache License Version 2.0, available at https:/
              * Indicates that this control is not available for interaction.
              */
             disabled: {
-              type: Boolean
+              type: Boolean,
+              reflectToAttribute: true
             },
 
             /**
@@ -189,24 +198,65 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               reflectToAttribute: true,
               notify: true
+            },
+
+            /**
+             * A read-only property indicating whether this input has a non empty value.
+             * It can be used for example in styling of the component.
+             */
+            hasValue: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              readOnly: true,
+              reflectToAttribute: true
+            },
+
+            /**
+             * If true, the element currently has focus.
+             */
+            focused: {
+              type: Boolean,
+              notify: true,
+              readOnly: true,
+              reflectToAttribute: true,
+              observer: '_focusedChanged'
             }
           }
-
         };
       }
 
       ready() {
         super.ready();
-        this.invalid = this._isInvalid();
 
         // Make FF take the focus (#9)
         if (this.autofocus) {
-          this.$.input.focus();
+          this.focus();
         }
       }
 
-      _valueChanged(value) {
+      _onInputFocus() {
+        this._setFocused(true);
+      }
+
+      focus() {
+        this.$.input.focus();
+      }
+
+      _onInputBlur() {
+        this._setFocused(false);
         this.invalid = this._isInvalid();
+      }
+
+      blur() {
+        this.$.input.blur();
+      }
+
+      _valueChanged(value) {
+        if (this.invalid) {
+          this.invalid = this._isInvalid();
+        }
+        this._setHasValue(value != null && value !== '');
       }
 
       _isInvalid() {
@@ -221,6 +271,12 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       validate() {
         return this.$.input.checkValidity();
+      }
+
+      _focusedChanged() {
+        // Needed for Edge, until they have support for CSS Custom Properties
+        // (already shipping in Edge Preview)
+        this.updateStyles();
       }
     }
 

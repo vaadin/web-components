@@ -14,7 +14,8 @@
 
     WCT.loadSuites([
       'properties.html',
-      'validate.html'
+      'validate.html',
+      'interaction.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, suite + '?wc-shadydom=true']);
     }, []));

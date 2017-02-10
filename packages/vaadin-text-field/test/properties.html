@@ -90,11 +90,31 @@
       });
 
       describe('binding', function() {
-
         it('setting input value updates value', function() {
           input.value = 'foo';
           input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
           expect(vinput.value).to.be.equal('foo');
+        });
+
+        it('setting input value updates has-value attribute', function() {
+          vinput.value = 'foo';
+          expect(vinput.hasValue).to.be.true;
+        });
+
+        it('setting empty value does not update has-value property', function() {
+          vinput.value = '';
+          expect(vinput.hasValue).to.be.false;
+        });
+
+        // User could accidently set a 0 or false value
+        it('setting number value updates has-value property', function() {
+          vinput.value = 0;
+          expect(vinput.hasValue).to.be.true;
+        });
+
+        it('setting boolean value updates has-value property', function() {
+          vinput.value = false;
+          expect(vinput.hasValue).to.be.true;
         });
       });
 
