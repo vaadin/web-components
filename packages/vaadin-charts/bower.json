@@ -30,10 +30,10 @@
   ],
   "dependencies": {
     "highcharts": "highcharts/highcharts-dist#v4.2.6",
-    "polymer": "Polymer/polymer#2.0-preview"
+    "polymer": "Polymer/polymer#2.0-preview",
+    "vaadin-license-checker": "vaadin/license-checker#2.0-preview"
   },
   "notupdated": {
-    "vaadin-license-checker": "vaadin/license-checker#0.9.6",
     "vaadin-grid": "^1.0.0"
   },
   "devDependencies": {
