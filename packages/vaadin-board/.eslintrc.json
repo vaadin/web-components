@@ -1,0 +1,22 @@
+{
+    "extends": ["vaadin", "eslint:recommended"],
+    "ecmaVersion": 6,
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6":true
+    },
+    "plugins": [
+        "html"
+    ],
+    "globals": {
+        "vaadin": false,
+        "Polymer": false,
+        "CustomElements": false,
+        "Resizable": false
+    },
+    "rules": {
+        "no-unused-vars": ["error",{"varsIgnorePattern":"Resizable"}],
+        "no-console": ["error",{"allow": ["warn", "error"] }]
+    }
+}

@@ -1,0 +1,63 @@
+.top {
+    min-height: 50px;
+}
+
+.mid {
+    min-height: 200px;
+}
+
+.low.a {
+    min-height: 200px;
+}
+
+.top.a {
+    background-color: #14BDEF;
+}
+
+.top.b {
+    background-color: #DC4A3C;
+}
+
+.top.c {
+    background-color: #00A657;
+}
+
+.top.d {
+    background-color: #F19E00;
+}
+
+.mid {
+    background-color: #4E92C1;
+}
+
+.low.a {
+    background-color: #00A556;
+}
+
+.low.b {
+    background-color: #F1CA43;
+}
+
+.low.b .top.a {
+    background-color: #BE7D00;
+}
+
+.low.b .top.b {
+    background-color: #008249;
+}
+
+.low.b .top.c {
+    background-color: #AF3A2E;
+}
+
+.low.b .top.d {
+    background-color: #0C98BE;
+}
+
+.top.a, .top.b, .top.c, .top.d, .mid,
+.low.a, .low.b {
+    box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.15),
+    inset -1px 0 0 0 rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 0 rgba(0, 0, 0, 0.15),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.15);
+}
