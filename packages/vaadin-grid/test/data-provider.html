@@ -182,12 +182,10 @@
           }
 
           callback(items);
-        };
 
-        grid.async(function() {
           expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
           done();
-        }, loadDebounceTime);
+        };
       });
 
       it('should clear item cache', function(done) {
@@ -236,6 +234,17 @@
         expect(getRows(grid.$.scroller.$.items)).to.have.length(3);
       });
 
+      it('should work with data provider set after a long delay', function(done) {
+        grid.size = 100;
+
+        grid.async(function() {
+          grid.dataProvider = sinon.spy(infiniteDataProvider);
+
+          expect(grid.dataProvider.callCount).to.eql(1);
+          expect(grid.dataProvider.args[0][0].page).to.eql(0);
+          done();
+        }, 1000);
+      });
     });
   </script>
 

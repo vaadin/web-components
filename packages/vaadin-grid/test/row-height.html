@@ -30,51 +30,12 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="smaller-content">
-    <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
-        <vaadin-grid-column>
-          <template>
-            <div style="line-height: 0.5em">[[item.index]]</div>
-          </template>
-          <template class="header">foo</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    </template>
-  </test-fixture>
-
   <test-fixture id="default-content">
     <template>
       <vaadin-grid style="width: 200px; height: 200px;" size="10000">
         <vaadin-grid-column>
           <template>
             <div>foobar</div>
-          </template>
-          <template class="header">foo</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="higher-content">
-    <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
-        <vaadin-grid-column>
-          <template>
-            <div style="line-height: 2em">[[item.index]]</div>
-          </template>
-          <template class="header">foo</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="higher-default-content">
-    <template>
-      <vaadin-grid style="width: 200px; height: 200px;" size="10000">
-        <vaadin-grid-column>
-          <template>
-            <div style="line-height: 2em">foobar</div>
           </template>
           <template class="header">foo</template>
         </vaadin-grid-column>
@@ -107,153 +68,66 @@
       var grid, scroller, header, rows, defaultHeight, wrappers;
       var dataProviderDelay = 200;
 
-      function init(fixtureName) {
+      function init(fixtureName, cb) {
         grid = fixture(fixtureName);
 
-        var listener = function() {
-          if (grid.onItemsAssigned) {
-            grid.onItemsAssigned();
-          }
-          delete grid.onItemsAssigned;
-        };
-        grid.addEventListener('items-assigned', listener);
+        listenOnce(grid, 'items-assigned', function() {
+          Polymer.dom.flush();
+
+          rows = getRows(scroller.$.items);
+          grid.customStyle['--vaadin-grid-cell'] = 'border: none !important';
+          grid.updateStyles();
+          defaultHeight = getRows(header)[0].clientHeight;
+
+          wrappers = getRowCells(rows[0]).map(function(cell) {
+            return getCellContent(cell);
+          });
+
+          cb();
+        });
 
         scroller = grid.$.scroller;
         header = scroller.$.header;
-        rows = getRows(scroller.$.items);
-        Polymer.dom.flush();
-        grid.customStyle['--vaadin-grid-cell'] = 'border: none !important';
-        grid.updateStyles();
-        defaultHeight = getRows(header)[0].clientHeight;
 
         grid.dataProvider = function(info, callback) {
-          setTimeout(function() {
-            var startIndex = info.pageSize * info.page;
-            callback(buildDataSet(startIndex + info.pageSize).splice(startIndex));
+          var startIndex = info.pageSize * info.page;
+          callback(buildDataSet(startIndex + info.pageSize).splice(startIndex));
 
-            grid.async(function() {
-              grid.fire('items-assigned');
-            }, 10);
-          }, dataProviderDelay);
+          grid.fire('items-assigned');
         };
-        wrappers = getRowCells(rows[0]).map(function(cell) {
-          return getCellContent(cell);
-        });
       }
 
-      beforeEach(function(done) {
-        setTimeout(done, dataProviderDelay * 2);
-      });
-
       it('should have higher wrappers on each row cell', function(done) {
-        init('two-columns');
-
-        wrappers[0].style.height = wrappers[0].clientHeight * 2 + 'px';
-        flush(function() {
-          expect(wrappers[1].clientHeight).to.equal(wrappers[0].clientHeight);
-          done();
+        init('two-columns', function() {
+          wrappers[0].style.height = wrappers[0].clientHeight * 2 + 'px';
+          flush(function() {
+            expect(wrappers[1].clientHeight).to.equal(wrappers[0].clientHeight);
+            done();
+          });
         });
       });
 
-      it('should not affect wrapper width', function(done) {
-        init('two-columns');
+      it('should not misalign on resize (wheel)', function(done) {
+        init('default-content', function() {
+          scrollToEnd(grid);
 
-        var wrapperWidth = wrappers[0].clientWidth;
-        grid.onItemsAssigned = function() {
-          expect(wrappers[0].clientWidth).to.equal(wrapperWidth);
+          // Simulate a wheel event that doesn't cause a scroll event
+          var e = new CustomEvent('wheel', {bubbles: true});
+          e.deltaY = -100;
+          e.deltaX = 0;
+          scroller.$.table.dispatchEvent(e);
+
+          // Simulate a (window) resize
+          grid.style.width = '200px';
+          scroller.fire('iron-resize');
+
+          expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
           done();
-        };
-      });
-
-      it('should give cells default minimum height', function() {
-        init('smaller-content');
-        expect(rows[0].clientHeight).to.equal(defaultHeight);
-      });
-
-      it('should not strech cells with default content', function() {
-        init('default-content');
-        expect(rows[0].clientHeight).to.equal(defaultHeight);
-      });
-
-      it('should support smaller content than default height', function(done) {
-        init('smaller-content');
-
-        grid.onItemsAssigned = function() {
-          expect(rows[0].clientHeight).to.be.below(defaultHeight);
-          done();
-        };
-      });
-
-      it('should increase row height', function(done) {
-        init('higher-content');
-        grid.onItemsAssigned = function() {
-          expect(rows[0].clientHeight).to.be.above(defaultHeight);
-          done();
-        };
-      });
-
-      it('should size placeholder rows with new average: smaller', function(done) {
-        init('smaller-content');
-
-        grid.onItemsAssigned = function() {
-          var newRowHeight = rows[0].clientHeight;
-          setTimeout(function() {
-            var rows = getRows(scroller.$.items);
-            expect(rows[0].clientHeight).to.equal(newRowHeight);
-            done();
-          }, dataProviderDelay / 2);
-          scroller.$.table.scrollTop += 1000;
-        };
-      });
-
-      it('should size placeholder rows with new average: higher', function(done) {
-        init('higher-content');
-
-        grid.onItemsAssigned = function() {
-          var newRowHeight = rows[0].clientHeight;
-          setTimeout(function() {
-            var rows = getRows(scroller.$.items);
-            expect(rows[0].clientHeight).to.equal(newRowHeight);
-            done();
-          }, dataProviderDelay / 2);
-          scroller.$.table.scrollTop += 10000;
-        };
-      });
-
-      it('should allow higher default content', function() {
-        init('higher-default-content');
-        expect(rows[0].clientHeight).to.be.above(defaultHeight);
-      });
-
-      it('should have the same size with data', function(done) {
-        init('higher-default-content');
-        grid.onItemsAssigned = function() {
-          expect(rows[0].clientHeight).to.be.above(defaultHeight);
-          done();
-        };
-      });
-
-      it('should not misalign on resize (wheel)', function() {
-        init('default-content');
-        scrollToEnd(grid);
-
-        // Simulate a wheel event that doesn't cause a scroll event
-        var e = new CustomEvent('wheel', {bubbles: true});
-        e.deltaY = -100;
-        e.deltaX = 0;
-        scroller.$.table.dispatchEvent(e);
-
-        // Simulate a (window) resize
-        grid.style.width = '200px';
-        scroller.fire('iron-resize');
-
-        expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
+        });
       });
 
       it('should update height when hiding columns', function(done) {
-        init('two-columns-uneven-content');
-
-        grid.onItemsAssigned = function() {
+        init('two-columns-uneven-content', function() {
           grid.querySelectorAll('vaadin-grid-column')[0].hidden = true;
 
           // Flush row height and position calculations
@@ -261,7 +135,7 @@
 
           expect(rows[0].getBoundingClientRect().bottom).to.eql(rows[1].getBoundingClientRect().top);
           done();
-        };
+        });
       });
 
     });

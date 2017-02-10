@@ -146,6 +146,8 @@
             scroller = grid.$.scroller;
             table = scroller.$.table;
             tbody = scroller.$.items;
+            grid.dataProvider = infiniteDataProvider;
+            Polymer.dom.flush();
           });
 
           it('should not lose scope on reorder', function(done) {

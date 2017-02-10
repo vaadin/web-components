@@ -58,6 +58,7 @@
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
           bodyRows = getRows(grid.$.scroller.$.items);
+          Polymer.dom.flush();
         });
 
         function collapseRow(index) {
@@ -166,32 +167,27 @@
           items.push({details: [1, 2, 3, 4]});
         }
 
-        beforeEach(function(done) {
+        beforeEach(function() {
           grid = fixture('repeat');
-
-          grid.dataProvider = function(params, callback) {
-            setTimeout(function() {
-              callback(items);
-              grid.fire('items-assigned');
-            }, 10);
-          };
-
-          bodyRows = getRows(grid.$.scroller.$.items);
-          Polymer.RenderStatus.afterNextRender(grid, done);
         });
 
         it('should have correct height', function(done) {
           grid.expandItem(items[0]);
 
           listenOnce(grid, 'items-assigned', function() {
-            var row = bodyRows[0];
+            var row = getRows(grid.$.scroller.$.items)[0];
             expect(row.offsetHeight).to.be.above(70);
             done();
           });
+
+          grid.dataProvider = function(params, callback) {
+            callback(items);
+            Polymer.dom.flush();
+
+            grid.fire('items-assigned');
+          };
         });
-
       });
-
     });
   </script>
 

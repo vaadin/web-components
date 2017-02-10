@@ -170,11 +170,12 @@
         header = scroller.$.header;
         body = scroller.$.items;
         footer = scroller.$.footer;
+        grid.dataProvider = infiniteDataProvider;
+        Polymer.dom.flush();
+
         headerRows = getRows(header);
         footerRows = getRows(footer);
         bodyRows = getRows(body);
-        grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
       }
 
       describe('No templates', function() {

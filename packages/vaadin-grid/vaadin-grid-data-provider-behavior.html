@@ -1,18 +1,3 @@
-<dom-module id="vaadin-grid-data-provider-styles">
-  <template>
-    <style>
-      :host(:not([has-data])) tbody tr::after {
-        /* A placeholder for empty rows.
-        Content must include (any) text so it derives any possible style
-        rules affecting text height. */
-        content: "-";
-        visibility: hidden;
-        width: 0;
-        padding: 8px 0;
-      }
-    </style>
-  </template>
-</dom-module>
 <dom-module id="vaadin-grid-data-provider-themability-styles">
   <template>
     <style>
@@ -168,7 +153,9 @@
         // debouncing only when data is needed to be fetched. eager loading
         // should somewhat prevent from getting here when scrolling slowly.
         this.debounce('load', function() {
-          uncachedPages.forEach(this._loadPage.bind(this));
+          uncachedPages.forEach(function(i) {
+            this._loadPage(i);
+          }.bind(this));
         }, 100);
       }
     },
@@ -230,17 +217,6 @@
         if (row) {
           this._updateItem(row, items[i]);
 
-          // update heights if any of the items change.
-          // TODO: in a way these should be obsolete, since _update() is called
-          // on scrollHandler every time tiles are recycled. And the function we
-          // are currently in is called as a result from calling assignModels when
-          // tiles are being recycled. I really should draw a diagram of all this.
-          if (!this.$.scroller.hasAttribute('has-data')) {
-            // First set of actual data set to rows, have average height re-measured
-            this.$.scroller._resetAverage();
-            this.$.scroller.toggleAttribute('has-data', true);
-          }
-
           this.debounce('update-heights', function() {
             this.$.scroller._updateMetrics();
             this.$.scroller._positionItems();
@@ -250,7 +226,8 @@
       }
     },
 
-    _loadPage: function(page) {
+    _loadPage: function(page, cb) {
+      cb = cb || this._updateItems.bind(this);
       if (!this._cache[page]) {
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page] && this.dataProvider) {
@@ -264,7 +241,7 @@
           this.dataProvider(opts, function(items) {
             this._cache[page] = items;
             delete this._pendingRequests[page];
-            this._updateItems(page, items);
+            cb(page, items);
 
             this._loading = this._pendingRequests.length > 0;
           }.bind(this));
@@ -299,6 +276,15 @@
     _dataProviderChanged: function(dataProvider, oldDataProvider) {
       if (oldDataProvider !== undefined) {
         this.clearCache();
+      }
+
+      if (!this.$.scroller.hasData) {
+        // load data before adding rows to make sure they have content when
+        // rendered for the first time.
+        this._loading = true;
+        this._loadPage(0, function() {
+          this.$.scroller.hasData = true;
+        }.bind(this));
       }
     }
 

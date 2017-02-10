@@ -309,6 +309,7 @@
         body = scroller.$.items;
         footer = scroller.$.footer;
         grid.dataProvider = infiniteDataProvider;
+        Polymer.dom.flush();
       }
 
       function expectFirstColumnHeader(columnName, level) {
