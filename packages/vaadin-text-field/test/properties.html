@@ -65,8 +65,7 @@
           });
 
         ['maxlength',
-          'minlength',
-          'tabindex'].forEach(function(prop) {
+          'minlength'].forEach(function(prop) {
             it('should set numeric attribute ' + prop, function() {
               assertAttrCanBeSet(prop, 2);
             });
@@ -87,6 +86,26 @@
               assertAttrCanBeSet(prop, false);
             });
           });
+      });
+
+      describe('tabindex', function() {
+        it('setting tabindex should update attribute', function() {
+          vinput.tabindex = 1;
+          expect(vinput.getAttribute('tabindex')).to.be.equal('1');
+        });
+
+        it('setting disabled to true should set tabindex to negative', function() {
+          vinput.tabindex = 1;
+          vinput.disabled = true;
+          expect(vinput.getAttribute('tabindex')).to.be.equal('-1');
+        });
+
+        it('setting disabled to false should set tabindex to negative', function() {
+          vinput.tabindex = 1;
+          vinput.disabled = true;
+          vinput.disabled = false;
+          expect(vinput.getAttribute('tabindex')).to.be.equal('1');
+        });
       });
 
       describe('binding', function() {

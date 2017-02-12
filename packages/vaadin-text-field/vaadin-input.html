@@ -63,11 +63,11 @@ Custom property | Description | Default
       placeholder="[[placeholder]]"
       readonly$="[[readonly]]"
       required$="[[required]]"
-      tabindex$="[[tabindex]]"
       value="{{value::input}}"
       title="[[title]]"
       on-focus="_onInputFocus"
       on-blur="_onInputBlur"
+      on-keydown="_onInputKeyDown"
     />
   </template>
 
@@ -101,7 +101,8 @@ Custom property | Description | Default
              */
             disabled: {
               type: Boolean,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_disabledChanged'
             },
 
             /**
@@ -178,7 +179,10 @@ Custom property | Description | Default
              * The position of the element in the tabbing navigation order for the current document.
              */
             tabindex: {
-              type: Number
+              type: Number,
+              value: 0,
+              reflectToAttribute: true,
+              observer: '_tabindexChanged'
             },
 
             /**
@@ -233,13 +237,16 @@ Custom property | Description | Default
         if (this.autofocus) {
           this.focus();
         }
+
+        this.addEventListener('focus', this._focus.bind(this));
+        this.addEventListener('blur', this._blur.bind(this));
       }
 
       _onInputFocus() {
         this._setFocused(true);
       }
 
-      focus() {
+      _focus() {
         this.$.input.focus();
       }
 
@@ -248,7 +255,7 @@ Custom property | Description | Default
         this.invalid = this._isInvalid();
       }
 
-      blur() {
+      _blur() {
         this.$.input.blur();
       }
 
@@ -277,6 +284,36 @@ Custom property | Description | Default
         // Needed for Edge, until they have support for CSS Custom Properties
         // (already shipping in Edge Preview)
         this.updateStyles();
+      }
+
+      _disabledChanged(disabled) {
+        if (disabled) {
+          this._oldTabindex = this.tabindex;
+          this.tabIndex = -1;
+        } else {
+          this.tabIndex = this._oldTabindex || 0;
+          this._oldTabindex = undefined;
+        }
+      }
+
+      _tabindexChanged(tabindex) {
+        if (this.disabled && tabindex != -1) {
+          this._oldTabindex = tabindex;
+        }
+        if (window.ShadyDOM && !this._tabindexChanging) {
+          // In shady remove host attribute and set to internal input
+          this._tabindexChanging = true;
+          this.removeAttribute('tabindex');
+          this.$.input.tabIndex = tabindex;
+          this._tabindexChanging = undefined;
+        }
+      }
+
+      _onInputKeyDown(e) {
+        // on shift-tab
+        if (e.shiftKey && e.keyCode === 9) {
+          this.focus();
+        }
       }
     }
 

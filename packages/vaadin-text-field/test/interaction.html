@@ -32,7 +32,7 @@
           vaadinInput.$.input.dispatchEvent(new CustomEvent('focus', {bubbles: true}));
         });
 
-        vaadinInput.focus();
+        vaadinInput._focus();
         expect(vaadinInput.focused).to.be.true;
       });
 
@@ -44,8 +44,8 @@
           vaadinInput.$.input.dispatchEvent(new CustomEvent('blur', {bubbles: true}));
         });
 
-        vaadinInput.focus();
-        vaadinInput.blur();
+        vaadinInput._focus();
+        vaadinInput._blur();
         expect(vaadinInput.focused).to.be.false;
       });
     });
