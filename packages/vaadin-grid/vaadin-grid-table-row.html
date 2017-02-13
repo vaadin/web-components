@@ -84,7 +84,6 @@
         } else {
           if (this._rowDetailsCell) {
             Polymer.dom(this.root).removeChild(this._rowDetailsCell);
-            this.style.paddingBottom = '';
             this._rowDetailsCell = null;
           }
         }
@@ -112,7 +111,11 @@
       _rowDetailsCellIndexChanged: function(_rowDetailsCell, index, target) {
         if (_rowDetailsCell) {
           _rowDetailsCell.index = index;
+
+          Polymer.dom.flush();
           this.style.paddingBottom = _rowDetailsCell.style.height = _rowDetailsCell.clientHeight + 'px';
+        } else {
+          this.style.paddingBottom = '';
         }
       },
 

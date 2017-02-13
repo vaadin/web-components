@@ -26,121 +26,171 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="repeat">
+    <template>
+      <vaadin-grid style="width: 200px; height: 400px;" size="100">
+        <template class="row-details">
+          <div>
+            <template is="dom-repeat" items="[[item.details]]">
+              <div>foo</div>
+            </template>
+          </div>
+        </template>
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('row details', function() {
       var grid;
       var bodyRows;
 
-      beforeEach(function(done) {
-        grid = fixture('default');
-        grid.dataProvider = infiniteDataProvider;
-        bodyRows = getRows(grid.$.scroller.$.items);
-        Polymer.Base.async(done, 25);
-      });
+      describe('simple', function() {
 
-      function expandRow(index) {
-        grid.expandItem(grid._cache[0][index]);
-      }
+        function expandRow(index) {
+          grid.expandItem(grid._cache[0][index]);
+        }
 
-      function collapseRow(index) {
-        grid.collapseItem(grid._cache[0][index]);
-      }
+        beforeEach(function() {
+          grid = fixture('default');
+          grid.dataProvider = infiniteDataProvider;
+          bodyRows = getRows(grid.$.scroller.$.items);
+        });
 
-      it('should expand a row', function(done) {
+        function collapseRow(index) {
+          grid.collapseItem(grid._cache[0][index]);
+        }
 
-        expect(getRowCells(bodyRows[1])).to.have.length(1);
-        expandRow(1);
-        var cells = getRowCells(bodyRows[1]);
-        expect(cells[1].hasAttribute('detailscell')).to.be.true;
-        done();
-      });
-
-      it('should collapse a row', function() {
-        expandRow(1);
-        collapseRow(1);
-        expect(getRowCells(bodyRows[1])).to.have.length(1);
-      });
-
-      it('should stamp the details template', function() {
-        expandRow(1);
-        var cells = getRowCells(bodyRows[1]);
-        expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
-      });
-
-      it('should have correct bounds', function() {
-        expandRow(1);
-        var cells = getRowCells(bodyRows[1]);
-        var bounds = cells[1].getBoundingClientRect();
-        expect(bounds.top).to.equal(cells[0].getBoundingClientRect().bottom);
-        expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
-        expect(bounds.right).to.equal(grid.$.scroller.$.items.getBoundingClientRect().right);
-        expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
-        expect(bounds.height).to.be.above(10);
-      });
-
-      it('should remove the details cell', function() {
-        expandRow(1);
-        var row = bodyRows[1];
-        grid.$.scroller.scrollToIndex(100);
-        grid._flushItemsDebouncer();
-        expect(getRowCells(row)).to.have.length(1);
-      });
-
-      it('should add details to fixed cells cache', function() {
-        expandRow(1);
-
-        grid.$.scroller.flushDebouncer('cache-elements');
-        bodyRows = getRows(grid.$.scroller.$.items);
-
-        expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
-      });
-
-      it('should add details from fixed cells cache on scroll', function() {
-        expandRow(1);
-
-        grid.$.scroller.scrollToIndex(100);
-        grid.$.scroller.flushDebouncer('cache-elements');
-
-        // TODO: Saulis: scrolling directly from index 100 to 0 will
-        // take 2-3s longer in this test for some reason. Gave up after trying to figure it out for 60mins.
-        grid.$.scroller.scrollToIndex(10);
-        grid.$.scroller.scrollToIndex(0);
-        grid.$.scroller.flushDebouncer('cache-elements');
-
-        bodyRows = getRows(grid.$.scroller.$.items);
-        expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
-      });
-
-      it('should remove details from fixed cells cache', function() {
-        expandRow(1);
-        grid.$.scroller.flushDebouncer('cache-elements');
-
-        collapseRow(1);
-        grid.$.scroller.flushDebouncer('cache-elements');
-        bodyRows = getRows(grid.$.scroller.$.items);
-
-        expect(grid.$.scroller._frozenCells).to.be.empty;
-      });
-
-      it('should remove details from fixed cells cache on scroll', function() {
-        expandRow(1);
-
-        grid.$.scroller.scrollToIndex(100);
-
-        grid.$.scroller.flushDebouncer('cache-elements');
-        expect(grid.$.scroller._frozenCells).to.be.empty;
-      });
-
-      it('should remove unused nodes from the light DOM', function(done) {
-        expandRow(1);
-        var childCount = Polymer.dom(grid).children.length;
-        collapseRow(1);
-        Polymer.Base.async(function() {
-          expect(Polymer.dom(grid).children.length).to.equal(childCount - 1);
+        it('should expand a row', function(done) {
+          expect(getRowCells(bodyRows[1])).to.have.length(1);
+          expandRow(1);
+          var cells = getRowCells(bodyRows[1]);
+          expect(cells[1].hasAttribute('detailscell')).to.be.true;
           done();
-        }, 1);
+        });
+
+        it('should collapse a row', function() {
+          expandRow(1);
+          collapseRow(1);
+          expect(getRowCells(bodyRows[1])).to.have.length(1);
+        });
+
+        it('should stamp the details template', function() {
+          expandRow(1);
+          var cells = getRowCells(bodyRows[1]);
+          expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
+        });
+
+        it('should have correct bounds', function() {
+          expandRow(1);
+          var cells = getRowCells(bodyRows[1]);
+          var bounds = cells[1].getBoundingClientRect();
+          expect(bounds.top).to.equal(cells[0].getBoundingClientRect().bottom);
+          expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
+          expect(bounds.right).to.equal(grid.$.scroller.$.items.getBoundingClientRect().right);
+          expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
+          expect(bounds.height).to.be.above(10);
+        });
+
+        it('should remove the details cell', function() {
+          expandRow(1);
+          var row = bodyRows[1];
+          grid.$.scroller.scrollToIndex(100);
+          grid._flushItemsDebouncer();
+          expect(getRowCells(row)).to.have.length(1);
+        });
+
+        it('should add details to fixed cells cache', function() {
+          expandRow(1);
+
+          grid.$.scroller.flushDebouncer('cache-elements');
+          bodyRows = getRows(grid.$.scroller.$.items);
+
+          expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
+        });
+
+        it('should add details from fixed cells cache on scroll', function() {
+          expandRow(1);
+
+          grid.$.scroller.scrollToIndex(100);
+          grid.$.scroller.flushDebouncer('cache-elements');
+
+          // TODO: Saulis: scrolling directly from index 100 to 0 will
+          // take 2-3s longer in this test for some reason. Gave up after trying to figure it out for 60mins.
+          grid.$.scroller.scrollToIndex(10);
+          grid.$.scroller.scrollToIndex(0);
+          grid.$.scroller.flushDebouncer('cache-elements');
+
+          bodyRows = getRows(grid.$.scroller.$.items);
+          expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
+        });
+
+        it('should remove details from fixed cells cache', function() {
+          expandRow(1);
+          grid.$.scroller.flushDebouncer('cache-elements');
+
+          collapseRow(1);
+          grid.$.scroller.flushDebouncer('cache-elements');
+          bodyRows = getRows(grid.$.scroller.$.items);
+
+          expect(grid.$.scroller._frozenCells).to.be.empty;
+        });
+
+        it('should remove details from fixed cells cache on scroll', function() {
+          expandRow(1);
+
+          grid.$.scroller.scrollToIndex(100);
+
+          grid.$.scroller.flushDebouncer('cache-elements');
+          expect(grid.$.scroller._frozenCells).to.be.empty;
+        });
+
+        it('should remove unused nodes from the light DOM', function(done) {
+          expandRow(1);
+          var childCount = Polymer.dom(grid).children.length;
+          collapseRow(1);
+          Polymer.Base.async(function() {
+            expect(Polymer.dom(grid).children.length).to.equal(childCount - 1);
+            done();
+          }, 1);
+        });
       });
 
+      describe('repeat', function() {
+
+        var items = [];
+        for (var i = 0; i < 50; i++) {
+          items.push({details: [1, 2, 3, 4]});
+        }
+
+        beforeEach(function(done) {
+          grid = fixture('repeat');
+
+          grid.dataProvider = function(params, callback) {
+            setTimeout(function() {
+              callback(items);
+              grid.fire('items-assigned');
+            }, 10);
+          };
+
+          bodyRows = getRows(grid.$.scroller.$.items);
+          Polymer.RenderStatus.afterNextRender(grid, done);
+        });
+
+        it('should have correct height', function(done) {
+          grid.expandItem(items[0]);
+
+          listenOnce(grid, 'items-assigned', function() {
+            var row = bodyRows[0];
+            expect(row.offsetHeight).to.be.above(70);
+            done();
+          });
+        });
+
+      });
 
     });
   </script>
