@@ -347,8 +347,22 @@ Custom property | Description | Default
 
       size: {
         type: Number
-      }
+      },
 
+      /**
+       * True when the input field has focus.
+       */
+      focused: {
+        type: Boolean,
+        value: false,
+        readOnly: true,
+        reflectToAttribute: true,
+        notify: true
+      }
+    },
+
+    listeners: {
+      'inputContainer.focused-changed': '_onInputContainerFocusedChanged'
     },
 
     attached: function() {
@@ -374,6 +388,24 @@ Custom property | Description | Default
 
     _getAriaExpanded: function(value) {
       return value.toString();
+    },
+
+    /**
+     * Sets focus on the input field.
+     */
+    focus: function() {
+      this.$.input.focus();
+    },
+
+    /**
+     * Removes focus from the input field.
+     */
+    blur: function() {
+      this.$.input.blur();
+    },
+
+    _onInputContainerFocusedChanged: function(e) {
+      this._setFocused(e.detail.value);
     }
   });
 

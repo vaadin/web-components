@@ -205,6 +205,60 @@
           expect(comboBox.selectedItem).to.be.null;
         });
       });
+
+      describe('focus API', function() {
+        it('should have readOnly focused property', function() {
+          comboBox.focused = true;
+          expect(comboBox.focused).to.be.false;
+          expect(comboBox.hasAttribute('focused')).to.be.false;
+        });
+
+        it('should not be focused by default', function() {
+          expect(comboBox.focused).to.be.false;
+          expect(comboBox.hasAttribute('focused')).to.be.false;
+        });
+
+        describe('methods', function() {
+          // Avoid FF window focus issues by stubing native focus behavior
+          var inputFocusStub, inputBlurStub;
+
+          beforeEach(function() {
+            inputFocusStub = sinon.stub(comboBox.$.input, 'focus', function() {
+              comboBox.$.input.fire('focus');
+            });
+
+            inputBlurStub = sinon.stub(comboBox.$.input, 'blur', function() {
+              comboBox.$.input.fire('blur');
+            });
+          });
+
+          it('should focus the input with focus method', function() {
+            var focusedChangedSpy = sinon.spy();
+            comboBox.addEventListener('focused-changed', focusedChangedSpy);
+
+            comboBox.focus();
+
+            expect(inputFocusStub.called).to.be.true;
+            expect(comboBox.focused).to.be.true;
+            expect(comboBox.hasAttribute('focused')).to.be.true;
+            expect(focusedChangedSpy.called).to.be.true;
+          });
+
+          it('should blur the input with the blur method', function() {
+            comboBox.focus();
+
+            var focusedChangedSpy = sinon.spy();
+            comboBox.addEventListener('focused-changed', focusedChangedSpy);
+
+            comboBox.blur();
+
+            expect(inputBlurStub.called).to.be.true;
+            expect(comboBox.focused).to.be.false;
+            expect(comboBox.hasAttribute('focused')).to.be.false;
+            expect(focusedChangedSpy.called).to.be.true;
+          });
+        });
+      });
     });
   </script>
 
