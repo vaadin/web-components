@@ -100,6 +100,13 @@
         expect(headerCells[0].clientWidth).to.equal(200);
       });
 
+      it('should not listen to track event on scroller', function() {
+        var scroller = grid.$.scroller;
+        var spy = sinon.spy(scroller, '_onTrack');
+        Polymer.Base.fire('track', {state: 'start'}, {node: scroller});
+        expect(spy.called).to.be.false;
+      });
+
       it('should be behind the frozen columns', function(done) {
         grid.style.width = '100px';
         grid._columnTree[0][0].frozen = true;
