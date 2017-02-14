@@ -88,26 +88,6 @@
           });
       });
 
-      describe('tabindex', function() {
-        it('setting tabindex should update attribute', function() {
-          vinput.tabindex = 1;
-          expect(vinput.getAttribute('tabindex')).to.be.equal('1');
-        });
-
-        it('setting disabled to true should set tabindex to negative', function() {
-          vinput.tabindex = 1;
-          vinput.disabled = true;
-          expect(vinput.getAttribute('tabindex')).to.be.equal('-1');
-        });
-
-        it('setting disabled to false should set tabindex to negative', function() {
-          vinput.tabindex = 1;
-          vinput.disabled = true;
-          vinput.disabled = false;
-          expect(vinput.getAttribute('tabindex')).to.be.equal('1');
-        });
-      });
-
       describe('binding', function() {
         it('setting input value updates value', function() {
           input.value = 'foo';

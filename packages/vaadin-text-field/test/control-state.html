@@ -1,0 +1,147 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-input tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-input.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
+
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-input></vaadin-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="disabled">
+    <template>
+      <vaadin-input disabled></vaadin-input>
+    </template>
+  </test-fixture>
+
+  <script>
+    // All timeouts in these tests are needed because of FF
+    function runAsync(test, done, timeout) {
+      setTimeout(() => {
+        test();
+        done();
+      }, timeout || 1);
+    }
+
+    describe('control-state behavior', function() {
+      var customElement, focusElement;
+
+      beforeEach(function(done) {
+        customElement = fixture('default');
+        // Need the shadow dom be rendered before getting the internal element reference
+        runAsync(() => focusElement = customElement.focusElement, done);
+      });
+
+      describe('tabindex', function() {
+        if (window.ShadyDOM) {
+          describe('in shady dom', function() {
+
+            it('we need tabindex set to -1 by default', function() {
+              expect(customElement.getAttribute('tabindex')).to.be.equal('-1');
+            });
+
+            it('setting tabIndex keep tabindex to -1', function(done) {
+              customElement.tabIndex = 1;
+              runAsync(() => expect(customElement.getAttribute('tabindex')).to.be.equal('-1'), done);
+            });
+
+            it('setting tabIndex should forward the value to the internal element', function(done) {
+              customElement.tabIndex = 1;
+              runAsync(() => expect(focusElement.getAttribute('tabindex')).to.be.equal('1'), done);
+            });
+
+            it('enabling the element should set tabindex to -1', function(done) {
+              customElement.tabIndex = 1;
+              customElement.disabled = true;
+              setTimeout(() => {
+                customElement.disabled = false;
+                runAsync(() => expect(customElement.getAttribute('tabindex')).to.be.equal('-1'), done);
+              }, 1);
+            });
+          });
+        } else {
+          describe('in shadow dom', function() {
+            it('we always need a tabindex by default', function() {
+              expect(customElement.getAttribute('tabindex')).to.be.equal('0');
+            });
+
+            it('setting tabIndex should update the attribute', function() {
+              customElement.tabIndex = 1;
+              expect(customElement.getAttribute('tabindex')).to.be.equal('1');
+            });
+
+            it('enabling the element should restore old tabindex', function() {
+              customElement.tabIndex = 1;
+              customElement.disabled = true;
+              customElement.disabled = false;
+              expect(customElement.getAttribute('tabindex')).to.be.equal('1');
+            });
+          });
+        }
+
+        it('setting disabled to true should remove tabindex', function(done) {
+          customElement.tabIndex = 1;
+          customElement.disabled = true;
+          runAsync(() => expect(customElement.getAttribute('tabindex')).to.not.be.ok, done);
+        });
+      });
+
+      // Not reliable tests results in these platforms.
+      if (!/iPhone|iPad|Edge/.test(navigator.userAgent)) {
+        describe('focus', function() {
+          // Avoid FF window focus issues by stubing native focus behavior
+          beforeEach(function() {
+            focusElement._focus = focusElement._focus || focusElement.focus;
+            sinon.stub(focusElement, 'focus', e => {
+              focusElement._focus();
+              focusElement.dispatchEvent(new CustomEvent('focus', {bubbles: true}));
+            });
+
+            focusElement._blur = focusElement._blur || focusElement.blur;
+            sinon.stub(customElement.$.input, 'blur', e => {
+              focusElement._blur();
+              focusElement.dispatchEvent(new CustomEvent('blur', {bubbles: true}));
+            });
+          });
+
+          it('should focus the internal input on focus', function(done) {
+            focusElement.focus();
+            runAsync(() => expect(customElement.focused).to.be.ok, done);
+          });
+
+          it('should blur the internal input on blur', function(done) {
+            customElement.focus();
+            customElement.blur();
+            runAsync(() => expect(customElement.focused).not.to.be.ok, done, 1000);
+          });
+        });
+      }
+
+      describe('disabled', function() {
+        beforeEach(function(done) {
+          customElement = fixture('disabled');
+          runAsync(() => focusElement = customElement.focusElement, done);
+        });
+
+        it('should not have tabindex if disabled when ready', function() {
+          expect(customElement.getAttribute('tabindex')).to.not.be.ok;
+        });
+
+        it('should update internal element tabIndex', function(done) {
+          customElement.tabIndex = 4;
+          runAsync(() => expect(focusElement.getAttribute('tabindex')).to.be.equal('4'), done);
+        });
+      });
+
+    });
+  </script>
+</body>
