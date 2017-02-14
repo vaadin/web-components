@@ -66,14 +66,12 @@ Custom property | Description | Default
       required$="[[required]]"
       value="{{value::input}}"
       title="[[title]]"
-      on-focus="_onInputFocus"
-      on-blur="_onInputBlur"
-      on-keydown="_onInputKeyDown"
+      on-blur="validate"
     />
   </template>
 
   <script>
-    class VaadinInput extends window.VaadinControlStateMixin(window.VaadinFormElementMixin(Polymer.Element)) {
+    class VaadinInputElement extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(Polymer.Element)) {
       static get is() {
         return 'vaadin-input';
       }
@@ -196,60 +194,21 @@ Custom property | Description | Default
               notify: true,
               readOnly: true,
               reflectToAttribute: true
-            },
-
-            /**
-             * If true, the element currently has focus.
-             */
-            focused: {
-              type: Boolean,
-              notify: true,
-              readOnly: true,
-              reflectToAttribute: true,
-              observer: '_focusedChanged'
             }
-          }
+          },
+
         };
       }
 
-      ready() {
-        super.ready();
-
-        // Make FF take the focus (#9)
-        if (this.autofocus) {
-          this.focus();
-        }
-
-        this.addEventListener('focus', this._focus.bind(this));
-        this.addEventListener('blur', this._blur.bind(this));
-      }
-
-      _onInputFocus() {
-        this._setFocused(true);
-      }
-
-      _focus() {
-        this.$.input.focus();
-      }
-
-      _onInputBlur() {
-        this._setFocused(false);
-        this.invalid = this._isInvalid();
-      }
-
-      _blur() {
-        this.$.input.blur();
+      get focusElement() {
+        return this.$.input;
       }
 
       _valueChanged(value) {
         if (this.invalid) {
-          this.invalid = this._isInvalid();
+          this.validate();
         }
         this._setHasValue(value != null && value !== '');
-      }
-
-      _isInvalid() {
-        return !this.validate();
       }
 
       /**
@@ -259,46 +218,10 @@ Custom property | Description | Default
        * @return {boolean} True if the value is valid.
        */
       validate() {
-        return this.$.input.checkValidity();
-      }
-
-      _focusedChanged() {
-        // Needed for Edge, until they have support for CSS Custom Properties
-        // (already shipping in Edge Preview)
-        this.updateStyles();
-      }
-
-      _disabledChanged(disabled) {
-        if (disabled) {
-          this._oldTabindex = this.tabindex;
-          this.tabIndex = -1;
-        } else {
-          this.tabIndex = this._oldTabindex || 0;
-          this._oldTabindex = undefined;
-        }
-      }
-
-      _tabindexChanged(tabindex) {
-        if (this.disabled && tabindex != -1) {
-          this._oldTabindex = tabindex;
-        }
-        if (window.ShadyDOM && !this._tabindexChanging) {
-          // In shady remove host attribute and set to internal input
-          this._tabindexChanging = true;
-          this.removeAttribute('tabindex');
-          this.$.input.tabIndex = tabindex;
-          this._tabindexChanging = undefined;
-        }
-      }
-
-      _onInputKeyDown(e) {
-        // on shift-tab
-        if (e.shiftKey && e.keyCode === 9) {
-          this.focus();
-        }
+        return !(this.invalid = !this.$.input.checkValidity());
       }
     }
 
-    customElements.define(VaadinInput.is, VaadinInput);
+    customElements.define(VaadinInputElement.is, VaadinInputElement);
   </script>
 </dom-module>
