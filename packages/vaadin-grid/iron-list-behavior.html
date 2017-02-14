@@ -569,10 +569,8 @@
         var y = this._physicalTop;
 
         this._iterateItems(function(pidx, vidx) {
-
-          this.translate3d(0, y + 'px', 0, this._physicalItems[pidx]);
+          this._physicalItems[pidx].style.transform = this._getTranslate(0, y);
           y += this._physicalSizes[pidx];
-
         });
 
       },
