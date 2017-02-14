@@ -47,7 +47,8 @@
     "iron-icon": "PolymerElements/iron-icon#^1.0.12",
     "paper-styles": "PolymerElements/paper-styles#^1.1.5",
     "iron-component-page": "^1.1.7",
-    "elements-demo-resources": "*"
+    "elements-demo-resources": "*",
+    "vaadin-combo-box": "^1.2.0"
   },
   "dependencies": {
     "polymer": "^1.6.1",

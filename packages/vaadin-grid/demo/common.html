@@ -5,10 +5,21 @@
 <link rel="import" href="../../paper-styles/default-theme.html">
 <link rel="import" href="../../elements-demo-resources/common.html">
 
+<style>
+  vaadin-grid {
+    text-transform: capitalize;
+  }
+
+  h3 + p {
+    margin-top: 0;
+  }
+</style>
+
 <!-- Menu Items -->
 <script>
   window.demos = [
     {name: 'index', title: 'Templating'},
+    {name: 'data', title: 'Assigning Data'},
     {name: 'selection'},
     {name: 'columns', title: 'Column Properties'},
     {name: 'sorting-filtering', title: 'Sorting and Filtering'},

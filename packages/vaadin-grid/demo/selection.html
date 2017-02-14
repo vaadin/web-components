@@ -10,7 +10,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../vaadin-grid-selection-column.html">
 
 
@@ -21,60 +21,12 @@
   <div class="vertical-section-container centered">
     <demo-navigation></demo-navigation>
 
-    <h3>Multi-Selection with Array Items</h3>
-    <demo-snippet>
-      <template>
-        <template is="dom-bind">
-          <x-array-data-provider items="{{items}}"></x-array-data-provider>
-          <vaadin-grid aria-label="Multi-Selection Example" items="[[items]]">
-            <vaadin-grid-selection-column auto-select>
-            </vaadin-grid-selection-column>
-            <vaadin-grid-column width="50px">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        </template>
-      </template>
-    </demo-snippet>
-
-    <h3>Selection using Templates</h3>
-    <demo-snippet>
-      <template>
-        <template is="dom-bind">
-          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <vaadin-grid aria-label="Selection using Templates Example" data-provider="[[dataProvider]]" size="200">
-            <vaadin-grid-column width="50px">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template>
-                <paper-button aria-label="Select Row" raised toggles active="{{selected}}">Select</paper-button>
-              </template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        </template>
-      </template>
-    </demo-snippet>
-
     <h3>Selection using Active Item</h3>
+    <p>
+      When a row is clicked, the item object from that row is assigned to <code>activeItem</code>.
+      <br>
+      To select items on click, <code>activeItem</code> can be pushed to <code>selectedItems</code>.
+    </p>
     <demo-snippet>
       <template>
         <x-selection></x-selection>
@@ -115,7 +67,84 @@
       </template>
     </demo-snippet>
 
-    <h3>Select All with Data Provider</h3>
+    <h3>Selection using Templates</h3>
+    <p>
+      In addition to modifying selection using <code>selectedItems</code> property
+      or <code>selectItem(item)</code> and <code>deselectItem(item)</code> methods,
+      the template variable <code>{{selected}}</code> can also be used.
+    </p>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          <vaadin-grid aria-label="Selection using Templates Example" data-provider="[[dataProvider]]" size="200">
+            <vaadin-grid-column width="50px">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template>
+                <paper-checkbox aria-label="Select Row" checked="{{selected}}">Selected</paper-checkb>
+              </template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+    <h3>Multi-Selection Column</h3>
+    <p>
+      <code>&lt;vaadin-grid&gt;</code> ships with a helper element <code>&lt;vaadin-grid-selection-column&gt;</code>
+      which provides a checkboxes bound to selection. It also comes with a "select all"
+      checkbox for the header.
+      <br><br>
+      <b>Hint: </b><code>auto-select</code> can be set to enable selecting rows on click.
+      <br><br>
+      <b>Note: </b>This is a opt-in feature so <code>vaadin-grid-selection-column.html</code> needs
+      to be explicitly imported.
+    </p>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <x-array-data-provider items="{{items}}"></x-array-data-provider>
+          <vaadin-grid aria-label="Multi-Selection Example" items="[[items]]">
+            <vaadin-grid-selection-column auto-select>
+            </vaadin-grid-selection-column>
+            <vaadin-grid-column width="50px">
+              <template class="header">#</template>
+              <template>[[index]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">First Name</template>
+              <template>[[item.user.name.first]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Last Name</template>
+              <template>[[item.user.name.last]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </demo-snippet>
+
+
+
+    <h3>Custom Select All with Data Provider</h3>
+    <p>
+      When dealing with remote data, "selecting all" can be tricky since pushing
+      every item to <code>selectedItem</code> would require fetching all of the items.
+      <br><br>
+      In this example, a custom selection state is used to provide a "select all"
+      functionality without having to fetch all of the items.
+    </p>
     <demo-snippet>
       <template>
         <dataprovider-select-all></dataprovider-select-all>
