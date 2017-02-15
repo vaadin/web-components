@@ -7,6 +7,8 @@ This program is available under Apache License Version 2.0, available at https:/
 <!--
 `<vaadin-input>` is a Polymer element for input control in forms.
 
+It wraps an `<input>` and a `<label>` native elements easy to customize.
+
 ```html
 <vaadin-input>
 </vaadin-input>
@@ -19,6 +21,7 @@ Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-input__input` | Mixin applied to the input element | `{}`
 `--vaadin-input__input-placeholder` | Mixin applied to the input's placeholder | `{}`
+`--vaadin-input__label` | Mixin applied to the label element | `{}`
 
 @element vaadin-input
 @demo demo/index.html
@@ -36,7 +39,15 @@ Custom property | Description | Default
       }
 
       input {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
         @apply --vaadin-input__input;
+      }
+
+      label {
+        display: block;
+        @apply --vaadin-input__label;
       }
 
       input::-webkit-input-placeholder {
@@ -51,6 +62,13 @@ Custom property | Description | Default
         @apply --vaadin-input__input-placeholder;
       }
     </style>
+
+    <dom-if if="[[label]]">
+      <template>
+        <label id="label" on-click="focus">[[label]]</label>
+      </template>
+    </dom-if>
+
     <input id="input"
       autocomplete$="[[autocomplete]]"
       autocorrect$="[[autocorrect]]"
@@ -96,6 +114,13 @@ Custom property | Description | Default
             },
 
             /**
+             * String used for the label element. If empty the element is removed from the dom.
+             */
+            label: {
+              type: String
+            },
+
+            /**
              * Identifies a list of pre-defined options to suggest to the user.
              * The value must be the id of a <datalist> element in the same document.
              */
@@ -111,6 +136,7 @@ Custom property | Description | Default
             maxlength: {
               type: Number
             },
+
             /**
              * If the value of the type attribute is text, email, search, password, tel, or url,
              * specifies the minimum number of characters (in Unicode code points) that the user

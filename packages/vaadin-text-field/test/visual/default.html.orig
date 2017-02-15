@@ -19,13 +19,17 @@
         border: solid 1px grey;
       }
 
-      #hidden-caret {
-        --vaadin-input__input: {
-          font-size: 0;
-          padding: 0 100px;
-          height: 20px;
-        };
+      div {
+        position: relative;
       }
+
+      .caret {
+        position: absolute;
+        background: green;
+        width: 25px;
+        height: 25px;
+      }
+
     </style>
   </custom-style>
 
@@ -36,15 +40,13 @@
       <p>
       input with value: <vaadin-input value="Go Vaadin"></vaadin-input>
       <p>
-      focused input: <vaadin-input autofocus id="hidden-caret"></vaadin-input>
+      focused input: <div><vaadin-input autofocus id="hidden-caret"></vaadin-input><div class="caret"></div></div>
       <p>
       disabled input: <vaadin-input disabled></vaadin-input>
       <p>
       input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
       <p>
-      input with label: <vaadin-input label="Foo"></vaadin-input>
-      <p>
-      input with label and Value: <vaadin-input label="Foo" value="Bar"></vaadin-input>
+      invalid input: <vaadin-input value minlength="4"></vaadin-input>
     </fieldset>
   </form>
 
