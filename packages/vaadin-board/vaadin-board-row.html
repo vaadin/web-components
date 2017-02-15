@@ -36,6 +36,16 @@
         super.ready();
         this.addEventListener('iron-resize', this._onIronResize);
         this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          //force this as an interested resizable of parent
+          this.dispatchEvent(new CustomEvent('iron-request-resize-notifications', {
+            node: this,
+            bubbles: true,
+            cancelable: true,
+            composed:true,
+            detail:{}
+          }));
+        });
       }
       connectedCallback() {
         super.connectedCallback();

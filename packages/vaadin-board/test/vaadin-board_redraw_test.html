@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>vaadin-board test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../vaadin-board.html">
+  </head>
+  <body>
+    <test-fixture id="board-1-row-4-items">
+      <template>
+        <vaadin-board style="width:1200px">
+          <vaadin-board-row id="top">
+            <div>top A</div>
+            <div>top B</div>
+            <div>top C</div>
+            <div>top D</div>
+          </vaadin-board-row>
+        </vaadin-board>
+      </template>
+    </test-fixture>
+    <test-fixture id="board-row-4-items">
+      <template>
+        <vaadin-board-row style="width:1200px">
+          <div>top A</div>
+          <div>top B</div>
+          <div>top C</div>
+          <div>top D</div>
+        </vaadin-board-row>
+      </template>
+    </test-fixture>
+    <script>
+      suite('vaadin-board', function () {
+
+        test('Changing styling of the board and calling redraw triggers relayouting', function() {
+          var board = fixture('board-1-row-4-items');
+          board.style.width="700px";
+          board.redraw();
+
+          var row = board.querySelector('#top');
+          var rowRect = row.getBoundingClientRect();
+          var children = row.querySelectorAll("div");
+          for (let i = 0; i < children.length; i++) {
+            var rect = children[i].getBoundingClientRect();
+
+            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+          }
+        });
+
+        test('Changing styling of the row and calling redraw triggers relayouting', function() {
+          var row = fixture('board-row-4-items');
+          row.style.width="700px";
+          row.redraw();
+
+          var rowRect = row.getBoundingClientRect();
+          var children = row.querySelectorAll("div");
+          for (let i = 0; i < children.length; i++) {
+            var rect = children[i].getBoundingClientRect();
+
+            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

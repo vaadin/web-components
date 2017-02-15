@@ -21,7 +21,7 @@ Responsive layout, with several features.
   </template>
 
   <script>
-    class VaadinBoard extends Polymer.Element {
+    class VaadinBoard extends Resizable(Polymer.Element){
       static get is() {
         return 'vaadin-board';
       }
@@ -44,6 +44,11 @@ Responsive layout, with several features.
       connectedCallback() {
         super.connectedCallback();
       }
+
+      redraw() {
+        this.notifyResize();
+      }
+
     }
     customElements.define(VaadinBoard.is, VaadinBoard);
   </script>
