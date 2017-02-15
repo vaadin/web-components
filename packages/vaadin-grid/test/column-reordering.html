@@ -371,6 +371,7 @@
       beforeEach(function(done) {
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
+        Polymer.dom.flush();
         Polymer.RenderStatus.afterNextRender(grid, done);
       });
 

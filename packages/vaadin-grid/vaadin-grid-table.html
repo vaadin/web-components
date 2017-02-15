@@ -255,7 +255,6 @@
   <template>
     <style include="vaadin-grid-table-scroll-styles"></style>
     <style include="vaadin-grid-row-details-styles"></style>
-    <style include="vaadin-grid-data-provider-styles"></style>
     <style include="vaadin-grid-table-styles"></style>
 
     <style include="vaadin-grid-table-themability-styles"></style>
@@ -354,12 +353,14 @@
         }
       },
 
-      target: Object
+      target: Object,
+
+      hasData: Boolean
     },
 
     observers: [
       '_columnTreeChanged(columnTree, _physicalItems, _physicalCountVal)',
-      '_sizeChanged(size, bindData)',
+      '_sizeChanged(size, bindData, hasData)',
       '_rowDetailsTemplateChanged(rowDetailsTemplate, _physicalItems, _physicalCountVal)'
     ],
 
@@ -492,7 +493,7 @@
       return physicalItems;
     },
 
-    _sizeChanged: function(size) {
+    _sizeChanged: function(size, bindData, hasData) {
       this._virtualStart = 0;
       this._physicalTop = 0;
 
