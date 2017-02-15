@@ -40,6 +40,7 @@
     "afterEach": false,
     "dragStart": false,
     "dragOver": false,
-    "dragAndDropOver": false
+    "dragAndDropOver": false,
+    "makeSoloTouchEvent": false
   }
 }

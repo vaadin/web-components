@@ -298,7 +298,9 @@
 
       this._translateStationaryElements();
 
-      this.scrolling = true;
+      if (!this.hasAttribute('reordering')) {
+        this.scrolling = true;
+      }
       this.debounce('vaadin-grid-scrolling', function() {
         this.scrolling = false;
         this._reorderRows();

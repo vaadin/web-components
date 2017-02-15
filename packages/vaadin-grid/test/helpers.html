@@ -251,32 +251,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function dragStart(source) {
-    var start = new CustomEvent('dragstart', {
-      bubbles: true
-    });
-    start.dataTransfer = {
-      setData: function() {
-        // Ignore
-      }
-    };
-    source.dispatchEvent(start);
+    var e = makeSoloTouchEvent('touchstart', {x: 0, y: 0}, source);
+    var cell = source;
+    if (cell.localName !== 'vaadin-grid-header-cell') {
+      var grid = Polymer.dom(cell).parentNode;
+      cell = grid.$.scroller._getCellByCellContent(source);
+    }
+    if (cell._startReorderTimeout) {
+      cell._startReorder(e);
+      clearTimeout(cell._startReorderTimeout);
+    }
   }
 
   function dragOver(source, target, clientX) {
     dragStart(source);
-    var over = new CustomEvent('dragover', {
-      bubbles: true
-    });
     var targetRect = target.getBoundingClientRect();
-    over.clientX = clientX || targetRect.left + targetRect.width / 2;
-    target.dispatchEvent(over);
+    makeSoloTouchEvent('touchmove', {
+      x: clientX || targetRect.left + targetRect.width / 2,
+      y: targetRect.top},
+      source);
   }
 
   function dragAndDropOver(source, target) {
     dragOver(source, target);
-    var dragend = new CustomEvent('dragend', {
-      bubbles: true
-    });
-    source.dispatchEvent(dragend);
+    makeSoloTouchEvent('touchend', {x: 0, y: 0}, source);
   }
+
+  function makeSoloTouchEvent(type, xy, node) {
+    var touches = [{
+      identifier: 0,
+      target: node,
+      clientX: xy.x,
+      clientY: xy.y
+    }];
+    var touchEventInit = {
+      touches: touches,
+      targetTouches: touches,
+      changedTouches: touches
+    };
+    var event = new CustomEvent(type, {bubbles: true, cancelable: true});
+    for (var property in touchEventInit) {
+      event[property] = touchEventInit[property];
+    }
+    node.dispatchEvent(event);
+    return event;
+  }
+
 </script>
