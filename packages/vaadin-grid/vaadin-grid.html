@@ -132,7 +132,7 @@ first element in the cell will be focused. You can override the behavior by appl
   <template>
     <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
-        row-details-template="[[_rowDetailsTemplate]]">
+        row-details-template="[[_rowDetailsTemplate]]" column-reordering-allowed="[[columnReorderingAllowed]]">
       <content></content>
     </vaadin-grid-table>
   </template>

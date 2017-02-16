@@ -125,11 +125,15 @@
         transform: translateX(-100%);
       }
 
+      :host([column-reordering-allowed]) #header,
       :host([column-resizing]) {
         -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         user-select: none;
+      }
+
+      :host([column-resizing]) {
         cursor: col-resize;
       }
 
@@ -162,6 +166,17 @@
       ::content > vaadin-grid-selection-column,
       ::content > vaadin-grid-column-group {
         display: none;
+      }
+
+      :host([no-content-pointer-events]) .vaadin-grid-cell ::content > .cell-content {
+        pointer-events: none;
+      }
+
+      #reorderghost {
+        visibility: hidden;
+        position: fixed;
+        opacity: 0.5;
+        pointer-events: none;
       }
 
       /* Style overrides required to make copying the selection to clipboard work properly (on Safari) */
@@ -296,6 +311,8 @@
       <div id="outersizer" is="vaadin-grid-sizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></div>
     </vaadin-grid-table-outer-scroller>
 
+    <div id="reorderghost"></div>
+
     <!--
       in native Shadow, we move the footer focus trap to light DOM.
       It needs to be injected/slotted back inside the shadow root in order to be focusable.
@@ -329,6 +346,11 @@
       bindData: Function,
 
       rowDetailsTemplate: Object,
+
+      columnReorderingAllowed: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
 
       safari: {
         value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
@@ -368,10 +390,10 @@
       'property-changed': '_columnPropChanged',
       'copy': '_onCopy',
       'animationend': '_onAnimationEnd',
-      'header.track': '_onTrack'
+      'header.column-resizing': '_onColumnResize'
     },
 
-    _onTrack: function() {
+    _onColumnResize: function() {
       this.toggleAttribute('column-resizing', this.$.header.querySelector('[column-resizing]'));
     },
 

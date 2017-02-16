@@ -89,9 +89,11 @@
         this._setSiblingsReorderStatus(this._draggedColumn, 'allowed');
         this._draggedColumn._reorderStatus = 'dragging';
 
-        // Need to set any data to enable D&D on Firefox
-        e.dataTransfer.setData('text', '');
-        e.dataTransfer.effectAllowed = 'move';
+        if (e.dataTransfer) {
+          // Need to set any data to enable D&D on Firefox
+          e.dataTransfer.setData('text', '');
+          e.dataTransfer.effectAllowed = 'move';
+        }
 
         this._autoScroller();
       }
