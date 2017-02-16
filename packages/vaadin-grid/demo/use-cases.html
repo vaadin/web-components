@@ -155,6 +155,122 @@
         </dom-module>
       </template>
     </demo-snippet>
+
+    <h3>Pagination</h3>
+    <demo-snippet>
+      <template>
+        <x-pagination></x-pagination>
+        <dom-module id="x-pagination">
+          <template>
+            <style>
+              vaadin-grid {
+                height: auto;
+              }
+
+              #pages {
+                display: flex;
+                justify-content: space-between;
+                margin: 20px;
+              }
+
+              #pages > div {
+                user-select: none;
+                cursor: pointer;
+                padding: 5px;
+                border-radius: 10%;
+              }
+
+              #pages > div:hover {
+                color: var(--default-primary-color);
+                background-color: #eee;
+              }
+
+              #pages > div[selected] {
+                font-weight: bold;
+                color: white;
+                background-color: var(--default-primary-color);
+              }
+            </style>
+            <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
+            <vaadin-grid id="grid" page-size="10">
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>
+                  [[item.user.name.first]]
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>
+                  [[item.user.name.last]]
+                </template>
+              </vaadin-grid-column>
+              <vaadin-grid-column width="200px">
+                <template class="header">Email</template>
+                <template>
+                  <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
+                </template>
+              </vaadin-grid-column>
+            </vaadin-grid>
+            <div id="pages">
+              <div on-tap="_prev">&lt;</div>
+              <template is="dom-repeat" items="[[pages]]">
+                <div on-tap="_select" selected$="[[_isSelected(page, item)]]">[[item]]</div>
+              </template>
+              <div on-tap="_next">&gt;</div>
+            </div>
+          </template>
+          <script>
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-pagination',
+
+                properties: {
+                  items: Array,
+                  page: Number,
+                  pages: Array
+                },
+
+                ready: function() {
+                  this.page = 0;
+                },
+
+                observers: ['_itemsChanged(items, page)'],
+
+                _isSelected: function(page, item) {
+                  return page === item - 1;
+                },
+
+                _select: function(e) {
+                  this.page = e.model.item - 1;
+                },
+
+                _next: function() {
+                  this.page = Math.min(this.pages.length - 1, this.page + 1);
+                },
+
+                _prev: function() {
+                  this.page = Math.max(0, this.page - 1);
+                },
+
+                _itemsChanged: function(items, page) {
+                  if (!this.pages) {
+                    this.pages = Array.apply( null, {length: Math.ceil(items.length / this.$.grid.pageSize)} ).map(function(item, index) {
+                      return index + 1;
+                    });
+                  }
+
+                  var start = page * this.$.grid.pageSize;
+                  var end = (page + 1) * this.$.grid.pageSize;
+                  this.$.grid.items = items.slice(start, end);
+                }
+              });
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 
