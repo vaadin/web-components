@@ -489,7 +489,22 @@
     },
 
     _onSpace: function(e) {
-      if (this.navigating && !this.interacting && this._virtualFocus === this.$.items) {
+      if (!this.navigating || this.interacting) {
+        return;
+      }
+
+      if (this._virtualFocus === this.$.header) {
+        var focusedSorter = this._virtualFocus._focusedCell
+          .getContentChildren('content')[0]
+          .querySelector('vaadin-grid-sorter');
+        if (focusedSorter) {
+          e.preventDefault();
+
+          focusedSorter.click();
+        }
+      }
+
+      if (this._virtualFocus === this.$.items) {
         e.preventDefault();
 
         this.fire('cell-activate', {

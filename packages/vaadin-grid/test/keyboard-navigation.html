@@ -47,6 +47,13 @@
           </template>
         </vaadin-grid-column>
         <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-sorter path=""></vaadin-grid-sorter>
+          </template>
+          <template></template>
+          <template class="footer"></template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
           <template class="header"></template>
           <template>[[index]] [[item]]</template>
           <template class="footer"></template>
@@ -610,7 +617,7 @@
               expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
             });
 
-            it('should not navigate to hidden column with right arrow', function() {
+            it('should not navigate to hidden column with left arrow', function() {
               grid._columnTree[0][0].hidden = true;
               clickItem(0);
               left();
@@ -619,13 +626,14 @@
             });
 
             it('should not navigate to hidden column with right arrow', function() {
-              grid._columnTree[0][2].hidden = true;
+              grid._columnTree[0][3].hidden = true;
               clickItem(0);
 
               right();
               right();
+              right();
 
-              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
             });
 
             it('should not navigate to hidden column with end', function() {
@@ -638,12 +646,12 @@
             });
 
             it('should not navigate to hidden column with home', function() {
-              grid._columnTree[0][2].hidden = true;
+              grid._columnTree[0][3].hidden = true;
               clickItem(0);
 
               end();
 
-              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
             });
           });
 
@@ -657,17 +665,18 @@
             it('should not navigate to row details with right arrow', function() {
               right(); // index 1
               right(); // index 2
+              right(); // index 3
 
               right();
 
-              expect(body._focusedRow.children[2].focused).to.be.true;
+              expect(body._focusedRow.children[3].focused).to.be.true;
               expect(body._focusedRow._rowDetailsCell.focused).to.be.falsey;
             });
 
             it('should not navigate to row details with end', function() {
               end();
 
-              expect(body._focusedRow.children[2].focused).to.be.true;
+              expect(body._focusedRow.children[3].focused).to.be.true;
               expect(body._focusedRow._rowDetailsCell.focused).to.be.falsey;
             });
 
@@ -802,7 +811,7 @@
 
             end();
 
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(3);
           });
 
 
@@ -811,7 +820,7 @@
 
             ctrlEnd();
 
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(3);
             expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
           });
 
@@ -1059,6 +1068,35 @@
             clickFirstBodyInput(0);
 
             expect(grid.activeItem).to.be.undefined;
+          });
+
+          it('should toggle sorter direction on space', function() {
+            var sorter = getCellContent(header.rows[0].children[2]).firstElementChild;
+            header.rows[0].children[1].click();
+            right();
+
+            space();
+            expect(sorter.direction).to.equal('asc');
+
+            space();
+            expect(sorter.direction).to.equal('desc');
+
+            space();
+            expect(sorter.direction).to.equal(null);
+          });
+
+          it('should prevent default keydown action for sorter on space', function() {
+            header.rows[0].children[1].click();
+            right();
+
+            var eventDefaultPrevented;
+            grid.addEventListener('keydown', function(e) {
+              eventDefaultPrevented = e.defaultPrevented;
+            });
+
+            space();
+
+            expect(eventDefaultPrevented).to.be.true;
           });
         });
 
