@@ -37,6 +37,10 @@ When using object items, and item templates, it is still necesary to set the `it
 </script>
 ----
 
+[[figure.vaadin-combo-box.item-template1]]
+.Using Custom Item Template
+image::img/vaadin-combo-box-custom-item-template.png[alt=Using Custom Item Template,width=320]
+
 In the above example, the [vaadinelement]#vaadin-combo-box# element has the custom item template, that renders [propertyname]#number#, [propertyname]#symbol#, and [propertyname]#name# keys from the given object items.
 
 === Item Template Variables
@@ -82,6 +86,10 @@ You can use [propertyname]#selected# and [propertyname]#focused# flags in the it
   elementsSelectedBox.items = elements;
 </script>
 ----
+
+[[figure.vaadin-combo-box.item-template2]]
+.Selected and Focused Flags
+image::img/vaadin-combo-box-selected-focused-flags.png[alt=Selected and Focused Flags,width=320]
 
 The above example shows the item states by binding to [propertyname]#selected# and [propertyname]#focused# template properties in the item text.
 
@@ -133,6 +141,10 @@ The following example demonstrates defining a custom element. The [elementname]#
 </dom-module>
 ----
 
+[[figure.vaadin-combo-box.item-template3]]
+.Styling Items with Custom Item Element
+image::img/vaadin-combo-box-custom-item-element.png[alt=Styling Items with Custom Item Element,width=320]
+
 Then you can use the previously defined [elementname]#my-item# element in the item template of [vaadinelement]#vaadin-combo-box#:
 
 [source,html]
@@ -175,3 +187,7 @@ If you use images in the template, make sure they have pre-defined bounds so the
   </template>
 </vaadin-combo-box>
 ----
+
+[[figure.vaadin-combo-box.item-template4]]
+.Item Template with Material Design
+image::img/vaadin-combo-box-item-template-material.png[alt=Item Template with Material Design,width=311]
