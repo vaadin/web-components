@@ -24,10 +24,6 @@
         nativeButton = Polymer.dom(vaadinButton.root).querySelector('button');
       });
 
-      it('has aria role "button"', function() {
-        expect(nativeButton.getAttribute('role')).to.be.eql('button');
-      });
-
       it('should define button label using light DOM', function() {
         var children = Polymer.dom(nativeButton).getEffectiveChildNodes();
         expect(children[1].textContent).to.be.equal('Vaadin ');

@@ -1,16 +1,17 @@
 gemini.suite('vaadin-button', function(rootSuite) {
+  // Hack needed for
+  // - Edge (https://github.com/vaadin/vaadin-input/issues/10)
+  // - Making sure that animations have finished
+  // - FF has async focused the input.
+  function wait(actions, find) {
+    actions.wait(5000);
+  }
 
-  rootSuite.setUrl('/');
-
-  gemini.suite('vaadin-button', function(suite) {
+  gemini.suite('default-tests', function(suite) {
     suite
-      .setCaptureElements('#visual-tests')
-      .capture('default', {}, function(actions, find) {
-        actions.wait(3000); // hack for IE/Edge
-      })
-      .capture('focus-tabindex', {}, function(actions, find) {
-        actions.sendKeys(gemini.TAB);
-      });
+      .setUrl('/default.html')
+      .setCaptureElements('#default-tests')
+      .capture('screenshots', {}, wait);
   });
 
 });

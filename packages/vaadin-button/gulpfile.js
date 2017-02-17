@@ -5,12 +5,13 @@ var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
 var stylelint = require('gulp-stylelint');
 var log = require('gulp-util').log;
+var polyserve = require('polyserve');
 var spawn = require('child_process').spawn;
 var which = require('which');
 
 var perf = {
   lighthouse: './node_modules/.bin/lighthouse',
-  port: 8080,
+  port: 7777,
   element: require('./package.json').name,
   dir: 'test/performance',
   tests: require('./test/performance/config.json')
@@ -98,6 +99,10 @@ function runTest(test, threshold, cb) {
   });
 }
 
+gulp.task('perf:run:server', function() {
+  polyserve.startServer({port: perf.port});
+});
+
 gulp.task('perf:env', function(cb) {
   which('google-chrome-stable', (err, path) => {
     process.env.LIGHTHOUSE_CHROMIUM_PATH = path;
@@ -105,12 +110,12 @@ gulp.task('perf:env', function(cb) {
   });
 });
 
-gulp.task('perf:run:tests', ['perf:env'], function(cb) {
+gulp.task('perf:run:tests', ['perf:run:server', 'perf:env'], function(cb) {
   perf.tests.reduce((prev, test) => () => runTest(test.name, test.threshold, prev), cb)();
 });
 
 gulp.task('perf:run', ['perf:run:tests'], function() {
-  log(`Finished 'perf:run' with ${perf.failed ? 'error' : 'great success'}`);
+  log('Finished \'perf:run\' with ' + (perf.failed ? 'error' : 'great success'));
   process.exitCode = perf.failed ? 1 : 0;
   process.exit();
 });

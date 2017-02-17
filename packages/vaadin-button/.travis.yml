@@ -18,7 +18,6 @@ install:
 
 before_script:
   - gulp lint
-  - polyserve &
   - travis_retry xvfb-run -s '-screen 0 1024x768x24' gulp perf:run
   - ([ "$TRAVIS_EVENT_TYPE" = "pull_request" ] || TRAVIS_BRANCH=quick/${TRAVIS_BUILD_ID} xvfb-run -s '-screen 0 1024x768x24' wct)
 
