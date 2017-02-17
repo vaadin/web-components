@@ -115,6 +115,7 @@
           </style>
 
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
           <vaadin-grid id="material" items="[[items]]" size="200">
 
             <vaadin-grid-selection-column width="66px" flex="0" select-all="{{selectAll}}">
@@ -302,6 +303,7 @@
           <x-data-provider data-provider="{{dataProvider}}" loading="{{_loading}}" delay="1000"></x-data-provider>
 
           <vaadin-grid id="valo-grid" data-provider="[[dataProvider]]" size="2000" loading$="[[_loading]]" column-reordering-allowed>
+
             <vaadin-grid-column-group frozen resizable>
               <template class="header"></template>
 
@@ -466,6 +468,7 @@
           </style>
 
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
           <vaadin-grid id="transparent-header" items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
             <template class="row-details">
               <div class="details-cell">
@@ -588,6 +591,7 @@
           </style>
 
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
           <vaadin-grid id="rounded-rows" items="[[items]]" size="200">
 
             <vaadin-grid-column>

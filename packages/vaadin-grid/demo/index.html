@@ -49,10 +49,12 @@
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
           <vaadin-grid aria-label="Basic Binding Example" data-provider="[[dataProvider]]" size="200">
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column width="50px">
               <template class="header">
                 <div aria-label="Picture"></div>
@@ -61,20 +63,24 @@
                 <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column width="150px">
               <template class="header">Address</template>
               <template>
                 <p style="white-space: normal">[[item.user.location.street]], [[item.user.location.city]]</p>
               </template>
             </vaadin-grid-column>
+
           </vaadin-grid>
         </template>
       </template>
@@ -110,24 +116,28 @@
             <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
 
             <vaadin-grid aria-label="Two-way Binding Example" on-item-changed="_log" data-provider="[[dataProvider]]" size="10000">
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
                   <input value="{{item.user.name.first::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>
                   <input value="{{item.user.name.last::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column width="200px">
                 <template class="header">Email</template>
                 <template>
                   <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
                 </template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -186,24 +196,29 @@
               </div>
             </template>
 
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column width="100px">
               <template class="header"></template>
               <template>
                 <paper-checkbox aria-label$="Show Details for [[item.user.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
               </template>
             </vaadin-grid-column>
+
           </vaadin-grid>
         </template>
       </template>

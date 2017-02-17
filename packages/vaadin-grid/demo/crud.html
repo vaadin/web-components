@@ -56,24 +56,28 @@
             </div>
 
             <vaadin-grid id="grid" items="[[items]]" size="100">
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
                   <input value="[[item.user.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]">
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>
                   <input value="[[item.user.name.last]]" on-input="_storeLast" readonly$="[[!_isEditing(editing, item)]]">
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column width="200px">
                 <template class="header">Email</template>
                 <template>
                   <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template>
                   <div style="display: flex">
@@ -84,6 +88,7 @@
                   </div>
                 </template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>

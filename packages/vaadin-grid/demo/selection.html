@@ -33,19 +33,24 @@
         <dom-module id="x-selection">
           <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+
             <vaadin-grid aria-label="Selection using Active Item Example" id="grid" data-provider="[[dataProvider]]" active-item="{{activeItem}}" size="200">
+
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.user.name.first]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.user.name.last]]</template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -77,24 +82,30 @@
       <template>
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+
           <vaadin-grid aria-label="Selection using Templates Example" data-provider="[[dataProvider]]" size="200">
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template>
                 <paper-checkbox aria-label="Select Row" checked="{{selected}}">Selected</paper-checkb>
               </template>
             </vaadin-grid-column>
+
           </vaadin-grid>
         </template>
       </template>
@@ -117,21 +128,26 @@
       <template>
         <template is="dom-bind">
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
           <vaadin-grid aria-label="Multi-Selection Example" items="[[items]]">
             <vaadin-grid-selection-column auto-select>
             </vaadin-grid-selection-column>
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
+
           </vaadin-grid>
         </template>
       </template>
@@ -164,7 +180,9 @@
               }
             </style>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+
             <vaadin-grid  aria-label="Select All with Data Example" id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
+
               <vaadin-grid-column width="40px" flex-grow="0" >
                 <template class="header">
                   <input aria-label="Select All" type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
@@ -173,14 +191,17 @@
                   <input aria-label="Select Row" type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.user.name.first]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.user.name.last]]</template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>

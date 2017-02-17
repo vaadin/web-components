@@ -30,18 +30,22 @@
         <dom-module id="x-array-data-example">
           <template>
             <vaadin-grid aria-label="Array Data Example" items="[[items]]">
+
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.firstName]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.lastName]]</template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -79,19 +83,24 @@
             </style>
             <paper-button raised on-tap="_add">Add Item</paper-button>
             <paper-button raised on-tap="_remove">Remove Item</paper-button>
+
             <vaadin-grid aria-label="Dynamic Data Example" items="[[items]]">
+
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.firstName]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.lastName]]</template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -142,19 +151,24 @@
             </style>
             <paper-button raised on-tap="_add">Add Item</paper-button>
             <paper-button raised on-tap="_remove">Remove Item</paper-button>
+
             <vaadin-grid aria-label="Dynamic Data Example" items="[[items]]">
+
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.firstName]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.lastName]]</template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -199,18 +213,22 @@
         <dom-module id="x-remote-data-example">
           <template>
             <vaadin-grid aria-label="Remote Data Example" data-provider="[[dataProvider]]" size="[[size]]">
+
               <vaadin-grid-column width="50px">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.user.name.first]]</template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.user.name.last]]</template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -220,7 +238,7 @@
               ready: function() {
                 this.size = 100;
                 this.dataProvider = function(opts, callback) {
-                  var items = Array.apply( null, { length: opts.pageSize } ).map(function(item, index) {
+                  var items = Array.apply( null, {length: opts.pageSize} ).map(function(item, index) {
                     return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
                   });
 
