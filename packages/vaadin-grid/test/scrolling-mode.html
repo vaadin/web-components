@@ -110,6 +110,16 @@
         expect(wheel(-100, 0).defaultPrevented).to.be.true;
       });
 
+      it('should not throw on table wheel', function() {
+        var tableWheel = function() {
+          var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+          e.deltaY = -1;
+          e.deltaX = 0;
+          grid.$.scroller.$.items.dispatchEvent(e);
+        };
+        expect(tableWheel).to.not.throw(Error);
+      });
+
     });
   </script>
 
