@@ -24,121 +24,79 @@
   </test-fixture>
 
   <script>
-    // All timeouts in these tests are needed because of FF
-    function runAsync(test, done, timeout) {
-      setTimeout(() => {
-        test();
-        done();
-      }, timeout || 1);
-    }
 
     describe('control-state behavior', function() {
       var customElement, focusElement;
 
-      beforeEach(function(done) {
+      beforeEach(function() {
         customElement = fixture('default');
         // Need the shadow dom be rendered before getting the internal element reference
-        runAsync(() => focusElement = customElement.focusElement, done);
+        focusElement = customElement.focusElement;
       });
 
       describe('tabindex', function() {
-        if (window.ShadyDOM) {
-          describe('in shady dom', function() {
+        it('setting tabIndex should forward the value to the internal element', function() {
+          customElement.tabIndex = 1;
+          expect(focusElement.getAttribute('tabindex')).to.be.equal('1');
+        });
 
-            it('we need tabindex set to -1 by default', function() {
-              expect(customElement.getAttribute('tabindex')).to.be.equal('-1');
-            });
+        it('we always need a tabindex by default', function() {
+          expect(customElement.getAttribute('tabindex')).to.be.equal('0');
+        });
 
-            it('setting tabIndex keep tabindex to -1', function(done) {
-              customElement.tabIndex = 1;
-              runAsync(() => expect(customElement.getAttribute('tabindex')).to.be.equal('-1'), done);
-            });
+        it('setting tabIndex should update the attribute', function() {
+          customElement.tabIndex = 1;
+          expect(customElement.getAttribute('tabindex')).to.be.equal('1');
+        });
 
-            it('setting tabIndex should forward the value to the internal element', function(done) {
-              customElement.tabIndex = 1;
-              runAsync(() => expect(focusElement.getAttribute('tabindex')).to.be.equal('1'), done);
-            });
-
-            it('enabling the element should set tabindex to -1', function(done) {
-              customElement.tabIndex = 1;
-              customElement.disabled = true;
-              setTimeout(() => {
-                customElement.disabled = false;
-                runAsync(() => expect(customElement.getAttribute('tabindex')).to.be.equal('-1'), done);
-              }, 1);
-            });
-          });
-        } else {
-          describe('in shadow dom', function() {
-            it('we always need a tabindex by default', function() {
-              expect(customElement.getAttribute('tabindex')).to.be.equal('0');
-            });
-
-            it('setting tabIndex should update the attribute', function() {
-              customElement.tabIndex = 1;
-              expect(customElement.getAttribute('tabindex')).to.be.equal('1');
-            });
-
-            it('enabling the element should restore old tabindex', function() {
-              customElement.tabIndex = 1;
-              customElement.disabled = true;
-              customElement.disabled = false;
-              expect(customElement.getAttribute('tabindex')).to.be.equal('1');
-            });
-          });
-        }
-
-        it('setting disabled to true should remove tabindex', function(done) {
+        it('enabling the element should restore old tabindex', function() {
           customElement.tabIndex = 1;
           customElement.disabled = true;
-          runAsync(() => expect(customElement.getAttribute('tabindex')).to.not.be.ok, done);
+          customElement.disabled = false;
+          expect(customElement.getAttribute('tabindex')).to.be.equal('1');
+        });
+
+        it('setting disabled to true should remove tabindex', function() {
+          customElement.tabIndex = 1;
+          customElement.disabled = true;
+          expect(customElement.getAttribute('tabindex')).to.not.be.ok;
+        });
+
+        it('should synchronize tabindex with tabIndex', function() {
+          customElement.tabindex = 1;
+          expect(customElement.tabIndex).to.eql(1);
         });
       });
 
-      // Not reliable tests results in these platforms.
-      if (!/iPhone|iPad|Edge/.test(navigator.userAgent)) {
+      if (!window.ShadyDOM) {
         describe('focus', function() {
-          // Avoid FF window focus issues by stubing native focus behavior
-          beforeEach(function() {
-            focusElement._focus = focusElement._focus || focusElement.focus;
-            sinon.stub(focusElement, 'focus', e => {
-              focusElement._focus();
-              focusElement.dispatchEvent(new CustomEvent('focus', {bubbles: true}));
-            });
-
-            focusElement._blur = focusElement._blur || focusElement.blur;
-            sinon.stub(customElement.$.input, 'blur', e => {
-              focusElement._blur();
-              focusElement.dispatchEvent(new CustomEvent('blur', {bubbles: true}));
-            });
-          });
-
-          it('should focus the internal input on focus', function(done) {
+          it('should focus the internal input on focus', function() {
             focusElement.focus();
-            runAsync(() => expect(customElement.focused).to.be.ok, done);
+            expect(customElement.focused).to.be.true;
           });
 
-          it('should blur the internal input on blur', function(done) {
+          it('should blur the internal input on blur', function() {
             customElement.focus();
-            customElement.blur();
-            runAsync(() => expect(customElement.focused).not.to.be.ok, done, 1000);
+            focusElement.blur();
+            expect(customElement.focused).to.be.false;
           });
         });
       }
 
       describe('disabled', function() {
-        beforeEach(function(done) {
+        beforeEach(function() {
           customElement = fixture('disabled');
-          runAsync(() => focusElement = customElement.focusElement, done);
+          focusElement = customElement.focusElement;
         });
 
         it('should not have tabindex if disabled when ready', function() {
           expect(customElement.getAttribute('tabindex')).to.not.be.ok;
         });
 
-        it('should update internal element tabIndex', function(done) {
+        it('should update internal element tabIndex', function() {
           customElement.tabIndex = 4;
-          runAsync(() => expect(focusElement.getAttribute('tabindex')).to.be.equal('4'), done);
+          expect(customElement.getAttribute('tabindex')).to.be.null;
+          expect(focusElement.getAttribute('tabindex')).to.be.equal('4');
         });
       });
 

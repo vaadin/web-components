@@ -35,15 +35,16 @@
            */
           'tabindex': {
             type: Number,
+            value: 0,
+            reflectToAttribute: true,
             observer: '_tabindexChanged'
           }
         }
       };
 
       if (window.ShadyDOM) {
-        // Edge needs these two properties defined because it messes up with upper/lower cased attributes.
-        // Other ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
-        cfg.properties['tab-index'] = cfg.properties['tabIndex'] = cfg.properties.tabindex;
+        // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
+        cfg.properties['tabIndex'] = cfg.properties.tabindex;
       }
 
       return cfg;
@@ -52,27 +53,20 @@
     ready() {
       super.ready();
 
-      // In shadow dom, the element should be always focusable
-      if (!this.disabled && this.getAttribute('tabindex') == null) {
-        this._setTabindex(window.ShadyDOM ? -1 : 0);
-      }
-
-      this.addEventListener('focus', this._focus.bind(this));
+      this.addEventListener('focus', e => this._focus(e));
       this.addEventListener('blur', () => this._setFocused(false));
 
-      Polymer.RenderStatus.afterNextRender(this, () => {
-        this.focusElement.addEventListener('focus', () => this._setFocused(true));
-        this.focusElement.addEventListener('keydown', e => {
-          if (e.shiftKey && e.keyCode === 9) {
-            this.focus();
-          }
-        });
-
-        // Make FF take the focus (#9)
-        if (this.autofocus && !this.focused) {
+      this.addEventListener('keydown', e => {
+        if (e.shiftKey && e.keyCode === 9) {
+          this._skipFocus = !!window.ShadyDOM;
           this.focus();
         }
       });
+
+      // Make FF take the focus (#9)
+      if (this.autofocus && !this.focused) {
+        this.focus();
+      }
     }
 
     /**
@@ -84,7 +78,13 @@
       return this;
     }
 
-    _focus() {
+    _focus(e) {
+      this._setFocused(true);
+
+      if (this._skipFocus) {
+        this._skipFocus = false;
+        return;
+      }
       this.focusElement.focus();
     }
 
@@ -99,31 +99,28 @@
       if (disabled) {
         this._setFocused(false);
         this.blur();
-        this._setTabindex(undefined);
+        this.tabindex = undefined;
       } else {
-        this._setTabindex(window.ShadyDOM ? -1 : this.focusElement.tabIndex);
+        this.tabindex = this.focusElement.tabIndex;
       }
+
+      // Needed for Edge, until they have support for CSS Custom Properties
+      // (already shipping in Edge Preview)
+      this.updateStyles();
     }
 
     _tabindexChanged(tabindex) {
-      if (!this._tabindexLocked) {
+      if (tabindex !== undefined) {
         this.focusElement.tabIndex = tabindex;
-        if (this.disabled) {
-          this._setTabindex(undefined);
-        } else if (window.ShadyDOM) {
-          this._setTabindex(-1);
-        }
       }
-    }
 
-    _setTabindex(tabindex) {
-      this._tabindexLocked = true;
-      if (tabindex === undefined) {
-        this.removeAttribute('tabindex');
-      } else {
-        this.setAttribute('tabindex', tabindex);
+      if (this.disabled) {
+        this.tabindex = tabindex = undefined;
       }
-      delete this._tabindexLocked;
+
+      if (window.ShadyDOM) {
+        this.setProperties({tabIndex: tabindex, tabindex: tabindex});
+      }
     }
 
     focusedChanged() {
