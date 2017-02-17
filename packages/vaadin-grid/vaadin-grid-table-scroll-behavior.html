@@ -28,12 +28,6 @@
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         z-index: -2;
-
-        /* translate Z needed to be applied to keep scroll bars from disappearing
-        when scrolling on desktop Safari.
-        Also, this rule can't be applied on mobile
-        Safari to keep scroll bars visible in there :-) */
-        transform: translateZ(0);
       }
 
       :host([ios]) table {
@@ -409,22 +403,22 @@
     _translateStationaryElements: function() {
       if (this.fixedSections) {
         this.$.items.style.transform =
-        this._getTranslate3d(-this._scrollLeft || 0, -this._scrollTop || 0);
+        this._getTranslate(-this._scrollLeft || 0, -this._scrollTop || 0);
 
         this.$.footer.style.transform = this.$.header.style.transform =
-        this._getTranslate3d(-this._scrollLeft || 0, 0);
+        this._getTranslate(-this._scrollLeft || 0, 0);
       } else {
-        this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate3d(0, this._scrollTop);
+        this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate(0, this._scrollTop);
       }
 
-      var frozenCellTransform = this._getTranslate3d(this._scrollLeft, 0);
+      var frozenCellTransform = this._getTranslate(this._scrollLeft, 0);
       for (var i = 0; i < this._frozenCells.length; i++) {
         this._frozenCells[i].style.transform = frozenCellTransform;
       }
     },
 
-    _getTranslate3d: function(x, y) {
-      return 'translate3d(' + x + 'px,' + y + 'px, 0)';
+    _getTranslate: function(x, y) {
+      return 'translate(' + x + 'px,' + y + 'px)';
     }
 
   };
