@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="vaadin-control-state-mixin.html">
+<link rel="import" href="../vaadin-input/vaadin-control-state-mixin.html">
 
 <dom-module id="vaadin-button">
   <template>
@@ -43,14 +43,6 @@ This program is available under Apache License Version 2.0, available at https:/
     class VaadinButtonElement extends Vaadin.ControlStateMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-button';
-      }
-
-      static get config() {
-        return {
-          properties: {
-
-          }
-        };
       }
 
       get focusElement() {
