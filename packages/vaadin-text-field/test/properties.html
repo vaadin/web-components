@@ -65,8 +65,7 @@
           });
 
         ['maxlength',
-          'minlength',
-          'tabindex'].forEach(function(prop) {
+          'minlength'].forEach(function(prop) {
             it('should set numeric attribute ' + prop, function() {
               assertAttrCanBeSet(prop, 2);
             });

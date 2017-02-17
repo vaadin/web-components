@@ -26,6 +26,7 @@ Custom property | Description | Default
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-form-element-mixin.html">
+<link rel="import" href="vaadin-control-state-mixin.html">
 
 <dom-module id="vaadin-input">
   <template>
@@ -63,16 +64,14 @@ Custom property | Description | Default
       placeholder="[[placeholder]]"
       readonly$="[[readonly]]"
       required$="[[required]]"
-      tabindex$="[[tabindex]]"
       value="{{value::input}}"
       title="[[title]]"
-      on-focus="_onInputFocus"
-      on-blur="_onInputBlur"
+      on-blur="validate"
     />
   </template>
 
   <script>
-    class VaadinInput extends window.VaadinFormElementMixin(Polymer.Element) {
+    class VaadinInputElement extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(Polymer.Element)) {
       static get is() {
         return 'vaadin-input';
       }
@@ -94,14 +93,6 @@ Custom property | Description | Default
              */
             autofocus: {
               type: Boolean
-            },
-
-            /**
-             * Indicates that this control is not available for interaction.
-             */
-            disabled: {
-              type: Boolean,
-              reflectToAttribute: true
             },
 
             /**
@@ -175,13 +166,6 @@ Custom property | Description | Default
             },
 
             /**
-             * The position of the element in the tabbing navigation order for the current document.
-             */
-            tabindex: {
-              type: Number
-            },
-
-            /**
              * The initial value of the control.
              * It can be used for two-way data binding.
              */
@@ -210,57 +194,21 @@ Custom property | Description | Default
               notify: true,
               readOnly: true,
               reflectToAttribute: true
-            },
-
-            /**
-             * If true, the element currently has focus.
-             */
-            focused: {
-              type: Boolean,
-              notify: true,
-              readOnly: true,
-              reflectToAttribute: true,
-              observer: '_focusedChanged'
             }
-          }
+          },
+
         };
       }
 
-      ready() {
-        super.ready();
-
-        // Make FF take the focus (#9)
-        if (this.autofocus) {
-          this.focus();
-        }
-      }
-
-      _onInputFocus() {
-        this._setFocused(true);
-      }
-
-      focus() {
-        this.$.input.focus();
-      }
-
-      _onInputBlur() {
-        this._setFocused(false);
-        this.invalid = this._isInvalid();
-      }
-
-      blur() {
-        this.$.input.blur();
+      get focusElement() {
+        return this.$.input;
       }
 
       _valueChanged(value) {
         if (this.invalid) {
-          this.invalid = this._isInvalid();
+          this.validate();
         }
         this._setHasValue(value != null && value !== '');
-      }
-
-      _isInvalid() {
-        return !this.validate();
       }
 
       /**
@@ -270,16 +218,10 @@ Custom property | Description | Default
        * @return {boolean} True if the value is valid.
        */
       validate() {
-        return this.$.input.checkValidity();
-      }
-
-      _focusedChanged() {
-        // Needed for Edge, until they have support for CSS Custom Properties
-        // (already shipping in Edge Preview)
-        this.updateStyles();
+        return !(this.invalid = !this.$.input.checkValidity());
       }
     }
 
-    customElements.define(VaadinInput.is, VaadinInput);
+    customElements.define(VaadinInputElement.is, VaadinInputElement);
   </script>
 </dom-module>

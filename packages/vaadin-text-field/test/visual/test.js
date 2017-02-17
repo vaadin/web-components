@@ -6,7 +6,7 @@ gemini.suite('vaadin-input', function(rootSuite) {
   // - Making sure that animations have finished
   // - FF has async focused the input.
   function wait(actions, find) {
-    actions.wait(3000);
+    actions.wait(5000);
   }
 
   gemini.suite('default-tests', function(suite) {

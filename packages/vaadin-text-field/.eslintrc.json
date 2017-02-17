@@ -9,6 +9,10 @@
     "html"
   ],
   "globals": {
-    "Polymer": false
+    "Polymer": false,
+    "Vaadin": false
+  },
+  "rules": {
+    "arrow-spacing": "error"
   }
 }

@@ -1,6 +1,8 @@
 <script>
+  window.Vaadin = window.Vaadin || {};
+
   // IronFormElementBehavior is not a proper 2.0 class.
-  window.VaadinFormElementMixin = subclass => class extends subclass {
+  Vaadin.FormElementMixin = subclass => class VaadinFormElementMixin extends subclass {
     static get config() {
       return {
         properties: {

@@ -67,14 +67,6 @@
           color: silver;
         };
       }
-
-      vaadin-input[focused]#hidden-caret {
-        --vaadin-input__input: {
-          @apply --test-theme-focus;
-          font-size: 0;
-          padding: 0 100px;
-        }
-      }
     </style>
   </custom-style>
 
@@ -85,7 +77,7 @@
       <p>
       input with value: <vaadin-input value="Go Vaadin"></vaadin-input>
       <p>
-      focused input: <vaadin-input autofocus id="hidden-caret"></vaadin-input>
+      focused input: <vaadin-input focused></vaadin-input>
       <p>
       disabled input: <vaadin-input value="disabled" disabled></vaadin-input>
       <p>

@@ -53,6 +53,21 @@
         vinput.required = true;
         expect(iform.validate()).to.be.false;
       });
+
+      it('should have the invalid attribute', function() {
+        vinput.required = true;
+        vinput.validate();
+        expect(vinput.getAttribute('invalid')).to.be.equal('');
+      });
+
+      it('should not have the invalid attribute', function() {
+        vinput.required = true;
+        vinput.validate();
+        vinput.required = false;
+        vinput.validate();
+        expect(vinput.getAttribute('invalid')).not.to.be.ok;
+      });
+
     });
   </script>
 </body>
