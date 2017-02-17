@@ -35,18 +35,16 @@ Custom property | Description | Default
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: inline-flex;
+        flex-direction: column;
+        -webkit-tap-highlight-color: transparent;
       }
 
       input {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
         @apply --vaadin-input__input;
       }
 
       label {
-        display: block;
         @apply --vaadin-input__label;
       }
 
@@ -61,13 +59,13 @@ Custom property | Description | Default
       input::placeholder {
         @apply --vaadin-input__input-placeholder;
       }
+
+      input::-ms-clear {
+        display: none;
+      }
     </style>
 
-    <dom-if if="[[label]]">
-      <template>
-        <label id="label" on-click="focus">[[label]]</label>
-      </template>
-    </dom-if>
+    <label id="label" on-click="focus">[[label]]</label>
 
     <input id="input"
       autocomplete$="[[autocomplete]]"
@@ -85,7 +83,7 @@ Custom property | Description | Default
       value="{{value::input}}"
       title="[[title]]"
       on-blur="validate"
-    />
+    >
   </template>
 
   <script>
@@ -246,6 +244,14 @@ Custom property | Description | Default
       validate() {
         return !(this.invalid = !this.$.input.checkValidity());
       }
+
+      // Needed for Edge, until they have support for CSS Custom Properties
+      // (already shipping in Edge Preview)
+      attributeChangedCallback(prop, oldVal, newVal) {
+        super.attributeChangedCallback(prop, oldVal, newVal);
+        this.updateStyles();
+      }
+
     }
 
     customElements.define(VaadinInputElement.is, VaadinInputElement);

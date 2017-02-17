@@ -17,18 +17,58 @@
 
     <demo-navigation></demo-navigation>
 
-    <h3>Material Design</h3>
+    <h2>Material design theme</h2>
+
+    <p>Import and include the <a href="material-vaadin-input.html">material-vaadin-input</a> style module to make &lt;vaadin-input&gt; look like a Material design text field.</p>
+
+    <h3>Labels</h3>
     <demo-snippet>
       <template>
         <custom-style>
-          <style include="material-vaadin-input"></style>
+          <style include="material-vaadin-input">
+            vaadin-input {
+              margin-right: 16px;
+              vertical-align: bottom;
+            }
+          </style>
         </custom-style>
-        <vaadin-input placeholder="Placeholder"></vaadin-input>
-        <vaadin-input value="Value"></vaadin-input>
-        <vaadin-input value="Focused" focused></vaadin-input>
-        <vaadin-input value="Disabled" disabled></vaadin-input>
-        <vaadin-input value="" placeholder="Invalid (min 4 characters)" required minlength="4" invalid></vaadin-input>
-        <vaadin-input label="Floating Label"></vaadin-input>
+
+        <vaadin-input placeholder="Non-floating label"></vaadin-input>
+
+        <vaadin-input label="Label"></vaadin-input>
+
+        <vaadin-input label="Label always floating" placeholder=""></vaadin-input>
+
+        <vaadin-input label="Label" placeholder="Placeholder"></vaadin-input>
+
+      </template>
+    </demo-snippet>
+
+    <h3>States</h3>
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style include="material-vaadin-input">
+            vaadin-input {
+              margin-right: 16px;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-input label="Focused" value="Value" focused></vaadin-input>
+
+        <vaadin-input label="Disabled" value="Value" disabled></vaadin-input>
+
+        <vaadin-input label="Read-only" value="Value" readonly></vaadin-input>
+
+        <vaadin-input label="Disabled" placeholder="Placeholder" disabled></vaadin-input>
+
+        <vaadin-input label="Read-only" placeholder="Placeholder" readonly></vaadin-input>
+
+        <vaadin-input label="Required" placeholder="I need a value" required></vaadin-input>
+
+        <vaadin-input label="Invalid" value="Numbers only" pattern="[0-9]+"></vaadin-input>
+
       </template>
     </demo-snippet>
 
