@@ -35,8 +35,7 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview"
   },
   "resolutions": {
-    "test-fixture": "^2.0.0",
-    "custom-elements": "remove-mo"
+    "test-fixture": "^2.0.0"
   },
   "variants": {
     "1.x": {
