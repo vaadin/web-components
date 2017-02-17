@@ -101,11 +101,6 @@
           Polymer.dom.flush();
         });
 
-        it('should schedule scroll to index before init', function() {
-          scroller.scrollToScaledIndex(10);
-          expect(scroller._pendingScrollToScaledIndex).to.equal(10);
-        });
-
         it('should clear scheduled scroll to index after init', function(done) {
           scroller.$.table.addEventListener('scroll', function() {
             scroller.debounce('table-scrolling', function() {

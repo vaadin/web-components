@@ -174,7 +174,7 @@
         }, loadDebounceTime);
       });
 
-      it('should bind item to templates', function(done) {
+      it('should bind item to templates', function() {
         container.dataProvider = function(opts, callback) {
           var items = [];
           for (var i = 0; i < opts.pageSize; i++) {
@@ -182,10 +182,9 @@
           }
 
           callback(items);
-
-          expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
-          done();
         };
+
+        expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
       });
 
       it('should clear item cache', function(done) {

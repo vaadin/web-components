@@ -331,8 +331,7 @@
       vaadin.elements.grid.TableScrollBehavior,
       vaadin.elements.grid.TableKeyboardBehavior,
       vaadin.elements.grid.TableColumnReorderingBehavior,
-      Polymer.Templatizer,
-      Polymer.IronResizableBehavior
+      Polymer.Templatizer
     ],
 
     properties: {
@@ -416,7 +415,7 @@
       }
 
       if (e.detail.path === 'hidden') {
-        this.notifyResize();
+        this._gridResizeHandler();
       }
     },
 
@@ -456,7 +455,7 @@
         row.columns = columnTree[columnTree.length - 1];
       });
 
-      this._updateHeaderFooterMetrics();
+      this._gridResizeHandler();
       this._updateLastColumn();
     },
 
@@ -467,18 +466,25 @@
     },
 
     _updateHeaderFooterMetrics: function() {
-      Polymer.RenderStatus.afterNextRender(this.$.header, function() {
-        var headerHeight = this.$.header.clientHeight + 'px';
-        var footerHeight = this.$.footer.clientHeight + 'px';
+      Polymer.dom.flush();
+      this._updateHeaderFooterMetricsSync();
 
-        [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
-          element.style.borderTopWidth = headerHeight;
-          element.style.borderBottomWidth = footerHeight;
-        });
+      Polymer.RenderStatus.afterNextRender(this.$.header, function() {
+        this._updateHeaderFooterMetricsSync();
         if (this._pendingScrollToScaledIndex) {
           this.scrollToScaledIndex(this._pendingScrollToScaledIndex);
         }
       }.bind(this));
+    },
+
+    _updateHeaderFooterMetricsSync: function() {
+      var headerHeight = this.$.header.clientHeight + 'px';
+      var footerHeight = this.$.footer.clientHeight + 'px';
+
+      [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
+        element.style.borderTopWidth = headerHeight;
+        element.style.borderBottomWidth = footerHeight;
+      });
     },
 
     _hasTemplatesChanged: function(columnTree) {
@@ -556,7 +562,19 @@
         el.toggleAttribute('hidden', el.index >= this.size);
         this.bindData(el.index, el);
       }, itemSet);
-    }
+    },
+
+    _gridResizeHandler: function() {
+      this._updateHeaderFooterMetrics();
+
+      if (this._physicalSizes) {
+        this._physicalItems.forEach(function(row) {
+          row.updateRowDetailsCellMetrics();
+        });
+        this._update();
+      }
+    },
+
 
   });
 

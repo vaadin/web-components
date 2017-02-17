@@ -128,6 +128,7 @@
       // Revisit iron-list-behavior for cleaner fix.
       if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
         this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
+        this._scrollHandler();
       }
     },
 

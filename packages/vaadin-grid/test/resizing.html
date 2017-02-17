@@ -1,0 +1,96 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid style="width: 200px; height: 400px;" size="10">
+        <template class="row-details">
+          [[index]]
+        </template>
+        <vaadin-grid-column>
+          <template class="header">header</template>
+          <template>[[index]]</template>
+          <template class="footer">footer</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('resizing', function() {
+
+      describe('notifyResize', function() {
+        var grid, scroller;
+
+        beforeEach(function(done) {
+          grid = fixture('default');
+          grid.dataProvider = infiniteDataProvider;
+          scroller = grid.$.scroller;
+          Polymer.dom.flush();
+          scroller.addEventListener('animationend', function() {
+            scroller.flushDebouncer('_debounceTemplate');
+            done();
+          });
+        });
+
+        it('should update header height', function() {
+          var _bottom = scroller.$.header.getBoundingClientRect().bottom;
+
+          grid.style.fontSize = '40px';
+          grid.notifyResize();
+
+          var _newBottom = scroller.$.header.getBoundingClientRect().bottom;
+          expect(_newBottom).to.be.above(_bottom);
+          var firstBodyRowRect = getRows(scroller.$.items)[0].getBoundingClientRect();
+          expect(firstBodyRowRect.top).to.be.closeTo(_newBottom, 1);
+        });
+
+        it('should update footer height', function() {
+          grid.style.fontSize = '40px';
+          grid.notifyResize();
+          scrollToEnd(grid);
+
+          var bodyRows = getRows(scroller.$.items);
+          expect(bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom)
+            .to.be.closeTo(scroller.$.footer.getBoundingClientRect().top, 1);
+        });
+
+        it('should update details row height', function() {
+          grid.expandItem(grid._cache[0][0]);
+          var bodyRows = getRows(scroller.$.items);
+          var cells = getRowCells(bodyRows[0]);
+          var detailsCell = cells.pop();
+          var _height = detailsCell.getBoundingClientRect().height;
+
+          grid.style.fontSize = '40px';
+          grid.notifyResize();
+
+          expect(detailsCell.getBoundingClientRect().height).to.be.above(_height);
+          expect(detailsCell.getBoundingClientRect().bottom)
+            .to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 1);
+        });
+
+      });
+
+
+    });
+  </script>
+
+</body>
+
+</html>
