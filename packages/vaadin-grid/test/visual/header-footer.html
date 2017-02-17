@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>header-footer visual tests</title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../vaadin-grid.html" rel="import">
+  <link href="../../demo/x-data-provider.html" rel="import">
+</head>
+
+<body>
+  <style media="screen">
+    .capture-block {
+      display: inline-block;
+      width: 200px;
+    }
+  </style>
+
+  <div class="capture-block" id="header-footer">
+    <template is="dom-bind">
+      <style is="custom-style">
+        vaadin-grid {
+          height: 100px;
+        }
+      </style>
+      <x-array-data-provider items="{{items}}"></x-array-data-provider>
+      <vaadin-grid items="[[items]]" size="200">
+        <template class="row-details">
+          [[index]]
+        </template>
+        <vaadin-grid-column>
+          <template class="header">header</template>
+          <template>[[index]]</template>
+          <template class="footer">footer</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+      <br>
+      <vaadin-grid items="[[items]]" size="200">
+        <template class="row-details">
+          [[index]]
+        </template>
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </div>
+</body>
