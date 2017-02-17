@@ -10,6 +10,13 @@
           /**
            * If true, the element currently has focus.
            */
+          'autofocus': {
+            type: Boolean
+          },
+
+          /**
+           * If true, the element currently has focus.
+           */
           'focused': {
             type: Boolean,
             notify: true,
@@ -63,9 +70,8 @@
         }
       });
 
-      // Make FF take the focus (#9)
       if (this.autofocus && !this.focused) {
-        this.focus();
+        window.requestAnimationFrame(() => this.focus());
       }
     }
 
