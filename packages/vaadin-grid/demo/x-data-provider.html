@@ -45,11 +45,22 @@
       is: 'x-array-data-provider',
 
       properties: {
+        size: {
+          type: Number,
+          value: null
+        },
+
         items: {
           notify: true,
-          value: function() {
-            return window.users.results;
-          }
+          computed: '_computeItems(size)'
+        }
+      },
+
+      _computeItems: function(size) {
+        if (size !== null) {
+          return window.users.results.slice(0, size);
+        } else {
+          return window.users.results;
         }
       }
     });

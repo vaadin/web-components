@@ -102,6 +102,16 @@
         expect(scroller.$.table.scrollTop).to.equal(500);
       });
 
+      it('should not scroll when size changes', function() {
+        scroller.scrollToIndex(99);
+        var top = scroller.$.table.scrollTop;
+
+        scroller.size += 1;
+
+        expect(scroller.$.table.scrollTop).to.eql(top);
+        expect(top).to.be.greaterThan(0);
+      });
+
       it('reset items', function() {
         scroller.size = 100;
 

@@ -5,18 +5,32 @@
 <link rel="import" href="../../paper-styles/default-theme.html">
 <link rel="import" href="../../elements-demo-resources/common.html">
 
+<style>
+  vaadin-grid {
+    text-transform: capitalize;
+  }
+
+  h3 + p {
+    margin-top: 0;
+  }
+</style>
+
 <!-- Menu Items -->
 <script>
   window.demos = [
-    {name: 'index', title: 'Templating'},
+    {name: 'index', title: 'Basic Usage'},
+    {name: 'data', title: 'Assigning Data'},
     {name: 'selection'},
-    {name: 'columns', title: 'Column Properties'},
+    {name: 'columns', title: 'Columns'},
     {name: 'sorting-filtering', title: 'Sorting and Filtering'},
-    {name: 'styling'}
+    {name: 'styling'},
+    {name: 'crud'},
+    {name: 'pagination'}
+
   ];
 </script>
 <link rel="import" href="../../elements-demo-resources/demo-navigation.html">
 
 <!-- The component to demo -->
-<link rel="import" href="../vaadin-grid.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid.html">
 <link rel="import" href="x-data-provider.html">

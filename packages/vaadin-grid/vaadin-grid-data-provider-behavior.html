@@ -82,11 +82,16 @@
       },
 
       /**
-       * Function that provides items lazily. Receives parameters `params`, `callback`
+       * Function that provides items lazily. Receives parameters `opts`, `callback`
        *
-       * `params.page` Requested page index
+       * `opts.page` Requested page index
        *
-       * `params.pageSize` Current page size
+       * `opts.pageSize` Current page size
+       *
+       * `opts.filters` Currently applied filters
+       *
+       * `opts.sortOrder` Currently applied sorting order
+       *
        */
       dataProvider: {
         type: Function,

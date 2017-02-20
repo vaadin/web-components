@@ -34,16 +34,27 @@
     </style>
 
     <h3>Basic Binding</h3>
+    <p>
+      Cells contents can be defined using <code>&lt;template&gt;</code> elements.
+      Inside templates, variables like <code>[[index]]</code> and <code>[[item.prop]]</code>
+      can be used to add dynamic content.
+    </p>
+    <p>
+      <b>Note:</b> By default, the height of a row is determined by the height of its cell contents,
+      as seen in this example.
+    </p>
     <demo-snippet>
       <template>
         <template is="dom-bind">
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
           <vaadin-grid aria-label="Basic Binding Example" data-provider="[[dataProvider]]" size="200">
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column width="50px">
               <template class="header">
                 <div aria-label="Picture"></div>
@@ -52,20 +63,36 @@
                 <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
               </template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="calc(50% - 100px)">
+
+            <vaadin-grid-column>
               <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="calc(50% - 100px)">
+
+            <vaadin-grid-column>
               <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
+
+            <vaadin-grid-column width="150px">
+              <template class="header">Address</template>
+              <template>
+                <p style="white-space: normal">[[item.user.location.street]], [[item.user.location.city]]</p>
+              </template>
+            </vaadin-grid-column>
+
           </vaadin-grid>
         </template>
       </template>
     </demo-snippet>
 
     <h3>Two-Way Binding</h3>
+    <p>
+      Some template variables, like the item properties, can be modified using <a href="https://www.polymer-project.org/1.0/docs/devguide/data-binding" target="_blank">Polymer's two-way binding</a>.
+    </p>
+    <p>
+      <b>Note:</b> <code>item-changed</code> event is fired when an item property is changed via two-way binding.
+    </p>
     <demo-snippet>
       <template>
         <x-two-way-binding></x-two-way-binding>
@@ -89,24 +116,28 @@
             <paper-checkbox checked="{{editing}}">Enable Editing</paper-checkbox>
 
             <vaadin-grid aria-label="Two-way Binding Example" on-item-changed="_log" data-provider="[[dataProvider]]" size="10000">
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
                   <input value="{{item.user.name.first::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>
                   <input value="{{item.user.name.last::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
+
               <vaadin-grid-column width="200px">
                 <template class="header">Email</template>
                 <template>
                   <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
                 </template>
               </vaadin-grid-column>
+
             </vaadin-grid>
           </template>
           <script>
@@ -120,57 +151,13 @@
       </template>
     </demo-snippet>
 
-    <h3>Column Grouping</h3>
-    <demo-snippet>
-      <template>
-        <template is="dom-bind">
-          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <vaadin-grid aria-label="Column Grouping Example" data-provider="[[dataProvider]]" size="200">
-            <vaadin-grid-column width="30px" flex-grow="0">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="50px" flex-grow="0">
-              <template class="header">
-                <div aria-label="Picture"></div>
-              </template>
-              <template>
-                <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
-              </template>
-            </vaadin-grid-column>
-            <vaadin-grid-column-group>
-              <template class="header">Name</template>
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">First</template>
-                <template>[[item.user.name.first]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">Last</template>
-                <template>[[item.user.name.last]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
-
-            <vaadin-grid-column-group>
-              <template class="header">Location</template>
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">City</template>
-                <template>[[item.user.location.city]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">State</template>
-                <template>[[item.user.location.state]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column width="200px">
-                <template class="header">Street</template>
-                <template>[[item.user.location.street]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
-          </vaadin-grid>
-        </template>
-      </template>
-    </demo-snippet>
-
     <h3>Row Details</h3>
+    <p>
+      Row Details can be enabled by providing a <code>&lt;template class="row-details"&gt;</code>
+      and expanding/collapsing items by using <code>{{expanded}}</code> template variable,
+      <code>expandedItems</code> property or <code>expandItem(item)</code> and
+      <code>collapseItem(item)</code> methods.
+    </p>
     <demo-snippet>
       <template>
         <template is="dom-bind">
@@ -209,24 +196,29 @@
               </div>
             </template>
 
+
             <vaadin-grid-column width="50px">
               <template class="header">#</template>
               <template>[[index]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">First Name</template>
               <template>[[item.user.name.first]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column>
               <template class="header">Last Name</template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
+
             <vaadin-grid-column width="100px">
               <template class="header"></template>
               <template>
                 <paper-checkbox aria-label$="Show Details for [[item.user.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
               </template>
             </vaadin-grid-column>
+
           </vaadin-grid>
         </template>
       </template>
