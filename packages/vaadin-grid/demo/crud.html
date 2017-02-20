@@ -33,6 +33,12 @@
     </style>
 
     <h3>CRUD</h3>
+    <p>
+      Column <code>&lt;template&gt;</code> elements and data binding can be used to implement inline editing.
+    </p>
+    <p>
+      <b>Note:</b> Remember to call <code>grid.clearCache()</code> to show updated data.
+    </p>
     <demo-snippet>
       <template>
         <x-crud></x-crud>
@@ -47,7 +53,7 @@
                 font: inherit;
               }
             </style>
-            <x-array-data-provider items="{{items}}"></x-array-data-provider>
+            <x-array-data-provider items="{{items}}" size="15"></x-array-data-provider>
 
             <div style="margin-bottom: 20px">
               <input id="firstname" placeholder="First Name">
@@ -55,12 +61,12 @@
               <button on-tap="_add">Add</button>
             </div>
 
-            <vaadin-grid id="grid" items="[[items]]" size="100">
+            <vaadin-grid id="grid" items="[[items]]">
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
-                  <input value="[[item.user.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]">
+                  <input id="first-[[index]]" value="[[item.user.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]">
                 </template>
               </vaadin-grid-column>
 
@@ -122,6 +128,8 @@
 
                   this._first = item.user.name.first;
                   this._last = item.user.name.last;
+
+                  this.$.grid.querySelector('#first-' + e.model.index).focus();
                 },
 
                 _save: function(e) {
@@ -141,11 +149,15 @@
                 },
 
                 _add: function(e) {
-                  this.items.unshift({user: {name: {first: this.$.firstname.value, last: this.$.lastname.value}}});
-                  this.$.grid.clearCache();
+                  if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
+                    this.items.unshift({user: {name: {first: this.$.firstname.value, last: this.$.lastname.value}}});
+                    this.$.grid.clearCache();
 
-                  this.$.firstname.value = '';
-                  this.$.lastname.value = '';
+                    this.$.firstname.value = '';
+                    this.$.lastname.value = '';
+                  } else {
+                    alert('First Name and Last Name required');
+                  }
                 },
 
                 _remove: function(e) {
