@@ -489,14 +489,13 @@
     },
 
     _onSpace: function(e) {
-      if (!this.navigating || this.interacting) {
+      if (this.interacting) {
         return;
       }
 
       if (this._virtualFocus === this.$.header) {
-        var focusedSorter = this._virtualFocus._focusedCell
-          .getContentChildren('content')[0]
-          .querySelector('vaadin-grid-sorter');
+        var focusedCell = this._virtualFocus._focusedCell;
+        var focusedSorter = focusedCell.getContentChildren('content')[0].querySelector('vaadin-grid-sorter');
         if (focusedSorter) {
           e.preventDefault();
 
@@ -504,7 +503,7 @@
         }
       }
 
-      if (this._virtualFocus === this.$.items) {
+      if (this.navigating && this._virtualFocus === this.$.items) {
         e.preventDefault();
 
         this.fire('cell-activate', {

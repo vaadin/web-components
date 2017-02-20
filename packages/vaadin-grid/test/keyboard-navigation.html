@@ -1548,6 +1548,58 @@
             });
           }
         });
+
+        describe('focus events on cell content', function() {
+          var cellContent;
+
+          beforeEach(function() {
+            cellContent = getCell(0, 0)._cellContent;
+          });
+
+          it('should dispatch cell-focusin after trap focus', function() {
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusin', spy);
+
+            bodyTrap.focus();
+
+            expect(spy.callCount).to.equal(1);
+          });
+
+          it('should dispatch cell-focusout after trap blur', function() {
+            bodyTrap.focus();
+
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusout', spy);
+
+            headerTrap.focus();
+
+            expect(spy.callCount).to.equal(1);
+          });
+
+          it('should dispatch cell-focusin on keyboard navigation', function() {
+            bodyTrap.focus();
+            getCell(0, 1).click();
+
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusin', spy);
+
+            left();
+
+            expect(spy.callCount).to.equal(1);
+          });
+
+          it('should dispatch cell-focusout on keyboard navigation', function() {
+            bodyTrap.focus();
+            getCell(0, 0).click();
+
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusout', spy);
+
+            right();
+
+            expect(spy.callCount).to.equal(1);
+          });
+        });
       });
     }
   </script>

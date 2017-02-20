@@ -25,6 +25,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="sorterInCellContent">
+    <template>
+      <div class="cell-content" data-cell-content-id="">
+        <vaadin-grid-sorter path="path"></vaadin-grid-sorter>
+      </div>
+    </template>
+  </test-fixture>
+
   <test-fixture id="grid">
     <template>
       <vaadin-grid style="width: 200px; height: 200px;">
@@ -52,7 +60,7 @@
     describe('sorting', function() {
 
       describe('sorter', function() {
-        var sorter, title, button, indicators, directionIndicator, orderIndicator;
+        var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
 
         function click(element) {
           Polymer.Base.fire('click', {}, {
@@ -68,6 +76,7 @@
           indicators = Polymer.dom(sorter.root).querySelector('#indicators');
           directionIndicator = Polymer.dom(sorter.root).querySelector('#direction');
           orderIndicator = Polymer.dom(sorter.root).querySelector('#order');
+          announcer = Polymer.dom(sorter.root).querySelector('#announcer');
         });
 
         it('should have default direction', function() {
@@ -111,6 +120,72 @@
           expect(sorter.getAttribute('direction')).to.equal('desc');
         });
 
+        it('should have aria-hidden for indicator', function() {
+          expect(indicators.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        describe('announcer', function() {
+          it('should reflect direction', function() {
+            expect(announcer.textContent).to.have.string('Unsorted');
+            expect(announcer.textContent).to.not.have.string('Sorted');
+
+            sorter.direction = 'asc';
+            expect(announcer.textContent).to.have.string('Sorted');
+            expect(announcer.textContent).to.not.have.string('Unsorted');
+            expect(announcer.textContent).to.have.string('ascending');
+            expect(announcer.textContent).to.not.have.string('descending');
+
+            sorter.direction = 'desc';
+            expect(announcer.textContent).to.have.string('Sorted');
+            expect(announcer.textContent).to.not.have.string('Unsorted');
+            expect(announcer.textContent).to.have.string('descending');
+            expect(announcer.textContent).to.not.have.string('ascending');
+          });
+
+          it('should reflect order', function() {
+            sorter.direction = 'asc';
+
+            expect(announcer.textContent).to.not.have.string('Order');
+
+            sorter._order = 0;
+            expect(announcer.textContent).to.have.string('Order 1');
+
+            sorter._order = 4;
+            expect(announcer.textContent).to.have.string('Order 5');
+          });
+
+          it('should have live region', function() {
+            expect(announcer.getAttribute('aria-live')).to.equal('polite');
+            expect(announcer.getAttribute('aria-atomic')).to.equal('true');
+          });
+        });
+      });
+
+      describe('sorter in cell content', function() {
+        var cellContent, sorter, announcer;
+
+        beforeEach(function() {
+          cellContent = fixture('sorterInCellContent');
+          sorter = Polymer.dom(cellContent).querySelector('vaadin-grid-sorter');
+          announcer = Polymer.dom(sorter.root).querySelector('#announcer');
+        });
+
+        it('should have aria-hidden state on announcer by default', function() {
+          expect(announcer.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        it('should not have aria-hidden state on announcer after cell content receives focus', function() {
+          cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
+
+          expect(announcer.getAttribute('aria-hidden')).to.equal('false');
+        });
+
+        it('should have aria-hidden state on announcer after cell content looses focus', function() {
+          cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
+          cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
+
+          expect(announcer.getAttribute('aria-hidden')).to.equal('true');
+        });
       });
 
       describe('grid', function() {
