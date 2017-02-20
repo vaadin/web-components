@@ -1,0 +1,127 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+
+`vaadin-grid-sorter` is a helper element for the `vaadin-grid` that provides out-of-the-box UI controls,
+visual feedback, and handlers for sorting the grid data.
+
+
+### Styling
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-grid-sorter-arrow` | Mixin applied to the arrow | `{}`
+`--vaadin-grid-sorter-order` | Mixin applied to the order | `{}`
+
+-->
+
+<link rel="import" href="vaadin-grid-cell-click-behavior.html">
+
+<dom-module id="vaadin-grid-sorter">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      #indicators {
+        position: relative;
+      }
+
+      :host(:not([direction])) #order,
+      :host(:not([direction])) #indicators::before {
+        opacity: 0.2;
+      }
+
+      #order {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateY(-4px) scale(0.7);
+        @apply(--vaadin-grid-sorter-order);
+      }
+
+      #indicators::before {
+        content: "▲";
+        display: block;
+        padding: 0 8px;
+        @apply(--vaadin-grid-sorter-arrow);
+      }
+
+      :host([direction=desc]) #indicators::before {
+        transform: rotateZ(180deg);
+      }
+    </style>
+
+    <content></content>
+    <div id="indicators">
+      <div id="order">[[_getDisplayOrder(_order)]]</div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'vaadin-grid-sorter',
+
+      properties: {
+
+        /**
+         * JS Path of the property in the item used for sorting the data.
+         */
+        path: String,
+
+        /**
+         * How to sort the data.
+         * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
+         * descending direction, or `null` for not sorting the data.
+         */
+        direction: {
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value: null
+        },
+
+        _order: Number
+
+      },
+
+      observers: [
+        '_propertiesChanged(path, direction, isAttached)'
+      ],
+
+      behaviors: [
+        vaadin.elements.grid.CellClickBehavior
+      ],
+
+      _propertiesChanged: function(path, direction, isAttached) {
+        if (isAttached) {
+          this.fire('sorter-changed');
+        }
+      },
+
+      _getDisplayOrder: function(order) {
+        return order === null ? '' : order + 1;
+      },
+
+      _cellClick: function(e) {
+        if (this.direction === 'asc') {
+          this.direction = 'desc';
+        } else if (this.direction === 'desc') {
+          this.direction = null;
+        } else {
+          this.direction = 'asc';
+        }
+      }
+
+    });
+  </script>
+</dom-module>
