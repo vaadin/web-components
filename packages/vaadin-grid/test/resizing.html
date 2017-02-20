@@ -16,9 +16,15 @@
 
 <body>
 
-  <test-fixture id="default">
+  <dom-module id="test-component">
     <template>
-      <vaadin-grid style="width: 200px; height: 400px;" size="10">
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
+
+      <vaadin-grid id="grid" style="width: 200px; height: 400px;" size="10" data-provider="[[dataProvider]]">
         <template class="row-details">
           [[index]]
         </template>
@@ -28,6 +34,28 @@
           <template class="footer">footer</template>
         </vaadin-grid-column>
       </vaadin-grid>
+
+    </template>
+    <script>
+      HTMLImports.whenReady(function() {
+        Polymer({
+          is: 'test-component',
+
+          properties: {
+            dataProvider: {
+              value: function() {
+                return infiniteDataProvider;
+              }
+            }
+          }
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="default">
+    <template>
+      <test-component></test-component>
     </template>
   </test-fixture>
 
@@ -38,14 +66,19 @@
         var grid, scroller;
 
         beforeEach(function(done) {
-          grid = fixture('default');
+          grid = fixture('default').$.grid;
           grid.dataProvider = infiniteDataProvider;
           scroller = grid.$.scroller;
           Polymer.dom.flush();
-          scroller.addEventListener('animationend', function() {
-            scroller.flushDebouncer('_debounceTemplate');
+          listenOnce(scroller, 'animationend', function() {
+            scroller.flushDebouncer('vaadin-grid-resizing');
             done();
           });
+        });
+
+        it('should align rows correctly', function() {
+          var rows = getRows(scroller.$.items);
+          expect(rows[0].getBoundingClientRect().bottom).to.be.closeTo(rows[1].getBoundingClientRect().top, 1);
         });
 
         it('should update header height', function() {
@@ -79,6 +112,7 @@
 
           grid.style.fontSize = '40px';
           grid.notifyResize();
+          scroller.flushDebouncer('vaadin-grid-resizing');
 
           expect(detailsCell.getBoundingClientRect().height).to.be.above(_height);
           expect(detailsCell.getBoundingClientRect().bottom)

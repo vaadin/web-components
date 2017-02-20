@@ -131,7 +131,7 @@
           grid.querySelectorAll('vaadin-grid-column')[0].hidden = true;
 
           // Flush row height and position calculations
-          grid.$.scroller.flushDebouncer('_debounceTemplate');
+          grid.$.scroller.flushDebouncer('vaadin-grid-resizing');
 
           expect(rows[0].getBoundingClientRect().bottom).to.eql(rows[1].getBoundingClientRect().top);
           done();

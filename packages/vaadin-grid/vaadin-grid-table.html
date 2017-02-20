@@ -571,7 +571,9 @@
         this._physicalItems.forEach(function(row) {
           row.updateRowDetailsCellMetrics();
         });
-        this._update();
+        this.debounce('vaadin-grid-resizing', function() {
+          this._update();
+        }.bind(this), 1);
       }
     },
 
