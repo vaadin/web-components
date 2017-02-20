@@ -66,6 +66,8 @@ columns under a common header.
 This can be achieved by wrapping the columns inside a [vaadinelement]#vaadin-grid-column-group#.
 You can also place nested groups inside the group, if you like.
 
+NOTE: You have to explicitly import the element in order to use [vaadinelement]#vaadin-grid-column-group#.
+
 [source,html]
 ----
 <vaadin-grid>
