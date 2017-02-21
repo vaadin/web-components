@@ -6,6 +6,7 @@
     "fixture": false,
     "it": false,
     "expect": false,
-    "gemini": false
+    "gemini": false,
+    "MockInteractions": false
   }
 }
