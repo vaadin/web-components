@@ -264,7 +264,9 @@
     clearCache: function() {
       this._cache = {};
       this._pendingRequests = {};
-      this.$.scroller._update();
+      if (this.$.scroller.hasData) {
+        this.$.scroller._update();
+      }
       this._flushItemsDebouncer();
     },
 
