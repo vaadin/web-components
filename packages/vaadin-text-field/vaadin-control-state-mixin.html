@@ -120,7 +120,7 @@
         this.focusElement.tabIndex = tabindex;
       }
 
-      if (this.disabled) {
+      if (this.disabled && this.tabindex) {
         this.tabindex = tabindex = undefined;
       }
 
