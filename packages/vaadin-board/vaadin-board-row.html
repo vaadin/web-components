@@ -79,21 +79,15 @@
        * Calculates flex basis based on colSpan and width
        * @param{Number} colspan value of the row
        * @param{Number} width of the row in px
-       * @param{Number} amount of nodes in the row
+       * @param{Number} amount of columns in the row
        */
-      _calculateFlexBasis(colSpan, width, nodesCount) {
-        let flexBasis = 25 * colSpan;
+      _calculateFlexBasis(colSpan, width, colsInRow) {
         if (width < this._ONE_COLUMN_MAX_WIDTH) {
-          flexBasis = 100;
-        } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
-
-          if (colSpan == 1 && nodesCount == 3) {
-            flexBasis = 33
-          }
-          else {
-            flexBasis = 50 * colSpan;
-          }
+          colsInRow = 1;
+        } else if (width < this._TWO_COLUMNS_MAX_WIDTH && colsInRow == 4) {
+          colsInRow = 2;
         }
+        let flexBasis = colSpan / colsInRow * 100;
         flexBasis = flexBasis > 100 ? 100 : flexBasis;
         return flexBasis + '%';
       }
@@ -180,8 +174,9 @@
           const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
           this._addStyleNames(width);
           const boardCols = this._parseBoardCols(filteredNodes);
+          const colsInRow = boardCols.reduce((a, b) => a + b, 0);
           this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e,i) => {
-              let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, filteredNodes.length);
+              let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow);
               if(forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
                   this._oldFlexBasis[i] = newFlexBasis
                   e.style.flexBasis = newFlexBasis;
