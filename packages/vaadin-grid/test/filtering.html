@@ -195,6 +195,20 @@
       });
 
     });
+
+    describe('lazy init', function() {
+
+      it('should not filter if there is no data yet', function() {
+        var grid = fixture('grid');
+        grid.size = 100;
+        grid.dataProvider = function(params, callback) {
+          // Don't provide any data
+        };
+        Polymer.dom.flush();
+        expect(flushFilters.bind(this, grid)).to.not.throw(Error);
+      });
+
+    });
   </script>
 
 </body>
