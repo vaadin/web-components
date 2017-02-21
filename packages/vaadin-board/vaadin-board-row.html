@@ -29,6 +29,11 @@
         this._onIronResize = this._onIronResize.bind(this);
         this._ONE_COLUMN_MAX_WIDTH = 600;
         this._TWO_COLUMNS_MAX_WIDTH = 960;
+
+        this._SMALL_VIEWPORT_CLASSNAME = "small";
+        this._MEDIUM_VIEWPORT_CLASSNAME = "medium";
+        this._LARGE_VIEWPORT_CLASSNAME = "large";
+
         this._oldWidth = 0;
         this._oldFlexBasis = [];
       }
@@ -50,6 +55,25 @@
       connectedCallback() {
         super.connectedCallback();
         Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
+      }
+
+      /**
+       * Adds styles for board row based on width
+       */
+      _addStyleNames(width) {
+        if (width < this._ONE_COLUMN_MAX_WIDTH) {
+          this.classList.add(this._SMALL_VIEWPORT_CLASSNAME);
+          this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
+          this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
+        } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
+          this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
+          this.classList.add(this._MEDIUM_VIEWPORT_CLASSNAME);
+          this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
+        } else {
+          this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
+          this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
+          this.classList.add(this._LARGE_VIEWPORT_CLASSNAME);
+        }
       }
       /**
        * Calculates flex basis based on colSpan and width
@@ -154,7 +178,7 @@
           const nodes = this.$.insertionPoint.assignedNodes();
 
           const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
-
+          this._addStyleNames(width);
           const boardCols = this._parseBoardCols(filteredNodes);
           this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e,i) => {
               let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, filteredNodes.length);
