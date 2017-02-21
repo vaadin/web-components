@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "polymer": "Polymer/polymer#2.0-preview",
-    "vaadin-input": "vaadin/vaadin-input#limonte-patch-1"
+    "vaadin-input": "vaadin/vaadin-input#master"
   }
 }
