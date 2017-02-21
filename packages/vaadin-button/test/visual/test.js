@@ -11,7 +11,10 @@ gemini.suite('vaadin-button', function(rootSuite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')
-      .capture('screenshots', {}, wait);
+      .capture('default', {}, wait)
+      .capture('focus-tabindex', function(actions) {
+        actions.sendKeys(gemini.TAB);
+      });
   });
 
 });
