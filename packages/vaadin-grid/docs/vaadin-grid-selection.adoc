@@ -25,7 +25,7 @@ The Two-way binding [propertyname]#selected# property inside templates can be us
       <paper-checkbox checked="{{selected}}"></paper-checkbox>
     </template>
   </vaadin-grid-column>
-  <vaadin-grid-column width="50px">
+  <vaadin-grid-column width="50px" flex-grow="0">
     <template class="header">Number</template>
     <template>[[item]]</template>
   </vaadin-grid-column>
@@ -45,7 +45,7 @@ When [vaadinelement]#vaadin-grid# is configured with an array of items as the da
 <vaadin-grid items='["One", "Two", "Three"]'>
   <vaadin-grid-selection-column>
   </vaadin-grid-selection-column>
-  <vaadin-grid-column width="50px">
+  <vaadin-grid-column width="50px" flex-grow="0">
     <template class="header">Number</template>
     <template>[[item]]</template>
   </vaadin-grid-column>
@@ -62,7 +62,7 @@ In addition, you can customize the selection column by changing its [propertynam
 [source,html]
 ----
 <vaadin-grid items='["One", "Two", "Three"]'>
-  <vaadin-grid-column width="50px">
+  <vaadin-grid-column width="50px" flex-grow="0">
     <template class="header">Number</template>
     <template>[[item]]</template>
   </vaadin-grid-column>
@@ -118,7 +118,7 @@ For instance in the next example, we implement a single selection model by setti
 <dom-module id="grid-single-selection">
   <template>
     <vaadin-grid id="grid" items='["One", "Two", "Tree"]'>
-      <vaadin-grid-column width="50px">
+      <vaadin-grid-column width="50px" flex-grow="0">
         <template class="header">Number</template>
         <template>[[item]]</template>
       </vaadin-grid-column>
