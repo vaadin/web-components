@@ -52,7 +52,7 @@ When [vaadinelement]#vaadin-grid# is configured with an array of items as the da
 </vaadin-grid>
 ----
 
-NOTE: You have to explicitly import the element in order to use [vaadinelement]#vaadin-grid-selection-column#.
+NOTE: You *must* explicitly import the `vaadin-grid-selection-column.html` in order to use [vaadinelement]#vaadin-grid-selection-column#.
 
 [[figure.vaadin-grid.selection.column]]
 image::img/vaadin-grid-selection-column.png[width="450"]

@@ -21,7 +21,7 @@ image::img/vaadin-grid-sort-indicators.png[]
 Sorting tabular data by clicking the column headers is quite a common use case.
 With [vaadinelement]#vaadin-grid# this can be enabled with the help of [elementname]#vaadin-grid-sorter# helper elements.
 
-NOTE: You have to explicitly import the element in order to use [vaadinelement]#vaadin-grid-sorter#.
+NOTE: You *must* explicitly import the `vaadin-grid-sorter.html` in order to use [vaadinelement]#vaadin-grid-sorter#.
 
 To demonstrate the functionality, let's first hook some data to a [vaadinelement]#vaadin-grid#:
 
@@ -147,7 +147,7 @@ Place a [elementname]#vaadin-grid-filter# element with a [propertyname]#path# de
 
 The element helps in filtering with custom data providers also since they automatically include filtering information to the data provider callback parameters.
 
-NOTE: You have to explicitly import the element in order to use [vaadinelement]#vaadin-grid-filter#.
+NOTE: You *must* explicitly import the `vaadin-grid-filter.html` in order to use [vaadinelement]#vaadin-grid-filter#.
 
 [source,html]
 ----
