@@ -127,6 +127,13 @@
         expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
       });
 
+      it('should have correct scrollWidth with hidden columns', function() {
+        grid.querySelector('vaadin-grid-column').hidden = true;
+        // Hide the table's sizer and rely on the cells to size properly
+        scroller.$.fixedsizer.hidden = true;
+        expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
+      });
+
       describe('syncing with scroll target', function() {
 
         it('should scroll the target', function(done) {
