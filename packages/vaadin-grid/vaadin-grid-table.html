@@ -391,6 +391,7 @@
 
     _onColumnResize: function() {
       this.toggleAttribute('column-resizing', this.$.header.querySelector('[column-resizing]'));
+      this._gridResizeHandler();
     },
 
     _onAnimationEnd: function(e) {
