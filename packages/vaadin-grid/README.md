@@ -27,12 +27,12 @@
 
   <vaadin-grid data-provider="[[dataProvider]]" size="200">
 
-    <vaadin-grid-column width="50px">
+    <vaadin-grid-column width="50px" flex-grow="0">
       <template class="header">#</template>
       <template>[[index]]</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-column width="50px">
+    <vaadin-grid-column width="50px" flex-grow="0">
       <template class="header"></template>
       <template>
         <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>

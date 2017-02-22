@@ -116,7 +116,7 @@ A variable [propertyname]#expanded# is available inside the row detail template.
   <vaadin-grid-column>
     ...
   </vaadin-grid-column>
-  <vaadin-grid-column width="30px">
+  <vaadin-grid-column width="30px" flex-grow="0">
     <template>
       <paper-checkbox checked="{{expanded}}">Details</paper-checkbox>
     </template>
