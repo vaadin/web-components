@@ -113,11 +113,19 @@
           _rowDetailsCell.index = index;
 
           Polymer.dom.flush();
-          this.style.paddingBottom = _rowDetailsCell.style.height = _rowDetailsCell.clientHeight + 'px';
+          this.updateRowDetailsCellMetrics();
         } else {
           this.style.paddingBottom = '';
         }
       },
+
+      updateRowDetailsCellMetrics: function() {
+        if (this._rowDetailsCell) {
+          this._rowDetailsCell.style.height = ''; // Reset previous height
+          this.style.paddingBottom = this._rowDetailsCell.style.height = this._rowDetailsCell.clientHeight + 'px';
+        }
+      },
+
 
       _columnsChanged: function(columns, target) {
         Polymer.dom(this).innerHTML = '';

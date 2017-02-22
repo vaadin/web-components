@@ -94,6 +94,7 @@ first element in the cell will be focused. You can override the behavior by appl
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-grid-table.html">
 <link rel="import" href="vaadin-grid-column.html">
 <link rel="import" href="vaadin-grid-active-item-behavior.html">
@@ -167,6 +168,7 @@ first element in the cell will be focused. You can override the behavior by appl
 
     behaviors: [
       Polymer.IronA11yKeysBehavior,
+      Polymer.IronResizableBehavior,
       vaadin.elements.grid.ActiveItemBehavior,
       vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.DataProviderBehavior,
@@ -180,7 +182,8 @@ first element in the cell will be focused. You can override the behavior by appl
     ],
 
     listeners: {
-      'property-changed': '_columnPropChanged'
+      'property-changed': '_columnPropChanged',
+      'iron-resize': '_gridResizeHandler'
     },
 
     _updateItem: function(row, item) {
@@ -208,6 +211,10 @@ first element in the cell will be focused. You can override the behavior by appl
       }
 
       e.stopPropagation();
+    },
+
+    _gridResizeHandler: function() {
+      this.$.scroller._gridResizeHandler();
     }
   });
 </script>

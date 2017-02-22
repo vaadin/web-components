@@ -165,6 +165,17 @@
         expect(grid._columnTree[0][1].flexGrow).to.equal(0);
       });
 
+      it('should notify resize on column resize', function() {
+        var spy = sinon.spy(grid.$.scroller, '_gridResizeHandler');
+        var options = {node: handle};
+        var rect = headerCells[0].getBoundingClientRect();
+
+        Polymer.Base.fire('track', {state: 'start'}, options);
+        Polymer.Base.fire('track', {state: 'track', x: rect.left + 200, y: 0}, options);
+
+        expect(spy.called).to.be.true;
+      });
+
     });
 
     describe('column group resizing', function() {
