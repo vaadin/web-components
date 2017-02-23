@@ -3,8 +3,8 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../bower_components/polymer/polymer.html" rel="import">
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../../polymer/polymer.html" rel="import">
   <link href="../../vaadin-input.html" rel="import">
 </head>
 
@@ -20,7 +20,7 @@
       }
 
       vaadin-input {
-        --test-theme: {
+        --test-theme__input: {
           outline: none;
           color: black;
           margin: 0;
@@ -34,37 +34,47 @@
           border: solid 1px silver;
         };
 
-        --test-theme-focus: {
-          @apply --test-theme;
+        --test-theme__input-focus: {
+          @apply --test-theme__input;
           border: solid 1px deepskyblue;
         };
 
         --vaadin-input__input: {
-          @apply --test-theme;
+          @apply --test-theme__input;
         };
 
         --vaadin-input__input-placeholder: {
+          color: silver;
+        };
+
+        --vaadin-input__label: {
           color: silver;
         };
       }
 
       vaadin-input[focused] {
         --vaadin-input__input: {
-          @apply --test-theme-focus;
+          @apply --test-theme__input-focus;
         };
       }
 
       vaadin-input[invalid] {
         --vaadin-input__input: {
-          @apply --test-theme;
+          @apply --test-theme__input;
           border: solid 1px red;
         };
       }
 
       vaadin-input[disabled] {
         --vaadin-input__input: {
-          @apply --test-theme;
+          @apply --test-theme__input;
           color: silver;
+        };
+      }
+
+      vaadin-input[has-value] {
+        --vaadin-input__label: {
+          color: deepskyblue;
         };
       }
     </style>
@@ -84,6 +94,10 @@
       input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
       <p>
       invalid input: <vaadin-input required invalid></vaadin-input>
+      <p>
+      input with label: <vaadin-input label="Foo"></vaadin-input>
+      <p>
+      input with label and Value: <vaadin-input label="Foo" value="Bar"></vaadin-input>
     </fieldset>
   </form>
 

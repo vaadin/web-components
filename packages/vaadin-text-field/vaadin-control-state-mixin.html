@@ -21,7 +21,6 @@
             type: Boolean,
             notify: true,
             readOnly: true,
-            observer: 'focusedChanged',
             reflectToAttribute: true
           },
 
@@ -127,12 +126,6 @@
       if (window.ShadyDOM) {
         this.setProperties({tabIndex: tabindex, tabindex: tabindex});
       }
-    }
-
-    focusedChanged() {
-      // Needed for Edge, until they have support for CSS Custom Properties
-      // (already shipping in Edge Preview)
-      this.updateStyles();
     }
   };
 </script>

@@ -19,6 +19,7 @@ Custom property | Description | Default
 ----------------|-------------|----------
 `--vaadin-input__input` | Mixin applied to the input element | `{}`
 `--vaadin-input__input-placeholder` | Mixin applied to the input's placeholder | `{}`
+`--vaadin-input__label` | Mixin applied to the label element | `{}`
 
 @element vaadin-input
 @demo demo/index.html
@@ -32,7 +33,9 @@ Custom property | Description | Default
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: inline-flex;
+        flex-direction: column;
+        -webkit-tap-highlight-color: transparent;
       }
 
       input {
@@ -50,7 +53,22 @@ Custom property | Description | Default
       input::placeholder {
         @apply --vaadin-input__input-placeholder;
       }
+
+      input::-ms-clear {
+        display: none;
+      }
+
+      label {
+        @apply --vaadin-input__label;
+      }
+
+      label:empty {
+        display: none;
+      }
     </style>
+
+    <label id="label" on-click="focus">[[label]]</label>
+
     <input id="input"
       autocomplete$="[[autocomplete]]"
       autocorrect$="[[autocorrect]]"
@@ -67,7 +85,7 @@ Custom property | Description | Default
       value="{{value::input}}"
       title="[[title]]"
       on-blur="validate"
-    />
+    >
   </template>
 
   <script>
@@ -96,6 +114,14 @@ Custom property | Description | Default
             },
 
             /**
+             * String used for the label element.
+             */
+            label: {
+              type: String,
+              value: ''
+            },
+
+            /**
              * Identifies a list of pre-defined options to suggest to the user.
              * The value must be the id of a <datalist> element in the same document.
              */
@@ -111,6 +137,7 @@ Custom property | Description | Default
             maxlength: {
               type: Number
             },
+
             /**
              * If the value of the type attribute is text, email, search, password, tel, or url,
              * specifies the minimum number of characters (in Unicode code points) that the user
@@ -219,6 +246,15 @@ Custom property | Description | Default
        */
       validate() {
         return !(this.invalid = !this.$.input.checkValidity());
+      }
+
+      attributeChangedCallback(prop, oldVal, newVal) {
+        super.attributeChangedCallback(prop, oldVal, newVal);
+        // Needed until Edge has CSS Custom Properties (present in Edge Preview)
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
+          /^(focused|invalid|disabled|placeholder|has-value)$/.test(prop)) {
+          this.updateStyles();
+        }
       }
     }
 

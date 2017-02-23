@@ -24,7 +24,7 @@
     "eslint-config-vaadin": "github:vaadin/eslint-config-vaadin",
     "eslint-plugin-html": "^1.7.0",
     "gemini": "^4.14.3",
-    "gemini-express": "^1.0.0",
+    "gemini-polyserve": "^1.0.0",
     "gemini-sauce": "^1.0.0",
     "gulp": "latest",
     "gulp-eslint": "^3.0.1",
