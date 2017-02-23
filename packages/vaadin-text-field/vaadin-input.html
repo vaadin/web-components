@@ -248,6 +248,13 @@ Custom property | Description | Default
         return !(this.invalid = !this.$.input.checkValidity());
       }
 
+      ready() {
+        super.ready();
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
+          this.updateStyles();
+        }
+      }
+
       attributeChangedCallback(prop, oldVal, newVal) {
         super.attributeChangedCallback(prop, oldVal, newVal);
         // Needed until Edge has CSS Custom Properties (present in Edge Preview)
