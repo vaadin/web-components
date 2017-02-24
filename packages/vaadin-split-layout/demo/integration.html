@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <title>vaadin-split-layout Integration</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+
+    <demo-navigation></demo-navigation>
+
+    <h3>Google Maps</h3>
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style is="custom-style">
+            iframe {
+              width: 0;
+              border: none;
+            }
+          </style>
+        </custom-style>
+        <vaadin-split-layout style="height: 300px">
+          <iframe src="//maps.google.com/maps?q=Turku&amp;output=embed"></iframe>
+          <iframe src="//maps.google.com/maps?q=Malta&amp;output=embed"></iframe>
+        </vaadin-split-layout>
+      </template>
+    </demo-snippet>
+
+  </div>
+</body>
+</html>

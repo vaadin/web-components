@@ -1,12 +1,11 @@
 <!doctype html>
 <html>
 <head>
-  <title>vaadin-split-layout demo</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>vaadin-split-layout Basic Examples</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
 </head>
@@ -14,12 +13,7 @@
 <body unresolved>
   <div class="vertical-section-container centered">
 
-    <nav class="vertical-section">
-      <ul class="layout horizontal wrap">
-        <li><b>Basic Examples</b></li>
-        <li><a href="custom.html">Customization</a></li>
-      </ul>
-    </nav>
+    <demo-navigation></demo-navigation>
 
     <h3>Horizontal Split Layout (Default)</h3>
     <demo-snippet>
@@ -69,7 +63,7 @@
     <h4>Using Relative Height</h4>
     <demo-snippet>
       <template>
-        <div style="height: 20vh;">
+        <div style="height: 200px;">
           <vaadin-split-layout style="height: 100%;">
             <div>First</div>
             <div>Second</div>

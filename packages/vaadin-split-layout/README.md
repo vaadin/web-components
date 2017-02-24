@@ -1,5 +1,5 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-split-layout.svg)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://beta.webcomponents.org/element/vaadin/vaadin-split-layout)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-split-layout)
 [![Build status](https://travis-ci.org/vaadin/vaadin-split-layout.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-split-layout)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -73,7 +73,7 @@
 
 1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
 
-1. When in the `vaadin-split-layout` directory, run `wct` or `npm test`, browser will automatically open the component API documentation.
+1. When in the `vaadin-split-layout` directory, run `wct` or `npm test`
 
 
 ## Following the coding style

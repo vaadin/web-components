@@ -7,6 +7,7 @@
     "it": false,
     "beforeEach": false,
     "fixture": false,
-    "MockInteractions": false
+    "MockInteractions": false,
+    "gemini": false
   }
 }
