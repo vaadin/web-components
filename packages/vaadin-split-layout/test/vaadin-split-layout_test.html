@@ -45,9 +45,9 @@
         steps = steps || 5;
         if (touchDevice) {
           var xy = MockInteractions.middleOfNode(node);
-          MockTouchInteractions.touchstart(node, xy);
+          MockInteractions.touchstart(node, xy);
           for (var i = 0; i <= steps; i++) {
-            MockTouchInteractions.makeSoloTouchEvent(
+            MockInteractions.makeSoloTouchEvent(
               'touchmove',
               {
                 x: xy.x + dx * i / steps,
@@ -56,7 +56,7 @@
               node
             );
           }
-          MockTouchInteractions.touchend(node, {x: xy.x + dx, y: xy.y + dy});
+          MockInteractions.touchend(node, {x: xy.x + dx, y: xy.y + dy});
         } else {
           MockInteractions.track(splitLayout.$.splitter, dx, dy, steps);
         }

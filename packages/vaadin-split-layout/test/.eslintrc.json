@@ -8,7 +8,6 @@
     "beforeEach": false,
     "fixture": false,
     "MockInteractions": false,
-    "MockTouchInteractions": false,
     "gemini": false
   }
 }
