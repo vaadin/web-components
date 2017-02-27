@@ -39,7 +39,7 @@
         animation: vaadin-grid-spin-360 400ms linear infinite;
       }
 
-      :host([loading])::before {
+      :host([loading]) #items::before {
         content: "";
         position: absolute;
         top: 0;
@@ -48,6 +48,7 @@
         height: 100%;
         background: rgba(255, 255, 255, 0.5);
         pointer-events: none;
+        z-index: 1;
         @apply(--vaadin-grid-loading-backdrop);
       }
 
