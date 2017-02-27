@@ -184,6 +184,7 @@ Custom property | Description | Default
       },
 
       _cellClick: function(e) {
+        e.preventDefault();
         if (this.direction === 'asc') {
           this.direction = 'desc';
         } else if (this.direction === 'desc') {

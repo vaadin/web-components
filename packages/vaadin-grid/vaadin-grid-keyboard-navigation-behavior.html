@@ -493,21 +493,15 @@
         return;
       }
 
-      if (this._virtualFocus === this.$.header) {
-        var focusedCell = this._virtualFocus._focusedCell;
-        var focusedSorter = focusedCell.getContentChildren('content')[0].querySelector('vaadin-grid-sorter');
-        if (focusedSorter) {
-          e.preventDefault();
+      e.preventDefault();
 
-          focusedSorter.click();
-        }
-      }
-
-      if (this.navigating && this._virtualFocus === this.$.items) {
-        e.preventDefault();
-
+      var focusedCell = this._virtualFocus._focusedCell;
+      var firstElementChild = focusedCell.getContentChildren('content')[0].firstElementChild;
+      if (firstElementChild) {
+        firstElementChild.click();
+      } else if (this.navigating) {
         this.fire('cell-activate', {
-          model: this._virtualFocus._focusedCell.instance
+          model: focusedCell.instance
         });
       }
     },

@@ -48,14 +48,14 @@
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template class="header">
-            <vaadin-grid-sorter path=""></vaadin-grid-sorter>
+            <div></div>
+            <div></div>
           </template>
-          <template></template>
-          <template class="footer"></template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header"></template>
-          <template>[[index]] [[item]]</template>
+          <template>
+            [[index]] [[item]]
+            <div></div>
+            <div></div>
+          </template>
           <template class="footer"></template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -626,14 +626,13 @@
             });
 
             it('should not navigate to hidden column with right arrow', function() {
-              grid._columnTree[0][3].hidden = true;
+              grid._columnTree[0][2].hidden = true;
               clickItem(0);
 
               right();
               right();
-              right();
 
-              expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
             });
 
             it('should not navigate to hidden column with end', function() {
@@ -646,12 +645,12 @@
             });
 
             it('should not navigate to hidden column with home', function() {
-              grid._columnTree[0][3].hidden = true;
+              grid._columnTree[0][2].hidden = true;
               clickItem(0);
 
               end();
 
-              expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
+              expect(scroller._virtualFocus._focusedCellIndex).to.eql(1);
             });
           });
 
@@ -665,18 +664,17 @@
             it('should not navigate to row details with right arrow', function() {
               right(); // index 1
               right(); // index 2
-              right(); // index 3
 
               right();
 
-              expect(body._focusedRow.children[3].focused).to.be.true;
+              expect(body._focusedRow.children[2].focused).to.be.true;
               expect(body._focusedRow._rowDetailsCell.focused).to.be.falsey;
             });
 
             it('should not navigate to row details with end', function() {
               end();
 
-              expect(body._focusedRow.children[3].focused).to.be.true;
+              expect(body._focusedRow.children[2].focused).to.be.true;
               expect(body._focusedRow._rowDetailsCell.focused).to.be.falsey;
             });
 
@@ -811,7 +809,7 @@
 
             end();
 
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(3);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
           });
 
 
@@ -820,7 +818,7 @@
 
             ctrlEnd();
 
-            expect(scroller._virtualFocus._focusedCellIndex).to.eql(3);
+            expect(scroller._virtualFocus._focusedCellIndex).to.eql(2);
             expect(scroller._virtualFocus._focusedRowIndex).to.eql(1);
           });
 
@@ -1070,33 +1068,61 @@
             expect(grid.activeItem).to.be.undefined;
           });
 
-          it('should toggle sorter direction on space', function() {
-            var sorter = getCellContent(header.rows[0].children[2]).firstElementChild;
-            header.rows[0].children[1].click();
-            right();
-
-            space();
-            expect(sorter.direction).to.equal('asc');
-
-            space();
-            expect(sorter.direction).to.equal('desc');
-
-            space();
-            expect(sorter.direction).to.equal(null);
-          });
-
-          it('should prevent default keydown action for sorter on space', function() {
-            header.rows[0].children[1].click();
-            right();
-
-            var eventDefaultPrevented;
-            grid.addEventListener('keydown', function(e) {
-              eventDefaultPrevented = e.defaultPrevented;
+          describe('space click shortcut', function() {
+            beforeEach(function() {
+              // navigate to first column
+              header.rows[0].children[1].click();
+              right();
             });
 
-            space();
+            it('should click first cell child on space', function() {
+              var firstChild = getCellContent(header.rows[0].children[2]).children[0];
+              var clickStub = sinon.stub(firstChild, 'click');
 
-            expect(eventDefaultPrevented).to.be.true;
+              space();
+
+              expect(clickStub.called).to.be.true;
+            });
+
+            it('should not click other cell children on space', function() {
+              var secondChild = getCellContent(header.rows[0].children[2]).children[1];
+              var clickStub = sinon.stub(secondChild, 'click');
+
+              space();
+
+              expect(clickStub.called).to.be.false;
+            });
+
+            it('should prevent default keydown action when clicking on space', function() {
+              var eventDefaultPrevented;
+              grid.addEventListener('keydown', function(e) {
+                eventDefaultPrevented = e.defaultPrevented;
+              });
+
+              space();
+
+              expect(eventDefaultPrevented).to.be.true;
+            });
+
+            it('should not activate if synthetic click has default prevented', function() {
+              var firstBodyRowFirstChild = getCellContent(body.rows[0].children[2]).children[0];
+
+              var spy = sinon.spy();
+              listenOnce(firstBodyRowFirstChild, 'click', function(e) {
+                spy();
+                e.preventDefault();
+              });
+
+              // Navigate to body, row 1, column 3
+              tab();
+              right();
+              right();
+
+              space();
+
+              expect(spy.called).to.be.true;
+              expect(grid.activeItem).to.be.undefined;
+            });
           });
         });
 

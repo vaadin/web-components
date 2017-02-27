@@ -159,6 +159,14 @@
             expect(announcer.getAttribute('aria-atomic')).to.equal('true');
           });
         });
+
+        it('should prevent default on click', function() {
+          var clickEvent = new CustomEvent('click', {cancelable: true});
+
+          sorter.dispatchEvent(clickEvent);
+
+          expect(clickEvent.defaultPrevented).to.be.true;
+        });
       });
 
       describe('sorter in cell content', function() {
