@@ -39,7 +39,7 @@
       }
       ready() {
         super.ready();
-        this.addEventListener('iron-resize', this._onIronResize);
+        this.addEventListener('iron-resize', this._onIronResize, true);
         this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
         Polymer.RenderStatus.afterNextRender(this, function() {
           //force this as an interested resizable of parent

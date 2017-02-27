@@ -132,7 +132,7 @@ let Resizable = (superclass) => class extends superclass {
   }
 
   _onDescendantIronResize(event) {
-    if (this._notifyingDescendant) {
+    if (event.target._notifyingDescendant) {
       event.stopPropagation();
       return;
     }
@@ -147,7 +147,6 @@ let Resizable = (superclass) => class extends superclass {
   _fireResize() {
     this.dispatchEvent(new CustomEvent('iron-resize',
       {
-        node: this,
         bubbles: false
       }));
   }

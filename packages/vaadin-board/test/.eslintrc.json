@@ -4,6 +4,7 @@
   },
   "globals": {
     "suite": false,
+    "expected": false,
     "test":  false,
     "assert": false,
     "setup": false,

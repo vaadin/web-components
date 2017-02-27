@@ -9,6 +9,7 @@
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="utils.js"></script>
 
     <link rel="import" href="../vaadin-board.html">
     <link rel="import" href="../vaadin-board-row.html">
@@ -95,11 +96,6 @@
       </template>
     </test-fixture>
     <script>
-      //Helper to calculate expected width
-      var expected = function(mult, height) {
-        return Math.floor(mult * height);
-      }
-
       suite('vaadin-board', function () {
         test('Item with board-cols=2 takes 50% on Desktop.', function () {
           var row = fixture('desktop-board-row');
