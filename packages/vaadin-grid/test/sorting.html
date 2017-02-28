@@ -194,6 +194,73 @@
             expect(cells[0].item).to.equal(grid.items[0]);
           });
 
+          it('should sort empty values', function() {
+            grid.items = [{
+              first: 'foo',
+              last: 'bar'
+            }, {
+              first: '',
+              last: ''
+            }, {
+              first: 'bar',
+              last: 'bar'
+            }];
+
+            expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
+            expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
+          });
+
+          it('should sort null values', function() {
+            grid.items = [{
+              first: 'foo',
+              last: 'bar'
+            }, {
+              first: null,
+              last: null
+            }, {
+              first: 'bar',
+              last: 'bar'
+            }];
+
+            expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
+            expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
+          });
+
+          it('should sort undefined values', function() {
+            grid.items = [{
+              first: 'foo',
+              last: 'bar'
+            }, {
+              first: undefined,
+              last: undefined
+            }, {
+              first: 'bar',
+              last: 'bar'
+            }];
+
+            expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
+            expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
+          });
+
+          it('should sort NaN values', function() {
+            grid.items = [{
+              first: 'foo',
+              last: 'bar'
+            }, {
+              first: NaN,
+              last: NaN
+            }, {
+              first: 'bar',
+              last: 'bar'
+            }];
+
+            expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
+            expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
+            expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('NaN');
+          });
         });
 
         describe('data provider', function() {
