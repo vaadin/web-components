@@ -3,27 +3,25 @@
 
   // IronFormElementBehavior is not a proper 2.0 class.
   Vaadin.FormElementMixin = subclass => class VaadinFormElementMixin extends subclass {
-    static get config() {
+    static get properties() {
       return {
-        properties: {
-          /**
-           * Fired when the element is added to an `iron-form`.
-           *
-           * @event iron-form-element-register
-           */
+        /**
+         * Fired when the element is added to an `iron-form`.
+         *
+         * @event iron-form-element-register
+         */
 
-          /**
-           * Fired when the element is removed from an `iron-form`.
-           *
-           * @event iron-form-element-unregister
-           */
+        /**
+         * Fired when the element is removed from an `iron-form`.
+         *
+         * @event iron-form-element-unregister
+         */
 
-          /**
-           * The form that the element is registered to.
-           */
-          _parentForm: {
-            type: Object
-          }
+        /**
+         * The form that the element is registered to.
+         */
+        _parentForm: {
+          type: Object
         }
       };
     }
