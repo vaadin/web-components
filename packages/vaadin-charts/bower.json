@@ -42,7 +42,7 @@
     "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^1.0.0",
     "iron-pages": "PolymerElements/iron-pages#^1.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
-    "web-component-tester": "*",
+    "web-component-tester": "4.0.3",
     "jquery": "^2.2.2"
   }
 }

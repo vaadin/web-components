@@ -22,6 +22,6 @@
     "gulp-vulcanize": "^6.0.0",
     "gulp-zip": "^3.2.0",
     "lodash": "^3.9.1",
-    "web-component-tester": "^3.3.9"
+    "web-component-tester": "4.0.3"
   }
 }

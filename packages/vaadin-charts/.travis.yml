@@ -1,6 +1,5 @@
 language: node_js
-node_js:
-- '0.12'
+node_js: "5.3"
 before_script:
 - bower install
 script:
