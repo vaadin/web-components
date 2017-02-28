@@ -398,6 +398,17 @@
           done();
         }, 200); // filter-changed has a 200ms debounce
       });
+
+      it('should not throw with data provider', function() {
+        grid.items = undefined;
+        grid.dataProvider = infiniteDataProvider;
+        grid.size = 1;
+
+        var checkbox = getBodyCellContent(grid, 0, 0).firstElementChild;
+        expect(function() {
+          checkbox.click();
+        }).not.to.throw(Error);
+      });
     });
   </script>
 

@@ -159,15 +159,17 @@ When the grid is configured with an array of items as the data provider, it prov
 
     _onSelectedItemsChanged: function(e) {
       this._selectAllChangeLock = true;
-      if (!this._grid.selectedItems.length) {
-        this.selectAll = false;
-        this._indeterminate = false;
-      } else if (this._arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
-        this.selectAll = true;
-        this._indeterminate = false;
-      } else {
-        this.selectAll = false;
-        this._indeterminate = true;
+      if (this._grid.items) {
+        if (!this._grid.selectedItems.length) {
+          this.selectAll = false;
+          this._indeterminate = false;
+        } else if (this._arrayContains(this._grid.selectedItems, this._grid._filter(this._grid.items))) {
+          this.selectAll = true;
+          this._indeterminate = false;
+        } else {
+          this.selectAll = false;
+          this._indeterminate = true;
+        }
       }
       this._selectAllChangeLock = false;
     },
