@@ -6,6 +6,7 @@
     "WCT": false,
     "HTMLImports": false,
     "sinon": false,
+    "gemini": false,
     "suite": false,
     "suiteSetup": false,
     "setup": false,
