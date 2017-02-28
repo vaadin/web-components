@@ -123,6 +123,9 @@
       this.$.table.scrollTop = idx / this.size * this.$.table.scrollHeight;
       this._scrollHandler();
       this.scrollToIndex(idx - this._vidxOffset);
+      // _scrollTop is not up-to-date at this point, update and run scrollhandler
+      this._resetScrollPosition(this._scrollPosition);
+      this._scrollHandler();
 
       // TODO: This is a hack to get around offset issues when scrolling to bottom.
       // Revisit iron-list-behavior for cleaner fix.

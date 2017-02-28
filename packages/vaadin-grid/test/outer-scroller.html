@@ -86,7 +86,11 @@
         outerScroller.hidden = false;
         target = outerScroller.scrollTarget;
         tableRect = scroller.$.table.getBoundingClientRect();
-        Polymer.Base.async(done, 1);
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          outerScroller._syncingScrollTarget = false;
+          outerScroller._syncingOuterScroller = false;
+          done();
+        });
       });
 
       it('should cancel wheel event', function() {

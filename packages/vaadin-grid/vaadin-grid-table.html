@@ -522,6 +522,9 @@
     },
 
     _sizeChanged: function(size, bindData, hasData) {
+      var scrollTop = this._scrollTop;
+      var firstVisibleIndex = this.firstVisibleIndex + this._vidxOffset;
+
       /* TODO: virtual count of 500k will make the sizer.top too large for Firefox */
       this._virtualCount = Math.min(size, 100000);
       this._physicalIndexForKey = {};
@@ -538,10 +541,25 @@
         this._physicalSizes = new Array(this._physicalCount);
       }
 
-      this._physicalStart = 0;
-
       this._itemsRendered = false;
-      this._debounceTemplate(this._render);
+
+      this._debounceTemplate(function() {
+        this._render();
+
+        if (!this._viewportHeight) {
+          return;
+          // Don't run the following before init or pool size for non-Chrome browsers grows too large
+        }
+
+        // The size may have decreased so need to scroll to appropriate index first
+        this.scrollToScaledIndex(Math.min(firstVisibleIndex, this.size));
+        // Scroll to the original scroll position (if possible)
+        this._scrollTop = scrollTop;
+        this._scrollHandler();
+
+        this.flushDebouncer('vaadin-grid-scrolling');
+
+      });
     },
 
     /**
