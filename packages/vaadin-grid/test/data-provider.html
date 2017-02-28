@@ -217,6 +217,13 @@
           });
         };
       });
+
+      it('should not set virtual scroll position to 0 on size change', function() {
+        scrollToEnd(grid);
+        grid.size = 500;
+        expect(grid.$.scroller._physicalTop).not.to.equal(0);
+        expect(grid.$.scroller._virtualStart).not.to.equal(0);
+      });
     });
 
     describe('set manually', function() {

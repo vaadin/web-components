@@ -522,9 +522,6 @@
     },
 
     _sizeChanged: function(size, bindData, hasData) {
-      this._virtualStart = 0;
-      this._physicalTop = 0;
-
       /* TODO: virtual count of 500k will make the sizer.top too large for Firefox */
       this._virtualCount = Math.min(size, 100000);
       this._physicalIndexForKey = {};
