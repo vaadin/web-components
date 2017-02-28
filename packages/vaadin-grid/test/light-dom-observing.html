@@ -387,6 +387,45 @@
             });
           });
 
+          it('should invoke node observer twice when removing columns', function(done) {
+            var column = Polymer.dom(grid).querySelector('vaadin-grid-column');
+            var spy = sinon.spy(grid._observer, 'fn');
+            Polymer.dom(grid).removeChild(column);
+            flush(function() {
+              // Once for the column and in effect of that, once for the removed cell content elements
+              expect(spy.callCount).to.equal(2);
+              done();
+            });
+          });
+
+          it('should invoke node observer twice when adding columns', function(done) {
+            var column = fixture('column');
+            var spy = sinon.spy(grid._observer, 'fn');
+            Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
+            flush(function() {
+              // Once for the column and in effect of that, once for the added cell content elements
+              var expectedCallCount = 2;
+              if (Polymer.Settings.useNativeShadow) {
+                // Focus traps are relocated
+                expectedCallCount++;
+              }
+              expect(spy.callCount).to.equal(expectedCallCount);
+              done();
+            });
+          });
+
+          it('should not invoke on row reorder', function(done) {
+            grid.size = 1000;
+            Polymer.dom.flush();
+            var spy = sinon.spy(grid._observer, 'fn');
+
+            scrollToEnd(grid);
+            flush(function() {
+              expect(spy.called).to.be.false;
+              done();
+            });
+          });
+
           it('should reuse column cells', function() {
             Polymer.dom.flush();
             var content = getHeaderCellContent(grid, 0, 0);
