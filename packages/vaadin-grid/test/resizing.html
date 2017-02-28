@@ -59,6 +59,18 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="flex-child">
+    <template>
+      <div style="display: flex; flex-direction: column; height: 500px; width: 200px;">
+        <vaadin-grid id="grid" style="flex: 1;" items='[1, 2, 3, 4, 5]'>
+          <vaadin-grid-column>
+            <template>[[index]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     describe('resizing', function() {
 
@@ -117,6 +129,34 @@
           expect(detailsCell.getBoundingClientRect().height).to.be.above(_height);
           expect(detailsCell.getBoundingClientRect().bottom)
             .to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 1);
+        });
+
+      });
+
+      describe('flex child', function() {
+        var wrapper, grid, table;
+
+        beforeEach(function() {
+          wrapper = fixture('flex-child');
+          grid = wrapper.querySelector('vaadin-grid');
+          table = grid.$.scroller.$.table;
+        });
+
+        it('table should cover the whole grid', function() {
+          var gridRect = grid.getBoundingClientRect();
+          var tableRect = table.getBoundingClientRect();
+          ['top', 'bottom', 'left', 'right'].forEach(function(propertyName) {
+            expect(tableRect[propertyName]).to.be.closeTo(gridRect[propertyName], 1);
+          });
+        });
+
+        it('table should cover the whole grid 2', function() {
+          wrapper.style.height = '100px';
+          var gridRect = grid.getBoundingClientRect();
+          var tableRect = table.getBoundingClientRect();
+          ['top', 'bottom', 'left', 'right'].forEach(function(propertyName) {
+            expect(tableRect[propertyName]).to.be.closeTo(gridRect[propertyName], 1);
+          });
         });
 
       });
