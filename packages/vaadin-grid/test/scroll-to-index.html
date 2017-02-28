@@ -47,12 +47,13 @@
         describe('Scroll: ' + scale, function() {
           var scroller;
 
-          beforeEach(function() {
+          beforeEach(function(done) {
             var grid = fixture(scale);
             grid.dataProvider = infiniteDataProvider;
             scroller = grid.$.scroller;
 
             Polymer.dom.flush();
+            Polymer.RenderStatus.afterNextRender(grid, done);
           });
 
           it('should scroll to scaled index', function(done) {
