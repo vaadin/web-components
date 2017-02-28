@@ -467,7 +467,9 @@
     },
 
     _updateHeaderFooterMetrics: function() {
-      Polymer.dom.flush();
+      if (this._physicalSizes) {
+        Polymer.dom.flush();
+      }
       this._updateHeaderFooterMetricsSync();
 
       Polymer.RenderStatus.afterNextRender(this.$.header, function() {
