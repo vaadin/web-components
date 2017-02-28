@@ -289,6 +289,10 @@
         expect(getComputedStyle(combobox.$.toggleIcon).display).to.equal('none');
       });
 
+      it('clearIcon should be hidden when disabled', function() {
+        expect(getComputedStyle(combobox.$.clearIcon).display).to.equal('none');
+      });
+
       it('dropdown should not be shown when disabled', function() {
         combobox.$.input.fire('tap');
         expect(combobox.opened).to.be.false;
@@ -303,6 +307,10 @@
 
       it('toggleIcon should be hidden when read-only', function() {
         expect(getComputedStyle(combobox.$.toggleIcon).display).to.equal('none');
+      });
+
+      it('clearIcon should be hidden when read-only', function() {
+        expect(getComputedStyle(combobox.$.clearIcon).display).to.equal('none');
       });
 
       it('dropdown should not be shown when read-only', function() {

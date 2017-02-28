@@ -32,6 +32,10 @@
         display: none;
       }
 
+      :host([readonly]) ::content .clear-button,
+      :host([readonly]) .clear-button,
+      :host([disabled]) ::content .clear-button,
+      :host([disabled]) .clear-button,
       :host([readonly]) ::content .toggle-button,
       :host([readonly]) .toggle-button,
       :host([disabled]) ::content .toggle-button,
