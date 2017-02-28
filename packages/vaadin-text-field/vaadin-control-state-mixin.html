@@ -4,53 +4,51 @@
   // Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
   // implementation fails in the shadow dom, so we have this for vaadin elements.
   Vaadin.ControlStateMixin = subclass => class VaadinControlStateMixin extends subclass {
-    static get config() {
+    static get properties() {
       var cfg = {
-        properties: {
-          /**
-           * If true, the element currently has focus.
-           */
-          'autofocus': {
-            type: Boolean
-          },
+        /**
+         * If true, the element currently has focus.
+         */
+        'autofocus': {
+          type: Boolean
+        },
 
-          /**
-           * If true, the element currently has focus.
-           */
-          'focused': {
-            type: Boolean,
-            notify: true,
-            readOnly: true,
-            reflectToAttribute: true
-          },
+        /**
+         * If true, the element currently has focus.
+         */
+        'focused': {
+          type: Boolean,
+          notify: true,
+          readOnly: true,
+          reflectToAttribute: true
+        },
 
-          /**
-           * If true, the user cannot interact with this element.
-           */
-          'disabled': {
-            type: Boolean,
-            observer: '_disabledChanged',
-            reflectToAttribute: true
-          },
+        /**
+         * If true, the user cannot interact with this element.
+         */
+        'disabled': {
+          type: Boolean,
+          observer: '_disabledChanged',
+          reflectToAttribute: true
+        },
 
-          /**
-           * Internal property needed to listen to `tabindex` attribute changes.
-           *
-           * For changing the tabindex of this component use the native `tabIndex` propety.
-           * @private
-           */
-          'tabindex': {
-            type: Number,
-            value: 0,
-            reflectToAttribute: true,
-            observer: '_tabindexChanged'
-          }
+        /**
+         * Internal property needed to listen to `tabindex` attribute changes.
+         *
+         * For changing the tabindex of this component use the native `tabIndex` propety.
+         * @private
+         */
+        'tabindex': {
+          type: Number,
+          value: 0,
+          reflectToAttribute: true,
+          observer: '_tabindexChanged'
         }
       };
 
       if (window.ShadyDOM) {
         // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
-        cfg.properties['tabIndex'] = cfg.properties.tabindex;
+        cfg['tabIndex'] = cfg.tabindex;
       }
 
       return cfg;

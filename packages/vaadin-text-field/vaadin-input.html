@@ -94,136 +94,133 @@ Custom property | Description | Default
         return 'vaadin-input';
       }
 
-      static get config() {
+      static get properties() {
         return {
-          properties: {
-            /**
-             * Whether the value of the control can be automatically completed by the browser.
-             * List of available options at:
-             * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
-             */
-            autocomplete: {
-              type: String
-            },
-
-            /**
-             * Specify that this control should have input focus when the page loads.
-             */
-            autofocus: {
-              type: Boolean
-            },
-
-            /**
-             * String used for the label element.
-             */
-            label: {
-              type: String,
-              value: ''
-            },
-
-            /**
-             * Identifies a list of pre-defined options to suggest to the user.
-             * The value must be the id of a <datalist> element in the same document.
-             */
-            list: {
-              type: String
-            },
-
-            /**
-             * If the value of the type attribute is text, email, search, password, tel, or url,
-             * specifies the maximum number of characters (in Unicode code points) that the user
-             * can enter.
-             */
-            maxlength: {
-              type: Number
-            },
-
-            /**
-             * If the value of the type attribute is text, email, search, password, tel, or url,
-             * specifies the minimum number of characters (in Unicode code points) that the user
-             * can enter.
-             */
-            minlength: {
-              type: Number
-            },
-
-            /**
-             * The name of the control, which is submitted with the form data.
-             */
-            name: {
-              type: String
-            },
-
-            /**
-             * A regular expression that the value is checked against.
-             * The pattern must match the entire value, not just some subset.
-             * This attribute applies when the value of the type attribute is text, search, tel,
-             * url, email, or password, otherwise it is ignored.
-             */
-            pattern: {
-              type: String
-            },
-
-            /**
-             * A hint to the user of what can be entered in the control.
-             */
-            placeholder: {
-              type: String
-            },
-
-            /**
-             * This attribute indicates that the user cannot modify the value of the control.
-             */
-            readonly: {
-              type: Boolean
-            },
-
-            /**
-             * Specifies that the user must fill in a value.
-             */
-            required: {
-              type: Boolean
-            },
-
-            /**
-             * Message to show to the user when validation fails.
-             */
-            title: {
-              type: String
-            },
-
-            /**
-             * The initial value of the control.
-             * It can be used for two-way data binding.
-             */
-            value: {
-              type: String,
-              observer: '_valueChanged',
-              notify: true
-            },
-
-            /**
-             * This property is set to true when the control value invalid.
-             */
-            invalid: {
-              type: Boolean,
-              reflectToAttribute: true,
-              notify: true
-            },
-
-            /**
-             * A read-only property indicating whether this input has a non empty value.
-             * It can be used for example in styling of the component.
-             */
-            hasValue: {
-              type: Boolean,
-              value: false,
-              notify: true,
-              readOnly: true,
-              reflectToAttribute: true
-            }
+          /**
+           * Whether the value of the control can be automatically completed by the browser.
+           * List of available options at:
+           * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
+           */
+          autocomplete: {
+            type: String
           },
 
+          /**
+           * Specify that this control should have input focus when the page loads.
+           */
+          autofocus: {
+            type: Boolean
+          },
+
+          /**
+           * String used for the label element.
+           */
+          label: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * Identifies a list of pre-defined options to suggest to the user.
+           * The value must be the id of a <datalist> element in the same document.
+           */
+          list: {
+            type: String
+          },
+
+          /**
+           * If the value of the type attribute is text, email, search, password, tel, or url,
+           * specifies the maximum number of characters (in Unicode code points) that the user
+           * can enter.
+           */
+          maxlength: {
+            type: Number
+          },
+
+          /**
+           * If the value of the type attribute is text, email, search, password, tel, or url,
+           * specifies the minimum number of characters (in Unicode code points) that the user
+           * can enter.
+           */
+          minlength: {
+            type: Number
+          },
+
+          /**
+           * The name of the control, which is submitted with the form data.
+           */
+          name: {
+            type: String
+          },
+
+          /**
+           * A regular expression that the value is checked against.
+           * The pattern must match the entire value, not just some subset.
+           * This attribute applies when the value of the type attribute is text, search, tel,
+           * url, email, or password, otherwise it is ignored.
+           */
+          pattern: {
+            type: String
+          },
+
+          /**
+           * A hint to the user of what can be entered in the control.
+           */
+          placeholder: {
+            type: String
+          },
+
+          /**
+           * This attribute indicates that the user cannot modify the value of the control.
+           */
+          readonly: {
+            type: Boolean
+          },
+
+          /**
+           * Specifies that the user must fill in a value.
+           */
+          required: {
+            type: Boolean
+          },
+
+          /**
+           * Message to show to the user when validation fails.
+           */
+          title: {
+            type: String
+          },
+
+          /**
+           * The initial value of the control.
+           * It can be used for two-way data binding.
+           */
+          value: {
+            type: String,
+            observer: '_valueChanged',
+            notify: true
+          },
+
+          /**
+           * This property is set to true when the control value invalid.
+           */
+          invalid: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true
+          },
+
+          /**
+           * A read-only property indicating whether this input has a non empty value.
+           * It can be used for example in styling of the component.
+           */
+          hasValue: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            readOnly: true,
+            reflectToAttribute: true
+          }
         };
       }
 
@@ -246,6 +243,13 @@ Custom property | Description | Default
        */
       validate() {
         return !(this.invalid = !this.$.input.checkValidity());
+      }
+
+      ready() {
+        super.ready();
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
+          this.updateStyles();
+        }
       }
 
       attributeChangedCallback(prop, oldVal, newVal) {
