@@ -59,6 +59,7 @@
 
       this.addEventListener('focus', e => this._focus(e));
       this.addEventListener('blur', () => this._setFocused(false));
+      this.addEventListener('click', e => this._focus(e));
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
@@ -106,10 +107,6 @@
       } else {
         this.tabindex = this.focusElement.tabIndex;
       }
-
-      // Needed for Edge, until they have support for CSS Custom Properties
-      // (already shipping in Edge Preview)
-      this.updateStyles();
     }
 
     _tabindexChanged(tabindex) {
