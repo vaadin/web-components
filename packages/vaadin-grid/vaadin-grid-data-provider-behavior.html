@@ -187,7 +187,7 @@
         });
 
         var prev = Math.max(0, pages[0] - 1);
-        var next = Math.min(pages[pages.length - 1] + 1, Math.floor(this.size / this.pageSize) - 1);
+        var next = Math.min(pages[pages.length - 1] + 1, Math.max(0, Math.floor(this.size / this.pageSize) - 1));
 
         this._loadPage(prev);
         this._loadPage(next);
