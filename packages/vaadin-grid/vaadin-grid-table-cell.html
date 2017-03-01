@@ -150,11 +150,11 @@
           }
           Polymer.dom(this).appendChild(insertionPoint);
         } else {
-          this.debounce('remove-content', function() {
+          this.async(function() {
             if (!this.isAttached && Polymer.dom(cellContent).parentNode === this.target) {
               Polymer.dom(this.target).removeChild(cellContent);
             }
-          }, 1);
+          });
         }
       },
 
