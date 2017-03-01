@@ -5,7 +5,8 @@
   "main": "vaadin-board.html",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
   "dependencies": {
-    "polymer": "Polymer/polymer#2.0-preview"
+    "polymer": "Polymer/polymer#2.0-preview",
+    "vaadin-license-checker": "vaadin/license-checker#2.0-preview"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0",
