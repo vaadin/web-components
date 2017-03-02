@@ -244,6 +244,20 @@
           done();
         }, 1000);
       });
+
+      it('should not request negative pages', function(done) {
+        grid.dataProvider = sinon.spy(infiniteDataProvider);
+        grid.size = 10;
+
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          for (var i = 0; i < grid.dataProvider.callCount; i++) {
+            var page = grid.dataProvider.getCall(i).args[0].page;
+            expect(page).to.be.above(-1);
+          }
+          done();
+        });
+      });
+
     });
   </script>
 
