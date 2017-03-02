@@ -128,6 +128,7 @@
       });
 
       it('should propagate frozen to child columns', function() {
+        columns[0].frozen = false;
         group.frozen = true;
 
         expect(columns[0].frozen).to.be.true;
@@ -141,10 +142,62 @@
         expect(group.hidden).to.be.true;
       });
 
-      it('should not change hidden property when child columns are visible', function() {
-        columns[0].hidden = true;
+      it('should unhide group column', function() {
+        group.hidden = true;
+        columns[0].hidden = false;
 
         expect(group.hidden).to.be.false;
+      });
+
+      it('should not unhide other columns', function() {
+        group.hidden = true;
+        columns[0].hidden = false;
+
+        expect(columns[1].hidden).to.be.true;
+      });
+
+      it('should propagate hidden to child columns', function() {
+        columns[0].hidden = false;
+        group.hidden = true;
+
+        expect(columns[0].hidden).to.be.true;
+        expect(columns[1].hidden).to.be.true;
+        expect(group.hidden).to.be.true;
+      });
+
+      it('should propagate hidden to child columns 2', function() {
+        group.hidden = true;
+        group.hidden = false;
+
+        expect(columns[0].hidden).to.be.false;
+        expect(columns[1].hidden).to.be.false;
+        expect(group.hidden).to.be.false;
+      });
+
+      it('should hide the group', function() {
+        Polymer.dom(group).removeChild(columns[0]);
+        Polymer.dom(group).removeChild(columns[1]);
+        Polymer.dom.flush();
+        expect(group.hidden).to.be.true;
+      });
+
+      it('should unhide the group', function() {
+        Polymer.dom(group).removeChild(columns[0]);
+        Polymer.dom(group).removeChild(columns[1]);
+        Polymer.dom.flush();
+        Polymer.dom(group).appendChild(columns[0]);
+        Polymer.dom.flush();
+        expect(group.hidden).to.be.false;
+      });
+
+      it('should not unhide the group', function() {
+        Polymer.dom(group).removeChild(columns[0]);
+        Polymer.dom(group).removeChild(columns[1]);
+        Polymer.dom.flush();
+        columns[0].hidden = true;
+        Polymer.dom(group).appendChild(columns[0]);
+        Polymer.dom.flush();
+        expect(group.hidden).to.be.true;
       });
 
       it('should notify header cell for hidden', function(done) {
@@ -157,8 +210,6 @@
         });
 
         columns[0].hidden = true;
-
-        expect(group.hidden).to.be.false;
       });
 
       it('should calculate column group width after hiding a column', function() {

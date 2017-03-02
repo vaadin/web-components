@@ -136,6 +136,36 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="hidden-group">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column-group hidden>
+          <vaadin-grid-column>
+            <template></template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template></template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="hidden-column">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column-group>
+          <vaadin-grid-column hidden>
+            <template></template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template></template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <vaadin-grid-column id="extra">
     <template class="footer">
       Foobar
@@ -400,6 +430,31 @@
             });
           });
         });
+      });
+
+      describe('hidden group', function() {
+
+        it('should hide children', function(done) {
+          init('hidden-group');
+
+          flush(function() {
+            expect(grid.querySelector('vaadin-grid-column').hidden).to.be.true;
+            expect(grid.querySelector('vaadin-grid-column-group').hidden).to.be.true;
+            done();
+          });
+        });
+
+        it('should hide self', function() {
+          init('hidden-column');
+
+          flush(function() {
+            expect(grid.querySelector('vaadin-grid-column-group').hidden).to.be.false;
+            var columns = grid.querySelectorAll('vaadin-grid-column');
+            expect(columns[0].hidden).to.be.true;
+            expect(columns[1].hidden).to.be.false;
+          });
+        });
+
       });
     });
   </script>
