@@ -22,6 +22,17 @@ This program is available under Apache License Version 2.0, available at https:/
 to easily customize the grid.
 __Note that the helper elements must be explicitly imported__
 
+ - A template can be decorated with one the following class names to specify its purpose
+  - "header": Marks a header template
+  - "footer": Marks a footer template
+  - "row-details": Marks a row details template
+
+ - The following built-in template variables can be bound to inside the templates
+  - "index": Number representing the row index
+  - "item" and it's sub-properties: Data object (provided by a data provider / items array)
+  - "selected": True if the item is selected (can be two-way bound)
+  - "expanded": True if the item is expanded for row details (can be two-way bound)
+
 #### Example:
 
     <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"}, {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
