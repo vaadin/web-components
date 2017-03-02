@@ -30,7 +30,7 @@
       <template>
         <template is="dom-bind">
           <style is="custom-style">
-            #grid-row-details .details {
+            .details {
               padding: 10px;
               margin: 10px;
               display: flex;
@@ -40,22 +40,14 @@
               font-size: 20px;
             }
 
-            #grid-row-details img {
+            img {
               width: 80px;
               height: 80px;
-            }
-
-            #grid-row-details {
-              --primary-color: #00b4f0;
-              --paper-font-common-base: {
-                font-family: var(--font-family);
-                font-size: 14px;
-              };
             }
           </style>
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-          <vaadin-grid aria-label="Row Details Example" id="grid-row-details" data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid active-item={{activeItem}} aria-label="Row Details Example" data-provider="[[dataProvider]]" size="200">
 
             <template class="row-details">
               <div class="details">
@@ -88,6 +80,83 @@
 
           </vaadin-grid>
         </template>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Expanding Items Without Data Binding</h3>
+    <p>
+      In this example the grid's "activeItem" property is bound to "expandedItems" property.
+    </p>
+    <p>
+      <b>Hint: </b>Click a row to toggle the active item.
+    </p>
+    <demo-snippet>
+      <template>
+        <bind-expanded-items></bind-expanded-items>
+        <dom-module id="bind-expanded-items">
+          <template>
+            <style>
+              :host {
+                display: block;
+              }
+
+              .details {
+                padding: 10px;
+                margin: 10px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+                font-size: 20px;
+              }
+
+              img {
+                width: 80px;
+                height: 80px;
+              }
+            </style>
+
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+
+            <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Expanded Items Example" data-provider="[[dataProvider]]" size="200">
+
+              <template class="row-details">
+                <div class="details">
+                  <img src="[[item.user.picture.large]]"></img>
+                  <p>Hi! My name is [[item.user.name.first]]!</p>
+                </div>
+              </template>
+
+              <vaadin-grid-column width="50px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.user.name.first]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.user.name.last]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+
+          </template>
+          <script>
+            Polymer({
+              is: 'bind-expanded-items',
+
+              _onActiveItemChanged: function(e) {
+                this.$.grid.expandedItems = [e.detail.value];
+              }
+            });
+          </script>
+        </dom-module>
+
       </template>
     </demo-snippet>
 
