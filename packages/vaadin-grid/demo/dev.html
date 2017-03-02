@@ -51,7 +51,7 @@
               dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <div>details-[[index]]-[[item.name]]</div>
             <button>Howdy</button>
-            <paper-input value="{{item.user.name.last}}"></paper-input>
+            <paper-input value="{{item.name.last}}"></paper-input>
           </template>
 
           <vaadin-grid-column width="45px" flex-grow="0" frozen resizable>
@@ -74,10 +74,10 @@
 
             <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0">
               <template>
-                <span class="elItem">[[item.user.name.first]]</span>
+                <span class="elItem">[[item.name.first]]</span>
               </template>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.first">TC1</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="name.first">TC1</vaadin-grid-sorter>
               </template>
               <template class="footer">
                 TCF1
@@ -92,10 +92,10 @@
 
             <vaadin-grid-column width="300px" flex-shrink="1" flex-grow="0">
               <template>
-                <span class="elItem">[[item.user.name.first]]</span>
+                <span class="elItem">[[item.name.first]]</span>
               </template>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.first">TC1</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="name.first">TC1</vaadin-grid-sorter>
               </template>
               <template class="footer">
                 TCF1
@@ -104,13 +104,13 @@
 
             <vaadin-grid-column width="20%">
               <template>
-                <paper-input value="{{item.user.name.last}}"></paper-input>
+                <paper-input value="{{item.name.last}}"></paper-input>
               </template>
               <template class="header">
                 TC2
               </template>
               <template class="footer">
-                <vaadin-grid-filter path="user.name.last"></vaadin-grid-filter>
+                <vaadin-grid-filter path="name.last"></vaadin-grid-filter>
               </template>
             </vaadin-grid-column>
 
@@ -121,7 +121,7 @@
           <vaadin-grid-column-group>
             <vaadin-grid-column width="200px" resizable>
               <template>
-                <div>[[item.user.name.first]].[[item.user.name.last]]@gmail.com</div>
+                <div>[[item.name.first]].[[item.name.last]]@gmail.com</div>
               </template>
               <template class="header">
                 TC3
@@ -131,10 +131,10 @@
             <vaadin-grid-column-group>
               <vaadin-grid-column width="200px">
                 <template>
-                  [[item.user.username]]
+                  [[item.username]]
                 </template>
                 <template class="header">
-                  <vaadin-grid-sorter path="user.username">TC1</vaadin-grid-sorter>
+                  <vaadin-grid-sorter path="username">TC1</vaadin-grid-sorter>
                 </template>
               </vaadin-grid-column>
               <vaadin-grid-column width="100px">
@@ -154,7 +154,7 @@
                 </template>
               </vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter path="user.username"></vaadin-grid-filter>
+                <vaadin-grid-filter path="username"></vaadin-grid-filter>
               </template>
             </vaadin-grid-column-group>
             <template class="header">

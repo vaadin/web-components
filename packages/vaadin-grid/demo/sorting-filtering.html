@@ -50,16 +50,16 @@
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.first">First Name</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="name.first">First Name</vaadin-grid-sorter>
               </template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.last" direction="asc">Last Name</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="name.last" direction="asc">Last Name</vaadin-grid-sorter>
               </template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
           </vaadin-grid>
@@ -96,20 +96,20 @@
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter aria-label="First Name" path="user.name.first" value="[[_filterFirstName]]">
+                <vaadin-grid-filter aria-label="First Name" path="name.first" value="[[_filterFirstName]]">
                   <input placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter aria-label="Last Name" path="user.name.last" value="[[_filterLastName]]">
+                <vaadin-grid-filter aria-label="Last Name" path="name.last" value="[[_filterLastName]]">
                   <input placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
           </vaadin-grid>

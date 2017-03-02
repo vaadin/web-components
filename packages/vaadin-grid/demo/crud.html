@@ -57,21 +57,21 @@
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
-                  <input id="first-[[index]]" value="[[item.user.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]">
+                  <input id="first-[[index]]" value="[[item.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]">
                 </template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>
-                  <input value="[[item.user.name.last]]" on-input="_storeLast" readonly$="[[!_isEditing(editing, item)]]">
+                  <input value="[[item.name.last]]" on-input="_storeLast" readonly$="[[!_isEditing(editing, item)]]">
                 </template>
               </vaadin-grid-column>
 
               <vaadin-grid-column width="200px">
                 <template class="header">Email</template>
                 <template>
-                  <div>[[item.user.name.first]].[[item.user.name.last]]@example.com</div>
+                  <div>[[item.name.first]].[[item.name.last]]@example.com</div>
                 </template>
               </vaadin-grid-column>
 
@@ -117,16 +117,16 @@
                   var item = e.model.item;
                   this.editing = item;
 
-                  this._first = item.user.name.first;
-                  this._last = item.user.name.last;
+                  this._first = item.name.first;
+                  this._last = item.name.last;
 
                   this.$.grid.querySelector('#first-' + e.model.index).focus();
                 },
 
                 _save: function(e) {
                   var item = e.model.item;
-                  item.user.name.first = this._first;
-                  item.user.name.last = this._last;
+                  item.name.first = this._first;
+                  item.name.last = this._last;
 
                   this.editing = null;
 

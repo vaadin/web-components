@@ -144,7 +144,7 @@ For example, you might want to align columns with numeric data to the right and 
     <div class="cell frozen">User Name</div>
   </template>
   <template>
-    <div class="cell frozen">[[item.user.username]]</div>
+    <div class="cell frozen">[[item.username]]</div>
   </template>
 </vaadin-grid-column>
 
@@ -155,7 +155,7 @@ For example, you might want to align columns with numeric data to the right and 
     <div class="cell numeric">Age</div>
   </template>
   <template>
-    <div class="cell numeric">[[item.user.age]]</div>
+    <div class="cell numeric">[[item.age]]</div>
   </template>
 </vaadin-grid-column>
 ----

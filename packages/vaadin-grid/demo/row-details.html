@@ -51,8 +51,8 @@
 
             <template class="row-details">
               <div class="details">
-                <img src="[[item.user.picture.large]]"></img>
-                <p>Hi! My name is [[item.user.name.first]]!</p>
+                <img src="[[item.picture.large]]"></img>
+                <p>Hi! My name is [[item.name.first]]!</p>
               </div>
             </template>
 
@@ -63,18 +63,18 @@
 
             <vaadin-grid-column>
               <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column width="100px">
               <template class="header"></template>
               <template>
-                <paper-checkbox aria-label$="Show Details for [[item.user.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
+                <paper-checkbox aria-label$="Show Details for [[item.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
               </template>
             </vaadin-grid-column>
 
@@ -123,8 +123,8 @@
 
               <template class="row-details">
                 <div class="details">
-                  <img src="[[item.user.picture.large]]"></img>
-                  <p>Hi! My name is [[item.user.name.first]]!</p>
+                  <img src="[[item.picture.large]]"></img>
+                  <p>Hi! My name is [[item.name.first]]!</p>
                 </div>
               </template>
 
@@ -135,12 +135,12 @@
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
-                <template>[[item.user.name.first]]</template>
+                <template>[[item.name.first]]</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
-                <template>[[item.user.name.last]]</template>
+                <template>[[item.name.last]]</template>
               </vaadin-grid-column>
 
             </vaadin-grid>
