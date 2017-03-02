@@ -47,8 +47,15 @@
           </template>
         </vaadin-grid-column>
         <vaadin-grid-column>
-          <template class="header"></template>
-          <template>[[index]] [[item]]</template>
+          <template class="header">
+            <div></div>
+            <div></div>
+          </template>
+          <template>
+            [[index]] [[item]]
+            <div></div>
+            <div></div>
+          </template>
           <template class="footer"></template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -610,7 +617,7 @@
               expect(scroller._virtualFocus._focusedCellIndex).to.eql(0);
             });
 
-            it('should not navigate to hidden column with right arrow', function() {
+            it('should not navigate to hidden column with left arrow', function() {
               grid._columnTree[0][0].hidden = true;
               clickItem(0);
               left();
@@ -1059,6 +1066,63 @@
             clickFirstBodyInput(0);
 
             expect(grid.activeItem).to.be.undefined;
+          });
+
+          describe('space click shortcut', function() {
+            beforeEach(function() {
+              // navigate to first column
+              header.rows[0].children[1].click();
+              right();
+            });
+
+            it('should click first cell child on space', function() {
+              var firstChild = getCellContent(header.rows[0].children[2]).children[0];
+              var clickStub = sinon.stub(firstChild, 'click');
+
+              space();
+
+              expect(clickStub.called).to.be.true;
+            });
+
+            it('should not click other cell children on space', function() {
+              var secondChild = getCellContent(header.rows[0].children[2]).children[1];
+              var clickStub = sinon.stub(secondChild, 'click');
+
+              space();
+
+              expect(clickStub.called).to.be.false;
+            });
+
+            it('should prevent default keydown action when clicking on space', function() {
+              var eventDefaultPrevented;
+              grid.addEventListener('keydown', function(e) {
+                eventDefaultPrevented = e.defaultPrevented;
+              });
+
+              space();
+
+              expect(eventDefaultPrevented).to.be.true;
+            });
+
+            it('should not activate if synthetic click has default prevented', function() {
+              var firstBodyRowFirstChild = getCellContent(body.rows[0].children[2]).children[0];
+
+              var spy = sinon.spy();
+              listenOnce(firstBodyRowFirstChild, 'click', function(e) {
+                spy();
+                e.preventDefault();
+              });
+
+              // Navigate to body, row 1, column 3
+              tab();
+              right();
+              right();
+
+              space();
+
+              expect(spy.called).to.be.true;
+              expect(grid.activeItem).to.be.undefined;
+            });
           });
         });
 
@@ -1509,6 +1573,58 @@
               expect(headerTrap.querySelector('.secondary')).not.to.be.null;
             });
           }
+        });
+
+        describe('focus events on cell content', function() {
+          var cellContent;
+
+          beforeEach(function() {
+            cellContent = getCell(0, 0)._cellContent;
+          });
+
+          it('should dispatch cell-focusin after trap focus', function() {
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusin', spy);
+
+            bodyTrap.focus();
+
+            expect(spy.callCount).to.equal(1);
+          });
+
+          it('should dispatch cell-focusout after trap blur', function() {
+            bodyTrap.focus();
+
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusout', spy);
+
+            headerTrap.focus();
+
+            expect(spy.callCount).to.equal(1);
+          });
+
+          it('should dispatch cell-focusin on keyboard navigation', function() {
+            bodyTrap.focus();
+            getCell(0, 1).click();
+
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusin', spy);
+
+            left();
+
+            expect(spy.callCount).to.equal(1);
+          });
+
+          it('should dispatch cell-focusout on keyboard navigation', function() {
+            bodyTrap.focus();
+            getCell(0, 0).click();
+
+            var spy = sinon.spy();
+            cellContent.addEventListener('cell-focusout', spy);
+
+            right();
+
+            expect(spy.callCount).to.equal(1);
+          });
         });
       });
     }

@@ -489,11 +489,19 @@
     },
 
     _onSpace: function(e) {
-      if (this.navigating && !this.interacting && this._virtualFocus === this.$.items) {
-        e.preventDefault();
+      if (this.interacting) {
+        return;
+      }
 
+      e.preventDefault();
+
+      var focusedCell = this._virtualFocus._focusedCell;
+      var firstElementChild = focusedCell.getContentChildren('content')[0].firstElementChild;
+      if (firstElementChild) {
+        firstElementChild.click();
+      } else if (this.navigating) {
         this.fire('cell-activate', {
-          model: this._virtualFocus._focusedCell.instance
+          model: focusedCell.instance
         });
       }
     },

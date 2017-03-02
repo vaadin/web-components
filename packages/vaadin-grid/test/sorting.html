@@ -25,6 +25,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="sorterInCellContent">
+    <template>
+      <div class="cell-content" data-cell-content-id="">
+        <vaadin-grid-sorter path="path"></vaadin-grid-sorter>
+      </div>
+    </template>
+  </test-fixture>
+
   <test-fixture id="grid">
     <template>
       <vaadin-grid style="width: 200px; height: 200px;">
@@ -52,7 +60,7 @@
     describe('sorting', function() {
 
       describe('sorter', function() {
-        var sorter, title, button, indicators, directionIndicator, orderIndicator;
+        var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
 
         function click(element) {
           Polymer.Base.fire('click', {}, {
@@ -68,6 +76,7 @@
           indicators = Polymer.dom(sorter.root).querySelector('#indicators');
           directionIndicator = Polymer.dom(sorter.root).querySelector('#direction');
           orderIndicator = Polymer.dom(sorter.root).querySelector('#order');
+          announcer = Polymer.dom(sorter.root).querySelector('#announcer');
         });
 
         it('should have default direction', function() {
@@ -111,6 +120,113 @@
           expect(sorter.getAttribute('direction')).to.equal('desc');
         });
 
+        it('should have aria-hidden for indicator', function() {
+          expect(indicators.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        describe('announcer', function() {
+          it('should reflect direction', function() {
+            expect(announcer.textContent).to.have.string('Unsorted');
+            expect(announcer.textContent).to.not.have.string('Sorted');
+
+            sorter.direction = 'asc';
+            expect(announcer.textContent).to.have.string('Sorted');
+            expect(announcer.textContent).to.not.have.string('Unsorted');
+            expect(announcer.textContent).to.have.string('ascending');
+            expect(announcer.textContent).to.not.have.string('descending');
+
+            sorter.direction = 'desc';
+            expect(announcer.textContent).to.have.string('Sorted');
+            expect(announcer.textContent).to.not.have.string('Unsorted');
+            expect(announcer.textContent).to.have.string('descending');
+            expect(announcer.textContent).to.not.have.string('ascending');
+          });
+
+          it('should reflect order', function() {
+            sorter.direction = 'asc';
+
+            expect(announcer.textContent).to.not.have.string('Order');
+
+            sorter._order = 0;
+            expect(announcer.textContent).to.have.string('Order 1');
+
+            sorter._order = 4;
+            expect(announcer.textContent).to.have.string('Order 5');
+          });
+
+          it('should announce direction change', function() {
+            var spy = sinon.spy();
+            sorter.addEventListener('iron-announce', spy);
+
+            sorter.direction = 'asc';
+
+            sorter.flushDebouncer('direction-announce');
+
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should announce order change', function() {
+            var spy = sinon.spy();
+            sorter.addEventListener('iron-announce', spy);
+
+            sorter._order = 0;
+
+            sorter.flushDebouncer('direction-announce');
+
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should debounce direction and order changes', function() {
+            var spy = sinon.spy();
+            sorter.addEventListener('iron-announce', spy);
+
+            sorter.direction = 'asc';
+            sorter._order = 0;
+
+            sorter.flushDebouncer('direction-announce');
+
+            expect(spy.callCount).to.eql(1);
+            expect(spy.args[0][0].detail.text).to.eql('Sorted ascending, Order 1.');
+          });
+        });
+
+        it('should prevent default on click', function() {
+          var clickEvent = new CustomEvent('click', {cancelable: true});
+
+          sorter.dispatchEvent(clickEvent);
+
+          expect(clickEvent.defaultPrevented).to.be.true;
+        });
+      });
+
+      describe('sorter in cell content', function() {
+        var cellContent, sorter, announcer;
+
+        beforeEach(function() {
+          cellContent = fixture('sorterInCellContent');
+          sorter = Polymer.dom(cellContent).querySelector('vaadin-grid-sorter');
+          announcer = Polymer.dom(sorter.root).querySelector('#announcer');
+        });
+
+        it('should have aria-hidden state on announcer by default', function() {
+          expect(announcer.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        it('should not have aria-hidden state on announcer after cell content receives focus', function() {
+          cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
+
+          expect(announcer.getAttribute('aria-hidden')).to.equal('false');
+        });
+
+        it('should have aria-hidden state on announcer after cell content looses focus', function(done) {
+          cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
+          cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
+
+          sorter.async(function() {
+            expect(announcer.getAttribute('aria-hidden')).to.equal('true');
+            done();
+          }, 1);
+        });
       });
 
       describe('grid', function() {

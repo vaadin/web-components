@@ -209,10 +209,12 @@
 
       observers: ['_templateChanged(template)'],
 
-      _cellClick: function() {
-        this.fire('cell-activate', {
-          model: this.instance
-        });
+      _cellClick: function(e) {
+        if (!e.defaultPrevented) {
+          this.fire('cell-activate', {
+            model: this.instance
+          });
+        }
       }
     });
 
