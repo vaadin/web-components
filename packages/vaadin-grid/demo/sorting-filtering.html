@@ -23,6 +23,7 @@
     <h3>Sorting</h3>
     <p>
       <code>&lt;vaadin-grid-sorter&gt;</code> can be used to define sorting for a column.
+      The users in the example are sorted by last name initially.
     </p>
     <p>
       <b>Hint: </b>When using a data provider, <code>path</code> on the sorter element
@@ -56,7 +57,7 @@
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.last">Last Name</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="user.name.last" direction="asc">Last Name</vaadin-grid-sorter>
               </template>
               <template>[[item.user.name.last]]</template>
             </vaadin-grid-column>
