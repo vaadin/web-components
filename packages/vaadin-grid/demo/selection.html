@@ -128,6 +128,10 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
+
+          <!-- Import vaadin-grid-selection-column.html (typically placed inside the <head> container) -->
+          <link rel="import" href="../../vaadin-grid/vaadin-grid-selection-column.html">
+
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
           <vaadin-grid aria-label="Multi-Selection Example" items="[[items]]">
