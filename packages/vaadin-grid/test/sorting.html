@@ -154,9 +154,39 @@
             expect(announcer.textContent).to.have.string('Order 5');
           });
 
-          it('should have live region', function() {
-            expect(announcer.getAttribute('aria-live')).to.equal('polite');
-            expect(announcer.getAttribute('aria-atomic')).to.equal('true');
+          it('should announce direction change', function() {
+            var spy = sinon.spy();
+            sorter.addEventListener('iron-announce', spy);
+
+            sorter.direction = 'asc';
+
+            sorter.flushDebouncer('direction-announce');
+
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should announce order change', function() {
+            var spy = sinon.spy();
+            sorter.addEventListener('iron-announce', spy);
+
+            sorter._order = 0;
+
+            sorter.flushDebouncer('direction-announce');
+
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should debounce direction and order changes', function() {
+            var spy = sinon.spy();
+            sorter.addEventListener('iron-announce', spy);
+
+            sorter.direction = 'asc';
+            sorter._order = 0;
+
+            sorter.flushDebouncer('direction-announce');
+
+            expect(spy.callCount).to.eql(1);
+            expect(spy.args[0][0].detail.text).to.eql('Sorted ascending, Order 1.');
           });
         });
 
@@ -188,11 +218,14 @@
           expect(announcer.getAttribute('aria-hidden')).to.equal('false');
         });
 
-        it('should have aria-hidden state on announcer after cell content looses focus', function() {
+        it('should have aria-hidden state on announcer after cell content looses focus', function(done) {
           cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
           cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
 
-          expect(announcer.getAttribute('aria-hidden')).to.equal('true');
+          sorter.async(function() {
+            expect(announcer.getAttribute('aria-hidden')).to.equal('true');
+            done();
+          }, 1);
         });
       });
 

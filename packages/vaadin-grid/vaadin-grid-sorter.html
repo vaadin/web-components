@@ -70,7 +70,7 @@ Custom property | Description | Default
     </style>
 
     <content></content>
-    <div id="announcer" aria-live="polite" aria-atomic="true" aria-hidden$="[[_getAriaHidden(_cellHasFocus)]]">
+    <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
     </div>
     <div id="indicators" aria-hidden="true">
@@ -128,7 +128,9 @@ Custom property | Description | Default
       },
 
       observers: [
-        '_propertiesChanged(path, direction, isAttached)'
+        '_propertiesChanged(path, direction, isAttached)',
+        '_directionOrOrderChanged(direction, _order)',
+        '_cellHasFocusChanged(_cellHasFocus)'
       ],
 
       behaviors: [
@@ -198,18 +200,32 @@ Custom property | Description | Default
         if (direction) {
           var label = 'Sorted ';
           label += direction === 'asc' ? 'ascending' : 'descending';
-          label += order === null ? '. ' : (', Order ' + (order + 1) + '. ');
+          label += order === null ? '. ' : (', Order ' + (order + 1) + '.');
           return label;
         } else {
           return 'Unsorted.';
         }
       },
 
-      _getAriaHidden: function(cellHasFocus) {
+      _directionOrOrderChanged: function(direction, order) {
+        this.debounce('direction-announce', function() {
+          this.fire('iron-announce', {text: this._getAriaLabel(direction, order)});
+        }, 1);
+      },
+
+      _cellHasFocusChanged: function(cellHasFocus) {
         // Let us hide the a11y announces when the cell content parent
         // of the sorter does not have virtual focus. This is needed to prevent
         // the sorter announcement on every body cell of the sortable column.
-        return (!cellHasFocus).toString();
+        if (cellHasFocus) {
+          this.$.announcer.setAttribute('aria-hidden', 'false');
+        } else {
+          // Wait before hiding the label to prevent readers like NVDA from reacting
+          // to changes for the unfocused cell.
+          this.async(function() {
+            this.$.announcer.setAttribute('aria-hidden', 'true');
+          }, 1);
+        }
       }
 
     });
