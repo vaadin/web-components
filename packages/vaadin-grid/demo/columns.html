@@ -22,21 +22,13 @@
   <div class="vertical-section-container centered">
     <demo-navigation></demo-navigation>
 
-    <style is="custom-style">
-      :root {
-        --iron-image-height: 30px;
-        --iron-image-width: 30px;
-      }
-
-      paper-checkbox {
-        margin-bottom: 20px;
-      }
-    </style>
-
     <h3>Column Grouping</h3>
     <p>
       Columns can be grouped together with <code>&lt;vaadin-grid-column-group&gt;</code> elements.
       Grouped columns can have a common header and footer cells.
+    </p>
+    <p>
+      <b>Note:</b> Remember to define explicit bounds for images in order to avoid glitches once an image has fully loaded.
     </p>
     <p>
       <b>NOTE: You must explicitly import the <code>vaadin-grid-column-group.html</code> in order to use <code>&lt;vaadin-grid-column-group&gt;</code>.</b>
@@ -47,6 +39,18 @@
 
           <!-- Import vaadin-grid-column-group.html (typically placed inside the <head> container) -->
           <link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
+
+          <style is="custom-style">
+            /* Define explicit bounds for images */
+            iron-image {
+              --iron-image-height: 30px;
+              --iron-image-width: 30px;
+            }
+
+            paper-checkbox {
+              margin-bottom: 20px;
+            }
+          </style>
 
           <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
