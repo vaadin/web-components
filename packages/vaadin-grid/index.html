@@ -49,21 +49,33 @@
           is: 'vaadin-grid-docs',
 
           _filterBehaviors: function(e) {
-            this.$.docs.docBehaviors.forEach(function(beh, index) {
+            if (this._modifyingBehaviors) {
+              return;
+            }
+
+            this._modifyingBehaviors = true;
+
+            this.$.docs._setDocBehaviors(this.$.docs.docBehaviors.filter(function(beh, index) {
               // blacklist internal APIs
-              if (/Polymer|iron|Iron|Table|FocusableCellContainer/.test(beh.is)) {
-                this.$.docs.splice('docBehaviors', index, 1);
-              }
-            }.bind(this));
+              return !/Polymer|iron|Iron|Table|FocusableCellContainer/.test(beh.is);
+            }));
+
+            this._modifyingBehaviors = false;
           },
 
           _filterElements: function(e) {
-            this.$.docs.docElements.forEach(function(el, index) {
+            if (this._modifyingElements) {
+              return;
+            }
+
+            this._modifyingElements = true;
+
+            this.$.docs._setDocElements(this.$.docs.docElements.filter(function(el, index) {
               // whitelist public elements
-              if (!/vaadin-grid$|column|filter|sorter/.test(el.is)) {
-                this.$.docs.splice('docElements', index, 1);
-              }
-            }.bind(this));
+              return /vaadin-grid$|column|filter|sorter/.test(el.is);
+            }));
+
+            this._modifyingElements = false;
           }
         });
       });
