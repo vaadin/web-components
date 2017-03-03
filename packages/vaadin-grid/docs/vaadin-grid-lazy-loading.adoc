@@ -69,11 +69,9 @@ REST API that supports fetching partial result sets.
 grid.dataProvider = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
-    }
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
   };
 
   xhr.open('GET', url, true);
@@ -96,10 +94,8 @@ The following describes a few examples on how you could set the [propertyname]#s
 function setSize() {
   var url = 'https://my.data/size';
   var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        grid.size = JSON.parse(xhr.responseText).totalSize);
-      }
+    xhr.onload = function() {
+      grid.size = JSON.parse(xhr.responseText).totalSize);
     };
     xhr.open('GET', url, true);
     xhr.send();
@@ -114,14 +110,12 @@ function setSize() {
 grid.dataProvider = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
 
-      // Assign size from the data payload.
-      grid.size = response.totalSize;
-    }
+    // Assign size from the data payload.
+    grid.size = response.totalSize;
   };
 
   xhr.open('GET', url, true);
@@ -139,16 +133,14 @@ grid.size = 10;
 grid.dataProvider = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page + '&per_page=' + params.pageSize;
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
 
-      // Increase the size dynamically, resulting in "infinite" scrolling.
-      var nextPageStart = params.pageSize * (params.page + 1);
-      if (nextPageStart >= grid.size) {
-        grid.size += 10;
-      }
+    // Increase the size dynamically, resulting in "infinite" scrolling.
+    var nextPageStart = params.pageSize * (params.page + 1);
+    if (nextPageStart >= grid.size) {
+      grid.size += 10;
     }
   };
 

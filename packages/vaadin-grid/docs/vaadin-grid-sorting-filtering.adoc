@@ -126,11 +126,9 @@ grid.dataProvider = function(params, callback) {
   '&sort_order=' + JSON.stringify(params.sortOrder);
 
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
-    }
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
   };
 
   xhr.open('GET', url, true);
@@ -198,11 +196,9 @@ grid.dataProvider = function(params, callback) {
   '&filters=' + JSON.stringify(params.filters);
 
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
-    }
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
   };
 
   xhr.open('GET', url, true);

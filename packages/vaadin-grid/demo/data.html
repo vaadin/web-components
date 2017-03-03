@@ -238,15 +238,13 @@
               ready: function() {
                 this.size = 200;
                 this.dataProvider = function(opts, callback) {
-                  var xhttp = new XMLHttpRequest();
-                  xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                      callback(JSON.parse(this.responseText).result);
-                    }
+                  var xhr = new XMLHttpRequest();
+                  xhr.onload = function() {
+                    callback(JSON.parse(xhr.responseText).result);
                   };
                   var index = opts.page * opts.pageSize;
-                  xhttp.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + opts.pageSize, true);
-                  xhttp.send();
+                  xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + opts.pageSize, true);
+                  xhr.send();
                 };
               }
 
