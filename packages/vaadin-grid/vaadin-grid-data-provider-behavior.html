@@ -250,6 +250,8 @@
             cb(page, items);
 
             this._loading = this._pendingRequests.length > 0;
+
+            this.debounce('check-size', this._checkSize, 2000);
           }.bind(this));
         }
       }
@@ -278,6 +280,12 @@
     _pageSizeChanged: function(pageSize, oldPageSize) {
       if (oldPageSize !== undefined && pageSize !== oldPageSize) {
         this.clearCache();
+      }
+    },
+
+    _checkSize: function() {
+      if (this.size === undefined) {
+        window.console.warn('The <vaadin-grid> needs a value for "size" property in order to display rows.');
       }
     },
 
