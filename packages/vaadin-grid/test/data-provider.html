@@ -28,7 +28,7 @@
       <vaadin-grid size="100" id="grid" style="height: 300px" data-provider="[[dataProvider]]">
         <vaadin-grid-column>
           <template>
-            <div class="item">[[item]][[index]]</div>
+            <div class="item">[[item.value]]</div>
           </template>
           <template class="header">Header</template>
         </vaadin-grid-column>
@@ -175,16 +175,8 @@
       });
 
       it('should bind item to templates', function() {
-        container.dataProvider = function(opts, callback) {
-          var items = [];
-          for (var i = 0; i < opts.pageSize; i++) {
-            items.push('foo' + (opts.page * opts.pageSize + i));
-          }
-
-          callback(items);
-        };
-
-        expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
+        container.dataProvider = infiniteDataProvider;
+        expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo0');
       });
 
       it('should clear item cache', function(done) {
@@ -216,6 +208,30 @@
             done();
           });
         };
+      });
+
+      it('should not set virtual scroll position to 0 on size change', function() {
+        scrollToEnd(grid);
+        grid.size = 500;
+        expect(grid.$.scroller._physicalTop).not.to.equal(0);
+        expect(grid.$.scroller._virtualStart).not.to.equal(0);
+      });
+
+      it('should scroll to last index if size decreased beyond current viewport', function() {
+        grid.size = 5000000;
+        Polymer.dom.flush();
+        scrollToEnd(grid);
+        expect(grid.$.scroller.lastVisibleIndex + grid.$.scroller._vidxOffset).to.equal(grid.size - 1);
+
+        grid.size = 50;
+        Polymer.dom.flush();
+        expect(grid.$.scroller.lastVisibleIndex + grid.$.scroller._vidxOffset).to.equal(grid.size - 1);
+
+        // Test actual last visible item
+        var rect = grid.getBoundingClientRect();
+        var scope = Polymer.Settings.useShadow ? grid.domHost.root : document;
+        var lastVisibleItem = scope.elementFromPoint(rect.left + 10, rect.bottom - 10);
+        expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
       });
     });
 
