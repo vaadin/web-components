@@ -24,7 +24,8 @@
     <h3>Selection using Active Item</h3>
     <p>
       When a row is clicked, the item object from that row is assigned to <code>activeItem</code>.
-      <br>
+    </p>
+    <p>
       To select items on click, <code>activeItem</code> can be pushed to <code>selectedItems</code>.
     </p>
     <demo-snippet>
@@ -255,6 +256,98 @@
         </dom-module>
       </template>
     </demo-snippet>
+
+    <h3>Space Key Action and Click to Activate</h3>
+    <p>
+      When a focused cell has child elements, the <kbd>Space</kbd> key clicks
+      the first child element.
+    </p>
+    <p>
+      Clicking a child element inside a cell activates the item, unless either:
+    </p>
+    <ul>
+      <li>
+        The clicked child is a focusable element, for example,
+        an <code>&lt;input&gt;</code>, a <code>&lt;button&gt;</code>, or has
+        the <code>tabindex</code> attribute.
+      </li>
+      <li>The clicked child prevents default action of the <code>click</code> event.</li>
+      <li>The clicked child stops propagation of the <code>click</code> event.</li>
+    </ul>
+    <p>
+      Try clicking and pressing <kbd>Space</kbd> for the body cell contents
+      in the example below.
+    </p>
+    <demo-snippet>
+      <template>
+        <x-space-action></x-space-action>
+        <dom-module id="x-space-action">
+          <template>
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+
+            <vaadin-grid aria-label="Space Key Action Example" id="grid" data-provider="[[dataProvider]]" active-item="{{activeItem}}" size="200">
+
+              <vaadin-grid-column>
+                <template class="header">Only text contents</template>
+                <template>
+                  Space activates
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">Button first child</template>
+                <template>
+                  <button on-click="_alert">Button</button>
+                  Space does not activate
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">Div first child</template>
+                <template>
+                  <div on-click="_alert">Div</div>
+                  Space activates
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">preventDefault for click</template>
+                <template>
+                  <div on-click="_alertAndPreventDefault">Div with preventDefault</div>
+                  Space does not activate
+                </template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+          <script>
+            Polymer({
+              is: 'x-space-action',
+
+              properties: {
+                activeItem: {
+                  observer: '_activeItemChanged'
+                }
+              },
+
+              _alert: function(e) {
+                alert(e.target.textContent + ' clicked');
+              },
+
+              _alertAndPreventDefault: function(e) {
+                e.preventDefault();
+                this._alert(e);
+              },
+
+              _activeItemChanged: function(item) {
+                this.$.grid.selectedItems = item ? [item] : [];
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+
   </div>
 </body>
 
