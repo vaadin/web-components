@@ -78,6 +78,8 @@
           Polymer.dom(this).insertBefore(this.$.scroller.$.headerFocusTrap, Polymer.dom(this).firstElementChild);
           Polymer.dom(this).appendChild(this.$.scroller.$.footerFocusTrap);
         }
+
+        this.debounce('check-imports', this._checkImports, 2000);
       }.bind(this));
     },
 
@@ -98,6 +100,20 @@
         }
       }
       return true;
+    },
+
+    _checkImports: function() {
+      [
+        'vaadin-grid-column-group',
+        'vaadin-grid-sorter',
+        'vaadin-grid-filter',
+        'vaadin-grid-selection-column'
+      ].forEach(function(elementName) {
+        var element = Polymer.dom(this).querySelector(elementName);
+        if (element && !Polymer.isInstance(element)) {
+          window.console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
+        }
+      }, this);
     }
   };
 </script>
