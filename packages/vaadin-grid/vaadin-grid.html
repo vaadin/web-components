@@ -118,7 +118,6 @@ first element in the cell will be focused. You can override the behavior by appl
 <dom-module id="vaadin-grid">
   <style>
     :host {
-      position: relative;
       display: block;
       height: 400px;
       background: var(--primary-background-color, #fff);
@@ -133,11 +132,8 @@ first element in the cell will be focused. You can override the behavior by appl
     }
 
     #scroller {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      height: 100%;
+      width: 100%;
     }
 
   </style>
