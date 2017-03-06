@@ -67,15 +67,6 @@ The `class` attribute is used to differentiate header and footer templates.
         _visibleChildColumns: Array,
 
         /**
-         * `true` when all of its child columns are hidden.
-         */
-        hidden: {
-          type: Boolean,
-          notify: true,
-          readOnly: true
-        },
-
-        /**
          * Represents the number of child columns of this group.
          */
         colSpan: {
@@ -116,7 +107,9 @@ The `class` attribute is used to differentiate header and footer templates.
 
       _columnPropChanged: function(e) {
         if (e.detail.path === 'hidden') {
+          this._preventHiddenCascade = true;
           this._updateVisibleChildColumns(this._childColumns);
+          this._preventHiddenCascade = false;
         }
 
         if (/flexGrow|width|hidden|_childColumns/.test(e.detail.path)) {
@@ -188,6 +181,12 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _childColumnsChanged: function(childColumns) {
+        if (!this._autoHidden && this.hidden) {
+          childColumns.forEach(function(column) {
+            column.hidden = true;
+          });
+          this._updateVisibleChildColumns(childColumns);
+        }
         this.fire('property-changed', {path: '_childColumns', value: childColumns});
       },
 
@@ -209,12 +208,27 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _hiddenChanged: function(hidden) {
+        if (this._rootColumns && !this._preventHiddenCascade) {
+          this._ignoreVisibleChildColumns = true;
+          this._rootColumns.forEach(function(column) {
+            column.hidden = hidden;
+          });
+          this._ignoreVisibleChildColumns = false;
+        }
+
         this.fire('property-changed', {path: 'hidden', value: hidden});
       },
 
       _visibleChildColumnsChanged: function(visibleChildColumns) {
         this._setColSpan(visibleChildColumns.length);
-        this._setHidden(this.colSpan === 0);
+
+        if (!this._ignoreVisibleChildColumns) {
+          if (visibleChildColumns.length === 0) {
+            this._autoHidden = this.hidden = true;
+          } else if (this.hidden && this._autoHidden) {
+            this._autoHidden = this.hidden = false;
+          }
+        }
       },
 
       _colSpanChanged: function(colSpan) {
