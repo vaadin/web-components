@@ -10,6 +10,14 @@
 
     properties: {
 
+      /*
+       * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
+       */
+      multiSort: {
+        type: Boolean,
+        value: false
+      },
+
       _sorters: {
         type: Array,
         value: function() {
@@ -34,14 +42,26 @@
       var sorter = e.target;
 
       this._removeArrayItem(this._sorters, sorter);
-      if (sorter.direction) {
-        this._sorters.unshift(sorter);
-      }
-
       sorter._order = null;
-      this._sorters.forEach(function(sorter, index) {
-        sorter._order = this._sorters.length > 1 ? index : null;
-      }, this);
+      
+      if (this.multiSort) {
+        if (sorter.direction) {
+          this._sorters.unshift(sorter);
+        }
+
+        this._sorters.forEach(function(sorter, index) {
+          sorter._order = this._sorters.length > 1 ? index : null;
+        }, this);
+      } else {
+        this._sorters.forEach(function(sorter) {
+          sorter._order = null;
+          sorter.direction = null;
+        });
+
+        if (sorter.direction) {
+          this._sorters = [sorter];
+        }
+      }
 
       e.stopPropagation();
 
