@@ -25,7 +25,7 @@
         }
       </style>
       <x-array-data-provider items="{{items}}"></x-array-data-provider>
-      <vaadin-grid aria-label="Sorting Example" items="[[items]]">
+      <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort>
         <vaadin-grid-column width="50px">
           <template class="header">#</template>
           <template>[[index]]</template>

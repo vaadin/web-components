@@ -35,7 +35,7 @@
 
   <test-fixture id="grid">
     <template>
-      <vaadin-grid style="width: 200px; height: 200px;">
+      <vaadin-grid style="width: 200px; height: 200px;" multi-sort>
         <vaadin-grid-column>
           <template class="header">
             <vaadin-grid-sorter path="first" direction="asc">
@@ -417,6 +417,40 @@
             expect(grid.dataProvider.called).to.be.true;
           });
 
+        });
+
+        describe('single column sorting', function() {
+          beforeEach(function() {
+            grid.multiSort = false;
+            grid.dataProvider = sinon.spy(grid.dataProvider);
+          });
+
+          it('should only using single sorter', function() {
+            grid.dataProvider.reset();
+            sorterFirst.direction = 'desc';
+
+            expect(grid.dataProvider.args[1][0].sortOrder.length).to.eql(1);
+          });
+
+          it('should remove order from sorters', function() {
+            // initial order before multiSort was set
+            expect(sorterLast._order).to.eql(0);
+            expect(sorterFirst._order).to.eql(1);
+
+            sorterFirst.direction = 'desc';
+
+            expect(sorterFirst._order).to.be.null;
+            expect(sorterLast._order).to.be.null;
+          });
+
+          it('should remove direction from previous sorter', function() {
+            sorterFirst.direction = 'desc';
+
+            sorterLast.direction = 'desc';
+
+            expect(sorterFirst.direction).to.be.null;
+            expect(sorterLast.direction).to.eql('desc');
+          });
         });
 
       });
