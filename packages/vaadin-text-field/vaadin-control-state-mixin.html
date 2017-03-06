@@ -57,8 +57,13 @@
     ready() {
       super.ready();
 
+      this.focusElement.addEventListener('focus', () => this._setFocused(true));
       this.addEventListener('focus', e => this._focus(e));
+
+      this.focusElement.addEventListener('blur', () => this._setFocused(false));
       this.addEventListener('blur', () => this._setFocused(false));
+
+      this.addEventListener('click', e => this._focus(e));
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
@@ -82,7 +87,7 @@
     }
 
     _focus(e) {
-      this._setFocused(true);
+      this._setFocused(!this.disabled);
 
       if (this._skipFocus) {
         this._skipFocus = false;
@@ -106,10 +111,6 @@
       } else {
         this.tabindex = this.focusElement.tabIndex;
       }
-
-      // Needed for Edge, until they have support for CSS Custom Properties
-      // (already shipping in Edge Preview)
-      this.updateStyles();
     }
 
     _tabindexChanged(tabindex) {

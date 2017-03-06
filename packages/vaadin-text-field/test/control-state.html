@@ -79,6 +79,22 @@
             focusElement.blur();
             expect(customElement.focused).to.be.false;
           });
+
+          it('should focus the internal input on host click', function() {
+            customElement.click();
+            expect(customElement.focused).to.be.true;
+          });
+
+          it('should focus the internal input on label click', function() {
+            customElement.$.label.click();
+            expect(customElement.focused).to.be.true;
+          });
+
+          it('should not update focused property on label click if disabled', function() {
+            customElement.disabled = true;
+            customElement.$.label.click();
+            expect(customElement.focused).to.be.false;
+          });
         });
       }
 
