@@ -34,7 +34,7 @@
 
     <h3>Pagination</h3>
     <p>
-      The <code>&lt;vaadin-grid&gt;</code> is an infinitely scrolling list by nature, but simple pagination can be implemented for example by changing the grid's <code>items</code> array on page change. 
+      The <code>&lt;vaadin-grid&gt;</code> is an infinitely scrolling list by nature, but simple pagination can be implemented for example by changing the grid's <code>items</code> array on page change.
     </p>
     <demo-snippet>
       <template>
@@ -48,13 +48,14 @@
 
               #pages {
                 display: flex;
-                justify-content: space-between;
+                flex-wrap: wrap;
                 margin: 20px;
               }
 
               #pages > button {
                 user-select: none;
                 padding: 5px;
+                margin: 0 5px;
                 border-radius: 10%;
                 border: 0;
                 background: transparent;
