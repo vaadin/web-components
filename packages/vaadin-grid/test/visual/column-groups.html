@@ -38,7 +38,7 @@
             <div aria-label="Picture"></div>
           </template>
           <template>
-            <iron-image alt="[[item.user.name.first]] [[item.user.name.last]]" src="[[item.user.picture.thumbnail]]"></iron-image>
+            <iron-image alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
           </template>
         </vaadin-grid-column>
 
@@ -47,12 +47,12 @@
 
           <vaadin-grid-column width="calc(25% - 20px)">
             <template class="header">First</template>
-            <template>[[item.user.name.first]]</template>
+            <template>[[item.name.first]]</template>
           </vaadin-grid-column>
 
           <vaadin-grid-column width="calc(25% - 20px)">
             <template class="header">Last</template>
-            <template>[[item.user.name.last]]</template>
+            <template>[[item.name.last]]</template>
           </vaadin-grid-column>
         </vaadin-grid-column-group>
 
@@ -61,17 +61,17 @@
 
           <vaadin-grid-column width="calc(25% - 20px)">
             <template class="header">City</template>
-            <template>[[item.user.location.city]]</template>
+            <template>[[item.location.city]]</template>
           </vaadin-grid-column>
 
           <vaadin-grid-column width="calc(25% - 20px)">
             <template class="header">State</template>
-            <template>[[item.user.location.state]]</template>
+            <template>[[item.location.state]]</template>
           </vaadin-grid-column>
 
           <vaadin-grid-column width="200px" resizable>
             <template class="header">Street</template>
-            <template>[[item.user.location.street]]</template>
+            <template>[[item.location.street]]</template>
           </vaadin-grid-column>
         </vaadin-grid-column-group>
 

@@ -221,12 +221,12 @@
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
-                <template>[[item.user.name.first]]</template>
+                <template>[[item.firstName]]</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
-                <template>[[item.user.name.last]]</template>
+                <template>[[item.lastName]]</template>
               </vaadin-grid-column>
 
             </vaadin-grid>
@@ -236,15 +236,18 @@
               is: 'x-remote-data-example',
 
               ready: function() {
-                this.size = 100;
+                this.size = 200;
                 this.dataProvider = function(opts, callback) {
-                  var items = Array.apply( null, {length: opts.pageSize} ).map(function(item, index) {
-                    return window.getJSON('http://randomuser.me?index=' + (index + opts.page * opts.pageSize));
-                  });
-
-                  callback(items);
+                  var xhr = new XMLHttpRequest();
+                  xhr.onload = function() {
+                    callback(JSON.parse(xhr.responseText).result);
+                  };
+                  var index = opts.page * opts.pageSize;
+                  xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + opts.pageSize, true);
+                  xhr.send();
                 };
               }
+
             });
           </script>
         </dom-module>

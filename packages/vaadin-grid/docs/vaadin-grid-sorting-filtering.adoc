@@ -58,19 +58,19 @@ So let's define a simple [vaadinelement]#vaadin-grid# with three columns.
 <vaadin-grid>
   <vaadin-grid-column>
     <template class="header">First</template>
-    <template>[[item.user.name.first]]<template>
+    <template>[[item.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">Last</template>
-    <template>[[item.user.name.last]]<template>
+    <template>[[item.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">
-      <vaadin-grid-sorter path="user.email">
+      <vaadin-grid-sorter path="email">
         Email
       </vaadin-grid-sorter>
     </template>
-    <template>[[item.user.email]]<template>
+    <template>[[item.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
@@ -90,18 +90,18 @@ A predefined sorting order can also be achieved by decorating the [elementname]#
 ----
 <vaadin-grid>
   <vaadin-grid-column>
-    <vaadin-grid-sorter path="user.name.last" direction="asc">
+    <vaadin-grid-sorter path="name.last" direction="asc">
       Last name
     </vaadin-grid-sorter>
-    <template>[[item.user.name.last]]<template>
+    <template>[[item.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">
-      <vaadin-grid-sorter path="user.email" direction="desc">
+      <vaadin-grid-sorter path="email" direction="desc">
         Email
       </vaadin-grid-sorter>
     </template>
-    <template>[[item.user.email]]<template>
+    <template>[[item.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
@@ -126,11 +126,9 @@ grid.dataProvider = function(params, callback) {
   '&sort_order=' + JSON.stringify(params.sortOrder);
 
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
-    }
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
   };
 
   xhr.open('GET', url, true);
@@ -154,22 +152,22 @@ NOTE: You *must* explicitly import the `vaadin-grid-filter.html` in order to use
 <vaadin-grid>
   <vaadin-grid-column>
     <template class="header">First</template>
-    <template>[[item.user.name.first]]<template>
+    <template>[[item.name.first]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">Last</template>
-    <template>[[item.user.name.last]]<template>
+    <template>[[item.name.last]]<template>
   </vaadin-grid-column>
   <vaadin-grid-column>
     <template class="header">
-      <vaadin-grid-filter path="user.email"></vaadin-grid-filter>
+      <vaadin-grid-filter path="email"></vaadin-grid-filter>
     </template>
-    <template>[[item.user.email]]<template>
+    <template>[[item.email]]<template>
   </vaadin-grid-column>
 </vaadin-grid>
 ----
 
-The code snippet above produces a three-column [vaadinelement]#vaadin-grid# with a filtering input that targets the data items' [propertyname]#user.email# property.
+The code snippet above produces a three-column [vaadinelement]#vaadin-grid# with a filtering input that targets the data items' [propertyname]#email# property.
 
 By default, the [elementname]#vaadin-grid-filter# shows a plain text input field, but you can replace it by including another element inside the [elementname]#vaadin-grid-filter#.
 The replacing element needs to be properly bound to the [elementname]#vaadin-grid-filter#'s [propertyname]#value# property to make it work as a filtering input.
@@ -177,7 +175,7 @@ The following example uses a [elementname]#paper-input# as a filter field.
 
 [source,html]
 ----
-<vaadin-grid-filter path="user.email" value="[[_emailFilter]]">
+<vaadin-grid-filter path="email" value="[[_emailFilter]]">
   <paper-input value={{_emailFilter}}></paper-input>
 </vaadin-grid-filter>
 ----
@@ -198,11 +196,9 @@ grid.dataProvider = function(params, callback) {
   '&filters=' + JSON.stringify(params.filters);
 
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      var response = JSON.parse(xhr.responseText);
-      callback(response.employees);
-    }
+  xhr.onload = function() {
+    var response = JSON.parse(xhr.responseText);
+    callback(response.employees);
   };
 
   xhr.open('GET', url, true);
