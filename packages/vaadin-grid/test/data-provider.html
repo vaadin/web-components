@@ -244,24 +244,24 @@
       });
 
       it('should warn about missing size', function() {
-        var _warn = window.console.warn;
-        var spy = window.console.warn = sinon.spy();
+        var _warn = console.warn;
+        var spy = console.warn = sinon.spy();
 
         grid.dataProvider = infiniteDataProvider;
         grid.flushDebouncer('check-size');
-        window.console.warn = _warn;
+        console.warn = _warn;
 
         expect(spy.called).to.be.true;
       });
 
       it('should not warn about missing size', function() {
-        var _warn = window.console.warn;
-        var spy = window.console.warn = sinon.spy();
+        var _warn = console.warn;
+        var spy = console.warn = sinon.spy();
 
         grid.dataProvider = infiniteDataProvider;
         grid.size = 1;
         grid.flushDebouncer('check-size');
-        window.console.warn = _warn;
+        console.warn = _warn;
 
         expect(spy.called).to.be.false;
       });
