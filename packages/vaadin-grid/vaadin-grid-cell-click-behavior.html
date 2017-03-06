@@ -58,7 +58,8 @@
     },
 
     _isFocusable: function(target) {
-      var isFocusableElement = Polymer.dom(target.parentNode)
+      var parent = Polymer.dom(target).parentNode;
+      var isFocusableElement = Polymer.dom(parent)
       .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]').indexOf(target) !== -1;
       return !target.disabled && isFocusableElement;
     }

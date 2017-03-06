@@ -80,9 +80,18 @@ Custom property | Description | Default
         clip: rect(0, 0, 0, 0);
         text-transform: none;
       }
+
+      #content {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+      }
     </style>
 
-    <content></content>
+    <div id="content">
+      <content></content>
+    </div>
     <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
     </div>
