@@ -44,12 +44,12 @@
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
-                <template>[[item.user.name.first]]</template>
+                <template>[[item.name.first]]</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
-                <template>[[item.user.name.last]]</template>
+                <template>[[item.name.last]]</template>
               </vaadin-grid-column>
 
             </vaadin-grid>
@@ -93,12 +93,12 @@
 
             <vaadin-grid-column>
               <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
@@ -122,12 +122,16 @@
       <b>Hint: </b><code>auto-select</code> can be set to enable selecting rows on click.
     </p>
     <p>
-      <b>Note: </b>This is a opt-in feature so <code>vaadin-grid-selection-column.html</code> needs
-      to be explicitly imported.
+      <b>Note: This is a opt-in feature so <code>vaadin-grid-selection-column.html</code> needs
+      to be explicitly imported.</b>
     </p>
     <demo-snippet>
       <template>
         <template is="dom-bind">
+
+          <!-- Import vaadin-grid-selection-column.html (typically placed inside the <head> container) -->
+          <link rel="import" href="../../vaadin-grid/vaadin-grid-selection-column.html">
+
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
           <vaadin-grid aria-label="Multi-Selection Example" items="[[items]]">
@@ -141,12 +145,12 @@
 
             <vaadin-grid-column>
               <template class="header">First Name</template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">Last Name</template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
           </vaadin-grid>
@@ -195,12 +199,12 @@
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
-                <template>[[item.user.name.first]]</template>
+                <template>[[item.name.first]]</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
-                <template>[[item.user.name.last]]</template>
+                <template>[[item.name.last]]</template>
               </vaadin-grid-column>
 
             </vaadin-grid>

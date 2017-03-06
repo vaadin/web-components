@@ -134,7 +134,7 @@ Additionally, if a column inside a column group is frozen, also the other column
 == Hiding Columns
 
 When a column is hidden, it is not visible in the table.
-Hiding is done by applying [propertyname]#hidden# to the [vaadinelement]#vaadin-grid-column#.
+Hiding is done by applying [propertyname]#hidden# to the [vaadinelement]#vaadin-grid-column# or [vaadinelement]#vaadin-grid-column-group#.
 
 [source,html]
 ----

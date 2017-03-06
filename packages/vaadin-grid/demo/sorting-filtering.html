@@ -10,8 +10,6 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
-  <link rel="import" href="../../paper-button/paper-button.html">
   <link rel="import" href="../vaadin-grid-sorter.html">
   <link rel="import" href="../vaadin-grid-filter.html">
 
@@ -25,17 +23,22 @@
     <h3>Sorting</h3>
     <p>
       <code>&lt;vaadin-grid-sorter&gt;</code> can be used to define sorting for a column.
+      The users in the example are sorted by last name initially.
     </p>
     <p>
       <b>Hint: </b>When using a data provider, <code>path</code> on the sorter element
       can be customized to be any string, instead of a property on the item object.
     </p>
     <p>
-      <b>NOTE:</b> You <b>must</b> explicitly import the <code>vaadin-grid-sorter.html</code> in order to use <code>&lt;vaadin-grid-sorter&gt;</code>.
+      <b>NOTE: You must explicitly import the <code>vaadin-grid-sorter.html</code> in order to use <code>&lt;vaadin-grid-sorter&gt;</code>.</b>
     </p>
     <demo-snippet>
       <template>
         <template is="dom-bind">
+
+          <!-- Import vaadin-grid-sorter.html (typically placed inside the <head> container) -->
+          <link rel="import" href="../../vaadin-grid/vaadin-grid-sorter.html">
+
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
           <vaadin-grid aria-label="Sorting Example" items="[[items]]">
@@ -47,16 +50,16 @@
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.first">First Name</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="name.first">First Name</vaadin-grid-sorter>
               </template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-sorter path="user.name.last">Last Name</vaadin-grid-sorter>
+                <vaadin-grid-sorter path="name.last" direction="asc">Last Name</vaadin-grid-sorter>
               </template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
           </vaadin-grid>
@@ -73,11 +76,15 @@
       can be customized to be any string, instead of a property on the item object.
     </p>
     <p>
-      <b>NOTE:</b> You <b>must</b> explicitly import the <code>vaadin-grid-filter.html</code> in order to use <code>&lt;vaadin-grid-filter&gt;</code>.
+      <b>NOTE: You must explicitly import the <code>vaadin-grid-filter.html</code> in order to use <code>&lt;vaadin-grid-filter&gt;</code>.</b>
     </p>
     <demo-snippet>
       <template>
         <template is="dom-bind">
+
+          <!-- Import vaadin-grid-filter.html (typically placed inside the <head> container) -->
+          <link rel="import" href="../../vaadin-grid/vaadin-grid-filter.html">
+
           <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
           <vaadin-grid aria-label="Filtering Example" items="[[items]]">
@@ -89,20 +96,20 @@
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter aria-label="First Name" path="user.name.first" value="[[_filterFirstName]]">
+                <vaadin-grid-filter aria-label="First Name" path="name.first" value="[[_filterFirstName]]">
                   <input placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
-              <template>[[item.user.name.first]]</template>
+              <template>[[item.name.first]]</template>
             </vaadin-grid-column>
 
             <vaadin-grid-column>
               <template class="header">
-                <vaadin-grid-filter aria-label="Last Name" path="user.name.last" value="[[_filterLastName]]">
+                <vaadin-grid-filter aria-label="Last Name" path="name.last" value="[[_filterLastName]]">
                   <input placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
                 </vaadin-grid-filter>
               </template>
-              <template>[[item.user.name.last]]</template>
+              <template>[[item.name.last]]</template>
             </vaadin-grid-column>
 
           </vaadin-grid>

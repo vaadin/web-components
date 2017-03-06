@@ -99,7 +99,7 @@
       <vaadin-grid items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
         <template class="row-details">
           <div class="details-cell">
-            <h1>Hi, I'm [[item.user.name.first]]</h1>
+            <h1>Hi, I'm [[item.name.first]]</h1>
           </div>
         </template>
 
@@ -119,17 +119,17 @@
 
           <vaadin-grid-column resizable>
             <template class="header">Email</template>
-            <template>[[item.user.email]]</template>
+            <template>[[item.email]]</template>
           </vaadin-grid-column>
 
           <vaadin-grid-column>
             <template class="header">City</template>
-            <template>[[item.user.location.city]]</template>
+            <template>[[item.location.city]]</template>
           </vaadin-grid-column>
 
           <vaadin-grid-column>
             <template class="header">State</template>
-            <template>[[item.user.location.state]]</template>
+            <template>[[item.location.state]]</template>
           </vaadin-grid-column>
         </vaadin-grid-column-group>
 

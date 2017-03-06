@@ -48,7 +48,8 @@
     "paper-styles": "PolymerElements/paper-styles#^1.1.5",
     "iron-component-page": "^1.1.7",
     "elements-demo-resources": "*",
-    "vaadin-combo-box": "^1.2.0"
+    "vaadin-combo-box": "^1.2.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
   },
   "dependencies": {
     "polymer": "^1.6.1",

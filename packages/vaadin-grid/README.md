@@ -35,18 +35,18 @@
     <vaadin-grid-column width="50px" flex-grow="0">
       <template class="header"></template>
       <template>
-        <iron-image src="[[item.user.picture.thumbnail]]"></iron-image>
+        <iron-image src="[[item.picture.thumbnail]]"></iron-image>
       </template>
     </vaadin-grid-column>
 
     <vaadin-grid-column width="calc(50% - 100px)">
       <template class="header">First Name</template>
-      <template>[[item.user.name.first]]</template>
+      <template>[[item.name.first]]</template>
     </vaadin-grid-column>
 
     <vaadin-grid-column width="calc(50% - 100px)">
       <template class="header">Last Name</template>
-      <template>[[item.user.name.last]]</template>
+      <template>[[item.name.last]]</template>
     </vaadin-grid-column>
 
   </vaadin-grid>

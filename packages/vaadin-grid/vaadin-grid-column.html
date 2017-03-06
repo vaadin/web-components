@@ -78,6 +78,14 @@ The `class` attribute is used to differentiate header and footer templates from 
         value: false
       },
 
+      /**
+       * When set to true, the cells for this column are hidden.
+       */
+      hidden: {
+        type: Boolean,
+        notify: true
+      },
+
       _lastFrozen: {
         type: Boolean,
         notify: true,
@@ -175,13 +183,6 @@ The `class` attribute is used to differentiate header and footer templates from 
           return this._findTemplate('template:not(.header):not(.footer)');
         }
       },
-
-      /**
-       * When set to true, the cells for this column are hidden.
-       */
-      hidden: {
-        type: Boolean
-      }
 
     },
 
