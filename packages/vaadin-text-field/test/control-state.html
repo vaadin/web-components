@@ -13,6 +13,9 @@
   <script>
     var elementName = window.elementName || window.location.pathname.replace(/.*\/([^\/]+)\/test\/.*/, '$1');
 
+    // Temporary fix until we rename repo
+    if (elementName == 'vaadin-input') elementName = 'vaadin-text-field';
+
     var importUrl = `../${elementName}.html`;
 
     var importElement = `<link rel="import" href="${importUrl}">`;
