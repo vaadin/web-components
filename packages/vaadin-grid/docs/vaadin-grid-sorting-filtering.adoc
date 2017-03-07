@@ -115,15 +115,15 @@ Clicking the column headers will again change the sort order with the last click
 When the data is fetched from a custom data provider, the responsibility of providing correctly ordered data is on the data provider itself.
 The data provider is asked for fresh sorted data whenever the sorting order is changed trough any [elementname]#vaadin-grid-column#.
 
-The effective [propertyname]#sortOrder# array will be included as one of the data provider callback parameters so it can be utilized by the data provider.
+The effective [propertyname]#sortOrders# array will be included as one of the data provider callback parameters so it can be utilized by the data provider.
 
 [source,javascript]
 ----
 grid.dataProvider = function(params, callback) {
   var url = 'https://my.data/data?page=' + params.page +
   '&per_page=' + params.pageSize +
-  // Include the sort order to the request
-  '&sort_order=' + JSON.stringify(params.sortOrder);
+  // Include the sort orders to the request
+  '&sort_orders=' + JSON.stringify(params.sortOrders);
 
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
