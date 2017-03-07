@@ -29,10 +29,11 @@
           background-position: 50% 100%;
 
           /*
-          This doesn’t work in Safari right now, but it’s fixed in
+          -webkit-transition needed for Safari right now, but it’s fixed in
           Safari Technology Preview, so we can expect it to fix itself in the
           near future (Safari 10.2 most probably).
           */
+          -webkit-transition: background-size 0.25s;
           transition: background-size 0.25s;
 
           /* Disable default invalid style in Firefox */
@@ -60,6 +61,8 @@
           transform-origin: 0 50%;
           transform: scale(0.75);
           width: 133%;
+
+          -webkit-transition: transform 0.25s;
           transition: transform 0.25s;
         };
 
