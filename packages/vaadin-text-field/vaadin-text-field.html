@@ -5,11 +5,11 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <!--
-`<vaadin-input>` is a Polymer element for input control in forms.
+`<vaadin-text-field>` is a Polymer element for text field control in forms.
 
 ```html
-<vaadin-input>
-</vaadin-input>
+<vaadin-text-field>
+</vaadin-text-field>
 ```
 
 ### Styling
@@ -17,11 +17,11 @@ The following mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--vaadin-input__input` | Mixin applied to the input element | `{}`
-`--vaadin-input__input-placeholder` | Mixin applied to the input's placeholder | `{}`
-`--vaadin-input__label` | Mixin applied to the label element | `{}`
+`--vaadin-text-field__input` | Mixin applied to the input element | `{}`
+`--vaadin-text-field__input-placeholder` | Mixin applied to the input's placeholder | `{}`
+`--vaadin-text-field__label` | Mixin applied to the label element | `{}`
 
-@element vaadin-input
+@element vaadin-text-field
 @demo demo/index.html
 -->
 
@@ -29,7 +29,7 @@ Custom property | Description | Default
 <link rel="import" href="vaadin-form-element-mixin.html">
 <link rel="import" href="vaadin-control-state-mixin.html">
 
-<dom-module id="vaadin-input">
+<dom-module id="vaadin-text-field">
   <template>
     <style>
       :host {
@@ -40,19 +40,19 @@ Custom property | Description | Default
       }
 
       input {
-        @apply --vaadin-input__input;
+        @apply --vaadin-text-field__input;
       }
 
       input::-webkit-input-placeholder {
-        @apply --vaadin-input__input-placeholder;
+        @apply --vaadin-text-field__input-placeholder;
       }
 
       input::-moz-placeholder {
-        @apply --vaadin-input__input-placeholder;
+        @apply --vaadin-text-field__input-placeholder;
       }
 
       input::placeholder {
-        @apply --vaadin-input__input-placeholder;
+        @apply --vaadin-text-field__input-placeholder;
       }
 
       input::-ms-clear {
@@ -60,7 +60,7 @@ Custom property | Description | Default
       }
 
       label {
-        @apply --vaadin-input__label;
+        @apply --vaadin-text-field__label;
       }
 
       label:empty {
@@ -90,9 +90,9 @@ Custom property | Description | Default
   </template>
 
   <script>
-    class VaadinInputElement extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(Polymer.Element)) {
+    class VaadinTextFieldElement extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(Polymer.Element)) {
       static get is() {
-        return 'vaadin-input';
+        return 'vaadin-text-field';
       }
 
       static get properties() {
@@ -263,6 +263,6 @@ Custom property | Description | Default
       }
     }
 
-    customElements.define(VaadinInputElement.is, VaadinInputElement);
+    customElements.define(VaadinTextFieldElement.is, VaadinTextFieldElement);
   </script>
 </dom-module>

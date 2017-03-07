@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>vaadin-input Custom Styles</title>
+  <title>vaadin-text-field Custom Styles</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="common.html">
-  <link rel="import" href="material-vaadin-input.html">
+  <link rel="import" href="material-vaadin-text-field.html">
 </head>
 
 <body>
@@ -19,27 +19,27 @@
 
     <h2>Material design theme</h2>
 
-    <p>Import and include the <a href="material-vaadin-input.html">material-vaadin-input</a> style module to make &lt;vaadin-input&gt; look like a Material design text field.</p>
+    <p>Import and include the <a href="material-vaadin-text-field.html">material-vaadin-text-field</a> style module to make &lt;vaadin-text-field&gt; look like a Material design text field.</p>
 
     <h3>Labels</h3>
     <demo-snippet>
       <template>
         <custom-style>
-          <style include="material-vaadin-input">
-            vaadin-input {
+          <style include="material-vaadin-text-field">
+            vaadin-text-field {
               margin-right: 16px;
               vertical-align: bottom;
             }
           </style>
         </custom-style>
 
-        <vaadin-input placeholder="Non-floating label"></vaadin-input>
+        <vaadin-text-field placeholder="Non-floating label"></vaadin-text-field>
 
-        <vaadin-input label="Label"></vaadin-input>
+        <vaadin-text-field label="Label"></vaadin-text-field>
 
-        <vaadin-input label="Label always floating" placeholder=""></vaadin-input>
+        <vaadin-text-field label="Label always floating" placeholder=""></vaadin-text-field>
 
-        <vaadin-input label="Label" placeholder="Placeholder"></vaadin-input>
+        <vaadin-text-field label="Label" placeholder="Placeholder"></vaadin-text-field>
 
       </template>
     </demo-snippet>
@@ -48,26 +48,26 @@
     <demo-snippet>
       <template>
         <custom-style>
-          <style include="material-vaadin-input">
-            vaadin-input {
+          <style include="material-vaadin-text-field">
+            vaadin-text-field {
               margin-right: 16px;
             }
           </style>
         </custom-style>
 
-        <vaadin-input label="Focused" value="Value" focused></vaadin-input>
+        <vaadin-text-field label="Focused" value="Value" focused></vaadin-text-field>
 
-        <vaadin-input label="Disabled" value="Value" disabled></vaadin-input>
+        <vaadin-text-field label="Disabled" value="Value" disabled></vaadin-text-field>
 
-        <vaadin-input label="Read-only" value="Value" readonly></vaadin-input>
+        <vaadin-text-field label="Read-only" value="Value" readonly></vaadin-text-field>
 
-        <vaadin-input label="Disabled" placeholder="Placeholder" disabled></vaadin-input>
+        <vaadin-text-field label="Disabled" placeholder="Placeholder" disabled></vaadin-text-field>
 
-        <vaadin-input label="Read-only" placeholder="Placeholder" readonly></vaadin-input>
+        <vaadin-text-field label="Read-only" placeholder="Placeholder" readonly></vaadin-text-field>
 
-        <vaadin-input label="Required" placeholder="I need a value" required></vaadin-input>
+        <vaadin-text-field label="Required" placeholder="I need a value" required></vaadin-text-field>
 
-        <vaadin-input label="Invalid" value="Numbers only" pattern="[0-9]+"></vaadin-input>
+        <vaadin-text-field label="Invalid" value="Numbers only" pattern="[0-9]+"></vaadin-text-field>
 
       </template>
     </demo-snippet>

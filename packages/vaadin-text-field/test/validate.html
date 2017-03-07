@@ -2,10 +2,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-input tests</title>
+  <title>vaadin-text-field tests</title>
 
   <script src="../../web-component-tester/browser.js"></script>
-  <link rel="import" href="../vaadin-input.html">
+  <link rel="import" href="../vaadin-text-field.html">
   <link rel="import" href="../../iron-form/iron-form.html">
 
 </head>
@@ -15,7 +15,7 @@
     <template>
       <iron-form id="iform">
         <form>
-          <vaadin-input name="foo"></vaadin-input>
+          <vaadin-text-field name="foo"></vaadin-text-field>
         </form>
       </iron-form>
     </template>
@@ -29,7 +29,7 @@
       beforeEach(function(done) {
         iform = fixture('default');
         window.setTimeout(function() {
-          vinput = iform.querySelector('vaadin-input');
+          vinput = iform.querySelector('vaadin-text-field');
           done();
         }, 1);
       });

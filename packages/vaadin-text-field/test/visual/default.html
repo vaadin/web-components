@@ -5,7 +5,7 @@
   <title></title>
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <link href="../../../polymer/polymer.html" rel="import">
-  <link href="../../vaadin-input.html" rel="import">
+  <link href="../../vaadin-text-field.html" rel="import">
 </head>
 
 <body>
@@ -20,7 +20,7 @@
       }
 
       #hidden-caret {
-        --vaadin-input__input: {
+        --vaadin-text-field__input: {
           font-size: 0;
           padding: 0 100px;
           height: 20px;
@@ -32,21 +32,21 @@
   <form>
     <fieldset id="default-tests">
       <p>
-      default input: <vaadin-input></vaadin-input>
+      default input: <vaadin-text-field></vaadin-text-field>
       <p>
-      input with value: <vaadin-input value="Go Vaadin"></vaadin-input>
+      input with value: <vaadin-text-field value="Go Vaadin"></vaadin-text-field>
       <p>
-      focused input: <vaadin-input autofocus id="hidden-caret"></vaadin-input>
+      focused input: <vaadin-text-field autofocus id="hidden-caret"></vaadin-text-field>
       <p>
-      disabled input: <vaadin-input disabled></vaadin-input>
+      disabled input: <vaadin-text-field disabled></vaadin-text-field>
       <p>
-      input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
+      input with placeholder: <vaadin-text-field placeholder="Run Vaadin"></vaadin-text-field>
       <p>
-      invalid input: <vaadin-input required invalid></vaadin-input>
+      invalid input: <vaadin-text-field required invalid></vaadin-text-field>
       <p>
-      input with label: <vaadin-input label="Foo"></vaadin-input>
+      input with label: <vaadin-text-field label="Foo"></vaadin-text-field>
       <p>
-      input with label and Value: <vaadin-input label="Foo" value="Bar"></vaadin-input>
+      input with label and Value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field>
     </fieldset>
   </form>
 
