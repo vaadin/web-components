@@ -175,7 +175,7 @@ Custom property | Description | Default
         }
       },
 
-      _getClosestCellContent() {
+      _getClosestCellContent: function() {
         var el = this;
         while (el = Polymer.dom(el).parentNode) {
           if (el.is === 'vaadin-grid' || el === document.body) {
