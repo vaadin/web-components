@@ -5,7 +5,9 @@
 
 # &lt;vaadin-text-field&gt;
 
+<!-- hide link until demo is online.
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-text-field/demo/)
+-->
 
 [&lt;vaadin-text-field&gt;](https://vaadin.com/elements/-/element/vaadin-text-field) is a [Polymer](http://polymer-project.org) element providing an input control in forms., part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
