@@ -45,8 +45,8 @@
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-date-picker/demo
-  - http://127.0.0.1:8080/components/vaadin-date-picker/test
+  - http://127.0.0.1:8080/components/vaadin-text-field/demo
+  - http://127.0.0.1:8080/components/vaadin-text-field/test
 
 
 ## Running tests from the command line
