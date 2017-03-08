@@ -31,10 +31,13 @@
     _arrayDataProvider: function(opts, cb) {
       var items = (this.items || []).slice(0);
 
-      items = this._filter(items);
+      if (this._checkPaths(this._filters, 'filtering', items)) {
+        items = this._filter(items);
+      }
+
       this.size = items.length;
 
-      if (opts.sortOrders.length) {
+      if (opts.sortOrders.length && this._checkPaths(this._sorters, 'sorting', items)) {
         items = items.sort(this._multiSort.bind(this));
       }
 
@@ -42,6 +45,39 @@
       var end = start + opts.pageSize;
       var slice = items.slice(start, end);
       cb(slice, items.length);
+    },
+
+    /**
+     * Check array of filters/sorters for paths validity, console.warn invalid items
+     * @param {Array}  arrayToCheck The array of filters/sorters to check
+     * @param {string} action       The name of action to include in warning (filtering, sorting)
+     * @param {Array}  items
+     */
+    _checkPaths: function(arrayToCheck, action, items) {
+      if (!items.length) {
+        return false;
+      }
+
+      var result = true;
+
+      for (var i in arrayToCheck) {
+        var path = arrayToCheck[i].path;
+
+        // skip simple paths
+        if (path.indexOf('.') === -1) {
+          continue;
+        }
+
+        var parentProperty = path.replace(/\.[^\.]*/, ''); // a.b.c -> a.b
+        if (Polymer.Base.get(parentProperty, items[0]) === undefined) {
+          console.warn(
+            'Path "' + path + '" used for ' + action + ' does not exist in all of the items, ' + action + ' is disabled.'
+          );
+          result = false;
+        }
+      }
+
+      return result;
     },
 
     _multiSort: function(a, b) {

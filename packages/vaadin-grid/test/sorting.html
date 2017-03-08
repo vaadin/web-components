@@ -25,7 +25,7 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="sorterInCellContent">
+  <test-fixture id="sorter-in-cell-content">
     <template>
       <div class="cell-content" data-cell-content-id="">
         <vaadin-grid-sorter path="path"></vaadin-grid-sorter>
@@ -61,13 +61,6 @@
 
       describe('sorter', function() {
         var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
-
-        function click(element) {
-          Polymer.Base.fire('click', {}, {
-            node: element,
-            bubbles: true
-          });
-        }
 
         beforeEach(function() {
           sorter = fixture('sorter');
@@ -203,7 +196,7 @@
         var cellContent, sorter, announcer;
 
         beforeEach(function() {
-          cellContent = fixture('sorterInCellContent');
+          cellContent = fixture('sorter-in-cell-content');
           sorter = Polymer.dom(cellContent).querySelector('vaadin-grid-sorter');
           announcer = Polymer.dom(sorter.root).querySelector('#announcer');
         });

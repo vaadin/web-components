@@ -111,7 +111,7 @@
       ].forEach(function(elementName) {
         var element = Polymer.dom(this).querySelector(elementName);
         if (element && !Polymer.isInstance(element)) {
-          window.console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
+          console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
         }
       }, this);
     }

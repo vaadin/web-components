@@ -12,6 +12,8 @@
 
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../vaadin-grid-filter.html">
+  <link rel="import" href="../vaadin-grid-sorter.html">
 </head>
 
 <body>
@@ -25,6 +27,29 @@
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template class="header">Last</template>
+          <template>[[item.name.last]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="invalid-path">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-sorter>
+              Sorter with invalid path
+            </vaadin-grid-sorter>
+          </template>
+          <template>[[item.name.first]]</template>
+        </vaadin-grid-column>
+
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-filter value="foo">
+            </vaadin-grid-filter>
+          </template>
           <template>[[item.name.last]]</template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -113,7 +138,114 @@
         }];
         expect(getContent(0, 0)).to.equal('a');
       });
+    });
 
+    describe('invalid paths', function() {
+      var grid;
+
+      beforeEach(function() {
+        grid = fixture('invalid-path');
+        grid.items = [{
+          name: {
+            first: 'foo',
+            last: 'bar'
+          }
+        }];
+      });
+
+      describe('invalid sorters paths', function() {
+        var sorter;
+
+        beforeEach(function() {
+          sorter = Polymer.dom(grid).querySelector('vaadin-grid-sorter');
+        });
+
+        it('should warn about invalid path with undefined parent property', function() {
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
+
+          sorter.path = 'foo.bar';
+          click(sorter);
+          console.warn = _warn;
+
+          expect(spy.called).to.be.true;
+        });
+
+        it('should not warn about undefined values with defined parent property', function() {
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
+
+          sorter.path = 'name.foo';
+          click(sorter);
+          console.warn = _warn;
+
+          expect(spy.called).to.be.false;
+        });
+
+        it('should not warn about invalid path without dots', function() {
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
+
+          sorter.path = 'foobar';
+          click(sorter);
+          console.warn = _warn;
+
+          expect(spy.called).to.be.false;
+        });
+      });
+
+      describe('invalid filters paths', function() {
+        var filter;
+
+        beforeEach(function() {
+          filter = Polymer.dom(grid).querySelector('vaadin-grid-filter');
+        });
+
+        it('should warn about invalid path with undefined parent property', function(done) {
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
+
+          filter.addEventListener('filter-changed', function(e) {
+            Polymer.Base.async(function() {
+              console.warn = _warn;
+              expect(spy.called).to.be.true;
+              done();
+            });
+          });
+
+          filter.path = 'foo.bar';
+        });
+
+        it('should not warn about undefined values with defined parent property', function(done) {
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
+
+          filter.addEventListener('filter-changed', function(e) {
+            Polymer.Base.async(function() {
+              console.warn = _warn;
+              expect(spy.called).to.be.false;
+              done();
+            });
+          });
+
+          filter.path = 'name.foo';
+        });
+
+        it('should not warn about invalid path without dots', function(done) {
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
+
+          filter.addEventListener('filter-changed', function(e) {
+            Polymer.Base.async(function() {
+              console.warn = _warn;
+              expect(spy.called).to.be.false;
+              done();
+            });
+          });
+
+          filter.path = 'foobar';
+        });
+      });
     });
   </script>
 

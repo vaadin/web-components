@@ -159,40 +159,40 @@
       });
 
       it('should warn about missing imports', function() {
-        var _warn = window.console.warn;
-        var spy = window.console.warn = sinon.spy();
+        var _warn = console.warn;
+        var spy = console.warn = sinon.spy();
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
 
         grid.flushDebouncer('check-imports');
-        window.console.warn = _warn;
+        console.warn = _warn;
 
         expect(spy.callCount).to.equal(1);
       });
 
       it('should warn about missing imports after adding new content', function() {
-        var _warn = window.console.warn;
-        var spy = window.console.warn = sinon.spy();
+        var _warn = console.warn;
+        var spy = console.warn = sinon.spy();
         grid.flushDebouncer('check-imports');
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom.flush();
         grid.flushDebouncer('check-imports');
-        window.console.warn = _warn;
+        console.warn = _warn;
 
         expect(spy.called).to.be.true;
       });
 
       it('should not warn about missing imports', function(done) {
         Polymer.Base.importHref('../vaadin-grid-sorter.html', function() {
-          var _warn = window.console.warn;
-          var spy = window.console.warn = sinon.spy();
+          var _warn = console.warn;
+          var spy = console.warn = sinon.spy();
 
           Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
 
           grid.flushDebouncer('check-imports');
-          window.console.warn = _warn;
+          console.warn = _warn;
 
           expect(spy.called).to.be.false;
           done();
