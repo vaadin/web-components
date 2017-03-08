@@ -49,7 +49,7 @@
       // for the virtual focus. This helps cell contents to detect if the cell
       // has focus, which is useful for the accessibility reasons. Used by
       // <vaadin-grid-sorter>.
-      if (this._lastFocusedCell || !focused) {
+      if (this._lastFocusedCell) {
         this._lastFocusedCell._cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
         this._lastFocusedCell = undefined;
       }
