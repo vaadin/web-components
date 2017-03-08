@@ -11,10 +11,7 @@
 <body>
 
   <script>
-    var elementName = window.elementName || window.location.pathname.replace(/.*\/([^\/]+)\/test\/.*/, '$1');
-
-    // Temporary fix until we rename repo
-    if (elementName == 'vaadin-input') elementName = 'vaadin-text-field';
+    var elementName = /[?&]wc-name=([\w-]+)/.exec(location.search)[1];
 
     var importUrl = `../${elementName}.html`;
 

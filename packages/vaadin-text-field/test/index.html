@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>vaadin-input tests</title>
+  <title>vaadin-text-field tests</title>
   <script src="../../web-component-tester/browser.js"></script>
 </head>
 
@@ -15,9 +15,9 @@
     WCT.loadSuites([
       'properties.html',
       'validate.html',
-      'control-state.html'
+      'control-state.html?wc-name=vaadin-text-field'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?wc-shadydom=true']);
+      return suites.concat([suite, suite.replace(/(.+)\?(.*)|$/, '$1?wc-shadydom=true&$2')]);
     }, []));
   </script>
 </body>
