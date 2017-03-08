@@ -142,18 +142,18 @@
 
         it('should scroll the target', function(done) {
           outerScroller.addEventListener('scroll', function() {
-            expect(target.scrollLeft).to.equal(1);
+            expect(target.scrollLeft).to.equal(100);
             done();
           });
-          outerScroller.scrollLeft = 1;
+          outerScroller.scrollLeft = 100;
         });
 
         it('should scroll the outer scroller', function(done) {
           target.addEventListener('scroll', function() {
-            expect(outerScroller.scrollLeft).to.equal(1);
+            expect(outerScroller.scrollLeft).to.equal(100);
             done();
           });
-          target.scrollLeft = 1;
+          target.scrollLeft = 100;
         });
 
       });
@@ -295,8 +295,8 @@
       it('should scroll the grid (scrolled to end)', function() {
         var scrollTop = grid.$.scroller._scrollTop;
         scrollable.scrollTop = scrollable.scrollHeight;
-        var e = wheel(scrollable, 0, 1);
-        expect(grid.$.scroller._scrollTop).to.equal(scrollTop + 1);
+        var e = wheel(scrollable, 0, 100);
+        expect(grid.$.scroller._scrollTop).to.equal(scrollTop + 100);
       });
 
     });
