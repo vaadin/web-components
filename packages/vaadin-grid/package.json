@@ -10,7 +10,7 @@
   },
   "homepage": "https://vaadin.com/elements",
   "devDependencies": {
-    "coveralls": "^2.11.3",
+    "coveralls": "2.11.3",
     "eslint-config-vaadin": "^0.2.0",
     "eslint-plugin-html": "^1.7.0",
     "gemini": "^4.17.1",
