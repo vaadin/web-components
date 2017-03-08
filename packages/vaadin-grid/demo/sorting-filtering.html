@@ -130,17 +130,17 @@
 
                 grid.size = 200;
 
-                grid.dataProvider = function(opts, callback) {
+                grid.dataProvider = function(params, callback) {
                   var xhr = new XMLHttpRequest();
                   xhr.onload = function() {
                     callback(JSON.parse(xhr.responseText).result);
                   };
 
-                  var index = opts,page * opts,pageSize;
-                  var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + opts,pageSize;
+                  var index = params.page * params.pageSize;
+                  var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
-                  // `opts.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
-                  opts.sortOrders.forEach(function(sort) {
+                  // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
+                  params.sortOrders.forEach(function(sort) {
                     url += '&orders[]=' + sort.path + ' ' + sort.direction;
                   });
 
@@ -257,7 +257,7 @@
 
                 grid.size = 200;
 
-                grid.dataProvider = function(opts, callback) {
+                grid.dataProvider = function(params, callback) {
                   var xhr = new XMLHttpRequest();
                   xhr.onload = function() {
                     var response = JSON.parse(xhr.responseText);
@@ -269,11 +269,11 @@
                     callback(response.result);
                   };
 
-                  var index = opts.page * opts.pageSize;
-                  var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + opts.pageSize;
+                  var index = params.page * params.pageSize;
+                  var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
-                  // `opts.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
-                  opts.filters.forEach(function(filter) {
+                  // `params.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
+                  params.filters.forEach(function(filter) {
                     url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value);
                   });
 

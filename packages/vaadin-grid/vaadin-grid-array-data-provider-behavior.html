@@ -28,7 +28,7 @@
       this.clearCache();
     },
 
-    _arrayDataProvider: function(opts, cb) {
+    _arrayDataProvider: function(params, cb) {
       var items = (this.items || []).slice(0);
 
       if (this._checkPaths(this._filters, 'filtering', items)) {
@@ -41,8 +41,8 @@
         items = items.sort(this._multiSort.bind(this));
       }
 
-      var start = opts.page * opts.pageSize;
-      var end = start + opts.pageSize;
+      var start = params.page * params.pageSize;
+      var end = start + params.pageSize;
       var slice = items.slice(start, end);
       cb(slice, items.length);
     },

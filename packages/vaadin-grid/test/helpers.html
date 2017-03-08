@@ -37,8 +37,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return scrollbarWidth;
   }
 
-  function infiniteDataProvider(opts, callback) {
-    callback(Array.apply(null, Array(opts.pageSize)).map(function(item, index) {
+  function infiniteDataProvider(params, callback) {
+    callback(Array.apply(null, Array(params.pageSize)).map(function(item, index) {
       return {
         value: 'foo' + index
       };
