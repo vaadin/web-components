@@ -50,6 +50,36 @@ __Note that the helper elements must be explicitly imported__
       </vaadin-grid-column>
     </vaadin-grid>
 
+### Lazy Loading with Function Data Provider
+
+In addition to assigning an array to the items property, you can alternatively
+provide the vaadin-grid data through the `dataProvider` function property.
+The vaadin-grid element calls this function lazily, only when it needs more data
+to be displayed.
+
+See the <a href="#vaadin-grid:method-dataProvider">`dataProvider`</a> in
+the API reference below for the detailed data provider arguments description,
+and the <a href="demo/data.html#assigning-remote-function-data">remote data
+live example</a>.
+
+__Note that when using function data providers, `size` always needs to be
+set manually.__
+
+    grid.size = 200; // The total number of items
+    grid.dataProvider = function(params, callback) {
+      var url = 'https://api.example/data' +
+          '?page=' + params.page +        // the requested page index
+          '&per_page=' + params.pageSize; // number of items on the page
+
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        var response = JSON.parse(xhr.responseText);
+        callback(response.employees);
+      };
+      xhr.open('GET', url, true);
+      xhr.send();
+    };
+
 ### Styling
 
 The following custom properties and mixins are available for styling:
