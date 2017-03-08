@@ -26,7 +26,14 @@
       When a row is clicked, the item object from that row is assigned to <code>activeItem</code>.
     </p>
     <p>
-      To select items on click, <code>activeItem</code> can be pushed to <code>selectedItems</code>.
+      To select items on click, <code>activeItem</code> can be added
+      to the <code>selectedItems</code> array. You can also call
+      <code>selectItem(item)</code> or <code>deselectItem(item)</code> in order
+      to select or deselect the grid item.
+    </p>
+    <p>
+      In the example below, the <code>selectedItems</code> array is replaced
+      whenever <code>activeItem</code> changes, making single-item selection.
     </p>
     <demo-snippet>
       <template>
