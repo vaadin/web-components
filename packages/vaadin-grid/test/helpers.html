@@ -297,4 +297,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return event;
   }
 
+  function click(element) {
+    Polymer.Base.fire('click', {}, {
+      node: element,
+      bubbles: true
+    });
+  }
+
 </script>

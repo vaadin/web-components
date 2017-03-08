@@ -39,6 +39,7 @@
     "listenOnce": false,
     "MockInteractions": false,
     "afterEach": false,
+    "click": false,
     "dragStart": false,
     "dragOver": false,
     "dragAndDropOver": false,
