@@ -51,6 +51,7 @@ __Note that the helper elements must be explicitly imported__
     </vaadin-grid>
 
 ### Styling
+
 The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
@@ -68,6 +69,60 @@ Custom property | Description | Default
 `--vaadin-grid-focused-cell` | Mixin applied to cells with keyboard focus | `{}`
 `--vaadin-grid-loading-spinner` | Mixin applied to the loading spinner | `{}`
 `--vaadin-grid-column-resize-handle` | Mixin applied to the column resize handle | `{}`
+
+__Note:__ you can also style cell template contents by targeting them with
+standard CSS. For example, using classes to apply custom background on a frozen
+column and aling numeric contents to the right:
+
+    <style is="custom-style">
+      vaadin-grid {
+        --vaadin-grid-cell: {
+          padding: 0;
+        };
+      }
+
+      .cell {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 8px;
+      }
+
+      .frozen {
+        background: lightgray;
+      }
+
+      .numeric {
+        text-align: right;
+      }
+    </style>
+
+    <vaadin-grid>
+
+      <vaadin-grid-column width="100px" frozen>
+        <template class="header">
+          <div class="cell frozen">User Name</div>
+        </template>
+        <template>
+          <div class="cell frozen">[[item.username]]</div>
+        </template>
+      </vaadin-grid-column>
+
+        ...
+
+      <vaadin-grid-column>
+        <template class="header">
+          <div class="cell numeric">Age</div>
+        </template>
+        <template>
+          <div class="cell numeric">[[item.age]]</div>
+        </template>
+      </vaadin-grid-column>
+
+    </vaadin-grid>
+
+See also the <a href="demo/styling.html" target="_blank">styling live examples</a>.
 
 ### Keyboard Navigation
 
