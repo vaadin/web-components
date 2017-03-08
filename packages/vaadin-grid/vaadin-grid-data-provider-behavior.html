@@ -82,7 +82,7 @@
        *
        * `opts.filters` Currently applied filters
        *
-       * `opts.sortOrder` Currently applied sorting order
+       * `opts.sortOrders` Currently applied sorting orders
        *
        */
       dataProvider: {
@@ -232,7 +232,7 @@
           var opts = {
             page: page,
             pageSize: this.pageSize,
-            sortOrder: this._mapSorters(),
+            sortOrders: this._mapSorters(),
             filters: this._mapFilters()
           };
           this.dataProvider(opts, function(items) {

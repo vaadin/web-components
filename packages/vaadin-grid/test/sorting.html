@@ -258,10 +258,10 @@
 
         it('should ignore sorter', function() {
           sorterFirst.direction = '';
-          var sortOrder = grid._mapSorters();
-          expect(sortOrder).to.have.length(1);
-          expect(sortOrder[0].path).to.equal('last');
-          expect(sortOrder[0].direction).to.equal('desc');
+          var sortOrders = grid._mapSorters();
+          expect(sortOrders).to.have.length(1);
+          expect(sortOrders[0].path).to.equal('last');
+          expect(sortOrders[0].direction).to.equal('desc');
         });
 
         it('should show order indicators', function() {
@@ -389,7 +389,7 @@
           it('should request with default sorting', function() {
             var lastCall = grid.dataProvider.lastCall;
             var params = lastCall.args[0];
-            expect(params.sortOrder).to.eql([{
+            expect(params.sortOrders).to.eql([{
               path: 'last',
               direction: 'desc'
             }, {
@@ -402,7 +402,7 @@
             sorterFirst.direction = 'desc';
             var lastCall = grid.dataProvider.lastCall;
             var params = lastCall.args[0];
-            expect(params.sortOrder).to.eql([{
+            expect(params.sortOrders).to.eql([{
               path: 'first',
               direction: 'desc'
             }, {
@@ -429,7 +429,7 @@
             grid.dataProvider.reset();
             sorterFirst.direction = 'desc';
 
-            expect(grid.dataProvider.args[1][0].sortOrder.length).to.eql(1);
+            expect(grid.dataProvider.args[1][0].sortOrders.length).to.eql(1);
           });
 
           it('should remove order from sorters', function() {

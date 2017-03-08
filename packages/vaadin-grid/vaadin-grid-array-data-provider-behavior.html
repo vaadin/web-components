@@ -34,7 +34,7 @@
       items = this._filter(items);
       this.size = items.length;
 
-      if (opts.sortOrder.length) {
+      if (opts.sortOrders.length) {
         items = items.sort(this._multiSort.bind(this));
       }
 
