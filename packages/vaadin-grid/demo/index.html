@@ -34,7 +34,7 @@
       <template>
         <template is="dom-bind">
           <!-- Fetch an array of users to be shown in the grid -->
-          <iron-ajax auto url="http://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+          <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
           <!-- The array is set as the <vaadin-grid>'s "items" property -->
           <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
@@ -86,7 +86,7 @@
             font: inherit;
           }
         </style>
-        <iron-ajax auto url="http://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
         <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
 
