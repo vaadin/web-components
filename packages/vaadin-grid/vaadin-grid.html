@@ -50,7 +50,37 @@ __Note that the helper elements must be explicitly imported__
       </vaadin-grid-column>
     </vaadin-grid>
 
+### Lazy Loading with Function Data Provider
+
+In addition to assigning an array to the items property, you can alternatively
+provide the vaadin-grid data through the `dataProvider` function property.
+The vaadin-grid element calls this function lazily, only when it needs more data
+to be displayed.
+
+See the <a href="#vaadin-grid:method-dataProvider">`dataProvider`</a> in
+the API reference below for the detailed data provider arguments description,
+and the “Assigning Data” page in the demos</a>.
+
+__Note that when using function data providers, `size` always needs to be
+set manually.__
+
+    grid.size = 200; // The total number of items
+    grid.dataProvider = function(params, callback) {
+      var url = 'https://api.example/data' +
+          '?page=' + params.page +        // the requested page index
+          '&per_page=' + params.pageSize; // number of items on the page
+
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        var response = JSON.parse(xhr.responseText);
+        callback(response.employees);
+      };
+      xhr.open('GET', url, true);
+      xhr.send();
+    };
+
 ### Styling
+
 The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
@@ -68,6 +98,60 @@ Custom property | Description | Default
 `--vaadin-grid-focused-cell` | Mixin applied to cells with keyboard focus | `{}`
 `--vaadin-grid-loading-spinner` | Mixin applied to the loading spinner | `{}`
 `--vaadin-grid-column-resize-handle` | Mixin applied to the column resize handle | `{}`
+
+__Note:__ you can also style cell template contents by targeting them with
+standard CSS. For example, using classes to apply custom background on a frozen
+column and aling numeric contents to the right:
+
+    <style is="custom-style">
+      vaadin-grid {
+        --vaadin-grid-cell: {
+          padding: 0;
+        };
+      }
+
+      .cell {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 8px;
+      }
+
+      .frozen {
+        background: lightgray;
+      }
+
+      .numeric {
+        text-align: right;
+      }
+    </style>
+
+    <vaadin-grid>
+
+      <vaadin-grid-column width="100px" frozen>
+        <template class="header">
+          <div class="cell frozen">User Name</div>
+        </template>
+        <template>
+          <div class="cell frozen">[[item.username]]</div>
+        </template>
+      </vaadin-grid-column>
+
+        ...
+
+      <vaadin-grid-column>
+        <template class="header">
+          <div class="cell numeric">Age</div>
+        </template>
+        <template>
+          <div class="cell numeric">[[item.age]]</div>
+        </template>
+      </vaadin-grid-column>
+
+    </vaadin-grid>
+
+See also the “Styling” page in the demos.
 
 ### Keyboard Navigation
 
@@ -91,8 +175,8 @@ Key | Action
 <kbd>Enter</kbd> or <kbd>F2</kbd> | Activates the interactive mode for the focused cell
 
 <b>Note</b>: If the focused cell has child elements, the <kbd>Space</kbd> key
-clicks the first child element of the focused cell. See the <a href="demo/selection.html#space-key-action-and-click-to-activate" target="_blank">selection live
-examples</a> for more information.
+clicks the first child element of the focused cell. See an example on the
+“Selection” demo page for more information.
 
 #### In interactive mode
 

@@ -74,15 +74,15 @@
       },
 
       /**
-       * Function that provides items lazily. Receives parameters `opts`, `callback`
+       * Function that provides items lazily. Receives arguments `params`, `callback`
        *
-       * `opts.page` Requested page index
+       * `params.page` Requested page index
        *
-       * `opts.pageSize` Current page size
+       * `params.pageSize` Current page size
        *
-       * `opts.filters` Currently applied filters
+       * `params.filters` Currently applied filters
        *
-       * `opts.sortOrders` Currently applied sorting orders
+       * `params.sortOrders` Currently applied sorting orders
        *
        */
       dataProvider: {
@@ -229,13 +229,13 @@
         // make sure same page isn't requested multiple times.
         if (!this._pendingRequests[page] && this.dataProvider) {
           this._pendingRequests[page] = true;
-          var opts = {
+          var params = {
             page: page,
             pageSize: this.pageSize,
             sortOrders: this._mapSorters(),
             filters: this._mapFilters()
           };
-          this.dataProvider(opts, function(items) {
+          this.dataProvider(params, function(items) {
             this._cache[page] = items;
             delete this._pendingRequests[page];
             cb(page, items);

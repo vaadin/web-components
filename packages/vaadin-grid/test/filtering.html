@@ -136,9 +136,9 @@
       it('should pass filters to dataProvider', function(done) {
         grid.size = 10;
 
-        grid.dataProvider = function(opts) {
-          expect(opts.filters[0]).to.eql({path: 'first', value: 'bar'});
-          expect(opts.filters[1]).to.eql({path: 'last', value: 'qux'});
+        grid.dataProvider = function(params) {
+          expect(params.filters[0]).to.eql({path: 'first', value: 'bar'});
+          expect(params.filters[1]).to.eql({path: 'last', value: 'qux'});
 
           if (!done._called) {
             done._called = true;

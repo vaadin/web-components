@@ -237,13 +237,13 @@
 
               ready: function() {
                 this.size = 200;
-                this.dataProvider = function(opts, callback) {
+                this.dataProvider = function(params, callback) {
                   var xhr = new XMLHttpRequest();
                   xhr.onload = function() {
                     callback(JSON.parse(xhr.responseText).result);
                   };
-                  var index = opts.page * opts.pageSize;
-                  xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + opts.pageSize, true);
+                  var index = params.page * params.pageSize;
+                  xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
                   xhr.send();
                 };
               }

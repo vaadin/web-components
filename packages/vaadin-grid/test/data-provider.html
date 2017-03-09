@@ -200,7 +200,7 @@
       });
 
       it('should apply `loading` attribute to scroller', function(done) {
-        container.dataProvider = function(opts, callback) {
+        container.dataProvider = function(params, callback) {
           expect(grid.$.scroller.hasAttribute('loading')).to.be.true;
 
           // prevent done from being multiple times.
