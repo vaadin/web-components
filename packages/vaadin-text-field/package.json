@@ -1,9 +1,9 @@
 {
-  "name": "vaadin-input",
+  "name": "vaadin-text-field",
   "version": "0.1.0",
-  "description": "vaadin-input",
-  "main": "vaadin-input.html",
-  "repository": "vaadin/vaadin-input",
+  "description": "vaadin-text-field",
+  "main": "vaadin-text-field.html",
+  "repository": "vaadin/vaadin-text-field",
   "keywords": [
     "Vaadin",
     "input",
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-input/issues"
+    "url": "https://github.com/vaadin/vaadin-text-field/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {

@@ -2,7 +2,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-input tests</title>
+  <title>vaadin-text-field tests</title>
 
   <script src="../../web-component-tester/browser.js"></script>
 
@@ -11,7 +11,7 @@
 <body>
 
   <script>
-    var elementName = window.elementName || window.location.pathname.replace(/.*\/([^\/]+)\/test\/.*/, '$1');
+    var elementName = /[?&]wc-name=([\w-]+)/.exec(location.search)[1];
 
     var importUrl = `../${elementName}.html`;
 

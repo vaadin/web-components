@@ -5,7 +5,7 @@
   <title></title>
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <link href="../../../polymer/polymer.html" rel="import">
-  <link href="../../vaadin-input.html" rel="import">
+  <link href="../../vaadin-text-field.html" rel="import">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
         border: solid 1px grey;
       }
 
-      vaadin-input {
+      vaadin-text-field {
         --test-theme__input: {
           outline: none;
           color: black;
@@ -39,41 +39,41 @@
           border: solid 1px deepskyblue;
         };
 
-        --vaadin-input__input: {
+        --vaadin-text-field__input: {
           @apply --test-theme__input;
         };
 
-        --vaadin-input__input-placeholder: {
+        --vaadin-text-field__input-placeholder: {
           color: silver;
         };
 
-        --vaadin-input__label: {
+        --vaadin-text-field__label: {
           color: silver;
         };
       }
 
-      vaadin-input[focused] {
-        --vaadin-input__input: {
+      vaadin-text-field[focused] {
+        --vaadin-text-field__input: {
           @apply --test-theme__input-focus;
         };
       }
 
-      vaadin-input[invalid] {
-        --vaadin-input__input: {
+      vaadin-text-field[invalid] {
+        --vaadin-text-field__input: {
           @apply --test-theme__input;
           border: solid 1px red;
         };
       }
 
-      vaadin-input[disabled] {
-        --vaadin-input__input: {
+      vaadin-text-field[disabled] {
+        --vaadin-text-field__input: {
           @apply --test-theme__input;
           color: silver;
         };
       }
 
-      vaadin-input[has-value] {
-        --vaadin-input__label: {
+      vaadin-text-field[has-value] {
+        --vaadin-text-field__label: {
           color: deepskyblue;
         };
       }
@@ -83,21 +83,21 @@
   <form>
     <fieldset id="styling-tests">
       <p>
-      default input: <vaadin-input></vaadin-input>
+      default input: <vaadin-text-field></vaadin-text-field>
       <p>
-      input with value: <vaadin-input value="Go Vaadin"></vaadin-input>
+      input with value: <vaadin-text-field value="Go Vaadin"></vaadin-text-field>
       <p>
-      focused input: <vaadin-input focused></vaadin-input>
+      focused input: <vaadin-text-field focused></vaadin-text-field>
       <p>
-      disabled input: <vaadin-input value="disabled" disabled></vaadin-input>
+      disabled input: <vaadin-text-field value="disabled" disabled></vaadin-text-field>
       <p>
-      input with placeholder: <vaadin-input placeholder="Run Vaadin"></vaadin-input>
+      input with placeholder: <vaadin-text-field placeholder="Run Vaadin"></vaadin-text-field>
       <p>
-      invalid input: <vaadin-input required invalid></vaadin-input>
+      invalid input: <vaadin-text-field required invalid></vaadin-text-field>
       <p>
-      input with label: <vaadin-input label="Foo"></vaadin-input>
+      input with label: <vaadin-text-field label="Foo"></vaadin-text-field>
       <p>
-      input with label and Value: <vaadin-input label="Foo" value="Bar"></vaadin-input>
+      input with label and Value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field>
     </fieldset>
   </form>
 
