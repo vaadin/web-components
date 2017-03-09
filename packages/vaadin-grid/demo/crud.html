@@ -141,7 +141,7 @@
 
                 _add: function(e) {
                   if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
-                    this.items.unshift({user: {name: {first: this.$.firstname.value, last: this.$.lastname.value}}});
+                    this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
                     this.$.grid.clearCache();
 
                     this.$.firstname.value = '';
