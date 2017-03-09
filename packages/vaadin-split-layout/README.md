@@ -59,21 +59,26 @@
 
 ## Running demos and tests in browser
 
-1. Install [polyserve](https://www.npmjs.com/package/polyserve): `npm install -g polyserve`
+1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
 
-1. When in the `vaadin-split-layout` directory, run `polyserve --open`, browser will automatically open the component API documentation.
+1. When in the `vaadin-split-layout` directory, run `polymer serve`, after that you will be able to access:
 
-1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
+  - Polymer1-compatible version:
 
-  - http://127.0.0.1:8080/components/vaadin-split-layout/demo
-  - http://127.0.0.1:8080/components/vaadin-split-layout/test
+    - API documentation: http://127.0.0.1:8000/components/vaadin-split-layout/
+    - Examples: http://127.0.0.1:8000/components/vaadin-split-layout/demo/
+    - Tests: http://127.0.0.1:8000/components/vaadin-split-layout/test/
+
+  - Polymer2-compatible version:
+
+    - API documentation: http://127.0.0.1:8001/components/vaadin-split-layout/
+    - Examples: http://127.0.0.1:8001/components/vaadin-split-layout/demo/
+    - Tests: http://127.0.0.1:8001/components/vaadin-split-layout/test/
 
 
 ## Running tests from the command line
 
-1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
-
-1. When in the `vaadin-split-layout` directory, run `wct` or `npm test`
+1. When in the `vaadin-split-layout` directory, run `polymer test`
 
 
 ## Following the coding style
