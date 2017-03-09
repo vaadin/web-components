@@ -1174,6 +1174,14 @@
             expect(row.hasAttribute('focused')).to.eql.true;
             expect(container.hasAttribute('focused')).to.eql.true;
           });
+
+          it('should not throw an error when switching focus between body and header', function() {
+            expect(function() {
+              clickItem(1);
+              getRowCells(getRows(grid.$.scroller.$.header)[0])[0].click();
+              clickItem(0);
+            }).to.not.throw(Error);
+          });
         });
 
         describe('interaction mode', function() {
