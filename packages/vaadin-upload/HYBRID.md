@@ -10,8 +10,11 @@ $ npm install polymer-cli@next
 Created new dependencies that targeted latest versions of Polymer, and set old dependencies to `variants`
 
 - Need to make sure to test all versions.
+<<<<<<< 48e55a8544895b5112e016386d3ba6c9eb6ef5a5
 
 ## 2. Update to Shadow DOM v1
 Changed `<content>` to `<slot>` and `::content foo` to `::slotted(foo)`.
 
 Updated the demos to use the new interface.
+=======
+>>>>>>> Changed dependencies.
