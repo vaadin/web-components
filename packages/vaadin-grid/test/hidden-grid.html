@@ -12,7 +12,7 @@
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 
-  <style is="custom-style">
+  <style>
     vaadin-grid {
       height: 200px;
       width: 200px;
@@ -70,7 +70,7 @@
 
         it('should measure header on appear', function() {
           var contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
-          var headerRect = grid.$.scroller.$.header.getBoundingClientRect();
+          var headerRect = grid.$.header.getBoundingClientRect();
           expect(contentRect.top).to.be.closeTo(headerRect.bottom, 1);
         });
 

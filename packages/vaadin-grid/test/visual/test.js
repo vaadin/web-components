@@ -53,7 +53,7 @@ gemini.suite('vaadin-grid', (rootSuite) => {
         actions.wait(3000);
       })
       .capture('row-details-visible', {}, (actions, find) => {
-        const row = find('tr[is="vaadin-grid-table-row"]');
+        const row = find('vaadin-grid-table-row');
         actions.click(row);
       });
   });

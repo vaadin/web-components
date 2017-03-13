@@ -26,6 +26,10 @@
     ],
 
     _announceFocusedCell: function(cell, focused) {
+      if (cell === undefined || focused === undefined) {
+        return;
+      }
+
       // changing activeTarget steals focus so we don't want to do that while interacting with
       // cell contents.
       // TODO: remember to change activeTarget when navigation mode is activated back.
@@ -36,15 +40,19 @@
       var activeTarget = cell._cellContent.id;
       if (this.is === 'vaadin-grid-table-body' && !cell.hasAttribute('detailscell')) {
         // note: having `cell.column.name` property for announcing would maybe be a good option here?
-        var index = Polymer.dom(cell.parentElement).querySelectorAll('td').indexOf(cell);
+        var index = Array.prototype.indexOf.call(Polymer.dom(cell.parentElement).querySelectorAll('.vaadin-grid-cell'), cell);
         var lastHeaderRow = this.domHost.$.header.lastElementChild;
         var headerCell = lastHeaderRow.children[index];
         activeTarget = headerCell._cellContent.id + ' ' + activeTarget;
       }
-      this._getFocusTrap().activeTarget = activeTarget;
+      this.domHost.$.footerFocusTrap.activeTarget = activeTarget;
     },
 
     _dispatchEvents: function(cell, focused) {
+      if (cell === undefined || focused === undefined) {
+        return;
+      }
+
       // Dispatches cell-focusin and cell-focusout events on the cell content
       // for the virtual focus. This helps cell contents to detect if the cell
       // has focus, which is useful for the accessibility reasons. Used by
@@ -60,7 +68,11 @@
     },
 
     _focusedCellChanged: function(rowIndex, cellIndex) {
-      Polymer.dom(this).children.forEach(function(row, i) {
+      if (rowIndex === undefined || cellIndex === undefined) {
+        return;
+      }
+
+      Array.prototype.forEach.call(Polymer.dom(this).children, function(row, i) {
         row.focused = i === rowIndex;
 
         if (row.focused) {
@@ -73,17 +85,6 @@
           cell.focused = j === this._focusedCellIndex;
         }.bind(this));
       }.bind(this));
-    },
-
-    _getFocusTrap: function() {
-      switch(this.is) {
-        case 'vaadin-grid-table-header':
-          return this.domHost.$.headerFocusTrap;
-        case 'vaadin-grid-table-body':
-          return this.domHost.$.bodyFocusTrap;
-        case 'vaadin-grid-table-footer':
-          return this.domHost.$.footerFocusTrap;
-      }
     },
 
     focusLeft: function() {

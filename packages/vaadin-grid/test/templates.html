@@ -51,7 +51,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({
           is: 'x-grid',
 
@@ -96,7 +96,7 @@
 
   <script>
     function getHeaderCell(grid, index) {
-      return grid.$.scroller.$.header.querySelectorAll('th')[index];
+      return grid.$.header.querySelectorAll('.vaadin-grid-cell')[index];
     }
 
     function getFirstHeaderCell(grid) {
@@ -105,6 +105,21 @@
 
     describe('templating', function() {
       var container, grid;
+
+      before(function() {
+
+        // On V1 Shady, iron-input detached is called multiple times during
+        // slot distribution, which breaks everything:
+        // https://github.com/PolymerElements/iron-input/blob/80f9811410ac19eb4fad958354360ed880c1b6ac/iron-input.html#L192
+        if (Polymer.Element && !Polymer.Settings.useNativeShadow)
+        var proto = Object.getPrototypeOf(document.createElement('iron-input'));
+        proto.detached = function() {
+          if (this._observer) {
+            Polymer.dom(this).unobserveNodes(this._observer);
+          }
+          this._observer = null;
+        }
+      });
 
       beforeEach(function(done) {
         container = fixture('formatting');
@@ -142,8 +157,8 @@
         parent.appendChild(grid);
         Polymer.dom.flush();
 
-        expect(grid.$.scroller.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
-        expect(grid.$.scroller.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
+        expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
+        expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
       });
 
       it('should not restamp footer templates on attach', function() {
@@ -153,8 +168,8 @@
         parent.appendChild(grid);
         Polymer.dom.flush();
 
-        expect(grid.$.scroller.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
-        expect(grid.$.scroller.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
+        expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
+        expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
       });
 
       describe('using functions inside templates', function() {

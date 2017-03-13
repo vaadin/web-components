@@ -73,21 +73,23 @@
     </template>
   </test-fixture>
 
-  <template is="dom-bind">
-    <style is="custom-style">
-      #dom-bind-grid .my-content {
-        color: rgb(255, 0, 0);
-      }
-    </style>
-
-    <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="dom-bind-grid">
-      <vaadin-grid-column>
-        <template>
-          <b class="my-content">[[index]]</b>
-        </template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  </template>
+  <dom-bind>
+    <template is="dom-bind">
+      <style>
+        #dom-bind-grid .my-content {
+          color: rgb(255, 0, 0);
+        }
+      </style>
+    
+      <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="dom-bind-grid">
+        <vaadin-grid-column>
+          <template>
+            <b class="my-content">[[index]]</b>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </dom-bind>
 
 
 
@@ -140,18 +142,18 @@
           // Only test non-shadow
           var scroller;
           var table;
-          var tbody;
+          var body;
 
           beforeEach(function() {
             scroller = grid.$.scroller;
             table = scroller.$.table;
-            tbody = scroller.$.items;
+            body = grid.$.items;
             grid.dataProvider = infiniteDataProvider;
             Polymer.dom.flush();
           });
 
           it('should not lose scope on reorder', function(done) {
-            var row = tbody.children[0];
+            var row = body.children[0];
             var content = row.querySelector('.my-content');
 
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
@@ -166,14 +168,14 @@
             });
 
             // Deliberately mess the row order...
-            tbody.appendChild(row);
+            body.appendChild(row);
             // ...and schedule a reorder
             table.scrollTop += 1;
 
           });
 
           it('should not have vaadin-grid-table scope', function() {
-            var row = tbody.children[25];
+            var row = body.children[25];
             var content = row.querySelector('.my-content');
             expect(content.classList.contains('vaadin-grid-table')).to.be.false;
           });

@@ -47,7 +47,7 @@
         <vaadin-grid-column>
           <template class="header">
             <vaadin-grid-filter path="value" value="[[filter]]">
-              <input id="filter" value="{{filter::input}}">
+              <input id="filter" slot="filter" value="{{filter::input}}">
             </vaadin-grid-filter>
           </template>
           <template></template>
@@ -66,9 +66,9 @@
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         cachedItems = grid._cache[0];
-        rows = getRows(grid.$.scroller.$.items);
         grid.selectedItems = [cachedItems[0]];
         Polymer.dom.flush();
+        rows = getRows(grid.$.items);
       });
 
       it('should set selected attribute', function() {
@@ -136,18 +136,18 @@
         grid = fixture('multiselect');
         grid.items = ['foo', 'bar', 'baz'];
 
+        Polymer.dom.flush();
+
         selectionColumn = grid._columnTree[0][0];
         cachedItems = grid._cache[0];
-        rows = getRows(grid.$.scroller.$.items);
-        headerRows = getRows(grid.$.scroller.$.header);
+        rows = getRows(grid.$.items);
+        headerRows = getRows(grid.$.header);
 
         firstHeaderCellContent = getCellContent(getRowCells(headerRows[1])[0]);
         firstBodyCellContent = getCellContent(getRowCells(rows[0])[0]);
 
         selectAllCheckbox = firstHeaderCellContent.children[0];
         firstBodyCheckbox = firstBodyCellContent.children[0];
-
-        Polymer.dom.flush();
       });
 
       it('should have a checkbox in the body cell', function() {
@@ -166,6 +166,7 @@
       it('should add the item to selectedItems when row is clicked and auto-select is enabled', function() {
         var cell = getRowCells(rows[1])[1];
         cell.click();
+
         expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
       });
 

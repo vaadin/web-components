@@ -126,7 +126,7 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _orderChanged: function(order, rootColumns) {
-        if (order) {
+        if (order && rootColumns) {
           // The parent column order number cascades downwards to it's children
           // so that the resulting order numbering constructs as follows:
           // [             1000              ]
@@ -159,6 +159,10 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _reorderStatusChanged: function(reorderStatus, rootColumns) {
+        if (reorderStatus === undefined || rootColumns === undefined) {
+          return;
+        }
+
         rootColumns.forEach(function(column) {
           column._reorderStatus = reorderStatus;
         });
@@ -167,6 +171,10 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _resizableChanged: function(resizable, rootColumns) {
+        if (resizable === undefined || rootColumns === undefined) {
+          return;
+        }
+
         rootColumns.forEach(function(column) {
           column.resizable = resizable;
         });
@@ -175,14 +183,14 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _updateVisibleChildColumns: function(childColumns) {
-        this._visibleChildColumns = childColumns.filter(function(col) {
+        this._visibleChildColumns = Array.prototype.filter.call(childColumns, function(col) {
           return !col.hidden;
         });
       },
 
       _childColumnsChanged: function(childColumns) {
         if (!this._autoHidden && this.hidden) {
-          childColumns.forEach(function(column) {
+          Array.prototype.forEach.call(childColumns, function(column) {
             column.hidden = true;
           });
           this._updateVisibleChildColumns(childColumns);
@@ -192,19 +200,23 @@ The `class` attribute is used to differentiate header and footer templates.
 
       _updateFlexAndWidth: function(visibleChildColumns) {
         if (visibleChildColumns.length) {
-          this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
-            return prev += ' + ' + (curr.width || '0px').replace('calc', '');
+          this._setWidth('calc(' + Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
+            return prev += ' + ' + (curr.width || '0').replace('calc', '');
           }, '').substring(3) + ')');
         } else {
           this._setWidth('0px');
         }
 
-        this._setFlexGrow(visibleChildColumns.reduce(function(prev, curr) {
+        this._setFlexGrow(Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
           return prev + curr.flexGrow;
         }, 0));
       },
 
       _frozenChanged: function(childColumns, frozen) {
+        if (childColumns === undefined || frozen === undefined) {
+          return;
+        }
+
         childColumns.forEach(function(col) {
           col.frozen = frozen;
         });
@@ -241,7 +253,7 @@ The `class` attribute is used to differentiate header and footer templates.
 
       _addNodeObserver: function() {
         this._observer = Polymer.dom(this).observeNodes(function(info) {
-          this._rootColumns = Polymer.dom(this).children.filter(function(child) {
+          this._rootColumns = Array.prototype.filter.call(Polymer.dom(this).children, function(child) {
             return /column/.test(child.localName);
           });
           var columns = function(node) {

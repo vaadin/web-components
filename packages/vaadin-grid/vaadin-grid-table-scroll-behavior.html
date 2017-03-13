@@ -1,61 +1,66 @@
 <link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
 
-<dom-module id="vaadin-grid-table-scroll-styles">
+<dom-module id="vaadin-grid-table-table-scroll-styles">
   <template>
     <style>
-      :host {
-        transform: translateZ(0);
-      }
-
-      thead {
-        position: absolute;
-        top: 0;
-        width: 100%;
-      }
-
-      tfoot {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-      }
-
-      tbody {
-        z-index: -1;
-      }
-
-      table {
+      vaadin-grid-table-table {
         position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         z-index: -2;
       }
 
-      :host([ios]) table {
+      vaadin-grid-table[ios] vaadin-grid-table-table {
         transform: none;
       }
 
-      :host([fixed-sections]) {
+      vaadin-grid-table[fixed-sections] vaadin-grid-table-table {
+        transform: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-table-scroll-styles">
+  <template>
+    <style>
+      vaadin-grid-table {
+        transform: translateZ(0);
+      }
+
+      vaadin-grid-table-header {
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      vaadin-grid-table-footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+      }
+
+      vaadin-grid-table-body {
+        z-index: -1;
+      }
+
+      vaadin-grid-table[fixed-sections] {
         /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
         a containing block. The object acts as a containing block for fixed positioned descendants. */
         transform: translateZ(0);
         overflow: hidden;
       }
 
-      :host([fixed-sections]) thead,
-      :host([fixed-sections]) tfoot {
+      vaadin-grid-table[fixed-sections] vaadin-grid-table-header,
+      vaadin-grid-table[fixed-sections] vaadin-grid-table-footer {
         position: fixed;
       }
 
-      :host([fixed-sections]) tbody#items {
+      vaadin-grid-table[fixed-sections] vaadin-grid-table-body#items {
         position: fixed;
         width: 100%;
         will-change: transform;
       }
-
-      :host([fixed-sections]) table {
-        transform: none;
-      }
-
     </style>
   </template>
 </dom-module>
@@ -103,12 +108,16 @@
       }
     },
 
-    listeners: {
-      'table.wheel': '_onWheel'
-    },
-
     ready: function() {
       this.scrollTarget = this.$.table;
+    },
+
+    attached: function() {
+      this.listen(this.scrollTarget, 'wheel', '_onWheel');
+    },
+
+    detached: function() {
+      this.unlisten(this.scrollTarget, 'wheel', '_onWheel');
     },
 
     /**
@@ -362,9 +371,10 @@
       }
     },
 
+    // correct order needed for preserving correct tab order between cell contents.
     _reorderRows: function() {
-      var tbody = Polymer.dom(this.$.items);
-      var items = tbody.querySelectorAll('tr');
+      var body = Polymer.dom(this.$.items);
+      var items = body.querySelectorAll('.vaadin-grid-row');
       var _adjustedVirtualStart = this._virtualStart + this._vidxOffset;
 
       // DOM index of the element with the lowest index
@@ -374,22 +384,22 @@
       if (physicalIndexOfFirst < items.length / 2) {
         // Append all the preceding elements after the last element
         for (var i = 0; i < physicalIndexOfFirst; i++) {
-          tbody.appendChild(items[i]);
+          body.appendChild(items[i]);
         }
       } else {
         // Prepend all the trailing elements before the first element
         for (var j = physicalIndexOfFirst; j < items.length; j++) {
-          tbody.insertBefore(items[j], items[0]);
+          body.insertBefore(items[j], items[0]);
         }
       }
     },
 
     _frozenCellsChanged: function() {
       this.debounce('cache-elements', function() {
-        Polymer.dom(this.root).querySelectorAll('td, th').forEach(function(cell) {
+        Polymer.dom(this.domHost.root).querySelectorAll('.vaadin-grid-cell').forEach(function(cell) {
           cell.style.transform = '';
         });
-        this._frozenCells = Polymer.dom(this.root).querySelectorAll('[frozen]');
+        this._frozenCells = Array.prototype.slice.call(Polymer.dom(this.domHost.root).querySelectorAll('[frozen]'));
         this._translateStationaryElements();
       });
       this._updateLastFrozen();
@@ -399,6 +409,7 @@
       if (!this.columnTree) {
         return;
       }
+
       var columnsRow = this.columnTree[this.columnTree.length - 1].slice(0);
       columnsRow.sort(function(a, b) {
         return a._order - b._order;

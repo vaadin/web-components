@@ -23,6 +23,10 @@
     ],
 
     _itemsChanged: function(items, splices) {
+      if (items === undefined || splices === undefined) {
+        return;
+      }
+
       this.size = (items || []).length;
       this.dataProvider = this.dataProvider || this._arrayDataProvider;
       this.clearCache();

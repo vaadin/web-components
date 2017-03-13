@@ -20,6 +20,7 @@
         column: Object,
         expanded: Boolean,
         flexGrow: Number,
+        colSpan: Number,
         focused: {
           type: Boolean,
           reflectToAttribute: true
@@ -72,8 +73,13 @@
         '_childColumnsChanged(_childColumns)'
       ],
 
-      created: function() {
+      ready: function() {
         this.classList.add('vaadin-grid-cell');
+
+        if (Polymer.Settings.useShadow === false) {
+          this.classList.add('style-scope');
+          this.classList.add('vaadin-grid');
+        }
       },
 
       _columnChanged: function(column) {
@@ -91,33 +97,43 @@
 
         // Assigning undefined to element.colSpan will set colSpan attribute to 0
         if (column.colSpan) {
-          this.setAttribute('colspan', column.colSpan);
+          this.colSpan = column.colSpan;
         }
 
         this.listen(column, 'property-changed', '_columnPropChanged');
       },
 
       _cellAttached: function(column, isAttached) {
+        if (column === undefined || isAttached === undefined) {
+          return;
+        }
+
         // Cells get detached when the column tree changes and new cells are created.
         // Also, cells get detached and attached during row reordering after scrolling.
         if (isAttached) {
           this.listen(column, 'property-changed', '_columnPropChanged');
         } else {
-          this.unlisten(column, 'property-changed', '_columnPropChanged');
+          // prevent unwanted unlistening when elements are being moved around when
+          // ShadyDOM polyfill inserts elements into slots.
+          this.async(function() {
+            if (!this.isAttached) {
+              this.unlisten(column, 'property-changed', '_columnPropChanged');
+            }
+          });
         }
       },
 
       _columnPropChanged: function(e) {
         if (e.target == this.column) {
-          if (e.detail.path === 'colSpan') {
-            this.setAttribute('colspan', e.detail.value);
-          } else {
-            this[e.detail.path] = e.detail.value;
-          }
+          this[e.detail.path] = e.detail.value;
         }
       },
 
       _expandedChanged: function(expanded, instance) {
+        if (expanded === undefined || instance === undefined) {
+          return;
+        }
+
         instance.__expanded__ = expanded;
         instance.expanded = expanded;
       },
@@ -127,23 +143,39 @@
       },
 
       _indexChanged: function(index, instance) {
+        if (index === undefined || instance === undefined) {
+          return;
+        }
+
         instance.index = index;
       },
 
       _itemChanged: function(item, instance) {
+        if (item === undefined || instance === undefined) {
+          return;
+        }
+
         instance.item = item;
       },
 
       _selectedChanged: function(selected, instance) {
+        if (selected === undefined || instance === undefined) {
+          return;
+        }
+
         instance.__selected__ = selected;
         instance.selected = selected;
       },
 
       _childColumnsChanged: function(childColumns) {
-        this.setAttribute('colspan', childColumns.length);
+        this.colSpan = childColumns.length;
       },
 
-      _toggleContent: function(isAttached, cellContent, insertionPoint) {
+      _toggleContent: function(isAttached, cellContent, insertionPoint, scrollerInsertionPoint) {
+        if (isAttached === undefined || cellContent === undefined || insertionPoint === undefined) {
+          return;
+        }
+
         if (isAttached) {
           if (Polymer.dom(cellContent).parentNode !== this.target) {
             Polymer.dom(this.target).appendChild(cellContent);
@@ -159,6 +191,10 @@
       },
 
       _toggleInstance: function(isAttached, templatizer, instance) {
+        if (isAttached === undefined || templatizer === undefined || instance === undefined) {
+          return;
+        }
+
         if (isAttached) {
           templatizer.addInstance(instance);
         } else {
@@ -180,25 +216,37 @@
       },
 
       _instanceChanged: function(instance, target) {
+        if (instance === undefined || target === undefined) {
+          return;
+        }
+
         this.style.height = '';
 
         this._cellContent = document.createElement('vaadin-grid-cell-content');
 
         var contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
         var id = 'vaadin-grid-cell-content-' + contentId;
-        this._cellContent.setAttribute('id', id);
 
         Polymer.dom(this._cellContent).appendChild(this.instance.root);
 
-        this._insertionPoint = document.createElement('content');
-        this._insertionPoint.setAttribute('select', '#' + id);
+        // Polymer 2.0
+        if (Polymer.Element) {
+          this._cellContent.setAttribute('slot', id);
+
+          this._insertionPoint = document.createElement('slot');
+          this._insertionPoint.setAttribute('name', id);
+
+        } else {
+          this._cellContent.setAttribute('id', id);
+
+          this._insertionPoint = document.createElement('content');
+          this._insertionPoint.setAttribute('select', '#' + id);
+        }
       },
     };
 
     Polymer({
       is: 'vaadin-grid-table-cell',
-
-      extends: 'td',
 
       behaviors: [
         vaadinGridTableCellBehavior,
@@ -218,8 +266,6 @@
 
     Polymer({
       is: 'vaadin-grid-table-header-cell',
-
-      extends: 'th',
 
       properties: {
         headerTemplate: Object,
@@ -315,8 +361,11 @@
         clearTimeout(this._startReorderTimeout);
         if (this._reorderGhost) {
           e.preventDefault();
-          var event = new CustomEvent('dragend', {bubbles: true});
-          this.dispatchEvent(event);
+
+          // TODO: WTF doesn't bubble in tests?
+          // var event = new CustomEvent('dragend', {bubbles: true});
+          // this.dispatchEvent(event);
+          this.fire('dragend');
           this._reorderGhost.style.visibility = 'hidden';
           this._reorderGhost = null;
         }
@@ -326,10 +375,10 @@
         if (Polymer.Settings.useShadow) {
           var scroller = this.target.$.scroller;
           scroller.toggleAttribute('no-content-pointer-events', true);
-          var cell = scroller.root.elementFromPoint(x, y);
+          var cell = this.domHost.root.elementFromPoint(x, y);
           scroller.toggleAttribute('no-content-pointer-events', false);
           if (cell && cell.getContentChildren) {
-            return cell.getContentChildren('content')[0];
+            return cell.getContentChildren(Polymer.Element ? 'slot': 'content')[0];
           }
         } else {
           return document.elementFromPoint(x, y);
@@ -382,7 +431,7 @@
         // Get the target column to resize
         var column = this.column;
         if (column.localName === 'vaadin-grid-column-group') {
-          column = column._childColumns.slice(0)
+          column = Array.prototype.slice.call(column._childColumns, 0)
           .sort(function(a, b) {
             return a._order - b._order;
           })
@@ -401,11 +450,12 @@
         }
 
         // Fix width and flex-grow for all preceding columns
-        var thead = this.parentElement.parentElement;
-        Polymer.dom(thead).querySelectorAll('tr:last-child th')
-        .sort(function(a, b) {
-          return a.column._order - b.column._order;
-        })
+        var header = this.parentElement.parentElement;
+        Array.prototype.slice.call(Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'))
+        .sort(
+          function(a, b) {
+            return a.column._order - b.column._order;
+          })
         .forEach(function(cell, index, array) {
           if (index < array.indexOf(targetCell)) {
             cell.column.width = cell.offsetWidth + 'px';
@@ -421,13 +471,17 @@
       },
 
       _getHeaderCellByColumn: function(column) {
-        var thead = this.parentElement.parentElement;
-        return Polymer.dom(thead).querySelectorAll('tr:last-child th').filter(function(cell) {
+        var header = this.parentElement.parentElement;
+        return Array.prototype.filter.call(Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'), function(cell) {
           return cell.column === column;
         })[0];
       },
 
       _headerTemplateChanged: function(headerTemplate, isAttached) {
+        if (headerTemplate === undefined || isAttached === undefined) {
+          return;
+        }
+
         if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
           this.instance = this.instance || headerTemplate.templatizer.createInstance();
@@ -447,8 +501,6 @@
     Polymer({
       is: 'vaadin-grid-table-footer-cell',
 
-      extends: 'td',
-
       properties: {
         footerTemplate: Object
       },
@@ -461,6 +513,10 @@
       observers: ['_footerTemplateChanged(footerTemplate, isAttached)'],
 
       _footerTemplateChanged: function(footerTemplate, isAttached) {
+        if (footerTemplate === undefined || isAttached === undefined) {
+          return;
+        }
+
         if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
           this._isEmpty = false;
           this.instance = this.instance || footerTemplate.templatizer.createInstance();

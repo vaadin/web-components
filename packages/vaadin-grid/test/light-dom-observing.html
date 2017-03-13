@@ -27,7 +27,7 @@
   <dom-module id="grid-wrapper">
     <template>
       <vaadin-grid id="grid" size="10">
-        <content></content>
+        <slot></slot>
         <vaadin-grid-column-group>
           <template class="header">wrapper group header</template>
           <template class="footer">wrapper group footer</template>
@@ -41,7 +41,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({is: 'grid-wrapper'});
       });
     </script>
@@ -180,13 +180,15 @@
   <test-fixture id="dom-repeat-columns">
     <template is="dom-template">
       <vaadin-grid id="grid" size="10">
-        <template is="dom-repeat" id="repeater" items="[[columns]]" as="column">
-          <vaadin-grid-column>
-            <template class="header">grid repeats column [[column]] header</template>
-            <template class="footer">grid repeats column [[column]] footer</template>
-            <template>grid repeats column [[column]] body [[item.value]]</template>
-          </vaadin-grid-column>
-        </template>
+        <dom-repeat id="repeater" items="[[columns]]" as="column">
+          <template is="dom-repeat" items="[[columns]]" as="column">
+            <vaadin-grid-column>
+              <template class="header">grid repeats column [[column]] header</template>
+              <template class="footer">grid repeats column [[column]] footer</template>
+              <template>grid repeats column [[column]] body [[item.value]]</template>
+            </vaadin-grid-column>
+          </template>
+        </dom-repeat>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -195,13 +197,15 @@
     <template is="dom-template">
       <vaadin-grid size="10">
         <vaadin-grid-column-group>
-          <template is="dom-repeat" items="[[columns]]" as="column">
-            <vaadin-grid-column>
-              <template class="header">group repeats column [[column]] header</template>
-              <template class="footer">group repeats column [[column]] footer</template>
-              <template>group repeats column [[column]] body [[item.value]]</template>
-            </vaadin-grid-column>
-          </template>
+          <dom-repeat items="[[columns]]" as="column">
+            <template is="dom-repeat" items="[[columns]]" as="column">
+              <vaadin-grid-column>
+                <template class="header">group repeats column [[column]] header</template>
+                <template class="footer">group repeats column [[column]] footer</template>
+                <template>group repeats column [[column]] body [[item.value]]</template>
+              </vaadin-grid-column>
+            </template>
+          </dom-repeat>
         </vaadin-grid-column-group>
       </vaadin-grid>
     </template>
@@ -210,15 +214,17 @@
   <test-fixture id="dom-repeat-groups">
     <template is="dom-template">
       <vaadin-grid size="10">
-        <template is="dom-repeat" items="[[columns]]" as="column">
-          <vaadin-grid-column-group>
-            <vaadin-grid-column>
-              <template class="header">grid repeats group [[column]] header</template>
-              <template class="footer">grid repeats group [[column]] footer</template>
-              <template>grid repeats group [[column]] body [[item.value]]</template>
-            </vaadin-grid-column>
-          </vaadin-grid-column-group>
-        </template>
+        <dom-repeat items="[[columns]]" as="column">
+          <template is="dom-repeat" items="[[columns]]" as="column">
+            <vaadin-grid-column-group>
+              <vaadin-grid-column>
+                <template class="header">grid repeats group [[column]] header</template>
+                <template class="footer">grid repeats group [[column]] footer</template>
+                <template>grid repeats group [[column]] body [[item.value]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </template>
+        </dom-repeat>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -227,15 +233,17 @@
     <template is="dom-template">
       <vaadin-grid size="10">
         <vaadin-grid-column-group>
-          <template is="dom-repeat" items="[[columns]]" as="column">
-            <vaadin-grid-column-group>
-              <vaadin-grid-column>
-                <template class="header">group repeats group [[column]] header</template>
-                <template class="footer">group repeats group [[column]] footer</template>
-                <template>group repeats group [[column]] body [[item.value]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
-          </template>
+          <dom-repeat items="[[columns]]" as="column">
+            <template is="dom-repeat" items="[[columns]]" as="column">
+              <vaadin-grid-column-group>
+                <vaadin-grid-column>
+                  <template class="header">group repeats group [[column]] header</template>
+                  <template class="footer">group repeats group [[column]] footer</template>
+                  <template>group repeats group [[column]] body [[item.value]]</template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </template>
+          </dom-repeat>
         </vaadin-grid-column-group>
       </vaadin-grid>
     </template>
@@ -298,19 +306,25 @@
       var wrapper, grid, scroller, header, body, footer, repeater;
 
       function init(fixtureName, data) {
+
         grid = fixture(fixtureName, data);
         if (grid.$.grid) {
           // unwrap the <grid-wrapper>
           wrapper = grid;
           grid = grid.$.grid || grid;
         }
-        repeater = Polymer.dom(grid).querySelector('template[is="dom-repeat"]');
-        scroller = grid.$.scroller;
-        header = scroller.$.header;
-        body = scroller.$.items;
-        footer = scroller.$.footer;
+
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
+
+        repeater = Polymer.dom(grid).querySelector(Polymer.Element ? 'dom-repeat' : 'template[is="dom-repeat"]');
+        if (repeater) {
+          repeater.items = data.columns; // TODO: Why needed?
+        }
+        scroller = grid.$.scroller;
+        header = grid.$.header;
+        body = grid.$.items;
+        footer = grid.$.footer;
       }
 
       function expectFirstColumnHeader(columnName, level) {
@@ -350,16 +364,20 @@
 
       describe('generic operations', function() {
         describe('columns inside grid', function() {
-          beforeEach(function() {
+          beforeEach(function(done) {
             init('columns');
+            Polymer.RenderStatus.afterNextRender(grid, done);
           });
 
           it('should support adding late', function(done) {
             var column = fixture('column');
             Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
             Polymer.dom.flush();
+            if (grid._observer.flush) {
+              grid._observer.flush();
+            }
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumn('some');
               done();
             });
@@ -369,8 +387,11 @@
             var column = fixture('selection-column');
             Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
             Polymer.dom.flush();
+            if (grid._observer.flush) {
+              grid._observer.flush();
+            }
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumn('some');
               done();
             });
@@ -380,8 +401,11 @@
             var column = Polymer.dom(grid).querySelector('vaadin-grid-column');
             Polymer.dom(grid).removeChild(column);
             Polymer.dom.flush();
+            if (grid._observer.flush) {
+              grid._observer.flush();
+            }
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumn('second');
               done();
             });
@@ -389,7 +413,7 @@
 
           it('should invoke node observer twice when removing columns', function(done) {
             var column = Polymer.dom(grid).querySelector('vaadin-grid-column');
-            var spy = sinon.spy(grid._observer, 'fn');
+            var spy = sinon.spy(grid._observer, Polymer.Element ? 'callback' : 'fn');
             Polymer.dom(grid).removeChild(column);
             flush(function() {
               // Once for the column and in effect of that, once for the removed cell content elements
@@ -400,15 +424,19 @@
 
           it('should invoke node observer twice when adding columns', function(done) {
             var column = fixture('column');
-            var spy = sinon.spy(grid._observer, 'fn');
+            var spy = sinon.spy(grid._observer, Polymer.Element ? 'callback' : 'fn');
             Polymer.dom(grid).insertBefore(column, Polymer.dom(grid).firstChild);
             flush(function() {
               // Once for the column and in effect of that, once for the added cell content elements
               var expectedCallCount = 2;
-              if (Polymer.Settings.useNativeShadow) {
-                // Focus traps are relocated
-                expectedCallCount++;
+              if (!Polymer.Element) {
+                // Currently the focus traps don't cause invocation on P2
+                if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
+                  // Focus traps are relocated
+                  expectedCallCount++;
+                }
               }
+
               expect(spy.callCount).to.equal(expectedCallCount);
               done();
             });
@@ -416,13 +444,13 @@
 
           it('should not invoke on row reorder', function(done) {
             grid.size = 1000;
-            Polymer.dom.flush();
-            var spy = sinon.spy(grid._observer, 'fn');
-
-            scrollToEnd(grid);
             flush(function() {
-              expect(spy.called).to.be.false;
-              done();
+              var spy = sinon.spy(grid._observer, Polymer.Element ? 'callback' : 'fn');
+              scrollToEnd(grid);
+              flush(function() {
+                expect(spy.called).to.be.false;
+                done();
+              });
             });
           });
 
@@ -431,11 +459,14 @@
             var content = getHeaderCellContent(grid, 0, 0);
             Polymer.dom(grid).appendChild(grid._columnTree[0][0]);
             Polymer.dom.flush();
+            if (grid._observer.flush) {
+              grid._observer.flush();
+            }
             expect(getHeaderCellContent(grid, 0, 1)).to.equal(content);
           });
 
           it('should not create new cells', function() {
-            var row = getRows(grid.$.scroller.$.items)[0];
+            var row = getRows(grid.$.items)[0];
             var spy = sinon.spy(row, '_createCell');
             Polymer.dom.flush();
             var content = getHeaderCellContent(grid, 0, 0);
@@ -459,7 +490,7 @@
             Polymer.dom(firstGroup).insertBefore(column, Polymer.dom(firstGroup).firstChild);
             Polymer.dom.flush();
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumn('some', 1);
               done();
             });
@@ -470,7 +501,7 @@
             Polymer.dom(firstGroup).removeChild(column);
             Polymer.dom.flush();
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumn('first bar', 1);
               done();
             });
@@ -487,7 +518,7 @@
             Polymer.dom(grid).insertBefore(group, Polymer.dom(grid).firstChild);
             Polymer.dom.flush();
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumnHeader('some group', 0);
               expectFirstColumnFooter('some group', 0);
               expectFirstColumn('some foo', 1);
@@ -500,7 +531,7 @@
             Polymer.dom(grid).removeChild(group);
             Polymer.dom.flush();
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumnHeader('second group', 0);
               expectFirstColumnFooter('second group', 0);
               expectFirstColumn('second foo', 1);
@@ -522,7 +553,7 @@
             Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
             Polymer.dom.flush();
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumnHeader('some group', 1);
               expectFirstColumnFooter('some group', 1);
               expectFirstColumn('some foo', 2);
@@ -535,7 +566,7 @@
             Polymer.dom(firstGroup).removeChild(group);
             Polymer.dom.flush();
 
-            grid.async(function() {
+            Polymer.RenderStatus.afterNextRender(grid, function() {
               expectFirstColumnHeader('second nested group', 1);
               expectFirstColumnFooter('second nested group', 1);
               expectFirstColumn('second foo', 2);
@@ -559,7 +590,7 @@
           repeater.unshift('items', 'd');
           repeater.render();
 
-          grid.async(function() {
+          Polymer.RenderStatus.afterNextRender(grid, function() {
             expectFirstColumn(prefix + ' d', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(4);
@@ -571,7 +602,7 @@
           repeater.shift('items');
           repeater.render();
 
-          grid.async(function() {
+          Polymer.RenderStatus.afterNextRender(grid, function() {
             expectFirstColumn(prefix + ' b', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(2);
@@ -629,7 +660,7 @@
               });
 
               it('should provide initial state', function(done) {
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('foo', 1);
                   expectNumberOfColumns(3);
                   done();
@@ -641,7 +672,7 @@
                 Polymer.dom(wrapper).insertBefore(column, Polymer.dom(wrapper).firstChild);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('some', 1);
                   expectNumberOfColumns(4);
                   done();
@@ -653,7 +684,7 @@
                 Polymer.dom(wrapper).removeChild(column);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('bar', 1);
                   expectNumberOfColumns(2);
                   done();
@@ -670,7 +701,7 @@
               });
 
               it('should provide initial state', function(done) {
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('first foo', 1);
                   expectNumberOfColumns(5);
                   done();
@@ -682,7 +713,7 @@
                 Polymer.dom(wrapper).insertBefore(group, Polymer.dom(wrapper).firstChild);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('some foo', 1);
                   expectNumberOfColumns(7);
                   done();
@@ -693,7 +724,7 @@
                 Polymer.dom(wrapper).removeChild(firstGroup);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('second foo', 1);
                   expectNumberOfColumns(3);
                   done();
@@ -716,7 +747,7 @@
                 Polymer.dom(firstGroup).insertBefore(column, Polymer.dom(firstGroup).firstChild);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('some', 1);
                   expectNumberOfColumns(6);
                   done();
@@ -728,7 +759,7 @@
                 Polymer.dom(firstGroup).removeChild(column);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('first bar', 1);
                   expectNumberOfColumns(4);
                   done();
@@ -742,7 +773,7 @@
                 Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(grid, function() {
                   expectFirstColumn('some foo', 2);
                   expectNumberOfColumns(7);
                   done();
@@ -754,12 +785,12 @@
                 Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
                 Polymer.dom.flush();
 
-                grid.async(function() {
+                Polymer.RenderStatus.afterNextRender(group, function() {
                   expectNumberOfColumns(7);
                   Polymer.dom(firstGroup).removeChild(group);
                   Polymer.dom.flush();
 
-                  grid.async(function() {
+                  Polymer.RenderStatus.beforeNextRender(grid, function() {
                     expectFirstColumn('first foo', 1);
                     expectNumberOfColumns(5);
                     done();

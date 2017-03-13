@@ -373,7 +373,7 @@
        */
       updateViewportBoundaries: function() {
         this._scrollerPaddingTop = this.scrollTarget === this ? 0 :
-            parseInt(window.getComputedStyle(this)['padding-top'], 10);
+            parseInt(window.getComputedStyle(this)['padding-top'] || 0, 10);
 
         this._viewportHeight = this._scrollTargetHeight;
       },
@@ -446,6 +446,10 @@
         }
         this._lastPage = currentPage;
         return true;
+      },
+
+      _debounceTemplate: function(fn) {
+        Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', fn));
       },
 
       /**
@@ -542,7 +546,13 @@
       _updateMetrics: function(itemSet) {
         // Make sure we distributed all the physical items
         // so we can measure them
-        Polymer.dom.flush();
+
+        // Calling Polymer.dom.flush() in Shady has some perf issues
+        // with multiple <slot> elements. Trying to reduce unnecessary
+        // calls during startup by flushing only when scrolling.
+        if (this.scrolling) {
+          Polymer.dom.flush();
+        }
 
         var newPhysicalSize = 0;
         var oldPhysicalSize = 0;

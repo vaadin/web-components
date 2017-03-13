@@ -152,7 +152,7 @@ column and aling numeric contents to the right:
 
     </vaadin-grid>
 
-See also the “Styling” page in the demos.
+See also the “Styling” demos.
 
 ### Keyboard Navigation
 
@@ -205,7 +205,6 @@ first element in the cell will be focused. You can override the behavior by appl
 <link rel="import" href="vaadin-grid-selection-behavior.html">
 <link rel="import" href="vaadin-grid-sort-behavior.html">
 <link rel="import" href="vaadin-grid-filter-behavior.html">
-<link rel="import" href="vaadin-grid-keyboard-navigation-behavior.html">
 <link rel="import" href="vaadin-grid-column-reordering-behavior.html">
 
 <dom-module id="vaadin-grid">
@@ -217,7 +216,9 @@ first element in the cell will be focused. You can override the behavior by appl
         background: var(--primary-background-color, #fff);
         box-sizing: border-box;
         border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
 
+      :host(:focus) {
         -webkit-tap-highlight-color: transparent;
       }
 
@@ -231,10 +232,35 @@ first element in the cell will be focused. You can override the behavior by appl
       }
     </style>
 
-    <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
-        column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
-        row-details-template="[[_rowDetailsTemplate]]" column-reordering-allowed="[[columnReorderingAllowed]]">
-      <content></content>
+    <style include="vaadin-grid-table-scroll-styles"></style>
+    <style include="vaadin-grid-row-details-styles"></style>
+    <style include="vaadin-grid-table-styles"></style>
+
+    <style include="vaadin-grid-table-themability-styles"></style>
+    <style include="vaadin-grid-selection-themability-styles"></style>
+    <style include="vaadin-grid-navigation-themability-styles"></style>
+    <style include="vaadin-grid-active-item-themability-styles"></style>
+    <style include="vaadin-grid-row-details-themability-styles"></style>
+    <style include="vaadin-grid-column-reordering-themability-styles"></style>
+
+    <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]" column-tree="[[_columnTree]]"
+      content-target="[[_getContentTarget()]]" row-details-template="[[_rowDetailsTemplate]]" column-reordering-allowed="[[columnReorderingAllowed]]">
+      <vaadin-grid-table-header id="header" slot="header" target="[[_getContentTarget()]]" column-tree="[[_columnTree]]"></vaadin-grid-table-header>
+      <vaadin-grid-table-body id="items" slot="items"></vaadin-grid-table-body>
+      <vaadin-grid-table-footer id="footer" slot="footer" target="[[_getContentTarget()]]" column-tree="[[_columnTree]]"></vaadin-grid-table-footer>
+
+      <!--
+      in native Shadow, we move the footer focus trap to light DOM.
+      It needs to be injected/slotted back inside the shadow root in order to be focusable.
+     -->
+      <slot name="footerFocusTrap"></slot>
+
+      <!-- This is for column elements, to make sure we can listen for events coming from them in Safari 9? -->
+      <!-- WARNING: this is converted to <content> without selector in P1 which might cause performance issues together with large number of cell content injection points. -->
+      <slot></slot>
+
+      <vaadin-grid-table-focus-trap id="footerFocusTrap" slot="footerFocusTrap" on-focus-gained="_onFooterFocus" on-focus-lost="_onFocusout">
+      </vaadin-grid-table-focus-trap>
     </vaadin-grid-table>
   </template>
 </dom-module>
@@ -278,8 +304,8 @@ first element in the cell will be focused. You can override the behavior by appl
       vaadin.elements.grid.SelectionBehavior,
       vaadin.elements.grid.SortBehavior,
       vaadin.elements.grid.FilterBehavior,
-      vaadin.elements.grid.KeyboardNavigationBehavior,
-      vaadin.elements.grid.ColumnReorderingBehavior
+      vaadin.elements.grid.ColumnReorderingBehavior,
+      vaadin.elements.grid.TableKeyboardBehavior
     ],
 
     listeners: {
@@ -293,7 +319,7 @@ first element in the cell will be focused. You can override the behavior by appl
       row.selected = this._isSelected(item);
       row.expanded = this._isExpanded(item);
       row.active = item !== null && item == this.activeItem;
-      row.focused = row.index === this.$.scroller.$.items._focusedRowIndex;
+      row.focused = row.index === this.$.items._focusedRowIndex;
     },
 
     _getContentTarget: function() {
@@ -306,7 +332,9 @@ first element in the cell will be focused. You can override the behavior by appl
       this.$.scroller.target = this;
 
       if (document.doctype === null) {
-        console.warn('<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.');
+        console.warn(
+          '<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
+        );
       }
     },
 

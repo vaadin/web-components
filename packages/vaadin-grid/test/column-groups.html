@@ -166,11 +166,13 @@
     </template>
   </test-fixture>
 
-  <vaadin-grid-column id="extra">
-    <template class="footer">
-      Foobar
-    </template>
-  </vaadin-grid-column>
+  <template id="extra">
+    <vaadin-grid-column>
+      <template class="footer">
+        Foobar
+      </template>
+    </vaadin-grid-column>
+  </template>
 
   <script>
     describe('column groups', function() {
@@ -199,9 +201,9 @@
       function init(fixure) {
         grid = fixture(fixure);
         scroller = grid.$.scroller;
-        header = scroller.$.header;
-        body = scroller.$.items;
-        footer = scroller.$.footer;
+        header = grid.$.header;
+        body = grid.$.items;
+        footer = grid.$.footer;
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
 
@@ -216,7 +218,7 @@
         });
 
         it('should have empty header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('th');
+          var cells = Polymer.dom(header).querySelectorAll('.vaadin-grid-cell');
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(cell) {
@@ -225,7 +227,7 @@
         });
 
         it('should have empty footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('td');
+          var cells = Polymer.dom(footer).querySelectorAll('.vaadin-grid-cell');
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(cell) {
@@ -249,7 +251,7 @@
           //  | header-0 | header-1 | header-2 |
           init('1column1group');
 
-          extraColumn = document.querySelector('#extra').cloneNode(true);
+          extraColumn = document.importNode(document.querySelector('#extra').content, true).children[0];
         });
 
         it('the group header cell should ignore changes from child columns', function() {
@@ -322,6 +324,11 @@
         it('should have visible footer rows after adding extra column', function() {
           Polymer.dom(grid).appendChild(extraColumn);
           Polymer.dom.flush();
+
+          if (Polymer.Element) {
+            grid._observer.flush();
+          }
+
           expect(getRows(footer)[0].hidden).to.be.false;
           expect(getRows(footer)[1].hidden).to.be.true;
         });
@@ -350,14 +357,14 @@
         });
 
         it('should have a border below the header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('th');
+          var cells = Polymer.dom(header).querySelectorAll('.vaadin-grid-cell');
           var cellOnLastRow = getCellContent(cells[cells.length - 1]);
 
           expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
         });
 
         it('should have a border above the footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('td');
+          var cells = Polymer.dom(footer).querySelectorAll('.vaadin-grid-cell');
           var cellOnFirstRow = getCellContent(cells[0]);
 
           expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
@@ -384,14 +391,14 @@
         });
 
         it('should have cell content wrappers in all header cells', function() {
-          Polymer.dom(header).querySelectorAll('th').forEach(function(a) {
+          Polymer.dom(header).querySelectorAll('.vaadin-grid-cell').forEach(function(a) {
             var content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 
         it('should have cell content wrappers in all footer cells', function() {
-          Polymer.dom(footer).querySelectorAll('td').forEach(function(a) {
+          Polymer.dom(footer).querySelectorAll('.vaadin-grid-cell').forEach(function(a) {
             var content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });

@@ -140,6 +140,11 @@
 
       describe('syncing with scroll target', function() {
 
+        beforeEach(function() {
+          outerScroller._syncingScrollTarget = false;
+          outerScroller._syncingOuterScroller = false;
+        });
+
         it('should scroll the target', function(done) {
           outerScroller.addEventListener('scroll', function() {
             Polymer.RenderStatus.afterNextRender(grid, function() {
@@ -262,7 +267,7 @@
       });
 
       it('should have the correct scrollHeight', function() {
-        var rows = getRows(scroller.$.items);
+        var rows = getRows(grid.$.items);
         var cells = getRowCells(rows[0]);
         var expectedScrollHeight = cells[0].offsetHeight;
         expect(outerScroller.scrollHeight).to.eql(expectedScrollHeight);

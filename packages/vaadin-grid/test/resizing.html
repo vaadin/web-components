@@ -77,19 +77,19 @@
         });
 
         it('should align rows correctly', function() {
-          var rows = getRows(scroller.$.items);
+          var rows = getRows(grid.$.items);
           expect(rows[0].getBoundingClientRect().bottom).to.be.closeTo(rows[1].getBoundingClientRect().top, 1);
         });
 
         it('should update header height', function() {
-          var _bottom = scroller.$.header.getBoundingClientRect().bottom;
+          var _bottom = grid.$.header.getBoundingClientRect().bottom;
 
           grid.style.fontSize = '40px';
           grid.notifyResize();
 
-          var _newBottom = scroller.$.header.getBoundingClientRect().bottom;
+          var _newBottom = grid.$.header.getBoundingClientRect().bottom;
           expect(_newBottom).to.be.above(_bottom);
-          var firstBodyRowRect = getRows(scroller.$.items)[0].getBoundingClientRect();
+          var firstBodyRowRect = getRows(grid.$.items)[0].getBoundingClientRect();
           expect(firstBodyRowRect.top).to.be.closeTo(_newBottom, 1);
         });
 
@@ -98,14 +98,14 @@
           grid.notifyResize();
           scrollToEnd(grid);
 
-          var bodyRows = getRows(scroller.$.items);
+          var bodyRows = getRows(grid.$.items);
           expect(bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom)
-            .to.be.closeTo(scroller.$.footer.getBoundingClientRect().top, 1);
+            .to.be.closeTo(grid.$.footer.getBoundingClientRect().top, 1);
         });
 
         it('should update details row height', function() {
           grid.expandItem(grid._cache[0][0]);
-          var bodyRows = getRows(scroller.$.items);
+          var bodyRows = getRows(grid.$.items);
           var cells = getRowCells(bodyRows[0]);
           var detailsCell = cells.pop();
           var _height = detailsCell.getBoundingClientRect().height;
@@ -117,6 +117,17 @@
           expect(detailsCell.getBoundingClientRect().height).to.be.above(_height);
           expect(detailsCell.getBoundingClientRect().bottom)
             .to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 1);
+        });
+
+        it('should align height with number of rows', function(done) {
+          grid.style.height = 'auto';
+          Polymer.RenderStatus.afterNextRender(grid, function() {
+            var headerHeight = grid.$.header.clientHeight;
+            var bodyHeight = grid.$.items.clientHeight;
+            var footerHeight = grid.$.footer.clientHeight;
+            expect(grid.clientHeight).to.equal(headerHeight + bodyHeight + footerHeight);
+            done();
+          });
         });
 
       });

@@ -8,7 +8,7 @@
 
   <title>vaadin-grid – Pagination</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
 </head>
@@ -102,50 +102,54 @@
             </div>
           </template>
           <script>
-            document.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-pagination',
+            Polymer({
+              is: 'x-pagination',
 
-                properties: {
-                  items: Array,
-                  page: Number,
-                  pages: Array
-                },
+              properties: {
+                items: Array,
+                page: Number,
+                pages: Array
+              },
 
-                ready: function() {
-                  this.page = 0;
-                },
+              ready: function() {
+                this.page = 0;
+              },
 
-                observers: ['_itemsChanged(items, page)'],
+              observers: ['_itemsChanged(items, page)'],
 
-                _isSelected: function(page, item) {
-                  return page === item - 1;
-                },
+              _isSelected: function(page, item) {
+                return page === item - 1;
+              },
 
-                _select: function(e) {
-                  this.page = e.model.item - 1;
-                },
+              _select: function(e) {
+                this.page = e.model.item - 1;
+              },
 
-                _next: function() {
-                  this.page = Math.min(this.pages.length - 1, this.page + 1);
-                },
+              _next: function() {
+                this.page = Math.min(this.pages.length - 1, this.page + 1);
+              },
 
-                _prev: function() {
-                  this.page = Math.max(0, this.page - 1);
-                },
+              _prev: function() {
+                this.page = Math.max(0, this.page - 1);
+              },
 
-                _itemsChanged: function(items, page) {
-                  if (!this.pages) {
-                    this.pages = Array.apply( null, {length: Math.ceil(items.length / this.$.grid.pageSize)} ).map(function(item, index) {
-                      return index + 1;
-                    });
-                  }
-
-                  var start = page * this.$.grid.pageSize;
-                  var end = (page + 1) * this.$.grid.pageSize;
-                  this.$.grid.items = items.slice(start, end);
+              _itemsChanged: function(items, page) {
+                if (items === undefined || page === undefined) {
+                  return;
                 }
-              });
+
+                if (!this.pages) {
+                  this.pages = Array.apply( null, {length: Math.ceil(items.length / this.$.grid.pageSize)} ).map(function(item, index) {
+                    return index + 1;
+                  });
+                }
+
+                var start = page * this.$.grid.pageSize;
+                var end = (page + 1) * this.$.grid.pageSize;
+                this.$.grid.items = items.slice(start, end);
+              }
+            });
+            document.addEventListener('WebComponentsReady', function() {
             });
           </script>
         </dom-module>

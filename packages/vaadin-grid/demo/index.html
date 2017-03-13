@@ -8,7 +8,7 @@
 
   <title>vaadin-grid – Basic Usage</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../iron-ajax/iron-ajax.html">
@@ -32,42 +32,44 @@
     </p>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <!-- Fetch an array of users to be shown in the grid -->
-          <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+        <dom-bind>
+          <template is="dom-bind">
+            <!-- Fetch an array of users to be shown in the grid -->
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-          <!-- The array is set as the <vaadin-grid>'s "items" property -->
-          <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
+            <!-- The array is set as the <vaadin-grid>'s "items" property -->
+            <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
 
-            <vaadin-grid-column width="50px" flex-grow="0">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-              <!-- If necessary, the footer could be set using <template class="footer"> -->
-              <template class="footer">#</template>
-            </vaadin-grid-column>
+              <vaadin-grid-column width="50px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+                <!-- If necessary, the footer could be set using <template class="footer"> -->
+                <template class="footer">#</template>
+              </vaadin-grid-column>
 
-            <vaadin-grid-column>
-              <template class="header">First Name</template>
-              <template>[[item.firstName]]</template>
-              <template class="footer">First Name</template>
-            </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.firstName]]</template>
+                <template class="footer">First Name</template>
+              </vaadin-grid-column>
 
-            <vaadin-grid-column>
-              <template class="header">Last Name</template>
-              <template>[[item.lastName]]</template>
-              <template class="footer">Last Name</template>
-            </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.lastName]]</template>
+                <template class="footer">Last Name</template>
+              </vaadin-grid-column>
 
-            <vaadin-grid-column width="150px">
-              <template class="header">Address</template>
-              <template>
-                <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
-              </template>
-              <template class="footer">Address</template>
-            </vaadin-grid-column>
+              <vaadin-grid-column width="150px">
+                <template class="header">Address</template>
+                <template>
+                  <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
+                </template>
+                <template class="footer">Address</template>
+              </vaadin-grid-column>
 
-          </vaadin-grid>
-        </template>
+            </vaadin-grid>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
@@ -77,45 +79,49 @@
     </p>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <style is="custom-style">
-            input[readonly] {
-              border: 2px solid transparent;
-            }
+        <dom-bind>
+          <template is="dom-bind">
+            <custom-style>
+              <style is="custom-style">
+                input[readonly] {
+                  border: 2px solid transparent;
+                }
 
-            input {
-              font: inherit;
-            }
-          </style>
-          <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+                input {
+                  font: inherit;
+                }
+              </style>
+            </custom-style>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-          <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
+            <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
 
-          <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
+            <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
 
-            <vaadin-grid-column>
-              <template class="header">First Name</template>
-              <template>
-                <input value="{{item.firstName::input}}" readonly$="[[!editing]]">
-              </template>
-            </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>
+                  <input value="{{item.firstName::input}}" readonly$="[[!editing]]">
+                </template>
+              </vaadin-grid-column>
 
-            <vaadin-grid-column>
-              <template class="header">Last Name</template>
-              <template>
-                <input value="{{item.lastName::input}}" readonly$="[[!editing]]">
-              </template>
-            </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>
+                  <input value="{{item.lastName::input}}" readonly$="[[!editing]]">
+                </template>
+              </vaadin-grid-column>
 
-            <vaadin-grid-column width="200px">
-              <template class="header">Email</template>
-              <template>
-                <div>[[item.firstName]].[[item.lastName]]@example.com</div>
-              </template>
-            </vaadin-grid-column>
+              <vaadin-grid-column width="200px">
+                <template class="header">Email</template>
+                <template>
+                  <div>[[item.firstName]].[[item.lastName]]@example.com</div>
+                </template>
+              </vaadin-grid-column>
 
-          </vaadin-grid>
-        </template>
+            </vaadin-grid>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 

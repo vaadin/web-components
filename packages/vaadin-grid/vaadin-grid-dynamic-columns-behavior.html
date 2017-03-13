@@ -24,7 +24,7 @@
     _childrenColumns: function(columns) {
       return columns.map(function(col) {
         if (col.localName === 'vaadin-grid-column-group') {
-          var children = Polymer.dom(col).children.filter(function(el) {
+          var children = Array.prototype.filter.call(Polymer.dom(col).children, function(el) {
             return /^vaadin-grid-(column|selection)/.test(el.localName);
           });
           return children;
@@ -73,10 +73,8 @@
         // in native Shadow, tab order goes first through shadow root, then moves over
         // to light children. We need to make sure footer focus trap is always
         // the very last element that can be tabbed into.
-        if (Polymer.Settings.useNativeShadow) {
-          Polymer.dom(this).insertBefore(this.$.scroller.$.bodyFocusTrap, Polymer.dom(this).firstElementChild);
-          Polymer.dom(this).insertBefore(this.$.scroller.$.headerFocusTrap, Polymer.dom(this).firstElementChild);
-          Polymer.dom(this).appendChild(this.$.scroller.$.footerFocusTrap);
+        if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
+          Polymer.dom(this).appendChild(this.$.footerFocusTrap);
         }
 
         this.debounce('check-imports', this._checkImports, 2000);
@@ -110,7 +108,7 @@
         'vaadin-grid-selection-column'
       ].forEach(function(elementName) {
         var element = Polymer.dom(this).querySelector(elementName);
-        if (element && !Polymer.isInstance(element)) {
+        if (element && (Polymer.isInstance ? !Polymer.isInstance(element) : !(element instanceof Polymer.Element))) {
           console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
         }
       }, this);

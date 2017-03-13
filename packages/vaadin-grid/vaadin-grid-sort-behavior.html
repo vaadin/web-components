@@ -38,12 +38,27 @@
       'sorter-changed': '_onSorterChanged'
     },
 
+    ready: function() {
+      // With Polymer 2 & shady the 'sorter-changed' listener isn't guaranteed to be registered
+      // before child <vaadin-grid-sorter>'s upgrade and fire the events. The following
+      // makes sure that 'sorter-changed' is fired for all <vaadin-grid-sorter> elements
+      // after this (<vaadin-grid>) is ready (and the listeners are active).
+      if (Polymer.Element && !Polymer.Settings.useNativeShadow) {
+        this.async(function() {
+          var sorters = Polymer.dom(this).querySelectorAll('vaadin-grid-sorter');
+          Array.prototype.forEach.call(sorters, function(sorter) {
+            sorter.fire('sorter-changed');
+          });
+        });
+      }
+    },
+
     _onSorterChanged: function(e) {
       var sorter = e.target;
 
       this._removeArrayItem(this._sorters, sorter);
       sorter._order = null;
-      
+
       if (this.multiSort) {
         if (sorter.direction) {
           this._sorters.unshift(sorter);

@@ -28,7 +28,7 @@
       </vaadin-grid-filter>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({
           is: 'filter-wrapper'
         });
@@ -129,7 +129,7 @@
 
       it('should have default inputs', function() {
         grid._filters.forEach(function(filter) {
-          expect(filter.getContentChildren('content')[0].tagName).to.equal('INPUT');
+          expect(filter.$.filter.clientHeight).to.be.greaterThan(0);
         });
       });
 

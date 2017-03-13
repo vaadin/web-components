@@ -311,7 +311,7 @@
             sorterFirst.direction = null;
             sorterLast.direction = null;
             grid.items = buildDataSet(1000);
-            var bodyRows = getRows(grid.$.scroller.$.items);
+            var bodyRows = getRows(grid.$.items);
             var cells = getRowCells(bodyRows[0]);
             expect(cells[0].item).to.equal(grid.items[0]);
           });

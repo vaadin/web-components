@@ -7,7 +7,7 @@
 
     <title>vaadin-grid</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
     <link rel="import" href="../vaadin-grid.html">
     <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
@@ -44,6 +44,8 @@
             height: 100%;
           }
         </style>
+        <input value="{{foobar::input}}">
+        <label>[[foobar]]</label>
         <vaadin-grid id="component" items="[[items]]" multi-selection column-reordering-allowed>
 
           <template class="row-details">
@@ -54,12 +56,12 @@
             <paper-input value="{{item.name.last}}"></paper-input>
           </template>
 
-          <vaadin-grid-column width="45px" flex-grow="0" frozen resizable>
+          <vaadin-grid-column width="145px" flex-grow="0" frozen resizable>
             <template>
-              [[index]]
+              [[index]] [[foobar]]
             </template>
             <template class="header">
-              Index
+              Index [[foobar]]
             </template>
           </vaadin-grid-column>
 
@@ -164,7 +166,6 @@
         </vaadin-grid>
       </template>
       <script>
-        document.addEventListener('WebComponentsReady', function() {
           Polymer({
             is: 'x-app',
 
@@ -174,6 +175,7 @@
               }
             }
           });
+        document.addEventListener('WebComponentsReady', function() {
         });
       </script>
     </dom-module>

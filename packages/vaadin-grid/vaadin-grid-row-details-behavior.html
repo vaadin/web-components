@@ -15,7 +15,7 @@
 <dom-module id="vaadin-grid-row-details-themability-styles">
   <template>
     <style>
-      td[detailscell] ::content > vaadin-grid-cell-content {
+      .vaadin-grid-cell[detailscell] ::slotted(vaadin-grid-cell-content) {
         background: #fff;
         @apply(--vaadin-grid-body-row-details-cell);
       }
@@ -57,6 +57,10 @@
     ],
 
     _expandedItemsChanged: function(expandedItems, dataProvider) {
+      if (expandedItems === undefined || dataProvider === undefined) {
+        return;
+      }
+
       this._flushItemsDebouncer();
       if (this.$.scroller._physicalItems) {
         this.$.scroller._physicalItems.forEach(function(row) {
@@ -66,7 +70,8 @@
     },
 
     _rowDetailsTemplateChanged: function(rowDetailsTemplate) {
-      var templatizer = new vaadin.elements.grid.Templatizer(this.dataHost);
+      var templatizer = new vaadin.elements.grid.Templatizer();
+      templatizer.dataHost = this.dataHost;
       templatizer._instanceProps = {
         expanded: true,
         index: true,
@@ -79,6 +84,7 @@
       Polymer.dom(this.root).appendChild(templatizer);
 
       templatizer.template = rowDetailsTemplate;
+      rowDetailsTemplate.templatizer = templatizer;
     },
 
     _isExpanded: function(item) {

@@ -8,22 +8,28 @@
   vaadin.elements.grid.Templatizer = Polymer({
     is: 'vaadin-grid-templatizer',
 
-    factoryImpl: function(dataHost) {
-      this.dataHost = dataHost;
-    },
-
     behaviors: [Polymer.Templatizer],
 
     properties: {
+      dataHost: Object,
       template: Object,
 
+      _templatized: Boolean,
       _forwardedParentProps: Object,
-      _templateInstances: Array
+      _templateInstances: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      }
     },
 
-    observers: ['_templateChanged(template)', '_forwardedParentPropsChanged(_forwardedParentProps.*, _templateInstances)'],
+    observers: ['_forwardedParentPropsChanged(_forwardedParentProps.*, _templateInstances)'],
 
     created: function() {
+      // needed for V2 to enable event.model on declarative event listeners.
+      this._parentModel = true;
+
       this._instanceProps = {
         expanded: true,
         index: true,
@@ -33,7 +39,12 @@
     },
 
     createInstance: function() {
+      this._ensureTemplatized();
       var instance = this.stamp(null);
+      // TODO: not sure why this is needed in V2???
+      if (Polymer.Element) {
+        instance._flushProperties();
+      }
       this.addInstance(instance);
 
       return instance;
@@ -51,14 +62,15 @@
       this._templateInstances.splice(index, 1);
     },
 
-    _templateChanged: function(template) {
-      this._forwardedParentProps = {};
-      this._templateInstances = [];
-      template.templatizer = this;
-      this.templatize(template);
+    _ensureTemplatized: function() {
+      // TODO V2 only property?
+      if (!this.template.__templatizeOwner) {
+        this._forwardedParentProps = {};
+        this.templatize(this.template);
 
-      // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
-      this._parentProps = this._parentProps || {};
+        // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
+        this._parentProps = this._parentProps || {};
+      }
     },
 
     _forwardInstanceProp: function(inst, prop, value) {
@@ -87,6 +99,11 @@
       }
     },
 
+    _notifyInstancePropV2: function(inst, prop, value) {
+      this._forwardInstanceProp(inst, prop, value);
+      this._forwardInstancePath(inst, prop, value);
+    },
+
     _forwardParentProp: function(prop, value) {
       // _forwardParentProp might be called during this.stamp() before
       // this.instance is set. We need to delay it until instance is set.
@@ -97,7 +114,23 @@
       this.set('_forwardedParentProps.' + path, value);
     },
 
+    _forwardHostPropV2: function(prop, value) {
+      this._forwardParentProp(prop, value);
+
+      // TODO: _forwardedParentPropsChanged isn't triggered for some reason in
+      // all cases in Hybrid mode. Try removing this after running pure P2.
+      if (this._templateInstances) {
+        this._templateInstances.forEach(function(inst) {
+            inst.notifyPath(prop, value);
+        });
+      }
+    },
+
     _forwardedParentPropsChanged: function(e, templateInstances) {
+      if (e === undefined || templateInstances === undefined) {
+        return;
+      }
+
       if (e.path !== '_forwardedParentProps') {
         var prop = e.path.substring(e.path.indexOf('.') + 1);
         var value = e.value;

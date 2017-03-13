@@ -81,7 +81,8 @@
             last: 'qux'
           }
         }];
-        body = grid.$.scroller.$.items;
+        Polymer.dom.flush();
+        body = grid.$.items;
         done();
       });
 
@@ -151,6 +152,7 @@
             last: 'bar'
           }
         }];
+        Polymer.dom.flush();
       });
 
       describe('invalid sorters paths', function() {

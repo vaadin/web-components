@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var defaultCellWidth = 100;
 
   function getCell(grid, index) {
-    return grid.$.scroller.$.items.querySelectorAll('td')[index];
+    return grid.$.items.querySelectorAll('.vaadin-grid-cell')[index];
   }
 
   function getFirstCell(grid) {
@@ -223,24 +223,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getRows(container) {
-    return Polymer.dom(container).querySelectorAll('tr');
+    return Array.prototype.slice.call(Polymer.dom(container).querySelectorAll('.vaadin-grid-row'));
   }
 
   function getRowCells(row) {
-    return Polymer.dom(row).querySelectorAll('td, th');
+    return Array.prototype.slice.call(Polymer.dom(row).querySelectorAll('.vaadin-grid-cell'));
   }
 
   function getCellContent(cell) {
-    return cell ? cell.getContentChildren('content')[0] : null;
+    return cell ? cell.getContentChildren(Polymer.Element ? 'slot': 'content')[0] : null;
   }
 
   function getHeaderCellContent(grid, row, col) {
-    var container = grid.$.scroller.$.header;
+    var container = grid.$.header;
     return getContainerCellContent(container, row, col);
   }
 
   function getBodyCellContent(grid, row, col) {
-    var container = grid.$.scroller.$.items;
+    var container = grid.$.items;
     return getContainerCellContent(container, row, col);
   }
 
@@ -257,6 +257,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var grid = Polymer.dom(cell).parentNode;
       cell = grid.$.scroller._getCellByCellContent(source);
     }
+
     if (cell._startReorderTimeout) {
       cell._startReorder(e);
       clearTimeout(cell._startReorderTimeout);

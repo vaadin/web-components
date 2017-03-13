@@ -17,32 +17,34 @@
   </style>
 
   <div class="capture-block" id="header-footer">
-    <template is="dom-bind">
-      <style is="custom-style">
-        vaadin-grid {
-          height: 100px;
-        }
-      </style>
-      <x-array-data-provider items="{{items}}"></x-array-data-provider>
-      <vaadin-grid items="[[items]]" size="200">
-        <template class="row-details">
-          [[index]]
-        </template>
-        <vaadin-grid-column>
-          <template class="header">header</template>
-          <template>[[index]]</template>
-          <template class="footer">footer</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-      <br>
-      <vaadin-grid items="[[items]]" size="200">
-        <template class="row-details">
-          [[index]]
-        </template>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    </template>
+    <dom-bind>
+      <template is="dom-bind">
+        <style>
+          vaadin-grid {
+            height: 100px;
+          }
+        </style>
+        <x-array-data-provider items="{{items}}"></x-array-data-provider>
+        <vaadin-grid items="[[items]]" size="200">
+          <template class="row-details">
+            [[index]]
+          </template>
+          <vaadin-grid-column>
+            <template class="header">header</template>
+            <template>[[index]]</template>
+            <template class="footer">footer</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+        <br>
+        <vaadin-grid items="[[items]]" size="200">
+          <template class="row-details">
+            [[index]]
+          </template>
+          <vaadin-grid-column>
+            <template>[[index]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      </template>
+    </dom-bind>
   </div>
 </body>

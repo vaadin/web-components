@@ -18,32 +18,34 @@
   </style>
 
   <div class="capture-block" id="sorting">
-    <template is="dom-bind">
-      <style is="custom-style">
-        vaadin-grid {
-          height: 250px;
-        }
-      </style>
-      <x-array-data-provider items="{{items}}"></x-array-data-provider>
-      <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort>
-        <vaadin-grid-column width="50px">
-          <template class="header">#</template>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-sorter id="first-name-sorter" path="name.first">First Name</vaadin-grid-sorter>
-          </template>
-          <template>[[item.name.first]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-sorter id="last-name-sorter" path="name.last">Last Name</vaadin-grid-sorter>
-          </template>
-          <template>[[item.name.last]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    </template>
+    <dom-bind>
+      <template is="dom-bind">
+        <style>
+          vaadin-grid {
+            height: 250px;
+          }
+        </style>
+        <x-array-data-provider items="{{items}}"></x-array-data-provider>
+        <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort>
+          <vaadin-grid-column width="50px">
+            <template class="header">#</template>
+            <template>[[index]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">
+              <vaadin-grid-sorter id="first-name-sorter" path="name.first">First Name</vaadin-grid-sorter>
+            </template>
+            <template>[[item.name.first]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">
+              <vaadin-grid-sorter id="last-name-sorter" path="name.last">Last Name</vaadin-grid-sorter>
+            </template>
+            <template>[[item.name.last]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      </template>
+    </dom-bind>
   </div>
 
 </body>

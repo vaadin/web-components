@@ -8,7 +8,7 @@
 
   <title>vaadin-grid – Column Properties</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
   <link rel="import" href="../../iron-image/iron-image.html">
@@ -17,11 +17,13 @@
 
   <link rel="import" href="common.html">
 
-  <style is="custom-style">
-    paper-checkbox {
-      margin-bottom: 20px;
-    }
-  </style>
+  <custom-style>
+    <style is="custom-style">
+      paper-checkbox {
+        margin-bottom: 20px;
+      }
+    </style>
+  </custom-style>
 </head>
 
 <body unresolved>
@@ -41,65 +43,67 @@
     </p>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-
-          <!-- Import vaadin-grid-column-group.html (typically placed inside the <head> container) -->
-          <link rel="import" href="../vaadin-grid-column-group.html">
-
-          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-
-          <vaadin-grid aria-label="Column Grouping Example" data-provider="[[dataProvider]]" size="200">
-
-            <vaadin-grid-column width="30px" flex-grow="0">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="50px" flex-grow="0">
-              <template class="header">
-                <div aria-label="Picture"></div>
-              </template>
-              <template>
-                <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-              </template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column-group>
-              <template class="header">Name</template>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">First</template>
-                <template>[[item.name.first]]</template>
+        <dom-bind>
+          <template is="dom-bind">
+          
+            <!-- Import vaadin-grid-column-group.html (typically placed inside the <head> container) -->
+            <link rel="import" href="../vaadin-grid-column-group.html">
+          
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          
+            <vaadin-grid aria-label="Column Grouping Example" data-provider="[[dataProvider]]" size="200">
+          
+              <vaadin-grid-column width="30px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
               </vaadin-grid-column>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">Last</template>
-                <template>[[item.name.last]]</template>
+          
+              <vaadin-grid-column width="50px" flex-grow="0">
+                <template class="header">
+                  <div aria-label="Picture"></div>
+                </template>
+                <template>
+                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
+                </template>
               </vaadin-grid-column>
-            </vaadin-grid-column-group>
-
-
-            <vaadin-grid-column-group>
-              <template class="header">Location</template>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">City</template>
-                <template>[[item.location.city]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">State</template>
-                <template>[[item.location.state]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="200px">
-                <template class="header">Street</template>
-                <template><p style="white-space: normal">[[item.location.street]]</p></template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
-
-          </vaadin-grid>
-        </template>
+          
+              <vaadin-grid-column-group>
+                <template class="header">Name</template>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">First</template>
+                  <template>[[item.name.first]]</template>
+                </vaadin-grid-column>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">Last</template>
+                  <template>[[item.name.last]]</template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+          
+          
+              <vaadin-grid-column-group>
+                <template class="header">Location</template>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">City</template>
+                  <template>[[item.location.city]]</template>
+                </vaadin-grid-column>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">State</template>
+                  <template>[[item.location.state]]</template>
+                </vaadin-grid-column>
+          
+                <vaadin-grid-column width="200px">
+                  <template class="header">Street</template>
+                  <template><p style="white-space: normal">[[item.location.street]]</p></template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+          
+            </vaadin-grid>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
@@ -114,43 +118,45 @@
     </p>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
-
-          <vaadin-grid aria-label="Freezing Columns Example" data-provider="[[dataProvider]]" size="200">
-
-            <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
-              <template class="header">
-                <div aria-label="Picture"></div>
-              </template>
-              <template>
-                <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-              </template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="33%">
-              <template class="header">First Name</template>
-              <template>[[item.name.first]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="33%">
-              <template class="header">Last Name</template>
-              <template>[[item.name.last]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="33%">
-              <template class="header">Email</template>
-              <template>[[item.email]]</template>
-            </vaadin-grid-column>
-
-          </vaadin-grid>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+            <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
+          
+            <vaadin-grid aria-label="Freezing Columns Example" data-provider="[[dataProvider]]" size="200">
+          
+              <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
+                <template class="header">
+                  <div aria-label="Picture"></div>
+                </template>
+                <template>
+                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
+                </template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="33%">
+                <template class="header">First Name</template>
+                <template>[[item.name.first]]</template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="33%">
+                <template class="header">Last Name</template>
+                <template>[[item.name.last]]</template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="33%">
+                <template class="header">Email</template>
+                <template>[[item.email]]</template>
+              </vaadin-grid-column>
+          
+            </vaadin-grid>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
@@ -164,44 +170,46 @@
     </p>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
-          <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
-
-          <vaadin-grid aria-label="Hiding Columns Example" data-provider="[[dataProvider]]" size="200">
-
-            <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
-              <template class="header">
-                <div aria-label="Picture"></div>
-              </template>
-              <template>
-                <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-              </template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="33%">
-              <template class="header">First Name</template>
-              <template>[[item.name.first]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="33%">
-              <template class="header">Last Name</template>
-              <template>[[item.name.last]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="33%">
-              <template class="header">Email</template>
-              <template>[[item.email]]</template>
-            </vaadin-grid-column>
-
-          </vaadin-grid>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+            <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
+            <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
+          
+            <vaadin-grid aria-label="Hiding Columns Example" data-provider="[[dataProvider]]" size="200">
+          
+              <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
+                <template class="header">
+                  <div aria-label="Picture"></div>
+                </template>
+                <template>
+                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
+                </template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="33%">
+                <template class="header">First Name</template>
+                <template>[[item.name.first]]</template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="33%">
+                <template class="header">Last Name</template>
+                <template>[[item.name.last]]</template>
+              </vaadin-grid-column>
+          
+              <vaadin-grid-column width="33%">
+                <template class="header">Email</template>
+                <template>[[item.email]]</template>
+              </vaadin-grid-column>
+          
+            </vaadin-grid>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
@@ -219,60 +227,62 @@
     </p>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-
-          <vaadin-grid aria-label="Reordering and Resizing Columns Example" data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
-
-            <vaadin-grid-column width="30px" flex-grow="0" resizable>
-              <template class="header">#</template>
-              <template>[[index]]</template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column width="50px" flex-grow="0" resizable>
-              <template class="header">
-                <div aria-label="Picture"></div>
-              </template>
-              <template>
-                <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-              </template>
-            </vaadin-grid-column>
-
-            <vaadin-grid-column-group resizable>
-              <template class="header">Name</template>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">First</template>
-                <template>[[item.name.first]]</template>
+        <dom-bind>
+          <template is="dom-bind">
+            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          
+            <vaadin-grid aria-label="Reordering and Resizing Columns Example" data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
+          
+              <vaadin-grid-column width="30px" flex-grow="0" resizable>
+                <template class="header">#</template>
+                <template>[[index]]</template>
               </vaadin-grid-column>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">Last</template>
-                <template>[[item.name.last]]</template>
+          
+              <vaadin-grid-column width="50px" flex-grow="0" resizable>
+                <template class="header">
+                  <div aria-label="Picture"></div>
+                </template>
+                <template>
+                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
+                </template>
               </vaadin-grid-column>
-            </vaadin-grid-column-group>
-
-            <vaadin-grid-column-group resizable>
-              <template class="header">Location</template>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">City</template>
-                <template>[[item.location.city]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="calc(25% - 20px)">
-                <template class="header">State</template>
-                <template>[[item.location.state]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="200px" resizable>
-                <template class="header">Street</template>
-                <template>[[item.location.street]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
-
-          </vaadin-grid>
-        </template>
+          
+              <vaadin-grid-column-group resizable>
+                <template class="header">Name</template>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">First</template>
+                  <template>[[item.name.first]]</template>
+                </vaadin-grid-column>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">Last</template>
+                  <template>[[item.name.last]]</template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+          
+              <vaadin-grid-column-group resizable>
+                <template class="header">Location</template>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">City</template>
+                  <template>[[item.location.city]]</template>
+                </vaadin-grid-column>
+          
+                <vaadin-grid-column width="calc(25% - 20px)">
+                  <template class="header">State</template>
+                  <template>[[item.location.state]]</template>
+                </vaadin-grid-column>
+          
+                <vaadin-grid-column width="200px" resizable>
+                  <template class="header">Street</template>
+                  <template>[[item.location.street]]</template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
+          
+            </vaadin-grid>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
