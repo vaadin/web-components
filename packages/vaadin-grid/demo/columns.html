@@ -295,16 +295,18 @@
             </vaadin-grid>
           </template>
           <script>
-            Polymer({
-              is: 'x-dynamic-columns',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-dynamic-columns',
 
-              properties: {
-                columns: Array
-              },
+                properties: {
+                  columns: Array
+                },
 
-              ready: function() {
-                this.columns = ['name.first', 'name.last', 'email'];
-              }
+                ready: function() {
+                  this.columns = ['name.first', 'name.last', 'email'];
+                }
+              });
             });
           </script>
         </dom-module>

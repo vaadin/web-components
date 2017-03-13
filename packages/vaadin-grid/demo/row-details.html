@@ -147,12 +147,14 @@
 
           </template>
           <script>
-            Polymer({
-              is: 'bind-expanded-items',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'bind-expanded-items',
 
-              _onActiveItemChanged: function(e) {
-                this.$.grid.expandedItems = [e.detail.value];
-              }
+                _onActiveItemChanged: function(e) {
+                  this.$.grid.expandedItems = [e.detail.value];
+                }
+              });
             });
           </script>
         </dom-module>
