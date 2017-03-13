@@ -18,32 +18,69 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.3",
-    "iron-form": "polymerelements/iron-form#^1.0.10",
-    "iron-form-element-behavior": "polymerelements/iron-form-element-behavior#^1.0.4",
-    "iron-icon": "PolymerElements/iron-icon#^1.0.4",
-    "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.9",
-    "iron-input": "polymerelements/iron-input#^1.0.5",
-    "iron-list": "polymerelements/iron-list#^1.0.0",
-    "iron-validatable-behavior": "polymerelements/iron-validatable-behavior#^1.0.5",
-    "paper-button": "polymerelements/paper-button#^1.0.6",
-    "paper-input": "PolymerElements/paper-input#^1.1.3",
-    "polymer": "Polymer/polymer#^1.2.0",
-    "iron-a11y-keys-behavior": "polymerelements/iron-a11y-keys-behavior#^1.0.7",
-    "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#^1.0.2",
-    "paper-styles": "polymerelements/paper-styles#^1.1.2",
-    "iron-a11y-announcer": "polymerelements/iron-a11y-announcer#^1.0.4",
-    "paper-icon-button": "polymerelements/paper-icon-button#^1.0.5"
+    "polymer": "#^1.7.0",
+    "iron-flex-layout": "^1.0.3",
+    "iron-form": "^1.0.10",
+    "iron-form-element-behavior": "^1.0.4",
+    "iron-icon": "^1.0.4",
+    "iron-iconset-svg": "^1.0.9",
+    "iron-input": "^1.0.5",
+    "iron-list": "^1.0.0",
+    "iron-validatable-behavior": "^1.0.5",
+    "paper-button": "^1.0.6",
+    "paper-input": "^1.1.3",
+    "iron-a11y-keys-behavior": "^1.0.7",
+    "iron-resizable-behavior": "^1.0.2",
+    "paper-styles": "^1.1.2",
+    "iron-a11y-announcer": "^1.0.4",
+    "paper-icon-button": "^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0",
-    "test-fixture": "polymerelements/test-fixture#^1.0.0",
-    "iron-ajax": "polymerelements/iron-ajax#^1.0.0",
-    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
-    "iron-component-page": "polymerelements/iron-component-page#^1.1.0",
-    "iron-icons": "PolymerElements/iron-icons#^1.0.3",
-    "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.0.0",
+    "test-fixture": "^1.0.0",
+    "iron-ajax": "^1.0.0",
+    "iron-test-helpers": "^1.0.0",
+    "iron-component-page": "^1.1.0",
+    "iron-icons": "^1.0.3",
+    "iron-demo-helpers": "^1.0.0",
     "elements-demo-resources": "vaadin/elements-demo-resources#master",
-    "paper-item": "PolymerElements/paper-item#^1.2.1"
+    "paper-item": "^1.2.1"
+  },
+  "variants": {
+    "polymer2": {
+      "dependencies": {
+        "polymer": "2.0.0-rc.2",
+        "iron-flex-layout": "#2.0-preview",
+        "iron-form-element-behavior": "#2.0-preview",
+        "iron-icon": "#2.0-preview",
+        "iron-iconset-svg": "#2.0-preview",
+        "iron-input": "#2.0-preview",
+        "iron-list": "#2.0-preview",
+        "iron-validatable-behavior": "#2.0-preview",
+        "paper-input": "#2.0-preview",
+        "paper-button": "#2.0-preview",
+        "iron-a11y-keys-behavior": "#2.0-preview",
+        "iron-resizable-behavior": "#2.0-preview",
+        "paper-styles": "#2.0-preview",
+        "iron-a11y-announcer": "#2.0-preview",
+        "paper-icon-button": "#2.0-preview"
+      },
+      "devDependencies": {
+        "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
+        "iron-form": "#2.0-preview",
+        "iron-icons": "#2.0-preview",
+        "iron-ajax": "#2.0-preview",
+        "iron-component-page": "#2.0-preview",
+        "iron-demo-helpers": "#2.0-preview",
+        "iron-test-helpers": "#2.0-preview",
+        "paper-button": "#2.0-preview",
+        "webcomponentsjs": "#v1"
+      },
+      "resolutions": {
+        "polymer": "^2.0.0-rc.2",
+        "iron-flex-layout": "2.0-preview",
+        "paper-styles": "2.0-preview"
+      }
+    }
   }
 }
