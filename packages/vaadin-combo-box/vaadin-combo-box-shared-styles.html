@@ -27,18 +27,23 @@
         padding: 4px 6px 8px !important;
       }
 
-      :host(:not([has-value])) ::content .clear-button,
+      :host(:not([has-value])) ::content [slot=clear-button],
+      :host(:not([has-value])) ::slotted([slot=clear-button]),
       :host(:not([has-value])) .clear-button {
         display: none;
       }
 
-      :host([readonly]) ::content .clear-button,
+      :host([readonly]) ::content [slot=clear-button],
+      :host([readonly]) ::slotted([slot=clear-button]),
       :host([readonly]) .clear-button,
-      :host([disabled]) ::content .clear-button,
+      :host([disabled]) ::content [slot=clear-button],
+      :host([disabled]) ::slotted([slot=clear-button]),
       :host([disabled]) .clear-button,
-      :host([readonly]) ::content .toggle-button,
+      :host([readonly]) ::content [slot=toggle-button],
+      :host([readonly]) ::slotted([slot=toggle-button]),
       :host([readonly]) .toggle-button,
-      :host([disabled]) ::content .toggle-button,
+      :host([disabled]) ::content [slot=toggle-button],
+      :host([disabled]) ::slotted([slot=toggle-button]),
       :host([disabled]) .toggle-button {
         display: none;
       }
