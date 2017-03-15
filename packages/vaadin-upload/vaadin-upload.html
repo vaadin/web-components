@@ -99,12 +99,12 @@ Custom property | Description | Default
       }
 
       :host([dragover-valid]) #dropLabel,
-      :host([dragover-valid]) ::content .drop-label {
+      :host([dragover-valid]) ::slotted(.drop-label) {
         color: var(--primary-color, #00B4F0);
         @apply(--vaadin-upload-drop-label-dragover);
       }
 
-      #dropLabel ::content iron-icon {
+      #dropLabel ::slotted(iron-icon) {
         margin-right: .25em;
         @apply(--vaadin-upload-drop-label-icon);
       }
@@ -157,21 +157,21 @@ Custom property | Description | Default
           </slot>
         </div>
         <div id="dropLabel" hidden$="[[nodrop]]">
-          <content select=".drop-label">
+          <slot name=drop-label>
             <iron-icon icon="vaadin-upload:file-upload"></iron-icon>
             [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
-          </content>
+          </slot>
         </div>
       </div>
     </div>
-    <content select=".file-list">
+    <slot name=file-list>
       <div id="fileList">
         <template is="dom-repeat" items="[[files]]" as="file">
           <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
         </template>
       </div>
-    </content>
-    <content></content>
+    </slot>
+    <slot></slot>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
     <paper-ripple id="dragRipple" noink></paper-ripple>
   </template>
