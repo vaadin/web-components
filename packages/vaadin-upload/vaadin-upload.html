@@ -99,6 +99,7 @@ Custom property | Description | Default
       }
 
       :host([dragover-valid]) #dropLabel,
+      :host([dragover-valid]) ::slotted(.drop-label) {
         color: var(--primary-color, #00B4F0);
         @apply(--vaadin-upload-drop-label-dragover);
       }
