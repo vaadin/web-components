@@ -1,68 +1,82 @@
 <!DOCTYPE html>
-<html>
 
 <head>
   <meta charset="utf-8">
   <title>vaadin-icons</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../vaadin-icons.html" />
-  <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html" />
+  <link rel="import" href="../vaadin-icons.html">
+  <link rel="import" href="../../iron-meta/iron-meta.html">
   <link rel="import" href="../../elements-demo-resources/common.html">
 
-  <style>
-    .icon {
-      margin: 24px 8px;
-      text-align: center;
-      width: 130px;
-      cursor: default;
-    }
+  <custom-style>
+    <style>
+      body {
+        text-align: center;
+      }
 
-    .icon span {
-      font-family: sans-serif;
-      font-size: 10px;
-      display: block;
-      color: #616161;
-      -webkit-transition: all 600ms;
-      transition: all 600ms;
-    }
+      .icon-container {
+        margin: 24px 8px;
+        text-align: center;
+        width: 130px;
+        display: inline-block;
+        cursor: default;
+        vertical-align: top;
+      }
 
-    .icon:hover span {
-      color: #00b4f0;
-    }
+      .icon-container span {
+        font-family: sans-serif;
+        font-size: 12px;
+        display: block;
+        margin-top: .5em;
+        color: #616161;
+        transition: all 600ms;
+      }
 
-    iron-icon {
-      fill: #616161;
-      -webkit-transition: all 200ms;
-      transition: all 200ms;
-    }
+      .icon-container:hover span {
+        color: #00b4f0;
+      }
 
-    .icon:hover iron-icon {
-      fill: #00b4f0;
-    }
-  </style>
+      .icon-container iron-icon {
+        display: inline-block;
+        fill: #616161;
+        transition: all 200ms;
+      }
+
+      .icon-container:hover iron-icon {
+        fill: #00b4f0;
+      }
+    </style>
+  </custom-style>
 </head>
 
-<body>
-  <div class="layout horizontal wrap center-justified">
+<body style="font-size: 0;">
+  <dom-bind>
     <template is="dom-bind">
-      <iron-meta type="iconset" list="{{iconsets}}"></iron-meta>
-      <template is="dom-repeat" items="{{iconsets}}">
-        <template is="dom-repeat" items="{{getIconNames(item)}}">
-          <div class="icon">
-            <iron-icon icon="[[item]]"></iron-icon>
-            <span>{{item}}</span>
-          </div>
+      <dom-repeat>
+        <template is="dom-repeat" items="{{iconsets}}">
+          <dom-repeat>
+            <template is="dom-repeat" items="{{getIconNames(item)}}">
+              <div class="icon-container">
+                <iron-icon icon="[[item]]"></iron-icon>
+                <span>{{item}}</span>
+              </div>
+            </template>
+          </dom-repeat>
         </template>
-      </template>
+      </dom-repeat>
     </template>
-  </div>
+  </dom-bind>
 
   <script>
-    document.querySelector('[is=dom-bind]').getIconNames = function(iconset) {
-      return iconset.getIconNames();
-    };
+    window.addEventListener('WebComponentsReady', function() {
+      var domBind = Polymer.version.match(/^1/) ? document.querySelector('[is=dom-bind]') : document.querySelector('dom-bind');
+
+      domBind.iconsets = new Polymer.IronMeta({type: 'iconset'}).list;
+
+      domBind.getIconNames = function(iconset) {
+        return iconset.getIconNames();
+      };
+    });
   </script>
 </body>
-
-</html>

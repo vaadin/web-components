@@ -18,9 +18,14 @@
   },
   "homepage": "https://vaadin.com/icons",
   "devDependencies": {
+    "bower": "latest",
     "cheerio": "^0.19.0",
+    "gemini": "^4.14.3",
+    "gemini-polyserve": "^1.0.0",
+    "gemini-sauce": "^1.0.0",
     "gulp": "latest",
     "gulp-modify": "latest",
-    "gulp-concat": "latest"
+    "gulp-concat": "latest",
+    "polymer-cli": "next"
   }
 }
