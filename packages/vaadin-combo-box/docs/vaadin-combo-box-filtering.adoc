@@ -5,7 +5,7 @@ layout: page
 ---
 
 
-[[vaadin-combo-box.external-filtering]]
+[[vaadin-combo-box.filtering]]
 == Overview
 
 By default, [vaadinelement]#vaadin-combo-box# is used with an array of items
