@@ -122,32 +122,34 @@
             </vaadin-grid>
           </template>
           <script>
-            Polymer({
-              is: 'x-remote-sorting-example',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-remote-sorting-example',
 
-              ready: function() {
-                var grid = this.$.grid;
+                ready: function() {
+                  var grid = this.$.grid;
 
-                grid.size = 200;
+                  grid.size = 200;
 
-                grid.dataProvider = function(params, callback) {
-                  var xhr = new XMLHttpRequest();
-                  xhr.onload = function() {
-                    callback(JSON.parse(xhr.responseText).result);
+                  grid.dataProvider = function(params, callback) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                      callback(JSON.parse(xhr.responseText).result);
+                    };
+
+                    var index = params.page * params.pageSize;
+                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+
+                    // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
+                    params.sortOrders.forEach(function(sort) {
+                      url += '&orders[]=' + sort.path + ' ' + sort.direction;
+                    });
+
+                    xhr.open('GET', url, true);
+                    xhr.send();
                   };
-
-                  var index = params.page * params.pageSize;
-                  var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
-
-                  // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
-                  params.sortOrders.forEach(function(sort) {
-                    url += '&orders[]=' + sort.path + ' ' + sort.direction;
-                  });
-
-                  xhr.open('GET', url, true);
-                  xhr.send();
-                };
-              }
+                }
+              });
             });
           </script>
         </dom-module>
@@ -249,38 +251,40 @@
             </vaadin-grid>
           </template>
           <script>
-            Polymer({
-              is: 'x-remote-filtering-example',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-remote-filtering-example',
 
-              ready: function() {
-                var grid = this.$.grid;
+                ready: function() {
+                  var grid = this.$.grid;
 
-                grid.size = 200;
+                  grid.size = 200;
 
-                grid.dataProvider = function(params, callback) {
-                  var xhr = new XMLHttpRequest();
-                  xhr.onload = function() {
-                    var response = JSON.parse(xhr.responseText);
+                  grid.dataProvider = function(params, callback) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                      var response = JSON.parse(xhr.responseText);
 
-                    // Number of items changes after filtering. We need
-                    // to update the grid size based on server response.
-                    grid.size = response.size;
+                      // Number of items changes after filtering. We need
+                      // to update the grid size based on server response.
+                      grid.size = response.size;
 
-                    callback(response.result);
+                      callback(response.result);
+                    };
+
+                    var index = params.page * params.pageSize;
+                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+
+                    // `params.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
+                    params.filters.forEach(function(filter) {
+                      url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value);
+                    });
+
+                    xhr.open('GET', url, true);
+                    xhr.send();
                   };
-
-                  var index = params.page * params.pageSize;
-                  var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
-
-                  // `params.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
-                  params.filters.forEach(function(filter) {
-                    url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value);
-                  });
-
-                  xhr.open('GET', url, true);
-                  xhr.send();
-                };
-              }
+                }
+              });
             });
           </script>
         </dom-module>

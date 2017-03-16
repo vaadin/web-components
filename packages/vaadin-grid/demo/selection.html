@@ -62,18 +62,20 @@
             </vaadin-grid>
           </template>
           <script>
-            Polymer({
-              is: 'x-selection',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-selection',
 
-              properties: {
-                activeItem: {
-                  observer: '_activeItemChanged'
+                properties: {
+                  activeItem: {
+                    observer: '_activeItemChanged'
+                  }
+                },
+
+                _activeItemChanged: function(item) {
+                  this.$.grid.selectedItems = item ? [item] : [];
                 }
-              },
-
-              _activeItemChanged: function(item) {
-                this.$.grid.selectedItems = item ? [item] : [];
-              }
+              });
             });
           </script>
         </dom-module>
@@ -217,52 +219,52 @@
             </vaadin-grid>
           </template>
           <script>
-          document.addEventListener('WebComponentsReady', function() {
-            Polymer({
-              is: 'dataprovider-select-all',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'dataprovider-select-all',
 
-              properties: {
-                inverted: {
-                  type: Boolean,
-                  value: false
+                properties: {
+                  inverted: {
+                    type: Boolean,
+                    value: false
+                  },
+                  indeterminate: {
+                    type: Boolean,
+                    value: false
+                  }
                 },
-                indeterminate: {
-                  type: Boolean,
-                  value: false
+
+                observers: ['_resetSelection(inverted)'],
+
+                _resetSelection: function(inverted) {
+                  this.$.grid.selectedItems = [];
+                  this.updateStyles();
+                  this.indeterminate = false;
+                },
+
+                _invert: function(e) {
+                  this.inverted = !this.inverted;
+                },
+
+                // iOS needs indeterminated + checked at the same time
+                _isChecked: function(inverted, indeterminate) {
+                  return indeterminate || inverted;
+                },
+
+                _selectItem: function(e) {
+                  if (e.target.checked === this.inverted) {
+                    this.$.grid.deselectItem(e.model.item);
+                  } else {
+                    this.$.grid.selectItem(e.model.item);
+                  }
+                  this.indeterminate = this.$.grid.selectedItems.length > 0;
+                },
+
+                _isSelected: function(inverted, selected) {
+                  return inverted != selected;
                 }
-              },
-
-              observers: ['_resetSelection(inverted)'],
-
-              _resetSelection: function(inverted) {
-                this.$.grid.selectedItems = [];
-                this.updateStyles();
-                this.indeterminate = false;
-              },
-
-              _invert: function(e) {
-                this.inverted = !this.inverted;
-              },
-
-               // iOS needs indeterminated + checked at the same time
-              _isChecked: function(inverted, indeterminate) {
-                return indeterminate || inverted;
-              },
-
-              _selectItem: function(e) {
-                if (e.target.checked === this.inverted) {
-                  this.$.grid.deselectItem(e.model.item);
-                } else {
-                  this.$.grid.selectItem(e.model.item);
-                }
-                this.indeterminate = this.$.grid.selectedItems.length > 0;
-              },
-
-              _isSelected: function(inverted, selected) {
-                return inverted != selected;
-              }
+              });
             });
-          });
           </script>
         </dom-module>
       </template>
@@ -332,27 +334,29 @@
             </vaadin-grid>
           </template>
           <script>
-            Polymer({
-              is: 'x-space-action',
+            addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'x-space-action',
 
-              properties: {
-                activeItem: {
-                  observer: '_activeItemChanged'
+                properties: {
+                  activeItem: {
+                    observer: '_activeItemChanged'
+                  }
+                },
+
+                _alert: function(e) {
+                  alert(e.target.textContent + ' clicked');
+                },
+
+                _alertAndPreventDefault: function(e) {
+                  e.preventDefault();
+                  this._alert(e);
+                },
+
+                _activeItemChanged: function(item) {
+                  this.$.grid.selectedItems = item ? [item] : [];
                 }
-              },
-
-              _alert: function(e) {
-                alert(e.target.textContent + ' clicked');
-              },
-
-              _alertAndPreventDefault: function(e) {
-                e.preventDefault();
-                this._alert(e);
-              },
-
-              _activeItemChanged: function(item) {
-                this.$.grid.selectedItems = item ? [item] : [];
-              }
+              });
             });
           </script>
         </dom-module>
