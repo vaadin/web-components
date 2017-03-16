@@ -30,8 +30,7 @@
     "iron-icon": "^1.0.9",
     "iron-icons": "^1.2.0",
     "paper-button": "^1.0.14",
-    "test-fixture": "^3.0.0",
-    "web-component-tester": "6.0.0-prerelease.6",
+    "web-component-tester": "6.0.0-prerelease.7",
     "webcomponentsjs": "^0.7.23"
   },
   "variants": {
