@@ -102,7 +102,7 @@
               _filterChanged: function(e) {
                 // case-sensitive filtering
                 this.items = elements.filter(function(el) {
-                  return el.match(e.detail.value);
+                  return el.indexOf(e.detail.value) !== -1;
                 });
               }
             });

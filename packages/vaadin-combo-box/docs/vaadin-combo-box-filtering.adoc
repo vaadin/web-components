@@ -36,7 +36,7 @@ on the [propertyname]#filter# and update [propertyname]#filteredItems# based on 
     // case-sensitive filtering
     var filter = e.detail.value;
     this.filteredItems = elements.filter(function(el) {
-      return el.match(filter);
+      return el.indexOf(filter) !== -1;
     });
   }
   ...
