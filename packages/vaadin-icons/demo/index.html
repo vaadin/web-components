@@ -11,8 +11,10 @@
 
   <custom-style>
     <style>
-      body {
-        text-align: center;
+      #wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
       .icon-container {
@@ -50,12 +52,12 @@
   </custom-style>
 </head>
 
-<body style="font-size: 0;">
+<body>
   <dom-bind>
     <template is="dom-bind">
       <dom-repeat>
         <template is="dom-repeat" items="{{iconsets}}">
-          <dom-repeat>
+          <dom-repeat id="wrapper">
             <template is="dom-repeat" items="{{getIconNames(item)}}">
               <div class="icon-container">
                 <iron-icon icon="[[item]]"></iron-icon>
