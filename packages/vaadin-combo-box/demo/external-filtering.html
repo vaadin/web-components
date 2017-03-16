@@ -100,9 +100,9 @@
               },
 
               _filterChanged: function(e) {
-                // case-sensitive starts-with filtering
+                // case-sensitive filtering
                 this.items = elements.filter(function(el) {
-                  return el.indexOf(e.detail.value) === 0;
+                  return el.match(e.detail.value);
                 });
               }
             });
