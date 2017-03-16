@@ -76,44 +76,46 @@
       Some template variables, like the item properties, can be modified using <a href="https://www.polymer-project.org/1.0/docs/devguide/data-binding" target="_blank">Polymer's two-way binding</a>.
     </p>
     <demo-snippet>
-      <template is="dom-bind">
-        <style is="custom-style">
-          input[readonly] {
-            border: 2px solid transparent;
-          }
+      <template>
+        <template is="dom-bind">
+          <style is="custom-style">
+            input[readonly] {
+              border: 2px solid transparent;
+            }
 
-          input {
-            font: inherit;
-          }
-        </style>
-        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+            input {
+              font: inherit;
+            }
+          </style>
+          <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-        <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
+          <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
 
-        <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
+          <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
 
-          <vaadin-grid-column>
-            <template class="header">First Name</template>
-            <template>
-              <input value="{{item.firstName::input}}" readonly$="[[!editing]]">
-            </template>
-          </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">First Name</template>
+              <template>
+                <input value="{{item.firstName::input}}" readonly$="[[!editing]]">
+              </template>
+            </vaadin-grid-column>
 
-          <vaadin-grid-column>
-            <template class="header">Last Name</template>
-            <template>
-              <input value="{{item.lastName::input}}" readonly$="[[!editing]]">
-            </template>
-          </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Last Name</template>
+              <template>
+                <input value="{{item.lastName::input}}" readonly$="[[!editing]]">
+              </template>
+            </vaadin-grid-column>
 
-          <vaadin-grid-column width="200px">
-            <template class="header">Email</template>
-            <template>
-              <div>[[item.firstName]].[[item.lastName]]@example.com</div>
-            </template>
-          </vaadin-grid-column>
+            <vaadin-grid-column width="200px">
+              <template class="header">Email</template>
+              <template>
+                <div>[[item.firstName]].[[item.lastName]]@example.com</div>
+              </template>
+            </vaadin-grid-column>
 
-        </vaadin-grid>
+          </vaadin-grid>
+        </template>
       </template>
     </demo-snippet>
 
