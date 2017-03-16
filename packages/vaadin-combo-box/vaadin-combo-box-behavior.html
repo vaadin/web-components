@@ -664,10 +664,21 @@
       }
     },
 
+    created: function() {
+      // needed for V2 to enable event.model on declarative event listeners.
+      this._parentModel = true;
+    },
+
+    _forwardHostPropV2: function(prop, value) {
+      console.log('_forwardHostPropV2');
+      _forwardParentProp(prop, value);
+      _forwardParentPath(prop, value);
+    },
+
     _forwardParentProp: function(prop, value) {
       var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
       Array.prototype.forEach.call(items, function(item) {
-        item._itemTemplateInstance[prop] = value;
+        item._itemTemplateInstance.set(prop, value);
       });
     },
 
