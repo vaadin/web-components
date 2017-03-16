@@ -164,8 +164,7 @@
       'vaadin-dropdown-opened': '_onOpened',
       'vaadin-dropdown-closed': '_onClosed',
       'keydown': '_onKeyDown',
-      'tap': '_onTap',
-      'overlay.selection-changed': '_overlaySelectedItemChanged'
+      'tap': '_onTap'
     },
 
     ready: function() {
@@ -176,6 +175,9 @@
       }
       this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
+
+      // 2.0 does not support 'overlay.selection-changed' syntax in listeners
+      this.$.overlay.addEventListener('selection-changed', this._overlaySelectedItemChanged.bind(this));
     },
 
     _onBlur: function() {
@@ -619,9 +621,9 @@
       return value !== undefined && value !== null;
     },
 
-    _overlaySelectedItemChanged: function(event, detail) {
-      if (this.selectedItem !== detail.item) {
-        this.selectedItem = detail.item;
+    _overlaySelectedItemChanged: function(e) {
+      if (this.selectedItem !== e.detail.item) {
+        this.selectedItem = e.detail.item;
       }
 
       if (this.opened) {

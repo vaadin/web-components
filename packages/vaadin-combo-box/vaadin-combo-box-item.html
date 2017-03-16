@@ -75,7 +75,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     attached: function() {
       if (!this._itemTemplateInstance) {
-        var comboBox = this.domHost.dataHost;
+        // 2.0 has __dataHost
+        var comboBox = this.domHost.dataHost || this.domHost.__dataHost;
         comboBox._ensureTemplatized();
         if (comboBox._itemTemplate) {
           this._itemTemplateInstance = comboBox.stamp();
@@ -86,7 +87,10 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     _updateTemplateInstanceVariable: function(variable, value, _itemTemplateInstance) {
-      this._itemTemplateInstance[variable] = value;
+      // 2.0 calls this method even though _itemTemplateInstance is undefined
+      if(_itemTemplateInstance) {
+        _itemTemplateInstance[variable] = value;
+      }
     }
   });
 </script>

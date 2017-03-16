@@ -59,14 +59,16 @@
 
       if (oldParentNode) {
         this._processPendingMutationObserversFor(oldParentNode);
-        if (oldParentNode.host) {
+        // FIXME: StyleTransformer does not exist in 2.0
+        if (oldParentNode.host && !Polymer.Element) {
           // When moving from local DOM, ensure to remove the old style scope
           Polymer.StyleTransformer.dom(this, oldParentNode.host.is, this._scopeCssViaAttr, true);
         }
       }
 
       this._processPendingMutationObserversFor(this);
-      if (target.host) {
+      // FIXME: StyleTransformer does not exist in 2.0
+      if (target.host && !Polymer.Element) {
         // When moving to local DOM, ensure to add the new style scope
         Polymer.StyleTransformer.dom(this, target.host.is, this._scopeCssViaAttr);
       }
