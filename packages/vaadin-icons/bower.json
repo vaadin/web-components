@@ -1,5 +1,6 @@
 {
   "name": "vaadin-icons",
+  "description": "Collection of 600+ unique icons designed for web applications",
   "homepage": "https://vaadin.com/icons",
   "authors": [
     "Vaadin Ltd"
@@ -10,9 +11,9 @@
     "polymer",
     "vaadin",
     "icons",
+    "svg-icons",
     "vaadin-icons"
   ],
-  "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.html",
   "moduleType": [],
   "license": "Apache-2.0",
@@ -20,16 +21,32 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.1",
-    "iron-icon": "polymerelements/iron-icon#^1.0.5",
-    "iron-iconset-svg": "polymerelements/iron-iconset-svg#^1.0.6"
+    "iron-icon": "PolymerElements/iron-icon#^1.0.5",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.6"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#^1.1.4",
-    "elements-demo-resources": "vaadin/elements-demo-resources#master"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
+    "iron-meta": "PolymerElements/iron-meta#^1.1.2",
+    "elements-demo-resources": "vaadin/elements-demo-resources#master",
+    "webcomponentsjs": "^0.7.23"
+  },
+  "variants": {
+    "polymer2": {
+      "dependencies": {
+        "polymer": "^2.0.0-rc.2",
+        "iron-icon": "#2.0-preview",
+        "iron-iconset-svg": "#2.0-preview"
+      },
+      "devDependencies": {
+        "iron-component-page": "#2.0-preview",
+        "iron-meta": "#2.0-preview",
+        "elements-demo-resources": "#2.0-preview",
+        "webcomponentsjs": "#v1"
+      }
+    }
   }
 }

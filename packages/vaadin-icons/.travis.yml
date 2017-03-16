@@ -1,0 +1,21 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js: stable
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install
+  - polymer install --variants
+
+script:
+  # test against Polymer 1
+  - gemini test test/visual
+
+  # test against Polymer 2
+  - rm -rf bower_components
+  - mv bower_components-polymer2 bower_components
+  - gemini test test/visual
