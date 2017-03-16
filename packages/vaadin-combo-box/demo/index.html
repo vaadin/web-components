@@ -8,7 +8,7 @@
 
   <title>vaadin-combo-box Basic Examples</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
 
@@ -26,9 +26,11 @@
       <template>
         <vaadin-combo-box id="demo1" label="Element"></vaadin-combo-box>
         <script>
-          var combobox = document.querySelector('#demo1');
-          // The elements is an array of String values.
-          combobox.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox = document.querySelector('#demo1');
+            // The elements is an array of String values.
+            combobox.items = elements;
+          });
         </script>
       </template>
     </demo-snippet>
@@ -40,13 +42,15 @@
         <p>Selected value: <span id="selected-value"></span>.</p>
 
         <script>
-          var combobox2 = document.querySelector('#demo2');
-          combobox2.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox2 = document.querySelector('#demo2');
+            combobox2.items = elements;
 
-          combobox2.addEventListener('value-changed', function() {
-            document.querySelector('#selected-value').innerHTML = combobox2.value;
+            combobox2.addEventListener('value-changed', function() {
+              document.querySelector('#selected-value').innerHTML = combobox2.value;
+            });
+            combobox2.value = 'Carbon';
           });
-          combobox2.value = 'Carbon';
         </script>
       </template>
     </demo-snippet>
@@ -60,13 +64,15 @@
         </form>
 
         <script>
-          var form = document.querySelector('form');
-          var combobox3 = form.querySelector('vaadin-combo-box');
-          combobox3.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var form = document.querySelector('form');
+            var combobox3 = form.querySelector('vaadin-combo-box');
+            combobox3.items = elements;
 
-          form.addEventListener('iron-form-submit', function() {
-            alert('Form submitted with name: ' + form.serialize().name);
-            return false;
+            form.addEventListener('iron-form-submit', function() {
+              alert('Form submitted with name: ' + form.serialize().name);
+              return false;
+            });
           });
         </script>
       </template>
