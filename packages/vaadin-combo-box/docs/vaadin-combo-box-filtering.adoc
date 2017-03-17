@@ -5,7 +5,7 @@ layout: page
 ---
 
 
-[[vaadin-combo-box.external-filtering]]
+[[vaadin-combo-box.filtering]]
 == Overview
 
 By default, [vaadinelement]#vaadin-combo-box# is used with an array of items
@@ -33,9 +33,10 @@ on the [propertyname]#filter# and update [propertyname]#filteredItems# based on 
 <script>
   ...
   _filterChanged: function(e) {
+    // case-sensitive filtering
     var filter = e.detail.value;
     this.filteredItems = elements.filter(function(el) {
-      return el.indexOf(filter) === 0;
+      return el.indexOf(filter) !== -1;
     });
   }
   ...
