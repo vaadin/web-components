@@ -238,7 +238,8 @@ Custom property | Description | Default
   </template>
 
   <template id="v1">
-    <iron-input bind-value="{{value}}" id="input" slot="input"
+    <iron-input id="input" slot="input"
+        bind-value="{{_inputElementValue}}"
         allowed-pattern="[[allowedPattern]]"
         invalid="{{invalid}}">
         <input id="nativeInput"
@@ -246,7 +247,6 @@ Custom property | Description | Default
             role="combobox"
             autocomplete="off"
             autocapitalize="none"
-            bind-value="{{_inputElementValue}}"
             aria-label$="[[label]]"
             aria-expanded$="[[_getAriaExpanded(opened)]]"
             aria-autocomplete="list"
