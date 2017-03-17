@@ -109,12 +109,17 @@
           expect(comboBox.$.input.bindValue).to.eql('foo');
         });
 
-        it('should set value after setting a custom input value', function() {
+        it('should set value after setting a custom input value', function(done) {
           comboBox.open();
           comboBox.$.input.bindValue = 'foo';
-          comboBox.close();
 
-          expect(comboBox.value).to.eql('foo');
+          // 2.0 adds a 2-way binding notification listeners for updating _inputElementValue
+          // when iron-input bindValue changes, hence it's needed async testing.
+          setTimeout(function(){
+            comboBox.close();
+            expect(comboBox.value).to.eql('foo');
+            done();
+          });
         });
 
         describe('`custom-value-set` event', function() {

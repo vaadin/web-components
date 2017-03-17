@@ -399,8 +399,9 @@ Custom property | Description | Default
       }
     },
 
-    listeners: {
-      'inputContainer.focused-changed': '_onInputContainerFocusedChanged'
+    ready: function() {
+      // 2.0 does not support nested syntax for listeners
+      this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
     },
 
     registered: function() {
@@ -450,14 +451,14 @@ Custom property | Description | Default
      * Sets focus on the input field.
      */
     focus: function() {
-      this.inputElement.focus();
+      this.$.input.focus();
     },
 
     /**
      * Removes focus from the input field.
      */
     blur: function() {
-      this.inputElement.blur();
+      this.$.input.blur();
     },
 
     _onInputContainerFocusedChanged: function(e) {
