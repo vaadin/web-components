@@ -127,8 +127,30 @@ Custom property | Description | Default
         z-index: 20;
       }
 
-      #input::-ms-clear {
+      input::-ms-clear {
         display: none;
+      }
+
+      /* The same code than paper-input */
+      input {
+        position: relative; /* to make a stacking context */
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--paper-input-container-input-color, var(--primary-text-color));
+        -webkit-appearance: none;
+        text-align: inherit;
+        vertical-align: bottom;
+
+        /* Firefox sets a min-width on the input, which can cause layout issues */
+        min-width: 0;
+
+        @apply --paper-font-subhead;
+        @apply --paper-input-container-input;
       }
     </style>
 
@@ -141,35 +163,31 @@ Custom property | Description | Default
           invalid="[[invalid]]">
       <label on-down="_preventDefault" id="label" hidden$="[[!label]]" aria-hidden="true" on-tap="_openAsync">[[label]]</label>
 
-      <slot name="prefix"></slot>
+      <slot name="prefix" slot="prefix"></slot>
 
       <span id="template-placeholder"></span>
-
-      <slot name="suffix"></slot>
 
       <!-- TODO (web-padawan): remove "suffix" attributes for 2.0 -->
       <div slot="suffix" suffix>
         <slot name="clear-button">
-          <paper-icon-button
-              id="clearIcon"
-              tabindex="-1"
-              aria-label="Clear"
-              icon="vaadin-combo-box:clear"
-              class="clear-button small">
+          <paper-icon-button id="clearIcon"
+          tabindex="-1"
+          aria-label="Clear"
+          icon="vaadin-combo-box:clear"
+          class="clear-button small">
           </paper-icon-button>
         </slot>
-      </div>
-
-      <div slot="suffix" suffix>
         <slot name="toggle-button">
-          <paper-icon-button
-              id="toggleIcon"
-              tabindex="-1"
-              icon="vaadin-combo-box:arrow-drop-down"
-              aria-label="Toggle"
-              aria-expanded$="[[_getAriaExpanded(opened)]]"
-              class="toggle-button rotate-on-open">
+          <paper-icon-button id="toggleIcon"
+          tabindex="-1"
+          icon="vaadin-combo-box:arrow-drop-down"
+          aria-label="Toggle"
+          aria-expanded$="[[_getAriaExpanded(opened)]]"
+          class="toggle-button rotate-on-open">
           </paper-icon-button>
+        </slot>
+
+        <slot name="suffix">
         </slot>
       </div>
 
