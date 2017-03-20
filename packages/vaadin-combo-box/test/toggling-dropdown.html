@@ -32,11 +32,15 @@
     var combobox;
     var comboboxLight;
 
-    function tapToggleIcon() {
-      Polymer.Base.fire('tap', {}, {
+    function fire(elm, type) {
+      Polymer.Base.fire(type, {}, {
         bubbles: true,
-        node: combobox.$$('paper-input-container #toggleIcon')
+        node: elm
       });
+    }
+
+    function tapToggleIcon() {
+      fire(combobox.$$('paper-input-container #toggleIcon'), 'tap');
     }
 
     beforeEach(function() {
@@ -59,7 +63,7 @@
       });
 
       it('should open asynchronously by clicking input', function(done) {
-        combobox.$$('paper-input-container input').fire('tap');
+        combobox.inputElement.click();
 
         expect(combobox.opened).to.be.false;
         Polymer.Base.async(function() {
@@ -173,7 +177,7 @@
             var focusedInput = Polymer.dom(combobox.root).querySelector('input');
             var activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
-            expect(focusedInput).to.equal(combobox.$.input);
+            expect(focusedInput).to.equal(combobox.inputElement);
           });
 
           it('should refocus the input field when closed from icon', function() {
@@ -182,7 +186,7 @@
             var focusedInput = Polymer.dom(combobox.root).querySelector('input');
             var activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
-            expect(focusedInput).to.eql(combobox.$.input);
+            expect(focusedInput).to.equal(combobox.inputElement);
           });
         }
 
@@ -255,7 +259,7 @@
       it('should close the overlay when focus is lost', function() {
         combobox.open();
 
-        combobox.$.input.fire('blur');
+        fire(combobox.inputElement, 'blur');
 
         expect(combobox.opened).to.equal(false);
       });
