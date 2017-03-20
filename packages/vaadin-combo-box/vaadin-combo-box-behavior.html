@@ -55,6 +55,11 @@
       },
 
       /**
+       * Used to detect user value changes and fire `change` events.
+       */
+      _lastCommittedValue: String,
+
+      /**
        * A read-only property indicating whether this combo box has a value
        * selected or not. It can be used for example in styling of the component.
        */
@@ -169,6 +174,7 @@
       if (this.value === undefined) {
         this.value = '';
       }
+      this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
     },
 
@@ -346,7 +352,11 @@
         this.value = '';
       }
 
-      this.close();
+      if (this.opened) {
+        this.close();
+      } else {
+        this._detectAndDispatchChange();
+      }
     },
 
     /**
@@ -354,6 +364,8 @@
      */
     cancel: function() {
       this._revertInputValueToValue();
+      // In the next _detectAndDispatchChange() call, the change detection should not pass
+      this._lastCommittedValue = this.value;
       this.close();
     },
 
@@ -374,6 +386,9 @@
       // other document nodes (combo-box is "modal")
       this._previousDocumentPointerEvents = document.body.style.pointerEvents;
       document.body.style.pointerEvents = 'none';
+
+      // _detectAndDispatchChange() should not consider value changes done before opening
+      this._lastCommittedValue = this.value;
     },
 
     _onClosed: function() {
@@ -398,6 +413,8 @@
           this._inputElementValue = this._getItemLabel(this.selectedItem);
         }
       }
+
+      this._detectAndDispatchChange();
 
       this._clearSelectionRange();
 
@@ -511,8 +528,15 @@
       } else {
         this.selectedItem = null;
       }
+      // In the next _detectAndDispatchChange() call, the change detection should pass
+      this._lastCommittedValue = undefined;
+    },
 
-      this.fire('change', undefined, {bubbles: true});
+    _detectAndDispatchChange: function() {
+      if (this.value !== this._lastCommittedValue) {
+        this.fire('change', undefined, {bubbles: true});
+        this._lastCommittedValue = this.value;
+      }
     },
 
     _itemsChanged: function(e) {

@@ -194,32 +194,82 @@
       expect(valueChangedSpy.callCount).to.equal(1);
     });
 
-    it('should fire exactly one `change` event', function() {
-      var spy = sinon.spy();
-      combobox.addEventListener('change', spy);
+    describe('`change` event', function() {
+      it('should fire `value-changed` and `selected-item-changed` before `changed`', function(done) {
+        combobox.addEventListener('change', function() {
+          expect(valueChangedSpy.called).to.be.true;
+          expect(selectedItemChangedSpy.called).to.be.true;
+          done();
+        });
 
-      combobox.value = 'foo';
-
-      expect(spy.callCount).to.equal(1);
-    });
-
-    it('should fire `value-changed` and `selected-item-changed` before `changed`', function(done) {
-      combobox.addEventListener('change', function() {
-        expect(valueChangedSpy.called).to.be.true;
-        expect(selectedItemChangedSpy.called).to.be.true;
-        done();
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.close();
       });
 
-      combobox.value = 'foo';
-    });
+      it('should fire exactly one `change` event', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('change', spy);
 
-    it('should stop input `change` event from bubbling', function() {
-      var spy = sinon.spy();
-      combobox.addEventListener('change', spy);
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.close();
 
-      combobox.$.input.fire('change');
+        expect(spy.callCount).to.equal(1);
+      });
 
-      expect(spy.callCount).to.equal(0);
+      it('should fire on clear', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('change', spy);
+
+        combobox.value = 'foo';
+        combobox.$.clearIcon.click();
+
+        expect(spy.callCount).to.equal(1);
+      });
+
+      it('should not fire until close', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('change', spy);
+
+        combobox.value = 'foo';
+        combobox.open();
+        combobox.value = 'bar';
+
+        expect(spy.callCount).to.equal(0);
+      });
+
+      it('should not fire on cancel', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('change', spy);
+
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.cancel();
+
+        expect(spy.callCount).to.equal(0);
+      });
+
+      it('should not fire for changes when closed', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('change', spy);
+
+        combobox.value = 'foo';
+
+        combobox.open();
+        combobox.close();
+
+        expect(spy.callCount).to.equal(0);
+      });
+
+      it('should stop input `change` event from bubbling', function() {
+        var spy = sinon.spy();
+        combobox.addEventListener('change', spy);
+
+        combobox.$.input.fire('change');
+
+        expect(spy.callCount).to.equal(0);
+      });
     });
 
     it('should close the dropdown when reselecting the current value', function() {

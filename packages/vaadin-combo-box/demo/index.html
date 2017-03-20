@@ -13,6 +13,7 @@
   <link rel="import" href="common.html">
 
   <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
 </head>
 
 <body unresolved>
@@ -66,6 +67,30 @@
           form.addEventListener('iron-form-submit', function() {
             alert('Form submitted with name: ' + form.serialize().name);
             return false;
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Change Event</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-combo-box id="changeEventDemo" items="[[elements]]"></vaadin-combo-box>
+        <paper-button id="setRandomValue" raised>Set random value</paper-button>
+        <script>
+          var combobox4 = document.querySelector('#changeEventDemo');
+          combobox4.items = elements;
+
+          combobox4.addEventListener('change', function(e) {
+            if (combobox4.value) {
+              alert('User selected value ' + combobox4.value);
+            } else {
+              alert('User has cleared the value');
+            }
+          });
+
+          document.querySelector('#setRandomValue').addEventListener('click', function() {
+            combobox4.value = combobox4.items[Math.floor(Math.random() * combobox4.items.length)];
           });
         </script>
       </template>
