@@ -9,6 +9,7 @@
   <title>vaadin-combo-box Object Items Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="data.js"></script>
 
   <link rel="import" href="common.html">
   <link rel="import" href="../../paper-item/all-imports.html">
@@ -30,12 +31,10 @@
         </vaadin-combo-box>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var elementsTemplateBox = document.querySelector('#elements-template-box');
-            // elementsJson is an Array of Objects. Item object format:
-            //   {name: 'Hydrogen', symbol: 'H', number: 1}
-            elementsTemplateBox.items = elementsJson;
-          });
+          var elementsTemplateBox = document.querySelector('#elements-template-box');
+          // elementsJson is an Array of Objects. Item object format:
+          //   {name: 'Hydrogen', symbol: 'H', number: 1}
+          elementsTemplateBox.items = elementsJson;
         </script>
       </template>
     </demo-snippet>
@@ -52,10 +51,8 @@
         </vaadin-combo-box>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var elementsSelectedBox = document.querySelector('#elements-selected-box');
-            elementsSelectedBox.items = elements;
-          });
+          var elementsSelectedBox = document.querySelector('#elements-selected-box');
+          elementsSelectedBox.items = elements;
         </script>
       </template>
     </demo-snippet>
@@ -116,10 +113,8 @@
         </vaadin-combo-box>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var elementsMyItemBox = document.querySelector('#elements-my-item-box');
-            elementsMyItemBox.items = elementsJson;
-          });
+          var elementsMyItemBox = document.querySelector('#elements-my-item-box');
+          elementsMyItemBox.items = elementsJson;
         </script>
       </template>
     </demo-snippet>
@@ -141,9 +136,7 @@
         </vaadin-combo-box>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
-            document.querySelector('#elements-paper-item').items = users;
-          });
+          document.querySelector('#elements-paper-item').items = users;
         </script>
       </template>
     </demo-snippet>
