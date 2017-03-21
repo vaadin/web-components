@@ -241,7 +241,9 @@ Custom property | Description | Default
     <iron-input id="input" slot="input"
         bind-value="{{_inputElementValue}}"
         allowed-pattern="[[allowedPattern]]"
-        invalid="{{invalid}}">
+        invalid="{{invalid}}"
+        on-change="_stopPropagation"
+        >
         <input id="nativeInput"
             type="text"
             role="combobox"
@@ -264,7 +266,6 @@ Custom property | Description | Default
             size$="[[size]]"
             on-input="_inputValueChanged"
             on-blur="_onBlur"
-            on-change="_stopPropagation"
             key-event-target>
     </iron-input>
   </template>

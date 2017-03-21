@@ -50,8 +50,7 @@
       value: {
         type: String,
         observer: '_valueChanged',
-        // notify: true already set in IronFormBehavior, setting this to true will make two value-changed events(?)
-        notify: false
+        notify: !!Polymer.Element
       },
 
       /**
