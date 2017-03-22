@@ -90,7 +90,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## Creating a pull request
 
   - Make sure your code is compliant with our code linters: `gulp lint`
-  - Check that tests are passing: `npm test`
+  - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
   - Wait for response from one of Vaadin Elements team members
 
