@@ -64,7 +64,7 @@
         var path = arrayToCheck[i].path;
 
         // skip simple paths
-        if (path.indexOf('.') === -1) {
+        if (!path || path.indexOf('.') === -1) {
           continue;
         }
 
