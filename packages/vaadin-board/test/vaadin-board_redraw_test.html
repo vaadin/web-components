@@ -54,9 +54,9 @@
     <script>
       suite('vaadin-board', function () {
 
-        test('Changing styling of the board and calling redraw triggers relayouting', function() {
+        test('Changing styling of the board and calling redraw triggers relayouting', function () {
           var board = fixture('board-1-row-4-items');
-          board.style.width="700px";
+          board.style.width = "700px";
           board.redraw();
 
           var row = board.querySelector('#top');
@@ -65,14 +65,14 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
-            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+            assert.approximately(rect.left, (i % 2 * rowRect.width / 2) + rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i / 2) * rowRect.height / 2) + rowRect.top, 1);
           }
         });
 
-        test('Changing styling of the board and calling redraw triggers relayouting for nested rows', function() {
+        test('Changing styling of the board and calling redraw triggers relayouting for nested rows', function () {
           var board = fixture('board-1-row-4-items-nested');
-          board.style.width="900px";
+          board.style.width = "900px";
           board.redraw();
 
           var nestedRow = board.querySelector('#nested');
@@ -83,7 +83,7 @@
             var rect = children[i].getBoundingClientRect();
 
             assert.approximately(rect.left, nestedRowRect.left, 1);
-            assert.approximately(rect.top, nestedRowRect.top+rect.height*i ,1);
+            assert.approximately(rect.top, nestedRowRect.top + rect.height * i, 1);
           }
         });
 
@@ -91,7 +91,8 @@
           var board = fixture('board-1-row-4-items-nested');
           var nestedRow = board.querySelector('#nested');
           var nestedRowRect = nestedRow.getBoundingClientRect();
-          var expectedLeftOffset = [0, expected(1 / 2, nestedRowRect.width),0, expected(1 / 2, nestedRowRect.width)];
+          var expectedLeftOffset = [0, expected(1 / 2, nestedRowRect.width), 0, expected(1 / 2, nestedRowRect.width)];
+
           board.style.width = "900px";
           board.redraw();
           board.style.width = "1200px";
@@ -107,9 +108,9 @@
           }
         });
 
-        test('Changing styling of the row and calling redraw triggers relayouting', function() {
+        test('Changing styling of the row and calling redraw triggers relayouting', function () {
           var row = fixture('board-row-4-items');
-          row.style.width="700px";
+          row.style.width = "700px";
           row.redraw();
 
           var rowRect = row.getBoundingClientRect();
@@ -117,8 +118,8 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
-            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+            assert.approximately(rect.left, (i % 2 * rowRect.width / 2) + rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i / 2) * rowRect.height / 2) + rowRect.top, 1);
           }
         });
       });

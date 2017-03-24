@@ -16,12 +16,12 @@
   <body>
     <test-fixture id="desktop-board-row">
       <template>
-          <vaadin-board-row style="width:1200px">
-            <div>top A</div>
-            <div>top B</div>
-            <div>top C</div>
-            <div>top D</div>
-          </vaadin-board-row>
+        <vaadin-board-row style="width:1200px">
+          <div>top A</div>
+          <div>top B</div>
+          <div>top C</div>
+          <div>top D</div>
+        </vaadin-board-row>
       </template>
     </test-fixture>
     <test-fixture id="tablet-board-row">
@@ -73,8 +73,8 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.approximately(rowRect.top, rect.top,1, "Row and content top are equal");
-            assert.approximately(rect.left, (i * rowRect.width / 4)+rowRect.left, 1);
+            assert.approximately(rowRect.top, rect.top, 1, "Row and content top are equal");
+            assert.approximately(rect.left, (i * rowRect.width / 4) + rowRect.left, 1);
           }
         });
 
@@ -86,8 +86,8 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
-            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top, 1);
+            assert.approximately(rect.left, (i % 2 * rowRect.width / 2) + rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i / 2) * rowRect.height / 2) + rowRect.top, 1);
           }
         });
 
@@ -100,7 +100,7 @@
             var rect = children[i].getBoundingClientRect();
 
             assert.approximately(rect.left, rowRect.left, 1);
-            assert.approximately(rect.top, (i * rowRect.height / 4)+rowRect.top, 1);
+            assert.approximately(rect.top, (i * rowRect.height / 4) + rowRect.top, 1);
           }
         });
 
@@ -113,7 +113,7 @@
             var rect = children[i].getBoundingClientRect();
 
             assert.equal(rowRect.top, rect.top, "Row and content top are equal");
-            assert.approximately(rect.left, (i * rowRect.width / 2)+rowRect.left, 1);
+            assert.approximately(rect.left, (i * rowRect.width / 2) + rowRect.left, 1);
           }
         });
 
@@ -125,8 +125,8 @@
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.approximately(rect.left, (i%2 * rowRect.width / 2)+rowRect.left, 1);
-            assert.approximately(rect.top, (Math.floor(i/2) * rowRect.height / 2)+rowRect.top,1);
+            assert.approximately(rect.left, (i % 2 * rowRect.width / 2) + rowRect.left, 1);
+            assert.approximately(rect.top, (Math.floor(i / 2) * rowRect.height / 2) + rowRect.top, 1);
           }
         });
 

@@ -56,9 +56,9 @@
         test('Items inside the board-row has different styling, based on row size.', function () {
           var board = fixture('board');
           var rows = board.querySelectorAll("vaadin-board-row");
-          assert.equal("rgb(255, 0, 0)",window.getComputedStyle(rows[0].querySelector("div")).backgroundColor);
-          assert.equal("rgb(0, 255, 0)",window.getComputedStyle(rows[1].querySelector("div")).backgroundColor);
-          assert.equal("rgb(0, 0, 255)",window.getComputedStyle(rows[2].querySelector("div")).backgroundColor);
+          assert.equal("rgb(255, 0, 0)", window.getComputedStyle(rows[0].querySelector("div")).backgroundColor);
+          assert.equal("rgb(0, 255, 0)", window.getComputedStyle(rows[1].querySelector("div")).backgroundColor);
+          assert.equal("rgb(0, 0, 255)", window.getComputedStyle(rows[2].querySelector("div")).backgroundColor);
         });
       });
     </script>

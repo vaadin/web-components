@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta id="viewport" name="viewport"
+          content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../vaadin-board-row.html">
+    <link rel="import" href="../../app-layout/app-drawer/app-drawer.html">
+    <link rel="import" href="../../app-layout/app-drawer-layout/app-drawer-layout.html">
+    <link rel="import" href="../../app-layout/app-header-layout/app-header-layout.html">
+
+  </head>
+  <body>
+    <!-- Simple app layout with a drawer menu and a vaadin-board content-->
+    <app-drawer-layout fullbleed>
+      <app-drawer id="drawer" slot="drawer">
+        <h1>Menu title</h1>
+      </app-drawer>
+      <app-header-layout has-scrolling-region>
+        <vaadin-board-row>
+          <div>top A</div>
+          <div>top B</div>
+          <div>top C</div>
+          <div>top D</div>
+        </vaadin-board-row>
+      </app-header-layout>
+    </app-drawer-layout>
+
+  </body>
+</html>

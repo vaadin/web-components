@@ -5,18 +5,17 @@
   "main": "vaadin-board.html",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
   "dependencies": {
-    "polymer": "v2.0.0-rc.1",
+    "polymer": "^v2.0.0-rc.1",
     "vaadin-license-checker": "vaadin/license-checker#2.0-preview"
   },
   "devDependencies": {
+    "app-layout": "PolymerElements/app-layout#2.0-preview",
     "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "v1.0.0-rc.4",
+    "webcomponentsjs": "^v1.0.0-rc.4",
     "test-fixture": "^2.0.0"
   },
   "resolutions": {
-    "polymer":"v2.0.0-rc.1",
-    "webcomponentsjs": "v1.0.0-rc.4",
     "test-fixture": "^2.0.0",
-    "custom-elements": "master"
+    "polymer": "^v2.0.0-rc.1"
   }
 }

@@ -102,7 +102,7 @@
           var rowRect = row.getBoundingClientRect();
 
           var children = row.querySelectorAll("div");
-          var expectedLeftOffset = [0, expected(1/2,rowRect.width), expected(3/4,rowRect.width)];
+          var expectedLeftOffset = [0, expected(1 / 2, rowRect.width), expected(3 / 4, rowRect.width)];
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
@@ -116,31 +116,30 @@
           var rowRect = row.getBoundingClientRect();
 
           var children = row.querySelectorAll("div");
-          var expectedLeftOffset = [0, expected(1/3,rowRect.width), expected(2/3,rowRect.width)];
-          var expectedToptOffset = [0, 0, 0];
+          var expectedLeftOffset = [0, expected(1 / 3, rowRect.width), expected(2 / 3, rowRect.width)];
+          var expectedTopOffset = [0, 0, 0];
 
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
             assert.approximately(rect.left, rowRect.left + expectedLeftOffset[i], 1, "Three items take 33% each.");
-            assert.approximately(rect.top, rowRect.top + expectedToptOffset[i], 1);
+            assert.approximately(rect.top, rowRect.top + expectedTopOffset[i], 1);
           }
         });
 
         test('Item with colspan 2 takes 100% on Tablet.', function () {
-
           var row = fixture('tablet-board-row');
           var rowRect = row.getBoundingClientRect();
 
           var children = row.querySelectorAll("div");
-          var expectedLeftOffset = [0, 0, expected(1/2,rowRect.width)];
-          var expectedToptOffset = [0, expected(1/2,rowRect.height),expected(1/2, rowRect.height)];
+          var expectedLeftOffset = [0, 0, expected(1 / 2, rowRect.width)];
+          var expectedTopOffset = [0, expected(1 / 2, rowRect.height), expected(1 / 2, rowRect.height)];
 
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
-            assert.approximately(rect.left, rowRect.left+expectedLeftOffset[i], 1, "Row and content left are equal");
-            assert.approximately(rect.top, rowRect.top + expectedToptOffset[i], 1);
+            assert.approximately(rect.left, rowRect.left + expectedLeftOffset[i], 1, "Row and content left are equal");
+            assert.approximately(rect.top, rowRect.top + expectedTopOffset[i], 1);
           }
         });
 
@@ -149,14 +148,14 @@
           var rowRect = row.getBoundingClientRect();
 
           var children = row.querySelectorAll("div");
-          var expectedLeftOffset = [0, expected(1/3,rowRect.width), expected(2/3,rowRect.width)];
-          var expectedToptOffset = [0, 0, 0];
+          var expectedLeftOffset = [0, expected(1 / 3, rowRect.width), expected(2 / 3, rowRect.width)];
+          var expectedTopOffset = [0, 0, 0];
 
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
 
             assert.approximately(rect.left, rowRect.left + expectedLeftOffset[i], 1, "Three items take 33% each on Tablet.");
-            assert.approximately(rect.top, rowRect.top + expectedToptOffset[i], 1);
+            assert.approximately(rect.top, rowRect.top + expectedTopOffset[i], 1);
           }
         });
 
@@ -184,29 +183,29 @@
         );
 
         test('Extra Item without board-cols dropped and there is a warning message', function () {
-            var row = fixture('desktop-board-row-extra');
-            var children = row.querySelectorAll("div");
-            assert.equal(children.length,4,"Number of children div should be 4");
-            assert.equal(warnMessage,"The column configuration is not valid; column count should add up to 3 or 4.");
-          })
+          var row = fixture('desktop-board-row-extra');
+          var children = row.querySelectorAll("div");
+          assert.equal(children.length, 4, "Number of children div should be 4");
+          assert.equal(warnMessage, "The column configuration is not valid; column count should add up to 3 or 4.");
+        })
 
         test('Extra Item with board-cols, that does not fit. Board-cols is dropped and there is a warning message.', function () {
           var row = fixture('desktop-board-row-extra-col2');
 
           var children = row.querySelectorAll("div");
-          assert.equal(children.length,4,"Number of children div should be 4");
-          assert.equal(warnMessage,"The column configuration is not valid; column count should add up to 3 or 4.");
+          assert.equal(children.length, 4, "Number of children div should be 4");
+          assert.equal(warnMessage, "The column configuration is not valid; column count should add up to 3 or 4.");
         });
 
-        teardown(function(){
+        teardown(function () {
           console.warn = oldWarn;
         })
 
         test('Board cols 2/3 and 1/3 should use 2/3 and 1/3 available space.', function () {
           var row = fixture('board-row-3-items-board-cols');
           var children = row.querySelectorAll("div");
-          var rowRect= row.getBoundingClientRect();
-          var expectedLeftOffset = [0, expected(2/3,rowRect.width)];
+          var rowRect = row.getBoundingClientRect();
+          var expectedLeftOffset = [0, expected(2 / 3, rowRect.width)];
           for (let i = 0; i < children.length; i++) {
             var rect = children[i].getBoundingClientRect();
             assert.approximately(rect.left, rowRect.left + expectedLeftOffset[i], 1);
