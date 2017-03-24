@@ -23,6 +23,7 @@ See the file LICENSE.md distributed with this software for more information abou
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 <link rel="import" href="configuration-reader.html">
+<link rel="import" href="../iron-resizable-behaviour/iron-resizable-behaviour.html">
 
 <script>
     var VaadinCharts = VaadinCharts || {};
@@ -142,7 +143,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             unselect: "point-unselect",
             update: "point-update"
         },
-
+        listeners: {
+            'iron-resize': '_onIronResize'
+        },
+        _onIronResize: function() {
+            if (this.chart.reflow) {
+                this.chart.reflow();
+            }
+        },
         /**
          * Reloads the chart with the original configuration defined in elements and its attributes.
          */
@@ -349,6 +357,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     /**
      * @polymerBehavior
      */
-    VaadinCharts.ChartBehavior = [VaadinCharts.ConfigurationReaderBehavior, VaadinCharts.ChartCommonBehavior]
+    VaadinCharts.ChartBehavior = [VaadinCharts.ConfigurationReaderBehavior, Polymer.IronResizableBehavior,VaadinCharts.ChartCommonBehavior ]
 
 </script>
