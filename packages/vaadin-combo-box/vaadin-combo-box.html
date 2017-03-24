@@ -217,11 +217,9 @@ Custom property | Description | Default
         </paper-icon-button>
       </slot>
 
-      <dom-if>
-        <template is="dom-if" if="[[errorMessage]]">
-          <paper-input-error>[[errorMessage]]</paper-input-error>
-        </template>
-      <dom-if>
+      <template is="dom-if" if="[[errorMessage]]">
+        <paper-input-error>[[errorMessage]]</paper-input-error>
+      </template>
     </paper-input-container>
 
     <vaadin-combo-box-overlay
