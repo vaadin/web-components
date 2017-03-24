@@ -256,6 +256,18 @@
         expect(datepicker.$.dropdown.noAutoFocus).to.equal(true);
       });
 
+      it('should realign on iron-resize', function(done) {
+        open(datepicker, function() {
+          sinon.stub(datepicker, '_updateAlignmentAndPosition', function() {
+            if (!done._called) {
+              done._called = true;
+              done();
+            }
+          });
+          datepicker.fire('iron-resize', undefined, {bubbles: false});
+        });
+      });
+
       describe('window scroll realign', function() {
 
         beforeEach(function(done) {
