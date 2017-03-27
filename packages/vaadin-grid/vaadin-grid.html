@@ -208,28 +208,28 @@ first element in the cell will be focused. You can override the behavior by appl
 <link rel="import" href="vaadin-grid-column-reordering-behavior.html">
 
 <dom-module id="vaadin-grid">
-  <style>
-    :host {
-      display: block;
-      height: 400px;
-      background: var(--primary-background-color, #fff);
-      box-sizing: border-box;
-      border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :host(:focus) {
-      outline: none;
-    }
-
-    #scroller {
-      height: 100%;
-      width: 100%;
-    }
-
-  </style>
   <template>
+    <style>
+      :host {
+        display: block;
+        height: 400px;
+        background: var(--primary-background-color, #fff);
+        box-sizing: border-box;
+        border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      :host(:focus) {
+        outline: none;
+      }
+
+      #scroller {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
     <vaadin-grid-table id="scroller" loading$=[[_loading]] bind-data="[[_bindData]]" size="[[size]]"
         column-tree="[[_columnTree]]" content-target="[[_getContentTarget()]]"
         row-details-template="[[_rowDetailsTemplate]]" column-reordering-allowed="[[columnReorderingAllowed]]">
