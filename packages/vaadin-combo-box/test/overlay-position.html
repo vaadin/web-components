@@ -36,11 +36,16 @@
     </div>
   </template>
   <script>
-    window.addEventListener('WebComponentsReady', function() {
+    function register() {
       Polymer({
         is: 'x-fixed'
       });
-    });
+    }
+    if (window.Polymer) {
+      register();
+    } else {
+      window.addEventListener('WebComponentsReady', register);
+    }
   </script>
 </dom-module>
 
@@ -205,7 +210,6 @@
       });
 
       it('should reposition after filtering', function(done) {
-        this.timeout(4000000);
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.$.input.bindValue = 'item 1';

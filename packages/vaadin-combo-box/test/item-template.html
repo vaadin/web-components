@@ -27,7 +27,7 @@
       </vaadin-combo-box>
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      function register() {
         Polymer({
           is: 'x-scope',
           parentMethod: function() {
@@ -35,7 +35,12 @@
           },
           parentEventHandler: function() { }
         });
-      });
+      }
+      if (window.Polymer) {
+        register();
+      } else {
+        window.addEventListener('WebComponentsReady', register);
+      }
     </script>
   </dom-module>
 
@@ -50,11 +55,15 @@
       var scope, combobox, firstItem;
 
       beforeEach(function(done) {
-        scope = fixture('scope', {items: ['foo', 'bar']});
+        scope = fixture('scope');
         combobox = scope.$.combobox;
+        combobox.items = ['foo', 'bar'];
         combobox.open();
-        firstItem = combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item');
-        combobox.async(done, 1);
+
+        combobox.async(function(){
+          firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+          done();
+        }, 100);
       });
 
       it('should render items using template', function() {

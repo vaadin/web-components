@@ -639,8 +639,8 @@
      * @return {boolean}
      */
     _getValidity: function() {
-      if (this.inputElement.validate) {
-        return this.inputElement.validate();
+      if (this.$.input.validate) {
+        return this.$.input.validate();
       }
     },
 
@@ -669,22 +669,25 @@
     },
 
     _forwardHostPropV2: function(prop, value) {
-      console.log('_forwardHostPropV2');
-      _forwardParentProp(prop, value);
-      _forwardParentPath(prop, value);
+      this._forwardParentProp(prop, value);
+      this._forwardParentPath(prop, value);
     },
 
     _forwardParentProp: function(prop, value) {
       var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
       Array.prototype.forEach.call(items, function(item) {
-        item._itemTemplateInstance.set(prop, value);
+        if (item._itemTemplateInstance) {
+          item._itemTemplateInstance.set(prop, value);
+        }
       });
     },
 
     _forwardParentPath: function(path, value) {
       var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
       Array.prototype.forEach.call(items, function(item) {
-        item._itemTemplateInstance.notifyPath(path, value, true);
+        if (item._itemTemplateInstance) {
+          item._itemTemplateInstance.notifyPath(path, value, true);
+        }
       });
     },
 

@@ -16,7 +16,7 @@
   <dom-module id="value-null">
     <script>
       // IE11 needs to wait for Polymer being loaded.
-      HTMLImports.whenReady(function() {
+      window.addEventListener('WebComponentsReady', function() {
         Polymer({
           is: 'value-null',
           properties: {
@@ -31,13 +31,13 @@
 
   <test-fixture id="fixturenull">
     <template>
-      <div>
+      <dom-bind>
         <template is="dom-bind">
-          <value-null value="{{name}}"></value-null>
-          <vaadin-combo-box items="[[robots]]" value="{{name}}"></vaadin-combo-box>
+          <value-null id="valuenull" value="{{name}}"></value-null>
+          <vaadin-combo-box id="combobox" items="[[robots]]" value="{{name}}"></vaadin-combo-box>
           <input is="iron-input" bind-value="{{name}}">
         </template>
-      </div>
+      </dom-bind>
     </template>
   </test-fixture>
 
@@ -52,8 +52,13 @@
 
       beforeEach(function() {
         var root = fixture('fixturenull');
-        valueNull = Polymer.dom(root).querySelector('value-null');
-        comboBox = Polymer.dom(root).querySelector('vaadin-combo-box');
+        if (Polymer.Element) {
+          valueNull = root.$.valuenull;
+          comboBox = root.$.combobox;
+        } else {
+          valueNull = Polymer.dom(root).querySelector('value-null');
+          comboBox = Polymer.dom(root).querySelector('vaadin-combo-box');
+        }
       });
 
       // Setting value to null/undefined makes the component enter in a loop,
