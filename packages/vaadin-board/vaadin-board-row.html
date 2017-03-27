@@ -180,7 +180,11 @@
               let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow);
               if(forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
                   this._oldFlexBasis[i] = newFlexBasis
-                  e.style.flexBasis = newFlexBasis;
+                // e.style.flexBasis = newFlexBasis;
+                // This fixes issue with vaadin-charts resizing.
+                // https://github.com/highcharts/highcharts/issues/6427
+                // May cause some isses, keep this until we found a better solution.
+                  e.style.width = newFlexBasis;
               }
           });
           this._oldWidth = width;
