@@ -36,6 +36,11 @@ module.exports = {
         },
         {
           'browserName': 'safari',
+          'platform': 'OS X 10.11',
+          'version': '9.0'
+        },
+        {
+          'browserName': 'safari',
           'appiumVersion': '1.6.3',
           'deviceName': 'iPad Simulator',
           'deviceOrientation': 'portrait',
