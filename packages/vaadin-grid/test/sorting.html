@@ -275,6 +275,13 @@
           expect(sorterLast._order).to.equal(null);
         });
 
+        it('should focus trap', function() {
+          // This test is relevant for IE11 only
+          var spy = sinon.spy(grid.$.scroller.$.headerFocusTrap, 'focus');
+          sorterFirst.$.content.dispatchEvent(new CustomEvent('focus'));
+          expect(spy.called).to.be.true;
+        });
+
         describe('array data provider', function() {
 
           it('should sort automatically', function() {

@@ -90,7 +90,7 @@ Custom property | Description | Default
       }
     </style>
 
-    <div id="content">
+    <div id="content" on-focus="_onContentFocus">
       <content></content>
     </div>
     <div id="announcer" aria-hidden="true">
@@ -173,6 +173,21 @@ Custom property | Description | Default
           this._cellContent.removeEventListener('cell-focusin', this._boundOnCellContentFocusin);
           this._cellContent.removeEventListener('cell-focusout', this._boundOnCellContentFocusout);
           this._cellContent = undefined;
+        }
+      },
+
+      _onContentFocus: function(e) {
+        /* Need to move the focus to the correct trap. This is only required for IE11. */
+        var grid = this;
+        while (grid.localName !== 'vaadin-grid') {
+          grid = Polymer.dom(grid).parentNode;
+        }
+
+        var thisCell = grid.$.scroller._getCellByCellContent(this);
+        if (thisCell.is === 'vaadin-grid-table-footer-cell') {
+          grid.$.scroller.$.footerFocusTrap.focus();
+        } else {
+          grid.$.scroller.$.headerFocusTrap.focus();
         }
       },
 
