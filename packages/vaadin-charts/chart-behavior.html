@@ -146,7 +146,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         listeners: {
             'iron-resize': '_onIronResize'
         },
-        _onIronResize: function() {
+        _onIronResize: function () {
             if (this.chart.reflow) {
                 this.chart.reflow();
             }
@@ -357,6 +357,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     /**
      * @polymerBehavior
      */
-    VaadinCharts.ChartBehavior = [VaadinCharts.ConfigurationReaderBehavior, Polymer.IronResizableBehavior,VaadinCharts.ChartCommonBehavior ]
+    VaadinCharts.ChartBehavior = [VaadinCharts.ConfigurationReaderBehavior, Polymer.IronResizableBehavior, VaadinCharts.ChartCommonBehavior]
 
 </script>
