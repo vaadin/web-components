@@ -430,27 +430,33 @@
     _inputValueChanged: function(e) {
       // Handle only input events from our inputElement.
       if (Polymer.dom(e).path.indexOf(this.inputElement) !== -1) {
-        if (this.filter === this._inputElementValue) {
-          // Filter and input value might get out of sync, while keyboard navigating for example.
-          // Afterwards, input value might be changed to the same value as used in filtering.
-          // In situation like these, we need to make sure all the filter changes handlers are run.
-          this._filterChanged(this.filter);
-        } else {
-          this._userDefinedFilter = true;
-          this.filter = this._inputElementValue;
-          this._userDefinedFilter = false;
-        }
+        this._filterFromInput();
+      }
+    },
 
-        if (!this.opened) {
-          this.open();
-        }
+    // This is called from tests, to avoid firing `input` which works async in 2.0
+    _filterFromInput: function(e) {
+      if (this.filter === this._inputElementValue) {
+        // Filter and input value might get out of sync, while keyboard navigating for example.
+        // Afterwards, input value might be changed to the same value as used in filtering.
+        // In situation like these, we need to make sure all the filter changes handlers are run.
+        this._filterChanged(this.filter);
+      } else {
+        this._userDefinedFilter = true;
+        this.filter = this._inputElementValue;
+        this._userDefinedFilter = false;
+      }
+      if (!this.opened) {
+        this.open();
       }
     },
 
     _clearSelectionRange: function() {
       // Setting selection range focuses and/or moves the caret in some browsers,
       // and there's no need to modify the selection range if the input isn't focused anyway.
-      if (document.activeElement === this.inputElement && this.inputElement.setSelectionRange) {
+      if ((document.activeElement === this.inputElement ||
+           document.activeElement === this)
+           && this.inputElement.setSelectionRange) {
         var caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
         this.inputElement.setSelectionRange(caretIndex, caretIndex);
       }

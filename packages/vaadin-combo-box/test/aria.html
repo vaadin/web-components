@@ -24,8 +24,8 @@
   describe('Accessible Rich Internet Applications (ARIA)', function() {
     var comboBox;
 
-    function getInput() {
-      return comboBox.$.input;
+    function getNativeInput() {
+      return comboBox.inputElement;
     }
     function getToggleIcon() {
       return comboBox.$.toggleIcon;
@@ -38,10 +38,10 @@
     }
 
     function arrowDown() {
-      MockInteractions.keyDownOn(getInput(), 40);
+      MockInteractions.keyDownOn(getNativeInput(), 40);
     }
     function esc() {
-      MockInteractions.keyDownOn(getInput(), 27);
+      MockInteractions.keyDownOn(getNativeInput(), 27);
     }
 
     beforeEach(function() {
@@ -51,9 +51,9 @@
 
     describe('when combo-box is attached', function() {
       it('should contain appropriate aria attributes', function() {
-        expect(getInput().getAttribute('role')).to.equal('combobox');
-        expect(getInput().getAttribute('aria-label')).to.equal('my label');
-        expect(getInput().getAttribute('aria-autocomplete')).to.equal('list');
+        expect(getNativeInput().getAttribute('role')).to.equal('combobox');
+        expect(getNativeInput().getAttribute('aria-label')).to.equal('my label');
+        expect(getNativeInput().getAttribute('aria-autocomplete')).to.equal('list');
         expect(getToggleIcon().getAttribute('role')).to.equal('button');
         expect(getToggleIcon().getAttribute('aria-label')).to.equal('Toggle');
         expect(getClearIcon().getAttribute('role')).to.equal('button');
@@ -71,14 +71,14 @@
       });
 
       it('should set aria-expanded attribute when opened', function() {
-        expect(getInput().getAttribute('aria-expanded')).to.equal('true');
+        expect(getNativeInput().getAttribute('aria-expanded')).to.equal('true');
         expect(getToggleIcon().getAttribute('aria-expanded')).to.equal('true');
       });
 
       it('should unset aria-expanded attribute when closed', function() {
         esc();
 
-        expect(getInput().getAttribute('aria-expanded')).to.equal('false');
+        expect(getNativeInput().getAttribute('aria-expanded')).to.equal('false');
         expect(getToggleIcon().getAttribute('aria-expanded')).to.equal('false');
       });
     });

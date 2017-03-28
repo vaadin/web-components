@@ -35,7 +35,8 @@
 
     function filter(value) {
       getInput().bindValue = value;
-      getInput().fire('input');
+      getInput()._onInput();
+      comboBox._filterFromInput();
     }
 
     function getFocusedIndex() {
@@ -296,8 +297,8 @@
         arrowDown();
 
         comboBox.async(function() {
-          expect(getInput().selectionStart).to.eql(0);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox.inputElement.selectionStart).to.eql(0);
+          expect(comboBox.inputElement.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -326,8 +327,8 @@
         arrowUp();
 
         comboBox.async(function() {
-          expect(getInput().selectionStart).to.eql(0);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox.inputElement.selectionStart).to.eql(0);
+          expect(comboBox.inputElement.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -364,15 +365,16 @@
         expect(getInput().bindValue).to.eql('bar');
       });
 
-      it('should remove selection from the input value selecting value', function() {
+      it('should remove selection from the input value selecting value', function(done) {
         arrowDown();
 
         enter();
 
         comboBox.async(function() {
-          expect(getInput().selectionStart).to.eql(3);
-          expect(getInput().selectionEnd).to.eql(3);
-        });
+          expect(comboBox.inputElement.selectionStart).to.eql(0);
+          expect(comboBox.inputElement.selectionEnd).to.eql(3);
+          done();
+        }, 1);
       });
     });
 
