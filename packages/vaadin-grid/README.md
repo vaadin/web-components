@@ -6,7 +6,7 @@
 
 # &lt;vaadin-grid&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-grid/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-grid/2.0.0-beta1/demo/)
 
 [&lt;vaadin-grid&gt;](https://vaadin.com/elements/-/element/vaadin-grid) is a free, high quality data grid / data table [Polymer](http://polymer-project.org) element, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
