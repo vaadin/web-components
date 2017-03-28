@@ -53,7 +53,7 @@
 </template>
 ```
 
-[<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.png" width="481" alt="Screenshot of vaadin-grid">](https://vaadin.com/elements/-/element/vaadin-grid)
+<img src="https://github.com/vaadin/vaadin-grid/raw/master/grid.gif">
 
 
 ## Contributing
