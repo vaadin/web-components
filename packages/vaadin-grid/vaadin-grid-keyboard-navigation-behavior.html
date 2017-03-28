@@ -8,7 +8,7 @@
         outline: none;
       }
 
-      :host([navigating]:not([interacting])) [focused] > tr[focused] > [focused] ::content > .cell-content {
+      :host([navigating]:not([interacting])) [focused] > tr[focused] > [focused] ::content > vaadin-grid-cell-content {
         box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.3);
         @apply(--vaadin-grid-focused-cell);
       }

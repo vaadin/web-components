@@ -144,7 +144,7 @@
 
       it('reorder should not affect light dom', function() {
         scroller.size = 100000;
-        var wrappers = Polymer.dom(grid).querySelectorAll('.cell-content');
+        var wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
 
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
           scroller.$.table.scrollTop = 5000 + scroller._physicalAverage * steps;
@@ -152,7 +152,7 @@
           scroller.flushDebouncer('_debounceTemplate');
           scroller.flushDebouncer('vaadin-grid-scrolling');
 
-          var newWrappers = Polymer.dom(grid).querySelectorAll('.cell-content');
+          var newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
           // Expect the light dom order unchanged
           expect(newWrappers).to.eql(wrappers);
         });

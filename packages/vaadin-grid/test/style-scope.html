@@ -25,7 +25,7 @@
           display: block;
         }
 
-        .cell-content {
+        vaadin-grid-cell-content {
           color: rgb(0, 255, 0);
         }
 
@@ -104,7 +104,7 @@
 
         beforeEach(function(done) {
           component = fixture('default');
-          wrapper = Polymer.dom(component.$.grid).querySelector('.cell-content');
+          wrapper = Polymer.dom(component.$.grid).querySelector('vaadin-grid-cell-content');
           content = Polymer.dom(component.$.grid).querySelector('.my-content');
 
           sliderInput = component.$$('paper-slider').$$('paper-input');

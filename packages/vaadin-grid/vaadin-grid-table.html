@@ -91,7 +91,7 @@
         position: relative;
       }
 
-      .vaadin-grid-cell ::content > .cell-content {
+      .vaadin-grid-cell ::content > vaadin-grid-cell-content {
          width: 100%;
          display: inline-flex;
          justify-content: center;
@@ -165,7 +165,7 @@
         display: none;
       }
 
-      :host([no-content-pointer-events]) .vaadin-grid-cell ::content > .cell-content {
+      :host([no-content-pointer-events]) .vaadin-grid-cell ::content > vaadin-grid-cell-content {
         pointer-events: none;
       }
 
@@ -196,19 +196,19 @@
 
       /* Default borders */
 
-      thead tr:last-child th ::content > .cell-content {
+      thead tr:last-child th ::content > vaadin-grid-cell-content {
         border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
       }
 
-      tfoot tr:first-child td ::content > .cell-content {
+      tfoot tr:first-child td ::content > vaadin-grid-cell-content {
         border-top: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
       }
 
-      tbody tr:not([lastrow]) td ::content > .cell-content {
+      tbody tr:not([lastrow]) td ::content > vaadin-grid-cell-content {
         border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
       }
 
-      [last-frozen] ::content > .cell-content {
+      [last-frozen] ::content > vaadin-grid-cell-content {
         border-right: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
       }
 
@@ -221,7 +221,7 @@
 
       /* Cells */
 
-      table tr .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+      table tr .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
         background: #fff;
         text-align: left;
         padding: 8px;
@@ -229,33 +229,33 @@
         @apply(--vaadin-grid-cell);
       }
 
-      table thead .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+      table thead .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
         font-weight: 500;
         @apply(--vaadin-grid-header-cell);
       }
 
-      table tfoot .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+      table tfoot .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
         font-weight: 500;
         @apply(--vaadin-grid-footer-cell);
       }
 
-      table tbody .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+      table tbody .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
         @apply(--vaadin-grid-body-cell);
       }
 
-      tbody [odd] .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+      tbody [odd] .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
         @apply(--vaadin-grid-body-row-odd-cell);
       }
 
-      table tr .vaadin-grid-cell:not([detailscell])[last-frozen] ::content > .cell-content {
+      table tr .vaadin-grid-cell:not([detailscell])[last-frozen] ::content > vaadin-grid-cell-content {
         @apply(--vaadin-grid-cell-last-frozen);
       }
 
-      :host(:not([scrolling])) tbody tr:hover .vaadin-grid-cell ::content > .cell-content {
+      :host(:not([scrolling])) tbody tr:hover .vaadin-grid-cell ::content > vaadin-grid-cell-content {
         @apply(--vaadin-grid-body-row-hover-cell);
       }
 
-      table tr .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::content > .cell-content {
+      table tr .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::content > vaadin-grid-cell-content {
         border-right: none;
       }
 
