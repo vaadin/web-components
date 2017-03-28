@@ -36,4 +36,4 @@ var fire = function(elm, type) {
     bubbles: true,
     node: elm
   });
-}
+};

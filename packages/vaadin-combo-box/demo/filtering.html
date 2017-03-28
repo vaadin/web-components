@@ -97,12 +97,10 @@
       },
 
       attached: function() {
-        console.log("AAAA");
         this._urlChanged(this.url);
       },
 
       _urlChanged: function(url) {
-        console.log("UUUU");
         var urlParts = url.split('?filter=');
         var filter = urlParts[1];
 

@@ -115,7 +115,7 @@
 
           // 2.0 adds a 2-way binding notification listeners for updating _inputElementValue
           // when iron-input bindValue changes, hence it's needed async testing.
-          setTimeout(function(){
+          setTimeout(function() {
             comboBox.close();
             expect(comboBox.value).to.eql('foo');
             done();

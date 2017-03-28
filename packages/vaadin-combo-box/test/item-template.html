@@ -60,10 +60,11 @@
         combobox.items = ['foo', 'bar'];
         combobox.open();
 
-        combobox.async(function(){
+        // 2.0 needs async here
+        combobox.async(function() {
           firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
           done();
-        }, 100);
+        }, 1);
       });
 
       it('should render items using template', function() {

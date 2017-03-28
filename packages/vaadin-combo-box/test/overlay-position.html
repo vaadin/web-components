@@ -70,7 +70,6 @@
     comboBox.style.width = width + 'px';
     comboBox.style.top = top + 'px';
     comboBox.style.left = left + 'px';
-    console.log(comboBox.style);
     if (document.createEvent) {
       // using old way because IE11 does not support: new Event('resize')
       var ev = document.createEvent('Event');
@@ -213,7 +212,7 @@
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.$.input.bindValue = 'item 1';
-        fire(comboBox.inputElement, 'input');
+        window.fire(comboBox.inputElement, 'input');
 
         Polymer.Base.async(function() {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);

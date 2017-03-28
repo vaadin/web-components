@@ -74,7 +74,7 @@
         comboBox.name = 'foo';
         comboBox.required = true;
         // 2.0 needs the timeout
-        setTimeout(function () {
+        setTimeout(function() {
           expect(comboBox.validate()).to.equal(false);
           expect(comboBox.invalid).to.be.equal(true);
           done();
@@ -85,7 +85,7 @@
         comboBox.name = 'foo';
         comboBox.required = true;
         comboBox.value = 'foo';
-        setTimeout(function () {
+        setTimeout(function() {
           expect(comboBox.validate()).to.equal(true);
           expect(comboBox.invalid).to.be.equal(false);
           done();
@@ -107,7 +107,7 @@
       it('should serialize correctly', function(done) {
         comboBox.value = 'bar';
         // 2.0 iron-form takes a while until `_form` is initialised
-        setTimeout(function () {
+        setTimeout(function() {
           // 2.0 API serialisation method name is different
           var json = Polymer.Element ? ironForm.serializeForm() : form.serialize();
           expect(json.foo).to.equal('bar');
@@ -123,7 +123,7 @@
           // iron-form 2.0 does not have iron-form-invalid event
           ironForm._makeAjaxRequest = spy;
           // 2.0 need a timeout before submiting iron-form
-          setTimeout(function () {
+          setTimeout(function() {
             ironForm.submit();
             expect(spy).not.to.have.been.called;
             done();
