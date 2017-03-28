@@ -1,0 +1,53 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<!--
+Element used for demo purposes
+-->
+
+<dom-module id="demo-element">
+  <template>
+    <style>
+      :host {
+        font-weight: bold;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #000;
+        text-align: center;
+        background-color: #b5b5b5;
+      }
+
+      .caption {
+        font-size: 2em;
+      }
+
+      .other {
+        font-size: 1em;
+        text-align: justify;
+      }
+    </style>
+    <div class="caption">[[caption]]</div>
+    <div class="other">
+      <slot></slot>
+    </div>
+
+
+  </template>
+
+  <script>
+    class DemoElement extends Polymer.Element {
+      static get is() {
+        return 'demo-element';
+      }
+
+      static get properties() {
+        return {
+          caption: {
+            type: String
+          }
+        }
+      }
+
+    }
+    customElements.define(DemoElement.is, DemoElement);
+  </script>
+</dom-module>
