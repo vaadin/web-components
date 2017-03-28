@@ -270,7 +270,7 @@
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
       <div id="fade"></div>
-      <vaadin-infinite-scroller id="scroller" on-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]">
+      <vaadin-infinite-scroller id="scroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]">
         <template>
           <vaadin-month-calendar
             i18n="[[i18n]]"
@@ -285,7 +285,7 @@
           </vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
-      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25" active="[[initialPosition]]">
+      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25" active="[[initialPosition]]">
         <template>
           <div role="button">[[_yearAfterXYears(index)]]</div>
           <div style="font-size: 18px; line-height: 56px; opacity: 0.3;" aria-hidden="true">•</div>
@@ -310,7 +310,6 @@
 
       listeners: {
         'keydown': '_onKeydown',
-        'scroll': '_stopPropagation',
         'tap': '_stopPropagation',
         'focus': '_onOverlayFocus',
         'blur': '_onOverlayBlur'

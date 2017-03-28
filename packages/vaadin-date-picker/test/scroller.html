@@ -91,16 +91,21 @@
         }
       });
 
-      it('should fire scroll events', function(done) {
-        listenForEvent(scroller, 'scroll', function() {
+      it('should fire non-bubbling custom-scroll events', function(done) {
+        function customScrollListener(e) {
+          scroller.removeEventListener('custom-scroll', customScrollListener);
+          expect(e.bubbles).to.be.false;
           done();
-        });
+        }
+
+        scroller.addEventListener('custom-scroll', customScrollListener);
+
         scroller.$.scroller.scrollTop += 10;
       });
 
-      it('should not fire scroll events', function(done) {
+      it('should not fire custom-scroll events', function(done) {
         var spy = sinon.spy();
-        scroller.addEventListener('scroll', spy);
+        scroller.addEventListener('custom-scroll', spy);
         listenForEvent(scroller.$.scroller, 'scroll', function() {
           expect(spy.called).to.be.false;
           done();

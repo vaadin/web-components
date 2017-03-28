@@ -198,7 +198,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (!this._preventScrollEvent) {
-        this.fire('scroll');
+        this.fire('custom-scroll', undefined, {bubbles: false});
         this._mayHaveMomentum = true;
       }
       this._preventScrollEvent = false;

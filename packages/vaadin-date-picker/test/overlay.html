@@ -33,16 +33,6 @@
 
       });
 
-      it('should stop scroll events from bubbling outside the overlay', function() {
-        var scrollSpy = sinon.spy();
-        document.addEventListener('scroll', scrollSpy);
-        overlay.$.scroller.dispatchEvent(new CustomEvent('scroll', {
-          bubbles: true
-        }));
-        document.removeEventListener('scroll', scrollSpy);
-        expect(scrollSpy.called).not.to.be.true;
-      });
-
       it('should stop tap events from bubbling outside the overlay', function() {
         var tapSpy = sinon.spy();
         document.addEventListener('tap', tapSpy);
