@@ -379,147 +379,159 @@
     <h3>Transparent Header</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind" id="transparent-template">
-          <style is="custom-style">
-            vaadin-grid#transparent-header {
-              font: 500 13px "Open Sans", sans-serif;
-              color: rgb(148, 154, 171);
-              --divider-color: rgb(223, 232, 239);
 
-              --vaadin-grid-cell: {
-                padding: 0 13px;
-              };
+        <transparent-header></transparent-header>
+        <dom-module id="transparent-header">
+          <template>
+            <style>
+              :host {
+                display: block;
+              }
 
-              --vaadin-grid-body-cell: {
-                height: 65px;
-              };
+              vaadin-grid {
+                font: 500 13px "Open Sans", sans-serif;
+                color: rgb(148, 154, 171);
+                --divider-color: rgb(223, 232, 239);
 
-              --vaadin-grid-header-cell: {
-                background: rgba(235, 238, 246, 0.9);
-                border-bottom: 1px solid rgba(208, 217, 225, 0.9);
-                border-top: 1px solid rgba(248, 250, 252, 0.9);
-                min-height: 35px;
+                --vaadin-grid-cell: {
+                  padding: 0 13px;
+                };
 
-                background-image: linear-gradient(rgba(108, 160, 218, 0), rgba(108, 160, 218, 0.15));
-                background-size: 1px 100%;
-                background-position: 100% 0%;
-                background-repeat: no-repeat;
-              };
+                --vaadin-grid-body-cell: {
+                  height: 65px;
+                };
 
-              --vaadin-grid-body-row-selected-cell: {
-                background-color: rgb(131, 183, 236);
-                color: #fff;
-                border-bottom-color: rgb(108, 160, 218);
-              };
+                --vaadin-grid-header-cell: {
+                  background: rgba(235, 238, 246, 0.9);
+                  border-bottom: 1px solid rgba(208, 217, 225, 0.9);
+                  border-top: 1px solid rgba(248, 250, 252, 0.9);
+                  min-height: 35px;
 
-              --vaadin-grid-body-row-odd-cell: {
-                background-color: rgb(251, 252, 254);
-              };
+                  background-image: linear-gradient(rgba(108, 160, 218, 0), rgba(108, 160, 218, 0.15));
+                  background-size: 1px 100%;
+                  background-position: 100% 0%;
+                  background-repeat: no-repeat;
+                };
 
-              --vaadin-grid-body-row-hover-cell: {
-                background-color: rgb(235, 238, 246);
-              };
+                --vaadin-grid-body-row-selected-cell: {
+                  background-color: rgb(131, 183, 236);
+                  color: #fff;
+                  border-bottom-color: rgb(108, 160, 218);
+                };
 
-              --vaadin-grid-body-row-details-cell: {
-                text-align: center;
-              };
+                --vaadin-grid-body-row-odd-cell: {
+                  background-color: rgb(251, 252, 254);
+                };
 
-              --vaadin-grid-column-resize-handle: {
-                opacity: 0;
-              };
-            }
+                --vaadin-grid-body-row-hover-cell: {
+                  background-color: rgb(235, 238, 246);
+                };
 
-            vaadin-grid#transparent-header input[type=checkbox] {
-              height: 16px;
-              width: 16px;
-            }
+                --vaadin-grid-body-row-details-cell: {
+                  text-align: center;
+                };
 
-            vaadin-grid#transparent-header .image {
-              height: 40px;
-              width: 40px;
-              display: inline-block;
-              border-radius: 50%;
-              vertical-align: middle;
-              margin-right: 15px;
-            }
+                --vaadin-grid-column-resize-handle: {
+                  opacity: 0;
+                };
+              }
 
-            vaadin-grid#transparent-header .header-content {
-              display: flex;
-              padding: 16px;
-              justify-content: space-between;
-            }
+              vaadin-grid input[type=checkbox] {
+                height: 16px;
+                width: 16px;
+              }
 
-            vaadin-grid#transparent-header .details-cell {
-              background: #fff;
-              width: 100%;
-            }
-          </style>
+              vaadin-grid .image {
+                height: 40px;
+                width: 40px;
+                display: inline-block;
+                border-radius: 50%;
+                vertical-align: middle;
+                margin-right: 15px;
+              }
 
-          <x-array-data-provider items="{{items}}"></x-array-data-provider>
+              vaadin-grid .header-content {
+                display: flex;
+                padding: 16px;
+                justify-content: space-between;
+              }
 
-          <vaadin-grid id="transparent-header" items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
-            <template class="row-details">
-              <div class="details-cell">
-                <h1>Hi, I'm [[item.name.first]]</h1>
-              </div>
-            </template>
+              vaadin-grid .details-cell {
+                background: #fff;
+                width: 100%;
+              }
+            </style>
 
-            <vaadin-grid-column-group>
-              <template class="header">
-                <div class="header-content">
-                  <b>1-200 of 15,554</b>
-                  <input placeholder="Search profiles" focus-target>
+            <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
+            <vaadin-grid id="grid" items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
+              <template class="row-details">
+                <div class="details-cell">
+                  <h1>Hi, I'm [[item.name.first]]</h1>
                 </div>
               </template>
 
-              <vaadin-grid-column width="45px" flex-grow="0">
-                <template>
-                  <input type="checkbox" checked="{{selected::change}}">
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column resizable>
-                <template class="header">Name</template>
-                <template>
-                  <div>
-                    <img class="image" src="[[item.picture.thumbnail]]">
-                    <span>[[item.name.first]]&nbsp;[[item.name.last]]</span>
+              <vaadin-grid-column-group>
+                <template class="header">
+                  <div class="header-content">
+                    <b>1-200 of 15,554</b>
+                    <input placeholder="Search profiles" focus-target>
                   </div>
                 </template>
-              </vaadin-grid-column>
 
-              <vaadin-grid-column resizable>
-                <template class="header">Email</template>
-                <template>[[item.email]]</template>
-              </vaadin-grid-column>
+                <vaadin-grid-column width="45px" flex-grow="0">
+                  <template>
+                    <input type="checkbox" checked="{{selected::change}}">
+                  </template>
+                </vaadin-grid-column>
 
-              <vaadin-grid-column>
-                <template class="header">City</template>
-                <template>[[item.location.city]]</template>
-              </vaadin-grid-column>
+                <vaadin-grid-column resizable>
+                  <template class="header">Name</template>
+                  <template>
+                    <div>
+                      <img class="image" src="[[item.picture.thumbnail]]">
+                      <span>[[item.name.first]]&nbsp;[[item.name.last]]</span>
+                    </div>
+                  </template>
+                </vaadin-grid-column>
 
-              <vaadin-grid-column>
-                <template class="header">State</template>
-                <template>[[item.location.state]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
+                <vaadin-grid-column resizable>
+                  <template class="header">Email</template>
+                  <template>[[item.email]]</template>
+                </vaadin-grid-column>
 
-          </vaadin-grid>
-        </template>
-        <script>
-          var transparentTemplate = document.querySelector('#transparent-template');
+                <vaadin-grid-column>
+                  <template class="header">City</template>
+                  <template>[[item.location.city]]</template>
+                </vaadin-grid-column>
 
-          transparentTemplate._activeItemChanged = function(e) {
-            var grid = e.target;
-            this._clickedItem = grid.activeItem ? grid.activeItem : this._clickedItem;
+                <vaadin-grid-column>
+                  <template class="header">State</template>
+                  <template>[[item.location.state]]</template>
+                </vaadin-grid-column>
+              </vaadin-grid-column-group>
 
-            if (grid.expandedItems.indexOf(this._clickedItem) > -1) {
-              grid.collapseItem(this._clickedItem);
-            } else {
-              grid.expandItem(this._clickedItem);
-            }
-          };
-        </script>
+            </vaadin-grid>
+
+          </template>
+          <script>
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'transparent-header',
+
+                _activeItemChanged: function() {
+                  this._clickedItem = this.$.grid.activeItem ? this.$.grid.activeItem : this._clickedItem;
+
+                  if (this.$.grid.expandedItems.indexOf(this._clickedItem) > -1) {
+                    this.$.grid.collapseItem(this._clickedItem);
+                  } else {
+                    this.$.grid.expandItem(this._clickedItem);
+                  }
+                }
+              });
+            });
+          </script>
+        </dom-module>
       </template>
     </demo-snippet>
 
