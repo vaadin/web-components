@@ -14,9 +14,9 @@
 
     WCT.loadSuites([
       'vaadin-button_test.html',
-      '../../vaadin-input/test/control-state.html'
+      '../../vaadin-text-field/test/control-state.html?wc-name=vaadin-text-field'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+      return suites.concat([suite, suite.replace(/(.+)\?(.*)|$/, '$1?wc-shadydom=true&$2')]);
     }, []));
   </script>
 </body>
