@@ -94,7 +94,13 @@
     },
 
     _normalizeEmptyValue: function(value) {
-      return [undefined, null].indexOf(value) >= 0 ? '' : value.toString();
+      if ([undefined, null].indexOf(value) >= 0) {
+        return '';
+      } else if (isNaN(value)) {
+        return value.toString();
+      } else {
+        return value;
+      }
     },
 
     _compare: function(a, b) {
@@ -114,7 +120,7 @@
       return items.filter(function(item, index) {
         return this._filters.filter(function(filter) {
           var value = this._normalizeEmptyValue(Polymer.Base.get(filter.path, item));
-          return value.toLowerCase().indexOf(filter.value.toString().toLowerCase()) === -1;
+          return value.toString().toLowerCase().indexOf(filter.value.toString().toLowerCase()) === -1;
         }.bind(this)).length === 0;
       }, this);
     }
