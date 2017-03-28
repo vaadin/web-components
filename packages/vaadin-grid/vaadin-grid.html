@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
@@ -14,20 +14,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
  - Then assign an array to the <a href="#vaadin-grid:property-items">`items`</a> property to visualize your data.
 
- - In addition, you have some helper elements such as
+ - In addition, there's helper elements such as
 <a href="#vaadin-grid-column-group">`<vaadin-grid-column-group>`</a>,
 <a href="#vaadin-grid-filter">`<vaadin-grid-filter>`</a>,
 <a href="#vaadin-grid-sorter">`<vaadin-grid-sorter>`</a> and
 <a href="#vaadin-grid-selection-column">`<vaadin-grid-selection-column>`</a>
-to easily customize the grid.
-__Note that the helper elements must be explicitly imported__
+that can be used to customize the grid.
+__Note that the helper elements must be explicitly imported.__
+If you want to import everything at once you can use the `all-imports.html` bundle.
 
- - A template can be decorated with one the following class names to specify its purpose
+ - A column template can be decorated with one the following class names to specify its purpose
   - "header": Marks a header template
   - "footer": Marks a footer template
   - "row-details": Marks a row details template
 
- - The following built-in template variables can be bound to inside the templates
+ - The following built-in template variables can be bound to inside the column templates
   - "index": Number representing the row index
   - "item" and it's sub-properties: Data object (provided by a data provider / items array)
   - "selected": True if the item is selected (can be two-way bound)
