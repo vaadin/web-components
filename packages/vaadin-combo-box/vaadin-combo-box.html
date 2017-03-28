@@ -428,8 +428,8 @@ Custom property | Description | Default
       this._setInputElement(Polymer.Element ? this.$.nativeInput : this.$.input);
 
       // Use the default toggle/clear or one replaced in light DOM.
-      this._toggleElement = Polymer.dom(this).querySelector('.toggle-button') || this.$.toggleIcon;
-      this._clearElement = Polymer.dom(this).querySelector('.clear-button') || this.$.clearIcon;
+      this._toggleElement = Polymer.dom(this).querySelector('[slot=toggle-button]') || this.$.toggleIcon;
+      this._clearElement = Polymer.dom(this).querySelector('[slot=clear-button]') || this.$.clearIcon;
       this._preventInputBlur();
     },
 

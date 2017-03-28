@@ -31,8 +31,7 @@
   describe('selecting a value', function() {
     var combobox;
     var input;
-    var valueChangedSpy;
-    var selectedItemChangedSpy;
+    var valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
 
     function dispatchTap(elm) {
       elm.dispatchEvent(new CustomEvent('tap', {
@@ -50,6 +49,12 @@
 
       selectedItemChangedSpy = sinon.spy();
       combobox.addEventListener('selected-item-changed', selectedItemChangedSpy);
+
+      selectionChangedSpy = sinon.spy();
+      combobox.$.overlay.addEventListener('selection-changed', selectionChangedSpy);
+
+      changeSpy = sinon.spy();
+      combobox.addEventListener('change', changeSpy);
     });
 
     it('should stop tap events from bubbling outside the overlay', function() {
@@ -64,15 +69,13 @@
 
     it('should fire `selection-changed` when tapped on an item', function(done) {
       combobox.opened = true;
-      var spy = sinon.spy();
-      combobox.$.overlay.addEventListener('selection-changed', spy);
 
       setTimeout(function() {
         Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
           bubbles: true
         }));
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.args[0][0].detail.item).to.eql(combobox.items[0]);
+        expect(selectionChangedSpy.calledOnce).to.be.true;
+        expect(selectionChangedSpy.args[0][0].detail.item).to.eql(combobox.items[0]);
         done();
       }, 1);
     });
@@ -80,16 +83,13 @@
     it('should fire `selection-changed` in short touch gestures', function(done) {
       combobox.opened = true;
 
-      var spy = sinon.spy();
-      combobox.$.overlay.addEventListener('selection-changed', spy);
-
       MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
 
       combobox.async(function() {
         var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
-        expect(spy.calledOnce).to.be.true;
+        expect(selectionChangedSpy.calledOnce).to.be.true;
         done();
       }, 200);
     });
@@ -97,16 +97,13 @@
     it('should not fire `selection-changed` in long touch gestures', function(done) {
       combobox.opened = true;
 
-      var spy = sinon.spy();
-      combobox.$.overlay.addEventListener('selection-changed', spy);
-
       MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
 
       combobox.async(function() {
         var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
-        expect(spy.calledOnce).to.be.false;
+        expect(selectionChangedSpy.calledOnce).to.be.false;
         done();
       }, 350);
     });
@@ -116,9 +113,6 @@
       var items = [];
       for (var i = 1; i < 50; i++) items.push(i);
       combobox.items = items;
-
-      var spy = sinon.spy();
-      combobox.$.overlay.addEventListener('selection-changed', spy);
 
       // open the combo box, and move the scroll
       combobox.opened = true;
@@ -132,7 +126,7 @@
           var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
-          expect(spy.calledOnce).to.be.false;
+          expect(selectionChangedSpy.calledOnce).to.be.false;
           done();
         }, 200);
       }
@@ -148,9 +142,6 @@
       for (var i = 1; i < 50; i++) items.push(i);
       combobox.items = items;
 
-      var spy = sinon.spy();
-      combobox.$.overlay.addEventListener('selection-changed', spy);
-
       combobox.opened = true;
 
       function listener() {
@@ -162,7 +153,7 @@
           var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
-          expect(spy.calledOnce).to.be.true;
+          expect(selectionChangedSpy.calledOnce).to.be.true;
           done();
         }, 500);
       }
@@ -207,25 +198,25 @@
       expect(spy.callCount).to.equal(1);
     });
 
-    if (Polymer.Elemnt) {
-      it('should fire `value-changed` and `selected-item-changed` before `changed`', function(done) {
-        combobox.addEventListener('change', function() {
+    it('should fire change events in correct order', function(done) {
+      combobox.addEventListener('change', function() {
+        // in 2.0 event order is different
+        if (Polymer.Element) {
+          expect(valueChangedSpy.called).to.be.false;
+        } else {
           expect(valueChangedSpy.called).to.be.true;
-          expect(selectedItemChangedSpy.called).to.be.true;
-          done();
-        });
-
-        combobox.value = 'foo';
+        }
+        expect(selectedItemChangedSpy.called).to.be.true;
+        done();
       });
-    }
+      combobox.value = 'foo';
+    });
+
 
     it('should stop input `change` event from bubbling', function() {
-      var spy = sinon.spy();
-      combobox.addEventListener('change', spy);
-
       combobox.$.input.fire('change');
 
-      expect(spy.callCount).to.equal(0);
+      expect(changeSpy.callCount).to.equal(0);
     });
 
     it('should close the dropdown when reselecting the current value', function() {
