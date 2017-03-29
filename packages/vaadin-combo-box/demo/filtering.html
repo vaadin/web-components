@@ -9,7 +9,6 @@
   <title>vaadin-combo-box Remote and Custom Filtering</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="data.js"></script>
 
   <link rel="import" href="common.html">
 </head>
@@ -44,19 +43,21 @@
             </vaadin-combo-box>
           </template>
           <script>
-            Polymer({
-              is: 'custom-filter',
+            window.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'custom-filter',
 
-              properties: {
-                items: Array,
-              },
+                properties: {
+                  items: Array,
+                },
 
-              _filterChanged: function(e) {
-                // case-sensitive starts-with filtering
-                this.items = elements.filter(function(el) {
-                  return el.indexOf(e.detail.value) === 0;
-                });
-              }
+                _filterChanged: function(e) {
+                  // case-sensitive starts-with filtering
+                  this.items = elements.filter(function(el) {
+                    return el.indexOf(e.detail.value) === 0;
+                  });
+                }
+              });
             });
           </script>
         </dom-module>

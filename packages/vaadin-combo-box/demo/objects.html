@@ -9,7 +9,6 @@
   <title>vaadin-combo-box Object Items Examples</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="data.js"></script>
 
   <link rel="import" href="common.html">
 </head>
@@ -27,22 +26,24 @@
         <p>Value: <span id="value"></span>.</p>
 
         <script>
-          var combobox = document.querySelector('#numbers-box');
-          combobox.items = [
-            {label: 'One', value: 1},
-            {label: 'Two', value: 2},
-            {label: 'Three', value: 3}
-          ];
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox = document.querySelector('#numbers-box');
+            combobox.items = [
+              {label: 'One', value: 1},
+              {label: 'Two', value: 2},
+              {label: 'Three', value: 3}
+            ];
 
-          combobox.addEventListener('selected-item-changed', function() {
-            document.querySelector('#selected-item').innerHTML = JSON.stringify(combobox.selectedItem);
+            combobox.addEventListener('selected-item-changed', function() {
+              document.querySelector('#selected-item').innerHTML = JSON.stringify(combobox.selectedItem);
+            });
+
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#value').innerHTML = combobox.value;
+            });
+
+            combobox.value = 1;
           });
-
-          combobox.addEventListener('value-changed', function() {
-            document.querySelector('#value').innerHTML = combobox.value;
-          });
-
-          combobox.value = 1;
         </script>
       </template>
     </demo-snippet>
@@ -56,21 +57,23 @@
         <p>Value: <span id="element-value"></span>.</p>
 
         <script>
-          var combobox2 = document.querySelector('#elements-box');
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox2 = document.querySelector('#elements-box');
 
-          // elementsJson is an Array of Objects. Item object format:
-          //   {name: 'Hydrogen', symbol: 'H', number: 1}
-          combobox2.items = elementsJson;
+            // elementsJson is an Array of Objects. Item object format:
+            //   {name: 'Hydrogen', symbol: 'H', number: 1}
+            combobox2.items = elementsJson;
 
-          combobox2.addEventListener('selected-item-changed', function() {
-            document.querySelector('#element-name').innerHTML = combobox2.selectedItem && combobox2.selectedItem.name;
+            combobox2.addEventListener('selected-item-changed', function() {
+              document.querySelector('#element-name').innerHTML = combobox2.selectedItem && combobox2.selectedItem.name;
+            });
+
+            combobox2.addEventListener('value-changed', function() {
+              document.querySelector('#element-value').innerHTML = combobox2.value;
+            });
+
+            combobox2.value = 'C';
           });
-
-          combobox2.addEventListener('value-changed', function() {
-            document.querySelector('#element-value').innerHTML = combobox2.value;
-          });
-
-          combobox2.value = 'C';
         </script>
       </template>
     </demo-snippet>
@@ -84,23 +87,25 @@
         <p>Value: <span id="country-value"></span>.</p>
 
         <script>
-          var countrySynonymsBox = document.querySelector('#country-synonyms-box');
+          window.addEventListener('WebComponentsReady', function() {
+            var countrySynonymsBox = document.querySelector('#country-synonyms-box');
 
-          countrySynonymsBox.items = [
-            {value: 'US', label: 'United States of America'},
-            {value: 'US', label: 'U.S.A.'}
-          ];
+            countrySynonymsBox.items = [
+              {value: 'US', label: 'United States of America'},
+              {value: 'US', label: 'U.S.A.'}
+            ];
 
-          countrySynonymsBox.addEventListener('selected-item-changed', function() {
-            var selectedItemAsString = JSON.stringify(countrySynonymsBox.selectedItem);
-            document.querySelector('#country-selected-item').innerText = selectedItemAsString;
+            countrySynonymsBox.addEventListener('selected-item-changed', function() {
+              var selectedItemAsString = JSON.stringify(countrySynonymsBox.selectedItem);
+              document.querySelector('#country-selected-item').innerText = selectedItemAsString;
+            });
+
+            countrySynonymsBox.addEventListener('value-changed', function() {
+              document.querySelector('#country-value').innerText = countrySynonymsBox.value;
+            });
+
+            countrySynonymsBox.value = 'US'; // selects first matching item
           });
-
-          countrySynonymsBox.addEventListener('value-changed', function() {
-            document.querySelector('#country-value').innerText = countrySynonymsBox.value;
-          });
-
-          countrySynonymsBox.value = 'US'; // selects first matching item
         </script>
       </template>
     </demo-snippet>
