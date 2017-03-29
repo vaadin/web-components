@@ -24,12 +24,15 @@
 
     <demo-snippet>
       <template>
-        <vaadin-combo-box id="demo1" label="Element"></vaadin-combo-box>
+        <vaadin-combo-box id="demo1-1" label="Element"></vaadin-combo-box>
+        <vaadin-combo-box id="demo1-2" label="Disabled" disabled></vaadin-combo-box>
+        <vaadin-combo-box id="demo1-3" label="Read-only" value="Carbon" readonly></vaadin-combo-box>
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            var combobox = document.querySelector('#demo1');
-            // The elements is an array of String values.
-            combobox.items = elements;
+            var combobox1 = document.querySelector('#demo1-1');
+            var combobox2 = document.querySelector('#demo1-2');
+            var combobox3 = document.querySelector('#demo1-3');
+            combobox1.items = combobox2.items = combobox3.items = elements;
           });
         </script>
       </template>
