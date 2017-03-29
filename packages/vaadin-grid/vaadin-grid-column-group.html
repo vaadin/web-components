@@ -191,9 +191,13 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _updateFlexAndWidth: function(visibleChildColumns) {
-        this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
-          return prev += ' + ' + (curr.width || '0').replace('calc', '');
-        }, '').substring(3) + ')');
+        if (visibleChildColumns.length) {
+          this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
+            return prev += ' + ' + (curr.width || '0px').replace('calc', '');
+          }, '').substring(3) + ')');
+        } else {
+          this._setWidth('0px');
+        }
 
         this._setFlexGrow(visibleChildColumns.reduce(function(prev, curr) {
           return prev + curr.flexGrow;

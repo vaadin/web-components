@@ -227,21 +227,22 @@
 
         beforeEach(function(done) {
           grid = fixture('grid');
-          Polymer.dom.flush();
-          sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
-          sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
+          flush(function() {
+            sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+            sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
 
-          grid.items = [{
-            first: 'foo',
-            last: 'bar'
-          }, {
-            first: 'foo',
-            last: 'baz'
-          }, {
-            first: 'bar',
-            last: 'bar'
-          }];
-          setTimeout(done, 1);
+            grid.items = [{
+              first: 'foo',
+              last: 'bar'
+            }, {
+              first: 'foo',
+              last: 'baz'
+            }, {
+              first: 'bar',
+              last: 'bar'
+            }];
+            Polymer.RenderStatus.afterNextRender(grid, done);
+          });
         });
 
         it('should be clickable', function() {

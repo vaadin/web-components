@@ -173,7 +173,9 @@
       if (cellContent) {
         var contentId = null;
         while (contentId === null && cellContent !== this.target && cellContent) {
-          contentId = cellContent.id;
+          if (cellContent.localName === 'vaadin-grid-cell-content') {
+            contentId = cellContent.id;
+          }
           cellContent = cellContent.parentElement;
         }
 
