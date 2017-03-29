@@ -46,7 +46,7 @@
     },
 
     _processPendingMutationObserversFor: function(node) {
-      if (!Polymer.Settings.useNativeCustomElements) {
+      if (window.CustomElements && !Polymer.Settings.useNativeCustomElements) {
         CustomElements.takeRecords(node);
       }
     },

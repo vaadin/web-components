@@ -25,23 +25,26 @@
         combobox = fixture('combobox');
       });
 
-      if (!Polymer.Element) {
+      it('should have preset value from property', function(done) {
         // FIXME: 2.0 does not have isInstance, although could be replaced by
         // Object.getPrototypeOf(combobox).is the test does not pass, seems
         // that value cannot set in advance.
-        it('should have preset value from property', function(done) {
-          // Set the value before the element is upgraded.
-          combobox.items = ['foo', 'bar'];
-          combobox.value = 'bar';
+        if (Polymer.Element) {
+          done();
+          return;
+        }
 
-          expect(Polymer.isInstance(combobox)).to.be.false;
+        // Set the value before the element is upgraded.
+        combobox.items = ['foo', 'bar'];
+        combobox.value = 'bar';
 
-          Polymer.Base.importHref('../vaadin-combo-box.html', function() {
-            expect(combobox.value).to.equal('bar');
-            done();
-          });
+        expect(Polymer.isInstance(combobox)).to.be.false;
+
+        Polymer.Base.importHref('../vaadin-combo-box.html', function() {
+          expect(combobox.value).to.equal('bar');
+          done();
         });
-      }
+      });
     });
   </script>
 

@@ -22,7 +22,7 @@
 <test-fixture id="combobox-custom-clear">
   <template>
     <vaadin-combo-box>
-      <div slot="clear-button" class="vaadin-combo-box clear-button">CLEAR1</div>
+      <div slot="clear-button" class="vaadin-combo-box clear-button">CLEAR</div>
     </vaadin-combo-box>
   </template>
 </test-fixture>
@@ -255,10 +255,14 @@
         clearIcon = combobox._clearElement;
       });
 
-      it('should show the clearing icon only when combobox has value', function() {
+      it('should show the clearing icon only when combobox has value', function(done) {
         expect(window.getComputedStyle(clearIcon).display).to.contain('block');
         combobox.value = '';
-        expect(window.getComputedStyle(clearIcon).display).to.contain('none');
+
+        setTimeout(function() {
+          expect(window.getComputedStyle(clearIcon).display).to.contain('none');
+          done();
+        }, 1);
       });
 
       it('should not show clearing icon when nothing is selected', function() {

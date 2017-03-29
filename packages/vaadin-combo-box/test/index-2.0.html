@@ -12,7 +12,7 @@
   <script>
     WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
     WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
-    
+
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
@@ -33,7 +33,7 @@
     ].reduce(function(suites, suite) {
       // Browser supports Shadow DOM
       if (document.head.createShadowRoot || document.head.attachShadow) {
-        return suites.concat([suite, suite + '?dom=shadow']);
+        return suites.concat([suite, suite + '?wc-shadydom=true']);
       } else {
         return suites.concat([suite]);
       }

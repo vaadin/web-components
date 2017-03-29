@@ -41,6 +41,14 @@
       });
     }
 
+    function tapLabel() {
+      fire(combobox.$.label, 'tap');
+    }
+
+    function tapInput() {
+      fire(combobox.inputElement, 'tap');
+    }
+
     function tapToggleIcon() {
       fire(combobox.$$('paper-input-container #toggleIcon'), 'tap');
     }
@@ -52,12 +60,9 @@
 
     describe('opening', function() {
       it('should open asynchronously by tapping label', function(done) {
-        Polymer.Base.fire('tap', {}, {
-          bubbles: true,
-          node: combobox.$$('paper-input-container label')
-        });
-
         expect(combobox.opened).to.be.false;
+        tapLabel();
+
         Polymer.Base.async(function() {
           expect(combobox.opened).to.be.true;
           done();
@@ -65,7 +70,7 @@
       });
 
       it('should open asynchronously by clicking input', function(done) {
-        combobox.inputElement.click();
+        tapInput();
 
         expect(combobox.opened).to.be.false;
         Polymer.Base.async(function() {
@@ -126,14 +131,20 @@
       // not get removed from the overlay after it's moved to the body. The
       // following test ensures that the overlay doesn't keep the style scope
       // of the combobox when moved during open.
-      it('should not leak combobox style scope to the overlay', function() {
+      it('should not leak combobox style scope to the overlay', function(done) {
         // Test only when style scope classes are used
         if (combobox.$.overlay.classList.contains('style-scope') &&
             combobox.$.overlay.classList.contains('vaadin-combo-box')) {
           combobox.open();
 
-          expect(combobox.$.overlay.classList.contains('style-scope')).to.be.false;
-          expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.false;
+          // Async needed for 2.0 in FF
+          setTimeout(function() {
+            expect(combobox.$.overlay.classList.contains('style-scope')).to.be.false;
+            expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.false;
+            done();
+          });
+        } else {
+          done();
         }
       });
 

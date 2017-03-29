@@ -283,19 +283,22 @@
       }, 1);
     });
 
-    // FIXME: _isPositionFixed not working in 2.0
-    if (!Polymer.Element) {
-      it('should same position when parent component has fixed', function(done) {
-        var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
+    it('should same position when parent component has fixed', function(done) {
+      // FIXME: _isPositionFixed not working in 2.0
+      if (Polymer.Element) {
+        done();
+        return;
+      }
 
-        combobox.open();
+      var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
 
-        Polymer.Base.async(function() {
-          expect(position(combobox.$.overlay)).to.eql('fixed');
-          done();
-        }, 1);
-      });
-    }
+      combobox.open();
+
+      Polymer.Base.async(function() {
+        expect(position(combobox.$.overlay)).to.eql('fixed');
+        done();
+      }, 1);
+    });
 
     it('should have position absolute', function(done) {
       var combobox = fixture('combobox');

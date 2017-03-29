@@ -3,43 +3,55 @@
 <dom-module id="vaadin-combo-box-shared-styles">
   <template>
     <style>
-      .rotate-on-open,
-      :host ::content .rotate-on-open {
-        transition: all 0.2s !important;
-      }
-
       :host([opened]) {
         pointer-events: auto;
       }
 
-      :host([opened]) .rotate-on-open,
+      :host ::content .rotate-on-open {
+        transition: all 0.2s !important;
+      }
+
+      .rotate-on-open {
+        transition: all 0.2s !important;
+      }
+
       :host([opened]) ::content .rotate-on-open {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
       }
 
-      paper-icon-button.small,
+      :host([opened]) .rotate-on-open {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+      }
+
       :host ::content paper-icon-button.small {
         padding: 6px !important;
       }
 
+      paper-icon-button.small {
+        padding: 6px !important;
+      }
+
+      /* ::content are still needed for custom buttons in shady dom in chrome */
       :host(:not([has-value])) ::content [slot=clear-button],
       :host(:not([has-value])) ::slotted([slot=clear-button]),
-      :host(:not([has-value])) .clear-button {
+      :host([readonly]) ::content [slot=clear-button],
+      :host([readonly]) ::slotted([slot=clear-button]),
+      :host([disabled]) ::content [slot=clear-button],
+      :host([disabled]) ::slotted([slot=clear-button]),
+      :host([readonly]) ::content [slot=toggle-button],
+      :host([readonly]) ::slotted([slot=toggle-button]),
+      :host([disabled]) ::content [slot=toggle-button],
+      :host([disabled]) ::slotted([slot=toggle-button]) {
         display: none;
       }
 
-      :host([readonly]) ::content [slot=clear-button],
-      :host([readonly]) ::slotted([slot=clear-button]),
+      /* non-shadow capable browsers fail when mixing with selectors above */
+      :host(:not([has-value])) .clear-button,
       :host([readonly]) .clear-button,
-      :host([disabled]) ::content [slot=clear-button],
-      :host([disabled]) ::slotted([slot=clear-button]),
       :host([disabled]) .clear-button,
-      :host([readonly]) ::content [slot=toggle-button],
-      :host([readonly]) ::slotted([slot=toggle-button]),
       :host([readonly]) .toggle-button,
-      :host([disabled]) ::content [slot=toggle-button],
-      :host([disabled]) ::slotted([slot=toggle-button]),
       :host([disabled]) .toggle-button {
         display: none;
       }
