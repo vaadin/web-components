@@ -449,17 +449,21 @@
             expect(bodyTrap.focus.callCount).to.eql(1);
           });
 
-          it('should not move virtual focus from body to footer on tab when no footer rows exist', function() {
+          it('should not move virtual focus from body to footer on tab when no footer rows exist', function(done) {
             footer.children[0].hidden = true;
 
             bodyTrap.focus();
 
             tab();
 
-            expect(scroller._virtualFocus).to.be.null;
+            // needs to be async thanks to IE11.
+            grid.async(function() {
+              expect(scroller._virtualFocus).to.be.null;
+              done();
+            }, 1);
           });
 
-          it('should not move virtual focus to footer on shift-tab when no footer rows exist', function() {
+          it('should move virtual focus to body instead of footer on shift-tab when no footer rows exist', function() {
             footer.children[0].hidden = true;
             footerTrap.focus();
 

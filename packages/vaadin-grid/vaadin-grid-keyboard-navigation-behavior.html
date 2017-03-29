@@ -208,7 +208,7 @@
     },
 
     _onTab: function(e) {
-      if (this.interacting) {
+      if (this.interacting || !this._virtualFocus) {
         return;
       }
 
@@ -225,7 +225,12 @@
               this._virtualFocus = this.$.footer;
               e.preventDefault();
             } else {
-              this._virtualFocus = null;
+              // IE11 doesn't handle the footer trap `focus` event above syncronously
+              // which means that virtualFocus gets set to null before the handler is run
+              // causing focus being transferred back to body focus trap.
+              this.async(function() {
+                this._virtualFocus = null;
+              }, 1);
             }
             break;
 
