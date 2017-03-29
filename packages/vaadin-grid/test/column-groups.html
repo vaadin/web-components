@@ -386,14 +386,14 @@
         it('should have cell content wrappers in all header cells', function() {
           Polymer.dom(header).querySelectorAll('th').forEach(function(a) {
             var content = getCellContent(a);
-            expect(content.classList.contains('cell-content')).to.be.true;
+            expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 
         it('should have cell content wrappers in all footer cells', function() {
           Polymer.dom(footer).querySelectorAll('td').forEach(function(a) {
             var content = getCellContent(a);
-            expect(content.classList.contains('cell-content')).to.be.true;
+            expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 

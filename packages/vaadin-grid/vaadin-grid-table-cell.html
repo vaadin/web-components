@@ -182,18 +182,16 @@
       _instanceChanged: function(instance, target) {
         this.style.height = '';
 
-        this._cellContent = document.createElement('div');
+        this._cellContent = document.createElement('vaadin-grid-cell-content');
 
-        this._cellContent.setAttribute('class', 'cell-content');
         var contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
-        this._cellContent.setAttribute('data-cell-content-id', contentId);
-        // TODO: maybe change data-cell-content-id attribute to ID with a prefix?
-        this._cellContent.setAttribute('id', 'vaadin-grid-cell-content-' + contentId);
+        var id = 'vaadin-grid-cell-content-' + contentId;
+        this._cellContent.setAttribute('id', id);
 
         Polymer.dom(this._cellContent).appendChild(this.instance.root);
 
         this._insertionPoint = document.createElement('content');
-        this._insertionPoint.setAttribute('select', '[data-cell-content-id="' + contentId + '"]');
+        this._insertionPoint.setAttribute('select', '#' + id);
       },
     };
 

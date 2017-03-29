@@ -183,7 +183,7 @@ Custom property | Description | Default
             // not found
             return null;
           }
-          if (el.hasAttribute('data-cell-content-id')) {
+          if (el.localName === 'vaadin-grid-cell-content') {
             // found
             return el;
           }

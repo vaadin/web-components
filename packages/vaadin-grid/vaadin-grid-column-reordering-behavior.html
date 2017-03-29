@@ -5,21 +5,21 @@
         background: #000;
       }
 
-      :host([reordering]) .vaadin-grid-cell:not([detailscell]) ::content > .cell-content {
+      :host([reordering]) .vaadin-grid-cell[reorder-status="dragging"] {
+        background: var(--primary-color, #000);
+      }
+
+      :host([reordering]) .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
         transition: opacity 300ms;
         transform: translateZ(0);
         opacity: 0.8;
       }
 
-      .vaadin-grid-cell[reorder-status="allowed"] ::content > .cell-content.cell-content {
+      :host([reordering]) .vaadin-grid-cell[reorder-status="allowed"] ::content > vaadin-grid-cell-content {
         opacity: 1;
       }
 
-      .vaadin-grid-cell[reorder-status="dragging"] {
-        background: var(--primary-color, #000);
-      }
-
-      .vaadin-grid-cell[reorder-status="dragging"] ::content > .cell-content.cell-content {
+      :host([reordering]) .vaadin-grid-cell[reorder-status="dragging"] ::content > vaadin-grid-cell-content {
         opacity: 0.95;
       }
     </style>
@@ -173,15 +173,12 @@
       if (cellContent) {
         var contentId = null;
         while (contentId === null && cellContent !== this.target && cellContent) {
-          contentId = cellContent.getAttribute('data-cell-content-id');
+          contentId = cellContent.id;
           cellContent = cellContent.parentElement;
         }
 
         if (contentId !== null) {
-          var injectionPoint = Polymer.dom(this.$.table).querySelectorAll('content')
-          .filter(function(content) {
-            return content.getAttribute('select') === '[data-cell-content-id="' + contentId + '"]';
-          })[0];
+          var injectionPoint = Polymer.dom(this.$.table).querySelector('content[select="#' + contentId + '"]');
           return Polymer.dom(injectionPoint).parentNode;
         }
       }
