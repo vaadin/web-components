@@ -192,7 +192,7 @@ The `class` attribute is used to differentiate header and footer templates.
 
       _updateFlexAndWidth: function(visibleChildColumns) {
         this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
-          return prev += ' + ' + (curr.width || '0').replace('calc', '');
+          return prev += ' + ' + (curr.width || '0px').replace('calc', '');
         }, '').substring(3) + ')');
 
         this._setFlexGrow(visibleChildColumns.reduce(function(prev, curr) {
