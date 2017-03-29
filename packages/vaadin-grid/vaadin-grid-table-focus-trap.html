@@ -3,6 +3,11 @@
 <dom-module id="vaadin-grid-table-focus-trap">
   <template>
     <style>
+     :host {
+       position: absolute;
+       z-index: -3;
+     }
+
      :host(:focus),
      .primary:focus,
      ::content .primary:focus,
@@ -13,8 +18,8 @@
     </style>
 
     <!-- trap needs to have content in order for Safari to scroll the page when focused -->
-    <div class="primary" tabindex="0" role="gridcell" on-focus="_onBaitFocus" on-blur="_onBaitBlur"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
-    <div class="secondary" tabindex="-1" role="gridcell" on-focus="_onBaitFocus" on-blur="_onBaitBlur"><div style="position:absolute;z-index:1;" aria-hidden="true">&nbsp;</div></div>
+    <div class="primary" tabindex="0" role="gridcell" on-focus="_onBaitFocus" on-blur="_onBaitBlur"><div aria-hidden="true">&nbsp;</div></div>
+    <div class="secondary" tabindex="-1" role="gridcell" on-focus="_onBaitFocus" on-blur="_onBaitBlur"><div aria-hidden="true">&nbsp;</div></div>
 
     <slot></slot>
   </template>
