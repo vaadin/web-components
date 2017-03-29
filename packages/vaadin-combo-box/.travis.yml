@@ -25,5 +25,5 @@ script:
   - mv bower_components-polymer2 bower_components
   - cp bower-polymer2.json bower.json
   - cp wct.conf-2.0.js wct.conf.js
-  - cp test/index-2.0.html test/index.html
+  - # (see iron-input #104) cp test/index-2.0.html test/index.html
   - xvfb-run -s '-screen 0 1024x768x24' wct
