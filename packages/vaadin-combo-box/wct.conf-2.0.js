@@ -1,7 +1,4 @@
 module.exports = {
-  plugins: {
-    'random-output': true
-  },
   registerHooks: function(context) {
     var crossPlatforms = [
       'Windows 10/chrome@55',
