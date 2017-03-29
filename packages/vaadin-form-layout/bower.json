@@ -29,13 +29,13 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
     "iron-component-page": "polymerelements/iron-component-page#2.0-preview",
     "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview",
-    "vaadin-input": "vaadin/vaadin-input",
+    "vaadin-text-field": "vaadin/vaadin-text-field",
     "paper-input": "polymerelements/paper-input#2.0-preview"
   },
   "resolutions": {
     "test-fixture": "^2.0.0"
   },
   "dependencies": {
-    "polymer": "polymer/polymer#2.0-preview"
+    "polymer": "polymer/polymer#^2.0.0-rc.1"
   }
 }
