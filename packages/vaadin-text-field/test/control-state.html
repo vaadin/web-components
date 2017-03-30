@@ -13,7 +13,7 @@
   <script>
     var elementName = /[?&]wc-name=([\w-]+)/.exec(location.search)[1];
 
-    var importUrl = `../${elementName}.html`;
+    var importUrl = `../../${elementName}/${elementName}.html`;
 
     var importElement = `<link rel="import" href="${importUrl}">`;
     var defaultFixture = `<test-fixture id="default"><template><${elementName}></${elementName}></template></test-fixture>`;
@@ -83,17 +83,6 @@
           it('should focus the internal input on host click', function() {
             customElement.click();
             expect(customElement.focused).to.be.true;
-          });
-
-          it('should focus the internal input on label click', function() {
-            customElement.$.label.click();
-            expect(customElement.focused).to.be.true;
-          });
-
-          it('should not update focused property on label click if disabled', function() {
-            customElement.disabled = true;
-            customElement.$.label.click();
-            expect(customElement.focused).to.be.false;
           });
         });
       }

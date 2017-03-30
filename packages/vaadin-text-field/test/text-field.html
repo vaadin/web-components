@@ -20,17 +20,17 @@
   <script>
 
     describe('properties', function() {
-      var vinput, input;
+      var textField, input;
 
       beforeEach(function() {
-        vinput = fixture('default');
-        input = vinput.$.input;
+        textField = fixture('default');
+        input = textField.$.input;
       });
 
       describe('native', function() {
 
         function assertAttrCanBeSet(prop, value) {
-          vinput[prop] = value;
+          textField[prop] = value;
           var attrval = input.getAttribute(prop);
 
           if (value === true) {
@@ -43,7 +43,7 @@
         }
 
         function assertPropCanBeSet(prop, value) {
-          vinput[prop] = value;
+          textField[prop] = value;
           expect(input[prop]).to.be.equal(value);
         }
 
@@ -92,30 +92,45 @@
         it('setting input value updates value', function() {
           input.value = 'foo';
           input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
-          expect(vinput.value).to.be.equal('foo');
+          expect(textField.value).to.be.equal('foo');
         });
 
         it('setting input value updates has-value attribute', function() {
-          vinput.value = 'foo';
-          expect(vinput.hasValue).to.be.true;
+          textField.value = 'foo';
+          expect(textField.hasValue).to.be.true;
         });
 
         it('setting empty value does not update has-value property', function() {
-          vinput.value = '';
-          expect(vinput.hasValue).to.be.false;
+          textField.value = '';
+          expect(textField.hasValue).to.be.false;
         });
 
         // User could accidently set a 0 or false value
         it('setting number value updates has-value property', function() {
-          vinput.value = 0;
-          expect(vinput.hasValue).to.be.true;
+          textField.value = 0;
+          expect(textField.hasValue).to.be.true;
         });
 
         it('setting boolean value updates has-value property', function() {
-          vinput.value = false;
-          expect(vinput.hasValue).to.be.true;
+          textField.value = false;
+          expect(textField.hasValue).to.be.true;
         });
       });
+
+      if (!window.ShadyDOM) {
+        describe('label', function() {
+          it('should focus the internal input on click', function() {
+            textField.$.label.click();
+            expect(textField.focused).to.be.true;
+          });
+
+          it('should not update focused property on click if disabled', function() {
+            textField.disabled = true;
+            textField.$.label.click();
+            expect(textField.focused).to.be.false;
+          });
+        });
+      }
 
     });
   </script>
