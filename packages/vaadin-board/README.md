@@ -17,13 +17,13 @@ Vaadin Board is distributed under [Commercial Vaadin Add-on License version 3](h
 $ bower install --save vaadin/vaadin-board
 ```
 
-### Install Vaadin Board
+### Import Vaadin Board
  Add html import
 ```
 <link rel="import" href="bower_components/vaadin/vaadin-board.html">
 <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 ```
-### Install Vaadin Board
+### Use Vaadin Board
  Create your first Vaadin Board
 ```
 <vaadin-board-row>
