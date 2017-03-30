@@ -46,6 +46,6 @@
     "iron-meta": "polymerelements/iron-meta#^1.1.1",
     "sugar": "^2.0.0",
     "iron-icons": "polymerelements/iron-icons#^1.1.2",
-    "web-component-tester": "^5.0.0"
+    "web-component-tester": "^6.0.0-prerelease.7"
   }
 }
