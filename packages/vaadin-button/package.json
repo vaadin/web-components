@@ -32,6 +32,7 @@
     "gulp-stylelint": "^3.7.0",
     "lighthouse": "~1.2.2",
     "polyserve": "^0.15.0",
+    "polymer-cli": "next",
     "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^5.0.0"
   }

@@ -24,18 +24,14 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "web-component-tester": "^5.0.0",
-    "test-fixture": "2.0.0",
-    "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
-    "iron-component-page": "polymerelements/iron-component-page#2.0-preview",
-    "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview",
-    "iron-test-helpers": "polymerelements/iron-test-helpers#2.0-preview"
-  },
-  "resolutions": {
-    "test-fixture": "^2.0.0"
+    "elements-demo-resources": "#2.0-preview",
+    "iron-component-page": "#2.0-preview",
+    "iron-demo-helpers": "#2.0-preview",
+    "iron-test-helpers": "#2.0-preview",
+    "web-component-tester": "^6.0.0-prerelease.7"
   },
   "dependencies": {
-    "polymer": "Polymer/polymer#2.0-preview",
-    "vaadin-input": "vaadin/vaadin-input#master"
+    "polymer": "^2.0.0-rc.1",
+    "vaadin-text-field": "#master"
   }
 }
