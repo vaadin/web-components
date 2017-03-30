@@ -86,6 +86,7 @@ Custom property | Description | Default
       value="{{value::input}}"
       title="[[title]]"
       on-blur="validate"
+      on-input="_onInput"
     >
   </template>
 
@@ -221,12 +222,27 @@ Custom property | Description | Default
             notify: true,
             readOnly: true,
             reflectToAttribute: true
-          }
+          },
+
+          /**
+           * When set to true, user is prevented from typing a value that
+           * conflicts with the given `pattern`.
+           */
+          preventInvalidInput: Boolean
         };
       }
 
       get focusElement() {
         return this.$.input;
+      }
+
+      _onInput(e) {
+        if (this.preventInvalidInput) {
+          const input = this.$.input;
+          if (input.value.length > 0 && !this.checkValidity()) {
+            input.value = this.value || '';
+          }
+        }
       }
 
       _valueChanged(value) {
@@ -243,7 +259,14 @@ Custom property | Description | Default
        * @return {boolean} True if the value is valid.
        */
       validate() {
-        return !(this.invalid = !this.$.input.checkValidity());
+        return !(this.invalid = !this.checkValidity());
+      }
+
+      /**
+       * Returns true if the current input value satisfies all constraints (if any)
+       */
+      checkValidity() {
+        return this.$.input.checkValidity();
       }
 
       ready() {
