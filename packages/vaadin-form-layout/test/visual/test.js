@@ -14,7 +14,7 @@ gemini.suite('vaadin-form-layout', (rootSuite) => {
             .setUrl('/../../demo/' + demo.name + '.html')
             .setCaptureElements('demo-snippet:nth-of-type(' + (snippetIndex + 1) + ') vaadin-form-layout')
             .capture('default', {}, (actions, find) => {
-              actions.wait(3000);
+              actions.wait(5000);
             });
         });
       });
