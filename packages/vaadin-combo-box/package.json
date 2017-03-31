@@ -20,6 +20,8 @@
   "devDependencies": {
     "eslint-plugin-html": "^1.7.0",
     "eslint-config-vaadin": "^0.1.0",
+    "bower": "latest",
+    "polymer-cli": "0.18.0-pre.13",
     "gulp": "latest",
     "gulp-html-extract": "^0.1.0",
     "gulp-eslint": "^3.0.1",

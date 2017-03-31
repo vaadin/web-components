@@ -161,9 +161,11 @@ Custom property | Description | Default
           invalid="[[invalid]]">
       <label on-down="_preventDefault" id="label" hidden$="[[!label]]" aria-hidden="true" on-tap="_openAsync">[[label]]</label>
 
-      <content select="[prefix]"></content>
+      <slot name="prefix"></slot>
 
-      <input
+
+      <iron-input>
+        <input
           is="iron-input"
           id="input"
           type="text"
@@ -190,10 +192,11 @@ Custom property | Description | Default
           on-blur="_onBlur"
           on-change="_stopPropagation"
           key-event-target>
+      </iron-input>
 
-      <content select="[suffix]"></content>
+      <slot name="suffix"></slot>
 
-      <content select=".clear-button">
+      <slot name="clear-button">
         <paper-icon-button
             id="clearIcon"
             tabindex="-1"
@@ -201,9 +204,9 @@ Custom property | Description | Default
             icon="vaadin-combo-box:clear"
             class="clear-button small">
         </paper-icon-button>
-      </content>
+      </slot>
 
-      <content select=".toggle-button">
+      <slot name="toggle-button">
         <paper-icon-button
             id="toggleIcon"
             tabindex="-1"
@@ -212,7 +215,7 @@ Custom property | Description | Default
             aria-expanded$="[[_getAriaExpanded(opened)]]"
             class="toggle-button rotate-on-open">
         </paper-icon-button>
-      </content>
+      </slot>
 
       <template is="dom-if" if="[[errorMessage]]">
         <paper-input-error>[[errorMessage]]</paper-input-error>
