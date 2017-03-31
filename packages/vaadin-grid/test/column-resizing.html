@@ -200,6 +200,18 @@
         expect(newColumn.resizable).to.be.true;
       });
 
+      it('should have resizable false by default on column', function() {
+        var newColumn = document.createElement('vaadin-grid-column');
+
+        expect(newColumn.resizable).to.be.false;
+      });
+
+      it('should not have resizable by default on column group', function() {
+        var newColumn = document.createElement('vaadin-grid-column-group');
+
+        expect(newColumn.resizable).to.be.undefined;
+      });
+
       it('should resize the child column', function() {
         var headerRows = getRows(grid.$.scroller.$.header);
         var handle = getRowCells(headerRows[0])[0]._resizeHandle;
