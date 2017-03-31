@@ -95,7 +95,9 @@ Custom property | Description | Default
       }
 
       :host ::content paper-icon-button.clear-button,
-      :host ::content paper-icon-button.toggle-button {
+      :host ::slotted(paper-icon-button.clear-button),
+      :host ::content paper-icon-button.toggle-button,
+      :host ::slotted(paper-icon-button.toggle-button) {
         line-height: 18px !important;
         width: 32px;
         height: 32px;
@@ -110,10 +112,6 @@ Custom property | Description | Default
 
       paper-icon-button.clear-button,
       paper-icon-button.toggle-button {
-        position: absolute;
-        bottom: -4px;
-        right: -4px;
-
         line-height: 18px !important;
         width: 32px;
         height: 32px;
@@ -124,14 +122,6 @@ Custom property | Description | Default
         cursor: pointer;
         margin-top: -1px;
         --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
-      }
-
-      paper-input-container ::content paper-icon-button.clear-button {
-        right: 28px;
-      }
-
-      paper-input-container paper-icon-button.clear-button {
-        right: 28px;
       }
 
       paper-input-container paper-icon-button:hover,
@@ -234,12 +224,13 @@ Custom property | Description | Default
   </template>
 
   <template id="v0">
-   <input	is="iron-input"	id="input" slot="input"
+   <input is="iron-input" id="input" slot="input"
        type="text"
        role="combobox"
        autocomplete="off"
        autocapitalize="none"
        bind-value="{{_inputElementValue}}"
+       label="[[label]]"
        aria-label$="[[label]]"
        aria-expanded$="[[_getAriaExpanded(opened)]]"
        aria-autocomplete="list"
@@ -268,6 +259,7 @@ Custom property | Description | Default
         invalid="{{invalid}}"
         on-change="_stopPropagation"
         name$="[[name]]"
+        label="[[label]]"
         >
         <input id="nativeInput"
             type="text"

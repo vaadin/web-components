@@ -88,10 +88,10 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     _updateTemplateInstanceVariable: function(variable, value, _itemTemplateInstance) {
-      // 2.0 calls this method even though _itemTemplateInstance is undefined
-      if(_itemTemplateInstance) {
-        _itemTemplateInstance[variable] = value;
+      if (variable === undefined || value === undefined || _itemTemplateInstance === undefined) {
+        return;
       }
+      _itemTemplateInstance[variable] = value;
     }
   });
 </script>

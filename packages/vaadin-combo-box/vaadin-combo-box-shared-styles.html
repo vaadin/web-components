@@ -7,7 +7,8 @@
         pointer-events: auto;
       }
 
-      :host ::content .rotate-on-open {
+      :host ::content .rotate-on-open,
+      :host ::slotted(.rotate-on-open) {
         transition: all 0.2s !important;
       }
 
@@ -15,7 +16,8 @@
         transition: all 0.2s !important;
       }
 
-      :host([opened]) ::content .rotate-on-open {
+      :host([opened]) ::content .rotate-on-open,
+      :host([opened]) ::slotted(.rotate-on-open) {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
       }
@@ -25,7 +27,8 @@
         transform: rotate(180deg);
       }
 
-      :host ::content paper-icon-button.small {
+      :host ::content paper-icon-button.small,
+      :host ::slotted(paper-icon-button.small) {
         padding: 6px !important;
       }
 

@@ -190,12 +190,8 @@
     });
 
     it('should fire exactly one `change` event', function() {
-      var spy = sinon.spy();
-      combobox.addEventListener('change', spy);
-
       combobox.value = 'foo';
-
-      expect(spy.callCount).to.equal(1);
+      expect(changeSpy.callCount).to.equal(1);
     });
 
     it('should fire change events in correct order', function(done) {

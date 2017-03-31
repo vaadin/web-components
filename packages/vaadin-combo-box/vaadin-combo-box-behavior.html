@@ -50,6 +50,9 @@
       value: {
         type: String,
         observer: '_valueChanged',
+        // notify: true already set in IronFormBehavior in Polymer 1.x
+        // hence setting it to false to avoid two value-changed events.
+        // In 2.0 we need to set to true though.
         notify: !!Polymer.Element
       },
 

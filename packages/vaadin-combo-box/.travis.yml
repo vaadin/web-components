@@ -13,7 +13,7 @@ addons:
 
 install:
   - npm install
-  - polymer install
+  - polymer install --variants
 
 before_script:
   - gulp lint
