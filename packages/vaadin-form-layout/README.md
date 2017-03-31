@@ -21,7 +21,9 @@
 -->
 ```html
 <vaadin-form-layout>
-  ...
+  <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+  <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+  <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
 </vaadin-form-layout>
 ```
 

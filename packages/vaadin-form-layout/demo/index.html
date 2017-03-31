@@ -22,10 +22,80 @@
     <demo-snippet>
       <template>
         <vaadin-form-layout>
-          <vaadin-text-field value="Jane"></vaadin-text-field>
-          <vaadin-text-field value="Doe"></vaadin-text-field>
-          <vaadin-text-field value="jane.doe@example.com"></vaadin-text-field>
+          <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+          <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+          <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
         </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Single Column</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout columns="1">
+          <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+          <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+          <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+        </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Custom Number of Columns</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout columns="3">
+          <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+          <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+          <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+        </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Spanning Items on Multiple Columns</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout>
+          <vaadin-text-field vaadin-form-layout-colspan="2" label="Address"></vaadin-text-field>
+          <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+          <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+        </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Explicit New Row</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout>
+          <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+          <br>
+          <vaadin-text-field label="Confirm Email" value="jane.doe@example.com"></vaadin-text-field>
+        </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <h3>Column Gap</h3>
+    <p>
+      Call the <code>updateStyles</code> method to set the custom column gap
+      value and update the layout.
+    </p>
+    <p>
+      Alternatively, to do this in a declarative way, you can override
+      the <code>--vaadin-form-layout-column-gap</code> custom CSS property
+      in the styles of a wrapper Polymer element.
+    </p>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout class="custom-gap">
+          <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+          <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+          <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+        </vaadin-form-layout>
+        <script>
+          addEventListener('WebComponentsReady', function() {
+            var layout = document.querySelector('vaadin-form-layout.custom-gap');
+            layout.updateStyles({'--vaadin-form-layout-column-gap': '4em'});
+          });
+        </script>
       </template>
     </demo-snippet>
 
@@ -36,6 +106,9 @@
           <paper-input label="First Name" value="Jane"></paper-input>
           <paper-input label="Last Name" value="Doe"></paper-input>
           <paper-input label="Email" value="jane.doe@example.com"></paper-input>
+          <br>
+          <paper-input label="Confirm Email" value="jane.doe@example.com"></paper-input>
+          <paper-input vaadin-form-layout-colspan="2" label="Address"></paper-input>
         </vaadin-form-layout>
       </template>
     </demo-snippet>

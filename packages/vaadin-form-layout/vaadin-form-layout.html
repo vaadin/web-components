@@ -9,10 +9,50 @@ This program is available under Apache License Version 2.0, available at https:/
 
 ```html
 <vaadin-form-layout>
+  <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+  <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+  <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
 </vaadin-form-layout>
 ```
 
-@element vaadin-form-layout
+It supports any child elements as layout items.
+
+By default, it makes a two-column layout. The number of columns is customizable
+with the `columns` property.
+
+### Spanning Items on Multiple Columns
+
+You can use `vaadin-form-layout-colspan` attribute on the items.
+In the example below, the first text field spans on two columns:
+
+<vaadin-form-layout>
+  <vaadin-text-field vaadin-form-layout-colspan="2" label="Address"></vaadin-text-field>
+  <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+  <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+</vaadin-form-layout>
+
+### Explicit New Row
+
+Use the `<br>` line break element to wrap the items on a new row:
+
+```html
+<vaadin-form-layout>
+  <vaadin-text-field label="Email"></vaadin-text-field>
+  <br>
+  <vaadin-text-field label="Confirm Email"></vaadin-text-field>
+</vaadin-form-layout>
+```
+
+### CSS Properties Reference
+
+The following custom CSS properties are available on the `<vaadin-form-layout>`
+element:
+
+Custom CSS property | Description | Default
+---|---|---
+`--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
+
+@polymerElement vaadin-form-layout
 @demo demo/index.html
 -->
 
@@ -23,27 +63,133 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
+
+        /* CSS API for host */
+        --vaadin-form-layout-column-gap: 2em; /* (default) */
+      }
+
+      #layout {
+        display: flex;
+
+        align-items: baseline; /* default `stretch` is not appropriate */
+
+        flex-wrap: wrap; /* the items should wrap */
+
+        /*
+          To implement the column gap, horizontal margins for the items is used,
+          see slotted elements style below. We need to compensate item margins
+          in the wrapper, so that the are no gaps around the layout itself.
+        */
+        margin-left: calc(-0.5 * var(--vaadin-form-layout-column-gap));
+        margin-right: calc(-0.5 * var(--vaadin-form-layout-column-gap));
+      }
+
+      #layout ::slotted(*) {
+        /* width: calc(99.999% / var(--vaadin-form-layout-columns) * var(--vaadin-form-layout-colspan) - var(--vaadin-form-layout-column-gap)); */
+
+        /* Items should neigher grow nor shrink. */
+        flex-grow: 0;
+        flex-shrink: 0;
+
+        /* Margins make gaps between the columns */
+        margin-left: calc(0.5 * var(--vaadin-form-layout-column-gap));
+        margin-right: calc(0.5 * var(--vaadin-form-layout-column-gap));
+      }
+
+      #layout ::slotted(br) {
+        /*
+          Line break element wraps the following item on a new line. Makes
+          a block with zero height, stretched to fill all the available width
+          of layout, so that the next sibling item is wrapped for sure.
+        */
+        display: block;
+        content: '';
+        flex: 1 1 100%;
+        width: 9999px; /* for Firefox :-( */
       }
     </style>
-    <slot></slot>
+    <div id="layout">
+      <slot id="slot"></slot>
+    </div>
   </template>
 
   <script>
-    if (!window.Vaadin) window.Vaadin = {};
-
-    Vaadin.FormLayoutElement = class VaadinFormLayoutElement extends Polymer.Element {
+    class VaadinFormLayoutElement extends Polymer.Element {
       static get is() {
         return 'vaadin-form-layout';
       }
 
-      static get config() {
+      static get properties() {
         return {
-          properties: {
+          /**
+           * Number of columns in the layout
+           */
+          columns: {
+            type: Number,
+            value: 2,
+            observer: '_columnsChanged'
           }
         };
       }
-    };
 
-    customElements.define(Vaadin.FormLayoutElement.is, Vaadin.FormLayoutElement);
+      connectedCallback() {
+        super.connectedCallback();
+
+        Polymer.RenderStatus.beforeNextRender(this, this.updateStyles);
+      }
+
+      _naturalNumberOrOne(n) {
+        if (typeof n === 'number' && n >= 1 && n < Infinity) return Math.floor(n);
+        return 1;
+      }
+
+      _columnsChanged(columns) {
+        const naturalColumns = this._naturalNumberOrOne(columns);
+        if (columns !== naturalColumns) {
+          this.columns = naturalColumns;
+          return;
+        }
+
+        this.updateStyles();
+      }
+
+      /**
+       * Update the item widths, column gaps and other styles.
+       */
+      updateStyles(...args) {
+        super.updateStyles(...args);
+
+        /*
+          The item width formula:
+
+              itemWidth = 100% / columns * colspan - columnGap
+
+          - take 100%, it is the #layout container width;
+          - then divide by the number of columns, the result is one column space;
+          - then multiply by the colspan, the result is space for this item;
+          - then subtract columnGap, because the column gap space is taken by
+            item margins of 1/2 * gap on both sides
+        */
+
+        const columnGap = window.ShadyCSS
+          ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
+          : getComputedStyle(this, '--vaadin-form-layout-column-gap');
+
+        Array.from(this.children).forEach(child => {
+          let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('vaadin-form-layout-colspan')));
+
+          // Never span further then the number of columns
+          colspan = Math.min(colspan, this.columns); 
+
+          const childRatio = colspan / this.columns;
+
+          // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
+          // otherwise the items might wrap, resizing is wobbly
+          child.style.width = `calc(${childRatio * 99.999}% - ${columnGap})`;
+        });
+      }
+    }
+
+    customElements.define(VaadinFormLayoutElement.is, VaadinFormLayoutElement);
   </script>
 </dom-module>
