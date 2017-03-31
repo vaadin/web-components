@@ -26,6 +26,30 @@
     </template>
   </test-fixture>
 
+  <dom-module id="x-grid">
+    <template>
+      <vaadin-grid id="grid" style="width: 50px; height: 400px;">
+        <template class="row-details"><span>[[index]]</span>-details</template>
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      HTMLImports.whenReady(function() {
+        Polymer({
+          is: 'x-grid'
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="with-scope">
+    <template>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
   <test-fixture id="repeat">
     <template>
       <vaadin-grid style="width: 200px; height: 400px;" size="100">
@@ -157,6 +181,29 @@
             expect(Polymer.dom(grid).children.length).to.equal(childCount - 1);
             done();
           }, 1);
+        });
+      });
+
+      describe('inside a parent scope', function() {
+
+        beforeEach(function() {
+          grid = fixture('with-scope').$.grid;
+          grid.items = ['foo', 'bar', 'baz'];
+          bodyRows = getRows(grid.$.scroller.$.items);
+          Polymer.dom.flush();
+        });
+
+        it('should have the correct index on details template', function() {
+          // expand item 0
+          grid.expandItem('foo');
+
+          // expand item 1
+          grid.expandItem('bar');
+
+          var firstRowCells = getRowCells(bodyRows[0]);
+          var secondRowCells = getRowCells(bodyRows[1]);
+          expect(getCellContent(firstRowCells[1]).textContent.trim()).to.equal('0-details');
+          expect(getCellContent(secondRowCells[1]).textContent.trim()).to.equal('1-details');
         });
       });
 
