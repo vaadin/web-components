@@ -23,7 +23,7 @@
         --vaadin-text-field__input: {
           font-size: 0;
           padding: 0 100px;
-          height: 20px;
+          height: 24px;
         };
       }
     </style>
@@ -32,21 +32,35 @@
   <form>
     <fieldset id="default-tests">
       <p>
-      default input: <vaadin-text-field></vaadin-text-field>
+      default: <vaadin-text-field></vaadin-text-field>
       <p>
-      input with value: <vaadin-text-field value="Go Vaadin"></vaadin-text-field>
+      value: <vaadin-text-field value="Go Vaadin"></vaadin-text-field>
       <p>
-      focused input: <vaadin-text-field autofocus id="hidden-caret"></vaadin-text-field>
+      focused: <vaadin-text-field autofocus id="hidden-caret"></vaadin-text-field>
       <p>
-      disabled input: <vaadin-text-field disabled></vaadin-text-field>
+      disabled: <vaadin-text-field disabled></vaadin-text-field>
       <p>
-      input with placeholder: <vaadin-text-field placeholder="Run Vaadin"></vaadin-text-field>
+      placeholder: <vaadin-text-field placeholder="Run Vaadin"></vaadin-text-field>
       <p>
-      invalid input: <vaadin-text-field required invalid></vaadin-text-field>
+      invalid: <vaadin-text-field required invalid></vaadin-text-field>
       <p>
-      input with label: <vaadin-text-field label="Foo"></vaadin-text-field>
+      label: <vaadin-text-field label="Foo"></vaadin-text-field>
       <p>
-      input with label and Value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field>
+      label and value: <vaadin-text-field label="Foo" value="Bar"></vaadin-text-field>
+      <p>
+      prefix and suffix:
+        <vaadin-text-field label="Foo" value="Bar">
+          <span slot="prefix">prefix</span>
+          <span slot="suffix">suffix</span>
+        </vaadin-text-field>
+      <p>
+      long: <vaadin-text-field label="Foo" value="Bar" style="width: 300px;"></vaadin-text-field>
+      <p>
+      short with prefix and suffix:
+        <vaadin-text-field label="Foo" value="Bar" style="width: 100px;">
+          <span slot="prefix">prefix</span>
+          <span slot="suffix">suffix</span>
+        </vaadin-text-field>
     </fieldset>
   </form>
 
