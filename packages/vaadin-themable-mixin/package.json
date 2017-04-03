@@ -1,0 +1,33 @@
+{
+  "name": "vaadin-themable-mixin",
+  "version": "1.0.0-alpha1",
+  "description": "vaadin-themable-mixin",
+  "main": "vaadin-themable-mixin.html",
+  "repository": "vaadin/vaadin-themable-mixin",
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-themable-mixin/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct"
+  },
+  "devDependencies": {
+    "eslint-config-vaadin": "github:vaadin/eslint-config-vaadin",
+    "eslint-plugin-html": "^1.7.0",
+    "gulp": "latest",
+    "gulp-eslint": "^3.0.1",
+    "gulp-html-extract": "^0.0.3",
+    "gulp-stylelint": "^3.7.0",
+    "polyserve": "^0.15.0",
+    "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
+    "web-component-tester": "^5.0.0"
+  }
+}

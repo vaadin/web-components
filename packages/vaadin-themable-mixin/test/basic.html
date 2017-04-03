@@ -1,0 +1,125 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-themable-mixin tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-themable-mixin.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+
+
+</head>
+
+<body>
+
+  <dom-module id="test-foo">
+    <template>
+      <div id="text">text</div>
+    </template>
+  </dom-module>
+
+  <dom-module id="test-bar">
+    <template>
+      <div id="text">text</div>
+    </template>
+  </dom-module>
+
+  <script>
+  class TestFoo extends Vaadin.ThemableMixin(Polymer.Element) {
+    static get is() {
+      return 'test-foo';
+    }
+  }
+  customElements.define(TestFoo.is, TestFoo);
+
+  class TestBar extends Vaadin.ThemableMixin(Polymer.Element) {
+    static get is() {
+      return 'test-bar';
+    }
+  }
+  customElements.define(TestBar.is, TestBar);
+
+  class TestBaz extends TestBar {
+    static get is() {
+      return 'test-baz';
+    }
+  }
+  customElements.define(TestBaz.is, TestBaz);
+  </script>
+
+
+  <dom-module id="test-styles" theme-for="test-foo">
+    <template>
+      <style>
+        #text {
+          color: rgb(255, 255, 255);
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="test-styles-multiple" theme-for="test-foo test-bar">
+    <template>
+      <style>
+        #text {
+          background-color: rgb(255, 0, 0);
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="test-styles-wildcard" theme-for="test*a*">
+    <template>
+      <style>
+        #text {
+          font-weight: bold;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <test-fixture id="default">
+    <template>
+      <test-foo></test-foo>
+      <test-bar></test-bar>
+      <test-baz></test-baz>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('injecting style modules', function() {
+      let components;
+
+      beforeEach(function() {
+        components = fixture('default');
+      });
+
+      it('should inject simple module', function() {
+        expect(window.getComputedStyle(components[0].$.text).color).to.equal('rgb(255, 255, 255)');
+      });
+
+      it('should inject multiple style modules', function() {
+        expect(window.getComputedStyle(components[0].$.text).color).to.equal('rgb(255, 255, 255)');
+        expect(window.getComputedStyle(components[0].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+      });
+
+      it('should inject to multiple components', function() {
+        expect(window.getComputedStyle(components[0].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+        expect(window.getComputedStyle(components[1].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+      });
+
+      it('should inject to subclassed components', function() {
+        expect(window.getComputedStyle(components[2].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+      });
+
+      it('should inject to wildcard styles', function() {
+        expect(window.getComputedStyle(components[0].$.text).fontWeight).to.equal('normal');
+        expect(window.getComputedStyle(components[1].$.text).fontWeight).to.equal('bold');
+        expect(window.getComputedStyle(components[2].$.text).fontWeight).to.equal('bold');
+      });
+
+
+    });
+  </script>
+</body>

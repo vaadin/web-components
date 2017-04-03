@@ -1,0 +1,30 @@
+{
+  "name": "vaadin-themable-mixin",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "vaadin-themable-mixin",
+  "main": "vaadin-themable-mixin.html",
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0-rc.1"
+  },
+  "devDependencies": {
+    "web-component-tester": "^5.0.0"
+  }
+}

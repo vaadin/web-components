@@ -1,2 +1,1 @@
-# vaadin-themes
-Uranus, Venus, Aphrodite
+# vaadin-themable-mixin
