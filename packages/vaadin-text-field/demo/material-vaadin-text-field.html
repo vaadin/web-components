@@ -4,13 +4,27 @@
       vaadin-text-field {
         position: relative;
         width: 160px;
-        padding: 16px 0 8px;
+        padding-top: 16px;
+        margin-bottom: 8px;
         color: rgba(0, 0, 0, 0.87);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
 
         /* Fix Chrome’s dancing labels */
         contain: content;
+
+        /*
+        -webkit-transition needed for Safari right now, but it’s fixed in
+        Safari Technology Preview, so we can expect it to fix itself in the
+        near future (Safari 10.2 most probably).
+        */
+        -webkit-transition: background-size 0.25s;
+        transition: background-size 0.25s;
+
+        background-size: 0% 2px, 100% 2px;
+        background-image: linear-gradient(#3F51B5, #3F51B5), linear-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+        background-repeat: no-repeat;
+        background-position: 50% 100%;
 
         --material-text-field__input: {
           outline: none;
@@ -19,22 +33,11 @@
           border-radius: 0;
           padding: 8px 0 10px;
           width: 100%;
-          height: 16px;
+          height: calc(16px + 8px + 10px);
           font-family: Roboto, sans-serif;
           font-size: 16px;
           color: inherit;
           background-color: transparent;
-          background-image: linear-gradient(#3F51B5, #3F51B5), linear-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1px);
-          background-repeat: no-repeat;
-          background-position: 50% 100%;
-
-          /*
-          -webkit-transition needed for Safari right now, but it’s fixed in
-          Safari Technology Preview, so we can expect it to fix itself in the
-          near future (Safari 10.2 most probably).
-          */
-          -webkit-transition: background-size 0.25s;
-          transition: background-size 0.25s;
 
           /* Disable default invalid style in Firefox */
           box-shadow: none;
@@ -42,7 +45,6 @@
 
         --vaadin-text-field__input: {
           @apply --material-text-field__input;
-          background-size: 0% 2px, 100% 2px;
         };
 
         --vaadin-text-field__input-placeholder: {
@@ -72,10 +74,7 @@
       }
 
       vaadin-text-field[focused] {
-        --vaadin-text-field__input: {
-          @apply --material-text-field__input;
-          background-size: 100% 2px, 100% 2px;
-        };
+        background-size: 100% 2px, 100% 2px;
 
         --vaadin-text-field__label: {
           @apply --material-text-field__label;
@@ -84,11 +83,8 @@
       }
 
       vaadin-text-field[invalid] {
-        --vaadin-text-field__input: {
-          @apply --material-text-field__input;
-          background-image: linear-gradient(#dd2c00, #dd2c00);
-          background-size: 100% 2px;
-        };
+        background-image: linear-gradient(#dd2c00, #dd2c00);
+        background-size: 100% 2px;
 
         --vaadin-text-field__label: {
           @apply --material-text-field__label;
@@ -98,16 +94,12 @@
 
       vaadin-text-field[disabled] {
         color: rgba(0, 0, 0, 0.38);
+        background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0) 2px);
+        background-size: 4px 1px;
+        background-repeat: repeat-x;
 
         --vaadin-text-field__input-placeholder: {
           opacity: 0.5;
-        };
-
-        --vaadin-text-field__input: {
-          @apply --material-text-field__input;
-          background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0) 2px);
-          background-size: 4px 1px;
-          background-repeat: repeat-x;
         };
       }
 
@@ -117,6 +109,7 @@
           transform: scale(1) translateY(calc(16px + 50%));
           width: 100%;
           pointer-events: none;
+          left: auto;
         };
       }
     </style>

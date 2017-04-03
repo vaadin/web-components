@@ -44,6 +44,30 @@
       </template>
     </demo-snippet>
 
+    <h3>Prefix and Suffix</h3>
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style include="material-vaadin-text-field">
+            vaadin-text-field {
+              width: 250px !important;
+            }
+
+            .letter-icon {
+              font-size: 24px;
+              padding-right: 5px;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-text-field label="Email address">
+          <div class="letter-icon" slot="prefix">✉️</div>
+          <div slot="suffix">@vaadin.com</div>
+        </vaadin-text-field>
+
+      </template>
+    </demo-snippet>
+
     <h3>States</h3>
     <demo-snippet>
       <template>

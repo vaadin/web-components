@@ -33,13 +33,14 @@ Custom property | Description | Default
   <template>
     <style>
       :host {
-        display: inline-flex;
-        flex-direction: column;
+        display: inline-block;
         outline: none;
         -webkit-tap-highlight-color: transparent;
       }
 
       input {
+        width: 100%;
+        box-sizing: border-box;
         @apply --vaadin-text-field__input;
       }
 
@@ -60,34 +61,74 @@ Custom property | Description | Default
       }
 
       label {
+        position: absolute;
+        left: 0;
+        top: 0;
         @apply --vaadin-text-field__label;
       }
 
       label:empty {
         display: none;
       }
+
+      #container {
+        position: relative;
+      }
+
+      #contentWrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      #labelAndInputContainer {
+        flex: 1;
+      }
+
+      #labelPlaceholder {
+        @apply --vaadin-text-field__label;
+        visibility: hidden;
+      }
+
+      #labelPlaceholder[no-label] {
+        display: none;
+      }
     </style>
 
-    <label id="label" on-click="focus">[[label]]</label>
+    <div id="container">
 
-    <input id="input"
-      autocomplete$="[[autocomplete]]"
-      autocorrect$="[[autocorrect]]"
-      autofocus$="[[autofocus]]"
-      disabled$="[[disabled]]"
-      list="[[list]]"
-      maxlength$="[[maxlength]]"
-      minlength$="[[minlength]]"
-      name="[[name]]"
-      pattern="[[pattern]]"
-      placeholder="[[placeholder]]"
-      readonly$="[[readonly]]"
-      required$="[[required]]"
-      value="{{value::input}}"
-      title="[[title]]"
-      on-blur="validate"
-      on-input="_onInput"
-    >
+      <div no-label$=[[!label]] id="labelPlaceholder">&nbsp;</div>
+
+      <div id="contentWrapper">
+
+        <slot id="prefix" name="prefix"></slot>
+
+        <div id="labelAndInputContainer">
+          <label id="label" on-click="focus">[[label]]</label>
+          <input id="input"
+            autocomplete$="[[autocomplete]]"
+            autocorrect$="[[autocorrect]]"
+            autofocus$="[[autofocus]]"
+            disabled$="[[disabled]]"
+            list="[[list]]"
+            maxlength$="[[maxlength]]"
+            minlength$="[[minlength]]"
+            name="[[name]]"
+            pattern="[[pattern]]"
+            placeholder="[[placeholder]]"
+            readonly$="[[readonly]]"
+            required$="[[required]]"
+            value="{{value::input}}"
+            title="[[title]]"
+            on-blur="validate"
+            on-input="_onInput"
+          >
+        </div>
+
+        <slot id="suffix" name="suffix"></slot>
+
+      </div>
+    </div>
+
   </template>
 
   <script>
