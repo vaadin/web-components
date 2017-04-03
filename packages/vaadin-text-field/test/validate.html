@@ -24,24 +24,24 @@
   <script>
 
     describe('validate', function() {
-      var iform, vinput;
+      let iform, tf;
 
       beforeEach(function(done) {
         iform = fixture('default');
         window.setTimeout(function() {
-          vinput = iform.querySelector('vaadin-text-field');
+          tf = iform.querySelector('vaadin-text-field');
           done();
         }, 1);
       });
 
       it('should call validate', function() {
-        var inputFocusSpy = window.sinon.spy(vinput, 'validate');
+        const inputFocusSpy = window.sinon.spy(tf, 'validate');
         iform.submit();
         expect(inputFocusSpy.called).to.be.true;
       });
 
       it('should serialize correctly', function() {
-        vinput.value = 'bar';
+        tf.value = 'bar';
         expect(iform.serializeForm().foo).to.equal('bar');
       });
 
@@ -50,22 +50,107 @@
       });
 
       it('should fail if required', function() {
-        vinput.required = true;
+        tf.required = true;
         expect(iform.validate()).to.be.false;
       });
 
       it('should have the invalid attribute', function() {
-        vinput.required = true;
-        vinput.validate();
-        expect(vinput.getAttribute('invalid')).to.be.equal('');
+        tf.required = true;
+        tf.validate();
+        expect(tf.getAttribute('invalid')).to.be.equal('');
       });
 
       it('should not have the invalid attribute', function() {
-        vinput.required = true;
-        vinput.validate();
-        vinput.required = false;
-        vinput.validate();
-        expect(vinput.getAttribute('invalid')).not.to.be.ok;
+        tf.required = true;
+        tf.validate();
+        tf.required = false;
+        tf.validate();
+        expect(tf.getAttribute('invalid')).not.to.be.ok;
+      });
+
+      describe('prevent invalid input', function() {
+
+        beforeEach(function() {
+          tf.preventInvalidInput = true;
+          tf.value = '1';
+        });
+
+        describe('user action', function() {
+
+          function userSetValue(value) {
+            tf.$.input.value = value;
+            tf.$.input.dispatchEvent(new CustomEvent('input'));
+          }
+
+          it('should prevent invalid pattern', function() {
+            tf.pattern = '[0-9]*';
+            userSetValue('f');
+            expect(tf.value).to.equal('1');
+          });
+
+          it('should not prevent valid pattern', function() {
+            tf.pattern = '[0-9]*';
+            userSetValue('2');
+            expect(tf.value).to.equal('2');
+          });
+
+          it('should have empty value', function() {
+            tf.value = undefined;
+            tf.pattern = '[0-9]*';
+            userSetValue('f');
+            expect(tf.value).to.equal('');
+          });
+
+          it('should not prevent too short value', function() {
+            tf.minlength = 1;
+            userSetValue('');
+            expect(tf.value).to.equal('');
+          });
+
+          it('should not prevent empty value for required field', function() {
+            tf.required = true;
+            userSetValue('');
+            expect(tf.value).to.equal('');
+          });
+
+          it('should not fire value change', function() {
+            const spy = sinon.spy();
+            tf.addEventListener('value-changed', spy);
+            tf.pattern = '[0-9]*';
+            userSetValue('f');
+            expect(spy.called).to.be.false;
+          });
+
+        });
+
+        describe('programmatic', function() {
+
+          it('should not prevent invalid pattern', function() {
+            tf.pattern = '[0-9]*';
+            tf.value = 'foo';
+            expect(tf.value).to.equal('foo');
+          });
+
+          it('should not prevent too short value', function() {
+            tf.minlength = 1;
+            tf.value = '';
+            expect(tf.value).to.equal('');
+          });
+
+          it('should not prevent empty value for required field', function() {
+            tf.required = true;
+            tf.value = '';
+            expect(tf.value).to.equal('');
+          });
+
+          it('should not prevent null value for required field', function() {
+            tf.required = true;
+            tf.value = null;
+            expect(tf.value).to.equal(null);
+          });
+
+        });
+
       });
 
     });
