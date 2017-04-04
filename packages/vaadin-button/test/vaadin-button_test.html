@@ -16,7 +16,7 @@
   </test-fixture>
 
   <script>
-    describe('sample test', function() {
+    describe('vaadin-button', function() {
       var vaadinButton, nativeButton;
 
       beforeEach(function() {
@@ -40,6 +40,25 @@
           done();
         });
         MockInteractions.downAndUp(vaadinButton);
+      });
+
+      it('host should have the `button` role', function() {
+        expect(vaadinButton.getAttribute('role')).to.be.eql('button');
+      });
+
+      it('native button should have the `presentation` role', function() {
+        expect(nativeButton.getAttribute('role')).to.be.eql('presentation');
+      });
+
+      it('should allow to set the aria-label property', function() {
+        window.parent.v = vaadinButton;
+        window.parent.n = nativeButton;
+        expect(vaadinButton.hasAttribute('aria-label')).to.be.false;
+        expect(nativeButton.hasAttribute('aria-label')).to.be.false;
+
+        vaadinButton.ariaLabel = 'foo';
+        expect(vaadinButton.getAttribute('aria-label')).to.be.eql('foo');
+        expect(nativeButton.hasAttribute('aria-label')).to.be.false;
       });
     });
   </script>
