@@ -1040,8 +1040,8 @@
             expect(grid.activeItem).to.be.null;
           });
 
-          it('should not have a default value', function() {
-            expect(grid.activeItem).to.be.undefined;
+          it('should be null by default', function() {
+            expect(grid.activeItem).to.be.null;
           });
 
           it('should activate on click', function() {
@@ -1069,7 +1069,7 @@
           it('should not activate when clicking on a native input', function() {
             clickFirstBodyInput(0);
 
-            expect(grid.activeItem).to.be.undefined;
+            expect(grid.activeItem).to.be.null;
           });
 
           describe('space click shortcut', function() {
@@ -1125,7 +1125,7 @@
               space();
 
               expect(spy.called).to.be.true;
-              expect(grid.activeItem).to.be.undefined;
+              expect(grid.activeItem).to.be.null;
             });
           });
         });
