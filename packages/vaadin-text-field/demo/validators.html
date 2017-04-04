@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+
+  <title>vaadin-text-field Custom Validators</title>
+
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <link rel='import' href='common.html'>
+</head>
+
+<body>
+  <div class='vertical-section-container centered'>
+
+    <demo-navigation></demo-navigation>
+
+    <h3>Synchronous Custom Validator</h3>
+
+    <p>Extend <code>VaadinTextFieldElement</code> to create your own custom element,
+      then override the <code>checkValidity()</code> method to validate the user's input</p>
+
+    <demo-snippet>
+      <template>
+        <style>
+          employee-role-text-field {
+            padding: 10px;
+            background: rgba(0, 128, 0, 0.15);
+          }
+
+          employee-role-text-field[invalid] {
+            background: rgba(244, 67, 54, 0.18);
+          }
+
+          employee-role-text-field div[slot=suffix] {
+            padding-left: 15px;
+            font-size: 80%;
+          }
+
+          employee-role-text-field[invalid] div[slot=suffix] {
+            color: red;
+          }
+        </style>
+
+        <employee-role-text-field label='Position'>
+          <div slot='suffix'>Valid options: Architect, Developer or Designer</div>
+        </employee-role-text-field>
+
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            class EmployeeRole extends VaadinTextFieldElement {
+              static get is() {
+                return 'employee-role-text-field';
+              }
+              checkValidity() {
+                return ['Architect', 'Developer', 'Designer'].indexOf(this.value) > -1;
+              }
+            }
+
+            customElements.define(EmployeeRole.is, EmployeeRole);
+          });
+        </script>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Asynchronous Custom Validator</h3>
+
+    <p>Extend <code>VaadinTextFieldElement</code> to create your own custom element,
+      then override the <code>checkValidity()</code> to make your asynchronous validation,
+      and finally set the <code>invalid</code> flag appropriately in the callback.</p>
+
+    <demo-snippet>
+      <template>
+        <style>
+          chemical-element-text-field div[slot=prefix] {
+            position: absolute;
+            margin-left: -8px;
+            color: red;
+            opacity: 0;
+          }
+
+          chemical-element-text-field[invalid] div[slot=prefix] {
+            opacity: 1;
+          }
+
+          chemical-element-text-field div[slot=suffix] {
+            padding-left: 15px;
+            font-size: 80%;
+          }
+
+          chemical-element-text-field[invalid] div[slot=suffix] {
+            color: red;
+          }
+        </style>
+
+        <iron-ajax id='ajax1' handle-as='json' url='http://vaadin.com/validate-element'></iron-ajax>
+        <chemical-element-text-field label='Element Name'>
+          <div slot='prefix'>!</div>
+          <div slot='suffix'>Type a valid Chemical Element such as Hydrogen, Oxygen, Carbon, etc.</div>
+        </chemical-element-text-field>
+
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            class ChemicalElement extends VaadinTextFieldElement {
+              static get is() {
+                return 'chemical-element-text-field';
+              }
+
+              ready() {
+                super.ready();
+
+                this.ajax = document.getElementById('ajax1');
+                this.ajax.addEventListener('response', function() {
+                  this.invalid = this.ajax.lastResponse.elements.indexOf(this.value) < 0;
+                }.bind(this));
+              }
+
+              checkValidity() {
+                this.ajax.generateRequest();
+                return true;
+              }
+            }
+
+            customElements.define(ChemicalElement.is, ChemicalElement);
+          });
+        </script>
+
+      </template>
+    </demo-snippet>
+  </div>
+
+  <dom-module id='iron-ajax'>
+    <template>
+    </template>
+    <script>
+        Polymer({
+          is: 'iron-ajax',
+
+          generateRequest: function() {
+            setTimeout(function() {
+              this.dispatchEvent(new CustomEvent('response'));
+            }.bind(this), 1000);
+          },
+
+          lastResponse: {'elements': [
+            'Hydrogen',
+            'Helium',
+            'Lithium',
+            'Beryllium',
+            'Boron',
+            'Carbon',
+            'Nitrogen',
+            'Oxygen',
+            'Fluorine',
+            'Neon',
+            'Sodium',
+            'Magnesium',
+            'Aluminum',
+            'Silicon',
+            'Phosphorus',
+            'Sulfur',
+            'Chlorine',
+            'Argon',
+            'Potassium',
+            'Calcium',
+            'Scandium',
+            'Titanium',
+            'Vanadium',
+            'Chromium',
+            'Manganese',
+            'Iron',
+            'Cobalt',
+            'Nickel',
+            'Copper',
+            'Zinc',
+            'Gallium',
+            'Germanium',
+            'Arsenic',
+            'Selenium',
+            'Bromine',
+            'Krypton',
+            'Rubidium',
+            'Strontium',
+            'Yttrium',
+            'Zirconium',
+            'Niobium',
+            'Molybdenum',
+            'Technetium',
+            'Ruthenium',
+            'Rhodium',
+            'Palladium',
+            'Silver',
+            'Cadmium',
+            'Indium',
+            'Tin',
+            'Antimony',
+            'Tellurium',
+            'Iodine',
+            'Xenon',
+            'Cesium',
+            'Barium',
+            'Lanthanum',
+            'Cerium',
+            'Praseodymium',
+            'Neodymium',
+            'Promethium',
+            'Samarium',
+            'Europium',
+            'Gadolinium',
+            'Terbium',
+            'Dysprosium',
+            'Holmium',
+            'Erbium',
+            'Thulium',
+            'Ytterbium',
+            'Lutetium',
+            'Hafnium',
+            'Tantalum',
+            'Tungsten',
+            'Rhenium',
+            'Osmium',
+            'Iridium',
+            'Platinum',
+            'Gold',
+            'Mercury',
+            'Thallium',
+            'Lead',
+            'Bismuth',
+            'Polonium',
+            'Astatine',
+            'Radon',
+            'Francium',
+            'Radium',
+            'Actinium',
+            'Thorium',
+            'Protactinium',
+            'Uranium',
+            'Neptunium',
+            'Plutonium',
+            'Americium',
+            'Curium',
+            'Berkelium',
+            'Californium',
+            'Einsteinium',
+            'Fermium',
+            'Mendelevium',
+            'Nobelium',
+            'Lawrencium',
+            'Rutherfordium',
+            'Dubnium',
+            'Seaborgium',
+            'Bohrium',
+            'Hassium',
+            'Meitnerium',
+            'Ununnilium',
+            'Unununium',
+            'Ununbium',
+            'Ununtrium',
+            'Ununquadium',
+            'Ununpentium',
+            'Ununhexium',
+            'Ununseptium',
+            'Ununoctium'
+          ]}
+        });
+
+    </script>
+  </dom-module>
+
+
+</body>
+</html>
