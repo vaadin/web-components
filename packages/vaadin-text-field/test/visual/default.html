@@ -18,14 +18,6 @@
         width: 550px;
         border: solid 1px grey;
       }
-
-      #hidden-caret {
-        --vaadin-text-field__input: {
-          font-size: 0;
-          padding: 0 100px;
-          height: 24px;
-        };
-      }
     </style>
   </custom-style>
 
@@ -63,5 +55,14 @@
         </vaadin-text-field>
     </fieldset>
   </form>
+
+  <script>
+    HTMLImports.whenReady(function() {
+      const style = document.querySelector("#hidden-caret").$.input.style;
+      style.fontSize = '0';
+      style.padding = '0 100px';
+      style.height = '24px';
+    });
+  </script>
 
 </body>

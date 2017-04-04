@@ -12,15 +12,6 @@ This program is available under Apache License Version 2.0, available at https:/
 </vaadin-text-field>
 ```
 
-### Styling
-The following mixins are available for styling:
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--vaadin-text-field__input` | Mixin applied to the input element | `{}`
-`--vaadin-text-field__input-placeholder` | Mixin applied to the input's placeholder | `{}`
-`--vaadin-text-field__label` | Mixin applied to the label element | `{}`
-
 @element vaadin-text-field
 @demo demo/index.html
 -->
@@ -42,19 +33,6 @@ Custom property | Description | Default
       input {
         width: 100%;
         box-sizing: border-box;
-        @apply --vaadin-text-field__input;
-      }
-
-      input::-webkit-input-placeholder {
-        @apply --vaadin-text-field__input-placeholder;
-      }
-
-      input::-moz-placeholder {
-        @apply --vaadin-text-field__input-placeholder;
-      }
-
-      input::placeholder {
-        @apply --vaadin-text-field__input-placeholder;
       }
 
       input::-ms-clear {
@@ -65,47 +43,45 @@ Custom property | Description | Default
         position: absolute;
         left: 0;
         top: 0;
-        @apply --vaadin-text-field__label;
       }
 
       label:empty {
         display: none;
       }
 
-      #container {
+      .container {
         position: relative;
       }
 
-      #contentWrapper {
+      .content-wrapper {
         display: flex;
         align-items: center;
       }
 
-      #labelAndInputContainer {
+      .label-and-input-container {
         flex: 1;
       }
 
-      #labelPlaceholder {
-        @apply --vaadin-text-field__label;
+      .label-placeholder {
         visibility: hidden;
       }
 
-      #labelPlaceholder[no-label] {
+      .label-placeholder[no-label] {
         display: none;
       }
     </style>
 
-    <div id="container">
+    <div class="container">
 
-      <div no-label$=[[!label]] id="labelPlaceholder">&nbsp;</div>
+      <div no-label$=[[!label]] class="label-placeholder">&nbsp;</div>
 
-      <div id="contentWrapper">
+      <div class="content-wrapper">
 
-        <slot id="prefix" name="prefix"></slot>
+        <slot name="prefix"></slot>
 
-        <div id="labelAndInputContainer">
-          <label id="label" on-click="focus">[[label]]</label>
-          <input id="input"
+        <div class="label-and-input-container">
+          <label id="label" part="label" on-click="focus">[[label]]</label>
+          <input id="input" part="input"
             autocomplete$="[[autocomplete]]"
             autocorrect$="[[autocorrect]]"
             autofocus$="[[autofocus]]"
@@ -125,7 +101,7 @@ Custom property | Description | Default
           >
         </div>
 
-        <slot id="suffix" name="suffix"></slot>
+        <slot name="suffix"></slot>
 
       </div>
     </div>
