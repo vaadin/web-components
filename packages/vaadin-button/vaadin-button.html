@@ -17,6 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-text-field/vaadin-control-state-mixin.html">
 
 <dom-module id="vaadin-button">
@@ -39,7 +40,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </button>
   </template>
   <script>
-    class VaadinButtonElement extends Vaadin.ControlStateMixin(Polymer.Element) {
+    class VaadinButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.Element)) {
       static get is() {
         return 'vaadin-button';
       }
