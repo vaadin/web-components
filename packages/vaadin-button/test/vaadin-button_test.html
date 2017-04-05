@@ -49,17 +49,6 @@
       it('native button should have the `presentation` role', function() {
         expect(nativeButton.getAttribute('role')).to.be.eql('presentation');
       });
-
-      it('should allow to set the aria-label property', function() {
-        window.parent.v = vaadinButton;
-        window.parent.n = nativeButton;
-        expect(vaadinButton.hasAttribute('aria-label')).to.be.false;
-        expect(nativeButton.hasAttribute('aria-label')).to.be.false;
-
-        vaadinButton.ariaLabel = 'foo';
-        expect(vaadinButton.getAttribute('aria-label')).to.be.eql('foo');
-        expect(nativeButton.hasAttribute('aria-label')).to.be.false;
-      });
     });
   </script>
 </body>
