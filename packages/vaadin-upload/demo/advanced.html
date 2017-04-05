@@ -39,7 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <template>
         <template is="dom-bind">
           <vaadin-upload id="fileEventsDemo" files="{{files}}">
-            <div slot=file-list>
+            <div slot="file-list">
               <h4>Files</h4>
               <ul>
                 <template is="dom-repeat" items="{{files}}" as="file">
@@ -131,7 +131,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <demo-snippet>
       <template>
         <vaadin-upload id="preFill" accept="application/pdf">
-          <div class="drop-label">
+          <div slot="drop-label">
             <iron-icon icon="description"></iron-icon>
             Drop your favourite Novels here
           </div>

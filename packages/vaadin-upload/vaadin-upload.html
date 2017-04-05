@@ -156,14 +156,14 @@ Custom property | Description | Default
           </slot>
         </div>
         <div id="dropLabel" hidden$="[[nodrop]]">
-          <slot name=drop-label>
+          <slot name="drop-label">
             <iron-icon icon="vaadin-upload:file-upload"></iron-icon>
             [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
           </slot>
         </div>
       </div>
     </div>
-    <slot name=file-list>
+    <slot name="file-list">
       <div id="fileList">
         <template is="dom-repeat" items="[[files]]" as="file">
           <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
