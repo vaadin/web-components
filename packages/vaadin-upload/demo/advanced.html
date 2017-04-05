@@ -131,10 +131,8 @@ This program is available under Apache License Version 2.0, available at https:/
     <demo-snippet>
       <template>
         <vaadin-upload id="preFill" accept="application/pdf">
-          <div slot="drop-label">
-            <iron-icon icon="description"></iron-icon>
-            Drop your favourite Novels here
-          </div>
+          <iron-icon slot="drop-label-icon" icon="description"></iron-icon>
+          <span slot="drop-label">Drop your favourite Novels here</span>
         </vaadin-upload>
         <script>
           var upload4 = document.querySelector('vaadin-upload#preFill');
