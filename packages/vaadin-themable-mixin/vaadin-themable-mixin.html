@@ -1,0 +1,34 @@
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  Vaadin.ThemableMixin = subclass => class VaadinThemableMixin extends subclass {
+
+    static constructor() {
+      this._memoizedTemplate = undefined;
+    }
+
+    static get template() {
+      if (super.template && !this._memoizedTemplate) {
+        this._memoizedTemplate = super.template.cloneNode(true);
+
+        const modules = Polymer.DomModule.prototype.modules;
+        for (const module in modules) {
+          const themeFor = modules[module].getAttribute('theme-for');
+          if (themeFor) {
+            themeFor.split(' ').forEach(function(themeForToken) {
+              if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
+                const styleEl = document.createElement('style');
+                styleEl.setAttribute('include', module);
+
+                const content = this._memoizedTemplate.content;
+                content.insertBefore(styleEl, content.firstChild);
+              }
+            }, this);
+          }
+        }
+      }
+      return this._memoizedTemplate;
+    }
+
+  };
+</script>
