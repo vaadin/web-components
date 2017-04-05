@@ -12,7 +12,7 @@
         this._memoizedTemplate = super.template.cloneNode(true);
 
         const modules = Polymer.DomModule.prototype.modules;
-        for (const module in modules) {
+        Object.keys(modules).forEach(function(module) {
           const themeFor = modules[module].getAttribute('theme-for');
           if (themeFor) {
             themeFor.split(' ').forEach(function(themeForToken) {
@@ -25,7 +25,7 @@
               }
             }, this);
           }
-        }
+        }, this);
       }
       return this._memoizedTemplate;
     }
