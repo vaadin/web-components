@@ -1,7 +1,15 @@
 gemini.suite('vaadin-form-layout', (rootSuite) => {
 
   var demos = [
-    {name: 'index', snippets: ['basic', 'paper-input']}
+    {name: 'index', snippets: [
+      'basic',
+      'single-column',
+      'columns',
+      'colspan',
+      'br',
+      'column-gap',
+      'paper-input'
+    ]}
   ];
 
   demos.forEach(function(demo) {
@@ -14,7 +22,17 @@ gemini.suite('vaadin-form-layout', (rootSuite) => {
             .setUrl('/../../demo/' + demo.name + '.html')
             .setCaptureElements('demo-snippet:nth-of-type(' + (snippetIndex + 1) + ') vaadin-form-layout')
             .capture('default', {}, (actions, find) => {
-              actions.wait(5000);
+              actions
+                .waitForJSCondition(function(window) {
+                  return window.webComponentsAreReady;
+                }, 60000)
+                .executeJS(function(window) {
+                  // Ensure nothing is focused to prevent blinking cursor
+                  var input = window.document.createElement('input');
+                  window.document.body.appendChild(input);
+                  input.focus();
+                  window.document.body.removeChild(input);
+                });
             });
         });
       });
