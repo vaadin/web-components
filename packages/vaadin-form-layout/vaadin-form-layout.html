@@ -22,11 +22,11 @@ with the `columns` property.
 
 ### Spanning Items on Multiple Columns
 
-You can use `vaadin-form-layout-colspan` attribute on the items.
+You can use `colspan` attribute on the items.
 In the example below, the first text field spans on two columns:
 
 <vaadin-form-layout>
-  <vaadin-text-field vaadin-form-layout-colspan="2" label="Address"></vaadin-text-field>
+  <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
 </vaadin-form-layout>
@@ -86,8 +86,6 @@ Custom CSS property | Description | Default
       }
 
       #layout ::slotted(*) {
-        /* width: calc(99.999% / var(--vaadin-form-layout-columns) * var(--vaadin-form-layout-colspan) - var(--vaadin-form-layout-column-gap)); */
-
         /* Items should neigher grow nor shrink. */
         flex-grow: 0;
         flex-shrink: 0;
@@ -177,7 +175,7 @@ Custom CSS property | Description | Default
           : getComputedStyle(this, '--vaadin-form-layout-column-gap');
 
         Array.from(this.children).forEach(child => {
-          let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('vaadin-form-layout-colspan')));
+          let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
 
           // Never span further then the number of columns
           colspan = Math.min(colspan, this.columns); 
