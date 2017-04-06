@@ -11,8 +11,5 @@
   "globals": {
     "Polymer": false,
     "Vaadin": false
-  },
-  "rules": {
-    "arrow-spacing": "error"
   }
 }
