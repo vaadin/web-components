@@ -1,0 +1,11 @@
+<script>
+  HTMLImports.whenReady(function() {
+    var hiddenCaretInputs = document.querySelectorAll('.hidden-caret');
+    [].forEach.call(hiddenCaretInputs, function(input) {
+      const style = input.$.input.style;
+      style.fontSize = '0';
+      style.padding = '0 100px';
+      style.height = '24px';
+    });
+  });
+</script>
