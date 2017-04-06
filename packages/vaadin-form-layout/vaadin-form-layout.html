@@ -57,6 +57,7 @@ Custom CSS property | Description | Default
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-form-layout">
   <template>
@@ -114,7 +115,7 @@ Custom CSS property | Description | Default
   </template>
 
   <script>
-    class VaadinFormLayoutElement extends Polymer.Element {
+    class VaadinFormLayoutElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-form-layout';
       }
