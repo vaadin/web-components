@@ -115,17 +115,9 @@
     <h3>Showing an Error Message</h3>
     <demo-snippet>
       <template>
-        <p><vaadin-text-field required errorMessage="You must write something in this input"></vaadin-text-field> Can type numbers only</p>
+        <vaadin-text-field required error-message="You must write something in this input"></vaadin-text-field>
       </template>
     </demo-snippet>
-
-    <div class="form-item">
-      <vaadin-text-field label="User Name"
-        minlength="4" maxlength="8" required pattern="^\w+$"
-        error-message="from 4 to 8 characters without spaces">
-      <div slot="prefix">*</div>
-      </vaadin-text-field>
-    </div>
 
     <h3>Full Form</h3>
     <demo-snippet>

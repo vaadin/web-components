@@ -106,14 +106,14 @@ This program is available under Apache License Version 2.0, available at https:/
             title="[[title]]"
             on-blur="validate"
             on-input="_onInput"
-            aria-describedby="error"
+            aria-describedby$="[[_errorId]]"
           >
         </div>
 
         <slot name="suffix"></slot>
 
-        <template is="dom-if" if="[[errorMessage]]">
-          <div id="error" aria-live="assertive" class="error">[[errorMessage]]</div>
+        <template id="errortpl" is="dom-if" if="[[errorMessage]]">
+          <div id="[[_errorId]]" aria-live="assertive" class="error">[[errorMessage]]</div>
         </template>
 
       </div>
@@ -149,8 +149,7 @@ This program is available under Apache License Version 2.0, available at https:/
            * Error to show when the input value is invalid.
            */
           errorMessage: {
-            type: String,
-            observer: '_errorMessageChanged'
+            type: String
           },
 
           /**
@@ -313,23 +312,10 @@ This program is available under Apache License Version 2.0, available at https:/
         if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
           this.updateStyles();
         }
-      }
 
-      _errorMessageChanged(value) {
-        // Save the error element for later use
-        if (value && !this._error) {
-
-          setTimeout(() => {
-            // Timeout so as DOM has been updated
-            this._error = Polymer.dom(this.root).querySelector('#error');
-
-            // In shady we need unique ids in the document
-            if (window.ShadyDOM) {
-              this._error.id += (VaadinTextFieldElement.uniqueId = 1 + VaadinTextFieldElement.uniqueId || 0);
-              this.$.input.setAttribute('aria-describedby', this._error.id);
-            }
-          });
-        }
+        // ShadyDOM needs unique ids in the document
+        var uniqueId = window.ShadyDOM ? VaadinTextFieldElement._uniqueId = 1 + VaadinTextFieldElement._uniqueId || 0 : '';
+        this._errorId = 'text-field-error' + uniqueId;
       }
 
       attributeChangedCallback(prop, oldVal, newVal) {

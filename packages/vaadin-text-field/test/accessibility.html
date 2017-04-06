@@ -19,24 +19,27 @@
   <script>
 
     describe('accessibility', function() {
-      let tf;
+      let tf, err;
 
       beforeEach(function(done) {
         tf = fixture('error-fixture');
-        setTimeout(done);
+        setTimeout(() => {
+          err = tf.root.querySelector('.error');
+          done();
+        });
       });
 
-      it('should memoize the error element', function() {
-        expect(tf._error).to.be.ok;
+      it('should have an error element classed with `error`', function() {
+        expect(err).to.be.ok;
       });
 
       it('should not show the error message the very first time', function() {
-        expect(window.getComputedStyle(tf._error).visibility).to.equal('hidden');
+        expect(window.getComputedStyle(err).visibility).to.equal('hidden');
       });
 
       it('should show the error message after validation is run', function() {
         tf.validate();
-        expect(window.getComputedStyle(tf._error).visibility).to.equal('visible');
+        expect(window.getComputedStyle(err).visibility).to.equal('visible');
       });
 
       it('should not show the error message if empty', function(done) {
@@ -44,18 +47,18 @@
         tf.validate();
 
         setTimeout(() => {
-          // don-if sets the display to none
-          expect(window.getComputedStyle(tf._error).display).to.equal('none');
+          // dom-if sets the display to none
+          expect(window.getComputedStyle(err).display).to.equal('none');
           done();
         });
       });
 
       it('should have aria-describedby attribute', function() {
-        expect(tf.$.input.getAttribute('aria-describedby')).to.equal(tf._error.id);
+        expect(tf.$.input.getAttribute('aria-describedby')).to.equal(err.id);
       });
 
       it('should have appropriate aria-live attribute', function() {
-        expect(tf._error.getAttribute('aria-live')).to.equal('assertive');
+        expect(err.getAttribute('aria-live')).to.equal('assertive');
       });
 
     });
