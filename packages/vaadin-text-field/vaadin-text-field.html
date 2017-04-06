@@ -149,7 +149,8 @@ This program is available under Apache License Version 2.0, available at https:/
            * Error to show when the input value is invalid.
            */
           errorMessage: {
-            type: String
+            type: String,
+            observer: '_errorMessageChanged'
           },
 
           /**
@@ -312,16 +313,23 @@ This program is available under Apache License Version 2.0, available at https:/
         if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
           this.updateStyles();
         }
+      }
 
-        setTimeout(() => {
-          this._error = Polymer.dom(this.root).querySelector('#error');
+      _errorMessageChanged(value) {
+        // Save the error element for later use
+        if (value && !this._error) {
 
-          // In shady we need unique ids in the document
-          if (window.ShadyDOM) {
-            this._error.id += (VaadinTextFieldElement.uniqueId = 1 + VaadinTextFieldElement.uniqueId || 0);
-            this.$.input.setAttribute('aria-describedby', this._error.id);
-          }
-        });
+          setTimeout(() => {
+            // Timeout so as DOM has been updated
+            this._error = Polymer.dom(this.root).querySelector('#error');
+
+            // In shady we need unique ids in the document
+            if (window.ShadyDOM) {
+              this._error.id += (VaadinTextFieldElement.uniqueId = 1 + VaadinTextFieldElement.uniqueId || 0);
+              this.$.input.setAttribute('aria-describedby', this._error.id);
+            }
+          });
+        }
       }
 
       attributeChangedCallback(prop, oldVal, newVal) {

@@ -26,6 +26,10 @@
         setTimeout(done);
       });
 
+      it('should memoize the error element', function() {
+        expect(tf._error).to.be.ok;
+      });
+
       it('should not show the error message the very first time', function() {
         expect(window.getComputedStyle(tf._error).visibility).to.equal('hidden');
       });
