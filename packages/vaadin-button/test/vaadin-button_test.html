@@ -16,7 +16,7 @@
   </test-fixture>
 
   <script>
-    describe('sample test', function() {
+    describe('vaadin-button', function() {
       var vaadinButton, nativeButton;
 
       beforeEach(function() {
@@ -40,6 +40,14 @@
           done();
         });
         MockInteractions.downAndUp(vaadinButton);
+      });
+
+      it('host should have the `button` role', function() {
+        expect(vaadinButton.getAttribute('role')).to.be.eql('button');
+      });
+
+      it('native button should have the `presentation` role', function() {
+        expect(nativeButton.getAttribute('role')).to.be.eql('presentation');
       });
     });
   </script>

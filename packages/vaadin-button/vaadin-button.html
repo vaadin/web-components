@@ -41,6 +41,17 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     class VaadinButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      ready() {
+        super.ready();
+
+        // Leaving default role in the native button, makes navigation announcement
+        // being different when using focus navigation (tab) versus using normal
+        // navigation (arrows). The first way announces the label on a button
+        // since the focus is moved programmatically, and the second on a group.
+        this.setAttribute('role', 'button');
+        this.$.button.setAttribute('role', 'presentation');
+      }
+
       static get is() {
         return 'vaadin-button';
       }
