@@ -36,6 +36,7 @@
     "test-fixture": "^2.0.0"
   },
   "dependencies": {
-    "polymer": "polymer/polymer#^2.0.0-rc.1"
+    "polymer": "polymer/polymer#^2.0.0-rc.1",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.1"
   }
 }
