@@ -16,17 +16,4 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
       .capture('screenshots', {}, wait);
   });
 
-  gemini.suite('styling-tests', function(suite) {
-    suite
-      .setUrl('/styling.html')
-      .setCaptureElements('#styling-tests')
-      .capture('screenshots', {}, wait);
-  });
-
-  gemini.suite('theming-tests', function(suite) {
-    suite
-      .setUrl('/theming-md.html')
-      .setCaptureElements('#theming-md-tests')
-      .capture('screenshots', {}, wait);
-  });
 });
