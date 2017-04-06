@@ -69,6 +69,14 @@ This program is available under Apache License Version 2.0, available at https:/
       .label-placeholder[no-label] {
         display: none;
       }
+
+      .error {
+        visibility: hidden;
+      }
+
+      :host([invalid]) .error {
+        visibility: visible;
+      }
     </style>
 
     <div class="container">
@@ -98,10 +106,15 @@ This program is available under Apache License Version 2.0, available at https:/
             title="[[title]]"
             on-blur="validate"
             on-input="_onInput"
+            aria-describedby="error"
           >
         </div>
 
         <slot name="suffix"></slot>
+
+        <template is="dom-if" if="[[errorMessage]]">
+          <div id="error" aria-live="assertive" class="error">[[errorMessage]]</div>
+        </template>
 
       </div>
     </div>
@@ -130,6 +143,13 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           autofocus: {
             type: Boolean
+          },
+
+          /**
+           * Error to show when the input value is invalid.
+           */
+          errorMessage: {
+            type: String
           },
 
           /**
@@ -292,6 +312,16 @@ This program is available under Apache License Version 2.0, available at https:/
         if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
           this.updateStyles();
         }
+
+        setTimeout(() => {
+          this._error = Polymer.dom(this.root).querySelector('#error');
+
+          // In shady we need unique ids in the document
+          if (window.ShadyDOM) {
+            this._error.id += (VaadinTextFieldElement.uniqueId = 1 + VaadinTextFieldElement.uniqueId || 0);
+            this.$.input.setAttribute('aria-describedby', this._error.id);
+          }
+        });
       }
 
       attributeChangedCallback(prop, oldVal, newVal) {

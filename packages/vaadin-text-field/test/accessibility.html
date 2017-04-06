@@ -1,0 +1,59 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-text-field tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-text-field.html">
+
+</head>
+
+<body>
+  <test-fixture id="error-fixture">
+    <template>
+      <vaadin-text-field required error-message="ERR"></vaadin-text-field>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    describe('accessibility', function() {
+      let tf;
+
+      beforeEach(function(done) {
+        tf = fixture('error-fixture');
+        setTimeout(done);
+      });
+
+      it('should not show the error message the very first time', function() {
+        expect(window.getComputedStyle(tf._error).visibility).to.equal('hidden');
+      });
+
+      it('should show the error message after validation is run', function() {
+        tf.validate();
+        expect(window.getComputedStyle(tf._error).visibility).to.equal('visible');
+      });
+
+      it('should not show the error message if empty', function(done) {
+        tf.errorMessage = '';
+        tf.validate();
+
+        setTimeout(() => {
+          // don-if sets the display to none
+          expect(window.getComputedStyle(tf._error).display).to.equal('none');
+          done();
+        });
+      });
+
+      it('should have aria-describedby attribute', function() {
+        expect(tf.$.input.getAttribute('aria-describedby')).to.equal(tf._error.id);
+      });
+
+      it('should have appropriate aria-live attribute', function() {
+        expect(tf._error.getAttribute('aria-live')).to.equal('assertive');
+      });
+
+    });
+  </script>
+</body>
