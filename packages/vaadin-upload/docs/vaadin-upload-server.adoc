@@ -61,7 +61,7 @@ uploader.addEventListener('upload-before', function(e) {
 
 uploader.addEventListener('upload-before', function(e) {
   if (e.detail.file.size > 10240) {
-    e.detail.file.error = 'File too big.'
+    e.detail.file.error = 'File is too large.'
   }
 });
 ----
