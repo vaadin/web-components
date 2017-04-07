@@ -343,6 +343,15 @@ Custom property | Description | Default
       },
 
       /**
+       * Prevents upload(s) from immediately uploading upon adding file(s).
+       * When set, you must manually trigger uploads using the `uploadFiles` method
+       */
+      noAuto: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
        * The object used to localize this component.
        * For changing the default localization, change the entire
        * _i18n_ object or just the property you want to modify.
@@ -368,7 +377,8 @@ Custom property | Description | Default
        status: {
          connecting: 'Connecting...',
          stalled: 'Stalled.',
-         processing: 'Processing File...'
+         processing: 'Processing File...',
+         held: 'Queued'
        },
        remainingTime: {
          prefix: 'remaining time: ',
@@ -416,7 +426,8 @@ Custom property | Description | Default
               status: {
                 connecting: 'Connecting...',
                 stalled: 'Stalled.',
-                processing: 'Processing File...'
+                processing: 'Processing File...',
+                held: 'Queued'
               },
               remainingTime: {
                 prefix: 'remaining time: ',
@@ -613,6 +624,19 @@ Custom property | Description | Default
       file.status = this._formatFileProgress(file);
     },
 
+    /**
+     * Triggers the upload of any files that are not completed
+     *
+     * @param {Array} [files] - Files being uploaded. Defaults to all outstanding files
+     */
+    uploadFiles: function(files) {
+      files = files || this.files;
+      files = files.filter(function(file) {
+        return !file.complete;
+      });
+      Array.prototype.forEach.call(files, this._uploadFile.bind(this));
+    },
+
     _uploadFile: function(file) {
       if (file.uploading) {
         return;
@@ -766,8 +790,12 @@ Custom property | Description | Default
         return;
       }
       file.loaded = 0;
+      file.status = this.i18n.uploading.status.held;
       this.unshift('files', file);
-      this._uploadFile(file);
+
+      if (!this.noAuto) {
+        this._uploadFile(file);
+      }
     },
 
     /**
@@ -833,8 +861,8 @@ Custom property | Description | Default
    *
    * @event file-reject
    * @param {Object} detail
-   *  @param {Object} detail.file the file added
-   *  @param {Object} detail.error the cause
+   * @param {Object} detail.file the file added
+   * @param {Object} detail.error the cause
    */
 
   /**
@@ -843,9 +871,9 @@ Custom property | Description | Default
    *
    * @event upload-before
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded
-   *   @param {Object} detail.file.uploadTarget the upload request URL, initialized with the value of vaadin-upload `target` property
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.file.uploadTarget the upload request URL, initialized with the value of vaadin-upload `target` property
    */
 
   /**
@@ -856,9 +884,9 @@ Custom property | Description | Default
    *
    * @event upload-request
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded
-   *  @param {Object} detail.formData the FormData object
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.formData the FormData object
    */
 
   /**
@@ -866,8 +894,8 @@ Custom property | Description | Default
    *
    * @event upload-start
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded
    */
 
   /**
@@ -875,8 +903,8 @@ Custom property | Description | Default
    *
    * @event upload-progress
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded with loaded info
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded with loaded info
    */
 
   /**
@@ -891,8 +919,8 @@ Custom property | Description | Default
    *
    * @event upload-response
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded
    */
 
   /**
@@ -900,8 +928,8 @@ Custom property | Description | Default
    *
    * @event upload-success
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded with loaded info
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded with loaded info
    */
 
   /**
@@ -909,8 +937,8 @@ Custom property | Description | Default
    *
    * @event upload-error
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded
    */
 
   /**
@@ -919,8 +947,8 @@ Custom property | Description | Default
    *
    * @event upload-retry
    * @param {Object} detail
-   *  @param {Object} detail.xhr the previous upload xhr
-   *  @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.xhr the previous upload xhr
+   * @param {Object} detail.file the file being uploaded
    */
 
   /**
@@ -929,8 +957,8 @@ Custom property | Description | Default
    *
    * @event upload-abort
    * @param {Object} detail
-   *  @param {Object} detail.xhr the xhr
-   *  @param {Object} detail.file the file being uploaded
+   * @param {Object} detail.xhr the xhr
+   * @param {Object} detail.file the file being uploaded
    */
 
 </script>
