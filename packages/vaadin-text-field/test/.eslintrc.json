@@ -1,5 +1,6 @@
 {
   "globals": {
+    "HTMLImports": false,
     "WCT": false,
     "describe": false,
     "beforeEach": false,
