@@ -70,8 +70,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      :host(:not([invalid])) [part=error-message] {
-        visibility: hidden;
+      [part=error-message]:empty {
+        display: none;
       }
     </style>
 
@@ -104,13 +104,10 @@ This program is available under Apache License Version 2.0, available at https:/
             on-input="_onInput"
             aria-describedby$="[[_errorId]]"
           >
-          <template id="errortpl" is="dom-if" if="[[errorMessage]]">
-            <div id="[[_errorId]]" aria-live="assertive" part="error-message">[[errorMessage]]</div>
-          </template>
+          <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden="[[!invalid]]">[[errorMessage]]</div>
         </div>
 
         <slot name="suffix"></slot>
-
 
       </div>
     </div>
@@ -145,7 +142,8 @@ This program is available under Apache License Version 2.0, available at https:/
            * Error to show when the input value is invalid.
            */
           errorMessage: {
-            type: String
+            type: String,
+            value: ''
           },
 
           /**
@@ -243,7 +241,8 @@ This program is available under Apache License Version 2.0, available at https:/
           invalid: {
             type: Boolean,
             reflectToAttribute: true,
-            notify: true
+            notify: true,
+            value: false
           },
 
           /**
