@@ -21,12 +21,11 @@
     describe('accessibility', function() {
       let tf, err;
 
-      beforeEach(function(done) {
+      beforeEach(function() {
         tf = fixture('error-fixture');
-        setTimeout(() => {
-          err = tf.root.querySelector('.error');
-          done();
-        });
+        Polymer.dom.flush()
+
+        err = tf.root.querySelector('[part=error-message]');
       });
 
       it('should have an error element classed with `error`', function() {
@@ -39,18 +38,17 @@
 
       it('should show the error message after validation is run', function() {
         tf.validate();
+
         expect(window.getComputedStyle(err).visibility).to.equal('visible');
       });
 
-      it('should not show the error message if empty', function(done) {
+      it('should not show the error message if empty', function() {
         tf.errorMessage = '';
-        tf.validate();
+        Polymer.dom.flush()
 
-        setTimeout(() => {
-          // dom-if sets the display to none
-          expect(window.getComputedStyle(err).display).to.equal('none');
-          done();
-        });
+        tf.validate();
+        // dom-if sets the display to none
+        expect(window.getComputedStyle(err).display).to.equal('none');
       });
 
       it('should have aria-describedby attribute', function() {

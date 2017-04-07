@@ -70,12 +70,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      .error {
+      :host(:not([invalid])) [part=error-message] {
         visibility: hidden;
-      }
-
-      :host([invalid]) .error {
-        visibility: visible;
       }
     </style>
 
@@ -108,13 +104,13 @@ This program is available under Apache License Version 2.0, available at https:/
             on-input="_onInput"
             aria-describedby$="[[_errorId]]"
           >
+          <template id="errortpl" is="dom-if" if="[[errorMessage]]">
+            <div id="[[_errorId]]" aria-live="assertive" part="error-message">[[errorMessage]]</div>
+          </template>
         </div>
 
         <slot name="suffix"></slot>
 
-        <template id="errortpl" is="dom-if" if="[[errorMessage]]">
-          <div id="[[_errorId]]" aria-live="assertive" class="error">[[errorMessage]]</div>
-        </template>
 
       </div>
     </div>
@@ -315,7 +311,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // ShadyDOM needs unique ids in the document
         var uniqueId = window.ShadyDOM ? VaadinTextFieldElement._uniqueId = 1 + VaadinTextFieldElement._uniqueId || 0 : '';
-        this._errorId = 'text-field-error' + uniqueId;
+        this._errorId = 'vaadin-text-field-error' + uniqueId;
       }
 
       attributeChangedCallback(prop, oldVal, newVal) {
