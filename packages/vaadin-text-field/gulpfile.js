@@ -22,7 +22,7 @@ gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 gulp.task('lint:js', function() {
   return gulp.src([
     '*.js',
-    'test/*.js'
+    'test/**/*.js'
   ])
   .pipe(eslint())
   .pipe(eslint.format())
@@ -32,8 +32,8 @@ gulp.task('lint:js', function() {
 gulp.task('lint:html', function() {
   return gulp.src([
     '*.html',
-    'demo/*.html',
-    'test/*.html'
+    'demo/**/*.html',
+    'test/**/*.html'
   ])
   .pipe(htmlExtract({
     sel: 'script, code-example code'
@@ -46,8 +46,8 @@ gulp.task('lint:html', function() {
 gulp.task('lint:css', function() {
   return gulp.src([
     '*.html',
-    'demo/*.html',
-    'test/*.html'
+    'demo/**/*.html',
+    'test/**/*.html'
   ])
   .pipe(htmlExtract({
     sel: 'style'
