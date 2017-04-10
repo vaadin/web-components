@@ -16,3 +16,9 @@
 
 <!-- The component to demo -->
 <link rel="import" href="../vaadin-button.html">
+
+<script>
+   window.addEventListener('WebComponentsReady', () => {
+     document.body.removeAttribute('unresolved');
+   });
+</script>
