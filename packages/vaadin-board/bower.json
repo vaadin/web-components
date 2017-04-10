@@ -6,6 +6,7 @@
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
   "dependencies": {
     "polymer": "^v2.0.0-rc.1",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview",
     "vaadin-license-checker": "vaadin/license-checker#2.0-preview"
   },
   "devDependencies": {
