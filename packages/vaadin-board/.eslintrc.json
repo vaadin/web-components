@@ -12,11 +12,9 @@
     "globals": {
         "vaadin": false,
         "Polymer": false,
-        "CustomElements": false,
-        "Resizable": false
+        "CustomElements": false
     },
     "rules": {
-        "no-unused-vars": ["error",{"varsIgnorePattern":"Resizable"}],
         "no-console": ["error",{"allow": ["warn", "error"] }]
     }
 }

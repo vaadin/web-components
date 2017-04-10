@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-board-row.html">
-
 <!--
 `vaadin-board`
 Responsive layout, with several features.
@@ -20,7 +20,7 @@ Responsive layout, with several features.
   </template>
 
   <script>
-    class VaadinBoard extends Resizable(Polymer.Element){
+    class VaadinBoard extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
       static get is() {
         return 'vaadin-board';
       }
