@@ -70,9 +70,6 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      [part=error-message]:empty {
-        display: none;
-      }
     </style>
 
     <div class="container">
@@ -102,9 +99,9 @@ This program is available under Apache License Version 2.0, available at https:/
             title="[[title]]"
             on-blur="validate"
             on-input="_onInput"
-            aria-describedby$="[[_errorId]]"
+            aria-describedby$="[[_hasError(invalid, errorMessage)]]"
           >
-          <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden="[[!invalid]]">[[errorMessage]]</div>
+          <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_hasError(invalid, errorMessage)]]">[[errorMessage]]</div>
         </div>
 
         <slot name="suffix"></slot>
@@ -293,6 +290,10 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       validate() {
         return !(this.invalid = !this.checkValidity());
+      }
+
+      _hasError(invalid, errorMessage) {
+        return errorMessage && invalid ? this._errorId : undefined;
       }
 
       /**
