@@ -40,10 +40,10 @@
       </template>
     </demo-snippet>
 
-    <h3>Custom Number of Columns</h3>
+    <h3>Custom Responsive Steps</h3>
     <demo-snippet>
       <template>
-        <vaadin-form-layout columns="3">
+        <vaadin-form-layout columns="1, 2 30em, 3 40em">
           <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
           <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
           <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
@@ -55,7 +55,7 @@
     <demo-snippet>
       <template>
         <vaadin-form-layout>
-          <vaadin-text-field vaadin-form-layout-colspan="2" label="Address"></vaadin-text-field>
+          <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
           <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
           <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
         </vaadin-form-layout>
@@ -108,7 +108,7 @@
           <paper-input label="Email" value="jane.doe@example.com"></paper-input>
           <br>
           <paper-input label="Confirm Email" value="jane.doe@example.com"></paper-input>
-          <paper-input vaadin-form-layout-colspan="2" label="Address"></paper-input>
+          <paper-input colspan="2" label="Address"></paper-input>
         </vaadin-form-layout>
       </template>
     </demo-snippet>

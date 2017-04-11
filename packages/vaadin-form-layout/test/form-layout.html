@@ -21,11 +21,11 @@
     <template>
       <vaadin-form-layout columns="3">
         <vaadin-text-field></vaadin-text-field>
-        <vaadin-text-field vaadin-form-layout-colspan="1"></vaadin-text-field>
-        <vaadin-text-field vaadin-form-layout-colspan="2"></vaadin-text-field>
-        <vaadin-text-field vaadin-form-layout-colspan="3"></vaadin-text-field>
-        <vaadin-text-field vaadin-form-layout-colspan="4"></vaadin-text-field>
-        <vaadin-text-field vaadin-form-layout-colspan="non-number"></vaadin-text-field>
+        <vaadin-text-field colspan="1"></vaadin-text-field>
+        <vaadin-text-field colspan="2"></vaadin-text-field>
+        <vaadin-text-field colspan="3"></vaadin-text-field>
+        <vaadin-text-field colspan="4"></vaadin-text-field>
+        <vaadin-text-field colspan="non-number"></vaadin-text-field>
       </vaadin-form-layout>
     </template>
   </test-fixture>
@@ -63,7 +63,6 @@
         expect(paperInput).to.be.ok;
         expect(slot.assignedNodes()).to.contain(paperInput);
       });
-
     });
 
     describe('columns property', function() {
@@ -73,47 +72,69 @@
         layout = fixture('default');
       });
 
-      it('should have 2 columns by default', function() {
-        expect(layout.columns).to.equal(2);
-        var parsedWidth = getParsedWidth(layout.firstElementChild);
-        expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(50, .5);
+      it('should have default value', function() {
+        expect(layout.columns).to.equal('1, 2 40em');
       });
 
-      it('should disallow invalid values, considering them as 1', function() {
-        layout.columns = '';
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = '2';
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = 'foo';
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = undefined;
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = null;
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = -1;
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = 0;
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = Infinity;
-        expect(layout.columns).to.equal(1);
-
-        layout.columns = NaN;
-        expect(layout.columns).to.equal(1);
-      });
-
-      it('should assing width inline style on items', function() {
+      it('should assign width inline style on items', function() {
         layout.columns = 3;
 
         var parsedWidth = getParsedWidth(layout.firstElementChild);
         expect(parsedWidth.percentage).to.match(/%$/);
         expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, .5);
+      });
+
+      describe('responsive', function() {
+        beforeEach(function() {
+          document.body.style.minWidth = '0';
+        });
+
+        afterEach(function() {
+          document.body.style.removeProperty('width');
+          document.body.style.removeProperty('min-width');
+        });
+
+        function estimateEffectiveColumnCount(layout) {
+          return 100 / parseFloat(getParsedWidth(layout.firstElementChild).percentage);
+        }
+
+        it('should be responsive by default', function() {
+          document.body.style.width = '20em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
+
+          document.body.style.width = '40em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, .1);
+        });
+
+        it('should allow specifying non-responsive', function() {
+          layout.columns = '3';
+
+          document.body.style.width = '20em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
+
+          document.body.style.width = '40em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
+        });
+
+        it('should allow specifying more steps', function() {
+          layout.columns = '1, 2 20em, 5 40em';
+
+          document.body.style.width = '10em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
+
+          document.body.style.width = '20em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, .1);
+
+          document.body.style.width = '40em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(5, .1);
+        });
       });
     });
 
