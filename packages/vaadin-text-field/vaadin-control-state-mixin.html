@@ -2,40 +2,13 @@
   window.Vaadin = window.Vaadin || {};
 
   /**
-   * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
-   * implementation fails in the shadow dom, so we have this for vaadin elements.
-   * @polymerMixin
+   * A private mixin to avoid problems with dynamic properties and Polymer Analyzer.
+   * No need to expose these properties in the API docs.
    */
-  Vaadin.ControlStateMixin = subclass => class VaadinControlStateMixin extends subclass {
+  Vaadin.TabIndexMixin = subclass => class VaadinTabIndexMixin extends subclass {
     static get properties() {
       var cfg = {
-        /**
-         * If true, the element currently has focus.
-         */
-        'autofocus': {
-          type: Boolean
-        },
-
-        /**
-         * If true, the element currently has focus.
-         */
-        'focused': {
-          type: Boolean,
-          notify: true,
-          readOnly: true,
-          reflectToAttribute: true
-        },
-
-        /**
-         * If true, the user cannot interact with this element.
-         */
-        'disabled': {
-          type: Boolean,
-          observer: '_disabledChanged',
-          reflectToAttribute: true
-        },
-
-        /**
+         /**
          * Internal property needed to listen to `tabindex` attribute changes.
          *
          * For changing the tabindex of this component use the native `tabIndex` propety.
@@ -47,7 +20,7 @@
           reflectToAttribute: true,
           observer: '_tabindexChanged'
         }
-      };
+      }
 
       if (window.ShadyDOM) {
         // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
@@ -55,6 +28,43 @@
       }
 
       return cfg;
+    }
+  }
+
+  /**
+   * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
+   * implementation fails in the shadow dom, so we have this for vaadin elements.
+   * @polymerMixin
+   */
+  Vaadin.ControlStateMixin = subclass => class VaadinControlStateMixin extends Vaadin.TabIndexMixin(subclass) {
+    static get properties() {
+      return {
+        /**
+         * If true, the element currently has focus.
+         */
+        autofocus: {
+          type: Boolean
+        },
+
+        /**
+         * If true, the element currently has focus.
+         */
+        focused: {
+          type: Boolean,
+          notify: true,
+          readOnly: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          observer: '_disabledChanged',
+          reflectToAttribute: true
+        }
+      };
     }
 
     ready() {

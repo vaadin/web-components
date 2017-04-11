@@ -7,22 +7,6 @@
       "path": "vaadin-text-field.html",
       "attributes": [
         {
-          "name": "autocomplete",
-          "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
-          "sourceRange": {
-            "start": {
-              "line": 124,
-              "column": 10
-            },
-            "end": {
-              "line": 126,
-              "column": 11
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
           "name": "autofocus",
           "description": "Specify that this control should have input focus when the page loads.",
           "sourceRange": {
@@ -37,6 +21,58 @@
           },
           "metadata": {},
           "type": "boolean"
+        },
+        {
+          "name": "focused",
+          "description": "If true, the element currently has focus.",
+          "sourceRange": {
+            "file": "vaadin-control-state-mixin.html",
+            "start": {
+              "line": 51,
+              "column": 8
+            },
+            "end": {
+              "line": 56,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "Vaadin.ControlStateMixin"
+        },
+        {
+          "name": "disabled",
+          "description": "If true, the user cannot interact with this element.",
+          "sourceRange": {
+            "file": "vaadin-control-state-mixin.html",
+            "start": {
+              "line": 61,
+              "column": 8
+            },
+            "end": {
+              "line": 65,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "boolean",
+          "inheritedFrom": "Vaadin.ControlStateMixin"
+        },
+        {
+          "name": "autocomplete",
+          "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
+          "sourceRange": {
+            "start": {
+              "line": 124,
+              "column": 10
+            },
+            "end": {
+              "line": 126,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
         },
         {
           "name": "label",
@@ -265,6 +301,72 @@
       ],
       "properties": [
         {
+          "name": "autofocus",
+          "type": "boolean",
+          "description": "Specify that this control should have input focus when the page loads.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 131,
+              "column": 10
+            },
+            "end": {
+              "line": 133,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "focused",
+          "type": "boolean",
+          "description": "If true, the element currently has focus.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "vaadin-control-state-mixin.html",
+            "start": {
+              "line": 51,
+              "column": 8
+            },
+            "end": {
+              "line": 56,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "readOnly": true
+            }
+          },
+          "inheritedFrom": "Vaadin.ControlStateMixin"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "If true, the user cannot interact with this element.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "vaadin-control-state-mixin.html",
+            "start": {
+              "line": 61,
+              "column": 8
+            },
+            "end": {
+              "line": 65,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_disabledChanged\""
+            }
+          },
+          "inheritedFrom": "Vaadin.ControlStateMixin"
+        },
+        {
           "name": "_parentForm",
           "type": "Object",
           "description": "The form that the element is registered to.",
@@ -297,25 +399,6 @@
             },
             "end": {
               "line": 126,
-              "column": 11
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "autofocus",
-          "type": "boolean",
-          "description": "Specify that this control should have input focus when the page loads.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 131,
-              "column": 10
-            },
-            "end": {
-              "line": 133,
               "column": 11
             }
           },
@@ -625,11 +708,11 @@
           "sourceRange": {
             "file": "vaadin-control-state-mixin.html",
             "start": {
-              "line": 91,
+              "line": 101,
               "column": 4
             },
             "end": {
-              "line": 99,
+              "line": 109,
               "column": 5
             }
           },
@@ -648,11 +731,11 @@
           "sourceRange": {
             "file": "vaadin-control-state-mixin.html",
             "start": {
-              "line": 106,
+              "line": 116,
               "column": 4
             },
             "end": {
-              "line": 108,
+              "line": 118,
               "column": 5
             }
           },
@@ -667,11 +750,11 @@
           "sourceRange": {
             "file": "vaadin-control-state-mixin.html",
             "start": {
-              "line": 110,
+              "line": 120,
               "column": 4
             },
             "end": {
-              "line": 119,
+              "line": 129,
               "column": 5
             }
           },
@@ -690,11 +773,11 @@
           "sourceRange": {
             "file": "vaadin-control-state-mixin.html",
             "start": {
-              "line": 121,
+              "line": 131,
               "column": 4
             },
             "end": {
-              "line": 133,
+              "line": 143,
               "column": 5
             }
           },
