@@ -1,8 +1,11 @@
 <script>
   window.Vaadin = window.Vaadin || {};
 
-  // Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
-  // implementation fails in the shadow dom, so we have this for vaadin elements.
+  /**
+   * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
+   * implementation fails in the shadow dom, so we have this for vaadin elements.
+   * @polymerMixin
+   */
   Vaadin.ControlStateMixin = subclass => class VaadinControlStateMixin extends subclass {
     static get properties() {
       var cfg = {
@@ -96,8 +99,11 @@
       this.focusElement.focus();
     }
 
-    // Native bluring in the host element does nothing because it does not have the focus.
-    // In chrome it works, but not in FF.
+    /**
+     * Native bluring in the host element does nothing because it does not have the focus.
+     * In chrome it works, but not in FF.
+     * @private
+     */
     blur() {
       this.focusElement.blur();
     }
