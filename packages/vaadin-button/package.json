@@ -34,6 +34,6 @@
     "polyserve": "^0.15.0",
     "polymer-cli": "next",
     "stylelint-config-vaadin": "^0.1.0",
-    "web-component-tester": "^5.0.0"
+    "web-component-tester": "^6.0.0-prerelease.6"
   }
 }
