@@ -4,61 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-`<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.
-
-```html
-<vaadin-form-layout>
-  <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
-  <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
-  <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
-</vaadin-form-layout>
-```
-
-It supports any child elements as layout items.
-
-By default, it makes a layout of two columns if the element width is equal or
-wider than 40em, and a single column layout otherwise.
-
-The number of columns and the responsive behavior are customizable with
-the `columns` property.
-
-### Spanning Items on Multiple Columns
-
-You can use `colspan` attribute on the items.
-In the example below, the first text field spans on two columns:
-
-<vaadin-form-layout>
-  <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
-  <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
-  <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
-</vaadin-form-layout>
-
-### Explicit New Row
-
-Use the `<br>` line break element to wrap the items on a new row:
-
-```html
-<vaadin-form-layout>
-  <vaadin-text-field label="Email"></vaadin-text-field>
-  <br>
-  <vaadin-text-field label="Confirm Email"></vaadin-text-field>
-</vaadin-form-layout>
-```
-
-### CSS Properties Reference
-
-The following custom CSS properties are available on the `<vaadin-form-layout>`
-element:
-
-Custom CSS property | Description | Default
----|---|---
-`--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
-
-@polymerElement vaadin-form-layout
-@demo demo/index.html
--->
-
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
@@ -117,6 +62,60 @@ Custom CSS property | Description | Default
   </template>
 
   <script>
+    /**
+     * `<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.
+     *
+     * ```html
+     * <vaadin-form-layout>
+     *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+     *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+     *   <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+     * </vaadin-form-layout>
+     * ```
+     *
+     * It supports any child elements as layout items.
+     *
+     * By default, it makes a layout of two columns if the element width is equal or
+     * wider than 40em, and a single column layout otherwise.
+     *
+     * The number of columns and the responsive behavior are customizable with
+     * the `columns` property.
+     *
+     * ### Spanning Items on Multiple Columns
+     *
+     * You can use `colspan` attribute on the items.
+     * In the example below, the first text field spans on two columns:
+     *
+     * <vaadin-form-layout>
+     *   <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
+     *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+     *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+     * </vaadin-form-layout>
+     *
+     * ### Explicit New Row
+     *
+     * Use the `<br>` line break element to wrap the items on a new row:
+     *
+     * ```html
+     * <vaadin-form-layout>
+     *   <vaadin-text-field label="Email"></vaadin-text-field>
+     *   <br>
+     *   <vaadin-text-field label="Confirm Email"></vaadin-text-field>
+     * </vaadin-form-layout>
+     * ```
+     *
+     * ### CSS Properties Reference
+     *
+     * The following custom CSS properties are available on the `<vaadin-form-layout>`
+     * element:
+     *
+     * Custom CSS property | Description | Default
+     * ---|---|---
+     * `--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
+     *
+     * @mixes Vaadin.ThemableMixin
+     * @demo demo/index.html
+     */
     class VaadinFormLayoutElement extends
         Vaadin.ThemableMixin(
             Polymer.mixinBehaviors(
