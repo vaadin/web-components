@@ -10,17 +10,19 @@
           "name": "autofocus",
           "description": "Specify that this control should have input focus when the page loads.",
           "sourceRange": {
+            "file": "vaadin-control-state-mixin.html",
             "start": {
-              "line": 131,
-              "column": 10
+              "line": 44,
+              "column": 8
             },
             "end": {
-              "line": 133,
-              "column": 11
+              "line": 46,
+              "column": 9
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "boolean",
+          "inheritedFrom": "Vaadin.ControlStateMixin"
         },
         {
           "name": "focused",
@@ -63,11 +65,27 @@
           "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
           "sourceRange": {
             "start": {
-              "line": 124,
+              "line": 127,
               "column": 10
             },
             "end": {
-              "line": 126,
+              "line": 129,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "error-message",
+          "description": "Error to show when the input value is invalid.",
+          "sourceRange": {
+            "start": {
+              "line": 134,
+              "column": 10
+            },
+            "end": {
+              "line": 137,
               "column": 11
             }
           },
@@ -79,11 +97,11 @@
           "description": "String used for the label element.",
           "sourceRange": {
             "start": {
-              "line": 138,
+              "line": 142,
               "column": 10
             },
             "end": {
-              "line": 141,
+              "line": 145,
               "column": 11
             }
           },
@@ -95,11 +113,11 @@
           "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
           "sourceRange": {
             "start": {
-              "line": 147,
+              "line": 151,
               "column": 10
             },
             "end": {
-              "line": 149,
+              "line": 153,
               "column": 11
             }
           },
@@ -111,11 +129,11 @@
           "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
           "sourceRange": {
             "start": {
-              "line": 156,
+              "line": 160,
               "column": 10
             },
             "end": {
-              "line": 158,
+              "line": 162,
               "column": 11
             }
           },
@@ -127,11 +145,11 @@
           "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
           "sourceRange": {
             "start": {
-              "line": 165,
+              "line": 169,
               "column": 10
             },
             "end": {
-              "line": 167,
+              "line": 171,
               "column": 11
             }
           },
@@ -143,11 +161,11 @@
           "description": "The name of the control, which is submitted with the form data.",
           "sourceRange": {
             "start": {
-              "line": 172,
+              "line": 176,
               "column": 10
             },
             "end": {
-              "line": 174,
+              "line": 178,
               "column": 11
             }
           },
@@ -159,11 +177,11 @@
           "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.\nThis attribute applies when the value of the type attribute is text, search, tel,\nurl, email, or password, otherwise it is ignored.",
           "sourceRange": {
             "start": {
-              "line": 182,
+              "line": 186,
               "column": 10
             },
             "end": {
-              "line": 184,
+              "line": 188,
               "column": 11
             }
           },
@@ -175,11 +193,11 @@
           "description": "A hint to the user of what can be entered in the control.",
           "sourceRange": {
             "start": {
-              "line": 189,
+              "line": 193,
               "column": 10
             },
             "end": {
-              "line": 191,
+              "line": 195,
               "column": 11
             }
           },
@@ -191,11 +209,11 @@
           "description": "This attribute indicates that the user cannot modify the value of the control.",
           "sourceRange": {
             "start": {
-              "line": 196,
+              "line": 200,
               "column": 10
             },
             "end": {
-              "line": 198,
+              "line": 202,
               "column": 11
             }
           },
@@ -207,11 +225,11 @@
           "description": "Specifies that the user must fill in a value.",
           "sourceRange": {
             "start": {
-              "line": 203,
+              "line": 207,
               "column": 10
             },
             "end": {
-              "line": 205,
+              "line": 209,
               "column": 11
             }
           },
@@ -223,11 +241,11 @@
           "description": "Message to show to the user when validation fails.",
           "sourceRange": {
             "start": {
-              "line": 210,
+              "line": 214,
               "column": 10
             },
             "end": {
-              "line": 212,
+              "line": 216,
               "column": 11
             }
           },
@@ -239,11 +257,11 @@
           "description": "The initial value of the control.\nIt can be used for two-way data binding.",
           "sourceRange": {
             "start": {
-              "line": 218,
+              "line": 222,
               "column": 10
             },
             "end": {
-              "line": 222,
+              "line": 226,
               "column": 11
             }
           },
@@ -255,11 +273,11 @@
           "description": "This property is set to true when the control value invalid.",
           "sourceRange": {
             "start": {
-              "line": 227,
+              "line": 231,
               "column": 10
             },
             "end": {
-              "line": 231,
+              "line": 236,
               "column": 11
             }
           },
@@ -271,11 +289,11 @@
           "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
           "sourceRange": {
             "start": {
-              "line": 237,
+              "line": 242,
               "column": 10
             },
             "end": {
-              "line": 243,
+              "line": 248,
               "column": 11
             }
           },
@@ -287,11 +305,11 @@
           "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
           "sourceRange": {
             "start": {
-              "line": 249,
+              "line": 254,
               "column": 10
             },
             "end": {
-              "line": 249,
+              "line": 254,
               "column": 38
             }
           },
@@ -306,18 +324,20 @@
           "description": "Specify that this control should have input focus when the page loads.",
           "privacy": "public",
           "sourceRange": {
+            "file": "vaadin-control-state-mixin.html",
             "start": {
-              "line": 131,
-              "column": 10
+              "line": 44,
+              "column": 8
             },
             "end": {
-              "line": 133,
-              "column": 11
+              "line": 46,
+              "column": 9
             }
           },
           "metadata": {
             "polymer": {}
-          }
+          },
+          "inheritedFrom": "Vaadin.ControlStateMixin"
         },
         {
           "name": "focused",
@@ -394,11 +414,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 124,
+              "line": 127,
               "column": 10
             },
             "end": {
-              "line": 126,
+              "line": 129,
               "column": 11
             }
           },
@@ -407,17 +427,37 @@
           }
         },
         {
+          "name": "errorMessage",
+          "type": "string",
+          "description": "Error to show when the input value is invalid.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 134,
+              "column": 10
+            },
+            "end": {
+              "line": 137,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
           "name": "label",
           "type": "string",
           "description": "String used for the label element.",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 138,
+              "line": 142,
               "column": 10
             },
             "end": {
-              "line": 141,
+              "line": 145,
               "column": 11
             }
           },
@@ -433,11 +473,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 147,
+              "line": 151,
               "column": 10
             },
             "end": {
-              "line": 149,
+              "line": 153,
               "column": 11
             }
           },
@@ -452,11 +492,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 156,
+              "line": 160,
               "column": 10
             },
             "end": {
-              "line": 158,
+              "line": 162,
               "column": 11
             }
           },
@@ -471,11 +511,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 165,
+              "line": 169,
               "column": 10
             },
             "end": {
-              "line": 167,
+              "line": 171,
               "column": 11
             }
           },
@@ -490,11 +530,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 172,
+              "line": 176,
               "column": 10
             },
             "end": {
-              "line": 174,
+              "line": 178,
               "column": 11
             }
           },
@@ -509,11 +549,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 182,
+              "line": 186,
               "column": 10
             },
             "end": {
-              "line": 184,
+              "line": 188,
               "column": 11
             }
           },
@@ -528,11 +568,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 189,
+              "line": 193,
               "column": 10
             },
             "end": {
-              "line": 191,
+              "line": 195,
               "column": 11
             }
           },
@@ -547,11 +587,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 196,
+              "line": 200,
               "column": 10
             },
             "end": {
-              "line": 198,
+              "line": 202,
               "column": 11
             }
           },
@@ -566,11 +606,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 203,
+              "line": 207,
               "column": 10
             },
             "end": {
-              "line": 205,
+              "line": 209,
               "column": 11
             }
           },
@@ -585,11 +625,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 210,
+              "line": 214,
               "column": 10
             },
             "end": {
-              "line": 212,
+              "line": 216,
               "column": 11
             }
           },
@@ -604,11 +644,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 218,
+              "line": 222,
               "column": 10
             },
             "end": {
-              "line": 222,
+              "line": 226,
               "column": 11
             }
           },
@@ -626,11 +666,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 227,
+              "line": 231,
               "column": 10
             },
             "end": {
-              "line": 231,
+              "line": 236,
               "column": 11
             }
           },
@@ -638,7 +678,8 @@
             "polymer": {
               "notify": true
             }
-          }
+          },
+          "defaultValue": "false"
         },
         {
           "name": "hasValue",
@@ -647,11 +688,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 237,
+              "line": 242,
               "column": 10
             },
             "end": {
-              "line": 243,
+              "line": 248,
               "column": 11
             }
           },
@@ -670,11 +711,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 249,
+              "line": 254,
               "column": 10
             },
             "end": {
-              "line": 249,
+              "line": 254,
               "column": 38
             }
           },
@@ -690,11 +731,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 290,
+              "line": 299,
               "column": 6
             },
             "end": {
-              "line": 295,
+              "line": 308,
               "column": 7
             }
           },
@@ -833,11 +874,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 257,
+              "line": 262,
               "column": 6
             },
             "end": {
-              "line": 264,
+              "line": 269,
               "column": 7
             }
           },
@@ -854,11 +895,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 266,
+              "line": 271,
               "column": 6
             },
             "end": {
-              "line": 271,
+              "line": 276,
               "column": 7
             }
           },
@@ -875,11 +916,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 279,
+              "line": 284,
               "column": 6
             },
             "end": {
-              "line": 281,
+              "line": 286,
               "column": 7
             }
           },
@@ -887,16 +928,40 @@
           "params": []
         },
         {
+          "name": "_hasError",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 288,
+              "column": 6
+            },
+            "end": {
+              "line": 290,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "invalid"
+            },
+            {
+              "name": "errorMessage"
+            }
+          ]
+        },
+        {
           "name": "checkValidity",
           "description": "Returns true if the current input value satisfies all constraints (if any)",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 286,
+              "line": 295,
               "column": 6
             },
             "end": {
-              "line": 288,
+              "line": 297,
               "column": 7
             }
           },
@@ -909,11 +974,11 @@
           "privacy": "private",
           "sourceRange": {
             "start": {
-              "line": 297,
+              "line": 310,
               "column": 6
             },
             "end": {
-              "line": 304,
+              "line": 317,
               "column": 7
             }
           },
@@ -943,11 +1008,11 @@
           "range": {
             "file": "vaadin-text-field.html",
             "start": {
-              "line": 67,
+              "line": 68,
               "column": 8
             },
             "end": {
-              "line": 67,
+              "line": 68,
               "column": 35
             }
           }
@@ -958,11 +1023,11 @@
           "range": {
             "file": "vaadin-text-field.html",
             "start": {
-              "line": 91,
+              "line": 94,
               "column": 8
             },
             "end": {
-              "line": 91,
+              "line": 94,
               "column": 35
             }
           }
@@ -1005,11 +1070,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 112,
+          "line": 115,
           "column": 4
         },
         "end": {
-          "line": 305,
+          "line": 318,
           "column": 5
         }
       },

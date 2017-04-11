@@ -20,7 +20,7 @@
           reflectToAttribute: true,
           observer: '_tabindexChanged'
         }
-      }
+      };
 
       if (window.ShadyDOM) {
         // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
@@ -29,7 +29,7 @@
 
       return cfg;
     }
-  }
+  };
 
   /**
    * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
@@ -40,7 +40,7 @@
     static get properties() {
       return {
         /**
-         * If true, the element currently has focus.
+         * Specify that this control should have input focus when the page loads.
          */
         autofocus: {
           type: Boolean
