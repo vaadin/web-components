@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-button Styling Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+
+    <demo-navigation></demo-navigation>
+
+    <h3>Styling</h3>
+
+    <p>
+      Define a custom style module with a <code>theme-for</code> attribute to target
+      a specific Vaadin Element type.
+      <br>
+      To stay on a safe side, only apply custom styles to either the element
+      itself (<code>:host</code>) or the exposed shadow parts (<code>[part~="name"]</code>).
+    </p>
+    <p>
+      <b>NOTE: The custom style module must be defined/imported before the element
+      it targets.</b>
+    </p>
+
+    <demo-snippet>
+      <template>
+        <dom-module id="button-styles" theme-for="vaadin-button">
+          <template>
+            <style>
+              [part~="button"] {
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.4;
+                cursor: pointer;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                color: #333;
+              }
+
+              [part~="button"]:active {
+                box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+              }
+
+              :host([focused]) [part~="button"] {
+                outline: 5px auto -webkit-focus-ring-color;
+                outline-offset: -2px;
+              }
+
+              [part~="button"]::-moz-focus-inner {
+                border: 0;
+              }
+
+              :host(.default) [part~="button"] {
+                background-color: #fff;
+                border-color: #ccc;
+              }
+
+              :host(.default) [part~="button"]:hover,
+              :host(.default[focused]) [part~="button"] {
+                background-color: #e6e6e6;
+                border-color: #adadad;
+              }
+
+              :host(.primary) [part~="button"] {
+                color: #fff;
+                background-color: #337ab7;
+                border-color: #2e6da4;
+              }
+
+              :host(.primary) [part~="button"]:hover,
+              :host(.primary[focused]) [part~="button"] {
+                background-color: #286090;
+                border-color: #204d74;
+              }
+            </style>
+          </template>
+        </dom-module>
+
+        <vaadin-button>Vaadin Button</vaadin-button>
+        <vaadin-button class="default">Default</vaadin-button>
+        <vaadin-button class="primary">Primary</vaadin-button>
+      </template>
+    </demo-snippet>
+
+</body>
+</html>

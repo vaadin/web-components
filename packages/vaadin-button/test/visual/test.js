@@ -17,4 +17,11 @@ gemini.suite('vaadin-button', function(rootSuite) {
       });
   });
 
+  gemini.suite('styling', function(suite) {
+    suite
+      .setUrl('styling.html')
+      .setCaptureElements('vaadin-button')
+      .capture('default', {}, wait);
+  });
+
 });
