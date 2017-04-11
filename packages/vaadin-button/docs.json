@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "`<vaadin-button>` is a Polymer element for customized buttons.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element",
+      "summary": "",
+      "path": "vaadin-button.html",
+      "attributes": [],
+      "properties": [],
+      "methods": [
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 54,
+              "column": 6
+            },
+            "end": {
+              "line": 63,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "demos": [],
+      "slots": [
+        {
+          "description": "",
+          "name": "",
+          "range": {
+            "file": "vaadin-button.html",
+            "start": {
+              "line": 29,
+              "column": 6
+            },
+            "end": {
+              "line": 29,
+              "column": 19
+            }
+          }
+        }
+      ],
+      "events": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 53,
+          "column": 4
+        },
+        "end": {
+          "line": 72,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "tagname": "vaadin-button",
+      "classname": "VaadinButtonElement",
+      "mixins": [
+        "Vaadin.ControlStateMixin",
+        "Vaadin.ThemableMixin"
+      ],
+      "superclass": "HTMLElement"
+    }
+  ]
+}
