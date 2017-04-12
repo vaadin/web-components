@@ -112,7 +112,7 @@
       // focus-ring is true when the element was focused from the keyboard.
       // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
       if (this.focused && this._tabPressed) {
-        this.setAttribute('focus-ring', true);
+        this.setAttribute('focus-ring', '');
       } else {
         this.removeAttribute('focus-ring');
       }
