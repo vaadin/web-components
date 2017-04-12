@@ -62,219 +62,228 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    /**
-     * `<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.
-     *
-     * ```html
-     * <vaadin-form-layout>
-     *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
-     *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
-     *   <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
-     * </vaadin-form-layout>
-     * ```
-     *
-     * It supports any child elements as layout items.
-     *
-     * By default, it makes a layout of two columns if the element width is equal or
-     * wider than 40em, and a single column layout otherwise.
-     *
-     * The number of columns and the responsive behavior are customizable with
-     * the `columns` property.
-     *
-     * ### Spanning Items on Multiple Columns
-     *
-     * You can use `colspan` attribute on the items.
-     * In the example below, the first text field spans on two columns:
-     *
-     * <vaadin-form-layout>
-     *   <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
-     *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
-     *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
-     * </vaadin-form-layout>
-     *
-     * ### Explicit New Row
-     *
-     * Use the `<br>` line break element to wrap the items on a new row:
-     *
-     * ```html
-     * <vaadin-form-layout>
-     *   <vaadin-text-field label="Email"></vaadin-text-field>
-     *   <br>
-     *   <vaadin-text-field label="Confirm Email"></vaadin-text-field>
-     * </vaadin-form-layout>
-     * ```
-     *
-     * ### CSS Properties Reference
-     *
-     * The following custom CSS properties are available on the `<vaadin-form-layout>`
-     * element:
-     *
-     * Custom CSS property | Description | Default
-     * ---|---|---
-     * `--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
-     *
-     * @mixes Vaadin.ThemableMixin
-     * @demo demo/index.html
-     */
-    class VaadinFormLayoutElement extends
-        Vaadin.ThemableMixin(
-            Polymer.mixinBehaviors(
-                [Polymer.IronResizableBehavior],
-                Polymer.Element
-            )
-        ) {
-      static get is() {
-        return 'vaadin-form-layout';
-      }
+    (function() {
+      /**
+       * `<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.
+       *
+       * ```html
+       * <vaadin-form-layout>
+       *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+       *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+       *   <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+       * </vaadin-form-layout>
+       * ```
+       *
+       * It supports any child elements as layout items.
+       *
+       * By default, it makes a layout of two columns if the element width is equal or
+       * wider than 40em, and a single column layout otherwise.
+       *
+       * The number of columns and the responsive behavior are customizable with
+       * the `columns` property.
+       *
+       * ### Spanning Items on Multiple Columns
+       *
+       * You can use `colspan` attribute on the items.
+       * In the example below, the first text field spans on two columns:
+       *
+       * <vaadin-form-layout>
+       *   <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
+       *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
+       *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+       * </vaadin-form-layout>
+       *
+       * ### Explicit New Row
+       *
+       * Use the `<br>` line break element to wrap the items on a new row:
+       *
+       * ```html
+       * <vaadin-form-layout>
+       *   <vaadin-text-field label="Email"></vaadin-text-field>
+       *   <br>
+       *   <vaadin-text-field label="Confirm Email"></vaadin-text-field>
+       * </vaadin-form-layout>
+       * ```
+       *
+       * ### CSS Properties Reference
+       *
+       * The following custom CSS properties are available on the `<vaadin-form-layout>`
+       * element:
+       *
+       * Custom CSS property | Description | Default
+       * ---|---|---
+       * `--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class FormLayoutElement extends
+          Vaadin.ThemableMixin(
+              Polymer.mixinBehaviors(
+                  [Polymer.IronResizableBehavior],
+                  Polymer.Element
+              )
+          ) {
+        static get is() {
+          return 'vaadin-form-layout';
+        }
 
-      static get properties() {
-        return {
-          /**
-           * Number of columns in the layout. Allows specifying a responsive
-           * behavior with the number of columns depending on the layout width.
-           *
-           * The value is a comma-separated list of one or more responsive
-           * steps, each responsive step is a space-separated list of the column
-           * count and the corresponding min-width threshold.
-           *
-           * The min-width thresholds are CSS length values specifying the
-           * minimum width of the layout for each responsive step.
-           *
-           * Formal syntax:
-           *     <responsive-step> [ , <responsive-step> ]*
-           * where
-           *     <responsive-step> = <column-count> [ <min-width> ]?
-           *
-           * <column-count> = <integer>
-           *     Number of columns, assumed as 1 if zero or negative.
-           * <min-width> = <length>
-           *     Minimum width of the layout corresponding to this step.
-           *     Optional, assumed as 0 if omitted.
-           *
-           * Examples:
-           *
-           * `1`
-           *     The layout is always a single column.
-           * `1, 2 40em`
-           *     The layout is two-column when the layout width is >= 40em, and
-           *     single-column otherwise.
-           */
-          columns: {
-            type: String,
-            value: '1, 2 40em',
-            observer: '_columnsChanged'
-          },
-
-          /**
-           * Parsed value of the columns property
-           */
-          _parsedResponsiveSteps: Array,
-
-          /**
-           * Current number of columns in the layout
-           */
-          _columnCount: {
-            type: Number,
-            observer: '_columnCountChanged'
-          }
-        };
-      }
-
-      ready() {
-        super.ready();
-
-        this.addEventListener('iron-resize', this._selectResponsiveStep);
-      }
-
-      connectedCallback() {
-        super.connectedCallback();
-
-        Polymer.RenderStatus.beforeNextRender(this, this._selectResponsiveStep);
-        Polymer.RenderStatus.beforeNextRender(this, this.updateStyles);
-      }
-
-      _naturalNumberOrOne(n) {
-        if (typeof n === 'number' && n >= 1 && n < Infinity) return Math.floor(n);
-        return 1;
-      }
-
-      _parseResponsiveSteps(columns) {
-        return columns.toString().split(',').map(parts => {
-          const [columns, minWidth] = parts.trim().split(/\s+/);
+        static get properties() {
           return {
-            columns: this._naturalNumberOrOne(parseInt(columns, 10)),
-            minWidth: minWidth || 0
+            /**
+             * Number of columns in the layout. Allows specifying a responsive
+             * behavior with the number of columns depending on the layout width.
+             *
+             * The value is a comma-separated list of one or more responsive
+             * steps, each responsive step is a space-separated list of the column
+             * count and the corresponding min-width threshold.
+             *
+             * The min-width thresholds are CSS length values specifying the
+             * minimum width of the layout for each responsive step.
+             *
+             * Formal syntax:
+             *     <responsive-step> [ , <responsive-step> ]*
+             * where
+             *     <responsive-step> = <column-count> [ <min-width> ]?
+             *
+             * <column-count> = <integer>
+             *     Number of columns, assumed as 1 if zero or negative.
+             * <min-width> = <length>
+             *     Minimum width of the layout corresponding to this step.
+             *     Optional, assumed as 0 if omitted.
+             *
+             * Examples:
+             *
+             * `1`
+             *     The layout is always a single column.
+             * `1, 2 40em`
+             *     The layout is two-column when the layout width is >= 40em, and
+             *     single-column otherwise.
+             */
+            columns: {
+              type: String,
+              value: '1, 2 40em',
+              observer: '_columnsChanged'
+            },
+
+            /**
+             * Parsed value of the columns property
+             */
+            _parsedResponsiveSteps: Array,
+
+            /**
+             * Current number of columns in the layout
+             */
+            _columnCount: {
+              type: Number,
+              observer: '_columnCountChanged'
+            }
           };
-        });
-      }
+        }
 
-      _columnsChanged(columns) {
-        this._parsedResponsiveSteps = this._parseResponsiveSteps(columns || '1, 2 40em');
-        this._selectResponsiveStep();
-      }
+        ready() {
+          super.ready();
 
-      _selectResponsiveStep() {
-        // Iterate through _parsedResponsiveSteps and choose the step
-        let selectedStep;
-        const tmpStyleProp = 'background-position';
-        this._parsedResponsiveSteps.forEach(step => {
-          // Convert minWidth to px units for comparison
-          this.$.layout.style.setProperty(tmpStyleProp, step.minWidth);
-          const stepMinWidthPx = parseFloat(getComputedStyle(this.$.layout).getPropertyValue(tmpStyleProp));
+          this.addEventListener('iron-resize', this._selectResponsiveStep);
+        }
 
-          // Compare step min-width with the host width, select the passed step
-          if (stepMinWidthPx <= this.offsetWidth) {
-            selectedStep = step;
+        connectedCallback() {
+          super.connectedCallback();
+
+          Polymer.RenderStatus.beforeNextRender(this, this._selectResponsiveStep);
+          Polymer.RenderStatus.beforeNextRender(this, this.updateStyles);
+        }
+
+        _naturalNumberOrOne(n) {
+          if (typeof n === 'number' && n >= 1 && n < Infinity) return Math.floor(n);
+          return 1;
+        }
+
+        _parseResponsiveSteps(columns) {
+          return columns.toString().split(',').map(parts => {
+            const [columns, minWidth] = parts.trim().split(/\s+/);
+            return {
+              columns: this._naturalNumberOrOne(parseInt(columns, 10)),
+              minWidth: minWidth || 0
+            };
+          });
+        }
+
+        _columnsChanged(columns) {
+          this._parsedResponsiveSteps = this._parseResponsiveSteps(columns || '1, 2 40em');
+          this._selectResponsiveStep();
+        }
+
+        _selectResponsiveStep() {
+          // Iterate through _parsedResponsiveSteps and choose the step
+          let selectedStep;
+          const tmpStyleProp = 'background-position';
+          this._parsedResponsiveSteps.forEach(step => {
+            // Convert minWidth to px units for comparison
+            this.$.layout.style.setProperty(tmpStyleProp, step.minWidth);
+            const stepMinWidthPx = parseFloat(getComputedStyle(this.$.layout).getPropertyValue(tmpStyleProp));
+
+            // Compare step min-width with the host width, select the passed step
+            if (stepMinWidthPx <= this.offsetWidth) {
+              selectedStep = step;
+            }
+          });
+          this.$.layout.style.removeProperty(tmpStyleProp);
+
+          // Sometimes converting units is not possible, e.g, when element is
+          // not connected. Then the `selectedStep` stays `undefined`.
+          if (selectedStep) {
+            // Update column count to the chosen responsive step’s value
+            this._columnCount = selectedStep.columns;
           }
-        });
-        this.$.layout.style.removeProperty(tmpStyleProp);
+        }
 
-        // Sometimes converting units is not possible, e.g, when element is
-        // not connected. Then the `selectedStep` stays `undefined`.
-        if (selectedStep) {
-          // Update column count to the chosen responsive step’s value
-          this._columnCount = selectedStep.columns;
+        _columnCountChanged() {
+          this.updateStyles();
+        }
+
+        /**
+        * Update the item widths, column gaps and other styles.
+        */
+        updateStyles(...args) {
+          super.updateStyles(...args);
+
+          /*
+            The item width formula:
+
+                itemWidth = colspan / columnCount * 100% - columnGap
+
+            We have to subtract columnGap, because the column gap space is taken
+            by item margins of 1/2 * gap on both sides
+          */
+
+          const columnGap = window.ShadyCSS
+            ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
+            : getComputedStyle(this, '--vaadin-form-layout-column-gap');
+
+          Array.from(this.children).forEach(child => {
+            let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
+
+            // Never span further than the number of columns
+            colspan = Math.min(colspan, this._columnCount); 
+
+            const childRatio = colspan / this._columnCount;
+
+            // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
+            // otherwise the items might wrap, resizing is wobbly
+            child.style.width = `calc(${childRatio * 99.999}% - ${columnGap})`;
+          });
         }
       }
 
-      _columnCountChanged() {
-        this.updateStyles();
-      }
+      customElements.define(FormLayoutElement.is, FormLayoutElement);
 
       /**
-       * Update the item widths, column gaps and other styles.
+       * @namespace Vaadin
        */
-      updateStyles(...args) {
-        super.updateStyles(...args);
-
-        /*
-          The item width formula:
-
-              itemWidth = colspan / columnCount * 100% - columnGap
-
-          We have to subtract columnGap, because the column gap space is taken
-          by item margins of 1/2 * gap on both sides
-        */
-
-        const columnGap = window.ShadyCSS
-          ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
-          : getComputedStyle(this, '--vaadin-form-layout-column-gap');
-
-        Array.from(this.children).forEach(child => {
-          let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
-
-          // Never span further than the number of columns
-          colspan = Math.min(colspan, this._columnCount); 
-
-          const childRatio = colspan / this._columnCount;
-
-          // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
-          // otherwise the items might wrap, resizing is wobbly
-          child.style.width = `calc(${childRatio * 99.999}% - ${columnGap})`;
-        });
-      }
-    }
-
-    customElements.define(VaadinFormLayoutElement.is, VaadinFormLayoutElement);
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.FormLayoutElement = FormLayoutElement;
+    })();
   </script>
 </dom-module>
