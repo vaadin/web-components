@@ -35,7 +35,7 @@
     "paper-progress": "PolymerElements/paper-progress#^1.0.0",
     "paper-ripple": "PolymerElements/paper-ripple#~1.0.0",
     "paper-styles": "PolymerElements/paper-styles#^1.0.0",
-    "polymer": "Polymer/polymer#^1.2.4"
+    "polymer": "Polymer/polymer#^1.7.0"
   },
   "devDependencies": {
     "elements-demo-resources": "Vaadin/elements-demo-resources#master",
