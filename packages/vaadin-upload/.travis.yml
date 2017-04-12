@@ -20,7 +20,10 @@ before_script:
   - ([ "$TRAVIS_EVENT_TYPE" = "pull_request" ] || TRAVIS_BRANCH=quick/${TRAVIS_BUILD_ID} xvfb-run -s '-screen 0 1024x768x24' polymer test)
 
 script:
+  # test against Polymer 1
   - xvfb-run -s '-screen 0 1024x768x24' wct
+
+  # test against Polymer 2
   - rm -rf bower_components
   - mv bower_components-polymer2 bower_components
   - xvfb-run -s '-screen 0 1024x768x24' wct
