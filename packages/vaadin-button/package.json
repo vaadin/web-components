@@ -30,7 +30,7 @@
     "gulp-html-extract": "^0.0.3",
     "gulp-eslint": "^3.0.1",
     "gulp-stylelint": "^3.7.0",
-    "lighthouse": "~1.2.2",
+    "lighthouse": "~1.6.0",
     "polyserve": "^0.15.0",
     "polymer-cli": "next",
     "stylelint-config-vaadin": "^0.1.0",
