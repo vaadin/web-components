@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../../polymer/polymer.html" rel="import">
   <link href="../../vaadin-text-field.html" rel="import">
+  <link href="./common.html" rel="import">
 </head>
 
 <body>
@@ -28,7 +28,7 @@
       <p>
       value: <vaadin-text-field value="Go Vaadin"></vaadin-text-field>
       <p>
-      focused: <vaadin-text-field autofocus id="hidden-caret"></vaadin-text-field>
+      focused: <vaadin-text-field autofocus class="hidden-caret"></vaadin-text-field>
       <p>
       disabled: <vaadin-text-field disabled></vaadin-text-field>
       <p>
@@ -55,14 +55,5 @@
         </vaadin-text-field>
     </fieldset>
   </form>
-
-  <script>
-    HTMLImports.whenReady(function() {
-      const style = document.querySelector('#hidden-caret').$.input.style;
-      style.fontSize = '0';
-      style.padding = '0 100px';
-      style.height = '24px';
-    });
-  </script>
 
 </body>

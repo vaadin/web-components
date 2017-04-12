@@ -7,14 +7,14 @@
    */
   Vaadin.TabIndexMixin = subclass => class VaadinTabIndexMixin extends subclass {
     static get properties() {
-      var cfg = {
-         /**
+      var properties = {
+        /**
          * Internal property needed to listen to `tabindex` attribute changes.
          *
          * For changing the tabindex of this component use the native `tabIndex` propety.
          * @private
          */
-        'tabindex': {
+        tabindex: {
           type: Number,
           value: 0,
           reflectToAttribute: true,
@@ -24,10 +24,10 @@
 
       if (window.ShadyDOM) {
         // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
-        cfg['tabIndex'] = cfg.tabindex;
+        properties['tabIndex'] = properties.tabindex;
       }
 
-      return cfg;
+      return properties;
     }
   };
 
@@ -53,6 +53,7 @@
           type: Boolean,
           notify: true,
           readOnly: true,
+          observer: '_focusedChanged',
           reflectToAttribute: true
         },
 
@@ -88,6 +89,41 @@
       if (this.autofocus && !this.focused) {
         window.requestAnimationFrame(() => this.focus());
       }
+
+      this._boundKeydownListener = this._bodyKeydownListener.bind(this);
+      this._boundKeyupListener = this._bodyKeyupListener.bind(this);
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+
+      document.body.addEventListener('keydown', this._boundKeydownListener, true);
+      document.body.addEventListener('keyup', this._boundKeyupListener, true);
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      document.body.removeEventListener('keydown', this._boundKeydownListener, true);
+      document.body.removeEventListener('keyup', this._boundKeyupListener, true);
+    }
+
+    _focusedChanged(focused) {
+      // focus-ring is true when the element was focused from the keyboard.
+      // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
+      if (this.focused && this._tabPressed) {
+        this.setAttribute('focus-ring', true);
+      } else {
+        this.removeAttribute('focus-ring');
+      }
+    }
+
+    _bodyKeydownListener(e) {
+      this._tabPressed = e.keyCode === 9;
+    }
+
+    _bodyKeyupListener() {
+      this._tabPressed = false;
     }
 
     /**
