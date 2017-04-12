@@ -53,14 +53,14 @@
             var clickSpy = sinon.spy();
             upload.$.fileInput.addEventListener('click', clickSpy);
 
-            upload.$.addFiles.fire('tap');
+            upload.$.addButton.fire('tap');
             expect(clickSpy).to.be.calledOnce;
           });
 
           it('should reset Polymer mouse canceller on click', function() {
             var spy = sinon.spy(Polymer.Gestures, 'resetMouseCanceller');
 
-            upload.$.addFiles.fire('tap');
+            upload.$.addButton.fire('tap');
 
             expect(spy).to.be.called;
           });
@@ -77,7 +77,7 @@
               expect(input.value).to.be.empty;
             });
 
-            upload.$.addFiles.fire('tap');
+            upload.$.addButton.fire('tap');
           });
 
         });
@@ -110,7 +110,7 @@
         });
 
         it('should disable add button when max files added', function() {
-          var addButton = upload.$.addFiles;
+          var addButton = upload.$.addButton;
 
           // Enabled with default maxFiles value
           expect(addButton.disabled).to.be.false;

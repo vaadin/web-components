@@ -146,6 +146,38 @@ This program is available under Apache License Version 2.0, available at https:/
         </script>
       </template>
     </demo-snippet>
+
+    <h3>Custom Upload Button</h3>
+    <demo-snippet>
+      <template>
+        <button-events-demo></button-events-demo>
+
+        <dom-module id="button-events-demo">
+          <template>
+            <style>
+              vaadin-upload {
+                --vaadin-upload-buttons-primary: {
+                  align-items: center;
+                };
+              }
+            </style>
+            <vaadin-upload id="upload" max-files="1" max-files-reached="{{maxFilesReached}}">
+              <button slot="add-button" disabled$="[[maxFilesReached]]">
+                UPLOAD
+              </button>
+            </vaadin-upload>
+          </template>
+          <script>
+            Polymer({
+              is: 'button-events-demo',
+              properties: {
+                maxFilesReached: Boolean
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>

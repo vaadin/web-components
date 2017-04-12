@@ -27,6 +27,7 @@ Custom property | Description | Default
 `--vaadin-upload-buttons`|A mixin that is applied to the buttons container|`{}`
 `--vaadin-upload-buttons-primary`|A mixin that is applied to the primary buttons container (left side)|`{}`
 `--vaadin-upload-buttons-secondary`|A mixin that is applied to the secondary buttons container (right side)|`{}`
+`--vaadin-upload-button-add-wrapper`|A mixin that is applied to the div wrapping the upload button|`{}`
 `--vaadin-upload-button-add`|A mixin that is applied to the upload button|`{}`
 `--vaadin-upload-button-add-disabled`|A mixin that is applied to the upload button when `maxFiles` limit is reached|`{}`
 
@@ -128,6 +129,10 @@ Custom property | Description | Default
       }
 
       #addFiles {
+        @apply(--vaadin-upload-button-add-wrapper);
+      }
+
+      #addButton {
         @apply(--paper-font-button);
         padding: .43em .57em;
         background: var(--primary-color, #00B4F0);
@@ -135,7 +140,7 @@ Custom property | Description | Default
         @apply(--vaadin-upload-button-add);
       }
 
-      #addFiles[disabled] {
+      #addButton[disabled] {
         background: var(--divider-color, #e0e0e0);
         color: var(--disabled-text-color, gray);
         @apply(--vaadin-upload-button-add-disabled);
@@ -144,7 +149,13 @@ Custom property | Description | Default
 
     <div id="buttons">
       <div id="buttonsPrimary">
-        <paper-button id="addFiles" on-tap="_onAddFilesClick" disabled="[[_maxFilesAdded(maxFiles, files.length)]]">[[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]</paper-button>
+        <div id="addFiles" on-tap="_onAddFilesClick">
+          <slot name="add-button">
+            <paper-button id="addButton" disabled$="[[maxFilesReached]]">
+              [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
+            </paper-button>
+          </slot>
+        </div>
         <div id="dropLabel" hidden$="[[nodrop]]">
           <content select=".drop-label">
             <iron-icon icon="vaadin-upload:file-upload"></iron-icon>
@@ -276,6 +287,17 @@ Custom property | Description | Default
       maxFiles: {
         type: Number,
         value: Infinity
+      },
+
+      /**
+       * Specifies if the maximum number of files have been uploaded
+       */
+      maxFilesReached: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        readOnly: true,
+        computed: '_maxFilesAdded(maxFiles, files.length)'
       },
 
       /**
@@ -475,8 +497,8 @@ Custom property | Description | Default
           ')';
     },
 
-    _maxFilesAdded: function() {
-      return this.maxFiles >= 0 && this.files.length >= this.maxFiles;
+    _maxFilesAdded: function(maxFiles, numFiles) {
+      return maxFiles >= 0 && numFiles >= maxFiles;
     },
 
     _dragRippleAction: function(action, event) {
@@ -528,7 +550,7 @@ Custom property | Description | Default
     _onDragover: function(event) {
       event.preventDefault();
       if (!this.nodrop && !this._dragover) {
-        this._dragoverValid = !this._maxFilesAdded();
+        this._dragoverValid = !this.maxFilesReached;
         if (this._dragoverValid) {
           this._dragRippleAction('down', event);
         }
@@ -729,7 +751,7 @@ Custom property | Description | Default
      * @param {File} file File being added
      */
     _addFile: function(file) {
-      if (this._maxFilesAdded()) {
+      if (this.maxFilesReached) {
         this.fire('file-reject', {file: file, error: this.i18n.error.tooManyFiles});
         return;
       }
