@@ -100,224 +100,233 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    /**
-     * `<vaadin-text-field>` is a Polymer element for text field control in forms.
-     *
-     * ```html
-     * <vaadin-text-field label="First Name">
-     * </vaadin-text-field>
-     * ```
-     *
-     * @mixes Vaadin.ControlStateMixin
-     * @mixes Vaadin.FormElementMixin
-     * @mixes Vaadin.ThemableMixin
-     * @demo demo/index.html
-     */
-    class VaadinTextFieldElement extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(Vaadin.ThemableMixin(Polymer.Element))) {
-      static get is() {
-        return 'vaadin-text-field';
-      }
+    (function() {
+      /**
+       * `<vaadin-text-field>` is a Polymer element for text field control in forms.
+       *
+       * ```html
+       * <vaadin-text-field label="First Name">
+       * </vaadin-text-field>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.FormElementMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class TextFieldElement extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(Vaadin.ThemableMixin(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-text-field';
+        }
 
-      static get properties() {
-        return {
-          /**
-           * Whether the value of the control can be automatically completed by the browser.
-           * List of available options at:
-           * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
-           */
-          autocomplete: {
-            type: String
-          },
+        static get properties() {
+          return {
+            /**
+             * Whether the value of the control can be automatically completed by the browser.
+             * List of available options at:
+             * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
+             */
+            autocomplete: {
+              type: String
+            },
 
-          /**
-           * Error to show when the input value is invalid.
-           */
-          errorMessage: {
-            type: String,
-            value: ''
-          },
+            /**
+             * Error to show when the input value is invalid.
+             */
+            errorMessage: {
+              type: String,
+              value: ''
+            },
 
-          /**
-           * String used for the label element.
-           */
-          label: {
-            type: String,
-            value: ''
-          },
+            /**
+             * String used for the label element.
+             */
+            label: {
+              type: String,
+              value: ''
+            },
 
-          /**
-           * Identifies a list of pre-defined options to suggest to the user.
-           * The value must be the id of a <datalist> element in the same document.
-           */
-          list: {
-            type: String
-          },
+            /**
+             * Identifies a list of pre-defined options to suggest to the user.
+             * The value must be the id of a <datalist> element in the same document.
+             */
+            list: {
+              type: String
+            },
 
-          /**
-           * If the value of the type attribute is text, email, search, password, tel, or url,
-           * specifies the maximum number of characters (in Unicode code points) that the user
-           * can enter.
-           */
-          maxlength: {
-            type: Number
-          },
+            /**
+             * If the value of the type attribute is text, email, search, password, tel, or url,
+             * specifies the maximum number of characters (in Unicode code points) that the user
+             * can enter.
+             */
+            maxlength: {
+              type: Number
+            },
 
-          /**
-           * If the value of the type attribute is text, email, search, password, tel, or url,
-           * specifies the minimum number of characters (in Unicode code points) that the user
-           * can enter.
-           */
-          minlength: {
-            type: Number
-          },
+            /**
+             * If the value of the type attribute is text, email, search, password, tel, or url,
+             * specifies the minimum number of characters (in Unicode code points) that the user
+             * can enter.
+             */
+            minlength: {
+              type: Number
+            },
 
-          /**
-           * The name of the control, which is submitted with the form data.
-           */
-          name: {
-            type: String
-          },
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: {
+              type: String
+            },
 
-          /**
-           * A regular expression that the value is checked against.
-           * The pattern must match the entire value, not just some subset.
-           * This attribute applies when the value of the type attribute is text, search, tel,
-           * url, email, or password, otherwise it is ignored.
-           */
-          pattern: {
-            type: String
-          },
+            /**
+             * A regular expression that the value is checked against.
+             * The pattern must match the entire value, not just some subset.
+             * This attribute applies when the value of the type attribute is text, search, tel,
+             * url, email, or password, otherwise it is ignored.
+             */
+            pattern: {
+              type: String
+            },
 
-          /**
-           * A hint to the user of what can be entered in the control.
-           */
-          placeholder: {
-            type: String
-          },
+            /**
+             * A hint to the user of what can be entered in the control.
+             */
+            placeholder: {
+              type: String
+            },
 
-          /**
-           * This attribute indicates that the user cannot modify the value of the control.
-           */
-          readonly: {
-            type: Boolean
-          },
+            /**
+             * This attribute indicates that the user cannot modify the value of the control.
+             */
+            readonly: {
+              type: Boolean
+            },
 
-          /**
-           * Specifies that the user must fill in a value.
-           */
-          required: {
-            type: Boolean
-          },
+            /**
+             * Specifies that the user must fill in a value.
+             */
+            required: {
+              type: Boolean
+            },
 
-          /**
-           * Message to show to the user when validation fails.
-           */
-          title: {
-            type: String
-          },
+            /**
+             * Message to show to the user when validation fails.
+             */
+            title: {
+              type: String
+            },
 
-          /**
-           * The initial value of the control.
-           * It can be used for two-way data binding.
-           */
-          value: {
-            type: String,
-            observer: '_valueChanged',
-            notify: true
-          },
+            /**
+             * The initial value of the control.
+             * It can be used for two-way data binding.
+             */
+            value: {
+              type: String,
+              observer: '_valueChanged',
+              notify: true
+            },
 
-          /**
-           * This property is set to true when the control value invalid.
-           */
-          invalid: {
-            type: Boolean,
-            reflectToAttribute: true,
-            notify: true,
-            value: false
-          },
+            /**
+             * This property is set to true when the control value invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
 
-          /**
-           * A read-only property indicating whether this input has a non empty value.
-           * It can be used for example in styling of the component.
-           */
-          hasValue: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            readOnly: true,
-            reflectToAttribute: true
-          },
+            /**
+             * A read-only property indicating whether this input has a non empty value.
+             * It can be used for example in styling of the component.
+             */
+            hasValue: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              readOnly: true,
+              reflectToAttribute: true
+            },
 
-          /**
-           * When set to true, user is prevented from typing a value that
-           * conflicts with the given `pattern`.
-           */
-          preventInvalidInput: Boolean
-        };
-      }
+            /**
+             * When set to true, user is prevented from typing a value that
+             * conflicts with the given `pattern`.
+             */
+            preventInvalidInput: Boolean
+          };
+        }
 
-      get focusElement() {
-        return this.$.input;
-      }
+        get focusElement() {
+          return this.$.input;
+        }
 
-      _onInput(e) {
-        if (this.preventInvalidInput) {
-          const input = this.$.input;
-          if (input.value.length > 0 && !this.checkValidity()) {
-            input.value = this.value || '';
+        _onInput(e) {
+          if (this.preventInvalidInput) {
+            const input = this.$.input;
+            if (input.value.length > 0 && !this.checkValidity()) {
+              input.value = this.value || '';
+            }
+          }
+        }
+
+        _valueChanged(value) {
+          if (this.invalid) {
+            this.validate();
+          }
+          this._setHasValue(value != null && value !== '');
+        }
+
+        /**
+         * Returns true if `value` is valid.
+         * `<iron-form>` uses this to check the validity or all its elements.
+         *
+         * @return {boolean} True if the value is valid.
+         */
+        validate() {
+          return !(this.invalid = !this.checkValidity());
+        }
+
+        _hasError(invalid, errorMessage) {
+          return errorMessage && invalid ? this._errorId : undefined;
+        }
+
+        /**
+         * Returns true if the current input value satisfies all constraints (if any)
+         */
+        checkValidity() {
+          return this.$.input.checkValidity();
+        }
+
+        ready() {
+          super.ready();
+          if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
+            this.updateStyles();
+          }
+
+          // ShadyDOM needs unique ids in the document
+          var uniqueId = window.ShadyDOM ? TextFieldElement._uniqueId = 1 + TextFieldElement._uniqueId || 0 : '';
+          this._errorId = 'vaadin-text-field-error' + uniqueId;
+        }
+
+        attributeChangedCallback(prop, oldVal, newVal) {
+          super.attributeChangedCallback(prop, oldVal, newVal);
+          // Needed until Edge has CSS Custom Properties (present in Edge Preview)
+          if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
+            /^(focused|invalid|disabled|placeholder|has-value)$/.test(prop)) {
+            this.updateStyles();
           }
         }
       }
 
-      _valueChanged(value) {
-        if (this.invalid) {
-          this.validate();
-        }
-        this._setHasValue(value != null && value !== '');
-      }
+      customElements.define(TextFieldElement.is, TextFieldElement);
 
       /**
-       * Returns true if `value` is valid.
-       * `<iron-form>` uses this to check the validity or all its elements.
-       *
-       * @return {boolean} True if the value is valid.
+       * @namespace Vaadin
        */
-      validate() {
-        return !(this.invalid = !this.checkValidity());
-      }
-
-      _hasError(invalid, errorMessage) {
-        return errorMessage && invalid ? this._errorId : undefined;
-      }
-
-      /**
-       * Returns true if the current input value satisfies all constraints (if any)
-       */
-      checkValidity() {
-        return this.$.input.checkValidity();
-      }
-
-      ready() {
-        super.ready();
-        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
-          this.updateStyles();
-        }
-
-        // ShadyDOM needs unique ids in the document
-        var uniqueId = window.ShadyDOM ? VaadinTextFieldElement._uniqueId = 1 + VaadinTextFieldElement._uniqueId || 0 : '';
-        this._errorId = 'vaadin-text-field-error' + uniqueId;
-      }
-
-      attributeChangedCallback(prop, oldVal, newVal) {
-        super.attributeChangedCallback(prop, oldVal, newVal);
-        // Needed until Edge has CSS Custom Properties (present in Edge Preview)
-        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
-          /^(focused|invalid|disabled|placeholder|has-value)$/.test(prop)) {
-          this.updateStyles();
-        }
-      }
-    }
-
-    customElements.define(VaadinTextFieldElement.is, VaadinTextFieldElement);
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.TextFieldElement = TextFieldElement;
+    })();
   </script>
 </dom-module>
