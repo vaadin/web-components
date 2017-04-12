@@ -28,13 +28,16 @@
               done();
             });
         });
-        test('dynamic importing', function () {
+        test('dynamic importing', function (done) {
             var chartwc = document.querySelector('#pieWithSeries');
-            var conf = chartwc._chartConf;
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
+            setTimeout(function () {
+                var conf = chartwc._chartConf;
+                expect(conf.series).to.exist;
+                expect(conf.series).not.to.be.empty;
+                expect(conf.series[0].data).to.exist;
+                expect(conf.series[0].data).not.to.be.empty;
+                done();
+            }, 300);
         });
     });
 </script>

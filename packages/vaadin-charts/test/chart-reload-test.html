@@ -79,10 +79,13 @@
             chartwc = el.$.chartWithBinding;
         });
 
-        test('_chartConf.chart maintained', function () {
-            expect(chartwc._chartConf.chart.polar).to.be.true;
-            el.$.reloadBtn.click();
-            expect(chartwc._chartConf.chart.polar).to.be.true;
+        test('_chartConf.chart maintained', function (done) {
+            setTimeout(function() {
+                expect(chartwc._chartConf.chart.polar).to.be.true;
+                el.$.reloadBtn.click();
+                expect(chartwc._chartConf.chart.polar).to.be.true;
+                done();
+            });
         });
 
         test('chart configuration change', function () {

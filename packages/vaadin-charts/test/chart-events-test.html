@@ -92,78 +92,90 @@
 <script>
     suite('<vaadin-_-chart>', function () {
 
-        test('all chart events, declarative listeners', function () {
+        test('all chart events, declarative listeners', function (done) {
             var element = document.querySelector("eventful-chart-declarative-attribute");
-            var elementChart = document.querySelector("eventful-chart-declarative-attribute vaadin-line-chart");
-            var eventNames = elementChart._chartEventNames;
+            var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+            setTimeout(function() {
+                var eventNames = elementChart._chartEventNames;
 
-            //fire all the events
-            for (var key in eventNames) {
-                Highcharts.fireEvent(elementChart.chart,key,{});
-            }
-            //verify all event handled
-            for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
-            }
+                //fire all the events
+                for (var key in eventNames) {
+                    Highcharts.fireEvent(elementChart.chart, key, {});
+                }
+                //verify all event handled
+                for (var key in eventNames) {
+                    expect(element.eventCount[eventNames[key]]).to.equal(1);
+                }
+                done();
+            });
         });
 
-        test('all chart events, programmatically added listeners', function () {
+        test('all chart events, programmatically added listeners', function (done) {
             var element = document.querySelector("programmatically-added-listeners");
-            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
-            var eventNames = elementChart._chartEventNames;
+            var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+            setTimeout(function() {
+                var eventNames = elementChart._chartEventNames;
 
-            //add all listeners
-            for (var key in eventNames) {
-                element.listen(element, eventNames[key], "handle");
-            }
-            //fire all the events
-            for (var key in eventNames) {
-                Highcharts.fireEvent(elementChart.chart,key,{});
-            }
-            //verify all event handled
-            for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
-            }
+                //add all listeners
+                for (var key in eventNames) {
+                    element.listen(element, eventNames[key], "handle");
+                }
+                //fire all the events
+                for (var key in eventNames) {
+                    Highcharts.fireEvent(elementChart.chart,key,{});
+                }
+                //verify all event handled
+                for (var key in eventNames) {
+                    expect(element.eventCount[eventNames[key]]).to.equal(1);
+                }
+                done();
+            });
         });
 
-        test('all series events, programmatically added listeners', function () {
-            var element = document.querySelector("programmatically-added-listeners");
-            element.cleanCount();
-            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
-            var eventNames = elementChart._seriesEventNames;
-
-            //add all listeners
-            for (var key in eventNames) {
-                element.listen(element, eventNames[key], "handle");
-            }
-            //fire all the events
-            for (var key in eventNames) {
-                Highcharts.fireEvent(elementChart.chart.series[0],key,{});
-            }
-            //verify all event handled
-            for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
-            }
-        });
-
-        test('all point events, programmatically added listeners', function () {
+        test('all series events, programmatically added listeners', function (done) {
             var element = document.querySelector("programmatically-added-listeners");
             element.cleanCount();
-            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
-            var eventNames = elementChart._pointEventNames;
+            var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+            setTimeout(function() {
+                var eventNames = elementChart._seriesEventNames;
 
-            //add all listeners
-            for (var key in eventNames) {
-                element.listen(element, eventNames[key], "handle");
-            }
-            //fire all the events
-            for (var key in eventNames) {
-                elementChart.chart.series[0].data[0].firePointEvent(key);
-            }
-            //verify all event handled
-            for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
-            }
+                //add all listeners
+                for (var key in eventNames) {
+                    element.listen(element, eventNames[key], "handle");
+                }
+                //fire all the events
+                for (var key in eventNames) {
+                    Highcharts.fireEvent(elementChart.chart.series[0],key,{});
+                }
+                //verify all event handled
+                for (var key in eventNames) {
+                    expect(element.eventCount[eventNames[key]]).to.equal(1);
+                }
+                done();
+            });
+        });
+
+        test('all point events, programmatically added listeners', function (done) {
+            setTimeout(function() {
+                var element = document.querySelector("programmatically-added-listeners");
+                element.cleanCount();
+                var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+                var eventNames = elementChart._pointEventNames;
+
+                //add all listeners
+                for (var key in eventNames) {
+                    element.listen(element, eventNames[key], "handle");
+                }
+                //fire all the events
+                for (var key in eventNames) {
+                    elementChart.chart.series[0].data[0].firePointEvent(key);
+                }
+                //verify all event handled
+                for (var key in eventNames) {
+                    expect(element.eventCount[eventNames[key]]).to.equal(1);
+                }
+                done();
+            });
         });
 
         test('chart-click event, event info is correct', function (done) {

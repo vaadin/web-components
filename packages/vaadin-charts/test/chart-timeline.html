@@ -48,7 +48,7 @@
 
         test('timeline chart contains range selector', function () {
             var chartwc = document.querySelector('#linechartwithtimeline');
-            var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
+            var rangeSelector = chartwc.shadowRoot.querySelectorAll('.highcharts-range-selector');
             expect(rangeSelector).to.have.length(2);
         });
 

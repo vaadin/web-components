@@ -60,16 +60,20 @@
     suite('<vaadin-_-chart>', function () {
         var el = document.querySelector("binding-chart");
 
-        test('data property binding', function () {
+        test('data property binding', function (done) {
             var chartwc = el.$.chartId;
-            var conf = chartwc._chartConf;
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
-            expect(conf.series[0].data).to.have.length(7);
-            expect(conf.series[0].data[1][0]).to.equal(1184025600000);
-            expect(conf.series[0].data[1][1]).to.equal(40.38);
+            setTimeout(function () {
+                var conf = chartwc._chartConf;
+                expect(conf.series).to.exist;
+                expect(conf.series).not.to.be.empty;
+                expect(conf.series[0].data).to.exist;
+                expect(conf.series[0].data).not.to.be.empty;
+                expect(conf.series[0].data).to.have.length(7);
+                expect(conf.series[0].data[1][0]).to.equal(1184025600000);
+                expect(conf.series[0].data[1][1]).to.equal(40.38);
+                done();
+            });
+
 
         });
 

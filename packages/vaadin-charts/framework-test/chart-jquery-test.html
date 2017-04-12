@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../jquery/dist/jquery.min.js"></script>
     <link rel="import" href="../vaadin-pie-chart.html">
@@ -24,34 +24,40 @@
 
 
 <script>
+  $(window).on('WebComponentsReady', function () {
+    setTimeout(function () {
+      var chart = $('#pie-with-legend')[0].chart;
+      chart.series[0].setData([
+        ["Aerospace", 45.0],
+        ["Medical", 26.8],
+        ["Agriculture ", 12.8],
+        ["Automotive", 8.5],
+        ["Consumers", 6.2],
+        ["Subsidies", 0.7]
 
-    $(document).on('WebComponentsReady', function() {
-        var chart = $('#pie-with-legend')[0].chart;
-        chart.series[0].setData([
-            ["Aerospace", 45.0],
-            ["Medical", 26.8],
-            ["Agriculture ", 12.8],
-            ["Automotive", 8.5],
-            ["Consumers", 6.2],
-            ["Subsidies", 0.7]
-        ]);
-    });
+      ])
+    })
+  });
 
     suite('framework integration', function () {
 
-        test('verify jquery integration works', function () {
-            var elementChart = document.querySelector("vaadin-pie-chart");
-            expect(elementChart.chart.redraw).to.exist;
+        test('verify jquery integration works', function (done) {
+            setTimeout(function() {
+                var elementChart = document.querySelector("vaadin-pie-chart");
+                expect(elementChart.chart.redraw).to.exist;
 
-            var chart = elementChart.chart;
-            expect(chart.series).to.exist;
-            expect(chart.series).not.to.be.empty;
-            expect(chart.series[0].data).to.exist;
-            expect(chart.series[0].data).not.to.be.empty;
-            expect(chart.series[0].data).to.have.length(6);
+                var chart = elementChart.chart;
+                expect(chart.series).to.exist;
+                expect(chart.series).not.to.be.empty;
+                expect(chart.series[0].data).to.exist;
+                expect(chart.series[0].data).not.to.be.empty;
+                expect(chart.series[0].data).to.have.length(6);
 
-            var chartSlices = document.querySelectorAll(".highcharts-series path");
-            expect(chartSlices).to.have.length(6);
+                var chartSlices = elementChart.shadowRoot.querySelectorAll(".highcharts-series path");
+                expect(chartSlices).to.have.length(6);
+                done();
+            });
+
         });
 
     });

@@ -88,14 +88,15 @@
             document.body.appendChild(element);
         });
 
-        test('chart on-load event, declarative on-event', function () {
-            var element = document.querySelector("eventful-pie-declarative-attribute");
+        test('chart on-load event, declarative on-event', function (done) {
+            setTimeout(function () {
+                var element = document.querySelector("eventful-pie-declarative-attribute");
+                expect(element.loaded).to.be.true;
+                var elementChart = element.shadowRoot.querySelector("vaadin-pie-chart");
 
-            expect(element.loaded).to.be.true;
-
-            var elementChart = document.querySelector("eventful-pie-declarative-attribute vaadin-pie-chart");
-
-            expect(elementChart.chart.redraw).to.exist;
+                expect(elementChart.chart.redraw).to.exist;
+                done();
+            });
         });
 
         test('chart on-load event, declarative listener mapping', function () {
@@ -103,7 +104,7 @@
 
             expect(element.loaded).to.be.true;
 
-            var elementChart = document.querySelector("eventful-pie-declarative-mapping vaadin-pie-chart");
+            var elementChart = element.shadowRoot.querySelector("vaadin-pie-chart");
 
             expect(elementChart.chart.redraw).to.exist;
         });

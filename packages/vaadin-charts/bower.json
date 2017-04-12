@@ -30,12 +30,9 @@
   ],
   "dependencies": {
     "highcharts": "highcharts/highcharts-dist#v4.2.6",
-    "polymer": "Polymer/polymer#2.0-preview",
+    "polymer": "Polymer/polymer#^v2.0.0-rc.1",
     "vaadin-license-checker": "vaadin/license-checker#2.0-preview",
     "iron-resizable-behavior": "2.0-preview"
-  },
-  "notupdated": {
-    "vaadin-grid": "^1.0.0"
   },
   "devDependencies": {
     "google-code-prettify": "*",
@@ -45,31 +42,15 @@
     "iron-menu-behavior": "PolymerElements/iron-menu-behavior#2.0-preview",
     "iron-pages": "PolymerElements/iron-pages#2.0-preview",
     "paper-tabs": "PolymerElements/paper-tabs#2.0-preview",
-    "web-component-tester": "^4.0.0",
-    "jquery": "^2.2.2"
+    "web-component-tester": "^6.0.0-prerelease.5",
+    "jquery": "^2.2.2",
+    "webcomponentsjs": "^v1.0.0-rc.5",
+    "vaadin-grid": "#2.1-polymer-2"
   },
   "resolutions": {
-    "mocha": "^2.3.0",
-    "webcomponentsjs": "v1",
-    "marked-element": "2.0-preview",
-    "polymer": "2.0-preview",
-    "paper-button": "2.0-preview",
-    "iron-flex-layout": "2.0-preview",
-    "paper-behaviors": "2.0-preview",
-    "iron-behaviors": "2.0-preview",
-    "iron-a11y-keys-behavior": "2.0-preview",
-    "iron-checked-element-behavior": "2.0-preview",
-    "iron-validatable-behavior": "2.0-preview",
-    "iron-meta": "2.0-preview",
-    "iron-form-element-behavior": "2.0-preview",
-    "paper-ripple": "2.0-preview",
-    "paper-styles": "2.0-preview",
-    "prism-element": "2.0-preview",
+    "polymer": "^v2.0.0-rc.1",
     "iron-resizable-behavior": "2.0-preview",
-    "iron-icon": "2.0-preview",
-    "iron-iconset-svg": "2.0-preview",
-    "paper-icon-button": "2.0-preview",
-    "iron-menu-behavior": "2.0-preview",
-    "iron-selector": "2.0-preview"
+    "iron-a11y-keys-behavior": "2.0-preview",
+    "webcomponentsjs": "^v1.0.0-rc.5"
   }
 }
