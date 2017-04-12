@@ -31,47 +31,56 @@ This program is available under Apache License Version 2.0, available at https:/
     </button>
   </template>
   <script>
-    /**
-     * `<vaadin-button>` is a Polymer element for customized buttons.
-     *
-     * ```html
-     * <vaadin-button>
-     * </vaadin-button>
-     * ```
-     *
-     * ### Styling
-     *
-     * The following shadow DOM parts are exposed for styling:
-     *
-     * Part name | Description
-     * ----------------|----------------
-     * `button` | The internal `<button>` element
-     *
-     * @mixes Vaadin.ControlStateMixin
-     * @mixes Vaadin.ThemableMixin
-     * @demo demo/index.html
-     */
-    class VaadinButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.Element)) {
-      ready() {
-        super.ready();
+    (function() {
+      /**
+      * `<vaadin-button>` is a Polymer element for customized buttons.
+      *
+      * ```html
+      * <vaadin-button>
+      * </vaadin-button>
+      * ```
+      *
+      * ### Styling
+      *
+      * The following shadow DOM parts are exposed for styling:
+      *
+      * Part name | Description
+      * ----------------|----------------
+      * `button` | The internal `<button>` element
+      *
+      * @memberof Vaadin
+      * @mixes Vaadin.ControlStateMixin
+      * @mixes Vaadin.ThemableMixin
+      * @demo demo/index.html
+      */
+      class ButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        ready() {
+          super.ready();
 
-        // Leaving default role in the native button, makes navigation announcement
-        // being different when using focus navigation (tab) versus using normal
-        // navigation (arrows). The first way announces the label on a button
-        // since the focus is moved programmatically, and the second on a group.
-        this.setAttribute('role', 'button');
-        this.$.button.setAttribute('role', 'presentation');
+          // Leaving default role in the native button, makes navigation announcement
+          // being different when using focus navigation (tab) versus using normal
+          // navigation (arrows). The first way announces the label on a button
+          // since the focus is moved programmatically, and the second on a group.
+          this.setAttribute('role', 'button');
+          this.$.button.setAttribute('role', 'presentation');
+        }
+
+        static get is() {
+          return 'vaadin-button';
+        }
+
+        get focusElement() {
+          return this.$.button;
+        }
       }
 
-      static get is() {
-        return 'vaadin-button';
-      }
+      customElements.define(ButtonElement.is, ButtonElement);
 
-      get focusElement() {
-        return this.$.button;
-      }
-    }
-
-    customElements.define(VaadinButtonElement.is, VaadinButtonElement);
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ButtonElement = ButtonElement;
+    })();
   </script>
 </dom-module>

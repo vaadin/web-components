@@ -1,73 +1,91 @@
 {
   "schema_version": "1.0.0",
-  "elements": [
+  "namespaces": [
     {
-      "description": "`<vaadin-button>` is a Polymer element for customized buttons.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element",
+      "name": "Vaadin",
+      "description": "",
       "summary": "",
-      "path": "vaadin-button.html",
-      "attributes": [],
-      "properties": [],
-      "methods": [
+      "sourceRange": {
+        "file": "vaadin-button.html",
+        "start": {
+          "line": 81,
+          "column": 7
+        },
+        "end": {
+          "line": 81,
+          "column": 43
+        }
+      },
+      "elements": [
         {
-          "name": "ready",
-          "description": "",
-          "privacy": "protected",
+          "description": "`<vaadin-button>` is a Polymer element for customized buttons.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element",
+          "summary": "",
+          "path": "vaadin-button.html",
+          "attributes": [],
+          "properties": [],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 56,
+                  "column": 8
+                },
+                "end": {
+                  "line": 65,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "demos": [],
+          "slots": [
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "file": "vaadin-button.html",
+                "start": {
+                  "line": 29,
+                  "column": 6
+                },
+                "end": {
+                  "line": 29,
+                  "column": 19
+                }
+              }
+            }
+          ],
+          "events": [],
+          "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 54,
+              "line": 55,
               "column": 6
             },
             "end": {
-              "line": 63,
+              "line": 74,
               "column": 7
             }
           },
-          "metadata": {},
-          "params": []
+          "privacy": "public",
+          "tagname": "vaadin-button",
+          "classname": "Vaadin.ButtonElement",
+          "mixins": [
+            "Vaadin.ControlStateMixin",
+            "Vaadin.ThemableMixin"
+          ],
+          "superclass": "HTMLElement"
         }
-      ],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "demos": [],
-      "slots": [
-        {
-          "description": "",
-          "name": "",
-          "range": {
-            "file": "vaadin-button.html",
-            "start": {
-              "line": 29,
-              "column": 6
-            },
-            "end": {
-              "line": 29,
-              "column": 19
-            }
-          }
-        }
-      ],
-      "events": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 53,
-          "column": 4
-        },
-        "end": {
-          "line": 72,
-          "column": 5
-        }
-      },
-      "privacy": "public",
-      "tagname": "vaadin-button",
-      "classname": "VaadinButtonElement",
-      "mixins": [
-        "Vaadin.ControlStateMixin",
-        "Vaadin.ThemableMixin"
-      ],
-      "superclass": "HTMLElement"
+      ]
     }
   ]
 }
