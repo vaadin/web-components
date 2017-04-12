@@ -18,7 +18,7 @@
 
     <h3>Synchronous Custom Validator</h3>
 
-    <p>Extend <code>VaadinTextFieldElement</code> to create your own custom element,
+    <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> method to validate the user's input</p>
 
     <demo-snippet>
@@ -49,7 +49,7 @@
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            class EmployeeRole extends VaadinTextFieldElement {
+            class EmployeeRole extends Vaadin.TextFieldElement {
               static get is() {
                 return 'employee-role-text-field';
               }
@@ -67,7 +67,7 @@
 
     <h3>Asynchronous Custom Validator</h3>
 
-    <p>Extend <code>VaadinTextFieldElement</code> to create your own custom element,
+    <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> to make your asynchronous validation,
       and finally set the <code>invalid</code> flag appropriately in the callback.</p>
 
@@ -103,7 +103,7 @@
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            class ChemicalElement extends VaadinTextFieldElement {
+            class ChemicalElement extends Vaadin.TextFieldElement {
               static get is() {
                 return 'chemical-element-text-field';
               }
