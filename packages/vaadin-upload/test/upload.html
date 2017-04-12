@@ -279,7 +279,7 @@
         it('should be indeterminate when connecting', function(done) {
           Polymer.Base.async(function() {
             expect(file.indeterminate).to.be.ok;
-            expect(file.status).to.be.equal('Connecting...');
+            expect(file.status).to.be.equal(upload.i18n.uploading.status.connecting);
             done();
           }, 200);
           upload._uploadFile(file);
@@ -317,10 +317,71 @@
 
         it('should be stalled when progress is not updated for more than 2 sec.', function(done) {
           Polymer.Base.async(function() {
-            expect(file.status).to.be.equal('Stalled.');
+            expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
             done();
           }, 2200);
           upload._uploadFile(file);
+        });
+      });
+
+      describe('Manual Upload', function() {
+        var files;
+        beforeEach(function() {
+          upload.noAuto = true;
+          upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
+        });
+
+        it('should be in held status', function(done) {
+          upload._addFile(file);
+          flush(function() {
+            expect(file.uploaded).not.to.be.ok;
+            expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
+            done();
+          });
+        });
+
+        it('should start uploading non-completed files after call to uploadFiles', function(done) {
+          var counter = 0;
+          files = createFiles(3, 512, 'application/json');
+          upload.files = files;
+          upload.files[1].complete = true;
+
+          for(var i = 0; i < upload.files.length; i++) {
+            expect(upload.files[i].uploading).not.to.be.ok;
+          }
+          upload.addEventListener('upload-start', function(e) {
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.file.uploading).to.be.ok;
+
+            if (++counter === (upload.files.length - 1)) {
+              done();
+            }
+          });
+          upload.uploadFiles();
+        });
+
+        it('should only start uploading files passed to uploadFiles call', function(done) {
+          var tempFileName = 'file-test';
+          files = createFiles(3, 512, 'application/json');
+          upload.files = files;
+          upload.files[2].name = tempFileName;
+
+          for(var i = 0; i < upload.files.length; i++) {
+            expect(upload.files[i].uploading).not.to.be.ok;
+          }
+          upload.addEventListener('upload-start', function(e) {
+            expect(e.detail.xhr).to.be.ok;
+            expect(e.detail.file).to.be.ok;
+            expect(e.detail.file.name).to.equal(tempFileName);
+            expect(e.detail.file.uploading).to.be.ok;
+
+            for(var i = 0; i < upload.files.length - 1; i++) {
+              expect(upload.files[i].uploading).not.to.be.ok;
+            }
+            done();
+          });
+          upload.uploadFiles([upload.files[2]]);
         });
       });
 

@@ -216,6 +216,14 @@
         files.forEach(upload._addFile.bind(upload));
         uploadStartSpy.should.have.been.calledTwice;
       });
+      it('should not automatically start upload when noAuto flag is set', function() {
+        var uploadStartSpy = sinon.spy();
+        upload.noAuto = true;
+        upload.addEventListener('upload-start', uploadStartSpy);
+
+        files.forEach(upload._addFile.bind(upload));
+        uploadStartSpy.should.not.have.been.called;
+      });
 
       describe('validate files', function() {
         it('should reject files when maxFiles is reached', function(done) {

@@ -178,6 +178,30 @@ This program is available under Apache License Version 2.0, available at https:/
         </dom-module>
       </template>
     </demo-snippet>
+
+    <h3>Manual Upload Trigger</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-upload id="manualUpload" no-auto></vaadin-upload>
+        <br>
+        <button id="uploadButton">Start Upload(s)</button>
+
+        <script>
+          var upload5 = document.querySelector('vaadin-upload#manualUpload');
+          var uploadButton = document.getElementById('uploadButton');
+
+          uploadButton.addEventListener('click', function() {
+            upload5.uploadFiles();
+          });
+
+          // Change upload button text
+          upload5.set('i18n.addFiles', {
+            one: 'Add File',
+            many: 'Add Files'
+          });
+        </script>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>
