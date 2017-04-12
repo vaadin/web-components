@@ -7,7 +7,7 @@
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-button/demo/)
 
-[&lt;vaadin-button&gt;](https://vaadin.com/elements/-/element/vaadin-button) is a [Polymer](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-button&gt;](https://vaadin.com/elements/-/element/vaadin-button) is a [Polymer](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
@@ -25,8 +25,9 @@
 </vaadin-button>
 ```
 
+<!-- TODO: uncomment when we have a nice screenshot to show
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" width="200" alt="Screenshot of vaadin-button">](https://vaadin.com/elements/-/element/vaadin-button)
-
+-->
 
 ## Contributing
 
