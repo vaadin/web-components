@@ -15,44 +15,55 @@
 
   <dom-module id="test-foo">
     <template>
-      <div id="text">text</div>
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
+      <div part="text" id="text">text</div>
     </template>
   </dom-module>
 
   <dom-module id="test-bar">
     <template>
-      <div id="text">text</div>
+      <div part="text" id="text">text</div>
     </template>
   </dom-module>
 
   <script>
-  class TestFoo extends Vaadin.ThemableMixin(Polymer.Element) {
-    static get is() {
-      return 'test-foo';
+  document.addEventListener('WebComponentsReady', function() {
+    class TestFoo extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'test-foo';
+      }
     }
-  }
-  customElements.define(TestFoo.is, TestFoo);
+    customElements.define(TestFoo.is, TestFoo);
 
-  class TestBar extends Vaadin.ThemableMixin(Polymer.Element) {
-    static get is() {
-      return 'test-bar';
+    class TestBar extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'test-bar';
+      }
     }
-  }
-  customElements.define(TestBar.is, TestBar);
+    customElements.define(TestBar.is, TestBar);
 
-  class TestBaz extends TestBar {
-    static get is() {
-      return 'test-baz';
+    class TestBaz extends TestBar {
+      static get is() {
+        return 'test-baz';
+      }
     }
-  }
-  customElements.define(TestBaz.is, TestBaz);
+    customElements.define(TestBaz.is, TestBaz);
+  });
   </script>
 
 
   <dom-module id="test-styles" theme-for="test-foo">
     <template>
       <style>
-        #text {
+        :host {
+          display: flex;
+        }
+
+        [part="text"] {
           color: rgb(255, 255, 255);
         }
       </style>
@@ -62,7 +73,7 @@
   <dom-module id="test-styles-multiple" theme-for="test-foo test-bar">
     <template>
       <style>
-        #text {
+        [part="text"] {
           background-color: rgb(255, 0, 0);
         }
       </style>
@@ -72,8 +83,8 @@
   <dom-module id="test-styles-wildcard" theme-for="test*a*">
     <template>
       <style>
-        #text {
-          font-weight: bold;
+        [part="text"] {
+          position: relative;
         }
       </style>
     </template>
@@ -114,11 +125,14 @@
       });
 
       it('should inject to wildcard styles', function() {
-        expect(window.getComputedStyle(components[0].$.text).fontWeight).to.equal('normal');
-        expect(window.getComputedStyle(components[1].$.text).fontWeight).to.equal('bold');
-        expect(window.getComputedStyle(components[2].$.text).fontWeight).to.equal('bold');
+        expect(window.getComputedStyle(components[0].$.text).position).to.equal('static');
+        expect(window.getComputedStyle(components[1].$.text).position).to.equal('relative');
+        expect(window.getComputedStyle(components[2].$.text).position).to.equal('relative');
       });
 
+      it('should override default value', function() {
+        expect(window.getComputedStyle(components[0]).display).to.equal('flex');
+      });
 
     });
   </script>

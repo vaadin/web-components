@@ -25,6 +25,7 @@
     "polymer": "Polymer/polymer#^2.0.0-rc.1"
   },
   "devDependencies": {
-    "web-component-tester": "^5.0.0"
+    "iron-test-helpers": "#2.0-preview",
+    "web-component-tester": "^6.0.0-prerelease.7"
   }
 }
