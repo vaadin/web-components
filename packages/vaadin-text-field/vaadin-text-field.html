@@ -15,46 +15,30 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: inline-block;
         outline: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      input {
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      input::-ms-clear {
-        display: none;
-      }
-
-      label {
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
-
-      label:empty {
-        display: none;
       }
 
       .container {
-        position: relative;
+        display: flex;
+        flex-direction: column;
       }
 
-      .content-wrapper {
+      [part="label"]:empty {
+        display: none;
+      }
+
+      .input-wrapper {
         display: flex;
         align-items: center;
       }
 
-      .label-and-input-container {
+      [part="input"] {
+        width: 100%;
+        box-sizing: border-box;
         flex: 1;
+        min-width: 0;
       }
 
-      .label-placeholder {
-        visibility: hidden;
-      }
-
-      .label-placeholder[no-label] {
+      [part="input"]::-ms-clear {
         display: none;
       }
 
@@ -62,39 +46,38 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div class="container">
 
-      <div no-label$=[[!label]] class="label-placeholder">&nbsp;</div>
+      <label part="label" on-click="focus">[[label]]</label>
 
-      <div class="content-wrapper">
+      <div class="input-wrapper">
 
         <slot name="prefix"></slot>
 
-        <div class="label-and-input-container">
-          <label id="label" part="label" on-click="focus">[[label]]</label>
-          <input id="input" part="input"
-            autocomplete$="[[autocomplete]]"
-            autocorrect$="[[autocorrect]]"
-            autofocus$="[[autofocus]]"
-            disabled$="[[disabled]]"
-            list="[[list]]"
-            maxlength$="[[maxlength]]"
-            minlength$="[[minlength]]"
-            name="[[name]]"
-            pattern="[[pattern]]"
-            placeholder="[[placeholder]]"
-            readonly$="[[readonly]]"
-            required$="[[required]]"
-            value="{{value::input}}"
-            title="[[title]]"
-            on-blur="validate"
-            on-input="_onInput"
-            aria-describedby$="[[_hasError(invalid, errorMessage)]]"
-          >
-          <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_hasError(invalid, errorMessage)]]">[[errorMessage]]</div>
-        </div>
+        <input id="input" part="input"
+          autocomplete$="[[autocomplete]]"
+          autocorrect$="[[autocorrect]]"
+          autofocus$="[[autofocus]]"
+          disabled$="[[disabled]]"
+          list="[[list]]"
+          maxlength$="[[maxlength]]"
+          minlength$="[[minlength]]"
+          name="[[name]]"
+          pattern="[[pattern]]"
+          placeholder="[[placeholder]]"
+          readonly$="[[readonly]]"
+          required$="[[required]]"
+          value="{{value::input}}"
+          title="[[title]]"
+          on-blur="validate"
+          on-input="_onInput"
+          aria-describedby$="[[_hasError(invalid, errorMessage)]]"
+        >
 
         <slot name="suffix"></slot>
 
       </div>
+
+      <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_hasError(invalid, errorMessage)]]">[[errorMessage]]</div>
+
     </div>
 
   </template>
