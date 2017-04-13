@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "polymer": "^2.0.0-rc.1",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.1"
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.3"
   }
 }
