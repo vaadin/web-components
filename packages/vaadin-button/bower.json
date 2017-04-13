@@ -24,15 +24,18 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "elements-demo-resources": "#2.0-preview",
+    "elements-demo-resources": "2.0-preview",
     "iron-component-page": "#2.0-preview",
     "iron-demo-helpers": "#2.0-preview",
     "iron-test-helpers": "#2.0-preview",
     "web-component-tester": "^6.0.0-prerelease.7"
   },
   "dependencies": {
-    "polymer": "^2.0.0-rc.1",
-    "vaadin-text-field": "#master",
+    "polymer": "^2.0.0",
+    "vaadin-text-field": "^1.0.0-alpha3",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.1"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
   }
 }
