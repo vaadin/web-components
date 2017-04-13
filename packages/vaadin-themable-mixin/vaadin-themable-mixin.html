@@ -24,7 +24,7 @@
                 styleEl.setAttribute('include', module);
 
                 const content = this._memoizedTemplate.content;
-                content.insertBefore(styleEl, content.firstChild);
+                content.appendChild(styleEl);
               }
             }, this);
           }
