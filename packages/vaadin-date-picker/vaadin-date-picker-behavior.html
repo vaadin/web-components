@@ -262,7 +262,8 @@
        */
       _minDate: {
         type: Date,
-        value: null
+        // null does not work here because minimizer passes undefined to overlay (#351)
+        value: ''
       },
 
       /**
@@ -270,7 +271,7 @@
        */
       _maxDate: {
         type: Date,
-        value: null
+        value: ''
       },
 
       _noInput: {
@@ -394,7 +395,7 @@
 
     _handleDateChange: function(property, value, oldValue) {
       if (!value) {
-        this[property] = null;
+        this[property] = '';
         return;
       }
 
