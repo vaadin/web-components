@@ -88,6 +88,13 @@
       }
 
       describe('_tabPressed and focus-ring', function() {
+        function focus() {
+          focusElement.dispatchEvent(new CustomEvent('focus'));
+        }
+        function blur() {
+          focusElement.dispatchEvent(new CustomEvent('blur'));
+        }
+
         it('should set and unset _tabPressed when press TAB', function() {
           MockInteractions.keyDownOn(document.body, 9);
           expect(customElement._tabPressed).to.be.true;
@@ -109,17 +116,19 @@
           expect(customElement._tabPressed).to.be.false;
         });
 
-        it('should set the focus-ring attribute when _tabPressed is true', function() {
+        it('should set the focus-ring attribute when TAB is pressed and focus is received', function() {
           MockInteractions.keyDownOn(document.body, 9);
-          customElement.focus();
+          focus();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
-          focusElement.blur();
+          blur();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
+        });
 
+        it('should set the focus-ring attribute when SHIFT+TAB is pressed and focus is received', function() {
           MockInteractions.keyDownOn(document.body, 9, 'shift');
-          customElement.focus();
+          focus();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
-          focusElement.blur();
+          blur();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
       });
