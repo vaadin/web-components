@@ -404,10 +404,7 @@
         this.value = oldValue;
         return;
       }
-      if (!(this[property] instanceof Date) ||
-        date.getFullYear() !== this[property].getFullYear() ||
-        date.getMonth() !== this[property].getMonth() ||
-        date.getDate() !== this[property].getDate()) {
+      if (!vaadin.elements.datepicker.DatePickerHelper._dateEquals(this[property], date)) {
         this[property] = date;
       }
     },
