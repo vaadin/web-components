@@ -142,16 +142,20 @@
 
         it('should scroll the target', function(done) {
           outerScroller.addEventListener('scroll', function() {
-            expect(target.scrollLeft).to.equal(100);
-            done();
+            Polymer.RenderStatus.afterNextRender(grid, function() {
+              expect(target.scrollLeft).to.equal(100);
+              done();
+            });
           });
           outerScroller.scrollLeft = 100;
         });
 
         it('should scroll the outer scroller', function(done) {
           target.addEventListener('scroll', function() {
-            expect(outerScroller.scrollLeft).to.equal(100);
-            done();
+            Polymer.RenderStatus.afterNextRender(grid, function() {
+              expect(outerScroller.scrollLeft).to.equal(100);
+              done();
+            });
           });
           target.scrollLeft = 100;
         });
