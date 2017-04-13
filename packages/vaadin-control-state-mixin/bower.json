@@ -1,0 +1,17 @@
+{
+  "name": "vaadin-control-state-mixin",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "",
+  "main": "vaadin-control-state-mixin.html",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/vaadin/vaadin-control-state-mixin/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
