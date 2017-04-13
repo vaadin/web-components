@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0.0",
+  "namespaces": [
+    {
+      "name": "Vaadin",
+      "description": "",
+      "summary": "",
+      "sourceRange": {
+        "file": "vaadin-form-layout.html",
+        "start": {
+          "line": 284,
+          "column": 6
+        },
+        "end": {
+          "line": 284,
+          "column": 42
+        }
+      },
+      "elements": [
+        {
+          "description": "`<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.\n\n```html\n<vaadin-form-layout>\n  <vaadin-text-field label=\"First Name\" value=\"Jane\"></vaadin-text-field>\n  <vaadin-text-field label=\"Last Name\" value=\"Doe\"></vaadin-text-field>\n  <vaadin-text-field label=\"Email\" value=\"jane.doe@example.com\"></vaadin-text-field>\n</vaadin-form-layout>\n```\n\nIt supports any child elements as layout items.\n\nBy default, it makes a layout of two columns if the element width is equal or\nwider than 40em, and a single column layout otherwise.\n\nThe number of columns and the responsive behavior are customizable with\nthe `columns` property.\n\n### Spanning Items on Multiple Columns\n\nYou can use `colspan` attribute on the items.\nIn the example below, the first text field spans on two columns:\n\n<vaadin-form-layout>\n  <vaadin-text-field colspan=\"2\" label=\"Address\"></vaadin-text-field>\n  <vaadin-text-field label=\"First Name\" value=\"Jane\"></vaadin-text-field>\n  <vaadin-text-field label=\"Last Name\" value=\"Doe\"></vaadin-text-field>\n</vaadin-form-layout>\n\n### Explicit New Row\n\nUse the `<br>` line break element to wrap the items on a new row:\n\n```html\n<vaadin-form-layout>\n  <vaadin-text-field label=\"Email\"></vaadin-text-field>\n  <br>\n  <vaadin-text-field label=\"Confirm Email\"></vaadin-text-field>\n</vaadin-form-layout>\n```\n\n### CSS Properties Reference\n\nThe following custom CSS properties are available on the `<vaadin-form-layout>`\nelement:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`",
+          "summary": "",
+          "path": "vaadin-form-layout.html",
+          "attributes": [
+            {
+              "name": "columns",
+              "description": "Number of columns in the layout. Allows specifying a responsive\nbehavior with the number of columns depending on the layout width.\n\nThe value is a comma-separated list of one or more responsive\nsteps, each responsive step is a space-separated list of the column\ncount and the corresponding min-width threshold.\n\nThe min-width thresholds are CSS length values specifying the\nminimum width of the layout for each responsive step.\n\nFormal syntax:\n    <responsive-step> [ , <responsive-step> ]*\nwhere\n    <responsive-step> = <column-count> [ <min-width> ]?\n\n<column-count> = <integer>\n    Number of columns, assumed as 1 if zero or negative.\n<min-width> = <length>\n    Minimum width of the layout corresponding to this step.\n    Optional, assumed as 0 if omitted.\n\nExamples:\n\n`1`\n    The layout is always a single column.\n`1, 2 40em`\n    The layout is two-column when the layout width is >= 40em, and\n    single-column otherwise.",
+              "sourceRange": {
+                "start": {
+                  "line": 163,
+                  "column": 12
+                },
+                "end": {
+                  "line": 167,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            }
+          ],
+          "properties": [
+            {
+              "name": "columns",
+              "type": "string",
+              "description": "Number of columns in the layout. Allows specifying a responsive\nbehavior with the number of columns depending on the layout width.\n\nThe value is a comma-separated list of one or more responsive\nsteps, each responsive step is a space-separated list of the column\ncount and the corresponding min-width threshold.\n\nThe min-width thresholds are CSS length values specifying the\nminimum width of the layout for each responsive step.\n\nFormal syntax:\n    <responsive-step> [ , <responsive-step> ]*\nwhere\n    <responsive-step> = <column-count> [ <min-width> ]?\n\n<column-count> = <integer>\n    Number of columns, assumed as 1 if zero or negative.\n<min-width> = <length>\n    Minimum width of the layout corresponding to this step.\n    Optional, assumed as 0 if omitted.\n\nExamples:\n\n`1`\n    The layout is always a single column.\n`1, 2 40em`\n    The layout is two-column when the layout width is >= 40em, and\n    single-column otherwise.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 163,
+                  "column": 12
+                },
+                "end": {
+                  "line": 167,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_columnsChanged\""
+                }
+              },
+              "defaultValue": "\"1, 2 40em\""
+            },
+            {
+              "name": "_parsedResponsiveSteps",
+              "type": "Array",
+              "description": "Parsed value of the columns property",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 172,
+                  "column": 12
+                },
+                "end": {
+                  "line": 172,
+                  "column": 41
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_columnCount",
+              "type": "number",
+              "description": "Current number of columns in the layout",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 177,
+                  "column": 12
+                },
+                "end": {
+                  "line": 180,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_columnCountChanged\""
+                }
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 184,
+                  "column": 8
+                },
+                "end": {
+                  "line": 188,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "connectedCallback",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 190,
+                  "column": 8
+                },
+                "end": {
+                  "line": 195,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_naturalNumberOrOne",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 197,
+                  "column": 8
+                },
+                "end": {
+                  "line": 200,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "n"
+                }
+              ]
+            },
+            {
+              "name": "_parseResponsiveSteps",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 202,
+                  "column": 8
+                },
+                "end": {
+                  "line": 210,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "columns"
+                }
+              ]
+            },
+            {
+              "name": "_columnsChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 212,
+                  "column": 8
+                },
+                "end": {
+                  "line": 215,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "columns"
+                }
+              ]
+            },
+            {
+              "name": "_selectResponsiveStep",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 217,
+                  "column": 8
+                },
+                "end": {
+                  "line": 239,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_columnCountChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 241,
+                  "column": 8
+                },
+                "end": {
+                  "line": 243,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "updateStyles",
+              "description": "Update the item widths, column gaps and other styles.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 248,
+                  "column": 8
+                },
+                "end": {
+                  "line": 276,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "...args"
+                }
+              ]
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "demos": [],
+          "slots": [
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "file": "vaadin-form-layout.html",
+                "start": {
+                  "line": 59,
+                  "column": 6
+                },
+                "end": {
+                  "line": 59,
+                  "column": 29
+                }
+              }
+            }
+          ],
+          "events": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 120,
+              "column": 6
+            },
+            "end": {
+              "line": 277,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "tagname": "vaadin-form-layout",
+          "classname": "Vaadin.FormLayoutElement",
+          "mixins": [
+            "Vaadin.ThemableMixin"
+          ],
+          "superclass": "HTMLElement"
+        }
+      ]
+    }
+  ]
+}
