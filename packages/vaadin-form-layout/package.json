@@ -33,6 +33,6 @@
     "gemini-polyserve": "^1.0.0",
     "gemini-sauce": "^1.0.0",
     "stylelint-config-vaadin": "github:vaadin/stylelint-config-vaadin",
-    "web-component-tester": "^5.0.0"
+    "web-component-tester": "^6.0.0-prerelease.7"
   }
 }
