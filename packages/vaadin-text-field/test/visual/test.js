@@ -20,4 +20,11 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
       });
   });
 
+  gemini.suite('styling', function(suite) {
+    suite
+      .setUrl('styling.html')
+      .setCaptureElements('vaadin-text-field')
+      .capture('default', {}, wait);
+  });
+
 });

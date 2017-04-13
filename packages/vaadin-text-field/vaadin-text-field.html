@@ -28,7 +28,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      .input-wrapper {
+      [part~="input-field"] {
         display: flex;
         align-items: center;
       }
@@ -50,7 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       <label part="label" on-click="focus">[[label]]</label>
 
-      <div class="input-wrapper">
+      <div part="input-field">
 
         <slot name="prefix"></slot>
 
@@ -103,6 +103,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `label` | The label element
        * `input` | The input element
        * `error-message` | The error message element
+       * `input-field` | The element that wraps prefix, input and suffix
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
