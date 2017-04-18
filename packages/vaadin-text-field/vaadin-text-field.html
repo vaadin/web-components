@@ -48,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div class="container">
 
-      <label part="label" on-click="focus">[[label]]</label>
+      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
 
       <div part="input-field">
 
@@ -66,19 +66,23 @@ This program is available under Apache License Version 2.0, available at https:/
           pattern="[[pattern]]"
           placeholder="[[placeholder]]"
           readonly$="[[readonly]]"
+          aria-readonly$="[[readonly]]"
           required$="[[required]]"
+          aria-required$="[[required]]"
           value="{{value::input}}"
           title="[[title]]"
           on-blur="validate"
           on-input="_onInput"
-          aria-describedby$="[[_hasError(invalid, errorMessage)]]"
+          aria-describedby$="[[_getActiveErrorId(invalid, errorMessage, _errorId)]]"
+          aria-labelledby$="[[_getActiveLabelId(label, _labelId)]]"
+          aria-invalid$="[[invalid]]"
         >
 
         <slot name="suffix"></slot>
 
       </div>
 
-      <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_hasError(invalid, errorMessage)]]">[[errorMessage]]</div>
+      <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
 
     </div>
 
@@ -261,6 +265,8 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             preventInvalidInput: Boolean,
 
+            _labelId: String,
+
             _errorId: String
           };
         }
@@ -295,8 +301,12 @@ This program is available under Apache License Version 2.0, available at https:/
           return !(this.invalid = !this.checkValidity());
         }
 
-        _hasError(invalid, errorMessage) {
-          return errorMessage && invalid ? this._errorId : undefined;
+        _getActiveErrorId(invalid, errorMessage, errorId) {
+          return errorMessage && invalid ? errorId : undefined;
+        }
+
+        _getActiveLabelId(label, labelId) {
+          return label ? labelId : undefined;
         }
 
         /**
@@ -312,9 +322,9 @@ This program is available under Apache License Version 2.0, available at https:/
             this.updateStyles();
           }
 
-          // ShadyDOM needs unique ids in the document
-          var uniqueId = window.ShadyDOM ? TextFieldElement._uniqueId = 1 + TextFieldElement._uniqueId || 0 : '';
-          this._errorId = 'vaadin-text-field-error' + uniqueId;
+          var uniqueId = TextFieldElement._uniqueId = 1 + TextFieldElement._uniqueId || 0;
+          this._errorId = 'vaadin-text-field-error-' + uniqueId;
+          this._labelId = 'vaadin-text-field-label-' + uniqueId;
         }
 
         attributeChangedCallback(prop, oldVal, newVal) {
