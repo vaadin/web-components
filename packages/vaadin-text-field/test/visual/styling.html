@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../vaadin-text-field.html" rel="import">
+</head>
+
+<body>
+
+  <dom-module id="text-field-styles" theme-for="vaadin-text-field">
+    <template>
+      <style>
+        [part~="label"] {
+          font-weight: bold;
+        }
+
+        [part~="value"] {
+          background-color: red;
+          border: none;
+        }
+
+        [part~="input-field"] {
+          border: 1px solid black;
+        }
+
+        [part~="error-message"] {
+          color: red;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <vaadin-text-field error-message="error" label="Label" required></vaadin-text-field>
+
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      document.querySelector('vaadin-text-field').validate();
+    });
+  </script>
+
+</body>

@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-text-field.html",
         "start": {
-          "line": 327,
-          "column": 4
+          "line": 323,
+          "column": 6
         },
         "end": {
-          "line": 327,
-          "column": 40
+          "line": 323,
+          "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-text-field>` is a Polymer element for text field control in forms.\n\n```html\n<vaadin-text-field label=\"First Name\">\n</vaadin-text-field>\n```",
+          "description": "`<vaadin-text-field>` is a Polymer element for text field control in forms.\n\n```html\n<vaadin-text-field label=\"First Name\">\n</vaadin-text-field>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`value` | The input element\n`error-message` | The error message element\n`input-field` | The element that wraps prefix, value and suffix",
           "summary": "",
           "path": "vaadin-text-field.html",
           "attributes": [
@@ -50,7 +50,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 56,
+                  "line": 57,
                   "column": 9
                 }
               },
@@ -64,11 +64,11 @@
               "sourceRange": {
                 "file": "vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 8
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 9
                 }
               },
@@ -81,12 +81,12 @@
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
               "sourceRange": {
                 "start": {
-                  "line": 129,
-                  "column": 10
+                  "line": 125,
+                  "column": 12
                 },
                 "end": {
-                  "line": 131,
-                  "column": 11
+                  "line": 127,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -97,12 +97,12 @@
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 136,
-                  "column": 10
+                  "line": 132,
+                  "column": 12
                 },
                 "end": {
-                  "line": 139,
-                  "column": 11
+                  "line": 135,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -113,12 +113,12 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 144,
-                  "column": 10
+                  "line": 140,
+                  "column": 12
                 },
                 "end": {
-                  "line": 147,
-                  "column": 11
+                  "line": 143,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -129,12 +129,12 @@
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
                 "start": {
-                  "line": 153,
-                  "column": 10
+                  "line": 149,
+                  "column": 12
                 },
                 "end": {
-                  "line": 155,
-                  "column": 11
+                  "line": 151,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -145,12 +145,12 @@
               "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
               "sourceRange": {
                 "start": {
-                  "line": 162,
-                  "column": 10
+                  "line": 158,
+                  "column": 12
                 },
                 "end": {
-                  "line": 164,
-                  "column": 11
+                  "line": 160,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -161,12 +161,12 @@
               "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
               "sourceRange": {
                 "start": {
-                  "line": 171,
-                  "column": 10
+                  "line": 167,
+                  "column": 12
                 },
                 "end": {
-                  "line": 173,
-                  "column": 11
+                  "line": 169,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -177,12 +177,12 @@
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 178,
-                  "column": 10
+                  "line": 174,
+                  "column": 12
                 },
                 "end": {
-                  "line": 180,
-                  "column": 11
+                  "line": 176,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -193,12 +193,12 @@
               "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.\nThis attribute applies when the value of the type attribute is text, search, tel,\nurl, email, or password, otherwise it is ignored.",
               "sourceRange": {
                 "start": {
-                  "line": 188,
-                  "column": 10
+                  "line": 184,
+                  "column": 12
                 },
                 "end": {
-                  "line": 190,
-                  "column": 11
+                  "line": 186,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -209,12 +209,12 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 195,
-                  "column": 10
+                  "line": 191,
+                  "column": 12
                 },
                 "end": {
-                  "line": 197,
-                  "column": 11
+                  "line": 193,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -225,12 +225,12 @@
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "sourceRange": {
                 "start": {
-                  "line": 202,
-                  "column": 10
+                  "line": 198,
+                  "column": 12
                 },
                 "end": {
-                  "line": 204,
-                  "column": 11
+                  "line": 200,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -241,12 +241,12 @@
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
                 "start": {
-                  "line": 209,
-                  "column": 10
+                  "line": 205,
+                  "column": 12
                 },
                 "end": {
-                  "line": 211,
-                  "column": 11
+                  "line": 207,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -257,12 +257,12 @@
               "description": "Message to show to the user when validation fails.",
               "sourceRange": {
                 "start": {
-                  "line": 216,
-                  "column": 10
+                  "line": 212,
+                  "column": 12
                 },
                 "end": {
-                  "line": 218,
-                  "column": 11
+                  "line": 214,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -273,12 +273,12 @@
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "sourceRange": {
                 "start": {
-                  "line": 224,
-                  "column": 10
+                  "line": 220,
+                  "column": 12
                 },
                 "end": {
-                  "line": 228,
-                  "column": 11
+                  "line": 224,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -289,12 +289,12 @@
               "description": "This property is set to true when the control value invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 233,
-                  "column": 10
+                  "line": 229,
+                  "column": 12
                 },
                 "end": {
-                  "line": 238,
-                  "column": 11
+                  "line": 234,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -305,12 +305,12 @@
               "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
               "sourceRange": {
                 "start": {
-                  "line": 244,
-                  "column": 10
+                  "line": 240,
+                  "column": 12
                 },
                 "end": {
-                  "line": 250,
-                  "column": 11
+                  "line": 246,
+                  "column": 13
                 }
               },
               "metadata": {},
@@ -321,12 +321,12 @@
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "sourceRange": {
                 "start": {
-                  "line": 256,
-                  "column": 10
+                  "line": 252,
+                  "column": 12
                 },
                 "end": {
-                  "line": 256,
-                  "column": 38
+                  "line": 252,
+                  "column": 40
                 }
               },
               "metadata": {},
@@ -367,13 +367,14 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 56,
+                  "line": 57,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {
                   "notify": true,
+                  "observer": "\"_focusedChanged\"",
                   "readOnly": true
                 }
               },
@@ -387,11 +388,11 @@
               "sourceRange": {
                 "file": "vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 8
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 9
                 }
               },
@@ -430,12 +431,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 129,
-                  "column": 10
+                  "line": 125,
+                  "column": 12
                 },
                 "end": {
-                  "line": 131,
-                  "column": 11
+                  "line": 127,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -449,12 +450,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 136,
-                  "column": 10
+                  "line": 132,
+                  "column": 12
                 },
                 "end": {
-                  "line": 139,
-                  "column": 11
+                  "line": 135,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -469,12 +470,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 144,
-                  "column": 10
+                  "line": 140,
+                  "column": 12
                 },
                 "end": {
-                  "line": 147,
-                  "column": 11
+                  "line": 143,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -489,12 +490,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 153,
-                  "column": 10
+                  "line": 149,
+                  "column": 12
                 },
                 "end": {
-                  "line": 155,
-                  "column": 11
+                  "line": 151,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -508,12 +509,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 162,
-                  "column": 10
+                  "line": 158,
+                  "column": 12
                 },
                 "end": {
-                  "line": 164,
-                  "column": 11
+                  "line": 160,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -527,12 +528,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 171,
-                  "column": 10
+                  "line": 167,
+                  "column": 12
                 },
                 "end": {
-                  "line": 173,
-                  "column": 11
+                  "line": 169,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -546,12 +547,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 178,
-                  "column": 10
+                  "line": 174,
+                  "column": 12
                 },
                 "end": {
-                  "line": 180,
-                  "column": 11
+                  "line": 176,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -565,12 +566,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 188,
-                  "column": 10
+                  "line": 184,
+                  "column": 12
                 },
                 "end": {
-                  "line": 190,
-                  "column": 11
+                  "line": 186,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -584,12 +585,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 195,
-                  "column": 10
+                  "line": 191,
+                  "column": 12
                 },
                 "end": {
-                  "line": 197,
-                  "column": 11
+                  "line": 193,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -603,12 +604,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 202,
-                  "column": 10
+                  "line": 198,
+                  "column": 12
                 },
                 "end": {
-                  "line": 204,
-                  "column": 11
+                  "line": 200,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -622,12 +623,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 209,
-                  "column": 10
+                  "line": 205,
+                  "column": 12
                 },
                 "end": {
-                  "line": 211,
-                  "column": 11
+                  "line": 207,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -641,12 +642,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 216,
-                  "column": 10
+                  "line": 212,
+                  "column": 12
                 },
                 "end": {
-                  "line": 218,
-                  "column": 11
+                  "line": 214,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -660,12 +661,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 224,
-                  "column": 10
+                  "line": 220,
+                  "column": 12
                 },
                 "end": {
-                  "line": 228,
-                  "column": 11
+                  "line": 224,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -682,12 +683,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 233,
-                  "column": 10
+                  "line": 229,
+                  "column": 12
                 },
                 "end": {
-                  "line": 238,
-                  "column": 11
+                  "line": 234,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -704,12 +705,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 244,
-                  "column": 10
+                  "line": 240,
+                  "column": 12
                 },
                 "end": {
-                  "line": 250,
-                  "column": 11
+                  "line": 246,
+                  "column": 13
                 }
               },
               "metadata": {
@@ -727,12 +728,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 256,
-                  "column": 10
+                  "line": 252,
+                  "column": 12
                 },
                 "end": {
-                  "line": 256,
-                  "column": 38
+                  "line": 252,
+                  "column": 40
                 }
               },
               "metadata": {
@@ -747,104 +748,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 301,
-                  "column": 6
+                  "line": 297,
+                  "column": 8
                 },
                 "end": {
-                  "line": 310,
-                  "column": 7
+                  "line": 306,
+                  "column": 9
                 }
               },
               "metadata": {},
               "params": []
-            },
-            {
-              "name": "_focus",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 101,
-                  "column": 4
-                },
-                "end": {
-                  "line": 109,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
-              "name": "blur",
-              "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
-              "privacy": "private",
-              "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 116,
-                  "column": 4
-                },
-                "end": {
-                  "line": 118,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
-              "name": "_disabledChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 120,
-                  "column": 4
-                },
-                "end": {
-                  "line": 129,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "disabled"
-                }
-              ],
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
-              "name": "_tabindexChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 131,
-                  "column": 4
-                },
-                "end": {
-                  "line": 143,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "tabindex"
-                }
-              ],
-              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "connectedCallback",
@@ -885,17 +798,170 @@
               "inheritedFrom": "Vaadin.FormElementMixin"
             },
             {
+              "name": "_focusedChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 110,
+                  "column": 4
+                },
+                "end": {
+                  "line": 118,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "focused"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_bodyKeydownListener",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 120,
+                  "column": 4
+                },
+                "end": {
+                  "line": 122,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_bodyKeyupListener",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 124,
+                  "column": 4
+                },
+                "end": {
+                  "line": 126,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_focus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 137,
+                  "column": 4
+                },
+                "end": {
+                  "line": 145,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "blur",
+              "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 152,
+                  "column": 4
+                },
+                "end": {
+                  "line": 154,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_disabledChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 156,
+                  "column": 4
+                },
+                "end": {
+                  "line": 165,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "disabled"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_tabindexChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 167,
+                  "column": 4
+                },
+                "end": {
+                  "line": 179,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "tabindex"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
               "name": "_onInput",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 264,
-                  "column": 6
+                  "line": 260,
+                  "column": 8
                 },
                 "end": {
-                  "line": 271,
-                  "column": 7
+                  "line": 267,
+                  "column": 9
                 }
               },
               "metadata": {},
@@ -911,12 +977,12 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 273,
-                  "column": 6
+                  "line": 269,
+                  "column": 8
                 },
                 "end": {
-                  "line": 278,
-                  "column": 7
+                  "line": 274,
+                  "column": 9
                 }
               },
               "metadata": {},
@@ -932,12 +998,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 286,
-                  "column": 6
+                  "line": 282,
+                  "column": 8
                 },
                 "end": {
-                  "line": 288,
-                  "column": 7
+                  "line": 284,
+                  "column": 9
                 }
               },
               "metadata": {},
@@ -949,12 +1015,12 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 290,
-                  "column": 6
+                  "line": 286,
+                  "column": 8
                 },
                 "end": {
-                  "line": 292,
-                  "column": 7
+                  "line": 288,
+                  "column": 9
                 }
               },
               "metadata": {},
@@ -973,12 +1039,12 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 297,
-                  "column": 6
+                  "line": 293,
+                  "column": 8
                 },
                 "end": {
-                  "line": 299,
-                  "column": 7
+                  "line": 295,
+                  "column": 9
                 }
               },
               "metadata": {},
@@ -990,12 +1056,12 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 312,
-                  "column": 6
+                  "line": 308,
+                  "column": 8
                 },
                 "end": {
-                  "line": 319,
-                  "column": 7
+                  "line": 315,
+                  "column": 9
                 }
               },
               "metadata": {},
@@ -1024,11 +1090,11 @@
               "range": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 68,
+                  "line": 54,
                   "column": 8
                 },
                 "end": {
-                  "line": 68,
+                  "line": 54,
                   "column": 35
                 }
               }
@@ -1039,11 +1105,11 @@
               "range": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 94,
+                  "line": 76,
                   "column": 8
                 },
                 "end": {
-                  "line": 94,
+                  "line": 76,
                   "column": 35
                 }
               }
@@ -1086,12 +1152,12 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 117,
-              "column": 4
+              "line": 113,
+              "column": 6
             },
             "end": {
-              "line": 320,
-              "column": 5
+              "line": 316,
+              "column": 7
             }
           },
           "privacy": "public",
