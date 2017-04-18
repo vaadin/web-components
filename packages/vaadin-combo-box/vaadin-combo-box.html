@@ -422,17 +422,7 @@ Custom property | Description | Default
       this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
     },
 
-    registered: function() {
-      if (Polymer.Element) {
-        this._beforeRegister();
-      }
-    },
-
     beforeRegister: function() {
-      this._beforeRegister();
-    },
-
-    _beforeRegister: function() {
       var template = Polymer.DomModule.import('vaadin-combo-box', 'template');
       var version = Polymer.Element ? 'v1' : 'v0';
       var inputTemplate = Polymer.DomModule.import('vaadin-combo-box', 'template#' + version);

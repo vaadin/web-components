@@ -56,8 +56,8 @@
           valueNull = root.$.valuenull;
           comboBox = root.$.combobox;
         } else {
-          valueNull = Polymer.dom(root).querySelector('value-null');
-          comboBox = Polymer.dom(root).querySelector('vaadin-combo-box');
+          valueNull = Polymer.dom(root.root).querySelector('value-null');
+          comboBox = Polymer.dom(root.root).querySelector('vaadin-combo-box');
         }
       });
 
