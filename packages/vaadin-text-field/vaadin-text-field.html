@@ -14,7 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
-        width: 175px; /* default input width in Chrome */
+        width: 175px;
         outline: none;
       }
 
@@ -33,14 +33,14 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: center;
       }
 
-      [part="input"] {
+      [part="value"] {
         width: 100%;
         box-sizing: border-box;
         flex: 1;
         min-width: 0;
       }
 
-      [part="input"]::-ms-clear {
+      [part="value"]::-ms-clear {
         display: none;
       }
 
@@ -54,7 +54,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <slot name="prefix"></slot>
 
-        <input id="input" part="input"
+        <input id="input" part="value"
           autocomplete$="[[autocomplete]]"
           autocorrect$="[[autocorrect]]"
           autofocus$="[[autofocus]]"
@@ -101,9 +101,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * Part name | Description
        * ----------------|----------------
        * `label` | The label element
-       * `input` | The input element
+       * `value` | The input element
        * `error-message` | The error message element
-       * `input-field` | The element that wraps prefix, input and suffix
+       * `input-field` | The element that wraps prefix, value and suffix
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
