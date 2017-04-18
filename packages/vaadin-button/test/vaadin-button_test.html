@@ -17,38 +17,88 @@
   </test-fixture>
 
   <script>
-    describe('vaadin-button', function() {
+    describe('vaadin-button', () => {
+      var down = node => {
+        node.dispatchEvent(new CustomEvent('down'));
+      };
+
+      var up = node => {
+        node.dispatchEvent(new CustomEvent('up'));
+      };
+
       var vaadinButton, nativeButton;
 
-      beforeEach(function() {
+      beforeEach(() => {
         vaadinButton = fixture('default');
         nativeButton = Polymer.dom(vaadinButton.root).querySelector('button');
       });
 
-      it('should define button label using light DOM', function() {
+      it('should define button label using light DOM', () => {
         var children = Polymer.dom(nativeButton).getEffectiveChildNodes();
         expect(children[1].textContent).to.be.equal('Vaadin ');
         expect(children[2].outerHTML).to.be.equal('<i>Button</i>');
       });
 
-      it('can be disabled imperatively', function() {
+      it('can be disabled imperatively', () => {
         vaadinButton.disabled = true;
         expect(nativeButton.hasAttribute('disabled')).to.be.eql(true);
       });
 
       it('fires click event', function(done) {
-        vaadinButton.addEventListener('click', function() {
+        vaadinButton.addEventListener('click', () => {
           done();
         });
         MockInteractions.downAndUp(vaadinButton);
       });
 
-      it('host should have the `button` role', function() {
+      it('host should have the `button` role', () => {
         expect(vaadinButton.getAttribute('role')).to.be.eql('button');
       });
 
-      it('native button should have the `presentation` role', function() {
+      it('native button should have the `presentation` role', () => {
         expect(nativeButton.getAttribute('role')).to.be.eql('presentation');
+      });
+
+      it('should have active attribute on down', () => {
+        down(vaadinButton);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute after up', () => {
+        down(vaadinButton);
+
+        up(vaadinButton);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.false;
+      });
+
+      it('should have active attribute on enter', () => {
+        MockInteractions.keyDownOn(vaadinButton, 13);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute 500ms after enter', () => {
+        MockInteractions.keyDownOn(vaadinButton, 13);
+
+        MockInteractions.keyUpOn(vaadinButton, 13);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.false;
+      });
+
+      it('should have active attribute on space', () => {
+        MockInteractions.keyDownOn(vaadinButton, 32);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute after space', () => {
+        MockInteractions.keyDownOn(vaadinButton, 32);
+
+        MockInteractions.keyUpOn(vaadinButton, 32);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.false;
       });
     });
   </script>
