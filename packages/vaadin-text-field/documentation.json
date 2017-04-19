@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-text-field.html",
         "start": {
-          "line": 323,
+          "line": 334,
           "column": 6
         },
         "end": {
-          "line": 323,
+          "line": 334,
           "column": 42
         }
       },
@@ -93,15 +93,31 @@
               "type": "string"
             },
             {
+              "name": "autocorrect",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 12
+                },
+                "end": {
+                  "line": 136,
+                  "column": 31
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
               "name": "error-message",
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 132,
+                  "line": 141,
                   "column": 12
                 },
                 "end": {
-                  "line": 135,
+                  "line": 144,
                   "column": 13
                 }
               },
@@ -113,11 +129,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 149,
                   "column": 12
                 },
                 "end": {
-                  "line": 143,
+                  "line": 152,
                   "column": 13
                 }
               },
@@ -129,22 +145,6 @@
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
                 "start": {
-                  "line": 149,
-                  "column": 12
-                },
-                "end": {
-                  "line": 151,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "maxlength",
-              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
-              "sourceRange": {
-                "start": {
                   "line": 158,
                   "column": 12
                 },
@@ -154,11 +154,11 @@
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "string"
             },
             {
-              "name": "minlength",
-              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
+              "name": "maxlength",
+              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
               "sourceRange": {
                 "start": {
                   "line": 167,
@@ -173,15 +173,31 @@
               "type": "number"
             },
             {
+              "name": "minlength",
+              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
+              "sourceRange": {
+                "start": {
+                  "line": 176,
+                  "column": 12
+                },
+                "end": {
+                  "line": 178,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "number"
+            },
+            {
               "name": "name",
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 174,
+                  "line": 183,
                   "column": 12
                 },
                 "end": {
-                  "line": 176,
+                  "line": 185,
                   "column": 13
                 }
               },
@@ -193,11 +209,11 @@
               "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.\nThis attribute applies when the value of the type attribute is text, search, tel,\nurl, email, or password, otherwise it is ignored.",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 193,
                   "column": 12
                 },
                 "end": {
-                  "line": 186,
+                  "line": 195,
                   "column": 13
                 }
               },
@@ -209,11 +225,11 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 191,
+                  "line": 200,
                   "column": 12
                 },
                 "end": {
-                  "line": 193,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -225,11 +241,11 @@
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 200,
+                  "line": 209,
                   "column": 13
                 }
               },
@@ -241,11 +257,11 @@
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 214,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 216,
                   "column": 13
                 }
               },
@@ -257,11 +273,11 @@
               "description": "Message to show to the user when validation fails.",
               "sourceRange": {
                 "start": {
-                  "line": 212,
+                  "line": 221,
                   "column": 12
                 },
                 "end": {
-                  "line": 214,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -273,11 +289,11 @@
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 229,
                   "column": 12
                 },
                 "end": {
-                  "line": 224,
+                  "line": 233,
                   "column": 13
                 }
               },
@@ -289,11 +305,11 @@
               "description": "This property is set to true when the control value invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 229,
+                  "line": 238,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 243,
                   "column": 13
                 }
               },
@@ -305,11 +321,11 @@
               "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 255,
                   "column": 13
                 }
               },
@@ -321,11 +337,11 @@
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "sourceRange": {
                 "start": {
-                  "line": 252,
+                  "line": 261,
                   "column": 12
                 },
                 "end": {
-                  "line": 252,
+                  "line": 261,
                   "column": 40
                 }
               },
@@ -444,17 +460,36 @@
               }
             },
             {
+              "name": "autocorrect",
+              "type": "string",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 12
+                },
+                "end": {
+                  "line": 136,
+                  "column": 31
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
               "name": "errorMessage",
               "type": "string",
               "description": "Error to show when the input value is invalid.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 132,
+                  "line": 141,
                   "column": 12
                 },
                 "end": {
-                  "line": 135,
+                  "line": 144,
                   "column": 13
                 }
               },
@@ -470,11 +505,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 149,
                   "column": 12
                 },
                 "end": {
-                  "line": 143,
+                  "line": 152,
                   "column": 13
                 }
               },
@@ -487,25 +522,6 @@
               "name": "list",
               "type": "string",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 149,
-                  "column": 12
-                },
-                "end": {
-                  "line": 151,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "maxlength",
-              "type": "number",
-              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -522,9 +538,9 @@
               }
             },
             {
-              "name": "minlength",
+              "name": "maxlength",
               "type": "number",
-              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
+              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -541,17 +557,36 @@
               }
             },
             {
+              "name": "minlength",
+              "type": "number",
+              "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 176,
+                  "column": 12
+                },
+                "end": {
+                  "line": 178,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
               "name": "name",
               "type": "string",
               "description": "The name of the control, which is submitted with the form data.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 174,
+                  "line": 183,
                   "column": 12
                 },
                 "end": {
-                  "line": 176,
+                  "line": 185,
                   "column": 13
                 }
               },
@@ -566,11 +601,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 193,
                   "column": 12
                 },
                 "end": {
-                  "line": 186,
+                  "line": 195,
                   "column": 13
                 }
               },
@@ -585,11 +620,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 191,
+                  "line": 200,
                   "column": 12
                 },
                 "end": {
-                  "line": 193,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -604,11 +639,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 200,
+                  "line": 209,
                   "column": 13
                 }
               },
@@ -623,11 +658,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 214,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 216,
                   "column": 13
                 }
               },
@@ -642,11 +677,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 212,
+                  "line": 221,
                   "column": 12
                 },
                 "end": {
-                  "line": 214,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -661,11 +696,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 229,
                   "column": 12
                 },
                 "end": {
-                  "line": 224,
+                  "line": 233,
                   "column": 13
                 }
               },
@@ -683,11 +718,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 229,
+                  "line": 238,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 243,
                   "column": 13
                 }
               },
@@ -705,11 +740,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 255,
                   "column": 13
                 }
               },
@@ -728,12 +763,31 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 252,
+                  "line": 261,
                   "column": 12
                 },
                 "end": {
-                  "line": 252,
+                  "line": 261,
                   "column": 40
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_errorId",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 263,
+                  "column": 12
+                },
+                "end": {
+                  "line": 263,
+                  "column": 28
                 }
               },
               "metadata": {
@@ -748,11 +802,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 297,
+                  "line": 308,
                   "column": 8
                 },
                 "end": {
-                  "line": 306,
+                  "line": 317,
                   "column": 9
                 }
               },
@@ -956,11 +1010,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 271,
                   "column": 8
                 },
                 "end": {
-                  "line": 267,
+                  "line": 278,
                   "column": 9
                 }
               },
@@ -977,11 +1031,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 269,
+                  "line": 280,
                   "column": 8
                 },
                 "end": {
-                  "line": 274,
+                  "line": 285,
                   "column": 9
                 }
               },
@@ -998,11 +1052,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 282,
+                  "line": 293,
                   "column": 8
                 },
                 "end": {
-                  "line": 284,
+                  "line": 295,
                   "column": 9
                 }
               },
@@ -1015,11 +1069,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 286,
+                  "line": 297,
                   "column": 8
                 },
                 "end": {
-                  "line": 288,
+                  "line": 299,
                   "column": 9
                 }
               },
@@ -1039,11 +1093,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 293,
+                  "line": 304,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 306,
                   "column": 9
                 }
               },
@@ -1056,11 +1110,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 319,
                   "column": 8
                 },
                 "end": {
-                  "line": 315,
+                  "line": 326,
                   "column": 9
                 }
               },
@@ -1156,7 +1210,7 @@
               "column": 6
             },
             "end": {
-              "line": 316,
+              "line": 327,
               "column": 7
             }
           },

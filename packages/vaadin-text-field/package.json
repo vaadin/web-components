@@ -31,6 +31,7 @@
     "gulp-html-extract": "^0.0.3",
     "gulp-stylelint": "^3.7.0",
     "lighthouse": "~1.6.0",
+    "polymer-cli": "^0.18.0",
     "polyserve": "^0.15.0",
     "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^6.0.0-prerelease.7"
