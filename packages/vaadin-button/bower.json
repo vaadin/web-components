@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-text-field": "^1.0.0-alpha3",
+    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^1.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.1"
   },
   "resolutions": {
