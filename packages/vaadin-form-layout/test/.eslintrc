@@ -7,6 +7,7 @@
     "afterEach": false,
     "fixture": false,
     "it": false,
-    "expect": false
+    "expect": false,
+    "sinon": false
   }
 }
