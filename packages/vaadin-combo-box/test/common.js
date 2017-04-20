@@ -1,5 +1,6 @@
 var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var chrome = /Chrome/i.test(navigator.userAgent);
+var edge = /Edge/i.test(navigator.userAgent);
 
 var touchDevice = (function() {
   try {

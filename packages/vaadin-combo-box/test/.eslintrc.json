@@ -7,6 +7,7 @@
     "WCT": false,
     "ios": false,
     "chrome": false,
+    "edge": false,
     "getItemArray": false,
     "before": false,
     "beforeEach": false,
