@@ -9,6 +9,23 @@
     <link rel="import" href="../elements-demo-resources/api-doc-viewer.html">
   </head>
   <body>
+    <form>
+      <select name="element-class-name" onchange="this.form.submit()">
+        <option>Vaadin.FormLayoutElement</option>
+        <option>Vaadin.FormItemElement</option>
+      </select>
+    </form>
     <api-doc-viewer url="docs.json" element-class-name="Vaadin.FormLayoutElement"></api-doc-viewer>
+    <script>
+      // TODO: Proper API docs navigation
+      addEventListener('WebComponentsReady', function() {
+        var matches = /element-class-name=([^&]+)/.exec(location.search);
+        var elementClassName = matches && matches[1];
+        if (elementClassName) {
+          document.querySelector('select[name="element-class-name"]').value = elementClassName;
+          document.querySelector('api-doc-viewer').elementClassName = elementClassName;
+        }
+      });
+    </script>
   </body>
 </html>

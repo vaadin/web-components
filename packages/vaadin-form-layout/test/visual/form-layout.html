@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../../polymer/polymer-element.html">
+  <link rel="import" href="../../vaadin-form-layout.html">
+  <link rel="import" href="../../vaadin-form-item.html">
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      // Wait for the other 'WebComponentsReady' event listeners
+      setTimeout(function() {
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <h3>Basic Usage</h3>
+
+  <vaadin-form-layout id="basic">
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <span slot="label">Date of Birth</span>
+      <input placeholder="YYYY" size="4"> -
+      <input placeholder="MM" size="2"> -
+      <input placeholder="DD" size="2"><br>
+      <em>Example: 1900-01-01</em>
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <input type="checkbox"> Subscribe to our Newsletter
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+  <h3>Single Column</h3>
+
+  <vaadin-form-layout id="singleColumn" columns="1">
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+  <h3>Custom Responsive Steps</h3>
+
+  <vaadin-form-layout id="columns" columns="1, 30em 2 labels-on-top, 40em 2, 50em 3 labels-on-top">
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+  <h3>Spanning Items on Multiple Columns</h3>
+
+  <vaadin-form-layout id="colspan">
+
+    <vaadin-form-item colspan="2">
+      <label slot="label">Address</label>
+      <input class="full-width">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+  <h3>Explicit New Row</h3>
+
+  <vaadin-form-layout id="br">
+
+    <vaadin-form-item>
+      <label slot="label">Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+    <br>
+
+    <vaadin-form-item>
+      <label slot="label">Confirm Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+  <h3>Custom CSS Properties</h3>
+
+  <dom-module id="my-form">
+    <template>
+      <style>
+
+        vaadin-form-layout {
+          --vaadin-form-layout-column-gap: 4em;
+        }
+
+        vaadin-form-item {
+          --vaadin-form-item-label-width: 6em;
+          --vaadin-form-item-label-gap: 1em;
+        }
+
+      </style>
+      <vaadin-form-layout>
+
+        <vaadin-form-item>
+          <label slot="label">First Name</label>
+          <input class="full-width" value="Jane">
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Last Name</label>
+          <input class="full-width" value="Doe">
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Email</label>
+          <input class="full-width" value="jane.doe@example.com">
+        </vaadin-form-item>
+
+      </vaadin-form-layout>
+    </template>
+  </dom-module>
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      class MyFormElement extends Polymer.Element {
+        static get is() {
+          return 'my-form';
+        }
+      }
+      customElements.define(MyFormElement.is, MyFormElement);
+    });
+  </script>
+  <my-form id="cssProperties"></my-form>
+
+</body>
+</html>

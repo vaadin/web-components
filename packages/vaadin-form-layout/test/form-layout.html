@@ -13,6 +13,7 @@
       <vaadin-form-layout>
         <vaadin-text-field></vaadin-text-field>
         <paper-input></paper-input>
+        <vaadin-form-item></vaadin-form-item>
       </vaadin-form-layout>
     </template>
   </test-fixture>
@@ -73,7 +74,7 @@
       });
 
       it('should have default value', function() {
-        expect(layout.columns).to.equal('1, 2 40em');
+        expect(layout.columns).to.equal('1 labels-on-top, 20em 1, 40em 2');
       });
 
       it('should assign width inline style on items', function() {
@@ -82,6 +83,20 @@
         var parsedWidth = getParsedWidth(layout.firstElementChild);
         expect(parsedWidth.percentage).to.match(/%$/);
         expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, .5);
+      });
+
+      it('should set label-on-top attribute to child form-item elements', function() {
+        layout.columns = '1';
+
+        expect(layout.children[0].getAttribute('label-on-top')).to.be.null;
+        expect(layout.children[1].getAttribute('label-on-top')).to.be.null;
+        expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+
+        layout.columns = '1 labels-on-top';
+
+        expect(layout.children[0].getAttribute('label-on-top')).to.be.null;
+        expect(layout.children[1].getAttribute('label-on-top')).to.be.null;
+        expect(layout.children[2].getAttribute('label-on-top')).to.equal('');
       });
 
       describe('responsive', function() {
@@ -99,59 +114,88 @@
         }
 
         it('should be responsive by default', function() {
+          document.body.style.width = '10em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.equal('');
+
           document.body.style.width = '20em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
 
           document.body.style.width = '40em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
         });
 
         it('should allow specifying non-responsive', function() {
           layout.columns = '3';
 
+          document.body.style.width = '10em';
+          layout.dispatchEvent(new CustomEvent('iron-resize'));
+          expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+
           document.body.style.width = '20em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
 
           document.body.style.width = '40em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
         });
 
         it('should allow specifying more steps', function() {
-          layout.columns = '1, 2 20em, 5 40em';
+          layout.columns = '1, 20em 2 labels-on-top, 40em 5';
 
           document.body.style.width = '10em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
 
           document.body.style.width = '20em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.equal('');
 
           document.body.style.width = '40em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(5, .1);
+          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
         });
       });
     });
 
-    describe('column-gap CSS property', function() {
+    describe('CSS properties', function() {
       var layout;
+
+      function getCustomCSSPropertyValue(element, propertyName) {
+        return window.ShadyCSS
+          ? window.ShadyCSS.getComputedStyleValue(element, propertyName)
+          : getComputedStyle(element).getPropertyValue(propertyName);
+      }
 
       beforeEach(function() {
         layout = fixture('default');
       });
 
-      it('should apply default gap', function() {
+      it('should apply default column-gap', function() {
         expect(getParsedWidth(layout.firstElementChild).gap).to.equal('2em');
       });
 
       it('should support updating with `updateStyles` call', function() {
-        layout.updateStyles({'--vaadin-form-layout-column-gap': '1cm'});
-        expect(getParsedWidth(layout.firstElementChild).gap).to.equal('1cm');
+        layout.updateStyles({
+          '--vaadin-form-layout-column-gap': '2cm',
+          '--vaadin-form-layout-label-width': '4cm',
+          '--vaadin-form-layout-label-gap': '1cm'
+        });
+        expect(getParsedWidth(layout.firstElementChild).gap).to.equal('2cm');
+        expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-width')).to.equal('4cm');
+        expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-gap')).to.equal('1cm');
       });
     });
 

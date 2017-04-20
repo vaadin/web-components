@@ -13,7 +13,8 @@
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
-      'form-layout.html'
+      'form-layout.html',
+      'form-item.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, suite + '?wc-shadydom=true']);
     }, []));

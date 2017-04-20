@@ -64,13 +64,27 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
       /**
-       * `<vaadin-form-layout>` is a Polymer element providing configurable responsive layout for form elements.
+       * `<vaadin-form-layout>` is a Polymer element providing configurable responsive
+       * layout for form elements.
        *
        * ```html
        * <vaadin-form-layout>
-       *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
-       *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
-       *   <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">First Name</label>
+       *     <input class="full-width" value="Jane">
+       *   </vaadin-form-item>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">Last Name</label>
+       *     <input class="full-width" value="Doe">
+       *   </vaadin-form-item>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">Email</label>
+       *     <input class="full-width" value="jane.doe@example.com">
+       *   </vaadin-form-item>
+       *
        * </vaadin-form-layout>
        * ```
        *
@@ -87,11 +101,26 @@ This program is available under Apache License Version 2.0, available at https:/
        * You can use `colspan` attribute on the items.
        * In the example below, the first text field spans on two columns:
        *
+       * ```html
        * <vaadin-form-layout>
-       *   <vaadin-text-field colspan="2" label="Address"></vaadin-text-field>
-       *   <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
-       *   <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
+       *
+       *   <vaadin-form-item colspan="2">
+       *     <label slot="label">Address</label>
+       *     <input class="full-width">
+       *   </vaadin-form-item>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">First Name</label>
+       *     <input class="full-width" value="Jane">
+       *   </vaadin-form-item>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">Last Name</label>
+       *     <input class="full-width" value="Doe">
+       *   </vaadin-form-item>
+       *
        * </vaadin-form-layout>
+       * ```
        *
        * ### Explicit New Row
        *
@@ -99,9 +128,19 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ```html
        * <vaadin-form-layout>
-       *   <vaadin-text-field label="Email"></vaadin-text-field>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">Email</label>
+       *     <input class="full-width">
+       *   </vaadin-form-item>
+       *
        *   <br>
-       *   <vaadin-text-field label="Confirm Email"></vaadin-text-field>
+       *
+       *   <vaadin-form-item>
+       *     <label slot="label">Confirm Email</label>
+       *     <input class="full-width">
+       *   </vaadin-form-item>
+       *
        * </vaadin-form-layout>
        * ```
        *
@@ -133,37 +172,77 @@ This program is available under Apache License Version 2.0, available at https:/
           return {
             /**
              * Number of columns in the layout. Allows specifying a responsive
-             * behavior with the number of columns depending on the layout width.
+             * behavior with the number of columns and the label position
+             * depending on the layout width.
              *
              * The value is a comma-separated list of one or more responsive
-             * steps, each responsive step is a space-separated list of the column
-             * count and the corresponding min-width threshold.
+             * steps, each responsive step is a space-separated list of the
+             * optional min-width threshold, the column count, and the optional
+             * `labels-on-top` flag.
              *
              * The min-width thresholds are CSS length values specifying the
              * minimum width of the layout for each responsive step.
              *
-             * Formal syntax:
-             *     <responsive-step> [ , <responsive-step> ]*
-             * where
-             *     <responsive-step> = <column-count> [ <min-width> ]?
+             * #### Formal syntax
              *
-             * <column-count> = <integer>
-             *     Number of columns, assumed as 1 if zero or negative.
-             * <min-width> = <length>
+             *     <responsive-step> [ , <responsive-step> ]*
+             *
+             *     <responsive-step> =
+             *         [ <min-width> ]? <column-count> [ labels-on-top ]?
+             *
+             * where:
+             *
+             * <dl>
+             *   <dt>`<min-width> = <length>`</dt>
+             *   <dd>
              *     Minimum width of the layout corresponding to this step.
              *     Optional, assumed as 0 if omitted.
+             *   </dd>
              *
-             * Examples:
+             *   <dt>`<column-count> = <integer>`</dt>
+             *   <dd>
+             *     Number of columns, assumed as 1 if zero or negative.
+             *   </dd>
              *
-             * `1`
-             *     The layout is always a single column.
-             * `1, 2 40em`
-             *     The layout is two-column when the layout width is >= 40em, and
-             *     single-column otherwise.
+             *   <dt>`labels-on-top`</dt>
+             *   <dd>
+             *     Optional, move the labels in the child `<vaadin-form-item>`
+             *     elements on top of the input fields. Labels are aside the
+             *     input fields if omitted.
+             *   </dd>
+             * </dl>
+             *
+             * #### Examples
+             *
+             * <dl>
+             *   <dt>`1`</dt>
+             *   <dd>
+             *     <p>The layout is always a single column, labels aside.
+             *   </dd>
+             *
+             *   <dt>`1, 40em 2`</dt>
+             *   <dd>
+             *     <p>Sets two responsive steps:
+             *     <ol>
+             *       <li>When the layout width is < 40em, one column, labels aside.
+             *       <li>Width >= 40em, two columns, labels aside.
+             *     </ol>
+             *   </dd>
+             *
+             *   <dt>`1 labels-on-top, 20em 1, 40em 2`</dt>
+             *   <dd>
+             *     <p>Default value. Three responsive steps:
+             *     <ol>
+             *       <li>Width < 20em, one column, labels on top.
+             *       <li>20em <= width < 40em, one column, labels aside.
+             *       <li>Width >= 40em, two columns, labels aside.
+             *     </ol>
+             *   </dd>
+             * </dl>
              */
             columns: {
               type: String,
-              value: '1, 2 40em',
+              value: '1 labels-on-top, 20em 1, 40em 2',
               observer: '_columnsChanged'
             },
 
@@ -176,13 +255,41 @@ This program is available under Apache License Version 2.0, available at https:/
              * Current number of columns in the layout
              */
             _columnCount: {
-              type: Number,
-              observer: '_columnCountChanged'
+              type: Number
+            },
+
+            /**
+             * Indicates that labels are on top
+             */
+            _labelsOnTop: {
+              type: Boolean
             }
           };
         }
 
+        static get observers() {
+          return [
+            '_invokeUpdateStyles(_columnCount, _labelsOnTop)'
+          ];
+        }
+
         ready() {
+          // Here we create and attach a style element that we use for validating
+          // CSS values in `columns`. We can’t add this to the `<template>`,
+          // because Polymer will throw it away. We need to create this before
+          // `super.ready()`, because `super.ready()` invokes `_columnsChanged`,
+          // which invokes the `_parsedResponsiveSteps` parser method,
+          // which requires `this._styleElement` to be already attached.
+          this._styleElement = document.createElement('style');
+          this.root.appendChild(this._styleElement);
+          // Ensure there is a child text node in the style element
+          this._styleElement.textContent = ' ';
+          if (window.ShadyDOM) {
+            // With ShadyDOM, setting textContent attaches text content nodes
+            // asynchronously, but we need it right away.
+            window.ShadyDOM.flush();
+          }
+
           super.ready();
 
           this.addEventListener('iron-resize', this._selectResponsiveStep);
@@ -200,18 +307,40 @@ This program is available under Apache License Version 2.0, available at https:/
           return 1;
         }
 
+        _isValidCSSLength(value) {
+          // Let us choose a CSS property for validating CSS <length> values:
+          // - `border-spacing` accepts `<length> | inherit`, it’s the best! But
+          //   it does not disallow invalid values at all in MSIE :-(
+          // - `letter-spacing` and `word-spacing` accept
+          //   `<length> | normal | inherit`, and disallows everything else, like
+          //   `<percentage>`, `auto` and such, good enough.
+          // - `word-spacing` is used since its shorter.
+
+          // Disallow known keywords allowed as the `word-spacing` value
+          if (value === 'inherit' || value === 'normal') return false;
+
+          // Use the value in a stylesheet and check the parsed value. Invalid
+          // input value results in empty parsed value.
+          this._styleElement.firstChild.nodeValue = `#styleElement { word-spacing: ${value}; }`;
+          return this._styleElement.sheet.cssRules[0].style.getPropertyValue('word-spacing') !== '';
+        }
+
         _parseResponsiveSteps(columns) {
           return columns.toString().split(',').map(parts => {
-            const [columns, minWidth] = parts.trim().split(/\s+/);
+            parts = parts.trim().split(/\s+/);
+            // If the first part is a valid CSS length, then take it as minWidth
+            const minWidth = this._isValidCSSLength(parts[0]) ? parts.shift() : 0;
+            const [columns, labelsOnTop] = parts;
             return {
+              minWidth: minWidth,
               columns: this._naturalNumberOrOne(parseInt(columns, 10)),
-              minWidth: minWidth || 0
+              labelsOnTop: labelsOnTop === 'labels-on-top'
             };
           });
         }
 
         _columnsChanged(columns) {
-          this._parsedResponsiveSteps = this._parseResponsiveSteps(columns || '1, 2 40em');
+          this._parsedResponsiveSteps = this._parseResponsiveSteps(columns || '1 labels-on-top, 20em 1, 40em 2');
           this._selectResponsiveStep();
         }
 
@@ -234,18 +363,19 @@ This program is available under Apache License Version 2.0, available at https:/
           // Sometimes converting units is not possible, e.g, when element is
           // not connected. Then the `selectedStep` stays `undefined`.
           if (selectedStep) {
-            // Update column count to the chosen responsive step’s value
+            // Apply the chosen responsive step’s properties
             this._columnCount = selectedStep.columns;
+            this._labelsOnTop = selectedStep.labelsOnTop;
           }
         }
 
-        _columnCountChanged() {
+        _invokeUpdateStyles() {
           this.updateStyles();
         }
 
         /**
-        * Update the item widths, column gaps and other styles.
-        */
+         * Set custom CSS property values and update the layout.
+         */
         updateStyles(...args) {
           super.updateStyles(...args);
 
@@ -260,19 +390,27 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const columnGap = window.ShadyCSS
             ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
-            : getComputedStyle(this, '--vaadin-form-layout-column-gap');
+            : getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-gap');
 
           Array.from(this.children).forEach(child => {
             let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
 
             // Never span further than the number of columns
-            colspan = Math.min(colspan, this._columnCount); 
+            colspan = Math.min(colspan, this._columnCount);
 
             const childRatio = colspan / this._columnCount;
 
             // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
             // otherwise the items might wrap, resizing is wobbly
             child.style.width = `calc(${childRatio * 99.999}% - ${columnGap})`;
+
+            if (child.localName === 'vaadin-form-item') {
+              if (this._labelsOnTop) {
+                child.setAttribute('label-on-top', '');
+              } else {
+                child.removeAttribute('label-on-top');
+              }
+            }
           });
         }
       }
