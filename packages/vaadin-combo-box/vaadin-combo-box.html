@@ -169,13 +169,19 @@ Custom property | Description | Default
     </style>
 
     <paper-input-container
-          id="inputContainer"
-          disabled$="[[disabled]]"
-          no-label-float="[[noLabelFloat]]"
-          always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
-          auto-validate$="[[autoValidate]]"
-          invalid="[[invalid]]">
-      <label on-down="_preventDefault" id="label" hidden$="[[!label]]" aria-hidden="true" on-tap="_openAsync">[[label]]</label>
+      id="inputContainer"
+      disabled$="[[disabled]]"
+      no-label-float="[[noLabelFloat]]"
+      always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
+      auto-validate$="[[autoValidate]]"
+      invalid="[[invalid]]">
+
+      <label id="label" slot="label"
+        on-down="_preventDefault"
+        hidden$="[[!label]]"
+        aria-hidden="true"
+        on-tap="_openAsync"
+        for="input">[[label]]</label>
 
       <slot name="prefix" slot="prefix"></slot>
 
@@ -185,19 +191,19 @@ Custom property | Description | Default
       <div slot="suffix" suffix>
         <slot name="clear-button">
           <paper-icon-button id="clearIcon"
-          tabindex="-1"
-          aria-label="Clear"
-          icon="vaadin-combo-box:clear"
-          class="clear-button small">
+            tabindex="-1"
+            aria-label="Clear"
+            icon="vaadin-combo-box:clear"
+            class="clear-button small">
           </paper-icon-button>
         </slot>
         <slot name="toggle-button">
           <paper-icon-button id="toggleIcon"
-          tabindex="-1"
-          icon="vaadin-combo-box:arrow-drop-down"
-          aria-label="Toggle"
-          aria-expanded$="[[_getAriaExpanded(opened)]]"
-          class="toggle-button rotate-on-open">
+            tabindex="-1"
+            icon="vaadin-combo-box:arrow-drop-down"
+            aria-label="Toggle"
+            aria-expanded$="[[_getAriaExpanded(opened)]]"
+            class="toggle-button rotate-on-open">
           </paper-icon-button>
         </slot>
 
@@ -210,80 +216,78 @@ Custom property | Description | Default
       </template>
     </paper-input-container>
 
-    <vaadin-combo-box-overlay
-        id="overlay"
-        opened$=[[opened]]
-        position-target="[[_getPositionTarget()]]"
-        _focused-index="[[_focusedIndex]]"
-        _item-label-path="[[itemLabelPath]]"
-        on-down="_onOverlayDown"
-        loading="[[loading]]"
-        on-mousedown="_preventDefault"
-        vertical-offset="2">
+    <vaadin-combo-box-overlay id="overlay"
+      opened$=[[opened]]
+      position-target="[[_getPositionTarget()]]"
+      _focused-index="[[_focusedIndex]]"
+      _item-label-path="[[itemLabelPath]]"
+      on-down="_onOverlayDown"
+      loading="[[loading]]"
+      on-mousedown="_preventDefault"
+      vertical-offset="2">
     </vaadin-combo-box-overlay>
   </template>
 
   <template id="v0">
    <input is="iron-input" id="input" slot="input"
-       type="text"
-       role="combobox"
-       autocomplete="off"
-       autocapitalize="none"
-       bind-value="{{_inputElementValue}}"
-       label="[[label]]"
-       aria-label$="[[label]]"
-       aria-expanded$="[[_getAriaExpanded(opened)]]"
-       aria-autocomplete="list"
-       disabled$="[[disabled]]"
-       invalid="{{invalid}}"
-       prevent-invalid-input="[[preventInvalidInput]]"
-       allowed-pattern="[[allowedPattern]]"
-       pattern$="[[pattern]]"
-       required$="[[required]]"
-       autofocus$="[[autofocus]]"
-       inputmode$="[[inputmode]]"
-       name$="[[name]]"
-       placeholder$="[[placeholder]]"
-       readonly$="[[readonly]]"
-       size$="[[size]]"
-       on-input="_inputValueChanged"
-       on-blur="_onBlur"
-       on-change="_stopPropagation"
-       key-event-target>
+     type="text"
+     role="combobox"
+     autocomplete="off"
+     autocapitalize="none"
+     bind-value="{{_inputElementValue}}"
+     label="[[label]]"
+     aria-label$="[[label]]"
+     aria-expanded$="[[_getAriaExpanded(opened)]]"
+     aria-autocomplete="list"
+     disabled$="[[disabled]]"
+     invalid="{{invalid}}"
+     prevent-invalid-input="[[preventInvalidInput]]"
+     allowed-pattern="[[allowedPattern]]"
+     pattern$="[[pattern]]"
+     required$="[[required]]"
+     autofocus$="[[autofocus]]"
+     inputmode$="[[inputmode]]"
+     name$="[[name]]"
+     placeholder$="[[placeholder]]"
+     readonly$="[[readonly]]"
+     size$="[[size]]"
+     on-input="_inputValueChanged"
+     on-blur="_onBlur"
+     on-change="_stopPropagation"
+     key-event-target>
   </template>
 
   <template id="v1">
     <iron-input id="input" slot="input"
-        bind-value="{{_inputElementValue}}"
-        allowed-pattern="[[allowedPattern]]"
+      bind-value="{{_inputElementValue}}"
+      allowed-pattern="[[allowedPattern]]"
+      invalid="{{invalid}}"
+      on-change="_stopPropagation"
+      name$="[[name]]"
+      label="[[label]]">
+      <input id="nativeInput"
+        type="text"
+        role="combobox"
+        autocomplete="off"
+        autocapitalize="none"
+        aria-label$="[[label]]"
+        aria-expanded$="[[_getAriaExpanded(opened)]]"
+        aria-autocomplete="list"
+        disabled$="[[disabled]]"
         invalid="{{invalid}}"
-        on-change="_stopPropagation"
+        prevent-invalid-input="[[preventInvalidInput]]"
+        allowed-pattern="[[allowedPattern]]"
+        pattern$="[[pattern]]"
+        required$="[[required]]"
+        autofocus$="[[autofocus]]"
+        inputmode$="[[inputmode]]"
         name$="[[name]]"
-        label="[[label]]"
-        >
-        <input id="nativeInput"
-            type="text"
-            role="combobox"
-            autocomplete="off"
-            autocapitalize="none"
-            aria-label$="[[label]]"
-            aria-expanded$="[[_getAriaExpanded(opened)]]"
-            aria-autocomplete="list"
-            disabled$="[[disabled]]"
-            invalid="{{invalid}}"
-            prevent-invalid-input="[[preventInvalidInput]]"
-            allowed-pattern="[[allowedPattern]]"
-            pattern$="[[pattern]]"
-            required$="[[required]]"
-            autofocus$="[[autofocus]]"
-            inputmode$="[[inputmode]]"
-            name$="[[name]]"
-            placeholder$="[[placeholder]]"
-            readonly$="[[readonly]]"
-            size$="[[size]]"
-            on-input="_inputValueChanged"
-            on-blur="_onBlur"
-            key-event-target>
+        placeholder$="[[placeholder]]"
+        readonly$="[[readonly]]"
+        size$="[[size]]"
+        on-input="_inputValueChanged"
+        on-blur="_onBlur"
+        key-event-target>
     </iron-input>
   </template>
 
