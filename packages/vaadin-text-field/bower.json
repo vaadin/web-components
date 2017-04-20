@@ -34,6 +34,6 @@
   "dependencies": {
     "polymer": "^2.0.0-rc.1",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.3",
-    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#fix/autofocus"
+    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^1.0.1"
   }
 }
