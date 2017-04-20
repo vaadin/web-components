@@ -95,8 +95,21 @@ Custom property | Description | Default
       }
 
       :host ::content paper-icon-button.clear-button,
+      :host ::content paper-icon-button.toggle-button {
+        line-height: 18px !important;
+        width: 32px;
+        height: 32px;
+        padding: 4px;
+        text-align: center;
+
+        color: rgba(0, 0, 0, .38);
+        cursor: pointer;
+        margin-top: -1px;
+        /* MS Edge logs a SyntaxError if uncommented and breaks the component initialisation */
+        /*--paper-icon-button-ink-color: rgba(0, 0, 0, .54);*/
+      }
+
       :host ::slotted(paper-icon-button.clear-button),
-      :host ::content paper-icon-button.toggle-button,
       :host ::slotted(paper-icon-button.toggle-button) {
         line-height: 18px !important;
         width: 32px;
