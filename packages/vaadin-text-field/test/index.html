@@ -15,10 +15,9 @@
     WCT.loadSuites([
       'text-field.html',
       'validate.html',
-      'accessibility.html',
-      'control-state.html?wc-name=vaadin-text-field'
+      'accessibility.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite.replace(/(.+)\?(.*)|$/, '$1?wc-shadydom=true&$2')]);
+      return suites.concat([suite, suite + '?wc-shadydom=true']);
     }, []));
   </script>
 </body>
