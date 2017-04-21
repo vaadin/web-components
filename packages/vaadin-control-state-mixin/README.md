@@ -3,7 +3,7 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # vaadin-control-state-mixin
-A mixin which adds `focused` state to an element.
+A mixin which adds `focused` and `focus-ring` states to an element.
 
 ## Contributing
 
