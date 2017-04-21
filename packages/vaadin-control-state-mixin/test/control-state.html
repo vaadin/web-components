@@ -38,6 +38,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="autofocus">
+    <template>
+      <test-element autofocus></test-element>
+    </template>
+  </test-fixture>
+
   <script>
     describe('control-state behavior', function() {
       var customElement, focusElement;
@@ -164,6 +170,16 @@
         });
       });
 
+      describe('autofocus', () => {
+        it('should have focused set', done => {
+          customElement = fixture('autofocus');
+
+          Polymer.Async.animationFrame.run(() => {
+            expect(customElement.focused).to.be.true;
+            done();
+          });
+        });
+      });
     });
   </script>
 </body>
