@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 
@@ -47,12 +48,25 @@ This program is available under Apache License Version 2.0, available at https:/
        * ----------------|----------------
        * `button` | The internal `<button>` element
        *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute | Description
+       * --------- | -----------
+       * `active` | Set when the button is pressed down, either with mouse, touch or the keyboard.
+       * `disabled` | Set when the button is disabled.
+       * `focus-ring` | Set when the button is focused using the keyboard.
+       * `focused` | Set when the button is focused.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class ButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-button';
+        }
+
         ready() {
           super.ready();
 
@@ -62,10 +76,15 @@ This program is available under Apache License Version 2.0, available at https:/
           // since the focus is moved programmatically, and the second on a group.
           this.setAttribute('role', 'button');
           this.$.button.setAttribute('role', 'presentation');
+
+          this._addActiveListeners();
         }
 
-        static get is() {
-          return 'vaadin-button';
+        _addActiveListeners() {
+          this._addEventListenerToNode(this, 'down', () => this.setAttribute('active', ''));
+          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+          this.addEventListener('keydown', e => [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
+          this.addEventListener('keyup', () => this.removeAttribute('active'));
         }
 
         get focusElement() {

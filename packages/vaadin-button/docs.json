@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-button.html",
         "start": {
-          "line": 81,
+          "line": 101,
           "column": 6
         },
         "end": {
-          "line": 81,
+          "line": 101,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-button>` is a Polymer element for customized buttons.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element",
+          "description": "`<vaadin-button>` is a Polymer element for customized buttons.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element\n\nThe following attributes are exposed for styling:\n\nAttribute | Description\n--------- | -----------\n`active` | Set when the button is pressed down, either with mouse, touch or the keyboard.\n`disabled` | Set when the button is disabled.\n`focus-ring` | Set when the button is focused using the keyboard.\n`focused` | Set when the button is focused.",
           "summary": "",
           "path": "vaadin-button.html",
           "attributes": [
@@ -155,11 +155,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 56,
+                  "line": 71,
                   "column": 8
                 },
                 "end": {
-                  "line": 65,
+                  "line": 82,
                   "column": 9
                 }
               },
@@ -356,6 +356,23 @@
                 }
               ],
               "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_addActiveListeners",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 84,
+                  "column": 8
+                },
+                "end": {
+                  "line": 89,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
             }
           ],
           "styling": {
@@ -370,11 +387,11 @@
               "range": {
                 "file": "vaadin-button.html",
                 "start": {
-                  "line": 29,
+                  "line": 31,
                   "column": 6
                 },
                 "end": {
-                  "line": 29,
+                  "line": 31,
                   "column": 19
                 }
               }
@@ -384,11 +401,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 55,
+              "line": 66,
               "column": 6
             },
             "end": {
-              "line": 74,
+              "line": 94,
               "column": 7
             }
           },

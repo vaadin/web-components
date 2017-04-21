@@ -26,6 +26,9 @@
       itself (<code>:host</code>) or the exposed shadow parts (<code>[part~="name"]</code>).
     </p>
     <p>
+      You can also use state attributes <code>active</code>, <code>focused</code> and <code>focus-ring</code>.
+    </p>
+    <p>
       <b>NOTE: The custom style module must be defined/imported before the element
       it targets.</b>
     </p>
@@ -45,12 +48,17 @@
                 color: #333;
               }
 
-              [part~="button"]:active {
+              :host([active]) [part~="button"] {
                 box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
               }
 
               :host([focused]) [part~="button"] {
                 outline: 5px auto -webkit-focus-ring-color;
+                outline-offset: -2px;
+              }
+
+              :host([focus-ring]) [part~="button"] {
+                outline: 5px auto;
                 outline-offset: -2px;
               }
 
