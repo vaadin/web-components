@@ -16,7 +16,7 @@
       <input id="input">
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      document.addEventListener('WebComponentsReady', () => {
         class TestElement extends Vaadin.ControlStateMixin(Polymer.Element) {
           static get is() {
             return 'test-element';
@@ -45,99 +45,100 @@
   </test-fixture>
 
   <script>
-    describe('control-state behavior', function() {
+    describe('control-state behavior', () => {
       var customElement, focusElement;
 
-      beforeEach(function() {
+      beforeEach(() => {
         customElement = fixture('default');
         // Need the shadow dom be rendered before getting the internal element reference
         focusElement = customElement.focusElement;
       });
 
-      describe('tabindex', function() {
-        it('setting tabIndex should forward the value to the internal element', function() {
+      describe('tabindex', () => {
+        it('setting tabIndex should forward the value to the internal element', () => {
           customElement.tabIndex = 1;
           expect(focusElement.getAttribute('tabindex')).to.be.equal('1');
         });
 
-        it('we always need a tabindex by default', function() {
+        it('we always need a tabindex by default', () => {
           expect(customElement.getAttribute('tabindex')).to.be.equal('0');
         });
 
-        it('setting tabIndex should update the attribute', function() {
+        it('setting tabIndex should update the attribute', () => {
           customElement.tabIndex = 1;
           expect(customElement.getAttribute('tabindex')).to.be.equal('1');
         });
 
-        it('enabling the element should restore old tabindex', function() {
+        it('enabling the element should restore old tabindex', () => {
           customElement.tabIndex = 1;
           customElement.disabled = true;
           customElement.disabled = false;
           expect(customElement.getAttribute('tabindex')).to.be.equal('1');
         });
 
-        it('setting disabled to true should remove tabindex', function() {
+        it('setting disabled to true should remove tabindex', () => {
           customElement.tabIndex = 1;
           customElement.disabled = true;
           expect(customElement.getAttribute('tabindex')).to.not.be.ok;
         });
 
-        it('should synchronize tabindex with tabIndex', function() {
+        it('should synchronize tabindex with tabIndex', () => {
           customElement.tabindex = 1;
           expect(customElement.tabIndex).to.eql(1);
         });
       });
 
       if (!window.ShadyDOM) {
-        describe('focus', function() {
-          it('should focus the internal input on focus', function() {
+        describe('focus', () => {
+          it('should focus the internal input on focus', () => {
             focusElement.focus();
             expect(customElement.focused).to.be.true;
           });
 
-          it('should blur the internal input on blur', function() {
+          it('should blur the internal input on blur', () => {
             customElement.focus();
             focusElement.blur();
             expect(customElement.focused).to.be.false;
           });
 
-          it('should focus the internal input on host click', function() {
+          it('should focus the internal input on host click', () => {
             customElement.click();
             expect(customElement.focused).to.be.true;
           });
         });
       }
 
-      describe('_tabPressed and focus-ring', function() {
-        function focus() {
+      describe('_tabPressed and focus-ring', () => {
+        var focus = () => {
           focusElement.dispatchEvent(new CustomEvent('focus'));
-        }
-        function blur() {
+        };
+        
+        var blur = () => {
           focusElement.dispatchEvent(new CustomEvent('blur'));
-        }
+        };
 
-        it('should set and unset _tabPressed when press TAB', function() {
+        it('should set and unset _tabPressed when press TAB', () => {
           MockInteractions.keyDownOn(document.body, 9);
           expect(customElement._tabPressed).to.be.true;
           MockInteractions.keyUpOn(document.body, 9);
           expect(customElement._tabPressed).to.be.false;
         });
 
-        it('should set and unset _tabPressed when press SHIFT+TAB', function() {
+        it('should set and unset _tabPressed when press SHIFT+TAB', () => {
           MockInteractions.keyDownOn(document.body, 9, 'shift');
           expect(customElement._tabPressed).to.be.true;
           MockInteractions.keyUpOn(document.body, 9, 'shift');
           expect(customElement._tabPressed).to.be.false;
         });
 
-        it('should not change _tabPressed on any other key except TAB', function() {
+        it('should not change _tabPressed on any other key except TAB', () => {
           MockInteractions.keyDownOn(document.body, 65);
           expect(customElement._tabPressed).to.be.false;
           MockInteractions.keyUpOn(document.body, 65);
           expect(customElement._tabPressed).to.be.false;
         });
 
-        it('should set the focus-ring attribute when TAB is pressed and focus is received', function() {
+        it('should set the focus-ring attribute when TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9);
           focus();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
@@ -145,7 +146,7 @@
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
-        it('should set the focus-ring attribute when SHIFT+TAB is pressed and focus is received', function() {
+        it('should set the focus-ring attribute when SHIFT+TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9, 'shift');
           focus();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
@@ -154,16 +155,16 @@
         });
       });
 
-      describe('disabled', function() {
-        beforeEach(function() {
+      describe('disabled', () => {
+        beforeEach(() => {
           customElement.disabled = true;
         });
 
-        it('should not have tabindex if disabled when ready', function() {
+        it('should not have tabindex if disabled when ready', () => {
           expect(customElement.getAttribute('tabindex')).to.not.be.ok;
         });
 
-        it('should update internal element tabIndex', function() {
+        it('should update internal element tabIndex', () => {
           customElement.tabIndex = 4;
           expect(customElement.getAttribute('tabindex')).to.be.null;
           expect(focusElement.getAttribute('tabindex')).to.be.equal('4');
