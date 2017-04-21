@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../../polymer/polymer-element.html">
+  <link rel="import" href="../../vaadin-form-layout.html">
+  <link rel="import" href="../../vaadin-form-item.html">
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      // Wait for the other 'WebComponentsReady' event listeners
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <h3>Spanning Items on Multiple Columns</h3>
+
+  <vaadin-form-layout capture>
+
+    <vaadin-form-item colspan="2">
+      <label slot="label">Address</label>
+      <input class="full-width">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+</body>
+</html>

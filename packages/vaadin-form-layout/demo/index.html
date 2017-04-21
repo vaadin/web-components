@@ -17,7 +17,7 @@
 <body>
   <div class="vertical-section-container centered">
 
-    <!-- <demo-navigation></demo-navigation> -->
+    <demo-navigation></demo-navigation>
 
     <h3>Basic Usage</h3>
     <demo-snippet>
@@ -58,6 +58,25 @@
             <input placeholder="MM" size="2"> -
             <input placeholder="DD" size="2"><br>
             <em>Example: 1900-01-01</em>
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </demo-snippet>
+
+    <p>
+      <strong>Note:</strong> in order to make <code>&lt;textarea&gt;</code> vertically
+      aligned with the <code>&lt;vaadin-form-item&gt;</code> label, add
+      <code style="white-space: nowrap;">textarea { vertical-align: top; display: inline-flex; }</code> to your CSS.
+    </p>
+
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout>
+
+          <vaadin-form-item colspan="2">
+            <label slot="label">Conference Abstract</label>
+            <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top;"></textarea>
           </vaadin-form-item>
 
         </vaadin-form-layout>
@@ -240,7 +259,7 @@
           </template>
         </dom-module>
         <script>
-          addEventListener(function() {
+          addEventListener('WebComponentsReady', function() {
             class MyFormElement extends Polymer.Element {
               static get is() {
                 return 'my-form';
