@@ -658,7 +658,8 @@ Custom property | Description | Default
 
         file.loaded = loaded;
         file.progress = progress;
-        file.indeterminate = loaded <= 0 || loaded >= total, true;
+        file.indeterminate = loaded <= 0 || loaded >= total;
+
         if (file.error) {
           file.indeterminate = file.status = undefined;
         } else if (!file.abort) {

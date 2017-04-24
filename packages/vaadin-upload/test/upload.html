@@ -286,13 +286,15 @@
         });
 
         it('should not be indeterminate when progressing', function(done) {
-          upload.addEventListener('upload-progress', function(e) {
+          var uploadProgressListener = function(e) {
             if (file.progress > 0) {
               expect(e.detail.file.indeterminate).not.to.be.ok;
               expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
+              upload.removeEventListener('upload-progress', uploadProgressListener);
               done();
             }
-          });
+          };
+          upload.addEventListener('upload-progress', uploadProgressListener);
           upload._uploadFile(file);
         });
 
