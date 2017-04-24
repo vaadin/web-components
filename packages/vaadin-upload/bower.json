@@ -44,28 +44,28 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#master",
     "mock-http-request": "philikon/MockHttpRequest#master",
     "paper-toast": "^1.0.0",
-    "web-component-tester": "^6.0.0-prerelease.7",
-    "webcomponentsjs": "^0.7.0"
+    "web-component-tester": "^6.0.0"
   },
   "variants": {
     "polymer2": {
       "dependencies": {
+        "polymer": "^2.0",
         "iron-icon": "#2.0-preview",
         "iron-iconset-svg": "#2.0-preview",
         "paper-button": "#2.0-preview",
         "paper-icon-button": "#2.0-preview",
         "paper-progress": "#2.0-preview",
         "paper-ripple": "PolymerElements/paper-ripple#2.0-preview",
-        "paper-styles": "#2.0-preview",
-        "polymer": "^2.0.0-rc.3"
+        "paper-styles": "#2.0-preview"
       },
       "devDependencies": {
+        "web-component-tester": "^6.0.0",
+        "test-fixture": "^3.0.0",
         "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
         "iron-component-page": "#2.0-preview",
         "iron-demo-helpers": "#2.0-preview",
         "iron-test-helpers": "#2.0-preview",
-        "paper-toast": "#2.0-preview",
-        "webcomponentsjs": "#v1"
+        "paper-toast": "#2.0-preview"
       }
     }
   }
