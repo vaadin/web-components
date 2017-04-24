@@ -103,7 +103,8 @@ Custom property | Description | Default
         @apply(--vaadin-upload-drop-label-dragover);
       }
 
-      #dropLabel ::slotted(iron-icon), #dropLabelIcon {
+      #dropLabel ::slotted(iron-icon),
+      #dropLabelIcon {
         margin-right: .25em;
         @apply(--vaadin-upload-drop-label-icon);
       }
@@ -203,7 +204,7 @@ Custom property | Description | Default
           } catch (e) {
             return false;
           }
-        },
+        }
       },
 
       /**
@@ -454,7 +455,7 @@ Custom property | Description | Default
       'drop': '_onDrop',
       'file-retry': '_onFileRetry',
       'file-abort': '_onFileAbort',
-      'file-remove': '_onFileRemove',
+      'file-remove': '_onFileRemove'
     },
 
     _formatSize: function(bytes) {
