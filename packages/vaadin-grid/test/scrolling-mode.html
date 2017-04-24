@@ -104,6 +104,13 @@
         expect(wheel(-1, 0).defaultPrevented).to.be.true;
       });
 
+      it('should not prevent wheel events when scrolled to max', function() {
+        scrollToEnd(grid);
+        grid.$.scroller.flushDebouncer('ignore-new-wheel');
+        expect(wheel(0, 1).defaultPrevented).to.be.false;
+        expect(wheel(0, 1).defaultPrevented).to.be.false;
+      });
+
       it('should prevent default during cancel period', function() {
         wheel(1, 0);
         wheel(-1, 0);

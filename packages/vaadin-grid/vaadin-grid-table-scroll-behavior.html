@@ -152,12 +152,15 @@
         table.scrollTop += e.deltaY;
         table.scrollLeft += e.deltaX;
         this._scrollHandler();
+        this._hasResidualMomentum = true;
 
         this._ignoreNewWheel = this.debounce('ignore-new-wheel', function() {
           this._ignoreNewWheel = null;
         }, 500);
-      } else if (momentum <= this._previousMomentum || this._ignoreNewWheel) {
+      } else if (this._hasResidualMomentum && momentum <= this._previousMomentum || this._ignoreNewWheel) {
         e.preventDefault();
+      } else if (momentum > this._previousMomentum) {
+        this._hasResidualMomentum = false;
       }
       this._previousMomentum = momentum;
     },
