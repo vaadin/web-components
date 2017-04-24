@@ -10,14 +10,14 @@
 
 <body>
   <script>
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents.js');
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
       'upload.html',
       'adding-files.html',
       'file-list.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?dom=shadow']);
+      return suites.concat([suite, suite + '?wc-shadydom=true&dom=shadow']);
     }, []));
   </script>
 </body>
