@@ -394,17 +394,15 @@
           files = createFiles(2, 512, 'application/json');
         });
 
-        it('should fire `upload-abort` and remove from files', function(done) {
+        it('should fire `file-remove` and remove from files', function(done) {
           upload.addEventListener('upload-progress', function(e) {
             if (e.detail.file == files[0] && e.detail.file.progress == 50) {
               upload._abortFileUpload(e.detail.file);
             }
           });
           upload.addEventListener('file-remove', function() {
-            Polymer.Base.async(function() {
-              expect(upload.files.length).to.be.equal(1);
-              done();
-            }, 1);
+            expect(upload.files.length).to.be.equal(1);
+            done();
           });
           upload._addFiles(files);
         });
