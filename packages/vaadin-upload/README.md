@@ -56,10 +56,8 @@
 -->
 ```html
 <vaadin-upload accept=".pdf">
-  <div class="drop-label">
-    <iron-icon icon="description"></iron-icon>
-    Drop your favourite Novels here (PDF files only)
-  </div>
+  <iron-icon slot="drop-label-icon" icon="description"></iron-icon>
+  <span slot="drop-label">Drop your favourite Novels here (PDF files only)</span>
 </vaadin-upload>
 ```
 
