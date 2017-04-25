@@ -50,7 +50,7 @@ Custom property | Description | Default
   <template>
     <style>
       :host {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
         display: block;
         position: relative;
         text-align: left;
@@ -73,7 +73,7 @@ Custom property | Description | Default
         over it. Helps to reduce the amount of events fired.
       */
       :host::before {
-        @apply(--layout-fit);
+        @apply --layout-fit;
         content: '';
         display: none;
         z-index: 10;
@@ -85,65 +85,65 @@ Custom property | Description | Default
 
       #dragRipple {
         color: var(--light-primary-color, #7CD8F7);
-        @apply(--vaadin-upload-drag-ripple);
+        @apply --vaadin-upload-drag-ripple;
       }
 
       #dropLabel {
-        @apply(--layout-flex);
-        @apply(--paper-font-body2);
+        @apply --layout-flex;
+        @apply --paper-font-body2;
         position: relative;
         padding: .43em .57em;
         margin: 0 .29em;
         color: var(--disabled-text-color, #b3b3b3);
-        @apply(--vaadin-upload-drop-label);
+        @apply --vaadin-upload-drop-label;
       }
 
       :host([dragover-valid]) #dropLabel {
         color: var(--primary-color, #00B4F0);
-        @apply(--vaadin-upload-drop-label-dragover);
+        @apply --vaadin-upload-drop-label-dragover;
       }
 
       #dropLabel ::slotted(iron-icon),
       #dropLabelIcon {
         margin-right: .25em;
-        @apply(--vaadin-upload-drop-label-icon);
+        @apply --vaadin-upload-drop-label-icon;
       }
 
       #fileList {
         position: relative;
-        @apply(--vaadin-upload-file-list);
+        @apply --vaadin-upload-file-list;
       }
 
       #buttons {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
         position: relative;
-        @apply(--vaadin-upload-buttons);
+        @apply --vaadin-upload-buttons;
       }
 
       #buttonsPrimary {
-        @apply(--layout-horizontal);
-        @apply(--layout-flex);
-        @apply(--layout-start);
+        @apply --layout-horizontal;
+        @apply --layout-flex;
+        @apply --layout-start;
         margin-left: -.29em;
-        @apply(--vaadin-upload-buttons-primary);
+        @apply --vaadin-upload-buttons-primary;
       }
 
       #addFiles {
-        @apply(--vaadin-upload-button-add-wrapper);
+        @apply --vaadin-upload-button-add-wrapper;
       }
 
       #addButton {
-        @apply(--paper-font-button);
+        @apply --paper-font-button;
         padding: .43em .57em;
         background: var(--primary-color, #00B4F0);
         color: var(--primary-font-color, #FFF);
-        @apply(--vaadin-upload-button-add);
+        @apply --vaadin-upload-button-add;
       }
 
       #addButton[disabled] {
         background: var(--divider-color, #e0e0e0);
         color: var(--disabled-text-color, gray);
-        @apply(--vaadin-upload-button-add-disabled);
+        @apply --vaadin-upload-button-add-disabled;
       }
     </style>
 
