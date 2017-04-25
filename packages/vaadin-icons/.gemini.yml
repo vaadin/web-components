@@ -22,14 +22,11 @@ browsers:
       version: "47.0"
       platform: "Windows 10"
 
-  # There's currently some weird JS errors with Polymer v2.
-  # TODO @limonte Revisit after stable release
-  # In Polymer v1 works fine.
-  #ie:
-  #  desiredCapabilities:
-  #    browserName: "internet explorer"
-  #    version: "11.0"
-  #    platform: "Windows 10"
+  ie:
+    desiredCapabilities:
+      browserName: "internet explorer"
+      version: "11.0"
+      platform: "Windows 10"
 
   edge:
     desiredCapabilities:
