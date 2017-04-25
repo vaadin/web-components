@@ -18,10 +18,14 @@ Visit **https://vaadin.com/icons** for more information and instructions how to 
 
 1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli@next`
 
-1. When in the `vaadin-split-layout` directory, run `polymer serve`, after that you will be able to access:
+1. When in the `vaadin-icons` directory, run `polymer install --variants` to install Bower dependencies
+
+1. Run `polymer serve`, after that you will be able to access:
 
   - Polymer1-compatible version: http://127.0.0.1:8000/components/vaadin-icons/demo/
   - Polymer2-compatible version: http://127.0.0.1:8001/components/vaadin-icons/demo/
+
+Note that ports `8000` and `8001` could be different in your environment.
 
 
 ## License
