@@ -86,6 +86,7 @@
        *
        */
       dataProvider: {
+        type: Object,
         notify: true,
         observer: '_dataProviderChanged'
       },
@@ -96,12 +97,14 @@
       _loading: Boolean,
 
       _cache: {
+        type: Object,
         value: function() {
           return {};
         }
       },
 
       _pendingRequests: {
+        type: Object,
         value: function() {
           return {};
         }
