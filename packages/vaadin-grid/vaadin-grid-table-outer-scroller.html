@@ -35,10 +35,12 @@
 
       properties: {
         scrollTarget: {
+          type: Object,
           observer: '_scrollTargetChanged'
         },
 
         passthrough: {
+          type: Boolean,
           reflectToAttribute: true,
           value: true
         }
