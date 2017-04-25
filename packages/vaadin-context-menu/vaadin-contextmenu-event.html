@@ -10,7 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
   (function() {
     Polymer.Gestures.register({
       name: 'vaadin-contextmenu',
-      deps: ['touchstart', 'touchmove', 'tap', 'contextmenu'],
+      deps: ['touchstart', 'touchmove', 'touchend', 'tap', 'contextmenu'],
       flow: {
         start: ['touchstart', 'contextmenu'],
         end: ['tap', 'contextmenu']
@@ -65,11 +65,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       },
 
-      // tap is fired on touchend – this is the easiest way to stop it from bubbling.
-      tap: function(e) {
+      touchend: function(e) {
         if (this.info.touchJob) {
           this.info.touchJob.stop();
         }
+      },
+
+      tap: function(e) {
         if (this.info.fired) {
           e.preventDefault();
           e.stopPropagation();
