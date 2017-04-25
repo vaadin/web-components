@@ -62,7 +62,9 @@
 
 1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli@next`
 
-1. When in the `vaadin-split-layout` directory, run `polymer serve`, after that you will be able to access:
+1. When in the `vaadin-split-layout` directory, run `polymer install --variants` to install Bower dependencies
+
+1. Run `polymer serve`, after that you will be able to access:
 
   - Polymer1-compatible version:
 
@@ -75,6 +77,8 @@
     - API documentation: http://127.0.0.1:8001/components/vaadin-split-layout/
     - Examples: http://127.0.0.1:8001/components/vaadin-split-layout/demo/
     - Tests: http://127.0.0.1:8001/components/vaadin-split-layout/test/
+    
+Note that ports `8000` and `8001` could be different in your environment.
 
 
 ## Running tests from the command line
