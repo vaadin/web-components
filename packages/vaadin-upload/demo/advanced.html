@@ -135,12 +135,14 @@ This program is available under Apache License Version 2.0, available at https:/
           <span slot="drop-label">Drop your favourite Novels here</span>
         </vaadin-upload>
         <script>
-          var upload4 = document.querySelector('vaadin-upload#preFill');
-          upload4.files = [
-            {name: 'Don Quixote.pdf', progress: 100, complete: true},
-            {name: 'Hamlet.pdf', progress: 100, complete: true}
-          ];
-          upload4.set('i18n.addFiles.many', 'Select books');
+          document.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#preFill');
+            upload.files = [
+              {name: 'Don Quixote.pdf', progress: 100, complete: true},
+              {name: 'Hamlet.pdf', progress: 100, complete: true}
+            ];
+            upload.set('i18n.addFiles.many', 'Select books');
+          });
         </script>
       </template>
     </demo-snippet>
@@ -185,17 +187,19 @@ This program is available under Apache License Version 2.0, available at https:/
         <button id="uploadButton">Start Upload(s)</button>
 
         <script>
-          var upload5 = document.querySelector('vaadin-upload#manualUpload');
-          var uploadButton = document.getElementById('uploadButton');
+          document.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#manualUpload');
+            var uploadButton = document.getElementById('uploadButton');
 
-          uploadButton.addEventListener('click', function() {
-            upload5.uploadFiles();
-          });
+            uploadButton.addEventListener('click', function() {
+              upload.uploadFiles();
+            });
 
-          // Change upload button text
-          upload5.set('i18n.addFiles', {
-            one: 'Add File',
-            many: 'Add Files'
+            // Change upload button text
+            upload.set('i18n.addFiles', {
+              one: 'Add File',
+              many: 'Add Files'
+            });
           });
         </script>
       </template>
