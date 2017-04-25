@@ -26,32 +26,29 @@ This program is available under Apache License Version 2.0, available at https:/
 </head>
 <body unresolved>
   <div class="vertical-section-container centered">
-    <nav class="vertical-section">
-      <ul class="layout horizontal wrap">
-        <li><a href="../demo/">Basic Examples</a></li>
-        <li><b>Advanced Usage</b></li>
-        <li><a href="i18n.html">I18n</a></li>
-      </ul>
-    </nav>
+
+    <demo-navigation></demo-navigation>
 
     <h3>Custom File List</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <vaadin-upload id="fileEventsDemo" files="{{files}}">
-            <div class="file-list">
-              <h4>Files</h4>
-              <ul>
-                <template is="dom-repeat" items="{{files}}" as="file">
-                  <li>
-                    <strong>[[file.name]]</strong>
-                    [[file.status]]
-                  </li>
-                </template>
-              </ul>
-            </div>
-          </vaadin-upload>
-        </template>
+        <dom-bind>
+          <template is="dom-bind">
+            <vaadin-upload id="fileEventsDemo" files="{{files}}">
+              <div slot="file-list">
+                <h4>Files</h4>
+                <ul>
+                  <template is="dom-repeat" items="{{files}}" as="file">
+                    <li>
+                      <strong>[[file.name]]</strong>
+                      [[file.status]]
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </vaadin-upload>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
@@ -131,18 +128,18 @@ This program is available under Apache License Version 2.0, available at https:/
     <demo-snippet>
       <template>
         <vaadin-upload id="preFill" accept="application/pdf">
-          <div class="drop-label">
-            <iron-icon icon="description"></iron-icon>
-            Drop your favourite Novels here
-          </div>
+          <iron-icon slot="drop-label-icon" icon="description"></iron-icon>
+          <span slot="drop-label">Drop your favourite Novels here</span>
         </vaadin-upload>
         <script>
-          var upload4 = document.querySelector('vaadin-upload#preFill');
-          upload4.files = [
-            {name: 'Don Quixote.pdf', progress: 100, complete: true},
-            {name: 'Hamlet.pdf', progress: 100, complete: true}
-          ];
-          upload4.set('i18n.addFiles.many', 'Select books');
+          document.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#preFill');
+            upload.files = [
+              {name: 'Don Quixote.pdf', progress: 100, complete: true},
+              {name: 'Hamlet.pdf', progress: 100, complete: true}
+            ];
+            upload.set('i18n.addFiles.many', 'Select books');
+          });
         </script>
       </template>
     </demo-snippet>
@@ -187,17 +184,19 @@ This program is available under Apache License Version 2.0, available at https:/
         <button id="uploadButton">Start Upload(s)</button>
 
         <script>
-          var upload5 = document.querySelector('vaadin-upload#manualUpload');
-          var uploadButton = document.getElementById('uploadButton');
+          document.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#manualUpload');
+            var uploadButton = document.getElementById('uploadButton');
 
-          uploadButton.addEventListener('click', function() {
-            upload5.uploadFiles();
-          });
+            uploadButton.addEventListener('click', function() {
+              upload.uploadFiles();
+            });
 
-          // Change upload button text
-          upload5.set('i18n.addFiles', {
-            one: 'Add File',
-            many: 'Add Files'
+            // Change upload button text
+            upload.set('i18n.addFiles', {
+              one: 'Add File',
+              many: 'Add Files'
+            });
           });
         </script>
       </template>

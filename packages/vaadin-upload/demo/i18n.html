@@ -26,13 +26,8 @@ This program is available under Apache License Version 2.0, available at https:/
 </head>
 <body unresolved>
   <div class="vertical-section-container centered">
-    <nav class="vertical-section">
-      <ul class="layout horizontal wrap">
-        <li><a href="../demo/">Basic Examples</a></li>
-        <li><a href="advanced.html">Advanced Usage</a></li>
-        <li><b>I18n</b></li>
-      </ul>
-    </nav>
+
+    <demo-navigation></demo-navigation>
 
     <h3>I18n</h3>
     <demo-snippet>
@@ -84,21 +79,23 @@ This program is available under Apache License Version 2.0, available at https:/
       <template>
         <vaadin-upload id="shortTime"></vaadin-upload>
         <script>
-          var upload = document.querySelector('vaadin-upload#shortTime');
+          document.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#shortTime');
 
-          upload.set('i18n.formatTime', function(seconds, split) {
-            return split
-              .map(function(number, i) {
-                return {number: number, unit: ['s', 'min', 'h', 'd'][i]};
-              })
-              .reverse()
-              .filter(function(value) {
-                return value.number > 0;
-              })
-              .map(function(value) {
-                return value.number + ' ' + value.unit;
-              })
-              .join(' ');
+            upload.set('i18n.formatTime', function(seconds, split) {
+              return split
+                .map(function(number, i) {
+                  return {number: number, unit: ['s', 'min', 'h', 'd'][i]};
+                })
+                .reverse()
+                .filter(function(value) {
+                  return value.number > 0;
+                })
+                .map(function(value) {
+                  return value.number + ' ' + value.unit;
+                })
+                .join(' ');
+            });
           });
         </script>
       </template>

@@ -10,14 +10,16 @@
 
 <body>
   <script>
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents.js');
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
       'upload.html',
       'adding-files.html',
       'file-list.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?dom=shadow']);
+      // &dom=shadow - enable shadow when running tests in Polymer v1
+      // wc-shadydom=true - enable shady when running tests in Polymer v2
+      return suites.concat([suite, suite + '?wc-shadydom=true&dom=shadow']);
     }, []));
   </script>
 </body>

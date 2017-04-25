@@ -50,7 +50,7 @@ Custom property | Description | Default
   <template>
     <style>
       :host {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
         display: block;
         position: relative;
         text-align: left;
@@ -73,7 +73,7 @@ Custom property | Description | Default
         over it. Helps to reduce the amount of events fired.
       */
       :host::before {
-        @apply(--layout-fit);
+        @apply --layout-fit;
         content: '';
         display: none;
         z-index: 10;
@@ -85,65 +85,65 @@ Custom property | Description | Default
 
       #dragRipple {
         color: var(--light-primary-color, #7CD8F7);
-        @apply(--vaadin-upload-drag-ripple);
+        @apply --vaadin-upload-drag-ripple;
       }
 
       #dropLabel {
-        @apply(--layout-flex);
-        @apply(--paper-font-body2);
+        @apply --layout-flex;
+        @apply --paper-font-body2;
         position: relative;
         padding: .43em .57em;
         margin: 0 .29em;
         color: var(--disabled-text-color, #b3b3b3);
-        @apply(--vaadin-upload-drop-label);
+        @apply --vaadin-upload-drop-label;
       }
 
-      :host([dragover-valid]) #dropLabel,
-      :host([dragover-valid]) ::content .drop-label {
+      :host([dragover-valid]) #dropLabel {
         color: var(--primary-color, #00B4F0);
-        @apply(--vaadin-upload-drop-label-dragover);
+        @apply --vaadin-upload-drop-label-dragover;
       }
 
-      #dropLabel ::content iron-icon {
+      #dropLabel ::slotted(iron-icon),
+      #dropLabelIcon {
         margin-right: .25em;
-        @apply(--vaadin-upload-drop-label-icon);
+        @apply --vaadin-upload-drop-label-icon;
       }
 
       #fileList {
         position: relative;
-        @apply(--vaadin-upload-file-list);
+        @apply --vaadin-upload-file-list;
       }
 
       #buttons {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
         position: relative;
-        @apply(--vaadin-upload-buttons);
+        @apply --vaadin-upload-buttons;
       }
 
       #buttonsPrimary {
-        @apply(--layout-horizontal);
-        @apply(--layout-flex);
-        @apply(--layout-start);
+        @apply --layout-horizontal;
+        @apply --layout-flex;
+        @apply --layout-start;
         margin-left: -.29em;
-        @apply(--vaadin-upload-buttons-primary);
+        @apply --vaadin-upload-buttons-primary;
       }
 
       #addFiles {
-        @apply(--vaadin-upload-button-add-wrapper);
+        @apply --vaadin-upload-button-add-wrapper;
       }
 
       #addButton {
-        @apply(--paper-font-button);
+        @apply --paper-font-button;
         padding: .43em .57em;
         background: var(--primary-color, #00B4F0);
         color: var(--primary-font-color, #FFF);
-        @apply(--vaadin-upload-button-add);
+        @apply --vaadin-upload-button-add;
       }
 
       #addButton[disabled] {
         background: var(--divider-color, #e0e0e0);
         color: var(--disabled-text-color, gray);
-        @apply(--vaadin-upload-button-add-disabled);
+        @apply --vaadin-upload-button-add-disabled;
       }
     </style>
 
@@ -157,21 +157,23 @@ Custom property | Description | Default
           </slot>
         </div>
         <div id="dropLabel" hidden$="[[nodrop]]">
-          <content select=".drop-label">
-            <iron-icon icon="vaadin-upload:file-upload"></iron-icon>
+          <slot name="drop-label-icon">
+            <iron-icon id="dropLabelIcon" icon="vaadin-upload:file-upload"></iron-icon>
+          </slot>
+          <slot name="drop-label">
             [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
-          </content>
+          </slot>
         </div>
       </div>
     </div>
-    <content select=".file-list">
+    <slot name="file-list">
       <div id="fileList">
         <template is="dom-repeat" items="[[files]]" as="file">
           <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
         </template>
       </div>
-    </content>
-    <content></content>
+    </slot>
+    <slot></slot>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
     <paper-ripple id="dragRipple" noink></paper-ripple>
   </template>
@@ -202,7 +204,7 @@ Custom property | Description | Default
           } catch (e) {
             return false;
           }
-        },
+        }
       },
 
       /**
@@ -453,7 +455,7 @@ Custom property | Description | Default
       'drop': '_onDrop',
       'file-retry': '_onFileRetry',
       'file-abort': '_onFileAbort',
-      'file-remove': '_onFileRemove',
+      'file-remove': '_onFileRemove'
     },
 
     _formatSize: function(bytes) {
@@ -656,7 +658,8 @@ Custom property | Description | Default
 
         file.loaded = loaded;
         file.progress = progress;
-        file.indeterminate = loaded <= 0 || loaded >= total, true;
+        file.indeterminate = loaded <= 0 || loaded >= total;
+
         if (file.error) {
           file.indeterminate = file.status = undefined;
         } else if (!file.abort) {

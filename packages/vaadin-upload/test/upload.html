@@ -286,13 +286,15 @@
         });
 
         it('should not be indeterminate when progressing', function(done) {
-          upload.addEventListener('upload-progress', function(e) {
+          var uploadProgressListener = function(e) {
             if (file.progress > 0) {
               expect(e.detail.file.indeterminate).not.to.be.ok;
               expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
+              upload.removeEventListener('upload-progress', uploadProgressListener);
               done();
             }
-          });
+          };
+          upload.addEventListener('upload-progress', uploadProgressListener);
           upload._uploadFile(file);
         });
 
@@ -392,17 +394,15 @@
           files = createFiles(2, 512, 'application/json');
         });
 
-        it('should fire `upload-abort` and remove from files', function(done) {
+        it('should fire `file-remove` and remove from files', function(done) {
           upload.addEventListener('upload-progress', function(e) {
             if (e.detail.file == files[0] && e.detail.file.progress == 50) {
               upload._abortFileUpload(e.detail.file);
             }
           });
           upload.addEventListener('file-remove', function() {
-            Polymer.Base.async(function() {
-              expect(upload.files.length).to.be.equal(1);
-              done();
-            }, 1);
+            expect(upload.files.length).to.be.equal(1);
+            done();
           });
           upload._addFiles(files);
         });

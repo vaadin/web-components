@@ -27,13 +27,8 @@ This program is available under Apache License Version 2.0, available at https:/
 </head>
 <body unresolved>
   <div class="vertical-section-container centered">
-    <nav class="vertical-section">
-      <ul class="layout horizontal wrap">
-        <li><b>Basic Examples</b></li>
-        <li><a href="advanced.html">Advanced Usage</a></li>
-        <li><a href="i18n.html">I18n</a></li>
-      </ul>
-    </nav>
+
+    <demo-navigation></demo-navigation>
 
     <h3>Basic Usage</h3>
     <demo-snippet>
@@ -91,10 +86,8 @@ This program is available under Apache License Version 2.0, available at https:/
     <demo-snippet>
       <template>
         <vaadin-upload>
-          <div class="drop-label">
-            <iron-icon icon="cloud-upload"></iron-icon>
-            Drop files to the cloud...
-          </div>
+          <iron-icon slot="drop-label-icon" icon="cloud-upload"></iron-icon>
+          <span slot="drop-label">Drop files to the cloud...</span>
         </vaadin-upload>
       </template>
     </demo-snippet>
@@ -110,10 +103,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <demo-snippet>
       <template>
         <vaadin-upload id="rejectEventDemo" max-files="3" accept="application/pdf" max-file-size="1000000">
-          <div class="drop-label">
-            <iron-icon icon="file-upload"></iron-icon>
-            Up to 3 PDF files, 1 MB each
-          </div>
+          <span slot="drop-label">Up to 3 PDF files, 1 MB each</span>
         </vaadin-upload>
 
         <paper-toast id="rejectToast"></paper-toast>
