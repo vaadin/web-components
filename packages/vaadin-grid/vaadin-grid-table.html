@@ -349,10 +349,12 @@
       },
 
       safari: {
+        type: Boolean,
         value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       },
 
       scrollbarWidth: {
+        type: Number,
         value: function() {
           // Create the measurement node
           var scrollDiv = document.createElement('div');
