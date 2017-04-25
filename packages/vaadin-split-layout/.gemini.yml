@@ -12,7 +12,7 @@ browsers:
   chrome:
     desiredCapabilities:
       browserName: "chrome"
-      version: "54.0"
+      version: "57.0"
       platform: "Windows 10"
 
   firefox:
@@ -30,7 +30,7 @@ browsers:
   edge:
     desiredCapabilities:
       browserName: "microsoftedge"
-      version: "13"
+      version: "14"
       platform: "Windows 10"
 
 
