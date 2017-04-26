@@ -87,7 +87,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
-          this._skipFocus = !!window.ShadyDOM;
           this.focus();
         }
       });
@@ -143,11 +142,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _focus(e) {
       this._setFocused(!this.disabled);
-
-      if (this._skipFocus) {
-        this._skipFocus = false;
-        return;
-      }
       this.focusElement.focus();
     }
 
