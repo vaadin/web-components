@@ -42,25 +42,53 @@
       <template>
         <dom-module id="my-grid-view">
           <template>
-            <vaadin-context-menu open-on="detailed-vaadin-contextmenu">
+            <style>
+              vaadin-grid {
+                --vaadin-grid-body-cell: {
+                  padding: 0;
+                };
+              }
+
+              .body-content {
+                padding: 8px;
+              }
+            </style>
+
+            <vaadin-context-menu>
               <template>
                 <paper-menu>
                   <paper-item on-tap="_add">Add</paper-item>
-                  <template is="dom-if" if="[[_isGridBody(detail)]]">
-                    <paper-item detail="[[detail]]" on-tap="_remove">Remove</paper-item>
+                  <template is="dom-if" if="[[_isGridBody(target)]]">
+                    <paper-item content="[[target]]" on-tap="_remove">Remove</paper-item>
                   </template>
                 </paper-menu>
               </template>
 
               <vaadin-grid id="grid" items="[[items]]">
-                <table>
-                  <colgroup>
-                    <col name="name">
-                    <col name="surname">
-                    <col name="effort">
-                  </colgroup>
-                </table>
+
+                <vaadin-grid-column>
+                  <template class="header">Name</template>
+                  <template>
+                    <div class="body-content" data-index$="[[index]]">[[item.name]]</div>
+                  </template>
+                </vaadin-grid-column>
+
+                <vaadin-grid-column>
+                  <template class="header">Surname</template>
+                  <template>
+                    <div class="body-content" data-index$="[[index]]">[[item.surname]]</div>
+                  </template>
+                </vaadin-grid-column>
+
+                <vaadin-grid-column>
+                  <template class="header">Effort</template>
+                  <template>
+                    <div class="body-content" data-index$="[[index]]">[[item.effort]]</div>
+                  </template>
+                </vaadin-grid-column>
+
               </vaadin-grid>
+
             </vaadin-context-menu>
           </template>
 
@@ -77,12 +105,8 @@
                 }
               },
 
-              ready: function() {
-                this.$.grid.detailedEvents = ['vaadin-contextmenu'];
-              },
-
-              _isGridBody: function(detail) {
-                return detail.section === 'body';
+              _isGridBody: function(target) {
+                return target.classList.contains('body-content');
               },
 
               _add: function() {
@@ -90,7 +114,8 @@
               },
 
               _remove: function(e) {
-                this.splice('items', e.target.detail.row, 1);
+                var index = parseInt(e.target.content.getAttribute('data-index'));
+                this.splice('items', index, 1);
               }
             });
           </script>
