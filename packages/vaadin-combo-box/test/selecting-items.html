@@ -67,17 +67,16 @@
       expect(tapSpy.calledOnce).not.to.be.true;
     });
 
-    it('should fire `selection-changed` when tapped on an item', function(done) {
+    it('should fire `selection-changed` when tapped on an item', function() {
       combobox.opened = true;
+      Polymer.dom.flush();
 
-      setTimeout(function() {
-        Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
-          bubbles: true
-        }));
-        expect(selectionChangedSpy.calledOnce).to.be.true;
-        expect(selectionChangedSpy.args[0][0].detail.item).to.eql(combobox.items[0]);
-        done();
-      }, 1);
+      Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
+        bubbles: true
+      }));
+
+      expect(selectionChangedSpy.calledOnce).to.be.true;
+      expect(selectionChangedSpy.args[0][0].detail.item).to.eql(combobox.items[0]);
     });
 
     it('should fire `selection-changed` in short touch gestures', function(done) {
@@ -174,14 +173,13 @@
       expect(combobox.$.input.bindValue).to.equal('foo');
     });
 
-    it('should close the dropdown on selection', function(done) {
+    it('should close the dropdown on selection', function() {
       combobox.open();
+      Polymer.dom.flush();
 
-      setTimeout(function() {
-        combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item').click();
-        expect(combobox.opened).to.equal(false);
-        done();
-      }, 0);
+      combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item').click();
+
+      expect(combobox.opened).to.equal(false);
     });
 
     it('should fire exactly one `value-changed` event', function() {
@@ -323,8 +321,7 @@
 
     function filter(value) {
       getInput().bindValue = value;
-      getInput()._onInput();
-      combobox._filterFromInput();
+      combobox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
     beforeEach(function(done) {

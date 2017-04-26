@@ -23,6 +23,11 @@
 
       beforeEach(function() {
         comboBox = fixture('combobox');
+
+        // flush iron-input DOM observer to pick up child input
+        if (comboBox._bindableInput._observer) {
+          comboBox._bindableInput._observer.flush();
+        }
       });
 
       describe('items property', function() {
@@ -109,17 +114,12 @@
           expect(comboBox._bindableInput.bindValue).to.eql('foo');
         });
 
-        it('should set value after setting a custom input value', function(done) {
+        it('should set value after setting a custom input value', function() {
           comboBox.open();
           comboBox._bindableInput.bindValue = 'foo';
+          comboBox.close();
 
-          // 2.0 adds a 2-way binding notification listeners for updating _inputElementValue
-          // when iron-input bindValue changes, hence it's needed async testing.
-          setTimeout(function() {
-            comboBox.close();
-            expect(comboBox.value).to.eql('foo');
-            done();
-          });
+          expect(comboBox.value).to.eql('foo');
         });
 
         describe('`custom-value-set` event', function() {

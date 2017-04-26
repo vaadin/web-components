@@ -22,17 +22,13 @@
     </template>
   </test-fixture>
 
-  <!-- Need
-   - slot="suffix" for 2.0
-   - suffix        for 1.x
-   - classes clear-button and vaadin-combo-box-light for non-shadow browsers
-  -->
   <test-fixture id="combobox-light-paper-input">
     <template>
       <vaadin-combo-box-light>
         <paper-input>
-          <paper-button slot="suffix" suffix class="vaadin-combo-box-light clear-button">Clear</paper-button>
-          <paper-button slot="suffix" suffix class="vaadin-combo-box-light toggle-button">Toggle</paper-button>
+          <!-- slot="suffix" for 2.0, suffix for 1.x -->
+          <paper-button slot="suffix" suffix class="clear-button">Clear</paper-button>
+          <paper-button slot="suffix" suffix class="toggle-button">Toggle</paper-button>
         </paper-input>
       </vaadin-combo-box-light>
     </template>
@@ -88,10 +84,10 @@
       });
 
       it('should toggle overlay by tapping toggle element', function() {
-        window.fire(comboBox._toggleElement, 'tap');
+        comboBox._toggleElement.dispatchEvent(new CustomEvent('tap', {bubbles: true}));
         expect(comboBox.opened).to.be.true;
 
-        window.fire(comboBox._toggleElement, 'tap');
+        comboBox._toggleElement.dispatchEvent(new CustomEvent('tap', {bubbles: true}));
         expect(comboBox.opened).to.be.false;
       });
 

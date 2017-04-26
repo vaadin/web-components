@@ -207,7 +207,7 @@
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.$.input.bindValue = 'item 1';
-        window.fire(comboBox.inputElement, 'input');
+        comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
         Polymer.Base.async(function() {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);

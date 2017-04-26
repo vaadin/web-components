@@ -31,10 +31,3 @@ var getItemArray = function(length) {
       return 'item ' + index;
     });
 };
-
-var fire = function(elm, type) {
-  Polymer.Base.fire(type, {}, {
-    bubbles: true,
-    node: elm
-  });
-};

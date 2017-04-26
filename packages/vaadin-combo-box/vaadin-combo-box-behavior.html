@@ -438,7 +438,6 @@
       }
     },
 
-    // This is called from tests, to avoid firing `input` which works async in 2.0
     _filterFromInput: function(e) {
       if (this.filter === this._inputElementValue) {
         // Filter and input value might get out of sync, while keyboard navigating for example.

@@ -31,22 +31,21 @@
 
     function setInputValue(value) {
       getInput().bindValue = value;
-      // 2.0 updates the value async via the input event.
-      // iron-input and combo-box listen to on-input, calling
-      // the handlers directly avoid having to run tests async.
-      getInput()._onInput(); // handler in iron-input
-      comboBox._filterFromInput(); // handler in combo-box
+      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
     function getInputValue() {
       return getInput().bindValue;
     }
 
-    beforeEach(function(done) {
+    beforeEach(function() {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
-      // 2.0 takes a while until the iron-input references the slotted input.
-      comboBox.async(done);
+
+      // flush iron-input light dom observer to pickup child input element
+      if (comboBox._bindableInput._observer) {
+        comboBox._bindableInput._observer.flush();
+      }
     });
 
     describe('setting the input field value', function() {
