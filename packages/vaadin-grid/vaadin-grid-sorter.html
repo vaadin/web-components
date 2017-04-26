@@ -96,7 +96,7 @@ Custom property | Description | Default
     <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
     </div>
-    <div id="indicators" aria-hidden="true">
+    <div id="indicators" aria-hidden="true" on-focus="_onContentFocus">
       <div id="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 
@@ -185,10 +185,12 @@ Custom property | Description | Default
 
         var thisCell = grid.$.scroller._getCellByCellContent(this);
         if (thisCell.is === 'vaadin-grid-table-footer-cell') {
-          grid.$.scroller.$.footerFocusTrap.focus();
+          grid.$.scroller._virtualFocus = grid.$.scroller.$.footer;
         } else {
-          grid.$.scroller.$.headerFocusTrap.focus();
+          grid.$.scroller._virtualFocus = grid.$.scroller.$.header;
         }
+        grid.$.scroller.interacting = false;
+        grid.focus();
       },
 
       _getClosestCellContent: function() {
