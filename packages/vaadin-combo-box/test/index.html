@@ -33,7 +33,7 @@
     ].reduce(function(suites, suite) {
       // Browser supports Shadow DOM
       if (document.head.createShadowRoot || document.head.attachShadow) {
-        return suites.concat([suite, suite + '?dom=shadow']);
+        return suites.concat([suite, suite + '?wc-shadydom=true&dom=shadow']);
       } else {
         return suites.concat([suite]);
       }
