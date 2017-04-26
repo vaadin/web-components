@@ -27,7 +27,7 @@
     "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.0.3",
     "gulp-stylelint": "^3.7.0",
-    "polymer-cli": "next",
+    "polymer-cli": "^0.18.0",
     "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^5.0.0"
   }
