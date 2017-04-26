@@ -58,21 +58,21 @@
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            var combobox2 = document.querySelector('#elements-box');
+            var combobox = document.querySelector('#elements-box');
 
             // elementsJson is an Array of Objects. Item object format:
             //   {name: 'Hydrogen', symbol: 'H', number: 1}
-            combobox2.items = elementsJson;
+            combobox.items = elementsJson;
 
-            combobox2.addEventListener('selected-item-changed', function() {
-              document.querySelector('#element-name').innerHTML = combobox2.selectedItem && combobox2.selectedItem.name;
+            combobox.addEventListener('selected-item-changed', function() {
+              document.querySelector('#element-name').innerHTML = combobox.selectedItem && combobox.selectedItem.name;
             });
 
-            combobox2.addEventListener('value-changed', function() {
-              document.querySelector('#element-value').innerHTML = combobox2.value;
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#element-value').innerHTML = combobox.value;
             });
 
-            combobox2.value = 'C';
+            combobox.value = 'C';
           });
         </script>
       </template>

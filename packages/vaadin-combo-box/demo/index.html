@@ -46,13 +46,13 @@
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            var combobox2 = document.querySelector('#demo2');
-            combobox2.items = elements;
+            var combobox = document.querySelector('#demo2');
+            combobox.items = elements;
 
-            combobox2.addEventListener('value-changed', function() {
-              document.querySelector('#selected-value').innerHTML = combobox2.value;
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#selected-value').innerHTML = combobox.value;
             });
-            combobox2.value = 'Carbon';
+            combobox.value = 'Carbon';
           });
         </script>
       </template>
@@ -69,8 +69,8 @@
         <script>
           window.addEventListener('WebComponentsReady', function() {
             var form = document.querySelector('form');
-            var combobox3 = form.querySelector('vaadin-combo-box');
-            combobox3.items = elements;
+            var combobox = form.querySelector('vaadin-combo-box');
+            combobox.items = elements;
 
             form.addEventListener('iron-form-submit', function() {
               alert('Form submitted with name: ' + form.serialize().name);
@@ -88,19 +88,19 @@
         <paper-button id="setRandomValue" raised>Set random value</paper-button>
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            var combobox4 = document.querySelector('#changeEventDemo');
-            combobox4.items = elements;
+            var combobox = document.querySelector('#changeEventDemo');
+            combobox.items = elements;
 
-            combobox4.addEventListener('change', function(e) {
-              if (combobox4.value) {
-                alert('User selected value ' + combobox4.value);
+            combobox.addEventListener('change', function(e) {
+              if (combobox.value) {
+                alert('User selected value ' + combobox.value);
               } else {
                 alert('User has cleared the value');
               }
             });
 
             document.querySelector('#setRandomValue').addEventListener('click', function() {
-              combobox4.value = combobox4.items[Math.floor(Math.random() * combobox4.items.length)];
+              combobox.value = combobox.items[Math.floor(Math.random() * combobox.items.length)];
             });
           });
         </script>
