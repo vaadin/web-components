@@ -68,7 +68,9 @@
 
 1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli@next`
 
-1. When in the `vaadin-combo-box` directory, run `polymer serve`, after that you will be able to access:
+1. When in the `vaadin-combo-box` directory, run `polymer install --variants` to install Bower dependencies
+
+1. Run `polymer serve`, after that you will be able to access:
 
   - Polymer1-compatible version:
 
@@ -81,6 +83,9 @@
     - API documentation: http://127.0.0.1:8001/components/vaadin-combo-box/index.html
     - Examples: http://127.0.0.1:8001/components/vaadin-combo-box/demo/index.html
     - Tests: http://127.0.0.1:8001/components/vaadin-combo-box/test/index.html
+
+Note that ports `8000` and `8001` could be different in your environment.
+
 
 ## Running tests from the command line
 
