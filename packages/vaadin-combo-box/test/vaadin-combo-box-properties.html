@@ -70,7 +70,7 @@
           comboBox.items = ['foo', 'bar'];
 
           expect(comboBox.selectedItem).to.eql('foo');
-          expect(comboBox.$.input.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.bindValue).to.eql('foo');
         });
 
         it('should be able to be set before object items', function() {
@@ -80,7 +80,7 @@
           comboBox.items = [item];
 
           expect(comboBox.selectedItem).to.eql(item);
-          expect(comboBox.$.input.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.bindValue).to.eql('foo');
         });
       });
 
@@ -106,12 +106,12 @@
         it('should set bind value after setting value property', function() {
           comboBox.value = 'foo';
 
-          expect(comboBox.$.input.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.bindValue).to.eql('foo');
         });
 
         it('should set value after setting a custom input value', function(done) {
           comboBox.open();
-          comboBox.$.input.bindValue = 'foo';
+          comboBox._bindableInput.bindValue = 'foo';
 
           // 2.0 adds a 2-way binding notification listeners for updating _inputElementValue
           // when iron-input bindValue changes, hence it's needed async testing.
@@ -128,7 +128,7 @@
             comboBox.addEventListener('custom-value-set', spy);
 
             comboBox.open();
-            comboBox.$.input.bindValue = 'foo';
+            comboBox._bindableInput.bindValue = 'foo';
             comboBox.close();
 
             expect(spy.callCount).to.eql(1);
@@ -141,7 +141,7 @@
             comboBox.addEventListener('custom-value-set', spy);
 
             comboBox.open();
-            comboBox.$.input.bindValue = 'foo';
+            comboBox._bindableInput.bindValue = 'foo';
             comboBox.close();
 
             expect(spy.callCount).to.eql(0);
@@ -153,7 +153,7 @@
             });
 
             comboBox.open();
-            comboBox.$.input.bindValue = 'foo';
+            comboBox._bindableInput.bindValue = 'foo';
             comboBox.close();
 
             expect(comboBox.value).to.be.empty;
@@ -185,7 +185,7 @@
           comboBox.selectedItem = 'foo';
 
           expect(comboBox.value).to.eql('foo');
-          expect(comboBox.$.input.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.bindValue).to.eql('foo');
         });
 
         it('should default back to null when value set to undefined', function() {
@@ -228,12 +228,12 @@
           var inputFocusStub, inputBlurStub;
 
           beforeEach(function() {
-            inputFocusStub = sinon.stub(comboBox.$.input, 'focus', function() {
-              comboBox.$.input.fire('focus');
+            inputFocusStub = sinon.stub(comboBox.inputElement, 'focus', function() {
+              comboBox.inputElement.dispatchEvent(new CustomEvent('focus'));
             });
 
-            inputBlurStub = sinon.stub(comboBox.$.input, 'blur', function() {
-              comboBox.$.input.fire('blur');
+            inputBlurStub = sinon.stub(comboBox.inputElement, 'blur', function() {
+              comboBox.inputElement.dispatchEvent(new CustomEvent('blur'));
             });
           });
 

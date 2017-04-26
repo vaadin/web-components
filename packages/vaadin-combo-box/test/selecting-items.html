@@ -210,7 +210,7 @@
 
 
     it('should stop input `change` event from bubbling', function() {
-      combobox.$.input.fire('change');
+      combobox.inputElement.dispatchEvent(new CustomEvent('change'));
 
       expect(changeSpy.callCount).to.equal(0);
     });
@@ -318,7 +318,7 @@
     var combobox;
 
     function getInput() {
-      return combobox.$.input;
+      return combobox._bindableInput;
     }
 
     function filter(value) {

@@ -324,7 +324,7 @@
       });
 
       it('dropdown should not be shown when disabled', function() {
-        combobox.$.input.fire('tap');
+        combobox.inputElement.dispatchEvent(new CustomEvent('tap'));
         expect(combobox.opened).to.be.false;
       });
     });
@@ -344,7 +344,7 @@
       });
 
       it('dropdown should not be shown when read-only', function() {
-        combobox.$.input.fire('tap');
+        combobox.inputElement.dispatchEvent(new CustomEvent('tap'));
         expect(combobox.opened).to.be.false;
       });
     });

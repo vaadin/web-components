@@ -650,8 +650,8 @@
      * @return {boolean}
      */
     _getValidity: function() {
-      if (this.$.input.validate) {
-        return this.$.input.validate();
+      if (this._bindableInput.validate) {
+        return this._bindableInput.validate();
       }
     },
 

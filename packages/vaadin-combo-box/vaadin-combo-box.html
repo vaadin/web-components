@@ -198,7 +198,40 @@ Custom property | Description | Default
 
       <slot name="prefix" slot="prefix"></slot>
 
-      <span id="template-placeholder"></span>
+      <iron-input slot="input"
+        bind-value="{{_inputElementValue}}"
+        allowed-pattern="[[allowedPattern]]"
+        invalid="{{invalid}}"
+        on-change="_stopPropagation"
+        name$="[[name]]"
+        label="[[label]]">
+        <input is="iron-input" id="input"
+          type="text"
+          role="combobox"
+          autocomplete="off"
+          autocapitalize="none"
+          bind-value="{{_inputElementValue}}"
+          label="[[label]]"
+          aria-label$="[[label]]"
+          aria-expanded$="[[_getAriaExpanded(opened)]]"
+          aria-autocomplete="list"
+          disabled$="[[disabled]]"
+          invalid="{{invalid}}"
+          prevent-invalid-input="[[preventInvalidInput]]"
+          allowed-pattern="[[allowedPattern]]"
+          pattern$="[[pattern]]"
+          required$="[[required]]"
+          autofocus$="[[autofocus]]"
+          inputmode$="[[inputmode]]"
+          name$="[[name]]"
+          placeholder$="[[placeholder]]"
+          readonly$="[[readonly]]"
+          size$="[[size]]"
+          on-input="_inputValueChanged"
+          on-blur="_onBlur"
+          on-change="_stopPropagation"
+          key-event-target>
+      </iron-input>
 
       <!-- TODO (web-padawan): remove "suffix" attributes for 2.0 -->
       <div slot="suffix" suffix>
@@ -240,70 +273,6 @@ Custom property | Description | Default
       vertical-offset="2">
     </vaadin-combo-box-overlay>
   </template>
-
-  <template id="v0">
-   <input is="iron-input" id="input" slot="input"
-     type="text"
-     role="combobox"
-     autocomplete="off"
-     autocapitalize="none"
-     bind-value="{{_inputElementValue}}"
-     label="[[label]]"
-     aria-label$="[[label]]"
-     aria-expanded$="[[_getAriaExpanded(opened)]]"
-     aria-autocomplete="list"
-     disabled$="[[disabled]]"
-     invalid="{{invalid}}"
-     prevent-invalid-input="[[preventInvalidInput]]"
-     allowed-pattern="[[allowedPattern]]"
-     pattern$="[[pattern]]"
-     required$="[[required]]"
-     autofocus$="[[autofocus]]"
-     inputmode$="[[inputmode]]"
-     name$="[[name]]"
-     placeholder$="[[placeholder]]"
-     readonly$="[[readonly]]"
-     size$="[[size]]"
-     on-input="_inputValueChanged"
-     on-blur="_onBlur"
-     on-change="_stopPropagation"
-     key-event-target>
-  </template>
-
-  <template id="v1">
-    <iron-input id="input" slot="input"
-      bind-value="{{_inputElementValue}}"
-      allowed-pattern="[[allowedPattern]]"
-      invalid="{{invalid}}"
-      on-change="_stopPropagation"
-      name$="[[name]]"
-      label="[[label]]">
-      <input id="nativeInput"
-        type="text"
-        role="combobox"
-        autocomplete="off"
-        autocapitalize="none"
-        aria-label$="[[label]]"
-        aria-expanded$="[[_getAriaExpanded(opened)]]"
-        aria-autocomplete="list"
-        disabled$="[[disabled]]"
-        invalid="{{invalid}}"
-        prevent-invalid-input="[[preventInvalidInput]]"
-        allowed-pattern="[[allowedPattern]]"
-        pattern$="[[pattern]]"
-        required$="[[required]]"
-        autofocus$="[[autofocus]]"
-        inputmode$="[[inputmode]]"
-        name$="[[name]]"
-        placeholder$="[[placeholder]]"
-        readonly$="[[readonly]]"
-        size$="[[size]]"
-        on-input="_inputValueChanged"
-        on-blur="_onBlur"
-        key-event-target>
-    </iron-input>
-  </template>
-
 </dom-module>
 
 <script>
@@ -439,16 +408,9 @@ Custom property | Description | Default
       this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
     },
 
-    beforeRegister: function() {
-      var template = Polymer.DomModule.import('vaadin-combo-box', 'template');
-      var version = Polymer.Element ? 'v1' : 'v0';
-      var inputTemplate = Polymer.DomModule.import('vaadin-combo-box', 'template#' + version);
-      var inputPlaceholder = template.content.querySelector('#template-placeholder');
-      inputPlaceholder.parentNode.replaceChild(inputTemplate.content, inputPlaceholder);
-    },
-
     attached: function() {
-      this._setInputElement(Polymer.Element ? this.$.nativeInput : this.$.input);
+      this._setInputElement(Polymer.dom(this.root).querySelector('input'));
+      this._bindableInput = Polymer.Element ? Polymer.dom(this.root).querySelector('iron-input') : this.inputElement;
 
       // Use the default toggle/clear or one replaced in light DOM.
       this._toggleElement = Polymer.dom(this).querySelector('[slot=toggle-button]') || this.$.toggleIcon;
@@ -476,14 +438,14 @@ Custom property | Description | Default
      * Sets focus on the input field.
      */
     focus: function() {
-      this.$.input.focus();
+      this.inputElement.focus();
     },
 
     /**
      * Removes focus from the input field.
      */
     blur: function() {
-      this.$.input.blur();
+      this.inputElement.blur();
     },
 
     _onInputContainerFocusedChanged: function(e) {
