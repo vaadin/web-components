@@ -6,7 +6,7 @@
 
 # &lt;vaadin-grid&gt; v2
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-grid/2.0.0-beta2/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-grid/2.0.0/demo/)
 
 > :eyes: Looking for &lt;vaadin-grid&gt; v1.x? Please see the [the v1 branch](https://github.com/vaadin/vaadin-grid/tree/1.x)
 
