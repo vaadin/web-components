@@ -60,8 +60,8 @@
     <demo-snippet>
       <template>
         <vaadin-combo-box id="demo2" label="Custom Icons">
-          <paper-icon-button icon="remove-circle" slot="clear-button" class="vaadin-combo-box clear-button"></paper-icon-button>
-          <paper-icon-button icon="search" slot="toggle-button" class="vaadin-combo-box toggle-button"></paper-icon-button>
+          <paper-icon-button icon="remove-circle" slot="clear-button"></paper-icon-button>
+          <paper-icon-button icon="search" slot="toggle-button"></paper-icon-button>
         </vaadin-combo-box>
         <script>
           window.addEventListener('WebComponentsReady', function() {
@@ -94,9 +94,9 @@
       <template>
         <vaadin-combo-box-light id="demo4" attr-for-value="value">
           <paper-input label="Elements" class="input">
-            <iron-icon icon="toll" slot="prefix"></iron-icon>
-            <paper-button slot="suffix" class="vaadin-combo-box-light clear-button">Clear</paper-button>
-            <paper-button slot="suffix" class="vaadin-combo-box-light toggle-button">Toggle</paper-button>
+            <iron-icon icon="toll" slot="prefix" prefix></iron-icon>
+            <paper-button slot="suffix" suffix class="clear-button">Clear</paper-button>
+            <paper-button slot="suffix" suffix class="toggle-button">Toggle</paper-button>
           </paper-input>
         </vaadin-combo-box-light>
         <script>

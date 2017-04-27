@@ -94,23 +94,10 @@ Custom property | Description | Default
         padding: 0;
       }
 
-      :host ::content paper-icon-button.clear-button,
-      :host ::content paper-icon-button.toggle-button {
-        line-height: 18px !important;
-        width: 32px;
-        height: 32px;
-        padding: 4px;
-        text-align: center;
-
-        color: rgba(0, 0, 0, .38);
-        cursor: pointer;
-        margin-top: -1px;
-        /* MS Edge logs a SyntaxError if uncommented and breaks the component initialisation */
-        /* --paper-icon-button-ink-color: rgba(0, 0, 0, .54); */
-      }
-
-      :host ::slotted(paper-icon-button.clear-button),
-      :host ::slotted(paper-icon-button.toggle-button) {
+      paper-icon-button.clear-button,
+      paper-icon-button.toggle-button,
+      :host ::slotted(paper-icon-button[slot="toggle-button"]),
+      :host ::slotted(paper-icon-button[slot="clear-button"]) {
         line-height: 18px !important;
         width: 32px;
         height: 32px;
@@ -123,8 +110,12 @@ Custom property | Description | Default
         --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
       }
 
-      paper-icon-button.clear-button,
-      paper-icon-button.toggle-button {
+      /*
+       * Hacky selector to apply when using P2 Shady.
+       * Invalid when using P2 Shadow so need to be kept in a separate block.
+       */
+      :host ::slotted(paper-input-container) paper-icon-button[slot="toggle-button"],
+      :host ::slotted(paper-input-container) paper-icon-button[slot="clear-button"] {
         line-height: 18px !important;
         width: 32px;
         height: 32px;
@@ -138,14 +129,25 @@ Custom property | Description | Default
       }
 
       paper-input-container paper-icon-button:hover,
-      paper-input-container ::content paper-icon-button:hover,
+      paper-input-container ::slotted(paper-icon-button:hover),
       :host([opened]) paper-input-container paper-icon-button,
-      :host([opened]) paper-input-container ::content paper-icon-button {
+      :host([opened]) paper-input-container ::slotted(paper-icon-button) {
         color: rgba(0, 0, 0, .54);
       }
 
-      :host([opened]) paper-input-container ::content paper-icon-button:hover,
+      /* P2 Shady */
+      :host ::slotted(paper-input-container) paper-icon-button:hover,
+      :host([opened]) ::slotted(paper-input-container) paper-icon-button {
+        color: rgba(0, 0, 0, .54);
+      }
+
+      :host([opened]) paper-input-container ::slotted(paper-icon-button:hover),
       :host([opened]) paper-input-container paper-icon-button:hover {
+        color: rgba(0, 0, 0, .86);
+      }
+
+      /* P2 Shady */
+      :host([opened]) ::slotted(paper-input-container) paper-icon-button:hover {
         color: rgba(0, 0, 0, .86);
       }
 
