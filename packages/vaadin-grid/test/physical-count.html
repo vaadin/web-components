@@ -86,6 +86,28 @@
         scroller._update();
         expect(scroller._increasePoolIfNeeded()).to.be.false;
       });
+
+      it('should minimize increase pool iterations', function(done) {
+        var spy = sinon.spy(grid.$.scroller, '_increasePool');
+        grid.style.height = '1000px';
+
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          expect(spy.callCount).to.be.below(4);
+          done();
+        });
+      });
+
+      it('should minimize physical count', function(done) {
+        expect(grid.$.scroller._physicalCount).to.be.below(26);
+        grid.style.height = '1000px';
+
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          expect(grid.$.scroller._physicalCount).to.be.below(87);
+          done();
+        });
+      });
+
+
     });
   </script>
 
