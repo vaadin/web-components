@@ -32,20 +32,15 @@
 <dom-module id="x-fixed">
   <template>
     <div style="position:fixed">
-      <content></content>
+      <slot></slot>
     </div>
   </template>
   <script>
-    function register() {
+    window.addEventListener('WebComponentsReady', function() {
       Polymer({
         is: 'x-fixed'
       });
-    }
-    if (window.Polymer) {
-      register();
-    } else {
-      window.addEventListener('WebComponentsReady', register);
-    }
+    });
   </script>
 </dom-module>
 
@@ -284,12 +279,6 @@
     });
 
     it('should same position when parent component has fixed', function(done) {
-      // FIXME: _isPositionFixed not working in 2.0
-      if (Polymer.Element) {
-        done();
-        return;
-      }
-
       var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
 
       combobox.open();

@@ -91,10 +91,24 @@
     },
 
     _isPositionFixed: function(element) {
-      var offsetParent = element.offsetParent;
+      var offsetParent = this._getOffsetParent(element);
 
       return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
         (offsetParent && this._isPositionFixed(offsetParent));
+    },
+
+    _getOffsetParent: function(element) {
+      if (element.assignedSlot) {
+        return element.assignedSlot.parentElement;
+      } else if (element.parentElement) {
+        return element.offsetParent;
+      }
+
+      var parent = Polymer.dom(element).parentNode;
+
+      if (parent && parent.nodeType === 11 && parent.host) {
+        return parent.host; // parent is #shadowRoot
+      }
     },
 
     _maxHeight: function(targetRect) {
