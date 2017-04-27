@@ -185,6 +185,13 @@
 
       it('should apply default column-gap', function() {
         expect(getParsedWidth(layout.firstElementChild).gap).to.equal('2em');
+        expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('16px'); // 0.5 * 2em in px
+        expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px');
+      });
+
+      it('should compensate for column-gap in layout wrapper', function() {
+        expect(getComputedStyle(layout.$.layout).getPropertyValue('margin-left')).to.equal('-16px'); // -0.5 * 2em in px
+        expect(getComputedStyle(layout.$.layout).getPropertyValue('margin-right')).to.equal('-16px');
       });
 
       it('should support updating with `updateStyles` call', function() {

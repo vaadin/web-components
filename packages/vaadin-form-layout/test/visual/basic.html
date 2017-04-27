@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../../polymer/polymer-element.html">
+  <link rel="import" href="../../vaadin-form-layout.html">
+  <link rel="import" href="../../vaadin-form-item.html">
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      // Wait for the other 'WebComponentsReady' event listeners
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <h3>Basic Usage</h3>
+
+  <vaadin-form-layout capture>
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <span slot="label">Date of Birth</span>
+      <input placeholder="YYYY" size="4"> -
+      <input placeholder="MM" size="2"> -
+      <input placeholder="DD" size="2"><br>
+      <em>Example: 1900-01-01</em>
+    </vaadin-form-item>
+
+    <vaadin-form-item colspan="2">
+      <label slot="label">Conference Abstract</label>
+      <textarea rows="6" class="full-width" style="display: inline-flex; vertical-align: top;"></textarea>
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <input type="checkbox"> Subscribe to our Newsletter
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+</body>
+</html>
