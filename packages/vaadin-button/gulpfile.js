@@ -78,7 +78,6 @@ function runTest(test, threshold, cb) {
       error = `Error: status ${status} while running lighthouse CLI`;
     } else {
       var results = JSON.parse(stdout);
-      // To upgrade to lighthouse v1.4.0+ use results.aggregations[0].total
       var total = results.aggregations[0].score[0].overall;
 
       if (total === undefined) {
