@@ -432,7 +432,17 @@
           Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', this._increasePool.bind(this, this._itemsPerRow), 16));
         } else {
           // fill the rest of the pages
-          this._debounceTemplate(this._increasePool.bind(this, this._itemsPerRow));
+
+          // Count average item height
+          var itemHeight = this._physicalSize / this._physicalCount;
+          // Number of items in one page (to fill one viewport)
+          var itemsPerPage = this._viewportHeight / itemHeight;
+          // Amount of items needed in total
+          var totalNeededItems = this._maxPages * itemsPerPage;
+          // Estimated count of missing items
+          var missingItems = Math.ceil(totalNeededItems - this._physicalCount);
+
+          this._debounceTemplate(this._increasePool.bind(this, missingItems || 1));
         }
         this._lastPage = currentPage;
         return true;
