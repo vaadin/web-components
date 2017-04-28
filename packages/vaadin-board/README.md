@@ -52,6 +52,8 @@ $ bower install --save vaadin/vaadin-board
 `git clone https://github.com/vaadin/vaadin-board.git`
 #### Install [polymer-cli](https://www.npmjs.com/package/polyserve):
 `npm install -g polymer-cli`
+#### Install Bower dependencies:
+`polymer install`
 #### Serve your application locally.
 `polymer serve`
 #### Go to http://localhost:8080/components/vaadin-board/demo/index.html to see the demo.
