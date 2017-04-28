@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-text-field.html",
         "start": {
-          "line": 334,
+          "line": 342,
           "column": 6
         },
         "end": {
-          "line": 334,
+          "line": 342,
           "column": 42
         }
       },
@@ -26,13 +26,13 @@
               "name": "autofocus",
               "description": "Specify that this control should have input focus when the page loads.",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 44,
+                  "line": 50,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 52,
                   "column": 9
                 }
               },
@@ -44,13 +44,13 @@
               "name": "focused",
               "description": "If true, the element currently has focus.",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 51,
+                  "line": 57,
                   "column": 8
                 },
                 "end": {
-                  "line": 57,
+                  "line": 63,
                   "column": 9
                 }
               },
@@ -62,13 +62,13 @@
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 62,
+                  "line": 68,
                   "column": 8
                 },
                 "end": {
-                  "line": 66,
+                  "line": 72,
                   "column": 9
                 }
               },
@@ -81,11 +81,11 @@
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
               "sourceRange": {
                 "start": {
-                  "line": 125,
+                  "line": 129,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 131,
                   "column": 13
                 }
               },
@@ -97,11 +97,11 @@
               "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 140,
                   "column": 31
                 }
               },
@@ -113,11 +113,11 @@
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 145,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 148,
                   "column": 13
                 }
               },
@@ -129,11 +129,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 153,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -145,11 +145,11 @@
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 12
                 },
                 "end": {
-                  "line": 160,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -161,11 +161,11 @@
               "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the maximum number of characters (in Unicode code points) that the user\ncan enter.",
               "sourceRange": {
                 "start": {
-                  "line": 167,
+                  "line": 171,
                   "column": 12
                 },
                 "end": {
-                  "line": 169,
+                  "line": 173,
                   "column": 13
                 }
               },
@@ -177,11 +177,11 @@
               "description": "If the value of the type attribute is text, email, search, password, tel, or url,\nspecifies the minimum number of characters (in Unicode code points) that the user\ncan enter.",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 180,
                   "column": 12
                 },
                 "end": {
-                  "line": 178,
+                  "line": 182,
                   "column": 13
                 }
               },
@@ -193,11 +193,11 @@
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 187,
                   "column": 12
                 },
                 "end": {
-                  "line": 185,
+                  "line": 189,
                   "column": 13
                 }
               },
@@ -206,14 +206,14 @@
             },
             {
               "name": "pattern",
-              "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.\nThis attribute applies when the value of the type attribute is text, search, tel,\nurl, email, or password, otherwise it is ignored.",
+              "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 195,
                   "column": 12
                 },
                 "end": {
-                  "line": 195,
+                  "line": 197,
                   "column": 13
                 }
               },
@@ -225,11 +225,11 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 202,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 204,
                   "column": 13
                 }
               },
@@ -241,11 +241,11 @@
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 209,
+                  "line": 211,
                   "column": 13
                 }
               },
@@ -257,11 +257,11 @@
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
                 "start": {
-                  "line": 214,
+                  "line": 216,
                   "column": 12
                 },
                 "end": {
-                  "line": 216,
+                  "line": 218,
                   "column": 13
                 }
               },
@@ -273,11 +273,11 @@
               "description": "Message to show to the user when validation fails.",
               "sourceRange": {
                 "start": {
-                  "line": 221,
+                  "line": 223,
                   "column": 12
                 },
                 "end": {
-                  "line": 223,
+                  "line": 225,
                   "column": 13
                 }
               },
@@ -289,11 +289,11 @@
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "sourceRange": {
                 "start": {
-                  "line": 229,
+                  "line": 231,
                   "column": 12
                 },
                 "end": {
-                  "line": 233,
+                  "line": 235,
                   "column": 13
                 }
               },
@@ -305,11 +305,11 @@
               "description": "This property is set to true when the control value invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 238,
+                  "line": 240,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 245,
                   "column": 13
                 }
               },
@@ -321,11 +321,11 @@
               "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
               "sourceRange": {
                 "start": {
-                  "line": 249,
+                  "line": 251,
                   "column": 12
                 },
                 "end": {
-                  "line": 255,
+                  "line": 257,
                   "column": 13
                 }
               },
@@ -337,11 +337,11 @@
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "sourceRange": {
                 "start": {
-                  "line": 261,
+                  "line": 263,
                   "column": 12
                 },
                 "end": {
-                  "line": 261,
+                  "line": 263,
                   "column": 40
                 }
               },
@@ -356,13 +356,13 @@
               "description": "Specify that this control should have input focus when the page loads.",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 44,
+                  "line": 50,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 52,
                   "column": 9
                 }
               },
@@ -377,13 +377,13 @@
               "description": "If true, the element currently has focus.",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 51,
+                  "line": 57,
                   "column": 8
                 },
                 "end": {
-                  "line": 57,
+                  "line": 63,
                   "column": 9
                 }
               },
@@ -402,13 +402,13 @@
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 62,
+                  "line": 68,
                   "column": 8
                 },
                 "end": {
-                  "line": 66,
+                  "line": 72,
                   "column": 9
                 }
               },
@@ -447,11 +447,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 125,
+                  "line": 129,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 131,
                   "column": 13
                 }
               },
@@ -466,11 +466,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 140,
                   "column": 31
                 }
               },
@@ -485,11 +485,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 145,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 148,
                   "column": 13
                 }
               },
@@ -505,11 +505,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 153,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -525,11 +525,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 12
                 },
                 "end": {
-                  "line": 160,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -544,11 +544,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 167,
+                  "line": 171,
                   "column": 12
                 },
                 "end": {
-                  "line": 169,
+                  "line": 173,
                   "column": 13
                 }
               },
@@ -563,11 +563,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 180,
                   "column": 12
                 },
                 "end": {
-                  "line": 178,
+                  "line": 182,
                   "column": 13
                 }
               },
@@ -582,11 +582,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 187,
                   "column": 12
                 },
                 "end": {
-                  "line": 185,
+                  "line": 189,
                   "column": 13
                 }
               },
@@ -597,15 +597,15 @@
             {
               "name": "pattern",
               "type": "string",
-              "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.\nThis attribute applies when the value of the type attribute is text, search, tel,\nurl, email, or password, otherwise it is ignored.",
+              "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 195,
                   "column": 12
                 },
                 "end": {
-                  "line": 195,
+                  "line": 197,
                   "column": 13
                 }
               },
@@ -620,11 +620,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 202,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 204,
                   "column": 13
                 }
               },
@@ -639,11 +639,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 209,
+                  "line": 211,
                   "column": 13
                 }
               },
@@ -658,11 +658,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 214,
+                  "line": 216,
                   "column": 12
                 },
                 "end": {
-                  "line": 216,
+                  "line": 218,
                   "column": 13
                 }
               },
@@ -677,11 +677,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 221,
+                  "line": 223,
                   "column": 12
                 },
                 "end": {
-                  "line": 223,
+                  "line": 225,
                   "column": 13
                 }
               },
@@ -696,11 +696,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 229,
+                  "line": 231,
                   "column": 12
                 },
                 "end": {
-                  "line": 233,
+                  "line": 235,
                   "column": 13
                 }
               },
@@ -718,11 +718,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 238,
+                  "line": 240,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 245,
                   "column": 13
                 }
               },
@@ -740,11 +740,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 249,
+                  "line": 251,
                   "column": 12
                 },
                 "end": {
-                  "line": 255,
+                  "line": 257,
                   "column": 13
                 }
               },
@@ -763,12 +763,31 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 261,
+                  "line": 263,
                   "column": 12
                 },
                 "end": {
-                  "line": 261,
+                  "line": 263,
                   "column": 40
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_labelId",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 265,
+                  "column": 12
+                },
+                "end": {
+                  "line": 265,
+                  "column": 28
                 }
               },
               "metadata": {
@@ -782,11 +801,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 263,
+                  "line": 267,
                   "column": 12
                 },
                 "end": {
-                  "line": 263,
+                  "line": 267,
                   "column": 28
                 }
               },
@@ -802,11 +821,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 316,
                   "column": 8
                 },
                 "end": {
-                  "line": 317,
+                  "line": 325,
                   "column": 9
                 }
               },
@@ -856,13 +875,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 116,
                   "column": 4
                 },
                 "end": {
-                  "line": 118,
+                  "line": 124,
                   "column": 5
                 }
               },
@@ -879,13 +898,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 120,
+                  "line": 126,
                   "column": 4
                 },
                 "end": {
-                  "line": 122,
+                  "line": 128,
                   "column": 5
                 }
               },
@@ -902,13 +921,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 130,
                   "column": 4
                 },
                 "end": {
-                  "line": 126,
+                  "line": 132,
                   "column": 5
                 }
               },
@@ -921,13 +940,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 137,
+                  "line": 143,
                   "column": 4
                 },
                 "end": {
-                  "line": 145,
+                  "line": 151,
                   "column": 5
                 }
               },
@@ -944,13 +963,13 @@
               "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
               "privacy": "private",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 154,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -963,13 +982,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 165,
+                  "line": 171,
                   "column": 5
                 }
               },
@@ -986,13 +1005,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 167,
+                  "line": 173,
                   "column": 4
                 },
                 "end": {
-                  "line": 179,
+                  "line": 185,
                   "column": 5
                 }
               },
@@ -1010,11 +1029,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 275,
                   "column": 8
                 },
                 "end": {
-                  "line": 278,
+                  "line": 282,
                   "column": 9
                 }
               },
@@ -1031,11 +1050,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 280,
+                  "line": 284,
                   "column": 8
                 },
                 "end": {
-                  "line": 285,
+                  "line": 289,
                   "column": 9
                 }
               },
@@ -1052,11 +1071,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 293,
+                  "line": 297,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 299,
                   "column": 9
                 }
               },
@@ -1064,16 +1083,16 @@
               "params": []
             },
             {
-              "name": "_hasError",
+              "name": "_getActiveErrorId",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 297,
+                  "line": 301,
                   "column": 8
                 },
                 "end": {
-                  "line": 299,
+                  "line": 303,
                   "column": 9
                 }
               },
@@ -1084,6 +1103,33 @@
                 },
                 {
                   "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ]
+            },
+            {
+              "name": "_getActiveLabelId",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 305,
+                  "column": 8
+                },
+                "end": {
+                  "line": 307,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "label"
+                },
+                {
+                  "name": "labelId"
                 }
               ]
             },
@@ -1093,11 +1139,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 304,
+                  "line": 312,
                   "column": 8
                 },
                 "end": {
-                  "line": 306,
+                  "line": 314,
                   "column": 9
                 }
               },
@@ -1110,11 +1156,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 319,
+                  "line": 327,
                   "column": 8
                 },
                 "end": {
-                  "line": 326,
+                  "line": 334,
                   "column": 9
                 }
               },
@@ -1159,11 +1205,11 @@
               "range": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 76,
+                  "line": 80,
                   "column": 8
                 },
                 "end": {
-                  "line": 76,
+                  "line": 80,
                   "column": 35
                 }
               }
@@ -1206,11 +1252,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 113,
+              "line": 117,
               "column": 6
             },
             "end": {
-              "line": 327,
+              "line": 335,
               "column": 7
             }
           },
