@@ -362,10 +362,13 @@
 
 
         comboBox.async(function() {
+          // selection range is only cleared when the input is focused, which is not the case
+          // in all environments running the tests, especially on safari. So we need to use the next best thing.
+          comboBox._clearSelectionRange = sinon.spy();
+
           enter();
 
-          expect(getInput().selectionStart).to.eql(3);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox._clearSelectionRange.callCount).to.eql(1);
           done();
         }, 1);
       });
