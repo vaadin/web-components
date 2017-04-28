@@ -103,7 +103,7 @@
         var value = e.value;
 
         templateInstances.forEach(function(inst) {
-          inst.notifyPath(prop, value);
+          inst.set(prop, value);
         });
       }
     }

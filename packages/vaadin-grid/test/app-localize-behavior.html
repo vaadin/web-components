@@ -1,0 +1,82 @@
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>iron-list test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../../app-localize-behavior/app-localize-behavior.html">
+</head>
+<body>
+
+  <dom-module id="x-grid">
+    <template>
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
+
+      <vaadin-grid id="grid" items="[1]">
+        <vaadin-grid-column>
+          <template class="header">[[localize('header')]]</template>
+          <template>[[item]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', function() {
+        Polymer({
+          is: 'x-grid',
+
+          behaviors: [Polymer.AppLocalizeBehavior],
+
+          properties: {
+            language: {
+              value: 'en'
+            }
+          },
+
+          attached: function() {
+            this.loadResources('locales.json');
+          }
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="grid">
+    <template>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    describe('app-localize-behavior', function() {
+      var container, column, grid;
+
+      beforeEach(function(done) {
+        container = fixture('grid');
+        grid = container.$.grid;
+        container.addEventListener('app-localize-resources-loaded', function() {
+          done();
+        });
+      });
+
+      it('should localize', function() {
+        expect(getHeaderCellContent(grid, 0, 0).innerText).to.equal('header');
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
