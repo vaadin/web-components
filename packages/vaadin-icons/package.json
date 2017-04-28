@@ -25,6 +25,6 @@
     "gulp": "latest",
     "gulp-modify": "latest",
     "gulp-concat": "latest",
-    "polymer-cli": "next"
+    "polymer-cli": "^0.18.0"
   }
 }

@@ -13,13 +13,19 @@ browsers:
   chrome:
     desiredCapabilities:
       browserName: "chrome"
-      version: "54.0"
+      version: "57.0"
       platform: "Windows 10"
 
   firefox:
     desiredCapabilities:
       browserName: "firefox"
       version: "47.0"
+      platform: "Windows 10"
+
+  ie:
+    desiredCapabilities:
+      browserName: "internet explorer"
+      version: "11.0"
       platform: "Windows 10"
 
   edge:
