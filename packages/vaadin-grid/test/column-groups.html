@@ -444,14 +444,15 @@
           });
         });
 
-        it('should hide self', function() {
+        it('should hide self', function(done) {
           init('hidden-column');
 
           flush(function() {
-            expect(grid.querySelector('vaadin-grid-column-group').hidden).to.be.false;
+            expect(grid.querySelector('vaadin-grid-column-group').hidden).not.to.be.true;
             var columns = grid.querySelectorAll('vaadin-grid-column');
             expect(columns[0].hidden).to.be.true;
-            expect(columns[1].hidden).to.be.false;
+            expect(columns[1].hidden).not.to.be.true;
+            done();
           });
         });
 
