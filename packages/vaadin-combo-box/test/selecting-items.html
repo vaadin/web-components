@@ -187,32 +187,6 @@
       expect(valueChangedSpy.callCount).to.equal(1);
     });
 
-    it('should fire exactly one `change` event', function() {
-      combobox.value = 'foo';
-      expect(changeSpy.callCount).to.equal(1);
-    });
-
-    it('should fire change events in correct order', function(done) {
-      combobox.addEventListener('change', function() {
-        // in 2.0 event order is different
-        if (Polymer.Element) {
-          expect(valueChangedSpy.called).to.be.false;
-        } else {
-          expect(valueChangedSpy.called).to.be.true;
-        }
-        expect(selectedItemChangedSpy.called).to.be.true;
-        done();
-      });
-      combobox.value = 'foo';
-    });
-
-
-    it('should stop input `change` event from bubbling', function() {
-      combobox.inputElement.dispatchEvent(new CustomEvent('change'));
-
-      expect(changeSpy.callCount).to.equal(0);
-    });
-
     it('should close the dropdown when reselecting the current value', function() {
       combobox.value = 'foo';
       combobox.open();
@@ -233,6 +207,76 @@
       combobox.open();
       combobox.close();
     });
+
+    describe('`change` event', function() {
+      it('should fire `value-changed` and `selected-item-changed` before `changed`', function(done) {
+        combobox.addEventListener('change', function() {
+          expect(valueChangedSpy.called).to.be.true;
+          expect(selectedItemChangedSpy.called).to.be.true;
+          done();
+        });
+
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.close();
+      });
+
+      it('should fire exactly one `change` event', function() {
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.close();
+
+        expect(changeSpy.callCount).to.equal(1);
+      });
+
+      it('should not fire `change` event when not commiting a value by closing', function() {
+        combobox.value = 'foo';
+
+        expect(changeSpy.callCount).to.equal(0);
+      });
+
+      it('should fire on clear', function() {
+        combobox.value = 'foo';
+        combobox.$.clearIcon.click();
+
+        expect(changeSpy.callCount).to.equal(1);
+      });
+
+      it('should not fire until close', function() {
+        combobox.value = 'foo';
+        combobox.open();
+        combobox.value = 'bar';
+
+        expect(changeSpy.callCount).to.equal(0);
+      });
+
+      it('should not fire on cancel', function() {
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.cancel();
+
+        expect(changeSpy.callCount).to.equal(0);
+      });
+
+      it('should not fire for changes when closed', function() {
+        combobox.value = 'foo';
+
+        combobox.open();
+        combobox.close();
+        it('should fire exactly one `change` event', function() {
+          combobox.value = 'foo';
+          expect(changeSpy.callCount).to.equal(1);
+        });
+
+        expect(changeSpy.callCount).to.equal(0);
+      });
+
+      it('should stop input `change` event from bubbling', function() {
+        combobox.inputElement.dispatchEvent(new CustomEvent('change'));
+
+        expect(changeSpy.callCount).to.equal(0);
+      });
+    });
   });
 
   ['default', 'custom'].forEach(function(button) {
@@ -247,17 +291,17 @@
         combobox.value = 'foo';
 
         clearIcon = combobox._clearElement;
+
+        // needed for Edge <= 14 in Polymer 2
+        combobox.updateStyles();
       });
 
       it('should show the clearing icon only when combobox has value', function(done) {
-        // FIXME: needed for Edge
-        combobox.updateStyles();
         expect(window.getComputedStyle(clearIcon).display).to.contain('block');
 
         combobox.value = '';
-        // FIXME: needed for Edge
-        combobox.open();
 
+        // needed for Edge <= 14
         setTimeout(function() {
           expect(window.getComputedStyle(clearIcon).display).to.contain('none');
           done();
