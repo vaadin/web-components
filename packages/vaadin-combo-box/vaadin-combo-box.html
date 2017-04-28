@@ -237,23 +237,27 @@ Custom property | Description | Default
 
       <!-- TODO (web-padawan): remove "suffix" attributes for 2.0 -->
       <div slot="suffix" suffix>
-        <slot name="clear-button">
-          <paper-icon-button id="clearIcon"
-            tabindex="-1"
-            aria-label="Clear"
-            icon="vaadin-combo-box:clear"
-            class="clear-button small">
-          </paper-icon-button>
-        </slot>
-        <slot name="toggle-button">
-          <paper-icon-button id="toggleIcon"
-            tabindex="-1"
-            icon="vaadin-combo-box:arrow-drop-down"
-            aria-label="Toggle"
-            aria-expanded$="[[_getAriaExpanded(opened)]]"
-            class="toggle-button rotate-on-open">
-          </paper-icon-button>
-        </slot>
+        <span>
+          <slot name="clear-button">
+            <paper-icon-button id="clearIcon"
+              tabindex="-1"
+              aria-label="Clear"
+              icon="vaadin-combo-box:clear"
+              class="clear-button small">
+            </paper-icon-button>
+          </slot>
+        </span>
+        <span>
+          <slot name="toggle-button">
+            <paper-icon-button id="toggleIcon"
+              tabindex="-1"
+              icon="vaadin-combo-box:arrow-drop-down"
+              aria-label="Toggle"
+              aria-expanded$="[[_getAriaExpanded(opened)]]"
+              class="toggle-button rotate-on-open">
+            </paper-icon-button>
+          </slot>
+        </span>
 
         <slot name="suffix">
         </slot>
