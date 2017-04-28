@@ -231,6 +231,7 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             value: {
               type: String,
+              value: '',
               observer: '_valueChanged',
               notify: true
             },
@@ -282,11 +283,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _valueChanged(value) {
+        _valueChanged(newVal, oldVal) {
+          // setting initial value to empty string, skip validation
+          if (newVal === '' && oldVal === undefined) {
+            return;
+          }
           if (this.invalid) {
             this.validate();
           }
-          this._setHasValue(value != null && value !== '');
+          this._setHasValue(newVal !== '');
         }
 
         /**
