@@ -6,7 +6,7 @@
   "dependencies": {
     "polymer": "^2.0.0-rc.1",
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview",
-    "vaadin-license-checker": "vaadin/license-checker#2.0-preview"
+    "vaadin-license-checker": "vaadin/license-checker#^1.0.0"
   },
   "devDependencies": {
     "app-layout": "PolymerElements/app-layout#2.0-preview",
