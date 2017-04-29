@@ -334,6 +334,15 @@ This program is available under Apache License Version 2.0, available at https:/
             /^(focused|focus-ring|invalid|disabled|placeholder|has-value)$/.test(prop)) {
             this.updateStyles();
           }
+
+          // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+          // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+          if (window.safari && this.root) {
+            this.root.querySelectorAll('*').forEach(el => {
+              el.style['-webkit-backface-visibility'] = 'visible';
+              el.style['-webkit-backface-visibility'] = '';
+            });
+          }
         }
       }
 
