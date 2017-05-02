@@ -221,6 +221,11 @@
         <td>Length of the gap between the label and input columns when the labels are aside</td>
         <td><code>1em</code></td>
       </tr>
+      <tr>
+        <td><code style="white-space: nowrap;">--vaadin-form-item-row-gap</code></td>
+        <td>Height of the gap between the form item elements</td>
+        <td><code>1em</code></td>
+      </tr>
     </table>
     <demo-snippet>
       <template>
@@ -235,6 +240,7 @@
               vaadin-form-item {
                 --vaadin-form-item-label-width: 6em;
                 --vaadin-form-item-label-gap: 1em;
+                --vaadin-form-item-row-gap: 1.25em;
               }
 
             </style>
@@ -273,9 +279,20 @@
     </demo-snippet>
 
     <h3>Vaadin Text Fields as Form Items</h3>
+    <p>
+      <strong>Note:</strong> When not using <code>&lt;vaadin-form-item&gt;</code>, vertical
+      gaps between the form rows should be added manually. For example, use CSS to add
+      vertical margin for the <code>&lt;vaadin-text-field&gt;</code> child elements:
+    </p>
     <demo-snippet>
       <template>
-        <vaadin-form-layout>
+        <style>
+          vaadin-form-layout.with-text-fields > vaadin-text-field {
+            margin-top: .5em;
+            margin-bottom: .5em;
+          }
+        </style>
+        <vaadin-form-layout class="with-text-fields">
           <vaadin-text-field label="First Name" value="Jane"></vaadin-text-field>
           <vaadin-text-field label="Last Name" value="Doe"></vaadin-text-field>
           <vaadin-text-field label="Email" value="jane.doe@example.com"></vaadin-text-field>
@@ -287,6 +304,10 @@
     </demo-snippet>
 
     <h3>Paper Inputs as Form Items</h3>
+    <p>
+      <code>&lt;paper-input&gt;</code> elements have built-in vertical spacing. Adding margins
+      with CSS is unnecessary.
+    </p>
     <demo-snippet>
       <template>
         <vaadin-form-layout>
