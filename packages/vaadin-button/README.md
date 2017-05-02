@@ -5,7 +5,7 @@
 
 # &lt;vaadin-button&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-button/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-button/1.0.0-alpha1/demo/)
 
 [&lt;vaadin-button&gt;](https://vaadin.com/elements/-/element/vaadin-button) is a [Polymer](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
