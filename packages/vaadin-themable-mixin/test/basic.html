@@ -13,22 +13,30 @@
 
 <body>
 
-  <dom-module id="test-foo">
-    <template>
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
-      <div part="text" id="text">text</div>
-    </template>
-  </dom-module>
+  <div id="dom-modules">
+    <dom-module id="test-foo">
+      <template>
+        <style>
+          :host {
+            display: block;
+          }
+        </style>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
 
-  <dom-module id="test-bar">
-    <template>
-      <div part="text" id="text">text</div>
-    </template>
-  </dom-module>
+    <dom-module id="test-bar">
+      <template>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
+
+    <dom-module id="test-qux">
+      <template>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
+  </div>
 
   <script>
   document.addEventListener('WebComponentsReady', function() {
@@ -52,49 +60,81 @@
       }
     }
     customElements.define(TestBaz.is, TestBaz);
+
+    class TestQux extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'test-qux';
+      }
+    }
+    customElements.define(TestQux.is, TestQux);
   });
   </script>
 
+  <div id="theme-modules">
+    <dom-module id="test-qux-default-theme" theme-for="test-qux">
+      <template>
+        <style>
+          [part="text"] {
+            color: rgb(255, 0, 0);
+          }
+        </style>
+      </template>
+    </dom-module>
 
-  <dom-module id="test-styles" theme-for="test-foo">
-    <template>
-      <style>
-        :host {
-          display: flex;
-        }
+    <!-- This default style module should get overridden by test-foo styles.
+    Removing this module doesn't make any difference to the test outcome but it's
+    here to make a point. -->
+    <dom-module id="test-foo-default-theme" theme-for="test-foo">
+      <template>
+        <style>
+          [part="text"] {
+            color: rgb(0, 0, 0) !important;
+          }
+        </style>
+      </template>
+    </dom-module>
 
-        [part="text"] {
-          color: rgb(255, 255, 255);
-        }
-      </style>
-    </template>
-  </dom-module>
+    <dom-module id="test-styles" theme-for="test-foo">
+      <template>
+        <style>
+          :host {
+            display: flex;
+          }
 
-  <dom-module id="test-styles-multiple" theme-for="test-foo test-bar">
-    <template>
-      <style>
-        [part="text"] {
-          background-color: rgb(255, 0, 0);
-        }
-      </style>
-    </template>
-  </dom-module>
+          [part="text"] {
+            color: rgb(255, 255, 255);
+          }
+        </style>
+      </template>
+    </dom-module>
 
-  <dom-module id="test-styles-wildcard" theme-for="test*a*">
-    <template>
-      <style>
-        [part="text"] {
-          position: relative;
-        }
-      </style>
-    </template>
-  </dom-module>
+    <dom-module id="test-styles-multiple" theme-for="test-foo test-bar">
+      <template>
+        <style>
+          [part="text"] {
+            background-color: rgb(255, 0, 0);
+          }
+        </style>
+      </template>
+    </dom-module>
+
+    <dom-module id="test-styles-wildcard" theme-for="test*a*">
+      <template>
+        <style>
+          [part="text"] {
+            position: relative;
+          }
+        </style>
+      </template>
+    </dom-module>
+  </div>
 
   <test-fixture id="default">
     <template>
       <test-foo></test-foo>
       <test-bar></test-bar>
       <test-baz></test-baz>
+      <test-qux></test-qux>
     </template>
   </test-fixture>
 
@@ -132,6 +172,10 @@
 
       it('should override default value', function() {
         expect(window.getComputedStyle(components[0]).display).to.equal('flex');
+      });
+
+      it('should fall back to default styles', function() {
+        expect(window.getComputedStyle(components[3].$.text).color).to.equal('rgb(255, 0, 0)');
       });
 
     });
