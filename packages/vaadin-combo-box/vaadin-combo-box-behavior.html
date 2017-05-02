@@ -443,7 +443,7 @@
         // Filter and input value might get out of sync, while keyboard navigating for example.
         // Afterwards, input value might be changed to the same value as used in filtering.
         // In situation like these, we need to make sure all the filter changes handlers are run.
-        this._filterChanged(this.filter);
+        this._filterChanged(this.filter, this.itemValuePath, this.itemLabelPath);
       } else {
         this._userDefinedFilter = true;
         this.filter = this._inputElementValue;
@@ -465,7 +465,10 @@
       }
     },
 
-    _filterChanged: function(filter) {
+    _filterChanged: function(filter, itemValuePath, itemLabelPath) {
+      if (filter === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+        return;
+      }
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
       }
@@ -500,7 +503,7 @@
         return;
       }
 
-      if (selectedItem === null) {
+      if (selectedItem === null || selectedItem === undefined) {
         if (!this.allowCustomValue) {
           this.value = '';
         }
@@ -549,7 +552,10 @@
       }
     },
 
-    _itemsChanged: function(e) {
+    _itemsChanged: function(e, itemValuePath, itemLabelPath) {
+      if (e === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+        return;
+      }
       if (e.path === 'items' || e.path === 'items.splices') {
         this.filteredItems = this.items ? this.items.slice(0) : this.items;
 
@@ -563,7 +569,10 @@
       }
     },
 
-    _filteredItemsChanged: function(e) {
+    _filteredItemsChanged: function(e, itemValuePath, itemLabelPath) {
+      if (e === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+        return;
+      }
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
