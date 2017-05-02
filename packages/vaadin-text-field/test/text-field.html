@@ -89,6 +89,10 @@
       });
 
       describe('binding', function() {
+        it('default value should be empty string', function() {
+          expect(textField.value).to.be.equal('');
+        });
+
         it('setting input value updates value', function() {
           input.value = 'foo';
           input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
