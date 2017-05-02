@@ -68,6 +68,14 @@
         expect(tf.getAttribute('invalid')).not.to.be.ok;
       });
 
+      it('validate() should return correct boolean value', function() {
+        tf.required = true;
+        tf.minlength = 2;
+        expect(tf.validate()).to.be.false;
+        tf.value = 'hi';
+        expect(tf.validate()).to.be.true;
+      });
+
       describe('prevent invalid input', function() {
 
         beforeEach(function() {
