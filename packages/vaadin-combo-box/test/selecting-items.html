@@ -301,7 +301,11 @@
 
         combobox.value = '';
 
-        // needed for Edge <= 14
+        // Edge and IE have an issue where the correct styles are not applied by the browser
+        // on the clear icon before triggering a reflow/re-render. Opening the combobox seems to be
+        // the most reliable way to fix this.
+        combobox.open();
+
         setTimeout(function() {
           expect(window.getComputedStyle(clearIcon).display).to.contain('none');
           done();
