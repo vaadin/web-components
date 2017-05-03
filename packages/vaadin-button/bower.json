@@ -33,7 +33,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^1.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.1"
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
