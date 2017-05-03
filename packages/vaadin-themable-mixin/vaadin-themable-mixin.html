@@ -1,6 +1,6 @@
 <script>
   window.Vaadin = window.Vaadin || {};
-  
+
   /**
    * @polymerMixin
    */
@@ -15,22 +15,35 @@
         this._memoizedTemplate = super.template.cloneNode(true);
 
         const modules = Polymer.DomModule.prototype.modules;
-        Object.keys(modules).forEach(function(module) {
-          const themeFor = modules[module].getAttribute('theme-for');
-          if (themeFor) {
-            themeFor.split(' ').forEach(function(themeForToken) {
-              if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
-                const styleEl = document.createElement('style');
-                styleEl.setAttribute('include', module);
+        let hasThemes = false;
+        const defaultModuleName = this.is + '-default-theme';
 
-                const content = this._memoizedTemplate.content;
-                content.appendChild(styleEl);
-              }
-            }, this);
+        Object.keys(modules).forEach(moduleName => {
+          if (moduleName !== defaultModuleName) {
+            const themeFor = modules[moduleName].getAttribute('theme-for');
+            if (themeFor) {
+              themeFor.split(' ').forEach(themeForToken => {
+                if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
+                  hasThemes = true;
+                  this.includeStyle(moduleName);
+                }
+              });
+            }
           }
-        }, this);
+        });
+
+        if (!hasThemes) {
+          // No theme modules found, include the default module
+          this.includeStyle(defaultModuleName);
+        }
       }
       return this._memoizedTemplate;
+    }
+
+    static includeStyle(moduleName) {
+      const styleEl = document.createElement('style');
+      styleEl.setAttribute('include', moduleName);
+      this._memoizedTemplate.content.appendChild(styleEl);
     }
 
   };
