@@ -414,7 +414,7 @@ Custom property | Description | Default
       // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       if (isSafari && this.root) {
-        this.root.querySelectorAll('*').forEach(el => {
+        Array.prototype.forEach.call(this.root.querySelectorAll('*'), function(el) {
           el.style['-webkit-backface-visibility'] = 'visible';
           el.style['-webkit-backface-visibility'] = '';
         });
