@@ -312,14 +312,6 @@
         }, 1);
       });
 
-      it('should not show clearing icon when nothing is selected', function() {
-        combobox.open();
-
-        combobox.value = '';
-
-        expect(window.getComputedStyle(clearIcon).display).to.eql('none');
-      });
-
       it('should clear the selection when tapping on the icon', function() {
         combobox.open();
 
