@@ -25,24 +25,20 @@
       return comboBox.$.overlay._items;
     }
 
-    function getInput() {
-      return comboBox._bindableInput;
-    }
-
     function setInputValue(value) {
-      getInput().bindValue = value;
+      comboBox.inputElement.value = value;
       comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
     function getInputValue() {
-      return getInput().bindValue;
+      return comboBox.inputElement.value;
     }
 
     beforeEach(function() {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
 
-      // flush iron-input light dom observer to pickup child input element
+      // make iron-input pick up child input
       if (comboBox._bindableInput._initSlottedInput) {
         comboBox._bindableInput._initSlottedInput();
       }

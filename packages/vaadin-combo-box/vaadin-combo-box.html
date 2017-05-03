@@ -204,7 +204,7 @@ Custom property | Description | Default
 
       <slot name="prefix" slot="prefix"></slot>
 
-      <iron-input slot="input"
+      <iron-input slot="input" id="ironinput"
         bind-value="{{_inputElementValue}}"
         allowed-pattern="[[allowedPattern]]"
         invalid="{{invalid}}"
@@ -426,12 +426,12 @@ Custom property | Description | Default
     ready: function() {
       // 2.0 does not support nested syntax for listeners
       this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
+
+      this._setInputElement(this.$.input);
+      this._bindableInput = this.$.ironinput;
     },
 
     attached: function() {
-      this._setInputElement(Polymer.dom(this.root).querySelector('input'));
-      this._bindableInput = Polymer.Element ? Polymer.dom(this.root).querySelector('iron-input') : this.inputElement;
-
       // Use the default toggle/clear or one replaced in light DOM.
       this._toggleElement = Polymer.dom(this).querySelector('[slot=toggle-button]') || this.$.toggleIcon;
       this._clearElement = Polymer.dom(this).querySelector('[slot=clear-button]') || this.$.clearIcon;
