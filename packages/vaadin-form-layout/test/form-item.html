@@ -173,6 +173,12 @@
         item.updateStyles({'--vaadin-form-item-label-gap': '8px'});
         expect(getComputedStyle(item.$.gap).width).to.equal('8px');
       });
+
+      it('should have default row-gap', function() {
+        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-row-gap')).to.equal('1em');
+        expect(getComputedStyle(item).marginTop).to.equal('8px'); // 0.5 * 1em in px
+        expect(getComputedStyle(item).marginBottom).to.equal('8px'); // 0.5 * 1em in px
+      });
     });
   </script>
 </body>

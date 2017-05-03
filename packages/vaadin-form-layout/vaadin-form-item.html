@@ -18,6 +18,9 @@ This program is available under Apache License Version 2.0, available at https:/
         /* CSS API for host */
         --vaadin-form-item-label-width: 8em;
         --vaadin-form-item-label-gap: 1em;
+        --vaadin-form-item-row-gap: 1em;
+
+        margin: calc(0.5 * var(--vaadin-form-item-row-gap)) 0;
       }
 
       :host([label-on-top]) {
@@ -50,7 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <div id="label" part="label" on-click="_onLabelClick">
-      <slot name="label"></slot>
+      <slot name="label" id="labelSlot"></slot>
     </div>
     <div id="gap"></div>
     <div id="content">
@@ -159,6 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * ---|---|---
        * `--vaadin-form-item-label-width` | Width of the label column when the labels are aside | `8em`
        * `--vaadin-form-item-label-gap` | Length of the gap between the label column and the input column when the labels are aside | `1em`
+       * `--vaadin-form-item-row-gap` | Height of the gap between the form item elements | `1em`
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
