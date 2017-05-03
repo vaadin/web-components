@@ -43,8 +43,8 @@
       comboBox.items = ['foo', 'bar', 'baz'];
 
       // flush iron-input light dom observer to pickup child input element
-      if (comboBox._bindableInput._observer) {
-        comboBox._bindableInput._observer.flush();
+      if (comboBox._bindableInput._initSlottedInput) {
+        comboBox._bindableInput._initSlottedInput();
       }
     });
 

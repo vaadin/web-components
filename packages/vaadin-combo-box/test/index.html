@@ -15,7 +15,7 @@
 
     // polyserve transpiles sources for Mobile Safari even if it shouldn't.
     // Remove after https://github.com/Polymer/polyserve/pull/185 is released.
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && window.Polymer && Polymer.Element) {
       WCT._config.environmentScripts.push('webcomponentsjs/custom-elements-es5-adapter.js');
     }
 
