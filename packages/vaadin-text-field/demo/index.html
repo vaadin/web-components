@@ -92,7 +92,9 @@
     </demo-snippet>
 
     <h3>Pattern Validation</h3>
-    The pattern property specifies a regular expression that the element's value is checked against.
+    <p>
+      The <code>pattern</code> property specifies a regular expression that the element's value is checked against.
+    </p>
     <demo-snippet>
       <template>
         <p><vaadin-text-field pattern="\d\d\d*" required></vaadin-text-field> type 2 numbers or more</p>
@@ -106,7 +108,13 @@
       </template>
     </demo-snippet>
 
-    <h3>Showing an Error Message</h3>
+    <h3>Error Message</h3>
+    <p>
+      The <code>errorMessage</code> property defines a message that gets shown when the input value is invalid.
+    </p>
+    <p>
+      <b>NOTE: The message is not visible initially or when the field is valid</b>
+    </p>
     <demo-snippet>
       <template>
         <p><vaadin-text-field required error-message="You must write something in this input"></vaadin-text-field> Required content</p>
