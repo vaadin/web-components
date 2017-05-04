@@ -1,0 +1,36 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-board-row.html">
+<link rel="import" href="../../app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../app-layout/app-header-layout/app-header-layout.html">
+
+
+<dom-module id="board-in-app-layout-component">
+  <template>
+    <!-- Simple app layout with a drawer menu and a vaadin-board content-->
+    <app-drawer-layout fullbleed id="layout">
+      <app-drawer id="drawer" slot="drawer" on-app-drawer-transitioned="_appDrawerTransitioned">
+        <h1>Menu title</h1>
+      </app-drawer>
+      <app-header-layout has-scrolling-region>
+        <vaadin-board-row id="row">
+          <div>top A</div>
+          <div>top B</div>
+          <div>top C</div>
+          <div>top D</div>
+        </vaadin-board-row>
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
+  <script>
+    class BoardInAppLayoutComponent extends Polymer.Element {
+      static get is() { return 'board-in-app-layout-component' }
+
+      _appDrawerTransitioned(){
+        this.$.layout.notifyResize();
+      }
+    }
+
+    customElements.define(BoardInAppLayoutComponent.is, BoardInAppLayoutComponent);
+  </script>
+</dom-module>

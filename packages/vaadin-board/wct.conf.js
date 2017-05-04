@@ -45,7 +45,7 @@ module.exports = {
           'deviceName': 'iPad Simulator',
           'deviceOrientation': 'portrait',
           'platformName': 'iOS',
-          'platformVersion': '10.0'
+          'platformVersion': '10.2'
         }
       ]
     }

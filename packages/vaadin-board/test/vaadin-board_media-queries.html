@@ -26,21 +26,22 @@
           var row;
           var finalSizeCheck = function () {
             //if menu is hidden size then for row should be medium
-            assert.equal(row.className, 'medium');
+            assert.include(row.className, 'medium');
             done();
           };
           var initialSizeCheck = function () {
-            row = iframe.contentDocument.querySelector('vaadin-board-row');
+            var app = iframe.contentDocument.querySelector('board-in-app-layout-component');
+            row = app.$.row;
             //if menu is visible then size for row should be small
-            assert.equal(row.className, 'small');
+            assert.include(row.className, 'small');
             //a size less than or equal to 640 will hide menu
             iframe.width = 640;
-            setTimeout(finalSizeCheck, 100);
+            setTimeout(finalSizeCheck, 500);
           };
           var setInitialSize = function () {
             //a size bigger than 640 will show menu
             iframe.width = 641;
-            setTimeout(initialSizeCheck, 100);
+            setTimeout(initialSizeCheck, 500);
           };
 
           iframe.contentWindow.addEventListener('WebComponentsReady', setInitialSize);
