@@ -14,6 +14,12 @@ gemini.suite('vaadin-button', function(rootSuite) {
       .capture('default', {}, wait)
       .capture('focus-tabindex', function(actions) {
         actions.sendKeys(gemini.TAB);
+      })
+      .after(function(actions, find) {
+        // Firefox stops responding on socket after a test, workaround:
+        return actions.executeJS(function(window) {
+          window.location.href = 'about:blank'; // just go away, please!
+        });
       });
   });
 
@@ -21,7 +27,13 @@ gemini.suite('vaadin-button', function(rootSuite) {
     suite
       .setUrl('styling.html')
       .setCaptureElements('vaadin-button')
-      .capture('default', {}, wait);
+      .capture('default', {}, wait)
+      .after(function(actions, find) {
+        // Firefox stops responding on socket after a test, workaround:
+        return actions.executeJS(function(window) {
+          window.location.href = 'about:blank'; // just go away, please!
+        });
+      });
   });
 
 });
