@@ -20,7 +20,7 @@
 
   <test-fixture id="colspan">
     <template>
-      <vaadin-form-layout columns="3">
+      <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
         <vaadin-text-field></vaadin-text-field>
         <vaadin-text-field colspan="1"></vaadin-text-field>
         <vaadin-text-field colspan="2"></vaadin-text-field>
@@ -66,7 +66,7 @@
       });
     });
 
-    describe('columns property', function() {
+    describe('responsiveSteps property', function() {
       var layout;
 
       beforeEach(function() {
@@ -74,11 +74,15 @@
       });
 
       it('should have default value', function() {
-        expect(layout.columns).to.equal('1 labels-on-top, 20em 1, 40em 2');
+        expect(layout.responsiveSteps).to.deep.equal([
+          {minWidth: 0, columns: 1, labelsOnTop: true},
+          {minWidth: '20em', columns: 1},
+          {minWidth: '40em', columns: 2}
+        ]);
       });
 
       it('should assign width inline style on items', function() {
-        layout.columns = 3;
+        layout.responsiveSteps = [{columns: 3}];
 
         var parsedWidth = getParsedWidth(layout.firstElementChild);
         expect(parsedWidth.percentage).to.match(/%$/);
@@ -86,13 +90,13 @@
       });
 
       it('should set label-on-top attribute to child form-item elements', function() {
-        layout.columns = '1';
+        layout.responsiveSteps = [{columns: 1}];
 
         expect(layout.children[0].getAttribute('label-on-top')).to.be.null;
         expect(layout.children[1].getAttribute('label-on-top')).to.be.null;
         expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
 
-        layout.columns = '1 labels-on-top';
+        layout.responsiveSteps = [{columns: 1, labelsOnTop: true}];
 
         expect(layout.children[0].getAttribute('label-on-top')).to.be.null;
         expect(layout.children[1].getAttribute('label-on-top')).to.be.null;
@@ -131,7 +135,7 @@
         });
 
         it('should allow specifying non-responsive', function() {
-          layout.columns = '3';
+          layout.responsiveSteps = [{columns: 3}];
 
           document.body.style.width = '10em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
@@ -150,7 +154,11 @@
         });
 
         it('should allow specifying more steps', function() {
-          layout.columns = '1, 20em 2 labels-on-top, 40em 5';
+          layout.responsiveSteps = [
+            {columns: 1},
+            {minWidth: '20em', columns: 2, labelsOnTop: true},
+            {minWidth: '40em', columns: 5}
+          ];
 
           document.body.style.width = '10em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
@@ -166,6 +174,74 @@
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(5, .1);
           expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+        });
+      });
+
+      describe('value validation', function() {
+        beforeEach(function() {
+          sinon.stub(console, 'warn');
+        });
+
+        afterEach(function() {
+          console.warn.restore();
+        });
+
+        var invalidValues = [
+          undefined, null, '', 'foo', 0, 1, {}, // array value is required
+          [], // at least one step is required
+          [{columns: undefined}], // columns key is required
+          [{columns: -1}], // columns requires natural number
+          [{columns: 0}], // columns requires natural number
+          [{columns: 0.5}], // columns requires natural number
+          [{minWidth: '10', columns: 1}], // minWidth requires valid CSS length string
+        ];
+
+        var validValues = [
+          [{columns: 1}],
+          [{columns: 1, minWidth: 0}],
+          [{columns: 1, minWidth: '480px'}],
+          [{columns: 1, minWidth: '480px', labelsOnTop: true}]
+        ];
+
+        it('should warn for invalid values', function() {
+          invalidValues.forEach(function(value) {
+            layout.responsiveSteps = value;
+            expect(console.warn.called).to.be.true;
+            expect(console.warn.args[0][0]).to.contain('Invalid');
+          });
+        });
+
+        it('should not warn for valid values', function() {
+          validValues.forEach(function(value) {
+            layout.responsiveSteps = value;
+            expect(console.warn.called).to.be.false;
+          });
+        });
+
+        it('should use default value for invalid values', function() {
+          invalidValues.forEach(function(value) {
+            layout.responsiveSteps = value;
+            expect(layout.responsiveSteps).to.deep.equal([
+              {minWidth: 0, columns: 1, labelsOnTop: true},
+              {minWidth: '20em', columns: 1},
+              {minWidth: '40em', columns: 2}
+            ]);
+          });
+        });
+
+        it('should use previous valid value for values', function() {
+          invalidValues.forEach(function(value) {
+            layout.responsiveSteps = [{columns: 1}];
+            layout.responsiveSteps = value;
+            expect(layout.responsiveSteps).to.deep.equal([{columns: 1}]);
+          });
+        });
+
+        it('should not change for valid values', function() {
+          validValues.forEach(function(value) {
+            layout.responsiveSteps = value;
+            expect(layout.responsiveSteps).to.equal(value);
+          });
         });
       });
     });

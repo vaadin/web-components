@@ -14,7 +14,7 @@
   <link rel="import" href="common.html">
 </head>
 
-<body>
+<body unresolved>
   <div class="vertical-section-container centered">
 
     <demo-navigation></demo-navigation>
@@ -98,9 +98,13 @@
     </demo-snippet>
 
     <h3>Single Column</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-form-layout columns="1">
+    <!--
+      Note for maintainers: use <nice-demo-snippet> for this example. The original
+      <demo-snippet> makes JSON attribute values unreadible.
+    -->
+    <nice-demo-snippet>
+      <script type="text/html" slot="source">
+        <vaadin-form-layout responsive-steps='[{"columns": 1}]'>
 
           <vaadin-form-item>
             <label slot="label">First Name</label>
@@ -118,13 +122,30 @@
           </vaadin-form-item>
 
         </vaadin-form-layout>
-      </template>
-    </demo-snippet>
+      </script>
+    </nice-demo-snippet>
 
     <h3>Custom Responsive Steps</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-form-layout columns="1, 30em 2 labels-on-top, 40em 2, 50em 3 labels-on-top">
+    <p>
+      Use JSON in the <code>&lt;responsive-steps&gt;</code> HTML attribute to specify
+      custom responsive steps for the <code>&lt;vaadin-form-layout&gt;</code> element.
+    </p>
+    <p>
+      <strong>See also:</strong> <a href="../#property-responsiveSteps"><code>responsiveSteps</code></a>
+      property in the API Reference.
+    </p>
+
+    <!--
+      Note: use <nice-demo-snippet> for this example. The original
+      <demo-snippet> makes JSON attribute values unreadible.
+    -->
+    <nice-demo-snippet>
+      <script type="text/html" slot="source">
+        <vaadin-form-layout
+            responsive-steps='[
+              {"minWidth": 0, "columns": 2},
+              {"minWidth": "640px", "columns": 3}
+            ]'>
 
           <vaadin-form-item>
             <label slot="label">First Name</label>
@@ -142,6 +163,49 @@
           </vaadin-form-item>
 
         </vaadin-form-layout>
+      </script>
+    </nice-demo-snippet>
+
+    <p>
+      Alternatively, you can customize the responsive steps by using JavaScript
+      to set the <code>responsiveSteps</code> array property.
+    </p>
+    <p>
+      Responsive steps can optionally have <code>labelsOnTop: true</code>.
+      This sets the <code>&lt;vaadin-form-item&gt;</code> labels on top of
+      the input fields for the steps having this flag.
+    </p>
+    <demo-snippet>
+      <template>
+        <vaadin-form-layout class="custom-steps">
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+        <script>
+          addEventListener('WebComponentsReady', function() {
+            var formLayout = document.querySelector('vaadin-form-layout.custom-steps');
+
+            formLayout.responsiveSteps = [
+              {minWidth: 0, columns: 1, labelsOnTop: true},
+              {minWidth: '30em', columns: 1}
+            ];
+
+          });
+        </script>
       </template>
     </demo-snippet>
 

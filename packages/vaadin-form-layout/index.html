@@ -21,9 +21,10 @@
       addEventListener('WebComponentsReady', function() {
         var matches = /element-class-name=([^&]+)/.exec(location.search);
         var elementClassName = matches && matches[1];
+        var viewer = document.querySelector('api-doc-viewer');
         if (elementClassName) {
           document.querySelector('select[name="element-class-name"]').value = elementClassName;
-          document.querySelector('api-doc-viewer').elementClassName = elementClassName;
+          viewer.elementClassName = elementClassName;
         }
       });
     </script>
