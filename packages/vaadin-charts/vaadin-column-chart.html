@@ -10,7 +10,7 @@ See the file LICENSE.md distributed with this software for more information abou
 
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
 
 <link rel="import" href="data-series.html">
@@ -33,15 +33,19 @@ Example:
     <template>
     </template>
     <script>
-        Polymer({
-            is: 'vaadin-column-chart',
+        class VaadinColumnChart extends Polymer.mixinBehaviors([VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior], Polymer.Element) {
+            static get is() { return 'vaadin-column-chart'; }
 
-            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+            constructor() {
+                super();
+            }
 
-            _getType: function () {
+            _getType() {
                 return 'column';
             }
 
-        });
+        }
+
+        customElements.define(VaadinColumnChart.is, VaadinColumnChart);
     </script>
 </dom-module>
