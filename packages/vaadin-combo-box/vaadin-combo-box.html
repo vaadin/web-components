@@ -234,6 +234,8 @@ Custom property | Description | Default
           key-event-target>
       </iron-input>
 
+      <slot name="suffix" slot="suffix"></slot>
+
       <!-- TODO (web-padawan): remove "suffix" attributes for 2.0 -->
       <div slot="suffix" suffix>
         <span>
@@ -257,9 +259,6 @@ Custom property | Description | Default
             </paper-icon-button>
           </slot>
         </span>
-
-        <slot name="suffix">
-        </slot>
       </div>
 
       <template is="dom-if" if="[[errorMessage]]">
