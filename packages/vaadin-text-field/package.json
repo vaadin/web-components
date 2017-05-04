@@ -1,6 +1,6 @@
 {
   "name": "vaadin-text-field",
-  "version": "1.0.0-alpha4",
+  "version": "1.0.0-alpha5",
   "description": "vaadin-text-field",
   "main": "vaadin-text-field.html",
   "repository": "vaadin/vaadin-text-field",
@@ -21,18 +21,21 @@
     "test": "wct"
   },
   "devDependencies": {
-    "eslint-config-vaadin": "^0.1.0",
-    "eslint-plugin-html": "^1.7.0",
-    "gemini": "^4.14.3",
+    "bower": "latest",
+    "eslint": "^3.11.1",
+    "eslint-config-vaadin": "^0.2.0",
+    "eslint-plugin-html": "^2.0.0",
+    "gemini": "^4.18.1",
     "gemini-polyserve": "^1.0.0",
     "gemini-sauce": "^1.0.0",
     "gulp": "latest",
     "gulp-eslint": "^3.0.1",
-    "gulp-html-extract": "^0.0.3",
+    "gulp-html-extract": "^0.3.0",
     "gulp-stylelint": "^3.7.0",
     "lighthouse": "~1.6.0",
     "polymer-cli": "^0.18.0",
-    "polyserve": "^0.15.0",
+    "polyserve": "^0.18.0",
+    "stylelint": "^7.10.0",
     "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^6.0.0-prerelease.7"
   }

@@ -4,16 +4,22 @@ language: node_js
 node_js: stable
 
 cache:
+  yarn: true
   directories:
     - node_modules
 
 addons:
+  apt:
+    sources:
+      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+    packages:
+      - yarn
   firefox: latest
   google-chrome: latest
 
 install:
-  - npm install
-  - npm install -g bower
+  - yarn
   - bower install
 
 before_script:
