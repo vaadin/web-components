@@ -31,7 +31,7 @@
   "dependencies": {
     "highcharts": "highcharts/highcharts-dist#v4.2.6",
     "polymer": "Polymer/polymer#^v2.0.0-rc.1",
-    "vaadin-license-checker": "vaadin/license-checker#2.0-preview",
+    "vaadin-license-checker": "vaadin/license-checker#^1.0.0",
     "iron-resizable-behavior": "2.0-preview"
   },
   "devDependencies": {
