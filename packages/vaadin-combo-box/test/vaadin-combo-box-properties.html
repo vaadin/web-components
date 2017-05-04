@@ -181,8 +181,8 @@
           comboBox.items = ['foo'];
         });
 
-        it('should have null by default', function() {
-          expect(comboBox.selectedItem).to.be.null;
+        it('should have undefined by default', function() {
+          expect(comboBox.selectedItem).to.be.undefined;
         });
 
         it('should set value and input', function() {

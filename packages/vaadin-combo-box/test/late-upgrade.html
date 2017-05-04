@@ -33,9 +33,7 @@
         expect(combobox.is).to.be.undefined;
 
         Polymer.Base.importHref('../vaadin-combo-box.html', function() {
-          setTimeout(function() {
-            expect(combobox.value).to.equal('bar');
-          });
+          expect(combobox.value).to.equal('bar');
           done();
         });
       });
