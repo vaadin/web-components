@@ -131,7 +131,7 @@
       });
 
       describe('enter key behavior', function() {
-        var keydownEvent, preventDefault, input;
+        var keydownEvent, preventDefault;
 
         beforeEach(function() {
           // These tests fake a keydown event for the enter key and
@@ -147,8 +147,6 @@
           keydownEvent.keyCode = 13;
           keydownEvent.code = 13;
           keydownEvent.preventDefault = preventDefault;
-
-          input = comboBox.$.input;
         });
 
         it('should prevent default on open combobox', function() {

@@ -170,7 +170,7 @@
 
       expect(combobox.selectedItem).to.equal('foo');
       expect(combobox.$.overlay._selectedItem).to.equal('foo');
-      expect(combobox.$.input.bindValue).to.equal('foo');
+      expect(combobox._bindableInput.bindValue).to.equal('foo');
     });
 
     it('should close the dropdown on selection', function() {

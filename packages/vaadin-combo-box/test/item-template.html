@@ -81,7 +81,7 @@
       });
 
       it('should update focused property', function() {
-        MockInteractions.keyDownOn(combobox.$.input, 40); // Press arrow down key
+        MockInteractions.keyDownOn(combobox.inputElement, 40); // Press arrow down key
         expect(Polymer.dom(firstItem.root).innerHTML).to.contain('focused: true');
       });
 

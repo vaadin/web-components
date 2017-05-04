@@ -35,7 +35,7 @@
           combobox.$.overlay.fire('down');
           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
-          expect(focusedInput).not.to.equal(combobox.$.input);
+          expect(focusedInput).not.to.equal(combobox.inputElement);
         });
       });
 

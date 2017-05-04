@@ -219,7 +219,7 @@
       it('should reposition after filtering', function(done) {
         moveComboBox(horiCenter, vertBottom, 300);
 
-        comboBox.$.input.bindValue = 'item 1';
+        comboBox.inputElement.value = 'item 1';
         comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
         Polymer.Base.async(function() {
