@@ -9,6 +9,52 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="vaadin-form-element-mixin.html">
 
+<dom-module id="vaadin-text-field-default-theme" theme-for="vaadin-text-field">
+  <template>
+    <style>
+      [part="label"] {
+        font-size: 0.875em;
+        font-weight: 600;
+        margin-bottom: 0.25em;
+      }
+
+      [part="input-field"] {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        padding: 0.25em;
+      }
+
+      :host([focused]) [part="input-field"] {
+        box-shadow: 0 0 2px 2px Highlight;
+      }
+
+      :host([invalid]) [part="input-field"] {
+        border-color: red;
+      }
+
+      :host([disabled]) {
+        opacity: 0.5;
+      }
+
+      [part="value"] {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        outline: none;
+        box-shadow: none;
+      }
+
+      [part="error-message"] {
+        font-size: 0.875em;
+        margin-top: 0.25em;
+        color: red;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-text-field">
   <template>
     <style>
@@ -28,7 +74,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      [part~="input-field"] {
+      [part="input-field"] {
         display: flex;
         align-items: center;
       }
