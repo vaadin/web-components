@@ -18,7 +18,9 @@ using an `<input>` element extended with `iron-input`.
 
 ```html
 <vaadin-combo-box-light>
-  <input is="iron-input">
+  <iron-input>
+    <input>
+  </iron-input>
 </vaadin-combo-box-light>
 ```
 
@@ -101,8 +103,7 @@ two `<paper-button>`s to act as the clear and toggle controls.
     },
 
     attached: function() {
-      var cssSelector = Polymer.Element ? 'iron-input' : 'input[is="iron-input"]';
-      cssSelector += ',paper-input,.paper-input-input,.input';
+      var cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
       this._setInputElement(Polymer.dom(this).querySelector(cssSelector));
       this._toggleElement = Polymer.dom(this).querySelector('.toggle-button');
       this._clearElement = Polymer.dom(this).querySelector('.clear-button');

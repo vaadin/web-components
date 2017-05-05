@@ -35,7 +35,9 @@
         <template is="dom-bind">
           <value-null id="valuenull" value="{{name}}"></value-null>
           <vaadin-combo-box id="combobox" items="[[robots]]" value="{{name}}"></vaadin-combo-box>
-          <input is="iron-input" bind-value="{{name}}">
+          <iron-input bind-value="{{name}}">
+            <input>
+          </iron-input>
         </template>
       </dom-bind>
     </template>
