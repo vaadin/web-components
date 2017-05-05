@@ -97,10 +97,6 @@
         debounceDuration: Number
       },
 
-      attached: function() {
-        this._urlChanged(this.url);
-      },
-
       _urlChanged: function(url) {
         var urlParts = url.split('?filter=');
         var filter = urlParts[1];

@@ -70,21 +70,13 @@
 
 1. When in the `vaadin-combo-box` directory, run `polymer install --variants` to install Bower dependencies
 
-1. Run `polymer serve`, after that you will be able to access:
+1. Run `polymer serve -o`, that will open 3 tabs in your default browser: one pointing the Polymer1 API index of the component,
+the second one pointing to the Polymer2 API, and the third one to the main page indicating the variants of the project.
+Hence, you can visit demos and tests by changing the URL path in the first two tabs.
 
-  - Polymer1-compatible version:
-
-    - API documentation: http://127.0.0.1:8000/components/vaadin-combo-box/index.html
-    - Examples: http://127.0.0.1:8000/components/vaadin-combo-box/demo/index.html
-    - Tests: http://127.0.0.1:8000/components/vaadin-combo-box/test/index.html
-
-  - Polymer2-compatible version:
-
-    - API documentation: http://127.0.0.1:8001/components/vaadin-combo-box/index.html
-    - Examples: http://127.0.0.1:8001/components/vaadin-combo-box/demo/index.html
-    - Tests: http://127.0.0.1:8001/components/vaadin-combo-box/test/index.html
-
-Note that ports `8000` and `8001` could be different in your environment.
+    - API documentation: http://localhost:port_number/components/vaadin-combo-box/index.html
+    - Examples: http://localhost:port_number/components/vaadin-combo-box/demo/index.html
+    - Tests: http://localhost:port_number/components/vaadin-combo-box/test/index.html
 
 
 ## Running tests from the command line
