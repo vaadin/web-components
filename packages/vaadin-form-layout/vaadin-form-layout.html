@@ -94,7 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * wider than 40em, and a single column layout otherwise.
        *
        * The number of columns and the responsive behavior are customizable with
-       * the `columns` property.
+       * the `responsiveSteps` property.
        *
        * ### Spanning Items on Multiple Columns
        *
@@ -171,56 +171,33 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * Number of columns in the layout. Allows specifying a responsive
-             * behavior with the number of columns and the label position
-             * depending on the layout width.
+             * @typedef ResponsiveStep
+             * @type {object}
+             * @property {string} minWidth - The threshold value for this step in CSS length units.
+             * @property {number} columns - Number of columns. Only natural numbers are valid.
+             * @property {boolean} labelsOnTop - Move labels on top of the input fields.
+             */
+
+            /**
+             * Allows specifying a responsive behavior with the number of columns
+             * and the label position depending on the layout width.
              *
-             * The value is a comma-separated list of one or more responsive
-             * steps, each responsive step is a space-separated list of the
-             * optional min-width threshold, the column count, and the optional
-             * `labels-on-top` flag.
-             *
-             * The min-width thresholds are CSS length values specifying the
-             * minimum width of the layout for each responsive step.
-             *
-             * #### Formal syntax
-             *
-             *     <responsive-step> [ , <responsive-step> ]*
-             *
-             *     <responsive-step> =
-             *         [ <min-width> ]? <column-count> [ labels-on-top ]?
-             *
-             * where:
-             *
-             * <dl>
-             *   <dt>`<min-width> = <length>`</dt>
-             *   <dd>
-             *     Minimum width of the layout corresponding to this step.
-             *     Optional, assumed as 0 if omitted.
-             *   </dd>
-             *
-             *   <dt>`<column-count> = <integer>`</dt>
-             *   <dd>
-             *     Number of columns, assumed as 1 if zero or negative.
-             *   </dd>
-             *
-             *   <dt>`labels-on-top`</dt>
-             *   <dd>
-             *     Optional, move the labels in the child `<vaadin-form-item>`
-             *     elements on top of the input fields. Labels are aside the
-             *     input fields if omitted.
-             *   </dd>
-             * </dl>
+             * Format: array of objects, each object defines one responsive step
+             * with `minWidth` CSS length, `columns` number, and optional
+             * `labelsOnTop` boolean flag. At least one item is required.
              *
              * #### Examples
              *
              * <dl>
-             *   <dt>`1`</dt>
+             *   <dt>`[{columns: 1}]`</dt>
              *   <dd>
              *     <p>The layout is always a single column, labels aside.
              *   </dd>
              *
-             *   <dt>`1, 40em 2`</dt>
+             *   <dt><pre><code>[
+             *   {minWidth: 0, columns: 1},
+             *   {minWidth: '40em', columns: 2}
+             * ]</code></pre></dt>
              *   <dd>
              *     <p>Sets two responsive steps:
              *     <ol>
@@ -229,7 +206,11 @@ This program is available under Apache License Version 2.0, available at https:/
              *     </ol>
              *   </dd>
              *
-             *   <dt>`1 labels-on-top, 20em 1, 40em 2`</dt>
+             *   <dt><pre><code>[
+             *   {minWidth: 0, columns: 1, labelsOnTop: true},
+             *   {minWidth: '20em', columns: 1},
+             *   {minWidth: '40em', columns: 2}
+             * ]</code></pre></dt>
              *   <dd>
              *     <p>Default value. Three responsive steps:
              *     <ol>
@@ -239,17 +220,20 @@ This program is available under Apache License Version 2.0, available at https:/
              *     </ol>
              *   </dd>
              * </dl>
+             *
+             * @type {ResponsiveStep[]}
              */
-            columns: {
-              type: String,
-              value: '1 labels-on-top, 20em 1, 40em 2',
-              observer: '_columnsChanged'
+            responsiveSteps: {
+              type: Array,
+              value: function() {
+                return [
+                  {minWidth: 0, columns: 1, labelsOnTop: true},
+                  {minWidth: '20em', columns: 1},
+                  {minWidth: '40em', columns: 2}
+                ];
+              },
+              observer: '_responsiveStepsChanged'
             },
-
-            /**
-             * Parsed value of the columns property
-             */
-            _parsedResponsiveSteps: Array,
 
             /**
              * Current number of columns in the layout
@@ -275,11 +259,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           // Here we create and attach a style element that we use for validating
-          // CSS values in `columns`. We can’t add this to the `<template>`,
+          // CSS values in `responsiveSteps`. We can’t add this to the `<template>`,
           // because Polymer will throw it away. We need to create this before
-          // `super.ready()`, because `super.ready()` invokes `_columnsChanged`,
-          // which invokes the `_parsedResponsiveSteps` parser method,
-          // which requires `this._styleElement` to be already attached.
+          // `super.ready()`, because `super.ready()` invokes property observers,
+          // and the observer for `responsiveSteps` does CSS value validation.
           this._styleElement = document.createElement('style');
           this.root.appendChild(this._styleElement);
           // Ensure there is a child text node in the style element
@@ -322,33 +305,56 @@ This program is available under Apache License Version 2.0, available at https:/
           // Use the value in a stylesheet and check the parsed value. Invalid
           // input value results in empty parsed value.
           this._styleElement.firstChild.nodeValue = `#styleElement { word-spacing: ${value}; }`;
+
+          if (!this._styleElement.sheet) {
+            // Stylesheet is not ready, probably not attached to the document yet.
+            return true;
+          }
+
           return this._styleElement.sheet.cssRules[0].style.getPropertyValue('word-spacing') !== '';
         }
 
-        _parseResponsiveSteps(columns) {
-          return columns.toString().split(',').map(parts => {
-            parts = parts.trim().split(/\s+/);
-            // If the first part is a valid CSS length, then take it as minWidth
-            const minWidth = this._isValidCSSLength(parts[0]) ? parts.shift() : 0;
-            const [columns, labelsOnTop] = parts;
-            return {
-              minWidth: minWidth,
-              columns: this._naturalNumberOrOne(parseInt(columns, 10)),
-              labelsOnTop: labelsOnTop === 'labels-on-top'
-            };
-          });
-        }
+        _responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
+          try {
+            if (!Array.isArray(responsiveSteps)) {
+              throw new Error('Invalid "responsiveSteps" type, an Array is required.');
+            }
 
-        _columnsChanged(columns) {
-          this._parsedResponsiveSteps = this._parseResponsiveSteps(columns || '1 labels-on-top, 20em 1, 40em 2');
+            if (responsiveSteps.length < 1) {
+              throw new Error('Invalid empty "responsiveSteps" array, at least one item is required.');
+            }
+
+            responsiveSteps.forEach(step => {
+              if (this._naturalNumberOrOne(step.columns) !== step.columns) {
+                throw new Error(`Invalid 'columns' value of ${step.columns}, a natural number is required.`);
+              }
+
+              if (step.minWidth !== undefined && !this._isValidCSSLength(step.minWidth)) {
+                throw new Error(`Invalid 'minWidth' value of ${step.minWidth}, a valid CSS length required.`);
+              }
+            });
+          } catch(e) {
+            if (oldResponsiveSteps && oldResponsiveSteps !== responsiveSteps) {
+              console.warn(`${e.message} Using previously set 'responsiveSteps' instead.`);
+              this.responsiveSteps = oldResponsiveSteps;
+            } else {
+              console.warn(`${e.message} Using default 'responsiveSteps' instead.`);
+              this.responsiveSteps = [
+                {minWidth: 0, columns: 1, labelsOnTop: true},
+                {minWidth: '20em', columns: 1},
+                {minWidth: '40em', columns: 2}
+              ];
+            }
+          }
+
           this._selectResponsiveStep();
         }
 
         _selectResponsiveStep() {
-          // Iterate through _parsedResponsiveSteps and choose the step
+          // Iterate through responsiveSteps and choose the step
           let selectedStep;
           const tmpStyleProp = 'background-position';
-          this._parsedResponsiveSteps.forEach(step => {
+          this.responsiveSteps.forEach(step => {
             // Convert minWidth to px units for comparison
             this.$.layout.style.setProperty(tmpStyleProp, step.minWidth);
             const stepMinWidthPx = parseFloat(getComputedStyle(this.$.layout).getPropertyValue(tmpStyleProp));

@@ -21,7 +21,34 @@
 
   <h3>Custom Responsive Steps</h3>
 
-  <vaadin-form-layout capture columns="1, 30em 2 labels-on-top, 40em 2, 50em 3 labels-on-top">
+  <vaadin-form-layout capture
+      responsive-steps='[
+        {"minWidth": 0, "columns": 2},
+        {"minWidth": "640px", "columns": 3}
+      ]'>
+
+    <vaadin-form-item>
+      <label slot="label">First Name</label>
+      <input class="full-width" value="Jane">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Last Name</label>
+      <input class="full-width" value="Doe">
+    </vaadin-form-item>
+
+    <vaadin-form-item>
+      <label slot="label">Email</label>
+      <input class="full-width" value="jane.doe@example.com">
+    </vaadin-form-item>
+
+  </vaadin-form-layout>
+
+  <vaadin-form-layout capture
+      responsive-steps='[
+        {"minWidth": 0, "columns": 1, "labelsOnTop": true},
+        {"minWidth": "30em", "columns": 1}
+      ]'>
 
     <vaadin-form-item>
       <label slot="label">First Name</label>

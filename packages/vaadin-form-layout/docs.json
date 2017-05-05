@@ -8,78 +8,59 @@
       "sourceRange": {
         "file": "vaadin-form-item.html",
         "start": {
-          "line": 194,
+          "line": 198,
           "column": 6
         },
         "end": {
-          "line": 194,
+          "line": 198,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-form-layout>` is a Polymer element providing configurable responsive\nlayout for form elements.\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item>\n    <label slot=\"label\">First Name</label>\n    <input class=\"full-width\" value=\"Jane\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Last Name</label>\n    <input class=\"full-width\" value=\"Doe\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Email</label>\n    <input class=\"full-width\" value=\"jane.doe@example.com\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\nIt supports any child elements as layout items.\n\nBy default, it makes a layout of two columns if the element width is equal or\nwider than 40em, and a single column layout otherwise.\n\nThe number of columns and the responsive behavior are customizable with\nthe `columns` property.\n\n### Spanning Items on Multiple Columns\n\nYou can use `colspan` attribute on the items.\nIn the example below, the first text field spans on two columns:\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item colspan=\"2\">\n    <label slot=\"label\">Address</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">First Name</label>\n    <input class=\"full-width\" value=\"Jane\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Last Name</label>\n    <input class=\"full-width\" value=\"Doe\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\n### Explicit New Row\n\nUse the `<br>` line break element to wrap the items on a new row:\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Email</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n  <br>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Confirm Email</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\n### CSS Properties Reference\n\nThe following custom CSS properties are available on the `<vaadin-form-layout>`\nelement:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`",
+          "description": "`<vaadin-form-layout>` is a Polymer element providing configurable responsive\nlayout for form elements.\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item>\n    <label slot=\"label\">First Name</label>\n    <input class=\"full-width\" value=\"Jane\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Last Name</label>\n    <input class=\"full-width\" value=\"Doe\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Email</label>\n    <input class=\"full-width\" value=\"jane.doe@example.com\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\nIt supports any child elements as layout items.\n\nBy default, it makes a layout of two columns if the element width is equal or\nwider than 40em, and a single column layout otherwise.\n\nThe number of columns and the responsive behavior are customizable with\nthe `responsiveSteps` property.\n\n### Spanning Items on Multiple Columns\n\nYou can use `colspan` attribute on the items.\nIn the example below, the first text field spans on two columns:\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item colspan=\"2\">\n    <label slot=\"label\">Address</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">First Name</label>\n    <input class=\"full-width\" value=\"Jane\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Last Name</label>\n    <input class=\"full-width\" value=\"Doe\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\n### Explicit New Row\n\nUse the `<br>` line break element to wrap the items on a new row:\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Email</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n  <br>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Confirm Email</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\n### CSS Properties Reference\n\nThe following custom CSS properties are available on the `<vaadin-form-layout>`\nelement:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`",
           "summary": "",
           "path": "vaadin-form-layout.html",
           "attributes": [
             {
-              "name": "columns",
-              "description": "Number of columns in the layout. Allows specifying a responsive\nbehavior with the number of columns and the label position\ndepending on the layout width.\n\nThe value is a comma-separated list of one or more responsive\nsteps, each responsive step is a space-separated list of the\noptional min-width threshold, the column count, and the optional\n`labels-on-top` flag.\n\nThe min-width thresholds are CSS length values specifying the\nminimum width of the layout for each responsive step.\n\n#### Formal syntax\n\n    <responsive-step> [ , <responsive-step> ]*\n\n    <responsive-step> =\n        [ <min-width> ]? <column-count> [ labels-on-top ]?\n\nwhere:\n\n<dl>\n  <dt>`<min-width> = <length>`</dt>\n  <dd>\n    Minimum width of the layout corresponding to this step.\n    Optional, assumed as 0 if omitted.\n  </dd>\n\n  <dt>`<column-count> = <integer>`</dt>\n  <dd>\n    Number of columns, assumed as 1 if zero or negative.\n  </dd>\n\n  <dt>`labels-on-top`</dt>\n  <dd>\n    Optional, move the labels in the child `<vaadin-form-item>`\n    elements on top of the input fields. Labels are aside the\n    input fields if omitted.\n  </dd>\n</dl>\n\n#### Examples\n\n<dl>\n  <dt>`1`</dt>\n  <dd>\n    <p>The layout is always a single column, labels aside.\n  </dd>\n\n  <dt>`1, 40em 2`</dt>\n  <dd>\n    <p>Sets two responsive steps:\n    <ol>\n      <li>When the layout width is < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n\n  <dt>`1 labels-on-top, 20em 1, 40em 2`</dt>\n  <dd>\n    <p>Default value. Three responsive steps:\n    <ol>\n      <li>Width < 20em, one column, labels on top.\n      <li>20em <= width < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n</dl>",
+              "name": "responsive-steps",
+              "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsOnTop` boolean flag. At least one item is required.\n\n#### Examples\n\n<dl>\n  <dt>`[{columns: 1}]`</dt>\n  <dd>\n    <p>The layout is always a single column, labels aside.\n  </dd>\n\n  <dt><pre><code>[\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n]</code></pre></dt>\n  <dd>\n    <p>Sets two responsive steps:\n    <ol>\n      <li>When the layout width is < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n\n  <dt><pre><code>[\n  {minWidth: 0, columns: 1, labelsOnTop: true},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n]</code></pre></dt>\n  <dd>\n    <p>Default value. Three responsive steps:\n    <ol>\n      <li>Width < 20em, one column, labels on top.\n      <li>20em <= width < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n</dl>",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 226,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 236,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "Array.<ResponsiveStep>"
             }
           ],
           "properties": [
             {
-              "name": "columns",
-              "type": "string",
-              "description": "Number of columns in the layout. Allows specifying a responsive\nbehavior with the number of columns and the label position\ndepending on the layout width.\n\nThe value is a comma-separated list of one or more responsive\nsteps, each responsive step is a space-separated list of the\noptional min-width threshold, the column count, and the optional\n`labels-on-top` flag.\n\nThe min-width thresholds are CSS length values specifying the\nminimum width of the layout for each responsive step.\n\n#### Formal syntax\n\n    <responsive-step> [ , <responsive-step> ]*\n\n    <responsive-step> =\n        [ <min-width> ]? <column-count> [ labels-on-top ]?\n\nwhere:\n\n<dl>\n  <dt>`<min-width> = <length>`</dt>\n  <dd>\n    Minimum width of the layout corresponding to this step.\n    Optional, assumed as 0 if omitted.\n  </dd>\n\n  <dt>`<column-count> = <integer>`</dt>\n  <dd>\n    Number of columns, assumed as 1 if zero or negative.\n  </dd>\n\n  <dt>`labels-on-top`</dt>\n  <dd>\n    Optional, move the labels in the child `<vaadin-form-item>`\n    elements on top of the input fields. Labels are aside the\n    input fields if omitted.\n  </dd>\n</dl>\n\n#### Examples\n\n<dl>\n  <dt>`1`</dt>\n  <dd>\n    <p>The layout is always a single column, labels aside.\n  </dd>\n\n  <dt>`1, 40em 2`</dt>\n  <dd>\n    <p>Sets two responsive steps:\n    <ol>\n      <li>When the layout width is < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n\n  <dt>`1 labels-on-top, 20em 1, 40em 2`</dt>\n  <dd>\n    <p>Default value. Three responsive steps:\n    <ol>\n      <li>Width < 20em, one column, labels on top.\n      <li>20em <= width < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n</dl>",
+              "name": "responsiveSteps",
+              "type": "Array.<ResponsiveStep>",
+              "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsOnTop` boolean flag. At least one item is required.\n\n#### Examples\n\n<dl>\n  <dt>`[{columns: 1}]`</dt>\n  <dd>\n    <p>The layout is always a single column, labels aside.\n  </dd>\n\n  <dt><pre><code>[\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n]</code></pre></dt>\n  <dd>\n    <p>Sets two responsive steps:\n    <ol>\n      <li>When the layout width is < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n\n  <dt><pre><code>[\n  {minWidth: 0, columns: 1, labelsOnTop: true},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n]</code></pre></dt>\n  <dd>\n    <p>Default value. Three responsive steps:\n    <ol>\n      <li>Width < 20em, one column, labels on top.\n      <li>20em <= width < 40em, one column, labels aside.\n      <li>Width >= 40em, two columns, labels aside.\n    </ol>\n  </dd>\n</dl>",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 226,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 236,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_columnsChanged\""
+                  "observer": "\"_responsiveStepsChanged\""
                 }
               },
-              "defaultValue": "\"1 labels-on-top, 20em 1, 40em 2\""
-            },
-            {
-              "name": "_parsedResponsiveSteps",
-              "type": "Array",
-              "description": "Parsed value of the columns property",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 251,
-                  "column": 12
-                },
-                "end": {
-                  "line": 251,
-                  "column": 41
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
+              "defaultValue": "[]"
             },
             {
               "name": "_columnCount",
@@ -88,11 +69,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 256,
+                  "line": 241,
                   "column": 12
                 },
                 "end": {
-                  "line": 258,
+                  "line": 243,
                   "column": 13
                 }
               },
@@ -107,11 +88,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 263,
+                  "line": 248,
                   "column": 12
                 },
                 "end": {
-                  "line": 265,
+                  "line": 250,
                   "column": 13
                 }
               },
@@ -127,11 +108,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 260,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 279,
                   "column": 9
                 }
               },
@@ -144,11 +125,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 297,
+                  "line": 281,
                   "column": 8
                 },
                 "end": {
-                  "line": 302,
+                  "line": 286,
                   "column": 9
                 }
               },
@@ -161,11 +142,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 304,
+                  "line": 288,
                   "column": 8
                 },
                 "end": {
-                  "line": 307,
+                  "line": 291,
                   "column": 9
                 }
               },
@@ -182,11 +163,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 309,
+                  "line": 293,
                   "column": 8
                 },
                 "end": {
-                  "line": 325,
+                  "line": 309,
                   "column": 9
                 }
               },
@@ -198,44 +179,26 @@
               ]
             },
             {
-              "name": "_parseResponsiveSteps",
+              "name": "_responsiveStepsChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 327,
+                  "line": 311,
                   "column": 8
                 },
                 "end": {
-                  "line": 339,
+                  "line": 345,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "columns"
-                }
-              ]
-            },
-            {
-              "name": "_columnsChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 341,
-                  "column": 8
+                  "name": "responsiveSteps"
                 },
-                "end": {
-                  "line": 344,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
                 {
-                  "name": "columns"
+                  "name": "oldResponsiveSteps"
                 }
               ]
             },
@@ -245,11 +208,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 346,
+                  "line": 347,
                   "column": 8
                 },
                 "end": {
-                  "line": 369,
+                  "line": 370,
                   "column": 9
                 }
               },
@@ -262,11 +225,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 371,
+                  "line": 372,
                   "column": 8
                 },
                 "end": {
-                  "line": 373,
+                  "line": 374,
                   "column": 9
                 }
               },
@@ -279,11 +242,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 378,
+                  "line": 379,
                   "column": 8
                 },
                 "end": {
-                  "line": 414,
+                  "line": 415,
                   "column": 9
                 }
               },
@@ -325,7 +288,7 @@
               "column": 6
             },
             "end": {
-              "line": 415,
+              "line": 416,
               "column": 7
             }
           },
@@ -338,7 +301,7 @@
           "superclass": "HTMLElement"
         },
         {
-          "description": "`<vaadin-form-item>` is a Polymer element providing labelled form item wrapper\nfor using inside `<vaadin-form-layout>`.\n\n`<vaadin-form-item>` accepts any number of children as the input content,\nand also has a separate named `label` slot:\n\n```html\n<vaadin-form-item>\n  <label slot=\"label\">Label aside</label>\n  <input>\n</vaadin-form-item>\n```\n\nAny content can be used. For instance, you can have multiple input elements\nwith surrounding text. The label can be an element of any type:\n\n```html\n<vaadin-form-item>\n  <span slot=\"label\">Date of Birth</span>\n  <input placeholder=\"YYYY\" size=\"4\"> -\n  <input placeholder=\"MM\" size=\"2\"> -\n  <input placeholder=\"DD\" size=\"2\"><br>\n  <em>Example: 1900-01-01</em>\n</vaadin-form-item>\n```\n\nThe label is optional and can be omitted:\n\n```html\n<vaadin-form-item>\n  <input type=\"checkbox\"> Subscribe to our Newsletter\n</vaadin-form-item>\n```\n\nBy default, the `label` slot content is displayed aside of the input content.\nWhen `label-on-top` attribute is set, the `label` slot content\nis displayed on top:\n\n```html\n<vaadin-form-item label-on-top>\n  <label slot=\"label\">Label on top</label>\n  <input>\n</vaadin-form-item>\n```\n\n**Note:** Normally, `<vaadin-form-item>` is used as a child of\na `<vaadin-form-layout>` element. Setting `label-on-top` is unnecessary,\nbecause the `label-on-top` attribute is triggered automatically by the parent\n`<vaadin-form-layout>`, depending on its width and responsive behavior.\n\n### Input Width\n\nBy default, `<vaadin-form-item>` does not manipulate the width of the slotted\ninput elements. Optionally you can stretch the child input element to fill\nthe available width for the input content by adding the `full-width` class:\n\n```html\n<vaadin-form-item>\n  <label slot=\"label\">Label</label>\n  <input class=\"full-width\">\n</vaadin-form-item>\n```\n\n### Styling\n\nThe `label-on-top` host attribute can be used to target the label on top state:\n\n<pre><code>\n&lt;dom-module id=\"my-form-item-theme\" theme-for=\"vaadin-form-item\"&gt;\n  &lt;template&gt;\n    &lt;style&gt;\n      :host {\n        /&#42; default state styles, label aside &#42;/\n      }\n\n      :host([label-on-top]) {\n        /&#42; label on top state styles &#42;/\n      }\n    &lt;/style&gt;\n  &lt;/template&gt;\n&lt;/dom-module&gt;\n</code></pre>\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\nlabel | The label slot container\n\n### Custom CSS Properties Reference\n\nThe following custom CSS properties are available on the `<vaadin-form-item>`\nelement:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-form-item-label-width` | Width of the label column when the labels are aside | `8em`\n`--vaadin-form-item-label-gap` | Length of the gap between the label column and the input column when the labels are aside | `1em`",
+          "description": "`<vaadin-form-item>` is a Polymer element providing labelled form item wrapper\nfor using inside `<vaadin-form-layout>`.\n\n`<vaadin-form-item>` accepts any number of children as the input content,\nand also has a separate named `label` slot:\n\n```html\n<vaadin-form-item>\n  <label slot=\"label\">Label aside</label>\n  <input>\n</vaadin-form-item>\n```\n\nAny content can be used. For instance, you can have multiple input elements\nwith surrounding text. The label can be an element of any type:\n\n```html\n<vaadin-form-item>\n  <span slot=\"label\">Date of Birth</span>\n  <input placeholder=\"YYYY\" size=\"4\"> -\n  <input placeholder=\"MM\" size=\"2\"> -\n  <input placeholder=\"DD\" size=\"2\"><br>\n  <em>Example: 1900-01-01</em>\n</vaadin-form-item>\n```\n\nThe label is optional and can be omitted:\n\n```html\n<vaadin-form-item>\n  <input type=\"checkbox\"> Subscribe to our Newsletter\n</vaadin-form-item>\n```\n\nBy default, the `label` slot content is displayed aside of the input content.\nWhen `label-on-top` attribute is set, the `label` slot content\nis displayed on top:\n\n```html\n<vaadin-form-item label-on-top>\n  <label slot=\"label\">Label on top</label>\n  <input>\n</vaadin-form-item>\n```\n\n**Note:** Normally, `<vaadin-form-item>` is used as a child of\na `<vaadin-form-layout>` element. Setting `label-on-top` is unnecessary,\nbecause the `label-on-top` attribute is triggered automatically by the parent\n`<vaadin-form-layout>`, depending on its width and responsive behavior.\n\n### Input Width\n\nBy default, `<vaadin-form-item>` does not manipulate the width of the slotted\ninput elements. Optionally you can stretch the child input element to fill\nthe available width for the input content by adding the `full-width` class:\n\n```html\n<vaadin-form-item>\n  <label slot=\"label\">Label</label>\n  <input class=\"full-width\">\n</vaadin-form-item>\n```\n\n### Styling\n\nThe `label-on-top` host attribute can be used to target the label on top state:\n\n<pre><code>\n&lt;dom-module id=\"my-form-item-theme\" theme-for=\"vaadin-form-item\"&gt;\n  &lt;template&gt;\n    &lt;style&gt;\n      :host {\n        /&#42; default state styles, label aside &#42;/\n      }\n\n      :host([label-on-top]) {\n        /&#42; label on top state styles &#42;/\n      }\n    &lt;/style&gt;\n  &lt;/template&gt;\n&lt;/dom-module&gt;\n</code></pre>\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\nlabel | The label slot container\n\n### Custom CSS Properties Reference\n\nThe following custom CSS properties are available on the `<vaadin-form-item>`\nelement:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-form-item-label-width` | Width of the label column when the labels are aside | `8em`\n`--vaadin-form-item-label-gap` | Length of the gap between the label column and the input column when the labels are aside | `1em`\n`--vaadin-form-item-row-gap` | Height of the gap between the form item elements | `1em`",
           "summary": "",
           "path": "vaadin-form-item.html",
           "attributes": [],
@@ -350,11 +313,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 186,
+                  "line": 190,
                   "column": 9
                 }
               },
@@ -378,12 +341,12 @@
               "range": {
                 "file": "vaadin-form-item.html",
                 "start": {
-                  "line": 52,
+                  "line": 55,
                   "column": 6
                 },
                 "end": {
-                  "line": 52,
-                  "column": 32
+                  "line": 55,
+                  "column": 47
                 }
               }
             },
@@ -393,11 +356,11 @@
               "range": {
                 "file": "vaadin-form-item.html",
                 "start": {
-                  "line": 56,
+                  "line": 59,
                   "column": 6
                 },
                 "end": {
-                  "line": 56,
+                  "line": 59,
                   "column": 36
                 }
               }
@@ -407,11 +370,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 166,
+              "line": 170,
               "column": 6
             },
             "end": {
-              "line": 187,
+              "line": 191,
               "column": 7
             }
           },
@@ -424,6 +387,342 @@
           "superclass": "HTMLElement"
         }
       ]
+    }
+  ],
+  "elements": [
+    {
+      "description": "`<nice-demo-snippet>` is a Polymer element displaying the provided HTML example\ncode with the hightlighted source below.\n\n`<nice-demo-snippet>` is similar to `<demo-snippet>` element from the\nPolymerElements/iron-demo-helpers.\n\nUsage:\n\n<nice-demo-snippet>\n  <script type=\"text/html\" slot=\"source\">\n    <h1>Hello, world!</h1>\n  </script>\n</nice-demo-snippet>\n\n`<nice-demo-snippet>` expects `<script type=\"text/html\">` child element defining\nthe source code, unlike the `<demo-snippet>`, which uses `<template>`.  This\nallows to display the code snippet intact, exactly as it was written, preserving\nline breaks, quotation symbols, JSON in HTML attributes, and so on.\n\nSimilarly to `<demo-snippet>`, The source is rendered in the light DOM,\nallowing easy styling and scripting in the parent (document) scope.\n\n@polymerElement",
+      "summary": "",
+      "path": "demo/nice-demo-snippet.html",
+      "attributes": [],
+      "properties": [
+        {
+          "name": "_source",
+          "type": "string",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 82,
+              "column": 12
+            },
+            "end": {
+              "line": 82,
+              "column": 27
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_demoRenderer",
+          "type": "Element",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 83,
+              "column": 12
+            },
+            "end": {
+              "line": 83,
+              "column": 34
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_initializeProperties",
+          "description": "Overrides the default `Polymer.PropertyAccessors` to ensure class\nmetaprogramming related to property accessors and effects has\ncompleted (calls `finalize`).\n\nIt also initializes any property defaults provided via `value` in\n`properties` metadata.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 580,
+              "column": 6
+            },
+            "end": {
+              "line": 621,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 8
+            },
+            "end": {
+              "line": 102,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "disconnectedCallback",
+          "description": "",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 104,
+              "column": 8
+            },
+            "end": {
+              "line": 114,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "ready",
+          "description": "Stamps the element template.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 655,
+              "column": 6
+            },
+            "end": {
+              "line": 663,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "_readyClients",
+          "description": "Implements `PropertyEffects`'s `_readyClients` call. Attaches\nelement dom by calling `_attachDom` with the dom stamped from the\nelement's template via `_stampTemplate`. Note that this allows\nclient dom to be attached to the element prior to any observers\nrunning.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 674,
+              "column": 6
+            },
+            "end": {
+              "line": 679,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "_attachDom",
+          "description": "Attaches an element's stamped dom to itself. By default,\nthis method creates a `shadowRoot` and adds the dom to it.\nHowever, this method may be overridden to allow an element\nto put its dom in another location.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 693,
+              "column": 6
+            },
+            "end": {
+              "line": 708,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "dom"
+            }
+          ],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "attributeChangedCallback",
+          "description": "Provides a default implementation of the standard Custom Elements\n`attributeChangedCallback`.\n\nBy default, attributes declared in `properties` metadata are\ndeserialized using their `type` information to properties of the\nsame name.  \"Dash-cased\" attributes are deserialzed to \"camelCase\"\nproperties.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 721,
+              "column": 6
+            },
+            "end": {
+              "line": 741,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "name"
+            },
+            {
+              "name": "old"
+            },
+            {
+              "name": "value"
+            }
+          ],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "updateStyles",
+          "description": "When using the ShadyCSS scoping and custom property shim, causes all\nshimmed styles in this element (and its subtree) to be updated\nbased on current custom property values.\n\nThe optional parameter overrides inline custom property styles with an\nobject of properties where the keys are CSS properties, and the values\nare strings.\n\nExample: `this.updateStyles({'--color': 'blue'})`\n\nThese properties are retained unless a value of `null` is set.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 759,
+              "column": 6
+            },
+            "end": {
+              "line": 763,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "properties"
+            }
+          ],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "resolveUrl",
+          "description": "Rewrites a given URL relative to a base URL. The base URL defaults to\nthe original location of the document containing the `dom-module` for\nthis element. This method will return the same URL before and after\nbundling.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
+            "start": {
+              "line": 776,
+              "column": 6
+            },
+            "end": {
+              "line": 781,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "url"
+            },
+            {
+              "name": "base"
+            }
+          ],
+          "inheritedFrom": "Polymer.ElementMixin"
+        },
+        {
+          "name": "_extractSource",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 116,
+              "column": 8
+            },
+            "end": {
+              "line": 120,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_render",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 122,
+              "column": 8
+            },
+            "end": {
+              "line": 127,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "source"
+            },
+            {
+              "name": "demoRenderer"
+            }
+          ]
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "demos": [],
+      "slots": [
+        {
+          "description": "",
+          "name": "",
+          "range": {
+            "file": "demo/nice-demo-snippet.html",
+            "start": {
+              "line": 65,
+              "column": 6
+            },
+            "end": {
+              "line": 65,
+              "column": 19
+            }
+          }
+        },
+        {
+          "description": "",
+          "name": "source",
+          "range": {
+            "file": "demo/nice-demo-snippet.html",
+            "start": {
+              "line": 71,
+              "column": 4
+            },
+            "end": {
+              "line": 71,
+              "column": 78
+            }
+          }
+        }
+      ],
+      "events": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 75,
+          "column": 6
+        },
+        "end": {
+          "line": 128,
+          "column": 7
+        }
+      },
+      "privacy": "public",
+      "tagname": "nice-demo-snippet",
+      "classname": "NiceDemoSnippetElement",
+      "superclass": "HTMLElement"
     }
   ]
 }

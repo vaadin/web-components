@@ -37,7 +37,7 @@ gemini.suite('vaadin-form-layout', (suite) => {
   [
     'basic',
     'single-column',
-    'columns',
+    'responsive-steps',
     'colspan',
     'br',
     'css-properties',
