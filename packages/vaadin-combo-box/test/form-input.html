@@ -75,17 +75,12 @@
         expect(comboBox.$$('input').getAttribute('readonly')).to.equal('');
       });
 
-      it('should validate correctly when input value is invalid', function(done) {
-        window.parent.e = comboBox;
+      it('should validate correctly when input value is invalid', function() {
         comboBox.name = 'foo';
         comboBox.required = true;
 
-        // Timeout needed in 1.x with hybrid iron-input
-        setTimeout(function() {
-          expect(comboBox.validate()).to.equal(false);
-          expect(comboBox.invalid).to.be.equal(true);
-          done();
-        });
+        expect(comboBox.validate()).to.equal(false);
+        expect(comboBox.invalid).to.be.equal(true);
       });
 
       it('should validate correctly when input value is valid', function() {
