@@ -8,7 +8,7 @@
 
   <title>vaadin-combo-box Basic Examples</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
 
@@ -24,11 +24,16 @@
 
     <demo-snippet>
       <template>
-        <vaadin-combo-box id="demo1" label="Element"></vaadin-combo-box>
+        <vaadin-combo-box id="demo1-1" label="Element"></vaadin-combo-box>
+        <vaadin-combo-box id="demo1-2" label="Disabled" disabled></vaadin-combo-box>
+        <vaadin-combo-box id="demo1-3" label="Read-only" value="Carbon" readonly></vaadin-combo-box>
         <script>
-          var combobox = document.querySelector('#demo1');
-          // The elements is an array of String values.
-          combobox.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox1 = document.querySelector('#demo1-1');
+            var combobox2 = document.querySelector('#demo1-2');
+            var combobox3 = document.querySelector('#demo1-3');
+            combobox1.items = combobox2.items = combobox3.items = elements;
+          });
         </script>
       </template>
     </demo-snippet>
@@ -40,13 +45,15 @@
         <p>Selected value: <span id="selected-value"></span>.</p>
 
         <script>
-          var combobox2 = document.querySelector('#demo2');
-          combobox2.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox = document.querySelector('#demo2');
+            combobox.items = elements;
 
-          combobox2.addEventListener('value-changed', function() {
-            document.querySelector('#selected-value').innerHTML = combobox2.value;
+            combobox.addEventListener('value-changed', function() {
+              document.querySelector('#selected-value').innerHTML = combobox.value;
+            });
+            combobox.value = 'Carbon';
           });
-          combobox2.value = 'Carbon';
         </script>
       </template>
     </demo-snippet>
@@ -60,13 +67,15 @@
         </form>
 
         <script>
-          var form = document.querySelector('form');
-          var combobox3 = form.querySelector('vaadin-combo-box');
-          combobox3.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var form = document.querySelector('form');
+            var combobox = form.querySelector('vaadin-combo-box');
+            combobox.items = elements;
 
-          form.addEventListener('iron-form-submit', function() {
-            alert('Form submitted with name: ' + form.serialize().name);
-            return false;
+            form.addEventListener('iron-form-submit', function() {
+              alert('Form submitted with name: ' + form.serialize().name);
+              return false;
+            });
           });
         </script>
       </template>
@@ -75,22 +84,24 @@
     <h3>Change Event</h3>
     <demo-snippet>
       <template>
-        <vaadin-combo-box id="changeEventDemo" items="[[elements]]"></vaadin-combo-box>
+        <vaadin-combo-box id="changeEventDemo"></vaadin-combo-box>
         <paper-button id="setRandomValue" raised>Set random value</paper-button>
         <script>
-          var combobox4 = document.querySelector('#changeEventDemo');
-          combobox4.items = elements;
+          window.addEventListener('WebComponentsReady', function() {
+            var combobox = document.querySelector('#changeEventDemo');
+            combobox.items = elements;
 
-          combobox4.addEventListener('change', function(e) {
-            if (combobox4.value) {
-              alert('User selected value ' + combobox4.value);
-            } else {
-              alert('User has cleared the value');
-            }
-          });
+            combobox.addEventListener('change', function(e) {
+              if (combobox.value) {
+                alert('User selected value ' + combobox.value);
+              } else {
+                alert('User has cleared the value');
+              }
+            });
 
-          document.querySelector('#setRandomValue').addEventListener('click', function() {
-            combobox4.value = combobox4.items[Math.floor(Math.random() * combobox4.items.length)];
+            document.querySelector('#setRandomValue').addEventListener('click', function() {
+              combobox.value = combobox.items[Math.floor(Math.random() * combobox.items.length)];
+            });
           });
         </script>
       </template>

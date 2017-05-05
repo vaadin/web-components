@@ -7,7 +7,6 @@
   <script src='../../web-component-tester/browser.js'></script>
 
   <link rel='import' href='common.html'>
-  <script src="../../promise-polyfill/Promise.js"></script>
   <script src='common.js'></script>
 </head>
 
@@ -25,7 +24,7 @@
     var comboBox;
 
     function getInput() {
-      return comboBox.$.input;
+      return comboBox.inputElement;
     }
     function getToggleIcon() {
       return comboBox.$.toggleIcon;

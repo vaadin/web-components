@@ -32,11 +32,11 @@
 <dom-module id="x-fixed">
   <template>
     <div style="position:fixed">
-      <content></content>
+      <slot></slot>
     </div>
   </template>
   <script>
-    HTMLImports.whenReady(function() {
+    window.addEventListener('WebComponentsReady', function() {
       Polymer({
         is: 'x-fixed'
       });
@@ -47,6 +47,19 @@
 <test-fixture id="fixed-component">
   <template>
     <x-fixed>
+      <!--
+          In this particular fixture, there is a really strange race condition when running Chrome with P2 Shady
+          which causes attached callback to be called before the ready is called in the <paper-input-container>
+          inside <vaadin-combo-box>.
+          The current implementation of attached expects _addons to have an empty array (it's being assigned in ready).
+
+          Instead of spending time in trying to reproduce the issue in an isolated case and filing an issue to paper-input
+          or the Shady polyfill, I found this nice workaround. Enjoy!
+       -->
+      <paper-input-container _addons='[]'>
+        <input>
+      </paper-input-container>
+
       <vaadin-combo-box label='combobox' style='width: 300px'></vaadin-combo-box>
     </x-fixed>
   </template>
@@ -206,8 +219,8 @@
       it('should reposition after filtering', function(done) {
         moveComboBox(horiCenter, vertBottom, 300);
 
-        comboBox.$.input.bindValue = 'item 1';
-        comboBox.$.input.fire('input');
+        comboBox.inputElement.value = 'item 1';
+        comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
         Polymer.Base.async(function() {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);

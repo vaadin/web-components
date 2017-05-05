@@ -26,12 +26,12 @@
     }
 
     function getInput() {
-      return comboBox.$.input;
+      return comboBox._bindableInput;
     }
 
     function setInputValue(value) {
       getInput().bindValue = value;
-      getInput().fire('input');
+      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
     function getInputValue() {
@@ -41,6 +41,11 @@
     beforeEach(function() {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
+
+      // flush iron-input light dom observer to pickup child input element
+      if (comboBox._bindableInput._initSlottedInput) {
+        comboBox._bindableInput._initSlottedInput();
+      }
     });
 
     describe('setting the input field value', function() {

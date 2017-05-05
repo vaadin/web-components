@@ -20,9 +20,11 @@
 
   <test-fixture id="combobox-in-form">
     <template is="dom-template">
-      <form is="iron-form">
-        <vaadin-combo-box name=[[name]] required=[[required]]></vaadin-combo-box>
-      </form>
+      <iron-form>
+        <form is="iron-form">
+          <vaadin-combo-box></vaadin-combo-box>
+        </form>
+      </iron-form>
     </template>
   </test-fixture>
 
@@ -33,6 +35,11 @@
       beforeEach(function() {
         comboBox = fixture('combobox');
         comboBox.allowCustomValue = true;
+
+        // flush iron-input DOM observer to pick up child input
+        if(comboBox._bindableInput._initSlottedInput) {
+          comboBox._bindableInput._initSlottedInput();
+        }
       });
 
       it('should have the given name', function() {
@@ -68,37 +75,63 @@
         expect(comboBox.$$('input').getAttribute('readonly')).to.equal('');
       });
 
-      it('should validate correctly', function() {
+      it('should validate correctly when input value is invalid', function() {
         comboBox.name = 'foo';
         comboBox.required = true;
+
         expect(comboBox.validate()).to.equal(false);
         expect(comboBox.invalid).to.be.equal(true);
+      });
 
+      it('should validate correctly when input value is valid', function() {
+        comboBox.name = 'foo';
+        comboBox.required = true;
         comboBox.value = 'foo';
+
         expect(comboBox.validate()).to.equal(true);
         expect(comboBox.invalid).to.be.equal(false);
       });
+    });
 
-      it('should serialize correctly', function() {
-        var form = fixture('combobox-in-form', {name: 'foo'});
-        comboBox = form.querySelector('vaadin-combo-box');
-        comboBox.value = 'bar';
-        expect(form.serialize().foo).to.equal('bar');
+    describe('using the field in iron-form', function() {
+      var comboBox, ironForm, form;
+
+      beforeEach(function() {
+        ironForm = fixture('combobox-in-form');
+        comboBox = ironForm.querySelector('vaadin-combo-box');
+        form = ironForm.querySelector('form');
+        comboBox.name = 'foo';
+        comboBox.allowCustomValue = true;
+
+        // flush DOM observer for form child in iron-form
+        if (ironForm._nodeObserver) {
+          ironForm._nodeObserver.flush();
+        }
       });
 
-      it('should not-submit iron-form with invalid value', function() {
-        var form = fixture('combobox-in-form', {name: 'foo', required: true});
+      it('should serialize correctly', function() {
+        comboBox.value = 'bar';
+
+        // 2.0 API serialisation method name is different
+        var json = Polymer.Element ? ironForm.serializeForm() : form.serialize();
+        expect(json.foo).to.equal('bar');
+      });
+
+      it('should not-submit iron-form with invalid value', function(done) {
+        comboBox.required = true;
+
         var spy = sinon.spy();
-        form.addEventListener('iron-form-invalid', spy);
-        form.submit();
-        expect(spy).to.have.been.called;
+
+        setTimeout(function() {
+          ironForm.addEventListener('iron-form-submit', spy);
+          ironForm.submit ? ironForm.submit() : form.submit();
+          expect(spy).not.to.have.been.called;
+          done();
+        });
       });
 
       describe('enter key behavior', function() {
-        var keydownEvent;
-        var preventDefault;
-        var comboBox;
-        var input;
+        var keydownEvent, preventDefault;
 
         beforeEach(function() {
           // These tests fake a keydown event for the enter key and
@@ -114,19 +147,17 @@
           keydownEvent.keyCode = 13;
           keydownEvent.code = 13;
           keydownEvent.preventDefault = preventDefault;
-
-          comboBox = fixture('combobox-in-form').$$('vaadin-combo-box');
-          input = comboBox.$$('input');
         });
 
         it('should prevent default on open combobox', function() {
           comboBox.open();
-          input.dispatchEvent(keydownEvent);
+          // Using comboBox instead of input because of 2.0
+          comboBox.dispatchEvent(keydownEvent);
           expect(preventDefault).to.have.been.called;
         });
 
         it('should not prevent default on closed combobox', function() {
-          input.dispatchEvent(keydownEvent);
+          comboBox.dispatchEvent(keydownEvent);
           expect(preventDefault).to.not.have.been.called;
         });
       });

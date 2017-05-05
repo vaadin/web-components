@@ -13,8 +13,13 @@
     WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
     WCT._config.environmentScripts.push(location.href.replace(/[^/]+$/, '') + 'mock-touch-interactions.js');
 
-    var edge = window.navigator.userAgent.indexOf('Edge') > -1; // webcomponentsjs/issues/575
-    WCT._config.environmentScripts.push(edge ? 'webcomponentsjs/webcomponents-lite.js' : 'webcomponentsjs/webcomponents.js');
+    // polyserve transpiles sources for Mobile Safari even if it shouldn't.
+    // Remove after https://github.com/Polymer/polyserve/pull/185 is released.
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && window.Polymer && Polymer.Element) {
+      WCT._config.environmentScripts.push('webcomponentsjs/custom-elements-es5-adapter.js');
+    }
+
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
       'vaadin-combo-box-properties.html',
@@ -32,7 +37,12 @@
       'vaadin-combo-box-light.html',
       'item-template.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?dom=shadow']);
+      // Browser supports Shadow DOM
+      if (document.head.createShadowRoot || document.head.attachShadow) {
+        return suites.concat([suite, suite + '?wc-shadydom=true&dom=shadow']);
+      } else {
+        return suites.concat([suite]);
+      }
     }, []));
   </script>
 </body>

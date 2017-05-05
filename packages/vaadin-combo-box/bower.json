@@ -44,13 +44,13 @@
     "iron-icons": "^1.0.0",
     "iron-test-helpers": "^1.0.0",
     "paper-item": "^1.0.0",
-    "web-component-tester": "^5.0.0",
-    "webcomponentsjs": "^0.7.23"
+    "test-fixture": "^3.0.0",
+    "web-component-tester": "^6.0.0"
   },
   "variants": {
     "polymer2": {
       "dependencies": {
-        "polymer": "^2.0.0-rc.2",
+        "polymer": "^2.0.0",
         "iron-flex-layout": "#2.0-preview",
         "iron-form": "#2.0-preview",
         "iron-form-element-behavior": "#2.0-preview",
@@ -76,8 +76,8 @@
         "iron-icons": "#2.0-preview",
         "iron-test-helpers": "#2.0-preview",
         "paper-item": "#2.0-preview",
-        "web-component-tester": "6.0.0-prerelease.7",
-        "webcomponentsjs": "#v1"
+        "test-fixture": "^3.0.0",
+        "web-component-tester": "^6.0.0"
       }
     }
   }
