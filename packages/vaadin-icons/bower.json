@@ -24,28 +24,23 @@
     "test"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.1.1",
-    "iron-icon": "PolymerElements/iron-icon#^1.0.5",
-    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.6"
+    "polymer": "^2.0.0",
+    "iron-icon": "#2.0-preview",
+    "iron-iconset-svg": "#2.0-preview"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4",
-    "iron-meta": "PolymerElements/iron-meta#^1.1.2",
-    "elements-demo-resources": "vaadin/elements-demo-resources#master",
-    "webcomponentsjs": "^0.7.23"
+    "iron-component-page": "#2.0-preview",
+    "iron-meta": "#2.0-preview",
+    "elements-demo-resources": "#2.0-preview"
   },
   "variants": {
-    "polymer2": {
+    "1.x": {
       "dependencies": {
-        "polymer": "^2.0.0-rc.2",
-        "iron-icon": "#2.0-preview",
-        "iron-iconset-svg": "#2.0-preview"
+        "polymer": "^1.7.0"
       },
-      "devDependencies": {
-        "iron-component-page": "#2.0-preview",
-        "iron-meta": "#2.0-preview",
-        "elements-demo-resources": "#2.0-preview",
-        "webcomponentsjs": "#v1"
+      "resolutions": {
+        "webcomponentsjs": "^0.7.24",
+        "polymer": "^1.7.0"
       }
     }
   }
