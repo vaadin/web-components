@@ -16,7 +16,7 @@
     <template>
       <vaadin-combo-box-light>
         <iron-input>
-          <input is="iron-input">
+          <input>
         </iron-input>
       </vaadin-combo-box-light>
     </template>
@@ -41,7 +41,7 @@
       beforeEach(function() {
         comboBox = fixture('combobox-light');
         comboBox.items = ['foo', 'bar', 'baz'];
-        ironInput = comboBox.querySelector(Polymer.Element ? 'iron-input' : 'input[is="iron-input"]');
+        ironInput = comboBox.querySelector('iron-input');
       });
 
       describe('using iron-input', function() {

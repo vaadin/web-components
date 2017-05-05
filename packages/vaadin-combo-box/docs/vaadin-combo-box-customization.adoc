@@ -75,7 +75,9 @@ In order to create a simple `iron-input`-based combo box, you can just wrap the 
 [source,html]
 ----
 <vaadin-combo-box-light>
-  <input is="iron-input">
+  <iron-input>
+    <input>
+  </iron-input>
 </vaadin-combo-box-light>
 ----
 

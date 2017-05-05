@@ -24,9 +24,9 @@
       beforeEach(function() {
         comboBox = fixture('combobox');
 
-        // flush iron-input DOM observer to pick up child input
-        if (comboBox._bindableInput._observer) {
-          comboBox._bindableInput._observer.flush();
+        // make iron-input pick up child input
+        if (comboBox._bindableInput._initSlottedInput) {
+          comboBox._bindableInput._initSlottedInput();
         }
       });
 

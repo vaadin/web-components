@@ -61,19 +61,21 @@
     <h3>Using as a Form Field</h3>
     <demo-snippet>
       <template>
-        <form is="iron-form" method="post" demo>
-          <vaadin-combo-box name="name" required label="Element"></vaadin-combo-box>
-          <button>Submit</button>
-        </form>
+        <iron-form>
+          <form method="post" demo>
+            <vaadin-combo-box name="name" required label="Element"></vaadin-combo-box>
+            <button>Submit</button>
+          </form>
+        </iron-form>
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
-            var form = document.querySelector('form');
+            var form = document.querySelector('iron-form');
             var combobox = form.querySelector('vaadin-combo-box');
             combobox.items = elements;
 
             form.addEventListener('iron-form-submit', function() {
-              alert('Form submitted with name: ' + form.serialize().name);
+              alert('Form submitted with name: ' + form.serializeForm().name);
               return false;
             });
           });

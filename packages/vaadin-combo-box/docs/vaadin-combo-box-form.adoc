@@ -12,10 +12,12 @@ The [vaadinelement]#<vaadin-combo-box># element implements the link:https://elem
 
 [source,html]
 ----
-<form is="iron-form" method="post">
-  <vaadin-combo-box name="name" label="Element"></vaadin-combo-box>
-  <button>Submit</button>
-</form>
+<iron-form>
+  <form method="post">
+    <vaadin-combo-box name="name" label="Element"></vaadin-combo-box>
+    <button>Submit</button>
+  </form>
+</iron-form>
 <script>
   var form = document.querySelector('form');
   var combobox = document.querySelector('vaadin-combo-box');

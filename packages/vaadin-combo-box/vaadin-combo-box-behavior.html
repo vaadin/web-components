@@ -516,6 +516,11 @@
 
         this._setHasValue(true);
         this._inputElementValue = this._getItemLabel(selectedItem);
+
+        // Could not be defined in 1.x because ready is called after all prop-setters
+        if (this.inputElement) {
+          this.inputElement.value = this._inputElementValue;
+        }
       }
 
       this.$.overlay._selectedItem = selectedItem;

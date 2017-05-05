@@ -21,7 +21,7 @@
   <test-fixture id="combobox-in-form">
     <template is="dom-template">
       <iron-form>
-        <form is="iron-form">
+        <form>
           <vaadin-combo-box></vaadin-combo-box>
         </form>
       </iron-form>
@@ -36,7 +36,7 @@
         comboBox = fixture('combobox');
         comboBox.allowCustomValue = true;
 
-        // flush iron-input DOM observer to pick up child input
+        // make iron-input pick up child input
         if(comboBox._bindableInput._initSlottedInput) {
           comboBox._bindableInput._initSlottedInput();
         }
@@ -102,19 +102,14 @@
         form = ironForm.querySelector('form');
         comboBox.name = 'foo';
         comboBox.allowCustomValue = true;
-
-        // flush DOM observer for form child in iron-form
-        if (ironForm._nodeObserver) {
-          ironForm._nodeObserver.flush();
-        }
       });
 
       it('should serialize correctly', function() {
         comboBox.value = 'bar';
 
-        // 2.0 API serialisation method name is different
-        var json = Polymer.Element ? ironForm.serializeForm() : form.serialize();
-        expect(json.foo).to.equal('bar');
+        // IronForm 2.0 returns an array
+        var val = ironForm.serializeForm().foo;
+        expect(val[0] || val).to.equal('bar');
       });
 
       it('should not-submit iron-form with invalid value', function(done) {
