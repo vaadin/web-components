@@ -36,18 +36,9 @@
   "variants": {
     "1.x": {
       "dependencies": {
-        "polymer": "^1.7.0",
-        "iron-resizable-behavior": "^1.0.5"
+        "polymer": "^1.7.0"
       },
       "devDependencies": {
-        "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
-        "iron-component-page": "#2.0-preview",
-        "iron-demo-helpers": "#2.0-preview",
-        "iron-icon": "#2.0-preview",
-        "iron-icons": "#2.0-preview",
-        "iron-test-helpers": "#2.0-preview",
-        "paper-button": "#2.0-preview",
-        "web-component-tester": "^6.0.0",
         "webcomponentsjs": "^0.7.24"
       },
       "resolutions": {
