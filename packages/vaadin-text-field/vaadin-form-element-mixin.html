@@ -5,7 +5,7 @@
    * IronFormElementBehavior is not a proper 2.0 class.
    * @polymerMixin
    */
-  Vaadin.FormElementMixin = subclass => class VaadinFormElementMixin extends subclass {
+  Vaadin.FormElementMixin = superClass => class VaadinFormElementMixin extends superClass {
     static get properties() {
       return {
         /**
