@@ -15,7 +15,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script>
   (function() {
 
-    const VaadinChartsConfigurationReader = (superclass) => class extends superclass {
+    window.Vaadin = window.Vaadin || {};
+    
+    Vaadin.ChartsConfigurationReader = (superClass) => class VaadinChartsConfigurationReader extends superClass {
 
       constructor() {
         super();
@@ -275,9 +277,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
     };
-
-    window.Vaadin = window.Vaadin || {};
-    Vaadin.ChartsConfigurationReader = VaadinChartsConfigurationReader;
 
   })();
   
