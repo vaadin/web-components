@@ -24,339 +24,346 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 <link rel="import" href="configuration-reader.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="valo-theme.html">
 
 <script>
-    var VaadinCharts = VaadinCharts || {};
+    (function () {
 
-    /**
-     * Behavior that provides common configuration for charts web components.
-     *
-     * @polymerBehavior
-     */
-    VaadinCharts.ChartCommonBehavior = {
-
-        /**
-         * Fired when the chart has been fully loaded.
-         *
-         * @event chart-loaded
-         */
-
-        properties: {
-
+        class VaadinChart extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior, VaadinCharts.ValoThemeBehavior], Vaadin.ChartsConfigurationReader(Polymer.Element)) {
             /**
-             * JS object created from the HTML configuration.
+             * Fired when the chart has been fully loaded.
              *
-             * @type {chart: object
-             *        colors: array
-             *        credits: object
-             *        data: object
-             *        drilldown: object
-             *        exporting: object
-             *        labels: object
-             *        legend: object
-             *        loading: object
-             *        navigation: object
-             *        noData: object
-             *        pane: object
-             *        plotOptions: object
-             *        series: array
-             *        subtitle: object
-             *        title: object
-             *        tooltip: object
-             *        xAxis: object
-             *        yAxis: object
-             *       }
-             **/
-            chart: {
-                type: Object,
-                readOnly: true,
-                notify: true,
-                value: function () {
-                    return {};
-                }
-            },
+             * @event chart-loaded
+             */
 
-            timeline: {
-                type: Boolean,
-                value: false,
-                observer: '_timelineChanged'
-            },
+            constructor() {
+                super();
+
+                /**
+                * List of properties that will always be copied from the chart element to the container div
+                **/
+                this._copyStyleProperties = ["flex", "-webkit-flex", "-ms-flex"];
+
+                /**
+                *  Name of the chart events to add to the configuration and its corresponding event for the chart element
+                **/
+                this._chartEventNames = {
+                    addSeries: "add-series",
+                    afterPrint: "after-print",
+                    beforePrint: "before-print",
+                    click: "chart-click",
+                    drilldown: "drilldown",
+                    drillup: "drillup",
+                    redraw: "redraw",
+                    selection: "selection"
+                };
+
+                /**
+                *  Name of the series events to add to the configuration and its corresponding event for the chart element
+                **/
+                this._seriesEventNames = {
+                    afterAnimate: "series-after-animate",
+                    checkboxClick: "series-checkbox-click",
+                    click: "series-click",
+                    hide: "series-hide",
+                    legendItemClick: "series-legend-item-click",
+                    mouseOut: "series-mouse-out",
+                    mouseOver: "series-mouse-over",
+                    show: "series-show"
+                };
+
+                /**
+                *  Name of the point events to add to the configuration and its corresponding event for the chart element
+                **/
+                this._pointEventNames = {
+                    click: "point-click",
+                    mouseOut: "point-mouse-out",
+                    mouseOver: "point-mouse-over",
+                    remove: "point-remove",
+                    select: "point-select",
+                    unselect: "point-unselect",
+                    update: "point-update"
+                };
+
+                //Workaround to prevent _chartConf from being undefined when calling _addSeries from child component in FF
+                this._chartConf = {};
+            }
+
+            static get properties() {
+                return {
+
+                    /**
+                    * JS object created from the HTML configuration.
+                    *
+                    * @type {
+                    *        chart: object
+                    *        colors: array
+                    *        credits: object
+                    *        data: object
+                    *        drilldown: object
+                    *        exporting: object
+                    *        labels: object
+                    *        legend: object
+                    *        loading: object
+                    *        navigation: object
+                    *        noData: object
+                    *        pane: object
+                    *        plotOptions: object
+                    *        series: array
+                    *        subtitle: object
+                    *        title: object
+                    *        tooltip: object
+                    *        xAxis: object
+                    *        yAxis: object
+                    *       }
+                    **/
+                    chart: {
+                        type: Object,
+                        readOnly: true,
+                        notify: true,
+                        value: function () {
+                            return {};
+                        }
+                    },
+
+                    timeline: {
+                        type: Boolean,
+                        value: false,
+                        observer: '_timelineChanged'
+                    },
+
+                    /**
+                    * Initial chart configuration before initial rendering.
+                    **/
+                    _chartConf: {
+                        type: Object,
+                        value: function () {
+                            return {};
+                        }
+                    }
+                };
+            }
 
             /**
-             * Initial chart configuration before initial rendering.
-             **/
-            _chartConf: {
-                type: Object,
-                value: function () {
-                    return {};
-                }
+            * Tells that the component has been initialized.
+            **/
+            isInitialized() {
+                return Object.keys(this.chart).length !== 0;
             }
-        },
 
-        /**
-         * Tells that the component has been initialized.
-         **/
-        isInitialized: function () {
-            return Object.keys(this.chart).length !== 0;
-        },
-
-        /**
-         * List of properties that will always be copied from the chart element to the container div
-         **/
-        _copyStyleProperties: ["flex", "-webkit-flex", "-ms-flex"],
-
-        /**
-         *  Name of the chart events to add to the configuration and its corresponding event for the chart element
-         **/
-        _chartEventNames: {
-            addSeries: "add-series",
-            afterPrint: "after-print",
-            beforePrint: "before-print",
-            click: "chart-click",
-            drilldown: "drilldown",
-            drillup: "drillup",
-            redraw: "redraw",
-            selection: "selection"
-        },
-        /**
-         *  Name of the series events to add to the configuration and its corresponding event for the chart element
-         **/
-        _seriesEventNames: {
-            afterAnimate: "series-after-animate",
-            checkboxClick: "series-checkbox-click",
-            click: "series-click",
-            hide: "series-hide",
-            legendItemClick: "series-legend-item-click",
-            mouseOut: "series-mouse-out",
-            mouseOver: "series-mouse-over",
-            show: "series-show"
-        },
-        /**
-         *  Name of the point events to add to the configuration and its corresponding event for the chart element
-         **/
-        _pointEventNames: {
-            click: "point-click",
-            mouseOut: "point-mouse-out",
-            mouseOver: "point-mouse-over",
-            remove: "point-remove",
-            select: "point-select",
-            unselect: "point-unselect",
-            update: "point-update"
-        },
-        listeners: {
-            'iron-resize': '_onIronResize'
-        },
-        _onIronResize: function () {
-            if (this.chart.reflow) {
-                this.chart.reflow();
-            }
-        },
-        /**
-         * Reloads the chart with the original configuration defined in elements and its attributes.
-         */
-        reloadConfiguration: function () {
-            this._chartConf = {};
-            this._initConfiguration();
-            this.chart.destroy();
-            this._setChart({});
-            this._reloadSeries();
-            this._initChart();
-        },
-
-        /**
-         * Reload all the chart's series
-         */
-        _reloadSeries: function () {
-            var series = this.querySelectorAll('data-series');
-            for (var i = 0; i < series.length; i++) {
-                series[i]._reloadConfiguration();
-            }
-        },
-
-        /**
-         * Dynamically add a new Series to this chart
-         * @return The index of the added series in the series array
-         **/
-        _addSeries: function (newSeries) {
-            if (this._chartConf.series === undefined) {
-                this._chartConf.series = [];
-            }
-            this._chartConf.series.push(newSeries);
-            return this._chartConf.series.length - 1;
-        },
-
-        /**
-         * Dynamically add a new Series to this chart's Drilldown configuration
-         * @return The index of the added series in the drilldown series array
-         **/
-        _addDrilldownSeries: function (newSeries) {
-            if (!this._chartConf.drilldown) {
-                this._chartConf.drilldown = {};
-            }
-            if (!this._chartConf.drilldown.series) {
-                this._chartConf.drilldown.series = [];
-            }
-            this._chartConf.drilldown.series.push(newSeries);
-            return this._chartConf.drilldown.series.length - 1;
-        },
-
-        /* ----------- lifecycle ----------- */
-        created: function () {
-            //Workaround to prevent _chartConf from being undefined when calling _addSeries from child component in FF
-            this._chartConf = {};
-        },
-
-        attached: function () {
-            Polymer.RenderStatus.afterNextRender(this, this._afterRender);
-        },
-
-        _afterRender: function() {
-            if (!this.isInitialized()) {
-                this._initLocalDom();
+            /**
+            * Reloads the chart with the original configuration defined in elements and its attributes.
+            */
+            reloadConfiguration() {
+                this._chartConf = {};
                 this._initConfiguration();
-                this.querySelectorAll("data-series").forEach(function (ds) {
-                    if (ds._initialize) {
-                        ds._initialize();
-                    }
-                });
-                if (this._loadTheme) {
-                    this._loadTheme();
-                }
+                this.chart.destroy();
+                this._setChart({});
+                this._reloadSeries();
                 this._initChart();
             }
-        },
 
-        /**
-         * Initializes the chart property using the json configuration.
-         */
-        _initChart: function () {
-            if (this.timeline) {
-                this._setChart(new Highcharts.StockChart(this._chartConf));
-            } else {
-                this._setChart(new Highcharts.Chart(this._chartConf));
-            }
-            this.fire("chart-loaded");
-        },
-
-        ready: function () {
-        },
-
-        _initLocalDom: function () {
-            var chartContainer = document.createElement('div');
-            chartContainer.id = "chartContainer";
-            this._updateStyles(chartContainer);
-            this.shadowRoot.appendChild(chartContainer);
-            var licenseChecker = document.createElement('vaadin-license-checker');
-            licenseChecker.productName = "vaadin-charts";
-            licenseChecker.productVersion = "3";
-            licenseChecker.productCaption = "Vaadin Charts";
-            this.shadowRoot.appendChild(licenseChecker);
-//            Polymer.dom.flush();
-        },
-
-        /**
-         * Updates chartContainer and current chart style property depending on flex status
-         */
-        _updateStyles: function (chartContainer) {
-            var isFlex = false;
-            this._copyStyleProperties.forEach(function (property) {
-                //Chrome returns default value if property is not set
-                //check if flex is defined for chart, and different than default value
-                if (getComputedStyle(this)[property] && getComputedStyle(this)[property] != "0 1 auto") {
-                    isFlex = true;
+            /**
+            * Reload all the chart's series
+            */
+            _reloadSeries() {
+                var series = this.querySelectorAll('data-series');
+                for (var i = 0; i < series.length; i++) {
+                    series[i]._reloadConfiguration();
                 }
-            }, this);
-            //If chart element is a flexible item the chartContainer should be flex too
-            if (isFlex) {
-                chartContainer.setAttribute("style", "overflow: hidden; flex: 1; -webkit-flex: 1; -ms-flex: 1; ");
-                var style = '';
-                if (this.hasAttribute("style")) {
-                    style = this.getAttribute("style");
-                    if (style.charAt(style.length - 1) !== ';') {
-                        style += ';'
+            }
+
+            /**
+            * Dynamically add a new Series to this chart
+            * @return The index of the added series in the series array
+            **/
+            _addSeries(newSeries) {
+                if (this._chartConf.series === undefined) {
+                    this._chartConf.series = [];
+                }
+                this._chartConf.series.push(newSeries);
+                return this._chartConf.series.length - 1;
+            }
+
+            /**
+            * Dynamically add a new Series to this chart's Drilldown configuration
+            * @return The index of the added series in the drilldown series array
+            **/
+            _addDrilldownSeries(newSeries) {
+                if (!this._chartConf.drilldown) {
+                    this._chartConf.drilldown = {};
+                }
+                if (!this._chartConf.drilldown.series) {
+                    this._chartConf.drilldown.series = [];
+                }
+                this._chartConf.drilldown.series.push(newSeries);
+                return this._chartConf.drilldown.series.length - 1;
+            }
+
+            /* ----------- lifecycle ----------- */
+            ready() {
+                super.ready();
+                this.addEventListener('iron-resize', this._onIronResize);
+            }
+
+            _onIronResize() {
+                if (this.chart.reflow) {
+                    this.chart.reflow();
+                }
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                Polymer.RenderStatus.afterNextRender(this, this._afterRender);
+            }
+
+            _afterRender() {
+                if (!this.isInitialized()) {
+                    this._initLocalDom();
+                    this._initConfiguration();
+                    this.querySelectorAll("data-series").forEach(function (ds) {
+                        if (ds._initialize) {
+                            ds._initialize();
+                        }
+                    });
+                    if (this._loadTheme) {
+                        this._loadTheme();
+                    }
+                    this._initChart();
+                }
+            }
+
+            /**
+            * Initializes the chart property using the json configuration.
+            */
+            _initChart() {
+                if (this.timeline) {
+                    this._setChart(new Highcharts.StockChart(this._chartConf));
+                } else {
+                    this._setChart(new Highcharts.Chart(this._chartConf));
+                }
+                this.fire("chart-loaded");
+            }
+
+            _initLocalDom() {
+                var chartContainer = document.createElement('div');
+                chartContainer.id = "chartContainer";
+                this._updateStyles(chartContainer);
+
+                // !this.shadowRoot && this.createShadowRoot();
+
+                this.shadowRoot.appendChild(chartContainer);
+                var licenseChecker = document.createElement('vaadin-license-checker');
+                licenseChecker.productName = "vaadin-charts";
+                licenseChecker.productVersion = "3";
+                licenseChecker.productCaption = "Vaadin Charts";
+                this.shadowRoot.appendChild(licenseChecker);
+            }
+
+            /**
+            * Updates chartContainer and current chart style property depending on flex status
+            */
+            _updateStyles(chartContainer) {
+                var isFlex = false;
+                this._copyStyleProperties.forEach(function (property) {
+                    //Chrome returns default value if property is not set
+                    //check if flex is defined for chart, and different than default value
+                    if (getComputedStyle(this)[property] && getComputedStyle(this)[property] != "0 1 auto") {
+                        isFlex = true;
+                    }
+                }, this);
+                //If chart element is a flexible item the chartContainer should be flex too
+                if (isFlex) {
+                    chartContainer.setAttribute("style", "overflow: hidden; flex: 1; -webkit-flex: 1; -ms-flex: 1; ");
+                    var style = '';
+                    if (this.hasAttribute("style")) {
+                        style = this.getAttribute("style");
+                        if (style.charAt(style.length - 1) !== ';') {
+                            style += ';'
+                        }
+                    }
+                    style += "overflow: hidden; display: -ms-flexbox; display: -webkit-flex; display: flex;";
+                    this.setAttribute("style", style);
+                } else {
+                    chartContainer.setAttribute("style", "height:100%; width:100%;");
+                }
+            }
+
+            /**
+            * Initializes the chart json configuration.
+            */
+            _initConfiguration() {
+                //probably not needed anymore
+                this._cleanNode(this);
+                this._loadConfiguration(this._chartConf, this);
+
+                if (!this._chartConf.chart) {
+                    this._chartConf.chart = {};
+                }
+
+                this._initEventListeners();
+                this._chartConf.chart.type = this._getType();
+                this._chartConf.chart.renderTo = this.shadowRoot.querySelector('#chartContainer');
+            }
+
+            _initEventListeners() {
+                this._chartConf.chart.events = {};
+                for (var key in this._chartEventNames) {
+                    if (this._chartEventNames.hasOwnProperty(key)) {
+                        this._addChartEvent(key, this._chartEventNames[key]);
                     }
                 }
-                style += "overflow: hidden; display: -ms-flexbox; display: -webkit-flex; display: flex;";
-                this.setAttribute("style", style);
-            } else {
-                chartContainer.setAttribute("style", "height:100%; width:100%;");
-            }
-        },
 
-        /**
-         * Initializes the chart json configuration.
-         */
-        _initConfiguration: function () {
-            //probably not needed anymore
-            this._cleanNode(this);
-            this._loadConfiguration(this._chartConf, this);
+                this._ensureObjectStructure(this._chartConf, "plotOptions.series");
+                this._chartConf.plotOptions.series.events = {};
+                for (var key in this._seriesEventNames) {
+                    if (this._seriesEventNames.hasOwnProperty(key)) {
+                        this._addSeriesEvent(key, this._seriesEventNames[key]);
+                    }
+                }
 
-            if (!this._chartConf.chart) {
-                this._chartConf.chart = {};
-            }
-
-            this._initEventListeners();
-            this._chartConf.chart.type = this._getType();
-            this._chartConf.chart.renderTo = Polymer.dom(this.root).querySelector('#chartContainer');
-        },
-
-        _initEventListeners: function () {
-            this._chartConf.chart.events = {};
-            for (var key in this._chartEventNames) {
-                if (this._chartEventNames.hasOwnProperty(key)) {
-                    this._addChartEvent(key, this._chartEventNames[key]);
+                this._ensureObjectStructure(this._chartConf, "plotOptions.series.point");
+                this._chartConf.plotOptions.series.point.events = {};
+                for (var key in this._pointEventNames) {
+                    if (this._pointEventNames.hasOwnProperty(key)) {
+                        this._addPointEvent(key, this._pointEventNames[key]);
+                    }
                 }
             }
 
-            this._ensureObjectStructure(this._chartConf, "plotOptions.series");
-            this._chartConf.plotOptions.series.events = {};
-            for (var key in this._seriesEventNames) {
-                if (this._seriesEventNames.hasOwnProperty(key)) {
-                    this._addSeriesEvent(key, this._seriesEventNames[key]);
+            _addChartEvent(highchartsName, vaadinChartsName) {
+                var self = this;
+                this._chartConf.chart.events[highchartsName] = function (e) {
+                    self.fire(vaadinChartsName, { originalEvent: e, chart: this });
+                };
+            }
+
+            _addSeriesEvent(highchartsName, vaadinChartsName) {
+                var self = this;
+                this._chartConf.plotOptions.series.events[highchartsName] = function (e) {
+                    self.fire(vaadinChartsName, { originalEvent: e, series: this });
+                };
+            }
+
+            _addPointEvent(highchartsName, vaadinChartsName) {
+                var self = this;
+                this._chartConf.plotOptions.series.point.events[highchartsName] = function (e) {
+                    self.fire(vaadinChartsName, { originalEvent: e, point: this });
+                };
+            }
+
+            _timelineChanged(newValue, oldValue) {
+                // Observer might be called before _initChart
+                if (this.isInitialized()) {
+                    this.reloadConfiguration();
                 }
             }
 
-            this._ensureObjectStructure(this._chartConf, "plotOptions.series.point");
-            this._chartConf.plotOptions.series.point.events = {};
-            for (var key in this._pointEventNames) {
-                if (this._pointEventNames.hasOwnProperty(key)) {
-                    this._addPointEvent(key, this._pointEventNames[key]);
-                }
-            }
-        },
+        };
 
-        _addChartEvent: function (highchartsName, vaadinChartsName) {
-            var self = this;
-            this._chartConf.chart.events[highchartsName] = function (e) {
-                self.fire(vaadinChartsName, {originalEvent: e, chart: this});
-            };
-        },
-
-        _addSeriesEvent: function (highchartsName, vaadinChartsName) {
-            var self = this;
-            this._chartConf.plotOptions.series.events[highchartsName] = function (e) {
-                self.fire(vaadinChartsName, {originalEvent: e, series: this});
-            };
-        },
-
-        _addPointEvent: function (highchartsName, vaadinChartsName) {
-            var self = this;
-            this._chartConf.plotOptions.series.point.events[highchartsName] = function (e) {
-                self.fire(vaadinChartsName, {originalEvent: e, point: this});
-            };
-        },
-
-        _timelineChanged: function (newValue, oldValue) {
-            // Observer might be called before _initChart
-            if (this.isInitialized()) {
-                this.reloadConfiguration();
-            }
-        }
-    }
-
-    /**
-     * @polymerBehavior
-     */
-    VaadinCharts.ChartBehavior = [VaadinCharts.ConfigurationReaderBehavior, Polymer.IronResizableBehavior, VaadinCharts.ChartCommonBehavior]
+        window.Vaadin = window.Vaadin || {};
+        Vaadin.Chart = VaadinChart;        
+    })();
 
 </script>

@@ -166,8 +166,8 @@
         heightDivisor = typeof heightDivisor !== 'undefined' ? heightDivisor : 1;
         widthDivisor = typeof widthDivisor !== 'undefined' ? widthDivisor : 1;
 
-        expect(elem.offsetHeight).to.equal(Math.round(document.documentElement.offsetHeight / heightDivisor));
-        expect(elem.offsetWidth).to.equal(Math.round(document.documentElement.offsetWidth / widthDivisor));
+        expect(elem.offsetHeight).to.be.approximately(Math.round(document.documentElement.offsetHeight / heightDivisor), 1);
+        expect(elem.offsetWidth).to.be.approximately(Math.round(document.documentElement.offsetWidth / widthDivisor), 1);
       }
 
 
