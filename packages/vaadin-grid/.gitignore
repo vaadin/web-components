@@ -17,3 +17,4 @@ npm-debug.log
 *.iml
 directives/typings
 coverage/
+bower-*

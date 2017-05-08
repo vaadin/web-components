@@ -28,86 +28,62 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "web-component-tester": "^4.3.1",
-    "iron-test-helpers": "^1.2.5",
-    "paper-input": "^1.1.17",
-    "paper-checkbox": "^1.4.0",
-    "iron-demo-helpers": "^1.2.5",
-    "iron-flex-layout": "^1.3.1",
-    "iron-image": "^1.2.5",
-    "paper-slider": "^1.0.12",
-    "iron-icons": "PolymerElements/iron-icons#^1.2.0",
-    "iron-media-query": "^1.0.8",
-    "paper-button": "^1.0.14",
-    "iron-icon": "PolymerElements/iron-icon#^1.0.12",
-    "paper-styles": "PolymerElements/paper-styles#^1.1.5",
-    "iron-component-page": "^1.1.7",
-    "elements-demo-resources": "*",
-    "vaadin-combo-box": "^1.2.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
-    "app-localize-behavior": "^1.0.2"
+    "web-component-tester": "^6.0.0",
+    "iron-test-helpers": "^v2.0.0",
+    "paper-input": "^v2.0.0",
+    "paper-checkbox": "^v2.0.0",
+    "iron-demo-helpers": "^v2.0.0",
+    "iron-flex-layout": "^v2.0.0",
+    "iron-image": "^v2.0.0",
+    "paper-slider": "^v2.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^v2.0.0",
+    "iron-media-query": "^v2.0.0",
+    "paper-button": "^v2.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^v2.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^v2.0.0",
+    "iron-component-page": "^v2.0.0",
+    "elements-demo-resources": "2.0-preview",
+    "iron-ajax": "PolymerElements/iron-ajax#^v2.0.0",
+    "app-localize-behavior": "^v2.0.0"
   },
   "dependencies": {
-    "polymer": "^1.6.1",
-    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^1.0.5",
-    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0",
-    "iron-a11y-keys-behavior": "^1.1.9",
-    "iron-a11y-announcer": "^1.0.5"
+    "polymer": "^2.0.0",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^v2.0.0",
+    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^v2.0.0",
+    "iron-a11y-keys-behavior": "^v2.0.0",
+    "iron-a11y-announcer": "^v2.0.0"
   },
-
+  "resolutions": {
+    "paper-styles": "^v2.0.0",
+    "iron-ajax": "^v2.0.0",
+    "iron-a11y-keys-behavior": "^v2.0.0",
+    "iron-demo-helpers": "^v2.0.0",
+    "iron-flex-layout": "^v2.0.0",
+    "paper-button": "^v2.0.0",
+    "iron-meta": "^v2.0.0",
+    "iron-behaviors": "^v2.0.0",
+    "iron-form-element-behavior": "^v2.0.0",
+    "marked-element": "^v2.0.0",
+    "prism-element": "^v2.0.0",
+    "iron-location": "^v2.0.0",
+    "paper-behaviors": "^v2.0.0",
+    "iron-checked-element-behavior": "^v2.0.0",
+    "paper-ripple": "^v2.0.0",
+    "iron-doc-viewer": "^v2.0.0",
+    "iron-validatable-behavior": "^v2.0.0"
+  },
+  
   "variants": {
-    "polymer-1": {
-      "devDependencies": {
-        "web-component-tester": "^4.3.1",
-        "iron-test-helpers": "^1.2.5",
-        "paper-input": "^1.1.17",
-        "paper-checkbox": "^1.4.0",
-        "iron-demo-helpers": "^1.2.5",
-        "iron-flex-layout": "^1.3.1",
-        "iron-image": "^1.2.5",
-        "paper-slider": "^1.0.12",
-        "iron-icons": "PolymerElements/iron-icons#^1.2.0",
-        "iron-media-query": "^1.0.8",
-        "paper-button": "^1.0.14",
-        "iron-icon": "PolymerElements/iron-icon#^1.0.12",
-        "paper-styles": "PolymerElements/paper-styles#^1.1.5",
-        "iron-component-page": "^1.1.7",
-        "elements-demo-resources": "*",
-        "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
-      },
+    "1.x": {
       "dependencies": {
-        "polymer": "^1.6.1",
-        "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^1.0.5",
-        "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0",
-        "iron-a11y-keys-behavior": "^1.1.9",
-        "iron-a11y-announcer": "^1.0.5"
-      }
-    },
-    "polymer-2": {
-      "devDependencies": {
-        "web-component-tester": "^6.0.0",
-        "iron-test-helpers": "2.0-preview",
-        "paper-input": "2.0-preview",
-        "paper-checkbox": "2.0-preview",
-        "iron-demo-helpers": "2.0-preview",
-        "iron-flex-layout": "2.0-preview",
-        "iron-image": "2.0-preview",
-        "paper-slider": "2.0-preview",
-        "iron-icons": "PolymerElements/iron-icons#2.0-preview",
-        "iron-media-query": "2.0-preview",
-        "paper-button": "2.0-preview",
-        "iron-icon": "PolymerElements/iron-icon#2.0-preview",
-        "paper-styles": "PolymerElements/paper-styles#2.0-preview",
-        "iron-component-page": "2.0-preview",
-        "elements-demo-resources": "2.0-preview",
-        "iron-ajax": "PolymerElements/iron-ajax#2.0-preview"
+        "polymer": "^1.7.0"
       },
-      "dependencies": {
-        "polymer": "^2.0.0",
-        "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview",
-        "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#2.0-preview",
-        "iron-a11y-keys-behavior": "2.0-preview",
-        "iron-a11y-announcer": "2.0-preview"
+      "devDependencies": {
+        "webcomponentsjs": "^0.7.24"
+      },
+      "resolutions": {
+        "polymer": "^1.7.0",
+        "webcomponentsjs": "^0.7.24"
       }
     }
   }
