@@ -124,7 +124,7 @@ The `class` attribute is used to differentiate header and footer templates from 
 
     _selectFirstTemplate: function(selector) {
       return Array.prototype.filter.call(Polymer.dom(this).querySelectorAll(selector), function(el) {
-        return el.parentElement === this;
+        return Polymer.dom(el).parentNode === this;
       }.bind(this))[0];
     },
 
