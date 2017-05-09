@@ -166,6 +166,7 @@
         </vaadin-grid>
       </template>
       <script>
+        document.addEventListener('WebComponentsReady', function() {
           Polymer({
             is: 'x-app',
 
@@ -175,7 +176,6 @@
               }
             }
           });
-        document.addEventListener('WebComponentsReady', function() {
         });
       </script>
     </dom-module>

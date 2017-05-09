@@ -40,22 +40,40 @@
   <test-fixture id="groups">
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <dom-repeat items="[1, 2]" as="colgroup">
-          <template is="dom-repeat" items="[1, 2]" as="colgroup">
+        <template is="dom-repeat" items="[1, 2]" as="colgroup">
+          <vaadin-grid-column-group>
+            <template class="header">[[colgroup]]</template>
+            <template class="footer">[[colgroup]]</template>
+            <template is="dom-repeat" items="[1, 2]" as="col">
+              <vaadin-grid-column>
+                <template class="header">[[colgroup]][[col]]</template>
+                <template>[[colgroup]][[col]]</template>
+                <template class="footer">[[colgroup]][[col]]</template>
+              </vaadin-grid-column>
+            </template>
+          </vaadin-grid-column-group>
+        </template>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="groups-p2">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <dom-repeat is="dom-repeat" items="[1, 2]" as="colgroup">
+          <template>
             <vaadin-grid-column-group>
               <template class="header">[[colgroup]]</template>
               <template class="footer">[[colgroup]]</template>
-              <!-- For some weird reason <template is="dom-repeat"> works inside a template,
-                   but <dom-repeat>, not so much -->
-              <!--<dom-repeat items="[1, 2]" as="col">-->
-                <template is="dom-repeat" items="[1, 2]" as="col">
+              <dom-repeat is="dom-repeat" items="[1, 2]" as="col">
+                <template>
                   <vaadin-grid-column>
                     <template class="header">[[colgroup]][[col]]</template>
                     <template>[[colgroup]][[col]]</template>
                     <template class="footer">[[colgroup]][[col]]</template>
                   </vaadin-grid-column>
                 </template>
-              <!--</dom-repeat>-->
+              </dom-repeat>
             </vaadin-grid-column-group>
           </template>
         </dom-repeat>
@@ -379,7 +397,7 @@
       var grid;
 
       beforeEach(function(done) {
-        grid = fixture('groups');
+        grid = Polymer.Element ? fixture('groups-p2') : fixture('groups');
         grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, done);
       });

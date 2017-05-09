@@ -277,11 +277,17 @@
     describe('scrollable-content', function() {
       var grid, scrollable;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
         grid = fixture('scrollable-content');
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
         scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          done();
+        });
       });
 
       it('should not cancel wheel events for scrollable content', function() {

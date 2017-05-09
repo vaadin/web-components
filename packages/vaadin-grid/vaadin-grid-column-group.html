@@ -102,7 +102,9 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       detached: function() {
-        Polymer.dom(this).unobserveNodes(this._observer);
+        if (this._observer) {
+          Polymer.dom(this).unobserveNodes(this._observer);
+        }
       },
 
       _columnPropChanged: function(e) {

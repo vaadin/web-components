@@ -119,6 +119,9 @@
         grid = fixture('grid');
         Polymer.dom.flush();
         flushFilters(grid);
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
       });
 
       it('should have filters', function() {
@@ -176,6 +179,10 @@
           first: 'bar',
           last: 'bar'
         }];
+
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
       });
 
       it('should filter automatically', function() {

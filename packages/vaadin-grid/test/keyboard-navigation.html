@@ -87,6 +87,10 @@
               node: footerTrap
             });
           });
+
+          if (Polymer.Element) {
+            grid._observer.flush();
+          }
         });
 
         afterEach(function() {
@@ -432,7 +436,7 @@
 
             // needs to be async thanks to IE11.
             grid.async(function() {
-              expect(scroller._virtualFocus).to.be.null;
+              expect(grid._virtualFocus).to.be.null;
               done();
             }, 1);
           });
@@ -753,15 +757,18 @@
               expect(body._focusedCell).to.eql(body.children[0]._rowDetailsCell);
             });
 
-            it('should focus on the first element inside details with enter', function() {
+            it('should focus on the first element inside details with enter', function(done) {
               down();
 
-              var input = getCellContent(body._focusedCell).children[0];
-              input.focus = sinon.spy();
+              Polymer.RenderStatus.afterNextRender(grid, function() {
+                var input = getCellContent(body._focusedCell).children[0];
+                input.focus = sinon.spy();
 
-              enter();
+                enter();
 
-              expect(input.focus.callCount).to.eql(1);
+                expect(input.focus.callCount).to.eql(1);
+                done();
+              });
             });
           });
 
@@ -910,10 +917,11 @@
           });
 
           describe('vertical scrolling', function() {
-            beforeEach(function() {
+            beforeEach(function(done) {
               grid.size = 200;
               grid.dataProvider = infiniteDataProvider;
               Polymer.dom.flush();
+              Polymer.RenderStatus.afterNextRender(grid, done);
             });
 
             it('should scroll rows visible with up arrow', function() {
@@ -933,17 +941,13 @@
               expect(grid.$.scroller.$.table.scrollTop).to.be.above(0);
             });
 
-            it('should scroll to the first row with ctrl+home', function(done) {
+            it('should scroll to the first row with ctrl+home', function() {
               clickItem(0);
-              grid.$.scroller.$.table.scrollTop = 9999999999;
 
-              grid.async(function() {
-                ctrlHome();
+              scrollToEnd(grid);
 
-                expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
-
-                done();
-              });
+              ctrlHome();
+              expect(grid.$.scroller.$.table.scrollTop).to.eql(0);
             });
 
             it('should scroll to the last row with ctrl+end', function() {
@@ -976,9 +980,9 @@
             });
 
             it('should scroll the focused item visible when focus is set to body', function(done) {
-              grid.$.scroller.$.table.scrollTop = 500;
+              scrollToEnd(grid);
 
-              grid.async(function() {
+              Polymer.RenderStatus.afterNextRender(grid, function() {
                 tabToHeader();
                 tab();
 

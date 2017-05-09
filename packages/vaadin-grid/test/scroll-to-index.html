@@ -95,11 +95,13 @@
       describe('other', function() {
         var grid, scroller;
 
-        beforeEach(function() {
+        beforeEach(function(done) {
           grid = fixture('large');
           grid.dataProvider = infiniteDataProvider;
           scroller = grid.$.scroller;
-          Polymer.dom.flush();
+          Polymer.RenderStatus.afterNextRender(grid, function() {
+            done();
+          });
         });
 
         it('should clear scheduled scroll to index after init', function(done) {

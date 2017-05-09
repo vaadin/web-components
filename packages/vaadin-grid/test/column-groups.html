@@ -40,7 +40,7 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="1column1group">
+  <test-fixture id="onecolumnonegroup">
     <template>
       <vaadin-grid size="10">
         <vaadin-grid-column frozen>
@@ -249,9 +249,12 @@
         beforeEach(function() {
           //  |          | group-0             |
           //  | header-0 | header-1 | header-2 |
-          init('1column1group');
+          init('onecolumnonegroup');
 
           extraColumn = document.importNode(document.querySelector('#extra').content, true).children[0];
+          if (grid._observer.flush) {
+            grid._observer.flush();
+          }
         });
 
         it('the group header cell should ignore changes from child columns', function() {

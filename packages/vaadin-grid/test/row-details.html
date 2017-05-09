@@ -78,11 +78,14 @@
           grid.expandItem(grid._cache[0][index]);
         }
 
-        beforeEach(function() {
+        beforeEach(function(done) {
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
           Polymer.dom.flush();
           bodyRows = getRows(grid.$.items);
+          Polymer.RenderStatus.afterNextRender(grid, function() {
+            done();
+          });
         });
 
         function collapseRow(index) {

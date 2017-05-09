@@ -154,7 +154,9 @@
 
           it('should not lose scope on reorder', function(done) {
             var row = body.children[0];
-            var content = row.querySelector('.my-content');
+
+            var cell = row.querySelector('vaadin-grid-table-cell');
+            var content = getCellContent(cell).querySelector('.my-content');
 
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
 
@@ -176,7 +178,8 @@
 
           it('should not have vaadin-grid-table scope', function() {
             var row = body.children[25];
-            var content = row.querySelector('.my-content');
+            var cell = row.querySelector('vaadin-grid-table-cell');
+            var content = getCellContent(cell).querySelector('.my-content');
             expect(content.classList.contains('vaadin-grid-table')).to.be.false;
           });
         }

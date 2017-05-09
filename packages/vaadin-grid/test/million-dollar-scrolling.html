@@ -54,7 +54,7 @@
       var table = grid.$.scroller.$.table;
       table.addEventListener('scroll', function() {
         if (grid.$.scroller.$.table.scrollTop > 0) {
-          table.scrollTop -= 2500;
+          table.scrollTop -= 2000;
         } else {
           Polymer.Base.async(done, 100);
         }

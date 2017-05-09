@@ -32,12 +32,15 @@
       var fixedContainers;
       var grid;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
         Polymer.dom.flush();
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          done();
+        });
       });
 
       function isFixed(element) {

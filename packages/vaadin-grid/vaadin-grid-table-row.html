@@ -139,6 +139,9 @@
 
       updateRowDetailsCellMetrics: function() {
         if (this._rowDetailsCell) {
+          if (this.target && this.target._observer && this.target._observer.flush) {
+            this.target._observer.flush();
+          }
           this._rowDetailsCell.style.height = ''; // Reset previous height
           this.style.paddingBottom = this._rowDetailsCell.style.height = this._rowDetailsCell.clientHeight + 'px';
         }

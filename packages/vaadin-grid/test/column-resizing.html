@@ -194,7 +194,7 @@
         expect(grid._columnTree[1][0].resizable).to.be.false;
       });
 
-      it('should inherit resizable value from parent group', function() {
+      it('should inherit resizable value from parent group', function(done) {
         var newColumn = document.createElement('vaadin-grid-column');
         Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
         Polymer.dom.flush();
@@ -203,7 +203,10 @@
           grid._columnTree[0][0]._observer.flush();
         }
 
-        expect(newColumn.resizable).to.be.true;
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          expect(newColumn.resizable).to.be.true;
+          done();
+        });
       });
 
       it('should have resizable false by default on column', function() {

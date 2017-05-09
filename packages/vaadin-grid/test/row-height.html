@@ -87,6 +87,10 @@
           rows = getRows(grid.$.items);
           defaultHeight = getRows(header)[0].clientHeight;
 
+          if (grid._observer.flush) {
+            grid._observer.flush();
+          }
+
           wrappers = getRowCells(rows[0]).map(function(cell) {
             return getCellContent(cell);
           });

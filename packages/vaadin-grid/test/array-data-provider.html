@@ -83,7 +83,9 @@
         }];
         Polymer.dom.flush();
         body = grid.$.items;
-        done();
+        Polymer.RenderStatus.afterNextRender(grid, function () {
+          done();
+        });
       });
 
       it('should have right amount of data', function() {
