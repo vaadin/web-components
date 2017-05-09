@@ -31,7 +31,7 @@
     "iron-test-helpers": "#2.0-preview",
     "paper-button": "#2.0-preview",
     "web-component-tester": "^6.0.0",
-    "webcomponentsjs": "#v1"
+    "webcomponentsjs": "^v1.0.0-rc.11"
   },
   "variants": {
     "1.x": {
