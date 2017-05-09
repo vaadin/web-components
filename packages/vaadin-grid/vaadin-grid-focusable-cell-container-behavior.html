@@ -37,7 +37,8 @@
         return;
       }
       // note: VoiceOver doesn't work with dynamic IDs.
-      var activeTarget = cell._cellContent.id;
+      var activeTarget = Polymer.Element ? cell._cellContent.getAttribute('slot') : cell._cellContent.id;
+
       if (this.is === 'vaadin-grid-table-body' && !cell.hasAttribute('detailscell')) {
         // note: having `cell.column.name` property for announcing would maybe be a good option here?
         var index = Array.prototype.indexOf.call(Polymer.dom(cell.parentElement).querySelectorAll('.vaadin-grid-cell'), cell);
