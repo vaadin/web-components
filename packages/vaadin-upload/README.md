@@ -74,7 +74,7 @@
 
 ## Running demos and tests in browser
 
-1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli@next`
+1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
 
 1. When in the `vaadin-upload` directory, run `polymer install --variants` to install Bower dependencies
 
