@@ -7,6 +7,11 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer.html">
 
 <script>
+  if (Polymer.Element) {
+    // 2.x needs this legacy import
+    Polymer.Base.importHref('../../polymer/lib/utils/gestures.html');
+  }
+
   (function() {
     Polymer.Gestures.register({
       name: 'vaadin-contextmenu',
@@ -76,7 +81,8 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       fire: function(target, x, y) {
-        Polymer.Gestures.fire(target, 'vaadin-contextmenu', {
+        // 2.0 has moved _fire method to private API
+        (Polymer.Gestures.fire || Polymer.Gestures._fire)(target, 'vaadin-contextmenu', {
           x: x,
           y: y,
           sourceEvent: this.info.sourceEvent

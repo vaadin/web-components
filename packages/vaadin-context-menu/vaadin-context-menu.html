@@ -136,11 +136,11 @@ Custom property | Description | Default
       }
 
       vaadin-context-menu-overlay {
-        @apply(--vaadin-context-menu-overlay);
+        @apply --vaadin-context-menu-overlay;
       }
     </style>
 
-    <content></content>
+    <slot></slot>
     <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
         on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed"
         with-backdrop>
@@ -276,13 +276,16 @@ Custom property | Description | Default
 
       _openedChanged: function(opened) {
         if (opened) {
-          this._contentTemplate = Polymer.dom(this).children.filter(function(el) {
+          this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, function(el) {
             return el.localName === 'template';
           })[0];
         }
       },
 
       _contextChanged: function(context, instance) {
+        if (context === undefined || instance === undefined) {
+          return;
+        }
         instance.detail = context.detail;
         instance.target = context.target;
       },
@@ -298,7 +301,7 @@ Custom property | Description | Default
         if (this.selector) {
           var targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
 
-          return targets.filter(function(el) {
+          return Array.prototype.filter.call(targets, function(el) {
             return Polymer.dom(e).path.indexOf(el) > -1;
           })[0];
         } else {
