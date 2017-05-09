@@ -30,12 +30,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script>
     (function () {
 
+        /**
+         * Base class for Vaadin Charts Polymer Elements. It contains all the behaviors and business logic that a chart can perform.
+         * To use Vaadin.Charts, the element must extend it and override the `_getType()` method, which must return a string with the type of the chart.
+         *
+         * @memberof Vaadin
+         * @mixes Polymer.IronResizableBehavior
+         * @mixes VaadinCharts.ValoThemeBehavior
+         * @mixes Vaadin.ChartsConfigurationReader
+         *
+         * @event chart-loaded fired when the chart has been fully loaded.
+         *
+         * @summary Base class for Vaadin Charts Polymer Elements.
+         *
+         */
         class VaadinChart extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior, VaadinCharts.ValoThemeBehavior], Vaadin.ChartsConfigurationReader(Polymer.Element)) {
-            /**
-             * Fired when the chart has been fully loaded.
-             *
-             * @event chart-loaded
-             */
 
             constructor() {
                 super();
@@ -363,7 +372,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         };
 
         window.Vaadin = window.Vaadin || {};
-        Vaadin.Chart = VaadinChart;        
+        Vaadin.Chart = VaadinChart;
+
     })();
 
 </script>
