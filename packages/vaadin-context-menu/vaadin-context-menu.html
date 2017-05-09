@@ -267,10 +267,10 @@ Custom property | Description | Default
 
       _closeOnChanged: function(closeOn, oldCloseOn) {
         if (oldCloseOn) {
-          this.unlisten(this, oldCloseOn, 'close');
+          this.unlisten(this.$.overlay, oldCloseOn, 'close');
         }
         if (closeOn) {
-          this.listen(this, closeOn, 'close');
+          this.listen(this.$.overlay, closeOn, 'close');
         }
       },
 
@@ -283,7 +283,7 @@ Custom property | Description | Default
       },
 
       _contextChanged: function(context, instance) {
-        if (context === undefined || instance === undefined) {
+        if (context === undefined || instance === undefined) {
           return;
         }
         instance.detail = context.detail;

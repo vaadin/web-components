@@ -6,12 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   <title></title>
-
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-context-menu.html">
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -86,7 +87,7 @@
       it('should align to bottom of the viewport', function(done) {
         menu._setOpened(true);
 
-        menu.addEventListener('iron-overlay-opened', function() {
+        listenForEvent(menu, 'iron-overlay-opened', function() {
           var styles = window.getComputedStyle(menu.$.overlay);
           expect(styles.bottom).to.eql('0px');
           expect(styles.transform).not.to.contain('translate');
@@ -99,7 +100,7 @@
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          menu.addEventListener('iron-overlay-opened', function() {
+          listenForEvent(menu, 'iron-overlay-opened', function() {
             expect(menu.opened).to.eql(true);
             expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
             done();
