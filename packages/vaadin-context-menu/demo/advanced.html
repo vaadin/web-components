@@ -26,10 +26,10 @@
       <template>
         <vaadin-context-menu selector="button" open-on="click" close-on="none">
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
 
           <button>Show Context Menu</button>
@@ -56,12 +56,12 @@
 
             <vaadin-context-menu>
               <template>
-                <paper-menu>
+                <paper-listbox>
                   <paper-item on-tap="_add">Add</paper-item>
                   <template is="dom-if" if="[[_isGridBody(target)]]">
                     <paper-item content="[[target]]" on-tap="_remove">Remove</paper-item>
                   </template>
-                </paper-menu>
+                </paper-listbox>
               </template>
 
               <vaadin-grid id="grid" items="[[items]]">
@@ -168,11 +168,11 @@
         <template id="app" is="dom-bind">
           <vaadin-context-menu>
             <template>
-              <paper-menu>
+              <paper-listbox>
                 <template is="dom-repeat" items="[[menuItems]]">
                   <paper-item>Menu Item</paper-item>
                 </template>
-              </paper-menu>
+              </paper-listbox>
             </template>
 
             <p>

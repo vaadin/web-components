@@ -27,10 +27,10 @@
       <template>
         <vaadin-context-menu>
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
 
           <p>This paragraph has the context menu provided in the above template.</p>
@@ -44,10 +44,10 @@
       <template>
         <vaadin-context-menu id="customListener">
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
         </vaadin-context-menu>
 
@@ -65,10 +65,10 @@
       <template>
         <vaadin-context-menu selector=".has-menu">
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
 
           <p class="has-menu">This paragraph opens the context menu.</p>
@@ -82,9 +82,9 @@
       <template>
         <vaadin-context-menu selector="li">
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>The menu target: [[target.textContent]]</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
 
           <ul>
@@ -103,10 +103,10 @@
           <template>
             <vaadin-context-menu selector="li">
               <template>
-                <paper-menu>
+                <paper-listbox>
                   <paper-item on-tap="_appendItem">Append item</paper-item>
                   <paper-item list-item="[[target]]" on-tap="_removeItem">Remove item</paper-item>
-                </paper-menu>
+                </paper-listbox>
               </template>
 
               <ul>
@@ -152,10 +152,10 @@
       <template>
         <vaadin-context-menu id="buttonMenu">
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
         </vaadin-context-menu>
 
@@ -179,10 +179,10 @@
       <template>
         <vaadin-context-menu>
           <template>
-            <paper-menu selected-class="no-selected-styles-please">
+            <paper-listbox selected-class="no-selected-styles-please">
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
 
           <p>The context menu of this paragraph does not change the items look when opened again.</p>

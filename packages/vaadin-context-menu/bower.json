@@ -29,7 +29,7 @@
     "web-component-tester": "^5.0.0",
     "iron-component-page": "polymerelements/iron-component-page#^1.1.0",
     "iron-test-helpers": "^1.2.5",
-    "paper-menu": "^1.2.2",
+    "paper-listbox": "^1.1.3",
     "paper-item": "^1.2.1",
     "iron-icons": "^1.1.3",
     "elements-demo-resources": "vaadin/elements-demo-resources#master",

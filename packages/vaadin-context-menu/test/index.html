@@ -8,26 +8,25 @@
   </head>
   <body>
     <script>
-      WCT._config.environmentScripts.push('webcomponentsjs/webcomponents.js');
+      WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
       WCT.loadSuites([
         'context.html',
-        'context.html?dom=shadow',
         'device-detector.html',
-        'device-detector.html?dom=shadow',
         'integration.html',
-        'integration.html?dom=shadow',
         'selection.html',
-        'selection.html?dom=shadow',
         'properties.html',
-        'properties.html?dom=shadow',
         'overlay.html',
-        'overlay.html?dom=shadow',
         'template.html',
-        'template.html?dom=shadow',
-        'touch.html',
-        'touch.html?dom=shadow'
-      ]);
+        'touch.html'
+      ].reduce(function(suites, suite) {
+        // Browser supports Shadow DOM
+        if (document.head.createShadowRoot || document.head.attachShadow) {
+          return suites.concat([suite, suite + '?wc-shadydom=true&dom=shadow']);
+        } else {
+          return suites.concat([suite]);
+        }
+      }, []));
     </script>
   </body>
 </html>
