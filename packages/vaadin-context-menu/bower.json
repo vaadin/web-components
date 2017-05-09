@@ -20,20 +20,28 @@
     "test"
   ],
   "dependencies": {
-    "polymer": "^1.6.1",
-    "iron-overlay-behavior": "^1.8.6",
-    "iron-media-query": "^1.0.8",
-    "paper-styles": "^1.1.5"
+    "polymer": "^1.7.0",
+    "iron-overlay-behavior": "#2.0-preview",
+    "iron-media-query": "#2.0-preview",
+    "paper-styles": "#2.0-preview"
   },
   "devDependencies": {
-    "web-component-tester": "^5.0.0",
-    "iron-component-page": "polymerelements/iron-component-page#^1.1.0",
-    "iron-test-helpers": "^1.2.5",
-    "paper-listbox": "^1.1.3",
-    "paper-item": "^1.2.1",
-    "iron-icons": "^1.1.3",
-    "elements-demo-resources": "vaadin/elements-demo-resources#master",
-    "iron-demo-helpers": "polymerelements/iron-demo-helpers#^1.0.0",
-    "vaadin-grid": "^2.0.0"
+    "elements-demo-resources": "vaadin/elements-demo-resources#2.0-preview",
+    "iron-component-page": "#2.0-preview",
+    "iron-demo-helpers": "#2.0-preview",
+    "iron-icons": "#2.0-preview",
+    "iron-test-helpers": "#2.0-preview",
+    "paper-item": "#2.0-preview",
+    "paper-listbox": "#2.0-preview",
+    "test-fixture": "^3.0.0",
+    "vaadin-grid": "^2.0.0",
+    "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "polymer": "^1.7.0",
+    "webcomponentsjs": "^0.7.24",
+    "iron-scroll-target-behavior": "2.0-preview",
+    "iron-resizable-behavior": "2.0-preview",
+    "iron-a11y-keys-behavior": "2.0-preview"
   }
 }
