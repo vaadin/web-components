@@ -16,7 +16,7 @@ Visit **https://vaadin.com/icons** for more information and instructions how to 
 
 ## Running demos in browser
 
-1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli@next`
+1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
 
 1. When in the `vaadin-icons` directory, run `polymer install --variants` to install Bower dependencies
 
