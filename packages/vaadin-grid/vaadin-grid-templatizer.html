@@ -15,16 +15,23 @@
       template: Object,
 
       _templatized: Boolean,
-      _forwardedParentProps: Object,
       _templateInstances: {
         type: Array,
+        value: function() {
+          return [];
+        }
+      },
+
+      _parentPathValues: {
         value: function() {
           return [];
         }
       }
     },
 
-    observers: ['_forwardedParentPropsChanged(_forwardedParentProps.*, _templateInstances)'],
+    observers: [
+      '_templateInstancesChanged(_templateInstances.*, _parentPathValues.*)'
+    ],
 
     created: function() {
       // needed for V2 to enable event.model on declarative event listeners.
@@ -52,20 +59,18 @@
 
     addInstance: function(instance) {
       if (this._templateInstances.indexOf(instance) === -1) {
-        this._templateInstances.push(instance);
+        this.push('_templateInstances', instance);
       }
     },
 
     removeInstance: function(instance) {
       var index = this._templateInstances.indexOf(instance);
-
-      this._templateInstances.splice(index, 1);
+      this.splice('_templateInstances', index, 1);
     },
 
     _ensureTemplatized: function() {
       // TODO V2 only property?
       if (!this.template.__templatizeOwner) {
-        this._forwardedParentProps = {};
         this.templatize(this.template);
 
         // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
@@ -105,13 +110,17 @@
     },
 
     _forwardParentProp: function(prop, value) {
-      // _forwardParentProp might be called during this.stamp() before
-      // this.instance is set. We need to delay it until instance is set.
-      this.set('_forwardedParentProps.' + prop, value);
+      this._parentPathValues[prop] = value;
+      this._templateInstances.forEach(function(inst) {
+        inst.set(prop, value);
+      }, this);
     },
 
     _forwardParentPath: function(path, value) {
-      this.set('_forwardedParentProps.' + path, value);
+      this.set(['_parentPathValues', path], value);
+      this._templateInstances.forEach(function(inst) {
+        inst.notifyPath(path, value);
+      }, this);
     },
 
     _forwardHostPropV2: function(prop, value) {
@@ -121,24 +130,18 @@
       // all cases in Hybrid mode. Try removing this after running pure P2.
       if (this._templateInstances) {
         this._templateInstances.forEach(function(inst) {
-            inst.notifyPath(prop, value);
-        });
+          inst.notifyPath(prop, value);
+        }, this);
       }
     },
 
-    _forwardedParentPropsChanged: function(e, templateInstances) {
-      if (e === undefined || templateInstances === undefined) {
-        return;
-      }
-
-      if (e.path !== '_forwardedParentProps') {
-        var prop = e.path.substring(e.path.indexOf('.') + 1);
-        var value = e.value;
-
-        templateInstances.forEach(function(inst) {
-          inst.set(prop, value);
-        });
-      }
+    _templateInstancesChanged: function(t, p) {
+      Object.keys(this._parentPathValues || []).forEach(function(keyName) {
+        this._templateInstances.forEach(function(inst) {
+          inst.set(keyName, this._parentPathValues[keyName]);
+        }, this);
+      }, this);
     }
+
   });
 </script>

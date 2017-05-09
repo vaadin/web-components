@@ -106,21 +106,6 @@
     describe('templating', function() {
       var container, grid;
 
-      before(function() {
-
-        // On V1 Shady, iron-input detached is called multiple times during
-        // slot distribution, which breaks everything:
-        // https://github.com/PolymerElements/iron-input/blob/80f9811410ac19eb4fad958354360ed880c1b6ac/iron-input.html#L192
-        if (Polymer.Element && !Polymer.Settings.useNativeShadow)
-        var proto = Object.getPrototypeOf(document.createElement('iron-input'));
-        proto.detached = function() {
-          if (this._observer) {
-            Polymer.dom(this).unobserveNodes(this._observer);
-          }
-          this._observer = null;
-        }
-      });
-
       beforeEach(function(done) {
         container = fixture('formatting');
         grid = container.$.grid;
