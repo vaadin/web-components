@@ -44,7 +44,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * @summary Base class for Vaadin Charts Polymer Elements.
          *
          */
-        class VaadinChart extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior, VaadinCharts.ValoThemeBehavior], Vaadin.ChartsConfigurationReader(Polymer.Element)) {
+        class VaadinChart extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Vaadin.ChartsValoTheme(Vaadin.ChartsConfigurationReader(Polymer.Element))) {
 
             constructor() {
                 super();
