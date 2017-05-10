@@ -17,7 +17,7 @@
       vaadin-grid {
         border: none;
       }
-    
+
       vaadin-grid.small {
         --vaadin-grid-cell: {
           line-height: 10px;
@@ -64,7 +64,7 @@
         });
       });
 
-      it('increase pool size after resizing the scroller', function() {
+      it('increase pool size after resizing the scroller', function(done) {
         grid.classList.add('small');
         Polymer.updateStyles();
         grid.style.display = 'none';
@@ -73,7 +73,12 @@
         grid.style.display = '';
         scroller._update();
         Polymer.dom.flush();
-        expect(scroller._physicalItems.length).to.be.greaterThan(25);
+
+        Polymer.RenderStatus.afterNextRender(scroller, function() {
+          scroller.flushDebouncer('_debounceTemplate');
+          expect(scroller._physicalItems.length).to.be.greaterThan(25);
+          done();
+        });
       });
 
       it('pool should not increase if the scroller has no size', function() {

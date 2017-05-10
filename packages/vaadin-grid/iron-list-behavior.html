@@ -415,10 +415,14 @@
         if (this._viewportHeight === 0) {
           return false;
         }
+
+        var estPhysicalSize = this._physicalSizes.reduce(function(prev, curr) {
+          return prev + (curr || 100);
+        }, 0);
         // Base case 2: If the physical size is optimal and the list's client height is full
         // with physical items, don't increase the pool.
-        var isClientHeightFull = this._physicalBottom >= this._scrollBottom && this._physicalTop <= this._scrollPosition;
-        if (this._physicalSize >= this._optPhysicalSize && isClientHeightFull) {
+        var isClientHeightFull = estPhysicalSize > this._viewportHeight;
+        if (estPhysicalSize >= this._optPhysicalSize && isClientHeightFull) {
           return false;
         }
         // this value should range between [0 <= `currentPage` <= `_maxPages`]

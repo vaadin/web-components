@@ -423,6 +423,8 @@
         return;
       }
 
+      Polymer.RenderStatus.afterNextRender(this, this._update);
+
       this._frozenCellsChanged();
       this._hasTemplatesChanged(columnTree);
 
