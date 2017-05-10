@@ -14,7 +14,6 @@
       dataHost: Object,
       template: Object,
 
-      _templatized: Boolean,
       _templateInstances: {
         type: Array,
         value: function() {
@@ -24,7 +23,7 @@
 
       _parentPathValues: {
         value: function() {
-          return [];
+          return {};
         }
       }
     },
@@ -69,12 +68,24 @@
     },
 
     _ensureTemplatized: function() {
-      // TODO V2 only property?
-      if (!this.template.__templatizeOwner) {
+      // Avoid multiple templatize for the template
+      if (!this.template._templatized) {
+        this.template._templatized = true;
+
         this.templatize(this.template);
 
         // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
         this._parentProps = this._parentProps || {};
+
+        // TODO: V1 only. For some reason, parent properties are not forwarded
+        // initially, they need manual forwarding.
+        if (!Polymer.Element) {
+          Object.keys(this._parentProps).forEach(function(prop) {
+            if (this._parentProps[prop]) {
+              // this._forwardParentProp(prop, this.dataHost[prop]);
+            }
+          }, this);
+        }
       }
     },
 
@@ -136,10 +147,22 @@
     },
 
     _templateInstancesChanged: function(t, p) {
-      Object.keys(this._parentPathValues || []).forEach(function(keyName) {
-        this._templateInstances.forEach(function(inst) {
-          inst.set(keyName, this._parentPathValues[keyName]);
-        }, this);
+      var index, count;
+      if (t.path === '_templateInstances') {
+        // Iterate all instances
+        index = 0;
+        count = this._templateInstances.length;
+      } else if (t.path === '_templateInstances.splices') {
+        // Iterate only new instances
+        index = t.value.index;
+        count = t.value.addedCount;
+      } else {
+        return;
+      }
+      Object.keys(this._parentPathValues || {}).forEach(function(keyName) {
+        for (var i = index; i < index + count; i++) {
+          this._templateInstances[i].set(keyName, this._parentPathValues[keyName]);
+        }
       }, this);
     }
 
