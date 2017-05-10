@@ -31,21 +31,27 @@ This program is available under Apache License Version 2.0, available at https:/
       reset: function() {
         this.info.sourceEvent = null;
         this.info.fired = false;
-        if (this.info.touchJob) {
-          this.info.touchJob.stop();
-        }
+        this._cancelTimer();
         this.info.touchJob = null;
         this.info.touchStartCoords = null;
       },
 
+      _cancelTimer: function() {
+        if (this._timerId) {
+          clearTimeout(this._timerId);
+        }
+      },
+
       touchstart: function(e) {
+        this._cancelTimer();
+
         this.info.sourceEvent = e;
         this.info.touchStartCoords = {
           x: e.changedTouches[0].clientX,
           y: e.changedTouches[0].clientY
         };
 
-        this.info.touchJob = Polymer.Debounce(this.info.touchJob, function() {
+        this._timerId = setTimeout(function() {
           var t = Polymer.Gestures.findOriginalTarget(e);
           var ct = e.changedTouches[0];
           if (this.info._ios && !e.shiftKey) {
@@ -59,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
         var touchStartCoords = this.info.touchStartCoords;
         if (Math.abs(touchStartCoords.x - e.changedTouches[0].clientX) > moveThreshold ||
             Math.abs(touchStartCoords.y - e.changedTouches[0].clientY) > moveThreshold) {
-          this.info.touchJob.stop();
+          this._cancelTimer();
         }
       },
 
@@ -71,9 +77,7 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       touchend: function(e) {
-        if (this.info.touchJob) {
-          this.info.touchJob.stop();
-        }
+        this._cancelTimer();
         if (this.info.fired) {
           e.preventDefault();
           e.stopPropagation();
