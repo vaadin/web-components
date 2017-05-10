@@ -5,17 +5,17 @@ module.exports = {
     'random-output': true
   },
   registerHooks: function(context) {
-    var saucelabsPlatforms = [
-      'OS X 10.11/iphone@9.3',
-      'OS X 10.11/ipad@9.3',
-      'Windows 10/microsoftedge@13',
-      'Windows 10/internet explorer@11',
-      'OS X 10.12/safari@10.0'
-    ];
-
     var cronPlatforms = [
       'Windows 10/chrome@55',
       'Windows 10/firefox@50'
+    ];
+
+    var saucelabsPlatforms = [
+      'OS X 10.11/iphone@10.2',
+      'OS X 10.11/ipad@10.2',
+      'Windows 10/microsoftedge@14',
+      'Windows 10/internet explorer@11',
+      'OS X 10.12/safari@10.0'
     ];
 
     if (argv.env === 'saucelabs') {
