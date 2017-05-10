@@ -27,11 +27,11 @@
   <dom-module id="grid-wrapper">
     <template>
       <vaadin-grid id="grid" size="10">
-        <slot></slot>
+        <slot name="grid"></slot>
         <vaadin-grid-column-group>
           <template class="header">wrapper group header</template>
           <template class="footer">wrapper group footer</template>
-          <content select="[in-group]"></content>
+          <slot name="group"></slot>
           <vaadin-grid-column>
             <template class="header">wrapper column header</template>
             <template class="footer">wrapper column footer</template>
@@ -178,10 +178,10 @@
   </test-fixture>
 
   <test-fixture id="dom-repeat-columns">
-    <template is="dom-template">
+    <template>
       <vaadin-grid id="grid" size="10">
-        <dom-repeat id="repeater" items="[[columns]]" as="column">
-          <template is="dom-repeat" items="[[columns]]" as="column">
+        <dom-repeat as="column">
+          <template is="dom-repeat" as="column">
             <vaadin-grid-column>
               <template class="header">grid repeats column [[column]] header</template>
               <template class="footer">grid repeats column [[column]] footer</template>
@@ -194,11 +194,11 @@
   </test-fixture>
 
   <test-fixture id="dom-repeat-columns-in-group">
-    <template is="dom-template">
+    <template>
       <vaadin-grid size="10">
         <vaadin-grid-column-group>
-          <dom-repeat items="[[columns]]" as="column">
-            <template is="dom-repeat" items="[[columns]]" as="column">
+          <dom-repeat as="column">
+            <template is="dom-repeat" as="column">
               <vaadin-grid-column>
                 <template class="header">group repeats column [[column]] header</template>
                 <template class="footer">group repeats column [[column]] footer</template>
@@ -212,10 +212,10 @@
   </test-fixture>
 
   <test-fixture id="dom-repeat-groups">
-    <template is="dom-template">
+    <template>
       <vaadin-grid size="10">
-        <dom-repeat items="[[columns]]" as="column">
-          <template is="dom-repeat" items="[[columns]]" as="column">
+        <dom-repeat as="column">
+          <template is="dom-repeat" as="column">
             <vaadin-grid-column-group>
               <vaadin-grid-column>
                 <template class="header">grid repeats group [[column]] header</template>
@@ -230,11 +230,11 @@
   </test-fixture>
 
   <test-fixture id="dom-repeat-groups-in-group">
-    <template is="dom-template">
+    <template>
       <vaadin-grid size="10">
         <vaadin-grid-column-group>
-          <dom-repeat items="[[columns]]" as="column">
-            <template is="dom-repeat" items="[[columns]]" as="column">
+          <dom-repeat as="column">
+            <template is="dom-repeat" as="column">
               <vaadin-grid-column-group>
                 <vaadin-grid-column>
                   <template class="header">group repeats group [[column]] header</template>
@@ -250,14 +250,14 @@
   </test-fixture>
 
   <test-fixture id="effective-children-columns">
-    <template is="dom-template">
+    <template>
       <grid-wrapper>
-        <vaadin-grid-column in-group$="[[inGroup]]">
+        <vaadin-grid-column>
           <template class="header">foo header</template>
           <template class="footer">foo footer</template>
           <template>foo body [[item.value]]</template>
         </vaadin-grid-column>
-        <vaadin-grid-column in-group$="[[inGroup]]">
+        <vaadin-grid-column>
           <template class="header">bar header</template>
           <template class="footer">bar footer</template>
           <template>bar body [[item.value]]</template>
@@ -267,9 +267,9 @@
   </test-fixture>
 
   <test-fixture id="effective-children-groups">
-    <template is="dom-template">
+    <template>
       <grid-wrapper>
-        <vaadin-grid-column-group in-group$="[[inGroup]]">
+        <vaadin-grid-column-group>
           <template class="header">first group header</template>
           <template class="footer">first group footer</template>
           <vaadin-grid-column>
@@ -283,7 +283,7 @@
             <template>first bar body [[item.value]]</template>
           </vaadin-grid-column>
         </vaadin-grid-column-group>
-        <vaadin-grid-column-group in-group$="[[inGroup]]">
+        <vaadin-grid-column-group>
           <template class="header">second group header</template>
           <template class="footer">second group footer</template>
           <vaadin-grid-column>
@@ -305,26 +305,36 @@
     describe('light dom observing', function() {
       var wrapper, grid, scroller, header, body, footer, repeater;
 
-      function init(fixtureName, data) {
-
-        grid = fixture(fixtureName, data);
+      function init(fixtureName, options) {
+        grid = fixture(fixtureName);
         if (grid.$.grid) {
           // unwrap the <grid-wrapper>
           wrapper = grid;
           grid = grid.$.grid || grid;
         }
 
-        grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
-
+        // <template is="dom-template"> does not work in Polymer 2, while
+        // <test-fixture> does not support <dom-template>.  We have to set
+        // the fixture data manually.
         repeater = Polymer.dom(grid).querySelector(Polymer.Element ? 'dom-repeat' : 'template[is="dom-repeat"]');
         if (repeater) {
-          repeater.items = data.columns; // TODO: Why needed?
+          repeater.items = options.columns;
         }
+
+        // Assign the slot to the <grid-wrapper> children.
+        if (wrapper) {
+          Array.prototype.forEach.call(Polymer.dom(wrapper).children, function(wrapperChild) {
+            Polymer.dom(wrapperChild).setAttribute('slot', options && options.inGroup ? 'group' : 'grid');
+          });
+        }
+
         scroller = grid.$.scroller;
         header = grid.$.header;
         body = grid.$.items;
         footer = grid.$.footer;
+
+        grid.dataProvider = infiniteDataProvider;
+        Polymer.dom.flush();
       }
 
       function expectFirstColumnHeader(columnName, level) {
@@ -578,12 +588,14 @@
 
       function shouldSupportDomRepeat(prefix, columnsLevel) {
         it('should provide initial state', function(done) {
-          grid.async(function() {
+          repeater.render();
+
+          Polymer.RenderStatus.afterNextRender(grid, function() {
             expectFirstColumn(prefix + ' a', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(3);
             done();
-          }, 1);
+          });
         });
 
         it('should add columns late', function(done) {
@@ -669,6 +681,7 @@
 
               it('should support adding late', function(done) {
                 var column = fixture('column');
+                Polymer.dom(column).setAttribute('slot', inGroup ? 'group' : 'grid');
                 Polymer.dom(wrapper).insertBefore(column, Polymer.dom(wrapper).firstChild);
                 Polymer.dom.flush();
 
@@ -710,6 +723,7 @@
 
               it('should support adding late', function(done) {
                 var group = fixture('group');
+                Polymer.dom(group).setAttribute('slot', inGroup ? 'group' : 'grid');
                 Polymer.dom(wrapper).insertBefore(group, Polymer.dom(wrapper).firstChild);
                 Polymer.dom.flush();
 
@@ -790,7 +804,7 @@
                   Polymer.dom(firstGroup).removeChild(group);
                   Polymer.dom.flush();
 
-                  Polymer.RenderStatus.beforeNextRender(grid, function() {
+                  Polymer.RenderStatus.afterNextRender(grid, function() {
                     expectFirstColumn('first foo', 1);
                     expectNumberOfColumns(5);
                     done();
