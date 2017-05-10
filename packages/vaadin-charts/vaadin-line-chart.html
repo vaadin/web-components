@@ -10,8 +10,8 @@ See the file LICENSE.md distributed with this software for more information abou
 
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
-<link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
+
 
 <link rel="import" href="data-series.html">
 
@@ -33,7 +33,7 @@ Example:
     <template>
     </template>
     <script>
-        class VaadinLineChart extends Vaadin.Chart {
+        class VaadinLineChart extends Vaadin.Charts.Base {
             static get is() { return 'vaadin-line-chart'; }
 
             constructor() {
