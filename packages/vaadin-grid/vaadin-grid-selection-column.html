@@ -111,6 +111,21 @@ When the grid is configured with an array of items as the data provider, it prov
           this.unlisten(this._grid, 'data-provider-changed', '_onDataProviderChanged');
           this.unlisten(this._grid, 'filter-changed', '_onSelectedItemsChanged');
           this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
+
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          if (isSafari && window.ShadyDOM && this.parentElement) {
+            // Detach might have beem caused by order change.
+            // Shady on safari doesn't restore isAttached so we'll need to do it manually.
+            var parent = this.parentElement;
+            var nextSibling = this.nextElementSibling;
+            parent.removeChild(this);
+            if (nextSibling) {
+              parent.insertBefore(this, nextSibling);
+            } else {
+              parent.appendChild(this);
+            }
+          }
+
         }
       },
 
@@ -163,7 +178,9 @@ When the grid is configured with an array of items as the data provider, it prov
         var activeItem = e.detail.value;
         if (this.autoSelect) {
           var item = activeItem || this._previousActiveItem;
-          this._grid._toggleItem(item);
+          if (item) {
+            this._grid._toggleItem(item);
+          }
         }
         this._previousActiveItem = activeItem;
       },
