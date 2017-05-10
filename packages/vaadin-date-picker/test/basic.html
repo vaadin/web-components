@@ -95,7 +95,7 @@
       it('should pass the placeholder attribute to the input tag', function() {
         var placeholder = 'Pick a date';
         datepicker.set('placeholder', placeholder);
-        expect(datepicker.$.input.placeholder).to.be.equal(placeholder);
+        expect(datepicker.$.nativeinput.placeholder).to.be.equal(placeholder);
       });
 
       // label and placeholder will go on top of each other if always-float-label isn't set

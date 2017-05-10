@@ -147,11 +147,11 @@ If you want to replace the default input field with a custom implementation, you
       }
 
       #clear iron-icon {
-        @apply(--vaadin-date-picker-clear-icon);
+        @apply --vaadin-date-picker-clear-icon;
       }
 
       #calendar iron-icon {
-        @apply(--vaadin-date-picker-calendar-icon);
+        @apply --vaadin-date-picker-calendar-icon;
       }
 
       :host([disabled]) #calendar,
@@ -184,7 +184,8 @@ If you want to replace the default input field with a custom implementation, you
         role="application"
         always-float-label="[[_computeAlwaysFloatLabel(placeholder)]]">
       <label id="label" aria-hidden="true">[[label]]</label>
-      <input id="input"
+      <iron-input id="input" invalid="{{invalid}}" bind-value="{{_userInputValue}}">
+        <input id="nativeinput"
           is="iron-input"
           autocomplete="off"
           type="text"
@@ -193,12 +194,13 @@ If you want to replace the default input field with a custom implementation, you
           name$="[[name]]"
           placeholder$="[[placeholder]]"
           aria-label$="[[label]]"
-          invalid="{{invalid}}"
+          invalid="[[invalid]]"
           required$="[[required]]"
           validator="[[validator]]"
           disabled$="[[disabled]]"
           readonly$="[[readonly]]"
           no-input$="[[_noInput]]" />
+        </iron-input>
       <div suffix id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
         <iron-icon icon="vaadin-date-picker:clear"></iron-icon>
         <paper-ripple class="circle" center></paper-ripple>
