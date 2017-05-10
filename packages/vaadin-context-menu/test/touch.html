@@ -55,6 +55,7 @@
         }
 
         node.dispatchEvent(event);
+        return event;
       }
 
       function middleOfNode(node) {
@@ -144,10 +145,21 @@
               bubbles: true
             });
 
-            expect(evt.defaultPrevented).to.eql(true);
+            expect(evt.defaultPrevented).to.eql(false);
 
             done();
           }, 1000);
+        });
+
+        it('should stop `touchend` from creating a tap event which cancels the overlay', function(done) {
+          var xy = middleOfNode(target);
+          makeSoloTouchEvent('touchstart', xy, target);
+
+          menu.async(function() {
+            var evt = makeSoloTouchEvent('touchend', xy, target);
+            expect(evt.defaultPrevented).to.eql(true);
+            done();
+          }, 600);
         });
 
         it('should not open when touch moving', function(done) {

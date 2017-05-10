@@ -10,10 +10,10 @@ This program is available under Apache License Version 2.0, available at https:/
   (function() {
     Polymer.Gestures.register({
       name: 'vaadin-contextmenu',
-      deps: ['touchstart', 'touchmove', 'touchend', 'tap', 'contextmenu'],
+      deps: ['touchstart', 'touchmove', 'touchend', 'contextmenu'],
       flow: {
         start: ['touchstart', 'contextmenu'],
-        end: ['tap', 'contextmenu']
+        end: ['contextmenu']
       },
 
       emits: ['vaadin-contextmenu'],
@@ -69,9 +69,6 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.info.touchJob) {
           this.info.touchJob.stop();
         }
-      },
-
-      tap: function(e) {
         if (this.info.fired) {
           e.preventDefault();
           e.stopPropagation();
