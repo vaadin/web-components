@@ -21,17 +21,20 @@
       return false;
     },
 
-    _childrenColumns: function(columns) {
+    _getChildColumns: function(el) {
+      return Polymer.dom(el).queryDistributedElements(
+          'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
+      );
+    },
+
+    _flattenColumnGroups: function(columns) {
       return columns.map(function(col) {
         if (col.localName === 'vaadin-grid-column-group') {
-          var children = Array.prototype.filter.call(Polymer.dom(col).children, function(el) {
-            return /^vaadin-grid-(column|selection)/.test(el.localName);
-          });
-          return children;
+          return this._getChildColumns(col);
         } else {
           return [col];
         }
-      }).reduce(function(prev, curr) {
+      }, this).reduce(function(prev, curr) {
         return prev.concat(curr);
       }, []);
     },
@@ -47,7 +50,7 @@
         if (!this._hasColumnGroups(c)) {
           break;
         }
-        c = this._childrenColumns(c);
+        c = this._flattenColumnGroups(c);
       }
 
       return _columnTree;
@@ -62,11 +65,11 @@
 
     _addNodeObserver: function() {
       this._observer = Polymer.dom(this).observeNodes(function(info) {
-        var rootColumns = function(node) {
+        var isColumnElement = function(node) {
           return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
         };
-        if (info.addedNodes.filter(rootColumns).length > 0 ||
-          info.removedNodes.filter(rootColumns).length > 0) {
+        if (info.addedNodes.filter(isColumnElement).length > 0 ||
+          info.removedNodes.filter(isColumnElement).length > 0) {
           this._updateColumnTree();
         }
 

@@ -176,6 +176,15 @@
               return !domRepeat.restamp;
             });
 
+            // Disable cache for header and footer rows, as sometimes (e.g., when columns
+            // inserted or removed dynamically), the cached cell would have incorrect
+            // template content leftovers.
+            // TODO: implement cell content cleanup when header or footer cells are
+            // detached, and enable cell caching for header and footer rows back.
+            disableCache = disableCache || 
+                this.is === 'vaadin-grid-table-header-row' ||
+                this.is === 'vaadin-grid-table-footer-row';
+
             if (!disableCache) {
               cache.push(cell);
             }

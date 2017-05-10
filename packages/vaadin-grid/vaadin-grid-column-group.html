@@ -44,7 +44,7 @@ The `class` attribute is used to differentiate header and footer templates.
       properties: {
         _childColumns: {
           value: function() {
-            return Polymer.dom(this).querySelectorAll('vaadin-grid-column, vaadin-grid-selection-column');
+            return this._getChildColumns(this);
           }
         },
 
@@ -253,17 +253,23 @@ The `class` attribute is used to differentiate header and footer templates.
         this.fire('property-changed', {path: 'colSpan', value: colSpan});
       },
 
+
+      // TODO: Refactor the duplicate methods with DynamicColumnsBehavior.
+      _getChildColumns: function(el) {
+        return Polymer.dom(el).queryDistributedElements(
+            'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
+        );
+      },
+
       _addNodeObserver: function() {
         this._observer = Polymer.dom(this).observeNodes(function(info) {
-          this._rootColumns = Array.prototype.filter.call(Polymer.dom(this).children, function(child) {
-            return /column/.test(child.localName);
-          });
-          var columns = function(node) {
-            return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+          var isColumnElement = function(node) {
+            return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
           };
-          if (info.addedNodes.filter(columns).length > 0 ||
-            info.removedNodes.filter(columns).length > 0) {
-            this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          if (info.addedNodes.filter(isColumnElement).length > 0 ||
+            info.removedNodes.filter(isColumnElement).length > 0) {
+            this._rootColumns = this._getChildColumns(this);
+            this._childColumns = this._getChildColumns(this);
           }
         }.bind(this));
       }
