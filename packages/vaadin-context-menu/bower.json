@@ -32,6 +32,7 @@
     "iron-test-helpers": "#2.0-preview",
     "paper-item": "#2.0-preview",
     "paper-listbox": "#2.0-preview",
+    "paper-styles": "#2.0-preview",
     "test-fixture": "^3.0.0",
     "vaadin-grid": "#2.1-polymer-2-rebased",
     "web-component-tester": "^6.0.0"
@@ -40,9 +41,6 @@
     "1.x": {
       "dependencies": {
         "polymer": "^1.7.0"
-      },
-      "devDependencies": {
-        "web-component-tester": "^6.0.0"
       },
       "resolutions": {
         "polymer": "^1.7.0",
