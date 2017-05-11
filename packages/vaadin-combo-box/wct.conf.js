@@ -1,14 +1,11 @@
+var argv = require('yargs').argv;
+
 module.exports = {
   plugins: {
     'random-output': true
   },
   registerHooks: function(context) {
-    var crossPlatforms = [
-      'Windows 10/chrome@55',
-      'Windows 10/firefox@50'
-    ];
-
-    var otherPlatforms = [
+    var saucelabsPlatforms = [
       'OS X 10.11/iphone@9.3',
       'OS X 10.11/ipad@9.3',
       // 'OS X 10.11/iphone@10.2', // iOS 10 tests need to be run manually
@@ -18,14 +15,16 @@ module.exports = {
       'OS X 10.11/safari@10.0'
     ];
 
-    // run SauceLabs tests for pushes, except cases when branch contains 'quick/'
-    if (process.env.TRAVIS_EVENT_TYPE === 'push' && process.env.TRAVIS_BRANCH.indexOf('quick/') === -1) {
-      // crossPlatforms are not tested here, but in Selenium WebDriver (see .travis.yml)
-      context.options.plugins.sauce.browsers = otherPlatforms;
+    var cronPlatforms = [
+      'Windows 10/chrome@55',
+      'Windows 10/firefox@50'
+    ];
 
-    // Run SauceLabs for daily builds, triggered by cron
-    } else if (process.env.TRAVIS_EVENT_TYPE === 'cron') {
-      context.options.plugins.sauce.browsers = crossPlatforms.concat(otherPlatforms);
+    if (argv.env === 'saucelabs') {
+      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+
+    } else if (argv.env === 'saucelabs-cron') {
+      context.options.plugins.sauce.browsers = cronPlatforms;
     }
   }
 };
