@@ -212,7 +212,12 @@ The `class` attribute is used to differentiate header and footer templates from 
       // since `frozen` is defined in ColumnBaseBehavior, this observer is triggered
       // normally before the column is actually attached to the DOM.
       // For events to bubble in Safari 9, element needs to be attached.
-      this.fire('property-changed', {path: 'frozen', value: frozen});
+      // Don’t propagate the default `false` value.
+      if (this._oldFrozen !== undefined || frozen !== false) {
+        this.fire('property-changed', {path: 'frozen', value: frozen});
+      }
+
+      this._oldFrozen = frozen;
     },
 
     _templateChanged: function(template) {

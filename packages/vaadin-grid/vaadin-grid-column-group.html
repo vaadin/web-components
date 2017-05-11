@@ -119,11 +119,13 @@ The `class` attribute is used to differentiate header and footer templates.
         }
 
         if (e.detail.path === 'frozen') {
-          this.frozen = e.detail.value;
+          // Don’t unfreeze the frozen group because of a non-frozen child
+          this.frozen = this.frozen || e.detail.value;
         }
 
         if (e.detail.path === 'lastFrozen') {
-          this._lastFrozen = e.detail.value;
+          // Don’t unfreeze the frozen group because of a non-frozen child
+          this._lastFrozen = this._lastFrozen || e.detail.value;
         }
       },
 
@@ -219,10 +221,21 @@ The `class` attribute is used to differentiate header and footer templates.
           return;
         }
 
-        childColumns.forEach(function(col) {
-          col.frozen = frozen;
-        });
-        this.fire('property-changed', {path: 'frozen', value: frozen});
+        // Don’t propagate the default `false` value.
+        if (this._oldFrozen !== undefined || frozen !== false) {
+          childColumns.forEach(function(col) {
+            // Don’t unfreeze the nested frozen groups
+            if (col.localName === 'vaadin-grid-column-group') {
+              col.frozen = col.frozen || frozen;
+            } else {
+              col.frozen = frozen;
+            }
+          });
+
+          this.fire('property-changed', {path: 'frozen', value: frozen});
+        }
+
+        this._oldFrozen = frozen;
       },
 
       _hiddenChanged: function(hidden) {
@@ -269,7 +282,7 @@ The `class` attribute is used to differentiate header and footer templates.
           if (info.addedNodes.filter(isColumnElement).length > 0 ||
             info.removedNodes.filter(isColumnElement).length > 0) {
             this._rootColumns = this._getChildColumns(this);
-            this._childColumns = this._getChildColumns(this);
+            this._childColumns = this._rootColumns;
           }
         }.bind(this));
       }
