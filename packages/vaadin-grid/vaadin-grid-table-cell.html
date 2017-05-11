@@ -378,7 +378,7 @@
           var cell = this.domHost.root.elementFromPoint(x, y);
           scroller.toggleAttribute('no-content-pointer-events', false);
           if (cell && cell.getContentChildren) {
-            return cell.getContentChildren(Polymer.Element ? 'slot': 'content')[0];
+            return cell.getContentChildren(Polymer.Element ? 'slot' : 'content')[0];
           }
         } else {
           return document.elementFromPoint(x, y);
@@ -472,7 +472,8 @@
 
       _getHeaderCellByColumn: function(column) {
         var header = this.parentElement.parentElement;
-        return Array.prototype.filter.call(Polymer.dom(header).querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'), function(cell) {
+        return Array.prototype.filter.call(Polymer.dom(header)
+          .querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'), function(cell) {
           return cell.column === column;
         })[0];
       },

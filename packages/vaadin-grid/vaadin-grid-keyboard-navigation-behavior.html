@@ -125,7 +125,8 @@
     _onFooterFocus: function(e) {
       this.navigating = true;
       this.interacting = false;
-      this._virtualFocus = this._virtualFocus || (this._shiftTabbed ? (this._isFooterVisible() ? this.$.footer : this.$.items) : this.$.header);
+      this._virtualFocus = this._virtualFocus ||
+        (this._shiftTabbed ? (this._isFooterVisible() ? this.$.footer : this.$.items) : this.$.header);
     },
 
     _virtualFocusChanged: function(virtualFocus, oldVirtualFocus) {

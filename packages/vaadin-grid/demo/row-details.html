@@ -41,7 +41,7 @@
                   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
                   font-size: 20px;
                 }
-                        
+
                 img {
                   width: 80px;
                   height: 80px;
@@ -49,38 +49,38 @@
               </style>
             </custom-style>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-          
+
             <vaadin-grid active-item={{activeItem}} aria-label="Row Details Example" data-provider="[[dataProvider]]" size="200">
-          
+
               <template class="row-details">
                 <div class="details">
                   <img src="[[item.picture.large]]"></img>
                   <p>Hi! My name is [[item.name.first]]!</p>
                 </div>
               </template>
-          
+
               <vaadin-grid-column width="50px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>[[item.name.first]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>[[item.name.last]]</template>
               </vaadin-grid-column>
-          
+
               <vaadin-grid-column width="100px">
                 <template class="header"></template>
                 <template>
                   <paper-checkbox aria-label$="Show Details for [[item.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
                 </template>
               </vaadin-grid-column>
-          
+
             </vaadin-grid>
           </template>
         </dom-bind>

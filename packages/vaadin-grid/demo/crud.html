@@ -89,6 +89,7 @@
             </vaadin-grid>
           </template>
           <script>
+            document.addEventListener('WebComponentsReady', function() {
               Polymer({
                 is: 'x-crud',
 
@@ -157,7 +158,6 @@
                   this.$.grid.clearCache();
                 }
               });
-            document.addEventListener('WebComponentsReady', function() {
             });
           </script>
         </dom-module>

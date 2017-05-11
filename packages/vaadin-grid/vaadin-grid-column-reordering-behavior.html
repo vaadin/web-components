@@ -180,19 +180,20 @@
 
     _getCellByCellContent: function(cellContent) {
       if (cellContent) {
+        var contentId, injectionPoint;
         if (Polymer.Element) {
-          var contentId = null;
+          contentId = null;
           while (contentId === null && cellContent !== this.target && cellContent) {
             contentId = cellContent.getAttribute('slot');
             cellContent = cellContent.parentElement;
           }
 
           if (contentId !== null) {
-            var injectionPoint = Polymer.dom(this.domHost.root).querySelector('slot[name=' + contentId + ']');
+            injectionPoint = Polymer.dom(this.domHost.root).querySelector('slot[name=' + contentId + ']');
             return Polymer.dom(injectionPoint).parentNode;
           }
         } else {
-          var contentId = null;
+          contentId = null;
           while (contentId === null && cellContent !== this.target && cellContent) {
             if (cellContent.localName === 'vaadin-grid-cell-content') {
               contentId = cellContent.id;
@@ -201,7 +202,7 @@
           }
 
           if (contentId !== null) {
-            var injectionPoint = Polymer.dom(this).querySelector('content[select="#' + contentId + '"]');
+            injectionPoint = Polymer.dom(this).querySelector('content[select="#' + contentId + '"]');
             return Polymer.dom(injectionPoint).parentNode;
           }
         }

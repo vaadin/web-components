@@ -105,14 +105,14 @@ When the grid is configured with an array of items as the data provider, it prov
         this.template = template;
       },
 
-      detached: function () {
+      detached: function() {
         if (this._grid) {
           this.unlisten(this._grid, 'active-item-changed', '_onActiveItemChanged');
           this.unlisten(this._grid, 'data-provider-changed', '_onDataProviderChanged');
           this.unlisten(this._grid, 'filter-changed', '_onSelectedItemsChanged');
           this.unlisten(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
 
-          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
           if (isSafari && window.ShadyDOM && this.parentElement) {
             // Detach might have beem caused by order change.
             // Shady on safari doesn't restore isAttached so we'll need to do it manually.
@@ -129,7 +129,7 @@ When the grid is configured with an array of items as the data provider, it prov
         }
       },
 
-      attached: function () {
+      attached: function() {
         this._grid = this._findGrid(this);
         if (this._grid) {
           this.listen(this._grid, 'active-item-changed', '_onActiveItemChanged');
@@ -139,14 +139,14 @@ When the grid is configured with an array of items as the data provider, it prov
         }
       },
 
-      _findGrid: function (elm) {
+      _findGrid: function(elm) {
         while (elm && elm.localName != 'vaadin-grid') {
           elm = Polymer.dom(elm).parentNode;
         }
         return elm || undefined;
       },
 
-      _onSelectAllChanged: function (selectAll, grid) {
+      _onSelectAllChanged: function(selectAll, grid) {
         if (selectAll === undefined || grid === undefined) {
           return;
         }
@@ -160,21 +160,21 @@ When the grid is configured with an array of items as the data provider, it prov
 
       // Return true if array `a` contains all the items in `b`
       // We need this when sorting or to preserve selection after filtering.
-      _arrayContains: function (a, b) {
+      _arrayContains: function(a, b) {
         for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++);
         return i == b.length;
       },
 
-      _onSelectAll: function (e) {
+      _onSelectAll: function(e) {
         this.selectAll = this._indeterminate || !this.selectAll;
       },
 
       // iOS needs indeterminated + checked at the same time
-      _isChecked: function (selectAll, indeterminate) {
+      _isChecked: function(selectAll, indeterminate) {
         return indeterminate || selectAll;
       },
 
-      _onActiveItemChanged: function (e) {
+      _onActiveItemChanged: function(e) {
         var activeItem = e.detail.value;
         if (this.autoSelect) {
           var item = activeItem || this._previousActiveItem;
@@ -185,7 +185,7 @@ When the grid is configured with an array of items as the data provider, it prov
         this._previousActiveItem = activeItem;
       },
 
-      _onSelectedItemsChanged: function (e) {
+      _onSelectedItemsChanged: function(e) {
         this._selectAllChangeLock = true;
         if (this._grid.items) {
           if (!this._grid.selectedItems.length) {
@@ -202,7 +202,7 @@ When the grid is configured with an array of items as the data provider, it prov
         this._selectAllChangeLock = false;
       },
 
-      _onDataProviderChanged: function (e) {
+      _onDataProviderChanged: function(e) {
         this._selectAllHidden = !this._grid.items;
       }
     });

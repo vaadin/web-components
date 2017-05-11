@@ -83,7 +83,7 @@
         }];
         Polymer.dom.flush();
         body = grid.$.items;
-        Polymer.RenderStatus.afterNextRender(grid, function () {
+        Polymer.RenderStatus.afterNextRender(grid, function() {
           done();
         });
       });
