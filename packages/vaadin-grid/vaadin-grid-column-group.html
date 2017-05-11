@@ -205,7 +205,7 @@ The `class` attribute is used to differentiate header and footer templates.
       _updateFlexAndWidth: function(visibleChildColumns) {
         if (visibleChildColumns.length) {
           this._setWidth('calc(' + Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
-            return prev += ' + ' + (curr.width || '0').replace('calc', '');
+            return prev += ' + ' + (curr.width || '0px').replace('calc', '');
           }, '').substring(3) + ')');
         } else {
           this._setWidth('0px');
@@ -223,7 +223,7 @@ The `class` attribute is used to differentiate header and footer templates.
 
         // Don’t propagate the default `false` value.
         if (this._oldFrozen !== undefined || frozen !== false) {
-          childColumns.forEach(function(col) {
+          Array.prototype.forEach.call(childColumns, function(col) {
             // Don’t unfreeze the nested frozen groups
             if (col.localName === 'vaadin-grid-column-group') {
               col.frozen = col.frozen || frozen;
