@@ -3,10 +3,13 @@ gemini.suite('vaadin-icons', function(rootSuite) {
   gemini.suite('default', function(suite) {
     suite
       .setUrl('../../demo/index.html')
+      .before(function(actions) {
+        actions.waitForJSCondition(function(window) {
+          return window.webComponentsAreReady;
+        }, 60000).wait(10000);
+      })
       .setCaptureElements('body')
-      .capture('default', {}, function(actions, find) {
-        actions.wait(5000);
-      });
+      .capture('default');
   });
 
 });
