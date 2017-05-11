@@ -188,10 +188,14 @@
         Polymer.RenderStatus.afterNextRender(grid, done);
       });
 
-      it('should cascade resizable property to child columns', function() {
-        expect(grid._columnTree[1][0].resizable).to.be.true;
-        grid._columnTree[0][0].resizable = false;
-        expect(grid._columnTree[1][0].resizable).to.be.false;
+      it('should cascade resizable property to child columns', function(done) {
+        // IE11
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          expect(grid._columnTree[1][0].resizable).to.be.true;
+          grid._columnTree[0][0].resizable = false;
+          expect(grid._columnTree[1][0].resizable).to.be.false;
+          done();
+        });
       });
 
       it('should inherit resizable value from parent group', function(done) {

@@ -168,12 +168,15 @@
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         Polymer.RenderStatus.afterNextRender(grid, function() {
-          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
-          headerContent = [];
-          for (var i = 0; i < colCount; i++) {
-            headerContent.push(getVisualHeaderCellContent(grid, 0, i));
-          }
-          done();
+          // IE11
+          Polymer.RenderStatus.afterNextRender(grid, function() {
+            var colCount = getRowCells(getRows(grid.$.header)[0]).length;
+            headerContent = [];
+            for (var i = 0; i < colCount; i++) {
+              headerContent.push(getVisualHeaderCellContent(grid, 0, i));
+            }
+          });
+          setTimeout(done, 100);
         });
       });
 
@@ -399,7 +402,10 @@
       beforeEach(function(done) {
         grid = Polymer.Element ? fixture('groups-p2') : fixture('groups');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        Polymer.RenderStatus.afterNextRender(grid, function() {
+          // IE11
+          Polymer.RenderStatus.afterNextRender(grid, done);
+        });
       });
 
       it('should have initial visual order', function() {
