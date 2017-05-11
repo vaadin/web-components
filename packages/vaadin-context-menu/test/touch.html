@@ -156,11 +156,11 @@
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          menu.async(function() {
+          listenForEvent(menu, 'iron-overlay-opened', function() {
             var evt = makeSoloTouchEvent('touchend', xy, target);
             expect(evt.defaultPrevented).to.eql(true);
             done();
-          }, 600);
+          });
         });
 
         it('should not open when touch moving', function(done) {
@@ -177,7 +177,6 @@
             done();
           }, 1000);
         });
-
       }
     });
   </script>

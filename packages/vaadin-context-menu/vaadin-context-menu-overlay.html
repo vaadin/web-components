@@ -97,6 +97,9 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       _positionChanged: function(x, y) {
+        if (x === undefined || y === undefined) {
+          return;
+        }
         this.translate3d(x + 'px', y + 'px', 0);
       },
 
