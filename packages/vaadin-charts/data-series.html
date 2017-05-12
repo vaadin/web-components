@@ -11,7 +11,7 @@ See the file LICENSE.md distributed with this software for more information abou
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="configuration-reader.html">
+<link rel="import" href="configuration-reader-mixin.html">
 
 <!--A series element for a chart element. 
  Accepts data in various formats and can be updated after creation. 
@@ -21,7 +21,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
   <template>
   </template>
   <script>
-    class DataSeries extends Vaadin.Charts.ConfigurationReader(Polymer.Element) {
+    class DataSeries extends Vaadin.ConfigurationReaderMixin(Polymer.Element) {
       static get is() { return 'data-series' }
 
       static get properties() {

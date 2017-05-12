@@ -15,7 +15,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <link rel="import" href="data-series.html">
 
-<link rel="import" href="chart-behavior.html">
+<link rel="import" href="base-chart.html">
 
 <!--
 An element that provides a WebComponent interface for <a href="http://vaadin.com/charts">Vaadin Charts</a>
@@ -39,20 +39,27 @@ Example:
     <template>
     </template>
     <script>
-        class VaadinBubbleChart extends Vaadin.Charts.Base {
-            
-            static get is() { return 'vaadin-bubble-chart'; }
+        (function () {
 
-            constructor() {
-                super();
+            class BubbleChartElement extends Vaadin.BaseChartElement {
+                
+                static get is() { return 'vaadin-bubble-chart'; }
+
+                constructor() {
+                    super();
+                }
+
+                _getType() {
+                    return 'bubble';
+                }
+
             }
 
-            _getType() {
-                return 'bubble';
-            }
+            customElements.define(BubbleChartElement.is, BubbleChartElement);
 
-        }
+            window.Vaadin = window.Vaadin || {};
+            window.Vaadin.BubbleChartElement = BubbleChartElement;
 
-        customElements.define(VaadinBubbleChart.is, VaadinBubbleChart);
+        })();
     </script>
 </dom-module>

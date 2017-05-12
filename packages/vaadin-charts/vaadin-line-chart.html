@@ -15,7 +15,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <link rel="import" href="data-series.html">
 
-<link rel="import" href="chart-behavior.html">
+<link rel="import" href="base-chart.html">
 
 <!--
 An element that provides a WebComponent interface for <a href="http://vaadin.com/charts">Vaadin Charts</a>
@@ -33,18 +33,25 @@ Example:
     <template>
     </template>
     <script>
-        class VaadinLineChart extends Vaadin.Charts.Base {
-            static get is() { return 'vaadin-line-chart'; }
+        (function () {
 
-            constructor() {
-                super();
-            }
+            class LineChartElement extends Vaadin.BaseChartElement {
+                static get is() { return 'vaadin-line-chart'; }
 
-            _getType () {
-                return 'line';
+                constructor() {
+                    super();
+                }
+
+                _getType () {
+                    return 'line';
+                }
             }
-        }
-        
-        customElements.define(VaadinLineChart.is, VaadinLineChart);
+            
+            customElements.define(LineChartElement.is, LineChartElement);
+
+            window.Vaadin = window.Vaadin || {};
+            window.Vaadin.LineChartElement = LineChartElement;
+
+        })();
     </script>
 </dom-module>

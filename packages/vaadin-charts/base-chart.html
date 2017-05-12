@@ -23,7 +23,7 @@ See the file LICENSE.md distributed with this software for more information abou
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 <link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
-<link rel="import" href="configuration-reader.html">
+<link rel="import" href="configuration-reader-mixin.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../polymer/polymer.html">
 
@@ -34,7 +34,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * Base class for Vaadin Charts Polymer Elements. It contains all the behaviors and business logic that a chart can perform.
          * To use Vaadin.Charts, the element must extend it and override the `_getType()` method, which must return a string with the type of the chart.
          *
-         * @memberof Vaadin.Charts
+         * @memberof Vaadin
          * @mixes Polymer.IronResizableBehavior
          * @mixes Vaadin.ChartsConfigurationReader
          *
@@ -44,7 +44,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *
          */
 
-        class VaadinChartsBase extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Vaadin.Charts.ConfigurationReader(Polymer.Element)) {
+        class BaseChartElement extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Vaadin.ConfigurationReaderMixin(Polymer.Element)) {
 
             constructor() {
                 super();
@@ -614,8 +614,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         };
 
         window.Vaadin = window.Vaadin || {};
-        window.Vaadin.Charts = window.Vaadin.Charts || {};
-        Vaadin.Charts.Base = VaadinChartsBase;
+        Vaadin.BaseChartElement = BaseChartElement;
 
     })();
 
