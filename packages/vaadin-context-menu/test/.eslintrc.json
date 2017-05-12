@@ -7,7 +7,7 @@
     "it": false,
     "before": false,
     "beforeEach": false,
-    "listenForEvent": false,
+    "listenOnce": false,
     "fixture": false,
     "MockInteractions": false,
     "MockTouchInteractions": false

@@ -33,7 +33,7 @@
         it('should stamp template on open', function(done) {
           expect(menu.$.overlay.textContent).not.to.contain('FOOBAR');
 
-          listenForEvent(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('FOOBAR');
             done();
           });
@@ -42,7 +42,7 @@
         });
 
         it('should bind target property', function(done) {
-          listenForEvent(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('target');
             done();
           });
@@ -53,7 +53,7 @@
         });
 
         it('should bind detail property', function(done) {
-          listenForEvent(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('bar');
             done();
           });

@@ -45,7 +45,7 @@
         describe('selection', function() {
 
           it('should close on item tap', function(done) {
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               MockInteractions.tap(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               expect(menu.opened).to.eql(false);
               done();
@@ -55,12 +55,12 @@
           });
 
           it('should close on keyboard selection', function(done) {
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               menu.async(function() {
                 MockInteractions.pressEnter(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               }, 10);
             });
-            listenForEvent(menu, 'iron-overlay-closed', function() {
+            listenOnce(menu, 'iron-overlay-closed', function() {
               done();
             });
 
@@ -68,7 +68,7 @@
           });
 
           it('should focus the child element', function(done) {
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               // P-1.x document.activeElement doesn't penerate shadow root in.
               // P-2.0 shadow and shadydom always fucuses the host
               if (Polymer.Element || Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
@@ -83,7 +83,7 @@
           });
 
           it('should focus the child element on `contextmenu` event', function(done) {
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               // document.activeElement doesn't penerate shadow root.
               if (Polymer.Element || Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
                 expect(document.activeElement).to.eql(unwrapIfNeeded(menu));

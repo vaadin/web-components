@@ -69,7 +69,7 @@
           it('should be visible when open', function(done) {
             expect(window.getComputedStyle(menu.$.overlay).display).to.eql('none');
 
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               expect(window.getComputedStyle(menu.$.overlay).display).to.not.eql('none');
               done();
             });
@@ -78,7 +78,7 @@
           });
 
           it('should open on `contextmenu` event', function(done) {
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               expect(menu.opened).to.eql(true);
               done();
             });
@@ -87,7 +87,7 @@
           });
 
           it('should be positioned on click target', function(done) {
-            listenForEvent(menu.listenOn, 'contextmenu', function() {
+            listenOnce(menu.listenOn, 'contextmenu', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(10);
               done();
@@ -97,7 +97,7 @@
           });
 
           it('should be positioned on detailed mouse event', function(done) {
-            listenForEvent(menu.listenOn, 'iron-overlay-opened', function() {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -111,7 +111,7 @@
           });
 
           it('should be positioned by gesture event', function(done) {
-            listenForEvent(menu.listenOn, 'iron-overlay-opened', function() {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(5);
               expect(menu.$.overlay.y).to.eql(5);
               done();
@@ -125,7 +125,7 @@
           });
 
           it('should be positioned by detailed gesture event', function(done) {
-            listenForEvent(menu.listenOn, 'iron-overlay-opened', function() {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(5);
               expect(menu.$.overlay.y).to.eql(5);
               done();
@@ -139,7 +139,7 @@
           });
 
           it('should be positioned by touch event', function(done) {
-            listenForEvent(menu.listenOn, 'iron-overlay-opened', function() {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -154,7 +154,7 @@
           });
 
           it('should be positioned by detailed touch event', function(done) {
-            listenForEvent(menu.listenOn, 'iron-overlay-opened', function() {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -182,7 +182,7 @@
 
         describe('closing', function() {
           beforeEach(function(done) {
-            listenForEvent(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', function() {
               done();
             });
 
@@ -190,7 +190,7 @@
           });
 
           it('should close on outside tap', function(done) {
-            listenForEvent(menu, 'iron-overlay-closed', function() {
+            listenOnce(menu, 'iron-overlay-closed', function() {
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -202,7 +202,7 @@
           });
 
           it('should close on backdrop contextmenu', function(done) {
-            listenForEvent(menu, 'iron-overlay-closed', function() {
+            listenOnce(menu, 'iron-overlay-closed', function() {
               expect(menu.opened).to.eql(false);
               done();
             });

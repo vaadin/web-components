@@ -87,7 +87,7 @@
       it('should align to bottom of the viewport', function(done) {
         menu._setOpened(true);
 
-        listenForEvent(menu, 'iron-overlay-opened', function() {
+        listenOnce(menu, 'iron-overlay-opened', function() {
           var styles = window.getComputedStyle(menu.$.overlay);
           expect(styles.bottom).to.eql('0px');
           expect(styles.transform).not.to.contain('translate');
@@ -100,7 +100,7 @@
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          listenForEvent(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.opened).to.eql(true);
             expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
             done();
@@ -156,7 +156,7 @@
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          listenForEvent(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             var evt = makeSoloTouchEvent('touchend', xy, target);
             expect(evt.defaultPrevented).to.eql(true);
             done();
