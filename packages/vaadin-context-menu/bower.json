@@ -44,10 +44,7 @@
       },
       "resolutions": {
         "polymer": "^1.7.0",
-        "webcomponentsjs": "^0.7.24",
-        "iron-scroll-target-behavior": "2.0-preview",
-        "iron-resizable-behavior": "2.0-preview",
-        "iron-a11y-keys-behavior": "2.0-preview"
+        "webcomponentsjs": "^0.7.24"
       }
     }
   }
