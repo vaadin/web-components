@@ -104,6 +104,9 @@
       var loadDebounceTime = 100;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+        
         container = fixture('table');
         grid = container.$.grid;
 

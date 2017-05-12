@@ -63,6 +63,9 @@
 
     describe('selection', function() {
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+        
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         cachedItems = grid._cache[0];
@@ -133,6 +136,9 @@
       var selectAllCheckbox, firstBodyCheckbox;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('multiselect');
         grid.items = ['foo', 'bar', 'baz'];
 
@@ -146,7 +152,7 @@
         if (grid._observer.flush) {
           grid._observer.flush();
         }
-        
+
         firstHeaderCellContent = getCellContent(getRowCells(headerRows[1])[0]);
         firstBodyCellContent = getCellContent(getRowCells(rows[0])[0]);
 

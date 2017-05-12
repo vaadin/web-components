@@ -71,6 +71,9 @@
       describe('keyboard navigation', function() {
         var grid, scroller, header, footer, body, footerTrap;
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('default')[0];
           grid.items = ['foo', 'bar'];
           Polymer.dom.flush();

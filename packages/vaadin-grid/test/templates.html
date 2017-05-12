@@ -107,6 +107,8 @@
       var container, grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
         container = fixture('formatting');
         grid = container.$.grid;
         grid._flushItemsDebouncer();

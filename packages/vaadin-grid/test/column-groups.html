@@ -178,6 +178,11 @@
     describe('column groups', function() {
       var grid, scroller, header, body, footer, headerRows, footerRows, bodyRows;
 
+      beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+      });
+
       function getFooterCellContent(row, col) {
         return getCellContent(getFooterCell(row, col)).textContent.trim();
       }

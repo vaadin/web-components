@@ -80,7 +80,7 @@
           color: rgb(255, 0, 0);
         }
       </style>
-    
+
       <vaadin-grid style="height: 400px;" size="1000" data-provider="[[dataProvider]]" id="dom-bind-grid">
         <vaadin-grid-column>
           <template>
@@ -105,6 +105,9 @@
         var sliderInput;
 
         beforeEach(function(done) {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           component = fixture('default');
           wrapper = Polymer.dom(component.$.grid).querySelector('vaadin-grid-cell-content');
           content = Polymer.dom(component.$.grid).querySelector('.my-content');

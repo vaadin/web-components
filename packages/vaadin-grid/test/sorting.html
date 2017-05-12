@@ -63,6 +63,9 @@
         var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+          
           sorter = fixture('sorter');
           title = Polymer.dom(sorter).querySelector('.title');
           button = Polymer.dom(sorter).querySelector('button');

@@ -71,6 +71,9 @@
       var filterWrapper;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+        
         filterWrapper = fixture('filter');
         filter = filterWrapper.$.filter;
       });

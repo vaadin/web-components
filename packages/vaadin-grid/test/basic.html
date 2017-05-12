@@ -28,6 +28,9 @@
       var scroller, grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+        
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
 
@@ -197,7 +200,7 @@
           if (grid._observer.flush) {
             grid._observer.flush();
           }
-          
+
           grid.flushDebouncer('check-imports');
           console.warn = _warn;
 
