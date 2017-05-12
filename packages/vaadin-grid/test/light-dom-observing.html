@@ -376,7 +376,7 @@
         describe('columns inside grid', function() {
           beforeEach(function(done) {
             init('columns');
-            Polymer.RenderStatus.afterNextRender(grid, done);
+            flush(done);
           });
 
           it('should support adding late', function(done) {
@@ -387,7 +387,7 @@
               grid._observer.flush();
             }
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumn('some');
               done();
             });
@@ -401,7 +401,7 @@
               grid._observer.flush();
             }
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumn('some');
               done();
             });
@@ -415,7 +415,7 @@
               grid._observer.flush();
             }
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumn('second');
               done();
             });
@@ -482,9 +482,10 @@
         describe('columns inside group', function() {
           var firstGroup;
 
-          beforeEach(function() {
+          beforeEach(function(done) {
             init('plain-groups');
             firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
+            flush(done);
           });
 
           it('should support adding late', function(done) {
@@ -492,7 +493,7 @@
             Polymer.dom(firstGroup).insertBefore(column, Polymer.dom(firstGroup).firstChild);
             Polymer.dom.flush();
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumn('some', 1);
               done();
             });
@@ -503,7 +504,7 @@
             Polymer.dom(firstGroup).removeChild(column);
             Polymer.dom.flush();
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumn('first bar', 1);
               done();
             });
@@ -520,7 +521,7 @@
             Polymer.dom(grid).insertBefore(group, Polymer.dom(grid).firstChild);
             Polymer.dom.flush();
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumnHeader('some group', 0);
               expectFirstColumnFooter('some group', 0);
               expectFirstColumn('some foo', 1);
@@ -533,7 +534,7 @@
             Polymer.dom(grid).removeChild(group);
             Polymer.dom.flush();
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumnHeader('second group', 0);
               expectFirstColumnFooter('second group', 0);
               expectFirstColumn('second foo', 1);
@@ -555,7 +556,7 @@
             Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
             Polymer.dom.flush();
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumnHeader('some group', 1);
               expectFirstColumnFooter('some group', 1);
               expectFirstColumn('some foo', 2);
@@ -568,7 +569,7 @@
             Polymer.dom(firstGroup).removeChild(group);
             Polymer.dom.flush();
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            flush(function() {
               expectFirstColumnHeader('second nested group', 1);
               expectFirstColumnFooter('second nested group', 1);
               expectFirstColumn('second foo', 2);
@@ -582,7 +583,7 @@
         it('should provide initial state', function(done) {
           repeater.render();
 
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          flush(function() {
             expectFirstColumn(prefix + ' a', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(3);
@@ -594,7 +595,7 @@
           repeater.unshift('items', 'd');
           repeater.render();
 
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          flush(function() {
             expectFirstColumn(prefix + ' d', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(4);
@@ -606,7 +607,7 @@
           repeater.shift('items');
           repeater.render();
 
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          flush(function() {
             expectFirstColumn(prefix + ' b', columnsLevel);
             expectFirstColumn('', columnsLevel);
             expectNumberOfColumns(2);
@@ -664,7 +665,7 @@
               });
 
               it('should provide initial state', function(done) {
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('foo', 1);
                   expectNumberOfColumns(3);
                   done();
@@ -677,7 +678,7 @@
                 Polymer.dom(wrapper).insertBefore(column, Polymer.dom(wrapper).firstChild);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('some', 1);
                   expectNumberOfColumns(4);
                   done();
@@ -689,7 +690,7 @@
                 Polymer.dom(wrapper).removeChild(column);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('bar', 1);
                   expectNumberOfColumns(2);
                   done();
@@ -706,7 +707,7 @@
               });
 
               it('should provide initial state', function(done) {
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('first foo', inGroup ? 2 : 1);
                   expectNumberOfColumns(5);
                   done();
@@ -719,7 +720,7 @@
                 Polymer.dom(wrapper).insertBefore(group, Polymer.dom(wrapper).firstChild);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('some foo', inGroup ? 2 : 1);
                   expectNumberOfColumns(7);
                   done();
@@ -730,7 +731,7 @@
                 Polymer.dom(wrapper).removeChild(firstGroup);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('second foo', inGroup ? 2 : 1);
                   expectNumberOfColumns(3);
                   done();
@@ -753,7 +754,7 @@
                 Polymer.dom(firstGroup).insertBefore(column, Polymer.dom(firstGroup).firstChild);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('some', inGroup ? 2 : 1);
                   expectNumberOfColumns(6);
                   done();
@@ -765,7 +766,7 @@
                 Polymer.dom(firstGroup).removeChild(column);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('first bar', inGroup ? 2 : 1);
                   expectNumberOfColumns(4);
                   done();
@@ -779,7 +780,7 @@
                 Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(grid, function() {
+                flush(function() {
                   expectFirstColumn('some foo', inGroup ? 3 : 2);
                   expectNumberOfColumns(7);
                   done();
@@ -791,12 +792,12 @@
                 Polymer.dom(firstGroup).insertBefore(group, Polymer.dom(firstGroup).firstChild);
                 Polymer.dom.flush();
 
-                Polymer.RenderStatus.afterNextRender(group, function() {
+                flush(function() {
                   expectNumberOfColumns(7);
                   Polymer.dom(firstGroup).removeChild(group);
                   Polymer.dom.flush();
 
-                  Polymer.RenderStatus.afterNextRender(grid, function() {
+                  flush(function() {
                     expectFirstColumn('first foo', inGroup ? 2 : 1);
                     expectNumberOfColumns(5);
                     done();
