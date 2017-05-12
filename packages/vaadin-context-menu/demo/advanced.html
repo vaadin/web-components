@@ -89,30 +89,32 @@
           </template>
 
           <script>
-            Polymer({
-              is: 'my-grid-view',
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'my-grid-view',
 
-              properties: {
-                items: {
-                  type: Array,
-                  value: function() {
-                    return getItems();
+                properties: {
+                  items: {
+                    type: Array,
+                    value: function() {
+                      return getItems();
+                    }
                   }
+                },
+
+                _isGridBody: function(target) {
+                  return target.classList.contains('body-content');
+                },
+
+                _add: function() {
+                  this.unshift('items', getNewItem());
+                },
+
+                _remove: function(e) {
+                  var index = parseInt(e.target.content.getAttribute('data-index'));
+                  this.splice('items', index, 1);
                 }
-              },
-
-              _isGridBody: function(target) {
-                return target.classList.contains('body-content');
-              },
-
-              _add: function() {
-                this.unshift('items', getNewItem());
-              },
-
-              _remove: function(e) {
-                var index = parseInt(e.target.content.getAttribute('data-index'));
-                this.splice('items', index, 1);
-              }
+              });
             });
           </script>
         </dom-module>

@@ -5,7 +5,6 @@
   },
   "globals": {
     "getItems": false,
-    "getNewItem": false,
-    "getRandomItems": false
+    "getNewItem": false
   }
 }
