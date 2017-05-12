@@ -47,7 +47,10 @@
         this.async(function() {
           var sorters = Polymer.dom(this).querySelectorAll('vaadin-grid-sorter');
           Array.prototype.forEach.call(sorters, function(sorter) {
-            sorter.fire('sorter-changed');
+            // Don't try to fire if the sorter hasn't been upgraded yet
+            if (sorter.fire) {
+              sorter.fire('sorter-changed');
+            }
           });
         });
       }

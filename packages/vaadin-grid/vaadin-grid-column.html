@@ -4,23 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-
-A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
-A column can have a template for each of the three table sections: header, body and footer.
-
-The `class` attribute is used to differentiate header and footer templates from the body template.
-
-#### Example:
-
-    <vaadin-grid-column>
-      <template class="header">I'm in the header</template>
-      <template>I'm in the body</template>
-      <template class="footer">I'm in the footer</template>
-    </vaadin-grid-column>
-
--->
-
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-templatizer.html">
 
@@ -56,7 +39,7 @@ The `class` attribute is used to differentiate header and footer templates from 
       },
 
       /**
-       * @private
+       * @protected
        */
       headerTemplate: {
         type: Object,
@@ -66,7 +49,7 @@ The `class` attribute is used to differentiate header and footer templates from 
       },
 
       /**
-       * @private
+       * @protected
        */
       footerTemplate: {
         type: Object,
@@ -182,7 +165,7 @@ The `class` attribute is used to differentiate header and footer templates from 
       },
 
       /**
-       * @private
+       * @protected
        */
       template: {
         type: Object,
@@ -259,6 +242,21 @@ The `class` attribute is used to differentiate header and footer templates from 
 
 <dom-module id="vaadin-grid-column">
   <script>
+    /**
+     * A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
+     * A column can have a template for each of the three table sections: header, body and footer.
+     *
+     * The `class` attribute is used to differentiate header and footer templates from the body template.
+     *
+     * #### Example:
+     *
+     *     <vaadin-grid-column>
+     *       <template class="header">I'm in the header</template>
+     *       <template>I'm in the body</template>
+     *       <template class="footer">I'm in the footer</template>
+     *     </vaadin-grid-column>
+     *
+     */
     Polymer({
       is: 'vaadin-grid-column',
 

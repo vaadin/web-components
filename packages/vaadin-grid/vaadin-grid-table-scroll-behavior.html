@@ -3,18 +3,18 @@
 <dom-module id="vaadin-grid-table-table-scroll-styles">
   <template>
     <style>
-      vaadin-grid-table-table {
+      #table {
         position: relative;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
         z-index: -2;
       }
 
-      vaadin-grid-table[ios] vaadin-grid-table-table {
+      vaadin-grid-table[ios] #table {
         transform: none;
       }
 
-      vaadin-grid-table[fixed-sections] vaadin-grid-table-table {
+      vaadin-grid-table[fixed-sections] #table {
         transform: none;
       }
     </style>

@@ -149,7 +149,7 @@
         border-bottom: 0 solid transparent;
       }
 
-      vaadin-grid-table-table {
+      #table {
         height: 100%;
         width: 100%;
         display: block;
@@ -268,14 +268,14 @@
       <style include="vaadin-grid-data-provider-themability-styles"></style>
 
       <div id="spinner"></div>
-      <vaadin-grid-table-table id="table" tabindex="-1" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
+      <div id="table" tabindex="-1" overflow-hidden$="[[_hideTableOverflow(scrollbarWidth, safari)]]">
         <div id="sizerwrapper">
           <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[columnTree]]"></vaadin-grid-sizer>
         </div>
         <slot name="header"></slot>
         <slot name="items"></slot>
         <slot name="footer"></slot>
-      </vaadin-grid-table-table>
+      </div>
 
       <div id="reorderghost"></div>
       <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
