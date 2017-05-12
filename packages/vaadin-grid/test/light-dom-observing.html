@@ -444,11 +444,10 @@
           });
 
           it('should not invoke on row reorder', function(done) {
-            grid.size = 1000;
+            grid.size = 100;
             flush(function() {
               var spy = sinon.spy(grid._observer, Polymer.Element ? 'callback' : 'fn');
-              scrollToEnd(grid);
-              flush(function() {
+              scrollToEnd(grid, function() {
                 expect(spy.called).to.be.false;
                 done();
               });
