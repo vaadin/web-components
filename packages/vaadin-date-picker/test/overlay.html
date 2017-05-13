@@ -83,7 +83,7 @@
         beforeEach(function(done) {
           // Wait for ignoreTaps to settle after initial scroll event
           listenForEvent(overlay.$.scroller.$.scroller, 'scroll', function() {
-            overlay.async(done, 350);
+            Polymer.Base.async(done, 350);
           });
 
           overlay.$.scroller.$.scroller.scrollTop += 1;
@@ -114,7 +114,7 @@
           var spy = sinon.spy(overlay, '_scrollToPosition');
 
           listenForEvent(overlay.$.scroller.$.scroller, 'scroll', function() {
-            overlay.async(function() {
+            Polymer.Base.async(function() {
               tap(overlay.$.yearScroller);
               expect(spy.called).to.be.true;
               done();
@@ -127,7 +127,7 @@
         it('should not react if the tap takes more than 300ms', function(done) {
           var spy = sinon.spy(overlay, '_scrollToPosition');
           overlay._onYearScrollTouchStart();
-          overlay.async(function() {
+          Polymer.Base.async(function() {
             tap(overlay.$.yearScroller);
             expect(spy.called).to.be.false;
             done();

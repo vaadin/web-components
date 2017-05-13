@@ -309,7 +309,7 @@
           beforeEach(function(done) {
             monthCalendar.showWeekNumbers = true;
             monthCalendar.set('i18n.firstDayOfWeek', 1);
-            monthCalendar.async(done);
+            Polymer.Base.async(done);
           });
 
           it('should have heading roles on week numbers', function() {

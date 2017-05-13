@@ -63,7 +63,7 @@
             done();
           } else {
             scroller.$.scroller.scrollTop += scroller.itemHeight * 3.7;
-            scroller.async(scrollDown, 30);
+            Polymer.Base.async(scrollDown, 30);
           }
         }
 
@@ -78,7 +78,7 @@
       //       done();
       //     } else {
       //       scroller.$.scroller.scrollTop -= scroller.itemHeight * 3.7;
-      //       scroller.async(scrollUp, 30);
+      //       Polymer.Base.async(scrollUp, 30);
       //     }
       //   }
       //

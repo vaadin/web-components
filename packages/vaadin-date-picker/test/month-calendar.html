@@ -36,7 +36,7 @@
         // Polymer.Base.async(done);
       });
 
-      // A helper for creating async test functions for 2016 month rendering.
+      // A helper for Polymer.Base.async test functions for 2016 month rendering.
       function createMonthTest(monthNumber) {
         var expectedDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -127,7 +127,7 @@
         var dateElement = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)')[10];
 
         monthCalendar._onMonthGridTouchStart();
-        monthCalendar.async(function() {
+        Polymer.Base.async(function() {
           tap(dateElement);
           expect(tapSpy.called).to.be.false;
           done();
@@ -162,7 +162,7 @@
         var month = new Date(0, 0);
         month.setFullYear(99);
         monthCalendar.month = month;
-        monthCalendar.async(function() {
+        Polymer.Base.async(function() {
           var date = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)').date;
           expect(date.getFullYear()).to.equal(month.getFullYear());
           done();
@@ -243,7 +243,7 @@
           monthCalendar.showWeekNumbers = 1;
           monthCalendar.month = new Date(2016, 1, 1);
 
-          monthCalendar.async(function() {
+          Polymer.Base.async(function() {
             var weekNumberElements = Polymer.dom(monthCalendar.$.monthGrid).querySelectorAll('.weeknumber');
             expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('viikko 5');
             expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('viikko 6');
@@ -268,7 +268,7 @@
           var month = new Date(2016, 0, 1);
           monthCalendar.month = month;
 
-          monthCalendar.async(function() {
+          Polymer.Base.async(function() {
             var weekNumbers = getWeekNumbers(monthCalendar);
             expect(weekNumbers).to.eql([53, 1, 2, 3, 4]);
             done();
@@ -279,7 +279,7 @@
           var month = new Date(2015, 11, 1);
           monthCalendar.month = month;
 
-          monthCalendar.async(function() {
+          Polymer.Base.async(function() {
             var weekNumbers = getWeekNumbers(monthCalendar);
             expect(weekNumbers).to.eql([49, 50, 51, 52, 53]);
             done();
@@ -290,7 +290,7 @@
           var month = new Date(2016, 1, 1);
           monthCalendar.month = month;
 
-          monthCalendar.async(function() {
+          Polymer.Base.async(function() {
             var weekNumbers = getWeekNumbers(monthCalendar);
             expect(weekNumbers).to.eql([5, 6, 7, 8, 9]);
             done();
@@ -303,7 +303,7 @@
 
           monthCalendar.month = month;
 
-          monthCalendar.async(function() {
+          Polymer.Base.async(function() {
             var weekNumbers = getWeekNumbers(monthCalendar);
             expect(weekNumbers).to.eql([18, 19, 20, 21, 22]);
             done();

@@ -18,7 +18,7 @@ addons:
 
 install:
   - yarn
-  - polymer install --variants
+  - polymer install
 
 before_script:
   - gulp lint

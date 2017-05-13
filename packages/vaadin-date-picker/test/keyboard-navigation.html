@@ -107,7 +107,7 @@
           it('should close overlay on esc', function(done) {
             datepicker.open();
             target = datepicker.$.overlay;
-            datepicker.async(function() {
+            Polymer.Base.async(function() {
               esc();
               expect(datepicker.opened).to.be.false;
               done();
@@ -133,7 +133,7 @@
 
             // wait for the 'iron-overlay-opened' to be fired to that the initialPosition
             // is set to the overlay.
-            datepicker.async(function() {
+            Polymer.Base.async(function() {
               arrowRight();
 
               expect(focusedDate()).to.eql(new Date(2001, 0, 2));

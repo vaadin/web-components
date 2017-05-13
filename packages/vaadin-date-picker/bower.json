@@ -66,16 +66,5 @@
     "iron-location": "1 - 2",
     "paper-behaviors": "1 - 2",
     "iron-checked-element-behavior": "1 - 2"
-  },
-  "variants": {
-    "1.x": {
-      "dependencies": {
-        "polymer": "^1.7.0"
-      },
-      "resolutions": {
-        "polymer": "^1.7.0",
-        "webcomponentsjs": "^0.7.24"
-      }
-    }
   }
 }

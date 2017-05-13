@@ -48,7 +48,7 @@
       });
 
       afterEach(function(done) {
-        datepicker.async(done, 1);
+        Polymer.Base.async(done, 1);
       });
 
       it('should set body `pointer-events: none` on open and restore initial value on close', function(done) {
@@ -162,7 +162,7 @@
       });
 
       afterEach(function(done) {
-        datepicker.async(done, 1);
+        Polymer.Base.async(done, 1);
       });
 
       it('should not close on calendar icon down', function(done) {
