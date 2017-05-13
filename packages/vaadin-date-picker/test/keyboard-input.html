@@ -80,10 +80,11 @@
           datepicker.open();
         }
 
-        beforeEach(function() {
+        beforeEach(function(done) {
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
-          target = datepicker.$.input;
+          target = datepicker.$.ironinput;
+          setTimeout(done, 1);
         });
 
         it('should open overlay on input', function() {
@@ -280,7 +281,7 @@
               bubbles: true
             });
             var spy = sinon.spy(e, 'preventDefault');
-            target.dispatchEvent(e);
+            datepicker.dispatchEvent(e);
             expect(spy.called).to.be.true;
             done();
           });

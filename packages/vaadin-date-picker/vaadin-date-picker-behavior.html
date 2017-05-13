@@ -309,7 +309,8 @@
       'keydown': '_onKeydown',
       'close': '_close',
       'date-tap': '_close',
-      'focus-input': '_focusAndSelect'
+      'focus-input': '_focusAndSelect',
+      'input': '_onUserInput'
     },
 
     ready: function() {
@@ -345,12 +346,18 @@
       this.$.dropdown.close();
     },
 
-   /**
+    /**
     * @property inputElement
     * @type HTMLElement
     */
     get inputElement() {
       return this._input();
+    },
+
+    get _nativeInput() {
+      if (this.inputElement) {
+       return this.inputElement.inputElement || this.inputElement;
+      }
     },
 
     _parseDate: function(str) {
@@ -378,12 +385,14 @@
     },
 
     _selectedDateChanged: function(selectedDate, formatDate) {
+      if (selectedDate === undefined || formatDate === undefined) return;
       this.value = this._formatISO(selectedDate);
       this._focusedDate = selectedDate;
       this._inputValue = selectedDate ? formatDate(selectedDate) : '';
     },
 
     _focusedDateChanged: function(focusedDate, formatDate) {
+      if (focusedDate === undefined || formatDate === undefined) return;
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(focusedDate) : '';
       }
@@ -533,7 +542,7 @@
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
-        var inputValue = this._inputValue;
+        var inputValue = this._inputValue || '';
         var parsedDate = this.i18n.parseDate(inputValue);
         if (this._isValidDate(parsedDate)) {
           this._selectedDate = parsedDate;
@@ -582,7 +591,13 @@
     _focusAndSelect: function() {
       if (!this._noInput) {
         this._focus();
-        this.inputElement.setSelectionRange(0, this._inputValue.length);
+        this._setSelectionRange(0, this._inputValue.length);
+      }
+    },
+
+    _setSelectionRange(a, b) {
+      if (this._nativeInput && this._nativeInput.setSelectionRange) {
+        this._nativeInput.setSelectionRange(a, b);
       }
     },
 
@@ -650,7 +665,7 @@
           if (this.opened) {
             e.preventDefault();
             // Clear the selection range (remains visible on IE)
-            this.inputElement.setSelectionRange(0, 0);
+            this._setSelectionRange(0, 0);
             if (e.shiftKey) {
               this.$.overlay.focusCancel();
             } else {
@@ -661,7 +676,6 @@
           }
           break;
       }
-
     },
 
     _validateInput: function(date, min, max) {
@@ -670,19 +684,25 @@
       }
     },
 
-    _userInputValueChanged: function() {
+    _onUserInput: function(e) {
+      if (this._userInputValueChanged() && !this.opened) {
+        this.open();
+        // iOS needs a refit after input blur animation has finished
+        this.$.dropdown.async(this.$.dropdown.refit, 500);
+      }
+    },
+
+    _userInputValueChanged: function(value) {
+      if (!this.opened && !this._inputValue) {
+        return;
+      }
       var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
       if (this._isValidDate(parsedDate)) {
         this._ignoreFocusedDateChange = true;
         this._focusedDate = parsedDate;
         this._ignoreFocusedDateChange = false;
       }
-
-      if (!this.opened) {
-        this.open();
-        // iOS needs a refit after input blur animation has finished
-        this.$.dropdown.async(this.$.dropdown.refit, 500);
-      }
+      return true;
     },
 
     _announceFocusedDate: function(_focusedDate, opened, _ignoreAnnounce) {

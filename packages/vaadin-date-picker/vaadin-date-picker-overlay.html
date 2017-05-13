@@ -257,11 +257,11 @@
     <div id="header" on-touchend="_preventDefault" aria-hidden="true">
       <paper-input-container>
         <label>[[label]]</label>
-        <iron-input id="input" ºbind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
+        <iron-input id="input" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
           <input readonly autocomplete="off">
         </iron-input>
 
-        <iron-icon id="clear" suffix on-tap="_clear" icon="vaadin-date-picker:clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
+        <iron-icon id="clear" slot="suffix" on-tap="_clear" icon="vaadin-date-picker:clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
       </paper-input-container>
       <iron-icon id="toggle" icon="vaadin-date-picker:event" on-tap="_cancel"></iron-icon>
     </div>
