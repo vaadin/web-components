@@ -4,58 +4,6 @@ Copyright (c) 2016 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-`<vaadin-date-picker>` is a date selection field which includes a scrollable
-month calendar view.
-```html
-<vaadin-date-picker label="Birthday"></vaadin-date-picker>
-```
-```js
-datePicker.value = '2016-03-02';
-```
-When the selected `value` is changed, a `value-changed` event is triggered.
-
-This element is also extended with the `IronFormElementBehavior` to
-enable usage within an `iron-form`.
-
-### Styling
-The following custom properties and mixins are available for styling:
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--vaadin-date-picker-overlay` | Mixin applied to the overlay | `{}`
-`--vaadin-date-picker-yearscroller` | Mixin applied to the year scroller | `{}`
-`--vaadin-date-picker-yearscroller-indicator` | Mixin applied to the year scroller indicator | `{}`
-`--vaadin-date-picker-calendar-icon` | Mixin applied to the calendar icon | `{}`
-`--vaadin-date-picker-clear-icon` | Mixin applied to the clear icon | `{}`
-`--vaadin-date-picker-scrollers-fade` | Mixin applied to the scrollers fade element | `{}`
-`--vaadin-date-picker-header` | Mixin applied to the picker header | `{}`
-`--vaadin-date-picker-toolbar` | Mixin applied to the picker toolbar | `{}`
-`--vaadin-date-picker-toolbar-icon` | Mixin applied to the picker toolbar icon | `{}`
-`--vaadin-date-picker-footer` | Mixin applied to the picker footer | `{}`
-`--vaadin-date-picker-calendar` | Mixin applied to a month calendar element | `{}`
-`--vaadin-date-picker-calendar-title` | Mixin applied to a month calendar title | `{}`
-`--vaadin-date-picker-calendar-cell` | Mixin applied to a month calendar cell | `{}`
-`--vaadin-date-picker-calendar-date-cell` | Mixin applied to a month calendar date cell | `{}`
-`--vaadin-date-picker-calendar-weekday-cell` | Mixin applied to a month calendar weekday cell | `{}`
-`--vaadin-date-picker-calendar-cell-today` | Mixin applied to a month calendar today cell | `{}`
-`--vaadin-date-picker-calendar-cell-selected` | Mixin applied to a month calendar selected cell | `{}`
-`--vaadin-date-picker-calendar-cell-focused` | Mixin applied to a month calendar focused cell | `{}`
-`--vaadin-date-picker-calendar-cell-today-selected` | Mixin applied to a month calendar selected today cell | `{}`
-`--vaadin-date-picker-calendar-cell-disabled` | Mixin applied to a month calendar disabled cell | `{}`
-`--vaadin-date-picker-calendar-weeknumber-cell` | Mixin applied to a month calendar weeknumber cell | `{}`
-`--vaadin-date-picker-calendar-focused-cell-focused` | Mixin applied to a focused month calendar focused cell | `{}`
-
-
-See paper-input-container documentation for styling the included input fields
-
-If you want to replace the default input field with a custom implementation, you should use the
-[`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
-
-@element vaadin-date-picker
-@demo demo/index.html
--->
-
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
@@ -266,105 +214,170 @@ If you want to replace the default input field with a custom implementation, you
   </template>
 
   <script>
-    Polymer({
-      is: 'vaadin-date-picker',
-
-      behaviors: [
-        vaadin.elements.datepicker.DatePickerBehavior
-      ],
-
-      properties: {
-        /**
-         * Set to true to auto-validate the input value.
-         */
-        autoValidate: {
-          type: Boolean,
-          value: false
-        },
-
-        /**
-         * Set to true to disable this element.
-         */
-        disabled: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-
-        /**
-         * Set to true to make this element read-only.
-         */
-        readonly: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-
-        /**
-         * A placeholder string in addition to the label. If this is set, the label will always float.
-         */
-        placeholder: String,
-
-        /**
-         * The error message to display when the input is invalid.
-         */
-        errorMessage: String,
-
-        _userInputValue: String
-      },
-
-      observers: [
-        '_userInputValueChanged(_userInputValue)'
-      ],
-
-      // TODO: revisit this in order to use validatable-behavior for both the full and
-      // the light component. Consider auto-validate, and validate(value) signature.
+    (function() {
       /**
-       * Override the IronValidatableBehavior._getValidity implementation, replacing
-       * it with the iron-input validation.
+       *
+       * `<vaadin-date-picker>` is a date selection field which includes a scrollable
+       * month calendar view.
+       * ```html
+       * <vaadin-date-picker label="Birthday"></vaadin-date-picker>
+       * ```
+       * ```js
+       * datePicker.value = '2016-03-02';
+       * ```
+       * When the selected `value` is changed, a `value-changed` event is triggered.
+       *
+       * This element is also extended with the `IronFormElementBehavior` to
+       * enable usage within an `iron-form`.
+       *
+       * ### Styling
+       * The following custom properties and mixins are available for styling:
+       *
+       * Custom property | Description | Default
+       * ----------------|-------------|----------
+       * `--vaadin-date-picker-overlay` | Mixin applied to the overlay | `{}`
+       * `--vaadin-date-picker-yearscroller` | Mixin applied to the year scroller | `{}`
+       * `--vaadin-date-picker-yearscroller-indicator` | Mixin applied to the year scroller indicator | `{}`
+       * `--vaadin-date-picker-calendar-icon` | Mixin applied to the calendar icon | `{}`
+       * `--vaadin-date-picker-clear-icon` | Mixin applied to the clear icon | `{}`
+       * `--vaadin-date-picker-scrollers-fade` | Mixin applied to the scrollers fade element | `{}`
+       * `--vaadin-date-picker-header` | Mixin applied to the picker header | `{}`
+       * `--vaadin-date-picker-toolbar` | Mixin applied to the picker toolbar | `{}`
+       * `--vaadin-date-picker-toolbar-icon` | Mixin applied to the picker toolbar icon | `{}`
+       * `--vaadin-date-picker-footer` | Mixin applied to the picker footer | `{}`
+       * `--vaadin-date-picker-calendar` | Mixin applied to a month calendar element | `{}`
+       * `--vaadin-date-picker-calendar-title` | Mixin applied to a month calendar title | `{}`
+       * `--vaadin-date-picker-calendar-cell` | Mixin applied to a month calendar cell | `{}`
+       * `--vaadin-date-picker-calendar-date-cell` | Mixin applied to a month calendar date cell | `{}`
+       * `--vaadin-date-picker-calendar-weekday-cell` | Mixin applied to a month calendar weekday cell | `{}`
+       * `--vaadin-date-picker-calendar-cell-today` | Mixin applied to a month calendar today cell | `{}`
+       * `--vaadin-date-picker-calendar-cell-selected` | Mixin applied to a month calendar selected cell | `{}`
+       * `--vaadin-date-picker-calendar-cell-focused` | Mixin applied to a month calendar focused cell | `{}`
+       * `--vaadin-date-picker-calendar-cell-today-selected` | Mixin applied to a month calendar selected today cell | `{}`
+       * `--vaadin-date-picker-calendar-cell-disabled` | Mixin applied to a month calendar disabled cell | `{}`
+       * `--vaadin-date-picker-calendar-weeknumber-cell` | Mixin applied to a month calendar weeknumber cell | `{}`
+       * `--vaadin-date-picker-calendar-focused-cell-focused` | Mixin applied to a focused month calendar focused cell | `{}`
+       *
+       * See paper-input-container documentation for styling the included input fields
+       *
+       * If you want to replace the default input field with a custom implementation, you should use the
+       * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
+       *
+       * @element vaadin-date-picker
+       * @demo demo/index.html
        */
-      _getValidity: function() {
-        var inputValid = !this._inputValue || (this._selectedDate && this._inputValue === this.i18n.formatDate(this._selectedDate));
-        var minMaxValid = !this._selectedDate ||
-            vaadin.elements.datepicker.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
-        return this.inputElement.validate() && inputValid && minMaxValid;
-      },
+      class DatePickerElement extends Polymer.mixinBehaviors(
+        [vaadin.elements.datepicker.DatePickerBehavior], Polymer.Element) {
 
-      _clear: function(e) {
-        e.stopPropagation();
-        this.value = '';
-        this.close();
-      },
+        static get is() {
+          return 'vaadin-date-picker';
+        }
 
-      _toggle: function(e) {
-        e.stopPropagation();
-        this[this.$.dropdown.opened ? 'close' : 'open']();
-      },
+        static get properties() {
+          return {
+            /**
+             * Set to true to auto-validate the input value.
+             */
+            autoValidate: {
+              type: Boolean,
+              value: false
+            },
 
-      _input: function() {
-        return this.$.ironinput;
-      },
+            /**
+             * Set to true to disable this element.
+             */
+            disabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
 
-      /**
-       * label and placeholder will go on top of each other if always-float-label isn't set
-       * This is the similar behavior as paper-input has:
-       * PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
-       */
-      _computeAlwaysFloatLabel: function(placeholder) {
-        return Boolean(placeholder);
-      },
+            /**
+             * Set to true to make this element read-only.
+             */
+            readonly: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
 
-      set _inputValue(value) {
-        this.inputElement.bindValue = value;
-      },
+            /**
+             * A placeholder string in addition to the label. If this is set, the label will always float.
+             */
+            placeholder: String,
 
-      get _inputValue() {
-        return this.inputElement.bindValue;
-      },
+            /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: String,
 
-      _getAriaExpanded: function(opened) {
-        return Boolean(opened).toString();
+            _userInputValue: String
+          };
+        }
+
+        static get observers() {
+          return [
+            '_userInputValueChanged(_userInputValue)'
+          ];
+        }
+
+        // TODO: revisit this in order to use validatable-behavior for both the full and
+        // the light component. Consider auto-validate, and validate(value) signature.
+        /**
+         * Override the IronValidatableBehavior._getValidity implementation, replacing
+         * it with the iron-input validation.
+         */
+        _getValidity() {
+          var inputValid = !this._inputValue || (this._selectedDate && this._inputValue === this.i18n.formatDate(this._selectedDate));
+          var minMaxValid = !this._selectedDate ||
+          vaadin.elements.datepicker.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+          return this.inputElement.validate() && inputValid && minMaxValid;
+        }
+
+        _clear(e) {
+          e.stopPropagation();
+          this.value = '';
+          this.close();
+        }
+
+        _toggle(e) {
+          e.stopPropagation();
+          this[this.$.dropdown.opened ? 'close' : 'open']();
+        }
+
+        _input() {
+          return this.$.ironinput;
+        }
+
+        /**
+         * label and placeholder will go on top of each other if always-float-label isn't set
+         * This is the similar behavior as paper-input has:
+         * PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
+         */
+        _computeAlwaysFloatLabel(placeholder) {
+          return Boolean(placeholder);
+        }
+
+        set _inputValue(value) {
+          this.inputElement.bindValue = value;
+        }
+
+        get _inputValue() {
+          return this.inputElement.bindValue;
+        }
+
+        _getAriaExpanded(opened) {
+          return Boolean(opened).toString();
+        }
       }
-    });
+
+      customElements.define(DatePickerElement.is, DatePickerElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.DatePickerElement = DatePickerElement;
+    })();
   </script>
 </dom-module>
