@@ -76,12 +76,14 @@
           var start = document.querySelector('#start');
           var end = document.querySelector('#end');
           start.addEventListener('value-changed', function() {
-            // Open the end date picker with a delay to
-            // make it less confusing.
-            window.setTimeout(function() {
-              end.value = start.value;
-              end.open();
-            }, 500);
+            if (start.value) {
+              // Open the end date picker with a delay to
+              // make it less confusing.
+              window.setTimeout(function() {
+                end.value = start.value;
+                end.open();
+              }, 500);
+            }
           });
         </script>
       </template>

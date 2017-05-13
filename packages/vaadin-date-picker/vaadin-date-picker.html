@@ -165,13 +165,29 @@ If you want to replace the default input field with a custom implementation, you
         display: none;
       }
 
-      #input {
-        box-sizing: border-box;
-        padding-right: 28px;
+      /* The same code than paper-input and combo-box */
+      input {
+        position: relative; /* to make a stacking context */
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        background: transparent;
         border: none;
+        color: var(--paper-input-container-input-color, var(--primary-text-color));
+        -webkit-appearance: none;
+        text-align: inherit;
+        vertical-align: bottom;
+
+        /* Firefox sets a min-width on the input, which can cause layout issues */
+        min-width: 0;
+
+        @apply --paper-font-subhead;
+        @apply --paper-input-container-input;
       }
 
-      #input::-ms-clear {
+      input::-ms-clear {
         display: none;
       }
     </style>
