@@ -347,16 +347,16 @@
     },
 
     /**
-    * @property inputElement
-    * @type HTMLElement
-    */
+     * @property inputElement
+     * @type HTMLElement
+     */
     get inputElement() {
       return this._input();
     },
 
     get _nativeInput() {
       if (this.inputElement) {
-       return this.inputElement.inputElement || this.inputElement;
+        return this.inputElement.inputElement || this.inputElement;
       }
     },
 
@@ -385,14 +385,14 @@
     },
 
     _selectedDateChanged: function(selectedDate, formatDate) {
-      if (selectedDate === undefined || formatDate === undefined) return;
+      if (selectedDate === undefined || formatDate === undefined) return;
       this.value = this._formatISO(selectedDate);
       this._focusedDate = selectedDate;
       this._inputValue = selectedDate ? formatDate(selectedDate) : '';
     },
 
     _focusedDateChanged: function(focusedDate, formatDate) {
-      if (focusedDate === undefined || formatDate === undefined) return;
+      if (focusedDate === undefined || formatDate === undefined) return;
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(focusedDate) : '';
       }
@@ -595,7 +595,7 @@
       }
     },
 
-    _setSelectionRange(a, b) {
+    _setSelectionRange: function(a, b) {
       if (this._nativeInput && this._nativeInput.setSelectionRange) {
         this._nativeInput.setSelectionRange(a, b);
       }

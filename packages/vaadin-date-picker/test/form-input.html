@@ -81,7 +81,7 @@
         datepicker.name = 'foo';
         datepicker.required = true;
 
-        setTimeout(function(){
+        setTimeout(function() {
           expect(datepicker.validate()).to.equal(false);
           expect(datepicker.invalid).to.be.equal(true);
 
@@ -97,7 +97,7 @@
         // Use a custom validator registered with <iron-meta>.
         datepicker.validator = 'year-2016-validator';
 
-        setTimeout(function(){
+        setTimeout(function() {
           // Try invalid value.
           datepicker.value = '2014-01-01';
           expect(datepicker.validate()).to.equal(false);
@@ -118,7 +118,7 @@
         datepicker.validator = 'year-2016-validator';
         datepicker.autoValidate = true;
 
-        setTimeout(function(){
+        setTimeout(function() {
           // Set invalid value.
           datepicker.value = '2014-01-01';
           expect(datepicker.invalid).to.be.true;
@@ -244,8 +244,6 @@
         expect(undeline.getAttribute('class')).to.contain('is-invalid');
       });
     });
-
-
   </script>
 
 </body>

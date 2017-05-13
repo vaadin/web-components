@@ -174,11 +174,6 @@ If you want to replace the default input field with a custom implementation, you
       #input::-ms-clear {
         display: none;
       }
-
-      :host([opened][has-value]) #input {
-        /*padding-right: 60px;
-        margin-right: -32px;*/
-      }
     </style>
 
     <paper-input-container id="inputcontainer"
@@ -191,10 +186,7 @@ If you want to replace the default input field with a custom implementation, you
 
       <iron-input slot="input" id="ironinput"
         bind-value="{{_userInputValue}}"
-        required="[[required]]"
         validator="[[validator]]"
-        disabled="[[disabled]]"
-        readonly="[[readonly]]"
         invalid="{{invalid}}">
         <input id="input"
           autocomplete="off"
