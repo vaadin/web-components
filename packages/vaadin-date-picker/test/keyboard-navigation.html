@@ -301,7 +301,9 @@
             pageDown();
 
             setTimeout(function() {
-              expect(overlay.$.scroller.position).to.eql(initialPosition);
+              var delta = Math.abs(overlay.$.scroller.position - initialPosition);
+              // FF sometimes reports subpixel differences
+              expect(delta).to.be.lessThan(1);
               done();
             });
           });
