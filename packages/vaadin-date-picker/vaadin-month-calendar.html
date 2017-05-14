@@ -212,7 +212,7 @@
         return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
       },
 
-      _dateEquals: vaadin.elements.datepicker.DatePickerHelper._dateEquals,
+      _dateEquals: Vaadin.DatePickerHelper._dateEquals,
 
       _onMonthGridTouchStart: function() {
         this._notTapping = false;
@@ -314,7 +314,7 @@
           });
         }
 
-        return vaadin.elements.datepicker.DatePickerHelper._getISOWeekNumber(date);
+        return Vaadin.DatePickerHelper._getISOWeekNumber(date);
       },
 
       _handleTap: function(e) {
@@ -328,7 +328,7 @@
         e.preventDefault();
       },
 
-      _dateAllowed: vaadin.elements.datepicker.DatePickerHelper._dateAllowed,
+      _dateAllowed: Vaadin.DatePickerHelper._dateAllowed,
 
       _getRole: function(date) {
         return date ? 'button' : 'presentational';

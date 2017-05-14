@@ -420,7 +420,7 @@
         this.value = oldValue;
         return;
       }
-      if (!vaadin.elements.datepicker.DatePickerHelper._dateEquals(this[property], date)) {
+      if (!Vaadin.DatePickerHelper._dateEquals(this[property], date)) {
         this[property] = date;
       }
     }
@@ -472,11 +472,11 @@
         parsedInitialPosition || new Date();
 
       if (parsedInitialPosition ||
-        vaadin.elements.datepicker.DatePickerHelper._dateAllowed(initialPosition, this._minDate, this._maxDate)) {
+        Vaadin.DatePickerHelper._dateAllowed(initialPosition, this._minDate, this._maxDate)) {
         this.$.overlay.initialPosition = initialPosition;
       } else {
         this.$.overlay.initialPosition =
-          vaadin.elements.datepicker.DatePickerHelper._getClosestDate(initialPosition, [this._minDate, this._maxDate]);
+          Vaadin.DatePickerHelper._getClosestDate(initialPosition, [this._minDate, this._maxDate]);
       }
 
       this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
@@ -686,7 +686,7 @@
 
     _validateInput(date, min, max) {
       if (date && (min || max)) {
-        this.invalid = !vaadin.elements.datepicker.DatePickerHelper._dateAllowed(date, min, max);
+        this.invalid = !Vaadin.DatePickerHelper._dateAllowed(date, min, max);
       }
     }
 

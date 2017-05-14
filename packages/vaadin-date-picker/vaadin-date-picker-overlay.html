@@ -435,7 +435,7 @@
       announceFocusedDate: function() {
         var focusedDate = this._currentlyFocusedDate();
         var announce = [];
-        if (vaadin.elements.datepicker.DatePickerHelper._dateEquals(focusedDate, new Date())) {
+        if (Vaadin.DatePickerHelper._dateEquals(focusedDate, new Date())) {
           announce.push(this.i18n.today);
         }
         announce = announce.concat([
@@ -446,7 +446,7 @@
         ]);
         if (this.showWeekNumbers && this.i18n.firstDayOfWeek === 1) {
           announce.push(this.i18n.week);
-          announce.push(vaadin.elements.datepicker.DatePickerHelper._getISOWeekNumber(focusedDate));
+          announce.push(Vaadin.DatePickerHelper._getISOWeekNumber(focusedDate));
         }
         this.fire('iron-announce', {text: announce.join(' ')});
         return;
@@ -814,7 +814,7 @@
               break;
             case 'space':
               var focusedDate = this.focusedDate;
-              if (vaadin.elements.datepicker.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
+              if (Vaadin.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
                 this.selectedDate = '';
                 this.focusedDate = focusedDate;
               } else {
@@ -867,7 +867,7 @@
             }
           } else {
             // Move to closest allowed date
-            this.focusedDate = vaadin.elements.datepicker.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
+            this.focusedDate = Vaadin.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
             this._focusedMonthDate = this.focusedDate.getDate();
           }
         }
@@ -900,7 +900,7 @@
             }
           } else {
             // Move to closest allowed date
-            this.focusedDate = vaadin.elements.datepicker.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
+            this.focusedDate = Vaadin.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
             this._focusedMonthDate = this.focusedDate.getDate();
           }
         }
@@ -928,7 +928,7 @@
             this._focusedMonthDate = this[property].getDate();
           } else {
             // Move to closest allowed date
-            this.focusedDate = vaadin.elements.datepicker.DatePickerHelper._getClosestDate(focusedDate, [this.minDate, this.maxDate]);
+            this.focusedDate = Vaadin.DatePickerHelper._getClosestDate(focusedDate, [this.minDate, this.maxDate]);
             this._focusedMonthDate = this.focusedDate.getDate();
           }
         }
