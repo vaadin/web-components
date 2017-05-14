@@ -61,294 +61,304 @@ This program is available under Apache License Version 2.0, available at https:/
 </dom-module>
 
 <script>
-  Polymer({
-    is: 'vaadin-infinite-scroller',
+  (function() {
 
-    behaviors: [
-      Polymer.Templatizer
-    ],
+    class InfiniteScrollerElement extends Polymer.mixinBehaviors([Polymer.Templatizer], Polymer.Element) {
 
-    properties: {
-
-      /**
-       * Height of individual items (in pixels).
-       * Changing after initialization not supported.
-       */
-      itemHeight: {
-        type: Number,
-        value: 50
-      },
-
-      /**
-       * Count of individual items in each buffer.
-       * The scroller has 2 buffers altogether so bufferSize of 20
-       * will result in 40 buffered DOM items in total.
-       * Changing after initialization not supported.
-       */
-      bufferSize: {
-        type: Number,
-        value: 20
-      },
-
-      /**
-       * The amount of initial scroll top. Needed in order for the
-       * user to be able to scroll backwards.
-       */
-      _initialScroll: {
-        value: 500000
-      },
-
-      /**
-       * The index/position mapped at _initialScroll point.
-       */
-      _initialIndex: {
-        value: 0
-      },
-
-      _buffers: Array,
-
-      _preventScrollEvent: Boolean,
-
-      _bufferHeight: Number,
-
-      _mayHaveMomentum: Boolean,
-
-      _initialized: Boolean,
-
-      active: Boolean
-    },
-
-    observers: [
-      '_activated(active)'
-    ],
-
-    _activated: function(active) {
-      if (active && !this._initialized) {
-        this._createPool();
-        this._initialized = true;
+      static get is() {
+        return 'vaadin-infinite-scroller';
       }
-    },
 
-    listeners: {
-      'animationend': '_animationEnd'
-    },
+      static get properties() {
+        return {
+          /**
+           * Height of individual items (in pixels).
+           * Changing after initialization not supported.
+           */
+          itemHeight: {
+            type: Number,
+            value: 50
+          },
 
-    _animationEnd: function() {
-      this.toggleAttribute('init-animation-done', true);
-    },
+          /**
+           * Count of individual items in each buffer.
+           * The scroller has 2 buffers altogether so bufferSize of 20
+           * will result in 40 buffered DOM items in total.
+           * Changing after initialization not supported.
+           */
+          bufferSize: {
+            type: Number,
+            value: 20
+          },
 
-    _finishInit: function() {
-      if (!this._initDone) {
-        // Once the first set of items start fading in, stamp the rest
-        this._buffers.forEach(function(buffer) {
-          [].forEach.call(buffer.children, function(itemWrapper) {
-            this._ensureStampedInstance(itemWrapper);
-          }.bind(this));
-        }, this);
+          /**
+           * The amount of initial scroll top. Needed in order for the
+           * user to be able to scroll backwards.
+           */
+          _initialScroll: {
+            value: 500000
+          },
 
-        if (!this._buffers[0].translateY) {
+          /**
+           * The index/position mapped at _initialScroll point.
+           */
+          _initialIndex: {
+            value: 0
+          },
+
+          _buffers: Array,
+
+          _preventScrollEvent: Boolean,
+
+          _bufferHeight: Number,
+
+          _mayHaveMomentum: Boolean,
+
+          _initialized: Boolean,
+
+          active: {
+            type: Boolean,
+            observer: '_activated'
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        // needed for V2 to enable event.model on declarative event listeners.
+        this._parentModel = true;
+        this.addEventListener('animationend', this._animationEnd.bind(this));
+      }
+
+      ready() {
+        super.ready();
+
+        this._bufferHeight = this.itemHeight * this.bufferSize;
+        this._buffers = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('.buffer'));
+
+        this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
+
+        var template = Polymer.dom(this).querySelector('template');
+        this.templatize(template);
+
+        // Firefox interprets elements with overflow:auto as focusable
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
+        var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        if (isFirefox) {
+          this.$.scroller.tabIndex = -1;
+        }
+      }
+
+      _activated(active) {
+        if (active && !this._initialized) {
+          this._createPool();
+          this._initialized = true;
+        }
+      }
+
+      _animationEnd() {
+        this.toggleAttribute('init-animation-done', true);
+      }
+
+      _finishInit() {
+        if (!this._initDone) {
+          // Once the first set of items start fading in, stamp the rest
+          this._buffers.forEach(function(buffer) {
+            [].forEach.call(buffer.children, function(itemWrapper) {
+              this._ensureStampedInstance(itemWrapper);
+            }.bind(this));
+          }, this);
+
+          if (!this._buffers[0].translateY) {
+            this._reset();
+          }
+
+          this._initDone = true;
+        }
+      }
+
+      _translateBuffer(up) {
+        var index = up ? 1 : 0;
+        this._buffers[index].translateY = this._buffers[(index ? 0 : 1)].translateY + this._bufferHeight * (index ? -1 : 1);
+        this.transform('translate3d(0, ' + this._buffers[index].translateY + 'px, 0)', this._buffers[index]);
+        this._buffers[index].updated = false;
+        this._buffers.reverse();
+      }
+
+      _scroll() {
+        var scrollTop = this.$.scroller.scrollTop;
+        if (scrollTop < this._bufferHeight || scrollTop > this._initialScroll * 2 - this._bufferHeight) {
+          // Scrolled near the end/beginning of the scrollable area -> reset.
+          this._initialIndex = ~~this.position;
           this._reset();
         }
 
-        this._initDone = true;
-      }
-    },
+        // Check if we scrolled enough to translate the buffer positions.
+        var bufferOffset = this.$$('.buffer').offsetTop;
+        var upperThresholdReached = scrollTop > this._buffers[1].translateY + this.itemHeight + bufferOffset;
+        var lowerThresholdReached = scrollTop < this._buffers[0].translateY + this.itemHeight + bufferOffset;
 
-    ready: function() {
-      this._bufferHeight = this.itemHeight * this.bufferSize;
-      this._buffers = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('.buffer'));
-
-      this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
-
-      var template = Polymer.dom(this).querySelector('template');
-      this.templatize(template);
-
-      // Firefox interprets elements with overflow:auto as focusable
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
-      var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-      if (isFirefox) {
-        this.$.scroller.tabIndex = -1;
-      }
-    },
-
-    _translateBuffer: function(up) {
-      var index = up ? 1 : 0;
-      this._buffers[index].translateY = this._buffers[(index ? 0 : 1)].translateY + this._bufferHeight * (index ? -1 : 1);
-      this.transform('translate3d(0, ' + this._buffers[index].translateY + 'px, 0)', this._buffers[index]);
-      this._buffers[index].updated = false;
-      this._buffers.reverse();
-    },
-
-    _scroll: function() {
-      var scrollTop = this.$.scroller.scrollTop;
-      if (scrollTop < this._bufferHeight || scrollTop > this._initialScroll * 2 - this._bufferHeight) {
-        // Scrolled near the end/beginning of the scrollable area -> reset.
-        this._initialIndex = ~~this.position;
-        this._reset();
-      }
-
-      // Check if we scrolled enough to translate the buffer positions.
-      var bufferOffset = this.$$('.buffer').offsetTop;
-      var upperThresholdReached = scrollTop > this._buffers[1].translateY + this.itemHeight + bufferOffset;
-      var lowerThresholdReached = scrollTop < this._buffers[0].translateY + this.itemHeight + bufferOffset;
-
-      if (upperThresholdReached || lowerThresholdReached) {
-        this._translateBuffer(lowerThresholdReached);
-        this._updateClones();
-      }
-
-      if (!this._preventScrollEvent) {
-        this.fire('custom-scroll', undefined, {bubbles: false});
-        this._mayHaveMomentum = true;
-      }
-      this._preventScrollEvent = false;
-
-      this.debounce('scrollFinish', function() {
-        var scrollerRect = this.$.scroller.getBoundingClientRect();
-        if (!this._isVisible(this._buffers[0], scrollerRect) && !this._isVisible(this._buffers[1], scrollerRect)) {
-          this.position = this.position;
+        if (upperThresholdReached || lowerThresholdReached) {
+          this._translateBuffer(lowerThresholdReached);
+          this._updateClones();
         }
-      }, 200);
-    },
 
-    /**
-     * Current scroller position as index. Can be a fractional number.
-     *
-     * @type {Number}
-     */
-    set position(index) {
-      this._preventScrollEvent = true;
-      if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
-        this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
-      } else {
-        this._initialIndex = ~~index;
-        this._reset();
+        if (!this._preventScrollEvent) {
+          this.fire('custom-scroll', undefined, {bubbles: false});
+          this._mayHaveMomentum = true;
+        }
+        this._preventScrollEvent = false;
+
+        this.debounce('scrollFinish', function() {
+          var scrollerRect = this.$.scroller.getBoundingClientRect();
+          if (!this._isVisible(this._buffers[0], scrollerRect) && !this._isVisible(this._buffers[1], scrollerRect)) {
+            this.position = this.position;
+          }
+        }.bind(this), 200);
+      }
+
+      /**
+       * Current scroller position as index. Can be a fractional number.
+       *
+       * @type {Number}
+       */
+      set position(index) {
+        this._preventScrollEvent = true;
+        if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
+          this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
+        } else {
+          this._initialIndex = ~~index;
+          this._reset();
+          this.unlisten(this.$.scroller, 'scroll', '_scroll');
+          this.$.scroller.scrollTop += index % 1 * this.itemHeight;
+          this.listen(this.$.scroller, 'scroll', '_scroll');
+        }
+
+        if (this._mayHaveMomentum) {
+          // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
+          this.$.scroller.classList.add('notouchscroll');
+          this._mayHaveMomentum = false;
+
+          Polymer.Base.async(function() {
+            // Restore -webkit-overflow-scrolling: touch; after a small delay.
+            this.$.scroller.classList.remove('notouchscroll');
+          }.bind(this), 10);
+        }
+
+      }
+
+      /**
+       * @private
+       */
+      get position() {
+        return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
+      }
+
+      _reset() {
         this.unlisten(this.$.scroller, 'scroll', '_scroll');
-        this.$.scroller.scrollTop += index % 1 * this.itemHeight;
+        this.$.scroller.scrollTop = this._initialScroll;
+        this._buffers[0].translateY = this._initialScroll - this._bufferHeight;
+        this._buffers[1].translateY = this._initialScroll;
+        this._buffers.forEach(function(buffer) {
+          Polymer.Base.transform('translate3d(0, ' + buffer.translateY + 'px, 0)', buffer);
+        });
+        this._buffers[0].updated = this._buffers[1].updated = false;
+        this._updateClones(true);
+
+        this.debounce('updateAllClones', function() {
+          this._buffers[0].updated = this._buffers[1].updated = false;
+          this._updateClones();
+        }.bind(this), 200);
+
         this.listen(this.$.scroller, 'scroll', '_scroll');
       }
 
-      if (this._mayHaveMomentum) {
-        // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
-        this.$.scroller.classList.add('notouchscroll');
-        this._mayHaveMomentum = false;
-
-        this.async(function() {
-          // Restore -webkit-overflow-scrolling: touch; after a small delay.
-          this.$.scroller.classList.remove('notouchscroll');
-        }, 10);
-      }
-
-    },
-
-    /**
-     * @private
-     */
-    get position() {
-      return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
-    },
-
-    _reset: function() {
-      this.unlisten(this.$.scroller, 'scroll', '_scroll');
-      this.$.scroller.scrollTop = this._initialScroll;
-      this._buffers[0].translateY = this._initialScroll - this._bufferHeight;
-      this._buffers[1].translateY = this._initialScroll;
-      this._buffers.forEach(function(buffer) {
-        Polymer.Base.transform('translate3d(0, ' + buffer.translateY + 'px, 0)', buffer);
-      });
-      this._buffers[0].updated = this._buffers[1].updated = false;
-      this._updateClones(true);
-
-      this.debounce('updateAllClones', function() {
-        this._buffers[0].updated = this._buffers[1].updated = false;
-        this._updateClones();
-      }, 200);
-
-      this.listen(this.$.scroller, 'scroll', '_scroll');
-    },
-
-    _createPool: function() {
-      var container = this.getBoundingClientRect();
-      this._buffers.forEach(function(buffer) {
-        for (var i = 0; i < this.bufferSize; i++) {
-          var itemWrapper = document.createElement('div');
-          itemWrapper.style.height = this.itemHeight + 'px';
-          itemWrapper.instance = {};
-
-          Polymer.dom(buffer).appendChild(itemWrapper);
-
-          this.async(function(itemWrapper, container) {
-            // Only stamp the visible instances first
-            if (this._isVisible(itemWrapper, container)) {
-              this._ensureStampedInstance(itemWrapper);
-            }
-          }.bind(this, itemWrapper, container), 1); // Wait for first reset
-
-          Polymer.RenderStatus.afterNextRender(itemWrapper, this._finishInit.bind(this));
-
-        }
-      }, this);
-    },
-
-    _ensureStampedInstance: function(itemWrapper) {
-      if (itemWrapper.firstElementChild) {
-        return;
-      }
-
-      var tmpInstance = itemWrapper.instance;
-      itemWrapper.instance = this.stamp({});
-      Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
-
-      Object.keys(tmpInstance).forEach(function(prop) {
-        itemWrapper.instance.set(prop, tmpInstance[prop]);
-      });
-    },
-
-    _updateClones: function(viewPortOnly) {
-      this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
-
-      var scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
-      this._buffers.forEach(function(buffer, bufferIndex) {
-        if (!buffer.updated) {
-          var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
-
-          [].forEach.call(buffer.children, function(itemWrapper, index) {
-            if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
-              itemWrapper.instance.index = firstIndex + index;
-            }
-          }.bind(this));
-          buffer.updated = true;
-        }
-      }, this);
-    },
-
-    _isVisible: function(element, container) {
-      var rect = element.getBoundingClientRect();
-      return rect.bottom > container.top && rect.top < container.bottom;
-    },
-
-    created: function() {
-      // needed for V2 to enable event.model on declarative event listeners.
-      this._parentModel = true;
-    },
-
-    _forwardHostPropV2: function(prop, value) {
-      this._forwardParentProp(prop, value);
-    },
-
-    /**
-     * Implements extension point from Templatizer mixin
-     * Called as side-effect of a host property change, responsible for
-     * notifying parent path change on each row.
-     */
-    _forwardParentProp: function(prop, value) {
-      if (prop !== 'index') {
+      _createPool() {
+        var container = this.getBoundingClientRect();
         this._buffers.forEach(function(buffer) {
-          [].forEach.call(buffer.children, function(itemWrapper) {
-            itemWrapper.instance[prop] = value;
-          });
+          for (var i = 0; i < this.bufferSize; i++) {
+            var itemWrapper = document.createElement('div');
+            itemWrapper.style.height = this.itemHeight + 'px';
+            itemWrapper.instance = {};
+
+            Polymer.dom(buffer).appendChild(itemWrapper);
+
+            Polymer.Base.async(function(itemWrapper, container) {
+              // Only stamp the visible instances first
+              if (this._isVisible(itemWrapper, container)) {
+                this._ensureStampedInstance(itemWrapper);
+              }
+            }.bind(this, itemWrapper, container), 1); // Wait for first reset
+
+            Polymer.RenderStatus.afterNextRender(itemWrapper, this._finishInit.bind(this));
+
+          }
+        }, this);
+      }
+
+      _ensureStampedInstance(itemWrapper) {
+        if (itemWrapper.firstElementChild) {
+          return;
+        }
+
+        var tmpInstance = itemWrapper.instance;
+        itemWrapper.instance = this.stamp({});
+        Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
+
+        Object.keys(tmpInstance).forEach(function(prop) {
+          itemWrapper.instance.set(prop, tmpInstance[prop]);
         });
       }
+
+      _updateClones(viewPortOnly) {
+        this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
+
+        var scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
+        this._buffers.forEach(function(buffer, bufferIndex) {
+          if (!buffer.updated) {
+            var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
+
+            [].forEach.call(buffer.children, function(itemWrapper, index) {
+              if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
+                itemWrapper.instance.index = firstIndex + index;
+              }
+            }.bind(this));
+            buffer.updated = true;
+          }
+        }, this);
+      }
+
+      _isVisible(element, container) {
+        var rect = element.getBoundingClientRect();
+        return rect.bottom > container.top && rect.top < container.bottom;
+      }
+
+      _forwardHostPropV2(prop, value) {
+        this._forwardParentProp(prop, value);
+      }
+
+      /**
+       * Implements extension point from Templatizer mixin
+       * Called as side-effect of a host property change, responsible for
+       * notifying parent path change on each row.
+       */
+      _forwardParentProp(prop, value) {
+        if (prop !== 'index') {
+          this._buffers.forEach(function(buffer) {
+            [].forEach.call(buffer.children, function(itemWrapper) {
+              itemWrapper.instance[prop] = value;
+            });
+          });
+        }
+      }
     }
-  });
+
+    customElements.define(InfiniteScrollerElement.is, InfiniteScrollerElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.InfiniteScrollerElement = InfiniteScrollerElement;
+  })();
 </script>
