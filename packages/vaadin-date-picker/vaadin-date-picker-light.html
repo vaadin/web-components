@@ -108,7 +108,7 @@ need to define the name of value property using the `attrForValue` property.
       _input: function() {
         // Using the same selector than in combo-box.
         // TODO: revisit this to decide the selector and document conveniently.
-        return Polymer.dom(this).querySelector('iron-input,input[is="iron-input"],paper-input,.paper-input-input,.input');
+        return Polymer.dom(this).querySelector('iron-input,paper-input,.paper-input-input,.input');
       },
 
       set _inputValue(value) {
