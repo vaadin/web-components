@@ -3,12 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <script src="common.js"></script>
   </head>
   <body>
     <test-fixture id="default">
@@ -32,7 +33,7 @@
         it('should stamp template on open', function(done) {
           expect(menu.$.overlay.textContent).not.to.contain('FOOBAR');
 
-          menu.addEventListener('iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('FOOBAR');
             done();
           });
@@ -41,7 +42,7 @@
         });
 
         it('should bind target property', function(done) {
-          menu.addEventListener('iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('target');
             done();
           });
@@ -52,7 +53,7 @@
         });
 
         it('should bind detail property', function(done) {
-          menu.addEventListener('iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', function() {
             expect(menu.$.overlay.textContent).to.contain('bar');
             done();
           });

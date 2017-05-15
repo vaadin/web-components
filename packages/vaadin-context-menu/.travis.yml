@@ -13,12 +13,12 @@ addons:
 
 install:
   - npm install
-  - npm install -g bower
-  - bower install
+  - polymer install --variants
 
 before_script:
   - gulp lint
-  - ([ "$TRAVIS_EVENT_TYPE" = "pull_request" ] || TRAVIS_BRANCH=quick/${TRAVIS_BUILD_ID} xvfb-run -s '-screen 0 1024x768x24' wct)
+  - polymer lint --rules polymer-2-hybrid --input *.html
+  - ([ "$TRAVIS_EVENT_TYPE" = "pull_request" ] || TRAVIS_BRANCH=quick/${TRAVIS_BUILD_ID} xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome -l firefox)
 
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' wct
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test

@@ -7,29 +7,25 @@
 
   <title>vaadin-context-menu Basic Examples</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
   <link rel="import" href="common.html">
 </head>
 
 <body unresolved>
   <div class="vertical-section-container centered">
-    <nav class="vertical-section">
-      <ul class="layout horizontal wrap">
-        <li><a href="index.html">Basic Examples</a></li>
-        <li><b>Advanced Usage</b></li>
-      </ul>
-    </nav>
+
+    <demo-navigation></demo-navigation>
 
     <h3>Opening and Closing Events</h3>
     <demo-snippet>
       <template>
         <vaadin-context-menu selector="button" open-on="click" close-on="none">
           <template>
-            <paper-menu>
+            <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
-            </paper-menu>
+            </paper-listbox>
           </template>
 
           <button>Show Context Menu</button>
@@ -56,12 +52,12 @@
 
             <vaadin-context-menu>
               <template>
-                <paper-menu>
+                <paper-listbox>
                   <paper-item on-tap="_add">Add</paper-item>
                   <template is="dom-if" if="[[_isGridBody(target)]]">
                     <paper-item content="[[target]]" on-tap="_remove">Remove</paper-item>
                   </template>
-                </paper-menu>
+                </paper-listbox>
               </template>
 
               <vaadin-grid id="grid" items="[[items]]">
@@ -93,30 +89,32 @@
           </template>
 
           <script>
-            Polymer({
-              is: 'my-grid-view',
+            document.addEventListener('WebComponentsReady', function() {
+              Polymer({
+                is: 'my-grid-view',
 
-              properties: {
-                items: {
-                  type: Array,
-                  value: function() {
-                    return getItems();
+                properties: {
+                  items: {
+                    type: Array,
+                    value: function() {
+                      return getItems();
+                    }
                   }
+                },
+
+                _isGridBody: function(target) {
+                  return target.classList.contains('body-content');
+                },
+
+                _add: function() {
+                  this.unshift('items', getNewItem());
+                },
+
+                _remove: function(e) {
+                  var index = parseInt(e.target.content.getAttribute('data-index'));
+                  this.splice('items', index, 1);
                 }
-              },
-
-              _isGridBody: function(target) {
-                return target.classList.contains('body-content');
-              },
-
-              _add: function() {
-                this.unshift('items', getNewItem());
-              },
-
-              _remove: function(e) {
-                var index = parseInt(e.target.content.getAttribute('data-index'));
-                this.splice('items', index, 1);
-              }
+              });
             });
           </script>
         </dom-module>
@@ -168,11 +166,11 @@
         <template id="app" is="dom-bind">
           <vaadin-context-menu>
             <template>
-              <paper-menu>
+              <paper-listbox>
                 <template is="dom-repeat" items="[[menuItems]]">
                   <paper-item>Menu Item</paper-item>
                 </template>
-              </paper-menu>
+              </paper-listbox>
             </template>
 
             <p>

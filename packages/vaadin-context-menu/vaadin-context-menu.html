@@ -16,15 +16,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
 The `<vaadin-context-menu>` element expects a child template with the overlay contents.
 
-You can use any elements in the template to build the actual menu. It is recommended to use `<paper-menu>` and `<paper-item>` for the basic single-level menu use case:
+You can use any elements in the template to build the actual menu. It is recommended to use `<paper-listbox>` and `<paper-item>` for the basic single-level menu use case:
 
 ```html
 <vaadin-context-menu>
   <template>
-    <paper-menu>
+    <paper-listbox>
       <paper-item>First menu item</paper-item>
       <paper-item>Second menu item</paper-item>
-    </paper-menu>
+    </paper-listbox>
   </template>
 </vaadin-context-menu>
 ```
@@ -42,10 +42,10 @@ By default, the `<vaadin-context-menu>` element listens for the menu opening eve
 ```html
 <vaadin-context-menu>
   <template>
-    <paper-menu>
+    <paper-listbox>
       <paper-item>First menu item</paper-item>
       <paper-item>Second menu item</paper-item>
-    </paper-menu>
+    </paper-listbox>
   </template>
 
   <p>This paragraph has the context menu provided in the above template.</p>
@@ -58,9 +58,9 @@ In case if you do not want to wrap the page content, you can listen for events o
 ```html
 <vaadin-context-menu id="customListener">
   <template>
-    <paper-menu>
+    <paper-listbox>
       ...
-    </paper-menu>
+    </paper-listbox>
   </template>
 </vaadin-context-menu>
 
@@ -81,9 +81,9 @@ In the following example, only the elements matching `.has-menu` will open the c
 ```html
 <vaadin-context-menu selector=".has-menu">
   <template>
-    <paper-menu>
+    <paper-listbox>
       ...
-    </paper-menu>
+    </paper-listbox>
   </template>
 
   <p class="has-menu">This paragraph opens the context menu</p>
@@ -103,9 +103,9 @@ In the following example, the menu item text is composed with the contents of th
 ```html
 <vaadin-context-menu selector="li">
   <template>
-    <paper-menu>
+    <paper-listbox>
       <paper-item>The menu target: [[target.textContent]]</paper-item>
-    </paper-menu>
+    </paper-listbox>
   </template>
 
   <ul>
@@ -136,11 +136,11 @@ Custom property | Description | Default
       }
 
       vaadin-context-menu-overlay {
-        @apply(--vaadin-context-menu-overlay);
+        @apply --vaadin-context-menu-overlay;
       }
     </style>
 
-    <content></content>
+    <slot></slot>
     <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
         on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed"
         with-backdrop>
@@ -267,22 +267,25 @@ Custom property | Description | Default
 
       _closeOnChanged: function(closeOn, oldCloseOn) {
         if (oldCloseOn) {
-          this.unlisten(this, oldCloseOn, 'close');
+          this.unlisten(this.$.overlay, oldCloseOn, 'close');
         }
         if (closeOn) {
-          this.listen(this, closeOn, 'close');
+          this.listen(this.$.overlay, closeOn, 'close');
         }
       },
 
       _openedChanged: function(opened) {
         if (opened) {
-          this._contentTemplate = Polymer.dom(this).children.filter(function(el) {
+          this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, function(el) {
             return el.localName === 'template';
           })[0];
         }
       },
 
       _contextChanged: function(context, instance) {
+        if (context === undefined || instance === undefined) {
+          return;
+        }
         instance.detail = context.detail;
         instance.target = context.target;
       },
@@ -298,7 +301,7 @@ Custom property | Description | Default
         if (this.selector) {
           var targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
 
-          return targets.filter(function(el) {
+          return Array.prototype.filter.call(targets, function(el) {
             return Polymer.dom(e).path.indexOf(el) > -1;
           })[0];
         } else {
