@@ -1,71 +1,71 @@
 <dom-module id="sparkline-example">
-    <template>
-        <vaadin-grid id="grid">
-            <table>
-                <colgroup>
-                    <col name="month" width="100">
-                    <col name="data" width="200">
-                    <col name="latest">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>Month</th>
-                    <th>Trend</th>
-                    <th>Latest value</th>
-                </tr>
-                </thead>
-            </table>
-        </vaadin-grid>
+  <template>
+    <vaadin-grid id="grid">
+      <table>
+        <colgroup>
+          <col name="month" width="100">
+          <col name="data" width="200">
+          <col name="latest">
+        </colgroup>
+        <thead>
+        <tr>
+          <th>Month</th>
+          <th>Trend</th>
+          <th>Latest value</th>
+        </tr>
+        </thead>
+      </table>
+    </vaadin-grid>
 
-        <iron-ajax
-                auto
-                id="dataFetcher"
-                url="other/sample_data/stockData"
-                handle-as="json"
-                on-response="_dataLoaded"
-                debounce-duration="300"></iron-ajax>
-    </template>
+    <iron-ajax
+            auto
+            id="dataFetcher"
+            url="other/sample_data/stockData"
+            handle-as="json"
+            on-response="_dataLoaded"
+            debounce-duration="300"></iron-ajax>
+  </template>
 
-    <script>
-        HTMLImports.whenReady(function () {
-            Polymer({
-                is: 'sparkline-example',
+  <script>
+    HTMLImports.whenReady(function () {
+      Polymer({
+        is: 'sparkline-example',
 
-                ready: function () {
-                    var grid = this.$.grid;
+        ready: function () {
+          var grid = this.$.grid;
 
-                    grid.style.width = "450px";
+          grid.style.width = "450px";
 
-                    grid.then(function (){
+          grid.then(function () {
 
-                        //vaadin-charts as a renderer for a vaadin-grid cell
-                        grid.columns[1].renderer = function (cell) {
-                            var sparkline = document.createElement('vaadin-sparkline');
-                            sparkline.setAttribute('style', 'width:150px; height:48px;');
-                            sparkline.setAttribute('data', cell.data);
+            //vaadin-charts as a renderer for a vaadin-grid cell
+            grid.columns[1].renderer = function (cell) {
+              var sparkline = document.createElement('vaadin-sparkline');
+              sparkline.setAttribute('style', 'width:150px; height:48px;');
+              sparkline.setAttribute('data', cell.data);
 
-                            cell.element.innerHTML = '';
-                            cell.element.appendChild(sparkline);
-                        };
+              cell.element.innerHTML = '';
+              cell.element.appendChild(sparkline);
+            };
 
-                        grid.columns[2].renderer = function (cell) {
-                            cell.element.innerHTML = '';
+            grid.columns[2].renderer = function (cell) {
+              cell.element.innerHTML = '';
 
-                            //show the last value of the data array
-                            var dataArray = cell.row.data.data;
-                            cell.element.innerHTML = '$' + dataArray[dataArray.length - 1];
-                        };
+              //show the last value of the data array
+              var dataArray = cell.row.data.data;
+              cell.element.innerHTML = '$' + dataArray[dataArray.length - 1];
+            };
 
-                    });
+          });
 
-                },
+        },
 
-                _dataLoaded: function (event) {
-                    this.$.grid.items = event.detail.response;
-                }
-            });
-        });
-    </script>
+        _dataLoaded: function (event) {
+          this.$.grid.items = event.detail.response;
+        }
+      });
+    });
+  </script>
 </dom-module>
 
 <sparkline-example></sparkline-example>

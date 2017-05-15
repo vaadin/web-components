@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -38,28 +37,30 @@ Example:
 </vaadin-ohlc-chart>
 -->
 <dom-module id="vaadin-ohlc-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class OhlcChartElement extends Vaadin.BaseChartElement {
-                static get is() { return 'vaadin-ohlc-chart'; }
+      class OhlcChartElement extends Vaadin.BaseChartElement {
+        static get is() {
+          return 'vaadin-ohlc-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType () {
-                    return 'ohlc';
-                }
-            }
+        _getType() {
+          return 'ohlc';
+        }
+      }
 
-            customElements.define(OhlcChartElement.is, OhlcChartElement);
+      customElements.define(OhlcChartElement.is, OhlcChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.OhlcChartElement = OhlcChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.OhlcChartElement = OhlcChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

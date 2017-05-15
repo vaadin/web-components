@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -37,28 +36,30 @@ Example:
     </vaadin-pie-chart>
 -->
 <dom-module id="vaadin-pie-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class PieChartElement extends Vaadin.BaseChartElement {
-                static get is() { return 'vaadin-pie-chart'; }
+      class PieChartElement extends Vaadin.BaseChartElement {
+        static get is() {
+          return 'vaadin-pie-chart';
+        }
 
-                constructor () {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType () {
-                    return 'pie';
-                }
-            }
+        _getType() {
+          return 'pie';
+        }
+      }
 
-            customElements.define(PieChartElement.is, PieChartElement);
+      customElements.define(PieChartElement.is, PieChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.PieChartElement = PieChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.PieChartElement = PieChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

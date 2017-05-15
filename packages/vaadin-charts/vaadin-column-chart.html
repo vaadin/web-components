@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -30,29 +29,31 @@ Example:
     </vaadin-column-chart>
 -->
 <dom-module id="vaadin-column-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class ColumnChartElement extends Vaadin.BaseChartElement {
-                static get is() { return 'vaadin-column-chart'; }
+      class ColumnChartElement extends Vaadin.BaseChartElement {
+        static get is() {
+          return 'vaadin-column-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'column';
-                }
+        _getType() {
+          return 'column';
+        }
 
-            }
+      }
 
-            customElements.define(ColumnChartElement.is, ColumnChartElement);
+      customElements.define(ColumnChartElement.is, ColumnChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.ColumnChartElement = ColumnChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.ColumnChartElement = ColumnChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

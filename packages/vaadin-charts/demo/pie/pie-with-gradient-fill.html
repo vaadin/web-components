@@ -1,61 +1,61 @@
 <vaadin-pie-chart id="pie-with-gradient-fill">
-    <chart-title>Browser market shares at a specific website, 2014</chart-title>
-    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
-    </tooltip>
-    <plot-options>
-        <pie allow-point-select="true" cursor="pointer">
-            <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
-            </data-labels>
-        </pie>
-    </plot-options>
+  <chart-title>Browser market shares at a specific website, 2014</chart-title>
+  <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+  </tooltip>
+  <plot-options>
+    <pie allow-point-select="true" cursor="pointer">
+      <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
+      </data-labels>
+    </pie>
+  </plot-options>
 
-    <data-series name="Browser share">
-        <data>
-            <point>
-                <y>55.11</y>
-                <name>IE</name>
-                <color>
-                  <stops position="0" color="#FF8000"></stops>
-                  <stops position="1" color="#804000"></stops>
-                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
-                </color>
-            </point>
-            <point>
-                <y>21.63</y>
-                <name>Firefox</name>
-                <color>
-                  <stops position="0" color="#00FFFF"></stops>
-                  <stops position="1" color="#008080"></stops>
-                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
-                </color>
-            </point>
-            <point>
-                <y>11.94</y>
-                <name>Chrome</name>
-                <color>
-                  <stops position="0" color="#FFFF00"></stops>
-                  <stops position="1" color="#808000"></stops>
-                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
-                </color>
-            </point>
-            <point>
-                <y>7.15</y>
-                <name>Safari</name>
-                <color>
-                  <stops position="0" color="#0080FF"></stops>
-                  <stops position="1" color="#004080"></stops>
-                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
-                </color>
-            </point>
-            <point>
-                <y>2.14</y>
-                <name>Opera</name>
-                <color>
-                  <stops position="0" color="#FF0000"></stops>
-                  <stops position="1" color="#800000"></stops>
-                  <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
-                </color>
-            </point>
-        </data>
-    </data-series>
+  <data-series name="Browser share">
+    <data>
+      <point>
+        <y>55.11</y>
+        <name>IE</name>
+        <color>
+          <stops position="0" color="#FF8000"></stops>
+          <stops position="1" color="#804000"></stops>
+          <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+        </color>
+      </point>
+      <point>
+        <y>21.63</y>
+        <name>Firefox</name>
+        <color>
+          <stops position="0" color="#00FFFF"></stops>
+          <stops position="1" color="#008080"></stops>
+          <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+        </color>
+      </point>
+      <point>
+        <y>11.94</y>
+        <name>Chrome</name>
+        <color>
+          <stops position="0" color="#FFFF00"></stops>
+          <stops position="1" color="#808000"></stops>
+          <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+        </color>
+      </point>
+      <point>
+        <y>7.15</y>
+        <name>Safari</name>
+        <color>
+          <stops position="0" color="#0080FF"></stops>
+          <stops position="1" color="#004080"></stops>
+          <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+        </color>
+      </point>
+      <point>
+        <y>2.14</y>
+        <name>Opera</name>
+        <color>
+          <stops position="0" color="#FF0000"></stops>
+          <stops position="1" color="#800000"></stops>
+          <radial-gradient cx="0.5" cy="0.3" r="0.7"></radial-gradient>
+        </color>
+      </point>
+    </data>
+  </data-series>
 </vaadin-pie-chart>

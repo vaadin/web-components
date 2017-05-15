@@ -22,7 +22,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
   </template>
   <script>
     class DataSeries extends Vaadin.ConfigurationReaderMixin(Polymer.Element) {
-      static get is() { return 'data-series' }
+      static get is() {
+        return 'data-series';
+      }
 
       static get properties() {
         return {

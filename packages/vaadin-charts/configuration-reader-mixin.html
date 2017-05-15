@@ -13,7 +13,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../polymer/polymer.html">
 
 <script>
-  (function() {
+  (function () {
 
     window.Vaadin = window.Vaadin || {};
 
@@ -55,7 +55,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Elements that contain two dimensional arrays. The values in value array can be specified using attributes and parser knows the correct order.
          **/
-        this._twoDimArrayNodes = { "stops": ["position", "color"] };
+        this._twoDimArrayNodes = {"stops": ["position", "color"]};
 
         /**
          * Elements whose text content should be set as text property value
@@ -83,10 +83,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       /**
-      * Transform the given string to camel-case
-      *
-      * @param {string} str
-      **/
+       * Transform the given string to camel-case
+       *
+       * @param {string} str
+       **/
       _toCamelCase(str) {
         var out = "";
         if (this._mappedKeywords.hasOwnProperty(str)) {
@@ -288,6 +288,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     };
 
   })();
-  
+
 
 </script>

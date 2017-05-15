@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-sparkline.html">
-</head>
-<body>
-<vaadin-sparkline data="10, 20, 14, 12, 30, 50, 80, 2"></vaadin-sparkline>
-<script>
+  </head>
+  <body>
+    <vaadin-sparkline data="10, 20, 14, 12, 30, 50, 80, 2"></vaadin-sparkline>
+    <script>
 
-    suite('<vaadin-sparkline>', function () {
+      suite('<vaadin-sparkline>', function () {
 
         test('sparkline generates correct config for charts', function () {
-            var chart = document.querySelector('vaadin-sparkline').shadowRoot.querySelector('vaadin-line-chart');
-            var conf = chart._chartConf;
+          var chart = document.querySelector('vaadin-sparkline').shadowRoot.querySelector('vaadin-line-chart');
+          var conf = chart._chartConf;
 
-            expect(conf.chart.type).to.equal('line');
-            expect(conf.title.text).to.be.null;
-            expect(conf.series[0].data).to.eql([10, 20, 14, 12, 30, 50, 80, 2]);
-            expect(conf.plotOptions.line.enableMouseTracking).to.be.false;
-            expect(conf.plotOptions.line.marker.enabled).to.be.false;
+          expect(conf.chart.type).to.equal('line');
+          expect(conf.title.text).to.be.null;
+          expect(conf.series[0].data).to.eql([10, 20, 14, 12, 30, 50, 80, 2]);
+          expect(conf.plotOptions.line.enableMouseTracking).to.be.false;
+          expect(conf.plotOptions.line.marker.enabled).to.be.false;
 
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

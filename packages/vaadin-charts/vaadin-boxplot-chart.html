@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -34,30 +33,32 @@ Example:
     </vaadin-boxplot-chart>
 -->
 <dom-module id="vaadin-boxplot-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class BoxplotChartElement extends Vaadin.BaseChartElement {
+      class BoxplotChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-boxplot-chart'; }
+        static get is() {
+          return 'vaadin-boxplot-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'boxplot';
-                }
+        _getType() {
+          return 'boxplot';
+        }
 
-            }
+      }
 
-            customElements.define(BoxplotChartElement.is, BoxplotChartElement);
+      customElements.define(BoxplotChartElement.is, BoxplotChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.BoxplotChartElement = BoxplotChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.BoxplotChartElement = BoxplotChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

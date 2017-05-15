@@ -1,59 +1,59 @@
 <!--This example defines a Web Component that uses an ajax request to define multiple series data-->
 <dom-module id="rest-multiple-series-data">
-    <template>
-        <iron-ajax
-                id="firstSeriesFetcher"
-                url="sample_data/simple_data"
-                handle-as="json"
-                last-response="{{seriesData}}"
-                debounce-duration="300"></iron-ajax>
-        <iron-ajax
-                id="secondSeriesFetcher"
-                url="sample_data/simple_data2"
-                handle-as="json"
-                last-response="{{series2Data}}"
-                debounce-duration="300"></iron-ajax>
+  <template>
+    <iron-ajax
+            id="firstSeriesFetcher"
+            url="sample_data/simple_data"
+            handle-as="json"
+            last-response="{{seriesData}}"
+            debounce-duration="300"></iron-ajax>
+    <iron-ajax
+            id="secondSeriesFetcher"
+            url="sample_data/simple_data2"
+            handle-as="json"
+            last-response="{{series2Data}}"
+            debounce-duration="300"></iron-ajax>
 
-        <vaadin-line-chart id="chart">
-            <chart-title>Monthly Average Temperature</chart-title>
-            <subtitle>Source: WorldClimate.com</subtitle>
+    <vaadin-line-chart id="chart">
+      <chart-title>Monthly Average Temperature</chart-title>
+      <subtitle>Source: WorldClimate.com</subtitle>
 
-            <x-axis>
-                <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-            </x-axis>
+      <x-axis>
+        <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
+      </x-axis>
 
-            <y-axis>
-                <chart-title align="high">Temperature (°C)</chart-title>
-            </y-axis>
+      <y-axis>
+        <chart-title align="high">Temperature (°C)</chart-title>
+      </y-axis>
 
-            <tooltip enabled="true"
-                        formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></tooltip>
+      <tooltip enabled="true"
+               formatter="function() {return '' + this.series.name + ' ' + this.x + ': ' + this.y + '°C';}"></tooltip>
 
-            <plot-options>
-                <line>
-                    <data-labels enabled="true"></data-labels>
-                </line>
-            </plot-options>
-            <data-series name="Tokyo" data="[[seriesData]]"></data-series>
-            <data-series name="London" data="[[series2Data]]"></data-series>
+      <plot-options>
+        <line>
+          <data-labels enabled="true"></data-labels>
+        </line>
+      </plot-options>
+      <data-series name="Tokyo" data="[[seriesData]]"></data-series>
+      <data-series name="London" data="[[series2Data]]"></data-series>
 
-        </vaadin-line-chart>
-    </template>
-    <script>
-        Polymer({
-            is: 'rest-multiple-series-data',
-            properties: {
-                seriesData: Object,
-                series2Data: Object
-            },
-            attached: function () {
-                this.async(function () {
-                    this.$.firstSeriesFetcher.generateRequest();
-                    this.$.secondSeriesFetcher.generateRequest();
-                }, 2);
-            }
-        });
-    </script>
+    </vaadin-line-chart>
+  </template>
+  <script>
+    Polymer({
+      is: 'rest-multiple-series-data',
+      properties: {
+        seriesData: Object,
+        series2Data: Object
+      },
+      attached: function () {
+        this.async(function () {
+          this.$.firstSeriesFetcher.generateRequest();
+          this.$.secondSeriesFetcher.generateRequest();
+        }, 2);
+      }
+    });
+  </script>
 
 </dom-module>
 

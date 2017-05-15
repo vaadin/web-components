@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -44,30 +43,32 @@ Example:
     </vaadin-heatmap-chart>
 -->
 <dom-module id="vaadin-heatmap-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class HeatmapChartElement extends Vaadin.BaseChartElement {
+      class HeatmapChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-heatmap-chart'; }
+        static get is() {
+          return 'vaadin-heatmap-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'heatmap';
-                }
+        _getType() {
+          return 'heatmap';
+        }
 
-            }
+      }
 
-            customElements.define(HeatmapChartElement.is, HeatmapChartElement);
+      customElements.define(HeatmapChartElement.is, HeatmapChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.HeatmapChartElement = HeatmapChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.HeatmapChartElement = HeatmapChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

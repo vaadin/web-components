@@ -1,388 +1,388 @@
 <vaadin-column-chart id="column-with-multi-level-drilldown">
-    <chart-title>Global happiness index</chart-title>
-    <subtitle>Source: www.happyplanetindex.org</subtitle>
-    <x-axis type="category"></x-axis>
-    <legend enabled="false"></legend>
-    <plot-options>
-        <column cursor="pointer">
-        </column>
-    </plot-options>
-    <data-series>
-        <name>Regions</name>
-        <color-by-point>true</color-by-point>
-        <data>
-            <point>
-                <name>Latin America and Caribbean</name>
-                <y>60</y>
-                <drilldown>Latin America and Caribbean Countries</drilldown>
-            </point>
-            <point>
-                <name>Western Nations</name>
-                <y>50</y>
-                <drilldown>Western Nations Countries</drilldown>
-            </point>
-            <point>
-                <name>Middle East and North Africa</name>
-                <y>53</y>
-                <drilldown>Middle East and North Africa Countries</drilldown>
-            </point>
-            <point>
-                <name>Sub-Saharan Africa</name>
-                <y>42</y>
-                <drilldown>Sub-Saharan Africa Countries</drilldown>
-            </point>
-            <point>
-                <name>South Asia</name>
-                <y>53</y>
-                <drilldown>South Asia Countries</drilldown>
-            </point>
-            <point>
-                <name>East Asia</name>
-                <y>55</y>
-                <drilldown>East Asia Countries</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="Latin America and Caribbean Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Costa Rica</name>
-                <y>64</y>
-                <drilldown>Costa Rica Details</drilldown>
-            </point>
-            <point>
-                <name>Colombia</name>
-                <y>59.8</y>
-                <drilldown>Colombia Details</drilldown>
-            </point>
-            <point>
-                <name>Belize</name>
-                <y>59.3</y>
-                <drilldown>Belize Details</drilldown>
-            </point>
-            <point>
-                <name>El Salvador</name>
-                <y>58.9</y>
-                <drilldown>El Salvador Details</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="Costa Rica Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 79.3 ],
-            [ "Well-being (0-10)", 7.3],
-            [ "Footprint (gha/capita)", 2.5 ]
-        </data>
-    </data-series>
-    <data-series id="Colombia Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 73.7 ],
-            [ "Well-being (0-10)", 6.4],
-            [ "Footprint (gha/capita)", 1.8 ]
-        </data>
-    </data-series>
-    <data-series id="Belize Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 76.1 ],
-            [ "Well-being (0-10)", 6.5],
-            [ "Footprint (gha/capita)", 2.1 ]
-        </data>
-    </data-series>
-    <data-series id="El Salvador" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 72.2 ],
-            [ "Well-being (0-10)", 6.7],
-            [ "Footprint (gha/capita)", 2.0 ]
-        </data>
-    </data-series>
-    <data-series id="Western Nations Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>New Zealand</name>
-                <y>51.6</y>
-                <drilldown>New Zealand Details</drilldown>
-            </point>
-            <point>
-                <name>Norway</name>
-                <y>51.4</y>
-                <drilldown>Norway Details</drilldown>
-            </point>
-            <point>
-                <name>Switzerland</name>
-                <y>50.3</y>
-                <drilldown>Switzerland Details</drilldown>
-            </point>
-            <point>
-                <name>United Kingdom</name>
-                <y>47.9</y>
-                <drilldown>United Kingdom Details</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="New Zealand Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 80.7 ],
-            [ "Well-being (0-10)", 7.2],
-            [ "Footprint (gha/capita)", 4.3 ]
-        </data>
-    </data-series>
-    <data-series id="Norway Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 81.1 ],
-            [ "Well-being (0-10)", 7.6],
-            [ "Footprint (gha/capita)", 4.8 ]
-        </data>
-    </data-series>
-    <data-series id="Switzerland Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 82.3 ],
-            [ "Well-being (0-10)", 7.5],
-            [ "Footprint (gha/capita)", 5.0 ]
-        </data>
-    </data-series>
-    <data-series id="United Kingdom Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 80.2 ],
-            [ "Well-being (0-10)", 7.0],
-            [ "Footprint (gha/capita)", 4.7 ]
-        </data>
-    </data-series>
-    <data-series id="Middle East and North Africa Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Israel</name>
-                <y>55.2</y>
-                <drilldown>Israel Details</drilldown>
-            </point>
-            <point>
-                <name>Algeria</name>
-                <y>52.2</y>
-                <drilldown>Algeria Details</drilldown>
-            </point>
-            <point>
-                <name>Jordan</name>
-                <y>51.7</y>
-                <drilldown>Jordan Details</drilldown>
-            </point>
-            <point>
-                <name>Palestine</name>
-                <y>51.2</y>
-                <drilldown>Palestine Details</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="Israel Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 81.6 ],
-            [ "Well-being (0-10)",7.4],
-            [ "Footprint (gha/capita)", 4.0 ]
-        </data>
-    </data-series>
-    <data-series id="Algeria Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 73.1 ],
-            [ "Well-being (0-10)", 5.2],
-            [ "Footprint (gha/capita)", 1.6 ]
-        </data>
-    </data-series>
-    <data-series id="Jordan Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 73.4 ],
-            [ "Well-being (0-10)", 5.7],
-            [ "Footprint (gha/capita)", 2.1 ]
-        </data>
-    </data-series>
-    <data-series id="Palestine Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 72.8 ],
-            [ "Well-being (0-10)", 4.8],
-            [ "Footprint (gha/capita)", 1.4 ]
-        </data>
-    </data-series>
-    <data-series id="Sub-Saharan Africa Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Madagascar</name>
-                <y>51.6</y>
-                <drilldown>Madagascar Details</drilldown>
-            </point>
-            <point>
-                <name>Malawi</name>
-                <y>42.5</y>
-                <drilldown>Malawi Details</drilldown>
-            </point>
-            <point>
-                <name>Ghana</name>
-                <y>40.3</y>
-                <drilldown>Ghana Details</drilldown>
-            </point>
-            <point>
-                <name>Ethiopia</name>
-                <y>39.2</y>
-                <drilldown>Ethiopia Details</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="Madagascar Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 66.7 ],
-            [ "Well-being (0-10)",4.6],
-            [ "Footprint (gha/capita)", 1.2 ]
-        </data>
-    </data-series>
-    <data-series id="Malawi Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 54.2 ],
-            [ "Well-being (0-10)", 5.1],
-            [ "Footprint (gha/capita)", 0.8 ]
-        </data>
-    </data-series>
-    <data-series id="Ghana Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 64.2 ],
-            [ "Well-being (0-10)", 4.6],
-            [ "Footprint (gha/capita)", 1.7 ]
-        </data>
-    </data-series>
-    <data-series id="Ethiopia Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 59.3 ],
-            [ "Well-being (0-10)", 4.4 ],
-            [ "Footprint (gha/capita)", 1.1 ]
-        </data>
-    </data-series>
-    <data-series id="South Asia Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Bangladesh</name>
-                <y>56.3</y>
-                <drilldown>Bangladesh Details</drilldown>
-            </point>
-            <point>
-                <name>Pakistan</name>
-                <y>54.1</y>
-                <drilldown>Pakistan Details</drilldown>
-            </point>
-            <point>
-                <name>India</name>
-                <y>50.9</y>
-                <drilldown>India Details</drilldown>
-            </point>
-            <point>
-                <name>Sri Lanka</name>
-                <y>51.2</y>
-                <drilldown>Sri Lanka Details</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="Bangladesh Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 68.9 ],
-            [ "Well-being (0-10)", 5.0],
-            [ "Footprint (gha/capita)", 0.7]
-        </data>
-    </data-series>
-    <data-series id="Pakistan Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 65.4 ],
-            [ "Well-being (0-10)", 5.3],
-            [ "Footprint (gha/capita)", 0.8]
-        </data>
-    </data-series>
-    <data-series id="India Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 65.4],
-            [ "Well-being (0-10)", 5.0],
-            [ "Footprint (gha/capita)", 0.9 ]
-        </data>
-    </data-series>
-    <data-series id="Sri Lanka Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 74.9 ],
-            [ "Well-being (0-10)", 4.2 ],
-            [ "Footprint (gha/capita)", 1.2 ]
-        </data>
-    </data-series>
-    <data-series id="East Asia Countries" drilldown="true">
-        <name>Countries</name>
-        <data>
-            <point>
-                <name>Vietnam</name>
-                <y>60.4</y>
-                <drilldown>Vietnam Details</drilldown>
-            </point>
-            <point>
-                <name>Indonesia</name>
-                <y>55.5</y>
-                <drilldown>Indonesia Details</drilldown>
-            </point>
-            <point>
-                <name>Thailand</name>
-                <y>53.5</y>
-                <drilldown>Thailand Details</drilldown>
-            </point>
-            <point>
-                <name>Philippines</name>
-                <y>52.4</y>
-                <drilldown>Philippines Details</drilldown>
-            </point>
-        </data>
-    </data-series>
-    <data-series id="Vietnam Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy",75.2],
-            [ "Well-being (0-10)",5.8],
-            [ "Footprint (gha/capita)", 1.4]
-        </data>
-    </data-series>
-    <data-series id="Indonesia Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 69.4 ],
-            [ "Well-being (0-10)", 5.5],
-            [ "Footprint (gha/capita)", 1.1]
-        </data>
-    </data-series>
-    <data-series id="Thailand Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 74.1 ],
-            [ "Well-being (0-10)", 6.2],
-            [ "Footprint (gha/capita)", 2.4 ]
-        </data>
-    </data-series>
-    <data-series id="Philippines Details" drilldown="true">
-        <name>Details</name>
-        <data>
-            [ "Life Expectancy", 68.7 ],
-            [ "Well-being (0-10)", 4.9 ],
-            [ "Footprint (gha/capita)", 1.0 ]
-        </data>
-    </data-series>
+  <chart-title>Global happiness index</chart-title>
+  <subtitle>Source: www.happyplanetindex.org</subtitle>
+  <x-axis type="category"></x-axis>
+  <legend enabled="false"></legend>
+  <plot-options>
+    <column cursor="pointer">
+    </column>
+  </plot-options>
+  <data-series>
+    <name>Regions</name>
+    <color-by-point>true</color-by-point>
+    <data>
+      <point>
+        <name>Latin America and Caribbean</name>
+        <y>60</y>
+        <drilldown>Latin America and Caribbean Countries</drilldown>
+      </point>
+      <point>
+        <name>Western Nations</name>
+        <y>50</y>
+        <drilldown>Western Nations Countries</drilldown>
+      </point>
+      <point>
+        <name>Middle East and North Africa</name>
+        <y>53</y>
+        <drilldown>Middle East and North Africa Countries</drilldown>
+      </point>
+      <point>
+        <name>Sub-Saharan Africa</name>
+        <y>42</y>
+        <drilldown>Sub-Saharan Africa Countries</drilldown>
+      </point>
+      <point>
+        <name>South Asia</name>
+        <y>53</y>
+        <drilldown>South Asia Countries</drilldown>
+      </point>
+      <point>
+        <name>East Asia</name>
+        <y>55</y>
+        <drilldown>East Asia Countries</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="Latin America and Caribbean Countries" drilldown="true">
+    <name>Countries</name>
+    <data>
+      <point>
+        <name>Costa Rica</name>
+        <y>64</y>
+        <drilldown>Costa Rica Details</drilldown>
+      </point>
+      <point>
+        <name>Colombia</name>
+        <y>59.8</y>
+        <drilldown>Colombia Details</drilldown>
+      </point>
+      <point>
+        <name>Belize</name>
+        <y>59.3</y>
+        <drilldown>Belize Details</drilldown>
+      </point>
+      <point>
+        <name>El Salvador</name>
+        <y>58.9</y>
+        <drilldown>El Salvador Details</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="Costa Rica Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 79.3 ],
+      [ "Well-being (0-10)", 7.3],
+      [ "Footprint (gha/capita)", 2.5 ]
+    </data>
+  </data-series>
+  <data-series id="Colombia Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 73.7 ],
+      [ "Well-being (0-10)", 6.4],
+      [ "Footprint (gha/capita)", 1.8 ]
+    </data>
+  </data-series>
+  <data-series id="Belize Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 76.1 ],
+      [ "Well-being (0-10)", 6.5],
+      [ "Footprint (gha/capita)", 2.1 ]
+    </data>
+  </data-series>
+  <data-series id="El Salvador" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 72.2 ],
+      [ "Well-being (0-10)", 6.7],
+      [ "Footprint (gha/capita)", 2.0 ]
+    </data>
+  </data-series>
+  <data-series id="Western Nations Countries" drilldown="true">
+    <name>Countries</name>
+    <data>
+      <point>
+        <name>New Zealand</name>
+        <y>51.6</y>
+        <drilldown>New Zealand Details</drilldown>
+      </point>
+      <point>
+        <name>Norway</name>
+        <y>51.4</y>
+        <drilldown>Norway Details</drilldown>
+      </point>
+      <point>
+        <name>Switzerland</name>
+        <y>50.3</y>
+        <drilldown>Switzerland Details</drilldown>
+      </point>
+      <point>
+        <name>United Kingdom</name>
+        <y>47.9</y>
+        <drilldown>United Kingdom Details</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="New Zealand Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 80.7 ],
+      [ "Well-being (0-10)", 7.2],
+      [ "Footprint (gha/capita)", 4.3 ]
+    </data>
+  </data-series>
+  <data-series id="Norway Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 81.1 ],
+      [ "Well-being (0-10)", 7.6],
+      [ "Footprint (gha/capita)", 4.8 ]
+    </data>
+  </data-series>
+  <data-series id="Switzerland Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 82.3 ],
+      [ "Well-being (0-10)", 7.5],
+      [ "Footprint (gha/capita)", 5.0 ]
+    </data>
+  </data-series>
+  <data-series id="United Kingdom Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 80.2 ],
+      [ "Well-being (0-10)", 7.0],
+      [ "Footprint (gha/capita)", 4.7 ]
+    </data>
+  </data-series>
+  <data-series id="Middle East and North Africa Countries" drilldown="true">
+    <name>Countries</name>
+    <data>
+      <point>
+        <name>Israel</name>
+        <y>55.2</y>
+        <drilldown>Israel Details</drilldown>
+      </point>
+      <point>
+        <name>Algeria</name>
+        <y>52.2</y>
+        <drilldown>Algeria Details</drilldown>
+      </point>
+      <point>
+        <name>Jordan</name>
+        <y>51.7</y>
+        <drilldown>Jordan Details</drilldown>
+      </point>
+      <point>
+        <name>Palestine</name>
+        <y>51.2</y>
+        <drilldown>Palestine Details</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="Israel Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 81.6 ],
+      [ "Well-being (0-10)",7.4],
+      [ "Footprint (gha/capita)", 4.0 ]
+    </data>
+  </data-series>
+  <data-series id="Algeria Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 73.1 ],
+      [ "Well-being (0-10)", 5.2],
+      [ "Footprint (gha/capita)", 1.6 ]
+    </data>
+  </data-series>
+  <data-series id="Jordan Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 73.4 ],
+      [ "Well-being (0-10)", 5.7],
+      [ "Footprint (gha/capita)", 2.1 ]
+    </data>
+  </data-series>
+  <data-series id="Palestine Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 72.8 ],
+      [ "Well-being (0-10)", 4.8],
+      [ "Footprint (gha/capita)", 1.4 ]
+    </data>
+  </data-series>
+  <data-series id="Sub-Saharan Africa Countries" drilldown="true">
+    <name>Countries</name>
+    <data>
+      <point>
+        <name>Madagascar</name>
+        <y>51.6</y>
+        <drilldown>Madagascar Details</drilldown>
+      </point>
+      <point>
+        <name>Malawi</name>
+        <y>42.5</y>
+        <drilldown>Malawi Details</drilldown>
+      </point>
+      <point>
+        <name>Ghana</name>
+        <y>40.3</y>
+        <drilldown>Ghana Details</drilldown>
+      </point>
+      <point>
+        <name>Ethiopia</name>
+        <y>39.2</y>
+        <drilldown>Ethiopia Details</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="Madagascar Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 66.7 ],
+      [ "Well-being (0-10)",4.6],
+      [ "Footprint (gha/capita)", 1.2 ]
+    </data>
+  </data-series>
+  <data-series id="Malawi Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 54.2 ],
+      [ "Well-being (0-10)", 5.1],
+      [ "Footprint (gha/capita)", 0.8 ]
+    </data>
+  </data-series>
+  <data-series id="Ghana Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 64.2 ],
+      [ "Well-being (0-10)", 4.6],
+      [ "Footprint (gha/capita)", 1.7 ]
+    </data>
+  </data-series>
+  <data-series id="Ethiopia Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 59.3 ],
+      [ "Well-being (0-10)", 4.4 ],
+      [ "Footprint (gha/capita)", 1.1 ]
+    </data>
+  </data-series>
+  <data-series id="South Asia Countries" drilldown="true">
+    <name>Countries</name>
+    <data>
+      <point>
+        <name>Bangladesh</name>
+        <y>56.3</y>
+        <drilldown>Bangladesh Details</drilldown>
+      </point>
+      <point>
+        <name>Pakistan</name>
+        <y>54.1</y>
+        <drilldown>Pakistan Details</drilldown>
+      </point>
+      <point>
+        <name>India</name>
+        <y>50.9</y>
+        <drilldown>India Details</drilldown>
+      </point>
+      <point>
+        <name>Sri Lanka</name>
+        <y>51.2</y>
+        <drilldown>Sri Lanka Details</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="Bangladesh Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 68.9 ],
+      [ "Well-being (0-10)", 5.0],
+      [ "Footprint (gha/capita)", 0.7]
+    </data>
+  </data-series>
+  <data-series id="Pakistan Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 65.4 ],
+      [ "Well-being (0-10)", 5.3],
+      [ "Footprint (gha/capita)", 0.8]
+    </data>
+  </data-series>
+  <data-series id="India Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 65.4],
+      [ "Well-being (0-10)", 5.0],
+      [ "Footprint (gha/capita)", 0.9 ]
+    </data>
+  </data-series>
+  <data-series id="Sri Lanka Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 74.9 ],
+      [ "Well-being (0-10)", 4.2 ],
+      [ "Footprint (gha/capita)", 1.2 ]
+    </data>
+  </data-series>
+  <data-series id="East Asia Countries" drilldown="true">
+    <name>Countries</name>
+    <data>
+      <point>
+        <name>Vietnam</name>
+        <y>60.4</y>
+        <drilldown>Vietnam Details</drilldown>
+      </point>
+      <point>
+        <name>Indonesia</name>
+        <y>55.5</y>
+        <drilldown>Indonesia Details</drilldown>
+      </point>
+      <point>
+        <name>Thailand</name>
+        <y>53.5</y>
+        <drilldown>Thailand Details</drilldown>
+      </point>
+      <point>
+        <name>Philippines</name>
+        <y>52.4</y>
+        <drilldown>Philippines Details</drilldown>
+      </point>
+    </data>
+  </data-series>
+  <data-series id="Vietnam Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy",75.2],
+      [ "Well-being (0-10)",5.8],
+      [ "Footprint (gha/capita)", 1.4]
+    </data>
+  </data-series>
+  <data-series id="Indonesia Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 69.4 ],
+      [ "Well-being (0-10)", 5.5],
+      [ "Footprint (gha/capita)", 1.1]
+    </data>
+  </data-series>
+  <data-series id="Thailand Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 74.1 ],
+      [ "Well-being (0-10)", 6.2],
+      [ "Footprint (gha/capita)", 2.4 ]
+    </data>
+  </data-series>
+  <data-series id="Philippines Details" drilldown="true">
+    <name>Details</name>
+    <data>
+      [ "Life Expectancy", 68.7 ],
+      [ "Well-being (0-10)", 4.9 ],
+      [ "Footprint (gha/capita)", 1.0 ]
+    </data>
+  </data-series>
 </vaadin-column-chart>

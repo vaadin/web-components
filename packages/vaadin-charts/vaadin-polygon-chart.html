@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -34,30 +33,32 @@ Example:
     </vaadin-polygon-chart>
 -->
 <dom-module id="vaadin-polygon-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class PolygonChartElement extends Vaadin.BaseChartElement {
+      class PolygonChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-polygon-chart'; }
+        static get is() {
+          return 'vaadin-polygon-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'polygon';
-                }
+        _getType() {
+          return 'polygon';
+        }
 
-            }
+      }
 
-            customElements.define(PolygonChartElement.is, PolygonChartElement);
+      customElements.define(PolygonChartElement.is, PolygonChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.PolygonChartElement = PolygonChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.PolygonChartElement = PolygonChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

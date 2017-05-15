@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -47,30 +46,32 @@ Example:
     </vaadin-treemap-chart>
 -->
 <dom-module id="vaadin-treemap-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class TreemapChartElement extends Vaadin.BaseChartElement {
+      class TreemapChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-treemap-chart'; }
+        static get is() {
+          return 'vaadin-treemap-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'treemap';
-                }
+        _getType() {
+          return 'treemap';
+        }
 
-            }
+      }
 
-            customElements.define(TreemapChartElement.is, TreemapChartElement);
-                        
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.TreemapChartElement = TreemapChartElement;
+      customElements.define(TreemapChartElement.is, TreemapChartElement);
 
-        })();
-    </script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.TreemapChartElement = TreemapChartElement;
+
+    })();
+  </script>
 </dom-module>

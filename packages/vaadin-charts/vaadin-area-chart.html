@@ -31,28 +31,30 @@ Example:
 </vaadin-area-chart>
 -->
 <dom-module id="vaadin-area-chart">
-    <template>
-    </template>
-    <script>
-        (function (){
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class AreaChartElement extends Vaadin.BaseChartElement {
-                static get is () { return 'vaadin-area-chart'; }
+      class AreaChartElement extends Vaadin.BaseChartElement {
+        static get is() {
+          return 'vaadin-area-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType () {
-                    return 'area';
-                }
-            }
+        _getType() {
+          return 'area';
+        }
+      }
 
-            customElements.define(AreaChartElement.is, AreaChartElement);
+      customElements.define(AreaChartElement.is, AreaChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.AreaChartElement = AreaChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.AreaChartElement = AreaChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

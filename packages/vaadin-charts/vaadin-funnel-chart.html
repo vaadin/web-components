@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -36,30 +35,32 @@ Example:
     </vaadin-funnel-chart>
 -->
 <dom-module id="vaadin-funnel-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class FunnelChartElement extends Vaadin.BaseChartElement {
-                
-                static get is() { return 'vaadin-funnel-chart'; }
+      class FunnelChartElement extends Vaadin.BaseChartElement {
 
-                constructor() {
-                    super();
-                }
+        static get is() {
+          return 'vaadin-funnel-chart';
+        }
 
-                _getType() {
-                    return 'funnel';
-                }
+        constructor() {
+          super();
+        }
 
-            }
+        _getType() {
+          return 'funnel';
+        }
 
-            customElements.define(FunnelChartElement.is, FunnelChartElement);
+      }
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.FunnelChartElement = FunnelChartElement;
+      customElements.define(FunnelChartElement.is, FunnelChartElement);
 
-        })();
-    </script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.FunnelChartElement = FunnelChartElement;
+
+    })();
+  </script>
 </dom-module>

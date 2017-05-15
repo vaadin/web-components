@@ -1,65 +1,66 @@
 <dom-module id="solid-gauge-example">
-    <template>
-        <vaadin-solidgauge-chart id="chart" on-chart-loaded="loadListener">
-            <chart height="500"></chart>
-            <chart-title>Speed</chart-title>
-            <pane start-angle="-90" end-angle="90">
-                <background background-color="#EEE" inner-radius="60%" outer-radius="100%" shape="arc"></background>
-            </pane>
-            <tooltip enabled="true" valueSuffix=" km/h"></tooltip>
-            <y-axis min="0" max="200" line-width="0" minor-tick-width="0" tick-width="0">
-                <stops>0.1, #55BF3B</stops>
-                <stops>0.5, #DDDF0D</stops>
-                <stops>0.9, #DF5353</stops>
-                <chart-title y="-100"></chart-title>
-                <labels enabled="false"></labels>
-            </y-axis>
-            <plot-options>
-                <solidgauge>
-                    <data-labels y="5" border-width="0" useHtml="true" format='<div style="text-align:center"><span style="font-size:25px;">{y}</span><br/> <span style=font-size:12pxg>km/h</span></div>'></data-labels>
+  <template>
+    <vaadin-solidgauge-chart id="chart" on-chart-loaded="loadListener">
+      <chart height="500"></chart>
+      <chart-title>Speed</chart-title>
+      <pane start-angle="-90" end-angle="90">
+        <background background-color="#EEE" inner-radius="60%" outer-radius="100%" shape="arc"></background>
+      </pane>
+      <tooltip enabled="true" valueSuffix=" km/h"></tooltip>
+      <y-axis min="0" max="200" line-width="0" minor-tick-width="0" tick-width="0">
+        <stops>0.1, #55BF3B</stops>
+        <stops>0.5, #DDDF0D</stops>
+        <stops>0.9, #DF5353</stops>
+        <chart-title y="-100"></chart-title>
+        <labels enabled="false"></labels>
+      </y-axis>
+      <plot-options>
+        <solidgauge>
+          <data-labels y="5" border-width="0" useHtml="true"
+                       format='<div style="text-align:center"><span style="font-size:25px;">{y}</span><br/> <span style=font-size:12pxg>km/h</span></div>'></data-labels>
 
-                </solidgauge>
-            </plot-options>
-            <data-series>
-                <data>80</data>
-            </data-series>
-        </vaadin-solidgauge-chart>
-    </template>
-    <script>
-        Polymer({
-            is: 'solid-gauge-example',
-            properties: {
-                isAttached: Boolean,
-                isChartReady: Boolean
-            },
-            updateChart: function() {
-                if(this.isAttached && this.isChartReady) {
-                    var chartWC = this.$.chart;
-                    if (chartWC) {
-                        var chart = chartWC.chart;
-                        var point = chart.series[0].points[0];
-                        var inc = Math.round((Math.random() - 0.5) * 100);
-                        var newVal = point.y + inc;
-                        if (newVal < 0 || newVal > 200) {
-                            newVal = point.y - inc;
-                        }
-                        point.update(newVal);
-                    }
-                    this.async(this.updateChart, 2000);
-                }
-            },
-            loadListener: function (e) {
-                this.isChartReady = true;
-                this.updateChart();
-            },
-            detached: function() {
-                this.isAttached=false;
-            },
-            attached: function() {
-                this.isAttached=true;
-                this.updateChart();
+        </solidgauge>
+      </plot-options>
+      <data-series>
+        <data>80</data>
+      </data-series>
+    </vaadin-solidgauge-chart>
+  </template>
+  <script>
+    Polymer({
+      is: 'solid-gauge-example',
+      properties: {
+        isAttached: Boolean,
+        isChartReady: Boolean
+      },
+      updateChart: function () {
+        if (this.isAttached && this.isChartReady) {
+          var chartWC = this.$.chart;
+          if (chartWC) {
+            var chart = chartWC.chart;
+            var point = chart.series[0].points[0];
+            var inc = Math.round((Math.random() - 0.5) * 100);
+            var newVal = point.y + inc;
+            if (newVal < 0 || newVal > 200) {
+              newVal = point.y - inc;
             }
-        });
-    </script>
+            point.update(newVal);
+          }
+          this.async(this.updateChart, 2000);
+        }
+      },
+      loadListener: function (e) {
+        this.isChartReady = true;
+        this.updateChart();
+      },
+      detached: function () {
+        this.isAttached = false;
+      },
+      attached: function () {
+        this.isAttached = true;
+        this.updateChart();
+      }
+    });
+  </script>
 </dom-module>
 <solid-gauge-example></solid-gauge-example>

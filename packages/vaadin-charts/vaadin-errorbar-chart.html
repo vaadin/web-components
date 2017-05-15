@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -38,31 +37,33 @@ Example:
     </vaadin-errorbar-chart>
 -->
 <dom-module id="vaadin-errorbar-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class ErrorbarChartElement extends Vaadin.BaseChartElement {
-                
-                static get is() { return 'vaadin-errorbar-chart'; }
+      class ErrorbarChartElement extends Vaadin.BaseChartElement {
 
-                constructor() {
-                    super();
-                }
+        static get is() {
+          return 'vaadin-errorbar-chart';
+        }
 
-                _getType() {
-                    return 'errorbar';
-                }
+        constructor() {
+          super();
+        }
 
-            }
+        _getType() {
+          return 'errorbar';
+        }
+
+      }
 
 
-            customElements.define(ErrorbarChartElement.is, ErrorbarChartElement);
+      customElements.define(ErrorbarChartElement.is, ErrorbarChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.ErrorbarChartElement = ErrorbarChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.ErrorbarChartElement = ErrorbarChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

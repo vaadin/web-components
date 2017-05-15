@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -33,30 +32,32 @@ Example:
     </vaadin-solidgauge-chart>
 -->
 <dom-module id="vaadin-solidgauge-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class SolidgaugeChartElement extends Vaadin.BaseChartElement {
+      class SolidgaugeChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-solidgauge-chart'; }
+        static get is() {
+          return 'vaadin-solidgauge-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'solidgauge';
-                }
+        _getType() {
+          return 'solidgauge';
+        }
 
-            }
+      }
 
-            customElements.define(SolidgaugeChartElement.is, SolidgaugeChartElement);
-                        
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.SolidgaugeChartElement = SolidgaugeChartElement;
+      customElements.define(SolidgaugeChartElement.is, SolidgaugeChartElement);
 
-        })();
-    </script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.SolidgaugeChartElement = SolidgaugeChartElement;
+
+    })();
+  </script>
 </dom-module>

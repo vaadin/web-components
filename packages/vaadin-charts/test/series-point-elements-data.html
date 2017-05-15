@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="chartId">
-    <data-series id="seriesId">
+  </head>
+  <body>
+    <vaadin-line-chart id="chartId">
+      <data-series id="seriesId">
         <data>
-            <point>
-                <x>4</x>
-                <y>2</y>
-                <name>Foobar</name>
-                <color>#00FF00</color>
-            </point>
-            <point>
-                <x>6</x>
-                <y>5</y>
-                <name>Barfoo</name>
-            </point>
-            <point>
-                <x>3</x>
-                <y>6</y>
-                <name>Foobar</name>
-                <color>#00FFFF</color>
-            </point>
-            <point>
-                <x>5</x>
-                <y>4</y>
-                <name>Barfoo2</name>
-            </point>
+          <point>
+            <x>4</x>
+            <y>2</y>
+            <name>Foobar</name>
+            <color>#00FF00</color>
+          </point>
+          <point>
+            <x>6</x>
+            <y>5</y>
+            <name>Barfoo</name>
+          </point>
+          <point>
+            <x>3</x>
+            <y>6</y>
+            <name>Foobar</name>
+            <color>#00FFFF</color>
+          </point>
+          <point>
+            <x>5</x>
+            <y>4</y>
+            <name>Barfoo2</name>
+          </point>
         </data>
-    </data-series>
-</vaadin-line-chart>
-<script>
+      </data-series>
+    </vaadin-line-chart>
+    <script>
 
-    suite('<data-series>', function () {
+      suite('<data-series>', function () {
 
         test('series config parsed', function () {
-            var chartswc = document.querySelector('#chartId');
-            var conf = chartswc._chartConf;
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
-            expect(conf.series[0].data).to.have.length(4);
-            expect(conf.series[0].data[1].x).to.equal(6);
-            expect(conf.series[0].data[1].y).to.equal(5);
-            expect(conf.series[0].data[1].name).to.equal('Barfoo');
-            expect(conf.series[0].data[2].color).to.equal('#00FFFF');
+          var chartswc = document.querySelector('#chartId');
+          var conf = chartswc._chartConf;
+          expect(conf.series).to.exist;
+          expect(conf.series).not.to.be.empty;
+          expect(conf.series[0].data).to.exist;
+          expect(conf.series[0].data).not.to.be.empty;
+          expect(conf.series[0].data).to.have.length(4);
+          expect(conf.series[0].data[1].x).to.equal(6);
+          expect(conf.series[0].data[1].y).to.equal(5);
+          expect(conf.series[0].data[1].name).to.equal('Barfoo');
+          expect(conf.series[0].data[2].color).to.equal('#00FFFF');
 
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

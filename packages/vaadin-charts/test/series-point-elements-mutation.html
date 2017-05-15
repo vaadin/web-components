@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="chartId">
-    <data-series id="seriesId">
+  </head>
+  <body>
+    <vaadin-line-chart id="chartId">
+      <data-series id="seriesId">
         <data id="dataId">
-            <point>
-                <x>4</x>
-                <y>2</y>
-                <name>Foobar</name>
-                <color>#00FF00</color>
-            </point>
-            <point>
-                <x>6</x>
-                <y>5</y>
-                <name>Barfoo</name>
-            </point>
+          <point>
+            <x>4</x>
+            <y>2</y>
+            <name>Foobar</name>
+            <color>#00FF00</color>
+          </point>
+          <point>
+            <x>6</x>
+            <y>5</y>
+            <name>Barfoo</name>
+          </point>
         </data>
-    </data-series>
-</vaadin-line-chart>
-<script>
+      </data-series>
+    </vaadin-line-chart>
+    <script>
 
-    suite('<data-series>', function () {
+      suite('<data-series>', function () {
 
         test('series config parsed', function (done) {
-            var chartswc = document.querySelector('#chartId');
-            var conf = chartswc._chartConf;
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
-            expect(conf.series[0].data).to.have.length(2);
+          var chartswc = document.querySelector('#chartId');
+          var conf = chartswc._chartConf;
+          expect(conf.series).to.exist;
+          expect(conf.series).not.to.be.empty;
+          expect(conf.series[0].data).to.exist;
+          expect(conf.series[0].data).not.to.be.empty;
+          expect(conf.series[0].data).to.have.length(2);
 
-            var dataElement = Polymer.dom(chartswc).querySelector('#dataId');
-            var point = document.createElement('point');
-            var x = document.createElement('x');
-            x.textContent = '8';
-            point.appendChild(x);
-            var y = document.createElement('y');
-            y.textContent = '3';
-            point.appendChild(y);
-            dataElement.appendChild(point);
-            setTimeout(function () {
-                expect(conf.series[0].data).to.have.length(3);
-                expect(conf.series[0].data[2].x).to.equal(8);
-                expect(conf.series[0].data[2].y).to.equal(3);
+          var dataElement = Polymer.dom(chartswc).querySelector('#dataId');
+          var point = document.createElement('point');
+          var x = document.createElement('x');
+          x.textContent = '8';
+          point.appendChild(x);
+          var y = document.createElement('y');
+          y.textContent = '3';
+          point.appendChild(y);
+          dataElement.appendChild(point);
+          setTimeout(function () {
+            expect(conf.series[0].data).to.have.length(3);
+            expect(conf.series[0].data[2].x).to.equal(8);
+            expect(conf.series[0].data[2].y).to.equal(3);
 
-                done();
+            done();
 
-            });
+          });
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

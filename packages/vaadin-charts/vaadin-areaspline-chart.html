@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -30,30 +29,32 @@ Example:
     </vaadin-areaspline-chart>
 -->
 <dom-module id="vaadin-areaspline-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class AreasplineChartElement extends Vaadin.BaseChartElement {
+      class AreasplineChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-areaspline-chart'; }
+        static get is() {
+          return 'vaadin-areaspline-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'areaspline';
-                }
+        _getType() {
+          return 'areaspline';
+        }
 
-            }
+      }
 
-            customElements.define(AreasplineChartElement.is, AreasplineChartElement);
+      customElements.define(AreasplineChartElement.is, AreasplineChartElement);
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.AreasplineChartElement = AreasplineChartElement;
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.AreasplineChartElement = AreasplineChartElement;
 
-        })();
-    </script>
+    })();
+  </script>
 </dom-module>

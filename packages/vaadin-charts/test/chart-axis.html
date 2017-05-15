@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="xAxisWithCategories">
-    <x-axis>
+  </head>
+  <body>
+    <vaadin-line-chart id="xAxisWithCategories">
+      <x-axis>
         <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-    </x-axis>
-</vaadin-line-chart>
+      </x-axis>
+    </vaadin-line-chart>
 
-<script>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('chart with x-axis categories', function () {
-            var chartwc = document.querySelector('#xAxisWithCategories');
-            var conf = chartwc._chartConf;
-            expect(conf.xAxis[0].categories).to.eql(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
+          var chartwc = document.querySelector('#xAxisWithCategories');
+          var conf = chartwc._chartConf;
+          expect(conf.xAxis[0].categories).to.eql(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
         });
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

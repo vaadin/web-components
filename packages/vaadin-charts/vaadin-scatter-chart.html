@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -30,30 +29,32 @@ Example:
     </vaadin-scatter-chart>
 -->
 <dom-module id="vaadin-scatter-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class ScatterChartElement extends Vaadin.BaseChartElement {
+      class ScatterChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-scatter-chart'; }
+        static get is() {
+          return 'vaadin-scatter-chart';
+        }
 
-                constructor() {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType() {
-                    return 'scatter';
-                }
+        _getType() {
+          return 'scatter';
+        }
 
-            }
+      }
 
-            customElements.define(ScatterChartElement.is, ScatterChartElement);
-                        
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.ScatterChartElement = ScatterChartElement;
+      customElements.define(ScatterChartElement.is, ScatterChartElement);
 
-        })();
-    </script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.ScatterChartElement = ScatterChartElement;
+
+    })();
+  </script>
 </dom-module>

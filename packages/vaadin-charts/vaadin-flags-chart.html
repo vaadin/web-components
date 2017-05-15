@@ -12,7 +12,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 
-
 <link rel="import" href="data-series.html">
 
 <link rel="import" href="base-chart.html">
@@ -52,30 +51,32 @@ Example:
 </vaadin-flags-chart>
 -->
 <dom-module id="vaadin-flags-chart">
-    <template>
-    </template>
-    <script>
-        (function () {
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            class FlagsChartElement extends Vaadin.BaseChartElement {
+      class FlagsChartElement extends Vaadin.BaseChartElement {
 
-                static get is() { return 'vaadin-flags-chart'; }
+        static get is() {
+          return 'vaadin-flags-chart';
+        }
 
-                constructor () {
-                    super();
-                }
+        constructor() {
+          super();
+        }
 
-                _getType () {
-                    return 'flags';
-                }
-                
-            }
+        _getType() {
+          return 'flags';
+        }
 
-            customElements.define(FlagsChartElement.is, FlagsChartElement);
+      }
 
-            window.Vaadin = window.Vaadin || {};
-            window.Vaadin.FlagsChartElement = FlagsChartElement;
+      customElements.define(FlagsChartElement.is, FlagsChartElement);
 
-        })();
-    </script>
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.FlagsChartElement = FlagsChartElement;
+
+    })();
+  </script>
 </dom-module>

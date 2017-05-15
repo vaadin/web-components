@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../../polymer/polymer.html">
-</head>
-<body>
-  <vaadin-pie-chart id="pieWithSeries">
+  </head>
+  <body>
+    <vaadin-pie-chart id="pieWithSeries">
       <data-series name="Browser share">
-          <data>["Firefox", 45.0],
-              ["IE", 26.8],
-              ["Chrome", 12.8],
-              ["Safari", 8.5],
-              ["Opera", 6.2],
-              ["Others", 0.7]
-          </data>
+        <data>["Firefox", 45.0],
+          ["IE", 26.8],
+          ["Chrome", 12.8],
+          ["Safari", 8.5],
+          ["Opera", 6.2],
+          ["Others", 0.7]
+        </data>
       </data-series>
-  </vaadin-pie-chart>
+    </vaadin-pie-chart>
 
-<script>
-    suite('<vaadin-_-chart>', function () {
-        setup(function(done) {
-            Polymer.Base.importHref('../vaadin-pie-chart.html', null, null, true);
-            HTMLImports.whenReady(function() {
-              done();
-            });
+    <script>
+      suite('<vaadin-_-chart>', function () {
+        setup(function (done) {
+          Polymer.Base.importHref('../vaadin-pie-chart.html', null, null, true);
+          HTMLImports.whenReady(function () {
+            done();
+          });
         });
         test('dynamic importing', function (done) {
-            var chartwc = document.querySelector('#pieWithSeries');
-            setTimeout(function () {
-                var conf = chartwc._chartConf;
-                expect(conf.series).to.exist;
-                expect(conf.series).not.to.be.empty;
-                expect(conf.series[0].data).to.exist;
-                expect(conf.series[0].data).not.to.be.empty;
-                done();
-            }, 300);
+          var chartwc = document.querySelector('#pieWithSeries');
+          setTimeout(function () {
+            var conf = chartwc._chartConf;
+            expect(conf.series).to.exist;
+            expect(conf.series).not.to.be.empty;
+            expect(conf.series[0].data).to.exist;
+            expect(conf.series[0].data).not.to.be.empty;
+            done();
+          }, 300);
         });
-    });
-</script>
+      });
+    </script>
 
-</body>
+  </body>
 </html>

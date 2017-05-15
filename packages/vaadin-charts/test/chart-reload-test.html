@@ -1,125 +1,125 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
+  </head>
+  <body>
 
-<dom-module id="reload-chart">
-    <template>
+    <dom-module id="reload-chart">
+      <template>
         <vaadin-line-chart id="chartWithBinding">
-            <chart polar="true"></chart>
-            <chart-title>Global temperature change</chart-title>
-            <subtitle>Data input from CSV</subtitle>
-            <plot-options>
-                <series>
-                    <marker enabled="false"></marker>
-                </series>
-            </plot-options>
-            <x-axis type="datetime"></x-axis>
-            <data-series id="seriesId" data="[[seriesData]]" line-width="1" name="Global"></data-series>
+          <chart polar="true"></chart>
+          <chart-title>Global temperature change</chart-title>
+          <subtitle>Data input from CSV</subtitle>
+          <plot-options>
+            <series>
+              <marker enabled="false"></marker>
+            </series>
+          </plot-options>
+          <x-axis type="datetime"></x-axis>
+          <data-series id="seriesId" data="[[seriesData]]" line-width="1" name="Global"></data-series>
         </vaadin-line-chart>
         <button id="pointBtn" on-click="_addSeriesPoint">Add series point</button>
         <button id="titleBtn" on-click="_changeTitle">Change title</button>
         <button id="nameBtn" on-click="_changeName">Change series name</button>
         <button id="reloadBtn" on-click="_reload">Reload</button>
 
-    </template>
-    <script>
+      </template>
+      <script>
         (function () {
-            HTMLImports.whenReady(function () {
-                Polymer({
-                    is: 'reload-chart',
-                    properties: {
-                        seriesData: {
-                            type: Array,
-                            value: [
-                                [1183939200000, 40.71],
-                                [1184025600000, 40.38],
-                                [1184112000000, 40.82],
-                                [1184198400000, 47.55],
-                                [1184284800000, 41.18],
-                                [1184544000000, 41.06],
-                                [1184630400000, 41.47]]
-                        }
-                    },
-                    _addSeriesPoint: function () {
-                        var x = (new Date()).getTime(),
-                                y = Math.floor(Math.random() * 40) + 1 ;
-                        this.push('seriesData', [x, y]);
-                    },
-                    _changeTitle: function () {
-                        this.$.chartWithBinding.chart.setTitle({text: 'New title'});
-                    },
-                    _changeName: function () {
-                        this.$.chartWithBinding.chart.series[0].name = 'New name';
-                    },
-                    _reload: function () {
-                        this.$.chartWithBinding.reloadConfiguration();
-                    }
-                });
+          HTMLImports.whenReady(function () {
+            Polymer({
+              is: 'reload-chart',
+              properties: {
+                seriesData: {
+                  type: Array,
+                  value: [
+                    [1183939200000, 40.71],
+                    [1184025600000, 40.38],
+                    [1184112000000, 40.82],
+                    [1184198400000, 47.55],
+                    [1184284800000, 41.18],
+                    [1184544000000, 41.06],
+                    [1184630400000, 41.47]]
+                }
+              },
+              _addSeriesPoint: function () {
+                var x = (new Date()).getTime(),
+                        y = Math.floor(Math.random() * 40) + 1;
+                this.push('seriesData', [x, y]);
+              },
+              _changeTitle: function () {
+                this.$.chartWithBinding.chart.setTitle({text: 'New title'});
+              },
+              _changeName: function () {
+                this.$.chartWithBinding.chart.series[0].name = 'New name';
+              },
+              _reload: function () {
+                this.$.chartWithBinding.reloadConfiguration();
+              }
             });
+          });
         })();
-    </script>
+      </script>
 
-</dom-module>
-<reload-chart></reload-chart>
-<script>
+    </dom-module>
+    <reload-chart></reload-chart>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
         var el;
         var chartwc;
 
         setup(function () {
-            el = document.querySelector("reload-chart");
-            chartwc = el.$.chartWithBinding;
+          el = document.querySelector("reload-chart");
+          chartwc = el.$.chartWithBinding;
         });
 
         test('_chartConf.chart maintained', function (done) {
-            setTimeout(function() {
-                expect(chartwc._chartConf.chart.polar).to.be.true;
-                el.$.reloadBtn.click();
-                expect(chartwc._chartConf.chart.polar).to.be.true;
-                done();
-            });
+          setTimeout(function () {
+            expect(chartwc._chartConf.chart.polar).to.be.true;
+            el.$.reloadBtn.click();
+            expect(chartwc._chartConf.chart.polar).to.be.true;
+            done();
+          });
         });
 
         test('chart configuration change', function () {
-            expect(chartwc.chart.title.textStr).to.equal("Global temperature change");
+          expect(chartwc.chart.title.textStr).to.equal("Global temperature change");
 
-            el.$.titleBtn.click();
-            expect(chartwc.chart.title.textStr).to.equal("New title");
+          el.$.titleBtn.click();
+          expect(chartwc.chart.title.textStr).to.equal("New title");
 
-            chartwc.reloadConfiguration();
-            expect(chartwc.chart.title.textStr).to.equal("Global temperature change");
+          chartwc.reloadConfiguration();
+          expect(chartwc.chart.title.textStr).to.equal("Global temperature change");
         });
 
         test('series configuration change', function () {
-            expect(chartwc.chart.series[0].name).to.equal("Global");
+          expect(chartwc.chart.series[0].name).to.equal("Global");
 
-            el.$.nameBtn.click();
-            expect(chartwc.chart.series[0].name).to.equal("New name");
+          el.$.nameBtn.click();
+          expect(chartwc.chart.series[0].name).to.equal("New name");
 
-            chartwc.reloadConfiguration();
-            expect(chartwc.chart.series[0].name).to.equal("Global");
+          chartwc.reloadConfiguration();
+          expect(chartwc.chart.series[0].name).to.equal("Global");
         });
 
         test('series binding maintained', function () {
-            expect(chartwc.chart.series[0].data).to.have.length(7);
+          expect(chartwc.chart.series[0].data).to.have.length(7);
 
-            el.$.pointBtn.click();
-            expect(chartwc.chart.series[0].data).to.have.length(8);
+          el.$.pointBtn.click();
+          expect(chartwc.chart.series[0].data).to.have.length(8);
 
-            el.$.reloadBtn.click();
-            expect(chartwc.chart.series[0].data).to.have.length(8);
+          el.$.reloadBtn.click();
+          expect(chartwc.chart.series[0].data).to.have.length(8);
         });
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

@@ -1,93 +1,93 @@
 <dom-module id="spline-updating-each-second-example">
-    <template>
-        <vaadin-spline-chart id="updatingSpline" on-chart-loaded="loadListener">
-            <chart animation="true" margin-right="10">
-            </chart>
-            <chart-title>Live random data</chart-title>
+  <template>
+    <vaadin-spline-chart id="updatingSpline" on-chart-loaded="loadListener">
+      <chart animation="true" margin-right="10">
+      </chart>
+      <chart-title>Live random data</chart-title>
 
 
-            <x-axis type="datetime"
-                       tick-pixel-interval="150">
-            </x-axis>
+      <x-axis type="datetime"
+              tick-pixel-interval="150">
+      </x-axis>
 
-            <y-axis>
-                <chart-title>Value</chart-title>
-                <plot-lines value="0" width="1" color="#808080"></plot-lines>
-            </y-axis>
+      <y-axis>
+        <chart-title>Value</chart-title>
+        <plot-lines value="0" width="1" color="#808080"></plot-lines>
+      </y-axis>
 
-            <tooltip formatter="function () {
+      <tooltip formatter="function () {
                     return '<b>' + this.series.name + '</b><br/>' +
                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
                         Highcharts.numberFormat(this.y, 2);}">
-            </tooltip>
+      </tooltip>
 
-            <legend enabled="false"></legend>
+      <legend enabled="false"></legend>
 
-            <exporting enabled="false"></exporting>
+      <exporting enabled="false"></exporting>
 
-            <data-series name="Random data">
-                <data>
-                    [(new Date()).getTime()-18000,Math.random()],
-                    [(new Date()).getTime()-17000,Math.random()],
-                    [(new Date()).getTime()-16000,Math.random()],
-                    [(new Date()).getTime()-15000,Math.random()],
-                    [(new Date()).getTime()-14000,Math.random()],
-                    [(new Date()).getTime()-13000,Math.random()],
-                    [(new Date()).getTime()-12000,Math.random()],
-                    [(new Date()).getTime()-11000,Math.random()],
-                    [(new Date()).getTime()-10000,Math.random()],
-                    [(new Date()).getTime()-9000,Math.random()],
-                    [(new Date()).getTime()-8000,Math.random()],
-                    [(new Date()).getTime()-7000,Math.random()],
-                    [(new Date()).getTime()-6000,Math.random()],
-                    [(new Date()).getTime()-5000,Math.random()],
-                    [(new Date()).getTime()-4000,Math.random()],
-                    [(new Date()).getTime()-3000,Math.random()],
-                    [(new Date()).getTime()-2000,Math.random()],
-                    [(new Date()).getTime()-1000,Math.random()],
-                    [(new Date()).getTime(),Math.random()]
-                </data>
-            </data-series>
+      <data-series name="Random data">
+        <data>
+          [(new Date()).getTime()-18000,Math.random()],
+          [(new Date()).getTime()-17000,Math.random()],
+          [(new Date()).getTime()-16000,Math.random()],
+          [(new Date()).getTime()-15000,Math.random()],
+          [(new Date()).getTime()-14000,Math.random()],
+          [(new Date()).getTime()-13000,Math.random()],
+          [(new Date()).getTime()-12000,Math.random()],
+          [(new Date()).getTime()-11000,Math.random()],
+          [(new Date()).getTime()-10000,Math.random()],
+          [(new Date()).getTime()-9000,Math.random()],
+          [(new Date()).getTime()-8000,Math.random()],
+          [(new Date()).getTime()-7000,Math.random()],
+          [(new Date()).getTime()-6000,Math.random()],
+          [(new Date()).getTime()-5000,Math.random()],
+          [(new Date()).getTime()-4000,Math.random()],
+          [(new Date()).getTime()-3000,Math.random()],
+          [(new Date()).getTime()-2000,Math.random()],
+          [(new Date()).getTime()-1000,Math.random()],
+          [(new Date()).getTime(),Math.random()]
+        </data>
+      </data-series>
 
-        </vaadin-spline-chart>
-    </template>
+    </vaadin-spline-chart>
+  </template>
 
 
-    <script>
-        Polymer({
-            is: 'spline-updating-each-second-example',
+  <script>
+    Polymer({
+      is: 'spline-updating-each-second-example',
 
-            properties: {
-                isAttached: Boolean,
-                isChartReady: Boolean
-            },
+      properties: {
+        isAttached: Boolean,
+        isChartReady: Boolean
+      },
 
-            attached: function () {
-                this.isAttached = true;
-                this.updateChart();
-            },
+      attached: function () {
+        this.isAttached = true;
+        this.updateChart();
+      },
 
-            detached: function () {
-                this.isAttached = false;
-            },
+      detached: function () {
+        this.isAttached = false;
+      },
 
-            loadListener: function (e) {
-                this.isChartReady = true;
-                this.updateChart();
-            },
+      loadListener: function (e) {
+        this.isChartReady = true;
+        this.updateChart();
+      },
 
-            updateChart: function () {
-                if (this.isAttached && this.isChartReady) {
-                    var chart = this.$.updatingSpline.chart;
-                    var series = chart.series[0];
-                    var x = (new Date()).getTime(), // current time
-                            y = Math.random();
-                    series.addPoint([x, y], true, true);
+      updateChart: function () {
+        if (this.isAttached && this.isChartReady) {
+          var chart = this.$.updatingSpline.chart;
+          var series = chart.series[0];
+          var x = (new Date()).getTime(), // current time
+                  y = Math.random();
+          series.addPoint([x, y], true, true);
 
-                    this.async(this.updateChart, 1000);
-                }
-            }
-        });
-    </script>
+          this.async(this.updateChart, 1000);
+        }
+      }
+    });
+  </script>
 </dom-module>
 <spline-updating-each-second-example></spline-updating-each-second-example>
