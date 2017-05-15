@@ -25,8 +25,8 @@ install:
 before_script:
   - gulp lint
   - polymer lint --rules polymer-2-hybrid --input *.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
+  # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
+  # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
