@@ -1,242 +1,258 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
+  </head>
+  <body>
 
-<dom-module id="eventful-chart-declarative-attribute">
+    <dom-module id="eventful-chart-declarative-attribute">
 
-    <template>
+      <template>
         <vaadin-line-chart on-add-series="handle"
-                 on-after-print="handle"
-                 on-before-print="handle"
-                 on-chart-click="handle"
-                 on-drilldown="handle"
-                 on-drillup="handle"
-                 on-redraw="handle"
-                 on-selection="handle"></vaadin-line-chart>
-    </template>
+                           on-after-print="handle"
+                           on-before-print="handle"
+                           on-chart-click="handle"
+                           on-drilldown="handle"
+                           on-drillup="handle"
+                           on-redraw="handle"
+                           on-selection="handle"></vaadin-line-chart>
+      </template>
 
-    <script>
+      <script>
         (function () {
-            HTMLImports.whenReady(function () {
-                Polymer({
-                    is: 'eventful-chart-declarative-attribute',
+          HTMLImports.whenReady(function () {
+            Polymer({
+              is: 'eventful-chart-declarative-attribute',
 
-                    properties: {
-                        eventCount: {
-                            type: Object,
-                            value: function () {
-                                return {};
-                            }
-                        }
-                    },
+              properties: {
+                eventCount: {
+                  type: Object,
+                  value: function () {
+                    return {};
+                  }
+                }
+              },
 
-                    handle: function (e) {
-                        if (!this.eventCount[e.type]) {
-                            this.eventCount[e.type] = 0;
-                        }
-                        this.eventCount[e.type]++;
-                    }
-                });
+              handle: function (e) {
+                if (!this.eventCount[e.type]) {
+                  this.eventCount[e.type] = 0;
+                }
+                this.eventCount[e.type]++;
+              }
             });
+          });
         })();
-    </script>
-</dom-module>
+      </script>
+    </dom-module>
 
-<eventful-chart-declarative-attribute></eventful-chart-declarative-attribute>
+    <eventful-chart-declarative-attribute></eventful-chart-declarative-attribute>
 
-<dom-module id="programmatically-added-listeners">
+    <dom-module id="programmatically-added-listeners">
 
-    <template>
-        <vaadin-line-chart><data-series><data>1,2</data></data-series></vaadin-line-chart>
-    </template>
+      <template>
+        <vaadin-line-chart>
+          <data-series>
+            <data>1,2</data>
+          </data-series>
+        </vaadin-line-chart>
+      </template>
 
-    <script>
+      <script>
         (function () {
-            HTMLImports.whenReady(function () {
-                Polymer({
-                    is: 'programmatically-added-listeners',
+          HTMLImports.whenReady(function () {
+            Polymer({
+              is: 'programmatically-added-listeners',
 
-                    properties: {
-                        eventCount: {
-                            type: Object,
-                            value: function () {
-                                return {};
-                            }
-                        }
-                    },
+              properties: {
+                eventCount: {
+                  type: Object,
+                  value: function () {
+                    return {};
+                  }
+                }
+              },
 
-                    handle: function (e) {
-                        if (!this.eventCount[e.type]) {
-                            this.eventCount[e.type] = 0;
-                        }
-                        this.eventCount[e.type]++;
-                    },
+              handle: function (e) {
+                if (!this.eventCount[e.type]) {
+                  this.eventCount[e.type] = 0;
+                }
+                this.eventCount[e.type]++;
+              },
 
-                    cleanCount: function(){
-                        this.eventCount = {};
-                    }
-                });
+              cleanCount: function () {
+                this.eventCount = {};
+              }
             });
+          });
         })();
-    </script>
-</dom-module>
+      </script>
+    </dom-module>
 
-<programmatically-added-listeners></programmatically-added-listeners>
-<script>
-    suite('<vaadin-_-chart>', function () {
+    <programmatically-added-listeners></programmatically-added-listeners>
+    <script>
+      suite('<vaadin-_-chart>', function () {
 
-        test('all chart events, declarative listeners', function () {
-            var element = document.querySelector("eventful-chart-declarative-attribute");
-            var elementChart = document.querySelector("eventful-chart-declarative-attribute vaadin-line-chart");
+        test('all chart events, declarative listeners', function (done) {
+          var element = document.querySelector("eventful-chart-declarative-attribute");
+          var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+          setTimeout(function () {
             var eventNames = elementChart._chartEventNames;
 
             //fire all the events
             for (var key in eventNames) {
-                Highcharts.fireEvent(elementChart.chart,key,{});
+              Highcharts.fireEvent(elementChart.chart, key, {});
             }
             //verify all event handled
             for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
+              expect(element.eventCount[eventNames[key]]).to.equal(1);
             }
+            done();
+          });
         });
 
-        test('all chart events, programmatically added listeners', function () {
-            var element = document.querySelector("programmatically-added-listeners");
-            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
+        test('all chart events, programmatically added listeners', function (done) {
+          var element = document.querySelector("programmatically-added-listeners");
+          var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+          setTimeout(function () {
             var eventNames = elementChart._chartEventNames;
 
             //add all listeners
             for (var key in eventNames) {
-                element.listen(element, eventNames[key], "handle");
+              element.listen(element, eventNames[key], "handle");
             }
             //fire all the events
             for (var key in eventNames) {
-                Highcharts.fireEvent(elementChart.chart,key,{});
+              Highcharts.fireEvent(elementChart.chart, key, {});
             }
             //verify all event handled
             for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
+              expect(element.eventCount[eventNames[key]]).to.equal(1);
             }
+            done();
+          });
         });
 
-        test('all series events, programmatically added listeners', function () {
-            var element = document.querySelector("programmatically-added-listeners");
-            element.cleanCount();
-            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
+        test('all series events, programmatically added listeners', function (done) {
+          var element = document.querySelector("programmatically-added-listeners");
+          element.cleanCount();
+          var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
+          setTimeout(function () {
             var eventNames = elementChart._seriesEventNames;
 
             //add all listeners
             for (var key in eventNames) {
-                element.listen(element, eventNames[key], "handle");
+              element.listen(element, eventNames[key], "handle");
             }
             //fire all the events
             for (var key in eventNames) {
-                Highcharts.fireEvent(elementChart.chart.series[0],key,{});
+              Highcharts.fireEvent(elementChart.chart.series[0], key, {});
             }
             //verify all event handled
             for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
+              expect(element.eventCount[eventNames[key]]).to.equal(1);
             }
+            done();
+          });
         });
 
-        test('all point events, programmatically added listeners', function () {
+        test('all point events, programmatically added listeners', function (done) {
+          setTimeout(function () {
             var element = document.querySelector("programmatically-added-listeners");
             element.cleanCount();
-            var elementChart = document.querySelector("programmatically-added-listeners vaadin-line-chart");
+            var elementChart = element.shadowRoot.querySelector("vaadin-line-chart");
             var eventNames = elementChart._pointEventNames;
 
             //add all listeners
             for (var key in eventNames) {
-                element.listen(element, eventNames[key], "handle");
+              element.listen(element, eventNames[key], "handle");
             }
             //fire all the events
             for (var key in eventNames) {
-                elementChart.chart.series[0].data[0].firePointEvent(key);
+              elementChart.chart.series[0].data[0].firePointEvent(key);
             }
             //verify all event handled
             for (var key in eventNames) {
-                expect(element.eventCount[eventNames[key]]).to.equal(1);
+              expect(element.eventCount[eventNames[key]]).to.equal(1);
             }
+            done();
+          });
         });
 
         test('chart-click event, event info is correct', function (done) {
-            var element = document.createElement('vaadin-line-chart');
+          var element = document.createElement('vaadin-line-chart');
 
-            element.addEventListener("chart-loaded", function () {
-                //fire chart click event on chart load
-                Highcharts.fireEvent(element.chart,"click",{});
-            });
+          element.addEventListener("chart-loaded", function () {
+            //fire chart click event on chart load
+            Highcharts.fireEvent(element.chart, "click", {});
+          });
 
-            element.addEventListener("chart-click", function (e) {
-                //event target should be chart element
-                expect(e.target).to.equal(element);
-                //event detail should contain original event info
-                expect(e.detail.originalEvent).to.exist;
-                expect(e.detail.originalEvent.type).to.equal("click");
-                expect(e.detail.chart).to.exist;
+          element.addEventListener("chart-click", function (e) {
+            //event target should be chart element
+            expect(e.target).to.equal(element);
+            //event detail should contain original event info
+            expect(e.detail.originalEvent).to.exist;
+            expect(e.detail.originalEvent.type).to.equal("click");
+            expect(e.detail.chart).to.exist;
 
-                document.body.removeChild(element);
-                done();
-            });
-            document.body.appendChild(element);
+            document.body.removeChild(element);
+            done();
+          });
+          document.body.appendChild(element);
         });
 
         test('series-click event, event info is correct', function (done) {
-            var element = document.createElement('vaadin-line-chart');
+          var element = document.createElement('vaadin-line-chart');
 
-            element.addEventListener("chart-loaded", function () {
-                element.chart.addSeries({data:[1,2]})
-                //fire series click event on chart load
-                Highcharts.fireEvent(element.chart.series[0],"click",{});
-            });
+          element.addEventListener("chart-loaded", function () {
+            element.chart.addSeries({data: [1, 2]})
+            //fire series click event on chart load
+            Highcharts.fireEvent(element.chart.series[0], "click", {});
+          });
 
-            element.addEventListener("series-click", function (e) {
-                //event target should be chart element
-                expect(e.target).to.equal(element);
-                //event detail should contain original event info
-                expect(e.detail.originalEvent).to.exist;
-                expect(e.detail.originalEvent.type).to.equal("click");
-                expect(e.detail.series).to.exist;
+          element.addEventListener("series-click", function (e) {
+            //event target should be chart element
+            expect(e.target).to.equal(element);
+            //event detail should contain original event info
+            expect(e.detail.originalEvent).to.exist;
+            expect(e.detail.originalEvent.type).to.equal("click");
+            expect(e.detail.series).to.exist;
 
-                document.body.removeChild(element);
-                done();
-            });
-            document.body.appendChild(element);
+            document.body.removeChild(element);
+            done();
+          });
+          document.body.appendChild(element);
         });
 
         test('point-click event, event info is correct', function (done) {
-            var element = document.createElement('vaadin-line-chart');
+          var element = document.createElement('vaadin-line-chart');
 
-            element.addEventListener("chart-loaded", function () {
-                element.chart.addSeries({data:[1,2]})
-                //fire point click event on chart load
-                element.chart.series[0].data[0].firePointEvent("click");
-            });
+          element.addEventListener("chart-loaded", function () {
+            element.chart.addSeries({data: [1, 2]})
+            //fire point click event on chart load
+            element.chart.series[0].data[0].firePointEvent("click");
+          });
 
-            element.addEventListener("point-click", function (e) {
-                //event target should be chart element
-                expect(e.target).to.equal(element);
-                //event detail should contain original event info
-                expect(e.detail.originalEvent).to.exist;
-                expect(e.detail.originalEvent.type).to.equal("click");
-                expect(e.detail.point).to.exist;
+          element.addEventListener("point-click", function (e) {
+            //event target should be chart element
+            expect(e.target).to.equal(element);
+            //event detail should contain original event info
+            expect(e.detail.originalEvent).to.exist;
+            expect(e.detail.originalEvent.type).to.equal("click");
+            expect(e.detail.point).to.exist;
 
-                document.body.removeChild(element);
-                done();
-            });
-            document.body.appendChild(element);
+            document.body.removeChild(element);
+            done();
+          });
+          document.body.appendChild(element);
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

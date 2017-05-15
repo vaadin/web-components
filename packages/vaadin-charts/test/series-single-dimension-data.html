@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="chartId">
-    <data-series id="seriesId">
+  </head>
+  <body>
+    <vaadin-line-chart id="chartId">
+      <data-series id="seriesId">
         <data>
-            1,2,3,4,5
+          1,2,3,4,5
         </data>
-    </data-series>
-</vaadin-line-chart>
-<script>
+      </data-series>
+    </vaadin-line-chart>
+    <script>
 
-    suite('<data-series>', function () {
+      suite('<data-series>', function () {
 
         test('series config parsed', function () {
-            var chartswc = document.querySelector('#chartId');
-            var conf = chartswc._chartConf;
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
-            expect(conf.series[0].data).to.have.length(5);
-            expect(conf.series[0].data[0]).to.equal(1);
+          var chartswc = document.querySelector('#chartId');
+          var conf = chartswc._chartConf;
+          expect(conf.series).to.exist;
+          expect(conf.series).not.to.be.empty;
+          expect(conf.series[0].data).to.exist;
+          expect(conf.series[0].data).not.to.be.empty;
+          expect(conf.series[0].data).to.have.length(5);
+          expect(conf.series[0].data[0]).to.equal(1);
 
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

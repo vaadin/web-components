@@ -1,116 +1,117 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
     <link rel="import" href="../vaadin-pie-chart.html">
-</head>
-<body>
+  </head>
+  <body>
 
-<dom-module id="eventful-pie-declarative-attribute">
+    <dom-module id="eventful-pie-declarative-attribute">
 
-    <template>
+      <template>
         <vaadin-pie-chart on-chart-loaded="chartLoaded"></vaadin-pie-chart>
-    </template>
+      </template>
 
-    <script>
+      <script>
         (function () {
-            HTMLImports.whenReady(function () {
-                Polymer({
-                    is: 'eventful-pie-declarative-attribute',
+          HTMLImports.whenReady(function () {
+            Polymer({
+              is: 'eventful-pie-declarative-attribute',
 
-                    properties: {
-                        loaded: {
-                            type: Boolean,
-                            value: false
-                        }
-                    },
+              properties: {
+                loaded: {
+                  type: Boolean,
+                  value: false
+                }
+              },
 
-                    chartLoaded: function () {
-                        this.loaded = true;
-                    }
-                });
+              chartLoaded: function () {
+                this.loaded = true;
+              }
             });
+          });
         })();
-    </script>
-</dom-module>
+      </script>
+    </dom-module>
 
-<eventful-pie-declarative-attribute></eventful-pie-declarative-attribute>
+    <eventful-pie-declarative-attribute></eventful-pie-declarative-attribute>
 
-<dom-module id="eventful-pie-declarative-mapping">
+    <dom-module id="eventful-pie-declarative-mapping">
 
-    <template>
+      <template>
         <vaadin-pie-chart></vaadin-pie-chart>
-    </template>
+      </template>
+
+      <script>
+        (function () {
+          HTMLImports.whenReady(function () {
+            Polymer({
+              is: 'eventful-pie-declarative-mapping',
+
+              properties: {
+                loaded: {
+                  type: Boolean,
+                  value: false
+                }
+              },
+
+              listeners: {
+                'chart-loaded': 'chartLoaded'
+              },
+
+              chartLoaded: function () {
+                this.loaded = true;
+              }
+            });
+          });
+        })();
+      </script>
+    </dom-module>
+
+    <eventful-pie-declarative-mapping></eventful-pie-declarative-mapping>
 
     <script>
-        (function () {
-            HTMLImports.whenReady(function () {
-                Polymer({
-                    is: 'eventful-pie-declarative-mapping',
-
-                    properties: {
-                        loaded: {
-                            type: Boolean,
-                            value: false
-                        }
-                    },
-
-                    listeners: {
-                        'chart-loaded': 'chartLoaded'
-                    },
-
-                    chartLoaded: function () {
-                        this.loaded = true;
-                    }
-                });
-            });
-        })();
-    </script>
-</dom-module>
-
-<eventful-pie-declarative-mapping></eventful-pie-declarative-mapping>
-
-<script>
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('chart on-load event, programmatically added', function (done) {
-            var element = document.createElement('vaadin-pie-chart');
-            element.addEventListener("chart-loaded", function () {
-                expect(element.chart.redraw).to.exist;
-                document.body.removeChild(element);
-                done();
+          var element = document.createElement('vaadin-pie-chart');
+          element.addEventListener("chart-loaded", function () {
+            expect(element.chart.redraw).to.exist;
+            document.body.removeChild(element);
+            done();
 
-            });
-            document.body.appendChild(element);
+          });
+          document.body.appendChild(element);
         });
 
-        test('chart on-load event, declarative on-event', function () {
+        test('chart on-load event, declarative on-event', function (done) {
+          setTimeout(function () {
             var element = document.querySelector("eventful-pie-declarative-attribute");
-
             expect(element.loaded).to.be.true;
-
-            var elementChart = document.querySelector("eventful-pie-declarative-attribute vaadin-pie-chart");
+            var elementChart = element.shadowRoot.querySelector("vaadin-pie-chart");
 
             expect(elementChart.chart.redraw).to.exist;
+            done();
+          });
         });
 
         test('chart on-load event, declarative listener mapping', function () {
-            var element = document.querySelector("eventful-pie-declarative-mapping");
+          var element = document.querySelector("eventful-pie-declarative-mapping");
 
-            expect(element.loaded).to.be.true;
+          expect(element.loaded).to.be.true;
 
-            var elementChart = document.querySelector("eventful-pie-declarative-mapping vaadin-pie-chart");
+          var elementChart = element.shadowRoot.querySelector("vaadin-pie-chart");
 
-            expect(elementChart.chart.redraw).to.exist;
+          expect(elementChart.chart.redraw).to.exist;
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

@@ -4,98 +4,98 @@
 
 <dom-module id="prettify-element">
 
-    <style>
-        pre {
-            white-space: pre-wrap;
+  <style>
+    pre {
+      white-space: pre-wrap;
+    }
+
+    .pln {
+      color: #000;
+    }
+
+    .str {
+      color: #080;
+    }
+
+    .kwd {
+      color: #008;
+    }
+
+    .com {
+      color: #800;
+    }
+
+    .typ {
+      color: #606;
+    }
+
+    .lit {
+      color: #066;
+    }
+
+    .pun, .opn, .clo {
+      color: #660;
+    }
+
+    .tag {
+      color: #008;
+    }
+
+    .atn {
+      color: #606;
+    }
+
+    .atv {
+      color: #080;
+    }
+
+    .dec, .var {
+      color: #606;
+    }
+
+    .fun {
+      color: red;
+    }
+
+    pre.prettyprint {
+      padding: 2px;
+      border: none;
+    }
+
+    ol.linenums {
+      margin-top: 0;
+      margin-bottom: 0
+    }
+
+    li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
+      list-style-type: none;
+    }
+
+    li.L1, li.L3, li.L5, li.L7, li.L9 {
+      background: #eee;
+    }
+  </style>
+
+  <template>
+    <pre class="prettyprint"><code id="content"></code></pre>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'prettify-element',
+
+      properties: {
+        text: {
+          type: String,
+          observer: '_textChanged'
         }
+      },
 
-        .pln {
-            color: #000;
-        }
-
-        .str {
-            color: #080;
-        }
-
-        .kwd {
-            color: #008;
-        }
-
-        .com {
-            color: #800;
-        }
-
-        .typ {
-            color: #606;
-        }
-
-        .lit {
-            color: #066;
-        }
-
-        .pun, .opn, .clo {
-            color: #660;
-        }
-
-        .tag {
-            color: #008;
-        }
-
-        .atn {
-            color: #606;
-        }
-
-        .atv {
-            color: #080;
-        }
-
-        .dec, .var {
-            color: #606;
-        }
-
-        .fun {
-            color: red;
-        }
-
-        pre.prettyprint {
-            padding: 2px;
-            border: none;
-        }
-
-        ol.linenums {
-            margin-top: 0;
-            margin-bottom: 0
-        }
-
-        li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
-            list-style-type: none;
-        }
-
-        li.L1, li.L3, li.L5, li.L7, li.L9 {
-            background: #eee;
-        }
-    </style>
-
-    <template>
-        <pre class="prettyprint"><code id="content"></code></pre>
-    </template>
-
-    <script>
-        Polymer({
-            is: 'prettify-element',
-
-            properties: {
-                text: {
-                    type: String,
-                    observer: '_textChanged'
-                }
-            },
-
-            _textChanged: function (newText, oldText) {
-                //prettyprint needs &, < and > to be escaped in HTML code
-                var escapedText = newText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                this.$.content.innerHTML = prettyPrintOne(escapedText, 'lang-html');
-            }
-        });
-    </script>
+      _textChanged: function (newText, oldText) {
+        //prettyprint needs &, < and > to be escaped in HTML code
+        var escapedText = newText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        this.$.content.innerHTML = prettyPrintOne(escapedText, 'lang-html');
+      }
+    });
+  </script>
 </dom-module>

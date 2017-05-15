@@ -1,36 +1,36 @@
 <dom-module id="events-example">
-    <template>
-        <vaadin-spline-chart id="events" on-chart-click="clickListener">
-            <chart>
-                <margin>70, 50, 60, 80</margin>
-            </chart>
-            <chart-title>Click to add point</chart-title>
-            <legend enabled="false"></legend>
-            <exporting enabled="false"></exporting>
-            <plot-options>
-                <series line-width="1">
-                </series>
-            </plot-options>
-            <data-series>
-                <data>29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</data>
-            </data-series>
-        </vaadin-spline-chart>
-    </template>
+  <template>
+    <vaadin-spline-chart id="events" on-chart-click="clickListener">
+      <chart>
+        <margin>70, 50, 60, 80</margin>
+      </chart>
+      <chart-title>Click to add point</chart-title>
+      <legend enabled="false"></legend>
+      <exporting enabled="false"></exporting>
+      <plot-options>
+        <series line-width="1">
+        </series>
+      </plot-options>
+      <data-series>
+        <data>29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4</data>
+      </data-series>
+    </vaadin-spline-chart>
+  </template>
 
-    <script>
-        Polymer({
-            is: 'events-example',
+  <script>
+    Polymer({
+      is: 'events-example',
 
-            clickListener: function (e) {
-                //get the underlying event with chart specific details
-                var originalEvent = e.detail.originalEvent;
-                // find the clicked values and the series
-                var y = originalEvent.yAxis[0].value,
-                        series = e.target.chart.series[0];
-                // Add it
-                series.addPoint(y);
-            }
-        });
-    </script>
+      clickListener: function (e) {
+        //get the underlying event with chart specific details
+        var originalEvent = e.detail.originalEvent;
+        // find the clicked values and the series
+        var y = originalEvent.yAxis[0].value,
+                series = e.target.chart.series[0];
+        // Add it
+        series.addPoint(y);
+      }
+    });
+  </script>
 </dom-module>
 <events-example></events-example>

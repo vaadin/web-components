@@ -1,60 +1,60 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="plotOptionsWithFillColorStops">
-    <plot-options line-width="1">
+  </head>
+  <body>
+    <vaadin-line-chart id="plotOptionsWithFillColorStops">
+      <plot-options line-width="1">
         <!-- TODO should be area-->
         <series>
-            <fill-color>
-                <stops position="0" color="#3090F0"></stops>
-                <stops color="red" position="0.1"></stops>
-                <stops>0.5, #FF7D42</stops>
-                <stops>
-                    <position>0.9</position>
-                    <color>rgba(200, 200, 200, 0.2)</color>
-                </stops>
-                <stops>
-                    <color>white</color>
-                    <position>1</position>
-                </stops>
-            </fill-color>
+          <fill-color>
+            <stops position="0" color="#3090F0"></stops>
+            <stops color="red" position="0.1"></stops>
+            <stops>0.5, #FF7D42</stops>
+            <stops>
+              <position>0.9</position>
+              <color>rgba(200, 200, 200, 0.2)</color>
+            </stops>
+            <stops>
+              <color>white</color>
+              <position>1</position>
+            </stops>
+          </fill-color>
         </series>
-    </plot-options>
-</vaadin-line-chart>
+      </plot-options>
+    </vaadin-line-chart>
 
-<script>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('chart fill color and stops', function () {
-            var chartwc = document.querySelector('#plotOptionsWithFillColorStops');
-            var conf = chartwc._chartConf;
-            expect(conf.plotOptions.series.fillColor).to.exist;
-            expect(conf.plotOptions.series.fillColor.stops).to.exist;
-            expect(conf.plotOptions.series.fillColor.stops).to.be.instanceof(Array);
-            expect(conf.plotOptions.series.fillColor.stops).to.not.be.empty;
-            expect(conf.plotOptions.series.fillColor.stops[0]).to.be.instanceof(Array);
-            expect(conf.plotOptions.series.fillColor.stops[0][0]).to.equal(0);
-            expect(conf.plotOptions.series.fillColor.stops[0][1]).to.equal("#3090F0");
-            expect(conf.plotOptions.series.fillColor.stops[1][0]).to.equal(0.1);
-            expect(conf.plotOptions.series.fillColor.stops[1][1]).to.equal("red");
-            expect(conf.plotOptions.series.fillColor.stops[2][0]).to.equal(0.5);
-            expect(conf.plotOptions.series.fillColor.stops[2][1]).to.equal("#FF7D42");
-            expect(conf.plotOptions.series.fillColor.stops[3][0]).to.equal(0.9);
-            expect(conf.plotOptions.series.fillColor.stops[3][1]).to.equal('rgba(200, 200, 200, 0.2)');
-            expect(conf.plotOptions.series.fillColor.stops[4][0]).to.equal(1);
-            expect(conf.plotOptions.series.fillColor.stops[4][1]).to.equal('white');
+          var chartwc = document.querySelector('#plotOptionsWithFillColorStops');
+          var conf = chartwc._chartConf;
+          expect(conf.plotOptions.series.fillColor).to.exist;
+          expect(conf.plotOptions.series.fillColor.stops).to.exist;
+          expect(conf.plotOptions.series.fillColor.stops).to.be.instanceof(Array);
+          expect(conf.plotOptions.series.fillColor.stops).to.not.be.empty;
+          expect(conf.plotOptions.series.fillColor.stops[0]).to.be.instanceof(Array);
+          expect(conf.plotOptions.series.fillColor.stops[0][0]).to.equal(0);
+          expect(conf.plotOptions.series.fillColor.stops[0][1]).to.equal("#3090F0");
+          expect(conf.plotOptions.series.fillColor.stops[1][0]).to.equal(0.1);
+          expect(conf.plotOptions.series.fillColor.stops[1][1]).to.equal("red");
+          expect(conf.plotOptions.series.fillColor.stops[2][0]).to.equal(0.5);
+          expect(conf.plotOptions.series.fillColor.stops[2][1]).to.equal("#FF7D42");
+          expect(conf.plotOptions.series.fillColor.stops[3][0]).to.equal(0.9);
+          expect(conf.plotOptions.series.fillColor.stops[3][1]).to.equal('rgba(200, 200, 200, 0.2)');
+          expect(conf.plotOptions.series.fillColor.stops[4][0]).to.equal(1);
+          expect(conf.plotOptions.series.fillColor.stops[4][1]).to.equal('white');
         });
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

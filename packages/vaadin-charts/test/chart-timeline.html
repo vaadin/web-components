@@ -1,84 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="linechartwithtimeline" timeline>
-    <chart-title>
+  </head>
+  <body>
+    <vaadin-line-chart id="linechartwithtimeline" timeline>
+      <chart-title>
         <text>timeline test</text>
         <chart-style color="#ff0000"></chart-style>
-    </chart-title>
-    <range-selector>
+      </chart-title>
+      <range-selector>
         <button-theme stroke-width="3">
-            <chart-style color="#ff0000"></chart-style>
+          <chart-style color="#ff0000"></chart-style>
         </button-theme>
-    </range-selector>
-    <data-series>
+      </range-selector>
+      <data-series>
         <data>
-            [1233532800000,13.07],
-            [1233619200000,13.28],
-            [1233705600000,13.36],
-            [1233792000000,13.78],
-            [1233878400000,14.25],
-            [1234137600000,14.64],
-            [1234224000000,13.98],
-            [1234310400000,13.83],
-            [1234396800000,14.18],
-            [1234483200000,14.17],
-            [1234828800000,13.50],
-            [1234915200000,13.48],
-            [1235001600000,12.95],
-            [1235088000000,13.00]
+          [1233532800000,13.07],
+          [1233619200000,13.28],
+          [1233705600000,13.36],
+          [1233792000000,13.78],
+          [1233878400000,14.25],
+          [1234137600000,14.64],
+          [1234224000000,13.98],
+          [1234310400000,13.83],
+          [1234396800000,14.18],
+          [1234483200000,14.17],
+          [1234828800000,13.50],
+          [1234915200000,13.48],
+          [1235001600000,12.95],
+          [1235088000000,13.00]
         </data>
-    </data-series>
-</vaadin-line-chart>
-<script>
+      </data-series>
+    </vaadin-line-chart>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('timeline property is correctly set', function () {
-            var chartwc = document.querySelector('#linechartwithtimeline');
-            expect(chartwc.timeline).to.be.true;
+          var chartwc = document.querySelector('#linechartwithtimeline');
+          expect(chartwc.timeline).to.be.true;
         });
 
         test('timeline chart contains range selector', function () {
-            var chartwc = document.querySelector('#linechartwithtimeline');
-            var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
-            expect(rangeSelector).to.have.length(2);
+          var chartwc = document.querySelector('#linechartwithtimeline');
+          var rangeSelector = chartwc.shadowRoot.querySelectorAll('.highcharts-range-selector');
+          expect(rangeSelector).to.have.length(2);
         });
 
         test('timeline button theme stroke width is correctly set', function () {
-            var chartwc = document.querySelector('#linechartwithtimeline');
-            var strokeWidth = chartwc._chartConf.rangeSelector.buttonTheme["stroke-width"];
-            expect(strokeWidth).to.equal(3);
+          var chartwc = document.querySelector('#linechartwithtimeline');
+          var strokeWidth = chartwc._chartConf.rangeSelector.buttonTheme["stroke-width"];
+          expect(strokeWidth).to.equal(3);
         });
 
         test('timeline button theme style is correctly set', function () {
-            var chartwc = document.querySelector('#linechartwithtimeline');
-            var style = chartwc._chartConf.rangeSelector.buttonTheme["style"]["color"];
-            expect(style).to.equal("#ff0000");
+          var chartwc = document.querySelector('#linechartwithtimeline');
+          var style = chartwc._chartConf.rangeSelector.buttonTheme["style"]["color"];
+          expect(style).to.equal("#ff0000");
         });
 
         test('timeline title style is correctly set', function () {
-            var chartwc = document.querySelector('#linechartwithtimeline');
-            var titleColor = chartwc._chartConf.title["style"]["color"];
-            expect(titleColor).to.equal("#ff0000");
+          var chartwc = document.querySelector('#linechartwithtimeline');
+          var titleColor = chartwc._chartConf.title["style"]["color"];
+          expect(titleColor).to.equal("#ff0000");
         });
         test('timeline disabled contains no range selector', function () {
-            var chartwc = document.querySelector('#linechartwithtimeline');
-            chartwc.timeline = false;
-            var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
-            expect(rangeSelector).to.have.length(0);
+          var chartwc = document.querySelector('#linechartwithtimeline');
+          chartwc.timeline = false;
+          var rangeSelector = chartwc.querySelectorAll('.highcharts-range-selector');
+          expect(rangeSelector).to.have.length(0);
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

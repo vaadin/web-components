@@ -1,10 +1,7 @@
 {
   "name": "vaadin-charts",
-  "version": "4.0.0",
+  "version": "5.0.0-alpha1",
   "repository": "vaadin/vaadin-charts",
-  "scripts": {
-    "test": " wct --plugin sauce test/ framework-test/"
-  },
   "devDependencies": {
     "bower": "^1.4.1",
     "config": "^1.13.0",
@@ -22,6 +19,9 @@
     "gulp-vulcanize": "^6.0.0",
     "gulp-zip": "^3.2.0",
     "lodash": "^3.9.1",
-    "web-component-tester": "4.0.3"
+    "web-component-tester": "^6.0.0-prerelease.5"
+  },
+  "scripts": {
+    "test": " wct --plugin sauce test/ framework-test/"
   }
 }

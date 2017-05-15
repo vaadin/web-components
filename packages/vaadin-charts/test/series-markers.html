@@ -1,56 +1,56 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="chartWithSeriesMarker">
-    <data-series>
+  </head>
+  <body>
+    <vaadin-line-chart id="chartWithSeriesMarker">
+      <data-series>
         <marker symbol="square"></marker>
         <data>25.2</data>
         <data>
-            <point>
-              <y>26.5</y>
-              <marker symbol="url(http://www.highcharts.com/demo/gfx/sun.png)"></marker>
-            </point>
+          <point>
+            <y>26.5</y>
+            <marker symbol="url(http://www.highcharts.com/demo/gfx/sun.png)"></marker>
+          </point>
         </data>
         <data>9.6</data>
-    </data-series>
-</vaadin-line-chart>
-<script>
+      </data-series>
+    </vaadin-line-chart>
+    <script>
 
-    suite('<data-series>', function () {
+      suite('<data-series>', function () {
 
         test('series marker defined', function () {
-            var chartswc = document.querySelector('#chartWithSeriesMarker');
-            var conf = chartswc._chartConf;
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
+          var chartswc = document.querySelector('#chartWithSeriesMarker');
+          var conf = chartswc._chartConf;
+          expect(conf.series).to.exist;
+          expect(conf.series).not.to.be.empty;
+          expect(conf.series[0].data).to.exist;
+          expect(conf.series[0].data).not.to.be.empty;
 
-            var series = conf.series[0];
+          var series = conf.series[0];
 
-            expect(series.marker).to.exist;
-            expect(series.marker.symbol).to.exist;
-            expect(series.marker.symbol).to.equal("square");
+          expect(series.marker).to.exist;
+          expect(series.marker.symbol).to.exist;
+          expect(series.marker.symbol).to.equal("square");
 
-            expect(series.data[1]).to.exist;
+          expect(series.data[1]).to.exist;
 
-            var valueWithMarker = series.data[1];
+          var valueWithMarker = series.data[1];
 
-            expect(valueWithMarker.marker.symbol).to.equal('url(http://www.highcharts.com/demo/gfx/sun.png)');
-            expect(valueWithMarker.y).to.equal(26.5);
+          expect(valueWithMarker.marker.symbol).to.equal('url(http://www.highcharts.com/demo/gfx/sun.png)');
+          expect(valueWithMarker.y).to.equal(26.5);
 
         });
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

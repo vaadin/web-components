@@ -38,7 +38,6 @@ https://vaadin.com/charts-for-polymer
     - **vaadin-treemap-chart**
     - **vaadin-waterfall-chart**.
  - Series component is **data-series**.
- - Valo theme for Charts is **valo-theme.html**.
  - Demos are inside **demo**.
 
 ## Running

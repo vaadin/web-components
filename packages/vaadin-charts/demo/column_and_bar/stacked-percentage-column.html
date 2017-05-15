@@ -1,27 +1,27 @@
 <vaadin-column-chart id="stacked-percentage-column">
-    <chart-title>Stacked column chart</chart-title>
-    <x-axis>
-        <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
-    </x-axis>
-    <y-axis allow-decimals="false" min="0">
-        <chart-title>Number of fruits</chart-title>
-        <stack-labels enabled="true"></stack-labels>
-    </y-axis>
-    <tooltip
-            point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>'
-            shared="true"></tooltip>
-    <plot-options>
-        <column stacking="percent">
-            <data-labels enabled="true" color="white"></data-labels>
-        </column>
-    </plot-options>
-    <data-series name="John">
-        <data>5, 3, 4, 7, 2</data>
-    </data-series>
-    <data-series name="Jane">
-        <data>2, 2, 3, 2, 1</data>
-    </data-series>
-    <data-series name="Joe">
-        <data>3, 4, 4, 2, 5</data>
-    </data-series>
+  <chart-title>Stacked column chart</chart-title>
+  <x-axis>
+    <categories>Apples, Oranges, Pears, Grapes, Bananas</categories>
+  </x-axis>
+  <y-axis allow-decimals="false" min="0">
+    <chart-title>Number of fruits</chart-title>
+    <stack-labels enabled="true"></stack-labels>
+  </y-axis>
+  <tooltip
+          point-format='<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>'
+          shared="true"></tooltip>
+  <plot-options>
+    <column stacking="percent">
+      <data-labels enabled="true" color="white"></data-labels>
+    </column>
+  </plot-options>
+  <data-series name="John">
+    <data>5, 3, 4, 7, 2</data>
+  </data-series>
+  <data-series name="Jane">
+    <data>2, 2, 3, 2, 1</data>
+  </data-series>
+  <data-series name="Joe">
+    <data>3, 4, 4, 2, 5</data>
+  </data-series>
 </vaadin-column-chart>

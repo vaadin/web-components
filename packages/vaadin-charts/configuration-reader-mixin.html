@@ -1,0 +1,293 @@
+<!--
+@license
+Vaadin Charts
+
+Copyright (C) 2015 Vaadin Ltd
+
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See the file LICENSE.md distributed with this software for more information about licensing.
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  (function () {
+
+    window.Vaadin = window.Vaadin || {};
+
+    /**
+     * Mixin that adds functionality to read the configuration presented on the child nodes of the element.
+     *
+     * @polymerMixin
+     *
+     * @memberof Vaadin
+     * @param {class} superClass base class to be extended by the returned class.
+     * @returns {class} VaadinChartsConfigurationReader class that extends `superClass` param.
+     */
+    Vaadin.ConfigurationReaderMixin = (superClass) => class VaadinChartsConfigurationReader extends superClass {
+
+      constructor() {
+        super();
+
+        /**
+         * Elements that should be ignored when mapping
+         **/
+        this._ignoredNodes = ["#text", "#comment", "data-series"];
+
+        /**
+         * List of words that will always be uppercased, instead of camel-cased
+         **/
+        this._uppercaseWords = ["html"];
+
+        /**
+         * Elements that should be mapped in to an array, e.g. two x-axis elements would be mapped to the same
+         * array
+         **/
+        this._multivaluedNodes = ["xAxis", "yAxis", "plotBands", "plotLines", "background", "crosshairs", "stops", "levels", "pane", "items", "units"];
+
+        /**
+         * Elements that contain an array of values, either as a comma-separated list or multiple elements
+         **/
+        this._arrayNodes = ["categories", "margin", "center", "units"];
+
+        /**
+         * Elements that contain two dimensional arrays. The values in value array can be specified using attributes and parser knows the correct order.
+         **/
+        this._twoDimArrayNodes = {"stops": ["position", "color"]};
+
+        /**
+         * Elements whose text content should be set as text property value
+         **/
+        this._textContentNodes = ["subtitle", "title"];
+
+        /**
+         * Elements where the whole node is going to be used as value, their name is always valid
+         **/
+        this._nodeValueAttributes = ["table"];
+
+        /**
+         *  Name of the elements of the light DOM that need to be mapped when creating the JSON configuration
+         **/
+        this._mappedKeywords = {
+          "chart-area": "area",
+          "stroke-width": "stroke-width",
+          "chart-frame": "frame",
+          "chart-style": "style",
+          "chart-title": "title",
+          "draw-on-series": "onSeries",
+          "draw-on-key": "onKey"
+        };
+
+      }
+
+      /**
+       * Transform the given string to camel-case
+       *
+       * @param {string} str
+       **/
+      _toCamelCase(str) {
+        var out = "";
+        if (this._mappedKeywords.hasOwnProperty(str)) {
+          out = this._mappedKeywords[str];
+        } else if (this._nodeValueAttributes.indexOf(str) !== -1) {
+          out = str;
+        } else {
+          str.split("-").forEach(function (word, idx) {
+            var add = word.toLowerCase();
+            //first word always goes in lower case, the rest go with camelCase, except for _uppercaseWords
+            if (idx === 0 || this._uppercaseWords.indexOf(add) === -1) {
+              out += (idx === 0 ? add : add[0].toUpperCase() + add.slice(1));
+            } else {
+              out += word.toUpperCase();
+            }
+          }, this);
+        }
+        return out;
+      }
+
+      /**
+       * Read configuration from one element and its attributes
+       *
+       * @param {object} dest the chart configuration object
+       * @param {node} parent the node that is parsed for configuration
+       **/
+      _loadFromNode(dest, node) {
+        for (var i in node.attributes) {
+          if (node.attributes.hasOwnProperty(i)) {
+            var attr = node.attributes[i].name;
+            if (attr !== undefined) {
+              var val = node.getAttribute(attr);
+              var res = this._parseAttribute(val);
+              dest[this._toCamelCase(attr)] = res;
+            }
+          }
+        }
+        if (this._hasOnlyTextContent(node)) {
+          dest.text = node.textContent;
+        }
+      }
+
+      /**
+       * Removes all empty text and comment nodes.
+       **/
+      _cleanNode(node) {
+        for (var n = 0; n < node.childNodes.length; n++) {
+          var child = node.childNodes[n];
+          if (child.nodeType === 3 && !/\S/.test(child.nodeValue)) {
+            node.removeChild(child);
+            n--;
+          } else if (child.nodeType === 1) {
+            this._cleanNode(child);
+          }
+        }
+      }
+
+      /**
+       * Parse String attribute to most specific type possible.
+       * Try JSON.parse, then eval if it's function, or return original value
+       * @param {object} value to be set
+       **/
+      _parseAttribute(val) {
+        var res;
+        try {
+          res = JSON.parse(val);
+        } catch (e) {
+          if (this._evalJavascript(val)) {
+            try {
+              res = eval('(' + val + ')');
+            } catch (e) {
+              res = val;
+            }
+          } else {
+            res = val;
+          }
+        }
+        return res;
+      }
+
+      _evalJavascript(val) {
+        //if it's a function eval
+        return val.indexOf('function') === 0;
+      }
+
+
+      /**
+       * Return true if node has a single child with nodeType TEXT_NODE (3) and non-empty value.
+       *
+       * @param {node} the node to check
+       **/
+      _hasOnlyTextContent(node) {
+        return node.hasChildNodes() && node.childNodes.length == 1 && node.childNodes[0].nodeType == 3 && node.textContent.trim() != "";
+      }
+
+
+      /**
+       * Returns a boolean value if text content is 'true' or 'false'. Otherwise, the return value is the text content itself.
+       *
+       * @param {node} the node to parse the text content
+       **/
+      _parseTextContent(node) {
+        try {
+          return JSON.parse(node.textContent);
+        } catch (e) {
+          return node.textContent;
+        }
+      }
+
+      /**
+       * Recursively load the configuration from the light-DOM elements.
+       *
+       * @param {object} dest the chart configuration object
+       * @param {node} parent the node that contains the configuration elements
+       **/
+      _loadConfiguration(dest, parent) {
+        for (var n = 0; n < parent.childNodes.length; n++) {
+          var node = parent.childNodes[n];
+          var name = node.nodeName.toLowerCase();
+          var camelName = this._toCamelCase(name);
+          if (this._ignoredNodes.indexOf(name) === -1) {
+            var result;
+
+            //read configuration into result
+            if (this._arrayNodes.indexOf(camelName) !== -1) {
+              result = [];
+              if (this._hasOnlyTextContent(node)) {
+                node.textContent.split(/\s*,\s*/).forEach(function (word) {
+                  result.push(this._parseAttribute(word));
+                }, this);
+              } else {
+                for (var i = 0; i < node.childNodes.length; i++) {
+                  var child = node.childNodes[i];
+                  result.push(this._parseAttribute(child.textContent));
+                }
+              }
+              result = result.length > 1 ? result : result[0];
+            } else if (this._twoDimArrayNodes.hasOwnProperty(name)) {
+              result = [];
+              if (this._hasOnlyTextContent(node)) {
+                node.textContent.split(/\s*,\s*/).forEach(function (word) {
+                  result.push(this._parseAttribute(word));
+                }, this);
+              } else {
+                var values = this._twoDimArrayNodes[name];
+                for (var i = 0; i < values.length; ++i) {
+                  var name = values[i];
+                  var attr = this._parseAttribute(node.getAttribute(name));
+                  if (attr != null) {
+                    result.push(attr);
+                  } else {
+                    for (var j = 0; j < node.childNodes.length; j++) {
+                      var child = node.childNodes[j];
+                      if (name === child.nodeName.toLowerCase()) {
+                        result.push(this._parseAttribute(child.textContent));
+                      }
+                    }
+                  }
+                }
+              }
+            } else if (this._nodeValueAttributes.indexOf(name) !== -1) {
+              result = node;
+            } else if (this._multivaluedNodes.indexOf(camelName) !== -1 || dest[camelName] === undefined) {
+              if (this._textContentNodes.indexOf(camelName) === -1 && this._hasOnlyTextContent(node)) {
+                result = this._parseTextContent(node);
+              }
+              else {
+                result = {};
+                this._loadFromNode(result, node);
+                this._loadConfiguration(result, node);
+              }
+            }
+
+            //put result in to the correct place
+            if (this._multivaluedNodes.indexOf(camelName) !== -1) {
+              if (dest[camelName] === undefined) {
+                dest[camelName] = [result];
+              } else {
+                dest[camelName].push(result);
+              }
+
+            } else if (dest[camelName] === undefined) {
+              dest[camelName] = result;
+            }
+          }
+        }
+      }
+
+      /**
+       * Creates the missing objects to ensure the path exists
+       **/
+      _ensureObjectStructure(obj, path) {
+        var parts = path.split(".");
+        for (var i = 0; i < parts.length; i++) {
+          if (!obj[parts[i]]) obj[parts[i]] = {};
+          obj = obj[parts[i]];
+        }
+      }
+    };
+
+  })();
+
+
+</script>

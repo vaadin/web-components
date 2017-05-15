@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-scatter-chart.html">
-</head>
-<body>
-<vaadin-scatter-chart id="options3d">
-    <chart margin="100">
+  </head>
+  <body>
+    <vaadin-scatter-chart id="options3d">
+      <chart margin="100">
         <options3d enabled="true"
                    alpha="60">
-            <chart-frame>
-                <bottom size="1" color="rgba(0,0,0,0.02)"></bottom>
-                <back size="1" color="rgba(0,0,0,0.04)"></back>
-                <side size="1" color="rgba(0,0,0,0.06)"></side>
-            </chart-frame>
+          <chart-frame>
+            <bottom size="1" color="rgba(0,0,0,0.02)"></bottom>
+            <back size="1" color="rgba(0,0,0,0.04)"></back>
+            <side size="1" color="rgba(0,0,0,0.06)"></side>
+          </chart-frame>
         </options3d>
-    </chart>
-</vaadin-scatter-chart>
+      </chart>
+    </vaadin-scatter-chart>
 
-<script>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('chart 3d options', function () {
-            var chartwc = document.querySelector('#options3d');
-            var conf = chartwc._chartConf;
-            expect(conf.chart.margin).to.equal(100);
-            expect(conf.chart.options3d).to.exist;
-            expect(conf.chart.options3d.enabled).to.equal(true);
-            expect(conf.chart.options3d.frame).to.exist;
-            expect(conf.chart.options3d.frame.bottom.size).to.equal(1);
-            expect(conf.chart.options3d.frame.bottom.color).to.equal('rgba(0,0,0,0.02)');
+          var chartwc = document.querySelector('#options3d');
+          var conf = chartwc._chartConf;
+          expect(conf.chart.margin).to.equal(100);
+          expect(conf.chart.options3d).to.exist;
+          expect(conf.chart.options3d.enabled).to.equal(true);
+          expect(conf.chart.options3d.frame).to.exist;
+          expect(conf.chart.options3d.frame.bottom.size).to.equal(1);
+          expect(conf.chart.options3d.frame.bottom.color).to.equal('rgba(0,0,0,0.02)');
 
         });
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

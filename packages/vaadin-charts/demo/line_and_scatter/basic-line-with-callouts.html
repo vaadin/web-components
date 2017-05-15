@@ -1,45 +1,45 @@
 <vaadin-line-chart id="basic-line-with-callouts">
-    <chart-title>Callout: Monthly Average Temperature</chart-title>
-    <subtitle>Source: WorldClimate.com</subtitle>
+  <chart-title>Callout: Monthly Average Temperature</chart-title>
+  <subtitle>Source: WorldClimate.com</subtitle>
 
-    <x-axis>
-        <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-    </x-axis>
+  <x-axis>
+    <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
+  </x-axis>
 
-    <y-axis>
-        <chart-title>Temperature (°C)</chart-title>
-    </y-axis>
+  <y-axis>
+    <chart-title>Temperature (°C)</chart-title>
+  </y-axis>
 
-    <plot-options>
-        <line enable-mouse-tracking="false">
-        </line>
-    </plot-options>
+  <plot-options>
+    <line enable-mouse-tracking="false">
+    </line>
+  </plot-options>
 
-    <data-series name="Tokyo">
-        <data>7.0, 6.9, 9.5, 14.5, 18.2 </data>
-        <data>
-          <point>
-            <y>21.5</y>
-            <data-labels shape="callout" enabled="true" y="-12"
-                         background-color="#FFEBCD">
+  <data-series name="Tokyo">
+    <data>7.0, 6.9, 9.5, 14.5, 18.2</data>
+    <data>
+      <point>
+        <y>21.5</y>
+        <data-labels shape="callout" enabled="true" y="-12"
+                     background-color="#FFEBCD">
 
-            </data-labels>
-          </point>
-        </data>
-        <data>
-            25.2, 26.5, 23.3, 18.3, 13.9, 9.6
-        </data>
-    </data-series>
-    <data-series name="London">
-        <data>3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0</data>
-        <data>
-          <point>
-            <y>16.6</y>
-            <data-labels shape="callout" enabled="true" y="-12"
-                         background-color="#FFEBCD">
-            </data-labels>
-          </point>
-        </data>
-        <data>14.2, 10.3, 6.6, 4.8</data>
-    </data-series>
+        </data-labels>
+      </point>
+    </data>
+    <data>
+      25.2, 26.5, 23.3, 18.3, 13.9, 9.6
+    </data>
+  </data-series>
+  <data-series name="London">
+    <data>3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0</data>
+    <data>
+      <point>
+        <y>16.6</y>
+        <data-labels shape="callout" enabled="true" y="-12"
+                     background-color="#FFEBCD">
+        </data-labels>
+      </point>
+    </data>
+    <data>14.2, 10.3, 6.6, 4.8</data>
+  </data-series>
 </vaadin-line-chart>

@@ -11,84 +11,84 @@
 This component allows viewing demo HTML files, so that the actual demo and the source are shown different pages. The file name, without the ".html" suffix, should be passed to the "source" property. The loaded DOM is inserted directly into the demo page, while the HTML text is loaded into the source page (using iron-ajax).
 -->
 <dom-module id="sourcing-component">
-    <style>
-        :host .sourcecode {
-            cursor: text;
-            padding-left: 20px;
-            -moz-user-select: text;
-            -webkit-user-select: text;
-            -ms-user-select: text;
-        }
-    </style>
-    <template>
-        <iron-ajax
-                id="sourceFetcher"
-                handle-as="text"
-                last-response="{{htmlValue}}"
-                debounce-duration="300"></iron-ajax>
+  <style>
+    :host .sourcecode {
+      cursor: text;
+      padding-left: 20px;
+      -moz-user-select: text;
+      -webkit-user-select: text;
+      -ms-user-select: text;
+    }
+  </style>
+  <template>
+    <iron-ajax
+            id="sourceFetcher"
+            handle-as="text"
+            last-response="{{htmlValue}}"
+            debounce-duration="300"></iron-ajax>
 
-        <paper-tabs id="tabs" selected="{{selected}}" noink>
-            <paper-tab>Example</paper-tab>
-            <paper-tab>Source</paper-tab>
-        </paper-tabs>
+    <paper-tabs id="tabs" selected="{{selected}}" noink>
+      <paper-tab>Example</paper-tab>
+      <paper-tab>Source</paper-tab>
+    </paper-tabs>
 
-        <iron-pages id="pages" selected="{{selected}}">
-            <div id="page1"></div>
-            <prettify-element class="sourcecode" text="{{htmlValue}}"></prettify-element>
-        </iron-pages>
-    </template>
+    <iron-pages id="pages" selected="{{selected}}">
+      <div id="page1"></div>
+      <prettify-element class="sourcecode" text="{{htmlValue}}"></prettify-element>
+    </iron-pages>
+  </template>
 </dom-module>
 
 <script>
-    (function () {
-        var demoId2dom = {};
-        Polymer({
-            is: "sourcing-component",
+  (function () {
+    var demoId2dom = {};
+    Polymer({
+      is: "sourcing-component",
 
-            properties: {
-                selected: {
-                    type: String,
-                    value: '0'
-                },
+      properties: {
+        selected: {
+          type: String,
+          value: '0'
+        },
 
-                source: {
-                    type: String,
-                    observer: '_sourceChanged'
-                },
+        source: {
+          type: String,
+          observer: '_sourceChanged'
+        },
 
-                htmlValue: String
-            },
+        htmlValue: String
+      },
 
-            updateDemo: function (demoId) {
-                if (demoId2dom[demoId]) {
-                    // Clear example tab
-                    var pageNode = Polymer.dom(this.$.page1)
-                    while (pageNode.firstChild) {
-                        pageNode.removeChild(pageNode.firstChild);
-                    }
+      updateDemo: function (demoId) {
+        if (demoId2dom[demoId]) {
+          // Clear example tab
+          var pageNode = Polymer.dom(this.$.page1)
+          while (pageNode.firstChild) {
+            pageNode.removeChild(pageNode.firstChild);
+          }
 
-                    // Add the DOM from cache
-                    pageNode.appendChild(demoId2dom[demoId]);
+          // Add the DOM from cache
+          pageNode.appendChild(demoId2dom[demoId]);
 
-                    // Load source code into tab two
-                    this.$.sourceFetcher.url = demoId + ".html";
-                    this.$.sourceFetcher.generateRequest();
-                }
-            },
+          // Load source code into tab two
+          this.$.sourceFetcher.url = demoId + ".html";
+          this.$.sourceFetcher.generateRequest();
+        }
+      },
 
-            _sourceChanged: function (newValue, oldValue) {
-                //Always show chart tab when changing demo
-                this.$.pages.select('0');
+      _sourceChanged: function (newValue, oldValue) {
+        //Always show chart tab when changing demo
+        this.$.pages.select('0');
 
-                if (demoId2dom[newValue]) {
-                    this.updateDemo(newValue);
-                } else {
-                    this.importHref(newValue + ".html", function (result) {
-                        demoId2dom[newValue] = result.target.import.body;
-                        this.updateDemo(newValue);
-                    });
-                }
-            }
-        });
-    })();
+        if (demoId2dom[newValue]) {
+          this.updateDemo(newValue);
+        } else {
+          this.importHref(newValue + ".html", function (result) {
+            demoId2dom[newValue] = result.target.import.body;
+            this.updateDemo(newValue);
+          });
+        }
+      }
+    });
+  })();
 </script>

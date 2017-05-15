@@ -1,67 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
 
-</head>
-<body>
-<dom-module id="binding-chart">
-    <template>
+  </head>
+  <body>
+    <dom-module id="binding-chart">
+      <template>
         <vaadin-line-chart id="chartId">
-            <chart-title>Global temperature change</chart-title>
-            <subtitle>Data input from CSV</subtitle>
-            <plot-options>
-                <series>
-                    <marker enabled="false"></marker>
-                </series>
-            </plot-options>
-            <x-axis type="datetime"></x-axis>
-            <data-series id="seriesId" data="[[seriesData]]" line-width="1"></data-series>
+          <chart-title>Global temperature change</chart-title>
+          <subtitle>Data input from CSV</subtitle>
+          <plot-options>
+            <series>
+              <marker enabled="false"></marker>
+            </series>
+          </plot-options>
+          <x-axis type="datetime"></x-axis>
+          <data-series id="seriesId" data="[[seriesData]]" line-width="1"></data-series>
         </vaadin-line-chart>
         <button id="myBtn" on-click="_addSeriesPoint">Add series point</button>
-    </template>
-    <script>
+      </template>
+      <script>
         (function () {
-            HTMLImports.whenReady(function () {
-                Polymer({
-                    is: 'binding-chart',
-                    properties: {
-                        seriesData: {
-                            type: Array,
-                            value: [
-                                [1183939200000, 40.71],
-                                [1184025600000, 40.38],
-                                [1184112000000, 40.82],
-                                [1184198400000, 47.55],
-                                [1184284800000, 41.18],
-                                [1184544000000, 41.06],
-                                [1184630400000, 41.47]]
-                        }
-                    },
-                    _addSeriesPoint: function () {
-                        var x = (new Date()).getTime(),
-                                y = Math.random();
-                        this.push('seriesData', [x, y]);
-                    }
-                });
+          HTMLImports.whenReady(function () {
+            Polymer({
+              is: 'binding-chart',
+              properties: {
+                seriesData: {
+                  type: Array,
+                  value: [
+                    [1183939200000, 40.71],
+                    [1184025600000, 40.38],
+                    [1184112000000, 40.82],
+                    [1184198400000, 47.55],
+                    [1184284800000, 41.18],
+                    [1184544000000, 41.06],
+                    [1184630400000, 41.47]]
+                }
+              },
+              _addSeriesPoint: function () {
+                var x = (new Date()).getTime(),
+                        y = Math.random();
+                this.push('seriesData', [x, y]);
+              }
             });
+          });
         })();
-    </script>
+      </script>
 
-</dom-module>
-<binding-chart></binding-chart>
+    </dom-module>
+    <binding-chart></binding-chart>
 
-<script>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
         var el = document.querySelector("binding-chart");
 
-        test('data property binding', function () {
-            var chartwc = el.$.chartId;
+        test('data property binding', function (done) {
+          var chartwc = el.$.chartId;
+          setTimeout(function () {
             var conf = chartwc._chartConf;
             expect(conf.series).to.exist;
             expect(conf.series).not.to.be.empty;
@@ -70,24 +71,27 @@
             expect(conf.series[0].data).to.have.length(7);
             expect(conf.series[0].data[1][0]).to.equal(1184025600000);
             expect(conf.series[0].data[1][1]).to.equal(40.38);
+            done();
+          });
+
 
         });
 
         test('data added after attached', function () {
-            var serieswc = el.$.seriesId;
-            var conf = serieswc._seriesConf;
-            expect(conf.data).to.exist;
-            expect(conf.data).not.to.be.empty;
-            expect(conf.data).to.have.length(7);
+          var serieswc = el.$.seriesId;
+          var conf = serieswc._seriesConf;
+          expect(conf.data).to.exist;
+          expect(conf.data).not.to.be.empty;
+          expect(conf.data).to.have.length(7);
 
-            var button = el.$.myBtn;
-            button.click();
+          var button = el.$.myBtn;
+          button.click();
 
-            expect(conf.data).to.have.length(8);
+          expect(conf.data).to.have.length(8);
         });
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

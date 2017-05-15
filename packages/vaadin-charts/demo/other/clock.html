@@ -1,123 +1,123 @@
 <dom-module id="clock-example">
 
-    <template>
-        <div style="height: 300px; width: 100%;">
-            <vaadin-gauge-chart id="clock" on-chart-loaded="clockLoadListener">
-                <chart plot-background-color="null" plot-background-image="null" plot-border-width="0"
-                          plot-shadow="false" animation="false"></chart>
-                <chart-title>Vaadin Charts Clock</chart-title>
-                <pane>
-                    <background>
-                    </background>
-                    <background border-width="0" border-radius="109%">
-                        <background-color>
-                            <radial-gradient cx="0.5" cy="-0.4" r="1.9">
-                            </radial-gradient>
-                            <stops position="0.5" color="rgba(255, 255, 255, 0.2)"></stops>
-                            <stops position="0.5" color="rgba(200, 200, 200, 0.2)"></stops>
-                        </background-color>
-                    </background>
-                </pane>
-                <y-axis min="0" max="12" grid-line-width="0" line-width="0" show-first-label="false"
-                           minor-tick-interval="0.166666" minor-tick-width="1" minor-tick-lenght="5"
-                           minor-tick-position="inside"
-                           minor-grid-line-width="0" minor-tick-color="#666"
-                           tick-interval="1" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666">
-                    <labels distance="-20"></labels>
-                </y-axis>
-                <tooltip enabled="false"></tooltip>
-                <plot-options>
-                    <gauge>
-                        <data-labels enabled="false"></data-labels>
-                    </gauge>
-                </plot-options>
-                <data-series>
-                    <data>
-                        <point>
-                            <id>hour</id>
-                            <y>0</y>
-                            <dial radius="60%" base-width="4" base-length="95%" rear-length="0"></dial>
-                        </point>
-                        <point>
-                            <id>minute</id>
-                            <y>0</y>
-                            <dial base-length="95%" rear-length="0"></dial>
-                        </point>
-                        <point>
-                            <id>second</id>
-                            <y>0</y>
-                            <dial radius="100%" base-width="1" rear-length="20%"></dial>
-                        </point>
-                    </data>
-                </data-series>
-            </vaadin-gauge-chart>
-        </div>
-    </template>
+  <template>
+    <div style="height: 300px; width: 100%;">
+      <vaadin-gauge-chart id="clock" on-chart-loaded="clockLoadListener">
+        <chart plot-background-color="null" plot-background-image="null" plot-border-width="0"
+               plot-shadow="false" animation="false"></chart>
+        <chart-title>Vaadin Charts Clock</chart-title>
+        <pane>
+          <background>
+          </background>
+          <background border-width="0" border-radius="109%">
+            <background-color>
+              <radial-gradient cx="0.5" cy="-0.4" r="1.9">
+              </radial-gradient>
+              <stops position="0.5" color="rgba(255, 255, 255, 0.2)"></stops>
+              <stops position="0.5" color="rgba(200, 200, 200, 0.2)"></stops>
+            </background-color>
+          </background>
+        </pane>
+        <y-axis min="0" max="12" grid-line-width="0" line-width="0" show-first-label="false"
+                minor-tick-interval="0.166666" minor-tick-width="1" minor-tick-lenght="5"
+                minor-tick-position="inside"
+                minor-grid-line-width="0" minor-tick-color="#666"
+                tick-interval="1" tick-width="2" tick-position="inside" tick-length="10" tick-color="#666">
+          <labels distance="-20"></labels>
+        </y-axis>
+        <tooltip enabled="false"></tooltip>
+        <plot-options>
+          <gauge>
+            <data-labels enabled="false"></data-labels>
+          </gauge>
+        </plot-options>
+        <data-series>
+          <data>
+            <point>
+              <id>hour</id>
+              <y>0</y>
+              <dial radius="60%" base-width="4" base-length="95%" rear-length="0"></dial>
+            </point>
+            <point>
+              <id>minute</id>
+              <y>0</y>
+              <dial base-length="95%" rear-length="0"></dial>
+            </point>
+            <point>
+              <id>second</id>
+              <y>0</y>
+              <dial radius="100%" base-width="1" rear-length="20%"></dial>
+            </point>
+          </data>
+        </data-series>
+      </vaadin-gauge-chart>
+    </div>
+  </template>
 
 
-    <script>
-        Polymer({
-            is: 'clock-example',
+  <script>
+    Polymer({
+      is: 'clock-example',
 
-            properties: {
-                isAttached: Boolean,
-                isChartReady: Boolean
-            },
+      properties: {
+        isAttached: Boolean,
+        isChartReady: Boolean
+      },
 
-            clockLoadListener: function () {
-                this.isChartReady = true;
-                this.updateTime();
-            },
+      clockLoadListener: function () {
+        this.isChartReady = true;
+        this.updateTime();
+      },
 
-            updateTime: function () {
-                if (this.isAttached && this.isChartReady) {
-                    var chart = this.$.clock.chart;
+      updateTime: function () {
+        if (this.isAttached && this.isChartReady) {
+          var chart = this.$.clock.chart;
 
-                    now = this.getNow();
+          now = this.getNow();
 
-                    var hour = chart.get('hour'),
-                            minute = chart.get('minute'),
-                            second = chart.get('second');
+          var hour = chart.get('hour'),
+                  minute = chart.get('minute'),
+                  second = chart.get('second');
 
-                    // Cache the tooltip text
-                    chart.tooltipText =
-                            this.pad(Math.floor(now.hours), 2) + ':' +
-                            this.pad(Math.floor(now.minutes * 5), 2) + ':' +
-                            this.pad(now.seconds * 5, 2);
+          // Cache the tooltip text
+          chart.tooltipText =
+                  this.pad(Math.floor(now.hours), 2) + ':' +
+                  this.pad(Math.floor(now.minutes * 5), 2) + ':' +
+                  this.pad(now.seconds * 5, 2);
 
-                    hour.update(now.hours);
-                    minute.update(now.minutes);
-                    second.update(now.seconds);
+          hour.update(now.hours);
+          minute.update(now.minutes);
+          second.update(now.seconds);
 
-                    this.async(this.updateTime, 1000);
-                }
-            },
+          this.async(this.updateTime, 1000);
+        }
+      },
 
-            getNow: function () {
-                var now = new Date();
+      getNow: function () {
+        var now = new Date();
 
-                return {
-                    hours: now.getHours() + now.getMinutes() / 60,
-                    minutes: now.getMinutes() * 12 / 60 + now.getSeconds() * 12 / 3600,
-                    seconds: now.getSeconds() * 12 / 60
-                };
-            },
+        return {
+          hours: now.getHours() + now.getMinutes() / 60,
+          minutes: now.getMinutes() * 12 / 60 + now.getSeconds() * 12 / 3600,
+          seconds: now.getSeconds() * 12 / 60
+        };
+      },
 
-            pad: function (number, length) {
-                // Create an array of the remaining length + 1 and join it with 0's
-                return new Array((length || 2) + 1 - String(number).length).join(0) + number;
-            },
+      pad: function (number, length) {
+        // Create an array of the remaining length + 1 and join it with 0's
+        return new Array((length || 2) + 1 - String(number).length).join(0) + number;
+      },
 
-            attached: function () {
-                this.isAttached = true;
-                this.updateTime();
-            },
+      attached: function () {
+        this.isAttached = true;
+        this.updateTime();
+      },
 
-            detached: function () {
-                this.isAttached = false;
-            }
-        });
-    </script>
+      detached: function () {
+        this.isAttached = false;
+      }
+    });
+  </script>
 </dom-module>
 
 <clock-example></clock-example>

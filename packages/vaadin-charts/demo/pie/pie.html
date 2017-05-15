@@ -1,22 +1,22 @@
 <vaadin-pie-chart id="pie">
-    <chart-title>Browser market shares at a specific website, 2010</chart-title>
-    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
-    </tooltip>
-    <plot-options>
-        <pie allow-point-select="true" cursor="pointer">
-            <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
-            </data-labels>
-        </pie>
-    </plot-options>
+  <chart-title>Browser market shares at a specific website, 2010</chart-title>
+  <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+  </tooltip>
+  <plot-options>
+    <pie allow-point-select="true" cursor="pointer">
+      <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage:.1f} %">
+      </data-labels>
+    </pie>
+  </plot-options>
 
-    <data-series name="Browser share">
-        <data>
-            ["Firefox",   45.0],
-            ["IE",       26.8],
-            ["Chrome", 12.8],
-            ["Safari",    8.5],
-            ["Opera",     6.2],
-            ["Others",   0.7]
-        </data>
-    </data-series>
+  <data-series name="Browser share">
+    <data>
+      ["Firefox", 45.0],
+      ["IE", 26.8],
+      ["Chrome", 12.8],
+      ["Safari", 8.5],
+      ["Opera", 6.2],
+      ["Others", 0.7]
+    </data>
+  </data-series>
 </vaadin-pie-chart>

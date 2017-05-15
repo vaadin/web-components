@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-line-chart.html">
-</head>
-<body>
-<vaadin-line-chart id="tooltipWithComplexPointFormat">
-    <tooltip point-format="x = {point.x}, y = {point.y}"></tooltip>
-</vaadin-line-chart>
+  </head>
+  <body>
+    <vaadin-line-chart id="tooltipWithComplexPointFormat">
+      <tooltip point-format="x = {point.x}, y = {point.y}"></tooltip>
+    </vaadin-line-chart>
 
-<vaadin-line-chart id="tooltipWithHtmlSet">
-    <tooltip use-html="true"></tooltip>
-</vaadin-line-chart>
-<script>
+    <vaadin-line-chart id="tooltipWithHtmlSet">
+      <tooltip use-html="true"></tooltip>
+    </vaadin-line-chart>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('tooltip with complex format', function () {
-            var chartwc = document.querySelector('#tooltipWithComplexPointFormat');
-            var conf = chartwc._chartConf;
-            expect(conf.tooltip.pointFormat).to.equal("x = {point.x}, y = {point.y}");
+          var chartwc = document.querySelector('#tooltipWithComplexPointFormat');
+          var conf = chartwc._chartConf;
+          expect(conf.tooltip.pointFormat).to.equal("x = {point.x}, y = {point.y}");
         });
 
         test('tooltip with HTML enabled', function () {
-            var chartwc = document.querySelector('#tooltipWithHtmlSet');
-            var conf = chartwc._chartConf;
-            expect(conf.tooltip.useHTML).to.be.true;
+          var chartwc = document.querySelector('#tooltipWithHtmlSet');
+          var conf = chartwc._chartConf;
+          expect(conf.tooltip.useHTML).to.be.true;
         });
 
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>

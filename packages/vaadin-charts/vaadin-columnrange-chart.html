@@ -10,12 +10,11 @@ See the file LICENSE.md distributed with this software for more information abou
 
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
 
 <link rel="import" href="data-series.html">
-<link rel="import" href="valo-theme.html">
-<link rel="import" href="chart-behavior.html">
+
+<link rel="import" href="base-chart.html">
 
 <!--
 An element that provides a WebComponent interface for <a href="http://vaadin.com/charts">Vaadin Charts</a>
@@ -33,18 +32,32 @@ Example:
     </vaadin-columnrange-chart>
 -->
 <dom-module id="vaadin-columnrange-chart">
-    <template>
-    </template>
-    <script>
-        Polymer({
-            is: 'vaadin-columnrange-chart',
+  <template>
+  </template>
+  <script>
+    (function () {
 
-            behaviors: [VaadinCharts.ValoThemeBehavior, VaadinCharts.ChartBehavior],
+      class ColumnrangeChartElement extends Vaadin.BaseChartElement {
 
-            _getType: function () {
-                return 'columnrange';
-            }
+        static get is() {
+          return 'vaadin-columnrange-chart';
+        }
 
-        });
-    </script>
+        constructor() {
+          super();
+        }
+
+        _getType() {
+          return 'columnrange';
+        }
+
+      }
+
+      customElements.define(ColumnrangeChartElement.is, ColumnrangeChartElement);
+
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.ColumnrangeChartElement = ColumnrangeChartElement;
+
+    })();
+  </script>
 </dom-module>

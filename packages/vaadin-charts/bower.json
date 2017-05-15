@@ -1,6 +1,5 @@
 {
   "name": "vaadin-charts",
-  "version": "4.0.0",
   "description": "Vaadin Charts Web Components",
   "authors": [
     "Vaadin Ltd"
@@ -30,19 +29,27 @@
   ],
   "dependencies": {
     "highcharts": "highcharts/highcharts-dist#v4.2.6",
-    "polymer": "Polymer/polymer#^1.1.0",
-    "vaadin-license-checker": "vaadin/license-checker#0.9.7"
+    "polymer": "Polymer/polymer#^v2.0.0-rc.1",
+    "vaadin-license-checker": "vaadin/license-checker#^1.0.0",
+    "iron-resizable-behavior": "2.0-preview"
   },
   "devDependencies": {
-    "vaadin-grid": "^1.0.0",
     "google-code-prettify": "*",
-    "iron-selector": "PolymerElements/iron-selector#v1.0.7",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
-    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^1.0.0",
-    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^1.0.0",
-    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
-    "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
-    "web-component-tester": "4.0.3",
-    "jquery": "^2.2.2"
+    "iron-selector": "PolymerElements/iron-selector#2.0-preview",
+    "iron-ajax": "PolymerElements/iron-ajax#2.0-preview",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#2.0-preview",
+    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#2.0-preview",
+    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
+    "paper-tabs": "PolymerElements/paper-tabs#2.0-preview",
+    "web-component-tester": "^6.0.0-prerelease.5",
+    "jquery": "^2.2.2",
+    "webcomponentsjs": "^v1.0.0-rc.5",
+    "vaadin-grid": "#2.1-polymer-2"
+  },
+  "resolutions": {
+    "polymer": "^v2.0.0-rc.1",
+    "iron-resizable-behavior": "2.0-preview",
+    "iron-a11y-keys-behavior": "2.0-preview",
+    "webcomponentsjs": "^v1.0.0-rc.5"
   }
 }

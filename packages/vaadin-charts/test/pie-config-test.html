@@ -1,62 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../vaadin-pie-chart.html">
-</head>
-<body>
-<vaadin-pie-chart id="pieWithSeries">
-    <chart-title>Browser market shares at a specific website, 2014</chart-title>
-    <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
-    </tooltip>
-    <plot-options>
-        <pie  start-angle="45" end-angle="180" cursor="pointer">
-            <data-labels  enabled="true" format="<b>{point.name}</b>: {point.percentage:.1f} %">
-                <distance>-30</distance>
-                <color>rgb(255,0,0)</color>
-            </data-labels>
+  </head>
+  <body>
+    <vaadin-pie-chart id="pieWithSeries">
+      <chart-title>Browser market shares at a specific website, 2014</chart-title>
+      <tooltip point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+      </tooltip>
+      <plot-options>
+        <pie start-angle="45" end-angle="180" cursor="pointer">
+          <data-labels enabled="true" format="<b>{point.name}</b>: {point.percentage:.1f} %">
+            <distance>-30</distance>
+            <color>rgb(255,0,0)</color>
+          </data-labels>
         </pie>
-    </plot-options>
-    <data-series size="80%" inner-size="50%" name="Browser share">
-        <data>["Firefox",   45.0],
-            ["IE",       26.8],
-            ["Chrome", 12.8],
-            ["Safari",    8.5],
-            ["Opera",     6.2],
-            ["Others",   0.7]</data>
-    </data-series>
-</vaadin-pie-chart>
-<script>
+      </plot-options>
+      <data-series size="80%" inner-size="50%" name="Browser share">
+        <data>["Firefox", 45.0],
+          ["IE", 26.8],
+          ["Chrome", 12.8],
+          ["Safari", 8.5],
+          ["Opera", 6.2],
+          ["Others", 0.7]
+        </data>
+      </data-series>
+    </vaadin-pie-chart>
+    <script>
 
-    suite('<vaadin-_-chart>', function () {
+      suite('<vaadin-_-chart>', function () {
 
         test('config with series', function () {
-            var chartwc = document.querySelector('#pieWithSeries');
-            var conf = chartwc._chartConf;
-            expect(conf.plotOptions).to.exist;
-            expect(conf.plotOptions.pie).to.exist;
-            expect(conf.plotOptions.pie.startAngle).to.equal(45);
-            expect(conf.plotOptions.pie.endAngle).to.equal(180);
-            expect(conf.plotOptions.pie.cursor).to.equal("pointer");
-            expect(conf.plotOptions.pie.dataLabels).to.exist;
-            expect(conf.plotOptions.pie.dataLabels.distance).to.equal(-30);
-            expect(conf.series).to.exist;
-            expect(conf.series).not.to.be.empty;
-            expect(conf.series[0].data).to.exist;
-            expect(conf.series[0].data).not.to.be.empty;
-            expect(conf.series[0].size).to.equal("80%");
-            expect(conf.series[0].name).to.equal("Browser share");
-            expect(conf.series[0].innerSize).to.equal("50%");
+          var chartwc = document.querySelector('#pieWithSeries');
+          var conf = chartwc._chartConf;
+          expect(conf.plotOptions).to.exist;
+          expect(conf.plotOptions.pie).to.exist;
+          expect(conf.plotOptions.pie.startAngle).to.equal(45);
+          expect(conf.plotOptions.pie.endAngle).to.equal(180);
+          expect(conf.plotOptions.pie.cursor).to.equal("pointer");
+          expect(conf.plotOptions.pie.dataLabels).to.exist;
+          expect(conf.plotOptions.pie.dataLabels.distance).to.equal(-30);
+          expect(conf.series).to.exist;
+          expect(conf.series).not.to.be.empty;
+          expect(conf.series[0].data).to.exist;
+          expect(conf.series[0].data).not.to.be.empty;
+          expect(conf.series[0].size).to.equal("80%");
+          expect(conf.series[0].name).to.equal("Browser share");
+          expect(conf.series[0].innerSize).to.equal("50%");
 
         });
 
 
-    });
+      });
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>
