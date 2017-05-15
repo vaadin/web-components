@@ -46,11 +46,7 @@
 
     createInstance: function() {
       this._ensureTemplatized();
-      var instance = this.stamp(null);
-      // TODO: not sure why this is needed in V2???
-      if (Polymer.Element) {
-        instance._flushProperties();
-      }
+      var instance = this.stamp({});
       this.addInstance(instance);
 
       return instance;
