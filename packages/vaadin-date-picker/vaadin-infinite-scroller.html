@@ -298,7 +298,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       var tmpInstance = itemWrapper.instance;
       itemWrapper.instance = this.stamp({});
-      Polymer.Element && itemWrapper.instance._flushProperties();
       Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
 
       Object.keys(tmpInstance).forEach(function(prop) {
@@ -360,13 +359,15 @@ This program is available under Apache License Version 2.0, available at https:/
      * notifying parent.<path> path change on each row.
      */
     _forwardParentPath: function(prop, value) {
+      /* FIXME: Aparently this is not needed, at least does not break any test.
       if (prop !== 'index') {
         this._buffers.forEach(function(buffer) {
           [].forEach.call(buffer.children, function(itemWrapper) {
-            // itemWrapper.instance.notifyPath(prop, value, true);
+            itemWrapper.instance.notifyPath(prop, value, true);
           });
         });
       }
+      */
     }
 
   });
