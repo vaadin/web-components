@@ -356,7 +356,8 @@
 
     get _nativeInput() {
       if (this.inputElement) {
-        return this.inputElement.inputElement || this.inputElement;
+        return this.inputElement.inputElement ? this.inputElement.inputElement :
+          window.unwrap ? window.unwrap(this.inputElement) : this.inputElement;
       }
     },
 
@@ -559,9 +560,8 @@
       }
       this._ignoreFocusedDateChange = false;
 
-      var input = window.unwrap ? window.unwrap(this.inputElement) : this.inputElement;
-      if ((this.shadowRoot && this.shadowRoot.activeElement === input) || document.activeElement === input) {
-        input.selectionStart = input.selectionEnd;
+      if (this._nativeInput && this._nativeInput.selectionStart) {
+        this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
       }
 
       this.validate();
