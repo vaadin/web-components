@@ -4,6 +4,7 @@ node_js: stable
 install:
 - npm install
 - npm install -g bower
+- bower install
 
 script:
 - npm test
