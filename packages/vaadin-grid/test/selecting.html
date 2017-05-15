@@ -65,7 +65,7 @@
       beforeEach(function() {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
-        
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         cachedItems = grid._cache[0];
@@ -395,7 +395,7 @@
         expect(selectAllCheckbox.indeterminate).to.be.false;
       });
 
-      it('should update select all when filters change', function(done) {
+      it('should update select all when filters change', function() {
         grid.items = [{value: 'foo'}, {value: 'bar'}];
 
         firstBodyCheckbox.click();
@@ -404,10 +404,8 @@
         filter.value = 'foo';
         Polymer.Base.fire('input', {}, {node: filter});
 
-        grid.async(function() {
-          expect(selectionColumn.selectAll).to.be.true;
-          done();
-        }, 200); // filter-changed has a 200ms debounce
+        filter.parentElement.flushDebouncer('filter-changed');
+        expect(selectionColumn.selectAll).to.be.true;
       });
 
       it('should not throw with data provider', function() {

@@ -41,7 +41,7 @@
         scroller = grid.$.scroller;
         fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
         Polymer.dom.flush();
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           done();
         });
       });

@@ -20,6 +20,7 @@
     "expect": false,
     "test": false,
     "flush": false,
+    "animationFrameFlush": false,
     "before": false,
     "beforeEach": false,
     "buildDataSet": false,

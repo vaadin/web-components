@@ -763,7 +763,7 @@
             it('should focus on the first element inside details with enter', function(done) {
               down();
 
-              Polymer.RenderStatus.afterNextRender(grid, function() {
+              animationFrameFlush(function() {
                 var input = getCellContent(body._focusedCell).children[0];
                 input.focus = sinon.spy();
 
@@ -924,7 +924,7 @@
               grid.size = 200;
               grid.dataProvider = infiniteDataProvider;
               Polymer.dom.flush();
-              Polymer.RenderStatus.afterNextRender(grid, done);
+              animationFrameFlush(done);
             });
 
             it('should scroll rows visible with up arrow', function() {
@@ -985,7 +985,7 @@
             it('should scroll the focused item visible when focus is set to body', function(done) {
               scrollToEnd(grid);
 
-              Polymer.RenderStatus.afterNextRender(grid, function() {
+              animationFrameFlush(function() {
                 tabToHeader();
                 tab();
 

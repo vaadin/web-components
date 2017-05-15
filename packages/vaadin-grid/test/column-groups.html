@@ -434,10 +434,10 @@
         });
 
         it('should have last row fully visible when scrolled to end', function(done) {
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          animationFrameFlush(function() {
             scrollToEnd(grid);
 
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            animationFrameFlush(function() {
               bodyRows = getRows(body);
               var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
               var footerTop = footer.getBoundingClientRect().top;

@@ -170,16 +170,13 @@
         
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
-          // IE11
-          Polymer.RenderStatus.afterNextRender(grid, function() {
-            var colCount = getRowCells(getRows(grid.$.header)[0]).length;
-            headerContent = [];
-            for (var i = 0; i < colCount; i++) {
-              headerContent.push(getVisualHeaderCellContent(grid, 0, i));
-            }
-          });
-          setTimeout(done, 100);
+        flush(function() {
+          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
+          headerContent = [];
+          for (var i = 0; i < colCount; i++) {
+            headerContent.push(getVisualHeaderCellContent(grid, 0, i));
+          }
+          done();
         });
       });
 
@@ -356,7 +353,7 @@
           var col = document.createElement('vaadin-grid-column');
           col.innerHTML = '<template></template>';
           Polymer.dom(grid).appendChild(col);
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          animationFrameFlush(function() {
             expect(col._order).to.equal(50000000);
             done();
           });
@@ -405,10 +402,7 @@
       beforeEach(function(done) {
         grid = Polymer.Element ? fixture('groups-p2') : fixture('groups');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
-          // IE11
-          Polymer.RenderStatus.afterNextRender(grid, done);
-        });
+        animationFrameFlush(done);
       });
 
       it('should have initial visual order', function() {
@@ -478,7 +472,7 @@
       beforeEach(function(done) {
         grid = fixture('differentWidths');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           headerContent0 = getHeaderCellContent(grid, 0, 0);
           headerContent1 = getHeaderCellContent(grid, 0, 1);
           content0rect = headerContent0.getBoundingClientRect();
@@ -507,7 +501,7 @@
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
       it('should support over 10 child-columns in a group', function() {

@@ -40,7 +40,7 @@
         var _error = console.error;
         var spy = console.error = sinon.spy();
         Polymer.Base.importHref('../vaadin-grid.html', function() {
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          animationFrameFlush(function() {
             console.error = _error;
             expect(spy.called).to.be.false;
             done();

@@ -61,7 +61,7 @@
 
         beforeEach(function(done) {
           listenOnce(grid.$.scroller, 'animationend', function() {
-            Polymer.RenderStatus.afterNextRender(grid, done);
+            animationFrameFlush(done);
           });
           container.removeAttribute('hidden');
         });

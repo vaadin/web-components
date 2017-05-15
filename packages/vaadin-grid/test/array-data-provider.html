@@ -86,9 +86,7 @@
         }];
         Polymer.dom.flush();
         body = grid.$.items;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
-          done();
-        });
+        animationFrameFlush(done);
       });
 
       it('should have right amount of data', function() {

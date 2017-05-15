@@ -89,7 +89,7 @@
         outerScroller.hidden = false;
         target = outerScroller.scrollTarget;
         tableRect = scroller.$.table.getBoundingClientRect();
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           outerScroller._syncingScrollTarget = false;
           outerScroller._syncingOuterScroller = false;
           done();
@@ -150,7 +150,7 @@
 
         it('should scroll the target', function(done) {
           outerScroller.addEventListener('scroll', function() {
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            animationFrameFlush(function() {
               expect(target.scrollLeft).to.equal(100);
               done();
             });
@@ -160,7 +160,7 @@
 
         it('should scroll the outer scroller', function(done) {
           target.addEventListener('scroll', function() {
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            animationFrameFlush(function() {
               expect(outerScroller.scrollLeft).to.equal(100);
               done();
             });
@@ -288,7 +288,7 @@
           grid._observer.flush();
         }
         scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           done();
         });
       });

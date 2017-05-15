@@ -124,7 +124,7 @@
 
         it('should align height with number of rows', function(done) {
           grid.style.height = 'auto';
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          animationFrameFlush(function() {
             var headerHeight = grid.$.header.clientHeight;
             var bodyHeight = grid.$.items.clientHeight;
             var footerHeight = grid.$.footer.clientHeight;

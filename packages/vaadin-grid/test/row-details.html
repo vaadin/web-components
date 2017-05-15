@@ -86,7 +86,7 @@
           grid.dataProvider = infiniteDataProvider;
           Polymer.dom.flush();
           bodyRows = getRows(grid.$.items);
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          animationFrameFlush(function() {
             done();
           });
         });

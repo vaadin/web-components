@@ -68,7 +68,7 @@
         Polymer.dom.flush();
         headerCells = getRowCells(getRows(grid.$.header)[0]);
         handle = headerCells[0]._resizeHandle;
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
       function getElementFromPoint(context, x, y) {
@@ -188,12 +188,12 @@
       beforeEach(function(done) {
         grid = fixture('group');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
       it('should cascade resizable property to child columns', function(done) {
         // IE11
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           expect(grid._columnTree[1][0].resizable).to.be.true;
           grid._columnTree[0][0].resizable = false;
           expect(grid._columnTree[1][0].resizable).to.be.false;
@@ -210,7 +210,7 @@
           grid._columnTree[0][0]._observer.flush();
         }
 
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           expect(newColumn.resizable).to.be.true;
           done();
         });
