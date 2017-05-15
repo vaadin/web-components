@@ -385,14 +385,18 @@
     },
 
     _selectedDateChanged: function(selectedDate, formatDate) {
-      if (selectedDate === undefined || formatDate === undefined) return;
+      if (selectedDate === undefined || formatDate === undefined) {
+        return;
+      }
       this.value = this._formatISO(selectedDate);
       this._focusedDate = selectedDate;
       this._inputValue = selectedDate ? formatDate(selectedDate) : '';
     },
 
     _focusedDateChanged: function(focusedDate, formatDate) {
-      if (focusedDate === undefined || formatDate === undefined) return;
+      if (focusedDate === undefined || formatDate === undefined) {
+        return;
+      }
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(focusedDate) : '';
       }

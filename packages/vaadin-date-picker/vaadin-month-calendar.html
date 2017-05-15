@@ -206,7 +206,9 @@
       ],
 
       _getTitle: function(month, monthNames) {
-        if (month === undefined || monthNames === undefined) return;
+        if (month === undefined || monthNames === undefined) {
+          return;
+        }
         return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
       },
 
@@ -224,14 +226,18 @@
       },
 
       _applyFirstDayOfWeek: function(weekDayNames, firstDayOfWeek) {
-        if (weekDayNames === undefined || firstDayOfWeek === undefined) return;
+        if (weekDayNames === undefined || firstDayOfWeek === undefined) {
+          return;
+        }
 
         return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
       },
 
       _getWeekDayNames: function(weekDayNames, weekDayNamesShort, showWeekNumbers, firstDayOfWeek) {
         if (weekDayNames === undefined || weekDayNamesShort === undefined ||
-          showWeekNumbers === undefined || firstDayOfWeek === undefined) return;
+          showWeekNumbers === undefined || firstDayOfWeek === undefined) {
+          return;
+        }
         weekDayNames = this._applyFirstDayOfWeek(weekDayNames, firstDayOfWeek);
         weekDayNamesShort = this._applyFirstDayOfWeek(weekDayNamesShort, firstDayOfWeek);
         weekDayNames = weekDayNames.map(function(day, index) {
@@ -270,7 +276,9 @@
       },
 
       _getDays: function(month, firstDayOfWeek) {
-        if (month === undefined || firstDayOfWeek === undefined) return;
+        if (month === undefined || firstDayOfWeek === undefined) {
+          return;
+        }
         // First day of the month (at midnight).
         var date = new Date(0, 0);
         date.setFullYear(month.getFullYear());
@@ -295,7 +303,9 @@
       },
 
       _getWeekNumber: function(date, days) {
-        if (date === undefined || days === undefined) return;
+        if (date === undefined || days === undefined) {
+          return;
+        }
 
         if (!date) {
           // Get the first non-null date from the days array.
@@ -342,7 +352,9 @@
       },
 
       _getAriaDisabled: function(date, min, max) {
-        if (date === undefined || min === undefined || max === undefined) return;
+        if (date === undefined || min === undefined || max === undefined) {
+          return;
+        }
         return this._dateAllowed(date, min, max) ? 'false' : 'true';
       }
     });
