@@ -8,17 +8,26 @@ cache:
     - node_modules
 
 addons:
+  sources:
+    - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
+      key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+  packages:
+    - yarn
   firefox: latest
   google-chrome: latest
 
 install:
-  - npm install
-  - polymer install --variants
+  - yarn
+  - polymer install
 
 before_script:
   - gulp lint
-  - polymer lint --rules polymer-2-hybrid --input *.html
-  - ([ "$TRAVIS_EVENT_TYPE" = "pull_request" ] || TRAVIS_BRANCH=quick/${TRAVIS_BUILD_ID} xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome -l firefox)
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
 
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
+      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
+    fi
+  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
+    fi
