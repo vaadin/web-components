@@ -185,6 +185,22 @@
       if (this.$.selector._scroller !== undefined) {
         this.$.selector._scroller = this._getScroller();
       }
+
+      // Stamping with an empty object instead of null
+      // will resolve templatizer issues in P2 that previously
+      // required calling _flushProperties/_enableProperties.
+      this._patchIronListStamping();
+    },
+
+    _patchIronListStamping: function() {
+      var stamp = this.$.selector.stamp;
+      this.$.selector.stamp = function(value) {
+        if (value === null) {
+          value = {};
+        }
+
+        return stamp.call(this, value);
+      };
     },
 
     _getFocusedItem: function(focusedIndex) {
@@ -298,7 +314,7 @@
     },
 
     ensureItemsRendered: function() {
-      this.$.selector.flushDebouncer('_debounceTemplate');
+      this.$.selector._render();
     },
 
     adjustScrollPosition: function() {

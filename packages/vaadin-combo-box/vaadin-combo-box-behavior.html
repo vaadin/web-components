@@ -372,6 +372,11 @@
     },
 
     _onOpened: function() {
+      // Pre P2 iron-list used a debouncer to render. Now that we syncronously render items,
+      // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
+      // because that will cause problems to say the least.
+      Polymer.flush && Polymer.flush();
+
       this.$.overlay.hidden = !this._hasItems(this.$.overlay._items) && !this.loading;
 
       // With iron-list v1.3.9, calling `notifyResize()` no longer renders

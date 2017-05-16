@@ -79,8 +79,7 @@ This program is available under Apache License Version 2.0, available at https:/
         var comboBox = this.domHost.dataHost || this.domHost.__dataHost;
         comboBox._ensureTemplatized();
         if (comboBox._itemTemplate) {
-          this._itemTemplateInstance = comboBox.stamp();
-          Polymer.Element && this._itemTemplateInstance._flushProperties();
+          this._itemTemplateInstance = comboBox.stamp({});
           Polymer.dom(this.root).textContent = '';
           Polymer.dom(this.root).appendChild(this._itemTemplateInstance.root);
         }
