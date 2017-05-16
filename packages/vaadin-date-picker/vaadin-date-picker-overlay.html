@@ -749,6 +749,8 @@
           e.stopPropagation();
           if (this.hasAttribute('fullscreen')) {
             e.preventDefault();
+          } else if ((this.$.cancelButton.focused || this.$.todayButton.focused) && e.shiftKey) {
+            // NOOP: Browser moves the focus
           } else if ((this.$.cancelButton.focused && !e.shiftKey) || (this._focused && e.shiftKey)) {
             // Return focus back to the input field
             e.preventDefault();
