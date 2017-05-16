@@ -17,17 +17,27 @@ addons:
   google-chrome: latest
 
 install:
-  - yarn
-  - polymer install
+  # not working in travis - yarn
+  - npm install
+  - polymer install --variants
 
 before_script:
   - gulp lint
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
 
 script:
-  - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
-    fi
-  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
-    fi
+  - run="xvfb-run -s '-screen 0 1024x768x24' polymer test "
+  - eval $run
+      test/basic.html
+  - eval $run
+      test/dropdown.html
+      test/overlay.html
+      test/month-calendar.html
+      test/scroller.html
+  - eval $run
+      test/form-input.html
+      test/custom-input.html
+      test/late-upgrade.html
+      test/wai-aria.html
+  - eval $run
+      test/keyboard-navigation.html
+      test/keyboard-input.html

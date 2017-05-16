@@ -691,8 +691,10 @@
     _onUserInput: function(e) {
       if (this._userInputValueChanged() && !this.opened) {
         this.open();
-        // iOS needs a refit after input blur animation has finished
-        this.$.dropdown.async(this.$.dropdown.refit, 500);
+        if (this._ios) {
+          // iOS needs a refit after input blur animation has finished
+          this.$.dropdown.async(this.$.dropdown.refit, 500);
+        }
       }
     },
 
