@@ -19,12 +19,14 @@
 
   <div class="capture-block" id="sorting">
     <dom-bind>
-      <template is="dom-bind">
-        <style>
-          vaadin-grid {
-            height: 250px;
-          }
-        </style>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-grid {
+              height: 250px;
+            }
+          </style>
+        </custom-style>
         <x-array-data-provider items="{{items}}"></x-array-data-provider>
         <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort>
           <vaadin-grid-column width="50px">

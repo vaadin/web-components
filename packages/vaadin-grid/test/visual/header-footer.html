@@ -18,12 +18,14 @@
 
   <div class="capture-block" id="header-footer">
     <dom-bind>
-      <template is="dom-bind">
-        <style>
-          vaadin-grid {
-            height: 100px;
-          }
-        </style>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-grid {
+              height: 100px;
+            }
+          </style>
+        </custom-style>
         <x-array-data-provider items="{{items}}"></x-array-data-provider>
         <vaadin-grid items="[[items]]" size="200">
           <template class="row-details">
