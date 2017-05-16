@@ -434,7 +434,7 @@
         });
 
         it('should have last row fully visible when scrolled to end', function(done) {
-          animationFrameFlush(function() {
+          flush(function() {
             scrollToEnd(grid);
 
             animationFrameFlush(function() {
