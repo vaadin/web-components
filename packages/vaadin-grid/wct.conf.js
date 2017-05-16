@@ -1,23 +1,26 @@
 var argv = require('yargs').argv;
 
 module.exports = {
+  testTimeout: 180 * 1000,
   registerHooks: function(context) {
     var saucelabsPlatforms = [
       'OS X 10.12/iphone@10.2',
       'OS X 10.12/ipad@10.2',
       'Windows 10/microsoftedge@14',
       'Windows 10/internet explorer@11',
-      'OS X 10.12/safari@10.0',
-      'Windows 10/chrome@58',
-      'Windows 10/firefox@53'
+      'OS X 10.12/safari@10.0'
     ];
 
     var cronPlatforms = [
-      'Windows 10/chrome@58',
-      'Windows 10/firefox@53'
+      'Windows 10/chrome@55',
+      'Windows 10/firefox@50'
     ];
 
-    if (argv.env === 'saucelabs') {
+    if (argv.env === 'hybrid') {
+      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+      context.options.plugins.local.browsers = ['chrome', 'firefox'];
+
+    } else if (argv.env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
 
     } else if (argv.env === 'saucelabs-cron') {
