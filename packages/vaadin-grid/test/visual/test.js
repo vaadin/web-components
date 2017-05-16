@@ -53,8 +53,10 @@ gemini.suite('vaadin-grid', (rootSuite) => {
         actions.wait(3000);
       })
       .capture('row-details-visible', {}, (actions, find) => {
-        const row = find('vaadin-grid-table-row');
-        actions.click(row);
+        actions.executeJS(window => {
+          const grid = window.document.querySelector('vaadin-grid');
+          grid.expandItem(grid.items[0]);
+        });
       });
   });
 

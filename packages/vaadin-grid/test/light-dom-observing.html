@@ -678,6 +678,7 @@
               });
 
               it('should support adding late', function(done) {
+                this.timeout(30000);
                 var column = fixture('column');
                 Polymer.dom(column).setAttribute('slot', inGroup ? 'group' : 'grid');
                 Polymer.dom(wrapper).insertBefore(column, Polymer.dom(wrapper).firstChild);

@@ -106,7 +106,7 @@
       beforeEach(function(done) {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
-        
+
         container = fixture('table');
         grid = container.$.grid;
 
@@ -288,6 +288,8 @@
       });
 
       it('should not request negative pages', function(done) {
+        this.timeout(30000);
+        
         grid.dataProvider = sinon.spy(infiniteDataProvider);
         grid.size = 10;
 
