@@ -290,19 +290,14 @@
         }, 1000);
       });
 
-      it('should not request negative pages', function(done) {
-        this.timeout(30000);
-        
+      it('should not request negative pages', function() {
         grid.dataProvider = sinon.spy(infiniteDataProvider);
         grid.size = 10;
 
-        animationFrameFlush(function() {
-          for (var i = 0; i < grid.dataProvider.callCount; i++) {
-            var page = grid.dataProvider.getCall(i).args[0].page;
-            expect(page).to.be.above(-1);
-          }
-          done();
-        });
+        for (var i = 0; i < grid.dataProvider.callCount; i++) {
+          var page = grid.dataProvider.getCall(i).args[0].page;
+          expect(page).to.be.above(-1);
+        }
       });
 
     });
