@@ -24,19 +24,19 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "web-component-tester": "^5.0.0",
-    "test-fixture": "2.0.0",
-    "elements-demo-resources": "2.0-preview",
-    "iron-demo-helpers": "polymerelements/iron-demo-helpers#2.0-preview",
-    "vaadin-text-field": "vaadin/vaadin-text-field",
-    "paper-input": "polymerelements/paper-input#2.0-preview"
+    "iron-demo-helpers": "^2.0.0",
+    "elements-demo-resources": "^2.0.0",
+    "paper-input": "^2.0.0",
+    "test-fixture": "^2.0.0",
+    "vaadin-text-field": "",
+    "web-component-tester": "^6.0.0"
   },
   "resolutions": {
     "test-fixture": "^2.0.0"
   },
   "dependencies": {
-    "polymer": "polymer/polymer#^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0",
-    "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#2.0-preview"
+    "iron-resizable-behavior": "^2.0.0",
+    "polymer": "^2.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
   }
 }
