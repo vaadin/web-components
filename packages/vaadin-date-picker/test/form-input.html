@@ -51,7 +51,7 @@
       function inputValue(value) {
         var input = datepicker._nativeInput;
         input.value = value;
-        Polymer.Base.fire('input', {}, {bubbles: true, node: input});
+        input.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
       }
 
       beforeEach(done => {

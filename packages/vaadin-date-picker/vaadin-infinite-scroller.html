@@ -208,12 +208,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         this._preventScrollEvent = false;
 
-        this.debounce('scrollFinish', () => {
-          var scrollerRect = this.$.scroller.getBoundingClientRect();
-          if (!this._isVisible(this._buffers[0], scrollerRect) && !this._isVisible(this._buffers[1], scrollerRect)) {
-            this.position = this.position;
-          }
-        }, 200);
+        this._debouncerScrollFinish = Polymer.Debouncer.debounce(this._debouncerScrollFinish,
+          Polymer.Async.timeOut.after(200), () => {
+            var scrollerRect = this.$.scroller.getBoundingClientRect();
+            if (!this._isVisible(this._buffers[0], scrollerRect) && !this._isVisible(this._buffers[1], scrollerRect)) {
+              this.position = this.position;
+            }
+          });
       }
 
       /**
@@ -238,7 +239,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.scroller.classList.add('notouchscroll');
           this._mayHaveMomentum = false;
 
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             // Restore -webkit-overflow-scrolling: touch; after a small delay.
             this.$.scroller.classList.remove('notouchscroll');
           }, 10);
@@ -259,15 +260,17 @@ This program is available under Apache License Version 2.0, available at https:/
         this._buffers[0].translateY = this._initialScroll - this._bufferHeight;
         this._buffers[1].translateY = this._initialScroll;
         this._buffers.forEach(buffer => {
-          Polymer.Base.transform('translate3d(0, ' + buffer.translateY + 'px, 0)', buffer);
+          buffer.style.transform = 'translate3d(0, ' + buffer.translateY + 'px, 0)';
         });
         this._buffers[0].updated = this._buffers[1].updated = false;
         this._updateClones(true);
 
-        this.debounce('updateAllClones', () => {
-          this._buffers[0].updated = this._buffers[1].updated = false;
-          this._updateClones();
-        }, 200);
+        this._debouncerUpdateClones = Polymer.Debouncer.debounce(
+          this._debouncerUpdateClones,
+          Polymer.Async.timeOut.after(200), () => {
+            this._buffers[0].updated = this._buffers[1].updated = false;
+            this._updateClones();
+          });
 
         this.listen(this.$.scroller, 'scroll', '_scroll');
       }
@@ -282,7 +285,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             Polymer.dom(buffer).appendChild(itemWrapper);
 
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               // Only stamp the visible instances first
               if (this._isVisible(itemWrapper, container)) {
                 this._ensureStampedInstance(itemWrapper);

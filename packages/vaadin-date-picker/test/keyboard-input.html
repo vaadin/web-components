@@ -476,7 +476,7 @@
           it('should focus the input on date tap', () => {
             arrowDown();
             var spy = sinon.spy(datepicker.inputElement, 'focus');
-            Polymer.Base.fire('date-tap', {}, {node: datepicker.$.overlay});
+            datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
             expect(spy.called).to.be.true;
           });
 
@@ -512,7 +512,7 @@
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.tap(datepicker.$.overlay);
               MockInteractions.focus(datepicker.$.overlay);
-              Polymer.Base.async(() => {
+              setTimeout(() => {
                 expect(spy.called).to.be.false;
                 done();
               }, 1);
@@ -533,7 +533,7 @@
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.todayButton, 9, 'shift');
               MockInteractions.focus(datepicker.$.overlay);
-              Polymer.Base.async(() => {
+              setTimeout(() => {
                 expect(spy.called).to.be.true;
                 done();
               }, 1);

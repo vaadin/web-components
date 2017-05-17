@@ -459,7 +459,9 @@ This program is available under Apache License Version 2.0, available at https:/
             announce.push(this.i18n.week);
             announce.push(Vaadin.DatePickerHelper._getISOWeekNumber(focusedDate));
           }
-          Polymer.Base.fire('iron-announce', {text: announce.join(' ')}, {node: this});
+          var e = new Event('iron-announce', {bubbles: true, composed: true});
+          e.detail = {text: announce.join(' ')};
+          this.dispatchEvent(e);
           return;
         }
 
@@ -534,7 +536,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onYearScrollTouchStart() {
           this._notTapping = false;
-          Polymer.Base.async(() => this._notTapping = true, 300);
+          setTimeout(() => this._notTapping = true, 300);
 
           this._repositionMonthScroller();
         }
@@ -545,7 +547,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _doIgnoreTaps() {
           this._ignoreTaps = true;
-          Polymer.Base.debounce('restore-taps', () => this._ignoreTaps = false, 300);
+          this._debouncer = Polymer.Debouncer.debounce(this._debouncer,
+            Polymer.Async.timeOut.after(300), () => this._ignoreTaps = false);
         }
 
         _formatDisplayed(date, formatDate) {
@@ -624,15 +627,17 @@ This program is available under Apache License Version 2.0, available at https:/
               this.$.scroller.position = currentPos;
               window.requestAnimationFrame(smoothScroll);
             } else {
-              Polymer.Base.fire('scroll-animation-finished', {
+              var e = new Event('scroll-animation-finished', {bubbles: true, composed: true});
+              e.detail = {
                 position: this._targetPosition,
                 oldPosition: initialPosition
-              }, {node: this});
+              };
+              this.dispatchEvent(e);
               this.$.scroller.position = this._targetPosition;
               this._targetPosition = undefined;
             }
 
-            Polymer.Base.async(this._repositionYearScroller.bind(this), 1);
+            setTimeout(this._repositionYearScroller.bind(this), 1);
           };
 
           // Start the animation.
@@ -744,7 +749,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _close() {
-          Polymer.Base.fire('close', {}, {node: this});
+          this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         }
 
         _cancel() {
@@ -783,9 +788,9 @@ This program is available under Apache License Version 2.0, available at https:/
             } else if ((this.$.cancelButton.focused && !e.shiftKey) || (this._focused && e.shiftKey)) {
               // Return focus back to the input field
               e.preventDefault();
-              Polymer.Base.fire('focus-input', {}, {node: this});
+              this.dispatchEvent(new CustomEvent('focus-input', {bubbles: true, composed: true}));
             } else {
-              Polymer.Base.async(() => {
+              setTimeout(() => {
                 if (this._focused) {
                   this.revealDate(this.focusedDate);
                 }

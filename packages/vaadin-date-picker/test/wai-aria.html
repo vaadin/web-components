@@ -122,14 +122,14 @@
         beforeEach(done => {
           overlay = fixture('overlay');
           overlay.i18n = getDefaultI18n();
-          Polymer.Base.async(done);
+          setTimeout(done);
         });
 
         describe('title announcer', () => {
 
           beforeEach(done => {
             Polymer.RenderStatus.afterNextRender(overlay.$.scroller, () => {
-              Polymer.Base.async(() => {
+              setTimeout(() => {
                 done();
               }, 1);
             });
@@ -145,7 +145,7 @@
 
           it('should be the first child of the overlay', () => {
             // Always introduce calendar contents with “Calendar”.
-            expect(Polymer.dom(overlay.root).querySelector(':not(style):not(:empty)')).to.equal(overlay.$.announcer);
+            expect(overlay.root.querySelector(':not(style):not(:empty)')).to.equal(overlay.$.announcer);
           });
 
           it('should not have hidden state', () => {
@@ -186,9 +186,9 @@
             scroller.active = true;
 
             Polymer.RenderStatus.afterNextRender(scroller, () => {
-              Polymer.Base.async(() => {
-                scroller.flushDebouncer('updateAllClones');
-                yearScrollerContents = Polymer.dom(overlay.$.yearScroller.root)
+              setTimeout(() => {
+                scroller._debouncerUpdateClones.flush();
+                yearScrollerContents = overlay.$.yearScroller.root
                   .querySelectorAll('.buffer > div > *');
                 done();
               }, 1);
@@ -210,7 +210,6 @@
 
           it('should have hidden state for dots', () => {
             // Do not speak dots between years.
-
             var dots = Array.prototype.filter.call(yearScrollerContents, el => {
               return !/\d+/.test(el.textContent);
             });
@@ -229,7 +228,7 @@
           monthCalendar = fixture('month-calendar');
           monthCalendar.i18n = getDefaultI18n();
           monthCalendar.month = new Date(2016, 1, 1);
-          Polymer.Base.async(done);
+          setTimeout(done);
         });
 
         it('should have heading role on the title', () => {
@@ -275,7 +274,7 @@
         it('should indicate today on date cells', done => {
           monthCalendar.month = new Date();
 
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             var todayElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)[today]');
             expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
             done();
@@ -309,13 +308,13 @@
           beforeEach(done => {
             monthCalendar.showWeekNumbers = true;
             monthCalendar.set('i18n.firstDayOfWeek', 1);
-            Polymer.Base.async(done);
+            setTimeout(done);
           });
 
           it('should have heading roles on week numbers', () => {
             // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
 
-            var weekNumberElements = Polymer.dom(monthCalendar.$.monthGrid).querySelectorAll('div.weekday:not(:empty)');
+            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('div.weekday:not(:empty)');
 
             Array.prototype.forEach.call(weekNumberElements, weekNumberElement => {
               expect(weekNumberElement.getAttribute('role')).to.equal('heading');
@@ -323,7 +322,7 @@
           });
 
           it('should have label properties on week numbers', () => {
-            var weekNumberElements = Polymer.dom(monthCalendar.$.monthGrid).querySelectorAll('.weeknumber');
+            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('.weeknumber');
 
             expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('Week 5');
             expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('Week 6');
@@ -352,7 +351,7 @@
         it('should request availability from IronA11yAnnouncer', done => {
           var spy = sinon.spy(Polymer.IronA11yAnnouncer, 'requestAvailability');
           fixture('datepicker');
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             expect(spy.called).to.be.true;
             done();
           });
@@ -441,7 +440,7 @@
             datepicker.open();
             datepicker._focusedDate = new Date(2016, 1, 2);
 
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               expect(announceSpy.callCount).to.be.equal(1);
               document.body.removeEventListener('iron-announce', announceSpy);
               done();

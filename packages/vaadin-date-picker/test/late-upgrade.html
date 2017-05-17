@@ -34,7 +34,7 @@
         var is = Polymer.Element ? datepicker instanceof Polymer.Element : Polymer.isInstance(datepicker);
         expect(is).to.be.false;
 
-        Polymer.Base.importHref('../vaadin-date-picker.html', () => {
+        Polymer.importHref('../vaadin-date-picker.html', () => {
           expect(datepicker.value).to.equal('2000-01-01');
           done();
         });

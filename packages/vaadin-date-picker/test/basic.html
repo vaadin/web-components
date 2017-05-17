@@ -37,7 +37,7 @@
       });
 
       afterEach(done => {
-        Polymer.Base.async(done, 1);
+        setTimeout(done, 1);
       });
 
       it('should have default value', () => {
@@ -174,10 +174,7 @@
         listenForEvent(datepicker, 'iron-overlay-closed', done);
 
         open(datepicker, () => {
-          Polymer.Base.fire('date-tap', {}, {
-            bubbles: true,
-            node: datepicker.$.overlay
-          });
+          datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
         });
       });
 
@@ -212,10 +209,7 @@
 
       it('should show clear icon', done => {
         datepicker.value = '2000-02-01';
-        Polymer.Base.fire('date-tap', {}, {
-          bubbles: true,
-          node: datepicker.$.overlay
-        });
+        datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true}));
 
         open(datepicker, () => {
           if (isFullscreen(datepicker)) {
@@ -291,9 +285,7 @@
               done();
             }
           });
-          Polymer.Base.fire('scroll', {}, {
-            node: window
-          });
+          window.dispatchEvent(new CustomEvent('scroll'));
         });
 
         it('should realign on container scroll', done => {
@@ -317,7 +309,7 @@
           it('should not realign on year/month scroll', done => {
             var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
             datepicker.$.overlay.$.yearScroller.$.scroller.scrollTop += 100;
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               expect(spy.called).to.be.false;
               done();
             }, 1);
@@ -327,10 +319,8 @@
         it('should not realign once closed', done => {
           datepicker.addEventListener('iron-overlay-closed', () => {
             var spy = sinon.spy(datepicker, '_updateAlignmentAndPosition');
-            Polymer.Base.fire('scroll', {}, {
-              node: window
-            });
-            Polymer.Base.async(() => {
+            window.dispatchEvent(new CustomEvent('scroll'));
+            setTimeout(() => {
               expect(spy.called).to.be.false;
               done();
             }, 1);
@@ -414,7 +404,7 @@
 
           open(datepicker, () => {
             Polymer.RenderStatus.afterNextRender(datepicker.$.overlay.$.scroller,
-              () => Polymer.Base.async(done, 1));
+              () => setTimeout(done, 1));
           });
 
         });

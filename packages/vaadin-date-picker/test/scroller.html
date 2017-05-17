@@ -27,7 +27,7 @@
       beforeEach(done => {
         scroller = document.querySelector('#scroller');
 
-        Polymer.RenderStatus.afterNextRender(scroller, () => Polymer.Base.async(done, 1));
+        Polymer.RenderStatus.afterNextRender(scroller, () => setTimeout(done, 1));
 
         scroller.active = true;
       });
@@ -61,7 +61,7 @@
             done();
           } else {
             scroller.$.scroller.scrollTop += scroller.itemHeight * 3.7;
-            Polymer.Base.async(scrollDown, 30);
+            setTimeout(scrollDown, 30);
           }
         }
 
@@ -76,7 +76,7 @@
       // done();
       // } else {
       // scroller.$.scroller.scrollTop -= scroller.itemHeight * 3.7;
-      // Polymer.Base.async(scrollUp, 30);
+      // setTimeout(scrollUp, 30);
       // }
       // }
       //

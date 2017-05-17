@@ -702,7 +702,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.open();
         if (this._ios) {
           // iOS needs a refit after input blur animation has finished
-          Polymer.Base.async(this.$.dropdown.refit, 500);
+          setTimeout(this.$.dropdown.refit, 500);
         }
       }
     }

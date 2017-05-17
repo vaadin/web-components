@@ -36,9 +36,7 @@
       it('should stop tap events from bubbling outside the overlay', () => {
         var tapSpy = sinon.spy();
         document.addEventListener('tap', tapSpy);
-        overlay.$.scroller.dispatchEvent(new CustomEvent('tap', {
-          bubbles: true
-        }));
+        overlay.$.scroller.dispatchEvent(new CustomEvent('tap', {bubbles: true}));
         document.removeEventListener('tap', tapSpy);
         expect(tapSpy.called).not.to.be.true;
       });
@@ -71,7 +69,7 @@
         overlay.scrollToDate(date);
         waitUntilScrolledTo(overlay, date, () => {
           var offset = overlay.$.yearScroller.clientHeight / 2;
-          overlay.$.yearScroller.flushDebouncer('updateAllClones');
+          overlay.$.yearScroller._debouncerUpdateClones.flush();
           expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.equal('2000');
           done();
         });
@@ -81,7 +79,7 @@
 
         beforeEach(done => {
           // Wait for ignoreTaps to settle after initial scroll event
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => Polymer.Base.async(done, 350));
+          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => setTimeout(done, 350));
 
           overlay.$.scroller.$.scroller.scrollTop += 1;
         });
@@ -111,7 +109,7 @@
           var spy = sinon.spy(overlay, '_scrollToPosition');
 
           listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               tap(overlay.$.yearScroller);
               expect(spy.called).to.be.true;
               done();
@@ -124,7 +122,7 @@
         it('should not react if the tap takes more than 300ms', done => {
           var spy = sinon.spy(overlay, '_scrollToPosition');
           overlay._onYearScrollTouchStart();
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             tap(overlay.$.yearScroller);
             expect(spy.called).to.be.false;
             done();

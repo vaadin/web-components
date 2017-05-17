@@ -42,7 +42,7 @@
       it('should open calendar on input', done => {
         var target = datepicker.inputElement;
         target.bindValue = '1';
-        Polymer.Base.fire('input', {}, {bubbles: true, node: datepicker._nativeInput});
+        datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
 
         listenForEvent(datepicker, 'iron-overlay-opened', () => {
           expect(datepicker.$.dropdown.opened).to.be.true;

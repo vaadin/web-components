@@ -47,7 +47,7 @@
         dropdown = datepicker.$.dropdown;
       });
 
-      afterEach(done => Polymer.Base.async(done, 1));
+      afterEach(done => setTimeout(done, 1));
 
       it('should set body `pointer-events: none` on open and restore initial value on close', done => {
         document.body.style.pointerEvents = 'painted';
@@ -114,7 +114,7 @@
             expect(dropdown.positionTarget).to.equal(fullscreen ? document.documentElement : datepicker);
             done();
           });
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             datepicker.open();
           });
         });
@@ -156,7 +156,7 @@
       beforeEach(() => datepicker = fixture('datepicker-wrapped').$.datepicker);
 
       afterEach(done => {
-        Polymer.Base.async(done, 1);
+        setTimeout(done, 1);
       });
 
       it('should not close on calendar icon down', done => {

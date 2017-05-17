@@ -234,7 +234,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onMonthGridTouchStart() {
           this._notTapping = false;
-          Polymer.Base.async(function() {
+          setTimeout(function() {
             this._notTapping = true;
           }.bind(this), 300);
         }
@@ -281,7 +281,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _showWeekNumbersChanged(showWeekNumbers, firstDayOfWeek) {
-          Polymer.Base.toggleAttribute('week-numbers', showWeekNumbers && firstDayOfWeek === 1, this);
+          if (showWeekNumbers && firstDayOfWeek === 1) {
+            this.setAttribute('week-numbers', '');
+          } else {
+            this.removeAttribute('week-numbers');
+          }
         }
 
         _showWeekSeparator(showWeekNumbers, firstDayOfWeek, index) {
@@ -338,7 +342,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _handleTap(e) {
           if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
             this.selectedDate = e.target.date;
-            Polymer.Base.fire('date-tap', {}, {node: this});
+            this.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
           }
         }
 
