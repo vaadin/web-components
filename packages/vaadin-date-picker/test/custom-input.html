@@ -25,32 +25,32 @@
   </test-fixture>
 
   <script>
-    describe('custom input', function() {
+    describe('custom input', () => {
       var datepicker;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         datepicker = fixture('custom-input-datepicker');
         setTimeout(done);
       });
 
-      it('should open calendar on tap', function() {
+      it('should open calendar on tap', () => {
         // mock-interactions tap does not work in mobile devices
         tap(datepicker);
         expect(datepicker.$.dropdown.opened).to.be.true;
       });
 
-      it('should open calendar on input', function(done) {
+      it('should open calendar on input', done => {
         var target = datepicker.inputElement;
         target.bindValue = '1';
         Polymer.Base.fire('input', {}, {bubbles: true, node: datepicker._nativeInput});
 
-        listenForEvent(datepicker, 'iron-overlay-opened', function() {
+        listenForEvent(datepicker, 'iron-overlay-opened', () => {
           expect(datepicker.$.dropdown.opened).to.be.true;
           done();
         });
       });
 
-      it('should not auto focus overlay', function() {
+      it('should not auto focus overlay', () => {
         expect(datepicker.$.dropdown.noAutoFocus).to.equal(true);
       });
     });

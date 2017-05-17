@@ -61,7 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
 </dom-module>
 
 <script>
-  (function() {
+  {
 
     class InfiniteScrollerElement extends Polymer.mixinBehaviors([Polymer.Templatizer], Polymer.Element) {
 
@@ -163,10 +163,9 @@ This program is available under Apache License Version 2.0, available at https:/
       _finishInit() {
         if (!this._initDone) {
           // Once the first set of items start fading in, stamp the rest
-          this._buffers.forEach(function(buffer) {
-            [].forEach.call(buffer.children, function(itemWrapper) {
-              this._ensureStampedInstance(itemWrapper);
-            }.bind(this));
+          this._buffers.forEach(buffer => {
+            [].forEach.call(buffer.children,
+              itemWrapper => this._ensureStampedInstance(itemWrapper));
           }, this);
 
           if (!this._buffers[0].translateY) {
@@ -209,12 +208,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         this._preventScrollEvent = false;
 
-        this.debounce('scrollFinish', function() {
+        this.debounce('scrollFinish', () => {
           var scrollerRect = this.$.scroller.getBoundingClientRect();
           if (!this._isVisible(this._buffers[0], scrollerRect) && !this._isVisible(this._buffers[1], scrollerRect)) {
             this.position = this.position;
           }
-        }.bind(this), 200);
+        }, 200);
       }
 
       /**
@@ -239,10 +238,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.scroller.classList.add('notouchscroll');
           this._mayHaveMomentum = false;
 
-          Polymer.Base.async(function() {
+          Polymer.Base.async(() => {
             // Restore -webkit-overflow-scrolling: touch; after a small delay.
             this.$.scroller.classList.remove('notouchscroll');
-          }.bind(this), 10);
+          }, 10);
         }
 
       }
@@ -259,23 +258,23 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.scroller.scrollTop = this._initialScroll;
         this._buffers[0].translateY = this._initialScroll - this._bufferHeight;
         this._buffers[1].translateY = this._initialScroll;
-        this._buffers.forEach(function(buffer) {
+        this._buffers.forEach(buffer => {
           Polymer.Base.transform('translate3d(0, ' + buffer.translateY + 'px, 0)', buffer);
         });
         this._buffers[0].updated = this._buffers[1].updated = false;
         this._updateClones(true);
 
-        this.debounce('updateAllClones', function() {
+        this.debounce('updateAllClones', () => {
           this._buffers[0].updated = this._buffers[1].updated = false;
           this._updateClones();
-        }.bind(this), 200);
+        }, 200);
 
         this.listen(this.$.scroller, 'scroll', '_scroll');
       }
 
       _createPool() {
         var container = this.getBoundingClientRect();
-        this._buffers.forEach(function(buffer) {
+        this._buffers.forEach(buffer => {
           for (var i = 0; i < this.bufferSize; i++) {
             var itemWrapper = document.createElement('div');
             itemWrapper.style.height = this.itemHeight + 'px';
@@ -283,12 +282,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
             Polymer.dom(buffer).appendChild(itemWrapper);
 
-            Polymer.Base.async(function(itemWrapper, container) {
+            Polymer.Base.async(() => {
               // Only stamp the visible instances first
               if (this._isVisible(itemWrapper, container)) {
                 this._ensureStampedInstance(itemWrapper);
               }
-            }.bind(this, itemWrapper, container), 1); // Wait for first reset
+            }, 1); // Wait for first reset
 
             Polymer.RenderStatus.afterNextRender(itemWrapper, this._finishInit.bind(this));
 
@@ -305,7 +304,7 @@ This program is available under Apache License Version 2.0, available at https:/
         itemWrapper.instance = this.stamp({});
         Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
 
-        Object.keys(tmpInstance).forEach(function(prop) {
+        Object.keys(tmpInstance).forEach(prop => {
           itemWrapper.instance.set(prop, tmpInstance[prop]);
         });
       }
@@ -314,15 +313,15 @@ This program is available under Apache License Version 2.0, available at https:/
         this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
         var scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
-        this._buffers.forEach(function(buffer, bufferIndex) {
+        this._buffers.forEach((buffer, bufferIndex) => {
           if (!buffer.updated) {
             var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
-            [].forEach.call(buffer.children, function(itemWrapper, index) {
+            [].forEach.call(buffer.children, (itemWrapper, index) => {
               if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
                 itemWrapper.instance.index = firstIndex + index;
               }
-            }.bind(this));
+            });
             buffer.updated = true;
           }
         }, this);
@@ -344,8 +343,8 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       _forwardParentProp(prop, value) {
         if (prop !== 'index') {
-          this._buffers.forEach(function(buffer) {
-            [].forEach.call(buffer.children, function(itemWrapper) {
+          this._buffers.forEach(buffer => {
+            [].forEach.call(buffer.children, itemWrapper => {
               itemWrapper.instance[prop] = value;
             });
           });
@@ -360,5 +359,5 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     window.Vaadin = window.Vaadin || {};
     Vaadin.InfiniteScrollerElement = InfiniteScrollerElement;
-  })();
+  }
 </script>

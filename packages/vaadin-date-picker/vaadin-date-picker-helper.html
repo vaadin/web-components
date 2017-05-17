@@ -68,10 +68,8 @@
      * @return {Date} Closest date
      */
     static _getClosestDate(date, dates) {
-      return dates.filter(function(date) {
-        return date !== undefined;
-      })
-       .reduce(function(closestDate, candidate) {
+      return dates.filter(date => date !== undefined)
+       .reduce((closestDate, candidate) => {
          if (!candidate) {
            return closestDate;
          }

@@ -142,7 +142,7 @@
 
               // A function to format given `Date` object as
               // date string.
-              formatDate: function(d) {
+              formatDate: d => {
                 // returns a string representation of the given
                 // Date object in 'MM/DD/YYYY' -format
               },
@@ -152,14 +152,14 @@
               // formatted by `formatDate`.
               // Setting the property to null will disable
               // keyboard input feature.
-              parseDate: function(text) {
+              parseDate: text => {
                 // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
                 // a Date object
               }
 
               // A function to format given `monthName` and
               // `fullYear` integer as calendar title string.
-              formatTitle: function(monthName, fullYear) {
+              formatTitle: (monthName, fullYear) => {
                 return monthName + ' ' + fullYear;
               }
             }
@@ -169,7 +169,7 @@
          */
         i18n: {
           type: Object,
-          value: function() {
+          value: () => {
             return {
               monthNames: [
                 'January', 'February', 'March', 'April', 'May',
@@ -183,7 +183,7 @@
               clear: 'Clear',
               today: 'Today',
               cancel: 'Cancel',
-              formatDate: function(d) {
+              formatDate: d => {
                 var year = d.getFullYear();
                 var yearString = year.toString();
                 if (yearString.length < 3 && year >= 0) {
@@ -191,7 +191,7 @@
                 }
                 return (d.getMonth() + 1) + '/' + d.getDate() + '/' + yearString;
               },
-              parseDate: function(text) {
+              parseDate: text => {
                 var parts = text.split('/');
                 var today = new Date();
                 var date, month = today.getMonth(), year = today.getFullYear();
@@ -218,7 +218,7 @@
                   return result;
                 }
               },
-              formatTitle: function(monthName, fullYear) {
+              formatTitle: (monthName, fullYear) => {
                 return monthName + ' ' + fullYear;
               }
             };
@@ -535,9 +535,8 @@
       this.unlisten(this, 'iron-resize', '_updateAlignmentAndPosition');
 
       if (this._touchPrevented) {
-        this._touchPrevented.forEach(function(prevented) {
-          prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
-        });
+        this._touchPrevented.forEach(prevented =>
+          prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue);
         this._touchPrevented = [];
       }
 
@@ -724,7 +723,7 @@
      *
      * @event value-changed
      * @param {Object} detail
-     *  @param {String} detail.value the date value or an empty `String`.
+     * @param {String} detail.value the date value or an empty `String`.
      */
   };
 
