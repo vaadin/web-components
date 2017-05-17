@@ -73,7 +73,7 @@
       beforeEach(function() {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
-        
+
         filterWrapper = fixture('filter');
         filter = filterWrapper.$.filter;
       });
@@ -119,6 +119,9 @@
       var grid;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('grid');
         Polymer.dom.flush();
         flushFilters(grid);
@@ -166,6 +169,9 @@
       var grid;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('grid');
         Polymer.dom.flush();
         flushFilters(grid);

@@ -81,7 +81,7 @@
         beforeEach(function(done) {
           // The before each block times out in CI with Firefox on Polymer 2
           this.timeout(30000);
-          
+
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
           Polymer.dom.flush();
@@ -193,6 +193,9 @@
       describe('inside a parent scope', function() {
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('with-scope').$.grid;
           grid.items = ['foo', 'bar', 'baz'];
           bodyRows = getRows(grid.$.scroller.$.items);
@@ -221,6 +224,9 @@
         }
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('repeat');
         });
 

@@ -167,7 +167,7 @@
       beforeEach(function(done) {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
-        
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         flush(function() {
@@ -400,6 +400,9 @@
       var grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = Polymer.Element ? fixture('groups-p2') : fixture('groups');
         grid.dataProvider = infiniteDataProvider;
         animationFrameFlush(done);
@@ -470,6 +473,9 @@
       var grid, headerContent0, headerContent1, content0rect, content1rect;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('differentWidths');
         grid.dataProvider = infiniteDataProvider;
         animationFrameFlush(function() {
@@ -498,6 +504,9 @@
       var grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();

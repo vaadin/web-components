@@ -42,7 +42,7 @@
       beforeEach(function(done) {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
-        
+
         container = fixture('trivialGrid');
         grid = container.firstElementChild;
         grid.dataProvider = infiniteDataProvider;

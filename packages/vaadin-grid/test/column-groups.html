@@ -178,11 +178,6 @@
     describe('column groups', function() {
       var grid, scroller, header, body, footer, headerRows, footerRows, bodyRows;
 
-      beforeEach(function() {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-      });
-
       function getFooterCellContent(row, col) {
         return getCellContent(getFooterCell(row, col)).textContent.trim();
       }
@@ -219,6 +214,9 @@
 
       describe('No templates', function() {
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           init('no-headers');
         });
 
@@ -252,6 +250,9 @@
         var extraColumn;
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           //  |          | group-0             |
           //  | header-0 | header-1 | header-2 |
           init('onecolumnonegroup');
@@ -354,6 +355,9 @@
 
       describe('Nested groups', function() {
         beforeEach(function(done) {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           //  | group-0             | group-1                                  |          |
           //  |           |         | group-2            | group-3             |          |
           //  |           |         |          |         | header-4 | header-5 | header-6 |

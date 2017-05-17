@@ -305,12 +305,6 @@
     describe('light dom observing', function() {
       var wrapper, grid, scroller, header, body, footer, repeater;
 
-      beforeEach(function() {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-      });
-
-
       function init(fixtureName, options) {
         grid = fixture(fixtureName);
         if (grid.$.grid) {
@@ -381,6 +375,9 @@
       describe('generic operations', function() {
         describe('columns inside grid', function() {
           beforeEach(function(done) {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('columns');
             flush(done);
           });
@@ -488,6 +485,9 @@
           var firstGroup;
 
           beforeEach(function(done) {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('plain-groups');
             firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
             flush(done);
@@ -518,6 +518,9 @@
 
         describe('groups inside grid', function() {
           beforeEach(function() {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('plain-groups');
           });
 
@@ -552,6 +555,9 @@
           var firstGroup;
 
           beforeEach(function() {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('nested-groups');
             firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
           });
@@ -630,6 +636,9 @@
 
         describe('columns inside grid', function() {
           beforeEach(function() {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('dom-repeat-columns', {columns: columns});
           });
 
@@ -638,6 +647,9 @@
 
         describe('columns inside group', function() {
           beforeEach(function() {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('dom-repeat-columns-in-group', {columns: columns});
           });
 
@@ -646,6 +658,9 @@
 
         describe('groups inside grid', function() {
           beforeEach(function() {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('dom-repeat-groups', {columns: columns});
           });
 
@@ -654,6 +669,9 @@
 
         describe('groups inside group', function() {
           beforeEach(function() {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             init('dom-repeat-groups-in-group', {columns: columns});
           });
 
@@ -666,6 +684,9 @@
           describe('children mutations', function() {
             describe('with columns', function() {
               beforeEach(function() {
+                // The before each block times out in CI with Firefox on Polymer 2
+                this.timeout(30000);
+
                 init('effective-children-columns', {inGroup: inGroup});
               });
 
@@ -708,6 +729,9 @@
               var firstGroup;
 
               beforeEach(function() {
+                // The before each block times out in CI with Firefox on Polymer 2
+                this.timeout(30000);
+
                 init('effective-children-groups', {inGroup: inGroup});
                 firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
               });
@@ -750,6 +774,9 @@
             var firstGroup;
 
             beforeEach(function() {
+              // The before each block times out in CI with Firefox on Polymer 2
+              this.timeout(30000);
+
               init('effective-children-groups', {inGroup: inGroup});
               firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
             });

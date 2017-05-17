@@ -81,15 +81,15 @@
       var container, grid;
 
       beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-        
         Polymer.Base.async(done, 1);
       });
 
       [100, 10000, 100000, 1000000].forEach(function(size) {
         describe(size + ' items', function() {
           beforeEach(function(done) {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             container = fixture('table');
             grid = container.$.grid;
             grid.dataProvider = infiniteDataProvider;

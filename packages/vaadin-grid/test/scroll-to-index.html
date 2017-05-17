@@ -48,6 +48,9 @@
           var scroller;
 
           beforeEach(function(done) {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             var grid = fixture(scale);
             grid.dataProvider = infiniteDataProvider;
             scroller = grid.$.scroller;
@@ -98,7 +101,7 @@
         beforeEach(function(done) {
           // The before each block times out in CI with Firefox on Polymer 2
           this.timeout(30000);
-          
+
           grid = fixture('large');
           grid.dataProvider = infiniteDataProvider;
           scroller = grid.$.scroller;

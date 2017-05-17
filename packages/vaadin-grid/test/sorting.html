@@ -65,7 +65,7 @@
         beforeEach(function() {
           // The before each block times out in CI with Firefox on Polymer 2
           this.timeout(30000);
-          
+
           sorter = fixture('sorter');
           title = Polymer.dom(sorter).querySelector('.title');
           button = Polymer.dom(sorter).querySelector('button');
@@ -199,6 +199,9 @@
         var cellContent, sorter, announcer;
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           cellContent = fixture('sorter-in-cell-content');
           sorter = Polymer.dom(cellContent).querySelector('vaadin-grid-sorter');
           announcer = Polymer.dom(sorter.root).querySelector('#announcer');
@@ -229,6 +232,9 @@
         var grid, sorterFirst, sorterLast;
 
         beforeEach(function(done) {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('grid');
           flush(function() {
             sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');

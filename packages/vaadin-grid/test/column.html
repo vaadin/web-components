@@ -56,7 +56,7 @@
       beforeEach(function(done) {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
-        
+
         container = fixture('grid');
         grid = container.$.grid;
         grid.dataProvider = infiniteDataProvider;
