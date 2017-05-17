@@ -413,14 +413,9 @@
           };
         }
 
-        static get hostAttributes() {
-          return {
-            'tabIndex': '0'
-          };
-        }
-
         ready() {
           super.ready();
+          this.setAttribute('tabindex', 0);
           this.addEventListener('keydown', this._onKeydown.bind(this));
           this.addEventListener('tap', this._stopPropagation.bind(this));
           this.addEventListener('focus', this._onOverlayFocus.bind(this));
