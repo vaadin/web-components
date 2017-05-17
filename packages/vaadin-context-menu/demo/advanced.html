@@ -126,26 +126,25 @@
     <h3>Basic HTML Menu</h3>
     <demo-snippet>
       <template>
-        <style>
-          .my-menu {
-            padding: 8px 0;
-            background: #fff;
-          }
-
-          .my-menu-item {
-            display: block;
-            padding: 8px 24px;
-            text-decoration: none;
-            color: #000;
-          }
-
-          .my-menu-item:hover {
-            background: #eee;
-          }
-        </style>
-
         <vaadin-context-menu>
           <template>
+            <style>
+              .my-menu {
+                padding: 8px 0;
+                background: #fff;
+              }
+
+              .my-menu-item {
+                display: block;
+                padding: 8px 24px;
+                text-decoration: none;
+                color: #000;
+              }
+
+              .my-menu-item:hover {
+                background: #eee;
+              }
+            </style>
             <div class="my-menu">
               <a href="#" class="my-menu-item">First menu item</a>
               <a href="#" class="my-menu-item">Second menu item</a>
@@ -163,22 +162,26 @@
     <h3>Long Menus</h3>
     <demo-snippet>
       <template>
-        <template id="app" is="dom-bind">
-          <vaadin-context-menu>
-            <template>
-              <paper-listbox>
-                <template is="dom-repeat" items="[[menuItems]]">
-                  <paper-item>Menu Item</paper-item>
-                </template>
-              </paper-listbox>
-            </template>
+        <dom-bind id="app">
+          <template>
+            <vaadin-context-menu>
+              <template>
+                <paper-listbox>
+                  <dom-repeat items="[[menuItems]]">
+                    <template>
+                      <paper-item>Menu Item</paper-item>
+                    </template>
+                  </dom-repeat>
+                </paper-listbox>
+              </template>
 
-            <p>
-              This paragraph has a context menu that cannot fit inside
-              the viewport. The context menu has scrolling for the menu items.
-            </p>
-          </vaadin-context-menu>
-        </template>
+              <p>
+                This paragraph has a context menu that cannot fit inside
+                the viewport. The context menu has scrolling for the menu items.
+              </p>
+            </vaadin-context-menu>
+          </template>
+        </dom-bind>
         <script>
           document.addEventListener('WebComponentsReady', function() {
             document.querySelector('#app').menuItems = new Array(30);
