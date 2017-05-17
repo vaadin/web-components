@@ -88,6 +88,15 @@
           setTimeout(done, 1);
         });
 
+        afterEach(done => {
+          if (datepicker._ios) {
+            // wait for refit in iOS
+            setTimeout(done, 501);
+          } else {
+            done();
+          }
+        });
+
         it('should open overlay on input', () => {
           inputChar('j');
           expect(datepicker.opened).to.be.true;

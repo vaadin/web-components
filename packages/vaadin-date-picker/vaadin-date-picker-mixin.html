@@ -696,7 +696,7 @@
         this.open();
         if (this._ios) {
           // iOS needs a refit after input blur animation has finished
-          this.$.dropdown.async(this.$.dropdown.refit, 500);
+          Polymer.Base.async(this.$.dropdown.refit, 500);
         }
       }
     }
