@@ -274,6 +274,7 @@
 
           combobox.close();
 
+          Polymer.dom.flush();
           expect(combobox.$.overlay.classList.contains('style-scope')).to.be.true;
           expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.true;
         }
