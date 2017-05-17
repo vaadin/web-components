@@ -109,6 +109,10 @@
         };
       }
 
+      beforeEach(function() {
+        this.currentTest.timeout(30000);
+      });
+
       it('should have higher wrappers on each row cell', function(done) {
         init('two-columns', function() {
           wrappers[0].style.height = wrappers[0].clientHeight * 2 + 'px';

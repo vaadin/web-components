@@ -216,6 +216,7 @@
     describe('lazy init', function() {
 
       it('should not filter if there is no data yet', function() {
+        this.timeout(30000);
         var grid = fixture('grid');
         grid.size = 100;
         grid.dataProvider = function(params, callback) {

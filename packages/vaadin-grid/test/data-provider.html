@@ -291,6 +291,8 @@
       });
 
       it('should not request negative pages', function() {
+        this.timeout(30000);
+        
         grid.dataProvider = sinon.spy(infiniteDataProvider);
         grid.size = 10;
 
