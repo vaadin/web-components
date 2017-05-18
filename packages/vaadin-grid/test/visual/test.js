@@ -5,7 +5,7 @@ gemini.suite('vaadin-grid', (rootSuite) => {
       .setUrl('header-footer.html')
       .setCaptureElements('#header-footer')
       .capture('header-footer', {}, (actions, find) => {
-        actions.wait(3000);
+        actions.wait(6000);
       });
   });
 
@@ -14,7 +14,7 @@ gemini.suite('vaadin-grid', (rootSuite) => {
       .setUrl('column-groups.html')
       .setCaptureElements('#column-groups')
       .capture('column-groups', {}, (actions, find) => {
-        actions.wait(3000);
+        actions.wait(6000);
       });
   });
 
@@ -27,7 +27,7 @@ gemini.suite('vaadin-grid', (rootSuite) => {
         this.lastNameSorter = find('#last-name-sorter');
       })
       .capture('sorting-initial', {}, (actions, find) => {
-        actions.wait(3000);
+        actions.wait(6000);
       })
       .capture('single-column-asc', {}, (actions, find) => {
         actions.click(this.firstNameSorter);
@@ -50,7 +50,7 @@ gemini.suite('vaadin-grid', (rootSuite) => {
       .setUrl('row-details.html')
       .setCaptureElements('#row-details')
       .capture('row-details-initial', {}, (actions, find) => {
-        actions.wait(3000);
+        actions.wait(6000);
       })
       .capture('row-details-visible', {}, (actions, find) => {
         actions.executeJS(function(window) {
