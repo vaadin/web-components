@@ -39,7 +39,7 @@ script:
     test/column-reordering.html
     test/data-provider.html
     test/filtering.html
-    --env hybrid
+    --env saucelabs
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/keyboard-navigation.html
     test/physical-count.html
@@ -51,7 +51,7 @@ script:
     test/templates.html
     test/scrolling-mode.html
     test/row-height.html
-    --env hybrid
+    --env saucelabs
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/row-details.html
     test/selecting.html
@@ -61,11 +61,10 @@ script:
     test/themability.html
     test/scroll-to-index.html
     test/resizing.html
-    --env hybrid
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/light-dom-observing.html
     test/doctype.html
     test/lazy-import.html
+    --env saucelabs
   # - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
   #     xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
   #   fi

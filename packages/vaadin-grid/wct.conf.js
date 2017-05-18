@@ -17,12 +17,8 @@ module.exports = {
       'Windows 10/firefox@50'
     ];
 
-    if (argv.env === 'hybrid') {
-      context.options.plugins.sauce.browsers = saucelabsPlatforms;
-      context.options.plugins.local.browsers = ['chrome', 'firefox'];
-
-    } else if (argv.env === 'saucelabs') {
-      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+    if (argv.env === 'saucelabs') {
+      context.options.plugins.sauce.browsers = saucelabsPlatforms.concat(cronPlatforms);
 
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
