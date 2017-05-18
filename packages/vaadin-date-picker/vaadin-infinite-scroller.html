@@ -134,11 +134,11 @@ This program is available under Apache License Version 2.0, available at https:/
         super.ready();
 
         this._bufferHeight = this.itemHeight * this.bufferSize;
-        this._buffers = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('.buffer'));
+        this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
 
         this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
 
-        var template = Polymer.dom(this).querySelector('template');
+        var template = this.querySelector('template');
         this.templatize(template);
 
         // Firefox interprets elements with overflow:auto as focusable
@@ -283,7 +283,7 @@ This program is available under Apache License Version 2.0, available at https:/
             itemWrapper.style.height = this.itemHeight + 'px';
             itemWrapper.instance = {};
 
-            Polymer.dom(buffer).appendChild(itemWrapper);
+            buffer.appendChild(itemWrapper);
 
             setTimeout(() => {
               // Only stamp the visible instances first
@@ -305,7 +305,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         var tmpInstance = itemWrapper.instance;
         itemWrapper.instance = this.stamp({});
-        Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
+        itemWrapper.appendChild(itemWrapper.instance.root);
 
         Object.keys(tmpInstance).forEach(prop => {
           itemWrapper.instance.set(prop, tmpInstance[prop]);

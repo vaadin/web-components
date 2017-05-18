@@ -585,8 +585,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _preventCancelOnComponentAccess(e) {
-      var event = Polymer.dom(e.detail);
-      if (/tap|mousedown|touchstart/.test(e.detail.type) && event.path.indexOf(this) > -1) {
+      var event = e.detail;
+      if (/tap|mousedown|touchstart/.test(e.detail.type) && event.composedPath().indexOf(this) > -1) {
         e.preventDefault();
       }
     }
