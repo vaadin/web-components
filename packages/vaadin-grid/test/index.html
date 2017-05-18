@@ -48,14 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       'resizing.html',
       'doctype.html',
       'lazy-import.html'
-    ].reduce(function(suites, suite) {
-      if (document.head.createShadowRoot || document.head.attachShadow) {
-        // Full shadow polyfill isn't currently supported
-        return suites.concat([suite]); // runs native Shadow on P1 and Shady on P2
-      } else {
-        return suites.concat([suite]);
-      }
-    }, []));
+    ]);
   </script>
 </body>
 </html>
