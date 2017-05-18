@@ -300,9 +300,7 @@
       this.$.selector.scrollToIndex(Math.max(0, targetIndex));
 
       // Sometimes the item is partly below the bottom edge, detect and adjust.
-      var item = this._items[index];
-      if (item === undefined) return;
-      var pidx = this.$.selector._getPhysicalIndex(item),
+      var pidx = this.$.selector._getPhysicalIndex(index),
         physicalItem = this.$.selector._physicalItems[pidx];
       if (!physicalItem) return;
       var physicalItemRect = physicalItem.getBoundingClientRect(),
