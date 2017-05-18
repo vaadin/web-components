@@ -42,7 +42,7 @@
     "iron-icon": "PolymerElements/iron-icon#^v2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^v2.0.0",
     "iron-component-page": "^v2.0.0",
-    "elements-demo-resources": "2.0-preview",
+    "elements-demo-resources": "v2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^v2.0.0",
     "app-localize-behavior": "^v2.0.0"
   },
@@ -53,26 +53,6 @@
     "iron-a11y-keys-behavior": "^v2.0.0",
     "iron-a11y-announcer": "^v2.0.0"
   },
-  "resolutions": {
-    "paper-styles": "^v2.0.0",
-    "iron-ajax": "^v2.0.0",
-    "iron-a11y-keys-behavior": "^v2.0.0",
-    "iron-demo-helpers": "^v2.0.0",
-    "iron-flex-layout": "^v2.0.0",
-    "paper-button": "^v2.0.0",
-    "iron-meta": "^v2.0.0",
-    "iron-behaviors": "^v2.0.0",
-    "iron-form-element-behavior": "^v2.0.0",
-    "marked-element": "^v2.0.0",
-    "prism-element": "^v2.0.0",
-    "iron-location": "^v2.0.0",
-    "paper-behaviors": "^v2.0.0",
-    "iron-checked-element-behavior": "^v2.0.0",
-    "paper-ripple": "^v2.0.0",
-    "iron-doc-viewer": "^v2.0.0",
-    "iron-validatable-behavior": "^v2.0.0"
-  },
-  
   "variants": {
     "1.x": {
       "dependencies": {
