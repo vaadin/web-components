@@ -4,8 +4,9 @@ module.exports = {
   testTimeout: 180 * 1000,
   registerHooks: function(context) {
     var saucelabsPlatforms = [
-      'OS X 10.12/iphone@10.2',
-      'OS X 10.12/ipad@10.2',
+      // TODO: Excluded iOS tests from the hybrid version. Re-enable for P2 version.
+      // 'OS X 10.12/iphone@10.2',
+      // 'OS X 10.12/ipad@10.2',
       'Windows 10/microsoftedge@14',
       'Windows 10/internet explorer@11',
       'OS X 10.12/safari@10.0'
