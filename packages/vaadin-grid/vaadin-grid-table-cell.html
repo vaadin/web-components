@@ -362,10 +362,8 @@
         if (this._reorderGhost) {
           e.preventDefault();
 
-          // TODO: WTF doesn't bubble in tests?
-          // var event = new CustomEvent('dragend', {bubbles: true});
-          // this.dispatchEvent(event);
-          this.fire('dragend');
+          var event = new CustomEvent('dragend', {bubbles: true});
+          this.dispatchEvent(event);
           this._reorderGhost.style.visibility = 'hidden';
           this._reorderGhost = null;
         }
