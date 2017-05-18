@@ -171,10 +171,15 @@
       to set the <code>responsiveSteps</code> array property.
     </p>
     <p>
-      Responsive steps can optionally have <code>labelsOnTop: true</code>.
-      This sets the <code>&lt;vaadin-form-item&gt;</code> labels on top of
-      the input fields for the steps having this flag.
+      Responsive steps can optionally set <code>labelsPosition</code> string
+      option. The following values are supported:
     </p>
+    <dl>
+      <dt>aside</dt>
+      <dd>Default value. Labels are positioned aside the input fields.</dd>
+      <dt>top</dt>
+      <dd>Labels are positioned above the input fields.</dd>
+    </dl>
     <demo-snippet>
       <template>
         <vaadin-form-layout class="custom-steps">
@@ -200,7 +205,7 @@
             var formLayout = document.querySelector('vaadin-form-layout.custom-steps');
 
             formLayout.responsiveSteps = [
-              {minWidth: 0, columns: 1, labelsOnTop: true},
+              {minWidth: 0, columns: 1, labelsPosition: 'top'},
               {minWidth: '30em', columns: 1}
             ];
 

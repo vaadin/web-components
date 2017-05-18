@@ -68,8 +68,8 @@
         expect(labelRect.right).to.be.below(inputRect.left);
       });
 
-      it('should be on top when label-on-top attribute is set', function() {
-        item.setAttribute('label-on-top', '');
+      it('should be on top when label-position="top" attribute is set', function() {
+        item.setAttribute('label-position', 'top');
 
         var labelRect = label.getBoundingClientRect();
         var inputRect = input.getBoundingClientRect();
@@ -82,8 +82,8 @@
         expect(getComputedStyle(item).getPropertyValue('align-items')).to.equal('baseline');
       });
 
-      it('should be in a vertical flex layout when label-on-top attribute is set', function() {
-        item.setAttribute('label-on-top', '');
+      it('should be in a vertical flex layout when label-position="top" attribute is set', function() {
+        item.setAttribute('label-position', 'top');
 
         expect(getComputedStyle(item).getPropertyValue('flex-direction')).to.equal('column');
         expect(getComputedStyle(item).getPropertyValue('align-items')).to.equal('stretch');
@@ -158,8 +158,8 @@
         expect(getComputedStyle(item.$.label).width).to.equal('100px');
       });
 
-      it('should not apply label-width when label-on-top attribute is set', function() {
-        item.setAttribute('label-on-top', '');
+      it('should not apply label-width when label-position="top" attribute is set', function() {
+        item.setAttribute('label-position', 'top');
         item.updateStyles({'--vaadin-form-item-label-width': '100px'});
         expect(getComputedStyle(item.$.label).width).to.not.equal('100px');
       });

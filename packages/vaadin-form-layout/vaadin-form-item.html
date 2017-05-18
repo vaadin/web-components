@@ -23,7 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: calc(0.5 * var(--vaadin-form-item-row-gap)) 0;
       }
 
-      :host([label-on-top]) {
+      :host([label-position="top"]) {
         flex-direction: column;
         align-items: stretch;
       }
@@ -33,7 +33,7 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: 0 0 auto;
       }
 
-      :host([label-on-top]) #label {
+      :host([label-position="top"]) #label {
         width: auto;
       }
 
@@ -99,19 +99,18 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        *
        * By default, the `label` slot content is displayed aside of the input content.
-       * When `label-on-top` attribute is set, the `label` slot content
-       * is displayed on top:
+       * When `label-position="top"` is set, the `label` slot content is displayed on top:
        *
        * ```html
-       * <vaadin-form-item label-on-top>
+       * <vaadin-form-item label-position="top">
        *   <label slot="label">Label on top</label>
        *   <input>
        * </vaadin-form-item>
        * ```
        *
        * **Note:** Normally, `<vaadin-form-item>` is used as a child of
-       * a `<vaadin-form-layout>` element. Setting `label-on-top` is unnecessary,
-       * because the `label-on-top` attribute is triggered automatically by the parent
+       * a `<vaadin-form-layout>` element. Setting `label-position` is unnecessary,
+       * because the `label-position` attribute is triggered automatically by the parent
        * `<vaadin-form-layout>`, depending on its width and responsive behavior.
        *
        * ### Input Width
@@ -129,7 +128,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * The `label-on-top` host attribute can be used to target the label on top state:
+       * The `label-position` host attribute can be used to target the label on top state:
        *
        * <pre><code>
        * &lt;dom-module id="my-form-item-theme" theme-for="vaadin-form-item"&gt;
@@ -139,7 +138,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *         /&#42; default state styles, label aside &#42;/
        *       }
        *
-       *       :host([label-on-top]) {
+       *       :host([label-position="top"]) {
        *         /&#42; label on top state styles &#42;/
        *       }
        *     &lt;/style&gt;

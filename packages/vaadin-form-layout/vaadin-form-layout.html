@@ -175,7 +175,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * @type {object}
              * @property {string} minWidth - The threshold value for this step in CSS length units.
              * @property {number} columns - Number of columns. Only natural numbers are valid.
-             * @property {boolean} labelsOnTop - Move labels on top of the input fields.
+             * @property {string} labelsPosition - Labels position option, valid values: `"aside"` (default), `"top"`.
              */
 
             /**
@@ -184,7 +184,7 @@ This program is available under Apache License Version 2.0, available at https:/
              *
              * Format: array of objects, each object defines one responsive step
              * with `minWidth` CSS length, `columns` number, and optional
-             * `labelsOnTop` boolean flag. At least one item is required.
+             * `labelsPosition` string of `"aside"` or `"top"`. At least one item is required.
              *
              * #### Examples
              *
@@ -207,7 +207,7 @@ This program is available under Apache License Version 2.0, available at https:/
              *   </dd>
              *
              *   <dt><pre><code>[
-             *   {minWidth: 0, columns: 1, labelsOnTop: true},
+             *   {minWidth: 0, columns: 1, labelsPosition: 'top'},
              *   {minWidth: '20em', columns: 1},
              *   {minWidth: '40em', columns: 2}
              * ]</code></pre></dt>
@@ -227,7 +227,7 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Array,
               value: function() {
                 return [
-                  {minWidth: 0, columns: 1, labelsOnTop: true},
+                  {minWidth: 0, columns: 1, labelsPosition: 'top'},
                   {minWidth: '20em', columns: 1},
                   {minWidth: '40em', columns: 2}
                 ];
@@ -332,6 +332,10 @@ This program is available under Apache License Version 2.0, available at https:/
               if (step.minWidth !== undefined && !this._isValidCSSLength(step.minWidth)) {
                 throw new Error(`Invalid 'minWidth' value of ${step.minWidth}, a valid CSS length required.`);
               }
+
+              if (step.labelsPosition !== undefined && ['aside', 'top'].indexOf(step.labelsPosition) === -1) {
+                throw new Error(`Invalid 'labelsPosition' value of ${step.labelsPosition}, 'aside' or 'top' string is required.`);
+              }
             });
           } catch(e) {
             if (oldResponsiveSteps && oldResponsiveSteps !== responsiveSteps) {
@@ -340,7 +344,7 @@ This program is available under Apache License Version 2.0, available at https:/
             } else {
               console.warn(`${e.message} Using default 'responsiveSteps' instead.`);
               this.responsiveSteps = [
-                {minWidth: 0, columns: 1, labelsOnTop: true},
+                {minWidth: 0, columns: 1, labelsPosition: 'top'},
                 {minWidth: '20em', columns: 1},
                 {minWidth: '40em', columns: 2}
               ];
@@ -371,7 +375,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (selectedStep) {
             // Apply the chosen responsive step’s properties
             this._columnCount = selectedStep.columns;
-            this._labelsOnTop = selectedStep.labelsOnTop;
+            this._labelsOnTop = selectedStep.labelsPosition === 'top';
           }
         }
 
@@ -412,9 +416,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
             if (child.localName === 'vaadin-form-item') {
               if (this._labelsOnTop) {
-                child.setAttribute('label-on-top', '');
+                child.setAttribute('label-position', 'top');
               } else {
-                child.removeAttribute('label-on-top');
+                child.removeAttribute('label-position');
               }
             }
           });

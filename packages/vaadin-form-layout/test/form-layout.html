@@ -75,7 +75,7 @@
 
       it('should have default value', function() {
         expect(layout.responsiveSteps).to.deep.equal([
-          {minWidth: 0, columns: 1, labelsOnTop: true},
+          {minWidth: 0, columns: 1, labelsPosition: 'top'},
           {minWidth: '20em', columns: 1},
           {minWidth: '40em', columns: 2}
         ]);
@@ -89,18 +89,18 @@
         expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, .5);
       });
 
-      it('should set label-on-top attribute to child form-item elements', function() {
+      it('should set label-position attribute to child form-item elements', function() {
         layout.responsiveSteps = [{columns: 1}];
 
-        expect(layout.children[0].getAttribute('label-on-top')).to.be.null;
-        expect(layout.children[1].getAttribute('label-on-top')).to.be.null;
-        expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+        expect(layout.children[0].getAttribute('label-position')).to.be.null;
+        expect(layout.children[1].getAttribute('label-position')).to.be.null;
+        expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
-        layout.responsiveSteps = [{columns: 1, labelsOnTop: true}];
+        layout.responsiveSteps = [{columns: 1, labelsPosition: 'top'}];
 
-        expect(layout.children[0].getAttribute('label-on-top')).to.be.null;
-        expect(layout.children[1].getAttribute('label-on-top')).to.be.null;
-        expect(layout.children[2].getAttribute('label-on-top')).to.equal('');
+        expect(layout.children[0].getAttribute('label-position')).to.be.null;
+        expect(layout.children[1].getAttribute('label-position')).to.be.null;
+        expect(layout.children[2].getAttribute('label-position')).to.equal('top');
       });
 
       describe('responsive', function() {
@@ -121,17 +121,17 @@
           document.body.style.width = '10em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.equal('');
+          expect(layout.children[2].getAttribute('label-position')).to.equal('top');
 
           document.body.style.width = '20em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
           document.body.style.width = '40em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
         });
 
         it('should allow specifying non-responsive', function() {
@@ -140,40 +140,40 @@
           document.body.style.width = '10em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
           document.body.style.width = '20em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
           document.body.style.width = '40em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
         });
 
         it('should allow specifying more steps', function() {
           layout.responsiveSteps = [
             {columns: 1},
-            {minWidth: '20em', columns: 2, labelsOnTop: true},
+            {minWidth: '20em', columns: 2, labelsPosition: 'top'},
             {minWidth: '40em', columns: 5}
           ];
 
           document.body.style.width = '10em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
           document.body.style.width = '20em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.equal('');
+          expect(layout.children[2].getAttribute('label-position')).to.equal('top');
 
           document.body.style.width = '40em';
           layout.dispatchEvent(new CustomEvent('iron-resize'));
           expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(5, .1);
-          expect(layout.children[2].getAttribute('label-on-top')).to.be.null;
+          expect(layout.children[2].getAttribute('label-position')).to.be.null;
         });
       });
 
@@ -194,13 +194,16 @@
           [{columns: 0}], // columns requires natural number
           [{columns: 0.5}], // columns requires natural number
           [{minWidth: '10', columns: 1}], // minWidth requires valid CSS length string
+          [{columns: 1, minWidth: '480px', labelsPosition: null}], // labelsPosition should be a string
+          [{columns: 1, minWidth: '480px', labelsPosition: 'foo'}] // labelsPosition should be in supported list
         ];
 
         var validValues = [
           [{columns: 1}],
           [{columns: 1, minWidth: 0}],
           [{columns: 1, minWidth: '480px'}],
-          [{columns: 1, minWidth: '480px', labelsOnTop: true}]
+          [{columns: 1, minWidth: '480px', labelsPosition: 'aside'}],
+          [{columns: 1, minWidth: '480px', labelsPosition: 'top'}]
         ];
 
         it('should warn for invalid values', function() {
@@ -222,7 +225,7 @@
           invalidValues.forEach(function(value) {
             layout.responsiveSteps = value;
             expect(layout.responsiveSteps).to.deep.equal([
-              {minWidth: 0, columns: 1, labelsOnTop: true},
+              {minWidth: 0, columns: 1, labelsPosition: 'top'},
               {minWidth: '20em', columns: 1},
               {minWidth: '40em', columns: 2}
             ]);
