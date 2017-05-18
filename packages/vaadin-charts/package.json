@@ -19,7 +19,7 @@
     "gulp-vulcanize": "^6.0.0",
     "gulp-zip": "^3.2.0",
     "lodash": "^3.9.1",
-    "web-component-tester": "^6.0.0-prerelease.5"
+    "web-component-tester": "^6.0.0"
   },
   "scripts": {
     "test": " wct --plugin sauce test/ framework-test/"
