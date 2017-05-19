@@ -40,6 +40,8 @@ In order to create a simple `iron-input`-based date-picker, you can just wrap th
 [source,html]
 ----
 <vaadin-date-picker-light>
-  <input is="iron-input">
+  <iron-input>
+   <input>
+  </iron-input>
 </vaadin-date-picker-light>
 ----
