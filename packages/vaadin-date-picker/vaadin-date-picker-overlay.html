@@ -248,6 +248,28 @@
         clip: rect(0, 0, 0, 0);
         clip-path: inset(100%);
       }
+
+      /* The same code than paper-input and combo-box */
+      input {
+        position: relative; /* to make a stacking context */
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--paper-input-container-input-color, var(--primary-text-color));
+        -webkit-appearance: none;
+        text-align: inherit;
+        vertical-align: bottom;
+
+        /* Firefox sets a min-width on the input, which can cause layout issues */
+        min-width: 0;
+
+        @apply --paper-font-subhead;
+        @apply --paper-input-container-input;
+      }
     </style>
 
     <div id="announcer" role="alert" aria-live="polite">
@@ -257,7 +279,7 @@
     <div id="header" on-touchend="_preventDefault" aria-hidden="true">
       <paper-input-container>
         <label>[[label]]</label>
-        <iron-input id="input" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
+        <iron-input id="input" slot="input" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
           <input readonly autocomplete="off">
         </iron-input>
 
