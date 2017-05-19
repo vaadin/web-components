@@ -34,7 +34,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({
           is: 'x-grid'
         });
@@ -54,6 +54,9 @@
       var container, column, grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         container = fixture('grid');
         grid = container.$.grid;
         grid.dataProvider = infiniteDataProvider;
@@ -70,7 +73,7 @@
           it('should be bound to header cells', function() {
             column.flexGrow = 2;
 
-            var header = grid.$.scroller.$.header;
+            var header = grid.$.header;
 
             expect(header._rows[0].cells[0].style.flexGrow).to.eql('3'); // colspan 2 + 1
             expect(header._rows[1].cells[0].style.flexGrow).to.eql('2');
@@ -85,7 +88,7 @@
           it('should be bound to footer cells', function() {
             column.flexGrow = 2;
 
-            expect(grid.$.scroller.$.footer._rows[0].cells[0].style.flexGrow).to.eql('2');
+            expect(grid.$.footer._rows[0].cells[0].style.flexGrow).to.eql('2');
           });
         });
 
@@ -97,7 +100,7 @@
           it('should be bound to header cells', function() {
             column.width = '20%';
 
-            var header = grid.$.scroller.$.header;
+            var header = grid.$.header;
 
             expect(header._rows[0].cells[0].style.width).to.eql('calc(20% + 100px)');
           });
@@ -111,7 +114,7 @@
           it('should be bound to footer cells', function() {
             column.width = '200px';
 
-            expect(grid.$.scroller.$.footer._rows[0].cells[0].style.width).to.eql('200px');
+            expect(grid.$.footer._rows[0].cells[0].style.width).to.eql('200px');
           });
         });
 
@@ -123,21 +126,21 @@
           it('should not be bound to column-group header cells', function() {
             column.hidden = true;
 
-            expect(grid.$.scroller.$.header._rows[0].cells[0].style.display).to.eql('');
+            expect(grid.$.header._rows[0].cells[0].style.display).to.eql('');
           });
 
           it('should bind colSpan to column-group header cells', function() {
-            expect(grid.$.scroller.$.header._rows[0].cells[0].colSpan).to.eql(2);
+            expect(grid.$.header._rows[0].cells[0].colSpan).to.eql(2);
 
             column.hidden = true;
 
-            expect(grid.$.scroller.$.header._rows[0].cells[0].colSpan).to.eql(1);
+            expect(grid.$.header._rows[0].cells[0].colSpan).to.eql(1);
           });
 
           it('should not be bound to column header cells', function() {
             column.hidden = true;
 
-            expect(window.getComputedStyle(grid.$.scroller.$.header._rows[1].cells[0]).display).to.eql('none');
+            expect(window.getComputedStyle(grid.$.header._rows[1].cells[0]).display).to.eql('none');
           });
 
           it('should be bound to row cells', function() {
@@ -149,7 +152,7 @@
           it('should be bound to footer cells', function() {
             column.hidden = true;
 
-            expect(window.getComputedStyle(grid.$.scroller.$.footer._rows[0].cells[0]).display).to.eql('none');
+            expect(window.getComputedStyle(grid.$.footer._rows[0].cells[0]).display).to.eql('none');
           });
         });
       });
@@ -162,8 +165,8 @@
 
       describe('header templates', function() {
         it('should read templates from light DOM', function() {
-          expect(getCellContent(grid.$.scroller.$.header._rows[0].cells[0]).textContent).to.contain('group header1');
-          expect(getCellContent(grid.$.scroller.$.header._rows[1].cells[0]).textContent).to.contain('header1');
+          expect(getCellContent(grid.$.header._rows[0].cells[0]).textContent).to.contain('group header1');
+          expect(getCellContent(grid.$.header._rows[1].cells[0]).textContent).to.contain('header1');
         });
       });
     });

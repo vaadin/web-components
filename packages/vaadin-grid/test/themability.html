@@ -31,6 +31,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="styles">
+    <template>
+      <custom-style id="foo">
+        <style is="custom-style" id="styles"></style>
+      </custom-style>
+    </template>
+  </test-fixture>
+
   <script>
     describe('selectors', function() {
       var grid;
@@ -38,21 +46,38 @@
       var footerRowCells;
       var bodyRowCells;
 
+      var templateStyle;
+
       var color1 = 'rgb(255, 0, 0)';
       var color2 = 'rgb(0, 255, 0)';
 
-      beforeEach(function() {
-        grid = fixture('default');
-        grid.items = buildDataSet(2);
-        var scroller = grid.$.scroller;
-        headerRowCells = getRowCells(getRows(scroller.$.header)[0]);
-        bodyRowCells = getRowCells(getRows(scroller.$.items)[1]);
-        footerRowCells = getRowCells(getRows(scroller.$.footer)[0]);
+      before(function() {
+        templateStyle = document.querySelector('#styles template').content.querySelector('style');
       });
 
-      function setColor(prop, borderColor) {
-        grid.customStyle[prop] = 'border-color: ' + borderColor;
-        grid.updateStyles();
+      beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
+        grid = fixture('default');
+        grid.items = buildDataSet(2);
+        Polymer.dom.flush();
+        headerRowCells = getRowCells(getRows(grid.$.header)[0]);
+        bodyRowCells = getRowCells(getRows(grid.$.items)[1]);
+        footerRowCells = getRowCells(getRows(grid.$.footer)[0]);
+
+        templateStyle.innerHTML = '';
+        flush(done);
+      });
+
+      function addStyle(style, value) {
+        templateStyle.innerHTML += 'vaadin-grid { ' + style + ': ' + value + '; }';
+        fixture('styles');
+        Polymer.updateStyles();
+      }
+
+      function setColor(mixin, borderColor) {
+        addStyle(mixin, '{border-color: ' + borderColor + '};');
       }
 
       function getColor(cell, prop) {
@@ -115,29 +140,29 @@
         expect(getColor(bodyRowCells[0])).to.equal(color2);
       });
 
-      it('should override last column cells right border', function() {
-        grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff';
-        grid.updateStyles();
-
+      it('should not override last column cells right border', function() {
+        addStyle('--vaadin-grid-body-cell', '{border-right: 1px solid #fff; }');
         var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[0])).borderRightStyle;
         expect(borderRight).to.equal('solid');
         borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
         expect(borderRight).to.equal('none');
       });
 
-      it('should override last column cells right border', function() {
-        grid.customStyle['--vaadin-grid-body-cell'] = 'border-right: 1px solid #fff !important';
-        grid.updateStyles();
-
-        var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
-        expect(borderRight).to.equal('solid');
-      });
+      // Disabled since useNativeCSSProperties still has this issue with mixins https://github.com/Polymer/polymer/issues/3700
+      // it('should override last column cells right border', function() {
+      //   addStyle('--vaadin-grid-body-cell', '{border-right: 1px solid #fff !important; }');
+      //
+      //   var borderRight = window.getComputedStyle(getCellContent(bodyRowCells[1])).borderRightStyle;
+      //   expect(borderRight).to.equal('solid');
+      // });
 
       it('should override focused cell styles', function() {
-        grid.$.scroller.$.items._focusedCellIndex = 0;
-        grid.$.scroller.$.items._focusedRowIndex = 1;
-        grid.$.scroller._virtualFocus = grid.$.scroller.$.items;
-        grid.$.scroller.navigating = true;
+        grid.selectedItems = grid.items;
+
+        grid.$.items._focusedCellIndex = 0;
+        grid.$.items._focusedRowIndex = 1;
+        grid._virtualFocus = grid.$.items;
+        grid.navigating = true;
 
         setColor('--vaadin-grid-body-row-selected-cell', color1);
         setColor('--vaadin-grid-focused-cell', color2);

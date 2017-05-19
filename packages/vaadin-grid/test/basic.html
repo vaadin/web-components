@@ -7,7 +7,6 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 </head>
@@ -29,6 +28,9 @@
       var scroller, grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
 
@@ -47,7 +49,7 @@
       it('check visible item count', function() {
         scroller.size = 10;
         Polymer.dom.flush();
-        expect(Polymer.dom(scroller.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
+        expect(Polymer.dom(grid.root).querySelectorAll('vaadin-grid-table-body .vaadin-grid-row:not([hidden])').length).to.eql(10);
       });
 
       it('first visible index', function() {
@@ -135,7 +137,7 @@
           scroller.flushDebouncer('_debounceTemplate');
           scroller.flushDebouncer('vaadin-grid-scrolling');
           // Expect the physical rows to be in order after scrolling
-          var rows = Polymer.dom(scroller.$.items).querySelectorAll('tr');
+          var rows = Polymer.dom(grid.$.items).querySelectorAll('.vaadin-grid-row');
           for (var i = 1; i < rows.length; i++) {
             expect(rows[i].index).to.equal(rows[i - 1].index + 1);
           }
@@ -178,6 +180,10 @@
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom.flush();
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
+
         grid.flushDebouncer('check-imports');
         console.warn = _warn;
 
@@ -190,6 +196,10 @@
           var spy = console.warn = sinon.spy();
 
           Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
+          Polymer.dom.flush();
+          if (grid._observer.flush) {
+            grid._observer.flush();
+          }
 
           grid.flushDebouncer('check-imports');
           console.warn = _warn;

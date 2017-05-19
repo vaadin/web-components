@@ -1,7 +1,7 @@
 <dom-module id="vaadin-grid-column-reordering-themability-styles">
   <template>
     <style>
-      :host([reordering]) .vaadin-grid-cell {
+      vaadin-grid-table[reordering] .vaadin-grid-cell {
         background: #000;
       }
 
@@ -9,17 +9,21 @@
         background: var(--primary-color, #000);
       }
 
-      :host([reordering]) .vaadin-grid-cell:not([detailscell]) ::content > vaadin-grid-cell-content {
+      vaadin-grid-table[reordering] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
         transition: opacity 300ms;
         transform: translateZ(0);
         opacity: 0.8;
       }
 
-      :host([reordering]) .vaadin-grid-cell[reorder-status="allowed"] ::content > vaadin-grid-cell-content {
+      #scroller .vaadin-grid-cell[reorder-status="allowed"] ::slotted(vaadin-grid-cell-content) {
         opacity: 1;
       }
 
-      :host([reordering]) .vaadin-grid-cell[reorder-status="dragging"] ::content > vaadin-grid-cell-content {
+      #scroller .vaadin-grid-cell[reorder-status="dragging"] {
+        background: var(--primary-color, #000);
+      }
+
+      #scroller .vaadin-grid-cell[reorder-status="dragging"] ::slotted(vaadin-grid-cell-content) {
         opacity: 0.95;
       }
     </style>
@@ -75,6 +79,10 @@
     ],
 
     _updateOrders: function(columnTree, splices) {
+      if (columnTree === undefined || splices === undefined) {
+        return;
+      }
+
       // Set order numbers to top-level columns
       columnTree[0].forEach(function(column, index) {
         column._order = (index + 1) * this._orderBaseScope;
@@ -82,6 +90,7 @@
     },
 
     _onDragStart: function(e) {
+
       var cell = this._getCellByCellContent(e.target);
       if (cell) {
         this.toggleAttribute('reordering', true);
@@ -100,7 +109,7 @@
     },
 
     _setSiblingsReorderStatus: function(column, status) {
-      Polymer.dom(Polymer.dom(column).parentNode).children.filter(function(child) {
+      Array.prototype.filter.call(Polymer.dom(Polymer.dom(column).parentNode).children, function(child) {
         return /column/.test(child.localName) && this._isSwapAllowed(child, column);
       }, this).forEach(function(sibling) {
         sibling._reorderStatus = status;
@@ -157,7 +166,7 @@
     },
 
     _isSwappableByPosition: function(targetColumn, clientX) {
-      var targetCell = Polymer.dom(this.$.header).querySelectorAll('th').filter(function(cell) {
+      var targetCell = Array.prototype.filter.call(Polymer.dom(this.$.header).querySelectorAll('.vaadin-grid-cell'), function(cell) {
         return cell.column === targetColumn;
       })[0];
       var sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();
@@ -171,17 +180,31 @@
 
     _getCellByCellContent: function(cellContent) {
       if (cellContent) {
-        var contentId = null;
-        while (contentId === null && cellContent !== this.target && cellContent) {
-          if (cellContent.localName === 'vaadin-grid-cell-content') {
-            contentId = cellContent.id;
+        var contentId, injectionPoint;
+        if (Polymer.Element) {
+          contentId = null;
+          while (contentId === null && cellContent !== this.target && cellContent) {
+            contentId = cellContent.getAttribute('slot');
+            cellContent = cellContent.parentElement;
           }
-          cellContent = cellContent.parentElement;
-        }
 
-        if (contentId !== null) {
-          var injectionPoint = Polymer.dom(this.$.table).querySelector('content[select="#' + contentId + '"]');
-          return Polymer.dom(injectionPoint).parentNode;
+          if (contentId !== null) {
+            injectionPoint = Polymer.dom(this.domHost.root).querySelector('slot[name=' + contentId + ']');
+            return Polymer.dom(injectionPoint).parentNode;
+          }
+        } else {
+          contentId = null;
+          while (contentId === null && cellContent !== this.target && cellContent) {
+            if (cellContent.localName === 'vaadin-grid-cell-content') {
+              contentId = cellContent.id;
+            }
+            cellContent = cellContent.parentElement;
+          }
+
+          if (contentId !== null) {
+            injectionPoint = Polymer.dom(this).querySelector('content[select="#' + contentId + '"]');
+            return Polymer.dom(injectionPoint).parentNode;
+          }
         }
       }
     },

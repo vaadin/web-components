@@ -36,6 +36,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var list, container;
 
       setup(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+        
         container = fixture('trivialList');
         list = container.list;
       });

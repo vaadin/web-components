@@ -16,6 +16,10 @@
       observers: ['_columnTreeChanged(columnTree, target)', '_rowsChanged(_rows)'],
 
       _columnTreeChanged: function(columnTree, target) {
+        if (columnTree === undefined || target === undefined) {
+          return;
+        }
+
         if (this._rows) {
           this._rows.forEach(function(row) {
             Polymer.dom(row).innerHTML = '';
@@ -31,7 +35,7 @@
           rows.push(row);
         }
 
-        this._rows = this.localName === 'thead' ? rows : rows.reverse();
+        this._rows = this.localName === 'vaadin-grid-table-header' ? rows : rows.reverse();
       },
 
       _rowsChanged: function(rows) {
@@ -45,18 +49,16 @@
 
     Polymer({
       is: 'vaadin-grid-table-header',
-      extends: 'thead',
       behaviors: [vaadinGridTableRowContainerBehavior,
         vaadin.elements.grid.FocusableCellContainerBehavior],
 
       _createRow: function() {
-        return document.createElement('tr', 'vaadin-grid-table-header-row');
+        return document.createElement('vaadin-grid-table-header-row');
       }
     });
 
     Polymer({
       is: 'vaadin-grid-table-body',
-      extends: 'tbody',
       behaviors: [vaadin.elements.grid.FocusableCellContainerBehavior],
 
       observers: ['_announceFocusedRow(_focusedRow)'],
@@ -106,7 +108,11 @@
       },
 
       _focusedCellChanged: function(rowIndex, cellIndex) {
-        Polymer.dom(this).children.forEach(function(row) {
+        if (rowIndex === undefined || cellIndex === undefined) {
+          return;
+        }
+
+        Array.prototype.forEach.call(Polymer.dom(this).children, function(row) {
           row.focused = row.index === rowIndex;
 
           if (row.index === rowIndex) {
@@ -123,12 +129,11 @@
 
     Polymer({
       is: 'vaadin-grid-table-footer',
-      extends: 'tfoot',
       behaviors: [vaadinGridTableRowContainerBehavior,
         vaadin.elements.grid.FocusableCellContainerBehavior],
 
       _createRow: function() {
-        return document.createElement('tr', 'vaadin-grid-table-footer-row');
+        return document.createElement('vaadin-grid-table-footer-row');
       }
     });
   })();

@@ -1,13 +1,15 @@
 var argv = require('yargs').argv;
 
 module.exports = {
+  testTimeout: 180 * 1000,
   registerHooks: function(context) {
     var saucelabsPlatforms = [
-      'OS X 10.11/iphone@9.3',
-      'OS X 10.11/ipad@9.3',
+      // TODO: Excluded iOS tests from the hybrid version. Re-enable for P2 version.
+      // 'OS X 10.12/iphone@10.2',
+      // 'OS X 10.12/ipad@10.2',
       'Windows 10/microsoftedge@14',
       'Windows 10/internet explorer@11',
-      'OS X 10.11/safari@10.0'
+      'OS X 10.12/safari@10.0'
     ];
 
     var cronPlatforms = [
@@ -16,7 +18,7 @@ module.exports = {
     ];
 
     if (argv.env === 'saucelabs') {
-      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+      context.options.plugins.sauce.browsers = saucelabsPlatforms.concat(cronPlatforms);
 
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;

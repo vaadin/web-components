@@ -32,12 +32,18 @@
       var fixedContainers;
       var grid;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
         Polymer.dom.flush();
+        animationFrameFlush(function() {
+          done();
+        });
       });
 
       function isFixed(element) {
@@ -60,8 +66,8 @@
       });
 
       it('should/should not have fixed container elements depending on scrolling mode', function() {
-        expect(isFixed(scroller.$.items)).to.equal(fixedContainers);
-        expect(isFixed(scroller.$.header)).to.equal(fixedContainers);
+        expect(isFixed(grid.$.items)).to.equal(fixedContainers);
+        expect(isFixed(grid.$.header)).to.equal(fixedContainers);
       });
 
       it('should have correct scroll bounds on all scroll modes', function() {
@@ -71,7 +77,7 @@
       });
 
       it('should not have the table transformed with fixed containers', function() {
-        // This is to ensure that a fixed tbody/thead/tfoot are not positioned
+        // This is to ensure that a fixed body/header/footer are not positioned
         // in relation to the table element but it's parent
         if (fixedContainers) {
           expect(window.getComputedStyle(scroller.$.table).transform).to.equal('none');
@@ -122,7 +128,7 @@
           var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
           e.deltaY = -1;
           e.deltaX = 0;
-          grid.$.scroller.$.items.dispatchEvent(e);
+          grid.$.items.dispatchEvent(e);
         };
         expect(tableWheel).to.not.throw(Error);
       });

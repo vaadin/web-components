@@ -15,11 +15,12 @@ browsers:
       version: "55.0"
       platform: "Windows 10"
 
-  firefox:
-    desiredCapabilities:
-      browserName: "firefox"
-      version: "47.0"
-      platform: "Windows 10"
+  # Skipping FF gemini tests in the hybrid version
+  # firefox:
+  #   desiredCapabilities:
+  #     browserName: "firefox"
+  #     version: "47.0"
+  #     platform: "Windows 10"
 
   edge:
     desiredCapabilities:

@@ -11,8 +11,6 @@
      */
     var vaadinGridTableRowBehavior = {
 
-      extends: 'tr',
-
       properties: {
         active: {
           type: Boolean,
@@ -58,6 +56,14 @@
         '_selectedChangedForDetails(selected, _rowDetailsCell)',
       ],
 
+      ready: function() {
+        this.classList.add('vaadin-grid-row');
+        if (Polymer.Settings.useShadow === false) {
+          this.classList.add('style-scope');
+          this.classList.add('vaadin-grid');
+        }
+      },
+
       iterateCells: function(callback) {
         this.cells.forEach(callback);
         if (this._rowDetailsCell) {
@@ -66,10 +72,14 @@
       },
 
       _rowDetailsChanged: function(expanded, rowDetailsTemplate, target) {
+        if (expanded === undefined || rowDetailsTemplate === undefined || target === undefined) {
+          return;
+        }
+
         if (expanded) {
           // TODO: template instance for each detail cell is pushed to the template.instances
           // but never cleaned up. Maybe consider just hiding details instead of removing.
-          var rowDetailsCell = document.createElement('td', 'vaadin-grid-table-cell');
+          var rowDetailsCell = document.createElement('vaadin-grid-table-cell');
           rowDetailsCell.setAttribute('detailscell', true);
           // Using a frozen cell as the details cell works as a handy way of
           // making it float in place
@@ -103,12 +113,20 @@
       },
 
       _rowDetailsCellChanged: function(_rowDetailsCell, target) {
+        if (_rowDetailsCell === undefined || target === undefined) {
+          return;
+        }
+
         // paddingBottom must be set before update() is called!
         // make sure observers are in the correct order!
         target.$.scroller._update();
       },
 
-      _rowDetailsCellIndexChanged: function(_rowDetailsCell, index, target) {
+      _rowDetailsCellIndexChanged: function(_rowDetailsCell, index) {
+        if (_rowDetailsCell === undefined || index === undefined) {
+          return;
+        }
+
         if (_rowDetailsCell) {
           _rowDetailsCell.index = index;
 
@@ -121,6 +139,9 @@
 
       updateRowDetailsCellMetrics: function() {
         if (this._rowDetailsCell) {
+          if (this.target && this.target._observer && this.target._observer.flush) {
+            this.target._observer.flush();
+          }
           this._rowDetailsCell.style.height = ''; // Reset previous height
           this.style.paddingBottom = this._rowDetailsCell.style.height = this._rowDetailsCell.clientHeight + 'px';
         }
@@ -128,6 +149,10 @@
 
 
       _columnsChanged: function(columns, target) {
+        if (columns === undefined || target === undefined) {
+          return;
+        }
+
         Polymer.dom(this).innerHTML = '';
 
         var cells = [];
@@ -141,7 +166,28 @@
           })[0];
           if (!cell) {
             cell = this._createCell();
-            cache.push(cell);
+
+            // Need to disable caching in Polymer 2 <dom-repeat> generated columns since
+            // the current implementation reuses template instances for different items.
+            //
+            // Once https://github.com/Polymer/polymer/pull/4363 is released, 'restamp'
+            // property can be used to utilize caching in <dom-repeat> generated columns also.
+            var disableCache = Array.prototype.some.call(this.target.querySelectorAll('dom-repeat'), function(domRepeat) {
+              return !domRepeat.restamp;
+            });
+
+            // Disable cache for header and footer rows, as sometimes (e.g., when columns
+            // inserted or removed dynamically), the cached cell would have incorrect
+            // template content leftovers.
+            // TODO: implement cell content cleanup when header or footer cells are
+            // detached, and enable cell caching for header and footer rows back.
+            disableCache = disableCache || 
+                this.is === 'vaadin-grid-table-header-row' ||
+                this.is === 'vaadin-grid-table-footer-row';
+
+            if (!disableCache) {
+              cache.push(cell);
+            }
           }
 
           cell.index = this.index;
@@ -157,13 +203,21 @@
         this.cells = cells;
       },
 
-      _indexChanged: function(index, cells, _rowDetailsCell) {
+      _indexChanged: function(index, cells) {
+        if (index === undefined || cells === undefined) {
+          return;
+        }
+
         cells.forEach(function(cell) {
           cell.index = index;
         });
       },
 
       _itemChanged: function(item, cells) {
+        if (item === undefined || cells === undefined) {
+          return;
+        }
+
         cells.forEach(function(cell) {
           // use assignment here instead of notifyPath to avoid triggering
           // forwardInstancePath for path "item" on cells unnecessarily.
@@ -172,18 +226,30 @@
       },
 
       _itemChangedForDetails: function(item, rowDetails) {
+        if (item === undefined || rowDetails === undefined) {
+          return;
+        }
+
         if (rowDetails) {
           rowDetails.item = item;
         }
       },
 
       _selectedChanged: function(selected, cells) {
+        if (selected === undefined || cells === undefined) {
+          return;
+        }
+
         cells.forEach(function(cell) {
           cell.selected = selected;
         });
       },
 
       _selectedChangedForDetails: function(selected, rowDetails) {
+        if (selected === undefined || rowDetails === undefined) {
+          return;
+        }
+
         if (rowDetails) {
           rowDetails.selected = selected;
         }
@@ -207,7 +273,7 @@
       ],
 
       _createCell: function() {
-        return document.createElement('td', 'vaadin-grid-table-cell');
+        return document.createElement('vaadin-grid-table-cell');
       }
     });
 
@@ -227,7 +293,7 @@
       },
 
       _createCell: function() {
-        return document.createElement('th', 'vaadin-grid-table-header-cell');
+        return document.createElement('vaadin-grid-table-header-cell');
       }
 
     });
@@ -248,7 +314,7 @@
       },
 
       _createCell: function() {
-        return document.createElement('td', 'vaadin-grid-table-footer-cell');
+        return document.createElement('vaadin-grid-table-footer-cell');
       }
 
     });

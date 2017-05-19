@@ -4,11 +4,12 @@
 <dom-module id="vaadin-grid-navigation-themability-styles">
   <template>
     <style>
-      :host(:focus) {
+      :host(:focus),
+      #table:focus {
         outline: none;
       }
 
-      :host([navigating]:not([interacting])) [focused] > tr[focused] > [focused] ::content > vaadin-grid-cell-content {
+      :host([navigating]:not([interacting])) [focused] > .vaadin-grid-row[focused] > [focused] ::slotted(vaadin-grid-cell-content) {
         box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.3);
         @apply(--vaadin-grid-focused-cell);
       }
@@ -22,13 +23,13 @@
   vaadin.elements.grid = vaadin.elements.grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.KeyboardNavigationBehaviorImpl
+   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehaviorImpl
    */
-  vaadin.elements.grid.KeyboardNavigationBehaviorImpl = {
+  vaadin.elements.grid.TableKeyboardBehaviorImpl = {
+
     hostAttributes: {
-      // keys can be listened only when vaadin-grid is focusable
-      'tabindex': -1,
-      'role': 'application'
+      'role': 'application',
+      'tabindex': 0
     },
 
     keyBindings: {
@@ -44,7 +45,6 @@
       'pagedown': '_onPageDown',
       'pageup': '_onPageUp',
       'right': '_onArrowRight',
-      'shift+tab': '_onShiftTab',
       'space': '_onSpace',
       'tab': '_onTab',
       'up': '_onArrowUp'
@@ -53,82 +53,6 @@
     attached: function() {
       Polymer.IronA11yAnnouncer.requestAvailability();
     },
-
-    _onEnd: function(e) {
-      this.$.scroller._onEnd(e);
-    },
-
-    _onEnter: function(e) {
-      this.$.scroller._onEnter(e);
-    },
-
-    _onEscape: function(e) {
-      this.$.scroller._onEscape(e);
-    },
-
-    _onF2: function(e) {
-      this.$.scroller._onF2(e);
-    },
-
-    _onTab: function(e) {
-      this.$.scroller._onTab(e);
-    },
-
-    _onShiftTab: function(e) {
-      this.$.scroller._onShiftTab(e);
-    },
-
-    _onArrowDown: function(e) {
-      this.$.scroller._onArrowDown(e);
-    },
-
-    _onArrowUp: function(e) {
-      this.$.scroller._onArrowUp(e);
-    },
-
-    _onArrowRight: function(e) {
-      this.$.scroller._onArrowRight(e);
-    },
-
-    _onArrowLeft: function(e) {
-      this.$.scroller._onArrowLeft(e);
-    },
-
-    _onHome: function(e) {
-      this.$.scroller._onHome(e);
-    },
-
-    _onCtrlHome: function(e) {
-      this.$.scroller._onCtrlHome(e);
-    },
-
-    _onCtrlEnd: function(e) {
-      this.$.scroller._onCtrlEnd(e);
-    },
-
-    _onPageDown: function(e) {
-      this.$.scroller._onPageDown(e);
-    },
-
-    _onPageUp: function(e) {
-      this.$.scroller._onPageUp(e);
-    },
-
-    _onSpace: function(e) {
-      this.$.scroller._onSpace(e);
-    },
-  };
-
-  /**
-   * @polymerBehavior vaadin.elements.grid.KeyboardNavigationBehavior
-   */
-  vaadin.elements.grid.KeyboardNavigationBehavior = [vaadin.elements.grid.KeyboardNavigationBehaviorImpl, Polymer.IronA11yKeysBehavior];
-
-
-  /**
-   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehavior
-   */
-  vaadin.elements.grid.TableKeyboardBehavior = {
 
     properties: {
       _virtualFocus: {
@@ -150,8 +74,31 @@
     },
 
     listeners: {
+      'focus': '_onFocus',
       'cell-focus': '_onCellFocus',
       'cell-content-focus': '_onCellContentFocus'
+    },
+
+    ready: function() {
+      document.addEventListener('keydown', function(e) {
+        if (e.keyCode === 9) {
+          this._tabbed = true;
+        }
+
+        if (e.keyCode === 9 && e.shiftKey) {
+          this._shiftTabbed = true;
+        }
+      }.bind(this), true);
+
+      document.addEventListener('keyup', function(e) {
+        if (e.keyCode === 9) {
+          this._tabbed = false;
+        }
+
+        if (e.keyCode === 9 && e.shiftKey) {
+          this._shiftTabbed = false;
+        }
+      }.bind(this), true);
     },
 
     _isFooterVisible: function() {
@@ -160,38 +107,26 @@
       }).length > 0;
     },
 
+    _onFocus: function(e) {
+      if (this._tabbed && !this._shiftTabbed) {
+        this._activateNavigation();
+      }
+    },
+
+    _activateNavigation: function() {
+      this.$.footerFocusTrap.focus();
+    },
+
     _onFocusout: function(e) {
       this.navigating = false;
       this.interacting = false;
     },
 
-    _onHeaderFocus: function(e) {
-      this.navigating = true;
-      this.interacting = false;
-      this.$.header._focusedCellIndex = this.$.header._focusedCellIndex || 0;
-      this.$.header._focusedRowIndex = this.$.header._focusedRowIndex || 0;
-      this._virtualFocus = this.$.header;
-    },
-
-    _onBodyFocus: function(e) {
-      this.navigating = true;
-      this.interacting = false;
-      this.$.items._focusedCellIndex = this.$.items._focusedCellIndex || 0;
-      this.$.items._focusedRowIndex = this.$.items._focusedRowIndex || 0;
-      this._virtualFocus = this.$.items;
-    },
-
     _onFooterFocus: function(e) {
-      if (this._isFooterVisible()) {
-        this.navigating = true;
-        this.interacting = false;
-
-        this.$.footer._focusedCellIndex = this.$.footer._focusedCellIndex || 0;
-        this.$.footer._focusedRowIndex = this.$.footer._focusedRowIndex || 0;
-        this._virtualFocus = this.$.footer;
-      } else if (!this._virtualFocus) {
-        this.$.bodyFocusTrap.focus();
-      }
+      this.navigating = true;
+      this.interacting = false;
+      this._virtualFocus = this._virtualFocus ||
+        (this._shiftTabbed ? (this._isFooterVisible() ? this.$.footer : this.$.items) : this.$.header);
     },
 
     _virtualFocusChanged: function(virtualFocus, oldVirtualFocus) {
@@ -199,6 +134,9 @@
         oldVirtualFocus.focused = false;
       }
       if (virtualFocus) {
+        virtualFocus._focusedCellIndex = virtualFocus._focusedCellIndex || 0;
+        virtualFocus._focusedRowIndex = virtualFocus._focusedRowIndex || 0;
+
         virtualFocus.focused = true;
 
         if (virtualFocus === this.$.items) {
@@ -213,80 +151,50 @@
       }
 
       if (this.navigating) {
-        switch (this._virtualFocus) {
-          case this.$.header:
-            this.$.bodyFocusTrap.focus();
-            e.preventDefault();
-            break;
-
-          case this.$.items:
-            this.$.footerFocusTrap.focus();
-            if (this._isFooterVisible()) {
-              this._virtualFocus = this.$.footer;
+        if (e.detail.keyboardEvent.shiftKey) {
+          switch (this._virtualFocus) {
+            case this.$.footer:
+              this._virtualFocus = this.$.items;
               e.preventDefault();
-            } else {
-              // IE11 doesn't handle the footer trap `focus` event above syncronously
-              // which means that virtualFocus gets set to null before the handler is run
-              // causing focus being transferred back to body focus trap.
-              this.async(function() {
-                this._virtualFocus = null;
-              }, 1);
-            }
-            break;
+              break;
+            case this.$.items:
+              this._virtualFocus = this.$.header;
+              e.preventDefault();
+              break;
+            case this.$.header:
+              this.focus();
+              this._virtualFocus = null;
+              break;
+          }
+        } else {
+          switch (this._virtualFocus) {
+            case this.$.header:
+              this._virtualFocus = this.$.items;
+              e.preventDefault();
+              break;
 
-          case this.$.footer:
-            this._virtualFocus = null;
-            break;
+            case this.$.items:
+              if (this._isFooterVisible()) {
+                this._virtualFocus = this.$.footer;
+                e.preventDefault();
+              } else {
+                // IE11 doesn't handle the footer trap `focus` event above syncronously
+                // which means that virtualFocus gets set to null before the handler is run
+                // causing focus being transferred back to body focus trap.
+                this.async(function() {
+                  this._virtualFocus = null;
+                }, 1);
+              }
+              break;
+
+            case this.$.footer:
+              this._virtualFocus = null;
+              break;
+          }
         }
       } else {
-        switch (this._virtualFocus) {
-          case this.$.header:
-            this.$.headerFocusTrap.focus();
-            break;
+        this._activateNavigation();
 
-          case this.$.items:
-            this.$.bodyFocusTrap.focus();
-            break;
-
-          case this.$.footer:
-            this.$.footerFocusTrap.focus();
-            break;
-        }
-        e.preventDefault();
-      }
-    },
-
-    _onShiftTab: function(e) {
-      if (this.interacting) {
-        return;
-      }
-
-      if (this.navigating) {
-        switch (this._virtualFocus) {
-          case this.$.footer:
-            this.$.bodyFocusTrap.focus();
-            e.preventDefault();
-            break;
-          case this.$.items:
-            this.$.headerFocusTrap.focus();
-            e.preventDefault();
-            break;
-          case this.$.header:
-            this._virtualFocus = null;
-            break;
-        }
-      } else {
-        switch (this._virtualFocus) {
-          case this.$.footer:
-            this.$.footerFocusTrap.focus();
-            break;
-          case this.$.items:
-            this.$.bodyFocusTrap.focus();
-            break;
-          case this.$.header:
-            this.$.headerFocusTrap.focus();
-            break;
-        }
         e.preventDefault();
       }
     },
@@ -302,7 +210,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusDown();
 
       this._ensureVirtualFocusInViewport();
@@ -312,8 +220,8 @@
       var headerRect = this.$.header.getBoundingClientRect();
       var footerRect = this.$.footer.getBoundingClientRect();
 
-      this.$.table.scrollTop += footerRect.top - headerRect.bottom;
-      this._scrollHandler();
+      this.$.scroller.$.table.scrollTop += footerRect.top - headerRect.bottom;
+      this.$.scroller._scrollHandler();
     },
 
     _onPageDown: function(e) {
@@ -323,12 +231,12 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       if (this._virtualFocus === this.$.items) {
-        var prevLastVisible = this.lastVisibleIndex;
+        var prevLastVisible = this.$.scroller.lastVisibleIndex;
         this._scrollPageDown();
-        this._virtualFocus._focusedRowIndex += (this.lastVisibleIndex - prevLastVisible) ||
-         (this.lastVisibleIndex - this._virtualFocus._focusedRowIndex);
+        this._virtualFocus._focusedRowIndex += (this.$.scroller.lastVisibleIndex - prevLastVisible) ||
+         (this.$.scroller.lastVisibleIndex - this._virtualFocus._focusedRowIndex);
         this._ensureVirtualFocusInViewport();
       } else {
         this._virtualFocus.focusPageDown();
@@ -339,8 +247,8 @@
       var headerRect = this.$.header.getBoundingClientRect();
       var footerRect = this.$.footer.getBoundingClientRect();
 
-      this.$.table.scrollTop -= footerRect.top - headerRect.bottom;
-      this._scrollHandler();
+      this.$.scroller.$.table.scrollTop -= footerRect.top - headerRect.bottom;
+      this.$.scroller._scrollHandler();
     },
 
     _onPageUp: function(e) {
@@ -350,11 +258,11 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       if (this._virtualFocus === this.$.items) {
-        var prevLastVisibleIndex = this.lastVisibleIndex;
+        var prevLastVisibleIndex = this.$.scroller.lastVisibleIndex;
         this._scrollPageUp();
-        this._virtualFocus._focusedRowIndex -= (prevLastVisibleIndex - this.lastVisibleIndex) ||
+        this._virtualFocus._focusedRowIndex -= (prevLastVisibleIndex - this.$.scroller.lastVisibleIndex) ||
          this._virtualFocus._focusedRowIndex;
         this._ensureVirtualFocusInViewport();
       } else {
@@ -369,7 +277,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusUp();
 
       this._ensureVirtualFocusInViewport();
@@ -382,7 +290,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusRight();
 
       this._ensureVirtualFocusInViewport();
@@ -395,7 +303,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusLeft();
 
       this._ensureVirtualFocusInViewport();
@@ -408,7 +316,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusHome();
 
       this._ensureVirtualFocusInViewport();
@@ -421,7 +329,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusEnd();
 
       this._ensureVirtualFocusInViewport();
@@ -442,17 +350,15 @@
         this._moveFocusToFocusTarget();
       } else if (e.detail.keyboardEvent.target.localName === 'input' &&
                  e.detail.keyboardEvent.target.type === 'text') {
-        this.interacting = false;
-        this._onTab(e); // revert to navigation
+        this.$.footerFocusTrap.focus();
       }
     },
 
     _onEscape: function(e) {
       if (this.interacting) {
-        this.interacting = false;
-        this._onTab(e); // revert to navigation
+        this.$.footerFocusTrap.focus();
       } else if (this.navigating) {
-        this.domHost.focus();
+        this.navigating = false;
       }
     },
 
@@ -461,8 +367,7 @@
       if (!this.interacting) {
         this._moveFocusToFocusTarget();
       } else {
-        this.interacting = false;
-        this._onTab(e); // revert to navigation
+        this.$.footerFocusTrap.focus();
       }
     },
 
@@ -473,7 +378,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusFirst();
 
       this._ensureVirtualFocusInViewport();
@@ -486,7 +391,7 @@
 
       e.preventDefault();
 
-      this.navigating = true;
+      this._activateNavigation();
       this._virtualFocus.focusLast();
 
       this._ensureVirtualFocusInViewport();
@@ -500,7 +405,7 @@
       e.preventDefault();
 
       var focusedCell = this._virtualFocus._focusedCell;
-      var firstElementChild = focusedCell.getContentChildren('content')[0].firstElementChild;
+      var firstElementChild = focusedCell.getContentChildren(Polymer.Element ? 'slot' : 'content')[0].firstElementChild;
       if (firstElementChild) {
         firstElementChild.click();
       } else if (this.navigating) {
@@ -520,13 +425,13 @@
       var row = cell.parentElement;
       var container = row.parentElement;
 
-      var rowIndex = Polymer.dom(container).children.indexOf(row);
+      var rowIndex = Array.prototype.indexOf.call(Polymer.dom(container).children, row);
       if (container === this.$.items) {
         rowIndex = row.index;
       }
 
       container._focusedRowIndex = rowIndex;
-      container._focusedCellIndex = Polymer.dom(row).children.indexOf(cell);
+      container._focusedCellIndex = Array.prototype.indexOf.call(Polymer.dom(row).children, cell);
       this._virtualFocus = container;
 
       if (cell.hasAttribute('detailscell')) {
@@ -537,17 +442,18 @@
 
 
     _ensureVirtualFocusInViewport: function() {
-      var scaledVirtualStart = this._vidxOffset + this._virtualStart;
+      var scaledVirtualStart = this.$.scroller._vidxOffset + this.$.scroller._virtualStart;
       var focusedIndex = this._virtualFocus._focusedRowIndex;
 
       if (this._virtualFocus === this.$.items && ((focusedIndex < scaledVirtualStart) ||
-          (focusedIndex > scaledVirtualStart + this._physicalCount))) {
-        this.scrollToScaledIndex(focusedIndex);
+          (focusedIndex > scaledVirtualStart + this.$.scroller._physicalCount))) {
+        this.$.scroller.scrollToScaledIndex(focusedIndex);
+
         // force resetting _focusedCell in case element reordering has happened.
         this._virtualFocus._focusedCellChanged(focusedIndex, this._virtualFocus._focusedCellIndex);
-      } else {
-        this._ensureElementInViewport(this._virtualFocus._focusedCell);
       }
+
+      this._ensureElementInViewport(this._virtualFocus._focusedCell);
     },
 
     _ensureElementInViewport: function(element) {
@@ -558,9 +464,9 @@
         var maxBottom = this.$.footer.getBoundingClientRect().top;
         var minTop = this.$.header.getBoundingClientRect().bottom;
         if (elementRect.bottom > maxBottom) {
-          this.$.table.scrollTop += (elementRect.bottom - maxBottom);
+          this.$.scroller.$.table.scrollTop += (elementRect.bottom - maxBottom);
         } else if (elementRect.top < minTop) {
-          this.$.table.scrollTop += (elementRect.top - minTop);
+          this.$.scroller.$.table.scrollTop += (elementRect.top - minTop);
         }
       }
 
@@ -571,18 +477,23 @@
       }
 
       // Horizontal
-      var maxRight = this.$.table.getBoundingClientRect().right;
-      var minLeft = this.$.table.getBoundingClientRect().left;
+      var maxRight = this.$.scroller.$.table.getBoundingClientRect().right;
+      var minLeft = this.$.scroller.$.table.getBoundingClientRect().left;
       var lastFrozen = this._virtualFocus._focusedRow.querySelector('[last-frozen]');
       if (lastFrozen) {
         minLeft = lastFrozen.getBoundingClientRect().right;
       }
 
       if (elementRect.right > maxRight) {
-        this.$.table.scrollLeft += (elementRect.right - maxRight);
+        this.$.scroller.$.table.scrollLeft += (elementRect.right - maxRight);
       } else if (elementRect.left < minLeft) {
-        this.$.table.scrollLeft += (elementRect.left - minLeft);
+        this.$.scroller.$.table.scrollLeft += (elementRect.left - minLeft);
       }
     }
   };
+
+    /**
+   * @polymerBehavior vaadin.elements.grid.TableKeyboardBehavior
+   */
+  vaadin.elements.grid.TableKeyboardBehavior = [vaadin.elements.grid.TableKeyboardBehaviorImpl, Polymer.IronA11yKeysBehavior];
 </script>

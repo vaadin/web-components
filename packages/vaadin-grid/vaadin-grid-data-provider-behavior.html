@@ -116,7 +116,7 @@
 
       // TODO: We could avoid iterating rows by fixing _physicalIndexForKey mapping
       // in iron-list-behavior so that vidx could be used to fetch the correct row element.
-      Polymer.dom(this.$.scroller.$.items).children.forEach(function(row) {
+      Array.prototype.forEach.call(Polymer.dom(this.$.items).children, function(row) {
         if (row.item === item) {
           row.iterateCells(function(cell) {
             // prevent _forwardInstancePath from firing duplicate `item-changed`

@@ -41,6 +41,9 @@
       var columns;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('frozen-columns');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
@@ -58,7 +61,7 @@
         expect(columns[0]._lastFrozen).to.be.false;
       });
 
-      ['thead', 'tbody'].forEach(function(container) {
+      ['vaadin-grid-table-header', 'vaadin-grid-table-body'].forEach(function(container) {
 
         describe(container, function() {
 
@@ -66,7 +69,7 @@
           var containerRows;
 
           beforeEach(function() {
-            containerElement = scroller.$$(container);
+            containerElement = Polymer.dom(grid.root).querySelector(container);
             containerRows = getRows(containerElement);
           });
 

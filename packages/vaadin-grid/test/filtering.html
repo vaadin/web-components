@@ -28,7 +28,7 @@
       </vaadin-grid-filter>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({
           is: 'filter-wrapper'
         });
@@ -71,6 +71,9 @@
       var filterWrapper;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         filterWrapper = fixture('filter');
         filter = filterWrapper.$.filter;
       });
@@ -116,9 +119,15 @@
       var grid;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('grid');
         Polymer.dom.flush();
         flushFilters(grid);
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
       });
 
       it('should have filters', function() {
@@ -129,7 +138,7 @@
 
       it('should have default inputs', function() {
         grid._filters.forEach(function(filter) {
-          expect(filter.getContentChildren('content')[0].tagName).to.equal('INPUT');
+          expect(filter.$.filter.clientHeight).to.be.greaterThan(0);
         });
       });
 
@@ -160,6 +169,9 @@
       var grid;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('grid');
         Polymer.dom.flush();
         flushFilters(grid);
@@ -176,6 +188,10 @@
           first: 'bar',
           last: 'bar'
         }];
+
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
       });
 
       it('should filter automatically', function() {
@@ -200,6 +216,7 @@
     describe('lazy init', function() {
 
       it('should not filter if there is no data yet', function() {
+        this.timeout(30000);
         var grid = fixture('grid');
         grid.size = 100;
         grid.dataProvider = function(params, callback) {

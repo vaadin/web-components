@@ -12,18 +12,20 @@
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 
-  <style is="custom-style">
-    vaadin-grid {
-      border: none;
-    }
-
-    vaadin-grid.small {
-      --vaadin-grid-cell: {
-        line-height: 10px;
-        padding: 0;
+  <custom-style>
+    <style is="custom-style">
+      vaadin-grid {
+        border: none;
       }
-    }
-  </style>
+
+      vaadin-grid.small {
+        --vaadin-grid-cell: {
+          line-height: 10px;
+          padding: 0;
+        }
+      }
+    </style>
+  </custom-style>
 
 </head>
 
@@ -44,13 +46,16 @@
       var scroller, grid;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
       });
 
       it('increase pool size', function(done) {
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           var lastItem = scroller._physicalItems[scroller.lastVisibleIndex];
           var lastItemHeight = lastItem.offsetHeight;
           var expectedFinalItem = Math.ceil(grid.offsetHeight / scroller._physicalAverage) - 1;
@@ -62,7 +67,7 @@
         });
       });
 
-      it('increase pool size after resizing the scroller', function() {
+      it('increase pool size after resizing the scroller', function(done) {
         grid.classList.add('small');
         Polymer.updateStyles();
         grid.style.display = 'none';
@@ -71,7 +76,12 @@
         grid.style.display = '';
         scroller._update();
         Polymer.dom.flush();
-        expect(scroller._physicalItems.length).to.be.greaterThan(25);
+
+        animationFrameFlush(function() {
+          scroller.flushDebouncer('_debounceTemplate');
+          expect(scroller._physicalItems.length).to.be.greaterThan(25);
+          done();
+        });
       });
 
       it('pool should not increase if the scroller has no size', function() {
@@ -91,7 +101,7 @@
         var spy = sinon.spy(grid.$.scroller, '_increasePool');
         grid.style.height = '1000px';
 
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           expect(spy.callCount).to.be.below(4);
           done();
         });
@@ -101,7 +111,7 @@
         expect(grid.$.scroller._physicalCount).to.be.below(26);
         grid.style.height = '1000px';
 
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           expect(grid.$.scroller._physicalCount).to.be.below(87);
           done();
         });

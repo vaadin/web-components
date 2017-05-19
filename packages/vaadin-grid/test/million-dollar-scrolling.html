@@ -13,7 +13,6 @@
   <link rel="import" href="helpers.html">
 
   <link rel="import" href="../vaadin-grid.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
 <body>
@@ -55,7 +54,7 @@
       var table = grid.$.scroller.$.table;
       table.addEventListener('scroll', function() {
         if (grid.$.scroller.$.table.scrollTop > 0) {
-          table.scrollTop -= 2500;
+          table.scrollTop -= 2000;
         } else {
           Polymer.Base.async(done, 100);
         }
@@ -88,6 +87,9 @@
       [100, 10000, 100000, 1000000].forEach(function(size) {
         describe(size + ' items', function() {
           beforeEach(function(done) {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             container = fixture('table');
             grid = container.$.grid;
             grid.dataProvider = infiniteDataProvider;

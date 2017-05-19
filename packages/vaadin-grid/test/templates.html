@@ -51,7 +51,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({
           is: 'x-grid',
 
@@ -96,7 +96,7 @@
 
   <script>
     function getHeaderCell(grid, index) {
-      return grid.$.scroller.$.header.querySelectorAll('th')[index];
+      return grid.$.header.querySelectorAll('.vaadin-grid-cell')[index];
     }
 
     function getFirstHeaderCell(grid) {
@@ -107,6 +107,9 @@
       var container, grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         container = fixture('formatting');
         grid = container.$.grid;
         grid._flushItemsDebouncer();
@@ -142,8 +145,8 @@
         parent.appendChild(grid);
         Polymer.dom.flush();
 
-        expect(grid.$.scroller.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
-        expect(grid.$.scroller.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
+        expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
+        expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
       });
 
       it('should not restamp footer templates on attach', function() {
@@ -153,8 +156,8 @@
         parent.appendChild(grid);
         Polymer.dom.flush();
 
-        expect(grid.$.scroller.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
-        expect(grid.$.scroller.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
+        expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
+        expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
       });
 
       describe('using functions inside templates', function() {

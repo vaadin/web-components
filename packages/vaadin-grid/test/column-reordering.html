@@ -20,13 +20,15 @@
   <test-fixture id="default">
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
-          <vaadin-grid-column resizable>
-            <template class="header">[[col]]</template>
-            <template>[[col]]</template>
-            <template class="footer">[[col]]</template>
-          </vaadin-grid-column>
-        </template>
+        <dom-repeat items="[1, 2, 3, 4]" as="col">
+          <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
+            <vaadin-grid-column resizable>
+              <template class="header">[[col]]</template>
+              <template>[[col]]</template>
+              <template class="footer">[[col]]</template>
+            </vaadin-grid-column>
+          </template>
+        </dom-repeat>
 
         <template class="row-details">
           foo
@@ -55,6 +57,30 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="groups-p2">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <dom-repeat is="dom-repeat" items="[1, 2]" as="colgroup">
+          <template>
+            <vaadin-grid-column-group>
+              <template class="header">[[colgroup]]</template>
+              <template class="footer">[[colgroup]]</template>
+              <dom-repeat is="dom-repeat" items="[1, 2]" as="col">
+                <template>
+                  <vaadin-grid-column>
+                    <template class="header">[[colgroup]][[col]]</template>
+                    <template>[[colgroup]][[col]]</template>
+                    <template class="footer">[[colgroup]][[col]]</template>
+                  </vaadin-grid-column>
+                </template>
+              </dom-repeat>
+            </vaadin-grid-column-group>
+          </template>
+        </dom-repeat>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <test-fixture id="differentWidths">
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
@@ -74,13 +100,15 @@
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <vaadin-grid-column-group>
-          <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
-            <vaadin-grid-column width="10px">
-              <template class="header">[[col]]</template>
-              <template>[[col]]</template>
-              <template class="footer">[[col]]</template>
-            </vaadin-grid-column>
-          </template>
+          <dom-repeat items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+            <template is="dom-repeat" items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" as="col">
+              <vaadin-grid-column width="10px">
+                <template class="header">[[col]]</template>
+                <template>[[col]]</template>
+                <template class="footer">[[col]]</template>
+              </vaadin-grid-column>
+            </template>
+          </dom-repeat>
         </vaadin-grid-column-group>
         <vaadin-grid-column width="10px">
           <template class="header">12</template>
@@ -93,9 +121,9 @@
 
   <script>
     function getVisualCellContent(section, row, col) {
-      var cell = Polymer.dom(section).querySelectorAll('th, td').pop();
-      if (section.tagName === 'TFOOT') {
-        cell = Polymer.dom(section).querySelector('td');
+      var cell = Array.prototype.slice.call(Polymer.dom(section).querySelectorAll('.vaadin-grid-cell')).pop();
+      if (section.tagName === 'VAADIN-GRID-TABLE-FOOTER') {
+        cell = Polymer.dom(section).querySelector('.vaadin-grid-cell');
       }
       var sectionRect = section.getBoundingClientRect();
       var sectionBorder = parseInt(section.style.borderTopWidth || 0);
@@ -107,15 +135,15 @@
     }
 
     function getVisualHeaderCellContent(grid, row, col) {
-      return getVisualCellContent(grid.$.scroller.$.header, row, col);
+      return getVisualCellContent(grid.$.header, row, col);
     }
 
     function getVisualColumnCellContents(grid, col) {
       var scroller = grid.$.scroller;
-      var headerContent = getVisualCellContent(scroller.$.header, getRows(scroller.$.header).length - 1, col);
-      var footerContent = getVisualCellContent(scroller.$.footer, 0, col);
-      var bodyContent = Polymer.dom(scroller.$.items).children.map(function(row, rowIndex) {
-        return getVisualCellContent(scroller.$.items, rowIndex, col);
+      var headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
+      var footerContent = getVisualCellContent(grid.$.footer, 0, col);
+      var bodyContent = Array.prototype.map.call(Polymer.dom(grid.$.items).children, function(row, rowIndex) {
+        return getVisualCellContent(grid.$.items, rowIndex, col);
       });
       return bodyContent.concat(headerContent).concat(footerContent);
     }
@@ -137,10 +165,13 @@
       var grid, headerContent;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
-          var colCount = getRowCells(getRows(grid.$.scroller.$.header)[0]).length;
+        flush(function() {
+          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           headerContent = [];
           for (var i = 0; i < colCount; i++) {
             headerContent.push(getVisualHeaderCellContent(grid, 0, i));
@@ -283,7 +314,7 @@
         it('should allow dropping over body cell of another column', function() {
           dragAndDropOver(
             headerContent[0],
-            getVisualCellContent(grid.$.scroller.$.items, 0, 1)
+            getVisualCellContent(grid.$.items, 0, 1)
           );
           expectVisualOrder(grid, [2, 1]);
         });
@@ -310,7 +341,7 @@
         });
 
         it('should update lastcolumn attribute (details open)', function() {
-          grid.expandItem(getRows(grid.$.scroller.$.items)[0].item);
+          grid.expandItem(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
           var cell = getCellByCellContent(grid, headerContent[2]);
           cell = getCellByCellContent(grid, headerContent[2]);
@@ -322,7 +353,7 @@
           var col = document.createElement('vaadin-grid-column');
           col.innerHTML = '<template></template>';
           Polymer.dom(grid).appendChild(col);
-          Polymer.RenderStatus.afterNextRender(grid, function() {
+          animationFrameFlush(function() {
             expect(col._order).to.equal(50000000);
             done();
           });
@@ -369,9 +400,12 @@
       var grid;
 
       beforeEach(function(done) {
-        grid = fixture('groups');
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
+        grid = Polymer.Element ? fixture('groups-p2') : fixture('groups');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
       it('should have initial visual order', function() {
@@ -415,7 +449,7 @@
       it('should allow dropping group over body cell of another group', function() {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 0, 0),
-          getVisualCellContent(grid.$.scroller.$.items, 0, 3)
+          getVisualCellContent(grid.$.items, 0, 3)
         );
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });
@@ -439,9 +473,12 @@
       var grid, headerContent0, headerContent1, content0rect, content1rect;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('differentWidths');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           headerContent0 = getHeaderCellContent(grid, 0, 0);
           headerContent1 = getHeaderCellContent(grid, 0, 1);
           content0rect = headerContent0.getBoundingClientRect();
@@ -467,10 +504,13 @@
       var grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
       it('should support over 10 child-columns in a group', function() {

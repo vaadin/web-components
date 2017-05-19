@@ -20,19 +20,57 @@ addons:
 
 install:
   - yarn
-  - polymer install
+  - polymer install --variants
 
 before_script:
   - gulp lint
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - polymer lint --rules polymer-2-hybrid --input *.html
+  # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
+  # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
 script:
-  - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
-    fi
-  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
-    fi
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+    test/basic.html
+    test/app-localize-behavior.html
+    test/column.html
+    test/column-group.html
+    test/column-groups.html
+    test/column-resizing.html
+    test/column-reordering.html
+    test/data-provider.html
+    test/filtering.html
+    --env saucelabs
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+    test/keyboard-navigation.html
+    test/physical-count.html
+    test/hidden-grid.html
+    test/million-dollar-scrolling.html
+    test/dynamic-item-size.html
+    test/frozen-columns.html
+    test/outer-scroller.html
+    test/templates.html
+    test/scrolling-mode.html
+    test/row-height.html
+    --env saucelabs
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+    test/row-details.html
+    test/selecting.html
+    test/style-scope.html
+    test/array-data-provider.html
+    test/sorting.html
+    test/themability.html
+    test/scroll-to-index.html
+    test/resizing.html
+    test/light-dom-observing.html
+    test/doctype.html
+    test/lazy-import.html
+    --env saucelabs
+  # - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
+  #     xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
+  #   fi
+  # - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+  #     xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
+  #   fi
   - gemini test test/visual
 
 after_success:

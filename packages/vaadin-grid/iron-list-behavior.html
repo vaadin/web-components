@@ -373,7 +373,7 @@
        */
       updateViewportBoundaries: function() {
         this._scrollerPaddingTop = this.scrollTarget === this ? 0 :
-            parseInt(window.getComputedStyle(this)['padding-top'], 10);
+            parseInt(window.getComputedStyle(this)['padding-top'] || 0, 10);
 
         this._viewportHeight = this._scrollTargetHeight;
       },
@@ -415,10 +415,14 @@
         if (this._viewportHeight === 0) {
           return false;
         }
+
+        var estPhysicalSize = this._physicalSizes.reduce(function(prev, curr) {
+          return prev + (curr || 100);
+        }, 0);
         // Base case 2: If the physical size is optimal and the list's client height is full
         // with physical items, don't increase the pool.
-        var isClientHeightFull = this._physicalBottom >= this._scrollBottom && this._physicalTop <= this._scrollPosition;
-        if (this._physicalSize >= this._optPhysicalSize && isClientHeightFull) {
+        var isClientHeightFull = estPhysicalSize > this._viewportHeight;
+        if (estPhysicalSize >= this._optPhysicalSize && isClientHeightFull) {
           return false;
         }
         // this value should range between [0 <= `currentPage` <= `_maxPages`]
@@ -446,6 +450,10 @@
         }
         this._lastPage = currentPage;
         return true;
+      },
+
+      _debounceTemplate: function(fn) {
+        Polymer.dom.addDebouncer(this.debounce('_debounceTemplate', fn));
       },
 
       /**
@@ -542,7 +550,13 @@
       _updateMetrics: function(itemSet) {
         // Make sure we distributed all the physical items
         // so we can measure them
-        Polymer.dom.flush();
+
+        // Calling Polymer.dom.flush() in Shady has some perf issues
+        // with multiple <slot> elements. Trying to reduce unnecessary
+        // calls during startup by flushing only when scrolling.
+        if (this.scrolling) {
+          Polymer.dom.flush();
+        }
 
         var newPhysicalSize = 0;
         var oldPhysicalSize = 0;

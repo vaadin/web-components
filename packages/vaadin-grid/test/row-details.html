@@ -78,11 +78,17 @@
           grid.expandItem(grid._cache[0][index]);
         }
 
-        beforeEach(function() {
+        beforeEach(function(done) {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
-          bodyRows = getRows(grid.$.scroller.$.items);
           Polymer.dom.flush();
+          bodyRows = getRows(grid.$.items);
+          animationFrameFlush(function() {
+            done();
+          });
         });
 
         function collapseRow(index) {
@@ -115,7 +121,7 @@
           var bounds = cells[1].getBoundingClientRect();
           expect(bounds.top).to.equal(cells[0].getBoundingClientRect().bottom);
           expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
-          expect(bounds.right).to.equal(grid.$.scroller.$.items.getBoundingClientRect().right);
+          expect(bounds.right).to.equal(grid.$.items.getBoundingClientRect().right);
           expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
           expect(bounds.height).to.be.above(10);
         });
@@ -132,7 +138,7 @@
           expandRow(1);
 
           grid.$.scroller.flushDebouncer('cache-elements');
-          bodyRows = getRows(grid.$.scroller.$.items);
+          bodyRows = getRows(grid.$.items);
 
           expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
         });
@@ -149,7 +155,7 @@
           grid.$.scroller.scrollToIndex(0);
           grid.$.scroller.flushDebouncer('cache-elements');
 
-          bodyRows = getRows(grid.$.scroller.$.items);
+          bodyRows = getRows(grid.$.items);
           expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
         });
 
@@ -159,7 +165,7 @@
 
           collapseRow(1);
           grid.$.scroller.flushDebouncer('cache-elements');
-          bodyRows = getRows(grid.$.scroller.$.items);
+          bodyRows = getRows(grid.$.items);
 
           expect(grid.$.scroller._frozenCells).to.be.empty;
         });
@@ -175,10 +181,10 @@
 
         it('should remove unused nodes from the light DOM', function(done) {
           expandRow(1);
-          var childCount = Polymer.dom(grid).children.length;
+          var childCount = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content').length;
           collapseRow(1);
           Polymer.Base.async(function() {
-            expect(Polymer.dom(grid).children.length).to.equal(childCount - 1);
+            expect(Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content').length).to.equal(childCount - 1);
             done();
           }, 1);
         });
@@ -187,6 +193,9 @@
       describe('inside a parent scope', function() {
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('with-scope').$.grid;
           grid.items = ['foo', 'bar', 'baz'];
           bodyRows = getRows(grid.$.scroller.$.items);
@@ -215,6 +224,9 @@
         }
 
         beforeEach(function() {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
           grid = fixture('repeat');
         });
 
@@ -222,7 +234,7 @@
           grid.expandItem(items[0]);
 
           listenOnce(grid, 'items-assigned', function() {
-            var row = getRows(grid.$.scroller.$.items)[0];
+            var row = getRows(grid.$.items)[0];
             expect(row.offsetHeight).to.be.above(70);
             done();
           });

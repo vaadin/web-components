@@ -12,7 +12,7 @@
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 
-  <style is="custom-style">
+  <style>
     vaadin-grid {
       height: 200px;
       width: 200px;
@@ -40,6 +40,9 @@
       var container, grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         container = fixture('trivialGrid');
         grid = container.firstElementChild;
         grid.dataProvider = infiniteDataProvider;
@@ -58,7 +61,7 @@
 
         beforeEach(function(done) {
           listenOnce(grid.$.scroller, 'animationend', function() {
-            Polymer.RenderStatus.afterNextRender(grid, done);
+            animationFrameFlush(done);
           });
           container.removeAttribute('hidden');
         });
@@ -70,7 +73,7 @@
 
         it('should measure header on appear', function() {
           var contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
-          var headerRect = grid.$.scroller.$.header.getBoundingClientRect();
+          var headerRect = grid.$.header.getBoundingClientRect();
           expect(contentRect.top).to.be.closeTo(headerRect.bottom, 1);
         });
 

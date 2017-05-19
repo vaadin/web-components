@@ -48,12 +48,15 @@
           var scroller;
 
           beforeEach(function(done) {
+            // The before each block times out in CI with Firefox on Polymer 2
+            this.timeout(30000);
+
             var grid = fixture(scale);
             grid.dataProvider = infiniteDataProvider;
             scroller = grid.$.scroller;
 
             Polymer.dom.flush();
-            Polymer.RenderStatus.afterNextRender(grid, done);
+            animationFrameFlush(done);
           });
 
           it('should scroll to scaled index', function(done) {
@@ -93,19 +96,24 @@
       });
 
       describe('other', function() {
-        var scroller;
+        var grid, scroller;
 
-        beforeEach(function() {
-          var grid = fixture('large');
+        beforeEach(function(done) {
+          // The before each block times out in CI with Firefox on Polymer 2
+          this.timeout(30000);
+
+          grid = fixture('large');
           grid.dataProvider = infiniteDataProvider;
           scroller = grid.$.scroller;
-          Polymer.dom.flush();
+          animationFrameFlush(function() {
+            done();
+          });
         });
 
         it('should clear scheduled scroll to index after init', function(done) {
           scroller.$.table.addEventListener('scroll', function() {
             scroller.debounce('table-scrolling', function() {
-              Polymer.RenderStatus.afterNextRender(scroller, function() {
+              animationFrameFlush(function() {
                 expect(scroller._pendingScrollToScaledIndex).not.to.be.ok;
                 done();
               });
@@ -119,7 +127,7 @@
           var listener = function() {
             scroller.flushDebouncer('vaadin-grid-scrolling');
             // Check that the rows are in order
-            var rows = Polymer.dom(scroller.$.items).querySelectorAll('tr');
+            var rows = Polymer.dom(grid.$.items).querySelectorAll('.vaadin-grid-row');
             for (var i = 1; i < rows.length; i++) {
               expect(rows[i].index).to.equal(rows[i - 1].index + 1);
             }

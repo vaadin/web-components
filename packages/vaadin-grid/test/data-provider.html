@@ -13,7 +13,6 @@
   <link rel="import" href="helpers.html">
 
   <link rel="import" href="../vaadin-grid.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
 <body>
@@ -35,7 +34,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      HTMLImports.whenReady(function() {
         Polymer({
           is: 'x-grid',
 
@@ -105,6 +104,9 @@
       var loadDebounceTime = 100;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         container = fixture('table');
         grid = container.$.grid;
 
@@ -240,7 +242,11 @@
       var grid;
 
       beforeEach(function() {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('grid');
+        Polymer.dom.flush();
       });
 
       it('should warn about missing size', function() {
@@ -269,7 +275,7 @@
       it('should work with data provider set before size', function() {
         grid.dataProvider = infiniteDataProvider;
         grid.size = 3;
-        expect(getRows(grid.$.scroller.$.items)).to.have.length(3);
+        expect(getRows(grid.$.items)).to.have.length(3);
       });
 
       it('should work with data provider set after a long delay', function(done) {
@@ -284,17 +290,16 @@
         }, 1000);
       });
 
-      it('should not request negative pages', function(done) {
+      it('should not request negative pages', function() {
+        this.timeout(30000);
+        
         grid.dataProvider = sinon.spy(infiniteDataProvider);
         grid.size = 10;
 
-        Polymer.RenderStatus.afterNextRender(grid, function() {
-          for (var i = 0; i < grid.dataProvider.callCount; i++) {
-            var page = grid.dataProvider.getCall(i).args[0].page;
-            expect(page).to.be.above(-1);
-          }
-          done();
-        });
+        for (var i = 0; i < grid.dataProvider.callCount; i++) {
+          var page = grid.dataProvider.getCall(i).args[0].page;
+          expect(page).to.be.above(-1);
+        }
       });
 
     });

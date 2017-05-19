@@ -60,11 +60,15 @@
       var grid, headerCells, handle;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
-        headerCells = getRowCells(getRows(grid.$.scroller.$.header)[0]);
+        Polymer.dom.flush();
+        headerCells = getRowCells(getRows(grid.$.header)[0]);
         handle = headerCells[0]._resizeHandle;
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
       function getElementFromPoint(context, x, y) {
@@ -88,7 +92,7 @@
         var scrollerRect = grid.$.scroller.getBoundingClientRect();
         var x = rect.left + handle.offsetWidth / 4;
         var y = rect.top + rect.height / 2;
-        expect(getElementFromPoint(grid.$.scroller, x, y)).to.equal(handle);
+        expect(getElementFromPoint(grid, x, y)).to.equal(handle);
       });
 
       it('should resize on track', function() {
@@ -116,11 +120,11 @@
         var table = grid.$.scroller.$.table;
 
         listenOnce(table, 'scroll', function() {
-          var secondCell = getRowCells(getRows(grid.$.scroller.$.header)[0])[1];
+          var secondCell = getRowCells(getRows(grid.$.header)[0])[1];
           var rect = secondCell.getBoundingClientRect();
           var x = rect.right - 10;
           var y = rect.top + rect.height / 2;
-          expect(getElementFromPoint(grid.$.scroller, x, y)).not.to.equal(secondCell._resizeHandle);
+          expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell._resizeHandle);
           done();
         });
 
@@ -161,7 +165,7 @@
         grid._columnTree[0][1].width = '50%';
         grid._columnTree[0][1].flexGrow = 1;
         Polymer.Base.fire('track', {state: 'start'}, {node: handle});
-        expect(grid._columnTree[0][1].width.indexOf('px')).not.to.equal(-1);
+        expect(grid._columnTree[0][1].width).to.contain('px');
         expect(grid._columnTree[0][1].flexGrow).to.equal(0);
       });
 
@@ -182,22 +186,37 @@
       var grid;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('group');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.RenderStatus.afterNextRender(grid, done);
+        animationFrameFlush(done);
       });
 
-      it('should cascade resizable property to child columns', function() {
-        expect(grid._columnTree[1][0].resizable).to.be.true;
-        grid._columnTree[0][0].resizable = false;
-        expect(grid._columnTree[1][0].resizable).to.be.false;
+      it('should cascade resizable property to child columns', function(done) {
+        // IE11
+        animationFrameFlush(function() {
+          expect(grid._columnTree[1][0].resizable).to.be.true;
+          grid._columnTree[0][0].resizable = false;
+          expect(grid._columnTree[1][0].resizable).to.be.false;
+          done();
+        });
       });
 
-      it('should inherit resizable value from parent group', function() {
+      it('should inherit resizable value from parent group', function(done) {
         var newColumn = document.createElement('vaadin-grid-column');
         Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
         Polymer.dom.flush();
-        expect(newColumn.resizable).to.be.true;
+
+        if (Polymer.Element) {
+          grid._columnTree[0][0]._observer.flush();
+        }
+
+        animationFrameFlush(function() {
+          expect(newColumn.resizable).to.be.true;
+          done();
+        });
       });
 
       it('should have resizable false by default on column', function() {
@@ -213,7 +232,7 @@
       });
 
       it('should resize the child column', function() {
-        var headerRows = getRows(grid.$.scroller.$.header);
+        var headerRows = getRows(grid.$.header);
         var handle = getRowCells(headerRows[0])[0]._resizeHandle;
 
         var cell = getRowCells(headerRows[1])[1];
@@ -227,7 +246,7 @@
 
       it('should resize the last non-hidden child column', function() {
         grid._columnTree[1][1].hidden = true;
-        var headerRows = getRows(grid.$.scroller.$.header);
+        var headerRows = getRows(grid.$.header);
         var handle = getRowCells(headerRows[0])[0]._resizeHandle;
 
         var cell = getRowCells(headerRows[1])[0];

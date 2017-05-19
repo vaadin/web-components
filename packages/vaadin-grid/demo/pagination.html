@@ -8,7 +8,7 @@
 
   <title>vaadin-grid – Pagination</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="common.html">
 </head>
@@ -135,6 +135,10 @@
                 },
 
                 _itemsChanged: function(items, page) {
+                  if (items === undefined || page === undefined) {
+                    return;
+                  }
+
                   if (!this.pages) {
                     this.pages = Array.apply( null, {length: Math.ceil(items.length / this.$.grid.pageSize)} ).map(function(item, index) {
                       return index + 1;

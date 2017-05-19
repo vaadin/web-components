@@ -9,10 +9,12 @@ www-test/
 war
 .DS_Store
 .sass-cache/
-/bower_components
+/bower_components*
+bower-polymer*.json
 node_modules
 npm-debug.log
 .idea
 *.iml
 directives/typings
 coverage/
+bower-*

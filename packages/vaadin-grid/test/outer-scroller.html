@@ -79,6 +79,9 @@
       var tableRect;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
@@ -86,7 +89,7 @@
         outerScroller.hidden = false;
         target = outerScroller.scrollTarget;
         tableRect = scroller.$.table.getBoundingClientRect();
-        Polymer.RenderStatus.afterNextRender(grid, function() {
+        animationFrameFlush(function() {
           outerScroller._syncingScrollTarget = false;
           outerScroller._syncingOuterScroller = false;
           done();
@@ -140,9 +143,14 @@
 
       describe('syncing with scroll target', function() {
 
+        beforeEach(function() {
+          outerScroller._syncingScrollTarget = false;
+          outerScroller._syncingOuterScroller = false;
+        });
+
         it('should scroll the target', function(done) {
           outerScroller.addEventListener('scroll', function() {
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            animationFrameFlush(function() {
               expect(target.scrollLeft).to.equal(100);
               done();
             });
@@ -152,7 +160,7 @@
 
         it('should scroll the outer scroller', function(done) {
           target.addEventListener('scroll', function() {
-            Polymer.RenderStatus.afterNextRender(grid, function() {
+            animationFrameFlush(function() {
               expect(outerScroller.scrollLeft).to.equal(100);
               done();
             });
@@ -253,6 +261,9 @@
       var outerScroller;
 
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('content-only');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
@@ -262,7 +273,7 @@
       });
 
       it('should have the correct scrollHeight', function() {
-        var rows = getRows(scroller.$.items);
+        var rows = getRows(grid.$.items);
         var cells = getRowCells(rows[0]);
         var expectedScrollHeight = cells[0].offsetHeight;
         expect(outerScroller.scrollHeight).to.eql(expectedScrollHeight);
@@ -272,11 +283,20 @@
     describe('scrollable-content', function() {
       var grid, scrollable;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         grid = fixture('scrollable-content');
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
+        if (grid._observer.flush) {
+          grid._observer.flush();
+        }
         scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
+        animationFrameFlush(function() {
+          done();
+        });
       });
 
       it('should not cancel wheel events for scrollable content', function() {

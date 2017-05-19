@@ -4,23 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-
-A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
-A column can have a template for each of the three table sections: header, body and footer.
-
-The `class` attribute is used to differentiate header and footer templates from the body template.
-
-#### Example:
-
-    <vaadin-grid-column>
-      <template class="header">I'm in the header</template>
-      <template>I'm in the body</template>
-      <template class="footer">I'm in the footer</template>
-    </vaadin-grid-column>
-
--->
-
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-templatizer.html">
 
@@ -56,22 +39,22 @@ The `class` attribute is used to differentiate header and footer templates from 
       },
 
       /**
-       * @private
+       * @protected
        */
       headerTemplate: {
         type: Object,
         value: function() {
-          return this._findTemplate('template.header') || null;
+          return this._prepareTemplatizer(this._findTemplate('template.header') || null, {});
         }
       },
 
       /**
-       * @private
+       * @protected
        */
       footerTemplate: {
         type: Object,
         value: function() {
-          return this._findTemplate('template.footer') || null;
+          return this._prepareTemplatizer(this._findTemplate('template.footer') || null, {});
         }
       },
 
@@ -110,9 +93,21 @@ The `class` attribute is used to differentiate header and footer templates from 
       '_lastFrozenChanged(_lastFrozen)'
     ],
 
+    _prepareTemplatizer: function(template, instanceProps) {
+      if (template) {
+        var templatizer = new vaadin.elements.grid.Templatizer();
+        templatizer.dataHost = this.dataHost;
+        templatizer._instanceProps = instanceProps || templatizer._instanceProps;
+        templatizer.template = template;
+        template.templatizer = templatizer;
+      }
+
+      return template;
+    },
+
     _selectFirstTemplate: function(selector) {
-      return Polymer.dom(this).querySelectorAll(selector).filter(function(el) {
-        return el.parentElement === this;
+      return Array.prototype.filter.call(Polymer.dom(this).querySelectorAll(selector), function(el) {
+        return Polymer.dom(el).parentNode === this;
       }.bind(this))[0];
     },
 
@@ -128,22 +123,10 @@ The `class` attribute is used to differentiate header and footer templates from 
     },
 
     _headerTemplateChanged: function(headerTemplate) {
-      if (headerTemplate) {
-        var templatizer = new vaadin.elements.grid.Templatizer(this.dataHost);
-        templatizer._instanceProps = {};
-        templatizer.template = headerTemplate;
-      }
-
       this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
     },
 
     _footerTemplateChanged: function(footerTemplate) {
-      if (footerTemplate) {
-        var templatizer = new vaadin.elements.grid.Templatizer(this.dataHost);
-        templatizer._instanceProps = {};
-        templatizer.template = footerTemplate;
-      }
-
       this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
     },
 
@@ -182,12 +165,12 @@ The `class` attribute is used to differentiate header and footer templates from 
       },
 
       /**
-       * @private
+       * @protected
        */
       template: {
         type: Object,
         value: function() {
-          return this._findTemplate('template:not(.header):not(.footer)');
+          return this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)'));
         }
       },
 
@@ -205,24 +188,29 @@ The `class` attribute is used to differentiate header and footer templates from 
     ],
 
     _frozenChanged: function(frozen, isAttached) {
+      if (frozen === undefined || isAttached === undefined) {
+        return;
+      }
+
       // since `frozen` is defined in ColumnBaseBehavior, this observer is triggered
       // normally before the column is actually attached to the DOM.
       // For events to bubble in Safari 9, element needs to be attached.
-      if (isAttached) {
+      // Don’t propagate the default `false` value.
+      if (this._oldFrozen !== undefined || frozen !== false) {
         this.fire('property-changed', {path: 'frozen', value: frozen});
       }
+
+      this._oldFrozen = frozen;
     },
 
     _templateChanged: function(template) {
-      var templatizer = new vaadin.elements.grid.Templatizer(this.dataHost);
-
       // body cell templatizer needs to be attached so that `item-changed` and
       // `template-instance-changed` events propagate to grid.
-      Polymer.dom(this.root).appendChild(templatizer);
+      if (template && template.templatizer) {
+        Polymer.dom(this.root).appendChild(template.templatizer);
+      }
 
-      templatizer.template = template;
-
-      // We bubble false for optimisation
+      // don't bubble for optimisation
       this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
     },
 
@@ -254,6 +242,21 @@ The `class` attribute is used to differentiate header and footer templates from 
 
 <dom-module id="vaadin-grid-column">
   <script>
+    /**
+     * A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
+     * A column can have a template for each of the three table sections: header, body and footer.
+     *
+     * The `class` attribute is used to differentiate header and footer templates from the body template.
+     *
+     * #### Example:
+     *
+     *     <vaadin-grid-column>
+     *       <template class="header">I'm in the header</template>
+     *       <template>I'm in the body</template>
+     *       <template class="footer">I'm in the footer</template>
+     *     </vaadin-grid-column>
+     *
+     */
     Polymer({
       is: 'vaadin-grid-column',
 

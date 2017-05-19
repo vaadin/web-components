@@ -67,6 +67,9 @@
       var group;
       var columns;
       beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
         group = fixture('group');
         columns = group.querySelectorAll('vaadin-grid-column');
 
@@ -178,6 +181,11 @@
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
+
         expect(group.hidden).to.be.true;
       });
 
@@ -185,8 +193,18 @@
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
+
         Polymer.dom(group).appendChild(columns[0]);
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
+
         expect(group.hidden).to.be.false;
       });
 
@@ -194,9 +212,19 @@
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
+
         columns[0].hidden = true;
         Polymer.dom(group).appendChild(columns[0]);
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          group._observer.flush();
+        }
+
         expect(group.hidden).to.be.true;
       });
 

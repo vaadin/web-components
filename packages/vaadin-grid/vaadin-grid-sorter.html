@@ -91,7 +91,7 @@ Custom property | Description | Default
     </style>
 
     <div id="content" on-focus="_onContentFocus">
-      <content></content>
+      <slot></slot>
     </div>
     <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
@@ -151,7 +151,7 @@ Custom property | Description | Default
       },
 
       observers: [
-        '_propertiesChanged(path, direction, isAttached)',
+        '_pathOrDirectionChanged(path, direction, isAttached)',
         '_directionOrOrderChanged(direction, _order)',
         '_cellHasFocusChanged(_cellHasFocus)'
       ],
@@ -215,7 +215,11 @@ Custom property | Description | Default
         this._cellHasFocus = false;
       },
 
-      _propertiesChanged: function(path, direction, isAttached) {
+      _pathOrDirectionChanged: function(path, direction, isAttached) {
+        if (path === undefined || direction === undefined || isAttached === undefined) {
+          return;
+        }
+
         if (isAttached) {
           this.fire('sorter-changed');
         }
@@ -248,9 +252,23 @@ Custom property | Description | Default
       },
 
       _directionOrOrderChanged: function(direction, order) {
+        if (direction === undefined || order === undefined) {
+          return;
+        }
+
         this.debounce('direction-announce', function() {
           this.fire('iron-announce', {text: this._getAriaLabel(direction, order)});
         }, 1);
+
+        // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+        // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari && this.root) {
+          this.root.querySelectorAll('*').forEach(function(el) {
+            el.style['-webkit-backface-visibility'] = 'visible';
+            el.style['-webkit-backface-visibility'] = '';
+          });
+        }
       },
 
       _cellHasFocusChanged: function(cellHasFocus) {

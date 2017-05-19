@@ -44,7 +44,7 @@ The `class` attribute is used to differentiate header and footer templates.
       properties: {
         _childColumns: {
           value: function() {
-            return Polymer.dom(this).querySelectorAll('vaadin-grid-column, vaadin-grid-selection-column');
+            return this._getChildColumns(this);
           }
         },
 
@@ -102,7 +102,9 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       detached: function() {
-        Polymer.dom(this).unobserveNodes(this._observer);
+        if (this._observer) {
+          Polymer.dom(this).unobserveNodes(this._observer);
+        }
       },
 
       _columnPropChanged: function(e) {
@@ -117,16 +119,18 @@ The `class` attribute is used to differentiate header and footer templates.
         }
 
         if (e.detail.path === 'frozen') {
-          this.frozen = e.detail.value;
+          // Don’t unfreeze the frozen group because of a non-frozen child
+          this.frozen = this.frozen || e.detail.value;
         }
 
         if (e.detail.path === 'lastFrozen') {
-          this._lastFrozen = e.detail.value;
+          // Don’t unfreeze the frozen group because of a non-frozen child
+          this._lastFrozen = this._lastFrozen || e.detail.value;
         }
       },
 
       _orderChanged: function(order, rootColumns) {
-        if (order) {
+        if (order && rootColumns) {
           // The parent column order number cascades downwards to it's children
           // so that the resulting order numbering constructs as follows:
           // [             1000              ]
@@ -159,6 +163,10 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _reorderStatusChanged: function(reorderStatus, rootColumns) {
+        if (reorderStatus === undefined || rootColumns === undefined) {
+          return;
+        }
+
         rootColumns.forEach(function(column) {
           column._reorderStatus = reorderStatus;
         });
@@ -167,6 +175,10 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _resizableChanged: function(resizable, rootColumns) {
+        if (resizable === undefined || rootColumns === undefined) {
+          return;
+        }
+
         rootColumns.forEach(function(column) {
           column.resizable = resizable;
         });
@@ -175,14 +187,14 @@ The `class` attribute is used to differentiate header and footer templates.
       },
 
       _updateVisibleChildColumns: function(childColumns) {
-        this._visibleChildColumns = childColumns.filter(function(col) {
+        this._visibleChildColumns = Array.prototype.filter.call(childColumns, function(col) {
           return !col.hidden;
         });
       },
 
       _childColumnsChanged: function(childColumns) {
         if (!this._autoHidden && this.hidden) {
-          childColumns.forEach(function(column) {
+          Array.prototype.forEach.call(childColumns, function(column) {
             column.hidden = true;
           });
           this._updateVisibleChildColumns(childColumns);
@@ -192,23 +204,38 @@ The `class` attribute is used to differentiate header and footer templates.
 
       _updateFlexAndWidth: function(visibleChildColumns) {
         if (visibleChildColumns.length) {
-          this._setWidth('calc(' + visibleChildColumns.reduce(function(prev, curr) {
+          this._setWidth('calc(' + Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
             return prev += ' + ' + (curr.width || '0px').replace('calc', '');
           }, '').substring(3) + ')');
         } else {
           this._setWidth('0px');
         }
 
-        this._setFlexGrow(visibleChildColumns.reduce(function(prev, curr) {
+        this._setFlexGrow(Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
           return prev + curr.flexGrow;
         }, 0));
       },
 
       _frozenChanged: function(childColumns, frozen) {
-        childColumns.forEach(function(col) {
-          col.frozen = frozen;
-        });
-        this.fire('property-changed', {path: 'frozen', value: frozen});
+        if (childColumns === undefined || frozen === undefined) {
+          return;
+        }
+
+        // Don’t propagate the default `false` value.
+        if (this._oldFrozen !== undefined || frozen !== false) {
+          Array.prototype.forEach.call(childColumns, function(col) {
+            // Don’t unfreeze the nested frozen groups
+            if (col.localName === 'vaadin-grid-column-group') {
+              col.frozen = col.frozen || frozen;
+            } else {
+              col.frozen = frozen;
+            }
+          });
+
+          this.fire('property-changed', {path: 'frozen', value: frozen});
+        }
+
+        this._oldFrozen = frozen;
       },
 
       _hiddenChanged: function(hidden) {
@@ -239,17 +266,23 @@ The `class` attribute is used to differentiate header and footer templates.
         this.fire('property-changed', {path: 'colSpan', value: colSpan});
       },
 
+
+      // TODO: Refactor the duplicate methods with DynamicColumnsBehavior.
+      _getChildColumns: function(el) {
+        return Polymer.dom(el).queryDistributedElements(
+            'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
+        );
+      },
+
       _addNodeObserver: function() {
         this._observer = Polymer.dom(this).observeNodes(function(info) {
-          this._rootColumns = Polymer.dom(this).children.filter(function(child) {
-            return /column/.test(child.localName);
-          });
-          var columns = function(node) {
-            return (node.nodeType === Node.ELEMENT_NODE && node.localName.indexOf('vaadin-grid-column') === 0);
+          var isColumnElement = function(node) {
+            return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
           };
-          if (info.addedNodes.filter(columns).length > 0 ||
-            info.removedNodes.filter(columns).length > 0) {
-            this._childColumns = Polymer.dom(this).querySelectorAll('vaadin-grid-column');
+          if (info.addedNodes.filter(isColumnElement).length > 0 ||
+            info.removedNodes.filter(isColumnElement).length > 0) {
+            this._rootColumns = this._getChildColumns(this);
+            this._childColumns = this._rootColumns;
           }
         }.bind(this));
       }

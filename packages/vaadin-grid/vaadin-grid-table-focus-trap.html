@@ -11,9 +11,9 @@
 
      :host(:focus),
      .primary:focus,
-     ::content .primary:focus,
+     ::slotted(.primary:focus),
      .secondary:focus,
-     ::content .secondary:focus {
+     ::slotted(.secondary:focus) {
        outline: none;
      }
     </style>
@@ -29,14 +29,7 @@
       is: 'vaadin-grid-table-focus-trap',
 
       hostAttributes: {
-        'tabindex': -1,
         'role': 'gridcell' // gridcell roles are for VoiceOver to announce "you're in a cell"
-      },
-
-      listeners: {
-        'focus': '_onFocus',
-        'focusin': '_stopPropagationForReannouncing',
-        'focusout': '_stopPropagationForReannouncing'
       },
 
       properties: {
@@ -52,33 +45,43 @@
 
         // In native shadow, focus traps need to be inside the same scope as
         // the "labelled by" elements
-        if (Polymer.Settings.useNativeShadow) {
-          Polymer.dom(this).appendChild(this._primary);
+        if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
           Polymer.dom(this).appendChild(this._secondary);
+          Polymer.dom(this).appendChild(this._primary);
         }
       },
 
-      _onFocus: function(e) {
-        this._primary.focus();
+      // TODO: native 'focus' and 'blur' events get retargeted differently in v0 and v1 polyfills
+      // so it's easier to avoid using them across shadow roots.
+      focus: function(e) {
+        if (this._focused !== this._primary) {
+          this._primary.focus();
+        } else {
+          this._secondary.focus();
+        }
       },
 
       _onBaitFocus: function(e) {
-        // TODO: remove this custom event after FF52 with native focusin support
-        // is in use.
-        this.fire('focusin');
-
         this._focused = e.target;
+        if (!this._movingFocusInternally) {
+          // TODO: native 'focus' and 'blur' events get retargeted differently in v0 and v1 polyfills
+          // so it's easier to fire own custom events in this case.
+          this.fire('focus-gained');
+          this._primary.tabIndex = -1; // remove from taborder to prevent unexpected tab loop in native shadow.
+        }
       },
 
       _onBaitBlur: function(e) {
-        // TODO: remove this custom event after FF52 with native focusout support
-        // is in use.
-        this.fire('focusout');
+        if (!this._movingFocusInternally) {
+          this.fire('focus-lost');
+          this._primary.tabIndex = 0; // put back into taborder to enable shift-tabbing in.
+        }
       },
 
       _activeTargetChanged: function(target) {
         // moving focus seems to be the most reliable way to get different screenreaders
         // to announce the "aria-labelledby" property
+        this._movingFocusInternally = true;
         if (this._focused === this._primary) {
           this._secondary.setAttribute('aria-labelledby', target);
           this._secondary.focus();
@@ -86,10 +89,11 @@
           this._primary.setAttribute('aria-labelledby', target);
           this._primary.focus();
         }
+        this._movingFocusInternally = false;
       },
 
       _reannounce: function() {
-        this._isReannouncing = true;
+        this._movingFocusInternally = true;
         if (this._focused === this._primary) {
           this._secondary.setAttribute('aria-labelledby', this.activeTarget);
           this._secondary.focus();
@@ -97,17 +101,8 @@
           this._primary.setAttribute('aria-labelledby', this.activeTarget);
           this._primary.focus();
         }
-        this._isReannouncing = false;
-      },
-
-      _stopPropagationForReannouncing: function(e) {
-        if (this._isReannouncing) {
-          // When reannouncing, the event is fake and must not be processed
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-        }
+        this._movingFocusInternally = false;
       }
-
     });
   </script>
 </dom-module>
