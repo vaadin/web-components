@@ -334,7 +334,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _forwardHostPropV2: function(prop, value) {
       this._forwardParentProp(prop, value);
-      this._forwardParentPath(prop, value);
     },
 
     /**
@@ -350,24 +349,6 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         });
       }
-    },
-
-    /**
-     * Implements extension point from Templatizer
-     * Called as side-effect of a host path change, responsible for
-     * notifying parent.<path> path change on each row.
-     */
-    _forwardParentPath: function(prop, value) {
-      /* FIXME: Aparently this is not needed, at least does not break any test.
-      if (prop !== 'index') {
-        this._buffers.forEach(function(buffer) {
-          [].forEach.call(buffer.children, function(itemWrapper) {
-            itemWrapper.instance.notifyPath(prop, value, true);
-          });
-        });
-      }
-      */
     }
-
   });
 </script>
