@@ -79,7 +79,7 @@ If you want to replace the default input field with a custom implementation, you
         pointer-events: auto;
       }
 
-      [name=suffix] {
+      #sufix {
         display: flex;
       }
 
@@ -218,7 +218,7 @@ If you want to replace the default input field with a custom implementation, you
           no-input$="[[_noInput]]">
       </iron-input>
 
-      <div slot="suffix" name="suffix">
+      <div id="suffix" slot="suffix" name="suffix">
         <div id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
           <iron-icon icon="vaadin-date-picker:clear"></iron-icon>
         </div>
