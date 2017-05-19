@@ -44,7 +44,7 @@
     "web-component-tester": "^6.0.0",
     "jquery": "^2.2.2",
     "webcomponentsjs": "^v1.0.0",
-    "vaadin-grid": "#2.1-polymer-2"
+    "vaadin-grid": "^3.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0",
