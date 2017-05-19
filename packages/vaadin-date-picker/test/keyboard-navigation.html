@@ -302,9 +302,8 @@
             pageDown();
 
             setTimeout(function() {
-              var delta = Math.abs(overlay.$.scroller.position - initialPosition);
               // FF sometimes reports subpixel differences
-              expect(delta).to.be.lessThan(1);
+              expect(overlay.$.scroller.position).to.be.closeTo(initialPosition, 1);
               done();
             });
           });

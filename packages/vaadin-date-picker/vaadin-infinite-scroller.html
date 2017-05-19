@@ -176,7 +176,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._buffers[index].translateY = this._buffers[(index ? 0 : 1)].translateY + this._bufferHeight * (index ? -1 : 1);
       this.transform('translate3d(0, ' + this._buffers[index].translateY + 'px, 0)', this._buffers[index]);
       this._buffers[index].updated = false;
-
       this._buffers.reverse();
     },
 

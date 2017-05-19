@@ -285,10 +285,12 @@
 
           it('should prevent key input', function(done) {
             var e = new CustomEvent('keydown', {
-              bubbles: true
+              bubbles: true,
+              composed: true
             });
+
             var spy = sinon.spy(e, 'preventDefault');
-            datepicker.dispatchEvent(e);
+            datepicker._nativeInput.dispatchEvent(e);
             expect(spy.called).to.be.true;
             done();
           });
