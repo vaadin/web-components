@@ -14,7 +14,7 @@ You can also use any other elements that support icons, for example, [elementnam
 
 [source,html]
 ----
-<iron-icon icon="vaadin-icons:calendar"></iron-icon>
+<iron-icon icon="vaadin:calendar"></iron-icon>
 ----
 
 == Other Usage Options
