@@ -4,7 +4,7 @@
   /**
    * @polymerMixin
    */
-  Vaadin.ThemableMixin = subclass => class VaadinThemableMixin extends subclass {
+  Vaadin.ThemableMixin = superClass => class VaadinThemableMixin extends superClass {
 
     static constructor() {
       this._memoizedTemplate = undefined;
