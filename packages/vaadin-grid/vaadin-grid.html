@@ -206,7 +206,80 @@ first element in the cell will be focused. You can override the behavior by appl
 <link rel="import" href="vaadin-grid-filter-behavior.html">
 <link rel="import" href="vaadin-grid-column-reordering-behavior.html">
 <link rel="import" href="vaadin-grid-scroller.html">
+<link rel="import" href="vaadin-grid-table-scroll-behavior.html">
 <link rel="import" href="vaadin-grid-table-row.html">
+<link rel="import" href="vaadin-grid-table-header-footer.html">
+
+<dom-module id="vaadin-grid-table-themability-styles">
+  <template>
+    <style>
+
+      /* Default borders */
+      vaadin-grid-table-header .vaadin-grid-row:last-child .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      vaadin-grid-table-footer .vaadin-grid-row:first-child .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+        border-top: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      vaadin-grid-table-body .vaadin-grid-row:not([lastrow]) .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      [last-frozen] ::slotted(vaadin-grid-cell-content) {
+        border-right: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+      }
+
+      /* Column resize handle */
+
+      .vaadin-grid-column-resize-handle {
+        border-right: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
+        @apply(--vaadin-grid-column-resize-handle);
+      }
+
+      /* Cells */
+      .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+        background: #fff;
+        text-align: left;
+        padding: 8px;
+        box-sizing: border-box;
+        @apply(--vaadin-grid-cell);
+      }
+
+      vaadin-grid-table-header .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+        font-weight: 500;
+        @apply(--vaadin-grid-header-cell);
+      }
+
+      vaadin-grid-table-footer .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+        font-weight: 500;
+        @apply(--vaadin-grid-footer-cell);
+      }
+
+      vaadin-grid-table-body .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+        @apply(--vaadin-grid-body-cell);
+      }
+
+      vaadin-grid-table-body [odd] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+        @apply(--vaadin-grid-body-row-odd-cell);
+      }
+
+      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell:not([detailscell])[last-frozen] ::slotted(vaadin-grid-cell-content) {
+        @apply(--vaadin-grid-cell-last-frozen);
+      }
+
+      vaadin-grid-table:not([scrolling]) vaadin-grid-table-body .vaadin-grid-row:hover .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+        @apply(--vaadin-grid-body-row-hover-cell);
+      }
+
+      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::slotted(vaadin-grid-cell-content) {
+        border-right: none;
+      }
+
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="vaadin-grid">
   <template>
@@ -230,6 +303,7 @@ first element in the cell will be focused. You can override the behavior by appl
         height: 100%;
         position: relative;
         animation: 1ms appear;
+        z-index: 1;
       }
 
       /*#items {
@@ -307,7 +381,17 @@ first element in the cell will be focused. You can override the behavior by appl
         cursor: col-resize;
       }
 
-      .vaadin-grid-row:not([hidden]) {
+      vaadin-grid-table-row {
+        position: absolute;
+        will-change: transform;
+      }
+
+      vaadin-grid-table-body {
+        position: relative;
+        display: block;
+      }
+
+      .vaadin-grid-row {
         display: flex;
         width: 100%;
       }
@@ -317,7 +401,7 @@ first element in the cell will be focused. You can override the behavior by appl
       }
 
       [hidden] {
-        display: none;
+        display: none !important;
       }
 
       vaadin-grid-table[no-content-pointer-events] .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
@@ -331,14 +415,26 @@ first element in the cell will be focused. You can override the behavior by appl
       }
     </style>
 
-    <vaadin-grid-scroller items="[[items]]" id="scroller" bind-data="[[_bindData]]">
-      <vaadin-grid-header slot="prefix"></vaadin-grid-header>
-      <template>
-        <vaadin-grid-table-row columns="[[_getBodyColumns(_columnTree, _columnTree.*)]]" target="[[_this]]"></vaadin-grid-table-row>
-      </template>
-      <vaadin-grid-footer slot="suffix"></vaadin-grid-footer>
-    </vaadin-grid-scroller>
+    <style include="vaadin-grid-table-scroll-styles"></style>
+    <style include="vaadin-grid-row-details-styles"></style>
+    <style include="vaadin-grid-table-styles"></style>
 
+    <style include="vaadin-grid-table-themability-styles"></style>
+    <style include="vaadin-grid-selection-themability-styles"></style>
+    <style include="vaadin-grid-navigation-themability-styles"></style>
+    <style include="vaadin-grid-active-item-themability-styles"></style>
+    <style include="vaadin-grid-row-details-themability-styles"></style>
+    <style include="vaadin-grid-column-reordering-themability-styles"></style>
+
+    <vaadin-grid-scroller items="[[items]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" grid="[[_this]]">
+      <vaadin-grid-table-header id="header" slot="header" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-header>
+      <vaadin-grid-table-body id="items" slot="items">
+        <template id="bodytemplate">
+          <vaadin-grid-table-row columns="[[_getBodyColumns(_columnTree.*)]]" target="[[_this]]"></vaadin-grid-table-row>
+        </template>
+      </vaadin-grid-table-body>
+      <vaadin-grid-table-footer id="footer" slot="footer" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-footer>
+    </vaadin-grid-scroller>
   </template>
 </dom-module>
 
@@ -351,7 +447,8 @@ first element in the cell will be focused. You can override the behavior by appl
       vaadin.elements.grid.SortBehavior,
       vaadin.elements.grid.FilterBehavior,
       vaadin.elements.grid.SelectionBehavior,
-      vaadin.elements.grid.RowDetailsBehavior
+      vaadin.elements.grid.RowDetailsBehavior,
+      vaadin.elements.grid.TableScrollBehavior
     ],
     Polymer.Element
   ) {
@@ -383,6 +480,10 @@ first element in the cell will be focused. You can override the behavior by appl
 
     _getBodyColumns(splices) {
       return this._columnTree[this._columnTree.length - 1];
+    }
+
+    _getHeaderColumns(splices, index) {
+      return this._columnTree[index];
     }
 
     _updateItem(row, item) {

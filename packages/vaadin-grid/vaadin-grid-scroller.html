@@ -1,5 +1,38 @@
 <link rel="import" href="vaadin-scroller.html">
 
+<dom-module id="vaadin-grid-scroller">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #items {
+        position: relative;
+        height: 100% !important;
+      }
+
+      vaadin-grid-header,
+      vaadin-grid-body,
+      vaadin-grid-footer {
+        display: block;
+      }
+    </style>
+
+    <array-selector
+        id="selector"
+        items="{{items}}"
+        selected="{{selectedItems}}"
+        selected-item="{{selectedItem}}"></array-selector>
+
+    <div id="items">
+      <slot name="header"></slot>
+      <slot name="items"></slot>
+      <slot name="footer"></slot>
+    </div>
+
+  </template>
+</dom-module>
 
 <script>
   class VaadinGridScroller extends VaadinScroller {
@@ -10,13 +43,16 @@
 
     static get properties() {
       return {
-        bindData: Object
+        bindData: Object,
+
+        grid: Object
       }
     }
 
-    /**
-    * @protected
-    */
+    get _userTemplate() {
+      return this.grid.$.bodytemplate;
+    }
+
     _updateScrollerItem(row, index) {
       this._virtualIndexToItem = this._virtualIndexToItem || {};
 
@@ -31,10 +67,87 @@
       this.bindData(row.index, row);
     }
 
+    _afterScroll() {
+      this.dispatchEvent(new CustomEvent('vaadin-grid-scroll', { bubbles: true }));
+    }
+
     /**
-    * @protected
-    */
-    _afterScroll() {}
+     * Scroll to a specific index (also scaled indexes) in the virtual list.
+     */
+    scrollToScaledIndex(idx) {
+      this._pendingScrollToScaledIndex = null;
+      if (!this.$.items.style.borderTopWidth) {
+        // Schedule another scroll to be invoked once init is complete
+        this._pendingScrollToScaledIndex = idx;
+      }
+
+      idx = Math.min(Math.max(idx, 0), this.size - 1);
+      this.$.table.scrollTop = idx / this.size * this.$.table.scrollHeight;
+      this._scrollHandler();
+      this.scrollToIndex(idx - this._vidxOffset);
+      // _scrollTop is not up-to-date at this point, update and run scrollhandler
+      this._resetScrollPosition(this._scrollPosition);
+      this._scrollHandler();
+
+      // TODO: This is a hack to get around offset issues when scrolling to bottom.
+      // Revisit iron-list-behavior for cleaner fix.
+      if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
+        this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
+        this._scrollHandler();
+      }
+    }
+
+    _adjustVirtualIndexOffset(delta) {
+      if (Math.abs(delta) > 10000) {
+        if (this._noScale) {
+          this._noScale = false;
+          return;
+        }
+
+        var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
+        var offset = scale * this.size;
+
+        this._vidxOffset = Math.round(offset - scale * this._virtualCount);
+
+        if (this.$.scroller._scrollTop === 0) {
+          // fixes issues when scrolling to start but correct items are not bound. :-()
+          this.scrollToIndex(0);
+        }
+      } else {
+        // Make sure user can always swipe/wheel scroll to the start and end
+        // TODO: causes a small jump in the scroll handle
+
+        var oldOffset = this._vidxOffset || 0;
+        var threshold = 1000;
+        var maxShift = 100;
+
+        // At start
+        if (this.$.scroller._scrollTop === 0) {
+          this._vidxOffset = 0;
+          if (oldOffset !== this._vidxOffset) {
+            this.scrollToIndex(0);
+          }
+        } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
+          this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
+          this.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
+          this._noScale = true;
+        }
+
+        // At end
+        var maxOffset = this.size - this._virtualCount;
+        if (this.$.scroller._scrollTop >= this._maxScrollTop) {
+          this._vidxOffset = maxOffset;
+          if (oldOffset !== this._vidxOffset) {
+            this.scrollToIndex(this._virtualCount);
+          }
+        } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
+          this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
+          this.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+          this._noScale = true;
+        }
+
+      }
+    }
 
   }
 
