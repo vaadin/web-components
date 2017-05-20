@@ -1,0 +1,44 @@
+<link rel="import" href="iron-list.html">
+
+
+<script>
+  class VaadinScroller extends PolymerIronList {
+
+    static get is() {
+      return 'vaadin-scroller';
+    }
+
+    // /**
+    // * @protected
+    // */
+    // _createScrollerItem() {}
+    /**
+    * @protected
+    */
+    _updateScrollerItem(item, index) {}
+    /**
+    * @protected
+    */
+    _afterScroll() {}
+
+    /**
+     * Assigns the data models to a given set of items.
+     * @param {!Array<number>=} itemSet
+     */
+    _assignModels(itemSet) {
+      super._assignModels(itemSet);
+      this._iterateItems(function(pidx, vidx) {
+        var el = this._physicalItems[pidx];
+        this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
+      }, itemSet);
+    }
+
+    _scrollHandler() {
+      super._scrollHandler();
+      this._afterScroll();
+    }
+
+  }
+
+  customElements.define(VaadinScroller.is, VaadinScroller);
+</script>

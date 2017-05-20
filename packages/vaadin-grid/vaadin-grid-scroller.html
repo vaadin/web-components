@@ -1,0 +1,42 @@
+<link rel="import" href="vaadin-scroller.html">
+
+
+<script>
+  class VaadinGridScroller extends VaadinScroller {
+
+    static get is() {
+      return 'vaadin-grid-scroller';
+    }
+
+    static get properties() {
+      return {
+        bindData: Object
+      }
+    }
+
+    /**
+    * @protected
+    */
+    _updateScrollerItem(row, index) {
+      this._virtualIndexToItem = this._virtualIndexToItem || {};
+
+      if (row.index) {
+        delete this._virtualIndexToItem[row.index];
+      }
+      row.index = index;
+      this._virtualIndexToItem[row.index] = row;
+      row.toggleAttribute('odd', row.index % 2);
+      // row.toggleAttribute('lastrow', row.index === this.size - 1);
+      // row.toggleAttribute('hidden', row.index >= this.size);
+      this.bindData(row.index, row);
+    }
+
+    /**
+    * @protected
+    */
+    _afterScroll() {}
+
+  }
+
+  customElements.define(VaadinGridScroller.is, VaadinGridScroller);
+</script>
