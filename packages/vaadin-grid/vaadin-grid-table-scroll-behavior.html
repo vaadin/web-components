@@ -221,21 +221,21 @@
 
     _frozenCellsChanged: function() {
       this.debounce('cache-elements', function() {
-        Polymer.dom(this.domHost.root).querySelectorAll('.vaadin-grid-cell').forEach(function(cell) {
+        Polymer.dom(this.root).querySelectorAll('.vaadin-grid-cell').forEach(function(cell) {
           cell.style.transform = '';
         });
-        this._frozenCells = Array.prototype.slice.call(Polymer.dom(this.domHost.root).querySelectorAll('[frozen]'));
+        this._frozenCells = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('[frozen]'));
         this._translateStationaryElements();
       });
       this._updateLastFrozen();
     },
 
     _updateLastFrozen: function() {
-      if (!this.columnTree) {
+      if (!this._columnTree) {
         return;
       }
 
-      var columnsRow = this.columnTree[this.columnTree.length - 1].slice(0);
+      var columnsRow = this._columnTree[this._columnTree.length - 1].slice(0);
       columnsRow.sort(function(a, b) {
         return a._order - b._order;
       });

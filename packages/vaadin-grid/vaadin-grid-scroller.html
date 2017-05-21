@@ -58,10 +58,17 @@
       }
     }
 
+    static get observers() {
+      return [
+        '_rowCountChanged(_physicalCountVal, _focusBackfillItem)'
+      ]
+    }
+
     get _userTemplate() {
       return this.target.$.bodytemplate;
     }
 
+    // TODO: This should be at grid level
     _updateScrollerItem(row, index) {
       this._virtualIndexToItem = this._virtualIndexToItem || {};
 
@@ -78,6 +85,10 @@
 
     _afterScroll() {
       this.dispatchEvent(new CustomEvent('vaadin-grid-scroll', { bubbles: true }));
+    }
+
+    _rowCountChanged() {
+      this.dispatchEvent(new CustomEvent('vaadin-grid-row-count-change'));
     }
 
     /**

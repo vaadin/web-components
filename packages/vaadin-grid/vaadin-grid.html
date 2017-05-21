@@ -490,7 +490,7 @@ first element in the cell will be focused. You can override the behavior by appl
     <style include="vaadin-grid-column-reordering-themability-styles"></style>
 
     <div id="scrollers">
-      <vaadin-grid-scroller size="[[size]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" target="[[_this]]" _est-scroll-height="{{_estScrollHeight}}">
+      <vaadin-grid-scroller size="[[size]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" target="[[_this]]" _est-scroll-height="{{_estScrollHeight}}" on-vaadin-grid-row-count-change="_rowCountChanged">
         <div id="sizerwrapper" slot="sizer">
           <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
         </div>
@@ -579,6 +579,8 @@ first element in the cell will be focused. You can override the behavior by appl
           e.stopPropagation();
         }
       });
+
+      this.addEventListener('property-changed', this._columnPropChanged.bind(this));
     }
 
     // TODO: Move to a mixin:
@@ -607,7 +609,40 @@ first element in the cell will be focused. You can override the behavior by appl
       });
     }
 
+    _columnPropChanged(e) {
+      if (e.detail.path === 'headerTemplate') {
+        this.toggleAttribute('has-templates', true, this.$.header);
+      }
 
+      if (e.detail.path === 'footerTemplate') {
+        this.toggleAttribute('has-templates', true, this.$.footer);
+      }
+
+      if (/frozen|hidden/.test(e.detail.path)) {
+        this._frozenCellsChanged();
+      }
+
+      if (e.detail.path === 'hidden') {
+        this._gridResizeHandler();
+      }
+    }
+
+    _gridResizeHandler() {
+      this._updateHeaderFooterMetrics();
+
+      if (this._physicalSizes) {
+        // this._physicalItems.forEach(function(row) {
+        //   row.updateRowDetailsCellMetrics();
+        // });
+        // this.debounce('vaadin-grid-resizing', function() {
+        //   this._update();
+        // }.bind(this), 1);
+      }
+    }
+
+    _rowCountChanged() {
+      this._frozenCellsChanged();
+    }
 
 
   }

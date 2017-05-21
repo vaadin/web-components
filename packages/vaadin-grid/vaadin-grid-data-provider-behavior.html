@@ -190,6 +190,7 @@
     _pagesForPhysicalItems: function() {
       // TODO: potentially heavy operation to run first visible index,
       // reconsider if performance issues occur on data binding / scrolling.
+      // TODO: _vidxOffset shouldn't be read from here.
       var firstVisiblePage = this._getPageForIndex(this.$.scroller.firstVisibleIndex + this.$.scroller._vidxOffset);
 
       return [firstVisiblePage].concat(
