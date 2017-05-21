@@ -8,10 +8,18 @@
       return 'vaadin-scroller';
     }
 
-    // /**
-    // * @protected
-    // */
-    // _createScrollerItem() {}
+    static get properties() {
+      return {
+        size: Number
+      }
+    }
+
+    static get observers() {
+      return [
+        '_sizeChanged(size)'
+      ]
+    }
+
     /**
     * @protected
     */
@@ -20,6 +28,16 @@
     * @protected
     */
     _afterScroll() {}
+
+    _sizeChanged(size) {
+      // TODO: Temporary solution. Override iron-list functions so that items array isn't needed anymore
+      // and handle million dollar scrolling right here.
+      const items = [];
+      for (let i = 0; i < size; i++) {
+        items.push('item-' + i);
+      }
+      this.items = items;
+    }
 
     /**
      * Assigns the data models to a given set of items.
