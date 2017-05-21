@@ -26,6 +26,7 @@
         selected-item="{{selectedItem}}"></array-selector>
 
     <div id="items">
+      <slot name="sizer"></slot>
       <slot name="header"></slot>
       <slot name="items"></slot>
       <slot name="footer"></slot>
@@ -45,7 +46,13 @@
       return {
         bindData: Object,
 
-        grid: Object
+        grid: Object,
+
+        _estScrollHeight: {
+          type: Number,
+          notify: true,
+          value: 0
+        }
       }
     }
 

@@ -209,6 +209,8 @@ first element in the cell will be focused. You can override the behavior by appl
 <link rel="import" href="vaadin-grid-table-scroll-behavior.html">
 <link rel="import" href="vaadin-grid-table-row.html">
 <link rel="import" href="vaadin-grid-table-header-footer.html">
+<link rel="import" href="vaadin-grid-table-outer-scroller.html">
+<link rel="import" href="vaadin-grid-sizer.html">
 
 <dom-module id="vaadin-grid-table-themability-styles">
   <template>
@@ -275,6 +277,60 @@ first element in the cell will be focused. You can override the behavior by appl
 
       vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::slotted(vaadin-grid-cell-content) {
         border-right: none;
+      }
+
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-table-table-styles">
+  <template>
+    <style>
+      :host([ios][column-resizing]) #outerscroller {
+        overflow: hidden;
+      }
+
+      #fixedsizer,
+      #outersizer {
+        border-top: 0 solid transparent;
+        border-bottom: 0 solid transparent;
+      }
+
+      #table {
+        height: 100%;
+        width: 100%;
+        display: block;
+        overflow: auto;
+        box-sizing: border-box;
+      }
+
+      #table[overflow-hidden],
+      #outerscroller[overflow-hidden] {
+        overflow: hidden;
+      }
+
+      vaadin-grid-sizer {
+        position: relative;
+        width: 100%;
+      }
+
+      #sizerwrapper {
+        position: absolute;
+        width: 100%;
+        z-index: -100;
+      }
+
+      #reorderghost {
+        visibility: hidden;
+        position: fixed;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      ::slotted(vaadin-grid-column),
+      ::slotted(vaadin-grid-selection-column),
+      ::slotted(vaadin-grid-column-group) {
+        display: none;
       }
 
     </style>
@@ -409,6 +465,11 @@ first element in the cell will be focused. You can override the behavior by appl
       }
 
 
+      #scrollers {
+        height: 100%;
+        position: relative;
+      }
+
       /* FOR DEBUGGING */
       :host ::slotted(vaadin-grid-cell-content) {
         pointer-events: none;
@@ -418,6 +479,7 @@ first element in the cell will be focused. You can override the behavior by appl
     <style include="vaadin-grid-table-scroll-styles"></style>
     <style include="vaadin-grid-row-details-styles"></style>
     <style include="vaadin-grid-table-styles"></style>
+    <style include="vaadin-grid-table-table-styles"></style>
 
     <style include="vaadin-grid-table-themability-styles"></style>
     <style include="vaadin-grid-selection-themability-styles"></style>
@@ -426,15 +488,25 @@ first element in the cell will be focused. You can override the behavior by appl
     <style include="vaadin-grid-row-details-themability-styles"></style>
     <style include="vaadin-grid-column-reordering-themability-styles"></style>
 
-    <vaadin-grid-scroller items="[[items]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" grid="[[_this]]">
-      <vaadin-grid-table-header id="header" slot="header" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-header>
-      <vaadin-grid-table-body id="items" slot="items">
-        <template id="bodytemplate">
-          <vaadin-grid-table-row columns="[[_getBodyColumns(_columnTree.*)]]" target="[[_this]]"></vaadin-grid-table-row>
-        </template>
-      </vaadin-grid-table-body>
-      <vaadin-grid-table-footer id="footer" slot="footer" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-footer>
-    </vaadin-grid-scroller>
+    <div id="scrollers">
+      <vaadin-grid-scroller items="[[items]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" grid="[[_this]]" _est-scroll-height="{{_estScrollHeight}}">
+        <div id="sizerwrapper" slot="sizer">
+          <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
+        </div>
+        <vaadin-grid-table-header id="header" slot="header" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-header>
+        <vaadin-grid-table-body id="items" slot="items">
+          <template id="bodytemplate">
+            <vaadin-grid-table-row columns="[[_getBodyColumns(_columnTree.*)]]" target="[[_this]]"></vaadin-grid-table-row>
+          </template>
+        </vaadin-grid-table-body>
+        <vaadin-grid-table-footer id="footer" slot="footer" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-footer>
+      </vaadin-grid-scroller>
+
+      <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
+        ios$="[[ios]]" scrolling$="[[scrolling]]">
+        <vaadin-grid-sizer id="outersizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
+      </vaadin-grid-table-outer-scroller>
+    </div>
   </template>
 </dom-module>
 
