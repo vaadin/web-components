@@ -68,6 +68,15 @@
       return this.target.$.bodytemplate;
     }
 
+    _increasePoolIfNeeded(count) {
+      super._increasePoolIfNeeded(count);
+      // Weird hack needed to get Safari to actually distribute slots
+      var div = document.createElement('div');
+      this.target.appendChild(div);
+      div.setAttribute('slot', 'foo-bar');
+      this.target.removeChild(div);
+    }
+
     // TODO: This should be at grid level
     _updateScrollerItem(row, index) {
       this._virtualIndexToItem = this._virtualIndexToItem || {};
