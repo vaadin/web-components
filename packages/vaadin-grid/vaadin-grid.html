@@ -362,11 +362,12 @@ first element in the cell will be focused. You can override the behavior by appl
         z-index: 1;
       }
 
-      /*#items {
+      #items {
         border-top: 0 solid transparent;
         border-bottom: 0 solid transparent;
       }
 
+      /*
       #items > .vaadin-grid-row {
         box-sizing: border-box;
         margin: 0;
@@ -489,7 +490,7 @@ first element in the cell will be focused. You can override the behavior by appl
     <style include="vaadin-grid-column-reordering-themability-styles"></style>
 
     <div id="scrollers">
-      <vaadin-grid-scroller items="[[items]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" grid="[[_this]]" _est-scroll-height="{{_estScrollHeight}}">
+      <vaadin-grid-scroller items="[[items]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" target="[[_this]]" _est-scroll-height="{{_estScrollHeight}}">
         <div id="sizerwrapper" slot="sizer">
           <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
         </div>
@@ -566,6 +567,45 @@ first element in the cell will be focused. You can override the behavior by appl
       row.active = item !== null && item == this.activeItem;
       // row.focused = row.index === this.$.items._focusedRowIndex;
     }
+
+    ready() {
+      super.ready();
+      this.$.scroller.addEventListener('animationend', e => {
+        if (/appear/.test(e.animationName)) {
+          // this._render();
+          this._updateHeaderFooterMetrics();
+          e.stopPropagation();
+        }
+      });
+    }
+
+    // TODO: Move to a mixin:
+
+    _updateHeaderFooterMetrics() {
+      if (this._physicalSizes) {
+        Polymer.dom.flush();
+      }
+      this._updateHeaderFooterMetricsSync();
+
+      Polymer.RenderStatus.afterNextRender(this.$.header, function() {
+        this._updateHeaderFooterMetricsSync();
+        if (this._pendingScrollToScaledIndex) {
+          this.scrollToScaledIndex(this._pendingScrollToScaledIndex);
+        }
+      }.bind(this));
+    }
+
+    _updateHeaderFooterMetricsSync() {
+      var headerHeight = this.$.header.clientHeight + 'px';
+      var footerHeight = this.$.footer.clientHeight + 'px';
+
+      [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
+        element.style.borderTopWidth = headerHeight;
+        element.style.borderBottomWidth = footerHeight;
+      });
+    }
+
+
 
 
   }

@@ -46,7 +46,7 @@
       return {
         bindData: Object,
 
-        grid: Object,
+        target: Object,
 
         _estScrollHeight: {
           type: Number,
@@ -57,7 +57,7 @@
     }
 
     get _userTemplate() {
-      return this.grid.$.bodytemplate;
+      return this.target.$.bodytemplate;
     }
 
     _updateScrollerItem(row, index) {
