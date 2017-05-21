@@ -262,7 +262,7 @@
       this._cache = {};
       this._pendingRequests = {};
       if (this.$.scroller.hasData) {
-        this.$.scroller._update();
+        this.$.scroller.update();
       }
       this._flushItemsDebouncer();
     },

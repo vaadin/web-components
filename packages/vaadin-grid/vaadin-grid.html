@@ -574,7 +574,7 @@ first element in the cell will be focused. You can override the behavior by appl
       super.ready();
       this.$.scroller.addEventListener('animationend', e => {
         if (/appear/.test(e.animationName)) {
-          // this._render();
+          // this.$.scroller.update();
           this._updateHeaderFooterMetrics();
           e.stopPropagation();
         }

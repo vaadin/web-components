@@ -60,6 +60,22 @@
       this._afterScroll();
     }
 
+    update() {
+      this._update();
+    }
+
+    ready() {
+      super.ready();
+
+      // TODO: This is pretty awkward
+      this._increasePoolIfNeeded(25);
+      this._render();
+      requestAnimationFrame(() => {
+        this.updateViewportBoundaries();
+        requestAnimationFrame(this._render.bind(this));
+      });
+    }
+
   }
 
   customElements.define(VaadinScroller.is, VaadinScroller);
