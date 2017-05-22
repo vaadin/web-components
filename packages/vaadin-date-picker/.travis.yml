@@ -17,8 +17,7 @@ addons:
   google-chrome: latest
 
 install:
-  # not working in travis - yarn
-  - npm install
+  - yarn
   - polymer install --variants
 
 before_script:
