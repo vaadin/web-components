@@ -15,7 +15,9 @@ using an `<input>` element extended with `iron-input`.
 
 ```html
 <vaadin-date-picker-light>
-  <input is="iron-input" />
+  <iron-input>
+    <input/>
+  </iron-input>
 </vaadin-date-picker-light>
 ```
 
@@ -55,7 +57,7 @@ need to define the name of value property using the `attrForValue` property.
       }
 
     </style>
-    <content></content>
+    <slot></slot>
 
     <iron-dropdown
         id="dropdown"
@@ -71,7 +73,7 @@ need to define the name of value property using the `attrForValue` property.
         fullscreen$=[[_fullscreen]]
         label=[[label]]
         selected-date="{{_selectedDate}}"
-        class="dropdown-content"
+        slot="dropdown-content"
         focused-date="{{_focusedDate}}"
         min-date="[[_minDate]]"
         max-date="[[_maxDate]]"
@@ -103,14 +105,10 @@ need to define the name of value property using the `attrForValue` property.
         }
       },
 
-      listeners: {
-        'input': '_userInputValueChanged'
-      },
-
       _input: function() {
         // Using the same selector than in combo-box.
         // TODO: revisit this to decide the selector and document conveniently.
-        return Polymer.dom(this).querySelector('input[is="iron-input"],paper-input,.paper-input-input,.input');
+        return Polymer.dom(this).querySelector('iron-input,paper-input,.paper-input-input,.input');
       },
 
       set _inputValue(value) {

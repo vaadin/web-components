@@ -39,7 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
         box-sizing: border-box;
         padding-right: 40px;
-        @apply(--vaadin-infinite-scroller-buffer);
+        @apply --vaadin-infinite-scroller-buffer;
       }
 
       :host(:not([init-animation-done])) .buffer > * {
@@ -156,7 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready: function() {
       this._bufferHeight = this.itemHeight * this.bufferSize;
-      this._buffers = Polymer.dom(this.root).querySelectorAll('.buffer');
+      this._buffers = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('.buffer'));
 
       this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
 
@@ -300,7 +300,7 @@ This program is available under Apache License Version 2.0, available at https:/
       Polymer.dom(itemWrapper).appendChild(itemWrapper.instance.root);
 
       Object.keys(tmpInstance).forEach(function(prop) {
-        itemWrapper.instance[prop] = tmpInstance[prop];
+        itemWrapper.instance.set(prop, tmpInstance[prop]);
       });
     },
 
@@ -327,6 +327,15 @@ This program is available under Apache License Version 2.0, available at https:/
       return rect.bottom > container.top && rect.top < container.bottom;
     },
 
+    created: function() {
+      // needed for V2 to enable event.model on declarative event listeners.
+      this._parentModel = true;
+    },
+
+    _forwardHostPropV2: function(prop, value) {
+      this._forwardParentProp(prop, value);
+    },
+
     /**
      * Implements extension point from Templatizer mixin
      * Called as side-effect of a host property change, responsible for
@@ -340,22 +349,6 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         });
       }
-    },
-
-    /**
-     * Implements extension point from Templatizer
-     * Called as side-effect of a host path change, responsible for
-     * notifying parent.<path> path change on each row.
-     */
-    _forwardParentPath: function(prop, value) {
-      if (prop !== 'index') {
-        this._buffers.forEach(function(buffer) {
-          [].forEach.call(buffer.children, function(itemWrapper) {
-            itemWrapper.instance.notifyPath(prop, value, true);
-          });
-        });
-      }
     }
-
   });
 </script>

@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="common.js"></script>
 
@@ -35,18 +36,28 @@
 
   <test-fixture id="datepicker-in-form">
     <template is="dom-template">
-      <form is="iron-form">
-        <vaadin-date-picker name="[[name]]" required="[[required]]"></vaadin-date-picker>
-      </form>
+      <iron-form>
+        <form is="iron-form">
+          <vaadin-date-picker name="foo"></vaadin-date-picker>
+        </form>
+      </iron-form>
     </template>
   </test-fixture>
 
   <script>
-    describe('using as a field in html form', function() {
+    describe('using as a field in the DOM', function() {
       var datepicker;
 
-      beforeEach(function() {
+      function inputValue(value) {
+        var input = datepicker._nativeInput;
+        input.value = value;
+        Polymer.Base.fire('input', {}, {bubbles: true, node: input});
+      }
+
+      beforeEach(function(done) {
         datepicker = fixture('datepicker');
+        // Needed so as iron-input has time to look for it's inputElement
+        setTimeout(done);
       });
 
       it('should have the given name', function() {
@@ -67,44 +78,59 @@
         expect(datepicker.$$('input').getAttribute('required')).to.equal(null);
       });
 
-      it('should validate correctly', function() {
+      it('should validate correctly with required flag', function(done) {
         datepicker.name = 'foo';
         datepicker.required = true;
-        expect(datepicker.validate()).to.equal(false);
-        expect(datepicker.invalid).to.be.equal(true);
 
-        datepicker.value = '2016-02-24';
-        expect(datepicker.validate()).to.equal(true);
-        expect(datepicker.invalid).to.be.equal(false);
+        setTimeout(function() {
+          expect(datepicker.validate()).to.equal(false);
+          expect(datepicker.invalid).to.be.equal(true);
+
+          datepicker.value = '2016-02-24';
+          expect(datepicker.validate()).to.equal(true);
+          expect(datepicker.invalid).to.be.equal(false);
+
+          done();
+        });
       });
 
-      it('should validate correctly with custom validator', function() {
+      it('should validate correctly with custom validator', function(done) {
         // Use a custom validator registered with <iron-meta>.
         datepicker.validator = 'year-2016-validator';
 
-        // Try invalid value.
-        datepicker.value = '2014-01-01';
-        expect(datepicker.validate()).to.equal(false);
-        expect(datepicker.invalid).to.equal(true);
+        setTimeout(function() {
+          // Try invalid value.
+          datepicker.value = '2014-01-01';
+          expect(datepicker.validate()).to.equal(false);
+          expect(datepicker.invalid).to.equal(true);
 
-        // Try valid value.
-        datepicker.value = '2016-01-01';
-        expect(datepicker.validate()).to.equal(true);
-        expect(datepicker.invalid).to.equal(false);
+          // Try valid value.
+          datepicker.value = '2016-01-01';
+          expect(datepicker.validate()).to.equal(true);
+          expect(datepicker.invalid).to.equal(false);
+
+          done();
+        });
+
       });
 
-      it('should validate correctly with auto-validate', function() {
+      it('should validate correctly with auto-validate', function(done) {
         // Use a custom validator registered with <iron-meta>.
         datepicker.validator = 'year-2016-validator';
         datepicker.autoValidate = true;
 
-        // Set invalid value.
-        datepicker.value = '2014-01-01';
-        expect(datepicker.invalid).to.be.true;
+        setTimeout(function() {
+          // Set invalid value.
+          datepicker.value = '2014-01-01';
+          expect(datepicker.invalid).to.be.true;
 
-        // Change it to a valid value.
-        datepicker.value = '2016-01-01';
-        expect(datepicker.invalid).to.be.false;
+          // Change it to a valid value.
+          datepicker.value = '2016-01-01';
+          expect(datepicker.invalid).to.be.false;
+
+          done();
+        });
+
       });
 
       it('should validate min/max dates', function() {
@@ -146,28 +172,6 @@
         });
       });
 
-      it('should serialize correctly', function() {
-        var form = fixture('datepicker-in-form', {name: 'foo'});
-        datepicker = form.querySelector('vaadin-date-picker');
-        datepicker.value = '2016-02-24';
-        expect(form.serialize().foo).to.equal('2016-02-24');
-      });
-
-      it('should not-submit iron-form with invalid value', function() {
-        var form = fixture('datepicker-in-form', {name: 'foo', required: true});
-        var spy = sinon.spy();
-        form.addEventListener('iron-form-invalid', spy);
-        form.submit();
-        expect(spy).to.have.been.called;
-      });
-
-      it('should show error indicator', function() {
-        var form = fixture('datepicker-in-form', {name: 'foo', required: true});
-        form.submit();
-        var undeline = form.querySelector('vaadin-date-picker').$.inputcontainer.$$('.underline');
-        expect(undeline.getAttribute('class')).to.contain('is-invalid');
-      });
-
       it('should have disabled paper-input-container', function() {
         datepicker.disabled = true;
         expect(datepicker.$.inputcontainer.getAttribute('disabled')).to.equal('');
@@ -175,9 +179,7 @@
       });
 
       it('should validate keyboard input (invalid)', function(done) {
-        var input = datepicker.$.input;
-        input.value = 'foo';
-        input.fire('input');
+        inputValue('foo');
 
         datepicker.addEventListener('iron-overlay-closed', function() {
           expect(datepicker.validate()).to.equal(false);
@@ -188,9 +190,7 @@
       });
 
       it('should validate keyboard input (valid)', function(done) {
-        var input = datepicker.$.input;
-        input.value = '01/01/2000';
-        input.fire('input');
+        inputValue('01/01/2000');
 
         datepicker.addEventListener('iron-overlay-closed', function() {
           expect(datepicker.validate()).to.equal(true);
@@ -201,10 +201,8 @@
       });
 
       it('should validate keyboard input (disallowed value)', function(done) {
-        var input = datepicker.$.input;
         datepicker.min = '2001-01-01';
-        input.value = '01/01/2000';
-        input.fire('input');
+        inputValue('01/01/2000');
 
         datepicker.addEventListener('iron-overlay-closed', function() {
           expect(datepicker.validate()).to.equal(false);
@@ -213,7 +211,39 @@
         });
         datepicker.close();
       });
+    });
 
+    describe('using as a field in an iron-form', function() {
+      var datepicker, ironForm, form;
+
+      beforeEach(function(done) {
+        ironForm = fixture('datepicker-in-form');
+        datepicker = ironForm.querySelector('vaadin-date-picker');
+        form = ironForm.querySelector('form');
+        setTimeout(done);
+      });
+
+      it('should serialize correctly', function() {
+        datepicker.value = '2016-02-24';
+        expect(ironForm.serializeForm().foo).to.equal('2016-02-24');
+      });
+
+      it('should not-submit iron-form with invalid value', function() {
+        datepicker.required = true;
+
+        // in iron-form 2.0 there is no event when submitting.
+        // Since serializeForm is not called when invalid, spying that.
+        var spy = sinon.spy(ironForm, 'serializeForm');
+        ironForm.submit();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should show error indicator', function() {
+        datepicker.required = true;
+        ironForm.submit();
+        var undeline = form.querySelector('vaadin-date-picker').$.inputcontainer.$$('.underline');
+        expect(undeline.getAttribute('class')).to.contain('is-invalid');
+      });
     });
   </script>
 

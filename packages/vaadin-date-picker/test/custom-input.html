@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <script src="common.js"></script>
@@ -16,7 +17,9 @@
   <test-fixture id="custom-input-datepicker">
     <template>
       <vaadin-date-picker-light>
-        <input is="iron-input">
+        <iron-input>
+          <input>
+        </iron-input>
       </vaadin-date-picker-light>
     </template>
   </test-fixture>
@@ -25,8 +28,9 @@
     describe('custom input', function() {
       var datepicker;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
         datepicker = fixture('custom-input-datepicker');
+        setTimeout(done);
       });
 
       it('should open calendar on tap', function() {
@@ -35,11 +39,15 @@
         expect(datepicker.$.dropdown.opened).to.be.true;
       });
 
-      it('should open calendar on input', function() {
+      it('should open calendar on input', function(done) {
         var target = datepicker.inputElement;
-        target.value = '1';
-        target.fire('input');
-        expect(datepicker.$.dropdown.opened).to.be.true;
+        target.bindValue = '1';
+        Polymer.Base.fire('input', {}, {bubbles: true, node: datepicker._nativeInput});
+
+        listenForEvent(datepicker, 'iron-overlay-opened', function() {
+          expect(datepicker.$.dropdown.opened).to.be.true;
+          done();
+        });
       });
 
       it('should not auto focus overlay', function() {

@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="common.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
@@ -301,7 +302,8 @@
             pageDown();
 
             setTimeout(function() {
-              expect(overlay.$.scroller.position).to.eql(initialPosition);
+              // FF sometimes reports subpixel differences
+              expect(overlay.$.scroller.position).to.be.closeTo(initialPosition, 1);
               done();
             });
           });

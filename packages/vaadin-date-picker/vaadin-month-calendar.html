@@ -12,16 +12,16 @@
         -ms-user-select: none;
         user-select: none;
         font: inherit;
-        @apply(--paper-font-common-base);
-        @apply(--vaadin-date-picker-calendar);
+        @apply --paper-font-common-base;
+        @apply --vaadin-date-picker-calendar;
       }
 
       #title {
         color: var(--primary-text-color);
         text-align: center;
         padding: 6px 0;
-        @apply(--paper-font-subhead);
-        @apply(--vaadin-date-picker-calendar-title);
+        @apply --paper-font-subhead;
+        @apply --vaadin-date-picker-calendar-title;
       }
 
       #monthGrid {
@@ -35,8 +35,8 @@
         margin: 0 1px;
         box-sizing: border-box;
         padding: 6px 0;
-        @apply(--paper-font-body1);
-        @apply(--vaadin-date-picker-calendar-cell);
+        @apply --paper-font-body1;
+        @apply --vaadin-date-picker-calendar-cell;
       }
 
       :host([week-numbers]) #monthGrid div {
@@ -46,7 +46,7 @@
       #monthGrid div:not(:empty) {
         cursor: pointer;
         color: var(--primary-text-color);
-        @apply(--vaadin-date-picker-calendar-date-cell);
+        @apply --vaadin-date-picker-calendar-date-cell;
       }
 
       #monthGrid div:not(:empty):not([disabled]):not(.weekday):not(.weeknumber):active {
@@ -59,8 +59,8 @@
         color: var(--secondary-text-color);
         cursor: default;
         padding: 8px 0;
-        @apply(--paper-font-caption);
-        @apply(--vaadin-date-picker-calendar-weekday-cell);
+        @apply --paper-font-caption;
+        @apply --vaadin-date-picker-calendar-weekday-cell;
       }
 
       #monthGrid div.weekday:empty,
@@ -72,46 +72,46 @@
       #monthGrid div[today] {
         position: relative;
         color: var(--primary-color);
-        @apply(--vaadin-date-picker-calendar-cell-today);
+        @apply --vaadin-date-picker-calendar-cell-today;
       }
 
       #monthGrid div[today][selected] {
-        @apply(--vaadin-date-picker-calendar-cell-today-selected);
+        @apply --vaadin-date-picker-calendar-cell-today-selected;
       }
 
       #monthGrid div[focused] {
         background: var(--light-primary-color);
         box-sizing: border-box;
         border-radius: 2px;
-        @apply(--vaadin-date-picker-calendar-cell-focused);
+        @apply --vaadin-date-picker-calendar-cell-focused;
       }
 
       :host([focused]) #monthGrid div[focused] {
         background: var(--primary-color);
         color: var(--primary-background-color);
-        @apply(--vaadin-date-picker-calendar-focused-cell-focused);
+        @apply --vaadin-date-picker-calendar-focused-cell-focused;
       }
 
       #monthGrid div[selected] {
         font-weight: 600;
-        @apply(--vaadin-date-picker-calendar-cell-selected);
+        @apply --vaadin-date-picker-calendar-cell-selected;
       }
 
       #monthGrid div[today][selected] {
-        @apply(--vaadin-date-picker-calendar-cell-today-selected);
+        @apply --vaadin-date-picker-calendar-cell-today-selected;
       }
 
       #monthGrid div[disabled] {
         opacity: 0.3;
         cursor: default;
-        @apply(--vaadin-date-picker-calendar-cell-disabled);
+        @apply --vaadin-date-picker-calendar-cell-disabled;
       }
 
       #monthGrid div.weeknumber {
         cursor: default;
         color: rgba(0, 0, 0, 0.4);
-        @apply(--paper-font-caption);
-        @apply(--vaadin-date-picker-calendar-weeknumber-cell);
+        @apply --paper-font-caption;
+        @apply --vaadin-date-picker-calendar-weeknumber-cell;
       }
     </style>
 
@@ -206,6 +206,9 @@
       ],
 
       _getTitle: function(month, monthNames) {
+        if (month === undefined || monthNames === undefined) {
+          return;
+        }
         return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
       },
 
@@ -223,10 +226,18 @@
       },
 
       _applyFirstDayOfWeek: function(weekDayNames, firstDayOfWeek) {
+        if (weekDayNames === undefined || firstDayOfWeek === undefined) {
+          return;
+        }
+
         return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
       },
 
       _getWeekDayNames: function(weekDayNames, weekDayNamesShort, showWeekNumbers, firstDayOfWeek) {
+        if (weekDayNames === undefined || weekDayNamesShort === undefined ||
+          showWeekNumbers === undefined || firstDayOfWeek === undefined) {
+          return;
+        }
         weekDayNames = this._applyFirstDayOfWeek(weekDayNames, firstDayOfWeek);
         weekDayNamesShort = this._applyFirstDayOfWeek(weekDayNamesShort, firstDayOfWeek);
         weekDayNames = weekDayNames.map(function(day, index) {
@@ -265,6 +276,9 @@
       },
 
       _getDays: function(month, firstDayOfWeek) {
+        if (month === undefined || firstDayOfWeek === undefined) {
+          return;
+        }
         // First day of the month (at midnight).
         var date = new Date(0, 0);
         date.setFullYear(month.getFullYear());
@@ -289,6 +303,10 @@
       },
 
       _getWeekNumber: function(date, days) {
+        if (date === undefined || days === undefined) {
+          return;
+        }
+
         if (!date) {
           // Get the first non-null date from the days array.
           date = days.reduce(function(acc, d) {
@@ -334,6 +352,9 @@
       },
 
       _getAriaDisabled: function(date, min, max) {
+        if (date === undefined || min === undefined || max === undefined) {
+          return;
+        }
         return this._dateAllowed(date, min, max) ? 'false' : 'true';
       }
     });

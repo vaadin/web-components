@@ -7,7 +7,7 @@
 
   <title>vaadin-date-picker Advanced Usage</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../sugar/dist/sugar.min.js"></script>
   <script src="../../sugar/dist/locales/fi.js"></script>
   <link rel="import" href="common.html">
@@ -76,12 +76,14 @@
           var start = document.querySelector('#start');
           var end = document.querySelector('#end');
           start.addEventListener('value-changed', function() {
-            // Open the end date picker with a delay to
-            // make it less confusing.
-            window.setTimeout(function() {
-              end.value = start.value;
-              end.open();
-            }, 500);
+            if (start.value) {
+              // Open the end date picker with a delay to
+              // make it less confusing.
+              window.setTimeout(function() {
+                end.value = start.value;
+                end.open();
+              }, 500);
+            }
           });
         </script>
       </template>
@@ -156,7 +158,9 @@
           }
         </style>
         <vaadin-date-picker-light class="my-input1">
-          <input is="iron-input" placeholder="Date" size="10"/>
+          <iron-input>
+            <input placeholder="Date" size="10"/>
+          </iron-input>
         </vaadin-date-picker-light>
       </template>
     </demo-snippet>
@@ -174,7 +178,10 @@
          <div class="my-input2">
            <iron-icon icon="event"></iron-icon>
            CHECK-IN:
-           <input is="iron-input" size="10"/>
+           <iron-input>
+             <input size="10"/>
+           </iron-input>
+
          </div>
         </vaadin-date-picker-light>
       </template>

@@ -10,7 +10,9 @@
 
 <body>
   <script>
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents.js');
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && window.Polymer && Polymer.Element) {
+      WCT._config.environmentScripts.push('webcomponentsjs/custom-elements-es5-adapter.js');
+    }
 
     WCT.loadSuites([
       'basic.html',
@@ -25,7 +27,12 @@
       'late-upgrade.html',
       'wai-aria.html'
     ].reduce(function(suites, suite) {
-      return suites.concat([suite, suite + '?dom=shadow']);
+      // Browser supports Shadow DOM
+      if (document.head.createShadowRoot || document.head.attachShadow) {
+        return suites.concat([suite, suite + '?wc-shadydom=true&dom=shadow']);
+      } else {
+        return suites.concat([suite]);
+      }
     }, []));
   </script>
 </body>

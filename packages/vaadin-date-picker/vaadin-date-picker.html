@@ -62,7 +62,6 @@ If you want to replace the default input field with a custom implementation, you
 <link rel="import" href="../paper-input/paper-input-error.html">
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-behavior.html">
@@ -78,6 +77,10 @@ If you want to replace the default input field with a custom implementation, you
 
       :host([opened]) {
         pointer-events: auto;
+      }
+
+      #sufix {
+        display: flex;
       }
 
       #overlay {
@@ -147,11 +150,11 @@ If you want to replace the default input field with a custom implementation, you
       }
 
       #clear iron-icon {
-        @apply(--vaadin-date-picker-clear-icon);
+        @apply --vaadin-date-picker-clear-icon;
       }
 
       #calendar iron-icon {
-        @apply(--vaadin-date-picker-calendar-icon);
+        @apply --vaadin-date-picker-calendar-icon;
       }
 
       :host([disabled]) #calendar,
@@ -162,18 +165,34 @@ If you want to replace the default input field with a custom implementation, you
         display: none;
       }
 
-      #input {
-        box-sizing: border-box;
-        padding-right: 28px;
+      :host [slot=suffix] {
+        display: flex;
       }
 
-      #input::-ms-clear {
+      /* The same code than paper-input and combo-box */
+      input {
+        position: relative; /* to make a stacking context */
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--paper-input-container-input-color, var(--primary-text-color));
+        -webkit-appearance: none;
+        text-align: inherit;
+        vertical-align: bottom;
+
+        /* Firefox sets a min-width on the input, which can cause layout issues */
+        min-width: 0;
+
+        @apply --paper-font-subhead;
+        @apply --paper-input-container-input;
+      }
+
+      input::-ms-clear {
         display: none;
-      }
-
-      :host([opened][has-value]) #input {
-        padding-right: 60px;
-        margin-right: -32px;
       }
     </style>
 
@@ -183,30 +202,35 @@ If you want to replace the default input field with a custom implementation, you
         disabled$="[[disabled]]"
         role="application"
         always-float-label="[[_computeAlwaysFloatLabel(placeholder)]]">
-      <label id="label" aria-hidden="true">[[label]]</label>
-      <input id="input"
-          is="iron-input"
+      <label id="label" slot="label" aria-hidden="true" for="input">[[label]]</label>
+
+      <iron-input slot="input" id="ironinput"
+        bind-value="{{_userInputValue}}"
+        validator="[[validator]]"
+        invalid="{{invalid}}">
+        <input id="input"
           autocomplete="off"
           type="text"
           on-focus="_focus"
-          value="{{_userInputValue::input}}"
           name$="[[name]]"
           placeholder$="[[placeholder]]"
           aria-label$="[[label]]"
-          invalid="{{invalid}}"
           required$="[[required]]"
           validator="[[validator]]"
           disabled$="[[disabled]]"
           readonly$="[[readonly]]"
-          no-input$="[[_noInput]]" />
-      <div suffix id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
-        <iron-icon icon="vaadin-date-picker:clear"></iron-icon>
-        <paper-ripple class="circle" center></paper-ripple>
+          no-input$="[[_noInput]]">
+      </iron-input>
+
+      <div id="suffix" slot="suffix" name="suffix">
+        <div id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
+          <iron-icon icon="vaadin-date-picker:clear"></iron-icon>
+        </div>
+        <div id="calendar" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]">
+          <iron-icon icon="vaadin-date-picker:event"></iron-icon>
+        </div>
       </div>
-      <div suffix id="calendar" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]">
-        <iron-icon icon="vaadin-date-picker:event"></iron-icon>
-        <paper-ripple class="circle" center></paper-ripple>
-      </div>
+
       <template is="dom-if" if="[[errorMessage]]">
         <paper-input-error aria-live="assertive">[[errorMessage]]</paper-input-error>
       </template>
@@ -226,7 +250,7 @@ If you want to replace the default input field with a custom implementation, you
           fullscreen$="[[_fullscreen]]"
           label="[[label]]"
           selected-date="{{_selectedDate}}"
-          class="dropdown-content"
+          slot="dropdown-content"
           focused-date="{{_focusedDate}}"
           show-week-numbers="[[showWeekNumbers]]"
           min-date="[[_minDate]]"
@@ -318,7 +342,7 @@ If you want to replace the default input field with a custom implementation, you
       },
 
       _input: function() {
-        return this.$.input;
+        return this.$.ironinput;
       },
 
       /**
