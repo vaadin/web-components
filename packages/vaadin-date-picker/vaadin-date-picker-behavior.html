@@ -689,7 +689,9 @@
     },
 
     _onUserInput: function(e) {
-      if (this._userInputValueChanged() && !this.opened) {
+      this._userInputValueChanged();
+
+      if (!this.opened) {
         this.open();
         if (this._ios) {
           // iOS needs a refit after input blur animation has finished
@@ -699,16 +701,14 @@
     },
 
     _userInputValueChanged: function(value) {
-      if (!this.opened && !this._inputValue) {
-        return;
+      if (this.opened && this._inputValue) {
+        var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
+        if (this._isValidDate(parsedDate)) {
+          this._ignoreFocusedDateChange = true;
+          this._focusedDate = parsedDate;
+          this._ignoreFocusedDateChange = false;
+        }
       }
-      var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
-      if (this._isValidDate(parsedDate)) {
-        this._ignoreFocusedDateChange = true;
-        this._focusedDate = parsedDate;
-        this._ignoreFocusedDateChange = false;
-      }
-      return true;
     },
 
     _announceFocusedDate: function(_focusedDate, opened, _ignoreAnnounce) {
