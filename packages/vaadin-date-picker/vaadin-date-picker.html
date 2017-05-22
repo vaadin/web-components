@@ -165,6 +165,10 @@ If you want to replace the default input field with a custom implementation, you
         display: none;
       }
 
+      :host [slot=suffix] {
+        display: flex;
+      }
+
       /* The same code than paper-input and combo-box */
       input {
         position: relative; /* to make a stacking context */
@@ -198,7 +202,7 @@ If you want to replace the default input field with a custom implementation, you
         disabled$="[[disabled]]"
         role="application"
         always-float-label="[[_computeAlwaysFloatLabel(placeholder)]]">
-      <label id="label" aria-hidden="true">[[label]]</label>
+      <label id="label" slot="label" aria-hidden="true" for="input">[[label]]</label>
 
       <iron-input slot="input" id="ironinput"
         bind-value="{{_userInputValue}}"
