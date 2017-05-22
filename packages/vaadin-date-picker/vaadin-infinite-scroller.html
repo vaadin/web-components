@@ -65,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   {
 
-    class InfiniteScrollerElement extends Polymer.mixinBehaviors([Polymer.Templatizer], Polymer.Element) {
+    class InfiniteScrollerElement extends Polymer.Element {
 
       static get is() {
         return 'vaadin-infinite-scroller';
@@ -125,23 +125,32 @@ This program is available under Apache License Version 2.0, available at https:/
         };
       }
 
-      constructor() {
-        super();
-        // needed for V2 to enable event.model on declarative event listeners.
-        this._parentModel = true;
-        this.addEventListener('animationend', this._animationEnd.bind(this));
-      }
-
       ready() {
         super.ready();
+        this.addEventListener('animationend', this._animationEnd.bind(this));
 
         this._bufferHeight = this.itemHeight * this.bufferSize;
         this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
 
         this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
 
-        var template = this.querySelector('template');
-        this.templatize(template);
+        var tpl = this.querySelector('template');
+        this.TemplateClass = Polymer.Templatize.templatize(tpl, this, {
+          mutableData: false,
+          parentModel: true,
+          instanceProps: this._instanceProps,
+          forwardHostProp: function(prop, value) {
+            if (prop !== 'index') {
+              this._buffers.forEach(buffer => {
+                [].forEach.call(buffer.children, itemWrapper => {
+                  itemWrapper.instance[prop] = value;
+                });
+              });
+            }
+          },
+          notifyInstanceProp: function() {
+          }
+        });
 
         // Firefox interprets elements with overflow:auto as focusable
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
@@ -181,7 +190,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _translateBuffer(up) {
         var index = up ? 1 : 0;
         this._buffers[index].translateY = this._buffers[(index ? 0 : 1)].translateY + this._bufferHeight * (index ? -1 : 1);
-        this.transform('translate3d(0, ' + this._buffers[index].translateY + 'px, 0)', this._buffers[index]);
+        this._buffers[index].style.transform = 'translate3d(0, ' + this._buffers[index].translateY + 'px, 0)';
         this._buffers[index].updated = false;
         this._buffers.reverse();
       }
@@ -199,7 +208,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // Check if we scrolled enough to translate the buffer positions.
-        var bufferOffset = this.$$('.buffer').offsetTop;
+        var bufferOffset = this.root.querySelector('.buffer').offsetTop;
         var upperThresholdReached = scrollTop > this._buffers[1].translateY + this.itemHeight + bufferOffset;
         var lowerThresholdReached = scrollTop < this._buffers[0].translateY + this.itemHeight + bufferOffset;
 
@@ -209,7 +218,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (!this._preventScrollEvent) {
-          this.fire('custom-scroll', undefined, {bubbles: false});
+          this.dispatchEvent(new CustomEvent('custom-scroll', {bubbles: false, composed: true}));
           this._mayHaveMomentum = true;
         }
         this._preventScrollEvent = false;
@@ -310,7 +319,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         var tmpInstance = itemWrapper.instance;
-        itemWrapper.instance = this.stamp({});
+
+        itemWrapper.instance = new this.TemplateClass({});
         itemWrapper.appendChild(itemWrapper.instance.root);
 
         Object.keys(tmpInstance).forEach(prop => {
