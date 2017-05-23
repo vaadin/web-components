@@ -344,7 +344,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e) {
         e.stopPropagation();
       }
-      this._inputElement.focus();
+      this._focus();
       this.close();
     }
 
@@ -361,8 +361,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     get _nativeInput() {
       if (this._inputElement) {
-        return this._inputElement.inputElement ? this._inputElement.inputElement :
-           window.unwrap ? window.unwrap(this._inputElement) : this._inputElement;
+        // vaadin-text-field's input is focusElement
+        // iron-input's input is inputElement
+        return this._inputElement.focusElement ? this._inputElement.focusElement :
+         this._inputElement.inputElement ? this._inputElement.inputElement :
+         window.unwrap ? window.unwrap(this._inputElement) : this._inputElement;
       }
     }
 
@@ -381,7 +384,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isNoInput() {
-      return this._fullscreen || !this.i18n.parseDate || this._ios;
+      return !this._inputElement || this._fullscreen || !this.i18n.parseDate || this._ios;
     }
 
     _formatISO(date) {
@@ -583,7 +586,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _preventCancelOnComponentAccess(e) {
       var event = e.detail;
-      if (/tap|mousedown|touchstart/.test(e.detail.type) && event.path.indexOf(this) > -1) {
+      if (/tap|mousedown|touchstart/.test(e.detail.type) && event.composedPath().indexOf(this) > -1) {
         e.preventDefault();
       }
     }

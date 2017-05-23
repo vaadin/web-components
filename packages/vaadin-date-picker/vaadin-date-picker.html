@@ -7,15 +7,13 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
-<link rel="import" href="../paper-input/paper-input-error.html">
-<link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
 <link rel="import" href="vaadin-date-picker-icons.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -145,31 +143,22 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <paper-input-container id="inputcontainer"
-        auto-validate$="[[autoValidate]]"
-        invalid$="[[invalid]]"
-        disabled$="[[disabled]]"
-        role="application"
-        always-float-label="[[_computeAlwaysFloatLabel(placeholder)]]">
-      <label id="label" slot="label" aria-hidden="true" for="input">[[label]]</label>
 
-      <iron-input slot="input" id="ironinput"
-        bind-value="{{_userInputValue}}"
-        validator="[[validator]]"
-        invalid="{{invalid}}">
-        <input id="input"
-          autocomplete="off"
-          type="text"
-          on-focus="_focus"
-          name$="[[name]]"
-          placeholder$="[[placeholder]]"
-          aria-label$="[[label]]"
-          required$="[[required]]"
-          validator="[[validator]]"
-          disabled$="[[disabled]]"
-          readonly$="[[readonly]]"
-          no-input$="[[_noInput]]">
-      </iron-input>
+    <vaadin-text-field id="input"
+        role="application"
+        autocomplete="off"
+        on-focus="_focus"
+        value="{{_userInputValue}}"
+        invalid="{{invalid}}"
+        label="[[label]]"
+        name="[[name]]"
+        placeholder="[[placeholder]]"
+        required="[[required]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        error-message="[[errorMessage]]"
+        aria-label$="[[label]]"
+      >
 
       <div id="suffix" slot="suffix" name="suffix">
         <div id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
@@ -179,11 +168,7 @@ This program is available under Apache License Version 2.0, available at https:/
           <iron-icon icon="vaadin-date-picker:event"></iron-icon>
         </div>
       </div>
-
-      <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error aria-live="assertive">[[errorMessage]]</paper-input-error>
-      </template>
-    </paper-input-container>
+    </vaadin-text-field>
 
     <iron-dropdown
         id="dropdown"
@@ -351,7 +336,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _input() {
-          return this.$.ironinput;
+          return this.$.input;
         }
 
         /**
@@ -364,11 +349,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         set _inputValue(value) {
-          this._inputElement.bindValue = value;
+          this._inputElement.value = value;
         }
 
         get _inputValue() {
-          return this._inputElement.bindValue;
+          return this._inputElement.value;
         }
 
         _getAriaExpanded(opened) {

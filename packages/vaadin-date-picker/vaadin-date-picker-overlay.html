@@ -12,9 +12,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
-<link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
@@ -284,14 +285,25 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div id="header" on-touchend="_preventDefault" aria-hidden="true">
-      <paper-input-container>
-        <label>[[label]]</label>
-        <iron-input id="input" slot="input" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
-          <input readonly autocomplete="off">
-        </iron-input>
+
+      <vaadin-text-field id="input"
+          role="application"
+          autocomplete="off"
+          readonly
+          value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]"
+          invalid="{{invalid}}"
+          label="[[label]]"
+          placeholder="[[placeholder]]"
+          required="[[required]]"
+          disabled="[[disabled]]"
+          readonly="[[readonly]]"
+          error-message="[[errorMessage]]"
+        >
 
         <iron-icon id="clear" slot="suffix" on-tap="_clear" icon="vaadin-date-picker:clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
-      </paper-input-container>
+
+      </vaadin-text-field>
+
       <iron-icon id="toggle" icon="vaadin-date-picker:event" on-tap="_cancel"></iron-icon>
     </div>
 
@@ -326,12 +338,14 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div id="footer" on-touchend="_preventDefault" role="toolbar">
-      <paper-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
+
+
+      <vaadin-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
         [[i18n.today]]
-      </paper-button>
-      <paper-button id="cancelButton" on-tap="_cancel">
+      </vaadin-button>
+      <vaadin-button id="cancelButton" on-tap="_cancel">
         [[i18n.cancel]]
-      </paper-button>
+      </vaadin-button>
     </div>
 
     <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
@@ -436,11 +450,11 @@ This program is available under Apache License Version 2.0, available at https:/
          * @param {Number} detail.oldPosition old position
          */
 
-        attached() {
-          super.attached();
+        connectedCallback() {
+          super.connectedCallback();
           this._translateX = this._yearScrollerWidth;
-          this.toggleClass('animate', true);
-          this.setScrollDirection('y', this.$.scrollers);
+          this.classList.add('animate');
+          Polymer.Gestures.setTouchAction(this.$.scrollers, 'pan-y');
           Polymer.IronA11yAnnouncer.requestAvailability();
         }
 
@@ -665,7 +679,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // If we're flinging quickly -> start animating already.
           if (Math.abs(e.detail.ddx) > this._yearScrollerWidth / 3) {
-            this.toggleClass('animate', true);
+            this._toggleAnimateClass(true);
           }
 
           var newTranslateX = this._translateX + e.detail.ddx;
@@ -683,7 +697,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           switch (e.detail.state) {
             case 'start':
-              this.toggleClass('animate', false);
+              this._toggleAnimateClass(false);
               break;
 
             case 'track':
@@ -691,13 +705,23 @@ This program is available under Apache License Version 2.0, available at https:/
               break;
 
             case 'end':
-              this.toggleClass('animate', true);
+              this._toggleAnimateClass(true);
               if (this._translateX >= this._yearScrollerWidth / 2) {
                 this._closeYearScroller();
               } else {
                 this._openYearScroller();
               }
               break;
+          }
+        }
+
+        _toggleAnimateClass(enable) {
+          if (enable) {
+            if (this.classList.contains('animate')) {
+              this.classList.remove('animate');
+            }
+          } else {
+            this.classList.add('animate');
           }
         }
 
