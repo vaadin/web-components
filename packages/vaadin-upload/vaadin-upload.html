@@ -455,7 +455,8 @@ Custom property | Description | Default
       'drop': '_onDrop',
       'file-retry': '_onFileRetry',
       'file-abort': '_onFileAbort',
-      'file-remove': '_onFileRemove'
+      'file-remove': '_onFileRemove',
+      'file-start': '_onFileStart'
     },
 
     _formatSize: function(bytes) {
@@ -726,7 +727,7 @@ Custom property | Description | Default
 
       file.status = this.i18n.uploading.status.connecting;
       file.uploading = file.indeterminate = true;
-      file.complete = file.abort = file.error = false;
+      file.complete = file.abort = file.error = file.held = false;
 
       xhr.upload.onloadstart = function() {
         this.fire('upload-start', {file: file, xhr: xhr});
@@ -793,6 +794,7 @@ Custom property | Description | Default
         return;
       }
       file.loaded = 0;
+      file.held = true;
       file.status = this.i18n.uploading.status.held;
       this.unshift('files', file);
 
@@ -830,6 +832,10 @@ Custom property | Description | Default
 
     _onFileInputChange: function(event) {
       this._addFiles(event.target.files);
+    },
+
+    _onFileStart: function(event) {
+      this._uploadFile(event.detail.file);
     },
 
     _onFileRetry: function(event) {

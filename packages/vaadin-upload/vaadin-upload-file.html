@@ -229,6 +229,7 @@ Custom property | Description | Default
       </div>
 
       <div id="commands">
+        <paper-icon-button icon="vaadin-upload:start" file-event="file-start" on-tap="_fireFileEvent" hidden$="[[!file.held]]"></paper-icon-button>
         <paper-icon-button icon="vaadin-upload:refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
         <paper-icon-button icon="vaadin-upload:clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
       </div>
@@ -309,7 +310,16 @@ Custom property | Description | Default
     *
     * @event file-retry
     * @param {Object} detail
-    *  @param {Object} detail.file file to retry upload of
+    * @param {Object} detail.file file to retry upload of
+    */
+
+   /**
+    * Fired when the start button is pressed. It is listened by `vaadin-upload`
+    * which will start a new upload process of this file.
+    *
+    * @event file-start
+    * @param {Object} detail
+    * @param {Object} detail.file file to start upload of
     */
 
     /**
@@ -319,7 +329,7 @@ Custom property | Description | Default
      *
      * @event file-abort
      * @param {Object} detail
-     *  @param {Object} detail.file file to abort upload of
+     * @param {Object} detail.file file to abort upload of
      */
 
     /**
@@ -329,7 +339,7 @@ Custom property | Description | Default
      *
      * @event file-remove
      * @param {Object} detail
-     *  @param {Object} detail.file file to remove from the  upload of
+     * @param {Object} detail.file file to remove from the  upload of
      */
   });
 
