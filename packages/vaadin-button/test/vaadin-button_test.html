@@ -100,6 +100,16 @@
 
         expect(vaadinButton.hasAttribute('active')).to.be.false;
       });
+
+      it('should not have active attribute when disabled', () => {
+        vaadinButton.disabled = true;
+        down(vaadinButton);
+        MockInteractions.keyDownOn(vaadinButton, 13);
+        MockInteractions.keyDownOn(vaadinButton, 32);
+
+        expect(vaadinButton.hasAttribute('active')).to.be.false;
+      });
+
     });
   </script>
 </body>
