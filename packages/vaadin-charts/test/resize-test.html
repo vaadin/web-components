@@ -16,6 +16,11 @@
     <test-fixture id="TestElement">
       <template>
         <x-resizable>
+          <vaadin-line-chart id="line">
+            <data-series name="New York">
+              <data>-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5</data>
+            </data-series>
+          </vaadin-line-chart>
         </x-resizable>
       </template>
     </test-fixture>
@@ -26,7 +31,8 @@
 
         test('Checks that calling resize on parent, resizes chart', function (done) {
           var testEl = fixture('TestElement');
-          var chart = testEl.$.line;
+          var chart = testEl.querySelector('#line');
+
           chart.addEventListener('iron-resize', function (event) {
             done();
           });
