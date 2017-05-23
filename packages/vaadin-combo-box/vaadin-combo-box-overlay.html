@@ -190,6 +190,13 @@
       // will resolve templatizer issues in P2 that previously
       // required calling _flushProperties/_enableProperties.
       this._patchIronListStamping();
+
+      // IE11: when scrolling with mouse, the focus goes to the scroller.
+      // This causes the overlay closing due to defocusing the input field.
+      // Prevent focusing the scroller by setting `unselectable="on"`.
+      if (/Trident/.test(navigator.userAgent)) {
+        this.$.scroller.setAttribute('unselectable', 'on');
+      }
     },
 
     _patchIronListStamping: function() {

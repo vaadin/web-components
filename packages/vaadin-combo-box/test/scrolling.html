@@ -48,6 +48,13 @@
         });
       });
 
+      describeIf(/Trident/.test(navigator.userAgent), 'IE11', function() {
+        it('should have unselectable="on" for the scroller', function() {
+          var scroller = combobox.$.overlay.$.scroller;
+          expect(scroller.getAttribute('unselectable')).to.equal('on');
+        });
+      });
+
       describe('scrolling position', function() {
         beforeEach(function() {
           var items = [];
