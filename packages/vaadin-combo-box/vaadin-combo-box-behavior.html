@@ -181,7 +181,7 @@
     },
 
     _onBlur: function() {
-      if (!this._closeOnBlurIsPrevented && document.activeElement !== this.$.overlay.$.scroller && document.activeElement !== null) {
+      if (!this._closeOnBlurIsPrevented) {
         this.close();
       }
     },
