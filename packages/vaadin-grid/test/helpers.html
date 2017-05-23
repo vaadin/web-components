@@ -147,7 +147,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   function getVisibleItems(list) {
     // make sure rows are ordered in the visible order
     list.flushDebouncer('vaadin-grid-scrolling');
-    var rows = getRows(list.$.items);
+    var rows = getRows(list.querySelector('#items'));
     var visibleRows = [];
     for (var i = 0; i < rows.length; i++) {
       if (isVisible(rows[i])) {

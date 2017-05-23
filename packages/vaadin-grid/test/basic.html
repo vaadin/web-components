@@ -88,6 +88,7 @@
         // make the height of the viewport same as the height of the row
         // and scroll to the last item
         grid.style.height = scroller._physicalItems[0].offsetHeight + 'px';
+        scroller.notifyResize();
         scroller.scrollToIndex(99);
         expect(scroller.firstVisibleIndex).to.equal(99);
       });
@@ -101,16 +102,16 @@
       it('scroll to a given scrollTop', function() {
         scroller.scrollToIndex(99);
         scroller.scroll(0, 500);
-        expect(scroller.$.table.scrollTop).to.equal(500);
+        expect(scroller.scrollTop).to.equal(500);
       });
 
       it('should not scroll when size changes', function() {
         scroller.scrollToIndex(99);
-        var top = scroller.$.table.scrollTop;
+        var top = scroller.scrollTop;
 
         scroller.size += 1;
 
-        expect(scroller.$.table.scrollTop).to.eql(top);
+        expect(scroller.scrollTop).to.eql(top);
         expect(top).to.be.greaterThan(0);
       });
 

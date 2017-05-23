@@ -36,11 +36,13 @@
     _sizeChanged(size) {
       // TODO: Temporary solution. Override iron-list functions so that items array isn't needed anymore
       // and handle million dollar scrolling right here.
+      var scrollTop = this.scrollTop;
       const items = [];
       for (let i = 0; i < size; i++) {
         items.push('item-' + i);
       }
       this.items = items;
+      this.scrollTop = scrollTop;
     }
 
     /**
