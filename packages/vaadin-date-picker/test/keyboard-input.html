@@ -33,9 +33,9 @@
         var datepicker;
 
         function inputChar(char) {
-          target.bindValue += char;
+          target.value += char;
           MockInteractions.keyDownOn(target, char.charCodeAt(0));
-          target.fire('input');
+          target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
         }
 
         function inputText(text) {
@@ -84,7 +84,7 @@
         beforeEach(done => {
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
-          target = datepicker.$.ironinput;
+          target = datepicker._inputElement;
           setTimeout(done, 1);
         });
 
@@ -170,7 +170,7 @@
           datepicker.addEventListener('iron-overlay-opened', () => {
             arrowDown();
             // Forwarding keys to overlay
-            target.bindValue = '';
+            target.value = '';
             inputText('foo');
             // Keys shouldn't get forwarded anymore
             var focused = focusedDate();
@@ -185,9 +185,7 @@
           open(() => {
             arrowDown();
             var focused = focusedDate();
-            target.fire('tap', {
-              bubbles: true
-            });
+            target.dispatchEvent(new CustomEvent('tap', {bubbles: true, composed: true}));
             arrowLeft();
             expect(focusedDate()).to.eql(focused);
             done();
@@ -250,7 +248,7 @@
 
         it('should empty value with false input', done => {
           datepicker.value = '2000-01-01';
-          target.bindValue = '';
+          target.value = '';
           inputText('foo');
           datepicker.addEventListener('iron-overlay-closed', () => {
             expect(datepicker.value).to.equal('');
@@ -261,7 +259,7 @@
 
         it('should be invalid with false input', done => {
           datepicker.value = '2000-01-01';
-          target.bindValue = '';
+          target.value = '';
           inputText('foo');
           datepicker.addEventListener('iron-overlay-closed', () => {
             expect(datepicker.invalid).to.be.true;
@@ -461,43 +459,41 @@
 
           it('should be tabbable', () => {
             expect(parseInt(datepicker.$.overlay.getAttribute('tabindex'), 10)).to.equal(0);
+            expect(datepicker._inputElement.focused).to.be.undefined;
           });
 
           it('should focus the input on esc', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker._inputElement, 'focus');
             esc();
-            expect(spy.called).to.be.true;
+            expect(datepicker._inputElement.focused).to.be.true;
           });
 
           it('should focus the input on date tap', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker._inputElement, 'focus');
             datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
-            expect(spy.called).to.be.true;
+            expect(datepicker._inputElement.focused).to.be.true;
           });
 
           it('should focus the input on date cancel', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker._inputElement, 'focus');
             MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
-            expect(spy.called).to.be.true;
+            expect(datepicker._inputElement.focused).to.be.true;
           });
 
           it('should focus cancel on input shift tab', done => {
-            var spy = sinon.spy(datepicker.$.overlay.$.cancelButton, 'focus');
             open(() => {
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
-              expect(spy.called).to.be.true;
+              expect(datepicker.$.overlay.$.cancelButton.focused).to.be.true;
               done();
             });
           });
 
-          it('should focus input in cancel tab', () => {
+          it('should focus input in cancel tab', done => {
             open(() => {
               MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
-              expect(datepicker.$.inputcontainer.focused).to.be.true;
+              expect(datepicker._inputElement.focused).to.be.true;
+              done();
             });
           });
 

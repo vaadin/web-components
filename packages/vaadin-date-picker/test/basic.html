@@ -116,15 +116,6 @@
         expect(datepicker.$.input.placeholder).to.be.equal(placeholder);
       });
 
-      // label and placeholder will go on top of each other if always-float-label isn't set
-      // This is the similar behavior as paper-input has:
-      // PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
-      it('should set always-float-label when placeholder is provided', () => {
-        expect(datepicker.$.inputcontainer.alwaysFloatLabel).to.be.false;
-        datepicker.set('placeholder', 'Pick a date');
-        expect(datepicker.$.inputcontainer.alwaysFloatLabel).to.be.true;
-      });
-
       it('should scroll to today by default', done => {
         var spy = sinon.spy(datepicker.$.overlay, 'scrollToDate');
         open(datepicker, () => {
@@ -182,11 +173,6 @@
         expect(datepicker.label).to.be.undefined;
       });
 
-      it('label should be bound to label element', () => {
-        datepicker.label = 'This is LABEL';
-        expect(datepicker.$.label.innerHTML).to.eql('This is LABEL');
-      });
-
       it('should clear the value', () => {
         datepicker.value = '2000-02-01';
         tap(datepicker.$.clear);
@@ -195,16 +181,16 @@
 
       it('should format display correctly', () => {
         datepicker.value = '2000-02-01';
-        expect(datepicker.$.ironinput.bindValue).to.equal('2/1/2000');
+        expect(datepicker._inputElement.value).to.equal('2/1/2000');
         datepicker.value = '1999-12-31';
-        expect(datepicker.$.ironinput.bindValue).to.equal('12/31/1999');
+        expect(datepicker._inputElement.value).to.equal('12/31/1999');
       });
 
       it('should format display correctly with sub 100 years', () => {
         datepicker.value = '+000001-02-01';
-        expect(datepicker.$.ironinput.bindValue).to.equal('2/1/0001');
+        expect(datepicker._inputElement.value).to.equal('2/1/0001');
         datepicker.value = '+000099-02-01';
-        expect(datepicker.$.ironinput.bindValue).to.equal('2/1/0099');
+        expect(datepicker._inputElement.value).to.equal('2/1/0099');
       });
 
       it('should show clear icon', done => {

@@ -55,7 +55,7 @@
         it('should have application role on input container', () => {
           // Makes JAWS not to intercept arrow keys but pass them to the browser
           // instead. Otherwise, the keyboard navigation is broken with JAWS.
-          expect(datepicker.$.inputcontainer.getAttribute('role')).to.equal('application');
+          expect(datepicker._inputElement.getAttribute('role')).to.equal('application');
         });
 
         it('should have button roles on buttons', () => {
@@ -88,16 +88,8 @@
           expect(datepicker.$.calendar.getAttribute('aria-expanded')).to.equal('true');
         });
 
-        it('should have hidden state on label', () => {
-          // Shadow DOM issues does not allow us to easily assiciate the label
-          // element with the input. Instead, we just hide the label from
-          // screen readers and label the input with `aria-label` attribute.
-          expect(datepicker.$.label.getAttribute('aria-hidden')).to.equal('true');
-        });
-
         it('should have label property on the input', () => {
-          // The label attribute/property should propagate to the spoken input label.
-          expect(datepicker.$.input.getAttribute('aria-label')).to.equal('ariatest');
+          expect(datepicker._inputElement.getAttribute('aria-label')).to.equal('ariatest');
         });
       });
 
