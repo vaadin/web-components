@@ -1,0 +1,38 @@
+{
+  "name": "vaadin-checkbox",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "vaadin-checkbox",
+  "main": "vaadin-checkbox.html",
+  "keywords": [
+    "Vaadin",
+    "checkbox",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
+  ],
+  "dependencies": {
+    "polymer": "^2.0.0",
+    "vaadin-control-state-mixin": "^1.0.0",
+    "vaadin-themable-mixin": "^1.1.0"
+  },
+  "devDependencies": {
+    "elements-demo-resources": "^2.0.0",
+    "iron-component-page": "^2.0.0",
+    "iron-demo-helpers": "^2.0.0",
+    "iron-test-helpers": "^2.0.0",
+    "web-component-tester": "^6.0.0"
+  }
+}

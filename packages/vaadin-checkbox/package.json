@@ -1,0 +1,42 @@
+{
+  "name": "vaadin-checkbox",
+  "version": "0.1.0",
+  "description": "vaadin-checkbox",
+  "main": "vaadin-checkbox.html",
+  "repository": "vaadin/vaadin-checkbox",
+  "keywords": [
+    "Vaadin",
+    "checkbox",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-checkbox/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "eslint": "^3.19.0",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^1.7.0",
+    "gemini": "^4.17.1",
+    "gemini-polyserve": "^1.0.0",
+    "gemini-sauce": "^1.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^3.0.1",
+    "gulp-html-extract": "^0.0.3",
+    "gulp-stylelint": "^3.7.0",
+    "polymer-cli": "^0.18.0",
+    "polyserve": "^0.15.0",
+    "stylelint": "^7.10.0",
+    "stylelint-config-vaadin": "latest",
+    "web-component-tester": "^6.0.0",
+    "yargs": "latest"
+  }
+}
