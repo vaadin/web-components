@@ -1,0 +1,5827 @@
+{
+  "schema_version": "1.0.0",
+  "namespaces": [
+    {
+      "name": "Vaadin",
+      "description": "",
+      "summary": "",
+      "sourceRange": {
+        "file": "vaadin-date-picker.html",
+        "start": {
+          "line": 379,
+          "column": 6
+        },
+        "end": {
+          "line": 379,
+          "column": 42
+        }
+      },
+      "elements": [
+        {
+          "description": "`<vaadin-date-picker>` is a date selection field which includes a scrollable\nmonth calendar view.\n```html\n<vaadin-date-picker label=\"Birthday\"></vaadin-date-picker>\n```\n```js\ndatePicker.value = '2016-03-02';\n```\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\nThis element is also extended with the `IronFormElementBehavior` to\nenable usage within an `iron-form`.\n\n### Styling\nThe following custom properties and mixins are available for styling:\n\nCustom property | Description | Default\n----------------|-------------|----------\n`--vaadin-date-picker-overlay` | Mixin applied to the overlay | `{}`\n`--vaadin-date-picker-yearscroller` | Mixin applied to the year scroller | `{}`\n`--vaadin-date-picker-yearscroller-indicator` | Mixin applied to the year scroller indicator | `{}`\n`--vaadin-date-picker-calendar-icon` | Mixin applied to the calendar icon | `{}`\n`--vaadin-date-picker-clear-icon` | Mixin applied to the clear icon | `{}`\n`--vaadin-date-picker-scrollers-fade` | Mixin applied to the scrollers fade element | `{}`\n`--vaadin-date-picker-header` | Mixin applied to the picker header | `{}`\n`--vaadin-date-picker-toolbar` | Mixin applied to the picker toolbar | `{}`\n`--vaadin-date-picker-toolbar-icon` | Mixin applied to the picker toolbar icon | `{}`\n`--vaadin-date-picker-footer` | Mixin applied to the picker footer | `{}`\n`--vaadin-date-picker-calendar` | Mixin applied to a month calendar element | `{}`\n`--vaadin-date-picker-calendar-title` | Mixin applied to a month calendar title | `{}`\n`--vaadin-date-picker-calendar-cell` | Mixin applied to a month calendar cell | `{}`\n`--vaadin-date-picker-calendar-date-cell` | Mixin applied to a month calendar date cell | `{}`\n`--vaadin-date-picker-calendar-weekday-cell` | Mixin applied to a month calendar weekday cell | `{}`\n`--vaadin-date-picker-calendar-cell-today` | Mixin applied to a month calendar today cell | `{}`\n`--vaadin-date-picker-calendar-cell-selected` | Mixin applied to a month calendar selected cell | `{}`\n`--vaadin-date-picker-calendar-cell-focused` | Mixin applied to a month calendar focused cell | `{}`\n`--vaadin-date-picker-calendar-cell-today-selected` | Mixin applied to a month calendar selected today cell | `{}`\n`--vaadin-date-picker-calendar-cell-disabled` | Mixin applied to a month calendar disabled cell | `{}`\n`--vaadin-date-picker-calendar-weeknumber-cell` | Mixin applied to a month calendar weeknumber cell | `{}`\n`--vaadin-date-picker-calendar-focused-cell-focused` | Mixin applied to a focused month calendar focused cell | `{}`\n\nSee paper-input-container documentation for styling the included input fields\n\nIf you want to replace the default input field with a custom implementation, you should use the\n[`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.",
+          "summary": "",
+          "path": "vaadin-date-picker.html",
+          "properties": [
+            {
+              "name": "_selectedDate",
+              "type": "Date",
+              "description": "The current selected date.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 27,
+                  "column": 8
+                },
+                "end": {
+                  "line": 29,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusedDate",
+              "type": "Date",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 31,
+                  "column": 8
+                },
+                "end": {
+                  "line": 31,
+                  "column": 26
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 42,
+                  "column": 8
+                },
+                "end": {
+                  "line": 46,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_valueChanged\""
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "hasValue",
+              "type": "boolean",
+              "description": "Indicates whether this date picker has a value.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 51,
+                  "column": 8
+                },
+                "end": {
+                  "line": 55,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "initialPosition",
+              "type": "string",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 62,
+                  "column": 8
+                },
+                "end": {
+                  "line": 62,
+                  "column": 31
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "description": "The label for this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 67,
+                  "column": 8
+                },
+                "end": {
+                  "line": 67,
+                  "column": 21
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "opened",
+              "type": "boolean",
+              "description": "Set true to open the date selector overlay.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 72,
+                  "column": 8
+                },
+                "end": {
+                  "line": 76,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "showWeekNumbers",
+              "type": "boolean",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 83,
+                  "column": 8
+                },
+                "end": {
+                  "line": 85,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_fullscreen",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 87,
+                  "column": 8
+                },
+                "end": {
+                  "line": 90,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_fullscreenChanged\""
+                }
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_fullscreenMediaQuery",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 92,
+                  "column": 8
+                },
+                "end": {
+                  "line": 94,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"(max-width: 420px), (max-height: 420px)\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_touchPrevented",
+              "type": "Array",
+              "description": "'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 98,
+                  "column": 8
+                },
+                "end": {
+                  "line": 98,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "i18n",
+              "type": "Object",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 176,
+                  "column": 8
+                },
+                "end": {
+                  "line": 232,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "min",
+              "type": "string",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 243,
+                  "column": 8
+                },
+                "end": {
+                  "line": 246,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_minChanged\""
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "max",
+              "type": "string",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 257,
+                  "column": 8
+                },
+                "end": {
+                  "line": 260,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_maxChanged\""
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_minDate",
+              "type": "Date",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 265,
+                  "column": 8
+                },
+                "end": {
+                  "line": 269,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_maxDate",
+              "type": "Date",
+              "description": "The latest date that can be selected. All later dates will be disabled.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 274,
+                  "column": 8
+                },
+                "end": {
+                  "line": 277,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_noInput",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 279,
+                  "column": 8
+                },
+                "end": {
+                  "line": 282,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_ios",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 284,
+                  "column": 8
+                },
+                "end": {
+                  "line": 287,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_ignoreAnnounce",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 289,
+                  "column": 8
+                },
+                "end": {
+                  "line": 291,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "true",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusOverlayOnOpen",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 293,
+                  "column": 8
+                },
+                "end": {
+                  "line": 293,
+                  "column": 36
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_documentPointerEvents",
+              "type": "string",
+              "description": "When datepicker is opened, we're setting body pointer-events to none\nto make the datepicker behave in \"modal\" way. This variable keeps the\nprevious state of body pointer-events to restore it when datepicker is\nclosed.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 301,
+                  "column": 8
+                },
+                "end": {
+                  "line": 301,
+                  "column": 38
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "autoValidate",
+              "type": "boolean",
+              "description": "Set to true to auto-validate the input value.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 281,
+                  "column": 12
+                },
+                "end": {
+                  "line": 284,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "description": "Set to true to disable this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 289,
+                  "column": 12
+                },
+                "end": {
+                  "line": 293,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "readonly",
+              "type": "boolean",
+              "description": "Set to true to make this element read-only.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 298,
+                  "column": 12
+                },
+                "end": {
+                  "line": 302,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "placeholder",
+              "type": "string",
+              "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 307,
+                  "column": 12
+                },
+                "end": {
+                  "line": 307,
+                  "column": 31
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "errorMessage",
+              "type": "string",
+              "description": "The error message to display when the input is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 312,
+                  "column": 12
+                },
+                "end": {
+                  "line": 312,
+                  "column": 32
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_userInputValue",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 314,
+                  "column": 12
+                },
+                "end": {
+                  "line": 314,
+                  "column": 35
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 314,
+                  "column": 4
+                },
+                "end": {
+                  "line": 330,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "open",
+              "description": "Opens the dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 335,
+                  "column": 4
+                },
+                "end": {
+                  "line": 340,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_close",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 342,
+                  "column": 4
+                },
+                "end": {
+                  "line": 348,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "close",
+              "description": "Closes the dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 353,
+                  "column": 4
+                },
+                "end": {
+                  "line": 355,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_parseDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 368,
+                  "column": 4
+                },
+                "end": {
+                  "line": 380,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "str"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_isNoInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 382,
+                  "column": 4
+                },
+                "end": {
+                  "line": 384,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_formatISO",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 386,
+                  "column": 4
+                },
+                "end": {
+                  "line": 390,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_selectedDateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 392,
+                  "column": 4
+                },
+                "end": {
+                  "line": 399,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selectedDate"
+                },
+                {
+                  "name": "formatDate"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusedDateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 401,
+                  "column": 4
+                },
+                "end": {
+                  "line": 408,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "focusedDate"
+                },
+                {
+                  "name": "formatDate"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_hasValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 410,
+                  "column": 4
+                },
+                "end": {
+                  "line": 412,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_handleDateChange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 414,
+                  "column": 4
+                },
+                "end": {
+                  "line": 428,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property"
+                },
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_valueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 430,
+                  "column": 4
+                },
+                "end": {
+                  "line": 432,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_minChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 434,
+                  "column": 4
+                },
+                "end": {
+                  "line": 436,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_maxChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 438,
+                  "column": 4
+                },
+                "end": {
+                  "line": 440,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_updateAlignmentAndPosition",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 442,
+                  "column": 4
+                },
+                "end": {
+                  "line": 462,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_fullscreenChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 464,
+                  "column": 4
+                },
+                "end": {
+                  "line": 468,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onOverlayOpened",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 470,
+                  "column": 4
+                },
+                "end": {
+                  "line": 513,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_preventWebkitOverflowScrollingTouch",
+              "description": "ancestor container with -webkit-overflow-scrolling: touch;",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 517,
+                  "column": 4
+                },
+                "end": {
+                  "line": 531,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "element"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onOverlayClosed",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 533,
+                  "column": 4
+                },
+                "end": {
+                  "line": 571,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "detached",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 573,
+                  "column": 4
+                },
+                "end": {
+                  "line": 575,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onScroll",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 577,
+                  "column": 4
+                },
+                "end": {
+                  "line": 581,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_preventCancelOnComponentAccess",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 583,
+                  "column": 4
+                },
+                "end": {
+                  "line": 588,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 590,
+                  "column": 4
+                },
+                "end": {
+                  "line": 596,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusAndSelect",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 598,
+                  "column": 4
+                },
+                "end": {
+                  "line": 601,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_setSelectionRange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 603,
+                  "column": 4
+                },
+                "end": {
+                  "line": 607,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "a"
+                },
+                {
+                  "name": "b"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_preventDefault",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 609,
+                  "column": 4
+                },
+                "end": {
+                  "line": 611,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_eventKey",
+              "description": "Keyboard Navigation",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 616,
+                  "column": 4
+                },
+                "end": {
+                  "line": 625,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_isValidDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 627,
+                  "column": 4
+                },
+                "end": {
+                  "line": 629,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "d"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onKeydown",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 631,
+                  "column": 4
+                },
+                "end": {
+                  "line": 684,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_validateInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 686,
+                  "column": 4
+                },
+                "end": {
+                  "line": 690,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onUserInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 692,
+                  "column": 4
+                },
+                "end": {
+                  "line": 703,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_userInputValueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 705,
+                  "column": 4
+                },
+                "end": {
+                  "line": 714,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_announceFocusedDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 716,
+                  "column": 4
+                },
+                "end": {
+                  "line": 720,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "_focusedDate"
+                },
+                {
+                  "name": "opened"
+                },
+                {
+                  "name": "_ignoreAnnounce"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_getValidity",
+              "description": "Override the IronValidatableBehavior._getValidity implementation, replacing\nit with the iron-input validation.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 330,
+                  "column": 8
+                },
+                "end": {
+                  "line": 335,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_clear",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 337,
+                  "column": 8
+                },
+                "end": {
+                  "line": 341,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_toggle",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 343,
+                  "column": 8
+                },
+                "end": {
+                  "line": 346,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_input",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 348,
+                  "column": 8
+                },
+                "end": {
+                  "line": 350,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_computeAlwaysFloatLabel",
+              "description": "label and placeholder will go on top of each other if always-float-label isn't set\nThis is the similar behavior as paper-input has:\nPolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 357,
+                  "column": 8
+                },
+                "end": {
+                  "line": 359,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "placeholder"
+                }
+              ]
+            },
+            {
+              "name": "_getAriaExpanded",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 369,
+                  "column": 8
+                },
+                "end": {
+                  "line": 371,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "opened"
+                }
+              ]
+            }
+          ],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 270,
+              "column": 6
+            },
+            "end": {
+              "line": 372,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "name": "Vaadin.DatePickerElement",
+          "attributes": [
+            {
+              "name": "value",
+              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 42,
+                  "column": 8
+                },
+                "end": {
+                  "line": 46,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "has-value",
+              "description": "Indicates whether this date picker has a value.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 51,
+                  "column": 8
+                },
+                "end": {
+                  "line": 55,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "initial-position",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 62,
+                  "column": 8
+                },
+                "end": {
+                  "line": 62,
+                  "column": 31
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "label",
+              "description": "The label for this element.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 67,
+                  "column": 8
+                },
+                "end": {
+                  "line": 67,
+                  "column": 21
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "opened",
+              "description": "Set true to open the date selector overlay.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 72,
+                  "column": 8
+                },
+                "end": {
+                  "line": 76,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "show-week-numbers",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 83,
+                  "column": 8
+                },
+                "end": {
+                  "line": 85,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "i18n",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 176,
+                  "column": 8
+                },
+                "end": {
+                  "line": 232,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Object",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "min",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 243,
+                  "column": 8
+                },
+                "end": {
+                  "line": 246,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "max",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 257,
+                  "column": 8
+                },
+                "end": {
+                  "line": 260,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "auto-validate",
+              "description": "Set to true to auto-validate the input value.",
+              "sourceRange": {
+                "start": {
+                  "line": 281,
+                  "column": 12
+                },
+                "end": {
+                  "line": 284,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "disabled",
+              "description": "Set to true to disable this element.",
+              "sourceRange": {
+                "start": {
+                  "line": 289,
+                  "column": 12
+                },
+                "end": {
+                  "line": 293,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "readonly",
+              "description": "Set to true to make this element read-only.",
+              "sourceRange": {
+                "start": {
+                  "line": 298,
+                  "column": 12
+                },
+                "end": {
+                  "line": 302,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "placeholder",
+              "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
+              "sourceRange": {
+                "start": {
+                  "line": 307,
+                  "column": 12
+                },
+                "end": {
+                  "line": 307,
+                  "column": 31
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "error-message",
+              "description": "The error message to display when the input is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 312,
+                  "column": 12
+                },
+                "end": {
+                  "line": 312,
+                  "column": 32
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [],
+          "tagname": "vaadin-date-picker",
+          "mixins": [
+            "Vaadin.DatePickerMixin"
+          ],
+          "superclass": "HTMLElement"
+        }
+      ],
+      "mixins": [
+        {
+          "description": "",
+          "summary": "",
+          "path": "vaadin-date-picker-mixin.html",
+          "properties": [
+            {
+              "name": "_selectedDate",
+              "type": "Date",
+              "description": "The current selected date.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 27,
+                  "column": 8
+                },
+                "end": {
+                  "line": 29,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_focusedDate",
+              "type": "Date",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 31,
+                  "column": 8
+                },
+                "end": {
+                  "line": 31,
+                  "column": 26
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 42,
+                  "column": 8
+                },
+                "end": {
+                  "line": 46,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_valueChanged\""
+                }
+              }
+            },
+            {
+              "name": "hasValue",
+              "type": "boolean",
+              "description": "Indicates whether this date picker has a value.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 51,
+                  "column": 8
+                },
+                "end": {
+                  "line": 55,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
+              "name": "initialPosition",
+              "type": "string",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 62,
+                  "column": 8
+                },
+                "end": {
+                  "line": 62,
+                  "column": 31
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "description": "The label for this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 67,
+                  "column": 8
+                },
+                "end": {
+                  "line": 67,
+                  "column": 21
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "opened",
+              "type": "boolean",
+              "description": "Set true to open the date selector overlay.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 72,
+                  "column": 8
+                },
+                "end": {
+                  "line": 76,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              }
+            },
+            {
+              "name": "showWeekNumbers",
+              "type": "boolean",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 83,
+                  "column": 8
+                },
+                "end": {
+                  "line": 85,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_fullscreen",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 87,
+                  "column": 8
+                },
+                "end": {
+                  "line": 90,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_fullscreenChanged\""
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "_fullscreenMediaQuery",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 92,
+                  "column": 8
+                },
+                "end": {
+                  "line": 94,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"(max-width: 420px), (max-height: 420px)\""
+            },
+            {
+              "name": "_touchPrevented",
+              "type": "Array",
+              "description": "'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 98,
+                  "column": 8
+                },
+                "end": {
+                  "line": 98,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "i18n",
+              "type": "Object",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 176,
+                  "column": 8
+                },
+                "end": {
+                  "line": 232,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "min",
+              "type": "string",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 243,
+                  "column": 8
+                },
+                "end": {
+                  "line": 246,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_minChanged\""
+                }
+              }
+            },
+            {
+              "name": "max",
+              "type": "string",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 257,
+                  "column": 8
+                },
+                "end": {
+                  "line": 260,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_maxChanged\""
+                }
+              }
+            },
+            {
+              "name": "_minDate",
+              "type": "Date",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 265,
+                  "column": 8
+                },
+                "end": {
+                  "line": 269,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "_maxDate",
+              "type": "Date",
+              "description": "The latest date that can be selected. All later dates will be disabled.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 274,
+                  "column": 8
+                },
+                "end": {
+                  "line": 277,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "_noInput",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 279,
+                  "column": 8
+                },
+                "end": {
+                  "line": 282,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
+              "name": "_ios",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 284,
+                  "column": 8
+                },
+                "end": {
+                  "line": 287,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_ignoreAnnounce",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 289,
+                  "column": 8
+                },
+                "end": {
+                  "line": 291,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "true"
+            },
+            {
+              "name": "_focusOverlayOnOpen",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 293,
+                  "column": 8
+                },
+                "end": {
+                  "line": 293,
+                  "column": 36
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_documentPointerEvents",
+              "type": "string",
+              "description": "When datepicker is opened, we're setting body pointer-events to none\nto make the datepicker behave in \"modal\" way. This variable keeps the\nprevious state of body pointer-events to restore it when datepicker is\nclosed.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 301,
+                  "column": 8
+                },
+                "end": {
+                  "line": 301,
+                  "column": 38
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 314,
+                  "column": 4
+                },
+                "end": {
+                  "line": 330,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "open",
+              "description": "Opens the dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 335,
+                  "column": 4
+                },
+                "end": {
+                  "line": 340,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_close",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 342,
+                  "column": 4
+                },
+                "end": {
+                  "line": 348,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "close",
+              "description": "Closes the dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 353,
+                  "column": 4
+                },
+                "end": {
+                  "line": 355,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_parseDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 368,
+                  "column": 4
+                },
+                "end": {
+                  "line": 380,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "str"
+                }
+              ]
+            },
+            {
+              "name": "_isNoInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 382,
+                  "column": 4
+                },
+                "end": {
+                  "line": 384,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_formatISO",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 386,
+                  "column": 4
+                },
+                "end": {
+                  "line": 390,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                }
+              ]
+            },
+            {
+              "name": "_selectedDateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 392,
+                  "column": 4
+                },
+                "end": {
+                  "line": 399,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selectedDate"
+                },
+                {
+                  "name": "formatDate"
+                }
+              ]
+            },
+            {
+              "name": "_focusedDateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 401,
+                  "column": 4
+                },
+                "end": {
+                  "line": 408,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "focusedDate"
+                },
+                {
+                  "name": "formatDate"
+                }
+              ]
+            },
+            {
+              "name": "_hasValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 410,
+                  "column": 4
+                },
+                "end": {
+                  "line": 412,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "name": "_handleDateChange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 414,
+                  "column": 4
+                },
+                "end": {
+                  "line": 428,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property"
+                },
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ]
+            },
+            {
+              "name": "_valueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 430,
+                  "column": 4
+                },
+                "end": {
+                  "line": 432,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ]
+            },
+            {
+              "name": "_minChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 434,
+                  "column": 4
+                },
+                "end": {
+                  "line": 436,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ]
+            },
+            {
+              "name": "_maxChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 438,
+                  "column": 4
+                },
+                "end": {
+                  "line": 440,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ]
+            },
+            {
+              "name": "_updateAlignmentAndPosition",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 442,
+                  "column": 4
+                },
+                "end": {
+                  "line": 462,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_fullscreenChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 464,
+                  "column": 4
+                },
+                "end": {
+                  "line": 468,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_onOverlayOpened",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 470,
+                  "column": 4
+                },
+                "end": {
+                  "line": 513,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_preventWebkitOverflowScrollingTouch",
+              "description": "ancestor container with -webkit-overflow-scrolling: touch;",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 517,
+                  "column": 4
+                },
+                "end": {
+                  "line": 531,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "element"
+                }
+              ]
+            },
+            {
+              "name": "_onOverlayClosed",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 533,
+                  "column": 4
+                },
+                "end": {
+                  "line": 571,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "detached",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 573,
+                  "column": 4
+                },
+                "end": {
+                  "line": 575,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_onScroll",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 577,
+                  "column": 4
+                },
+                "end": {
+                  "line": 581,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_preventCancelOnComponentAccess",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 583,
+                  "column": 4
+                },
+                "end": {
+                  "line": 588,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_focus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 590,
+                  "column": 4
+                },
+                "end": {
+                  "line": 596,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_focusAndSelect",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 598,
+                  "column": 4
+                },
+                "end": {
+                  "line": 601,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_setSelectionRange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 603,
+                  "column": 4
+                },
+                "end": {
+                  "line": 607,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "a"
+                },
+                {
+                  "name": "b"
+                }
+              ]
+            },
+            {
+              "name": "_preventDefault",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 609,
+                  "column": 4
+                },
+                "end": {
+                  "line": 611,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_eventKey",
+              "description": "Keyboard Navigation",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 616,
+                  "column": 4
+                },
+                "end": {
+                  "line": 625,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_isValidDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 627,
+                  "column": 4
+                },
+                "end": {
+                  "line": 629,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "d"
+                }
+              ]
+            },
+            {
+              "name": "_onKeydown",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 631,
+                  "column": 4
+                },
+                "end": {
+                  "line": 684,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_validateInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 686,
+                  "column": 4
+                },
+                "end": {
+                  "line": 690,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ]
+            },
+            {
+              "name": "_onUserInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 692,
+                  "column": 4
+                },
+                "end": {
+                  "line": 703,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_userInputValueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 705,
+                  "column": 4
+                },
+                "end": {
+                  "line": 714,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "name": "_announceFocusedDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 716,
+                  "column": 4
+                },
+                "end": {
+                  "line": 720,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "_focusedDate"
+                },
+                {
+                  "name": "opened"
+                },
+                {
+                  "name": "_ignoreAnnounce"
+                }
+              ]
+            }
+          ],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 18,
+              "column": 2
+            },
+            "end": {
+              "line": 721,
+              "column": 3
+            }
+          },
+          "privacy": "public",
+          "name": "Vaadin.DatePickerMixin",
+          "attributes": [
+            {
+              "name": "value",
+              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "start": {
+                  "line": 42,
+                  "column": 8
+                },
+                "end": {
+                  "line": 46,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "has-value",
+              "description": "Indicates whether this date picker has a value.",
+              "sourceRange": {
+                "start": {
+                  "line": 51,
+                  "column": 8
+                },
+                "end": {
+                  "line": 55,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "initial-position",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "sourceRange": {
+                "start": {
+                  "line": 62,
+                  "column": 8
+                },
+                "end": {
+                  "line": 62,
+                  "column": 31
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "label",
+              "description": "The label for this element.",
+              "sourceRange": {
+                "start": {
+                  "line": 67,
+                  "column": 8
+                },
+                "end": {
+                  "line": 67,
+                  "column": 21
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "opened",
+              "description": "Set true to open the date selector overlay.",
+              "sourceRange": {
+                "start": {
+                  "line": 72,
+                  "column": 8
+                },
+                "end": {
+                  "line": 76,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "show-week-numbers",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "sourceRange": {
+                "start": {
+                  "line": 83,
+                  "column": 8
+                },
+                "end": {
+                  "line": 85,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "i18n",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "sourceRange": {
+                "start": {
+                  "line": 176,
+                  "column": 8
+                },
+                "end": {
+                  "line": 232,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Object"
+            },
+            {
+              "name": "min",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "start": {
+                  "line": 243,
+                  "column": 8
+                },
+                "end": {
+                  "line": 246,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "max",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "start": {
+                  "line": 257,
+                  "column": 8
+                },
+                "end": {
+                  "line": 260,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": []
+        }
+      ],
+      "classes": [
+        {
+          "description": "",
+          "summary": "",
+          "path": "vaadin-date-picker-helper.html",
+          "properties": [],
+          "methods": [],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 9,
+              "column": 28
+            },
+            "end": {
+              "line": 91,
+              "column": 3
+            }
+          },
+          "privacy": "public",
+          "name": "Vaadin.DatePickerHelper"
+        }
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "description": "",
+      "summary": "",
+      "path": "vaadin-month-calendar.html",
+      "properties": [
+        {
+          "name": "month",
+          "type": "Date",
+          "description": "A `Date` object defining the month to be displayed. Only year and\nmonth properties are actually used.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 159,
+              "column": 12
+            },
+            "end": {
+              "line": 162,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "selectedDate",
+          "type": "Date",
+          "description": "A `Date` object for the currently selected date.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 167,
+              "column": 12
+            },
+            "end": {
+              "line": 170,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          }
+        },
+        {
+          "name": "focusedDate",
+          "type": "Date",
+          "description": "A `Date` object for the currently focused date.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 175,
+              "column": 12
+            },
+            "end": {
+              "line": 175,
+              "column": 29
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "showWeekNumbers",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 177,
+              "column": 12
+            },
+            "end": {
+              "line": 180,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "i18n",
+          "type": "Object",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 182,
+              "column": 12
+            },
+            "end": {
+              "line": 184,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "ignoreTaps",
+          "type": "boolean",
+          "description": "Flag stating whether taps on the component should be ignored.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 189,
+              "column": 12
+            },
+            "end": {
+              "line": 189,
+              "column": 31
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_notTapping",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 191,
+              "column": 12
+            },
+            "end": {
+              "line": 191,
+              "column": 32
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "minDate",
+          "type": "Date",
+          "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 196,
+              "column": 12
+            },
+            "end": {
+              "line": 199,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "null"
+        },
+        {
+          "name": "maxDate",
+          "type": "Date",
+          "description": "The latest date that can be selected. All later dates will be disabled.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 204,
+              "column": 12
+            },
+            "end": {
+              "line": 207,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "null"
+        },
+        {
+          "name": "_days",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 209,
+              "column": 12
+            },
+            "end": {
+              "line": 212,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_getTitle",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 228,
+              "column": 8
+            },
+            "end": {
+              "line": 233,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "month"
+            },
+            {
+              "name": "monthNames"
+            }
+          ]
+        },
+        {
+          "name": "_onMonthGridTouchStart",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 235,
+              "column": 8
+            },
+            "end": {
+              "line": 240,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_dateAdd",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 242,
+              "column": 8
+            },
+            "end": {
+              "line": 244,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "delta"
+            }
+          ]
+        },
+        {
+          "name": "_applyFirstDayOfWeek",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 246,
+              "column": 8
+            },
+            "end": {
+              "line": 252,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "weekDayNames"
+            },
+            {
+              "name": "firstDayOfWeek"
+            }
+          ]
+        },
+        {
+          "name": "_getWeekDayNames",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 254,
+              "column": 8
+            },
+            "end": {
+              "line": 277,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "weekDayNames"
+            },
+            {
+              "name": "weekDayNamesShort"
+            },
+            {
+              "name": "showWeekNumbers"
+            },
+            {
+              "name": "firstDayOfWeek"
+            }
+          ]
+        },
+        {
+          "name": "_getDate",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 279,
+              "column": 8
+            },
+            "end": {
+              "line": 281,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            }
+          ]
+        },
+        {
+          "name": "_showWeekNumbersChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 283,
+              "column": 8
+            },
+            "end": {
+              "line": 289,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "showWeekNumbers"
+            },
+            {
+              "name": "firstDayOfWeek"
+            }
+          ]
+        },
+        {
+          "name": "_showWeekSeparator",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 291,
+              "column": 8
+            },
+            "end": {
+              "line": 294,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "showWeekNumbers"
+            },
+            {
+              "name": "firstDayOfWeek"
+            },
+            {
+              "name": "index"
+            }
+          ]
+        },
+        {
+          "name": "_isToday",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 296,
+              "column": 8
+            },
+            "end": {
+              "line": 298,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            }
+          ]
+        },
+        {
+          "name": "_getDays",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 300,
+              "column": 8
+            },
+            "end": {
+              "line": 325,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "month"
+            },
+            {
+              "name": "firstDayOfWeek"
+            }
+          ]
+        },
+        {
+          "name": "_getWeekNumber",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 327,
+              "column": 8
+            },
+            "end": {
+              "line": 340,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "days"
+            }
+          ]
+        },
+        {
+          "name": "_handleTap",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 342,
+              "column": 8
+            },
+            "end": {
+              "line": 347,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_preventDefault",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 349,
+              "column": 8
+            },
+            "end": {
+              "line": 351,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_getRole",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 353,
+              "column": 8
+            },
+            "end": {
+              "line": 355,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            }
+          ]
+        },
+        {
+          "name": "_getAriaLabel",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 357,
+              "column": 8
+            },
+            "end": {
+              "line": 372,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            }
+          ]
+        },
+        {
+          "name": "_getAriaDisabled",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 374,
+              "column": 8
+            },
+            "end": {
+              "line": 379,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "min"
+            },
+            {
+              "name": "max"
+            }
+          ]
+        }
+      ],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 147,
+          "column": 6
+        },
+        "end": {
+          "line": 380,
+          "column": 7
+        }
+      },
+      "privacy": "public",
+      "name": "MonthCalendarElement",
+      "attributes": [
+        {
+          "name": "month",
+          "description": "A `Date` object defining the month to be displayed. Only year and\nmonth properties are actually used.",
+          "sourceRange": {
+            "start": {
+              "line": 159,
+              "column": 12
+            },
+            "end": {
+              "line": 162,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "selected-date",
+          "description": "A `Date` object for the currently selected date.",
+          "sourceRange": {
+            "start": {
+              "line": 167,
+              "column": 12
+            },
+            "end": {
+              "line": 170,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "focused-date",
+          "description": "A `Date` object for the currently focused date.",
+          "sourceRange": {
+            "start": {
+              "line": 175,
+              "column": 12
+            },
+            "end": {
+              "line": 175,
+              "column": 29
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "show-week-numbers",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 177,
+              "column": 12
+            },
+            "end": {
+              "line": 180,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "i18n",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 182,
+              "column": 12
+            },
+            "end": {
+              "line": 184,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "ignore-taps",
+          "description": "Flag stating whether taps on the component should be ignored.",
+          "sourceRange": {
+            "start": {
+              "line": 189,
+              "column": 12
+            },
+            "end": {
+              "line": 189,
+              "column": 31
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "min-date",
+          "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+          "sourceRange": {
+            "start": {
+              "line": 196,
+              "column": 12
+            },
+            "end": {
+              "line": 199,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "max-date",
+          "description": "The latest date that can be selected. All later dates will be disabled.",
+          "sourceRange": {
+            "start": {
+              "line": 204,
+              "column": 12
+            },
+            "end": {
+              "line": 207,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "selected-date-changed",
+          "description": "Fired when the `selectedDate` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "vaadin-month-calendar",
+      "superclass": "HTMLElement"
+    },
+    {
+      "description": "",
+      "summary": "",
+      "path": "vaadin-infinite-scroller.html",
+      "properties": [
+        {
+          "name": "itemHeight",
+          "type": "number",
+          "description": "Height of individual items (in pixels).\nChanging after initialization not supported.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 79,
+              "column": 10
+            },
+            "end": {
+              "line": 82,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "50"
+        },
+        {
+          "name": "bufferSize",
+          "type": "number",
+          "description": "Count of individual items in each buffer.\nThe scroller has 2 buffers altogether so bufferSize of 20\nwill result in 40 buffered DOM items in total.\nChanging after initialization not supported.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 90,
+              "column": 10
+            },
+            "end": {
+              "line": 93,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "20"
+        },
+        {
+          "name": "_initialScroll",
+          "type": "?",
+          "description": "The amount of initial scroll top. Needed in order for the\nuser to be able to scroll backwards.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 99,
+              "column": 10
+            },
+            "end": {
+              "line": 101,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "500000"
+        },
+        {
+          "name": "_initialIndex",
+          "type": "?",
+          "description": "The index/position mapped at _initialScroll point.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 106,
+              "column": 10
+            },
+            "end": {
+              "line": 108,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "_buffers",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 110,
+              "column": 10
+            },
+            "end": {
+              "line": 110,
+              "column": 25
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_preventScrollEvent",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 112,
+              "column": 10
+            },
+            "end": {
+              "line": 112,
+              "column": 38
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_bufferHeight",
+          "type": "number",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 114,
+              "column": 10
+            },
+            "end": {
+              "line": 114,
+              "column": 31
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_mayHaveMomentum",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 116,
+              "column": 10
+            },
+            "end": {
+              "line": 116,
+              "column": 35
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_initialized",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 118,
+              "column": 10
+            },
+            "end": {
+              "line": 118,
+              "column": 31
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 120,
+              "column": 10
+            },
+            "end": {
+              "line": 123,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_activated\""
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 134,
+              "column": 6
+            },
+            "end": {
+              "line": 151,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_activated",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 153,
+              "column": 6
+            },
+            "end": {
+              "line": 158,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "active"
+            }
+          ]
+        },
+        {
+          "name": "_animationEnd",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 160,
+              "column": 6
+            },
+            "end": {
+              "line": 162,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_finishInit",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 164,
+              "column": 6
+            },
+            "end": {
+              "line": 178,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_translateBuffer",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 180,
+              "column": 6
+            },
+            "end": {
+              "line": 186,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "up"
+            }
+          ]
+        },
+        {
+          "name": "_scroll",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 188,
+              "column": 6
+            },
+            "end": {
+              "line": 219,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_reset",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 258,
+              "column": 6
+            },
+            "end": {
+              "line": 277,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_createPool",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 279,
+              "column": 6
+            },
+            "end": {
+              "line": 300,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_ensureStampedInstance",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 302,
+              "column": 6
+            },
+            "end": {
+              "line": 314,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "itemWrapper"
+            }
+          ]
+        },
+        {
+          "name": "_updateClones",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 316,
+              "column": 6
+            },
+            "end": {
+              "line": 332,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "viewPortOnly"
+            }
+          ]
+        },
+        {
+          "name": "_isVisible",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 334,
+              "column": 6
+            },
+            "end": {
+              "line": 337,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "element"
+            },
+            {
+              "name": "container"
+            }
+          ]
+        },
+        {
+          "name": "_forwardHostPropV2",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 339,
+              "column": 6
+            },
+            "end": {
+              "line": 341,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "prop"
+            },
+            {
+              "name": "value"
+            }
+          ]
+        },
+        {
+          "name": "_forwardParentProp",
+          "description": "Implements extension point from Templatizer mixin\nCalled as side-effect of a host property change, responsible for\nnotifying parent path change on each row.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 348,
+              "column": 6
+            },
+            "end": {
+              "line": 356,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "prop"
+            },
+            {
+              "name": "value"
+            }
+          ]
+        }
+      ],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 67,
+          "column": 4
+        },
+        "end": {
+          "line": 357,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "name": "InfiniteScrollerElement",
+      "attributes": [
+        {
+          "name": "item-height",
+          "description": "Height of individual items (in pixels).\nChanging after initialization not supported.",
+          "sourceRange": {
+            "start": {
+              "line": 79,
+              "column": 10
+            },
+            "end": {
+              "line": 82,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "buffer-size",
+          "description": "Count of individual items in each buffer.\nThe scroller has 2 buffers altogether so bufferSize of 20\nwill result in 40 buffered DOM items in total.\nChanging after initialization not supported.",
+          "sourceRange": {
+            "start": {
+              "line": 90,
+              "column": 10
+            },
+            "end": {
+              "line": 93,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "active",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 120,
+              "column": 10
+            },
+            "end": {
+              "line": 123,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "vaadin-infinite-scroller",
+      "superclass": "HTMLElement"
+    },
+    {
+      "description": "",
+      "summary": "",
+      "path": "vaadin-date-picker-overlay.html",
+      "properties": [
+        {
+          "name": "selectedDate",
+          "type": "Date",
+          "description": "The value for this element.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 351,
+              "column": 12
+            },
+            "end": {
+              "line": 354,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          }
+        },
+        {
+          "name": "focusedDate",
+          "type": "Date",
+          "description": "Date value which is focused using keyboard.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 359,
+              "column": 12
+            },
+            "end": {
+              "line": 363,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_focusedDateChanged\""
+            }
+          }
+        },
+        {
+          "name": "_focusedMonthDate",
+          "type": "number",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 365,
+              "column": 12
+            },
+            "end": {
+              "line": 365,
+              "column": 37
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "initialPosition",
+          "type": "Date",
+          "description": "Date which should be visible when there is no value selected.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 370,
+              "column": 12
+            },
+            "end": {
+              "line": 373,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_initialPositionChanged\""
+            }
+          }
+        },
+        {
+          "name": "_originDate",
+          "type": "?",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 375,
+              "column": 12
+            },
+            "end": {
+              "line": 377,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_visibleMonthIndex",
+          "type": "number",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 379,
+              "column": 12
+            },
+            "end": {
+              "line": 379,
+              "column": 38
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_desktopMode",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 381,
+              "column": 12
+            },
+            "end": {
+              "line": 381,
+              "column": 33
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_translateX",
+          "type": "?",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 383,
+              "column": 12
+            },
+            "end": {
+              "line": 385,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_translateXChanged\""
+            }
+          }
+        },
+        {
+          "name": "_yearScrollerWidth",
+          "type": "?",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 387,
+              "column": 12
+            },
+            "end": {
+              "line": 389,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "50"
+        },
+        {
+          "name": "i18n",
+          "type": "Object",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 391,
+              "column": 12
+            },
+            "end": {
+              "line": 393,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "showWeekNumbers",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 395,
+              "column": 12
+            },
+            "end": {
+              "line": 397,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_ignoreTaps",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 399,
+              "column": 12
+            },
+            "end": {
+              "line": 399,
+              "column": 32
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_notTapping",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 401,
+              "column": 12
+            },
+            "end": {
+              "line": 401,
+              "column": 32
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "minDate",
+          "type": "Date",
+          "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 406,
+              "column": 12
+            },
+            "end": {
+              "line": 406,
+              "column": 25
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "maxDate",
+          "type": "Date",
+          "description": "The latest date that can be selected. All later dates will be disabled.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 411,
+              "column": 12
+            },
+            "end": {
+              "line": 411,
+              "column": 25
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_focused",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 413,
+              "column": 12
+            },
+            "end": {
+              "line": 413,
+              "column": 29
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "description": "Input label",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 418,
+              "column": 12
+            },
+            "end": {
+              "line": 418,
+              "column": 25
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 422,
+              "column": 8
+            },
+            "end": {
+              "line": 429,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "attached",
+          "description": "Fired when the scroller reaches the target scrolling position.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 438,
+              "column": 8
+            },
+            "end": {
+              "line": 444,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "announceFocusedDate",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 446,
+              "column": 8
+            },
+            "end": {
+              "line": 470,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "focusCancel",
+          "description": "Focuses the cancel button",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 475,
+              "column": 8
+            },
+            "end": {
+              "line": 477,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "scrollToDate",
+          "description": "Scrolls the list to the given Date.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 482,
+              "column": 8
+            },
+            "end": {
+              "line": 484,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "animate"
+            }
+          ]
+        },
+        {
+          "name": "_focusedDateChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 486,
+              "column": 8
+            },
+            "end": {
+              "line": 488,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "focusedDate"
+            }
+          ]
+        },
+        {
+          "name": "revealDate",
+          "description": "Scrolls the month and year scrollers enough to reveal the given date.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 493,
+              "column": 8
+            },
+            "end": {
+              "line": 507,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            }
+          ]
+        },
+        {
+          "name": "_onOverlayFocus",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 509,
+              "column": 8
+            },
+            "end": {
+              "line": 511,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onOverlayBlur",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 513,
+              "column": 8
+            },
+            "end": {
+              "line": 515,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_initialPositionChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 517,
+              "column": 8
+            },
+            "end": {
+              "line": 519,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "initialPosition"
+            }
+          ]
+        },
+        {
+          "name": "_repositionYearScroller",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 521,
+              "column": 8
+            },
+            "end": {
+              "line": 524,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_repositionMonthScroller",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 526,
+              "column": 8
+            },
+            "end": {
+              "line": 529,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onMonthScroll",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 531,
+              "column": 8
+            },
+            "end": {
+              "line": 534,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onYearScroll",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 536,
+              "column": 8
+            },
+            "end": {
+              "line": 539,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onYearScrollTouchStart",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 541,
+              "column": 8
+            },
+            "end": {
+              "line": 546,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onMonthScrollTouchStart",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 548,
+              "column": 8
+            },
+            "end": {
+              "line": 550,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_doIgnoreTaps",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 552,
+              "column": 8
+            },
+            "end": {
+              "line": 556,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_formatDisplayed",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 558,
+              "column": 8
+            },
+            "end": {
+              "line": 562,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "formatDate"
+            }
+          ]
+        },
+        {
+          "name": "_onTodayTap",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 564,
+              "column": 8
+            },
+            "end": {
+              "line": 574,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_scrollToCurrentMonth",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 576,
+              "column": 8
+            },
+            "end": {
+              "line": 582,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_showClear",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 584,
+              "column": 8
+            },
+            "end": {
+              "line": 586,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "selectedDate"
+            }
+          ]
+        },
+        {
+          "name": "_onYearTap",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 588,
+              "column": 8
+            },
+            "end": {
+              "line": 594,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_scrollToPosition",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 596,
+              "column": 8
+            },
+            "end": {
+              "line": 652,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "targetPosition"
+            },
+            {
+              "name": "animate"
+            }
+          ]
+        },
+        {
+          "name": "_limit",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 654,
+              "column": 8
+            },
+            "end": {
+              "line": 656,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "value"
+            },
+            {
+              "name": "range"
+            }
+          ]
+        },
+        {
+          "name": "_handleTrack",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 658,
+              "column": 8
+            },
+            "end": {
+              "line": 675,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_track",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 677,
+              "column": 8
+            },
+            "end": {
+              "line": 701,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_toggleYearScroller",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 703,
+              "column": 8
+            },
+            "end": {
+              "line": 705,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_openYearScroller",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 707,
+              "column": 8
+            },
+            "end": {
+              "line": 709,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_closeYearScroller",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 711,
+              "column": 8
+            },
+            "end": {
+              "line": 713,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_isYearScrollerVisible",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 715,
+              "column": 8
+            },
+            "end": {
+              "line": 717,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_translateXChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 719,
+              "column": 8
+            },
+            "end": {
+              "line": 725,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ]
+        },
+        {
+          "name": "_yearAfterXYears",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 727,
+              "column": 8
+            },
+            "end": {
+              "line": 731,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "index"
+            }
+          ]
+        },
+        {
+          "name": "_yearAfterXMonths",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 733,
+              "column": 8
+            },
+            "end": {
+              "line": 735,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "months"
+            }
+          ]
+        },
+        {
+          "name": "_dateAfterXMonths",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 737,
+              "column": 8
+            },
+            "end": {
+              "line": 742,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "months"
+            }
+          ]
+        },
+        {
+          "name": "_differenceInMonths",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 744,
+              "column": 8
+            },
+            "end": {
+              "line": 747,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date1"
+            },
+            {
+              "name": "date2"
+            }
+          ]
+        },
+        {
+          "name": "_differenceInYears",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 749,
+              "column": 8
+            },
+            "end": {
+              "line": 751,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date1"
+            },
+            {
+              "name": "date2"
+            }
+          ]
+        },
+        {
+          "name": "_clear",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 753,
+              "column": 8
+            },
+            "end": {
+              "line": 756,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_close",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 758,
+              "column": 8
+            },
+            "end": {
+              "line": 760,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_cancel",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 762,
+              "column": 8
+            },
+            "end": {
+              "line": 765,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_preventDefault",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 767,
+              "column": 8
+            },
+            "end": {
+              "line": 769,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_eventKey",
+          "description": "Keyboard Navigation",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 774,
+              "column": 8
+            },
+            "end": {
+              "line": 783,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_onKeydown",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 785,
+              "column": 8
+            },
+            "end": {
+              "line": 857,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_buttonFocused",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 859,
+              "column": 8
+            },
+            "end": {
+              "line": 861,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_currentlyFocusedDate",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 863,
+              "column": 8
+            },
+            "end": {
+              "line": 865,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_moveFocusByDays",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 867,
+              "column": 8
+            },
+            "end": {
+              "line": 893,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "days"
+            }
+          ]
+        },
+        {
+          "name": "_moveFocusByMonths",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 895,
+              "column": 8
+            },
+            "end": {
+              "line": 926,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "months"
+            }
+          ]
+        },
+        {
+          "name": "_moveFocusInsideMonth",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 928,
+              "column": 8
+            },
+            "end": {
+              "line": 954,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "focusedDate"
+            },
+            {
+              "name": "property"
+            }
+          ]
+        },
+        {
+          "name": "_dateAllowed",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 956,
+              "column": 8
+            },
+            "end": {
+              "line": 958,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "min"
+            },
+            {
+              "name": "max"
+            }
+          ]
+        },
+        {
+          "name": "_isTodayAllowed",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 960,
+              "column": 8
+            },
+            "end": {
+              "line": 967,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "min"
+            },
+            {
+              "name": "max"
+            }
+          ]
+        },
+        {
+          "name": "_stopPropagation",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 969,
+              "column": 8
+            },
+            "end": {
+              "line": 971,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        }
+      ],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 340,
+          "column": 6
+        },
+        "end": {
+          "line": 972,
+          "column": 7
+        }
+      },
+      "privacy": "public",
+      "name": "DatePickerOverlayElement",
+      "attributes": [
+        {
+          "name": "selected-date",
+          "description": "The value for this element.",
+          "sourceRange": {
+            "start": {
+              "line": 351,
+              "column": 12
+            },
+            "end": {
+              "line": 354,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "focused-date",
+          "description": "Date value which is focused using keyboard.",
+          "sourceRange": {
+            "start": {
+              "line": 359,
+              "column": 12
+            },
+            "end": {
+              "line": 363,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "initial-position",
+          "description": "Date which should be visible when there is no value selected.",
+          "sourceRange": {
+            "start": {
+              "line": 370,
+              "column": 12
+            },
+            "end": {
+              "line": 373,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "i18n",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 391,
+              "column": 12
+            },
+            "end": {
+              "line": 393,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "show-week-numbers",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 395,
+              "column": 12
+            },
+            "end": {
+              "line": 397,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "min-date",
+          "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+          "sourceRange": {
+            "start": {
+              "line": 406,
+              "column": 12
+            },
+            "end": {
+              "line": 406,
+              "column": 25
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "max-date",
+          "description": "The latest date that can be selected. All later dates will be disabled.",
+          "sourceRange": {
+            "start": {
+              "line": 411,
+              "column": 12
+            },
+            "end": {
+              "line": 411,
+              "column": 25
+            }
+          },
+          "metadata": {},
+          "type": "Date"
+        },
+        {
+          "name": "label",
+          "description": "Input label",
+          "sourceRange": {
+            "start": {
+              "line": 418,
+              "column": 12
+            },
+            "end": {
+              "line": 418,
+              "column": 25
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "scroll-animation-finished",
+          "description": "scroll-animation-finished",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "selected-date-changed",
+          "description": "Fired when the `selectedDate` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "focused-date-changed",
+          "description": "Fired when the `focusedDate` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "vaadin-date-picker-overlay",
+      "superclass": "HTMLElement"
+    }
+  ]
+}
