@@ -31,7 +31,8 @@
             return suites.concat([suite, suite + '?wc-shadydom=true']);
         }, [])
     }
-
+    // increase the default load page time out
+    WCT._ChildRunner.loadTimeout = 60000 * 3;
     WCT.loadSuites(createSuitesURLs());
 </script>
 </body>

@@ -4,18 +4,19 @@
   "main": "vaadin-board.html",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
   "dependencies": {
-    "polymer": "^2.0.0-rc.1",
-    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#2.0-preview",
+    "polymer": "^2.0.0",
+    "iron-resizable-behavior": "^2.0.0",
     "vaadin-license-checker": "vaadin/license-checker#^1.0.0"
   },
   "devDependencies": {
-    "app-layout": "PolymerElements/app-layout#2.0-preview",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "^1.0.0-rc.4",
-    "test-fixture": "^2.0.0"
+    "app-layout": "PolymerElements/app-layout#v2.0.0",
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "^1.0.0",
+    "test-fixture": "^3.0.0-rc.1"
   },
   "resolutions": {
-    "test-fixture": "^2.0.0",
-    "polymer": "^2.0.0-rc.1"
+    "test-fixture": "^3.0.0-rc.1",
+    "polymer": "^2.0.0",
+    "webcomponentsjs": "^1.0.0"
   }
 }

@@ -21,7 +21,7 @@
     "gulp-html-extract": "^0.1.0",
     "gulp-stylelint": "^3.7.0",
     "stylelint-config-vaadin": "^0.1.0",
-    "web-component-tester": "^5.0.0"
+    "web-component-tester": "^6.0.0"
   },
   "scripts": {
     "test": "wct"
