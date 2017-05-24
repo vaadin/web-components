@@ -42,7 +42,8 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         value: {
           type: String,
-          observer: '_valueChanged'
+          observer: '_valueChanged',
+          notify: true
         },
 
         /**
@@ -717,14 +718,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.overlay.announceFocusedDate();
       }
     }
-
-    /**
-     * Fired when the value changes.
-     *
-     * @event value-changed
-     * @param {Object} detail
-     * @param {String} detail.value the date value or an empty `String`.
-     */
   };
 
 </script>
