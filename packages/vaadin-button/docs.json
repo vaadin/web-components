@@ -8,75 +8,19 @@
       "sourceRange": {
         "file": "vaadin-button.html",
         "start": {
-          "line": 101,
+          "line": 99,
           "column": 6
         },
         "end": {
-          "line": 101,
+          "line": 99,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-button>` is a Polymer element for customized buttons.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element\n\nThe following attributes are exposed for styling:\n\nAttribute | Description\n--------- | -----------\n`active` | Set when the button is pressed down, either with mouse, touch or the keyboard.\n`disabled` | Set when the button is disabled.\n`focus-ring` | Set when the button is focused using the keyboard.\n`focused` | Set when the button is focused.",
+          "description": "`<vaadin-button>` is a Polymer element providing an accessible and customizable button.\n\n```html\n<vaadin-button>\n</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n----------------|----------------\n`button` | The internal `<button>` element\n\nThe following attributes are exposed for styling:\n\nAttribute | Description\n--------- | -----------\n`active` | Set when the button is pressed down, either with mouse, touch or the keyboard.\n`disabled` | Set when the button is disabled.\n`focus-ring` | Set when the button is focused using the keyboard.\n`focused` | Set when the button is focused.",
           "summary": "",
           "path": "vaadin-button.html",
-          "attributes": [
-            {
-              "name": "autofocus",
-              "description": "Specify that this control should have input focus when the page loads.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 44,
-                  "column": 8
-                },
-                "end": {
-                  "line": 46,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
-              "name": "focused",
-              "description": "If true, the element currently has focus.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 51,
-                  "column": 8
-                },
-                "end": {
-                  "line": 57,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
-              "name": "disabled",
-              "description": "If true, the user cannot interact with this element.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 62,
-                  "column": 8
-                },
-                "end": {
-                  "line": 66,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            }
-          ],
           "properties": [
             {
               "name": "autofocus",
@@ -84,13 +28,13 @@
               "description": "Specify that this control should have input focus when the page loads.",
               "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 44,
+                  "line": 50,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 52,
                   "column": 9
                 }
               },
@@ -105,13 +49,13 @@
               "description": "If true, the element currently has focus.",
               "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 51,
+                  "line": 57,
                   "column": 8
                 },
                 "end": {
-                  "line": 57,
+                  "line": 63,
                   "column": 9
                 }
               },
@@ -130,13 +74,13 @@
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 62,
+                  "line": 68,
                   "column": 8
                 },
                 "end": {
-                  "line": 66,
+                  "line": 72,
                   "column": 9
                 }
               },
@@ -155,11 +99,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 71,
+                  "line": 69,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 80,
                   "column": 9
                 }
               },
@@ -169,15 +113,15 @@
             {
               "name": "connectedCallback",
               "description": "",
-              "privacy": "private",
+              "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 101,
                   "column": 4
                 },
                 "end": {
-                  "line": 101,
+                  "line": 106,
                   "column": 5
                 }
               },
@@ -188,15 +132,15 @@
             {
               "name": "disconnectedCallback",
               "description": "",
-              "privacy": "private",
+              "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 108,
                   "column": 4
                 },
                 "end": {
-                  "line": 108,
+                  "line": 113,
                   "column": 5
                 }
               },
@@ -209,13 +153,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 115,
                   "column": 4
                 },
                 "end": {
-                  "line": 118,
+                  "line": 123,
                   "column": 5
                 }
               },
@@ -232,13 +176,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 120,
+                  "line": 125,
                   "column": 4
                 },
                 "end": {
-                  "line": 122,
+                  "line": 127,
                   "column": 5
                 }
               },
@@ -255,13 +199,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 129,
                   "column": 4
                 },
                 "end": {
-                  "line": 126,
+                  "line": 131,
                   "column": 5
                 }
               },
@@ -274,9 +218,9 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 137,
+                  "line": 142,
                   "column": 4
                 },
                 "end": {
@@ -297,7 +241,7 @@
               "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 152,
                   "column": 4
@@ -316,7 +260,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 156,
                   "column": 4
@@ -339,7 +283,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-text-field/vaadin-control-state-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 167,
                   "column": 4
@@ -363,11 +307,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 84,
+                  "line": 82,
                   "column": 8
                 },
                 "end": {
-                  "line": 89,
+                  "line": 87,
                   "column": 9
                 }
               },
@@ -375,11 +319,86 @@
               "params": []
             }
           ],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 64,
+              "column": 6
+            },
+            "end": {
+              "line": 92,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "name": "Vaadin.ButtonElement",
+          "attributes": [
+            {
+              "name": "autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "sourceRange": {
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 50,
+                  "column": 8
+                },
+                "end": {
+                  "line": 52,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "focused",
+              "description": "If true, the element currently has focus.",
+              "sourceRange": {
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 57,
+                  "column": 8
+                },
+                "end": {
+                  "line": 63,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "sourceRange": {
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 68,
+                  "column": 8
+                },
+                "end": {
+                  "line": 72,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            }
+          ],
+          "events": [],
           "styling": {
             "cssVariables": [],
             "selectors": []
           },
-          "demos": [],
           "slots": [
             {
               "description": "",
@@ -387,31 +406,17 @@
               "range": {
                 "file": "vaadin-button.html",
                 "start": {
-                  "line": 31,
+                  "line": 29,
                   "column": 6
                 },
                 "end": {
-                  "line": 31,
+                  "line": 29,
                   "column": 19
                 }
               }
             }
           ],
-          "events": [],
-          "metadata": {},
-          "sourceRange": {
-            "start": {
-              "line": 66,
-              "column": 6
-            },
-            "end": {
-              "line": 94,
-              "column": 7
-            }
-          },
-          "privacy": "public",
           "tagname": "vaadin-button",
-          "classname": "Vaadin.ButtonElement",
           "mixins": [
             "Vaadin.ControlStateMixin",
             "Vaadin.ThemableMixin"
