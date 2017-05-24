@@ -343,7 +343,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e) {
         e.stopPropagation();
       }
-      this.inputElement.focus();
+      this._inputElement.focus();
       this.close();
     }
 
@@ -354,18 +354,14 @@ This program is available under Apache License Version 2.0, available at https:/
       this.$.dropdown.close();
     }
 
-    /**
-     * @property inputElement
-     * @type HTMLElement
-     */
-    get inputElement() {
+    get _inputElement() {
       return this._input();
     }
 
     get _nativeInput() {
-      if (this.inputElement) {
-        return this.inputElement.inputElement ? this.inputElement.inputElement :
-           window.unwrap ? window.unwrap(this.inputElement) : this.inputElement;
+      if (this._inputElement) {
+        return this._inputElement.inputElement ? this._inputElement.inputElement :
+           window.unwrap ? window.unwrap(this._inputElement) : this._inputElement;
       }
     }
 

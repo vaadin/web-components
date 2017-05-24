@@ -113,13 +113,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         set _inputValue(value) {
-          if (this.inputElement) {
-            this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = value;
+          if (this._inputElement) {
+            this._inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)] = value;
           }
         }
 
         get _inputValue() {
-          return this.inputElement && this.inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)];
+          return this._inputElement && this._inputElement[Polymer.CaseMap.dashToCamelCase(this.attrForValue)];
         }
       }
 

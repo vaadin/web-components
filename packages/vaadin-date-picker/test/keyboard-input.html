@@ -468,21 +468,21 @@
 
           it('should focus the input on esc', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            var spy = sinon.spy(datepicker._inputElement, 'focus');
             esc();
             expect(spy.called).to.be.true;
           });
 
           it('should focus the input on date tap', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            var spy = sinon.spy(datepicker._inputElement, 'focus');
             datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
             expect(spy.called).to.be.true;
           });
 
           it('should focus the input on date cancel', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            var spy = sinon.spy(datepicker._inputElement, 'focus');
             MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
             expect(spy.called).to.be.true;
           });
@@ -490,7 +490,7 @@
           it('should focus cancel on input shift tab', done => {
             var spy = sinon.spy(datepicker.$.overlay.$.cancelButton, 'focus');
             open(() => {
-              MockInteractions.pressAndReleaseKeyOn(datepicker.inputElement, 9, 'shift');
+              MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
               expect(spy.called).to.be.true;
               done();
             });
@@ -499,7 +499,7 @@
           // FIXME: flaky tests
           // it('should focus input in cancel tab', done => {
           // open(() => {
-          // var spy = sinon.spy(datepicker.inputElement, 'focus');
+          // var spy = sinon.spy(datepicker._inputElement, 'focus');
           // MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
           // MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
           // expect(spy.called).to.be.true;
@@ -522,7 +522,7 @@
           it('should reveal the focused date on tab focus from input', done => {
             open(() => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
-              MockInteractions.pressAndReleaseKeyOn(datepicker.inputElement, 9);
+              MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9);
               expect(spy.called).to.be.true;
               done();
             });
