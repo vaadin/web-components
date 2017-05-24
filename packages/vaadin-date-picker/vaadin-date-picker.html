@@ -264,7 +264,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * If you want to replace the default input field with a custom implementation, you should use the
        * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
        *
-       * @element vaadin-date-picker
+       * @memberof Vaadin
+       * @mixes Vaadin.DatePickerMixin
        * @demo demo/index.html
        */
       class DatePickerElement extends Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)) {
