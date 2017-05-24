@@ -51,7 +51,7 @@
       });
 
       it('should have correct buffer count', () => {
-        expect(scroller.$$('.buffer').children).to.have.length(80);
+        expect(scroller.root.querySelector('.buffer').children).to.have.length(80);
       });
 
       it('should reflect currently visible item index as position scrolling down', done => {

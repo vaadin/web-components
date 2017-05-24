@@ -86,7 +86,7 @@
 
         it('should set ignoreTaps to calendar on scroll', done => {
           listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
-            expect(overlay.$.scroller.$$('vaadin-month-calendar').ignoreTaps).to.be.true;
+            expect(overlay.$.scroller.root.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
             done();
           });
 
