@@ -595,15 +595,13 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._noInput) {
         this.$.overlay.focus();
       } else {
-        this.inputElement.focus();
+        this._nativeInput.focus();
       }
     }
 
     _focusAndSelect() {
-      if (!this._noInput) {
-        this._focus();
-        this._setSelectionRange(0, this._inputValue.length);
-      }
+      this._focus();
+      this._setSelectionRange(0, this._inputValue.length);
     }
 
     _setSelectionRange(a, b) {
