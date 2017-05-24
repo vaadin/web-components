@@ -29,7 +29,7 @@
   <script>
     // iOS doesn't support arrow keys etc.
     if (!ios) {
-      describe('keyboard navigation', function() {
+      describe('keyboard navigation', () => {
 
         var target;
         var overlay;
@@ -82,39 +82,45 @@
           return overlay.focusedDate;
         }
 
-        describe('date-picker', function() {
+        describe('date-picker', () => {
           var datepicker;
 
-          beforeEach(function() {
+          beforeEach(() => {
             datepicker = fixture('datepicker');
             overlay = datepicker.$.overlay;
           });
 
-          it('should open overlay on down', function() {
+          afterEach(() => {
+            if (datepicker._debouncerRefit) {
+              datepicker._debouncerRefit.flush();
+            }
+          });
+
+          it('should open overlay on down', () => {
             target = datepicker.$.input;
             arrowDown();
 
             expect(datepicker.opened).to.be.true;
           });
 
-          it('should open overlay on up', function() {
+          it('should open overlay on up', () => {
             target = datepicker.$.input;
             arrowUp();
 
             expect(datepicker.opened).to.be.true;
           });
 
-          it('should close overlay on esc', function(done) {
+          it('should close overlay on esc', done => {
             datepicker.open();
             target = datepicker.$.overlay;
-            datepicker.async(function() {
+            setTimeout(() => {
               esc();
               expect(datepicker.opened).to.be.false;
               done();
             }, 1);
           });
 
-          it('should be focused on selected value when overlay is opened', function() {
+          it('should be focused on selected value when overlay is opened', () => {
             datepicker.value = '2001-01-01';
 
             datepicker.open();
@@ -124,7 +130,7 @@
             expect(focusedDate()).to.eql(new Date(2001, 0, 2));
           });
 
-          it('should be focused on initial position when no value is set', function(done) {
+          it('should be focused on initial position when no value is set', done => {
             datepicker.value = null;
             datepicker.initialPosition = '2001-01-01';
 
@@ -133,7 +139,7 @@
 
             // wait for the 'iron-overlay-opened' to be fired to that the initialPosition
             // is set to the overlay.
-            datepicker.async(function() {
+            setTimeout(() => {
               arrowRight();
 
               expect(focusedDate()).to.eql(new Date(2001, 0, 2));
@@ -141,7 +147,7 @@
             }, 1);
           });
 
-          it('should be focused on today if no initial position is set', function() {
+          it('should be focused on today if no initial position is set', () => {
             var today = new Date();
             datepicker.value = null;
             datepicker.initialPosition = null;
@@ -153,7 +159,7 @@
             expect(focusedDate()).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
           });
 
-          it('should not lose focused date after deselecting', function() {
+          it('should not lose focused date after deselecting', () => {
             var _focused = focusedDate();
             datepicker.open();
             target = overlay;
@@ -164,9 +170,9 @@
           });
         });
 
-        describe('overlay', function() {
+        describe('overlay', () => {
 
-          beforeEach(function(done) {
+          beforeEach(done => {
             overlay = fixture('overlay');
             overlay.i18n = getDefaultI18n();
             target = overlay;
@@ -175,45 +181,44 @@
             overlay.focusedDate = new Date(2000, 0, 1);
 
             overlay.scrollToDate(overlay.focusedDate);
-            listenForEvent(overlay, 'scroll-animation-finished', function() {
-              Polymer.RenderStatus.afterNextRender(overlay, done);
-            });
+            listenForEvent(overlay, 'scroll-animation-finished', () =>
+              Polymer.RenderStatus.afterNextRender(overlay, done));
           });
 
-          it('should focus one week forward with arrow down', function() {
+          it('should focus one week forward with arrow down', () => {
             arrowDown(overlay);
 
             expect(overlay.focusedDate).to.eql(new Date(2000, 0, 8));
           });
 
-          it('should focus one week backward with arrow up', function() {
+          it('should focus one week backward with arrow up', () => {
             arrowUp(overlay);
 
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus one day forward with arrow right', function() {
+          it('should focus one day forward with arrow right', () => {
             arrowRight();
 
             expect(overlay.focusedDate).to.eql(new Date(2000, 0, 2));
 
           });
 
-          it('should focus one day backward with arrow left', function() {
+          it('should focus one day backward with arrow left', () => {
             arrowLeft();
 
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 31));
           });
 
-          it('should close overlay with enter', function() {
+          it('should close overlay with enter', () => {
             var spy = sinon.spy(overlay, '_close');
             enter();
 
             expect(spy.calledOnce).to.be.true;
           });
 
-          it('should scroll to focused month', function(done) {
-            overlay.addEventListener('scroll-animation-finished', function(e) {
+          it('should scroll to focused month', done => {
+            overlay.addEventListener('scroll-animation-finished', e => {
               expect(e.detail.position).to.eql(e.detail.oldPosition - 1);
               done();
             });
@@ -221,53 +226,53 @@
             arrowUp();
           });
 
-          it('should select a date with space', function() {
+          it('should select a date with space', () => {
             arrowRight();
             space();
 
             expect(overlay.selectedDate).to.eql(new Date(2000, 0, 2));
           });
 
-          it('should deselect selected date with space', function() {
+          it('should deselect selected date with space', () => {
             space();
             space();
 
             expect(overlay.selectedDate).to.be.empty;
           });
 
-          it('should focus first day of the month with home', function() {
+          it('should focus first day of the month with home', () => {
             arrowLeft();
             home();
 
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 1));
           });
 
-          it('should focus last day of the month with end', function() {
+          it('should focus last day of the month with end', () => {
             end();
 
             expect(overlay.focusedDate).to.eql(new Date(2000, 0, 31));
           });
 
-          it('should focus next month with pagedown', function() {
+          it('should focus next month with pagedown', () => {
             pageDown();
 
             expect(focusedDate()).to.eql(new Date(2000, 1, 1));
           });
 
-          it('should focus previous month with pageup', function() {
+          it('should focus previous month with pageup', () => {
             pageUp();
 
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 1));
           });
 
-          it('should not skip a month', function() {
+          it('should not skip a month', () => {
             overlay.focusedDate = new Date(2000, 0, 31);
             pageDown();
 
             expect(overlay.focusedDate).to.eql(new Date(2000, 1, 29));
           });
 
-          it('should focus the previously focused date number if available', function() {
+          it('should focus the previously focused date number if available', () => {
             overlay.focusedDate = new Date(2000, 0, 31);
             pageDown();
             pageDown();
@@ -275,20 +280,20 @@
             expect(overlay.focusedDate).to.eql(new Date(2000, 2, 31));
           });
 
-          it('should focus next year with shift and pagedown', function() {
+          it('should focus next year with shift and pagedown', () => {
             pageDown('shift');
 
             expect(overlay.focusedDate).to.eql(new Date(2001, 0, 1));
           });
 
-          it('should focus previous year with shift and pageup', function() {
+          it('should focus previous year with shift and pageup', () => {
             pageUp('shift');
 
             expect(overlay.focusedDate).to.eql(new Date(1999, 0, 1));
           });
 
-          it('should scroll up when focus goes invisible', function(done) {
-            overlay.addEventListener('scroll-animation-finished', function(e) {
+          it('should scroll up when focus goes invisible', done => {
+            overlay.addEventListener('scroll-animation-finished', e => {
               expect(e.detail.position).to.eql(e.detail.oldPosition - 12);
               done();
             });
@@ -296,20 +301,20 @@
             pageUp('shift');
           });
 
-          it('should not scroll down when focus keeps visible', function(done) {
+          it('should not scroll down when focus keeps visible', done => {
             var initialPosition = overlay.$.scroller.position;
 
             pageDown();
 
-            setTimeout(function() {
+            setTimeout(() => {
               // FF sometimes reports subpixel differences
               expect(overlay.$.scroller.position).to.be.closeTo(initialPosition, 1);
               done();
             });
           });
 
-          it('should scroll down when focus goes invisible', function(done) {
-            overlay.addEventListener('scroll-animation-finished', function(e) {
+          it('should scroll down when focus goes invisible', done => {
+            overlay.addEventListener('scroll-animation-finished', e => {
               expect(e.detail.position).to.be.greaterThan(e.detail.oldPosition);
               done();
             });
@@ -317,13 +322,13 @@
             pageDown('shift');
           });
 
-          it('should not focus on today click if no date focused', function() {
+          it('should not focus on today click if no date focused', () => {
             overlay.focusedDate = null;
             overlay._scrollToCurrentMonth();
             expect(overlay.focusedDate).to.be.null;
           });
 
-          it('should focus on today click if a date is focused', function() {
+          it('should focus on today click if a date is focused', () => {
             arrowRight();
             overlay._scrollToCurrentMonth();
             expect(overlay.focusedDate.getFullYear()).to.eql(new Date().getFullYear());
@@ -331,7 +336,7 @@
             expect(overlay.focusedDate.getDate()).to.eql(new Date().getDate());
           });
 
-          it('should move to max date when targeted date is disabled', function() {
+          it('should move to max date when targeted date is disabled', () => {
             overlay.maxDate = new Date(2000, 0, 7);
 
             arrowDown(overlay);
@@ -339,7 +344,7 @@
             expect(overlay.focusedDate).to.eql(new Date(2000, 0, 7));
           });
 
-          it('should move to min date when targeted date is disabled', function() {
+          it('should move to min date when targeted date is disabled', () => {
             overlay.minDate = new Date(1999, 11, 26);
 
             arrowUp(overlay);
@@ -347,7 +352,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 26));
           });
 
-          it('should focus min date with home', function() {
+          it('should focus min date with home', () => {
             overlay.minDate = new Date(1999, 11, 3);
 
             arrowLeft();
@@ -356,7 +361,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
           });
 
-          it('should focus max date with end', function() {
+          it('should focus max date with end', () => {
             overlay.maxDate = new Date(2000, 0, 26);
 
             end();
@@ -364,7 +369,7 @@
             expect(overlay.focusedDate).to.eql(new Date(2000, 0, 26));
           });
 
-          it('should focus max date with pagedown', function() {
+          it('should focus max date with pagedown', () => {
             overlay.maxDate = new Date(2000, 0, 28);
 
             pageDown();
@@ -372,7 +377,7 @@
             expect(overlay.focusedDate).to.eql(new Date(2000, 0, 28));
           });
 
-          it('should focus min date with pageup', function() {
+          it('should focus min date with pageup', () => {
             overlay.minDate = new Date(1999, 11, 3);
 
             pageUp();
@@ -380,7 +385,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
           });
 
-          it('should focus max date with shift and pagedown', function() {
+          it('should focus max date with shift and pagedown', () => {
             overlay.maxDate = new Date(2000, 11, 28);
 
             pageDown('shift');
@@ -388,7 +393,7 @@
             expect(overlay.focusedDate).to.eql(new Date(2000, 11, 28));
           });
 
-          it('should focus min date with shift and pageup', function() {
+          it('should focus min date with shift and pageup', () => {
             overlay.minDate = new Date(1999, 5, 3);
 
             pageUp('shift');
@@ -396,7 +401,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 5, 3));
           });
 
-          it('should focus the closest allowed date with pageup when selected date is disabled', function() {
+          it('should focus the closest allowed date with pageup when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -405,7 +410,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with pagedown when selected date is disabled', function() {
+          it('should focus the closest allowed date with pagedown when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -414,7 +419,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with shift pageup when selected date is disabled', function() {
+          it('should focus the closest allowed date with shift pageup when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -423,7 +428,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with shift pagedown when selected date is disabled', function() {
+          it('should focus the closest allowed date with shift pagedown when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -432,7 +437,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with home when selected date is disabled', function() {
+          it('should focus the closest allowed date with home when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -441,7 +446,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with end when selected date is disabled', function() {
+          it('should focus the closest allowed date with end when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -450,7 +455,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with arrow up when selected date is disabled', function() {
+          it('should focus the closest allowed date with arrow up when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -459,7 +464,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with arrow down when selected date is disabled', function() {
+          it('should focus the closest allowed date with arrow down when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -468,7 +473,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with arrow left when selected date is disabled', function() {
+          it('should focus the closest allowed date with arrow left when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -477,7 +482,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus the closest allowed date with arrow right when selected date is disabled', function() {
+          it('should focus the closest allowed date with arrow right when selected date is disabled', () => {
             overlay.focusedDate = new Date(1999, 5, 10);
             overlay.minDate = new Date(1999, 11, 25);
 
@@ -486,7 +491,7 @@
             expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
           });
 
-          it('should focus two-digit years while navigating days', function() {
+          it('should focus two-digit years while navigating days', () => {
             var date = new Date(99, 0, 1);
             date.setFullYear(99);
             overlay.focusedDate = date;
@@ -497,7 +502,7 @@
             expect(overlay.focusedDate).to.eql(date);
           });
 
-          it('should focus two-digit years while navigating months', function() {
+          it('should focus two-digit years while navigating months', () => {
             var date = new Date(99, 0, 1);
             date.setFullYear(99);
             overlay.focusedDate = date;
@@ -508,7 +513,7 @@
             expect(overlay.focusedDate).to.eql(date);
           });
 
-          it('should focus two-digit years while navigating in month', function() {
+          it('should focus two-digit years while navigating in month', () => {
             var date = new Date(99, 0, 1);
             date.setFullYear(99);
             overlay.focusedDate = date;

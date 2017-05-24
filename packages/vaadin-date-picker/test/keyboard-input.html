@@ -26,7 +26,7 @@
       // Keybard input is disabled on IOS since it doesn't handle fixed positioned elements
       // (the dropdown) well while input is focused.
 
-      describe('keyboard input', function() {
+      describe('keyboard input', () => {
 
         var target;
         var overlay;
@@ -73,7 +73,7 @@
         }
 
         function open(callback) {
-          var listener = function() {
+          var listener = () => {
             datepicker.removeEventListener('iron-overlay-opened', listener);
             callback();
           };
@@ -81,32 +81,38 @@
           datepicker.open();
         }
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
           target = datepicker.$.ironinput;
           setTimeout(done, 1);
         });
 
-        it('should open overlay on input', function() {
+        afterEach(() => {
+          if (datepicker._debouncerRefit) {
+            datepicker._debouncerRefit.flush();
+          }
+        });
+
+        it('should open overlay on input', () => {
           inputChar('j');
           expect(datepicker.opened).to.be.true;
         });
 
-        it('should not focus with unparseable date', function() {
+        it('should not focus with unparseable date', () => {
           inputChar('j');
 
           expect(focusedDate()).not.to.be.ok;
         });
 
-        it('should focus parsed date', function() {
+        it('should focus parsed date', () => {
           inputText('1/20/2000');
 
           expect(focusedDate().getMonth()).to.equal(0);
           expect(focusedDate().getDate()).to.equal(20);
         });
 
-        it('should update focus on input change', function() {
+        it('should update focus on input change', () => {
           inputText('1/20/20');
           inputText('17');
 
@@ -114,8 +120,8 @@
           expect(focusedDate().getFullYear()).to.equal(2017);
         });
 
-        it('should select focused date on enter', function(done) {
-          datepicker.addEventListener('iron-overlay-closed', function() {
+        it('should select focused date on enter', done => {
+          datepicker.addEventListener('iron-overlay-closed', () => {
             expect(datepicker.value).to.equal('2001-01-01');
             done();
           });
@@ -124,16 +130,16 @@
           enter();
         });
 
-        it('should display focused date while overlay focused', function() {
+        it('should display focused date while overlay focused', () => {
           inputText('1/2/2000');
           arrowDown();
           expect(target.value).not.to.equal('1/2/2000');
         });
 
-        it('should not forward keys after close', function(done) {
+        it('should not forward keys after close', done => {
           inputText('1/2/2000');
           arrowDown();
-          datepicker.addEventListener('iron-overlay-closed', function() {
+          datepicker.addEventListener('iron-overlay-closed', () => {
             var focused = focusedDate();
             arrowRight();
             expect(focusedDate()).to.eql(focused);
@@ -142,28 +148,26 @@
           enter();
         });
 
-        it('should not open with wrong keys', function() {
+        it('should not open with wrong keys', () => {
           arrowRight();
           expect(datepicker.opened).to.be.false;
         });
 
-        it('should not forward keys after reopen', function(done) {
+        it('should not forward keys after reopen', done => {
           inputText('1/2/2000');
           arrowDown();
-          datepicker.addEventListener('iron-overlay-opened', function() {
+          datepicker.addEventListener('iron-overlay-opened', () => {
             var focused = focusedDate();
             arrowRight();
             expect(focusedDate()).to.eql(focused);
             done();
           });
-          datepicker.addEventListener('iron-overlay-closed', function() {
-            inputText('0');
-          });
+          datepicker.addEventListener('iron-overlay-closed', () => inputText('0'));
           enter();
         });
 
-        it('should not forward after user changes input', function(done) {
-          datepicker.addEventListener('iron-overlay-opened', function() {
+        it('should not forward after user changes input', done => {
+          datepicker.addEventListener('iron-overlay-opened', () => {
             arrowDown();
             // Forwarding keys to overlay
             target.bindValue = '';
@@ -177,8 +181,8 @@
           inputText('1/2/2000');
         });
 
-        it('should not forward after input tap', function(done) {
-          open(function() {
+        it('should not forward after input tap', done => {
+          open(() => {
             arrowDown();
             var focused = focusedDate();
             target.fire('tap', {
@@ -190,10 +194,10 @@
           });
         });
 
-        it('should reflect focused date to input', function(done) {
+        it('should reflect focused date to input', done => {
           datepicker.value = '2000-01-01';
 
-          datepicker.addEventListener('iron-overlay-opened', function() {
+          datepicker.addEventListener('iron-overlay-opened', () => {
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/8/2000');
             done();
@@ -201,19 +205,19 @@
           arrowDown();
         });
 
-        it('should not reflect focused date on open', function(done) {
+        it('should not reflect focused date on open', done => {
 
-          datepicker.addEventListener('iron-overlay-opened', function() {
+          datepicker.addEventListener('iron-overlay-opened', () => {
             expect(datepicker._inputValue).to.equal('');
             done();
           });
           arrowDown();
         });
 
-        it('should stop key event bubbles from overlay', function(done) {
+        it('should stop key event bubbles from overlay', done => {
           datepicker.value = '2000-01-01';
 
-          datepicker.addEventListener('iron-overlay-opened', function() {
+          datepicker.addEventListener('iron-overlay-opened', () => {
             arrowDown();
             target = overlay;
             arrowDown();
@@ -223,19 +227,19 @@
           arrowDown();
         });
 
-        it('should update focused date on select', function() {
+        it('should update focused date on select', () => {
           datepicker.value = '2000-01-01';
           expect(focusedDate().getMonth()).to.equal(0);
           expect(focusedDate().getDate()).to.equal(1);
           expect(focusedDate().getFullYear()).to.equal(2000);
         });
 
-        it('should validate on close', function(done) {
+        it('should validate on close', done => {
 
-          open(function() {
+          open(() => {
             var spy = sinon.spy(datepicker, 'validate');
 
-            datepicker.addEventListener('iron-overlay-closed', function() {
+            datepicker.addEventListener('iron-overlay-closed', () => {
               expect(spy.called).to.be.true;
               done();
             });
@@ -244,46 +248,46 @@
           });
         });
 
-        it('should empty value with false input', function(done) {
+        it('should empty value with false input', done => {
           datepicker.value = '2000-01-01';
           target.bindValue = '';
           inputText('foo');
-          datepicker.addEventListener('iron-overlay-closed', function() {
+          datepicker.addEventListener('iron-overlay-closed', () => {
             expect(datepicker.value).to.equal('');
             done();
           });
           datepicker.close();
         });
 
-        it('should be invalid with false input', function(done) {
+        it('should be invalid with false input', done => {
           datepicker.value = '2000-01-01';
           target.bindValue = '';
           inputText('foo');
-          datepicker.addEventListener('iron-overlay-closed', function() {
+          datepicker.addEventListener('iron-overlay-closed', () => {
             expect(datepicker.invalid).to.be.true;
             done();
           });
           datepicker.close();
         });
 
-        it('should clear selection on close', function(done) {
-          datepicker.addEventListener('iron-overlay-closed', function() {
+        it('should clear selection on close', done => {
+          datepicker.addEventListener('iron-overlay-closed', () => {
             expect(target.selectionStart).to.equal(target.selectionEnd);
             done();
           });
-          open(function() {
+          open(() => {
             arrowDown();
             datepicker.close();
           });
         });
 
-        describe('no parseDate', function() {
+        describe('no parseDate', () => {
 
-          beforeEach(function() {
+          beforeEach(() => {
             datepicker.set('i18n.parseDate', null);
           });
 
-          it('should prevent key input', function(done) {
+          it('should prevent key input', done => {
             var e = new CustomEvent('keydown', {
               bubbles: true,
               composed: true
@@ -295,49 +299,43 @@
             done();
           });
 
-          it('should select focused date on close', function(done) {
-            datepicker.addEventListener('iron-overlay-closed', function() {
+          it('should select focused date on close', done => {
+            datepicker.addEventListener('iron-overlay-closed', () => {
               expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
               done();
             });
 
-            open(function() {
-              datepicker.close();
-            });
+            open(() => datepicker.close());
           });
 
         });
 
-        it('should not forward up/down to overlay when closed', function(done) {
-          datepicker.addEventListener('iron-overlay-opened', function() {
+        it('should not forward up/down to overlay when closed', done => {
+          datepicker.addEventListener('iron-overlay-opened', () => {
             expect(datepicker._focusedDate.getDate()).to.eql(new Date().getDate());
             done();
           });
           arrowUp();
         });
 
-        it('should forward up/down to overlay', function(done) {
-          open(function() {
+        it('should forward up/down to overlay', done => {
+          open(() => {
             arrowUp();
             expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
             done();
           });
         });
 
-        describe('esc behavior', function() {
+        describe('esc behavior', () => {
 
-          it('should close the overlay on esc', function(done) {
-            datepicker.addEventListener('iron-overlay-closed', function() {
-              done();
-            });
-            open(function() {
-              esc();
-            });
+          it('should close the overlay on esc', done => {
+            datepicker.addEventListener('iron-overlay-closed', () => done());
+            open(esc);
           });
 
-          it('should revert input value on esc', function(done) {
+          it('should revert input value on esc', done => {
             datepicker.value = '2000-01-01';
-            open(function() {
+            open(() => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -347,9 +345,9 @@
             });
           });
 
-          it('should revert input value on esc (empty)', function(done) {
+          it('should revert input value on esc (empty)', done => {
             datepicker.value = '';
-            open(function() {
+            open(() => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -359,13 +357,13 @@
             });
           });
 
-          it('should not change value on esc', function(done) {
+          it('should not change value on esc', done => {
             datepicker.value = '2000-01-01';
-            datepicker.addEventListener('iron-overlay-closed', function() {
+            datepicker.addEventListener('iron-overlay-closed', () => {
               expect(datepicker.value).to.equal('2000-01-01');
               done();
             });
-            open(function() {
+            open(() => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -373,13 +371,13 @@
             });
           });
 
-          it('should not change value on esc (empty)', function(done) {
+          it('should not change value on esc (empty)', done => {
             datepicker.value = '';
-            datepicker.addEventListener('iron-overlay-closed', function() {
+            datepicker.addEventListener('iron-overlay-closed', () => {
               expect(datepicker.value).to.equal('');
               done();
             });
-            open(function() {
+            open(() => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -389,15 +387,13 @@
 
         });
 
-        describe('default parser', function() {
+        describe('default parser', () => {
 
           var today;
 
-          beforeEach(function() {
-            today = new Date();
-          });
+          beforeEach(() => today = new Date());
 
-          it('should parse a single digit', function() {
+          it('should parse a single digit', () => {
             inputText('20');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(today.getFullYear());
@@ -405,7 +401,7 @@
             expect(result.getDate()).to.equal(20);
           });
 
-          it('should parse two digits', function() {
+          it('should parse two digits', () => {
             inputText('6/20');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(today.getFullYear());
@@ -413,7 +409,7 @@
             expect(result.getDate()).to.equal(20);
           });
 
-          it('should parse three digits', function() {
+          it('should parse three digits', () => {
             inputText('6/20/1999');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(1999);
@@ -421,37 +417,37 @@
             expect(result.getDate()).to.equal(20);
           });
 
-          it('should parse three digits with small year', function() {
+          it('should parse three digits with small year', () => {
             inputText('6/20/0099');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(99);
           });
 
-          it('should parse three digits with short year', function() {
+          it('should parse three digits with short year', () => {
             inputText('6/20/99');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(1999);
           });
 
-          it('should parse three digits with short year 2', function() {
+          it('should parse three digits with short year 2', () => {
             inputText('6/20/20');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(2020);
           });
 
-          it('should parse three digits with short year 3', function() {
+          it('should parse three digits with short year 3', () => {
             inputText('6/20/1');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(2001);
           });
 
-          it('should parse three digits with negative year', function() {
+          it('should parse three digits with negative year', () => {
             inputText('6/20/-1');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(-1);
           });
 
-          it('should parse in base 10', function() {
+          it('should parse in base 10', () => {
             inputText('09/09/09');
             var result = focusedDate();
             expect(result.getFullYear()).to.equal(2009);
@@ -461,90 +457,87 @@
 
         });
 
-        describe('focus modes', function() {
+        describe('focus modes', () => {
 
-          it('should be tabbable', function() {
+          it('should be tabbable', () => {
             expect(parseInt(datepicker.$.overlay.getAttribute('tabindex'), 10)).to.equal(0);
           });
 
-          it('should focus the input on esc', function() {
+          it('should focus the input on esc', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            var spy = sinon.spy(datepicker._inputElement, 'focus');
             esc();
             expect(spy.called).to.be.true;
           });
 
-          it('should focus the input on date tap', function() {
+          it('should focus the input on date tap', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
-            datepicker.$.overlay.fire('date-tap');
+            var spy = sinon.spy(datepicker._inputElement, 'focus');
+            datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
             expect(spy.called).to.be.true;
           });
 
-          it('should focus the input on date cancel', function() {
+          it('should focus the input on date cancel', () => {
             arrowDown();
-            var spy = sinon.spy(datepicker.inputElement, 'focus');
+            var spy = sinon.spy(datepicker._inputElement, 'focus');
             MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
             expect(spy.called).to.be.true;
           });
 
-          it('should focus cancel on input shift tab', function(done) {
+          it('should focus cancel on input shift tab', done => {
             var spy = sinon.spy(datepicker.$.overlay.$.cancelButton, 'focus');
-            open(function() {
-              MockInteractions.pressAndReleaseKeyOn(datepicker.inputElement, 9, 'shift');
+            open(() => {
+              MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
               expect(spy.called).to.be.true;
               done();
             });
           });
 
-          // FIXME: flaky tests
-          // it('should focus input in cancel tab', function(done) {
-          //   open(function() {
-          //     var spy = sinon.spy(datepicker.inputElement, 'focus');
-          //     MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
-          //     MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
-          //     expect(spy.called).to.be.true;
-          //     done();
-          //   });
-          // });
+          it('should focus input in cancel tab', () => {
+            open(() => {
+              MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
+              MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
+              expect(datepicker.$.inputcontainer.focused).to.be.true;
+            });
+          });
 
-          it('should not reveal the focused date on tap', function(done) {
-            open(function() {
+          it('should not reveal the focused date on tap', done => {
+            open(() => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.tap(datepicker.$.overlay);
               MockInteractions.focus(datepicker.$.overlay);
-              Polymer.Base.async(function() {
+              setTimeout(() => {
                 expect(spy.called).to.be.false;
                 done();
               }, 1);
             });
           });
 
-          it('should reveal the focused date on tab focus from input', function(done) {
-            open(function() {
+          it('should reveal the focused date on tab focus from input', done => {
+            open(() => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
-              MockInteractions.pressAndReleaseKeyOn(datepicker.inputElement, 9);
+              MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9);
               expect(spy.called).to.be.true;
               done();
             });
           });
 
-          it('should reveal the focused date on shift-tab focus from today button', function(done) {
-            open(function() {
+          it('should reveal the focused date on shift-tab focus from today button', done => {
+            open(() => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.todayButton, 9, 'shift');
               MockInteractions.focus(datepicker.$.overlay);
-              Polymer.Base.async(function() {
+              setTimeout(() => {
                 expect(spy.called).to.be.true;
                 done();
               }, 1);
             });
           });
 
-          it('should not focus overlay on key-input', function(done) {
+          it('should not focus overlay on key-input', done => {
             var spy = sinon.spy(datepicker.$.overlay, 'focus');
 
-            listenForEvent(datepicker, 'iron-overlay-opened', function() {
+            listenForEvent(datepicker, 'iron-overlay-opened', () => {
               expect(spy.called).to.be.false;
               done();
             });

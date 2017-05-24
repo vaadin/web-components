@@ -20,77 +20,72 @@
   </test-fixture>
 
   <script>
-    describe('vaadin-date-picker-overlay', function() {
+    describe('vaadin-date-picker-overlay', () => {
       var overlay;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         overlay = fixture('overlay');
         overlay.i18n = getDefaultI18n();
 
         overlay.initialPosition = new Date();
-        Polymer.RenderStatus.afterNextRender(overlay.$.scroller, function() {
-          waitUntilScrolledTo(overlay, new Date(), done);
-        });
+        Polymer.RenderStatus.afterNextRender(overlay.$.scroller,
+          () => waitUntilScrolledTo(overlay, new Date(), done));
 
       });
 
-      it('should stop tap events from bubbling outside the overlay', function() {
+      it('should stop tap events from bubbling outside the overlay', () => {
         var tapSpy = sinon.spy();
         document.addEventListener('tap', tapSpy);
-        overlay.$.scroller.dispatchEvent(new CustomEvent('tap', {
-          bubbles: true
-        }));
+        overlay.$.scroller.dispatchEvent(new CustomEvent('tap', {bubbles: true}));
         document.removeEventListener('tap', tapSpy);
         expect(tapSpy.called).not.to.be.true;
       });
 
-      it('should return correct month', function() {
+      it('should return correct month', () => {
         overlay._originDate = new Date(2016, 2, 31);
         expect(overlay._dateAfterXMonths(11).getMonth()).to.equal(1);
       });
 
-      it('should reflect the year of currently visible month on the toolbar', function(done) {
+      it('should reflect the year of currently visible month on the toolbar', done => {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
-        waitUntilScrolledTo(overlay, date, function() {
+        waitUntilScrolledTo(overlay, date, () => {
           expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
           done();
         });
       });
 
-      it('should scroll to the given date', function(done) {
+      it('should scroll to the given date', done => {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
-        waitUntilScrolledTo(overlay, date, function() {
+        waitUntilScrolledTo(overlay, date, () => {
           expect(monthsEqual(getFirstVisibleItem(overlay.$.scroller, 0).firstElementChild.month, date)).to.be.true;
           done();
         });
       });
 
-      it('should scroll to the given year', function(done) {
+      it('should scroll to the given year', done => {
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
-        waitUntilScrolledTo(overlay, date, function() {
+        waitUntilScrolledTo(overlay, date, () => {
           var offset = overlay.$.yearScroller.clientHeight / 2;
-          overlay.$.yearScroller.flushDebouncer('updateAllClones');
+          overlay.$.yearScroller._debouncerUpdateClones.flush();
           expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.equal('2000');
           done();
         });
       });
 
-      describe('taps', function() {
+      describe('taps', () => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           // Wait for ignoreTaps to settle after initial scroll event
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', function() {
-            overlay.async(done, 350);
-          });
+          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => setTimeout(done, 350));
 
           overlay.$.scroller.$.scroller.scrollTop += 1;
         });
 
-        it('should set ignoreTaps to calendar on scroll', function(done) {
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', function() {
+        it('should set ignoreTaps to calendar on scroll', done => {
+          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
             expect(overlay.$.scroller.$$('vaadin-month-calendar').ignoreTaps).to.be.true;
             done();
           });
@@ -98,10 +93,10 @@
           overlay.$.scroller.$.scroller.scrollTop += 1;
         });
 
-        it('should not react to year tap after scroll', function(done) {
+        it('should not react to year tap after scroll', done => {
           var spy = sinon.spy(overlay, '_scrollToPosition');
 
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', function() {
+          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
             tap(overlay.$.yearScroller);
             expect(spy.called).to.be.false;
             done();
@@ -110,11 +105,11 @@
           overlay.$.scroller.$.scroller.scrollTop += 1;
         });
 
-        it('should react to year tap after 300ms elapsed after scroll', function(done) {
+        it('should react to year tap after 300ms elapsed after scroll', done => {
           var spy = sinon.spy(overlay, '_scrollToPosition');
 
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', function() {
-            overlay.async(function() {
+          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
+            setTimeout(() => {
               tap(overlay.$.yearScroller);
               expect(spy.called).to.be.true;
               done();
@@ -124,10 +119,10 @@
           overlay.$.scroller.$.scroller.scrollTop += 1;
         });
 
-        it('should not react if the tap takes more than 300ms', function(done) {
+        it('should not react if the tap takes more than 300ms', done => {
           var spy = sinon.spy(overlay, '_scrollToPosition');
           overlay._onYearScrollTouchStart();
-          overlay.async(function() {
+          setTimeout(() => {
             tap(overlay.$.yearScroller);
             expect(spy.called).to.be.false;
             done();
@@ -135,9 +130,9 @@
         });
       });
 
-      describe('header', function() {
+      describe('header', () => {
 
-        it('should be visible', function() {
+        it('should be visible', () => {
           overlay.setAttribute('fullscreen', '');
           // No idea why but IE requires these in order to repaint the header
           overlay.$.header.setAttribute('style', '');
@@ -145,13 +140,13 @@
           expect(window.getComputedStyle(overlay.$.header).display).to.equal('flex');
         });
 
-        it('should be invisible', function() {
+        it('should be invisible', () => {
           expect(window.getComputedStyle(overlay.$.header).display).to.equal('none');
         });
 
-        it('should reflect value in label', function() {
+        it('should reflect value in label', () => {
           overlay.i18n = {
-            formatDate: function(date) {
+            formatDate: date => {
               return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
             }
           };
@@ -159,16 +154,16 @@
           expect(overlay.$.input.bindValue).to.equal('2/1/2000');
         });
 
-        it('should not show clear button if not value is set', function() {
+        it('should not show clear button if not value is set', () => {
           expect(window.getComputedStyle(overlay.$.clear).display).to.equal('none');
         });
 
-        it('should show clear button if value is set', function() {
+        it('should show clear button if value is set', () => {
           overlay.selectedDate = new Date();
           expect(window.getComputedStyle(overlay.$.clear).display).to.equal('flex');
         });
 
-        it('should clear the value and fire a close on clear', function() {
+        it('should clear the value and fire a close on clear', () => {
           overlay.selectedDate = new Date();
           var spy = sinon.spy();
           overlay.addEventListener('close', spy);
@@ -181,33 +176,33 @@
 
       });
 
-      describe('footer', function() {
-        it('should fire close on cancel click', function() {
+      describe('footer', () => {
+        it('should fire close on cancel click', () => {
           var spy = sinon.spy();
           overlay.addEventListener('close', spy);
           tap(overlay.$.cancelButton);
           expect(spy.calledOnce).to.be.true;
         });
 
-        describe('today button', function() {
-          it('should scroll to current date', function(done) {
+        describe('today button', () => {
+          it('should scroll to current date', done => {
             var date = new Date(2000, 1, 1);
             overlay.scrollToDate(date);
-            waitUntilScrolledTo(overlay, date, function() {
+            waitUntilScrolledTo(overlay, date, () => {
               tap(overlay.$.todayButton);
-              waitUntilScrolledTo(overlay, new Date(), function() {
+              waitUntilScrolledTo(overlay, new Date(), () => {
                 done();
               });
             });
           });
 
-          it('should close the overlay and select today if on current month', function(done) {
+          it('should close the overlay and select today if on current month', done => {
             var today = new Date();
             overlay.scrollToDate(today);
             var spy = sinon.spy();
             overlay.addEventListener('close', spy);
 
-            waitUntilScrolledTo(overlay, today, function() {
+            waitUntilScrolledTo(overlay, today, () => {
               tap(overlay.$.todayButton);
 
               expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
@@ -218,13 +213,13 @@
             });
           });
 
-          it('should not close the overlay and not select today if not on current month', function(done) {
+          it('should not close the overlay and not select today if not on current month', done => {
             var today = new Date();
             overlay.scrollToDate(today);
             var spy = sinon.spy();
             overlay.addEventListener('close', spy);
 
-            waitUntilScrolledTo(overlay, today, function() {
+            waitUntilScrolledTo(overlay, today, () => {
               overlay.$.scroller.$.scroller.scrollTop -= 1;
               tap(overlay.$.todayButton);
 
@@ -234,7 +229,7 @@
             });
           });
 
-          it('should do nothing if disabled', function(done) {
+          it('should do nothing if disabled', done => {
             var initialDate = new Date(2000, 1, 1);
             overlay.scrollToDate(initialDate);
             var closeSpy = sinon.spy();
@@ -243,7 +238,7 @@
 
             overlay.$.todayButton.disabled = true;
 
-            waitUntilScrolledTo(overlay, initialDate, function() {
+            waitUntilScrolledTo(overlay, initialDate, () => {
               var lastScrollPos = overlay.$.scroller.position;
               MockInteractions.tap(overlay.$.todayButton);
 
@@ -255,10 +250,10 @@
             });
           });
 
-          describe('date limits', function() {
+          describe('date limits', () => {
             var todayMidnight, yesterdayMidnight, tommorrowMidnight;
 
-            beforeEach(function() {
+            beforeEach(() => {
               var today = new Date();
               todayMidnight = new Date(0, 0);
               todayMidnight.setFullYear(today.getFullYear());
@@ -272,36 +267,36 @@
               overlay.maxDate = null;
             });
 
-            it('should not be disabled by default', function() {
+            it('should not be disabled by default', () => {
               expect(overlay.$.todayButton.disabled).to.be.false;
             });
 
-            it('should not be disabled if today is inside the limits', function() {
+            it('should not be disabled if today is inside the limits', () => {
               overlay.minDate = yesterdayMidnight;
               overlay.maxDate = tommorrowMidnight;
 
               expect(overlay.$.todayButton.disabled).to.be.false;
             });
 
-            it('should not be disabled if today is min', function() {
+            it('should not be disabled if today is min', () => {
               overlay.minDate = todayMidnight;
 
               expect(overlay.$.todayButton.disabled).to.be.false;
             });
 
-            it('should not be disabled if today is max', function() {
+            it('should not be disabled if today is max', () => {
               overlay.maxDate = todayMidnight;
 
               expect(overlay.$.todayButton.disabled).to.be.false;
             });
 
-            it('should be disabled if the limits are in past', function() {
+            it('should be disabled if the limits are in past', () => {
               overlay.maxDate = yesterdayMidnight;
 
               expect(overlay.$.todayButton.disabled).to.be.true;
             });
 
-            it('should be disabled if the limits are in future', function() {
+            it('should be disabled if the limits are in future', () => {
               overlay.minDate = tommorrowMidnight;
 
               expect(overlay.$.todayButton.disabled).to.be.true;

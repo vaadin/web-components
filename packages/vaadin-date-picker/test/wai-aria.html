@@ -43,93 +43,93 @@
 
 
   <script>
-    describe('WAI-ARIA', function() {
+    describe('WAI-ARIA', () => {
 
-      describe('date picker', function() {
+      describe('date picker', () => {
         var datepicker;
 
-        beforeEach(function() {
+        beforeEach(() => {
           datepicker = fixture('datepicker');
         });
 
-        it('should have application role on input container', function() {
+        it('should have application role on input container', () => {
           // Makes JAWS not to intercept arrow keys but pass them to the browser
           // instead. Otherwise, the keyboard navigation is broken with JAWS.
           expect(datepicker.$.inputcontainer.getAttribute('role')).to.equal('application');
         });
 
-        it('should have button roles on buttons', function() {
+        it('should have button roles on buttons', () => {
           // Indicate icon buttons as clickable. Especially helpful on touch devices.
           expect(datepicker.$.calendar.getAttribute('role')).to.equal('button');
           expect(datepicker.$.clear.getAttribute('role')).to.equal('button');
         });
 
-        it('should have label properties on buttons', function() {
+        it('should have label properties on buttons', () => {
           // Give spoken names for the icon buttons.
           expect(datepicker.$.calendar.getAttribute('aria-label')).to.equal('Calendar');
           expect(datepicker.$.clear.getAttribute('aria-label')).to.equal('Clear');
         });
 
-        it('should have label properties on buttons in correct locale', function() {
+        it('should have label properties on buttons in correct locale', () => {
           datepicker.set('i18n.calendar', 'kalenteri');
           datepicker.set('i18n.clear', 'tyhjennä');
           expect(datepicker.$.calendar.getAttribute('aria-label')).to.equal('kalenteri');
           expect(datepicker.$.clear.getAttribute('aria-label')).to.equal('tyhjennä');
         });
 
-        it('should have expanded state false on calendar button', function() {
+        it('should have expanded state false on calendar button', () => {
           // Indicate that there is a collabsible calendar, closed by default.
           expect(datepicker.$.calendar.getAttribute('aria-expanded')).to.equal('false');
         });
 
-        it('should have expanded state true on calendar button when opened', function() {
+        it('should have expanded state true on calendar button when opened', () => {
           datepicker.open();
 
           expect(datepicker.$.calendar.getAttribute('aria-expanded')).to.equal('true');
         });
 
-        it('should have hidden state on label', function() {
+        it('should have hidden state on label', () => {
           // Shadow DOM issues does not allow us to easily assiciate the label
           // element with the input. Instead, we just hide the label from
           // screen readers and label the input with `aria-label` attribute.
           expect(datepicker.$.label.getAttribute('aria-hidden')).to.equal('true');
         });
 
-        it('should have label property on the input', function() {
+        it('should have label property on the input', () => {
           // The label attribute/property should propagate to the spoken input label.
           expect(datepicker.$.input.getAttribute('aria-label')).to.equal('ariatest');
         });
       });
 
-      describe('overlay hosting element', function() {
+      describe('overlay hosting element', () => {
         var datepicker, datepickerLight;
 
-        beforeEach(function() {
+        beforeEach(() => {
           datepicker = fixture('datepicker');
           datepickerLight = fixture('datepickerLight');
         });
 
-        it('should have dialog role', function() {
+        it('should have dialog role', () => {
           expect(datepicker.$.overlay.getAttribute('role')).to.equal('dialog');
           expect(datepickerLight.$.overlay.getAttribute('role')).to.equal('dialog');
         });
 
       });
 
-      describe('overlay contents', function() {
+      describe('overlay contents', () => {
         var overlay;
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           overlay = fixture('overlay');
           overlay.i18n = getDefaultI18n();
-          Polymer.Base.async(done);
+          setTimeout(done);
         });
 
-        describe('title announcer', function() {
+        describe('title announcer', () => {
 
-          beforeEach(function(done) {
-            Polymer.RenderStatus.afterNextRender(overlay.$.scroller, function() {
-              Polymer.Base.async(function() {
+          beforeEach(done => {
+            Polymer.RenderStatus.afterNextRender(overlay.$.scroller, () => {
+              setTimeout(() => {
                 done();
               }, 1);
             });
@@ -139,132 +139,131 @@
           // Title announcer notifies the user when the overlay opens with
           // an explicit “<alert> Calender” announce.
 
-          it('should be present in the overlay', function() {
+          it('should be present in the overlay', () => {
             expect(overlay.$.announcer).to.be.ok;
           });
 
-          it('should be the first child of the overlay', function() {
+          it('should be the first child of the overlay', () => {
             // Always introduce calendar contents with “Calendar”.
-            expect(Polymer.dom(overlay.root).querySelector(':not(style):not(:empty)')).to.equal(overlay.$.announcer);
+            expect(overlay.root.querySelector(':not(style):not(:empty)')).to.equal(overlay.$.announcer);
           });
 
-          it('should not have hidden state', function() {
+          it('should not have hidden state', () => {
             // Otherwise is not spoken.
             expect(overlay.$.announcer.getAttribute('aria-hidden')).to.not.equal('true');
           });
 
-          it('should be visible', function() {
+          it('should be visible', () => {
             expect(overlay.$.announcer.offsetWidth).to.be.at.least(1);
             expect(overlay.$.announcer.offsetHeight).to.be.at.least(1);
           });
 
-          it('should have role alert', function() {
+          it('should have role alert', () => {
             expect(overlay.$.announcer.getAttribute('role')).to.equal('alert');
           });
 
-          it('should have live property polite', function() {
+          it('should have live property polite', () => {
             // By default alerts are assertive and interrupt screen readers.
             // Polite mode makes the announce in normal order.
             expect(overlay.$.announcer.getAttribute('aria-live')).to.equal('polite');
           });
 
-          it('should have text', function() {
+          it('should have text', () => {
             expect(overlay.$.announcer.textContent.trim()).to.equal('Calendar');
           });
 
-          it('should have text in correct locale', function() {
+          it('should have text in correct locale', () => {
             overlay.set('i18n.calendar', 'kalenteri');
             expect(overlay.$.announcer.textContent.trim()).to.equal('kalenteri');
           });
         });
 
-        describe('year scroller contents', function() {
+        describe('year scroller contents', () => {
           var yearScrollerContents;
 
-          beforeEach(function(done) {
+          beforeEach(done => {
             var scroller = overlay.$.yearScroller;
             scroller.active = true;
 
-            Polymer.RenderStatus.afterNextRender(scroller, function() {
-              Polymer.Base.async(function() {
-                scroller.flushDebouncer('updateAllClones');
-                yearScrollerContents = Polymer.dom(overlay.$.yearScroller.root)
+            Polymer.RenderStatus.afterNextRender(scroller, () => {
+              setTimeout(() => {
+                scroller._debouncerUpdateClones.flush();
+                yearScrollerContents = overlay.$.yearScroller.root
                   .querySelectorAll('.buffer > div > *');
                 done();
               }, 1);
             });
           });
 
-          it('should contain button role for years', function() {
+          it('should contain button role for years', () => {
             // Indicate years as clickable.
 
-            var years = Array.prototype.filter.call(yearScrollerContents, function(el) {
+            var years = Array.prototype.filter.call(yearScrollerContents, el => {
               return /\d+/.test(el.textContent);
             });
 
             expect(years).to.not.be.empty;
-            years.forEach(function(year) {
+            years.forEach(year => {
               expect(year.getAttribute('role')).to.equal('button');
             });
           });
 
-          it('should have hidden state for dots', function() {
+          it('should have hidden state for dots', () => {
             // Do not speak dots between years.
-
-            var dots = Array.prototype.filter.call(yearScrollerContents, function(el) {
+            var dots = Array.prototype.filter.call(yearScrollerContents, el => {
               return !/\d+/.test(el.textContent);
             });
 
             expect(dots).to.not.be.empty;
-            dots.forEach(function(dot) {
+            dots.forEach(dot => {
               expect(dot.getAttribute('aria-hidden')).to.equal('true');
             });
           });
         });
       });
 
-      describe('month calendar contents', function() {
+      describe('month calendar contents', () => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           monthCalendar = fixture('month-calendar');
           monthCalendar.i18n = getDefaultI18n();
           monthCalendar.month = new Date(2016, 1, 1);
-          Polymer.Base.async(done);
+          setTimeout(done);
         });
 
-        it('should have heading role on the title', function() {
+        it('should have heading role on the title', () => {
           // Consistency and convenience. Announces title as a header.
           expect(monthCalendar.$.title.getAttribute('role')).to.equal('heading');
         });
 
-        it('should have heading roles on the weekdays', function() {
+        it('should have heading roles on the weekdays', () => {
           // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
 
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
 
-          Array.prototype.forEach.call(weekdays, function(weekday) {
+          Array.prototype.forEach.call(weekdays, weekday => {
             expect(weekday.getAttribute('role')).to.equal('heading');
           });
         });
 
-        it('should have label properties on the weekdays', function() {
+        it('should have label properties on the weekdays', () => {
           // Speak week days with full words instead of acronyms.
 
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
-          var weekdayLabels = Array.prototype.map.call(weekdays, function(weekday) {
+          var weekdayLabels = Array.prototype.map.call(weekdays, weekday => {
             return weekday.getAttribute('aria-label');
           });
 
           expect(weekdayLabels).to.eql(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
         });
 
-        it('should have button roles and labels on date cells', function() {
+        it('should have button roles and labels on date cells', () => {
           // The date cells should be spoken with a full date.
 
           var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
 
           expect(dateElements).to.not.be.empty;
-          Array.prototype.forEach.call(dateElements, function(dateElement) {
+          Array.prototype.forEach.call(dateElements, dateElement => {
             expect(dateElement.getAttribute('role')).to.equal('button');
             expect(dateElement.getAttribute('aria-label')).to.be.ok;
           });
@@ -272,17 +271,17 @@
           expect(dateElements[1].getAttribute('aria-label')).to.equal('2 February 2016, Tuesday');
         });
 
-        it('should indicate today on date cells', function(done) {
+        it('should indicate today on date cells', done => {
           monthCalendar.month = new Date();
 
-          Polymer.Base.async(function() {
+          setTimeout(() => {
             var todayElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)[today]');
             expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
             done();
           });
         });
 
-        it('should have disabled state on disabled date cells', function() {
+        it('should have disabled state on disabled date cells', () => {
           // just [disabled] attribute is not enough for screen readers, should
           // also contain aria-disabled="true".
 
@@ -293,37 +292,37 @@
           expect(dateElements[10].getAttribute('aria-disabled')).to.equal('true');
         });
 
-        it('should not have button roles and label properties on empty cells', function() {
+        it('should not have button roles and label properties on empty cells', () => {
           // The empty cells should not be spoken.
 
           var emptyDateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):empty');
 
           expect(emptyDateElements).to.not.be.empty;
-          Array.prototype.forEach.call(emptyDateElements, function(emptyDateElement) {
+          Array.prototype.forEach.call(emptyDateElements, emptyDateElement => {
             expect(emptyDateElement.getAttribute('role')).to.not.equal('button');
             expect(emptyDateElement.getAttribute('aria-label')).to.not.be.ok;
           });
         });
 
-        describe('week numbers', function() {
-          beforeEach(function(done) {
+        describe('week numbers', () => {
+          beforeEach(done => {
             monthCalendar.showWeekNumbers = true;
             monthCalendar.set('i18n.firstDayOfWeek', 1);
-            monthCalendar.async(done);
+            setTimeout(done);
           });
 
-          it('should have heading roles on week numbers', function() {
+          it('should have heading roles on week numbers', () => {
             // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
 
-            var weekNumberElements = Polymer.dom(monthCalendar.$.monthGrid).querySelectorAll('div.weekday:not(:empty)');
+            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('div.weekday:not(:empty)');
 
-            Array.prototype.forEach.call(weekNumberElements, function(weekNumberElement) {
+            Array.prototype.forEach.call(weekNumberElements, weekNumberElement => {
               expect(weekNumberElement.getAttribute('role')).to.equal('heading');
             });
           });
 
-          it('should have label properties on week numbers', function() {
-            var weekNumberElements = Polymer.dom(monthCalendar.$.monthGrid).querySelectorAll('.weeknumber');
+          it('should have label properties on week numbers', () => {
+            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('.weeknumber');
 
             expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('Week 5');
             expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('Week 6');
@@ -332,34 +331,34 @@
 
       });
 
-      describe('announcements', function() {
+      describe('announcements', () => {
         // NOTE: See <iron-a11y-announcer> API
 
         var datepicker;
 
-        beforeEach(function() {
+        beforeEach(() => {
           datepicker = fixture('datepicker');
         });
 
         function waitForAnnounce(callback) {
-          var listener = function(event) {
+          var listener = event => {
             document.body.removeEventListener('iron-announce', listener);
             callback(event.detail.text);
           };
           document.body.addEventListener('iron-announce', listener);
         }
 
-        it('should request availability from IronA11yAnnouncer', function(done) {
+        it('should request availability from IronA11yAnnouncer', done => {
           var spy = sinon.spy(Polymer.IronA11yAnnouncer, 'requestAvailability');
           fixture('datepicker');
-          Polymer.Base.async(function() {
+          setTimeout(() => {
             expect(spy.called).to.be.true;
             done();
           });
         });
 
-        it('should announce focused date on open', function(done) {
-          waitForAnnounce(function(text) {
+        it('should announce focused date on open', done => {
+          waitForAnnounce(text => {
             expect(text).to.equal('Monday 1 February 2016');
             done();
           });
@@ -368,10 +367,10 @@
           datepicker.open();
         });
 
-        it('should announce focused date changes when opened', function(done) {
+        it('should announce focused date changes when opened', done => {
           datepicker.open();
 
-          waitForAnnounce(function(text) {
+          waitForAnnounce(text => {
             expect(text).to.equal('Tuesday 2 February 2016');
             done();
           });
@@ -379,7 +378,7 @@
           datepicker._focusedDate = new Date(2016, 1, 2);
         });
 
-        it('should not announce focused date changes when closed', function(done) {
+        it('should not announce focused date changes when closed', done => {
           var announceSpy = sinon.spy();
           document.body.addEventListener('iron-announce', announceSpy);
 
@@ -390,8 +389,8 @@
           done();
         });
 
-        it('should announce value on open', function(done) {
-          waitForAnnounce(function(text) {
+        it('should announce value on open', done => {
+          waitForAnnounce(text => {
             expect(text).to.equal('Monday 1 February 2016');
             done();
           });
@@ -400,8 +399,8 @@
           datepicker.open();
         });
 
-        it('should announce initial position on open', function(done) {
-          waitForAnnounce(function(text) {
+        it('should announce initial position on open', done => {
+          waitForAnnounce(text => {
             expect(text).to.equal('Monday 1 February 2016');
             done();
           });
@@ -410,8 +409,8 @@
           datepicker.open();
         });
 
-        it('should announce today', function(done) {
-          waitForAnnounce(function(text) {
+        it('should announce today', done => {
+          waitForAnnounce(text => {
             expect(text.indexOf('Today')).to.equal(0);
             done();
           });
@@ -419,12 +418,12 @@
           datepicker.open();
         });
 
-        it('should announce week numbers if enabled', function(done) {
+        it('should announce week numbers if enabled', done => {
           datepicker._focusedDate = new Date(2016, 1, 1);
           datepicker.showWeekNumbers = true;
           datepicker.set('i18n.firstDayOfWeek', 1);
 
-          waitForAnnounce(function(text) {
+          waitForAnnounce(text => {
             expect(text).to.match(/ Week 5$/);
             done();
           });
@@ -433,7 +432,7 @@
         });
 
         if (!ios) {
-          it('should announce once', function(done) {
+          it('should announce once', done => {
             var announceSpy = sinon.spy();
             document.body.addEventListener('iron-announce', announceSpy);
 
@@ -441,7 +440,7 @@
             datepicker.open();
             datepicker._focusedDate = new Date(2016, 1, 2);
 
-            Polymer.Base.async(function() {
+            setTimeout(() => {
               expect(announceSpy.callCount).to.be.equal(1);
               document.body.removeEventListener('iron-announce', announceSpy);
               done();
@@ -449,8 +448,8 @@
           });
         }
 
-        describe('i18n', function() {
-          beforeEach(function() {
+        describe('i18n', () => {
+          beforeEach(() => {
             datepicker.set('i18n.monthNames',
                 'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'));
             datepicker.set('i18n.weekdays', 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'));
@@ -458,8 +457,8 @@
             datepicker.set('i18n.today', 'Tänään');
           });
 
-          it('should announce dates in correct locale', function(done) {
-            waitForAnnounce(function(text) {
+          it('should announce dates in correct locale', done => {
+            waitForAnnounce(text => {
               expect(text).to.equal('maanantai 1 helmikuu 2016');
               done();
             });
@@ -468,8 +467,8 @@
             datepicker.open();
           });
 
-          it('should announce today in correct locale', function(done) {
-            waitForAnnounce(function(text) {
+          it('should announce today in correct locale', done => {
+            waitForAnnounce(text => {
               expect(text.indexOf('Tänään')).to.equal(0);
               done();
             });
@@ -477,12 +476,12 @@
             datepicker.open();
           });
 
-          it('should announce week numbers in correct locale', function(done) {
+          it('should announce week numbers in correct locale', done => {
             datepicker._focusedDate = new Date(2016, 1, 1);
             datepicker.showWeekNumbers = true;
             datepicker.set('i18n.firstDayOfWeek', 1);
 
-            waitForAnnounce(function(text) {
+            waitForAnnounce(text => {
               expect(text).to.match(/ viikko 5$/);
               done();
             });

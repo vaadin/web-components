@@ -38,21 +38,19 @@
 
 ## Running demos and tests in browser
 
-1. Install [polyserve](https://www.npmjs.com/package/polyserve): `npm install -g polyserve`
+1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
 
-1. When in the `vaadin-date-picker` directory, run `polyserve --open`, browser will automatically open the component API documentation.
+1. When in the `vaadin-date-picker` directory, run `polymer serve --open`, browser will automatically open the component API documentation.
 
-1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
+1. You can also open demo or in-browser tests by adding **demo/** or **test/** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-date-picker/demo
-  - http://127.0.0.1:8080/components/vaadin-date-picker/test
+  - http://127.0.0.1:8081/components/vaadin-date-picker/demo/index.html
+  - http://127.0.0.1:8081/components/vaadin-date-picker/test/index.html
 
 
 ## Running tests from the command line
 
-1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
-
-1. When in the `vaadin-date-picker` directory, run `wct` or `npm test`
+  1. When in the `vaadin-date-picker` directory, run `polymer test`
 
 
 ## Following the coding style
