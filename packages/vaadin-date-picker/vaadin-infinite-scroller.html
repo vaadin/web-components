@@ -135,10 +135,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
 
         var tpl = this.querySelector('template');
-        this.TemplateClass = Polymer.Templatize.templatize(tpl, this, {
-          mutableData: false,
-          parentModel: true,
-          instanceProps: this._instanceProps,
+        this._TemplateClass = Polymer.Templatize.templatize(tpl, this, {
           forwardHostProp: function(prop, value) {
             if (prop !== 'index') {
               this._buffers.forEach(buffer => {
@@ -147,8 +144,6 @@ This program is available under Apache License Version 2.0, available at https:/
                 });
               });
             }
-          },
-          notifyInstanceProp: function() {
           }
         });
 
@@ -320,7 +315,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         var tmpInstance = itemWrapper.instance;
 
-        itemWrapper.instance = new this.TemplateClass({});
+        itemWrapper.instance = new this._TemplateClass({});
         itemWrapper.appendChild(itemWrapper.instance.root);
 
         Object.keys(tmpInstance).forEach(prop => {
