@@ -460,9 +460,13 @@ This program is available under Apache License Version 2.0, available at https:/
             announce.push(this.i18n.week);
             announce.push(Vaadin.DatePickerHelper._getISOWeekNumber(focusedDate));
           }
-          var e = new Event('iron-announce', {bubbles: true, composed: true});
-          e.detail = {text: announce.join(' ')};
-          this.dispatchEvent(e);
+          this.dispatchEvent(new CustomEvent('iron-announce', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              text: announce.join(' ')
+            }
+          }));
           return;
         }
 
@@ -628,12 +632,15 @@ This program is available under Apache License Version 2.0, available at https:/
               this.$.scroller.position = currentPos;
               window.requestAnimationFrame(smoothScroll);
             } else {
-              var e = new Event('scroll-animation-finished', {bubbles: true, composed: true});
-              e.detail = {
-                position: this._targetPosition,
-                oldPosition: initialPosition
-              };
-              this.dispatchEvent(e);
+              this.dispatchEvent(new CustomEvent('scroll-animation-finished', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                  position: this._targetPosition,
+                  oldPosition: initialPosition
+                }
+              }));
+
               this.$.scroller.position = this._targetPosition;
               this._targetPosition = undefined;
             }
