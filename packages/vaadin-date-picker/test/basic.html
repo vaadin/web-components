@@ -388,11 +388,9 @@
           datepicker.set('i18n.today', 'Tänään');
           datepicker.set('i18n.cancel', 'Peruuta');
 
-          open(datepicker, () => {
-            Polymer.RenderStatus.afterNextRender(datepicker.$.overlay.$.scroller,
-              () => setTimeout(done, 1));
-          });
-
+          open(datepicker,
+            () => Polymer.RenderStatus.afterNextRender(datepicker.$.overlay.$.scroller,
+              () => setTimeout(done, 1)));
         });
 
         it('should notify i18n mutation to children', () => {

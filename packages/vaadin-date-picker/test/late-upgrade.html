@@ -23,9 +23,7 @@
     describe('Late upgrade', () => {
       var datepicker;
 
-      beforeEach(function() {
-        datepicker = fixture('datepicker');
-      });
+      beforeEach(() => datepicker = fixture('datepicker'));
 
       it('should have preset value from property', (done) => {
         // Set the value before the element is upgraded.

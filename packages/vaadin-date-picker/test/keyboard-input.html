@@ -15,7 +15,7 @@
 
   <test-fixture id="datepicker">
     <template>
-      <vaadin-date-picker></vaadin-date-picker>
+      <vaadin-date-picker style="display: inline-block"></vaadin-date-picker>
     </template>
   </test-fixture>
 
@@ -33,6 +33,11 @@
         var datepicker;
 
         function inputChar(char) {
+          // We need to disable focus in ie11 like it is done in the `common.js.open()` method.
+          if (ie11) {
+            datepicker._focus = () => {};
+          }
+
           target.value += char;
           MockInteractions.keyDownOn(target, char.charCodeAt(0));
           target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
@@ -70,15 +75,6 @@
 
         function focusedDate() {
           return overlay.focusedDate;
-        }
-
-        function open(callback) {
-          var listener = () => {
-            datepicker.removeEventListener('iron-overlay-opened', listener);
-            callback();
-          };
-          datepicker.addEventListener('iron-overlay-opened', listener);
-          datepicker.open();
         }
 
         beforeEach(done => {
@@ -182,7 +178,7 @@
         });
 
         it('should not forward after input tap', done => {
-          open(() => {
+          open(datepicker, () => {
             arrowDown();
             var focused = focusedDate();
             target.dispatchEvent(new CustomEvent('tap', {bubbles: true, composed: true}));
@@ -234,7 +230,7 @@
 
         it('should validate on close', done => {
 
-          open(() => {
+          open(datepicker, () => {
             var spy = sinon.spy(datepicker, 'validate');
 
             datepicker.addEventListener('iron-overlay-closed', () => {
@@ -273,7 +269,7 @@
             expect(target.selectionStart).to.equal(target.selectionEnd);
             done();
           });
-          open(() => {
+          open(datepicker, () => {
             arrowDown();
             datepicker.close();
           });
@@ -303,7 +299,7 @@
               done();
             });
 
-            open(() => datepicker.close());
+            open(datepicker, () => datepicker.close());
           });
 
         });
@@ -317,7 +313,7 @@
         });
 
         it('should forward up/down to overlay', done => {
-          open(() => {
+          open(datepicker, () => {
             arrowUp();
             expect(datepicker._focusedDate.getDate()).not.to.eql(new Date().getDate());
             done();
@@ -328,12 +324,12 @@
 
           it('should close the overlay on esc', done => {
             datepicker.addEventListener('iron-overlay-closed', () => done());
-            open(esc);
+            open(datepicker, esc);
           });
 
           it('should revert input value on esc', done => {
             datepicker.value = '2000-01-01';
-            open(() => {
+            open(datepicker, () => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -345,7 +341,7 @@
 
           it('should revert input value on esc (empty)', done => {
             datepicker.value = '';
-            open(() => {
+            open(datepicker, () => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -361,7 +357,7 @@
               expect(datepicker.value).to.equal('2000-01-01');
               done();
             });
-            open(() => {
+            open(datepicker, () => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -375,7 +371,7 @@
               expect(datepicker.value).to.equal('');
               done();
             });
-            open(() => {
+            open(datepicker, () => {
               inputText('1/2/2000');
               arrowDown();
               arrowDown();
@@ -462,26 +458,42 @@
             expect(datepicker._inputElement.focused).to.be.undefined;
           });
 
-          it('should focus the input on esc', () => {
+          it('should focus the input on esc', done => {
             arrowDown();
             esc();
-            expect(datepicker._inputElement.focused).to.be.true;
+            // IE11 needs timeout
+            setTimeout(() => {
+              expect(datepicker._inputElement.focused).to.be.true;
+              done();
+            }, 1);
           });
 
-          it('should focus the input on date tap', () => {
+          it('should focus the input on date tap', done => {
             arrowDown();
             datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
-            expect(datepicker._inputElement.focused).to.be.true;
+            // IE11 needs timeout
+            setTimeout(() => {
+              expect(datepicker._inputElement.focused).to.be.true;
+              done();
+            }, 1);
           });
 
-          it('should focus the input on date cancel', () => {
+          it('should focus the input on date cancel', done => {
             arrowDown();
             MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
-            expect(datepicker._inputElement.focused).to.be.true;
+            // IE11 needs timeout
+            setTimeout(() => {
+              expect(datepicker._inputElement.focused).to.be.true;
+              done();
+            }, 1);
           });
 
           it('should focus cancel on input shift tab', done => {
-            open(() => {
+            open(datepicker, () => {
+              // In the open() the focus for IE11 is skip,  we need to focus manually here.
+              if (ie11) {
+                MockInteractions.focus(datepicker._inputElement);
+              }
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
               expect(datepicker.$.overlay.$.cancelButton.focused).to.be.true;
               done();
@@ -489,7 +501,7 @@
           });
 
           it('should focus input in cancel tab', done => {
-            open(() => {
+            open(datepicker, () => {
               MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
               expect(datepicker._inputElement.focused).to.be.true;
@@ -498,7 +510,7 @@
           });
 
           it('should not reveal the focused date on tap', done => {
-            open(() => {
+            open(datepicker, () => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.tap(datepicker.$.overlay);
               MockInteractions.focus(datepicker.$.overlay);
@@ -510,7 +522,7 @@
           });
 
           it('should reveal the focused date on tab focus from input', done => {
-            open(() => {
+            open(datepicker, () => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9);
               expect(spy.called).to.be.true;
@@ -519,7 +531,7 @@
           });
 
           it('should reveal the focused date on shift-tab focus from today button', done => {
-            open(() => {
+            open(datepicker, () => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.todayButton, 9, 'shift');
               MockInteractions.focus(datepicker.$.overlay);

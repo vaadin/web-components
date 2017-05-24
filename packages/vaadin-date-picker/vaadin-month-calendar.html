@@ -235,9 +235,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onMonthGridTouchStart() {
           this._notTapping = false;
-          setTimeout(function() {
-            this._notTapping = true;
-          }.bind(this), 300);
+          setTimeout(() => this._notTapping = true, 300);
         }
 
         _dateAdd(date, delta) {
@@ -259,7 +257,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           weekDayNames = this._applyFirstDayOfWeek(weekDayNames, firstDayOfWeek);
           weekDayNamesShort = this._applyFirstDayOfWeek(weekDayNamesShort, firstDayOfWeek);
-          weekDayNames = weekDayNames.map(function(day, index) {
+          weekDayNames = weekDayNames.map((day, index) => {
             return {
               weekDay: day,
               weekDayShort: weekDayNamesShort[index]
