@@ -68,20 +68,19 @@
         scrollDown();
       });
 
-      // FIXME: fails in FF travis
-      // it('should reflect currently visible item index as position scrolling up', done => {
-      // function scrollUp() {
-      // verifyPosition();
-      // if (scroller.position < -scroller.bufferSize * 1.5) {
-      // done();
-      // } else {
-      // scroller.$.scroller.scrollTop -= scroller.itemHeight * 3.7;
-      // setTimeout(scrollUp, 30);
-      // }
-      // }
-      //
-      // scrollUp();
-      // });
+      it('should reflect currently visible item index as position scrolling up', done => {
+        function scrollUp() {
+          verifyPosition();
+          if (scroller.position < -scroller.bufferSize * 1.5) {
+            done();
+          } else {
+            scroller.$.scroller.scrollTop -= scroller.itemHeight * 3.7;
+            setTimeout(scrollUp, 30);
+          }
+        }
+
+        scrollUp();
+      });
 
       it('should reflect position as currently visible item index', () => {
         scroller.position = -5;
