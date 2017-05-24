@@ -493,16 +493,13 @@
             });
           });
 
-          // FIXME: flaky tests
-          // it('should focus input in cancel tab', done => {
-          // open(() => {
-          // var spy = sinon.spy(datepicker._inputElement, 'focus');
-          // MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
-          // MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
-          // expect(spy.called).to.be.true;
-          // done();
-          // });
-          // });
+          it('should focus input in cancel tab', () => {
+            open(() => {
+              MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
+              MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
+              expect(datepicker.$.inputcontainer.focused).to.be.true;
+            });
+          });
 
           it('should not reveal the focused date on tap', done => {
             open(() => {
