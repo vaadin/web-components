@@ -40,7 +40,7 @@
 
 1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
 
-1. When in the `vaadin-button` directory, run `polymer serve --open`, browser will automatically open the component API documentation.
+1. When in the `vaadin-date-picker` directory, run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo/** or **test/** to the URL, for example:
 
@@ -50,7 +50,7 @@
 
 ## Running tests from the command line
 
-  1. When in the `vaadin-button` directory, run `polymer test`
+  1. When in the `vaadin-date-picker` directory, run `polymer test`
 
 
 ## Following the coding style
