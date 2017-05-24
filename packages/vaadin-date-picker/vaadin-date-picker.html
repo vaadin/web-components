@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../paper-input/paper-input-error.html">
@@ -266,7 +267,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @element vaadin-date-picker
        * @demo demo/index.html
        */
-      class DatePickerElement extends Vaadin.DatePickerMixin(Polymer.Element) {
+      class DatePickerElement extends Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)) {
 
         static get is() {
           return 'vaadin-date-picker';

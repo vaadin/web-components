@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
@@ -337,7 +338,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     {
-      class DatePickerOverlayElement extends Polymer.Element {
+      class DatePickerOverlayElement extends Polymer.GestureEventListeners(Polymer.Element) {
 
         static get is() {
           return 'vaadin-date-picker-overlay';
