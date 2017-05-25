@@ -78,7 +78,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _order: Number,
 
-      _reorderStatus: Boolean
+      _reorderStatus: Boolean,
+
+      _cells: {
+        value: function() {
+          return [];
+        }
+      }
     },
 
     observers: [
@@ -141,24 +147,37 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     },
 
+    _cellsChanged: function(cells) {
+      cells.forEach((cell) => {
+        cell.style.width = this.width;
+      });
+    },
+
     _headerTemplateChanged: function(headerTemplate) {
-      this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
+      // this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
     },
 
     _footerTemplateChanged: function(footerTemplate) {
-      this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
+      // this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
     },
 
     _flexGrowChanged: function(flexGrow) {
-      this.fire('property-changed', {path: 'flexGrow', value: flexGrow});
+      this._cells.forEach(function(cell) {
+        cell.style.flexGrow = flexGrow;
+      });
     },
 
     _widthChanged: function(width) {
-      this.fire('property-changed', {path: 'width', value: width});
+      if (this.parentElement._columnPropChanged) {
+        this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
+      }
+      this._cells.forEach(function(cell) {
+        cell.style.width = width;
+      });
     },
 
     _lastFrozenChanged: function(lastFrozen) {
-      this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
+      // this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
     }
   };
 
@@ -194,29 +213,36 @@ This program is available under Apache License Version 2.0, available at https:/
 
     observers: [
       '_flexGrowChanged(flexGrow)',
-      '_widthChanged(width)',
+      '_widthChanged(width, _cells.*)',
       '_templateChanged(template)',
-      '_frozenChanged(frozen, isAttached)',
+      '_frozenChanged(frozen, _cells.*)',
       '_hiddenChanged(hidden)',
       '_orderChanged(_order)',
       '_reorderStatusChanged(_reorderStatus)',
       '_resizableChanged(resizable)'
     ],
 
-    _frozenChanged: function(frozen, isAttached) {
-      if (frozen === undefined || isAttached === undefined) {
-        return;
-      }
+    _frozenChanged: function(frozen) {
+      // if (frozen === undefined || isAttached === undefined) {
+      //   return;
+      // }
 
       // since `frozen` is defined in ColumnBaseBehavior, this observer is triggered
       // normally before the column is actually attached to the DOM.
       // For events to bubble in Safari 9, element needs to be attached.
       // Don’t propagate the default `false` value.
-      if (this._oldFrozen !== undefined || frozen !== false) {
-        this.fire('property-changed', {path: 'frozen', value: frozen});
-      }
-
-      this._oldFrozen = frozen;
+      // if (this._oldFrozen !== undefined || frozen !== false) {
+      //   this.fire('property-changed', {path: 'frozen', value: frozen});
+      // }
+      //
+      // this._oldFrozen = frozen;
+      this._cells.forEach(function(cell) {
+        if (frozen) {
+          cell.setAttribute('frozen', '');
+        } else {
+          cell.removeAttribute('frozen');
+        }
+      });
     },
 
     _templateChanged: function(template) {
@@ -227,23 +253,23 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       // don't bubble for optimisation
-      this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
+      // this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
     },
 
     _hiddenChanged: function(hidden) {
-      this.fire('property-changed', {path: 'hidden', value: hidden});
+      // this.fire('property-changed', {path: 'hidden', value: hidden});
     },
 
     _orderChanged: function(order) {
-      this.fire('property-changed', {path: 'order', value: order});
+      // this.fire('property-changed', {path: 'order', value: order});
     },
 
     _reorderStatusChanged: function(reorderStatus) {
-      this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
+      // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
     },
 
     _resizableChanged: function(resizable) {
-      this.fire('property-changed', {path: 'resizable', value: resizable});
+      // this.fire('property-changed', {path: 'resizable', value: resizable});
     },
   };
 

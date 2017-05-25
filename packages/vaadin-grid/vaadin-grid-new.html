@@ -9,11 +9,13 @@
   <template>
     <style include="vaadin-grid-styles"></style>
 
-    <table id="table">
-      <thead id="header"></thead>
-      <tbody id="items"></tbody>
-      <tfoot id="footer"></tfoot>
-    </table>
+    <div id="scroller">
+      <table id="table">
+        <thead id="header"></thead>
+        <tbody id="items"></tbody>
+        <tfoot id="footer"></tfoot>
+      </table>
+    </div>
 
     <!-- The template needs at least one slot or else shady doesn't distribute -->
     <slot name="nodristribute"></slot>
@@ -70,11 +72,10 @@
         // }
 
         const cell = document.createElement('td');
+        column.push('_cells', cell);
+
         cell.classList.add('vaadin-grid-cell');
-        if (column.frozen) {
-          cell.setAttribute('frozen', '');
-        }
-        cell.style.width = column.width;
+
         cell._instance = inst;
         const slot = document.createElement('slot');
         slot.setAttribute('name', id);
@@ -119,10 +120,6 @@
       });
 
 
-      columnTree[columnTree.length - 1].forEach((column) => {
-        column.addEventListener('property-changed', this._columnPropChanged.bind(this));
-      });
-
 
     }
 
@@ -136,13 +133,6 @@
       // row.active = item !== null && item == this.activeItem;
       // row.focused = row.index === this.$.items._focusedRowIndex;
     }
-
-    _columnPropChanged(e) {
-      const column = e.target;
-
-      console.log("foo", e.detail.path);
-    }
-
   }
 
   customElements.define(VaadinGrid.is, VaadinGrid);
