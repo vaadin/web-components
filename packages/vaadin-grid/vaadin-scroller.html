@@ -42,25 +42,46 @@
     _createRow() {}
 
     _sizeChanged(size) {
-      // TODO: Temporary solution. Override iron-list functions so that items array isn't needed anymore
-      // and handle million dollar scrolling right here.
-      var scrollTop = this.scrollTop;
-      const items = [];
-      for (let i = 0; i < size; i++) {
-        items.push('item-' + i);
+      if (!this._physicalItems) {
+        this._virtualStart = 0;
+        this._physicalTop = 0;
+        this._physicalIndexForKey = {};
+        this._firstVisibleIndexVal = null;
+        this._lastVisibleIndexVal = null;
+        this._physicalCount = this._physicalCount || 0;
+        this._physicalItems = this._physicalItems || [];
+        this._physicalSizes = this._physicalSizes || [];
+        this._physicalStart = 0;
+        if (this._scrollTop > this._scrollOffset) {
+          this._resetScrollPosition(0);
+        }
       }
-      this.items = items;
-      this.scrollTop = scrollTop;
+      this._virtualCount = size ? size : 0;
+
+      // The following if so that scroll position would get updated
+      // after size is reduced (if necessary)
+      this._update();
+      setTimeout(this._update.bind(this), 10);
     }
+
 
     _createPool(size) {
       var i, inst;
       var physicalItems = new Array(size);
+      const fragment = document.createDocumentFragment();
       for (i = 0; i < size; i++) {
         inst = this._createRow();
         physicalItems[i] = inst;
-        this._getRowTarget().appendChild(inst);
+        fragment.appendChild(inst);
       }
+      this._getRowTarget().appendChild(fragment);
+
+      // Weird hack needed to get Safari to actually distribute slots
+      const content = this.querySelector('[slot]');
+      const slot = content.getAttribute('slot');
+      content.setAttribute('slot', 'foo-bar');
+      content.setAttribute('slot', slot);
+
       return physicalItems;
     }
 
@@ -71,6 +92,11 @@
     _assignModels(itemSet) {
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
+        if (vidx < this.size) {
+          el.removeAttribute('hidden');
+        } else {
+          el.setAttribute('hidden', '');
+        }
         this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
       }, itemSet);
     }
