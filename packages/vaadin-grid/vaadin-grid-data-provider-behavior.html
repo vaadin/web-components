@@ -235,8 +235,8 @@
           var params = {
             page: page,
             pageSize: this.pageSize,
-            sortOrders: this._mapSorters(),
-            filters: this._mapFilters()
+            // sortOrders: this._mapSorters(),
+            // filters: this._mapFilters()
           };
           this.dataProvider(params, function(items) {
             this._cache[page] = items;

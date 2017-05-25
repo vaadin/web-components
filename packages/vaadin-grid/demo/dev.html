@@ -46,7 +46,7 @@
         </style>
         <input value="{{foobar::input}}">
         <label>[[foobar]]</label>
-        <vaadin-grid id="component" items="[[items]]" multi-selection column-reordering-allowed>
+        <vaadin-grid id="component" data-provider="[[_dp]]" size=1000 multi-selection column-reordering-allowed>
 
           <template class="row-details">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -173,7 +173,19 @@
             properties: {
               items: {
                 value: window.users.results
+              },
+
+              _dp: {
+                value: function() {
+                  return this.dataProvider.bind(this);
+                }
               }
+
+
+            },
+
+            dataProvider: function(opts, cb) {
+              cb(window.users.results);
             }
           });
         });
