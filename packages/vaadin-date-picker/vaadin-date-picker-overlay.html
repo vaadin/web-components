@@ -812,21 +812,32 @@ This program is available under Apache License Version 2.0, available at https:/
 
           var eventKey = this._eventKey(e);
           if (eventKey === 'tab') {
+            // We handle tabs here and don't want to bubble up.
             e.stopPropagation();
-            if (this.hasAttribute('fullscreen')) {
+
+            const isFullscreen = this.hasAttribute('fullscreen');
+            const isShift = e.shiftKey;
+            // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
+            // previously in the keydown event.
+            const isToday = e.composedPath().indexOf(this.$.todayButton) >= 0;
+            const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
+            const isScroller = this._focused && !isToday && !isCancel;
+
+            if (isFullscreen) {
               e.preventDefault();
-            } else if ((this.$.cancelButton.focused || this.$.todayButton.focused) && e.shiftKey) {
-              // NOOP: Browser moves the focus.
-            } else if ((this.$.cancelButton.focused && !e.shiftKey) || (this._focused && e.shiftKey)) {
+            } else if (isShift && isScroller || !isShift && isCancel) {
               // Return focus back to the input field
               e.preventDefault();
               this.dispatchEvent(new CustomEvent('focus-input', {bubbles: true, composed: true}));
+            } else if (isShift && isToday) {
+              // Browser returns focus back to the scrollable area. We need to set
+              // the focused flag, and move the scroll to focused date.
+              this._focused = true;
+              setTimeout(() => this.revealDate(this.focusedDate), 1);
             } else {
-              setTimeout(() => {
-                if (this._focused) {
-                  this.revealDate(this.focusedDate);
-                }
-              }, 1);
+              // Browser moves the focus out of the scroller, hence focused flag must
+              // set to false.
+              this._focused = false;
             }
           } else if (eventKey) {
             e.preventDefault();
