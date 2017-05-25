@@ -1,6 +1,8 @@
 <link rel="import" href="vaadin-scroller.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
 <link rel="import" href="vaadin-grid-data-provider-behavior.html">
+<link rel="import" href="vaadin-grid-table-scroll-behavior.html">
+
 <link rel="import" href="vaadin-grid-styles.html">
 
 <dom-module id="vaadin-grid">
@@ -10,6 +12,7 @@
     <table id="table">
       <thead id="header"></thead>
       <tbody id="items"></tbody>
+      <tfoot id="footer"></tfoot>
     </table>
 
     <!-- The template needs at least one slot or else shady doesn't distribute -->
@@ -22,7 +25,8 @@
   class VaadinGrid extends Polymer.mixinBehaviors(
     [
       vaadin.elements.grid.DynamicColumnsBehavior,
-      vaadin.elements.grid.DataProviderBehavior
+      vaadin.elements.grid.DataProviderBehavior,
+      vaadin.elements.grid.TableScrollBehavior
     ],
     VaadinScroller) {
 
@@ -67,6 +71,9 @@
 
         const cell = document.createElement('td');
         cell.classList.add('vaadin-grid-cell');
+        if (column.frozen) {
+          cell.setAttribute('frozen', '');
+        }
         cell.style.width = column.width;
         cell._instance = inst;
         const slot = document.createElement('slot');
@@ -80,6 +87,8 @@
 
       // Might be empty if only cache was used
       this.appendChild(contentsFragment);
+
+      this._frozenCellsChanged();
     }
 
     _updateScrollerItem(row, index) {

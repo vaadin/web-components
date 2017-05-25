@@ -130,7 +130,7 @@
         return;
       }
 
-      var table = this.$.scroller;
+      var table = this.$.table;
       var momentum = Math.abs(e.deltaX) + Math.abs(e.deltaY);
 
       if (this._canScroll(table, e.deltaX, e.deltaY)) {
@@ -178,7 +178,7 @@
      * Update the models, the position of the
      * items in the viewport and recycle tiles as needed.
      */
-    _scrollHandler: function(e) {
+    _afterScroll: function(e) {
       // this._adjustVirtualIndexOffset(delta);
 
       this._translateStationaryElements();
@@ -251,15 +251,15 @@
     _translateStationaryElements: function() {
       if (this.fixedSections) {
         this.$.items.style.transform =
-        this._getTranslate(-this.$.scroller._scrollLeft || 0, -this.$.scroller._scrollTop || 0);
+        this._getTranslate(-this._scrollLeft || 0, -this._scrollTop || 0);
 
         this.$.footer.style.transform = this.$.header.style.transform =
-        this._getTranslate(-this.$.scroller._scrollLeft || 0, 0);
+        this._getTranslate(-this._scrollLeft || 0, 0);
       } else {
-        this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate(0, this.$.scroller._scrollTop);
+        this.$.footer.style.transform = this.$.header.style.transform = this._getTranslate(0, this._scrollTop);
       }
 
-      var frozenCellTransform = this._getTranslate(this.$.scroller._scrollLeft, 0);
+      var frozenCellTransform = this._getTranslate(this._scrollLeft, 0);
       for (var i = 0; i < this._frozenCells.length; i++) {
         this._frozenCells[i].style.transform = frozenCellTransform;
       }
@@ -275,7 +275,7 @@
    * @polymerBehavior vaadin.elements.grid.TableScrollBehavior
    */
   vaadin.elements.grid.TableScrollBehavior = [
-    Polymer.IronScrollTargetBehavior,
+    // Polymer.IronScrollTargetBehavior,
     vaadin.elements.grid.TableScrollBehaviorImpl
   ];
 
