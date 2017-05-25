@@ -35,9 +35,7 @@ function listenForEvent(elem, type, callback) {
   elem.addEventListener(type, listener);
 }
 
-function open(datepicker, callback) {
-  listenForEvent(datepicker, 'iron-overlay-opened', callback);
-
+function hackFocusIE11(datepicker) {
   // IE11 causes an 'Error thrown outside of test function: Unspecified error' after running
   // tests that open the overlay, and just when the polyfill executes the `disconnectedCallback`
   // phase when the fixture is removed.
@@ -47,6 +45,14 @@ function open(datepicker, callback) {
   if (ie11) {
     datepicker._focus = () => {};
   }
+}
+
+function open(datepicker, callback) {
+  listenForEvent(datepicker, 'iron-overlay-opened', callback);
+
+  // Avoid focus issues when running tests in IE11
+  hackFocusIE11(datepicker);
+
   datepicker.open();
 }
 
@@ -94,14 +100,21 @@ function describeSkipIf(bool, title, callback) {
   }
 }
 
+function waitUntil(check, callback) {
+  var id = setInterval(function() {
+    if (check()) {
+      clearInterval(id);
+      callback();
+    }
+  }, 10);
+}
+
 function waitUntilScrolledTo(overlay, date, callback) {
-  if (overlay.$.scroller.position) {
-    overlay._onMonthScroll();
-  }
-  var monthIndex = overlay._differenceInMonths(date, new Date());
-  if (overlay.$.scroller.position === monthIndex) {
-    Polymer.RenderStatus.afterNextRender(overlay, callback);
-  } else {
-    setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
-  }
+  waitUntil(() => {
+    if (overlay.$.scroller.position) {
+      overlay._onMonthScroll();
+    }
+    var monthIndex = overlay._differenceInMonths(date, new Date());
+    return overlay.$.scroller.position === monthIndex;
+  }, () => Polymer.RenderStatus.afterNextRender(overlay, callback));
 }

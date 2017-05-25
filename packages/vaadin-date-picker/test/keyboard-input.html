@@ -33,10 +33,9 @@
         var datepicker;
 
         function inputChar(char) {
-          // We need to disable focus in ie11 like it is done in the `common.js.open()` method.
-          if (ie11) {
-            datepicker._focus = () => {};
-          }
+
+          // Avoid focus issues when running tests in IE11
+          hackFocusIE11(datepicker);
 
           target.value += char;
           MockInteractions.keyDownOn(target, char.charCodeAt(0));
@@ -462,50 +461,43 @@
             arrowDown();
             esc();
             // IE11 needs timeout
-            setTimeout(() => {
-              expect(datepicker._inputElement.focused).to.be.true;
-              done();
-            }, 1);
+            waitUntil(() => datepicker._inputElement.focused, done);
           });
 
           it('should focus the input on date tap', done => {
             arrowDown();
             datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
             // IE11 needs timeout
-            setTimeout(() => {
-              expect(datepicker._inputElement.focused).to.be.true;
-              done();
-            }, 1);
+            waitUntil(() => datepicker._inputElement.focused, done);
           });
 
           it('should focus the input on date cancel', done => {
             arrowDown();
             MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
             // IE11 needs timeout
-            setTimeout(() => {
-              expect(datepicker._inputElement.focused).to.be.true;
-              done();
-            }, 1);
+            waitUntil(() => datepicker._inputElement.focused, done);
           });
 
-          it('should focus cancel on input shift tab', done => {
+          it('should focus cancel on input shift tab', function(done) {
             open(datepicker, () => {
-              // In the open() the focus for IE11 is skip,  we need to focus manually here.
-              if (ie11) {
-                MockInteractions.focus(datepicker._inputElement);
-              }
+              MockInteractions.focus(datepicker._inputElement);
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
-              expect(datepicker.$.overlay.$.cancelButton.focused).to.be.true;
-              done();
+              // IE11 needs timeout
+              waitUntil(() => datepicker.$.overlay.$.cancelButton.focused, done);
             });
           });
 
           it('should focus input in cancel tab', done => {
             open(datepicker, () => {
               MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
+
+              // IE11 needs spy the focus instead of checking _inputElement.focused
+              var spy = sinon.spy(datepicker, '_focus');
               MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
-              expect(datepicker._inputElement.focused).to.be.true;
-              done();
+              setTimeout(() => {
+                expect(spy.called).to.be.true;
+                done();
+              }, 1);
             });
           });
 
