@@ -87,6 +87,10 @@
          background: #fff;
       }
 
+      .vaadin-grid-cell ::slotted(vaadin-grid-cell-content:empty) { /* Bad selector */
+        min-height: 100px;
+      }
+
       [hidden] {
         display: none;
       }

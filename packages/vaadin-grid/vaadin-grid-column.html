@@ -77,18 +77,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _reorderStatus: Boolean,
 
-      _cells: {
-        type: Array,
-        value: function() {
-          return [];
-        }
-      }
+      _cells: Array,
+
+      _headerCell: Object
     },
 
     observers: [
       '_footerTemplateChanged(footerTemplate)',
       '_headerTemplateChanged(headerTemplate)',
-      '_lastFrozenChanged(_lastFrozen)'
+      '_lastFrozenChanged(_lastFrozen)',
+      '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
+      '_stampHeaderTemplate(headerTemplate, _headerCell)',
+      // '_stampHeaderTemplate(footerTemplate, _footerCell)'
     ],
 
     created: function() {
@@ -128,6 +128,35 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     },
 
+    _stampBodyTemplate: function(template, cells) {
+      // console.log(template, this._cells);
+      if (!template || !this._cells) {
+        return;
+      }
+
+      this._cells.forEach((cell) => {
+        if (!cell._instance) {
+          const inst = template.templatizer.createInstance();
+          cell._content.appendChild(inst.root);
+          cell._instance = inst;
+
+          inst.index = cell.parentElement.index; // TODO: _index
+          inst.item = cell.parentElement._item;
+        }
+      });
+      // cell._instance = inst;
+    },
+
+    _stampHeaderTemplate: function(headerTemplate, headerCell) {
+      if (!headerTemplate || !headerCell || headerCell._instance) {
+        return;
+      }
+
+      const inst = headerTemplate.templatizer.createInstance();
+      headerCell._content.appendChild(inst.root);
+      headerCell._instance = inst;
+    },
+
     _selectFirstTemplate: function(selector) {
       return Array.prototype.filter.call(Polymer.dom(this).querySelectorAll(selector), function(el) {
         return Polymer.dom(el).parentNode === this;
@@ -145,12 +174,6 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     },
 
-    _cellsChanged: function(cells) {
-      cells.forEach((cell) => {
-        cell.style.width = this.width;
-      });
-    },
-
     _headerTemplateChanged: function(headerTemplate) {
       // this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
     },
@@ -160,16 +183,19 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     _flexGrowChanged: function(flexGrow) {
-      this._cells.forEach(function(cell) {
+      this._cells && this._cells.forEach(function(cell) {
         cell.style.flexGrow = flexGrow;
       });
     },
 
-    _widthChanged: function(width) {
+    _widthChanged: function(width, headerCell, cells) {
+      if (!width || !headerCell || !cells) {
+        return;
+      }
       if (this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
       }
-      this._cells.forEach(function(cell) {
+      this._cells && this._cells.concat(this._headerCell).forEach(function(cell) {
         cell.style.width = width;
       });
     },
@@ -211,7 +237,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     observers: [
       '_flexGrowChanged(flexGrow)',
-      '_widthChanged(width, _cells.*)',
+      '_widthChanged(width, _headerCell, _cells.*)',
       '_templateChanged(template)',
       '_frozenChanged(frozen, _cells.*)',
       '_hiddenChanged(hidden)',
@@ -234,7 +260,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // }
       //
       // this._oldFrozen = frozen;
-      this._cells.forEach(function(cell) {
+      this._cells && this._cells.forEach(function(cell) {
         if (frozen) {
           cell.setAttribute('frozen', '');
         } else {

@@ -2,6 +2,7 @@
 <link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
 <link rel="import" href="vaadin-grid-data-provider-behavior.html">
 <link rel="import" href="vaadin-grid-table-scroll-behavior.html">
+<link rel="import" href="vaadin-grid-column.html">
 
 <link rel="import" href="vaadin-grid-styles.html">
 
@@ -43,7 +44,7 @@
     }
 
     _createScrollerRow() {
-      const row = document.createElement('tr')
+      const row = document.createElement('tr');
       this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
       return row;
     }
@@ -58,34 +59,42 @@
       const cellsFragment = document.createDocumentFragment();
       const contentsFragment = document.createDocumentFragment();
 
+      row.innerHTML = '';
       columns.forEach((column, index) => {
         // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
         // {
           const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
           const id = 'vaadin-grid-cell-content-' + contentId;
-          const inst = column[templateName].templatizer.createInstance();
+
 
           const cellContent = document.createElement('vaadin-grid-cell-content');
           cellContent.setAttribute('slot' , id);
-          cellContent.appendChild(inst.root);
           contentsFragment.appendChild(cellContent);
         // }
 
         const cell = document.createElement('td');
-        column.push('_cells', cell); // TODO: This is really heavy, batch/debounce it
-
-
         cell.classList.add('vaadin-grid-cell');
+        cell._content = cellContent;
 
-        cell._instance = inst;
         const slot = document.createElement('slot');
         slot.setAttribute('name', id);
         cell.appendChild(slot);
-        cellsFragment.appendChild(cell)
+        // cellsFragment.appendChild(cell)
+        row.appendChild(cell);
+
+        if (templateName === 'template') {
+          column._cells = column._cells || [];
+          column._cells.push(cell);
+          if (column.notifyPath) {
+            column.notifyPath('_cells.*', column._cells); // TODO: This is really heavy, batch/debounce it
+          }
+        } else if (templateName === 'headerTemplate') {
+          column._headerCell = cell;
+        }
       });
 
-      row.innerHTML = '';
-      row.appendChild(cellsFragment);
+
+      // row.appendChild(cellsFragment);
 
       // Might be empty if only cache was used
       this.appendChild(contentsFragment);
@@ -99,9 +108,10 @@
       columns.forEach((column, columnIndex) => {
         const cell = row.children[columnIndex];
         const slot = cell.firstElementChild;
-        const inst = cell._instance;
 
-        inst.index = index;
+        if (cell._instance) {
+          cell._instance.index = index;
+        }
       });
       this._getItem(index, row);
     }
@@ -126,8 +136,11 @@
 
     _updateItem(row, item) {
       // row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
+      row._item = item;
       Array.from(row.children).forEach((cell) => {
-        cell._instance.item = item;
+        if (cell._instance) {
+          cell._instance.item = item;
+        }
       });
       // row.selected = this._isSelected(item);
       // row.expanded = this._isExpanded(item);
