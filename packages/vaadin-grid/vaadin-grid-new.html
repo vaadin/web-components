@@ -118,8 +118,6 @@
     }
 
     _updateScrollerItem(row, index) {
-      row.index = index;
-
       const columns = this._columnTree[this._columnTree.length - 1];
       // Polymer.Templatizer.modelForElement(row)
       columns.forEach((column, columnIndex) => {
@@ -129,14 +127,6 @@
 
         inst.index = index;
       });
-
-      this._virtualIndexToItem = this._virtualIndexToItem || {};
-
-      if (row.index) {
-        delete this._virtualIndexToItem[row.index];
-      }
-      row.index = index;
-      this._virtualIndexToItem[row.index] = row;
       this._getItem(index, row);
     }
 
