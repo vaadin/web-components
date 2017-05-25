@@ -32,6 +32,14 @@
     * @protected
     */
     _afterScroll() {}
+    /**
+    * @protected
+    */
+    _getRowTarget() {}
+    /**
+    * @protected
+    */
+    _createRow() {}
 
     _sizeChanged(size) {
       // TODO: Temporary solution. Override iron-list functions so that items array isn't needed anymore
@@ -45,12 +53,22 @@
       this.scrollTop = scrollTop;
     }
 
+    _createPool(size) {
+      var i, inst;
+      var physicalItems = new Array(size);
+      for (i = 0; i < size; i++) {
+        inst = this._createRow();
+        physicalItems[i] = inst;
+        this._getRowTarget().appendChild(inst);
+      }
+      return physicalItems;
+    }
+
     /**
      * Assigns the data models to a given set of items.
      * @param {!Array<number>=} itemSet
      */
     _assignModels(itemSet) {
-      super._assignModels(itemSet);
       this._iterateItems(function(pidx, vidx) {
         var el = this._physicalItems[pidx];
         this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
@@ -62,21 +80,26 @@
       this._afterScroll();
     }
 
-    update() {
-      this._update();
+    _createFocusBackfillItem() {
+      // Ignore
     }
 
-    ready() {
-      super.ready();
 
-      // TODO: This is pretty awkward
-      this._increasePoolIfNeeded(25);
-      this._render();
-      requestAnimationFrame(() => {
-        this.updateViewportBoundaries();
-        requestAnimationFrame(this._render.bind(this));
-      });
-    }
+    // update() {
+    //   this._update();
+    // }
+
+    // ready() {
+    //   super.ready();
+    //
+    //   // TODO: This is pretty awkward
+    //   this._increasePoolIfNeeded(25);
+    //   this._render();
+    //   requestAnimationFrame(() => {
+    //     this.updateViewportBoundaries();
+    //     requestAnimationFrame(this._render.bind(this));
+    //   });
+    // }
 
   }
 

@@ -1,0 +1,135 @@
+<link rel="import" href="vaadin-scroller.html">
+<link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
+
+<dom-module id="vaadin-grid">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 400px;
+      }
+
+      #table {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #items {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      tr {
+        display: flex;
+      }
+
+      td {
+        display: block;
+        width: 100%;
+      }
+    </style>
+
+
+    <array-selector
+        id="selector"
+        items="{{items}}"
+        selected="{{selectedItems}}"
+        selected-item="{{selectedItem}}"></array-selector>
+
+    <table id="table">
+      <tbody id="items"></tbody>
+    </table>
+
+    <!-- The template needs at least one slot or else shady doesn't distribute -->
+    <slot name="nodristribute"></slot>
+
+  </template>
+</dom-module>
+
+<script>
+  class VaadinGrid extends Polymer.mixinBehaviors(
+    [
+      vaadin.elements.grid.DynamicColumnsBehavior
+    ],
+    VaadinScroller) {
+
+    static get is() {
+      return 'vaadin-grid';
+    }
+
+    static get observers() {
+      return [
+        '_columnTreeChanged(_columnTree, _columnTree.*)',
+      ]
+    }
+
+    _createRow() {
+      const row = document.createElement('tr')
+      this._updateRow(row);
+      return row;
+    }
+
+    _getRowTarget() {
+      return this.$.items;
+    }
+
+    _updateRow(row) {
+      if (this._columnTree && this._columnTree.length) {
+        const columns = this._columnTree[this._columnTree.length - 1];
+
+        // Create the row cells programmatically to avoid a <template> tag
+        const cellsFragment = document.createDocumentFragment();
+        const contentsFragment = document.createDocumentFragment();
+
+        columns.forEach((column, index) => {
+          // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
+          // {
+            const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
+            const id = 'vaadin-grid-cell-content-' + contentId;
+            const inst = column.template.templatizer.createInstance();
+
+            const cellContent = document.createElement('vaadin-grid-cell-content');
+            cellContent.setAttribute('slot' , id);
+            cellContent.appendChild(inst.root);
+            contentsFragment.appendChild(cellContent);
+          // }
+
+          const cell = document.createElement('td');
+          cell._instance = inst;
+          const slot = document.createElement('slot');
+          slot.setAttribute('name', id);
+          cell.appendChild(slot);
+          cellsFragment.appendChild(cell)
+        });
+
+        row.innerHTML = '';
+        row.appendChild(cellsFragment);
+
+        // Might be empty if only cache was used
+        this.appendChild(contentsFragment);
+      }
+    }
+
+    _updateScrollerItem(row, index) {
+      const columns = this._columnTree[this._columnTree.length - 1];
+      // Polymer.Templatizer.modelForElement(row)
+      columns.forEach((column, columnIndex) => {
+        const cell = row.children[columnIndex];
+        const slot = cell.firstElementChild;
+        const inst = cell._instance;
+
+        inst.index = index;
+      });
+
+    }
+
+    _columnTreeChanged(columnTree, splices) {
+      Array.from(this.$.items.children).forEach(this._updateRow.bind(this));
+    }
+
+  }
+
+  customElements.define(VaadinGrid.is, VaadinGrid);
+</script>
