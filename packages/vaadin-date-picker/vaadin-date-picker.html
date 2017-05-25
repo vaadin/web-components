@@ -19,15 +19,11 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: block;
+        display: inline-block;
       }
 
       :host([opened]) {
         pointer-events: auto;
-      }
-
-      #sufix {
-        display: flex;
       }
 
       #overlay {
@@ -35,31 +31,7 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 420px;
       }
 
-      #inputcontainer {
-        padding-bottom: 0;
-      }
-
-      #inputcontainer,
-      #inputcontainer input {
-        cursor: pointer;
-      }
-
-      #inputcontainer:focus {
-        outline: none;
-      }
-
-      paper-input-container div[suffix] {
-        box-sizing: content-box;
-        position: absolute;
-        right: -4px;
-        bottom: -4px;
-        width: 24px;
-        height: 24px;
-        padding: 4px;
-        text-align: center;
-      }
-
-      paper-input-container iron-icon {
+      iron-icon {
         fill: rgba(0, 0, 0, .26);
         cursor: pointer;
         --iron-icon-width: 20px;
@@ -68,40 +40,13 @@ This program is available under Apache License Version 2.0, available at https:/
         transition: fill 0.2s;
       }
 
-      paper-input-container paper-ripple {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) paper-input-container {
-        --paper-input-container-underline-focus: {
-          -webkit-transform: none;
-          transform: none;
-        }
-      }
-
-      paper-input-container iron-icon:hover,
-      :host([opened]) paper-input-container iron-icon {
+      iron-icon:hover,
+      :host([opened]) iron-icon {
         fill: rgba(0, 0, 0, .54);
       }
 
-      :host([opened]) paper-input-container iron-icon:hover {
+      :host([opened]) iron-icon:hover {
         fill: rgba(0, 0, 0, .86);
-      }
-
-      #input[no-input] {
-        pointer-events: none;
-      }
-
-      #clear {
-        right: 28px;
-      }
-
-      #clear iron-icon {
-        @apply --vaadin-date-picker-clear-icon;
-      }
-
-      #calendar iron-icon {
-        @apply --vaadin-date-picker-calendar-icon;
       }
 
       :host([disabled]) #calendar,
@@ -114,32 +59,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host [slot=suffix] {
         display: flex;
-      }
-
-      /* The same code than paper-input and combo-box */
-      input {
-        position: relative; /* to make a stacking context */
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--paper-input-container-input-color, var(--primary-text-color));
-        -webkit-appearance: none;
-        text-align: inherit;
-        vertical-align: bottom;
-
-        /* Firefox sets a min-width on the input, which can cause layout issues */
-        min-width: 0;
-
-        @apply --paper-font-subhead;
-        @apply --paper-input-container-input;
-      }
-
-      input::-ms-clear {
-        display: none;
       }
     </style>
 

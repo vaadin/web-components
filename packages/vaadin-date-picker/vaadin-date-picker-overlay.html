@@ -10,7 +10,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-input/iron-input.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
@@ -208,21 +207,6 @@ This program is available under Apache License Version 2.0, available at https:/
         align-self: flex-end;
       }
 
-      #header paper-input-container {
-        flex: 1;
-        margin-right: 24px;
-        padding-bottom: 0;
-        --paper-input-container-underline: {
-          display: none;
-        };
-        --paper-input-container-underline-focus: {
-          display: block;
-          background: var(--dark-theme-text-color);
-          -webkit-transform: none;
-          transform: none;
-        };
-      }
-
       #clear {
         display: none;
       }
@@ -244,12 +228,6 @@ This program is available under Apache License Version 2.0, available at https:/
         @apply --vaadin-date-picker-footer;
       }
 
-      paper-button.keyboard-focus {
-        color: var(--primary-background-color);
-        background: var(--primary-color);
-        outline: none;
-      }
-
       #announcer {
         display: inline-block;
         position: fixed;
@@ -257,27 +235,6 @@ This program is available under Apache License Version 2.0, available at https:/
         clip-path: inset(100%);
       }
 
-      /* The same code than paper-input and combo-box */
-      input {
-        position: relative; /* to make a stacking context */
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--paper-input-container-input-color, var(--primary-text-color));
-        -webkit-appearance: none;
-        text-align: inherit;
-        vertical-align: bottom;
-
-        /* Firefox sets a min-width on the input, which can cause layout issues */
-        min-width: 0;
-
-        @apply --paper-font-subhead;
-        @apply --paper-input-container-input;
-      }
     </style>
 
     <div id="announcer" role="alert" aria-live="polite">
