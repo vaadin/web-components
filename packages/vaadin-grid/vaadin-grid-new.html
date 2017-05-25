@@ -72,7 +72,8 @@
         // }
 
         const cell = document.createElement('td');
-        column.push('_cells', cell);
+        column.push('_cells', cell); // TODO: This is really heavy, batch/debounce it
+
 
         cell.classList.add('vaadin-grid-cell');
 

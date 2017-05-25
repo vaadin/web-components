@@ -71,7 +71,6 @@ The `class` attribute is used to differentiate header and footer templates.
          */
         colSpan: {
           type: Number,
-          notify: true,
           readOnly: true
         },
 
@@ -92,9 +91,9 @@ The `class` attribute is used to differentiate header and footer templates.
         '_resizableChanged(resizable, _rootColumns)'
       ],
 
-      listeners: {
-        'property-changed': '_columnPropChanged'
-      },
+      // listeners: {
+      //   'property-changed': '_columnPropChanged'
+      // },
 
       attached: function() {
         this._updateFlexAndWidth(this._visibleChildColumns);

@@ -24,26 +24,6 @@
 <dom-module id="vaadin-grid-table-scroll-styles">
   <template>
     <style>
-      vaadin-grid-table {
-        transform: translateZ(0);
-      }
-
-      vaadin-grid-table-header {
-        position: absolute;
-        top: 0;
-        width: 100%;
-      }
-
-      vaadin-grid-table-footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-      }
-
-      vaadin-grid-table-body {
-        z-index: -1;
-      }
-
       vaadin-grid-table[fixed-sections] {
         /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
         a containing block. The object acts as a containing block for fixed positioned descendants. */

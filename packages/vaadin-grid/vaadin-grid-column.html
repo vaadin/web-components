@@ -58,7 +58,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       frozen: {
         type: Boolean,
-        notify: true,
         value: false
       },
 
@@ -66,13 +65,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * When set to true, the cells for this column are hidden.
        */
       hidden: {
-        type: Boolean,
-        notify: true
+        type: Boolean
       },
 
       _lastFrozen: {
         type: Boolean,
-        notify: true,
         value: false
       },
 
@@ -81,6 +78,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _reorderStatus: Boolean,
 
       _cells: {
+        type: Array,
         value: function() {
           return [];
         }
