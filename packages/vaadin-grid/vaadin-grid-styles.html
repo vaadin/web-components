@@ -1,0 +1,38 @@
+<dom-module id="vaadin-grid-styles">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 400px;
+      }
+
+      #table {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #items {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      tr {
+        display: flex;
+        position: absolute;
+        width: 100%;
+      }
+
+      td {
+        display: block;
+        width: 100%;
+      }
+
+      tr[hidden] {
+        display: none !important
+      }
+    </style>
+  </template>
+</dom-module>
