@@ -36,9 +36,9 @@
       ]
     }
 
-    _createRow() {
+    _createScrollerRow() {
       const row = document.createElement('tr')
-      this._updateRow(row);
+      this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
       return row;
     }
 
@@ -46,41 +46,40 @@
       return this.$.items;
     }
 
-    _updateRow(row) {
-      if (this._columnTree && this._columnTree.length) {
-        const columns = this._columnTree[this._columnTree.length - 1];
+    _updateRow(row, columns, templateName) {
+      templateName = templateName || 'template';
+      // Create the row cells programmatically to avoid a <template> tag
+      const cellsFragment = document.createDocumentFragment();
+      const contentsFragment = document.createDocumentFragment();
 
-        // Create the row cells programmatically to avoid a <template> tag
-        const cellsFragment = document.createDocumentFragment();
-        const contentsFragment = document.createDocumentFragment();
+      columns.forEach((column, index) => {
+        // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
+        // {
+          const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
+          const id = 'vaadin-grid-cell-content-' + contentId;
+          const inst = column[templateName].templatizer.createInstance();
 
-        columns.forEach((column, index) => {
-          // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
-          // {
-            const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
-            const id = 'vaadin-grid-cell-content-' + contentId;
-            const inst = column.template.templatizer.createInstance();
+          const cellContent = document.createElement('vaadin-grid-cell-content');
+          cellContent.setAttribute('slot' , id);
+          cellContent.appendChild(inst.root);
+          contentsFragment.appendChild(cellContent);
+        // }
 
-            const cellContent = document.createElement('vaadin-grid-cell-content');
-            cellContent.setAttribute('slot' , id);
-            cellContent.appendChild(inst.root);
-            contentsFragment.appendChild(cellContent);
-          // }
+        const cell = document.createElement('td');
+        cell.classList.add('vaadin-grid-cell');
+        cell.style.width = column.width;
+        cell._instance = inst;
+        const slot = document.createElement('slot');
+        slot.setAttribute('name', id);
+        cell.appendChild(slot);
+        cellsFragment.appendChild(cell)
+      });
 
-          const cell = document.createElement('td');
-          cell._instance = inst;
-          const slot = document.createElement('slot');
-          slot.setAttribute('name', id);
-          cell.appendChild(slot);
-          cellsFragment.appendChild(cell)
-        });
+      row.innerHTML = '';
+      row.appendChild(cellsFragment);
 
-        row.innerHTML = '';
-        row.appendChild(cellsFragment);
-
-        // Might be empty if only cache was used
-        this.appendChild(contentsFragment);
-      }
+      // Might be empty if only cache was used
+      this.appendChild(contentsFragment);
     }
 
     _updateScrollerItem(row, index) {
@@ -97,7 +96,25 @@
     }
 
     _columnTreeChanged(columnTree, splices) {
-      Array.from(this.$.items.children).forEach(this._updateRow.bind(this));
+      Array.from(this.$.items.children).forEach(this._updateRow.bind(this, columnTree[columnTree.length - 1]));
+
+      while (this.$.header.children.length < columnTree.length) {
+        this.$.header.appendChild(document.createElement('tr'));
+      }
+      while (this.$.header.children.length > columnTree.length) {
+        this.$.header.removeChild(this.$.header.firstElementChild);
+      }
+
+      Array.from(this.$.header.children).forEach((headerRow, index) => {
+        this._updateRow(headerRow, columnTree[index], 'headerTemplate');
+      });
+
+
+      columnTree[columnTree.length - 1].forEach((column) => {
+        column.addEventListener('property-changed', this._columnPropChanged.bind(this));
+      });
+
+
     }
 
     _updateItem(row, item) {
@@ -109,6 +126,12 @@
       // row.expanded = this._isExpanded(item);
       // row.active = item !== null && item == this.activeItem;
       // row.focused = row.index === this.$.items._focusedRowIndex;
+    }
+
+    _columnPropChanged(e) {
+      const column = e.target;
+
+      console.log("foo", e.detail.path);
     }
 
   }

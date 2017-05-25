@@ -1,6 +1,6 @@
 <link rel="import" href="iron-list.html">
 
-
+<!-- TODO: Default template needed! -->
 <script>
   class VaadinScroller extends PolymerIronList {
 
@@ -39,7 +39,7 @@
     /**
     * @protected
     */
-    _createRow() {}
+    _createScrollerRow() {}
 
     _sizeChanged(size) {
       if (!this._physicalItems) {
@@ -70,7 +70,7 @@
       var physicalItems = new Array(size);
       const fragment = document.createDocumentFragment();
       for (i = 0; i < size; i++) {
-        inst = this._createRow();
+        inst = this._createScrollerRow();
         physicalItems[i] = inst;
         fragment.appendChild(inst);
       }
