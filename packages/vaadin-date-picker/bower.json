@@ -42,23 +42,5 @@
     "iron-test-helpers": "#2.0.0",
     "sugar": "^2.0.0",
     "web-component-tester": "^6.0.0"
-  },
-  "resolutions": {
-    "paper-ripple": "1 - 2",
-    "iron-a11y-keys-behavior": "1 - 2",
-    "paper-styles": "1 - 2",
-    "iron-flex-layout": "1 - 2",
-    "iron-demo-helpers": "2.0.0",
-    "iron-meta": "1 - 2",
-    "iron-ajax": "1 - 2",
-    "iron-doc-viewer": "1 - 2",
-    "prism-element": "1 - 2",
-    "marked-element": "1 - 2",
-    "iron-behaviors": "1 - 2",
-    "iron-location": "1 - 2",
-    "paper-behaviors": "1 - 2",
-    "iron-checked-element-behavior": "1 - 2",
-    "webcomponentsjs": "^v1.0.0",
-    "polymer": "^2.0"
   }
 }
