@@ -4,7 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
@@ -16,7 +15,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @polymerMixin
    */
   Vaadin.DatePickerMixin = subclass => class VaadinDatePickerMixin extends Polymer.mixinBehaviors(
-  [Polymer.IronValidatableBehavior, Polymer.IronA11yKeysBehavior, Polymer.IronResizableBehavior], subclass
+  [Polymer.IronA11yKeysBehavior, Polymer.IronResizableBehavior], subclass
   ) {
 
     static get properties() {
@@ -585,6 +584,31 @@ This program is available under Apache License Version 2.0, available at https:/
 
     detached() {
       this._onOverlayClosed();
+    }
+
+    /**
+     * Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.
+     *
+     * @return {boolean} True if the value is valid and sets the `invalid` flag appropriatelly
+     */
+    validate(value) {
+      value = value !== undefined ? value : this._inputValue;
+      return !(this.invalid = !this.checkValidity(value));
+    }
+
+    /**
+     * Returns true if the current input value satisfies all constraints (if any)
+     *
+     * Override the `checkValidity` method for custom validations.
+     */
+    checkValidity(value) {
+      var inputValid = !value || (this._selectedDate && value === this.i18n.formatDate(this._selectedDate));
+      var minMaxValid = !this._selectedDate ||
+      Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+      var inputValidity = this._inputElement &&
+        (this._inputElement.checkValidity && this._inputElement.checkValidity() ||
+         this._inputElement.validate && this._inputElement.validate());
+      return inputValid && minMaxValid && inputValidity;
     }
 
     _onScroll(e) {

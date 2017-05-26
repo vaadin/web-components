@@ -14,20 +14,22 @@
 
 <body>
   <script>
-    // Needed for poly-filled browsers
     document.addEventListener('WebComponentsReady', () => {
-      // Create a custom validator
-      new Polymer.IronMeta({
-        type: 'validator',
-        key: 'year-2016-validator',
-        value: {
-          validate: value => {
-            return new Date(value).getFullYear() === 2016;
-          }
+      class DatePicker2016Element extends Vaadin.DatePickerElement {
+        checkValidity(value) {
+          return new Date(value).getFullYear() === 2016;
         }
-      });
+      }
+      customElements.define('vaadin-date-picker-2016', DatePicker2016Element);
     });
   </script>
+
+  <test-fixture id="custom-validation">
+    <template>
+      <vaadin-date-picker-2016></vaadin-date-picker-2016>
+    </template>
+  </test-fixture>
+
   <test-fixture id="datepicker">
     <template>
       <vaadin-date-picker></vaadin-date-picker>
@@ -94,46 +96,25 @@
         });
       });
 
-      // TODO: support custom validatos somehow in datepicker
-      //
-      // it('should validate correctly with custom validator', done => {
-      //   // Use a custom validator registered with <iron-meta>.
-      //   datepicker.validator = 'year-2016-validator';
-      //
-      //   setTimeout(() => {
-      //     // Try invalid value.
-      //     datepicker.value = '2014-01-01';
-      //     expect(datepicker.validate()).to.equal(false);
-      //     expect(datepicker.invalid).to.equal(true);
-      //
-      //     // Try valid value.
-      //     datepicker.value = '2016-01-01';
-      //     expect(datepicker.validate()).to.equal(true);
-      //     expect(datepicker.invalid).to.equal(false);
-      //
-      //     done();
-      //   });
-      //
-      // });
-      //
-      // it('should validate correctly with auto-validate', done => {
-      //   // Use a custom validator registered with <iron-meta>.
-      //   datepicker.validator = 'year-2016-validator';
-      //   datepicker.autoValidate = true;
-      //
-      //   setTimeout(() => {
-      //     // Set invalid value.
-      //     datepicker.value = '2014-01-01';
-      //     expect(datepicker.invalid).to.be.true;
-      //
-      //     // Change it to a valid value.
-      //     datepicker.value = '2016-01-01';
-      //     expect(datepicker.invalid).to.be.false;
-      //
-      //     done();
-      //   });
-      //
-      // });
+      describe('custom validator', () => {
+        beforeEach(done => {
+          datepicker = fixture('custom-validation');
+          setTimeout(done);
+        });
+
+        it('should validate correctly with custom validator', () => {
+          window.parent.e = datepicker;
+          // Try invalid value.
+          datepicker.value = '2014-01-01';
+          expect(datepicker.validate()).to.equal(false);
+          expect(datepicker.invalid).to.equal(true);
+
+          // Try valid value.
+          datepicker.value = '2016-01-01';
+          expect(datepicker.validate()).to.equal(true);
+          expect(datepicker.invalid).to.equal(false);
+        });
+      });
 
       it('should validate min/max dates', () => {
         datepicker.min = '2000-01-01';
