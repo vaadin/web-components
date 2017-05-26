@@ -8,7 +8,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="../paper-styles/typography.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
@@ -17,7 +16,15 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
-<link rel="import" href="vaadin-date-picker-icons.html">
+
+<style>
+  @font-face {
+    font-family: 'vaadin-date-picker-icons';
+    src: url('vaadin-date-picker-icons.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -51,24 +58,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       #toolbar:not([desktop]) {
         cursor: pointer;
-      }
-
-      #toolbar iron-icon {
-        fill: var(--primary-color);
-        padding: 0;
-        transition: transform 200ms;
-        will-change: transform;
-        --iron-icon-width: 20px;
-        --iron-icon-height: 20px;
-        @apply --vaadin-date-picker-toolbar-icon;
-      }
-
-      #toolbar iron-icon[rotate] {
-        transform: rotate(180deg);
-      }
-
-      #toolbar iron-icon[hidden] {
-        display: none;
       }
 
       #scrollers {
@@ -209,11 +198,53 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #clear,
+      #toggle,
+      #yeartoggle {
+        font-family: 'vaadin-date-picker-icons';
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #clear,
       #toggle {
         margin-left: 10px;
       }
 
       #clear {
+        display: none;
+      }
+
+      #clear::before {
+        content: "\e901";
+      }
+
+      #toggle::before {
+        content: "\e902";
+      }
+
+      #yeartoggle::before {
+        content: "\e900";
+      }
+
+      #yeartoggle {
+        color: var(--primary-color);
+        transition: transform 200ms;
+        will-change: transform;
+        @apply --vaadin-date-picker-toolbar-icon;
+      }
+
+      #yeartoggle[rotate] {
+        transform: rotate(180deg);
+      }
+
+      #yeartoggle[hidden] {
         display: none;
       }
 
@@ -249,15 +280,15 @@ This program is available under Apache License Version 2.0, available at https:/
     <div id="header" on-touchend="_preventDefault" aria-hidden="true">
       <div id="label">[[label]]</div>
       <div id="input" invalid="{{invalid}}">[[_formatDisplayed(selectedDate, i18n.formatDate)]]</div>
-      <iron-icon id="clear" slot="suffix" on-tap="_clear" icon="vaadin-date-picker:clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
-      <iron-icon id="toggle" icon="vaadin-date-picker:event" on-tap="_cancel"></iron-icon>
+      <div id="clear" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
+      <div id="toggle" on-tap="_cancel"></div>
     </div>
 
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
       [[_yearAfterXMonths(_visibleMonthIndex)]]
-      <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="vaadin-date-picker:chevron-right"></iron-icon>
+      <div id="yeartoggle" rotate$="[[_isYearScrollerVisible(_translateX)]]"></div>
     </div>
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">

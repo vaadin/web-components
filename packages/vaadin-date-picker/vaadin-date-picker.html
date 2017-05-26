@@ -7,12 +7,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
-<link rel="import" href="vaadin-date-picker-icons.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 
 <dom-module id="vaadin-date-picker">
@@ -26,39 +24,49 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: auto;
       }
 
+      #input {
+        min-width: 100%;
+      }
+
       #overlay {
         height: 100vh;
         width: 420px;
       }
 
-      iron-icon {
-        fill: rgba(0, 0, 0, .26);
+      [slot="suffix"] {
+        font-family: 'vaadin-date-picker-icons';
+        font-size: 19px;
+        color: rgba(0, 0, 0, .26);
         cursor: pointer;
-        --iron-icon-width: 20px;
-        --iron-icon-height: 20px;
-        margin-top: -1px;
-        transition: fill 0.2s;
-      }
-
-      iron-icon:hover,
-      :host([opened]) iron-icon {
-        fill: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) iron-icon:hover {
-        fill: rgba(0, 0, 0, .86);
-      }
-
-      :host([disabled]) #calendar,
-      :host([readonly]) #calendar,
-      :host(:not([has-value])) #clear,
-      :host([readonly]) #clear,
-      :host([disabled]) #clear {
-        display: none;
-      }
-
-      :host [slot=suffix] {
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
         display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #clear::before {
+        content: "\e901";
+      }
+
+      #calendar::before {
+        content: "\e902";
+      }
+
+      [slot="suffix"]:hover,
+      :host([opened]) [slot="suffix"] {
+        color: rgba(0, 0, 0, .54);
+      }
+
+      :host([opened]) [slot="suffix"]:hover {
+        color: rgba(0, 0, 0, .86);
+      }
+
+      :host([disabled]) [slot="suffix"],
+      :host([readonly]) [slot="suffix"],
+      :host(:not([has-value])) #clear {
+        display: none;
       }
     </style>
 
@@ -79,14 +87,8 @@ This program is available under Apache License Version 2.0, available at https:/
         aria-label$="[[label]]"
       >
 
-      <div id="suffix" slot="suffix" name="suffix">
-        <div id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
-          <iron-icon icon="vaadin-date-picker:clear"></iron-icon>
-        </div>
-        <div id="calendar" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]">
-          <iron-icon icon="vaadin-date-picker:event"></iron-icon>
-        </div>
-      </div>
+      <div id="clear" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
+      <div id="calendar" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
     <iron-dropdown
