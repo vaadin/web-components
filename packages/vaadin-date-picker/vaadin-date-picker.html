@@ -202,6 +202,30 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: String,
+
+            /**
+             * This property is set to true when the control value invalid.
+             */
+            invalid: {
+              type: Boolean,
+              notify: true,
+              value: false
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: String,
+
+            /**
+             * A placeholder string in addition to the label. If this is set, the label will always float.
+             */
+            placeholder: String,
+
+            /**
              * Set to true to make this element read-only.
              */
             readonly: {
@@ -211,14 +235,34 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * A placeholder string in addition to the label. If this is set, the label will always float.
+             * Specifies that the user must fill in a value.
              */
-            placeholder: String,
+            required: Boolean,
 
             /**
-             * The error message to display when the input is invalid.
+             * This property is set to true when the control value invalid.
              */
-            errorMessage: String,
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: {
+              type: String
+            },
+
+            /**
+             * Specifies that the user must fill in a value.
+             */
+            required: {
+              type: Boolean,
+              value: false
+            },
 
             _userInputValue: String
           };

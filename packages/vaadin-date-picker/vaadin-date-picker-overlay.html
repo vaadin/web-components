@@ -376,6 +376,16 @@ This program is available under Apache License Version 2.0, available at https:/
             _focused: Boolean,
 
             /**
+             * This property is set to true when the control value invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            /**
              * Input label
              */
             label: String

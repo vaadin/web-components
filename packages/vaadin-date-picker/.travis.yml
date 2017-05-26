@@ -4,15 +4,17 @@ language: node_js
 node_js: stable
 
 cache:
+  yarn: true
   directories:
     - node_modules
 
 addons:
-  sources:
-    - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
-      key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-  packages:
-    - yarn
+  apt:
+    sources:
+      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+    packages:
+      - yarn
   firefox: latest
   google-chrome: latest
 
@@ -22,6 +24,7 @@ install:
 
 before_script:
   - gulp lint
+  - polymer lint --rules polymer-2 --input *.html
 
 script:
   - run="xvfb-run -s '-screen 0 1024x768x24' polymer test "
