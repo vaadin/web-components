@@ -189,15 +189,20 @@ This program is available under Apache License Version 2.0, available at https:/
     },
 
     _widthChanged: function(width, headerCell, cells) {
-      if (!width || !headerCell || !cells) {
+      if (!width || !headerCell) {
         return;
       }
+
       if (this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
       }
-      this._cells && this._cells.concat(this._headerCell).forEach(function(cell) {
+
+      this._cells && this._cells.forEach(function(cell) {
         cell.style.width = width;
       });
+      if (headerCell) {
+        headerCell.style.width = width;
+      }
     },
 
     _lastFrozenChanged: function(lastFrozen) {
