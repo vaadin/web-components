@@ -4,7 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
@@ -17,7 +16,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @polymerMixin
    */
   Vaadin.DatePickerMixin = subclass => class VaadinDatePickerMixin extends Polymer.mixinBehaviors(
-  [Polymer.IronFormElementBehavior, Polymer.IronValidatableBehavior, Polymer.IronA11yKeysBehavior, Polymer.IronResizableBehavior], subclass
+  [Polymer.IronValidatableBehavior, Polymer.IronA11yKeysBehavior, Polymer.IronResizableBehavior], subclass
   ) {
 
     static get properties() {
@@ -43,7 +42,23 @@ This program is available under Apache License Version 2.0, available at https:/
         value: {
           type: String,
           observer: '_valueChanged',
-          notify: true
+          notify: true,
+          value: ''
+        },
+
+        /**
+         * Set to true to mark the input as required.
+         */
+        required: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The name of this element.
+         */
+        name: {
+          type: String
         },
 
         /**
@@ -322,12 +337,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('date-tap', this._close.bind(this));
       this.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
-
-      // The value property is also defined in IronFormElementBehavior, which
-      // will mix up the default value if set in the property.
-      if (this.value === undefined) {
-        this.value = '';
-      }
     }
 
     /**

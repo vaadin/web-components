@@ -22,7 +22,6 @@
     "iron-a11y-announcer": "#2.0.0",
     "iron-a11y-keys-behavior": "#2.0.0",
     "iron-dropdown": "#2.0.0",
-    "iron-form-element-behavior": "#2.0.0",
     "iron-media-query": "#2.0.0",
     "iron-overlay-behavior": "#2.0.0",
     "iron-resizable-behavior": "#2.0.0",
@@ -47,7 +46,6 @@
   },
   "resolutions": {
     "paper-ripple": "1 - 2",
-    "iron-form-element-behavior": "1 - 2",
     "iron-a11y-keys-behavior": "1 - 2",
     "iron-validatable-behavior": "1 - 2",
     "paper-styles": "1 - 2",
