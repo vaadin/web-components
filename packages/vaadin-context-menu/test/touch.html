@@ -48,7 +48,8 @@
         };
         var event = new CustomEvent(type, {
           bubbles: true,
-          cancelable: true
+          cancelable: true,
+          composed: true
         });
 
         for (var property in touchEventInit) {
@@ -157,9 +158,13 @@
           makeSoloTouchEvent('touchstart', xy, target);
 
           listenOnce(menu, 'iron-overlay-opened', function() {
-            var evt = makeSoloTouchEvent('touchend', xy, target);
-            expect(evt.defaultPrevented).to.eql(true);
-            done();
+            listenOnce(target, 'tap', function() {
+              throw new Error('tap fired!');
+            });
+            setTimeout(function() {
+              done();
+            }, 1);
+            makeSoloTouchEvent('touchend', xy, target);
           });
         });
 

@@ -25,7 +25,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       reset: function() {
         this.info.sourceEvent = null;
-        this.info.fired = false;
         this._cancelTimer();
         this.info.touchJob = null;
         this.info.touchStartCoords = null;
@@ -47,10 +46,19 @@ This program is available under Apache License Version 2.0, available at https:/
         };
 
         this._timerId = setTimeout(function() {
-          var t = Polymer.Gestures.findOriginalTarget(e);
+          // Original target may or may not be inside a shadow root.
+          // For code readability, findOriginalTarget() should be
+          // changed to use composedPath() directly after native Shadow becomes the norm.
+          var t = Polymer.Gestures.findOriginalTarget(e) || e.target;
           var ct = e.changedTouches[0];
-          if (this.info._ios && !e.shiftKey) {
-            this.fire(t, ct.clientX, ct.clientY);
+          if (!e.shiftKey) {
+            if (this.info._ios) {
+              this.fire(t, ct.clientX, ct.clientY);
+            }
+
+            // needed to prevent any 'tap' gesture events from firing
+            // which could potentially cancel/close the overlay.
+            Polymer.Gestures.prevent('tap');
           }
         }.bind(this), 500); // default setting for Android and iOS.
       },
@@ -64,18 +72,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       },
 
+      touchend: function() {
+        this._cancelTimer();
+      },
+
       contextmenu: function(e) {
         if (!e.shiftKey) {
           this.info.sourceEvent = e;
           this.fire(e.target, e.clientX, e.clientY);
-        }
-      },
-
-      touchend: function(e) {
-        this._cancelTimer();
-        if (this.info.fired) {
-          e.preventDefault();
-          e.stopPropagation();
         }
       },
 
@@ -86,8 +90,6 @@ This program is available under Apache License Version 2.0, available at https:/
           y: y,
           sourceEvent: this.info.sourceEvent
         });
-
-        this.info.fired = true;
       }
     });
   })();
