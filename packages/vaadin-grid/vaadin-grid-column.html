@@ -207,7 +207,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _lastFrozenChanged: function(lastFrozen) {
       // this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
+    },
+
+    _toggleAttribute: function(name, on, element) {
+      if (on) {
+        element.setAttribute(name, '');
+      } else {
+        element.removeAttribute(name);
+      }
     }
+
+
   };
 
   /**
@@ -244,34 +254,22 @@ This program is available under Apache License Version 2.0, available at https:/
       '_flexGrowChanged(flexGrow)',
       '_widthChanged(width, _headerCell, _cells.*)',
       '_templateChanged(template)',
-      '_frozenChanged(frozen, _cells.*)',
+      '_frozenChanged(frozen, _headerCell, _cells.*)',
       '_hiddenChanged(hidden)',
       '_orderChanged(_order)',
       '_reorderStatusChanged(_reorderStatus)',
       '_resizableChanged(resizable)'
     ],
 
-    _frozenChanged: function(frozen) {
-      // if (frozen === undefined || isAttached === undefined) {
-      //   return;
-      // }
+    _frozenChanged: function(frozen, headerCell, cells) {
+      if (this.parentElement._columnPropChanged) {
+        this.parentElement._columnPropChanged({detail: {path: 'frozen', value: frozen}}); // TODO: Decent APIs
+      }
 
-      // since `frozen` is defined in ColumnBaseBehavior, this observer is triggered
-      // normally before the column is actually attached to the DOM.
-      // For events to bubble in Safari 9, element needs to be attached.
-      // Don’t propagate the default `false` value.
-      // if (this._oldFrozen !== undefined || frozen !== false) {
-      //   this.fire('property-changed', {path: 'frozen', value: frozen});
-      // }
-      //
-      // this._oldFrozen = frozen;
-      this._cells && this._cells.forEach(function(cell) {
-        if (frozen) {
-          cell.setAttribute('frozen', '');
-        } else {
-          cell.removeAttribute('frozen');
-        }
-      });
+      this._cells && this._cells.forEach(this._toggleAttribute.bind(this, 'frozen', frozen));
+      if (headerCell) {
+        this._toggleAttribute('frozen', frozen, headerCell);
+      }
     },
 
     _templateChanged: function(template) {

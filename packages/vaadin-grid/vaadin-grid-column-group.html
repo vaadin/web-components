@@ -82,7 +82,7 @@ The `class` attribute is used to differentiate header and footer templates.
         '_childColumnsChanged(_childColumns)',
         '_flexGrowChanged(flexGrow)',
         '_widthChanged(width, _headerCell, _cells.*)',
-        '_frozenChanged(_childColumns, frozen)',
+        '_frozenChanged(_childColumns, frozen, _headerCell)',
         '_hiddenChanged(hidden)',
         '_visibleChildColumnsChanged(_visibleChildColumns)',
         '_colSpanChanged(colSpan)',
@@ -215,26 +215,29 @@ The `class` attribute is used to differentiate header and footer templates.
         }, 0));
       },
 
-      _frozenChanged: function(childColumns, frozen) {
+      _frozenChanged: function(childColumns, frozen, headerCell) {
         if (childColumns === undefined || frozen === undefined) {
           return;
         }
+        
+        if (headerCell) {
+          this._toggleAttribute('frozen', frozen, headerCell);
+        }
 
         // Don’t propagate the default `false` value.
-        if (this._oldFrozen !== undefined || frozen !== false) {
+        // if (frozen !== false) {
           Array.prototype.forEach.call(childColumns, function(col) {
             // Don’t unfreeze the nested frozen groups
-            if (col.localName === 'vaadin-grid-column-group') {
-              col.frozen = col.frozen || frozen;
-            } else {
+            // if (col.localName === 'vaadin-grid-column-group') {
+            //   col.frozen = col.frozen || frozen;
+            // } else {
               col.frozen = frozen;
-            }
+            // }
           });
 
           // this.fire('property-changed', {path: 'frozen', value: frozen});
-        }
+        // }
 
-        this._oldFrozen = frozen;
       },
 
       _hiddenChanged: function(hidden) {
