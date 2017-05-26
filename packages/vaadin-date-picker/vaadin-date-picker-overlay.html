@@ -706,9 +706,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _toggleAnimateClass(enable) {
           if (enable) {
-            this.classList.remove('animate');
-          } else {
             this.classList.add('animate');
+          } else {
+            this.classList.remove('animate');
           }
         }
 
@@ -730,9 +730,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _translateXChanged(x) {
           if (!this._desktopMode) {
-            this.transform('translateX(' + (x - this._yearScrollerWidth) + 'px)', this.$.scroller);
-            this.transform('translateX(' + x + 'px)', this.$.yearScroller);
-            this.transform('translateX(' + -x + 'px)', this.$.fade);
+            this.$.scroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
+            this.$.yearScroller.style.transform = 'translateX(' + x + 'px)';
+            this.$.fade.style.transform = 'translateX(' + -x + 'px)';
           }
         }
 
