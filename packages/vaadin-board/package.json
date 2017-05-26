@@ -1,6 +1,6 @@
 {
   "name": "vaadin-board",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
   "author": "Vaadin Ltd",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
