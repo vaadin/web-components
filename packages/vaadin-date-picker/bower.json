@@ -27,7 +27,8 @@
     "iron-resizable-behavior": "#2.0.0",
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
-    "vaadin-text-field": "^1.0.0"
+    "vaadin-text-field": "^1.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.1",
