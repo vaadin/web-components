@@ -1,0 +1,180 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+
+<dom-module id="vaadin-checkbox">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        outline: none;
+      }
+
+      [part="label"] {
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        padding: 2px 3px 0 0;
+        outline: none;
+      }
+
+      :host([focus-ring]) [part="label"] {
+        box-shadow: 0 0 2px 2px Highlight;
+      }
+
+      [part="native-checkbox"] {
+        vertical-align: middle;
+      }
+    </style>
+
+    <label id="label" part="label">
+      <input
+        type="checkbox"
+        part="native-checkbox"
+        checked$="[[checked]]"
+        indeterminate$="[[indeterminate]]"
+        tabindex="-1">
+      <span
+        part="checkbox"
+        checked$="[[checked]]"
+        indeterminate$="[[indeterminate]]">
+      </span>
+      <slot></slot>
+    </label>
+
+  </template>
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    (function() {
+      /**
+       * `<vaadin-checkbox>` is a Polymer element for customized checkboxes.
+       *
+       * ```html
+       * <vaadin-checkbox>
+       *   Make my profile visible
+       * </vaadin-checkbox>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are exposed for styling:
+       *
+       * Part name  | Description
+       * -----------|----------------
+       * `checkbox` | The styleable `<span>` element with a graphical check
+       * `label`    | The `<label>` element
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute    | Description
+       * -------------|------------
+       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.
+       * `disabled`   | Set when the checkbox is disabled.
+       * `focus-ring` | Set when the checkbox is focused using the keyboard.
+       * `focused`    | Set when the checkbox is focused.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class CheckboxElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-checkbox';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * True if the checkbox is checked.
+             */
+            checked: {
+              type: Boolean,
+              value: false,
+              observer: '_checkedChanged'
+            },
+
+            /**
+             * Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.
+             * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
+             */
+            indeterminate: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * The value of the checkbox.
+             * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Value
+             */
+            value: {
+              type: String,
+              value: ''
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'checkbox');
+
+          this._addActiveListeners();
+        }
+
+        _checkedChanged(checked) {
+          this.setAttribute('aria-checked', checked);
+        }
+
+        _addActiveListeners() {
+          this._addEventListenerToNode(this, 'down', () => this.setAttribute('active', ''));
+
+          this._addEventListenerToNode(this, 'up', () => {
+            this.checked = !this.checked;
+            this.removeAttribute('active');
+          });
+
+          this.addEventListener('keydown', e => {
+            if (e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('active', '');
+            }
+          });
+
+          this.addEventListener('keyup', e => {
+            if (e.keyCode === 32) {
+              this.checked = !this.checked;
+              this.removeAttribute('active');
+            }
+          });
+        }
+
+        get focusElement() {
+          return this.$.label;
+        }
+      }
+
+      customElements.define(CheckboxElement.is, CheckboxElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.CheckboxElement = CheckboxElement;
+    })();
+  </script>
+</dom-module>
