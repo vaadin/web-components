@@ -279,7 +279,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div id="header" on-touchend="_preventDefault" aria-hidden="true">
       <div id="label">[[label]]</div>
-      <div id="input" invalid="{{invalid}}">[[_formatDisplayed(selectedDate, i18n.formatDate)]]</div>
+      <div id="input">[[_formatDisplayed(selectedDate, i18n.formatDate)]]</div>
       <div id="clear" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
       <div id="toggle" on-tap="_cancel"></div>
     </div>
@@ -405,16 +405,6 @@ This program is available under Apache License Version 2.0, available at https:/
             maxDate: Date,
 
             _focused: Boolean,
-
-            /**
-             * This property is set to true when the control value invalid.
-             */
-            invalid: {
-              type: Boolean,
-              reflectToAttribute: true,
-              notify: true,
-              value: false
-            },
 
             /**
              * Input label

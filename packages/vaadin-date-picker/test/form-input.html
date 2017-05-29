@@ -103,7 +103,6 @@
         });
 
         it('should validate correctly with custom validator', () => {
-          window.parent.e = datepicker;
           // Try invalid value.
           datepicker.value = '2014-01-01';
           expect(datepicker.validate()).to.equal(false);
