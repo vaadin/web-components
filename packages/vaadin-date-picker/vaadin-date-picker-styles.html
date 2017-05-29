@@ -4,6 +4,12 @@
       :host {
         display: block;
       }
+
+      [part~="overlay"] {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 1px 5px 0 rgba(0, 0, 0, 0.12),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2)
+      }
     </style>
   </template>
 </dom-module>
@@ -13,6 +19,55 @@
     <style>
       :host {
         background: #fff;
+      }
+
+      [part="overlay-header"] {
+        background: #eee;
+        padding: 16px;
+        position: relative;
+      }
+
+      [part~="years-toggle-button"] {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: #eee;
+        z-index: 1;
+        padding: 8px;
+      }
+
+      [part~="years"] {
+        background: #ddd;
+        cursor: pointer;
+      }
+
+      [part~="years"]::before {
+        border-left-color: #fff;
+      }
+
+      [part~="toolbar"] {
+        padding: 16px;
+        background: #eee;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-infinite-scroller-default-theme" theme-for="vaadin-infinite-scroller">
+  <template>
+    <style>
+      /* FIXME: These are here currently only because infinite scroller currently renders in it's local(not light) DOM. */
+      [part~="year-number"] {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-around;
+        text-align: center;
+        transform: translateY(-10%); /* TODO: Where does this offset come from? */
+      }
+
+      [part~="year-number"]::after {
+        content: "•";
       }
     </style>
   </template>
