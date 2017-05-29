@@ -826,6 +826,8 @@ This program is available under Apache License Version 2.0, available at https:/
               // set to false.
               this._focused = false;
             }
+          } else if ((eventKey == 'enter' || eventKey == 'space') && this._buttonFocused()) {
+            // Let buttons handle their default actions
           } else if (eventKey) {
             e.preventDefault();
             e.stopPropagation();
