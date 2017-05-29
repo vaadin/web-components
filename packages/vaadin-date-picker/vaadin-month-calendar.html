@@ -26,12 +26,22 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 6px 0;
       }
 
-      #monthGrid {
+      #weekdays, #days {
         display: flex;
         flex-wrap: wrap;
       }
 
-      #monthGrid div {
+      #days-container {
+        display: flex;
+      }
+
+      #weeknumbers {
+        flex-shrink: 0;
+      }
+
+      #weekdays div,
+      #days div,
+      #weeknumbers div {
         text-align: center;
         width: calc(14.285714286% - 2px);
         margin: 0 1px;
@@ -39,29 +49,32 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 6px 0;
       }
 
-      :host([week-numbers]) #monthGrid div {
+      :host([week-numbers]) #weekdays div.weekday:not(:empty) {
         width: calc(12.5% - 2px);
       }
 
-      #monthGrid div:not(:empty) {
+      #weekdays div:not(:empty),
+      #days div:not(:empty),
+      #weeknumbers div:not(:empty) {
         cursor: pointer;
         color: var(--primary-text-color);
       }
 
-      #monthGrid div:not(:empty):not([disabled]):not(.weekday):not(.weeknumber):active {
+      #days div:not(:empty):not([disabled]):active {
         background: var(--light-primary-color);
         border-radius: 2px;
       }
 
-      #monthGrid div.weekday {
+      #weekdays div.weekday {
         text-transform: uppercase;
         color: var(--secondary-text-color);
         cursor: default;
         padding: 8px 0;
       }
 
-      #monthGrid div.weekday:empty,
-      #monthGrid div.weeknumber {
+      #weekdays div.weekday:empty,
+      #weeknumbers {
+        box-sizing: border-box;
         width: calc(10% - 2px);
         padding-right: 1.25%;
       }
@@ -71,27 +84,19 @@ This program is available under Apache License Version 2.0, available at https:/
         color: var(--primary-color);
       }
 
-      #monthGrid div[today][selected] {
-
-      }
-
-      #monthGrid div[focused] {
+      #days div[focused] {
         background: var(--light-primary-color);
         box-sizing: border-box;
         border-radius: 2px;
       }
 
-      :host([focused]) #monthGrid div[focused] {
+      :host([focused]) #days div[focused] {
         background: var(--primary-color);
         color: var(--primary-background-color);
       }
 
-      #monthGrid div[selected] {
+      #days div[selected] {
         font-weight: 600;
-      }
-
-      #monthGrid div[today][selected] {
-
       }
 
       #monthGrid div[disabled] {
@@ -99,7 +104,7 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: default;
       }
 
-      #monthGrid div.weeknumber {
+      #weeknumbers div.weeknumber {
         cursor: default;
         color: rgba(0, 0, 0, 0.4);
       }
@@ -107,23 +112,31 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div id="title" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
-        <div class="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
-      </template>
-      <template is="dom-repeat" items="[[_days]]">
-        <template is="dom-if" if="[[_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek, index)]]">
-          <div class="weeknumber" role="heading" aria-label$="[[i18n.week]] [[_getWeekNumber(item, _days)]]">[[_getWeekNumber(item, _days)]]</div>
+      <div id="weekdays">
+        <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
+          <div class="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
         </template>
-        <div
-            today$="[[_isToday(item)]]"
-            selected$="[[_dateEquals(item, selectedDate)]]"
-            focused$="[[_dateEquals(item, focusedDate)]]"
-            date="[[item]]"
-            disabled$="[[!_dateAllowed(item, minDate, maxDate)]]"
-            role$="[[_getRole(item)]]"
-            aria-label$="[[_getAriaLabel(item)]]"
-            aria-disabled$="[[_getAriaDisabled(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
-      </template>
+      </div>
+      <div id="days-container">
+        <div id="weeknumbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
+          <template is="dom-repeat" items="[[_getWeekNumbers(_days)]]">
+            <div class="weeknumber" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
+          </template>
+        </div>
+        <div id="days">
+          <template is="dom-repeat" items="[[_days]]">
+            <div
+                today$="[[_isToday(item)]]"
+                selected$="[[_dateEquals(item, selectedDate)]]"
+                focused$="[[_dateEquals(item, focusedDate)]]"
+                date="[[item]]"
+                disabled$="[[!_dateAllowed(item, minDate, maxDate)]]"
+                role$="[[_getRole(item)]]"
+                aria-label$="[[_getAriaLabel(item)]]"
+                aria-disabled$="[[_getAriaDisabled(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
+          </template>
+        </div>
+      </div>
     </div>
   </template>
   <script>
@@ -296,9 +309,9 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _showWeekSeparator(showWeekNumbers, firstDayOfWeek, index) {
+        _showWeekSeparator(showWeekNumbers, firstDayOfWeek) {
           // Currently only supported for locales that start the week on Monday.
-          return showWeekNumbers && firstDayOfWeek === 1 && (index % 7 === 0);
+          return showWeekNumbers && firstDayOfWeek === 1;
         }
 
         _isToday(date) {
@@ -345,6 +358,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           return Vaadin.DatePickerHelper._getISOWeekNumber(date);
+        }
+
+        _getWeekNumbers(dates) {
+          return dates.map(date => this._getWeekNumber(date, dates))
+                      .filter((week, index, arr) => arr.indexOf(week) === index);
         }
 
         _handleTap(e) {
