@@ -82,40 +82,12 @@
               // make it less confusing.
               window.setTimeout(function() {
                 end.value = start.value;
+                start.close();
                 end.open();
               }, 500);
             }
           });
         </script>
-      </template>
-    </demo-snippet>
-
-    <h3>Styling</h3>
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          .custom-theme {
-            --primary-color: var(--paper-indigo-700);
-            --dark-theme-background-color: #fff;
-            --dark-theme-secondary-color: #737373;
-            --primary-text-color: #abc;
-            --secondary-text-color: #bcbcbc;
-            --light-primary-color: var(--paper-indigo-500);
-            --primary-background-color: var(--paper-grey-900);
-
-            --vaadin-date-picker-toolbar: {
-              background: var(--paper-grey-900);
-            }
-            --vaadin-date-picker-calendar-weekday-cell: {
-              text-transform: capitalize;
-              font-size: 14px;
-            }
-            --vaadin-date-picker-calendar-cell-selected: {
-              color: #fff;
-            }
-          }
-        </style>
-        <vaadin-date-picker class="custom-theme" label="Birthday"></vaadin-date-picker>
       </template>
     </demo-snippet>
 
@@ -126,7 +98,7 @@
       <demo-snippet>
         <template>
           <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
-          
+
           <script>
             window.addEventListener('WebComponentsReady', function() {
               class DatePickerCurrentYearElement extends Vaadin.DatePickerElement {
@@ -151,8 +123,7 @@
       <template>
         <style is="custom-style">
           .my-input1 input {
-            background: var(--paper-grey-100);
-            border: 2px solid var(--paper-blue-500);
+            /* TODO: Fix styles */
             border-radius: 4px;
             padding: 4px;
             text-align: center;

@@ -6,7 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
 
 <dom-module id="vaadin-month-calendar">
@@ -19,16 +18,12 @@ This program is available under Apache License Version 2.0, available at https:/
         -ms-user-select: none;
         user-select: none;
         font: inherit;
-        @apply --paper-font-common-base;
-        @apply --vaadin-date-picker-calendar;
       }
 
       #title {
         color: var(--primary-text-color);
         text-align: center;
         padding: 6px 0;
-        @apply --paper-font-subhead;
-        @apply --vaadin-date-picker-calendar-title;
       }
 
       #monthGrid {
@@ -42,8 +37,6 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0 1px;
         box-sizing: border-box;
         padding: 6px 0;
-        @apply --paper-font-body1;
-        @apply --vaadin-date-picker-calendar-cell;
       }
 
       :host([week-numbers]) #monthGrid div {
@@ -53,7 +46,6 @@ This program is available under Apache License Version 2.0, available at https:/
       #monthGrid div:not(:empty) {
         cursor: pointer;
         color: var(--primary-text-color);
-        @apply --vaadin-date-picker-calendar-date-cell;
       }
 
       #monthGrid div:not(:empty):not([disabled]):not(.weekday):not(.weeknumber):active {
@@ -66,8 +58,6 @@ This program is available under Apache License Version 2.0, available at https:/
         color: var(--secondary-text-color);
         cursor: default;
         padding: 8px 0;
-        @apply --paper-font-caption;
-        @apply --vaadin-date-picker-calendar-weekday-cell;
       }
 
       #monthGrid div.weekday:empty,
@@ -79,46 +69,39 @@ This program is available under Apache License Version 2.0, available at https:/
       #monthGrid div[today] {
         position: relative;
         color: var(--primary-color);
-        @apply --vaadin-date-picker-calendar-cell-today;
       }
 
       #monthGrid div[today][selected] {
-        @apply --vaadin-date-picker-calendar-cell-today-selected;
+
       }
 
       #monthGrid div[focused] {
         background: var(--light-primary-color);
         box-sizing: border-box;
         border-radius: 2px;
-        @apply --vaadin-date-picker-calendar-cell-focused;
       }
 
       :host([focused]) #monthGrid div[focused] {
         background: var(--primary-color);
         color: var(--primary-background-color);
-        @apply --vaadin-date-picker-calendar-focused-cell-focused;
       }
 
       #monthGrid div[selected] {
         font-weight: 600;
-        @apply --vaadin-date-picker-calendar-cell-selected;
       }
 
       #monthGrid div[today][selected] {
-        @apply --vaadin-date-picker-calendar-cell-today-selected;
+
       }
 
       #monthGrid div[disabled] {
         opacity: 0.3;
         cursor: default;
-        @apply --vaadin-date-picker-calendar-cell-disabled;
       }
 
       #monthGrid div.weeknumber {
         cursor: default;
         color: rgba(0, 0, 0, 0.4);
-        @apply --paper-font-caption;
-        @apply --vaadin-date-picker-calendar-weeknumber-cell;
       }
     </style>
 

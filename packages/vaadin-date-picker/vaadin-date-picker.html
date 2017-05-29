@@ -138,35 +138,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        * When the selected `value` is changed, a `value-changed` event is triggered.
        *
-       * ### Styling
-       * The following custom properties and mixins are available for styling:
        *
-       * Custom property | Description | Default
-       * ----------------|-------------|----------
-       * `--vaadin-date-picker-overlay` | Mixin applied to the overlay | `{}`
-       * `--vaadin-date-picker-yearscroller` | Mixin applied to the year scroller | `{}`
-       * `--vaadin-date-picker-yearscroller-indicator` | Mixin applied to the year scroller indicator | `{}`
-       * `--vaadin-date-picker-calendar-icon` | Mixin applied to the calendar icon | `{}`
-       * `--vaadin-date-picker-clear-icon` | Mixin applied to the clear icon | `{}`
-       * `--vaadin-date-picker-scrollers-fade` | Mixin applied to the scrollers fade element | `{}`
-       * `--vaadin-date-picker-header` | Mixin applied to the picker header | `{}`
-       * `--vaadin-date-picker-toolbar` | Mixin applied to the picker toolbar | `{}`
-       * `--vaadin-date-picker-toolbar-icon` | Mixin applied to the picker toolbar icon | `{}`
-       * `--vaadin-date-picker-footer` | Mixin applied to the picker footer | `{}`
-       * `--vaadin-date-picker-calendar` | Mixin applied to a month calendar element | `{}`
-       * `--vaadin-date-picker-calendar-title` | Mixin applied to a month calendar title | `{}`
-       * `--vaadin-date-picker-calendar-cell` | Mixin applied to a month calendar cell | `{}`
-       * `--vaadin-date-picker-calendar-date-cell` | Mixin applied to a month calendar date cell | `{}`
-       * `--vaadin-date-picker-calendar-weekday-cell` | Mixin applied to a month calendar weekday cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-today` | Mixin applied to a month calendar today cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-selected` | Mixin applied to a month calendar selected cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-focused` | Mixin applied to a month calendar focused cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-today-selected` | Mixin applied to a month calendar selected today cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-disabled` | Mixin applied to a month calendar disabled cell | `{}`
-       * `--vaadin-date-picker-calendar-weeknumber-cell` | Mixin applied to a month calendar weeknumber cell | `{}`
-       * `--vaadin-date-picker-calendar-focused-cell-focused` | Mixin applied to a focused month calendar focused cell | `{}`
-       *
-       * See paper-input-container documentation for styling the included input fields
+       * TODO: Document shadow parts
        *
        * If you want to replace the default input field with a custom implementation, you should use the
        * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
@@ -251,15 +224,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _input() {
           return this.$.input;
-        }
-
-        /**
-         * label and placeholder will go on top of each other if always-float-label isn't set
-         * This is the similar behavior as paper-input has:
-         * PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
-         */
-        _computeAlwaysFloatLabel(placeholder) {
-          return Boolean(placeholder);
         }
 
         set _inputValue(value) {

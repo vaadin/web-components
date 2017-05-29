@@ -6,8 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../paper-styles/shadow.html">
-<link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
@@ -37,9 +35,6 @@ This program is available under Apache License Version 2.0, available at https:/
         background: var(--primary-background-color);
         font: inherit;
         outline: none;
-        @apply --paper-font-common-base;
-        @apply --shadow-elevation-2dp;
-        @apply --vaadin-date-picker-overlay;
       }
 
       #toolbar {
@@ -48,12 +43,9 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 14px;
         background: var(--primary-background-color);
         z-index: 2;
-        @apply --paper-font-button;
-        @apply --shadow-elevation-2dp;
         flex-shrink: 0;
         transform: translateZ(0);
         color: var(--primary-color);
-        @apply --vaadin-date-picker-toolbar;
       }
 
       #toolbar:not([desktop]) {
@@ -78,7 +70,6 @@ This program is available under Apache License Version 2.0, available at https:/
         height: 100%;
         z-index: 1;
         transform: translateX(-100%);
-        @apply --vaadin-date-picker-scrollers-fade;
       }
 
       #scrollers[desktop] #fade {
@@ -114,8 +105,6 @@ This program is available under Apache License Version 2.0, available at https:/
         right: 0;
         transform: translateX(100%);
         -webkit-tap-highlight-color: transparent;
-        @apply --paper-font-menu;
-        @apply --vaadin-date-picker-yearscroller;
       }
 
       #yearScroller div {
@@ -153,7 +142,6 @@ This program is available under Apache License Version 2.0, available at https:/
         border-style: solid;
         border-color: transparent;
         border-left-color: var(--primary-background-color);
-        @apply --vaadin-date-picker-yearscroller-indicator;
       }
 
       :host(.animate) vaadin-infinite-scroller {
@@ -173,10 +161,6 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 0 14px;
         height: 64px; /* height set to 64px to match app-toolbar height */
         box-sizing: border-box;
-
-        @apply --paper-font-subhead;
-        @apply --shadow-elevation-2dp;
-        @apply --vaadin-date-picker-header;
 
         color: var(--dark-theme-text-color);
         cursor: pointer;
@@ -237,7 +221,6 @@ This program is available under Apache License Version 2.0, available at https:/
         color: var(--primary-color);
         transition: transform 200ms;
         will-change: transform;
-        @apply --vaadin-date-picker-toolbar-icon;
       }
 
       #yeartoggle[rotate] {
@@ -256,13 +239,11 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         justify-content: space-between;
         padding: 4px;
-        @apply --paper-font-body2;
         background: var(--primary-background-color);
         z-index: 2;
         box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.5);
         color: var(--primary-color);
         flex-shrink: 0;
-        @apply --vaadin-date-picker-footer;
       }
 
       #announcer {
