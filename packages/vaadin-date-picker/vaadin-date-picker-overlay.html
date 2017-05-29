@@ -274,7 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
       <div id="fade"></div>
-      <vaadin-infinite-scroller id="scroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]">
+      <vaadin-infinite-scroller id="scroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]" part="months">
         <template>
           <vaadin-month-calendar
             i18n="[[i18n]]"
@@ -285,7 +285,8 @@ This program is available under Apache License Version 2.0, available at https:/
             show-week-numbers="[[showWeekNumbers]]"
             min-date="[[minDate]]"
             max-date="[[maxDate]]"
-            focused$="[[_focused]]">
+            focused$="[[_focused]]"
+            part="month">
           </vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
