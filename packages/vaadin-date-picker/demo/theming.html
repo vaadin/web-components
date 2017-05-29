@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-date-picker Basic Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <demo-navigation></demo-navigation>
+
+    <h3>Plain date picker</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="date-picker-styles" theme-for="vaadin-month-calendar">
+          <template>
+            <style>
+              [part="date"] {
+                padding: 12px 0;
+                height: 40px;
+              }
+
+              [part="date"][today]:not([focused]) {
+                position: relative;
+              }
+
+              [part="date"][today]:not([focused])::before {
+                content: '';
+                position: absolute;
+                background: #f5a623;
+                opacity: 0.3;
+                width: 24px;
+                height: 24px;
+                border-radius: 100%;
+                top: 7px;
+                left: 10px;
+              }
+
+              [part="date"][focused] {
+                background: #f5a623;
+                color: #fff;
+                border-radius: 6px;
+                border: 4px solid #fff;
+                padding-top: 8px;
+              }
+
+              /* TODO */
+              [part="month"][disabled] {
+                opacity: 0.1;
+              }
+
+              [part="weekday"] {
+                display: none;
+              }
+
+              [part="week-numbers"] {
+                transform: translateY(-14px);
+              }
+
+              [part="week-number"] {
+                position: relative;
+                color: rgba(0, 0, 0, 0.1);
+              }
+
+              [part="week-number"]::after {
+                content: '';
+                position: absolute;
+                left: 20px;
+                top: 14px;
+                width: 335px;
+                height: 1px;
+                background-color: rgba(0, 0, 0, 0.1);
+              }
+
+              [part="month-header"] {
+                font-size: 24px;
+                font-weight: 100;
+                margin-bottom: 12px;
+              }
+
+              /* TODO: making the whole month name bold requires refactoring the i18n */
+              [part="month-header"]::first-letter {
+                font-weight: 400;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="scroller-styles" theme-for="vaadin-infinite-scroller">
+          <template>
+            <style>
+              /* TODO: not worky */
+              :host {
+                --item-height: 300px;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-date-picker id="weeks" show-week-numbers min="2017-05-01"></vaadin-date-picker>
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            // Async call needed here for IE11 compatibility.
+            Polymer.Base.async(function() {
+              var datepicker = document.querySelector('vaadin-date-picker#weeks');
+              datepicker.set('i18n.firstDayOfWeek', 1);
+              datepicker.$.overlay.$.monthScroller.itemHeight = 300;
+              datepicker.$.overlay.$.monthScroller._bufferHeight = 6 * 300;
+            });
+          });
+        </script>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+</html>

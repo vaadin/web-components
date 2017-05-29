@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-month-calendar">
   <template>
@@ -35,13 +36,20 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
       }
 
-      #weeknumbers {
+      #week-numbers {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         flex-shrink: 0;
       }
 
-      #weekdays div,
-      #days div,
-      #weeknumbers div {
+      #week-numbers[hidden] {
+        display: none;
+      }
+
+      .weekday,
+      .date,
+      .week-number {
         text-align: center;
         width: calc(14.285714286% - 2px);
         margin: 0 1px;
@@ -49,83 +57,66 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 6px 0;
       }
 
-      :host([week-numbers]) #weekdays div.weekday:not(:empty) {
+      :host([week-numbers]) .weekday:not(:empty) {
         width: calc(12.5% - 2px);
       }
 
-      #weekdays div:not(:empty),
-      #days div:not(:empty),
-      #weeknumbers div:not(:empty) {
+      .weekday:not(:empty),
+      .date:not(:empty),
+      .week-number:not(:empty) {
         cursor: pointer;
-        color: var(--primary-text-color);
       }
 
-      #days div:not(:empty):not([disabled]):active {
-        background: var(--light-primary-color);
+      .weekday:not(:empty):not([disabled]):active {
         border-radius: 2px;
       }
 
-      #weekdays div.weekday {
+      .weekday {
         text-transform: uppercase;
-        color: var(--secondary-text-color);
         cursor: default;
         padding: 8px 0;
       }
 
-      #weekdays div.weekday:empty,
-      #weeknumbers {
+      .weekday:empty,
+      #week-numbers {
         box-sizing: border-box;
         width: calc(10% - 2px);
         padding-right: 1.25%;
       }
 
-      #monthGrid div[today] {
-        position: relative;
-        color: var(--primary-color);
-      }
-
-      #days div[focused] {
-        background: var(--light-primary-color);
-        box-sizing: border-box;
-        border-radius: 2px;
-      }
-
-      :host([focused]) #days div[focused] {
-        background: var(--primary-color);
-        color: var(--primary-background-color);
-      }
-
-      #days div[selected] {
+      .date[selected] {
         font-weight: 600;
       }
 
-      #monthGrid div[disabled] {
+      .date[disabled] {
         opacity: 0.3;
         cursor: default;
       }
 
-      #weeknumbers div.weeknumber {
+      .week-number {
         cursor: default;
         color: rgba(0, 0, 0, 0.4);
       }
     </style>
 
-    <div id="title" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
+    <div id="title" part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <div id="weekdays">
+      <div id="weekdays" part="weekdays">
         <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
-          <div class="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
+          <div class="weekday" part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
         </template>
       </div>
       <div id="days-container">
-        <div id="weeknumbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
+        <div id="week-numbers" part="week-numbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
           <template is="dom-repeat" items="[[_getWeekNumbers(_days)]]">
-            <div class="weeknumber" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
+            <div class="week-number" part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
           </template>
         </div>
         <div id="days">
           <template is="dom-repeat" items="[[_days]]">
             <div
+                class="date"
+                part="date"
                 today$="[[_isToday(item)]]"
                 selected$="[[_dateEquals(item, selectedDate)]]"
                 focused$="[[_dateEquals(item, focusedDate)]]"
@@ -141,7 +132,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     {
-      class MonthCalendarElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      class MonthCalendarElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
 
         static get is() {
           return 'vaadin-month-calendar';
