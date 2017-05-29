@@ -29,6 +29,10 @@ This program is available under Apache License Version 2.0, available at https:/
         outline: none;
       }
 
+      [part="label"][disabled] {
+        color: #ccc;
+      }
+
       :host([focus-ring]) [part="label"] {
         box-shadow: 0 0 2px 2px Highlight;
       }
@@ -38,16 +42,24 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <label id="label" part="label">
+    <label
+        id="label"
+        part="label"
+        checked$="[[checked]]"
+        disabled$="[[disabled]]"
+        indeterminate$="[[indeterminate]]"
+    >
       <input
         type="checkbox"
         part="native-checkbox"
         checked$="[[checked]]"
+        disabled$="[[disabled]]"
         indeterminate$="[[indeterminate]]"
         tabindex="-1">
       <span
         part="checkbox"
         checked$="[[checked]]"
+        disabled$="[[disabled]]"
         indeterminate$="[[indeterminate]]">
       </span>
       <slot></slot>
@@ -109,13 +121,15 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * True if the checkbox is disabled.
+             */
+            disabled: Boolean,
+
+            /**
              * Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.
              * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
              */
-            indeterminate: {
-              type: Boolean,
-              value: false
-            },
+            indeterminate: Boolean,
 
             /**
              * The value of the checkbox.
@@ -141,24 +155,30 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _addActiveListeners() {
-          this._addEventListenerToNode(this, 'down', () => this.setAttribute('active', ''));
+          this._addEventListenerToNode(this, 'down', () => {
+            if (!this.disabled) {
+              this.setAttribute('active', '');
+            }
+          });
 
           this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
 
           this._addEventListenerToNode(this, 'click', (e) => {
             e.preventDefault();
-            this.checked = !this.checked;
+            if (!this.disabled) {
+              this.checked = !this.checked;
+            }
           });
 
           this.addEventListener('keydown', e => {
-            if (e.keyCode === 32) {
+            if (!this.disabled && e.keyCode === 32) {
               e.preventDefault();
               this.setAttribute('active', '');
             }
           });
 
           this.addEventListener('keyup', e => {
-            if (e.keyCode === 32) {
+            if (!this.disabled && e.keyCode === 32) {
               this.checked = !this.checked;
               this.removeAttribute('active');
             }
