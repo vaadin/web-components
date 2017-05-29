@@ -143,9 +143,11 @@ This program is available under Apache License Version 2.0, available at https:/
         _addActiveListeners() {
           this._addEventListenerToNode(this, 'down', () => this.setAttribute('active', ''));
 
-          this._addEventListenerToNode(this, 'up', () => {
+          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+
+          this._addEventListenerToNode(this, 'click', (e) => {
+            e.preventDefault();
             this.checked = !this.checked;
-            this.removeAttribute('active');
           });
 
           this.addEventListener('keydown', e => {
