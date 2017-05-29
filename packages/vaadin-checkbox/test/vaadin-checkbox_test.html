@@ -30,7 +30,7 @@
 
       beforeEach(() => {
         vaadinCheckbox = fixture('default');
-        nativeCheckbox = Polymer.dom(vaadinCheckbox.root).querySelector('#checkbox');
+        nativeCheckbox = Polymer.dom(vaadinCheckbox.root).querySelector('#native-checkbox');
         label = Polymer.dom(vaadinCheckbox.root).querySelector('#label');
       });
 
@@ -58,10 +58,6 @@
 
       it('host should have the `checkbox` role', () => {
         expect(vaadinCheckbox.getAttribute('role')).to.be.eql('checkbox');
-      });
-
-      it('native checkbox should have the `presentation` role', () => {
-        expect(nativeCheckbox.getAttribute('role')).to.be.eql('presentation');
       });
 
       it('should have active attribute on down', () => {
