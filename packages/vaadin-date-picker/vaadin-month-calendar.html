@@ -193,6 +193,12 @@ This program is available under Apache License Version 2.0, available at https:/
             _days: {
               type: Array,
               computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)'
+            },
+
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              computed: '_isDisabled(month, minDate, maxDate)'
             }
           };
         }
@@ -209,6 +215,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _dateAllowed(date, min, max) {
           return Vaadin.DatePickerHelper._dateAllowed(date, min, max);
+        }
+
+        /* Returns true if all the dates in the month are out of the allowed range */
+        _isDisabled(month, minDate, maxDate) {
+          // First day of the month
+          var firstDate = new Date(0, 0);
+          firstDate.setFullYear(month.getFullYear());
+          firstDate.setMonth(month.getMonth());
+          firstDate.setDate(1);
+
+          // Last day of the month
+          var lastDate = new Date(0, 0);
+          lastDate.setFullYear(month.getFullYear());
+          lastDate.setMonth(month.getMonth() + 1);
+          lastDate.setDate(-1);
+
+          return !this._dateAllowed(firstDate, minDate, maxDate)
+            && !this._dateAllowed(lastDate, minDate, maxDate);
         }
 
         _getTitle(month, monthNames) {

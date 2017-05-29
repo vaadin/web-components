@@ -307,6 +307,24 @@
         });
       });
 
+      describe('Date limits', () => {
+
+        it('should be disabled when all dates are disabled', () => {
+          monthCalendar.minDate = new Date(2016, 2, 1);
+          expect(monthCalendar.hasAttribute('disabled')).to.be.true;
+        });
+
+        it('should not be disabled when some dates are disabled', () => {
+          monthCalendar.minDate = new Date(2016, 1, 15);
+          expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+        });
+
+        it('should not be disabled when no dates are disabled', () => {
+          expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+        });
+
+      });
+
     });
   </script>
 
