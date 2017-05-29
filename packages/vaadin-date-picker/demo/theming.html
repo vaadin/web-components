@@ -21,16 +21,16 @@
         <dom-module id="date-picker-styles" theme-for="vaadin-month-calendar">
           <template>
             <style>
-              [part="date"] {
+              [part~="date"] {
                 padding: 12px 0;
                 height: 40px;
               }
 
-              [part="date"][today]:not([focused]) {
+              [part~="date"][today]:not([focused]) {
                 position: relative;
               }
 
-              [part="date"][today]:not([focused])::before {
+              [part~="date"][today]:not([focused])::before {
                 content: '';
                 position: absolute;
                 background: #f5a623;
@@ -42,7 +42,7 @@
                 left: 10px;
               }
 
-              [part="date"][focused] {
+              [part~="date"][focused] {
                 background: #f5a623;
                 color: #fff;
                 border-radius: 6px;
@@ -50,25 +50,20 @@
                 padding-top: 8px;
               }
 
-              /* TODO */
-              [part="month"][disabled] {
-                opacity: 0.1;
-              }
-
-              [part="weekday"] {
+              [part~="weekday"] {
                 display: none;
               }
 
-              [part="week-numbers"] {
+              [part~="week-numbers"] {
                 transform: translateY(-14px);
               }
 
-              [part="week-number"] {
+              [part~="week-number"] {
                 position: relative;
                 color: rgba(0, 0, 0, 0.1);
               }
 
-              [part="week-number"]::after {
+              [part~="week-number"]::after {
                 content: '';
                 position: absolute;
                 left: 20px;
@@ -78,14 +73,14 @@
                 background-color: rgba(0, 0, 0, 0.1);
               }
 
-              [part="month-header"] {
+              [part~="month-header"] {
                 font-size: 24px;
                 font-weight: 100;
                 margin-bottom: 12px;
               }
 
               /* TODO: making the whole month name bold requires refactoring the i18n */
-              [part="month-header"]::first-letter {
+              [part~="month-header"]::first-letter {
                 font-weight: 400;
               }
             </style>
@@ -97,6 +92,10 @@
               /* TODO: not worky */
               :host {
                 --item-height: 300px;
+              }
+
+              [part~="month"][disabled] {
+                opacity: 0.3;
               }
             </style>
           </template>
