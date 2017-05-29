@@ -32,8 +32,6 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-direction: column;
         height: 100%;
         width: 100%;
-        background: var(--primary-background-color);
-        font: inherit;
         outline: none;
       }
 
@@ -41,20 +39,13 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         justify-content: space-between;
         padding: 14px;
-        background: var(--primary-background-color);
         z-index: 2;
         flex-shrink: 0;
         transform: translateZ(0);
-        color: var(--primary-color);
-      }
-
-      #toolbar:not([desktop]) {
-        cursor: pointer;
       }
 
       #scrollers {
         display: flex;
-        flex-direction: row;
         height: 100%;
         width: 100%;
         position: relative;
@@ -76,12 +67,12 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      #scroller,
+      #monthScroller,
       #yearScroller {
         height: 100%;
       }
 
-      #scroller {
+      #monthScroller {
         padding: 0 8px;
         position: absolute;
         top: 0;
@@ -90,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 0;
       }
 
-      #scrollers[desktop] #scroller {
+      #scrollers[desktop] #monthScroller {
         right: 50px;
         transform: none !important;
       }
@@ -274,7 +265,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
       <div id="fade"></div>
-      <vaadin-infinite-scroller id="scroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]" part="months">
+      <vaadin-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]" part="months">
         <template>
           <vaadin-month-calendar
             i18n="[[i18n]]"
@@ -292,15 +283,12 @@ This program is available under Apache License Version 2.0, available at https:/
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25" active="[[initialPosition]]">
         <template>
-          <div role="button">[[_yearAfterXYears(index)]]</div>
-          <div style="font-size: 18px; line-height: 56px; opacity: 0.3;" aria-hidden="true">•</div>
+          <div part="year-number" role="button">[[_yearAfterXYears(index)]]</div>
         </template>
       </vaadin-infinite-scroller>
     </div>
 
     <div id="footer" on-touchend="_preventDefault" role="toolbar">
-
-
       <vaadin-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
         [[i18n.today]]
       </vaadin-button>
@@ -469,10 +457,10 @@ This program is available under Apache License Version 2.0, available at https:/
         revealDate(date) {
           if (date) {
             var diff = this._differenceInMonths(date, this._originDate);
-            var scrolledAboveViewport = this.$.scroller.position > diff;
+            var scrolledAboveViewport = this.$.monthScroller.position > diff;
 
-            var visibleItems = this.$.scroller.clientHeight / this.$.scroller.itemHeight;
-            var scrolledBelowViewport = this.$.scroller.position + visibleItems - 1 < diff;
+            var visibleItems = this.$.monthScroller.clientHeight / this.$.monthScroller.itemHeight;
+            var scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
 
             if (scrolledAboveViewport) {
               this._scrollToPosition(diff, true);
@@ -495,13 +483,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _repositionYearScroller() {
-          this._visibleMonthIndex = Math.floor(this.$.scroller.position);
-          this.$.yearScroller.position = (this.$.scroller.position + this._originDate.getMonth()) / 12;
+          this._visibleMonthIndex = Math.floor(this.$.monthScroller.position);
+          this.$.yearScroller.position = (this.$.monthScroller.position + this._originDate.getMonth()) / 12;
         }
 
         _repositionMonthScroller() {
-          this.$.scroller.position = this.$.yearScroller.position * 12 - this._originDate.getMonth();
-          this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+          this.$.monthScroller.position = this.$.yearScroller.position * 12 - this._originDate.getMonth();
+          this._visibleMonthIndex = Math.floor(this.$.monthScroller.position);
         }
 
         _onMonthScroll() {
@@ -539,7 +527,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onTodayTap() {
           var today = new Date();
-          if (this.$.scroller.position === this._differenceInMonths(today, this._originDate)) {
+          if (this.$.monthScroller.position === this._differenceInMonths(today, this._originDate)) {
             // Select today only if the month scroller is positioned exactly
             // at the beginning of the current month
             this.selectedDate = today;
@@ -565,7 +553,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this._ignoreTaps && !this._notTapping) {
             var scrollDelta = e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
             var yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
-            this._scrollToPosition(this.$.scroller.position + yearDelta * 12, true);
+            this._scrollToPosition(this.$.monthScroller.position + yearDelta * 12, true);
           }
         }
 
@@ -576,7 +564,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (!animate) {
-            this.$.scroller.position = targetPosition;
+            this.$.monthScroller.position = targetPosition;
             this._targetPosition = undefined;
             this._repositionYearScroller();
             return;
@@ -596,7 +584,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           var duration = animate ? 300 : 0;
           var start = 0;
-          var initialPosition = this.$.scroller.position;
+          var initialPosition = this.$.monthScroller.position;
 
           var smoothScroll = timestamp => {
             start = start || timestamp;
@@ -604,7 +592,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             if (currentTime < duration) {
               var currentPos = easingFunction(currentTime, initialPosition, this._targetPosition - initialPosition, duration);
-              this.$.scroller.position = currentPos;
+              this.$.monthScroller.position = currentPos;
               window.requestAnimationFrame(smoothScroll);
             } else {
               this.dispatchEvent(new CustomEvent('scroll-animation-finished', {
@@ -616,7 +604,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
               }));
 
-              this.$.scroller.position = this._targetPosition;
+              this.$.monthScroller.position = this._targetPosition;
               this._targetPosition = undefined;
             }
 
@@ -702,7 +690,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _translateXChanged(x) {
           if (!this._desktopMode) {
-            this.$.scroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
+            this.$.monthScroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
             this.$.yearScroller.style.transform = 'translateX(' + x + 'px)';
             this.$.fade.style.transform = 'translateX(' + -x + 'px)';
           }
