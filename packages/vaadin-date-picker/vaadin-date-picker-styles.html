@@ -68,3 +68,39 @@
     </style>
   </template>
 </dom-module>
+
+<dom-module id="vaadin-month-calendar-default-theme" theme-for="vaadin-month-calendar">
+  <template>
+    <style>
+      [part~="month-header"] {
+        font-size: 20px;
+      }
+
+      [part~="weekday"] {
+        font-weight: 100;
+      }
+
+      [part~="date"] {
+        box-sizing: border-box;
+        border-radius: 2px;
+      }
+
+      [part~="date"][focused] {
+        background: #eee;
+      }
+
+      [part~="date"][selected] {
+        font-weight: 600;
+      }
+
+      [part~="date"][disabled] {
+        opacity: 0.3;
+      }
+
+      [part~="week-number"] {
+        font-weight: 100;
+        color: rgba(0, 0, 0, 0.4);
+      }
+    </style>
+  </template>
+</dom-module>
