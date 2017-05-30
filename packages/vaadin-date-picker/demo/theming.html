@@ -182,6 +182,11 @@
                 box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 0.2);
               }
 
+              [part~="years"] {
+                background: #716a60;
+                color: #babbb6;
+              }
+
               [part~="toolbar"] {
                 background: #f7f6f2;
               }
@@ -190,10 +195,20 @@
         </dom-module>
         <dom-module id="scroller-styles" theme-for="vaadin-infinite-scroller">
           <template>
+            <style include="vaadin-infinite-scroller-default-theme"></style>
             <style>
               /* TODO: not worky */
               :host {
                 --item-height: 300px;
+              }
+
+              :host([part~="years"]) [part~="year-number"][current] {
+                color: #f5c679;
+                opacity: 0.6;
+              }
+
+              :host([part~="years"]) [part~="year-number"]::after {
+                color: #babbb6;
               }
 
               [part~="month"][disabled] {
