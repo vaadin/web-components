@@ -16,8 +16,18 @@
   (https://github.com/PolymerElements/test-fixture/issues/24)
   so in order to be able to test vaadin-infinite-scroller in isolation we're
   using the same instance in this suite -->
-  <vaadin-infinite-scroller id="scroller" item-height="30" buffer-size="80">
-    <template><div>[[index]]</div></template>
+  <custom-style>
+    <style>
+      vaadin-infinite-scroller {
+        --item-height: 30;
+      }
+    </style>
+  </custom-style>
+
+  <vaadin-infinite-scroller id="scroller" buffer-size="80">
+    <template>
+      <div>[[index]]</div>
+    </template>
   </vaadin-infinite-scroller>
 
   <script>

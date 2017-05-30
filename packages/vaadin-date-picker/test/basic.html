@@ -30,10 +30,12 @@
 
   <script>
     describe('Basic features', () => {
-      var datepicker;
+      var datepicker, clearButton, toggleButton;
 
       beforeEach(() => {
         datepicker = fixture('datepicker');
+        clearButton = datepicker.root.querySelector('[part="clear-button"]');
+        toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
       });
 
       afterEach(done => {
@@ -51,11 +53,11 @@
 
         // IE also needs timeouts
         setTimeout(() => {
-          expect(datepicker.$.clear.clientHeight).not.equal(0);
+          expect(clearButton.clientHeight).not.equal(0);
 
           datepicker.value = '';
           setTimeout(() => {
-            expect(datepicker.$.clear.clientHeight).to.equal(0);
+            expect(clearButton.clientHeight).to.equal(0);
             done();
           }, 200);
         });
@@ -175,7 +177,7 @@
 
       it('should clear the value', () => {
         datepicker.value = '2000-02-01';
-        tap(datepicker.$.clear);
+        tap(clearButton);
         expect(datepicker.value).to.equal('');
       });
 
@@ -201,7 +203,7 @@
           if (isFullscreen(datepicker)) {
             expect(datepicker.$.overlay.$.clear.clientHeight).not.to.equal(0);
           } else {
-            expect(datepicker.$.clear.clientHeight).not.to.equal(0);
+            expect(clearButton.clientHeight).not.to.equal(0);
           }
           done();
         });
@@ -209,7 +211,7 @@
 
       it('should open by tapping the calendar icon', done => {
         listenForEvent(datepicker, 'iron-overlay-opened', done);
-        tap(datepicker.$.calendar);
+        tap(toggleButton);
       });
 
       it('should scroll to a date on open', done => {
@@ -394,8 +396,8 @@
         });
 
         it('should notify i18n mutation to children', () => {
-          var monthCalendar = datepicker.$.overlay.$.scroller.$.scroller.querySelector('vaadin-month-calendar');
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var monthCalendar = datepicker.$.overlay.$.monthScroller.$.scroller.querySelector('vaadin-month-calendar');
+          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]');
           var weekdayLabels = Array.prototype.map.call(weekdays,
             weekday => weekday.getAttribute('aria-label'));
           var weekdayTitles = Array.prototype.map.call(weekdays,
@@ -404,14 +406,14 @@
           expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
         });
 
-        it('should reflect value in overlay input', () => {
+        it('should reflect value in overlay header', () => {
           datepicker.value = '2000-02-01';
-          expect(datepicker.$.overlay.$.input.textContent.trim()).to.equal('1.2.2000');
+          expect(datepicker.$.overlay.root.querySelector('[part="label"]').textContent.trim()).to.equal('1.2.2000');
         });
 
         it('should display buttons in correct locale', () => {
-          expect(datepicker.$.calendar.getAttribute('aria-label').trim()).to.equal('Kalenteri');
-          expect(datepicker.$.clear.getAttribute('aria-label').trim()).to.equal('Tyhjennä');
+          expect(toggleButton.getAttribute('aria-label').trim()).to.equal('Kalenteri');
+          expect(clearButton.getAttribute('aria-label').trim()).to.equal('Tyhjennä');
           expect(datepicker.$.overlay.$.todayButton.textContent.trim()).to.equal('Tänään');
           expect(datepicker.$.overlay.$.cancelButton.textContent.trim()).to.equal('Peruuta');
         });
@@ -431,13 +433,13 @@
         });
 
         it('calendar icon should be hidden', () => {
-          expect(datepicker.$.calendar.clientHeight).to.equal(0);
+          expect(toggleButton.clientHeight).to.equal(0);
         });
 
         it('clear icon should be hidden', () => {
-          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          expect(clearButton.clientHeight).to.equal(0);
           datepicker.open();
-          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          expect(clearButton.clientHeight).to.equal(0);
         });
       });
 
@@ -451,13 +453,13 @@
         });
 
         it('calendar icon should be hidden', () => {
-          expect(datepicker.$.calendar.clientHeight).to.equal(0);
+          expect(toggleButton.clientHeight).to.equal(0);
         });
 
         it('clear icon should be hidden', () => {
-          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          expect(clearButton.clientHeight).to.equal(0);
           datepicker.open();
-          expect(datepicker.$.clear.clientHeight).to.equal(0);
+          expect(clearButton.clientHeight).to.equal(0);
         });
 
         it('should be focusable', () => {

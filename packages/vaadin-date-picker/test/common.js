@@ -62,10 +62,7 @@ function close(datepicker, callback) {
 }
 
 function tap(element) {
-  Polymer.Base.fire('tap', {}, {
-    bubbles: true,
-    node: element
-  });
+  element.dispatchEvent(new CustomEvent('tap', {bubbles: true, detail: {}}));
 }
 
 function monthsEqual(date1, date2) {
