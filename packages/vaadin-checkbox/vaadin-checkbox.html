@@ -38,6 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="native-checkbox"] {
         margin-top: 1px;
         vertical-align: middle;
+        outline: none;
       }
     </style>
 
@@ -49,7 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
         indeterminate$="[[indeterminate]]"
     >
       <input
-        id="native-checkbox"
+        id="nativeCheckbox"
         type="checkbox"
         part="native-checkbox"
         checked$="[[checked]]"
@@ -85,10 +86,11 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * The following shadow DOM parts are exposed for styling:
        *
-       * Part name  | Description
-       * -----------|----------------
-       * `checkbox` | The styleable `<span>` element with a graphical check
-       * `label`    | The `<label>` element
+       * Part name         | Description
+       * ------------------|----------------
+       * `native-checkbox` | The `<input type="checkbox">` element
+       * `checkbox`        | The styleable `<span>` element with a graphical check
+       * `label`           | The `<label>` element
        *
        * The following attributes are exposed for styling:
        *
@@ -156,7 +158,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _addActiveListeners() {
           // DOWN
-          this._addEventListenerToNode(this, 'down', () => {
+          this._addEventListenerToNode(this, 'down', (e) => {
+            e.preventDefault();
             if (!this.disabled) {
               this.setAttribute('active', '');
             }
@@ -176,6 +179,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // KEYUP
           this.addEventListener('keyup', e => {
             if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
               this.checked = !this.checked;
               this.removeAttribute('active');
             }
@@ -183,7 +187,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.$.label;
+          return this.$.nativeCheckbox;
         }
       }
 
