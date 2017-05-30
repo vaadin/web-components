@@ -43,38 +43,21 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-grow: 1;
       }
 
-      #clear,
-      #toggle,
+      [part="clear-button"],
+      [part="toggle-button"],
       [part="years-toggle-button"]::before {
         font-family: 'vaadin-date-picker-icons';
-        font-size: 24px;
-        cursor: pointer;
-        transition: color 0.2s;
-        height: 20px;
-        width: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
 
-      #clear,
-      #toggle {
-        margin-left: 10px;
-      }
-
-      #clear {
+      [part="clear-button"]:not([showclear]) {
         display: none;
       }
 
-      #clear[showclear] {
-        display: flex;
-      }
-
-      #clear::before {
+      [part="clear-button"]::before {
         content: "\e901";
       }
 
-      #toggle::before {
+      [part="toggle-button"]::before {
         content: "\e902";
       }
 
@@ -90,17 +73,8 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "\e900";
       }
 
-      #yeartoggle {
-        transition: transform 200ms;
-        will-change: transform;
-      }
-
       :host(:not([years-visible])) [part="years-toggle-button"]::before {
         transform: rotate(180deg);
-      }
-
-      #yeartoggle[hidden] {
-        display: none;
       }
 
       #scrollers {
@@ -200,8 +174,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div part="overlay-header" on-touchend="_preventDefault" aria-hidden="true">
       <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
-      <div id="clear" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
-      <div id="toggle" on-tap="_cancel"></div>
+      <div part="clear-button" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
+      <div part="toggle-button" on-tap="_cancel"></div>
 
       <div part="years-toggle-button" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
         [[_yearAfterXMonths(_visibleMonthIndex)]]

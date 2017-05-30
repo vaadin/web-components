@@ -66,6 +66,28 @@
         padding: 8px;
       }
 
+      [part~="clear-button"],
+      [part~="toggle-button"],
+      [part~="years-toggle-button"]::before {
+        font-size: 24px;
+        cursor: pointer;
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      [part~="clear-button"],
+      [part~="toggle-button"] {
+        margin-left: 10px;
+      }
+
+      [part~="years-toggle-button"] {
+        display: flex;
+      }
+
       [part~="years"] {
         background: #ddd;
         cursor: pointer;
