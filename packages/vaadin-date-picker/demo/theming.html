@@ -9,6 +9,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="common.html">
+  <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
 </head>
 
 <body unresolved>
@@ -21,10 +22,6 @@
         <dom-module id="text-field-styles" theme-for="vaadin-text-field">
           <template>
             <style>
-              :host {
-                width: 250px;
-              }
-
               [part~="input-field"] {
                 border-radius: 20px;
                 border: 2px solid #f5a623;
@@ -38,15 +35,55 @@
               }
 
               [part~="value"] {
+                font-family: inherit;
                 border: none;
                 font-size: medium;
-                font-weight: 200;
                 color: rgba(0, 0, 0, 0.5);
               }
             </style>
           </template>
         </dom-module>
-        <dom-module id="date-picker-styles" theme-for="vaadin-month-calendar">
+        <dom-module id="button-styles" theme-for="vaadin-button">
+          <template>
+            <style>
+              :host([part~="today-button"]) [part~="button"]::before {
+                content: "•";
+                color: #f5a623;
+                font-size: x-large;
+              }
+
+              [part~="button"] {
+                font-family: inherit;
+                border: none;
+                background: #f7f6f2;
+                font-size: medium;
+              }
+
+              [part~="button"]:focus {
+                outline: none;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="date-picker-styles" theme-for="vaadin-date-picker">
+          <template>
+            <style>
+              :host {
+                font-family: 'Cabin', sans-serif;
+              }
+
+              [part~="text-field"] {
+                width: 250px;
+              }
+
+              [part~="today-button"]::before {
+                content: "•";
+              }
+            </style>
+          </template>
+        </dom-module>
+
+        <dom-module id="month-calendar-styles" theme-for="vaadin-month-calendar">
           <template>
             <style>
               [part~="date"] {
@@ -63,15 +100,23 @@
                 position: absolute;
                 background: #f5a623;
                 opacity: 0.3;
-                width: 24px;
-                height: 24px;
+                width: 26px;
+                height: 26px;
                 border-radius: 100%;
                 top: 7px;
-                left: 10px;
+                left: 8px;
               }
 
               [part~="date"][focused] {
                 background: #f5a623;
+                color: #fff;
+                border-radius: 6px;
+                border: 4px solid #fff;
+                padding-top: 8px;
+              }
+
+              [part~="date"]:not([disabled]):hover {
+                background: rgba(245,187,39,1);
                 color: #fff;
                 border-radius: 6px;
                 border: 4px solid #fff;
@@ -123,6 +168,22 @@
               /* TODO: making the whole month name bold requires refactoring the i18n */
               [part~="month-header"]::first-letter {
                 font-weight: 400;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="overlay-styles" theme-for="vaadin-date-picker-overlay">
+          <template>
+            <style include="vaadin-date-picker-overlay-default-theme"></style>
+            <style>
+              :host {
+                border-radius: 6px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 0px 4px 2px 0px rgba(0, 0, 0, 0.2);
+              }
+
+              [part~="toolbar"] {
+                background: #f7f6f2;
               }
             </style>
           </template>
