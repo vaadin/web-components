@@ -787,6 +787,12 @@ This program is available under Apache License Version 2.0, available at https:/
         _onKeydown(e) {
           var focus = this._currentlyFocusedDate();
 
+          // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
+          // previously in the keydown event.
+          const isToday = e.composedPath().indexOf(this.$.todayButton) >= 0;
+          const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
+          const isScroller = !isToday && !isCancel;
+
           var eventKey = this._eventKey(e);
           if (eventKey === 'tab') {
             // We handle tabs here and don't want to bubble up.
@@ -794,11 +800,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
             const isFullscreen = this.hasAttribute('fullscreen');
             const isShift = e.shiftKey;
-            // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
-            // previously in the keydown event.
-            const isToday = e.composedPath().indexOf(this.$.todayButton) >= 0;
-            const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
-            const isScroller = this._focused && !isToday && !isCancel;
 
             if (isFullscreen) {
               e.preventDefault();
@@ -816,12 +817,9 @@ This program is available under Apache License Version 2.0, available at https:/
               // set to false.
               this._focused = false;
             }
-          } else if ((eventKey == 'enter' || eventKey == 'space') && this._buttonFocused()) {
-            // Let buttons handle their default actions
           } else if (eventKey) {
             e.preventDefault();
             e.stopPropagation();
-
             switch (eventKey) {
               case 'down':
                 this._moveFocusByDays(7);
@@ -832,27 +830,35 @@ This program is available under Apache License Version 2.0, available at https:/
                 this.focus();
                 break;
               case 'right':
-                if (!this._buttonFocused()) {
+                if (isScroller) {
                   this._moveFocusByDays(1);
                 }
                 break;
               case 'left':
-                if (!this._buttonFocused()) {
+                if (isScroller) {
                   this._moveFocusByDays(-1);
                 }
                 break;
               case 'enter':
-                if (!this._buttonFocused()) {
+                if (isScroller || isCancel) {
                   this._close();
+                } else if (isToday) {
+                  this._onTodayTap();
                 }
                 break;
               case 'space':
-                var focusedDate = this.focusedDate;
-                if (Vaadin.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
-                  this.selectedDate = '';
-                  this.focusedDate = focusedDate;
+                if (isCancel) {
+                  this._close();
+                } else if (isToday) {
+                  this._onTodayTap();
                 } else {
-                  this.selectedDate = focusedDate;
+                  var focusedDate = this.focusedDate;
+                  if (Vaadin.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
+                    this.selectedDate = '';
+                    this.focusedDate = focusedDate;
+                  } else {
+                    this.selectedDate = focusedDate;
+                  }
                 }
                 break;
               case 'home':
@@ -869,10 +875,6 @@ This program is available under Apache License Version 2.0, available at https:/
                 break;
             }
           }
-        }
-
-        _buttonFocused() {
-          return this.$.todayButton.focused || this.$.cancelButton.focused;
         }
 
         _currentlyFocusedDate() {
