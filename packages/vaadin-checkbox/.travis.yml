@@ -20,6 +20,7 @@ before_script:
   - gulp lint
   - polymer lint --rules polymer-2 --input *.html
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' gulp perf:run
 
 script:
   - gemini test test/visual
