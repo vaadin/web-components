@@ -30,14 +30,14 @@
 
       beforeEach(() => {
         vaadinCheckbox = fixture('default');
-        nativeCheckbox = Polymer.dom(vaadinCheckbox.root).querySelector('#native-checkbox');
-        label = Polymer.dom(vaadinCheckbox.root).querySelector('#label');
+        nativeCheckbox = Polymer.dom(vaadinCheckbox.root).querySelector('[part="native-checkbox"]');
+        label = Polymer.dom(vaadinCheckbox.root).querySelector('[part="label"]');
       });
 
       it('should define checkbox label using light DOM', () => {
         var children = Polymer.dom(label).getEffectiveChildNodes();
-        expect(children[5].textContent).to.be.equal('Vaadin ');
-        expect(children[6].outerHTML).to.be.equal('<i>Checkbox</i>');
+        expect(children[1].textContent).to.be.equal('Vaadin ');
+        expect(children[2].outerHTML).to.be.equal('<i>Checkbox</i>');
       });
 
       it('can be disabled imperatively', () => {

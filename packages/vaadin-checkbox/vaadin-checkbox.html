@@ -4,47 +4,54 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
--->
-
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+
+<dom-module id="vaadin-checkbox-default-theme" theme-for="vaadin-checkbox">
+  <template>
+    <style>
+      :host {
+        padding-right: 5px;
+      }
+
+      :host([focus-ring]) {
+        box-shadow: 0 0 2px 2px Highlight;
+      }
+
+      [part="wrapper"] {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      [part="native-checkbox"] {
+        margin-right: 5px;
+        outline: none;
+      }
+
+      [part="label"] {
+        outline: none;
+      }
+
+      [disabled] [part="label"] {
+        opacity: 0.5;
+      }
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="vaadin-checkbox">
   <template>
     <style>
       :host {
         display: inline-block;
-        position: relative;
-        outline: none;
-      }
-
-      [part="label"] {
-        display: inline-block;
-        padding: 2px 3px 0 0;
-        outline: none;
-      }
-
-      [part="label"][disabled] {
-        color: #ccc;
-      }
-
-      :host([focus-ring]) [part="label"] {
-        box-shadow: 0 0 2px 2px Highlight;
-      }
-
-      [part="native-checkbox"] {
-        margin-top: 1px;
-        vertical-align: middle;
         outline: none;
       }
     </style>
 
     <label
-        id="label"
-        part="label"
+        part="wrapper"
         checked$="[[checked]]"
         disabled$="[[disabled]]"
         indeterminate$="[[indeterminate]]"
@@ -56,14 +63,12 @@ This program is available under Apache License Version 2.0, available at https:/
         checked$="[[checked]]"
         disabled$="[[disabled]]"
         indeterminate$="[[indeterminate]]"
+        role="presentation"
         tabindex="-1">
-      <span
-        part="checkbox"
-        checked$="[[checked]]"
-        disabled$="[[disabled]]"
-        indeterminate$="[[indeterminate]]">
+      <span part="checkbox"></span>
+      <span part="label">
+        <slot></slot>
       </span>
-      <slot></slot>
     </label>
 
   </template>
@@ -88,9 +93,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name         | Description
        * ------------------|----------------
+       * `wrapper`         | The native `<label>` element which wraps all parts
        * `native-checkbox` | The `<input type="checkbox">` element
-       * `checkbox`        | The styleable `<span>` element with a graphical check
-       * `label`           | The `<label>` element
+       * `checkbox`        | The `<span>` element for a custom graphical check
+       * `label`           | The `<span>` element for slotted `<label>` text or HTML
        *
        * The following attributes are exposed for styling:
        *
