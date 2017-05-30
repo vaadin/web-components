@@ -26,26 +26,18 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: auto;
       }
 
-      #input {
+      [part="input"] {
         min-width: 100%;
       }
 
-      #overlay {
+      [part="overlay"] {
         height: 100vh;
         width: 420px;
       }
 
-      [slot="suffix"] {
+      [part="clear-button"],
+      [part="toggle-button"] {
         font-family: 'vaadin-date-picker-icons';
-        font-size: 19px;
-        color: rgba(0, 0, 0, .26);
-        cursor: pointer;
-        transition: color 0.2s;
-        height: 20px;
-        width: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
 
       [part="clear-button"]::before {
@@ -56,17 +48,10 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "\e902";
       }
 
-      [slot="suffix"]:hover,
-      :host([opened]) [slot="suffix"] {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) [slot="suffix"]:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      :host([disabled]) [slot="suffix"],
-      :host([readonly]) [slot="suffix"],
+      :host([disabled]) [part="clear-button"],
+      :host([disabled]) [part="toggle-button"],
+      :host([readonly]) [part="clear-button"],
+      :host([readonly]) [part="toggle-button"],
       :host(:not([has-value])) [part="clear-button"] {
         display: none;
       }
