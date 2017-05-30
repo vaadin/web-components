@@ -48,11 +48,11 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: center;
       }
 
-      #clear::before {
+      [part="clear-button"]::before {
         content: "\e901";
       }
 
-      #calendar::before {
+      [part="toggle-button"]::before {
         content: "\e902";
       }
 
@@ -67,7 +67,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([disabled]) [slot="suffix"],
       :host([readonly]) [slot="suffix"],
-      :host(:not([has-value])) #clear {
+      :host(:not([has-value])) [part="clear-button"] {
         display: none;
       }
     </style>
@@ -87,10 +87,11 @@ This program is available under Apache License Version 2.0, available at https:/
         readonly="[[readonly]]"
         error-message="[[errorMessage]]"
         aria-label$="[[label]]"
+        part="text-field"
       >
 
-      <div id="clear" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
-      <div id="calendar" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
+      <div part="clear-button" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
+      <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
     <iron-dropdown
