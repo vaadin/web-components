@@ -161,6 +161,19 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-shrink: 0;
       }
 
+      [part~="overlay-header"]:not([desktop]) {
+        padding-bottom: 40px;
+      }
+
+      [part~="years-toggle-button"] {
+        position: absolute;
+        top: auto;
+        right: 8px;
+        bottom: 0;
+        z-index: 1;
+        padding: 8px;
+      }
+
       #announcer {
         display: inline-block;
         position: fixed;
@@ -173,7 +186,7 @@ This program is available under Apache License Version 2.0, available at https:/
       [[i18n.calendar]]
     </div>
 
-    <div part="overlay-header" on-touchend="_preventDefault" aria-hidden="true">
+    <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
       <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
       <div part="clear-button" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
       <div part="toggle-button" on-tap="_cancel"></div>
