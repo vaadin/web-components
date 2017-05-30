@@ -22,6 +22,7 @@ before_script:
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
 
 script:
+  - gemini test test/visual
   - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
       xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
     fi
