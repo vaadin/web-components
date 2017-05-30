@@ -107,7 +107,7 @@
                 left: 8px;
               }
 
-              [part~="date"][focused] {
+              [part~="date"][selected] {
                 background: #f5a623;
                 color: #fff;
                 border-radius: 6px;
@@ -115,7 +115,8 @@
                 padding-top: 8px;
               }
 
-              [part~="date"]:not([disabled]):hover {
+              [part~="date"]:not([disabled]):hover,
+              [part~="date"][focused]:not([disabled]) {
                 background: rgba(245,187,39,1);
                 color: #fff;
                 border-radius: 6px;
