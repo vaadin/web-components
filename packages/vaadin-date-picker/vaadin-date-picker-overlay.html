@@ -242,7 +242,7 @@ This program is available under Apache License Version 2.0, available at https:/
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25" active="[[initialPosition]]" part="years">
         <template>
-          <div part="year-number" role="button">[[_yearAfterXYears(index)]]</div>
+          <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedDate)]]">[[_yearAfterXYears(index)]]</div>
         </template>
       </vaadin-infinite-scroller>
     </div>
@@ -408,6 +408,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _focusedDateChanged(focusedDate) {
           this.revealDate(focusedDate);
+        }
+
+        _isCurrentYear(yearsFromNow) {
+          return yearsFromNow === 0;
+        }
+
+        _isSelectedYear(yearsFromNow, selectedDate) {
+          if (selectedDate) {
+            return selectedDate.getFullYear() === this._originDate.getFullYear() + yearsFromNow;
+          }
         }
 
         /**

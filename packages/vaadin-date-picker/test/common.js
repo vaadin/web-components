@@ -111,10 +111,10 @@ function waitUntil(check, callback) {
 
 function waitUntilScrolledTo(overlay, date, callback) {
   waitUntil(() => {
-    if (overlay.$.scroller.position) {
+    if (overlay.$.monthScroller.position) {
       overlay._onMonthScroll();
     }
     var monthIndex = overlay._differenceInMonths(date, new Date());
-    return overlay.$.scroller.position === monthIndex;
+    return overlay.$.monthScroller.position === monthIndex;
   }, () => Polymer.RenderStatus.afterNextRender(overlay, callback));
 }
