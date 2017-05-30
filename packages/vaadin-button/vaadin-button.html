@@ -31,6 +31,10 @@ This program is available under Apache License Version 2.0, available at https:/
     </button>
   </template>
   <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
     (function() {
       /**
        * `<vaadin-button>` is a Polymer element providing an accessible and customizable button.
