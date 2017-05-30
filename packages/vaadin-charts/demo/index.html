@@ -1,27 +1,35 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
-<head lang="en">
+<head>
   <meta charset="utf-8">
-  <title></title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>vaadin-board demo</title>
+
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="demo-picker.html">
-  <link rel="stylesheet" type="text/css" href="themes/valo/styles.css">
-  <link rel="stylesheet" type="text/css" href="themes/styles.css">
-  <script>
-    (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function ()
-    { (i[r].q = i[r].q || []).push(arguments) }
-      , i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-658457-6', 'auto');
-    ga('send', 'pageview', { 'page': '/vaadin-charts' });
-  </script>
+
+  <link rel="import" href="../vaadin-charts.html">
 </head>
 
-<body class="valo v-app" style="margin:0; padding:0">
-  <demo-picker></demo-picker>
+<body unresolved>
+  <vaadin-pie-chart id="pie-with-legend">
+    <chart-title>Browser market shares at a specific website, 2014</chart-title>
+    <tooltip value-decimals="1" point-format="{series.name}: <b>{point.percentage:.1f}%</b>">
+    </tooltip>
+    <plot-options>
+      <pie allow-point-select="true" show-in-legend="true" cursor="pointer">
+        <data-labels enabled="true" format="<b>{point.name}</b>:    {point.percentage} %">
+        </data-labels>
+      </pie>
+    </plot-options>
+
+    <data-series name="Browser share">
+      <data>
+        ["Firefox", 45.0], ["IE", 26.8], ["Chrome", 12.8], ["Safari", 8.5], ["Opera", 6.2], ["Others", 0.7],
+      </data>
+    </data-series>
+  </vaadin-pie-chart>
 </body>
 
 </html>

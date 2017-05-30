@@ -38,14 +38,15 @@ https://vaadin.com/charts-for-polymer
     - **vaadin-treemap-chart**
     - **vaadin-waterfall-chart**.
  - Series component is **data-series**.
- - Demos are inside **demo**.
 
 ## Running
 
 1. Clone the repo.
 2. Run `npm install` & `bower install` to install all tools and dependencies.
 3. Serve the files with [Polyserve](https://github.com/PolymerLabs/polyserve).
-4. Go to [http://localhost:8080/components/vaadin-charts/demo/index.html](http://localhost:8080/components/vaadin-charts/demo/index.html) to view the demo.
+4. Go to [http://localhost:8080/components/vaadin-charts/demo/index.html](http://localhost:8080/components/vaadin-charts/demo/index.html) to view a basic demo.
+
+Check out [Vaadin Charts Demo Project](https://github.com/vaadin/vaadin-charts-demo) to run the full demo app.
 
 ## Development
 
