@@ -13,28 +13,26 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        padding-right: 5px;
+        display: inline-flex;
+        align-items: center;
+        outline: none;
       }
 
       :host([focus-ring]) {
         box-shadow: 0 0 2px 2px Highlight;
       }
 
-      [part="wrapper"] {
-        display: inline-flex;
-        align-items: center;
-      }
-
       [part="native-checkbox"] {
-        margin-right: 5px;
+        margin-right: 0;
         outline: none;
       }
 
       [part="label"] {
+        padding: 0 5px;
         outline: none;
       }
 
-      [disabled] [part="label"] {
+      :host([disabled]) [part="label"] {
         opacity: 0.5;
       }
     </style>
@@ -43,32 +41,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-checkbox">
   <template>
-    <style>
-      :host {
-        display: inline-block;
-        outline: none;
-      }
-    </style>
 
-    <label
-        part="wrapper"
-        checked$="[[checked]]"
-        disabled$="[[disabled]]"
-        indeterminate$="[[indeterminate]]"
-    >
-      <input
-        id="nativeCheckbox"
-        type="checkbox"
-        part="native-checkbox"
-        checked$="[[checked]]"
-        disabled$="[[disabled]]"
-        indeterminate$="[[indeterminate]]"
-        role="presentation"
-        tabindex="-1">
-      <span part="checkbox"></span>
-      <span part="label">
-        <slot></slot>
-      </span>
+    <input
+      id="nativeCheckbox"
+      type="checkbox"
+      part="native-checkbox"
+      checked$="[[checked]]"
+      disabled$="[[disabled]]"
+      indeterminate$="[[indeterminate]]"
+      role="presentation"
+      tabindex="-1">
+
+    <span part="checkbox"></span>
+
+    <label for="nativeCheckbox" part="label">
+      <slot></slot>
     </label>
 
   </template>
@@ -93,10 +80,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name         | Description
        * ------------------|----------------
-       * `wrapper`         | The native `<label>` element which wraps all parts
        * `native-checkbox` | The `<input type="checkbox">` element
        * `checkbox`        | The `<span>` element for a custom graphical check
-       * `label`           | The `<span>` element for slotted `<label>` text or HTML
+       * `label`           | The `<label>` element
        *
        * The following attributes are exposed for styling:
        *
@@ -125,19 +111,26 @@ This program is available under Apache License Version 2.0, available at https:/
             checked: {
               type: Boolean,
               value: false,
-              observer: '_checkedChanged'
+              observer: '_checkedChanged',
+              reflectToAttribute: true
             },
 
             /**
              * True if the checkbox is disabled.
              */
-            disabled: Boolean,
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
 
             /**
              * Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.
              * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
              */
-            indeterminate: Boolean,
+            indeterminate: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
 
             /**
              * The value of the checkbox.
