@@ -110,9 +110,6 @@ This program is available under Apache License Version 2.0, available at https:/
         right: 0;
         transform: translateX(100%);
         -webkit-tap-highlight-color: transparent;
-      }
-
-      [part="years"] div {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -149,7 +146,8 @@ This program is available under Apache License Version 2.0, available at https:/
         border-left-color: #000;
       }
 
-      :host(.animate) vaadin-infinite-scroller {
+      :host(.animate) [part="months"],
+      :host(.animate) [part="years"] {
         transition: all 200ms;
       }
 
