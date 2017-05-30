@@ -76,18 +76,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
-          /**
-           * Height of individual items (in pixels).
-           * Changing after initialization not supported.
-           */
-          itemHeight: {
-            type: Number,
-            value: function() {
-              return window.ShadyCSS
-                ? window.ShadyCSS.getComputedStyleValue(this, '--item-height')
-                : getComputedStyle(this).getPropertyValue('--item-height');
-            }
-          },
 
           /**
            * Count of individual items in each buffer.
@@ -119,8 +107,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _preventScrollEvent: Boolean,
 
-          _bufferHeight: Number,
-
           _mayHaveMomentum: Boolean,
 
           _initialized: Boolean,
@@ -136,7 +122,6 @@ This program is available under Apache License Version 2.0, available at https:/
         super.ready();
         this.addEventListener('animationend', this._animationEnd.bind(this));
 
-        this._bufferHeight = this.itemHeight * this.bufferSize;
         this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
 
         this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
@@ -269,6 +254,21 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       get position() {
         return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
+      }
+
+      get itemHeight() {
+        if (!this._itemHeightVal) {
+          const itemHeight = window.ShadyCSS
+            ? window.ShadyCSS.getComputedStyleValue(this, '--item-height')
+            : getComputedStyle(this).getPropertyValue('--item-height');
+          this._itemHeightVal = parseInt(itemHeight);
+        }
+
+        return this._itemHeightVal;
+      }
+
+      get _bufferHeight() {
+        return this.itemHeight * this.bufferSize;
       }
 
       _reset() {

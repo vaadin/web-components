@@ -187,6 +187,10 @@
                 color: #babbb6;
               }
 
+              [part~="months"] {
+                --item-height: 340px;
+              }
+
               [part~="toolbar"] {
                 background: #f7f6f2;
               }
@@ -209,10 +213,6 @@
           <template>
             <style include="vaadin-infinite-scroller-default-theme"></style>
             <style>
-              /* TODO: not worky */
-              :host {
-                --item-height: 300px;
-              }
 
               :host([part~="years"]) [part~="year-number"][current] {
                 color: #f5c679;
@@ -237,8 +237,6 @@
             Polymer.Base.async(function() {
               var datepicker = document.querySelector('vaadin-date-picker#weeks');
               datepicker.set('i18n.firstDayOfWeek', 1);
-              datepicker.$.overlay.$.monthScroller.itemHeight = 340;
-              datepicker.$.overlay.$.monthScroller._bufferHeight = 6 * 340;
             });
           });
         </script>

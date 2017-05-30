@@ -92,6 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="months"] {
+        --item-height: 250px;
         padding: 0 8px;
         position: absolute;
         top: 0;
@@ -106,6 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="years"] {
+        --item-height: 80px;
         width: 50px;
         position: absolute;
         right: 0;
@@ -182,7 +184,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
-      <vaadin-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]" part="months">
+      <vaadin-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" buffer-size="6" active="[[initialPosition]]" part="months">
         <template>
           <vaadin-month-calendar
             i18n="[[i18n]]"
@@ -198,7 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
           </vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
-      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25" active="[[initialPosition]]" part="years">
+      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="25" active="[[initialPosition]]" part="years">
         <template>
           <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedDate)]]">[[_yearAfterXYears(index)]]</div>
         </template>
