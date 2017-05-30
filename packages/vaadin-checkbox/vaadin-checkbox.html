@@ -13,9 +13,13 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
+        display: inline-block;
+        outline: none;
+      }
+
+      [part="wrapper"] {
         display: inline-flex;
         align-items: center;
-        outline: none;
       }
 
       :host([focus-ring]) {
@@ -42,20 +46,22 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-checkbox">
   <template>
 
-    <input
-      id="nativeCheckbox"
-      type="checkbox"
-      part="native-checkbox"
-      checked$="[[checked]]"
-      disabled$="[[disabled]]"
-      indeterminate$="[[indeterminate]]"
-      role="presentation"
-      tabindex="-1">
+    <label part="wrapper">
+      <input
+        id="nativeCheckbox"
+        type="checkbox"
+        part="native-checkbox"
+        checked$="[[checked]]"
+        disabled$="[[disabled]]"
+        indeterminate$="[[indeterminate]]"
+        role="presentation"
+        tabindex="-1">
 
-    <span part="checkbox"></span>
+      <span part="checkbox"></span>
 
-    <label for="nativeCheckbox" part="label">
-      <slot></slot>
+      <span part="label">
+        <slot></slot>
+      </span>
     </label>
 
   </template>
@@ -80,9 +86,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name         | Description
        * ------------------|----------------
+       * `wrapper`         | The `<label>` element which wrapps the checkbox and [part="label"]
        * `native-checkbox` | The `<input type="checkbox">` element
        * `checkbox`        | The `<span>` element for a custom graphical check
-       * `label`           | The `<label>` element
+       * `label`           | The `<span>` element for slotted text/HTML label
        *
        * The following attributes are exposed for styling:
        *
