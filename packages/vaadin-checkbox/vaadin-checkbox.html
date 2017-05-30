@@ -22,8 +22,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="label"] {
-        width: 100%;
-        height: 100%;
         display: inline-block;
         padding: 2px 3px 0 0;
         outline: none;
@@ -156,21 +154,17 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _addActiveListeners() {
+          // DOWN
           this._addEventListenerToNode(this, 'down', () => {
             if (!this.disabled) {
               this.setAttribute('active', '');
             }
           });
 
+          // UP
           this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
 
-          this._addEventListenerToNode(this, 'click', (e) => {
-            e.preventDefault();
-            if (!this.disabled) {
-              this.checked = !this.checked;
-            }
-          });
-
+          // KEYDOWN
           this.addEventListener('keydown', e => {
             if (!this.disabled && e.keyCode === 32) {
               e.preventDefault();
@@ -178,6 +172,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
 
+          // KEYUP
           this.addEventListener('keyup', e => {
             if (!this.disabled && e.keyCode === 32) {
               this.checked = !this.checked;
