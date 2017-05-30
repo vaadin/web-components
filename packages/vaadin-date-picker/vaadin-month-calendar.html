@@ -22,12 +22,13 @@ This program is available under Apache License Version 2.0, available at https:/
         font: inherit;
       }
 
-      #title {
+      [part="month-header"] {
         text-align: center;
         padding: 6px 0;
       }
 
-      #weekdays, #days {
+      [part="weekdays"],
+      #days {
         display: flex;
         flex-wrap: wrap;
       }
@@ -36,20 +37,20 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
       }
 
-      #week-numbers {
+      [part="week-numbers"] {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         flex-shrink: 0;
       }
 
-      #week-numbers[hidden] {
+      [part="week-numbers"][hidden] {
         display: none;
       }
 
-      .weekday,
-      .date,
-      .week-number {
+      [part="weekday"],
+      [part="date"],
+      [part="week-number"] {
         text-align: center;
         width: calc(14.285714286% - 2px);
         margin: 0 1px;
@@ -57,59 +58,58 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 6px 0;
       }
 
-      :host([week-numbers]) .weekday:not(:empty) {
+      :host([week-numbers]) [part="weekday"]:not(:empty) {
         width: calc(12.5% - 2px);
       }
 
-      .weekday:not(:empty),
-      .date:not(:empty),
-      .week-number:not(:empty) {
+      [part="weekday"]:not(:empty),
+      [part="date"]:not(:empty),
+      [part="week-number"]:not(:empty) {
         cursor: pointer;
       }
 
-      .weekday:not(:empty):not([disabled]):active {
+      [part="weekday"]:not(:empty):not([disabled]):active {
         border-radius: 2px;
       }
 
-      .weekday {
+      [part="weekday"] {
         text-transform: uppercase;
         cursor: default;
         padding: 8px 0;
       }
 
-      .weekday:empty,
-      #week-numbers {
+      [part="weekday"]:empty,
+      [part="week-numbers"] {
         box-sizing: border-box;
         width: calc(10% - 2px);
         padding-right: 1.25%;
       }
 
-      .date[disabled] {
+      [part="date"][disabled] {
         cursor: default;
       }
 
-      .week-number {
+      [part="week-number"] {
         cursor: default;
       }
     </style>
 
-    <div id="title" part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
+    <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <div id="weekdays" part="weekdays">
+      <div part="weekdays">
         <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
-          <div class="weekday" part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
+          <div part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
         </template>
       </div>
       <div id="days-container">
-        <div id="week-numbers" part="week-numbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
+        <div part="week-numbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
           <template is="dom-repeat" items="[[_getWeekNumbers(_days)]]">
-            <div class="week-number" part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
+            <div part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
           </template>
         </div>
         <div id="days">
           <template is="dom-repeat" items="[[_days]]">
             <div
-                class="date"
                 part="date"
                 today$="[[_isToday(item)]]"
                 selected$="[[_dateEquals(item, selectedDate)]]"
