@@ -605,9 +605,18 @@ This program is available under Apache License Version 2.0, available at https:/
       var inputValid = !value || (this._selectedDate && value === this.i18n.formatDate(this._selectedDate));
       var minMaxValid = !this._selectedDate ||
       Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
-      var inputValidity = this._inputElement &&
-        (this._inputElement.checkValidity && this._inputElement.checkValidity() ||
-         this._inputElement.validate && this._inputElement.validate());
+
+      var inputValidity = true;
+      if (this._inputElement) {
+        if (this._inputElement.checkValidity) {
+          // vaadin native input elements have the checkValidity method
+          inputValidity = this._inputElement.checkValidity(value);
+        } else if (this._inputElement.validate) {
+          // iron-form-elements have the validate API
+          inputValidity = this._inputElement.validate(value);
+        }
+      }
+
       return inputValid && minMaxValid && inputValidity;
     }
 

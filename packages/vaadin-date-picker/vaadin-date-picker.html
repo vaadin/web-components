@@ -76,7 +76,7 @@ This program is available under Apache License Version 2.0, available at https:/
         autocomplete="off"
         on-focus="_focus"
         value="{{_userInputValue}}"
-        invalid="{{invalid}}"
+        invalid="[[invalid]]"
         label="[[label]]"
         name="[[name]]"
         placeholder="[[placeholder]]"
@@ -124,7 +124,7 @@ This program is available under Apache License Version 2.0, available at https:/
     if (!Polymer.Element) {
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
-    
+
     {
       /**
        *
@@ -229,6 +229,13 @@ This program is available under Apache License Version 2.0, available at https:/
           return [
             '_userInputValueChanged(_userInputValue)'
           ];
+        }
+
+        ready() {
+          super.ready();
+
+          // In order to have synchronized invalid property, we need to use the same validate logic.
+          Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
         }
 
         _clear(e) {
