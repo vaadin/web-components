@@ -8,17 +8,23 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="../paper-styles/typography.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-input/iron-input.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
-<link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
-<link rel="import" href="vaadin-date-picker-icons.html">
+
+<style>
+  @font-face {
+    font-family: 'vaadin-date-picker-icons';
+    src: url('vaadin-date-picker-icons.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -52,24 +58,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       #toolbar:not([desktop]) {
         cursor: pointer;
-      }
-
-      #toolbar iron-icon {
-        fill: var(--primary-color);
-        padding: 0;
-        transition: transform 200ms;
-        will-change: transform;
-        --iron-icon-width: 20px;
-        --iron-icon-height: 20px;
-        @apply --vaadin-date-picker-toolbar-icon;
-      }
-
-      #toolbar iron-icon[rotate] {
-        transform: rotate(180deg);
-      }
-
-      #toolbar iron-icon[hidden] {
-        display: none;
       }
 
       #scrollers {
@@ -182,47 +170,81 @@ This program is available under Apache License Version 2.0, available at https:/
 
       #header {
         background: var(--primary-color);
-        padding: 0 14px 14px;
-        display: flex;
-        flex-shrink: 0;
+        padding: 0 14px;
         height: 64px; /* height set to 64px to match app-toolbar height */
         box-sizing: border-box;
 
         @apply --paper-font-subhead;
         @apply --shadow-elevation-2dp;
         @apply --vaadin-date-picker-header;
-      }
 
-      #header label,
-      #header input {
-        color: var(--dark-theme-text-color);
-      }
-
-      #header iron-icon {
         color: var(--dark-theme-text-color);
         cursor: pointer;
+
+        display: flex;
+        flex-shrink: 0;
+        flex-wrap: nowrap;
+        align-items: center;
       }
 
+      #label {
+        position: absolute;
+        top: 0;
+        font-size: 80%;
+      }
+
+      #input {
+        flex-grow: 1;
+      }
+
+      #clear,
+      #toggle,
+      #yeartoggle {
+        font-family: 'vaadin-date-picker-icons';
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #clear,
       #toggle {
-        align-self: flex-end;
-      }
-
-      #header paper-input-container {
-        flex: 1;
-        margin-right: 24px;
-        padding-bottom: 0;
-        --paper-input-container-underline: {
-          display: none;
-        };
-        --paper-input-container-underline-focus: {
-          display: block;
-          background: var(--dark-theme-text-color);
-          -webkit-transform: none;
-          transform: none;
-        };
+        margin-left: 10px;
       }
 
       #clear {
+        display: none;
+      }
+
+      #clear::before {
+        content: "\e901";
+      }
+
+      #toggle::before {
+        content: "\e902";
+      }
+
+      #yeartoggle::before {
+        content: "\e900";
+      }
+
+      #yeartoggle {
+        color: var(--primary-color);
+        transition: transform 200ms;
+        will-change: transform;
+        @apply --vaadin-date-picker-toolbar-icon;
+      }
+
+      #yeartoggle[rotate] {
+        transform: rotate(180deg);
+      }
+
+      #yeartoggle[hidden] {
         display: none;
       }
 
@@ -243,39 +265,11 @@ This program is available under Apache License Version 2.0, available at https:/
         @apply --vaadin-date-picker-footer;
       }
 
-      paper-button.keyboard-focus {
-        color: var(--primary-background-color);
-        background: var(--primary-color);
-        outline: none;
-      }
-
       #announcer {
         display: inline-block;
         position: fixed;
         clip: rect(0, 0, 0, 0);
         clip-path: inset(100%);
-      }
-
-      /* The same code than paper-input and combo-box */
-      input {
-        position: relative; /* to make a stacking context */
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--paper-input-container-input-color, var(--primary-text-color));
-        -webkit-appearance: none;
-        text-align: inherit;
-        vertical-align: bottom;
-
-        /* Firefox sets a min-width on the input, which can cause layout issues */
-        min-width: 0;
-
-        @apply --paper-font-subhead;
-        @apply --paper-input-container-input;
       }
     </style>
 
@@ -284,20 +278,17 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div id="header" on-touchend="_preventDefault" aria-hidden="true">
-      <paper-input-container>
-        <label>[[label]]</label>
-        <iron-input id="input" slot="input" bind-value="[[_formatDisplayed(selectedDate, i18n.formatDate)]]">
-          <input readonly autocomplete="off">
-        </iron-input>
+      <div id="label">[[label]]</div>
+      <div id="input">[[_formatDisplayed(selectedDate, i18n.formatDate)]]</div>
+      <div id="clear" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
+      <div id="toggle" on-tap="_cancel"></div>
+    </div>
 
-        <iron-icon id="clear" slot="suffix" on-tap="_clear" icon="vaadin-date-picker:clear" showclear$="[[_showClear(selectedDate)]]"></iron-icon>
-      </paper-input-container>
-      <iron-icon id="toggle" icon="vaadin-date-picker:event" on-tap="_cancel"></iron-icon>
     </div>
 
     <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
       [[_yearAfterXMonths(_visibleMonthIndex)]]
-      <iron-icon rotate$="[[_isYearScrollerVisible(_translateX)]]" icon="vaadin-date-picker:chevron-right"></iron-icon>
+      <div id="yeartoggle" rotate$="[[_isYearScrollerVisible(_translateX)]]"></div>
     </div>
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
@@ -326,12 +317,14 @@ This program is available under Apache License Version 2.0, available at https:/
     </div>
 
     <div id="footer" on-touchend="_preventDefault" role="toolbar">
-      <paper-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
+
+
+      <vaadin-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
         [[i18n.today]]
-      </paper-button>
-      <paper-button id="cancelButton" on-tap="_cancel">
+      </vaadin-button>
+      <vaadin-button id="cancelButton" on-tap="_cancel">
         [[i18n.cancel]]
-      </paper-button>
+      </vaadin-button>
     </div>
 
     <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
@@ -436,11 +429,11 @@ This program is available under Apache License Version 2.0, available at https:/
          * @param {Number} detail.oldPosition old position
          */
 
-        attached() {
-          super.attached();
+        connectedCallback() {
+          super.connectedCallback();
           this._translateX = this._yearScrollerWidth;
-          this.toggleClass('animate', true);
-          this.setScrollDirection('y', this.$.scrollers);
+          this._toggleAnimateClass(true);
+          Polymer.Gestures.setTouchAction(this.$.scrollers, 'pan-y');
           Polymer.IronA11yAnnouncer.requestAvailability();
         }
 
@@ -583,7 +576,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _showClear(selectedDate) {
-          return selectedDate !== null;
+          return !!selectedDate;
         }
 
         _onYearTap(e) {
@@ -665,7 +658,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // If we're flinging quickly -> start animating already.
           if (Math.abs(e.detail.ddx) > this._yearScrollerWidth / 3) {
-            this.toggleClass('animate', true);
+            this._toggleAnimateClass(true);
           }
 
           var newTranslateX = this._translateX + e.detail.ddx;
@@ -683,7 +676,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           switch (e.detail.state) {
             case 'start':
-              this.toggleClass('animate', false);
+              this._toggleAnimateClass(false);
               break;
 
             case 'track':
@@ -691,13 +684,21 @@ This program is available under Apache License Version 2.0, available at https:/
               break;
 
             case 'end':
-              this.toggleClass('animate', true);
+              this._toggleAnimateClass(true);
               if (this._translateX >= this._yearScrollerWidth / 2) {
                 this._closeYearScroller();
               } else {
                 this._openYearScroller();
               }
               break;
+          }
+        }
+
+        _toggleAnimateClass(enable) {
+          if (enable) {
+            this.classList.add('animate');
+          } else {
+            this.classList.remove('animate');
           }
         }
 
@@ -719,9 +720,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _translateXChanged(x) {
           if (!this._desktopMode) {
-            this.transform('translateX(' + (x - this._yearScrollerWidth) + 'px)', this.$.scroller);
-            this.transform('translateX(' + x + 'px)', this.$.yearScroller);
-            this.transform('translateX(' + -x + 'px)', this.$.fade);
+            this.$.scroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
+            this.$.yearScroller.style.transform = 'translateX(' + x + 'px)';
+            this.$.fade.style.transform = 'translateX(' + -x + 'px)';
           }
         }
 
@@ -786,28 +787,39 @@ This program is available under Apache License Version 2.0, available at https:/
         _onKeydown(e) {
           var focus = this._currentlyFocusedDate();
 
+          // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
+          // previously in the keydown event.
+          const isToday = e.composedPath().indexOf(this.$.todayButton) >= 0;
+          const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
+          const isScroller = !isToday && !isCancel;
+
           var eventKey = this._eventKey(e);
           if (eventKey === 'tab') {
+            // We handle tabs here and don't want to bubble up.
             e.stopPropagation();
-            if (this.hasAttribute('fullscreen')) {
+
+            const isFullscreen = this.hasAttribute('fullscreen');
+            const isShift = e.shiftKey;
+
+            if (isFullscreen) {
               e.preventDefault();
-            } else if ((this.$.cancelButton.focused || this.$.todayButton.focused) && e.shiftKey) {
-              // NOOP: Browser moves the focus.
-            } else if ((this.$.cancelButton.focused && !e.shiftKey) || (this._focused && e.shiftKey)) {
+            } else if (isShift && isScroller || !isShift && isCancel) {
               // Return focus back to the input field
               e.preventDefault();
               this.dispatchEvent(new CustomEvent('focus-input', {bubbles: true, composed: true}));
+            } else if (isShift && isToday) {
+              // Browser returns focus back to the scrollable area. We need to set
+              // the focused flag, and move the scroll to focused date.
+              this._focused = true;
+              setTimeout(() => this.revealDate(this.focusedDate), 1);
             } else {
-              setTimeout(() => {
-                if (this._focused) {
-                  this.revealDate(this.focusedDate);
-                }
-              }, 1);
+              // Browser moves the focus out of the scroller, hence focused flag must
+              // set to false.
+              this._focused = false;
             }
           } else if (eventKey) {
             e.preventDefault();
             e.stopPropagation();
-
             switch (eventKey) {
               case 'down':
                 this._moveFocusByDays(7);
@@ -818,27 +830,35 @@ This program is available under Apache License Version 2.0, available at https:/
                 this.focus();
                 break;
               case 'right':
-                if (!this._buttonFocused()) {
+                if (isScroller) {
                   this._moveFocusByDays(1);
                 }
                 break;
               case 'left':
-                if (!this._buttonFocused()) {
+                if (isScroller) {
                   this._moveFocusByDays(-1);
                 }
                 break;
               case 'enter':
-                if (!this._buttonFocused()) {
+                if (isScroller || isCancel) {
                   this._close();
+                } else if (isToday) {
+                  this._onTodayTap();
                 }
                 break;
               case 'space':
-                var focusedDate = this.focusedDate;
-                if (Vaadin.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
-                  this.selectedDate = '';
-                  this.focusedDate = focusedDate;
+                if (isCancel) {
+                  this._close();
+                } else if (isToday) {
+                  this._onTodayTap();
                 } else {
-                  this.selectedDate = focusedDate;
+                  var focusedDate = this.focusedDate;
+                  if (Vaadin.DatePickerHelper._dateEquals(focusedDate, this.selectedDate)) {
+                    this.selectedDate = '';
+                    this.focusedDate = focusedDate;
+                  } else {
+                    this.selectedDate = focusedDate;
+                  }
                 }
                 break;
               case 'home':
@@ -855,10 +875,6 @@ This program is available under Apache License Version 2.0, available at https:/
                 break;
             }
           }
-        }
-
-        _buttonFocused() {
-          return this.$.todayButton.focused || this.$.cancelButton.focused;
         }
 
         _currentlyFocusedDate() {

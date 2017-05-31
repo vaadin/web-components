@@ -13,6 +13,7 @@
   <link rel="import" href="common.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../iron-input/iron-input.html">
 
 </head>
 
@@ -119,30 +120,30 @@
     </demo-snippet>
 
     <h3>Custom Validator</h3>
+    <p>Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
+       then override the <code>checkValidity(value)</code> method to validate the input.
     <demo-snippet>
-      <template>
-        <vaadin-date-picker
-          id="custom-validation"
-          auto-validate
-          label="Only this year is accepted">
-        </vaadin-date-picker>
-
-        <script>
-          document.addEventListener('WebComponentsReady', function() {
-            new Polymer.IronMeta({
-              type: 'validator',
-              key: 'this-year-validator',
-              value: {
-                validate: function(value) {
-                  var currentYear = new Date().getFullYear();
-                  return new Date(value).getFullYear() === currentYear;
+      <demo-snippet>
+        <template>
+          <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
+          
+          <script>
+            window.addEventListener('WebComponentsReady', function() {
+              class DatePickerCurrentYearElement extends Vaadin.DatePickerElement {
+                checkValidity(value) {
+                  var valid = super.checkValidity();
+                  if (valid) {
+                    var currentYear = new Date().getFullYear();
+                    valid = new Date(value).getFullYear() === currentYear;
+                  }
+                  return valid;
                 }
               }
+              customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
             });
-            document.querySelector('#custom-validation').validator = 'this-year-validator';
-          });
-        </script>
-      </template>
+          </script>
+        </template>
+      </demo-snippet>
     </demo-snippet>
 
     <h3>Custom Inputs</h3>

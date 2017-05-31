@@ -1,6 +1,8 @@
-var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-var safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1 && navigator.userAgent.toLowerCase().indexOf('chrome/') == -1;
-var android = /(android)/i.test(navigator.userAgent);
+var ua = navigator.userAgent;
+var ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+var safari = ua.toLowerCase().indexOf('safari/') > -1 && ua.toLowerCase().indexOf('chrome/') == -1;
+var android = /(android)/i.test(ua);
+var ie11 = /Trident/.test(ua);
 
 function getDefaultI18n() {
   return {
@@ -33,8 +35,24 @@ function listenForEvent(elem, type, callback) {
   elem.addEventListener(type, listener);
 }
 
+function hackFocusIE11(datepicker) {
+  // IE11 causes an 'Error thrown outside of test function: Unspecified error' after running
+  // tests that open the overlay, and just when the polyfill executes the `disconnectedCallback`
+  // phase when the fixture is removed.
+  // The problem seems to be in the `this._nativeInput.focus()` call in the mixin, changing
+  // the `focus()` call to the custom element `this._inputElement.focus()`, or sending a 'focus'
+  // event to the input to move the focus, do not fix the problem.
+  if (ie11) {
+    datepicker._focus = () => {};
+  }
+}
+
 function open(datepicker, callback) {
   listenForEvent(datepicker, 'iron-overlay-opened', callback);
+
+  // Avoid focus issues when running tests in IE11
+  hackFocusIE11(datepicker);
+
   datepicker.open();
 }
 
@@ -82,14 +100,21 @@ function describeSkipIf(bool, title, callback) {
   }
 }
 
+function waitUntil(check, callback) {
+  var id = setInterval(function() {
+    if (check()) {
+      clearInterval(id);
+      callback();
+    }
+  }, 10);
+}
+
 function waitUntilScrolledTo(overlay, date, callback) {
-  if (overlay.$.scroller.position) {
-    overlay._onMonthScroll();
-  }
-  var monthIndex = overlay._differenceInMonths(date, new Date());
-  if (overlay.$.scroller.position === monthIndex) {
-    Polymer.RenderStatus.afterNextRender(overlay, callback);
-  } else {
-    setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
-  }
+  waitUntil(() => {
+    if (overlay.$.scroller.position) {
+      overlay._onMonthScroll();
+    }
+    var monthIndex = overlay._differenceInMonths(date, new Date());
+    return overlay.$.scroller.position === monthIndex;
+  }, () => Polymer.RenderStatus.afterNextRender(overlay, callback));
 }

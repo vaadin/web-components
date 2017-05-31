@@ -4,8 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
-<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
@@ -17,7 +15,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @polymerMixin
    */
   Vaadin.DatePickerMixin = subclass => class VaadinDatePickerMixin extends Polymer.mixinBehaviors(
-  [Polymer.IronFormElementBehavior, Polymer.IronValidatableBehavior, Polymer.IronA11yKeysBehavior, Polymer.IronResizableBehavior], subclass
+  [Polymer.IronA11yKeysBehavior, Polymer.IronResizableBehavior], subclass
   ) {
 
     static get properties() {
@@ -43,7 +41,23 @@ This program is available under Apache License Version 2.0, available at https:/
         value: {
           type: String,
           observer: '_valueChanged',
-          notify: true
+          notify: true,
+          value: ''
+        },
+
+        /**
+         * Set to true to mark the input as required.
+         */
+        required: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The name of this element.
+         */
+        name: {
+          type: String
         },
 
         /**
@@ -322,12 +336,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('date-tap', this._close.bind(this));
       this.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
-
-      // The value property is also defined in IronFormElementBehavior, which
-      // will mix up the default value if set in the property.
-      if (this.value === undefined) {
-        this.value = '';
-      }
     }
 
     /**
@@ -344,7 +352,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e) {
         e.stopPropagation();
       }
-      this._inputElement.focus();
+      this._focus();
       this.close();
     }
 
@@ -361,8 +369,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     get _nativeInput() {
       if (this._inputElement) {
-        return this._inputElement.inputElement ? this._inputElement.inputElement :
-           window.unwrap ? window.unwrap(this._inputElement) : this._inputElement;
+        // vaadin-text-field's input is focusElement
+        // iron-input's input is inputElement
+        return this._inputElement.focusElement ? this._inputElement.focusElement :
+         this._inputElement.inputElement ? this._inputElement.inputElement :
+         window.unwrap ? window.unwrap(this._inputElement) : this._inputElement;
       }
     }
 
@@ -381,7 +392,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isNoInput() {
-      return this._fullscreen || !this.i18n.parseDate || this._ios;
+      return !this._inputElement || this._fullscreen || !this.i18n.parseDate || this._ios;
     }
 
     _formatISO(date) {
@@ -573,6 +584,40 @@ This program is available under Apache License Version 2.0, available at https:/
 
     detached() {
       this._onOverlayClosed();
+    }
+
+    /**
+     * Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.
+     *
+     * @return {boolean} True if the value is valid and sets the `invalid` flag appropriatelly
+     */
+    validate(value) {
+      value = value !== undefined ? value : this._inputValue;
+      return !(this.invalid = !this.checkValidity(value));
+    }
+
+    /**
+     * Returns true if the current input value satisfies all constraints (if any)
+     *
+     * Override the `checkValidity` method for custom validations.
+     */
+    checkValidity(value) {
+      var inputValid = !value || (this._selectedDate && value === this.i18n.formatDate(this._selectedDate));
+      var minMaxValid = !this._selectedDate ||
+      Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+
+      var inputValidity = true;
+      if (this._inputElement) {
+        if (this._inputElement.checkValidity) {
+          // vaadin native input elements have the checkValidity method
+          inputValidity = this._inputElement.checkValidity(value);
+        } else if (this._inputElement.validate) {
+          // iron-form-elements have the validate API
+          inputValidity = this._inputElement.validate(value);
+        }
+      }
+
+      return inputValid && minMaxValid && inputValidity;
     }
 
     _onScroll(e) {

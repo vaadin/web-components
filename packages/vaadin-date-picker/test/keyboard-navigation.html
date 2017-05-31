@@ -134,17 +134,14 @@
             datepicker.value = null;
             datepicker.initialPosition = '2001-01-01';
 
-            datepicker.open();
             target = overlay;
 
-            // wait for the 'iron-overlay-opened' to be fired to that the initialPosition
-            // is set to the overlay.
-            setTimeout(() => {
+            open(datepicker, () => {
+              target = overlay;
               arrowRight();
-
               expect(focusedDate()).to.eql(new Date(2001, 0, 2));
               done();
-            }, 1);
+            });
           });
 
           it('should be focused on today if no initial position is set', () => {
@@ -166,7 +163,7 @@
             space();
             space();
 
-            expect(focusedDate()).to.equal(_focused);
+            expect(focusedDate().getTime()).to.equal(_focused.getTime());
           });
         });
 

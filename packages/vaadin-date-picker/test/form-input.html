@@ -14,20 +14,22 @@
 
 <body>
   <script>
-    // Needed for poly-filled browsers
     document.addEventListener('WebComponentsReady', () => {
-      // Create a custom validator
-      new Polymer.IronMeta({
-        type: 'validator',
-        key: 'year-2016-validator',
-        value: {
-          validate: value => {
-            return new Date(value).getFullYear() === 2016;
-          }
+      class DatePicker2016Element extends Vaadin.DatePickerElement {
+        checkValidity(value) {
+          return new Date(value).getFullYear() === 2016;
         }
-      });
+      }
+      customElements.define('vaadin-date-picker-2016', DatePicker2016Element);
     });
   </script>
+
+  <test-fixture id="custom-validation">
+    <template>
+      <vaadin-date-picker-2016></vaadin-date-picker-2016>
+    </template>
+  </test-fixture>
+
   <test-fixture id="datepicker">
     <template>
       <vaadin-date-picker></vaadin-date-picker>
@@ -62,20 +64,20 @@
 
       it('should have the given name', () => {
         datepicker.name = 'foo';
-        expect(datepicker.$$('input').getAttribute('name')).to.equal('foo');
+        expect(datepicker._inputElement.name).to.equal('foo');
       });
 
       it('should have no name', () => {
-        expect(datepicker.$$('input').getAttribute('name')).to.equal(null);
+        expect(datepicker._inputElement.name).to.be.undefined;
       });
 
       it('should be required', () => {
         datepicker.required = true;
-        expect(datepicker.$$('input').getAttribute('required')).to.equal('');
+        expect(datepicker._inputElement.required).to.be.true;
       });
 
       it('should not be required', () => {
-        expect(datepicker.$$('input').getAttribute('required')).to.equal(null);
+        expect(datepicker._inputElement.required).to.be.false;
       });
 
       it('should validate correctly with required flag', done => {
@@ -94,11 +96,13 @@
         });
       });
 
-      it('should validate correctly with custom validator', done => {
-        // Use a custom validator registered with <iron-meta>.
-        datepicker.validator = 'year-2016-validator';
+      describe('custom validator', () => {
+        beforeEach(done => {
+          datepicker = fixture('custom-validation');
+          setTimeout(done);
+        });
 
-        setTimeout(() => {
+        it('should validate correctly with custom validator', () => {
           // Try invalid value.
           datepicker.value = '2014-01-01';
           expect(datepicker.validate()).to.equal(false);
@@ -108,29 +112,7 @@
           datepicker.value = '2016-01-01';
           expect(datepicker.validate()).to.equal(true);
           expect(datepicker.invalid).to.equal(false);
-
-          done();
         });
-
-      });
-
-      it('should validate correctly with auto-validate', done => {
-        // Use a custom validator registered with <iron-meta>.
-        datepicker.validator = 'year-2016-validator';
-        datepicker.autoValidate = true;
-
-        setTimeout(() => {
-          // Set invalid value.
-          datepicker.value = '2014-01-01';
-          expect(datepicker.invalid).to.be.true;
-
-          // Change it to a valid value.
-          datepicker.value = '2016-01-01';
-          expect(datepicker.invalid).to.be.false;
-
-          done();
-        });
-
       });
 
       it('should validate min/max dates', () => {
@@ -149,18 +131,13 @@
 
       it('should be possible to force invalid status', () => {
         datepicker.invalid = true;
-        expect(datepicker.$.inputcontainer.invalid).to.be.true;
+        expect(datepicker._inputElement.invalid).to.be.true;
       });
 
-      it('should display the error-message when invalid', done => {
+      it('should display the error-message when invalid', () => {
         datepicker.invalid = true;
         datepicker.errorMessage = 'Not cool';
-        flush(() => {
-          var error = datepicker.$$('paper-input-error');
-          expect(error).not.to.equal(null);
-          expect(error.textContent.trim()).to.equal(datepicker.errorMessage);
-          done();
-        });
+        expect(datepicker._inputElement.errorMessage).to.equal(datepicker.errorMessage);
       });
 
       it('should not display the error-message when undefined', done => {
@@ -172,10 +149,10 @@
         });
       });
 
-      it('should have disabled paper-input-container', () => {
+      it('should have disabled vaadin-text-field', () => {
         datepicker.disabled = true;
-        expect(datepicker.$.inputcontainer.getAttribute('disabled')).to.equal('');
-        expect(datepicker.$.input.disabled).to.equal(true);
+        expect(datepicker._inputElement.hasAttribute('disabled')).to.be.true;
+        expect(datepicker._inputElement.disabled).to.equal(true);
       });
 
       it('should validate keyboard input (invalid)', done => {
@@ -241,8 +218,7 @@
       it('should show error indicator', () => {
         datepicker.required = true;
         ironForm.submit();
-        var undeline = form.querySelector('vaadin-date-picker').$.inputcontainer.$$('.underline');
-        expect(undeline.getAttribute('class')).to.contain('is-invalid');
+        expect(datepicker._inputElement.invalid).to.be.true;
       });
     });
   </script>

@@ -7,29 +7,25 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
-<link rel="import" href="../paper-input/paper-input-error.html">
-<link rel="import" href="../iron-input/iron-input.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
-<link rel="import" href="vaadin-date-picker-icons.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
     <style>
       :host {
-        display: block;
+        display: inline-block;
       }
 
       :host([opened]) {
         pointer-events: auto;
       }
 
-      #sufix {
-        display: flex;
+      #input {
+        min-width: 100%;
       }
 
       #overlay {
@@ -37,153 +33,63 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 420px;
       }
 
-      #inputcontainer {
-        padding-bottom: 0;
-      }
-
-      #inputcontainer,
-      #inputcontainer input {
+      [slot="suffix"] {
+        font-family: 'vaadin-date-picker-icons';
+        font-size: 19px;
+        color: rgba(0, 0, 0, .26);
         cursor: pointer;
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
-      #inputcontainer:focus {
-        outline: none;
+      #clear::before {
+        content: "\e901";
       }
 
-      paper-input-container div[suffix] {
-        box-sizing: content-box;
-        position: absolute;
-        right: -4px;
-        bottom: -4px;
-        width: 24px;
-        height: 24px;
-        padding: 4px;
-        text-align: center;
+      #calendar::before {
+        content: "\e902";
       }
 
-      paper-input-container iron-icon {
-        fill: rgba(0, 0, 0, .26);
-        cursor: pointer;
-        --iron-icon-width: 20px;
-        --iron-icon-height: 20px;
-        margin-top: -1px;
-        transition: fill 0.2s;
-      }
-
-      paper-input-container paper-ripple {
+      [slot="suffix"]:hover,
+      :host([opened]) [slot="suffix"] {
         color: rgba(0, 0, 0, .54);
       }
 
-      :host([opened]) paper-input-container {
-        --paper-input-container-underline-focus: {
-          -webkit-transform: none;
-          transform: none;
-        }
+      :host([opened]) [slot="suffix"]:hover {
+        color: rgba(0, 0, 0, .86);
       }
 
-      paper-input-container iron-icon:hover,
-      :host([opened]) paper-input-container iron-icon {
-        fill: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) paper-input-container iron-icon:hover {
-        fill: rgba(0, 0, 0, .86);
-      }
-
-      #input[no-input] {
-        pointer-events: none;
-      }
-
-      #clear {
-        right: 28px;
-      }
-
-      #clear iron-icon {
-        @apply --vaadin-date-picker-clear-icon;
-      }
-
-      #calendar iron-icon {
-        @apply --vaadin-date-picker-calendar-icon;
-      }
-
-      :host([disabled]) #calendar,
-      :host([readonly]) #calendar,
-      :host(:not([has-value])) #clear,
-      :host([readonly]) #clear,
-      :host([disabled]) #clear {
-        display: none;
-      }
-
-      :host [slot=suffix] {
-        display: flex;
-      }
-
-      /* The same code than paper-input and combo-box */
-      input {
-        position: relative; /* to make a stacking context */
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--paper-input-container-input-color, var(--primary-text-color));
-        -webkit-appearance: none;
-        text-align: inherit;
-        vertical-align: bottom;
-
-        /* Firefox sets a min-width on the input, which can cause layout issues */
-        min-width: 0;
-
-        @apply --paper-font-subhead;
-        @apply --paper-input-container-input;
-      }
-
-      input::-ms-clear {
+      :host([disabled]) [slot="suffix"],
+      :host([readonly]) [slot="suffix"],
+      :host(:not([has-value])) #clear {
         display: none;
       }
     </style>
 
-    <paper-input-container id="inputcontainer"
-        auto-validate$="[[autoValidate]]"
-        invalid$="[[invalid]]"
-        disabled$="[[disabled]]"
+
+    <vaadin-text-field id="input"
         role="application"
-        always-float-label="[[_computeAlwaysFloatLabel(placeholder)]]">
-      <label id="label" slot="label" aria-hidden="true" for="input">[[label]]</label>
+        autocomplete="off"
+        on-focus="_focus"
+        value="{{_userInputValue}}"
+        invalid="[[invalid]]"
+        label="[[label]]"
+        name="[[name]]"
+        placeholder="[[placeholder]]"
+        required="[[required]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        error-message="[[errorMessage]]"
+        aria-label$="[[label]]"
+      >
 
-      <iron-input slot="input" id="ironinput"
-        bind-value="{{_userInputValue}}"
-        validator="[[validator]]"
-        invalid="{{invalid}}">
-        <input id="input"
-          autocomplete="off"
-          type="text"
-          on-focus="_focus"
-          name$="[[name]]"
-          placeholder$="[[placeholder]]"
-          aria-label$="[[label]]"
-          required$="[[required]]"
-          validator="[[validator]]"
-          disabled$="[[disabled]]"
-          readonly$="[[readonly]]"
-          no-input$="[[_noInput]]">
-      </iron-input>
-
-      <div id="suffix" slot="suffix" name="suffix">
-        <div id="clear" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]">
-          <iron-icon icon="vaadin-date-picker:clear"></iron-icon>
-        </div>
-        <div id="calendar" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]">
-          <iron-icon icon="vaadin-date-picker:event"></iron-icon>
-        </div>
-      </div>
-
-      <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error aria-live="assertive">[[errorMessage]]</paper-input-error>
-      </template>
-    </paper-input-container>
+      <div id="clear" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
+      <div id="calendar" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
+    </vaadin-text-field>
 
     <iron-dropdown
         id="dropdown"
@@ -218,7 +124,7 @@ This program is available under Apache License Version 2.0, available at https:/
     if (!Polymer.Element) {
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
-    
+
     {
       /**
        *
@@ -231,9 +137,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * datePicker.value = '2016-03-02';
        * ```
        * When the selected `value` is changed, a `value-changed` event is triggered.
-       *
-       * This element is also extended with the `IronFormElementBehavior` to
-       * enable usage within an `iron-form`.
        *
        * ### Styling
        * The following custom properties and mixins are available for styling:
@@ -281,14 +184,6 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * Set to true to auto-validate the input value.
-             */
-            autoValidate: {
-              type: Boolean,
-              value: false
-            },
-
-            /**
              * Set to true to disable this element.
              */
             disabled: {
@@ -296,6 +191,16 @@ This program is available under Apache License Version 2.0, available at https:/
               value: false,
               reflectToAttribute: true
             },
+
+            /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: String,
+
+            /**
+             * A placeholder string in addition to the label. If this is set, the label will always float.
+             */
+            placeholder: String,
 
             /**
              * Set to true to make this element read-only.
@@ -307,14 +212,14 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * A placeholder string in addition to the label. If this is set, the label will always float.
+             * This property is set to true when the control value invalid.
              */
-            placeholder: String,
-
-            /**
-             * The error message to display when the input is invalid.
-             */
-            errorMessage: String,
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
 
             _userInputValue: String
           };
@@ -326,17 +231,11 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        // TODO: revisit this in order to use validatable-behavior for both the full and
-        // the light component. Consider auto-validate, and validate(value) signature.
-        /**
-         * Override the IronValidatableBehavior._getValidity implementation, replacing
-         * it with the iron-input validation.
-         */
-        _getValidity() {
-          var inputValid = !this._inputValue || (this._selectedDate && this._inputValue === this.i18n.formatDate(this._selectedDate));
-          var minMaxValid = !this._selectedDate ||
-          Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
-          return this._inputElement.validate() && inputValid && minMaxValid;
+        ready() {
+          super.ready();
+
+          // In order to have synchronized invalid property, we need to use the same validate logic.
+          Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
         }
 
         _clear(e) {
@@ -351,7 +250,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _input() {
-          return this.$.ironinput;
+          return this.$.input;
         }
 
         /**
@@ -364,11 +263,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         set _inputValue(value) {
-          this._inputElement.bindValue = value;
+          this._inputElement.value = value;
         }
 
         get _inputValue() {
-          return this._inputElement.bindValue;
+          return this._inputElement.value;
         }
 
         _getAriaExpanded(opened) {

@@ -22,19 +22,13 @@
     "iron-a11y-announcer": "#2.0.0",
     "iron-a11y-keys-behavior": "#2.0.0",
     "iron-dropdown": "#2.0.0",
-    "iron-form-element-behavior": "#2.0.0",
-    "iron-icon": "#2.0.0",
-    "iron-iconset-svg": "#2.0.0",
-    "iron-input": "#2.0.0",
     "iron-media-query": "#2.0.0",
     "iron-overlay-behavior": "#2.0.0",
     "iron-resizable-behavior": "#2.0.0",
-    "iron-validatable-behavior": "#2.0.0",
-    "paper-input": "#2.0.0",
-    "paper-button": "#2.0.0",
-    "paper-ripple": "polymerelements/paper-ripple#2.0.0",
     "paper-styles": "#2.0.0",
-    "polymer": "^2.0"
+    "polymer": "^2.0",
+    "vaadin-button": "^1.0.0",
+    "vaadin-text-field": "^1.0.0"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.1",
@@ -43,28 +37,10 @@
     "iron-flex-layout": "#2.0.0",
     "iron-form": "#2.0-preview",
     "iron-icons": "#2.0.0",
+    "iron-input": "#2.0.0",
     "iron-meta": "#2.0.0",
     "iron-test-helpers": "#2.0.0",
     "sugar": "^2.0.0",
     "web-component-tester": "^6.0.0"
-  },
-  "resolutions": {
-    "paper-ripple": "1 - 2",
-    "iron-form-element-behavior": "1 - 2",
-    "iron-a11y-keys-behavior": "1 - 2",
-    "paper-button": "1 - 2",
-    "iron-validatable-behavior": "1 - 2",
-    "paper-styles": "1 - 2",
-    "iron-flex-layout": "1 - 2",
-    "iron-demo-helpers": "2.0.0",
-    "iron-meta": "1 - 2",
-    "iron-ajax": "1 - 2",
-    "iron-doc-viewer": "1 - 2",
-    "prism-element": "1 - 2",
-    "marked-element": "1 - 2",
-    "iron-behaviors": "1 - 2",
-    "iron-location": "1 - 2",
-    "paper-behaviors": "1 - 2",
-    "iron-checked-element-behavior": "1 - 2"
   }
 }
