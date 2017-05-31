@@ -55,7 +55,7 @@
       }
 
       it('should render days in correct order by default', () => {
-        var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]');
+        var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
         var weekdayTitles = Array.prototype.map.call(weekdays, weekday => {
           return weekday.textContent;
         });
@@ -66,7 +66,7 @@
         monthCalendar.set('i18n.firstDayOfWeek', 1); // Start from Monday.
 
         setTimeout(() => {
-          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]');
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayTitles = Array.prototype.map.call(weekdays, weekday => {
             return weekday.textContent;
           });
@@ -201,7 +201,7 @@
         });
 
         it('should render weekdays in correct locale', () => {
-          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]');
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays, weekday => {
             return weekday.getAttribute('aria-label');
           });

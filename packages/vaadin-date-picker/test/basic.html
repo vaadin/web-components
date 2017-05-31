@@ -107,11 +107,6 @@
         tap(datepicker.$.input);
       });
 
-      it('should open on label tap', done => {
-        listenForEvent(datepicker, 'iron-overlay-opened', done);
-        tap(datepicker.$.input);
-      });
-
       it('should pass the placeholder attribute to the input tag', () => {
         var placeholder = 'Pick a date';
         datepicker.set('placeholder', placeholder);
@@ -397,7 +392,7 @@
 
         it('should notify i18n mutation to children', () => {
           var monthCalendar = datepicker.$.overlay.$.monthScroller.$.scroller.querySelector('vaadin-month-calendar');
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]');
+          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays,
             weekday => weekday.getAttribute('aria-label'));
           var weekdayTitles = Array.prototype.map.call(weekdays,

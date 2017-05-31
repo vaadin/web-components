@@ -70,7 +70,7 @@
         waitUntilScrolledTo(overlay, date, () => {
           var offset = overlay.$.yearScroller.clientHeight / 2;
           overlay.$.yearScroller._debouncerUpdateClones.flush();
-          expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.equal('2000');
+          expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.contain('2000');
           done();
         });
       });
