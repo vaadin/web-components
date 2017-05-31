@@ -16,25 +16,17 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        font: inherit;
-      }
-
-      [part="month-header"] {
-        text-align: center;
-        padding: 6px 0;
       }
 
       [part="weekdays"],
       #days {
         display: flex;
         flex-wrap: wrap;
+        flex-grow: 1;
       }
 
-      #days-container {
+      #days-container,
+      #weekdays-container {
         display: flex;
       }
 
@@ -50,57 +42,26 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="weekday"],
-      [part="date"],
-      [part="week-number"] {
-        text-align: center;
-        width: calc(14.285714286% - 2px);
-        margin: 0 1px;
-        box-sizing: border-box;
-        padding: 6px 0;
-      }
-
-      :host([week-numbers]) [part="weekday"]:not(:empty) {
-        width: calc(12.5% - 2px);
-      }
-
-      [part="weekday"]:not(:empty),
-      [part="date"]:not(:empty),
-      [part="week-number"]:not(:empty) {
-        cursor: pointer;
-      }
-
-      [part="weekday"]:not(:empty):not([disabled]):active {
-        border-radius: 2px;
-      }
-
-      [part="weekday"] {
-        text-transform: uppercase;
-        cursor: default;
-        padding: 8px 0;
+      [part="date"] {
+        width: calc(1 / 7 * 100%);
       }
 
       [part="weekday"]:empty,
       [part="week-numbers"] {
-        box-sizing: border-box;
-        width: calc(10% - 2px);
-        padding-right: 1.25%;
-      }
-
-      [part="date"][disabled] {
-        cursor: default;
-      }
-
-      [part="week-number"] {
-        cursor: default;
+        width: 10%;
+        flex-shrink: 0;
       }
     </style>
 
     <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <div part="weekdays">
-        <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
-          <div part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
-        </template>
+      <div id="weekdays-container">
+        <div hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]" part="weekday"></div>
+        <div part="weekdays">
+          <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
+            <div part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
+          </template>
+        </div>
       </div>
       <div id="days-container">
         <div part="week-numbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
@@ -271,14 +232,6 @@ This program is available under Apache License Version 2.0, available at https:/
               weekDayShort: weekDayNamesShort[index]
             };
           });
-
-          // Add extra space in the beginning of weekday names
-          if (showWeekNumbers && firstDayOfWeek === 1) {
-            weekDayNames.unshift({
-              weekDay: '',
-              weekDayShort: ''
-            });
-          }
 
           return weekDayNames;
         }

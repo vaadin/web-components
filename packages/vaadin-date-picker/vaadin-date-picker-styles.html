@@ -126,12 +126,25 @@
 <dom-module id="vaadin-month-calendar-default-theme" theme-for="vaadin-month-calendar">
   <template>
     <style>
+      :host {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
       [part~="month-header"] {
         font-size: 20px;
+        text-align: center;
+        padding: 6px 0;
+        cursor: default;
       }
 
       [part~="weekday"] {
         font-weight: 100;
+        text-transform: uppercase;
+        padding: 8px 0;
+        cursor: default;
       }
 
       [part~="date"] {
@@ -149,11 +162,29 @@
 
       [part~="date"][disabled] {
         opacity: 0.3;
+        cursor: default;
       }
 
       [part~="week-number"] {
         font-weight: 100;
         color: rgba(0, 0, 0, 0.4);
+        cursor: default;
+      }
+
+      [part~="date"]:not(:empty) {
+        cursor: pointer;
+      }
+
+      [part~="weekday"],
+      [part~="date"],
+      [part~="week-number"] {
+        text-align: center;
+        box-sizing: border-box;
+        padding: 6px 0;
+      }
+
+      [part~="weekday"]:not(:empty):not([disabled]):active {
+        border-radius: 2px;
       }
     </style>
   </template>
