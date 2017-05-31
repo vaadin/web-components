@@ -39,6 +39,7 @@
                 border: none;
                 font-size: medium;
                 color: rgba(0, 0, 0, 0.5);
+                background: transparent;
               }
             </style>
           </template>
@@ -46,6 +47,10 @@
         <dom-module id="button-styles" theme-for="vaadin-button">
           <template>
             <style>
+              :host([focus-ring]) [part~="button"] {
+                color: #f5a623;
+              }
+
               :host([part~="today-button"]) [part~="button"]::before {
                 content: "•";
                 color: #f5a623;
@@ -57,6 +62,7 @@
                 border: none;
                 background: #f7f6f2;
                 font-size: medium;
+                cursor: pointer;
               }
 
               [part~="button"]:focus {
@@ -70,10 +76,12 @@
             <style include="vaadin-date-picker-default-theme">
               :host {
                 font-family: 'Cabin', sans-serif;
+                width: 250px;
+                max-width: 100%;
               }
 
-              [part~="text-field"] {
-                width: 250px;
+              [part="text-field"] {
+                max-width: 100%;
               }
             </style>
           </template>
@@ -81,7 +89,7 @@
 
         <dom-module id="month-calendar-styles" theme-for="vaadin-month-calendar">
           <template>
-            <style>
+            <style include="vaadin-month-calendar-default-theme">
               [part~="date"] {
                 padding: 12px 0;
                 height: 40px;
@@ -149,9 +157,9 @@
               [part~="week-number"]::after {
                 content: '';
                 position: absolute;
-                left: 20px;
+                left: calc(100% - 5px);
                 top: 14px;
-                width: 333px;
+                width: 325px;
                 height: 1px;
                 background-color: rgba(0, 0, 0, 0.1);
               }
@@ -161,18 +169,12 @@
                 font-weight: 100;
                 margin-bottom: 16px;
               }
-
-              /* TODO: making the whole month name bold requires refactoring the i18n */
-              [part~="month-header"]::first-letter {
-                font-weight: 400;
-              }
             </style>
           </template>
         </dom-module>
         <dom-module id="overlay-styles" theme-for="vaadin-date-picker-overlay">
           <template>
-            <style include="vaadin-date-picker-overlay-default-theme"></style>
-            <style>
+            <style include="vaadin-date-picker-overlay-default-theme">
               :host {
                 border-radius: 6px;
                 border: 1px solid rgba(0, 0, 0, 0.1);
@@ -204,9 +206,7 @@
         </dom-module>
         <dom-module id="scroller-styles" theme-for="vaadin-infinite-scroller">
           <template>
-            <style include="vaadin-infinite-scroller-default-theme"></style>
-            <style>
-
+            <style include="vaadin-infinite-scroller-default-theme">
               :host([part~="years"]) [part~="year-number"][current] {
                 color: rgba(245, 198, 121, 0.6);
               }
@@ -218,7 +218,6 @@
               [part~="month"][disabled] {
                 opacity: 0.3;
               }
-
             </style>
           </template>
         </dom-module>
