@@ -204,9 +204,9 @@
 
           it('should have hidden state for dots', () => {
             // Do not speak dots between years.
-            var dots = Array.prototype.filter.call(yearScrollerContents, el => {
-              return !/\d+/.test(el.textContent);
-            });
+            var dots = Array.prototype.slice.call(yearScrollerContents)
+                            .map(el => el.querySelector('[part="year-separator"]'))
+                            .filter(el => !/\d+/.test(el.textContent));
 
             expect(dots).to.not.be.empty;
             dots.forEach(dot => {

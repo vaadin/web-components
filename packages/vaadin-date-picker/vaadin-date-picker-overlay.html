@@ -215,7 +215,10 @@ This program is available under Apache License Version 2.0, available at https:/
       </vaadin-infinite-scroller>
       <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="25" active="[[initialPosition]]" part="years">
         <template>
-          <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedDate)]]">[[_yearAfterXYears(index)]]</div>
+          <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedDate)]]">
+            [[_yearAfterXYears(index)]]
+            <div part="year-separator" aria-hidden="true"></div>
+          </div>
         </template>
       </vaadin-infinite-scroller>
     </div>
