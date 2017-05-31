@@ -67,17 +67,13 @@
         </dom-module>
         <dom-module id="date-picker-styles" theme-for="vaadin-date-picker">
           <template>
-            <style>
+            <style include="vaadin-date-picker-default-theme">
               :host {
                 font-family: 'Cabin', sans-serif;
               }
 
               [part~="text-field"] {
                 width: 250px;
-              }
-
-              [part~="today-button"]::before {
-                content: "•";
               }
             </style>
           </template>
