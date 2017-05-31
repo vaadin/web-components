@@ -20,6 +20,7 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="wrapper"] {
         display: inline-flex;
         align-items: center;
+        outline: none;
       }
 
       :host([focus-ring]) {
@@ -28,7 +29,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="native-checkbox"] {
         margin-right: 0;
-        outline: none;
       }
 
       [part="label"] {
@@ -46,7 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-checkbox">
   <template>
 
-    <label part="wrapper">
+    <label part="wrapper" id="label">
       <input
         id="nativeCheckbox"
         type="checkbox"
@@ -191,7 +191,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.$.nativeCheckbox;
+          return this.$.label;
         }
       }
 
