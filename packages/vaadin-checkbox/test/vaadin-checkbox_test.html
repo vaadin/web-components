@@ -74,6 +74,21 @@
         expect(vaadinCheckbox.indeterminate).to.be.eql(false);
       });
 
+      it('should set aria-checked to "true" when checked', () => {
+        vaadinCheckbox.checked = true;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
+      });
+
+      it('should set aria-checked to "false" when unchecked', () => {
+        vaadinCheckbox.checked = false;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
+      });
+
+      it('should set aria-checked to "mixed" when indeterminate', () => {
+        vaadinCheckbox.indeterminate = true;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
+      });
+
       it('native checkbox should have the `presentation` role', () => {
         expect(vaadinCheckbox.getAttribute('role')).to.be.eql('checkbox');
       });
