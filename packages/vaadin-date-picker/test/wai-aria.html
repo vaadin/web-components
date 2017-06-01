@@ -180,12 +180,12 @@
             scroller.active = true;
 
             Polymer.RenderStatus.afterNextRender(scroller, () => {
-              setTimeout(() => {
+              animationFrameFlush(function() {
                 scroller._debouncerUpdateClones.flush();
                 yearScrollerContents = overlay.$.yearScroller
                   .querySelectorAll('div > [part="year-number"]');
                 done();
-              }, 1);
+              });
             });
           });
 

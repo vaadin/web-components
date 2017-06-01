@@ -36,6 +36,7 @@
 
       beforeEach(done => {
         scroller = document.querySelector('#scroller');
+        scroller._itemHeightVal = 30; // Workaround for IE (reading the CSS property fails)
 
         Polymer.RenderStatus.afterNextRender(scroller, () => setTimeout(done, 1));
 
