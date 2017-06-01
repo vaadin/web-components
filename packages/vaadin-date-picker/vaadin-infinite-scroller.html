@@ -42,9 +42,6 @@ This program is available under Apache License Version 2.0, available at https:/
         box-sizing: border-box;
         padding-right: 40px;
         top: var(--vaadin-inifnite-scroller-buffer-offset, 0);
-      }
-
-      :host(:not([init-animation-done])) .buffer > * {
         animation: fadein 0.2s;
       }
 
@@ -117,7 +114,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       ready() {
         super.ready();
-        this.addEventListener('animationend', this._animationEnd.bind(this));
 
         this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
 
@@ -149,10 +145,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this._createPool();
           this._initialized = true;
         }
-      }
-
-      _animationEnd() {
-        this.toggleAttribute('init-animation-done', true);
       }
 
       _finishInit() {
