@@ -91,20 +91,14 @@
 
       [part~="years"]::before {
         border-left-color: #fff;
+        z-index: 1;
       }
 
       [part~="toolbar"] {
         padding: 16px;
         background: #eee;
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="vaadin-infinite-scroller-default-theme" theme-for="vaadin-infinite-scroller">
-  <template>
-    <style>
-      /* FIXME: These are here currently only because infinite scroller renders in it's local(not light) DOM. */
       [part~="year-number"],
       [part~="year-separator"] {
         display: flex;

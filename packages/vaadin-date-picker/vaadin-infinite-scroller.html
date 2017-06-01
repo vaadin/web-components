@@ -7,7 +7,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/legacy/class.html">
 <link rel="import" href="../polymer/lib/legacy/templatizer-behavior.html">
-<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-infinite-scroller">
   <template>
@@ -66,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   {
 
-    class InfiniteScrollerElement extends Vaadin.ThemableMixin(Polymer.Element) {
+    class InfiniteScrollerElement extends Polymer.Element {
 
       static get is() {
         return 'vaadin-infinite-scroller';
@@ -129,8 +128,8 @@ This program is available under Apache License Version 2.0, available at https:/
           forwardHostProp: function(prop, value) {
             if (prop !== 'index') {
               this._buffers.forEach(buffer => {
-                [].forEach.call(buffer.children, itemWrapper => {
-                  itemWrapper.instance[prop] = value;
+                [].forEach.call(buffer.children, injectionPoint => {
+                  injectionPoint._itemWrapper.instance[prop] = value;
                 });
               });
             }
@@ -161,7 +160,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // Once the first set of items start fading in, stamp the rest
           this._buffers.forEach(buffer => {
             [].forEach.call(buffer.children,
-              itemWrapper => this._ensureStampedInstance(itemWrapper));
+              injectionPoint => this._ensureStampedInstance(injectionPoint._itemWrapper));
           }, this);
 
           if (!this._buffers[0].translateY) {
@@ -298,7 +297,16 @@ This program is available under Apache License Version 2.0, available at https:/
             itemWrapper.style.height = this.itemHeight + 'px';
             itemWrapper.instance = {};
 
-            buffer.appendChild(itemWrapper);
+            const contentId = Vaadin.InfiniteScrollerElement._contentIndex = Vaadin.InfiniteScrollerElement._contentIndex + 1 || 0;
+            const slotName = 'vaadin-infinite-scroller-item-content-' + contentId;
+
+            const injectionPoint = document.createElement('slot');
+            injectionPoint.setAttribute('name', slotName);
+            injectionPoint._itemWrapper = itemWrapper;
+            buffer.appendChild(injectionPoint);
+
+            itemWrapper.setAttribute('slot', slotName);
+            this.appendChild(itemWrapper);
 
             setTimeout(() => {
               // Only stamp the visible instances first
@@ -336,7 +344,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!buffer.updated) {
             var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
-            [].forEach.call(buffer.children, (itemWrapper, index) => {
+            [].forEach.call(buffer.children, (injectionPoint, index) => {
+              const itemWrapper = injectionPoint._itemWrapper;
               if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
                 itemWrapper.instance.index = firstIndex + index;
               }

@@ -201,12 +201,7 @@
               [part~="years-toggle-button"] {
                 background: transparent;
               }
-            </style>
-          </template>
-        </dom-module>
-        <dom-module id="scroller-styles" theme-for="vaadin-infinite-scroller">
-          <template>
-            <style include="vaadin-infinite-scroller-default-theme">
+
               :host([part~="years"]) [part~="year-number"][current] {
                 color: rgba(245, 198, 121, 0.6);
               }
@@ -221,6 +216,7 @@
             </style>
           </template>
         </dom-module>
+
         <vaadin-date-picker id="weeks" show-week-numbers min="2017-05-01" placeholder="YYYY-MM-DD"></vaadin-date-picker>
         <script>
           window.addEventListener('WebComponentsReady', function() {
