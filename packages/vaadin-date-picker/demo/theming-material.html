@@ -50,6 +50,7 @@
           <template>
             <style include="vaadin-month-calendar-default-theme">
               [part~="date"] {
+                position: relative;
                 height: 32px;
                 font-weight: normal;
 
@@ -58,8 +59,23 @@
                 justify-content: center;
               }
 
+              [part~="date"][focused]:not([disabled])::after {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                z-index: -1;
+                content: '';
+                height: 32px;
+                width: 32px;
+                border-radius: 100%;
+                background: var(--material-primary-color);
+              }
+
               [part~="date"][today] {
-                color: var(--primary-color);
+                color: var(--material-primary-text-color);
               }
 
               [part~="date"][selected] {
@@ -67,14 +83,9 @@
               }
 
               [part~="date"][focused]:not([disabled]) {
-                background: var(--light-primary-color);
+                color: var(--material-primary-contrast-color);
+                background: transparent;
                 box-sizing: border-box;
-                border-radius: 2px;
-              }
-
-              :host([focused]) [part~="date"][focused]:not([disabled]) {
-                background: var(--primary-color);
-                color: #fff;
               }
 
               [part~="date"][selected] {
@@ -87,7 +98,7 @@
               }
 
               [part~="weekday"] {
-                color: var(--secondary-text-color);
+                color: var(--material-secondary-text-color);
               }
 
               [part~="week-number"] {
@@ -111,13 +122,23 @@
             <style include="vaadin-date-picker-overlay-default-theme">
               :host {
                 border-radius: 2px;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(0, 0, 0, 0.3);
               }
 
               [part~="years"] {
-                background: #000;
-                color: #babbb6;
+                background: #eee;
+                z-index: 1;
+              }
+
+              [part~="years"]::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 1px;
+                height: 100%;
+                background: var(--material-body-text-color);
+                opacity: 0.3;
               }
 
               [part~="months"] {
@@ -126,27 +147,41 @@
 
               [part~="toolbar"] {
                 padding: 4px;
-                color: var(--primary-color);
-                background: var(--secondary-color);
-                box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.5);
+                color: var(--material-body-text-color);
+                background: #eee;
+                border-top: 1px solid rgba(0, 0, 0, 0.3);
               }
 
               [part~="overlay-header"] {
-                color: #fff;
+                color: var(--material-body-text-color);
                 font-size: 18px;
-                background: var(--primary-color);
+                background: #eee;
+                border-bottom: 2px solid var(--material-primary-color);
+              }
+
+              [part~="overlay-header"]:not([desktop]) {
+                /* TODO make this default? */
+                padding-bottom: 16px;
+              }
+
+              :host([years-visible]) [part~="years"]::after {
+                top: calc(20px + 16px);
+                height: calc(100% - 20px - 16px);
               }
 
               [part~="years-toggle-button"] {
-                background: transparent;
+                position: absolute;
+                height: 20px;
+                z-index: 1;
+                top: calc(100% + 2px);
+                right: 0;
+                padding: 8px;
+                border-left: 1px solid rgba(0, 0, 0, 0.3);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.3);
               }
 
-              [part~="years"] [part~="year-number"][current] {
-                color: var(--primary-color);
-              }
-
-              [part~="years"] [part~="year-separator"]::after {
-                color: #babbb6;
+              [part~="years"] [part~="year-number"] {
+                color: var(--material-body-text-color);
               }
 
               [part~="month"][disabled] {
