@@ -65,6 +65,15 @@
         expect(vaadinCheckbox.checked).to.be.eql(false);
       });
 
+      it('should bind indeterminate to the native checkbox and vice versa', () => {
+        vaadinCheckbox.indeterminate = true;
+        expect(nativeCheckbox.indeterminate).to.be.eql(true);
+
+        nativeCheckbox.indeterminate = false;
+        nativeCheckbox.dispatchEvent(new CustomEvent('change'));
+        expect(vaadinCheckbox.indeterminate).to.be.eql(false);
+      });
+
       it('native checkbox should have the `presentation` role', () => {
         expect(vaadinCheckbox.getAttribute('role')).to.be.eql('checkbox');
       });
