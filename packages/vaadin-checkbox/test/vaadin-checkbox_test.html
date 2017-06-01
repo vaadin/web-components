@@ -12,7 +12,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-checkbox value="vaadin">Vaadin <i>Checkbox</i></vaadin-checkbox>
+      <vaadin-checkbox>Vaadin <i>Checkbox</i></vaadin-checkbox>
     </template>
   </test-fixture>
 
@@ -45,8 +45,8 @@
         expect(nativeCheckbox.hasAttribute('disabled')).to.be.eql(true);
       });
 
-      it('has value', () => {
-        expect(vaadinCheckbox.value).to.be.eql('vaadin');
+      it('has default value "on"', () => {
+        expect(vaadinCheckbox.value).to.be.eql('on');
       });
 
       it('fires click event', function(done) {
