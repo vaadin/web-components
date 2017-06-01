@@ -182,8 +182,8 @@
             Polymer.RenderStatus.afterNextRender(scroller, () => {
               setTimeout(() => {
                 scroller._debouncerUpdateClones.flush();
-                yearScrollerContents = overlay.$.yearScroller.root
-                  .querySelectorAll('.buffer > div > *');
+                yearScrollerContents = overlay.$.yearScroller
+                  .querySelectorAll('div > [part="year-number"]');
                 done();
               }, 1);
             });
@@ -205,8 +205,7 @@
           it('should have hidden state for dots', () => {
             // Do not speak dots between years.
             var dots = Array.prototype.slice.call(yearScrollerContents)
-                            .map(el => el.querySelector('[part="year-separator"]'))
-                            .filter(el => !/\d+/.test(el.textContent));
+                            .map(el => el.nextElementSibling);
 
             expect(dots).to.not.be.empty;
             dots.forEach(dot => {
@@ -233,8 +232,7 @@
         it('should have heading roles on the weekdays', () => {
           // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
 
-          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]');
-
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           Array.prototype.forEach.call(weekdays, weekday => {
             expect(weekday.getAttribute('role')).to.equal('heading');
           });
@@ -243,7 +241,7 @@
         it('should have label properties on the weekdays', () => {
           // Speak week days with full words instead of acronyms.
 
-          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]');
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays, weekday => {
             return weekday.getAttribute('aria-label');
           });

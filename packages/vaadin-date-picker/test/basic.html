@@ -391,7 +391,7 @@
         });
 
         it('should notify i18n mutation to children', () => {
-          var monthCalendar = datepicker.$.overlay.$.monthScroller.$.scroller.querySelector('vaadin-month-calendar');
+          var monthCalendar = datepicker.$.overlay.$.monthScroller.querySelector('vaadin-month-calendar');
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays,
             weekday => weekday.getAttribute('aria-label'));

@@ -74,8 +74,8 @@ function getFirstVisibleItem(scroller, bufferOffset) {
   bufferOffset = (bufferOffset || 0);
 
   scroller._buffers.forEach(function(buffer) {
-    [].forEach.call(buffer.children, function(itemWrapper) {
-      children.push(itemWrapper);
+    [].forEach.call(buffer.children, function(injectionPoint) {
+      children.push(injectionPoint._itemWrapper);
     });
   });
   var scrollerRect = scroller.getBoundingClientRect();
