@@ -58,13 +58,8 @@
         position: relative;
       }
 
-      [part~="years-toggle-button"] {
-        background: #eee;
-      }
-
       [part~="clear-button"],
-      [part~="toggle-button"],
-      [part~="years-toggle-button"]::before {
+      [part~="toggle-button"] {
         font-size: 24px;
         cursor: pointer;
         transition: color 0.2s;
@@ -73,15 +68,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-
-      [part~="clear-button"],
-      [part~="toggle-button"] {
         margin-left: 10px;
       }
 
       [part~="years-toggle-button"] {
-        display: flex;
+        background: #eee;
+        align-items: center;
+      }
+
+      [part~="years-toggle-button"]::before {
+        font-size: 24px;
+        line-height: 1em;
       }
 
       [part~="years"] {
