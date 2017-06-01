@@ -285,7 +285,7 @@ This program is available under Apache License Version 2.0, available at https:/
         var container = this.getBoundingClientRect();
         this._buffers.forEach(buffer => {
           for (var i = 0; i < this.bufferSize; i++) {
-            var itemWrapper = document.createElement('div');
+            const itemWrapper = document.createElement('div');
             itemWrapper.style.height = this.itemHeight + 'px';
             itemWrapper.instance = {};
 
@@ -300,17 +300,21 @@ This program is available under Apache License Version 2.0, available at https:/
             itemWrapper.setAttribute('slot', slotName);
             this.appendChild(itemWrapper);
 
+            // This is needed by IE
+            Polymer.dom.flush();
+
             setTimeout(() => {
               // Only stamp the visible instances first
               if (this._isVisible(itemWrapper, container)) {
                 this._ensureStampedInstance(itemWrapper);
               }
             }, 1); // Wait for first reset
-
-            Polymer.RenderStatus.afterNextRender(itemWrapper, this._finishInit.bind(this));
-
           }
         }, this);
+
+        setTimeout(() => {
+          Polymer.RenderStatus.afterNextRender(this, this._finishInit.bind(this));
+        }, 1);
       }
 
       _ensureStampedInstance(itemWrapper) {

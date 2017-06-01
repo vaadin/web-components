@@ -43,7 +43,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="weekday"],
       [part="date"] {
-        width: calc(1 / 7 * 100%);
+        /* Would use calc(100% / 7) but it doesn't work nice on IE */
+        width: 14.285714286%;
       }
 
       [part="weekday"]:empty,
