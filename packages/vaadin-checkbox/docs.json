@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-checkbox.html",
         "start": {
-          "line": 202,
+          "line": 213,
           "column": 6
         },
         "end": {
-          "line": 202,
+          "line": 213,
           "column": 42
         }
       },
@@ -102,12 +102,13 @@
                   "column": 12
                 },
                 "end": {
-                  "line": 122,
+                  "line": 123,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
+                  "notify": true,
                   "observer": "\"_checkedChanged\""
                 }
               },
@@ -120,16 +121,19 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 129,
                   "column": 12
                 },
                 "end": {
-                  "line": 131,
+                  "line": 134,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_indeterminateChanged\""
+                }
               }
             },
             {
@@ -139,11 +143,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 139,
                   "column": 12
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 13
                 }
               },
@@ -158,11 +162,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 143,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 146,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -179,11 +183,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 153,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 159,
                   "column": 9
                 }
               },
@@ -387,11 +391,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 161,
                   "column": 8
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 9
                 }
               },
@@ -403,16 +407,37 @@
               ]
             },
             {
+              "name": "_indeterminateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 165,
+                  "column": 8
+                },
+                "end": {
+                  "line": 171,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "indeterminate"
+                }
+              ]
+            },
+            {
               "name": "_addActiveListeners",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 190,
+                  "line": 201,
                   "column": 9
                 }
               },
@@ -433,7 +458,7 @@
               "column": 6
             },
             "end": {
-              "line": 195,
+              "line": 206,
               "column": 7
             }
           },
@@ -503,7 +528,7 @@
                   "column": 12
                 },
                 "end": {
-                  "line": 122,
+                  "line": 123,
                   "column": 13
                 }
               },
@@ -515,11 +540,11 @@
               "description": "Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 129,
                   "column": 12
                 },
                 "end": {
-                  "line": 131,
+                  "line": 134,
                   "column": 13
                 }
               },
@@ -531,11 +556,11 @@
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 139,
                   "column": 12
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 13
                 }
               },
@@ -547,11 +572,11 @@
               "description": "The value given to the data submitted with the checkbox's name to the server when the control is inside a form.",
               "sourceRange": {
                 "start": {
-                  "line": 143,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 146,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -559,7 +584,20 @@
               "type": "string"
             }
           ],
-          "events": [],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "checked-changed",
+              "description": "Fired when the `checked` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "indeterminate-changed",
+              "description": "Fired when the `indeterminate` property changes.",
+              "metadata": {}
+            }
+          ],
           "styling": {
             "cssVariables": [],
             "selectors": []
