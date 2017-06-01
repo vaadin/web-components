@@ -1,0 +1,129 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-checkbox tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../vaadin-checkbox.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-checkbox>Vaadin <i>Checkbox</i></vaadin-checkbox>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-checkbox', () => {
+      var down = node => {
+        node.dispatchEvent(new CustomEvent('down'));
+      };
+
+      var up = node => {
+        node.dispatchEvent(new CustomEvent('up'));
+      };
+
+      var vaadinCheckbox, nativeCheckbox, label;
+
+      beforeEach(() => {
+        vaadinCheckbox = fixture('default');
+        nativeCheckbox = Polymer.dom(vaadinCheckbox.root).querySelector('[part="native-checkbox"]');
+        label = Polymer.dom(vaadinCheckbox.root).querySelector('[part="label"]');
+      });
+
+      it('should define checkbox label using light DOM', () => {
+        var children = Polymer.dom(label).getEffectiveChildNodes();
+        expect(children[1].textContent).to.be.equal('Vaadin ');
+        expect(children[2].outerHTML).to.be.equal('<i>Checkbox</i>');
+      });
+
+      it('can be disabled imperatively', () => {
+        vaadinCheckbox.disabled = true;
+        expect(nativeCheckbox.hasAttribute('disabled')).to.be.eql(true);
+      });
+
+      it('has default value "on"', () => {
+        expect(vaadinCheckbox.value).to.be.eql('on');
+      });
+
+      it('fires click event', function(done) {
+        vaadinCheckbox.addEventListener('click', () => {
+          done();
+        });
+        MockInteractions.downAndUp(vaadinCheckbox);
+      });
+
+      it('should bind checked to the native checkbox and vice versa', () => {
+        vaadinCheckbox.checked = true;
+        expect(nativeCheckbox.checked).to.be.eql(true);
+
+        nativeCheckbox.checked = false;
+        nativeCheckbox.dispatchEvent(new CustomEvent('change'));
+        expect(vaadinCheckbox.checked).to.be.eql(false);
+      });
+
+      it('should bind indeterminate to the native checkbox and vice versa', () => {
+        vaadinCheckbox.indeterminate = true;
+        expect(nativeCheckbox.indeterminate).to.be.eql(true);
+
+        nativeCheckbox.indeterminate = false;
+        nativeCheckbox.dispatchEvent(new CustomEvent('change'));
+        expect(vaadinCheckbox.indeterminate).to.be.eql(false);
+      });
+
+      it('should set aria-checked to "true" when checked', () => {
+        vaadinCheckbox.checked = true;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
+      });
+
+      it('should set aria-checked to "false" when unchecked', () => {
+        vaadinCheckbox.checked = false;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
+      });
+
+      it('should set aria-checked to "mixed" when indeterminate', () => {
+        vaadinCheckbox.indeterminate = true;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
+      });
+
+      it('native checkbox should have the `presentation` role', () => {
+        expect(vaadinCheckbox.getAttribute('role')).to.be.eql('checkbox');
+      });
+
+      it('host should have the `checkbox` role', () => {
+        expect(vaadinCheckbox.getAttribute('role')).to.be.eql('checkbox');
+      });
+
+      it('should have active attribute on down', () => {
+        down(vaadinCheckbox);
+
+        expect(vaadinCheckbox.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute after up', () => {
+        down(vaadinCheckbox);
+
+        up(vaadinCheckbox);
+
+        expect(vaadinCheckbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should have active attribute on space', () => {
+        MockInteractions.keyDownOn(vaadinCheckbox, 32);
+
+        expect(vaadinCheckbox.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute after space', () => {
+        MockInteractions.keyDownOn(vaadinCheckbox, 32);
+
+        MockInteractions.keyUpOn(vaadinCheckbox, 32);
+
+        expect(vaadinCheckbox.hasAttribute('active')).to.be.false;
+      });
+    });
+  </script>
+</body>

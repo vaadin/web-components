@@ -1,0 +1,19 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>vaadin-checkbox tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+</head>
+
+<body>
+  <script>
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
+
+    WCT.loadSuites([
+      'vaadin-checkbox_test.html',
+      'vaadin-checkbox_test.html?wc-shadydom=true'
+    ]);
+  </script>
+</body>
