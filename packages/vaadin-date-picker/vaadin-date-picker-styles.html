@@ -104,14 +104,14 @@
 <dom-module id="vaadin-infinite-scroller-default-theme" theme-for="vaadin-infinite-scroller">
   <template>
     <style>
-      /* FIXME: These are here currently only because infinite scroller currently renders in it's local(not light) DOM. */
-      [part~="year-number"] {
+      /* FIXME: These are here currently only because infinite scroller renders in it's local(not light) DOM. */
+      [part~="year-number"],
+      [part~="year-separator"] {
         display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: space-around;
-        text-align: center;
-        transform: translateY(-10%); /* TODO: Where does this offset come from? */
+        align-items: center;
+        justify-content: center;
+        height: 50%;
+        transform: translateY(-50%);
       }
 
       [part~="year-separator"]::after {

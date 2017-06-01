@@ -117,20 +117,13 @@ This program is available under Apache License Version 2.0, available at https:/
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        /* Center the year scroller position. */
+        --vaadin-inifnite-scroller-buffer-offset: 50%;
       }
 
       #scrollers[desktop] [part="years"] {
         position: absolute;
         transform: none !important;
-      }
-
-      [part="years"] {
-        /* Center the year scroller position. */
-        --vaadin-infinite-scroller-buffer: {
-          top: 50%;
-          margin-top: -12px;
-          width: 90px;
-        }
       }
 
       [part="years"]::before {
@@ -217,8 +210,8 @@ This program is available under Apache License Version 2.0, available at https:/
         <template>
           <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedDate)]]">
             [[_yearAfterXYears(index)]]
-            <div part="year-separator" aria-hidden="true"></div>
           </div>
+          <div part="year-separator" aria-hidden="true"></div>
         </template>
       </vaadin-infinite-scroller>
     </div>
