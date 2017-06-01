@@ -6,10 +6,13 @@ module.exports = {
     ];
 
     var otherPlatforms = [
-      'OS X 10.11/iphone@9.3',
-      'OS X 10.11/ipad@9.3',
+      'macOS 10.12/iphone@10.3',
+      // iPad simulator does not start on Saucelabs for some reason
+      // TODO: enable back
+      // 'macOS 10.12/ipad@10.3',
       'Windows 10/microsoftedge@14',
-      'OS X 10.11/safari@10.0'
+      'Windows 10/internet explorer@11',
+      'macOS 10.12/safari@10.0'
     ];
 
     // run SauceLabs tests for pushes, except cases when branch contains 'quick/'

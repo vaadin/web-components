@@ -10,10 +10,10 @@
 
 <body>
   <script>
-    // Needed to load here in iOS
-    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
     // non-lite polyfill #v1 cause problems
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
+    // Needs to be loaded after the polyfill
+    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
 
     WCT.loadSuites([
       'vaadin-split-layout_test.html',
