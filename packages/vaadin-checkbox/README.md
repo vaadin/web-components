@@ -5,7 +5,7 @@
 
 # &lt;vaadin-checkbox&gt;
 
-<!--[Live Demo ↗](https://cdn.vaadin.com/vaadin-checkbox/1.0.0-alpha1/demo/)-->
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-checkbox/1.0.0-alpha1/demo/)
 
 [&lt;vaadin-checkbox&gt;](https://vaadin.com/elements/-/element/vaadin-checkbox) is a [Polymer](http://polymer-project.org) element providing an accessible and customizable checkbox, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
@@ -20,7 +20,9 @@
 ```
 -->
 ```html
-<vaadin-checkbox></vaadin-checkbox>
+<vaadin-checkbox checked>
+  Make my profile visible
+</vaadin-checkbox>
 ```
 
 <!-- TODO: uncomment when we have a nice screenshot to show
