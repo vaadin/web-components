@@ -1,0 +1,87 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="vaadin-overlay">
+  <template>
+    <style>
+      :host {
+          position: absolute;
+          @apply --shadow-elevation-2dp;
+          background: #fff;
+          border-radius: 0 0 2px 2px;
+          top: 0;
+          left: 0;
+          pointer-events: auto;
+
+          /**
+          * Keep the vaadin-combo-box-overlay above paper-dialogs.
+          * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
+          */
+          z-index: 200;
+          overflow: hidden;
+        }
+      </style>
+    <slot></slot>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-overlay',
+
+    behaviors: [Polymer.Templatizer],
+
+    properties: {
+      template: {
+        notify: true,
+        value: function() {
+          return Polymer.dom(this).querySelector('template') || undefined;
+        }
+      },
+
+      _instance: Object
+    },
+
+    observers: ['_templateChanged(template)'],
+
+    _templateChanged: function(template) {
+      this.templatize(template);
+      this._instance = this.stamp();
+      this.root.appendChild(this._instance.root);
+    },
+
+    _forwardHostPropV2: function(prop, value) {
+      if (this._instance) {
+        this._instance.set(prop, value)
+      }
+    },
+
+    _processPendingMutationObserversFor: function(node) {
+      if (window.CustomElements && !Polymer.Settings.useNativeCustomElements) {
+        CustomElements.takeRecords(node);
+      }
+    },
+
+    _moveTo: function(target) {
+      // `attached` and `detached` callbacks are unreliable with Shadow DOM polyfill. They are asynchonous and sometimes
+      // cancel each other. We need to process mutation observers synchonously after moving the overlay. :-(
+      var oldParentNode = this.parentNode;
+      Polymer.dom(target).appendChild(this);
+
+      if (oldParentNode) {
+        this._processPendingMutationObserversFor(oldParentNode);
+        // StyleTransformer does not exist in 2.0, v1 Shady polyfill takes care of this automatically.
+        if (oldParentNode.host && !Polymer.Element) {
+          // When moving from local DOM, ensure to remove the old style scope
+          Polymer.StyleTransformer.dom(this, oldParentNode.host.is, this._scopeCssViaAttr, true);
+        }
+      }
+
+      this._processPendingMutationObserversFor(this);
+      // StyleTransformer does not exist in 2.0, v1 Shady polyfill takes care of this automatically.
+      if (target.host && !Polymer.Element) {
+        // When moving to local DOM, ensure to add the new style scope
+        Polymer.StyleTransformer.dom(this, target.host.is, this._scopeCssViaAttr);
+      }
+    }
+  });
+</script>

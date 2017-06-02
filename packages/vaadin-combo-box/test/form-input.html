@@ -109,7 +109,7 @@
 
         // IronForm 2.0 returns an array
         var val = ironForm.serializeForm().foo;
-        expect(val[0] || val).to.equal('bar');
+        expect(Array.isArray(val) ? val[0] : val).to.equal('bar');
       });
 
       it('should not-submit iron-form with invalid value', function(done) {

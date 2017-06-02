@@ -4,105 +4,91 @@
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-overlay-behavior.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
+<link rel="import" href="vaadin-overlay.html">
 
 <dom-module id="vaadin-combo-box-overlay">
   <template>
-    <style>
-      :host {
-        position: absolute;
-        @apply --shadow-elevation-2dp;
-        background: #fff;
-        border-radius: 0 0 2px 2px;
-        top: 0;
-        left: 0;
-        pointer-events: auto;
+    <vaadin-overlay id="overlay" opened$="[[opened]]" loading$="[[loading]]" position-target="[[positionTarget]]" on-template-changed="_templateChanged">
+      <template>
+        <style>
+          :host([opened][loading]) {
+            display: block !important;
+            height: 58px;
+          }
 
-        /**
-        * Keep the vaadin-combo-box-overlay above paper-dialogs.
-        * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
-        */
-        z-index: 200;
-        overflow: hidden;
-      }
+          #scroller {
+            overflow: auto;
 
-      #scroller {
-        overflow: auto;
-        max-height: var(--vaadin-combo-box-overlay-max-height, 65vh);
+            /* Fixes item background from getting on top of scrollbars on Safari */
+            transform: translate3d(0, 0, 0);
 
-        /* Fixes item background from getting on top of scrollbars on Safari */
-        transform: translate3d(0, 0, 0);
+            /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+            -webkit-overflow-scrolling: touch;
+          }
 
-        /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
-        -webkit-overflow-scrolling: touch;
-      }
+          #selector {
+            --iron-list-items-container: {
+              border-top: 8px solid transparent;
+              border-bottom: 8px solid transparent;
+            };
+          }
 
-      #selector {
-        --iron-list-items-container: {
-          border-top: 8px solid transparent;
-          border-bottom: 8px solid transparent;
-        };
-      }
+          #selector vaadin-combo-box-item {
+            cursor: pointer;
+            padding: 13px 16px;
+            color: var(--primary-text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
 
-      #selector vaadin-combo-box-item {
-        cursor: pointer;
-        padding: 13px 16px;
-        color: var(--primary-text-color);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+          #selector:not([touch-device]) vaadin-combo-box-item:hover,
+          #selector vaadin-combo-box-item[focused] {
+            background: #eee;
+          }
 
-      :host([opened][loading]) {
-        /* roughly the size of a list with one item */
-        display: block !important;
-        height: 58px;
-      }
+          #selector vaadin-combo-box-item[selected] {
+            color: var(--primary-color);
+          }
 
-      #selector:not([touch-device]) vaadin-combo-box-item:hover,
-      #selector vaadin-combo-box-item[focused] {
-        background: #eee;
-      }
-
-      #selector vaadin-combo-box-item[selected] {
-        color: var(--primary-color);
-      }
-
-      #selector vaadin-combo-box-item[hidden] {
-        display: none;
-      }
-    </style>
-
-    <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-    <div id="scroller" scroller="[[_getScroller()]]"
-        on-tap="_stopPropagation"
-        on-touchstart="_onTouchStart"
-        on-touchend="_preventDefault"
-        on-scroll="_onScroll"
-        hidden$="[[loading]]">
-      <iron-list
-          id="selector"
-          touch-device$="[[touchDevice]]"
-          role="listbox"
-          items="[[_items]]"
-          scroll-target="[[_getScroller()]]">
-        <template>
-          <vaadin-combo-box-item
-              on-tap="_onTap"
-              index="[[index]]"
-              item="[[item]]"
-              label="[[getItemLabel(item)]]"
-              selected="[[_isItemSelected(item, _selectedItem)]]"
-              role$="[[_getAriaRole(index)]]"
-              aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-              focused="[[_isItemFocused(_focusedIndex,index)]]">
-          </vaadin-combo-box-item>
-        </template>
-      </iron-list>
-    </div>
+          #selector vaadin-combo-box-item[hidden] {
+            display: none;
+          }
+        </style>
+        <vaadin-spinner active="[[loading]]"></vaadin-spinner>
+        <div id="scroller" scroller="[[_scroller]]"
+            on-tap="_stopPropagation"
+            on-touchstart="_onTouchStart"
+            on-touchend="_preventDefault"
+            on-scroll="_onScroll"
+            hidden$="[[loading]]">
+          <iron-list
+              id="selector"
+              touch-device$="[[touchDevice]]"
+              role="listbox"
+              items="[[_items]]"
+              scroll-target="[[_scroller]]">
+            <template>
+              <vaadin-combo-box-item
+                  on-tap="_onTap"
+                  index="[[index]]"
+                  item="[[item]]"
+                  label="[[getItemLabel(item)]]"
+                  selected="[[_isItemSelected(item, _selectedItem)]]"
+                  role$="[[_getAriaRole(index)]]"
+                  aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
+                  focused="[[_isItemFocused(_focusedIndex,index)]]">
+              </vaadin-combo-box-item>
+            </template>
+          </iron-list>
+        </div>
+      </template>
+    </vaadin-overlay>
   </template>
 </dom-module>
 
@@ -110,9 +96,7 @@
   Polymer({
     is: 'vaadin-combo-box-overlay',
 
-    behaviors: [
-      vaadin.elements.combobox.OverlayBehavior
-    ],
+    behaviors: [Polymer.IronResizableBehavior],
 
     properties: {
 
@@ -132,6 +116,8 @@
         }
       },
 
+      opened: Boolean,
+
       /*
        * `true` when new items are being loaded.
        */
@@ -140,6 +126,29 @@
         value: false,
         reflectToAttribute: true,
         observer: 'notifyResize'
+      },
+
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        type: Object
+      },
+
+      /**
+       * Vertical offset for the overlay position.
+       */
+      verticalOffset: {
+        type: Number,
+        value: 0
+      },
+
+      /**
+       * If `true`, overlay is aligned above the `positionTarget`
+       */
+      _alignedAbove: {
+        type: Boolean,
+        value: false
       },
 
       _selectedItem: {
@@ -177,14 +186,12 @@
       _ignoreTaps: Boolean,
     },
 
+    listeners: {
+      'iron-resize': '_setPosition'
+    },
+
     ready: function() {
       this._patchWheelOverScrolling();
-
-      // Fix for #182. Only relevant for iron-list 1.0.X and 1.1.X.
-      // 1.2.X works fine without this.
-      if (this.$.selector._scroller !== undefined) {
-        this.$.selector._scroller = this._getScroller();
-      }
 
       // Stamping with an empty object instead of null
       // will resolve templatizer issues in P2 that previously
@@ -198,6 +205,133 @@
         this.$.scroller.setAttribute('unselectable', 'on');
       }
     },
+
+    /***/
+    // TODO: remove
+    created: function() {
+      this._boundSetPosition = this._setPosition.bind(this);
+    },
+
+    notifyResize: function() {
+      this._setPosition();
+    },
+
+    _maxHeight: function(targetRect) {
+      var margin = 8;
+      var minHeight = 116; // Height of two items in combo-box
+      var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
+
+      if (this._alignedAbove) {
+        return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
+      } else {
+        return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
+      }
+    },
+
+    _moveTo: function(target) {
+      this.$.overlay._moveTo(target);
+
+      if (target === document.body) {
+        this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
+        window.addEventListener('scroll', this._boundSetPosition, true);
+        this._setPosition();
+      } else {
+        window.removeEventListener('scroll', this._boundSetPosition, true);
+      }
+    },
+
+    _isPositionFixed: function(element) {
+      var offsetParent = this._getOffsetParent(element);
+
+      return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
+        (offsetParent && this._isPositionFixed(offsetParent));
+    },
+
+    _getOffsetParent: function(element) {
+      if (element.assignedSlot) {
+        return element.assignedSlot.parentElement;
+      } else if (element.parentElement) {
+        return element.offsetParent;
+      }
+
+      var parent = Polymer.dom(element).parentNode;
+
+      if (parent && parent.nodeType === 11 && parent.host) {
+        return parent.host; // parent is #shadowRoot
+      }
+    },
+
+    _verticalOffset: function(overlayRect, targetRect) {
+      if (this._alignedAbove) {
+        return -overlayRect.height;
+      } else {
+        return targetRect.height + this.verticalOffset;
+      }
+    },
+
+    _unwrapIfNeeded: function(element) {
+      var isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
+      return isWrapped ? window.unwrap(element) : element;
+    },
+
+    _templateChanged: function(e) {
+      // TODO: rename to _selector
+      this.$.selector = this.$.overlay.root.querySelector('#selector');
+      this._scroller = this.$.scroller = this.$.overlay.root.querySelector('#scroller');
+    },
+
+    _setPosition: function(e) {
+      if (e && e.target) {
+        var target = e.target === document ? document.body : e.target;
+        var parent = this._unwrapIfNeeded(this.$.overlay.parentElement);
+        if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
+          return;
+        }
+      }
+
+      if (!this.positionTarget) {
+        return;
+      }
+
+      var targetRect = this.positionTarget.getBoundingClientRect();
+      this._alignedAbove = this._shouldAlignAbove();
+
+      // TODO: this is using legacy API:
+      // https://www.polymer-project.org/2.0/docs/api/mixins/Polymer.LegacyElementMixin#method-getComputedStyleValue
+      this._scroller.style.maxHeight = this.getComputedStyleValue('--vaadin-combo-box-overlay-max-height') || '65vh';
+
+      // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
+      this.$.overlay.style.maxHeight = this._maxHeight(targetRect);
+
+      // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
+      this.$.selector.style.maxHeight = this._maxHeight(targetRect);
+
+      var overlayRect = this.$.overlay.getBoundingClientRect();
+      this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+      this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
+        this._verticalOffset(overlayRect, targetRect);
+
+      var _devicePixelRatio = window.devicePixelRatio || 1;
+      this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
+      this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
+      this.$.overlay.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
+
+      this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
+
+      this.updateViewportBoundaries();
+    },
+
+    _shouldAlignAbove: function() {
+      var spaceBelow = (
+          window.innerHeight -
+          this.positionTarget.getBoundingClientRect().bottom -
+          Math.min(document.body.scrollTop, 0)
+        ) / window.innerHeight;
+
+      return spaceBelow < 0.30;
+    },
+
+    /***/
 
     _patchIronListStamping: function() {
       var stamp = this.$.selector.stamp;
@@ -311,10 +445,10 @@
         physicalItem = this.$.selector._physicalItems[pidx];
       if (!physicalItem) return;
       var physicalItemRect = physicalItem.getBoundingClientRect(),
-        scrollerRect = this.$.scroller.getBoundingClientRect(),
+        scrollerRect = this._scroller.getBoundingClientRect(),
         scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
       if (scrollTopAdjust > 0) {
-        this.$.scroller.scrollTop += scrollTopAdjust;
+        this._scroller.scrollTop += scrollTopAdjust;
       }
     },
 
@@ -326,14 +460,6 @@
       if (this._items) {
         this._scrollIntoView(this._focusedIndex);
       }
-    },
-
-    // Note: this whole scroller thing is done to support iron lists scrollToIndex()
-    // and features that use it like keyboard navigation in IE11 for iron-list 1.0.x.
-    // Tested that iron-list 1.2.x works nicely even without the external scroller, but
-    // left these here for now for backwards compatibility.
-    _getScroller: function() {
-      return this.$.scroller;
     },
 
     /**

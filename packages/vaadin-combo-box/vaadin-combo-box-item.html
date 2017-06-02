@@ -75,8 +75,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     attached: function() {
       if (!this._itemTemplateInstance) {
-        // 2.0 has __dataHost
-        var comboBox = this.domHost.dataHost || this.domHost.__dataHost;
+        // 2.0 has __dataHost. Might want to consider assigning combobox reference directly to item.
+        var overlay = this.domHost;
+        var dropdown = overlay.__dataHost;
+        var comboBoxOverlay = dropdown.domHost;
+        var comboBox = comboBoxOverlay.domHost;
         comboBox._ensureTemplatized();
         if (comboBox._itemTemplate) {
           this._itemTemplateInstance = comboBox.stamp({});

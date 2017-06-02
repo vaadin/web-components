@@ -87,11 +87,13 @@
   }
 
   function dropContent() {
-    return comboBox.$.overlay;
+    return comboBox.$.overlay.$.overlay;
   }
+
   function dropContentRect() {
     return dropContent().getBoundingClientRect();
   }
+
   function inputContentRect() {
     return comboBox.$.inputContainer.getBoundingClientRect();
   }
@@ -149,7 +151,7 @@
 
       it('should notify resize on items change', function() {
         var spy = sinon.spy();
-        comboBox.$.overlay.addEventListener('iron-resize', spy);
+        comboBox.$.overlay.notifyResize = spy;
         comboBox.items = [1, 2, 3];
         expect(spy.called).to.be.true;
       });
@@ -210,7 +212,7 @@
         comboBox.open();
 
         Polymer.Base.async(function() {
-          expect(dropContent()._alignedAbove).to.be.true;
+          expect(comboBox.$.overlay._alignedAbove).to.be.true;
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
@@ -253,7 +255,7 @@
 
     describe('overlay attached/detached callbacks', function() {
       it('should be called after open and close', function() {
-        var overlay = comboBox.$.overlay;
+        var overlay = dropContent();
         overlay.detached = sinon.spy();
         overlay.attached = sinon.spy();
 
@@ -286,7 +288,7 @@
       combobox.open();
 
       Polymer.Base.async(function() {
-        expect(position(combobox.$.overlay)).to.eql('fixed');
+        expect(position(combobox.$.overlay.$.overlay)).to.eql('fixed');
         done();
       }, 1);
     });
@@ -297,7 +299,7 @@
       combobox.open();
 
       Polymer.Base.async(function() {
-        expect(position(combobox.$.overlay)).to.eql('fixed');
+        expect(position(combobox.$.overlay.$.overlay)).to.eql('fixed');
         done();
       }, 1);
     });
@@ -308,7 +310,7 @@
       combobox.open();
 
       Polymer.Base.async(function() {
-        expect(position(combobox.$.overlay)).to.eql('absolute');
+        expect(position(combobox.$.overlay.$.overlay)).to.eql('absolute');
         done();
       }, 1);
     });

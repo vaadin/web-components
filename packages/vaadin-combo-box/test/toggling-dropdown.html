@@ -133,13 +133,13 @@
       // of the combobox when moved during open.
       it('should not leak combobox style scope to the overlay', function() {
         // Test only when style scope classes are used
-        if (combobox.$.overlay.classList.contains('style-scope') &&
-            combobox.$.overlay.classList.contains('vaadin-combo-box')) {
+        if (combobox.$.overlay.$.overlay.classList.contains('style-scope') &&
+            combobox.$.overlay.$.overlay.classList.contains('vaadin-combo-box')) {
           combobox.open();
           Polymer.dom.flush();
 
-          expect(combobox.$.overlay.classList.contains('style-scope')).to.be.false;
-          expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.false;
+          expect(combobox.$.overlay.$.overlay.classList.contains('style-scope')).to.be.false;
+          expect(combobox.$.overlay.$.overlay.classList.contains('vaadin-combo-box')).to.be.false;
         }
       });
 
@@ -241,7 +241,7 @@
       it('should not close popup when clicking on any overlay children', function() {
         combobox.open();
 
-        combobox.$.overlay.$.scroller.click();
+        combobox.$.overlay._scroller.click();
 
         expect(combobox.opened).to.be.true;
       });
