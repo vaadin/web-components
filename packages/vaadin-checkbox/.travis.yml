@@ -12,7 +12,6 @@ addons:
   google-chrome: latest
 
 install:
-  - npm install npm@5 -g
   - npm install
   - polymer install
 
