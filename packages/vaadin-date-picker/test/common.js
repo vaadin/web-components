@@ -62,7 +62,7 @@ function close(datepicker, callback) {
 }
 
 function tap(element) {
-  element.dispatchEvent(new CustomEvent('tap', {bubbles: true, composed: true}));
+  element.dispatchEvent(new CustomEvent('tap', {bubbles: true, detail: {}, composed: true}));
 }
 
 function monthsEqual(date1, date2) {
