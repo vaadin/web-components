@@ -137,8 +137,8 @@
 
       it('should have an instance stamped to every wrapper', done => {
         scroller._buffers.forEach(buffer => {
-          [].forEach.call(buffer.children, injectionPoint => {
-            expect(injectionPoint._itemWrapper.firstElementChild).to.be.ok;
+          [].forEach.call(buffer.children, insertionPoint => {
+            expect(insertionPoint._itemWrapper.firstElementChild).to.be.ok;
           });
         }, this);
         done();
