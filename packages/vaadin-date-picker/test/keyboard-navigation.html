@@ -87,6 +87,8 @@
 
           beforeEach(() => {
             datepicker = fixture('datepicker');
+            datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+            datepicker.$.overlay.$.yearScroller.bufferSize = 0;
             overlay = datepicker.$.overlay;
           });
 

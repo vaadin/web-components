@@ -20,19 +20,4 @@ before_script:
   - polymer lint --rules polymer-2 --input *.html
 
 script:
-  - run="xvfb-run -s '-screen 0 1024x768x24' polymer test "
-  - eval $run
-      test/basic.html
-  - eval $run
-      test/dropdown.html
-      test/overlay.html
-      test/month-calendar.html
-      test/scroller.html
-  - eval $run
-      test/form-input.html
-      test/custom-input.html
-      test/late-upgrade.html
-      test/wai-aria.html
-  - eval $run
-      test/keyboard-navigation.html
-      test/keyboard-input.html
+  - xvfb-run -s '-screen 0 1024x768x24' wct

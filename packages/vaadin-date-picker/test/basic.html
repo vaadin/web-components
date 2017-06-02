@@ -36,6 +36,8 @@
         datepicker = fixture('datepicker');
         clearButton = datepicker.root.querySelector('[part="clear-button"]');
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
       });
 
       afterEach(done => {
@@ -48,6 +50,7 @@
 
       // Needs to be in this order to pass in IE
       it('should not show clear icon', done => {
+        datepicker.$.overlay.$.monthScroller.bufferSize = 1;
         datepicker.open();
         datepicker.value = '2000-02-01';
 
@@ -385,12 +388,15 @@
           datepicker.set('i18n.today', 'Tänään');
           datepicker.set('i18n.cancel', 'Peruuta');
 
+          datepicker.$.overlay.$.monthScroller.bufferSize = 1;
+
           open(datepicker,
             () => Polymer.RenderStatus.afterNextRender(datepicker.$.overlay.$.scroller,
               () => setTimeout(done, 1)));
         });
 
         it('should notify i18n mutation to children', () => {
+
           var monthCalendar = datepicker.$.overlay.$.monthScroller.querySelector('vaadin-month-calendar');
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays,

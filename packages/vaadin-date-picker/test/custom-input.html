@@ -30,6 +30,8 @@
 
       beforeEach(done => {
         datepicker = fixture('custom-input-datepicker');
+        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
         setTimeout(done);
       });
 

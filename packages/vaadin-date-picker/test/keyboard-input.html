@@ -80,6 +80,8 @@
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
           target = datepicker._inputElement;
+          datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+          datepicker.$.overlay.$.yearScroller.bufferSize = 0;
           setTimeout(done, 1);
         });
 

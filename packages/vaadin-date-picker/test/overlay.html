@@ -26,6 +26,8 @@
       beforeEach(done => {
         overlay = fixture('overlay');
         overlay.i18n = getDefaultI18n();
+        overlay.$.monthScroller.bufferSize = 1;
+        overlay.$.yearScroller.bufferSize = 1;
 
         overlay.initialPosition = new Date();
         Polymer.RenderStatus.afterNextRender(overlay.$.monthScroller,
