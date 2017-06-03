@@ -187,7 +187,9 @@ This program is available under Apache License Version 2.0, available at https:/
              * on: Enable autocorrection.
              * off: Disable autocorrection.
              */
-            autocorrect: String,
+            autocorrect: {
+              type: String
+            },
 
             /**
              * Error to show when the input value is invalid.
@@ -307,11 +309,17 @@ This program is available under Apache License Version 2.0, available at https:/
              * When set to true, user is prevented from typing a value that
              * conflicts with the given `pattern`.
              */
-            preventInvalidInput: Boolean,
+            preventInvalidInput: {
+              type: Boolean
+            },
 
-            _labelId: String,
+            _labelId: {
+              type: String
+            },
 
-            _errorId: String
+            _errorId: {
+              type: String
+            }
           };
         }
 
@@ -371,8 +379,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           var uniqueId = TextFieldElement._uniqueId = 1 + TextFieldElement._uniqueId || 0;
-          this._errorId = 'vaadin-text-field-error-' + uniqueId;
-          this._labelId = 'vaadin-text-field-label-' + uniqueId;
+          this._errorId = `${this.is}-error-${uniqueId}`;
+          this._labelId = `${this.is}-label-${uniqueId}`;
         }
 
         attributeChangedCallback(prop, oldVal, newVal) {
@@ -387,9 +395,10 @@ This program is available under Apache License Version 2.0, available at https:/
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
           if (isSafari && this.root) {
+            const WEBKIT_PROPERTY = '-webkit-backface-visibility';
             this.root.querySelectorAll('*').forEach(el => {
-              el.style['-webkit-backface-visibility'] = 'visible';
-              el.style['-webkit-backface-visibility'] = '';
+              el.style[WEBKIT_PROPERTY] = 'visible';
+              el.style[WEBKIT_PROPERTY] = '';
             });
           }
         }
