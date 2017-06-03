@@ -83,8 +83,6 @@
     },
 
     _open: function() {
-      this.$.overlay._moveTo(document.body);
-
       this._addOutsideClickListener();
 
       // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
@@ -103,8 +101,6 @@
     },
 
     _close: function() {
-      this.$.overlay._moveTo(this.root);
-
       this._removeOutsideClickListener();
 
       this.fire('vaadin-dropdown-closed');

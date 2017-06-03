@@ -13,7 +13,7 @@
 
 <dom-module id="vaadin-combo-box-overlay">
   <template>
-    <vaadin-overlay id="overlay" opened$="[[opened]]" loading$="[[loading]]" position-target="[[positionTarget]]" on-template-changed="_templateChanged">
+    <vaadin-overlay id="overlay" opened="[[opened]]" loading$="[[loading]]" position-target="[[positionTarget]]" on-template-changed="_templateChanged">
       <template>
         <style>
           :host([opened][loading]) {
@@ -206,7 +206,9 @@
       }
     },
 
-    /***/
+    observers: ['_openedChanged(opened)'],
+
+    /** */
     // TODO: remove
     created: function() {
       this._boundSetPosition = this._setPosition.bind(this);
@@ -228,10 +230,8 @@
       }
     },
 
-    _moveTo: function(target) {
-      this.$.overlay._moveTo(target);
-
-      if (target === document.body) {
+    _openedChanged: function(opened) {
+      if (opened) {
         this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
         window.addEventListener('scroll', this._boundSetPosition, true);
         this._setPosition();
@@ -331,7 +331,7 @@
       return spaceBelow < 0.30;
     },
 
-    /***/
+    /** */
 
     _patchIronListStamping: function() {
       var stamp = this.$.selector.stamp;
