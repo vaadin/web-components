@@ -60,7 +60,7 @@
     it('should stop tap events from bubbling outside the overlay', function() {
       var tapSpy = sinon.spy();
       document.addEventListener('tap', tapSpy);
-      combobox.$.overlay.$.selector.dispatchEvent(new CustomEvent('tap', {
+      combobox.$.overlay._selector.dispatchEvent(new CustomEvent('tap', {
         bubbles: true
       }));
       document.removeEventListener('tap', tapSpy);
@@ -71,7 +71,7 @@
       combobox.opened = true;
       Polymer.dom.flush();
 
-      Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
+      Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
         bubbles: true
       }));
 
@@ -82,10 +82,10 @@
     it('should fire `selection-changed` in short touch gestures', function(done) {
       combobox.opened = true;
 
-      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
+      MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
       combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+        var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -96,10 +96,10 @@
     it('should not fire `selection-changed` in long touch gestures', function(done) {
       combobox.opened = true;
 
-      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
+      MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
       combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+        var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -119,10 +119,10 @@
       function listener() {
         // Ensure the listener is invoked only once. Otherwise, `done()` might
         // be called multiple times, which produces error for the test.
-        combobox.$.overlay.$.scroller.removeEventListener('scroll', listener);
+        combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
         combobox.async(function() {
-          var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+          var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -131,9 +131,9 @@
       }
 
       // Scroll start could delay, for example, with full SD polyfill
-      combobox.$.overlay.$.scroller.addEventListener('scroll', listener);
+      combobox.$.overlay._scroller.addEventListener('scroll', listener);
 
-      combobox.$.overlay.$.selector.scrollToIndex(20);
+      combobox.$.overlay._selector.scrollToIndex(20);
     });
 
     it('should fire `selection-changed` after the scrolling grace period', function(done) {
@@ -146,10 +146,10 @@
       function listener() {
         // Ensure the listener is invoked only once. Otherwise, `done()` might
         // be called multiple times, which produces error for the test.
-        combobox.$.overlay.$.scroller.removeEventListener('scroll', listener);
+        combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
         combobox.async(function() {
-          var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+          var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -158,9 +158,9 @@
       }
 
       // Scroll start could delay, for example, with full SD polyfill
-      combobox.$.overlay.$.scroller.addEventListener('scroll', listener);
+      combobox.$.overlay._scroller.addEventListener('scroll', listener);
 
-      combobox.$.overlay.$.selector.scrollToIndex(20);
+      combobox.$.overlay._selector.scrollToIndex(20);
     });
 
     it('should select by using JS api', function() {
@@ -177,7 +177,7 @@
       combobox.open();
       Polymer.dom.flush();
 
-      combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item').click();
+      combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
 
       expect(combobox.opened).to.equal(false);
     });

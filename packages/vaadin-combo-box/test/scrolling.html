@@ -43,14 +43,14 @@
         it('should have momentum scrolling enabled', function() {
           combobox.open();
 
-          var scroller = combobox.$.overlay._unwrapIfNeeded(combobox.$.overlay.$.scroller);
+          var scroller = combobox.$.overlay._unwrapIfNeeded(combobox.$.overlay._scroller);
           expect(getComputedStyle(scroller).WebkitOverflowScrolling).to.equal('touch');
         });
       });
 
       describeIf(/Trident/.test(navigator.userAgent), 'IE11', function() {
         it('should have unselectable="on" for the scroller', function() {
-          var scroller = combobox.$.overlay.$.scroller;
+          var scroller = combobox.$.overlay._scroller;
           expect(scroller.getAttribute('unselectable')).to.equal('on');
         });
       });
@@ -69,18 +69,18 @@
         it('should be zero when no items are selected', function() {
           combobox.open();
 
-          expect(combobox.$.overlay.$.scroller.scrollTop).to.equal(0);
+          expect(combobox.$.overlay._scroller.scrollTop).to.equal(0);
         });
 
         it('should be zero when the first item is selected', function() {
           combobox.value = combobox.items[0];
           combobox.open();
 
-          expect(combobox.$.overlay.$.scroller.scrollTop).to.equal(0);
+          expect(combobox.$.overlay._scroller.scrollTop).to.equal(0);
         });
 
         function expectSelectedItemPositionToBeVisible() {
-          var selectedItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('[selected]');
+          var selectedItem = Polymer.dom(combobox.$.overlay._selector).querySelector('[selected]');
           expect(selectedItem).to.be.ok;
 
           var selectedItemRect = selectedItem.getBoundingClientRect();

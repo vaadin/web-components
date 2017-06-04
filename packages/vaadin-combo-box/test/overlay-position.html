@@ -203,7 +203,7 @@
       beforeEach(function() {
         // These tests randomly fails in Edge when they are run from travis
         // unless we reset borders.
-        comboBox.$.overlay.$.selector.$.items.style.border = 'none';
+        comboBox.$.overlay._selector.$.items.style.border = 'none';
       });
 
       it('should be above input', function(done) {

@@ -187,7 +187,7 @@
     },
 
     _onOverlayDown: function(event) {
-      if (this.$.overlay.touchDevice && event.target !== this.$.overlay.$.scroller) {
+      if (this.$.overlay.touchDevice && event.target !== this.$.overlay._scroller) {
         // On touch devices, blur the input on touch start inside the overlay, in order to hide
         // the virtual keyboard. But don't close the overlay on this blur.
         this._closeOnBlurIsPrevented = true;
@@ -700,7 +700,7 @@
     },
 
     _forwardParentProp: function(prop, value) {
-      var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
+      var items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
       Array.prototype.forEach.call(items, function(item) {
         if (item._itemTemplateInstance) {
           item._itemTemplateInstance.set(prop, value);
@@ -709,7 +709,7 @@
     },
 
     _forwardParentPath: function(path, value) {
-      var items = this.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item');
+      var items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
       Array.prototype.forEach.call(items, function(item) {
         if (item._itemTemplateInstance) {
           item._itemTemplateInstance.notifyPath(path, value, true);

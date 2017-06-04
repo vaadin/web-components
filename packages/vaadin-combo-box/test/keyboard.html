@@ -384,7 +384,7 @@
 
         Polymer.Base.async(function() {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
-          expect(comboBox.$.overlay.$.selector.lastVisibleIndex).to.eql(3);
+          expect(comboBox.$.overlay._selector.lastVisibleIndex).to.eql(3);
           done();
         }, 1);
       });
@@ -400,7 +400,7 @@
         comboBox.open();
 
         Polymer.Base.async(function() {
-          expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay.$.selector.lastVisibleIndex + 1);
+          expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay._selector.lastVisibleIndex + 1);
           done();
         }, 1);
       });
@@ -418,7 +418,7 @@
 
         comboBox.items = items;
         comboBox.open();
-        selector = comboBox.$.overlay.$.selector;
+        selector = comboBox.$.overlay._selector;
 
         Polymer.Base.async(done, 1);
       });

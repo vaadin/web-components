@@ -175,16 +175,15 @@
       // This causes the overlay closing due to defocusing the input field.
       // Prevent focusing the scroller by setting `unselectable="on"`.
       if (/Trident/.test(navigator.userAgent)) {
-        this.$.scroller.setAttribute('unselectable', 'on');
+        this._scroller.setAttribute('unselectable', 'on');
       }
     },
 
     observers: ['_selectorChanged(selector)', '_loadingChanged(loading)'],
 
     _templateChanged: function(e) {
-      // TODO: rename to _selector
-      this._selector = this.$.selector = this.$.dropdown.$.overlay.root.querySelector('#selector');
-      this._scroller = this.$.scroller = this.$.dropdown.$.overlay.root.querySelector('#scroller');
+      this._selector = this.$.dropdown.$.overlay.root.querySelector('#selector');
+      this._scroller = this.$.dropdown.$.overlay.root.querySelector('#scroller');
     },
 
     _loadingChanged: function(loading) {
@@ -205,7 +204,7 @@
     },
 
     _setOverlayHeight: function() {
-      if (!this.positionTarget || !this.$.selector) {
+      if (!this.positionTarget || !this._selector) {
         return;
       }
 
@@ -219,7 +218,7 @@
       this.$.dropdown.$.overlay.style.maxHeight = this._maxOverlayHeight(targetRect);
 
       // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-      this.$.selector.style.maxHeight = this._maxOverlayHeight(targetRect);
+      this._selector.style.maxHeight = this._maxOverlayHeight(targetRect);
 
       this.updateViewportBoundaries();
     },
@@ -333,19 +332,19 @@
 
       var targetIndex = index;
 
-      if (index > this.$.selector.lastVisibleIndex - 1) {
+      if (index > this._selector.lastVisibleIndex - 1) {
         // Index is below the bottom, scrolling down. Make the item appear at the bottom.
         targetIndex = index - visibleItemsCount + 1;
-      } else if (index > this.$.selector.firstVisibleIndex) {
+      } else if (index > this._selector.firstVisibleIndex) {
         // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
         // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
-        targetIndex = this.$.selector.firstVisibleIndex;
+        targetIndex = this._selector.firstVisibleIndex;
       }
-      this.$.selector.scrollToIndex(Math.max(0, targetIndex));
+      this._selector.scrollToIndex(Math.max(0, targetIndex));
 
       // Sometimes the item is partly below the bottom edge, detect and adjust.
-      var pidx = this.$.selector._getPhysicalIndex(index),
-        physicalItem = this.$.selector._physicalItems[pidx];
+      var pidx = this._selector._getPhysicalIndex(index),
+        physicalItem = this._selector._physicalItems[pidx];
       if (!physicalItem) return;
       var physicalItemRect = physicalItem.getBoundingClientRect(),
         scrollerRect = this._scroller.getBoundingClientRect(),
@@ -356,7 +355,7 @@
     },
 
     ensureItemsRendered: function() {
-      this.$.selector._render();
+      this._selector._render();
     },
 
     adjustScrollPosition: function() {
@@ -387,12 +386,12 @@
 
     updateViewportBoundaries: function() {
       this._cachedViewportTotalPaddingBottom = undefined;
-      this.$.selector.updateViewportBoundaries();
+      this._selector.updateViewportBoundaries();
     },
 
     get _viewportTotalPaddingBottom() {
       if (this._cachedViewportTotalPaddingBottom === undefined) {
-        var itemsStyle = window.getComputedStyle(this.$.dropdown._unwrapIfNeeded(this.$.selector.$.items));
+        var itemsStyle = window.getComputedStyle(this.$.dropdown._unwrapIfNeeded(this._selector.$.items));
         this._cachedViewportTotalPaddingBottom = [
           itemsStyle.paddingBottom,
           itemsStyle.borderBottomWidth
@@ -422,8 +421,8 @@
 
     _selectItem: function(item) {
       item = (typeof item === 'number') ? this._items[item] : item;
-      if (this.$.selector.selectedItem !== item) {
-        this.$.selector.selectItem(item);
+      if (this._selector.selectedItem !== item) {
+        this._selector.selectItem(item);
       }
     },
 

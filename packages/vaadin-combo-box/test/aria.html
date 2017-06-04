@@ -33,7 +33,7 @@
       return comboBox.$.clearIcon;
     }
     function getItemElement(i) {
-      return comboBox.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item')[i];
+      return comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')[i];
     }
 
     function arrowDown() {
@@ -70,7 +70,7 @@
       });
 
       it('iron-list should have role listbox', function() {
-        expect(comboBox.$.overlay.$.selector.getAttribute('role')).to.equal('listbox');
+        expect(comboBox.$.overlay._selector.getAttribute('role')).to.equal('listbox');
       });
 
       it('should set aria-expanded attribute when opened', function() {

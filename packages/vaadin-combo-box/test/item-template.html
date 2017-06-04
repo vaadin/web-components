@@ -56,7 +56,7 @@
         combobox.open();
 
         Polymer.dom.flush();
-        firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+        firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
       });
 
       it('should render items using template', function() {

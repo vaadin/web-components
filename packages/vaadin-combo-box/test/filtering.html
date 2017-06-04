@@ -284,7 +284,7 @@
         comboBox.loading = true;
 
         expect(comboBox.opened).to.be.true;
-        expect(comboBox.$.overlay.$.scroller.hidden).to.be.true;
+        expect(comboBox.$.overlay._scroller.hidden).to.be.true;
       });
 
       it('should refresh items after reassignment', function() {
