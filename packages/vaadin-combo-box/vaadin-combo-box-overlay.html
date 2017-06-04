@@ -6,14 +6,13 @@
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../paper-styles/shadow.html">
-<link rel="import" href="vaadin-overlay-behavior.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
-<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="vaadin-dropdown.html">
 
 <dom-module id="vaadin-combo-box-overlay">
   <template>
-    <vaadin-overlay id="overlay" opened="[[opened]]" loading$="[[loading]]" position-target="[[positionTarget]]" on-template-changed="_templateChanged">
+    <vaadin-dropdown id="dropdown" opened="{{opened}}" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]" on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
       <template>
         <style>
           :host([opened][loading]) {
@@ -88,15 +87,13 @@
           </iron-list>
         </div>
       </template>
-    </vaadin-overlay>
+    </vaadin-dropdown>
   </template>
 </dom-module>
 
 <script>
   Polymer({
     is: 'vaadin-combo-box-overlay',
-
-    behaviors: [Polymer.IronResizableBehavior],
 
     properties: {
 
@@ -125,14 +122,7 @@
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: 'notifyResize'
-      },
-
-      /**
-       * The element to position/align the dropdown by.
-       */
-      positionTarget: {
-        type: Object
+        observer: '_setOverlayHeight'
       },
 
       /**
@@ -141,14 +131,6 @@
       verticalOffset: {
         type: Number,
         value: 0
-      },
-
-      /**
-       * If `true`, overlay is aligned above the `positionTarget`
-       */
-      _alignedAbove: {
-        type: Boolean,
-        value: false
       },
 
       _selectedItem: {
@@ -184,20 +166,11 @@
       _notTapping: Boolean,
 
       _ignoreTaps: Boolean,
-    },
 
-    listeners: {
-      'iron-resize': '_setPosition'
+      _selector: Object
     },
 
     ready: function() {
-      this._patchWheelOverScrolling();
-
-      // Stamping with an empty object instead of null
-      // will resolve templatizer issues in P2 that previously
-      // required calling _flushProperties/_enableProperties.
-      this._patchIronListStamping();
-
       // IE11: when scrolling with mouse, the focus goes to the scroller.
       // This causes the overlay closing due to defocusing the input field.
       // Prevent focusing the scroller by setting `unselectable="on"`.
@@ -206,136 +179,66 @@
       }
     },
 
-    observers: ['_openedChanged(opened)'],
-
-    /** */
-    // TODO: remove
-    created: function() {
-      this._boundSetPosition = this._setPosition.bind(this);
-    },
-
-    notifyResize: function() {
-      this._setPosition();
-    },
-
-    _maxHeight: function(targetRect) {
-      var margin = 8;
-      var minHeight = 116; // Height of two items in combo-box
-      var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
-
-      if (this._alignedAbove) {
-        return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
-      } else {
-        return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
-      }
-    },
-
-    _openedChanged: function(opened) {
-      if (opened) {
-        this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
-        window.addEventListener('scroll', this._boundSetPosition, true);
-        this._setPosition();
-      } else {
-        window.removeEventListener('scroll', this._boundSetPosition, true);
-      }
-    },
-
-    _isPositionFixed: function(element) {
-      var offsetParent = this._getOffsetParent(element);
-
-      return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
-        (offsetParent && this._isPositionFixed(offsetParent));
-    },
-
-    _getOffsetParent: function(element) {
-      if (element.assignedSlot) {
-        return element.assignedSlot.parentElement;
-      } else if (element.parentElement) {
-        return element.offsetParent;
-      }
-
-      var parent = Polymer.dom(element).parentNode;
-
-      if (parent && parent.nodeType === 11 && parent.host) {
-        return parent.host; // parent is #shadowRoot
-      }
-    },
-
-    _verticalOffset: function(overlayRect, targetRect) {
-      if (this._alignedAbove) {
-        return -overlayRect.height;
-      } else {
-        return targetRect.height + this.verticalOffset;
-      }
-    },
-
-    _unwrapIfNeeded: function(element) {
-      var isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
-      return isWrapped ? window.unwrap(element) : element;
-    },
+    observers: ['_selectorChanged(selector)', '_loadingChanged(loading)'],
 
     _templateChanged: function(e) {
       // TODO: rename to _selector
-      this.$.selector = this.$.overlay.root.querySelector('#selector');
-      this._scroller = this.$.scroller = this.$.overlay.root.querySelector('#scroller');
+      this._selector = this.$.selector = this.$.dropdown.$.overlay.root.querySelector('#selector');
+      this._scroller = this.$.scroller = this.$.dropdown.$.overlay.root.querySelector('#scroller');
     },
 
-    _setPosition: function(e) {
-      if (e && e.target) {
-        var target = e.target === document ? document.body : e.target;
-        var parent = this._unwrapIfNeeded(this.$.overlay.parentElement);
-        if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
-          return;
-        }
+    _loadingChanged: function(loading) {
+      if (loading) {
+        this.$.dropdown.$.overlay.setAttribute('loading', '');
+      } else {
+        this.$.dropdown.$.overlay.removeAttribute('loading');
       }
+    },
 
-      if (!this.positionTarget) {
+    _selectorChanged: function(selector) {
+      this._patchWheelOverScrolling();
+
+      // Stamping with an empty object instead of null
+      // will resolve templatizer issues in P2 that previously
+      // required calling _flushProperties/_enableProperties.
+      this._patchIronListStamping();
+    },
+
+    _setOverlayHeight: function() {
+      if (!this.positionTarget || !this.$.selector) {
         return;
       }
 
       var targetRect = this.positionTarget.getBoundingClientRect();
-      this._alignedAbove = this._shouldAlignAbove();
 
       // TODO: this is using legacy API:
       // https://www.polymer-project.org/2.0/docs/api/mixins/Polymer.LegacyElementMixin#method-getComputedStyleValue
       this._scroller.style.maxHeight = this.getComputedStyleValue('--vaadin-combo-box-overlay-max-height') || '65vh';
 
       // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
-      this.$.overlay.style.maxHeight = this._maxHeight(targetRect);
+      this.$.dropdown.$.overlay.style.maxHeight = this._maxOverlayHeight(targetRect);
 
       // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-      this.$.selector.style.maxHeight = this._maxHeight(targetRect);
-
-      var overlayRect = this.$.overlay.getBoundingClientRect();
-      this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
-      this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
-        this._verticalOffset(overlayRect, targetRect);
-
-      var _devicePixelRatio = window.devicePixelRatio || 1;
-      this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
-      this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
-      this.$.overlay.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
-
-      this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
+      this.$.selector.style.maxHeight = this._maxOverlayHeight(targetRect);
 
       this.updateViewportBoundaries();
     },
 
-    _shouldAlignAbove: function() {
-      var spaceBelow = (
-          window.innerHeight -
-          this.positionTarget.getBoundingClientRect().bottom -
-          Math.min(document.body.scrollTop, 0)
-        ) / window.innerHeight;
+    _maxOverlayHeight: function(targetRect) {
+      var margin = 8;
+      var minHeight = 116; // Height of two items in combo-box
+      var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
 
-      return spaceBelow < 0.30;
+      if (this.$.dropdown.alignedAbove) {
+        return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
+      } else {
+        return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
+      }
     },
 
-    /** */
-
     _patchIronListStamping: function() {
-      var stamp = this.$.selector.stamp;
-      this.$.selector.stamp = function(value) {
+      var stamp = this._selector.stamp;
+      this._selector.stamp = function(value) {
         if (value === null) {
           value = {};
         }
@@ -468,7 +371,7 @@
      * scrolling the parent similarily to touch scrolling.
      */
     _patchWheelOverScrolling: function() {
-      var selector = this.$.selector;
+      var selector = this._selector;
       selector.addEventListener('wheel', function(e) {
         var scroller = selector._scroller || selector.scrollTarget;
         var scrolledToTop = scroller.scrollTop === 0;
@@ -489,7 +392,7 @@
 
     get _viewportTotalPaddingBottom() {
       if (this._cachedViewportTotalPaddingBottom === undefined) {
-        var itemsStyle = window.getComputedStyle(this._unwrapIfNeeded(this.$.selector.$.items));
+        var itemsStyle = window.getComputedStyle(this.$.dropdown._unwrapIfNeeded(this.$.selector.$.items));
         this._cachedViewportTotalPaddingBottom = [
           itemsStyle.paddingBottom,
           itemsStyle.borderBottomWidth
@@ -504,13 +407,17 @@
     },
 
     _visibleItemsCount: function() {
+      if (!this._selector) {
+        return;
+      }
+
       // Ensure items are rendered
-      this.$.selector.flushDebouncer('_debounceTemplate');
+      this._selector.flushDebouncer('_debounceTemplate');
       // Ensure items are positioned
-      this.$.selector.scrollToIndex(this.$.selector.firstVisibleIndex);
+      this._selector.scrollToIndex(this._selector.firstVisibleIndex);
       // Ensure viewport boundaries are up-to-date
       this.updateViewportBoundaries();
-      return this.$.selector.lastVisibleIndex - this.$.selector.firstVisibleIndex + 1;
+      return this._selector.lastVisibleIndex - this._selector.firstVisibleIndex + 1;
     },
 
     _selectItem: function(item) {

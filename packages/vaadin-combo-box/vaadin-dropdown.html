@@ -1,0 +1,226 @@
+<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<dom-module id="vaadin-dropdown">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <vaadin-overlay id="overlay" opened="[[opened]]" template="{{template}}">
+      <slot></slot>
+    </vaadin-overlay>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'vaadin-dropdown',
+
+    behaviors: [Polymer.IronResizableBehavior],
+
+    properties: {
+      opened: {
+        type: Boolean,
+        notify: true
+      },
+
+      template: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * True if the device supports touch events.
+       */
+      touchDevice: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: function() {
+          try {
+            document.createEvent('TouchEvent');
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      },
+
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        type: Object
+      },
+
+      /**
+       * Vertical offset for the overlay position.
+       */
+      verticalOffset: {
+        type: Number,
+        value: 0
+      },
+
+      /**
+       * If `true`, overlay is aligned above the `positionTarget`
+       */
+      alignedAbove: {
+        type: Boolean,
+        value: false
+      },
+    },
+
+    listeners: {
+      'iron-resize': '_setPosition'
+    },
+
+    observers: ['_openedChanged(opened)'],
+
+    created: function() {
+      this._boundSetPosition = this._setPosition.bind(this);
+    },
+
+    detached: function() {
+      // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
+      this.opened = false;
+    },
+
+    notifyResize: function() {
+      if (this.positionTarget) {
+        this._setPosition();
+      }
+    },
+
+    /**
+     * Fired after the `vaadin-dropdown` opens.
+     *
+     * @event vaadin-dropdown-opened
+     */
+    /**
+     * Fired after the `vaadin-dropdown` closes.
+     *
+     * @event vaadin-dropdown-closed
+     */
+
+    _openedChanged: function(opened) {
+      if (opened) {
+        this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
+        this._setPosition();
+
+        window.addEventListener('scroll', this._boundSetPosition, true);
+        this._addOutsideClickListener();
+        this.fire('vaadin-dropdown-opened');
+      } else {
+        window.removeEventListener('scroll', this._boundSetPosition, true);
+        this._removeOutsideClickListener();
+        this.fire('vaadin-dropdown-closed');
+      }
+    },
+
+    // We need to listen on 'click' / 'tap' event and capture it and close the overlay before
+    // propagating the event to the listener in the button. Otherwise, if the clicked button would call
+    // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+    _outsideClickListener: function(event) {
+      var eventPath = Polymer.dom(event).path;
+      if (eventPath.indexOf(this.positionTarget) < 0 && eventPath.indexOf(this.$.overlay) < 0) {
+        this.opened = false;
+      }
+    },
+
+    _addOutsideClickListener: function() {
+      // With desktop mouse, 'click' will make Polymer to fire 'tap' event.
+      // With touch devices, 'touchend' will make Polymer to fire 'tap' event, but browser will also fire 'click'.
+      // So, 'click' and 'tap' can come in any order and we need to make sure that the first one fired will close the overlay.
+      if (this.touchDevice) {
+        Polymer.Gestures.add(document, 'tap', null);
+        document.addEventListener('tap', this._outsideClickListener.bind(this), true);
+      } else {
+        document.addEventListener('click', this._outsideClickListener.bind(this), true);
+      }
+    },
+
+    _removeOutsideClickListener: function() {
+      if (this.touchDevice) {
+        // Not sure if this is a good idea to remove this Gesture globally, but that's how the iron-overlay-behavior does it.
+        Polymer.Gestures.remove(document, 'tap', null);
+        document.removeEventListener('tap', this._outsideClickListener.bind(this), true);
+      } else {
+        document.removeEventListener('click', this._outsideClickListener.bind(this), true);
+      }
+    },
+
+    _isPositionFixed: function(element) {
+      var offsetParent = this._getOffsetParent(element);
+
+      return window.getComputedStyle(this._unwrapIfNeeded(element)).position === 'fixed' ||
+        (offsetParent && this._isPositionFixed(offsetParent));
+    },
+
+    _getOffsetParent: function(element) {
+      if (element.assignedSlot) {
+        return element.assignedSlot.parentElement;
+      } else if (element.parentElement) {
+        return element.offsetParent;
+      }
+
+      var parent = Polymer.dom(element).parentNode;
+
+      if (parent && parent.nodeType === 11 && parent.host) {
+        return parent.host; // parent is #shadowRoot
+      }
+    },
+
+    _verticalOffset: function(overlayRect, targetRect) {
+      if (this.alignedAbove) {
+        return -overlayRect.height;
+      } else {
+        return targetRect.height + this.verticalOffset;
+      }
+    },
+
+    // TODO: not needed in v1 anymore? test with firefox
+    _unwrapIfNeeded: function(element) {
+      var isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
+      return isWrapped ? window.unwrap(element) : element;
+    },
+
+    _shouldAlignAbove: function() {
+      var spaceBelow = (
+          window.innerHeight -
+          this.positionTarget.getBoundingClientRect().bottom -
+          Math.min(document.body.scrollTop, 0)
+        ) / window.innerHeight;
+
+      return spaceBelow < 0.30;
+    },
+
+    _setPosition: function(e) {
+      if (e && e.target) {
+        var target = e.target === document ? document.body : e.target;
+        var parent = this._unwrapIfNeeded(this.$.overlay.parentElement);
+        if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
+          return;
+        }
+      }
+
+      var targetRect = this.positionTarget.getBoundingClientRect();
+      this.alignedAbove = this._shouldAlignAbove();
+
+      var overlayRect = this.$.overlay.getBoundingClientRect();
+      this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+      this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
+        this._verticalOffset(overlayRect, targetRect);
+
+      var _devicePixelRatio = window.devicePixelRatio || 1;
+      this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
+      this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
+      this.$.overlay.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
+
+      this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
+
+      // TODO: fire only when position actually changes changes
+      this.fire('position-changed');
+    }
+  });
+</script>

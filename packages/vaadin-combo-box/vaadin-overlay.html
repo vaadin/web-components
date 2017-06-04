@@ -20,7 +20,7 @@
           overflow: hidden;
         }
       </style>
-    <slot></slot>
+    <slot on-slotchange="_assignTemplate"></slot>
   </template>
 </dom-module>
 
@@ -37,16 +37,24 @@
       },
 
       template: {
-        notify: true,
-        value: function() {
-          return Polymer.dom(this).querySelector('template') || undefined;
-        }
+        type: Object,
+        notify: true
       },
 
       _instance: Object
     },
 
     observers: ['_openedChanged(opened)', '_templateChanged(template)'],
+
+    ready: function() {
+      // TODO: after combo-box-overlay extends dropdown, try if template can again be set in the property
+      // default value function
+      this._assignTemplate();
+    },
+
+    _assignTemplate: function() {
+      this.template = this.queryEffectiveChildren('template') || undefined;
+    },
 
     _openedChanged: function(opened) {
       if (opened) {

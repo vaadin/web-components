@@ -53,6 +53,10 @@
       fire(combobox.$$('paper-input-container #toggleIcon'), 'tap');
     }
 
+    function overlay() {
+      return combobox.$.overlay.$.dropdown.$.overlay;
+    }
+
     beforeEach(function() {
       combobox = fixture('combobox');
       comboboxLight = fixture('combobox-light');
@@ -133,13 +137,13 @@
       // of the combobox when moved during open.
       it('should not leak combobox style scope to the overlay', function() {
         // Test only when style scope classes are used
-        if (combobox.$.overlay.$.overlay.classList.contains('style-scope') &&
-            combobox.$.overlay.$.overlay.classList.contains('vaadin-combo-box')) {
+        if (overlay().classList.contains('style-scope') &&
+            overlay().classList.contains('vaadin-combo-box')) {
           combobox.open();
           Polymer.dom.flush();
 
-          expect(combobox.$.overlay.$.overlay.classList.contains('style-scope')).to.be.false;
-          expect(combobox.$.overlay.$.overlay.classList.contains('vaadin-combo-box')).to.be.false;
+          expect(overlay().classList.contains('style-scope')).to.be.false;
+          expect(overlay().classList.contains('vaadin-combo-box')).to.be.false;
         }
       });
 
@@ -233,7 +237,7 @@
       it('should not close when tapping on the overlay', function() {
         combobox.open();
 
-        combobox.$.overlay.fire('tap');
+        combobox.$.overlay.$.dropdown.$.overlay.fire('tap');
 
         expect(combobox.opened).to.be.true;
       });

@@ -84,7 +84,7 @@
           expect(selectedItem).to.be.ok;
 
           var selectedItemRect = selectedItem.getBoundingClientRect();
-          var overlayRect = combobox.$.overlay.$.overlay.getBoundingClientRect();
+          var overlayRect = combobox.$.overlay.$.dropdown.$.overlay.getBoundingClientRect();
           expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
           expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
           expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);

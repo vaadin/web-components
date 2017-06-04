@@ -1,6 +1,6 @@
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel="import" href="vaadin-dropdown-behavior.html">
+<link rel="import" href="vaadin-combo-box-dropdown-behavior.html">
 
 <script>
   window.vaadin = window.vaadin || {};
@@ -387,7 +387,7 @@
       // Ensure metrics are up-to-date
       this.$.overlay.updateViewportBoundaries();
       this.$.overlay.async(this.$.overlay.adjustScrollPosition);
-      this.$.overlay.async(this.$.overlay.notifyResize, 1);
+      this.$.overlay.$.dropdown.async(this.$.overlay.$.dropdown.notifyResize, 1);
 
       // Set body pointer-events to 'none' to disable mouse interactions with
       // other document nodes (combo-box is "modal")
@@ -591,7 +591,7 @@
         // async needed to reposition correctly after filtering
         // (especially when aligned on top of input)
         this.async(function() {
-          this.$.overlay.notifyResize();
+          this.$.overlay.$.dropdown.notifyResize();
         }, 1);
       }
     },
@@ -618,7 +618,7 @@
       this.$.overlay.set('_items', items);
 
       this.$.overlay.hidden = !this._hasItems(items);
-      this.$.overlay.notifyResize();
+      this.$.overlay.$.dropdown.notifyResize();
     },
 
     _hasItems: function(array) {
