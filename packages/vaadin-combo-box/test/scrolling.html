@@ -43,7 +43,7 @@
         it('should have momentum scrolling enabled', function() {
           combobox.open();
 
-          var scroller = combobox.$.overlay._unwrapIfNeeded(combobox.$.overlay._scroller);
+          var scroller = combobox.$.overlay._scroller;
           expect(getComputedStyle(scroller).WebkitOverflowScrolling).to.equal('touch');
         });
       });

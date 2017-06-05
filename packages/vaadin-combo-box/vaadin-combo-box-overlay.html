@@ -391,7 +391,7 @@
 
     get _viewportTotalPaddingBottom() {
       if (this._cachedViewportTotalPaddingBottom === undefined) {
-        var itemsStyle = window.getComputedStyle(this.$.dropdown._unwrapIfNeeded(this._selector.$.items));
+        var itemsStyle = window.getComputedStyle(this._selector.$.items);
         this._cachedViewportTotalPaddingBottom = [
           itemsStyle.paddingBottom,
           itemsStyle.borderBottomWidth
