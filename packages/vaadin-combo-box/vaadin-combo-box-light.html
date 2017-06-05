@@ -4,45 +4,6 @@ Copyright (c) 2016 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-`<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
-only the dropdown functionality and leaving the input field definition to the user.
-
-This element is using the same [`ComboBoxBehavior`](#vaadin.elements.combobox.ComboBoxBehavior) as
-[`<vaadin-combo-box>`](#vaadin-combo-box), so the API remains the same.
-
-To create a custom input field, you need to add a child element which has a two-way
-data-bindable property representing the input value. The property name is expected
-to be `bindValue` by default. See the example below for a simplest possible example
-using an `<input>` element extended with `iron-input`.
-
-```html
-<vaadin-combo-box-light>
-  <iron-input>
-    <input>
-  </iron-input>
-</vaadin-combo-box-light>
-```
-
-If you are using other custom input fields like `<paper-input>`, you
-need to define the name of value property with `attrForValue` property.
-See the example below on how to create a custom input field based
-on a `<paper-input>` decorated with a custom `<iron-icon>` and
-two `<paper-button>`s to act as the clear and toggle controls.
-
-```html
-<vaadin-combo-box-light attr-for-value="value">
-  <paper-input label="Elements" class="input">
-    <iron-icon icon="toll" prefix></iron-icon>
-    <paper-button suffix class="clear-button">Clear</paper-button>
-    <paper-button suffix class="toggle-button">Toggle</paper-button>
-  </paper-input>
-</vaadin-combo-box-light>
-```
-
-@element vaadin-combo-box-light
--->
-
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="vaadin-combo-box-behavior.html">
@@ -73,65 +34,128 @@ two `<paper-button>`s to act as the clear and toggle controls.
   </template>
 </dom-module>
 
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
 <script>
-  Polymer({
-    is: 'vaadin-combo-box-light',
+  if (!Polymer.Element) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+  }
 
-    behaviors: [
-      Polymer.IronA11yKeysBehavior,
-      vaadin.elements.combobox.ComboBoxBehavior
-    ],
+  {
+    /**
+     * `<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
+     * only the dropdown functionality and leaving the input field definition to the user.
+     *
+     * This element is using the same [`ComboBoxBehavior`](#vaadin.elements.combobox.ComboBoxBehavior) as
+     * [`<vaadin-combo-box>`](#vaadin-combo-box), so the API remains the same.
+     *
+     * To create a custom input field, you need to add a child element which has a two-way
+     * data-bindable property representing the input value. The property name is expected
+     * to be `bindValue` by default. See the example below for a simplest possible example
+     * using an `<input>` element extended with `iron-input`.
+     *
+     * ```html
+     * <vaadin-combo-box-light>
+     *   <iron-input>
+     *     <input>
+     *   </iron-input>
+     * </vaadin-combo-box-light>
+     * ```
+     *
+     * If you are using other custom input fields like `<paper-input>`, you
+     * need to define the name of value property with `attrForValue` property.
+     * See the example below on how to create a custom input field based
+     * on a `<paper-input>` decorated with a custom `<iron-icon>` and
+     * two `<paper-button>`s to act as the clear and toggle controls.
+     *
+     * ```html
+     * <vaadin-combo-box-light attr-for-value="value">
+     *   <paper-input label="Elements" class="input">
+     *     <iron-icon icon="toll" prefix></iron-icon>
+     *     <paper-button suffix class="clear-button">Clear</paper-button>
+     *     <paper-button suffix class="toggle-button">Toggle</paper-button>
+     *   </paper-input>
+     * </vaadin-combo-box-light>
+     * ```
+     *
+     * @element vaadin-combo-box-light
+     */
+    class ComboBoxLightElement extends Polymer.GestureEventListeners(Polymer.mixinBehaviors(
+    [Polymer.IronA11yKeysBehavior, vaadin.elements.combobox.ComboBoxBehavior], Polymer.Element)) {
 
-    properties: {
-      /**
-       * Name of the two-way data-bindable property representing the
-       * value of the custom input field.
-       */
-      attrForValue: {
-        type: String,
-        value: 'bind-value'
-      },
-
-      /**
-       * Number of pixels used as the vertical offset in positioning of
-       * the dropdown.
-       */
-      overlayVerticalOffset: {
-        type: Number,
-        value: 0
+      static get is() {
+        return 'vaadin-combo-box-light';
       }
-    },
 
-    attached: function() {
-      var cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
-      this._setInputElement(Polymer.dom(this).querySelector(cssSelector));
-      this._toggleElement = Polymer.dom(this).querySelector('.toggle-button');
-      this._clearElement = Polymer.dom(this).querySelector('.clear-button');
+      static get properties() {
+        return {
+          /**
+           * Name of the two-way data-bindable property representing the
+           * value of the custom input field.
+           */
+          attrForValue: {
+            type: String,
+            value: 'bind-value'
+          },
 
-      this._revertInputValue();
-      this.listen(this.inputElement, 'input', '_inputValueChanged');
-      this.listen(this.inputElement, 'blur', '_onBlur');
-      this._preventInputBlur();
-    },
+          /**
+           * Number of pixels used as the vertical offset in positioning of
+           * the dropdown.
+           */
+          overlayVerticalOffset: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
 
-    detached: function() {
-      this.unlisten(this.inputElement, 'input', '_inputValueChanged');
-      this.unlisten(this.inputElement, 'blur', '_onBlur');
-      this._restoreInputBlur();
-    },
+      ready() {
+        super.ready();
+      }
 
-    get _propertyForValue() {
-      return Polymer.CaseMap.dashToCamelCase(this.attrForValue);
-    },
+      attached() {
+        super.attached();
+        var cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
+        this._setInputElement(Polymer.dom(this).querySelector(cssSelector));
+        this._toggleElement = Polymer.dom(this).querySelector('.toggle-button');
+        this._clearElement = Polymer.dom(this).querySelector('.clear-button');
 
-    get _inputElementValue() {
-      return this.inputElement && this.inputElement[this._propertyForValue];
-    },
+        this._revertInputValue();
+        this.listen(this.inputElement, 'input', '_inputValueChanged');
+        this.listen(this.inputElement, 'blur', '_onBlur');
+        this._preventInputBlur();
+      }
 
-    set _inputElementValue(value) {
-      if (this.inputElement) {
-        this.inputElement[this._propertyForValue] = value;
+      detached() {
+        super.detached();
+        this.unlisten(this.inputElement, 'input', '_inputValueChanged');
+        this.unlisten(this.inputElement, 'blur', '_onBlur');
+        this._restoreInputBlur();
+      }
+
+      get _propertyForValue() {
+        return Polymer.CaseMap.dashToCamelCase(this.attrForValue);
+      }
+
+      get _inputElementValue() {
+        return this.inputElement && this.inputElement[this._propertyForValue];
+      }
+
+      set _inputElementValue(value) {
+        if (this.inputElement) {
+          this.inputElement[this._propertyForValue] = value;
+        }
       }
     }
-  });
+
+    customElements.define(ComboBoxLightElement.is, ComboBoxLightElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.ComboBoxLightElement = ComboBoxLightElement;
+  }
 </script>
