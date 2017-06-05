@@ -5,7 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
@@ -13,7 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../paper-input/paper-input-error.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="vaadin-combo-box-behavior.html">
+<link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
 <link rel="import" href="vaadin-combo-box-icons.html">
@@ -224,39 +223,39 @@ This program is available under Apache License Version 2.0, available at https:/
     if (!Polymer.Element) {
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
-    
+
     {
       /**
        * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
        * input field for filtering the list of items. If you want to replace the default
        * input field with a custom implementation, you should use the
        * [`<vaadin-combo-box-light>`](#vaadin-combo-box-light) element.
-       * 
+       *
        * Items in the dropdown list must be provided as a list of `String` values.
        * Defining the items is done using the `items` property, which can be assigned
        * with data-binding, using an attribute or directly with the JavaScript property.
-       * 
+       *
        * ```html
        * <vaadin-combo-box
        *     label="Fruit"
        *     items="[[data]]">
        * </vaadin-combo-box>
        * ```
-       * 
+       *
        * ```js
        * combobox.items = ['apple', 'orange', 'banana'];
        * ```
-       * 
+       *
        * When the selected `value` is changed, a `value-changed` event is triggered.
-       * 
+       *
        * This element is also extended with the `IronFormElementBehavior` to
        * enable usage within an `iron-form`.
-       * 
+       *
        * ### Item Template
-       * 
+       *
        * `<vaadin-combo-box>` supports using custom item template provided in the light
        * DOM:
-       * 
+       *
        * ```html
        * <vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
        *   <template>
@@ -264,30 +263,29 @@ This program is available under Apache License Version 2.0, available at https:/
        *   </template>
        * </vaadin-combo-box>
        * ```
-       * 
+       *
        * The following properties are available for item template bindings:
-       * 
+       *
        * Property name | Type | Description
        * --------------|------|------------
        * `index`| Number | Index of the item in the `items` array
        * `item` | String or Object | The item reference
        * `selected` | Boolean | True when item is selected
        * `focused` | Boolean | True when item is focused
-       * 
+       *
        * See the [Item Template Live Demos](demo/item-template.html) for more examples.
-       * 
+       *
        * ### Styling
        * There are custom properties and mixins you can use to style the component:
-       * 
+       *
        * Custom property | Description | Default
        * ----------------|-------------|-------------
        * `--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`
-       * 
+       *
        * @element vaadin-combo-box
        * @demo demo/index.html
        */
-      class ComboBoxElement extends Polymer.GestureEventListeners(Polymer.mixinBehaviors(
-      [Polymer.IronValidatableBehavior, vaadin.elements.combobox.ComboBoxBehavior], Polymer.Element)) {
+      class ComboBoxElement extends Vaadin.ComboBoxMixin(Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element)) {
 
         static get is() {
           return 'vaadin-combo-box';
@@ -476,7 +474,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onInputContainerFocusedChanged(e) {
           this._setFocused(e.detail.value);
-        }        
+        }
       }
 
       customElements.define(ComboBoxElement.is, ComboBoxElement);
