@@ -4,22 +4,15 @@ language: node_js
 node_js: stable
 
 cache:
-  yarn: true
   directories:
     - node_modules
 
 addons:
-  apt:
-    sources:
-      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
-        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-    packages:
-      - yarn
   firefox: latest
   google-chrome: latest
 
 install:
-  - yarn
+  - npm install
   - polymer install --variants
 
 before_script:
@@ -65,13 +58,13 @@ script:
     test/doctype.html
     test/lazy-import.html
     --env saucelabs
-  # - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
-  #     xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
-  #   fi
+  - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
+      npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
+      gemini test test/visual;
+    fi
   # - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
   #     xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
   #   fi
-  - gemini test test/visual
 
 after_success:
   - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
