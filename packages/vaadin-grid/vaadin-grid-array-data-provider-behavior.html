@@ -72,7 +72,7 @@
           continue;
         }
 
-        var parentProperty = path.replace(/\.[^\.]*/, ''); // a.b.c -> a.b
+        var parentProperty = path.replace(/\.[^\.]*$/, ''); // a.b.c -> a.b
         if (Polymer.Base.get(parentProperty, items[0]) === undefined) {
           console.warn(
             'Path "' + path + '" used for ' + action + ' does not exist in all of the items, ' + action + ' is disabled.'
