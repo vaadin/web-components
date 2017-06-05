@@ -41,9 +41,11 @@
       });
 
       it('should leave a placeholder after moving to body', function() {
+        var overlayIndex = Array.prototype.indexOf.call(parent.childNodes, overlay);
+
         overlay.opened = true;
 
-        expect(parent.children[0]).to.eql(overlay._placeholder);
+        expect(parent.childNodes[overlayIndex]).to.eql(overlay._placeholder);
       });
 
       it('should return to original place when closed', function() {

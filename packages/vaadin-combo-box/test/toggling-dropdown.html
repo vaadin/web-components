@@ -237,7 +237,7 @@
       it('should not close when tapping on the overlay', function() {
         combobox.open();
 
-        combobox.$.overlay.$.dropdown.$.overlay.fire('tap');
+        fire(combobox.$.overlay.$.dropdown.$.overlay, 'tap');
 
         expect(combobox.opened).to.be.true;
       });

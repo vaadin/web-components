@@ -1,90 +1,122 @@
-<link rel="import" href="../polymer/polymer.html">
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/templatize.html">
 
 <dom-module id="vaadin-overlay">
   <template>
     <style>
-      :host {
-          position: absolute;
-          @apply --shadow-elevation-2dp;
-          background: #fff;
-          border-radius: 0 0 2px 2px;
-          top: 0;
-          left: 0;
-          pointer-events: auto;
+       :host {
+        position: absolute;
+        @apply --shadow-elevation-2dp;
+        background: #fff;
+        border-radius: 0 0 2px 2px;
+        top: 0;
+        left: 0;
+        pointer-events: auto;
 
-          /**
+        /**
           * Keep the vaadin-combo-box-overlay above paper-dialogs.
           * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
           */
-          z-index: 200;
-          overflow: hidden;
-        }
-      </style>
-    <slot on-slotchange="_assignTemplate"></slot>
+        z-index: 200;
+        overflow: hidden;
+      }
+    </style>
+    <slot id="slot" on-slotchange="_assignTemplate"></slot>
   </template>
 </dom-module>
 
 <script>
-  Polymer({
-    is: 'vaadin-overlay',
+  if (!Polymer.Element) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+  }
 
-    behaviors: [Polymer.Templatizer],
-
-    properties: {
-      opened: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
-
-      template: {
-        type: Object,
-        notify: true
-      },
-
-      _instance: Object
-    },
-
-    observers: ['_openedChanged(opened)', '_templateChanged(template)'],
-
-    ready: function() {
-      // TODO: after combo-box-overlay extends dropdown, try if template can again be set in the property
-      // default value function
-      this._assignTemplate();
-    },
-
-    _assignTemplate: function() {
-      this.template = this.queryEffectiveChildren('template') || undefined;
-    },
-
-    _openedChanged: function(opened) {
-      if (opened) {
-        // should be a comment node instead of element?
-        this._placeholder = document.createElement('div');
-        this.parentNode.insertBefore(this._placeholder, this);
-        document.body.appendChild(this);
-      } else if(this._placeholder) {
-        this._placeholder.parentNode.insertBefore(this, this._placeholder);
-        this._processPendingMutationObserversFor(document.body);
-        this._placeholder.parentNode.removeChild(this._placeholder);
+  (function () {
+    /**
+     * `<vaadin-overlay>` is a Polymer element for creating overlays.
+     * @memberof Vaadin
+     */
+    class OverlayElement extends Polymer.Element {
+      static get is() {
+        return 'vaadin-overlay'
       }
-    },
 
-    _templateChanged: function(template) {
-      this.templatize(template);
-      this._instance = this.stamp();
-      this.root.appendChild(this._instance.root);
-    },
+      static get properties() {
+        return {
+          opened: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
 
-    _forwardHostPropV2: function(prop, value) {
-      if (this._instance) {
-        this._instance.set(prop, value);
+          template: {
+            type: Object,
+            notify: true
+          },
+
+          _instance: Object
+        };
       }
-    },
 
-    _processPendingMutationObserversFor: function(node) {
-      if (window.CustomElements && !Polymer.Settings.useNativeCustomElements) {
-        CustomElements.takeRecords(node);
+      static get observers() {
+        return ['_openedChanged(opened)', '_templateChanged(template)'];
+      }
+
+      ready() {
+        super.ready();
+        this._assignTemplate();
+      }
+
+      _assignTemplate() {
+        var template = this.$.slot.assignedNodes({
+          flatten: true
+        }).find(node => node.localName && node.localName === 'template');
+        this.template = template || undefined;
+      }
+
+      _openedChanged(opened) {
+        if (opened) {
+          this._placeholder = document.createComment('vaadin-overlay-placeholder');
+          this.parentNode.insertBefore(this._placeholder, this);
+          document.body.appendChild(this);
+        } else if (this._placeholder) {
+          this._placeholder.parentNode.insertBefore(this, this._placeholder);
+          this._processPendingMutationObserversFor(document.body);
+          this._placeholder.parentNode.removeChild(this._placeholder);
+        }
+      }
+
+      _templateChanged(template) {
+        var Templatizer = Polymer.Templatize.templatize(template, this, {
+          forwardHostProp: function (prop, value) {
+            if (this._instance) {
+              this._instance.forwardHostProp(prop, value);
+            }
+          }
+        });
+
+        this._instance = new Templatizer({});
+
+        this.root.appendChild(this._instance.root);
+      }
+
+      _processPendingMutationObserversFor(node) {
+        if (window.CustomElements && !Polymer.Settings.useNativeCustomElements) {
+          CustomElements.takeRecords(node);
+        }
       }
     }
-  });
+
+    customElements.define(OverlayElement.is, OverlayElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.OverlayElement = OverlayElement;
+  })();
 </script>

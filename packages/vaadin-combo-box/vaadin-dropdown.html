@@ -209,7 +209,7 @@
       var _devicePixelRatio = window.devicePixelRatio || 1;
       this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
       this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
-      this.$.overlay.translate3d(this._translateX + 'px', this._translateY + 'px', '0');
+      this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
 
       this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
 

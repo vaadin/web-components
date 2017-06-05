@@ -252,29 +252,6 @@
         expect(dropContentRect().top).to.be.at.least(0);
       });
     });
-
-    describe('overlay attached/detached callbacks', function() {
-      it('should be called after open and close', function() {
-        var overlay = dropContent();
-        overlay.detached = sinon.spy();
-        overlay.attached = sinon.spy();
-
-        comboBox.open();
-
-        sinon.assert.calledOnce(overlay.detached);
-        sinon.assert.calledOnce(overlay.attached);
-        sinon.assert.callOrder(overlay.detached, overlay.attached);
-
-        overlay.detached.reset();
-        overlay.attached.reset();
-
-        comboBox.close();
-
-        sinon.assert.calledOnce(overlay.detached);
-        sinon.assert.calledOnce(overlay.attached);
-        sinon.assert.callOrder(overlay.detached, overlay.attached);
-      });
-    });
   });
 
   describe('overlay with fixed position target', function() {
