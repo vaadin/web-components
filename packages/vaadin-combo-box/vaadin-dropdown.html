@@ -1,10 +1,18 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/gestures.html">
 <link rel="import" href="vaadin-overlay.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <dom-module id="vaadin-dropdown">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
       }
     </style>
@@ -15,206 +23,232 @@
 </dom-module>
 
 <script>
-  Polymer({
-    is: 'vaadin-dropdown',
+  (function() {
+    /**
+     * `<vaadin-dropdown>` is a Polymer element for creating dropdowns.
+     * @memberof Vaadin
+     */
+    class DropdownElement extends Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element) {
+      static get is() {
+        return 'vaadin-dropdown';
+      }
 
-    behaviors: [Polymer.IronResizableBehavior],
+      static get properties() {
+        return {
+          opened: {
+            type: Boolean,
+            notify: true
+          },
 
-    properties: {
-      opened: {
-        type: Boolean,
-        notify: true
-      },
+          template: {
+            type: Object,
+            notify: true
+          },
 
-      template: {
-        type: Object,
-        notify: true
-      },
+          /**
+           * True if the device supports touch events.
+           */
+          touchDevice: {
+            type: Boolean,
+            reflectToAttribute: true,
+            value: () => {
+              try {
+                document.createEvent('TouchEvent');
+                return true;
+              } catch (e) {
+                return false;
+              }
+            }
+          },
 
-      /**
-       * True if the device supports touch events.
-       */
-      touchDevice: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: function() {
-          try {
-            document.createEvent('TouchEvent');
-            return true;
-          } catch (e) {
-            return false;
+          /**
+           * The element to position/align the dropdown by.
+           */
+          positionTarget: {
+            type: Object
+          },
+
+          /**
+           * Vertical offset for the overlay position.
+           */
+          verticalOffset: {
+            type: Number,
+            value: 0
+          },
+
+          /**
+           * If `true`, overlay is aligned above the `positionTarget`
+           */
+          alignedAbove: {
+            type: Boolean,
+            value: false
           }
-        }
-      },
-
-      /**
-       * The element to position/align the dropdown by.
-       */
-      positionTarget: {
-        type: Object
-      },
-
-      /**
-       * Vertical offset for the overlay position.
-       */
-      verticalOffset: {
-        type: Number,
-        value: 0
-      },
-
-      /**
-       * If `true`, overlay is aligned above the `positionTarget`
-       */
-      alignedAbove: {
-        type: Boolean,
-        value: false
-      },
-    },
-
-    listeners: {
-      'iron-resize': '_setPosition'
-    },
-
-    observers: ['_openedChanged(opened)'],
-
-    created: function() {
-      this._boundSetPosition = this._setPosition.bind(this);
-    },
-
-    detached: function() {
-      // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
-      this.opened = false;
-    },
-
-    notifyResize: function() {
-      if (this.positionTarget) {
-        this._setPosition();
+        };
       }
-    },
 
-    /**
-     * Fired after the `vaadin-dropdown` opens.
-     *
-     * @event vaadin-dropdown-opened
-     */
-    /**
-     * Fired after the `vaadin-dropdown` closes.
-     *
-     * @event vaadin-dropdown-closed
-     */
-
-    _openedChanged: function(opened) {
-      if (opened) {
-        this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
-        this._setPosition();
-
-        window.addEventListener('scroll', this._boundSetPosition, true);
-        this._addOutsideClickListener();
-        this.fire('vaadin-dropdown-opened');
-      } else {
-        window.removeEventListener('scroll', this._boundSetPosition, true);
-        this._removeOutsideClickListener();
-        this.fire('vaadin-dropdown-closed');
+      static get observers() {
+        return ['_openedChanged(opened)'];
       }
-    },
 
-    // We need to listen on 'click' / 'tap' event and capture it and close the overlay before
-    // propagating the event to the listener in the button. Otherwise, if the clicked button would call
-    // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
-    _outsideClickListener: function(event) {
-      var eventPath = Polymer.dom(event).path;
-      if (eventPath.indexOf(this.positionTarget) < 0 && eventPath.indexOf(this.$.overlay) < 0) {
+      constructor() {
+        super();
+        this._boundSetPosition = this._setPosition.bind(this);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('iron-resize', this._boundSetPosition);
+      }
+
+      ready() {
+        super.ready();
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('iron-resize', this._boundSetPosition);
+
+        // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
         this.opened = false;
       }
-    },
 
-    _addOutsideClickListener: function() {
-      // With desktop mouse, 'click' will make Polymer to fire 'tap' event.
-      // With touch devices, 'touchend' will make Polymer to fire 'tap' event, but browser will also fire 'click'.
-      // So, 'click' and 'tap' can come in any order and we need to make sure that the first one fired will close the overlay.
-      if (this.touchDevice) {
-        Polymer.Gestures.add(document, 'tap', null);
-        document.addEventListener('tap', this._outsideClickListener.bind(this), true);
-      } else {
-        document.addEventListener('click', this._outsideClickListener.bind(this), true);
-      }
-    },
-
-    _removeOutsideClickListener: function() {
-      if (this.touchDevice) {
-        // Not sure if this is a good idea to remove this Gesture globally, but that's how the iron-overlay-behavior does it.
-        Polymer.Gestures.remove(document, 'tap', null);
-        document.removeEventListener('tap', this._outsideClickListener.bind(this), true);
-      } else {
-        document.removeEventListener('click', this._outsideClickListener.bind(this), true);
-      }
-    },
-
-    _isPositionFixed: function(element) {
-      var offsetParent = this._getOffsetParent(element);
-
-      return window.getComputedStyle(element).position === 'fixed' ||
-        (offsetParent && this._isPositionFixed(offsetParent));
-    },
-
-    _getOffsetParent: function(element) {
-      if (element.assignedSlot) {
-        return element.assignedSlot.parentElement;
-      } else if (element.parentElement) {
-        return element.offsetParent;
+      notifyResize() {
+        if (this.positionTarget) {
+          this._setPosition();
+        }
       }
 
-      var parent = Polymer.dom(element).parentNode;
+      /**
+       * Fired after the `vaadin-dropdown` opens.
+       *
+       * @event vaadin-dropdown-opened
+       */
+      /**
+       * Fired after the `vaadin-dropdown` closes.
+       *
+       * @event vaadin-dropdown-closed
+       */
 
-      if (parent && parent.nodeType === 11 && parent.host) {
-        return parent.host; // parent is #shadowRoot
+      _openedChanged(opened) {
+        if (opened) {
+          this.$.overlay.style.position = this._isPositionFixed(this.positionTarget) ? 'fixed' : 'absolute';
+          this._setPosition();
+
+          window.addEventListener('scroll', this._boundSetPosition, true);
+          this._addOutsideClickListener();
+          this.fire('vaadin-dropdown-opened');
+        } else {
+          window.removeEventListener('scroll', this._boundSetPosition, true);
+          this._removeOutsideClickListener();
+          this.fire('vaadin-dropdown-closed');
+        }
       }
-    },
 
-    _verticalOffset: function(overlayRect, targetRect) {
-      if (this.alignedAbove) {
-        return -overlayRect.height;
-      } else {
-        return targetRect.height + this.verticalOffset;
+
+      // We need to listen on 'click' / 'tap' event and capture it and close the overlay before
+      // propagating the event to the listener in the button. Otherwise, if the clicked button would call
+      // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+      _outsideClickListener(event) {
+        var eventPath = event.composedPath();
+        if (eventPath.indexOf(this.positionTarget) < 0 && eventPath.indexOf(this.$.overlay) < 0) {
+          this.opened = false;
+        }
       }
-    },
 
-    _shouldAlignAbove: function() {
-      var spaceBelow = (
+      _addOutsideClickListener() {
+        // With desktop mouse, 'click' will make Polymer to fire 'tap' event.
+        // With touch devices, 'touchend' will make Polymer to fire 'tap' event, but browser will also fire 'click'.
+        // So, 'click' and 'tap' can come in any order and we need to make sure that the first one fired will close the overlay.
+        if (this.touchDevice) {
+          Polymer.Gestures.add(document, 'tap', null);
+          document.addEventListener('tap', this._outsideClickListener.bind(this), true);
+        } else {
+          document.addEventListener('click', this._outsideClickListener.bind(this), true);
+        }
+      }
+
+      _removeOutsideClickListener() {
+        if (this.touchDevice) {
+          document.removeEventListener('tap', this._outsideClickListener.bind(this), true);
+        } else {
+          document.removeEventListener('click', this._outsideClickListener.bind(this), true);
+        }
+      }
+
+      _isPositionFixed(element) {
+        var offsetParent = this._getOffsetParent(element);
+
+        return window.getComputedStyle(element).position === 'fixed' ||
+          (offsetParent && this._isPositionFixed(offsetParent));
+      }
+
+      _getOffsetParent(element) {
+        if (element.assignedSlot) {
+          return element.assignedSlot.parentElement;
+        } else if (element.parentElement) {
+          return element.offsetParent;
+        }
+
+        var parent = Polymer.dom(element).parentNode;
+
+        if (parent && parent.nodeType === 11 && parent.host) {
+          return parent.host; // parent is #shadowRoot
+        }
+      }
+
+      _verticalOffset(overlayRect, targetRect) {
+        if (this.alignedAbove) {
+          return -overlayRect.height;
+        } else {
+          return targetRect.height + this.verticalOffset;
+        }
+      }
+
+      _shouldAlignAbove() {
+        var spaceBelow = (
           window.innerHeight -
           this.positionTarget.getBoundingClientRect().bottom -
           Math.min(document.body.scrollTop, 0)
         ) / window.innerHeight;
 
-      return spaceBelow < 0.30;
-    },
-
-    _setPosition: function(e) {
-      if (e && e.target) {
-        var target = e.target === document ? document.body : e.target;
-        var parent = this.$.overlay.parentElement;
-        if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
-          return;
-        }
+        return spaceBelow < 0.30;
       }
 
-      var targetRect = this.positionTarget.getBoundingClientRect();
-      this.alignedAbove = this._shouldAlignAbove();
+      _setPosition(e) {
+        if (e && e.target) {
+          var target = e.target === document ? document.body : e.target;
+          var parent = this.$.overlay.parentElement;
+          if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
+            return;
+          }
+        }
 
-      var overlayRect = this.$.overlay.getBoundingClientRect();
-      this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
-      this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
-        this._verticalOffset(overlayRect, targetRect);
+        var targetRect = this.positionTarget.getBoundingClientRect();
+        this.alignedAbove = this._shouldAlignAbove();
 
-      var _devicePixelRatio = window.devicePixelRatio || 1;
-      this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
-      this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
-      this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
+        var overlayRect = this.$.overlay.getBoundingClientRect();
+        this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
+        this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
+          this._verticalOffset(overlayRect, targetRect);
 
-      this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
+        var _devicePixelRatio = window.devicePixelRatio || 1;
+        this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
+        this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
+        this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
 
-      // TODO: fire only when position actually changes changes
-      this.fire('position-changed');
+        this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
+
+        // TODO: fire only when position actually changes changes
+        this.dispatchEvent(new CustomEvent('position-changed'));
+      }
     }
-  });
+
+    customElements.define(DropdownElement.is, DropdownElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.DropdownElement = DropdownElement;
+  })();
 </script>
