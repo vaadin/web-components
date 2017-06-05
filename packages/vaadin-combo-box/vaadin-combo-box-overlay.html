@@ -2,7 +2,10 @@
 @element vaadin-combo-box-overlay
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../paper-styles/shadow.html">
@@ -12,10 +15,11 @@
 
 <dom-module id="vaadin-combo-box-overlay">
   <template>
-    <vaadin-dropdown id="dropdown" opened="{{opened}}" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]" on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
+    <vaadin-dropdown id="dropdown" opened="{{opened}}" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]"
+      on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
       <template>
         <style>
-          :host([opened][loading]) {
+           :host([opened][loading]) {
             display: block !important;
             height: 58px;
           }
@@ -34,7 +38,8 @@
             --iron-list-items-container: {
               border-top: 8px solid transparent;
               border-bottom: 8px solid transparent;
-            };
+            }
+            ;
           }
 
           #selector vaadin-combo-box-item {
@@ -60,28 +65,12 @@
           }
         </style>
         <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-        <div id="scroller" scroller="[[_scroller]]"
-            on-tap="_stopPropagation"
-            on-touchstart="_onTouchStart"
-            on-touchend="_preventDefault"
-            on-scroll="_onScroll"
-            hidden$="[[loading]]">
-          <iron-list
-              id="selector"
-              touch-device$="[[touchDevice]]"
-              role="listbox"
-              items="[[_items]]"
-              scroll-target="[[_scroller]]">
+        <div id="scroller" scroller="[[_scroller]]" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
+          on-scroll="_onScroll" hidden$="[[loading]]">
+          <iron-list id="selector" touch-device$="[[touchDevice]]" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>
-              <vaadin-combo-box-item
-                  on-tap="_onTap"
-                  index="[[index]]"
-                  item="[[item]]"
-                  label="[[getItemLabel(item)]]"
-                  selected="[[_isItemSelected(item, _selectedItem)]]"
-                  role$="[[_getAriaRole(index)]]"
-                  aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
-                  focused="[[_isItemFocused(_focusedIndex,index)]]">
+              <vaadin-combo-box-item on-tap="_onTap" index="[[index]]" item="[[item]]" label="[[getItemLabel(item)]]" selected="[[_isItemSelected(item, _selectedItem)]]"
+                role$="[[_getAriaRole(index)]]" aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]" focused="[[_isItemFocused(_focusedIndex,index)]]">
               </vaadin-combo-box-item>
             </template>
           </iron-list>
@@ -92,351 +81,367 @@
 </dom-module>
 
 <script>
-  Polymer({
-    is: 'vaadin-combo-box-overlay',
-
-    properties: {
-
-      /**
-       * True if the device supports touch events.
-       */
-      touchDevice: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: function() {
-          try {
-            document.createEvent('TouchEvent');
-            return true;
-          } catch (e) {
-            return false;
-          }
-        }
-      },
-
-      opened: Boolean,
-
-      /*
-       * `true` when new items are being loaded.
-       */
-      loading: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-        observer: '_setOverlayHeight'
-      },
-
-      /**
-       * Vertical offset for the overlay position.
-       */
-      verticalOffset: {
-        type: Number,
-        value: 0
-      },
-
-      _selectedItem: {
-        type: Object
-      },
-
-      _items: {
-        type: Object
-      },
-
-      _focusedIndex: {
-        type: Number,
-        notify: true,
-        value: -1,
-        observer: '_focusedIndexChanged'
-      },
-
-      _focusedItem: {
-        type: String,
-        computed: '_getFocusedItem(_focusedIndex)'
-      },
-
-      _itemLabelPath: {
-        type: String,
-        value: 'label'
-      },
-
-      _itemValuePath: {
-        type: String,
-        value: 'value'
-      },
-
-      _notTapping: Boolean,
-
-      _ignoreTaps: Boolean,
-
-      _selector: Object
-    },
-
-    ready: function() {
-      // IE11: when scrolling with mouse, the focus goes to the scroller.
-      // This causes the overlay closing due to defocusing the input field.
-      // Prevent focusing the scroller by setting `unselectable="on"`.
-      if (/Trident/.test(navigator.userAgent)) {
-        this._scroller.setAttribute('unselectable', 'on');
-      }
-
-      // Prevent blurring the input when clicking inside the overlay.
-      this.$.dropdown.$.overlay.addEventListener('mousedown', e => e.preventDefault());
-    },
-
-    observers: ['_selectorChanged(selector)', '_loadingChanged(loading)'],
-
-    _templateChanged: function(e) {
-      this._selector = this.$.dropdown.$.overlay.root.querySelector('#selector');
-      this._scroller = this.$.dropdown.$.overlay.root.querySelector('#scroller');
-    },
-
-    _loadingChanged: function(loading) {
-      if (loading) {
-        this.$.dropdown.$.overlay.setAttribute('loading', '');
-      } else {
-        this.$.dropdown.$.overlay.removeAttribute('loading');
-      }
-    },
-
-    _selectorChanged: function(selector) {
-      this._patchWheelOverScrolling();
-
-      // Stamping with an empty object instead of null
-      // will resolve templatizer issues in P2 that previously
-      // required calling _flushProperties/_enableProperties.
-      this._patchIronListStamping();
-    },
-
-    _setOverlayHeight: function() {
-      if (!this.positionTarget || !this._selector) {
-        return;
-      }
-
-      var targetRect = this.positionTarget.getBoundingClientRect();
-
-      // TODO: this is using legacy API:
-      // https://www.polymer-project.org/2.0/docs/api/mixins/Polymer.LegacyElementMixin#method-getComputedStyleValue
-      this._scroller.style.maxHeight = this.getComputedStyleValue('--vaadin-combo-box-overlay-max-height') || '65vh';
-
-      // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
-      this.$.dropdown.$.overlay.style.maxHeight = this._maxOverlayHeight(targetRect);
-
-      // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-      this._selector.style.maxHeight = this._maxOverlayHeight(targetRect);
-
-      this.updateViewportBoundaries();
-    },
-
-    _maxOverlayHeight: function(targetRect) {
-      var margin = 8;
-      var minHeight = 116; // Height of two items in combo-box
-      var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
-
-      if (this.$.dropdown.alignedAbove) {
-        return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
-      } else {
-        return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
-      }
-    },
-
-    _patchIronListStamping: function() {
-      var stamp = this._selector.stamp;
-      this._selector.stamp = function(value) {
-        if (value === null) {
-          value = {};
-        }
-
-        return stamp.call(this, value);
-      };
-    },
-
-    _getFocusedItem: function(focusedIndex) {
-      if (focusedIndex >= 0) {
-        return this._items[focusedIndex];
-      }
-    },
-
-    _isItemSelected: function(item, selectedItem) {
-      return item === selectedItem;
-    },
-
-    _onTap: function(e) {
-      if (!this._notTapping && !this._ignoreTaps) {
-        this.fire('selection-changed', {item: e.model.item});
-      }
-    },
-
-    _onTouchStart: function() {
-      this._notTapping = false;
-      this.async(function() {
-        this._notTapping = true;
-      }, 300);
-    },
-
-    _onScroll: function() {
-      this._ignoreTaps = true;
-      this.debounce('restore-taps', function() {
-        this._ignoreTaps = false;
-      }, 300);
-    },
-
+  (function() {
     /**
-     * Gets the index of the item with the provided label.
-     * @return {Number}
+     * @memberof Vaadin
      */
-    indexOfLabel: function(label) {
-      if (this._items && label) {
-        for (var i = 0; i < this._items.length; i++) {
-          if (this.getItemLabel(this._items[i]).toString().toLowerCase() ===
+    class ComboBoxOverlayElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() {
+        return 'vaadin-combo-box-overlay';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * True if the device supports touch events.
+           */
+          touchDevice: {
+            type: Boolean,
+            reflectToAttribute: true,
+            value: () => {
+              try {
+                document.createEvent('TouchEvent');
+                return true;
+              } catch (e) {
+                return false;
+              }
+            }
+          },
+
+          opened: Boolean,
+
+          /*
+           * `true` when new items are being loaded.
+           */
+          loading: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_setOverlayHeight'
+          },
+
+          /**
+           * Vertical offset for the overlay position.
+           */
+          verticalOffset: {
+            type: Number,
+            value: 0
+          },
+
+          _selectedItem: {
+            type: Object
+          },
+
+          _items: {
+            type: Object
+          },
+
+          _focusedIndex: {
+            type: Number,
+            notify: true,
+            value: -1,
+            observer: '_focusedIndexChanged'
+          },
+
+          _focusedItem: {
+            type: String,
+            computed: '_getFocusedItem(_focusedIndex)'
+          },
+
+          _itemLabelPath: {
+            type: String,
+            value: 'label'
+          },
+
+          _itemValuePath: {
+            type: String,
+            value: 'value'
+          },
+
+          _notTapping: Boolean,
+
+          _ignoreTaps: Boolean,
+
+          _selector: Object
+        };
+      }
+
+      static get observers() {
+        return ['_selectorChanged(selector)', '_loadingChanged(loading)'];
+      }
+
+      ready() {
+        super.ready();
+        // IE11: when scrolling with mouse, the focus goes to the scroller.
+        // This causes the overlay closing due to defocusing the input field.
+        // Prevent focusing the scroller by setting `unselectable="on"`.
+        if (/Trident/.test(navigator.userAgent)) {
+          this._scroller.setAttribute('unselectable', 'on');
+        }
+
+        // Prevent blurring the input when clicking inside the overlay.
+        this.$.dropdown.$.overlay.addEventListener('mousedown', e => e.preventDefault());
+      }
+
+      _templateChanged(e) {
+        this._selector = this.$.dropdown.$.overlay.root.querySelector('#selector');
+        this._scroller = this.$.dropdown.$.overlay.root.querySelector('#scroller');
+      }
+
+      _loadingChanged(loading) {
+        if (loading) {
+          this.$.dropdown.$.overlay.setAttribute('loading', '');
+        } else {
+          this.$.dropdown.$.overlay.removeAttribute('loading');
+        }
+      }
+
+      _selectorChanged(selector) {
+        this._patchWheelOverScrolling();
+
+        // Stamping with an empty object instead of null
+        // will resolve templatizer issues in P2 that previously
+        // required calling _flushProperties/_enableProperties.
+        this._patchIronListStamping();
+      }
+
+      _setOverlayHeight() {
+        if (!this.positionTarget || !this._selector) {
+          return;
+        }
+
+        var targetRect = this.positionTarget.getBoundingClientRect();
+
+        this._scroller.style.maxHeight = (window.ShadyCSS ?
+          window.ShadyCSS.getComputedStyleValue(this, '--vaadin-combo-box-overlay-max-height') :
+          getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height')) || '65vh';
+
+        // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
+        this.$.dropdown.$.overlay.style.maxHeight = this._maxOverlayHeight(targetRect);
+
+        // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
+        this._selector.style.maxHeight = this._maxOverlayHeight(targetRect);
+
+        this.updateViewportBoundaries();
+      }
+
+      _maxOverlayHeight(targetRect) {
+        var margin = 8;
+        var minHeight = 116; // Height of two items in combo-box
+        var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
+
+        if (this.$.dropdown.alignedAbove) {
+          return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
+        } else {
+          return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
+        }
+      }
+
+      _patchIronListStamping() {
+        var stamp = this._selector.stamp;
+        this._selector.stamp = value => {
+          if (value === null) {
+            value = {};
+          }
+
+          return stamp.call(this, value);
+        };
+      }
+
+      _getFocusedItem(focusedIndex) {
+        if (focusedIndex >= 0) {
+          return this._items[focusedIndex];
+        }
+      }
+
+      _isItemSelected(item, selectedItem) {
+        return item === selectedItem;
+      }
+
+      _onTap(e) {
+        if (!this._notTapping && !this._ignoreTaps) {
+          this.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: e.model.item}}));
+        }
+      }
+
+      _onTouchStart() {
+        this._notTapping = false;
+        Polymer.Async.timeOut.after(300).run(() => this._notTapping = true);
+      }
+
+      _onScroll() {
+        this._ignoreTaps = true;
+        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps,
+          Polymer.Async.timeOut.after(300), () => this._ignoreTaps = false);
+      }
+
+      /**
+       * Gets the index of the item with the provided label.
+       * @return {Number}
+       */
+      indexOfLabel(label) {
+        if (this._items && label) {
+          for (var i = 0; i < this._items.length; i++) {
+            if (this.getItemLabel(this._items[i]).toString().toLowerCase() ===
               label.toString().toLowerCase()) {
-            return i;
+              return i;
+            }
           }
         }
+
+        return -1;
       }
 
-      return -1;
-    },
-
-    /**
-     * Gets the label string for the item based on the `_itemLabelPath`.
-     * @return {String}
-     */
-    getItemLabel: function(item) {
-      var label = item ? this.get(this._itemLabelPath, item) : undefined;
-      if (label === undefined) {
-        label = item ? item.toString() : '';
-      }
-      return label;
-    },
-
-    _isItemFocused: function(focusedIndex, itemIndex) {
-      return focusedIndex == itemIndex;
-    },
-
-    _getAriaSelected: function(focusedIndex, itemIndex) {
-      return this._isItemFocused(focusedIndex, itemIndex).toString();
-    },
-
-    _getAriaRole: function(itemIndex) {
-      return itemIndex !== undefined ? 'option' : false;
-    },
-
-    _focusedIndexChanged: function(index) {
-      if (index >= 0) {
-        this._scrollIntoView(index);
-      }
-    },
-
-    _scrollIntoView: function(index) {
-      var visibleItemsCount = this._visibleItemsCount();
-      if (visibleItemsCount === undefined) {
-        // Scroller is not visible. Moving is unnecessary.
-        return;
-      }
-
-      var targetIndex = index;
-
-      if (index > this._selector.lastVisibleIndex - 1) {
-        // Index is below the bottom, scrolling down. Make the item appear at the bottom.
-        targetIndex = index - visibleItemsCount + 1;
-      } else if (index > this._selector.firstVisibleIndex) {
-        // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
-        // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
-        targetIndex = this._selector.firstVisibleIndex;
-      }
-      this._selector.scrollToIndex(Math.max(0, targetIndex));
-
-      // Sometimes the item is partly below the bottom edge, detect and adjust.
-      var pidx = this._selector._getPhysicalIndex(index),
-        physicalItem = this._selector._physicalItems[pidx];
-      if (!physicalItem) return;
-      var physicalItemRect = physicalItem.getBoundingClientRect(),
-        scrollerRect = this._scroller.getBoundingClientRect(),
-        scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
-      if (scrollTopAdjust > 0) {
-        this._scroller.scrollTop += scrollTopAdjust;
-      }
-    },
-
-    ensureItemsRendered: function() {
-      this._selector._render();
-    },
-
-    adjustScrollPosition: function() {
-      if (this._items) {
-        this._scrollIntoView(this._focusedIndex);
-      }
-    },
-
-    /**
-     * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
-     * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
-     * scrolling the parent similarily to touch scrolling.
-     */
-    _patchWheelOverScrolling: function() {
-      var selector = this._selector;
-      selector.addEventListener('wheel', function(e) {
-        var scroller = selector._scroller || selector.scrollTarget;
-        var scrolledToTop = scroller.scrollTop === 0;
-        var scrolledToBottom = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 1;
-
-        if (scrolledToTop && e.deltaY < 0) {
-          e.preventDefault();
-        } else if (scrolledToBottom && e.deltaY > 0) {
-          e.preventDefault();
+      /**
+       * Gets the label string for the item based on the `_itemLabelPath`.
+       * @return {String}
+       */
+      getItemLabel(item) {
+        var label = item ? this.get(this._itemLabelPath, item) : undefined;
+        if (label === undefined) {
+          label = item ? item.toString() : '';
         }
-      });
-    },
+        return label;
+      }
 
-    updateViewportBoundaries: function() {
-      this._cachedViewportTotalPaddingBottom = undefined;
-      this._selector.updateViewportBoundaries();
-    },
+      _isItemFocused(focusedIndex, itemIndex) {
+        return focusedIndex == itemIndex;
+      }
 
-    get _viewportTotalPaddingBottom() {
-      if (this._cachedViewportTotalPaddingBottom === undefined) {
-        var itemsStyle = window.getComputedStyle(this._selector.$.items);
-        this._cachedViewportTotalPaddingBottom = [
-          itemsStyle.paddingBottom,
-          itemsStyle.borderBottomWidth
-        ].map(function(v) {
-          return parseInt(v, 10);
-        }).reduce(function(sum, v) {
-          return sum + v;
+      _getAriaSelected(focusedIndex, itemIndex) {
+        return this._isItemFocused(focusedIndex, itemIndex).toString();
+      }
+
+      _getAriaRole(itemIndex) {
+        return itemIndex !== undefined ? 'option' : false;
+      }
+
+      _focusedIndexChanged(index) {
+        if (index >= 0) {
+          this._scrollIntoView(index);
+        }
+      }
+
+      _scrollIntoView(index) {
+        var visibleItemsCount = this._visibleItemsCount();
+        if (visibleItemsCount === undefined) {
+          // Scroller is not visible. Moving is unnecessary.
+          return;
+        }
+
+        var targetIndex = index;
+
+        if (index > this._selector.lastVisibleIndex - 1) {
+          // Index is below the bottom, scrolling down. Make the item appear at the bottom.
+          targetIndex = index - visibleItemsCount + 1;
+        } else if (index > this._selector.firstVisibleIndex) {
+          // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
+          // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
+          targetIndex = this._selector.firstVisibleIndex;
+        }
+        this._selector.scrollToIndex(Math.max(0, targetIndex));
+
+        // Sometimes the item is partly below the bottom edge, detect and adjust.
+        var pidx = this._selector._getPhysicalIndex(index),
+          physicalItem = this._selector._physicalItems[pidx];
+        if (!physicalItem) return;
+        var physicalItemRect = physicalItem.getBoundingClientRect(),
+          scrollerRect = this._scroller.getBoundingClientRect(),
+          scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
+        if (scrollTopAdjust > 0) {
+          this._scroller.scrollTop += scrollTopAdjust;
+        }
+      }
+
+      ensureItemsRendered() {
+        this._selector._render();
+      }
+
+      adjustScrollPosition() {
+        if (this._items) {
+          this._scrollIntoView(this._focusedIndex);
+        }
+      }
+
+      /**
+       * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
+       * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
+       * scrolling the parent similarily to touch scrolling.
+       */
+      _patchWheelOverScrolling() {
+        var selector = this._selector;
+        selector.addEventListener('wheel', e => {
+          var scroller = selector._scroller || selector.scrollTarget;
+          var scrolledToTop = scroller.scrollTop === 0;
+          var scrolledToBottom = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 1;
+
+          if (scrolledToTop && e.deltaY < 0) {
+            e.preventDefault();
+          } else if (scrolledToBottom && e.deltaY > 0) {
+            e.preventDefault();
+          }
         });
       }
 
-      return this._cachedViewportTotalPaddingBottom;
-    },
-
-    _visibleItemsCount: function() {
-      if (!this._selector) {
-        return;
+      updateViewportBoundaries() {
+        this._cachedViewportTotalPaddingBottom = undefined;
+        this._selector.updateViewportBoundaries();
       }
 
-      // Ensure items are rendered
-      this._selector.flushDebouncer('_debounceTemplate');
-      // Ensure items are positioned
-      this._selector.scrollToIndex(this._selector.firstVisibleIndex);
-      // Ensure viewport boundaries are up-to-date
-      this.updateViewportBoundaries();
-      return this._selector.lastVisibleIndex - this._selector.firstVisibleIndex + 1;
-    },
+      get _viewportTotalPaddingBottom() {
+        if (this._cachedViewportTotalPaddingBottom === undefined) {
+          var itemsStyle = window.getComputedStyle(this._selector.$.items);
+          this._cachedViewportTotalPaddingBottom = [
+            itemsStyle.paddingBottom,
+            itemsStyle.borderBottomWidth
+          ].map(v => {
+            return parseInt(v, 10);
+          }).reduce((sum, v) => {
+            return sum + v;
+          });
+        }
 
-    _selectItem: function(item) {
-      item = (typeof item === 'number') ? this._items[item] : item;
-      if (this._selector.selectedItem !== item) {
-        this._selector.selectItem(item);
+        return this._cachedViewportTotalPaddingBottom;
       }
-    },
 
-    _preventDefault: function(e) {
-      if (e.cancelable) {
-        e.preventDefault();
+      _visibleItemsCount() {
+        if (!this._selector) {
+          return;
+        }
+
+        // Ensure items are rendered
+        this._selector.flushDebouncer('_debounceTemplate');
+        // Ensure items are positioned
+        this._selector.scrollToIndex(this._selector.firstVisibleIndex);
+        // Ensure viewport boundaries are up-to-date
+        this.updateViewportBoundaries();
+        return this._selector.lastVisibleIndex - this._selector.firstVisibleIndex + 1;
       }
-    },
 
-    _stopPropagation: function(e) {
-      e.stopPropagation();
+      _selectItem(item) {
+        item = (typeof item === 'number') ? this._items[item] : item;
+        if (this._selector.selectedItem !== item) {
+          this._selector.selectItem(item);
+        }
+      }
+
+      _preventDefault(e) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+
+      _stopPropagation(e) {
+        e.stopPropagation();
+      }
     }
-  });
+
+    customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.ComboBoxOverlayElement = ComboBoxOverlayElement;
+  })();
 </script>

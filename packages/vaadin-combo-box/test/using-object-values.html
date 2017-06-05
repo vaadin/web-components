@@ -68,7 +68,7 @@
 
       function selectItem(index) {
         // simulates tapping on the overlay items, but it more reliable in tests.
-        combobox.$.overlay.fire('selection-changed', {item: combobox.items[index]});
+        combobox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: combobox.items[index]}}));
       }
 
       beforeEach(function() {

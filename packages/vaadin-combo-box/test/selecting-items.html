@@ -190,14 +190,14 @@
     it('should close the dropdown when reselecting the current value', function() {
       combobox.value = 'foo';
       combobox.open();
-      combobox.$.overlay.fire('selection-changed', {item: combobox.items[0]});
+      combobox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: combobox.items[0]}}));
       expect(combobox.opened).to.be.false;
     });
 
     it('should not fire an event when reselecting the current value', function() {
       combobox.value = 'foo';
       valueChangedSpy.reset();
-      combobox.$.overlay.fire('selection-changed', {item: combobox.items[0]});
+      combobox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: combobox.items[0]}}));
       expect(valueChangedSpy.callCount).to.equal(0);
     });
 

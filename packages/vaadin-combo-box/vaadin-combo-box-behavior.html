@@ -386,8 +386,8 @@
 
       // Ensure metrics are up-to-date
       this.$.overlay.updateViewportBoundaries();
-      this.$.overlay.async(this.$.overlay.adjustScrollPosition);
-      this.$.overlay.$.dropdown.async(this.$.overlay.$.dropdown.notifyResize, 1);
+      Polymer.Async.microTask.run(() => this.$.overlay.adjustScrollPosition());
+      Polymer.Async.timeOut.after(1).run(() => this.$.overlay.$.dropdown.notifyResize());
 
       // Set body pointer-events to 'none' to disable mouse interactions with
       // other document nodes (combo-box is "modal")
