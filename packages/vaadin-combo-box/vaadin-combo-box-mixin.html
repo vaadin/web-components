@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel="import" href="vaadin-combo-box-dropdown-behavior.html">
+<link rel="import" href="vaadin-combo-box-dropdown-mixin.html">
 
 <script>
   window.Vaadin = window.Vaadin || {};
@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @polymerMixin
    */
   Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends Polymer.GestureEventListeners(Polymer.mixinBehaviors(
-  [Polymer.IronFormElementBehavior, Polymer.Templatizer, vaadin.elements.combobox.DropdownBehavior], subclass
+  [Polymer.IronFormElementBehavior, Polymer.Templatizer], Vaadin.ComboBoxDropdownMixin(subclass)
   )) {
 
     static get properties() {
