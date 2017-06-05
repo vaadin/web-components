@@ -299,13 +299,13 @@
           });
 
           it('should not scroll down when focus keeps visible', done => {
-            var initialPosition = overlay.$.scroller.position;
+            var initialPosition = overlay.$.monthScroller.position;
 
             pageDown();
 
             setTimeout(() => {
               // FF sometimes reports subpixel differences
-              expect(overlay.$.scroller.position).to.be.closeTo(initialPosition, 1);
+              expect(overlay.$.monthScroller.position).to.be.closeTo(initialPosition, 1);
               done();
             });
           });

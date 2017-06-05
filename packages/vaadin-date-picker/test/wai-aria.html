@@ -46,10 +46,12 @@
     describe('WAI-ARIA', () => {
 
       describe('date picker', () => {
-        var datepicker;
+        var datepicker, toggleButton, clearButton;
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
+          clearButton = datepicker.root.querySelector('[part="clear-button"]');
+          toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
         });
 
         it('should have application role on input container', () => {
@@ -60,32 +62,32 @@
 
         it('should have button roles on buttons', () => {
           // Indicate icon buttons as clickable. Especially helpful on touch devices.
-          expect(datepicker.$.calendar.getAttribute('role')).to.equal('button');
-          expect(datepicker.$.clear.getAttribute('role')).to.equal('button');
+          expect(toggleButton.getAttribute('role')).to.equal('button');
+          expect(clearButton.getAttribute('role')).to.equal('button');
         });
 
         it('should have label properties on buttons', () => {
           // Give spoken names for the icon buttons.
-          expect(datepicker.$.calendar.getAttribute('aria-label')).to.equal('Calendar');
-          expect(datepicker.$.clear.getAttribute('aria-label')).to.equal('Clear');
+          expect(toggleButton.getAttribute('aria-label')).to.equal('Calendar');
+          expect(clearButton.getAttribute('aria-label')).to.equal('Clear');
         });
 
         it('should have label properties on buttons in correct locale', () => {
           datepicker.set('i18n.calendar', 'kalenteri');
           datepicker.set('i18n.clear', 'tyhjennä');
-          expect(datepicker.$.calendar.getAttribute('aria-label')).to.equal('kalenteri');
-          expect(datepicker.$.clear.getAttribute('aria-label')).to.equal('tyhjennä');
+          expect(toggleButton.getAttribute('aria-label')).to.equal('kalenteri');
+          expect(clearButton.getAttribute('aria-label')).to.equal('tyhjennä');
         });
 
         it('should have expanded state false on calendar button', () => {
           // Indicate that there is a collabsible calendar, closed by default.
-          expect(datepicker.$.calendar.getAttribute('aria-expanded')).to.equal('false');
+          expect(toggleButton.getAttribute('aria-expanded')).to.equal('false');
         });
 
         it('should have expanded state true on calendar button when opened', () => {
           datepicker.open();
 
-          expect(datepicker.$.calendar.getAttribute('aria-expanded')).to.equal('true');
+          expect(toggleButton.getAttribute('aria-expanded')).to.equal('true');
         });
 
         it('should have label property on the input', () => {
@@ -178,12 +180,12 @@
             scroller.active = true;
 
             Polymer.RenderStatus.afterNextRender(scroller, () => {
-              setTimeout(() => {
+              animationFrameFlush(function() {
                 scroller._debouncerUpdateClones.flush();
-                yearScrollerContents = overlay.$.yearScroller.root
-                  .querySelectorAll('.buffer > div > *');
+                yearScrollerContents = overlay.$.yearScroller
+                  .querySelectorAll('div > [part="year-number"]');
                 done();
-              }, 1);
+              });
             });
           });
 
@@ -202,9 +204,8 @@
 
           it('should have hidden state for dots', () => {
             // Do not speak dots between years.
-            var dots = Array.prototype.filter.call(yearScrollerContents, el => {
-              return !/\d+/.test(el.textContent);
-            });
+            var dots = Array.prototype.slice.call(yearScrollerContents)
+                            .map(el => el.nextElementSibling);
 
             expect(dots).to.not.be.empty;
             dots.forEach(dot => {
@@ -225,14 +226,13 @@
 
         it('should have heading role on the title', () => {
           // Consistency and convenience. Announces title as a header.
-          expect(monthCalendar.$.title.getAttribute('role')).to.equal('heading');
+          expect(monthCalendar.root.querySelector('[part="month-header"]').getAttribute('role')).to.equal('heading');
         });
 
         it('should have heading roles on the weekdays', () => {
           // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
 
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
-
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           Array.prototype.forEach.call(weekdays, weekday => {
             expect(weekday.getAttribute('role')).to.equal('heading');
           });
@@ -241,7 +241,7 @@
         it('should have label properties on the weekdays', () => {
           // Speak week days with full words instead of acronyms.
 
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays, weekday => {
             return weekday.getAttribute('aria-label');
           });
@@ -252,7 +252,7 @@
         it('should have button roles and labels on date cells', () => {
           // The date cells should be spoken with a full date.
 
-          var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          var dateElements = monthCalendar.root.querySelectorAll('[part="date"]:not(:empty)');
 
           expect(dateElements).to.not.be.empty;
           Array.prototype.forEach.call(dateElements, dateElement => {
@@ -267,7 +267,7 @@
           monthCalendar.month = new Date();
 
           setTimeout(() => {
-            var todayElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)[today]');
+            var todayElement = monthCalendar.root.querySelector('[part="date"]:not(:empty)[today]');
             expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
             done();
           });
@@ -279,7 +279,7 @@
 
           monthCalendar.maxDate = new Date(2016, 1, 10); // 10 February 2016
 
-          var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          var dateElements = monthCalendar.root.querySelectorAll('[part="date"]:not(:empty)');
           expect(dateElements[9].getAttribute('aria-disabled')).to.not.equal('true');
           expect(dateElements[10].getAttribute('aria-disabled')).to.equal('true');
         });
@@ -287,7 +287,7 @@
         it('should not have button roles and label properties on empty cells', () => {
           // The empty cells should not be spoken.
 
-          var emptyDateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):empty');
+          var emptyDateElements = monthCalendar.root.querySelectorAll('[part="date"]:empty');
 
           expect(emptyDateElements).to.not.be.empty;
           Array.prototype.forEach.call(emptyDateElements, emptyDateElement => {
@@ -306,7 +306,7 @@
           it('should have heading roles on week numbers', () => {
             // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
 
-            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('div.weekday:not(:empty)');
+            var weekNumberElements = monthCalendar.root.querySelectorAll('[part="week-number"]');
 
             Array.prototype.forEach.call(weekNumberElements, weekNumberElement => {
               expect(weekNumberElement.getAttribute('role')).to.equal('heading');
@@ -314,7 +314,7 @@
           });
 
           it('should have label properties on week numbers', () => {
-            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('.weeknumber');
+            var weekNumberElements = monthCalendar.root.querySelectorAll('[part="week-number"]');
 
             expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('Week 5');
             expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('Week 6');

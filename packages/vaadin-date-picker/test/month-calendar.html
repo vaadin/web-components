@@ -42,7 +42,7 @@
         return done => {
           monthCalendar.month = new Date(2016, monthNumber, 1);
           setTimeout(() => {
-            var numberOfDays = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+            var numberOfDays = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)').length;
             expect(numberOfDays).to.equal(expectedDays[monthNumber]);
             done();
           });
@@ -55,7 +55,7 @@
       }
 
       it('should render days in correct order by default', () => {
-        var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+        var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
         var weekdayTitles = Array.prototype.map.call(weekdays, weekday => {
           return weekday.textContent;
         });
@@ -66,7 +66,7 @@
         monthCalendar.set('i18n.firstDayOfWeek', 1); // Start from Monday.
 
         setTimeout(() => {
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayTitles = Array.prototype.map.call(weekdays, weekday => {
             return weekday.textContent;
           });
@@ -78,15 +78,15 @@
       it('should re-render after changing the month', done => {
         monthCalendar.month = new Date(2000, 0, 1); // Feb 2016 -> Jan 2000
         setTimeout(() => {
-          var days = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)').length;
+          var days = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)').length;
           expect(days).to.equal(31);
-          expect(monthCalendar.$.title.textContent).to.equal('January 2000');
+          expect(monthCalendar.root.querySelector('[part="month-header"]').textContent).to.equal('January 2000');
           done();
         });
       });
 
       it('should fire value change on tap', () => {
-        var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+        var dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
         tap(dateElements[10]);
         expect(valueChangedSpy.calledOnce).to.be.true;
       });
@@ -94,7 +94,7 @@
       it('should fire date-tap on tap', () => {
         tapSpy = sinon.spy();
         monthCalendar.addEventListener('date-tap', tapSpy);
-        var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+        var dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
         tap(dateElements[10]);
         expect(tapSpy.calledOnce).to.be.true;
         tap(dateElements[10]);
@@ -102,13 +102,13 @@
       });
 
       it('should not fire value change on tapping an empty cell', () => {
-        var emptyDateElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):empty');
+        var emptyDateElement = monthCalendar.$.days.querySelector('[part="date"]:empty');
         tap(emptyDateElement);
         expect(valueChangedSpy.called).to.be.false;
       });
 
       it('should update value on tap', () => {
-        var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+        var dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
         for (var i = 0; i < dateElements.length; i++) {
           if (dateElements[i].date.getDate() === 10) {
             // Tenth of February.
@@ -123,7 +123,7 @@
       it('should not react if the tap takes more than 300ms', done => {
         tapSpy = sinon.spy();
         monthCalendar.addEventListener('date-tap', tapSpy);
-        var dateElement = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)')[10];
+        var dateElement = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)')[10];
 
         monthCalendar._onMonthGridTouchStart();
         setTimeout(() => {
@@ -137,7 +137,7 @@
         tapSpy = sinon.spy();
         monthCalendar.addEventListener('date-tap', tapSpy);
         monthCalendar.ignoreTaps = true;
-        var dateElement = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)')[10];
+        var dateElement = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)')[10];
         tap(dateElement);
         expect(tapSpy.called).to.be.false;
       });
@@ -152,7 +152,7 @@
         touchendEvent.preventDefault = preventDefaultSpy;
 
         // Dispatch a fake touchend event from a date element.
-        var dateElement = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)');
+        var dateElement = monthCalendar.$.days.querySelector('[part="date"]:not(:empty)');
         dateElement.dispatchEvent(touchendEvent);
         expect(preventDefaultSpy).to.have.been.called;
       });
@@ -162,7 +162,7 @@
         month.setFullYear(99);
         monthCalendar.month = month;
         setTimeout(() => {
-          var date = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)').date;
+          var date = monthCalendar.$.days.querySelector('[part="date"]:not(:empty)').date;
           expect(date.getFullYear()).to.equal(month.getFullYear());
           done();
         });
@@ -173,7 +173,7 @@
         monthCalendar.maxDate = new Date('2016-02-09');
 
         setTimeout(() => {
-          var dateElements = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          var dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
           for (var i = 0; i < dateElements.length; i++) {
             if (dateElements[i].date.getDate() === 10) {
               // Tenth of February.
@@ -201,7 +201,7 @@
         });
 
         it('should render weekdays in correct locale', () => {
-          var weekdays = monthCalendar.$.monthGrid.querySelectorAll('div.weekday');
+          var weekdays = monthCalendar.root.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays, weekday => {
             return weekday.getAttribute('aria-label');
           });
@@ -213,7 +213,7 @@
         });
 
         it('should label dates in correct locale', () => {
-          var dates = monthCalendar.$.monthGrid.querySelectorAll('div:not(.weekday):not(:empty)');
+          var dates = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
           Array.prototype.slice.call(dates, 0, 7).map((date, index) => {
             var label = date.getAttribute('aria-label');
             expect(label).to.equal((index + 1) + ' helmikuu 2016, ' + [
@@ -226,14 +226,14 @@
         it('should label today in correct locale', done => {
           monthCalendar.month = new Date();
           setTimeout(() => {
-            var today = monthCalendar.$.monthGrid.querySelector('div:not(.weekday):not(:empty)[today]');
+            var today = monthCalendar.$.monthGrid.querySelector('[part="date"]:not(:empty)[today]');
             expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
             done();
           });
         });
 
         it('should render month name in correct locale', () => {
-          expect(monthCalendar.$.title.textContent).to.equal('helmikuu-2016');
+          expect(monthCalendar.root.querySelector('[part="month-header"]').textContent).to.equal('helmikuu-2016');
         });
 
         it('should label week numbers in correct locale', done => {
@@ -241,7 +241,7 @@
           monthCalendar.month = new Date(2016, 1, 1);
 
           setTimeout(() => {
-            var weekNumberElements = monthCalendar.$.monthGrid.querySelectorAll('.weeknumber');
+            var weekNumberElements = monthCalendar.root.querySelectorAll('[part="week-number"]');
             expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('viikko 5');
             expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('viikko 6');
             done();
@@ -256,7 +256,7 @@
         });
 
         function getWeekNumbers(cal) {
-          return [].map.call(cal.$.monthGrid.querySelectorAll('.weeknumber'),
+          return [].map.call(cal.root.querySelectorAll('[part="week-number"]'),
             elem => parseInt(elem.textContent, 10));
         }
 
@@ -305,6 +305,24 @@
             done();
           });
         });
+      });
+
+      describe('Date limits', () => {
+
+        it('should be disabled when all dates are disabled', () => {
+          monthCalendar.minDate = new Date(2016, 2, 1);
+          expect(monthCalendar.hasAttribute('disabled')).to.be.true;
+        });
+
+        it('should not be disabled when some dates are disabled', () => {
+          monthCalendar.minDate = new Date(2016, 1, 15);
+          expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+        });
+
+        it('should not be disabled when no dates are disabled', () => {
+          expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+        });
+
       });
 
     });

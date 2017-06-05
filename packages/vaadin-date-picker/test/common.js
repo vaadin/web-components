@@ -62,10 +62,7 @@ function close(datepicker, callback) {
 }
 
 function tap(element) {
-  Polymer.Base.fire('tap', {}, {
-    bubbles: true,
-    node: element
-  });
+  element.dispatchEvent(new CustomEvent('tap', {bubbles: true, detail: {}, composed: true}));
 }
 
 function monthsEqual(date1, date2) {
@@ -77,8 +74,8 @@ function getFirstVisibleItem(scroller, bufferOffset) {
   bufferOffset = (bufferOffset || 0);
 
   scroller._buffers.forEach(function(buffer) {
-    [].forEach.call(buffer.children, function(itemWrapper) {
-      children.push(itemWrapper);
+    [].forEach.call(buffer.children, function(insertionPoint) {
+      children.push(insertionPoint._itemWrapper);
     });
   });
   var scrollerRect = scroller.getBoundingClientRect();
@@ -111,10 +108,10 @@ function waitUntil(check, callback) {
 
 function waitUntilScrolledTo(overlay, date, callback) {
   waitUntil(() => {
-    if (overlay.$.scroller.position) {
+    if (overlay.$.monthScroller.position) {
       overlay._onMonthScroll();
     }
     var monthIndex = overlay._differenceInMonths(date, new Date());
-    return overlay.$.scroller.position === monthIndex;
+    return overlay.$.monthScroller.position === monthIndex;
   }, () => Polymer.RenderStatus.afterNextRender(overlay, callback));
 }

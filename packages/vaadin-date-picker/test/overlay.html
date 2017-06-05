@@ -28,7 +28,7 @@
         overlay.i18n = getDefaultI18n();
 
         overlay.initialPosition = new Date();
-        Polymer.RenderStatus.afterNextRender(overlay.$.scroller,
+        Polymer.RenderStatus.afterNextRender(overlay.$.monthScroller,
           () => waitUntilScrolledTo(overlay, new Date(), done));
 
       });
@@ -36,7 +36,7 @@
       it('should stop tap events from bubbling outside the overlay', () => {
         var tapSpy = sinon.spy();
         document.addEventListener('tap', tapSpy);
-        overlay.$.scroller.dispatchEvent(new CustomEvent('tap', {bubbles: true}));
+        overlay.$.monthScroller.dispatchEvent(new CustomEvent('tap', {bubbles: true}));
         document.removeEventListener('tap', tapSpy);
         expect(tapSpy.called).not.to.be.true;
       });
@@ -50,7 +50,7 @@
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
         waitUntilScrolledTo(overlay, date, () => {
-          expect(parseInt(overlay.$.toolbar.textContent)).to.equal(2000);
+          expect(parseInt(overlay.root.querySelector('[part="years-toggle-button"]').textContent)).to.equal(2000);
           done();
         });
       });
@@ -59,7 +59,7 @@
         var date = new Date(2000, 1, 1);
         overlay.scrollToDate(date);
         waitUntilScrolledTo(overlay, date, () => {
-          expect(monthsEqual(getFirstVisibleItem(overlay.$.scroller, 0).firstElementChild.month, date)).to.be.true;
+          expect(monthsEqual(getFirstVisibleItem(overlay.$.monthScroller, 0).firstElementChild.month, date)).to.be.true;
           done();
         });
       });
@@ -70,8 +70,33 @@
         waitUntilScrolledTo(overlay, date, () => {
           var offset = overlay.$.yearScroller.clientHeight / 2;
           overlay.$.yearScroller._debouncerUpdateClones.flush();
-          expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.equal('2000');
+          expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.contain('2000');
           done();
+        });
+      });
+
+      it('should mark current year', () => {
+        const yearScroller = overlay.$.yearScroller;
+
+        yearScroller._buffers.forEach(buffer => {
+          [].forEach.call(buffer.children, insertionPoint => {
+            const year = insertionPoint._itemWrapper.firstElementChild;
+            const isCurrent = year.textContent.indexOf(new Date().getFullYear()) > -1;
+            expect(year.hasAttribute('current')).to.equal(isCurrent);
+          });
+        });
+      });
+
+      it('should mark selected year', () => {
+        const yearScroller = overlay.$.yearScroller;
+        overlay.selectedDate = new Date();
+
+        yearScroller._buffers.forEach(buffer => {
+          [].forEach.call(buffer.children, insertionPoint => {
+            const year = insertionPoint._itemWrapper.firstElementChild;
+            const isCurrent = year.textContent.indexOf(new Date().getFullYear()) > -1;
+            expect(year.hasAttribute('selected')).to.equal(isCurrent);
+          });
         });
       });
 
@@ -79,36 +104,36 @@
 
         beforeEach(done => {
           // Wait for ignoreTaps to settle after initial scroll event
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => setTimeout(done, 350));
+          listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => setTimeout(done, 350));
 
-          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.$.monthScroller.$.scroller.scrollTop += 1;
         });
 
         it('should set ignoreTaps to calendar on scroll', done => {
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
-            expect(overlay.$.scroller.root.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
+          listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+            expect(overlay.$.monthScroller.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
             done();
           });
 
-          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.$.monthScroller.$.scroller.scrollTop += 1;
         });
 
         it('should not react to year tap after scroll', done => {
           var spy = sinon.spy(overlay, '_scrollToPosition');
 
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
+          listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
             tap(overlay.$.yearScroller);
             expect(spy.called).to.be.false;
             done();
           });
 
-          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.$.monthScroller.$.scroller.scrollTop += 1;
         });
 
         it('should react to year tap after 300ms elapsed after scroll', done => {
           var spy = sinon.spy(overlay, '_scrollToPosition');
 
-          listenForEvent(overlay.$.scroller.$.scroller, 'scroll', () => {
+          listenForEvent(overlay.$.monthScroller.$.scroller, 'scroll', () => {
             setTimeout(() => {
               tap(overlay.$.yearScroller);
               expect(spy.called).to.be.true;
@@ -116,7 +141,7 @@
             }, 350);
           });
 
-          overlay.$.scroller.$.scroller.scrollTop += 1;
+          overlay.$.monthScroller.$.scroller.scrollTop += 1;
         });
 
         it('should not react if the tap takes more than 300ms', done => {
@@ -131,36 +156,41 @@
       });
 
       describe('header', () => {
+        var header, clearButton;
+
+        beforeEach(() => {
+          header = overlay.root.querySelector('[part="overlay-header"]');
+          clearButton = overlay.root.querySelector('[part="clear-button"]');
+        });
 
         it('should be visible', () => {
           overlay.setAttribute('fullscreen', '');
           // No idea why but IE requires these in order to repaint the header
-          overlay.$.header.setAttribute('style', '');
-          overlay.$.header.removeAttribute('style');
-          expect(window.getComputedStyle(overlay.$.header).display).to.equal('flex');
+          header.setAttribute('style', '');
+          header.removeAttribute('style');
+          expect(window.getComputedStyle(header).display).to.equal('flex');
         });
 
         it('should be invisible', () => {
-          expect(window.getComputedStyle(overlay.$.header).display).to.equal('none');
+          expect(window.getComputedStyle(header).display).to.equal('none');
         });
 
         it('should reflect value in label', () => {
-          overlay.i18n = {
-            formatDate: date => {
-              return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-            }
+          overlay.i18n.formatDate = date => {
+            return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
           };
+
           overlay.selectedDate = new Date(2000, 1, 1);
-          expect(overlay.$.input.textContent.trim()).to.equal('2/1/2000');
+          expect(overlay.root.querySelector('[part="label"]').textContent.trim()).to.equal('2/1/2000');
         });
 
         it('should not show clear button if not value is set', () => {
-          expect(window.getComputedStyle(overlay.$.clear).display).to.equal('none');
+          expect(window.getComputedStyle(clearButton).display).to.equal('none');
         });
 
         it('should show clear button if value is set', () => {
           overlay.selectedDate = new Date();
-          expect(window.getComputedStyle(overlay.$.clear).display).to.equal('flex');
+          expect(window.getComputedStyle(clearButton).display).to.equal('flex');
         });
 
         it('should clear the value and fire a close on clear', () => {
@@ -168,7 +198,7 @@
           var spy = sinon.spy();
           overlay.addEventListener('close', spy);
 
-          tap(overlay.$.clear);
+          tap(clearButton);
 
           expect(overlay.selectedDate).to.equal('');
           expect(spy.calledOnce).to.be.true;
@@ -220,7 +250,7 @@
             overlay.addEventListener('close', spy);
 
             waitUntilScrolledTo(overlay, today, () => {
-              overlay.$.scroller.$.scroller.scrollTop -= 1;
+              overlay.$.monthScroller.$.scroller.scrollTop -= 1;
               tap(overlay.$.todayButton);
 
               expect(overlay.selectedDate).to.be.undefined;
@@ -239,10 +269,10 @@
             overlay.$.todayButton.disabled = true;
 
             waitUntilScrolledTo(overlay, initialDate, () => {
-              var lastScrollPos = overlay.$.scroller.position;
+              var lastScrollPos = overlay.$.monthScroller.position;
               MockInteractions.tap(overlay.$.todayButton);
 
-              expect(overlay.$.scroller.position).to.equal(lastScrollPos);
+              expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
               // FIXME: fails in FF + Polymer 1.x
               // expect(scrollSpy.called).to.be.false;
               expect(closeSpy.called).to.be.false;

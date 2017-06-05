@@ -8,10 +8,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="vaadin-date-picker-styles.html">
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -24,48 +26,33 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: auto;
       }
 
-      #input {
+      [part="text-field"] {
         min-width: 100%;
       }
 
-      #overlay {
+      [part="overlay"] {
         height: 100vh;
         width: 420px;
       }
 
-      [slot="suffix"] {
+      [part="clear-button"],
+      [part="toggle-button"] {
         font-family: 'vaadin-date-picker-icons';
-        font-size: 19px;
-        color: rgba(0, 0, 0, .26);
-        cursor: pointer;
-        transition: color 0.2s;
-        height: 20px;
-        width: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
 
-      #clear::before {
+      [part="clear-button"]::before {
         content: "\e901";
       }
 
-      #calendar::before {
+      [part="toggle-button"]::before {
         content: "\e902";
       }
 
-      [slot="suffix"]:hover,
-      :host([opened]) [slot="suffix"] {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) [slot="suffix"]:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      :host([disabled]) [slot="suffix"],
-      :host([readonly]) [slot="suffix"],
-      :host(:not([has-value])) #clear {
+      :host([disabled]) [part="clear-button"],
+      :host([disabled]) [part="toggle-button"],
+      :host([readonly]) [part="clear-button"],
+      :host([readonly]) [part="toggle-button"],
+      :host(:not([has-value])) [part="clear-button"] {
         display: none;
       }
     </style>
@@ -85,10 +72,11 @@ This program is available under Apache License Version 2.0, available at https:/
         readonly="[[readonly]]"
         error-message="[[errorMessage]]"
         aria-label$="[[label]]"
+        part="text-field"
       >
 
-      <div id="clear" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
-      <div id="calendar" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
+      <div part="clear-button" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
+      <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
     <iron-dropdown
@@ -110,7 +98,8 @@ This program is available under Apache License Version 2.0, available at https:/
           show-week-numbers="[[showWeekNumbers]]"
           min-date="[[_minDate]]"
           max-date="[[_maxDate]]"
-          role="dialog">
+          role="dialog"
+          part="overlay">
       </vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -138,35 +127,37 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        * When the selected `value` is changed, a `value-changed` event is triggered.
        *
+       *
        * ### Styling
-       * The following custom properties and mixins are available for styling:
        *
-       * Custom property | Description | Default
-       * ----------------|-------------|----------
-       * `--vaadin-date-picker-overlay` | Mixin applied to the overlay | `{}`
-       * `--vaadin-date-picker-yearscroller` | Mixin applied to the year scroller | `{}`
-       * `--vaadin-date-picker-yearscroller-indicator` | Mixin applied to the year scroller indicator | `{}`
-       * `--vaadin-date-picker-calendar-icon` | Mixin applied to the calendar icon | `{}`
-       * `--vaadin-date-picker-clear-icon` | Mixin applied to the clear icon | `{}`
-       * `--vaadin-date-picker-scrollers-fade` | Mixin applied to the scrollers fade element | `{}`
-       * `--vaadin-date-picker-header` | Mixin applied to the picker header | `{}`
-       * `--vaadin-date-picker-toolbar` | Mixin applied to the picker toolbar | `{}`
-       * `--vaadin-date-picker-toolbar-icon` | Mixin applied to the picker toolbar icon | `{}`
-       * `--vaadin-date-picker-footer` | Mixin applied to the picker footer | `{}`
-       * `--vaadin-date-picker-calendar` | Mixin applied to a month calendar element | `{}`
-       * `--vaadin-date-picker-calendar-title` | Mixin applied to a month calendar title | `{}`
-       * `--vaadin-date-picker-calendar-cell` | Mixin applied to a month calendar cell | `{}`
-       * `--vaadin-date-picker-calendar-date-cell` | Mixin applied to a month calendar date cell | `{}`
-       * `--vaadin-date-picker-calendar-weekday-cell` | Mixin applied to a month calendar weekday cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-today` | Mixin applied to a month calendar today cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-selected` | Mixin applied to a month calendar selected cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-focused` | Mixin applied to a month calendar focused cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-today-selected` | Mixin applied to a month calendar selected today cell | `{}`
-       * `--vaadin-date-picker-calendar-cell-disabled` | Mixin applied to a month calendar disabled cell | `{}`
-       * `--vaadin-date-picker-calendar-weeknumber-cell` | Mixin applied to a month calendar weeknumber cell | `{}`
-       * `--vaadin-date-picker-calendar-focused-cell-focused` | Mixin applied to a focused month calendar focused cell | `{}`
+       * The following shadow DOM parts are available for styling:
        *
-       * See paper-input-container documentation for styling the included input fields
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `text-field` | Input element | vaadin-date-picker
+       * `clear-button` | Clear button | vaadin-date-picker
+       * `toggle-button` | Toggle button | vaadin-date-picker
+       * `overlay` | The overlay element | vaadin-date-picker
+       * `overlay` | The overlay element | vaadin-date-picker-light
+       * `overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay
+       * `label` | Fullscreen mode value/label | vaadin-date-picker-overlay
+       * `clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay
+       * `toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay
+       * `years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay
+       * `months` | Months scroller | vaadin-date-picker-overlay
+       * `years` | Years scroller | vaadin-date-picker-overlay
+       * `toolbar` | Footer bar with buttons | vaadin-date-picker-overlay
+       * `today-button` | Today button | vaadin-date-picker-overlay
+       * `cancel-button` | Cancel button | vaadin-date-picker-overlay
+       * `month` | Month calendar | vaadin-date-picker-overlay
+       * `year-number` | Year number | vaadin-date-picker-overlay
+       * `year-separator` | Year separator | vaadin-date-picker-overlay
+       * `month-header` | Month title | vaadin-month-calendar
+       * `weekdays` | Weekday container | vaadin-month-calendar
+       * `weekday` | Weekday element | vaadin-month-calendar
+       * `week-numbers` | Week numbers container | vaadin-month-calendar
+       * `week-number` | Week number element | vaadin-month-calendar
+       * `date` | Date element | vaadin-month-calendar
        *
        * If you want to replace the default input field with a custom implementation, you should use the
        * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
@@ -175,7 +166,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.DatePickerMixin
        * @demo demo/index.html
        */
-      class DatePickerElement extends Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+      class DatePickerElement extends Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element))) {
 
         static get is() {
           return 'vaadin-date-picker';
@@ -251,15 +242,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _input() {
           return this.$.input;
-        }
-
-        /**
-         * label and placeholder will go on top of each other if always-float-label isn't set
-         * This is the similar behavior as paper-input has:
-         * PolymerElements/paper-input/blob/d248dad17af3ee46a0701a664e0f304c1619770d/paper-input-behavior.html#L502
-         */
-        _computeAlwaysFloatLabel(placeholder) {
-          return Boolean(placeholder);
         }
 
         set _inputValue(value) {

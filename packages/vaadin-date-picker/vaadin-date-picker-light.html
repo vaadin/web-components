@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 
@@ -21,7 +22,7 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: auto;
       }
 
-      #overlay {
+      [part="overlay"] {
         height: 100vh;
         width: 420px;
       }
@@ -46,7 +47,8 @@ This program is available under Apache License Version 2.0, available at https:/
         focused-date="{{_focusedDate}}"
         min-date="[[_minDate]]"
         max-date="[[_maxDate]]"
-        role="dialog">
+        role="dialog"
+        part="overlay">
       </vaadin-date-picker-overlay>
     </iron-dropdown>
 
@@ -92,7 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.DatePickerMixin
        */
-      class DatePickerLightElement extends Vaadin.DatePickerMixin(Polymer.Element) {
+      class DatePickerLightElement extends Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-date-picker-light';
         }

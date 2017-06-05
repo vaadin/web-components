@@ -41,10 +41,12 @@
     describe('Dropdown', () => {
       var datepicker;
       var dropdown;
+      var toggleButton;
 
       beforeEach(() => {
         datepicker = fixture('datepicker');
         dropdown = datepicker.$.dropdown;
+        toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
       });
 
       afterEach(done => setTimeout(done, 1));
@@ -68,7 +70,7 @@
 
       it('should not close on calendar icon down', done => {
         datepicker.addEventListener('iron-overlay-opened', () => {
-          MockInteractions.down(datepicker.$.calendar);
+          MockInteractions.down(toggleButton);
           expect(datepicker.$.dropdown.opened).to.be.true;
 
           done();
@@ -153,7 +155,10 @@
     describe('Dropdown-wrapped', () => {
       var datepicker;
 
-      beforeEach(() => datepicker = fixture('datepicker-wrapped').$.datepicker);
+      beforeEach(() => {
+        datepicker = fixture('datepicker-wrapped').$.datepicker;
+        toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+      });
 
       afterEach(done => {
         setTimeout(done, 1);
@@ -161,7 +166,7 @@
 
       it('should not close on calendar icon down', done => {
         datepicker.addEventListener('iron-overlay-opened', () => {
-          MockInteractions.down(datepicker.$.calendar);
+          MockInteractions.down(toggleButton);
           expect(datepicker.$.dropdown.opened).to.be.true;
 
           done();

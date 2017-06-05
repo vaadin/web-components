@@ -471,6 +471,8 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.dropdown.style.marginTop = (bottomAlign ? 10 : this.clientHeight + 2) + 'px';
         this.$.dropdown.style.marginBottom = (bottomAlign ? this.clientHeight : 10) + 'px';
       }
+
+      this.$.overlay._repositionYearScroller();
     }
 
     _fullscreenChanged() {

@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-date-picker Theming Example</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+  <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+    <demo-navigation></demo-navigation>
+
+    <h3>Themed Date Picker</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="text-field-styles" theme-for="vaadin-text-field">
+          <template>
+            <style>
+              [part~="input-field"] {
+                border-radius: 20px;
+                border: 2px solid #bdbdbd;
+                height: 30px;
+                padding: 1px 10px;
+              }
+
+              :host([focused]) [part~="input-field"] {
+                border-color: #f5a623;
+                box-shadow: 0 0 4px 0 rgba(245, 187, 39, 1);
+              }
+
+              [part~="value"]:focus {
+                outline: none;
+              }
+
+              [part~="value"] {
+                font-family: inherit;
+                border: none;
+                font-size: medium;
+                color: rgba(0, 0, 0, 0.5);
+                background: transparent;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="button-styles" theme-for="vaadin-button">
+          <template>
+            <style>
+              :host([focus-ring]) [part~="button"] {
+                color: #f5a623;
+              }
+
+              :host([part~="today-button"]) [part~="button"]::before {
+                content: "•";
+                color: #f5a623;
+                font-size: x-large;
+              }
+
+              [part~="button"] {
+                font-family: inherit;
+                border: none;
+                background: #f7f6f2;
+                font-size: medium;
+                cursor: pointer;
+              }
+
+              [part~="button"]:focus {
+                outline: none;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="date-picker-styles" theme-for="vaadin-date-picker">
+          <template>
+            <style include="vaadin-date-picker-default-theme">
+              :host {
+                font-family: 'Cabin', sans-serif;
+                width: 250px;
+                max-width: 100%;
+              }
+
+              [part="text-field"] {
+                max-width: 100%;
+              }
+            </style>
+          </template>
+        </dom-module>
+
+        <dom-module id="month-calendar-styles" theme-for="vaadin-month-calendar">
+          <template>
+            <style include="vaadin-month-calendar-default-theme">
+              [part~="date"] {
+                padding: 12px 0;
+                height: 40px;
+              }
+
+              [part~="date"][today]:not([focused]) {
+                position: relative;
+              }
+
+              [part~="date"][today]:not([focused])::before {
+                content: '';
+                position: absolute;
+                background: #f5a623;
+                opacity: 0.3;
+                width: 26px;
+                height: 26px;
+                border-radius: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: auto;
+              }
+
+              [part~="date"][selected] {
+                background: #f5a623;
+                color: #fff;
+                border-radius: 6px;
+                border: 4px solid #fff;
+                padding-top: 8px;
+              }
+
+              :host(:not([focused])) [part~="date"][focused] {
+                opacity: 0.7;
+              }
+
+              [part~="date"]:not([disabled]):hover,
+              [part~="date"][focused]:not([disabled]) {
+                background: rgba(245, 187, 39, 1);
+                color: #fff;
+                border-radius: 6px;
+                border: 4px solid #fff;
+                padding-top: 8px;
+              }
+
+              [part~="date"][selected] {
+                font-weight: 600;
+              }
+
+              [part~="weekdays"] {
+                background: #f7f6f2;
+                transform: translateY(-14px);
+                font-weight: 100;
+                font-size: small;
+                border-radius: 6px;
+              }
+
+              [part~="weekday"] {
+                text-transform: none;
+                color: #babbb6;
+              }
+
+              [part~="week-numbers"] {
+                transform: translateY(-14px);
+              }
+
+              [part~="week-number"] {
+                position: relative;
+                color: rgba(0, 0, 0, 0.1);
+              }
+
+              [part~="week-number"]::after {
+                content: '';
+                position: absolute;
+                left: calc(100% - 5px);
+                top: 14px;
+                width: 325px;
+                height: 1px;
+                background-color: rgba(0, 0, 0, 0.1);
+              }
+
+              [part~="month-header"] {
+                font-size: 24px;
+                font-weight: 100;
+                margin-bottom: 16px;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="overlay-styles" theme-for="vaadin-date-picker-overlay">
+          <template>
+            <style include="vaadin-date-picker-overlay-default-theme">
+              :host {
+                border-radius: 6px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.2);
+              }
+
+              [part~="years"] {
+                background: #716a60;
+                color: #babbb6;
+              }
+
+              [part~="months"] {
+                --vaadin-infinite-scroller-item-height: 340px;
+              }
+
+              [part~="toolbar"] {
+                background: #f7f6f2;
+              }
+
+              [part~="overlay-header"] {
+                background: #f7f6f2;
+              }
+
+              [part~="years-toggle-button"] {
+                background: transparent;
+              }
+
+              [part~="years"] [part~="year-number"][current] {
+                color: rgba(245, 198, 121, 0.6);
+              }
+
+              [part~="years"] [part~="year-separator"]::after {
+                color: #babbb6;
+              }
+
+              [part~="month"][disabled] {
+                opacity: 0.3;
+              }
+            </style>
+          </template>
+        </dom-module>
+
+        <vaadin-date-picker id="weeks" show-week-numbers min="2017-05-01" placeholder="YYYY-MM-DD"></vaadin-date-picker>
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            // Async call needed here for IE11 compatibility.
+            Polymer.Base.async(function() {
+              var datepicker = document.querySelector('vaadin-date-picker#weeks');
+              datepicker.set('i18n.firstDayOfWeek', 1);
+            });
+          });
+        </script>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+</html>

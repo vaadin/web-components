@@ -5,147 +5,91 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-date-picker-styles.html">
 
 <dom-module id="vaadin-month-calendar">
   <template>
     <style>
       :host {
         display: block;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        font: inherit;
-        @apply --paper-font-common-base;
-        @apply --vaadin-date-picker-calendar;
       }
 
-      #title {
-        color: var(--primary-text-color);
-        text-align: center;
-        padding: 6px 0;
-        @apply --paper-font-subhead;
-        @apply --vaadin-date-picker-calendar-title;
-      }
-
-      #monthGrid {
+      [part="weekdays"],
+      #days {
         display: flex;
         flex-wrap: wrap;
+        flex-grow: 1;
       }
 
-      #monthGrid div {
-        text-align: center;
-        width: calc(14.285714286% - 2px);
-        margin: 0 1px;
-        box-sizing: border-box;
-        padding: 6px 0;
-        @apply --paper-font-body1;
-        @apply --vaadin-date-picker-calendar-cell;
+      #days-container,
+      #weekdays-container {
+        display: flex;
       }
 
-      :host([week-numbers]) #monthGrid div {
-        width: calc(12.5% - 2px);
+      [part="week-numbers"] {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-shrink: 0;
       }
 
-      #monthGrid div:not(:empty) {
-        cursor: pointer;
-        color: var(--primary-text-color);
-        @apply --vaadin-date-picker-calendar-date-cell;
+      [part="week-numbers"][hidden] {
+        display: none;
       }
 
-      #monthGrid div:not(:empty):not([disabled]):not(.weekday):not(.weeknumber):active {
-        background: var(--light-primary-color);
-        border-radius: 2px;
+      [part="weekday"],
+      [part="date"] {
+        /* Would use calc(100% / 7) but it doesn't work nice on IE */
+        width: 14.285714286%;
       }
 
-      #monthGrid div.weekday {
-        text-transform: uppercase;
-        color: var(--secondary-text-color);
-        cursor: default;
-        padding: 8px 0;
-        @apply --paper-font-caption;
-        @apply --vaadin-date-picker-calendar-weekday-cell;
-      }
-
-      #monthGrid div.weekday:empty,
-      #monthGrid div.weeknumber {
-        width: calc(10% - 2px);
-        padding-right: 1.25%;
-      }
-
-      #monthGrid div[today] {
-        position: relative;
-        color: var(--primary-color);
-        @apply --vaadin-date-picker-calendar-cell-today;
-      }
-
-      #monthGrid div[today][selected] {
-        @apply --vaadin-date-picker-calendar-cell-today-selected;
-      }
-
-      #monthGrid div[focused] {
-        background: var(--light-primary-color);
-        box-sizing: border-box;
-        border-radius: 2px;
-        @apply --vaadin-date-picker-calendar-cell-focused;
-      }
-
-      :host([focused]) #monthGrid div[focused] {
-        background: var(--primary-color);
-        color: var(--primary-background-color);
-        @apply --vaadin-date-picker-calendar-focused-cell-focused;
-      }
-
-      #monthGrid div[selected] {
-        font-weight: 600;
-        @apply --vaadin-date-picker-calendar-cell-selected;
-      }
-
-      #monthGrid div[today][selected] {
-        @apply --vaadin-date-picker-calendar-cell-today-selected;
-      }
-
-      #monthGrid div[disabled] {
-        opacity: 0.3;
-        cursor: default;
-        @apply --vaadin-date-picker-calendar-cell-disabled;
-      }
-
-      #monthGrid div.weeknumber {
-        cursor: default;
-        color: rgba(0, 0, 0, 0.4);
-        @apply --paper-font-caption;
-        @apply --vaadin-date-picker-calendar-weeknumber-cell;
+      [part="weekday"]:empty,
+      [part="week-numbers"] {
+        width: 12.5%;
+        flex-shrink: 0;
       }
     </style>
 
-    <div id="title" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
+    <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
     <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-      <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
-        <div class="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
-      </template>
-      <template is="dom-repeat" items="[[_days]]">
-        <template is="dom-if" if="[[_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek, index)]]">
-          <div class="weeknumber" role="heading" aria-label$="[[i18n.week]] [[_getWeekNumber(item, _days)]]">[[_getWeekNumber(item, _days)]]</div>
-        </template>
-        <div
-            today$="[[_isToday(item)]]"
-            selected$="[[_dateEquals(item, selectedDate)]]"
-            focused$="[[_dateEquals(item, focusedDate)]]"
-            date="[[item]]"
-            disabled$="[[!_dateAllowed(item, minDate, maxDate)]]"
-            role$="[[_getRole(item)]]"
-            aria-label$="[[_getAriaLabel(item)]]"
-            aria-disabled$="[[_getAriaDisabled(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
-      </template>
+      <div id="weekdays-container">
+        <div hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]" part="weekday"></div>
+        <div part="weekdays">
+          <template is="dom-repeat" items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]">
+            <div part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
+          </template>
+        </div>
+      </div>
+      <div id="days-container">
+        <div part="week-numbers" hidden="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
+          <template is="dom-repeat" items="[[_getWeekNumbers(_days)]]">
+            <div part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
+          </template>
+        </div>
+        <div id="days">
+          <template is="dom-repeat" items="[[_days]]">
+            <div
+                part="date"
+                today$="[[_isToday(item)]]"
+                selected$="[[_dateEquals(item, selectedDate)]]"
+                focused$="[[_dateEquals(item, focusedDate)]]"
+                date="[[item]]"
+                disabled$="[[!_dateAllowed(item, minDate, maxDate)]]"
+                role$="[[_getRole(item)]]"
+                aria-label$="[[_getAriaLabel(item)]]"
+                aria-disabled$="[[_getAriaDisabled(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
+          </template>
+        </div>
+      </div>
     </div>
   </template>
   <script>
     {
-      class MonthCalendarElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      class MonthCalendarElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
 
         static get is() {
           return 'vaadin-month-calendar';
@@ -210,6 +154,12 @@ This program is available under Apache License Version 2.0, available at https:/
             _days: {
               type: Array,
               computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)'
+            },
+
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              computed: '_isDisabled(month, minDate, maxDate)'
             }
           };
         }
@@ -226,6 +176,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _dateAllowed(date, min, max) {
           return Vaadin.DatePickerHelper._dateAllowed(date, min, max);
+        }
+
+        /* Returns true if all the dates in the month are out of the allowed range */
+        _isDisabled(month, minDate, maxDate) {
+          // First day of the month
+          var firstDate = new Date(0, 0);
+          firstDate.setFullYear(month.getFullYear());
+          firstDate.setMonth(month.getMonth());
+          firstDate.setDate(1);
+
+          // Last day of the month
+          var lastDate = new Date(0, 0);
+          lastDate.setFullYear(month.getFullYear());
+          lastDate.setMonth(month.getMonth() + 1);
+          lastDate.setDate(-1);
+
+          return !this._dateAllowed(firstDate, minDate, maxDate)
+            && !this._dateAllowed(lastDate, minDate, maxDate);
         }
 
         _getTitle(month, monthNames) {
@@ -266,14 +234,6 @@ This program is available under Apache License Version 2.0, available at https:/
             };
           });
 
-          // Add extra space in the beginning of weekday names
-          if (showWeekNumbers && firstDayOfWeek === 1) {
-            weekDayNames.unshift({
-              weekDay: '',
-              weekDayShort: ''
-            });
-          }
-
           return weekDayNames;
         }
 
@@ -289,9 +249,9 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _showWeekSeparator(showWeekNumbers, firstDayOfWeek, index) {
+        _showWeekSeparator(showWeekNumbers, firstDayOfWeek) {
           // Currently only supported for locales that start the week on Monday.
-          return showWeekNumbers && firstDayOfWeek === 1 && (index % 7 === 0);
+          return showWeekNumbers && firstDayOfWeek === 1;
         }
 
         _isToday(date) {
@@ -338,6 +298,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           return Vaadin.DatePickerHelper._getISOWeekNumber(date);
+        }
+
+        _getWeekNumbers(dates) {
+          return dates.map(date => this._getWeekNumber(date, dates))
+                      .filter((week, index, arr) => arr.indexOf(week) === index);
         }
 
         _handleTap(e) {

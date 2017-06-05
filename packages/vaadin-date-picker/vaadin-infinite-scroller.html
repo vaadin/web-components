@@ -41,10 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
         box-sizing: border-box;
         padding-right: 40px;
-        @apply --vaadin-infinite-scroller-buffer;
-      }
-
-      :host(:not([init-animation-done])) .buffer > * {
+        top: var(--vaadin-inifnite-scroller-buffer-offset, 0);
         animation: fadein 0.2s;
       }
 
@@ -73,14 +70,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
-          /**
-           * Height of individual items (in pixels).
-           * Changing after initialization not supported.
-           */
-          itemHeight: {
-            type: Number,
-            value: 50
-          },
 
           /**
            * Count of individual items in each buffer.
@@ -112,8 +101,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _preventScrollEvent: Boolean,
 
-          _bufferHeight: Number,
-
           _mayHaveMomentum: Boolean,
 
           _initialized: Boolean,
@@ -127,9 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       ready() {
         super.ready();
-        this.addEventListener('animationend', this._animationEnd.bind(this));
 
-        this._bufferHeight = this.itemHeight * this.bufferSize;
         this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
 
         this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
@@ -139,8 +124,8 @@ This program is available under Apache License Version 2.0, available at https:/
           forwardHostProp: function(prop, value) {
             if (prop !== 'index') {
               this._buffers.forEach(buffer => {
-                [].forEach.call(buffer.children, itemWrapper => {
-                  itemWrapper.instance[prop] = value;
+                [].forEach.call(buffer.children, insertionPoint => {
+                  insertionPoint._itemWrapper.instance[prop] = value;
                 });
               });
             }
@@ -162,16 +147,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _animationEnd() {
-        this.toggleAttribute('init-animation-done', true);
-      }
-
       _finishInit() {
         if (!this._initDone) {
           // Once the first set of items start fading in, stamp the rest
           this._buffers.forEach(buffer => {
             [].forEach.call(buffer.children,
-              itemWrapper => this._ensureStampedInstance(itemWrapper));
+              insertionPoint => this._ensureStampedInstance(insertionPoint._itemWrapper));
           }, this);
 
           if (!this._buffers[0].translateY) {
@@ -264,6 +245,21 @@ This program is available under Apache License Version 2.0, available at https:/
         return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
       }
 
+      get itemHeight() {
+        if (!this._itemHeightVal) {
+          const itemHeight = window.ShadyCSS
+            ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-infinite-scroller-item-height')
+            : getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
+          this._itemHeightVal = parseInt(itemHeight);
+        }
+
+        return this._itemHeightVal;
+      }
+
+      get _bufferHeight() {
+        return this.itemHeight * this.bufferSize;
+      }
+
       _reset() {
         this._scrollDisabled = true;
         this.$.scroller.scrollTop = this._initialScroll;
@@ -289,11 +285,23 @@ This program is available under Apache License Version 2.0, available at https:/
         var container = this.getBoundingClientRect();
         this._buffers.forEach(buffer => {
           for (var i = 0; i < this.bufferSize; i++) {
-            var itemWrapper = document.createElement('div');
+            const itemWrapper = document.createElement('div');
             itemWrapper.style.height = this.itemHeight + 'px';
             itemWrapper.instance = {};
 
-            buffer.appendChild(itemWrapper);
+            const contentId = Vaadin.InfiniteScrollerElement._contentIndex = Vaadin.InfiniteScrollerElement._contentIndex + 1 || 0;
+            const slotName = 'vaadin-infinite-scroller-item-content-' + contentId;
+
+            const insertionPoint = document.createElement('slot');
+            insertionPoint.setAttribute('name', slotName);
+            insertionPoint._itemWrapper = itemWrapper;
+            buffer.appendChild(insertionPoint);
+
+            itemWrapper.setAttribute('slot', slotName);
+            this.appendChild(itemWrapper);
+
+            // This is needed by IE
+            Polymer.dom.flush();
 
             setTimeout(() => {
               // Only stamp the visible instances first
@@ -301,11 +309,12 @@ This program is available under Apache License Version 2.0, available at https:/
                 this._ensureStampedInstance(itemWrapper);
               }
             }, 1); // Wait for first reset
-
-            Polymer.RenderStatus.afterNextRender(itemWrapper, this._finishInit.bind(this));
-
           }
         }, this);
+
+        setTimeout(() => {
+          Polymer.RenderStatus.afterNextRender(this, this._finishInit.bind(this));
+        }, 1);
       }
 
       _ensureStampedInstance(itemWrapper) {
@@ -331,7 +340,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!buffer.updated) {
             var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
-            [].forEach.call(buffer.children, (itemWrapper, index) => {
+            [].forEach.call(buffer.children, (insertionPoint, index) => {
+              const itemWrapper = insertionPoint._itemWrapper;
               if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
                 itemWrapper.instance.index = firstIndex + index;
               }
@@ -344,25 +354,6 @@ This program is available under Apache License Version 2.0, available at https:/
       _isVisible(element, container) {
         var rect = element.getBoundingClientRect();
         return rect.bottom > container.top && rect.top < container.bottom;
-      }
-
-      _forwardHostPropV2(prop, value) {
-        this._forwardParentProp(prop, value);
-      }
-
-      /**
-       * Implements extension point from Templatizer mixin
-       * Called as side-effect of a host property change, responsible for
-       * notifying parent path change on each row.
-       */
-      _forwardParentProp(prop, value) {
-        if (prop !== 'index') {
-          this._buffers.forEach(buffer => {
-            [].forEach.call(buffer.children, itemWrapper => {
-              itemWrapper.instance[prop] = value;
-            });
-          });
-        }
       }
     }
 

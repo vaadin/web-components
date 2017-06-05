@@ -25,10 +25,10 @@
     "iron-media-query": "#2.0.0",
     "iron-overlay-behavior": "#2.0.0",
     "iron-resizable-behavior": "#2.0.0",
-    "paper-styles": "#2.0.0",
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
-    "vaadin-text-field": "^1.0.0"
+    "vaadin-text-field": "^1.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.1",
@@ -41,6 +41,7 @@
     "iron-meta": "#2.0.0",
     "iron-test-helpers": "#2.0.0",
     "sugar": "^2.0.0",
-    "web-component-tester": "^6.0.0"
+    "web-component-tester": "^6.0.0",
+    "vaadin-themes": "vaadin/vaadin-themes"
   }
 }

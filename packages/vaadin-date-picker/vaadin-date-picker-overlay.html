@@ -6,25 +6,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../paper-styles/shadow.html">
-<link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
-
-<style>
-  @font-face {
-    font-family: 'vaadin-date-picker-icons';
-    src: url('vaadin-date-picker-icons.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-</style>
+<link rel="import" href="vaadin-date-picker-styles.html">
 
 <dom-module id="vaadin-date-picker-overlay">
   <template>
@@ -34,63 +25,74 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-direction: column;
         height: 100%;
         width: 100%;
-        background: var(--primary-background-color);
-        font: inherit;
         outline: none;
-        @apply --paper-font-common-base;
-        @apply --shadow-elevation-2dp;
-        @apply --vaadin-date-picker-overlay;
+        background: #fff;
       }
 
-      #toolbar {
+      [part="overlay-header"] {
         display: flex;
-        justify-content: space-between;
-        padding: 14px;
-        background: var(--primary-background-color);
-        z-index: 2;
-        @apply --paper-font-button;
-        @apply --shadow-elevation-2dp;
         flex-shrink: 0;
-        transform: translateZ(0);
-        color: var(--primary-color);
-        @apply --vaadin-date-picker-toolbar;
+        flex-wrap: nowrap;
+        align-items: center;
       }
 
-      #toolbar:not([desktop]) {
-        cursor: pointer;
+      :host(:not([fullscreen])) [part="overlay-header"] {
+        display: none;
+      }
+
+      [part="label"] {
+        flex-grow: 1;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"],
+      [part="years-toggle-button"]::before {
+        font-family: 'vaadin-date-picker-icons';
+      }
+
+      [part="clear-button"]:not([showclear]) {
+        display: none;
+      }
+
+      [part="clear-button"]::before {
+        content: "\e901";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e902";
+      }
+
+      [part="years-toggle-button"] {
+        display: flex;
+      }
+
+      [part="years-toggle-button"][desktop] {
+        display: none;
+      }
+
+      [part="years-toggle-button"]::before {
+        content: "\e900";
+      }
+
+      :host(:not([years-visible])) [part="years-toggle-button"]::before {
+        transform: rotate(180deg);
       }
 
       #scrollers {
         display: flex;
-        flex-direction: row;
         height: 100%;
         width: 100%;
         position: relative;
         overflow: hidden;
       }
 
-      #scrollers #fade {
-        pointer-events: none;
-        display: block;
-        background: linear-gradient(90deg, var(--primary-background-color), rgba(255, 255, 255, 0));
-        width: 50px;
-        position: absolute;
-        height: 100%;
-        z-index: 1;
-        transform: translateX(-100%);
-        @apply --vaadin-date-picker-scrollers-fade;
-      }
-
-      #scrollers[desktop] #fade {
-        display: none;
-      }
-
-      #scroller,
-      #yearScroller {
+      [part="months"],
+      [part="years"] {
         height: 100%;
       }
 
-      #scroller {
+      [part="months"] {
+        --vaadin-infinite-scroller-item-height: 250px;
         padding: 0 8px;
         position: absolute;
         top: 0;
@@ -99,47 +101,32 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 0;
       }
 
-      #scrollers[desktop] #scroller {
+      #scrollers[desktop] [part="months"] {
         right: 50px;
         transform: none !important;
       }
 
-      #yearScroller {
-        text-align: center;
+      [part="years"] {
+        --vaadin-infinite-scroller-item-height: 80px;
         width: 50px;
-        background: var(--dark-theme-background-color);
-        color: var(--dark-theme-secondary-color);
-        cursor: pointer;
         position: absolute;
         right: 0;
         transform: translateX(100%);
         -webkit-tap-highlight-color: transparent;
-        @apply --paper-font-menu;
-        @apply --vaadin-date-picker-yearscroller;
-      }
-
-      #yearScroller div {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        /* Center the year scroller position. */
+        --vaadin-inifnite-scroller-buffer-offset: 50%;
       }
 
-      #scrollers[desktop] #yearScroller {
+      #scrollers[desktop] [part="years"] {
         position: absolute;
         transform: none !important;
       }
 
-      #yearScroller {
-        /* Center the year scroller position. */
-        --vaadin-infinite-scroller-buffer: {
-          top: 50%;
-          margin-top: -12px;
-          width: 90px;
-        }
-      }
-
-      #yearScroller::before {
+      [part="years"]::before {
         content: '';
         display: block;
         background: transparent;
@@ -148,121 +135,36 @@ This program is available under Apache License Version 2.0, available at https:/
         position: absolute;
         left: 0;
         top: 50%;
-        margin-top: -6px;
+        transform: translateY(-50%);
         border-width: 6px;
         border-style: solid;
         border-color: transparent;
-        border-left-color: var(--primary-background-color);
-        @apply --vaadin-date-picker-yearscroller-indicator;
+        border-left-color: #000;
       }
 
-      :host(.animate) vaadin-infinite-scroller {
+      :host(.animate) [part="months"],
+      :host(.animate) [part="years"] {
         transition: all 200ms;
       }
 
-      :host(:not([fullscreen])) #header {
-        display: none;
-      }
-
-      #toolbar[desktop] {
-        display: none;
-      }
-
-      #header {
-        background: var(--primary-color);
-        padding: 0 14px;
-        height: 64px; /* height set to 64px to match app-toolbar height */
-        box-sizing: border-box;
-
-        @apply --paper-font-subhead;
-        @apply --shadow-elevation-2dp;
-        @apply --vaadin-date-picker-header;
-
-        color: var(--dark-theme-text-color);
-        cursor: pointer;
-
-        display: flex;
-        flex-shrink: 0;
-        flex-wrap: nowrap;
-        align-items: center;
-      }
-
-      #label {
-        position: absolute;
-        top: 0;
-        font-size: 80%;
-      }
-
-      #input {
-        flex-grow: 1;
-      }
-
-      #clear,
-      #toggle,
-      #yeartoggle {
-        font-family: 'vaadin-date-picker-icons';
-        font-size: 24px;
-        color: #fff;
-        cursor: pointer;
-        transition: color 0.2s;
-        height: 20px;
-        width: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #clear,
-      #toggle {
-        margin-left: 10px;
-      }
-
-      #clear {
-        display: none;
-      }
-
-      #clear::before {
-        content: "\e901";
-      }
-
-      #toggle::before {
-        content: "\e902";
-      }
-
-      #yeartoggle::before {
-        content: "\e900";
-      }
-
-      #yeartoggle {
-        color: var(--primary-color);
-        transition: transform 200ms;
-        will-change: transform;
-        @apply --vaadin-date-picker-toolbar-icon;
-      }
-
-      #yeartoggle[rotate] {
-        transform: rotate(180deg);
-      }
-
-      #yeartoggle[hidden] {
-        display: none;
-      }
-
-      #clear[showclear] {
-        display: flex;
-      }
-
-      #footer {
+      [part="toolbar"] {
         display: flex;
         justify-content: space-between;
-        padding: 4px;
-        @apply --paper-font-body2;
-        background: var(--primary-background-color);
         z-index: 2;
-        box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.5);
-        color: var(--primary-color);
         flex-shrink: 0;
-        @apply --vaadin-date-picker-footer;
+      }
+
+      [part~="overlay-header"]:not([desktop]) {
+        padding-bottom: 40px;
+      }
+
+      [part~="years-toggle-button"] {
+        position: absolute;
+        top: auto;
+        right: 8px;
+        bottom: 0;
+        z-index: 1;
+        padding: 8px;
       }
 
       #announcer {
@@ -277,23 +179,18 @@ This program is available under Apache License Version 2.0, available at https:/
       [[i18n.calendar]]
     </div>
 
-    <div id="header" on-touchend="_preventDefault" aria-hidden="true">
-      <div id="label">[[label]]</div>
-      <div id="input">[[_formatDisplayed(selectedDate, i18n.formatDate)]]</div>
-      <div id="clear" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
-      <div id="toggle" on-tap="_cancel"></div>
-    </div>
+    <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
+      <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
+      <div part="clear-button" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
+      <div part="toggle-button" on-tap="_cancel"></div>
 
-    </div>
-
-    <div id="toolbar" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
-      [[_yearAfterXMonths(_visibleMonthIndex)]]
-      <div id="yeartoggle" rotate$="[[_isYearScrollerVisible(_translateX)]]"></div>
+      <div part="years-toggle-button" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
+        [[_yearAfterXMonths(_visibleMonthIndex)]]
+      </div>
     </div>
 
     <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
-      <div id="fade"></div>
-      <vaadin-infinite-scroller id="scroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" item-height="250" buffer-size="6" active="[[initialPosition]]">
+      <vaadin-infinite-scroller id="monthScroller" on-custom-scroll="_onMonthScroll" on-touchstart="_onMonthScrollTouchStart" buffer-size="6" active="[[initialPosition]]" part="months">
         <template>
           <vaadin-month-calendar
             i18n="[[i18n]]"
@@ -304,25 +201,26 @@ This program is available under Apache License Version 2.0, available at https:/
             show-week-numbers="[[showWeekNumbers]]"
             min-date="[[minDate]]"
             max-date="[[maxDate]]"
-            focused$="[[_focused]]">
+            focused$="[[_focused]]"
+            part="month">
           </vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
-      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" item-height="80" buffer-size="25" active="[[initialPosition]]">
+      <vaadin-infinite-scroller id="yearScroller" on-tap="_onYearTap" on-custom-scroll="_onYearScroll" on-touchstart="_onYearScrollTouchStart" buffer-size="25" active="[[initialPosition]]" part="years">
         <template>
-          <div role="button">[[_yearAfterXYears(index)]]</div>
-          <div style="font-size: 18px; line-height: 56px; opacity: 0.3;" aria-hidden="true">•</div>
+          <div part="year-number" role="button" current$="[[_isCurrentYear(index)]]" selected$="[[_isSelectedYear(index, selectedDate)]]">
+            [[_yearAfterXYears(index)]]
+          </div>
+          <div part="year-separator" aria-hidden="true"></div>
         </template>
       </vaadin-infinite-scroller>
     </div>
 
-    <div id="footer" on-touchend="_preventDefault" role="toolbar">
-
-
-      <vaadin-button id="todayButton" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
+    <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
+      <vaadin-button id="todayButton" part="today-button" disabled="[[!_isTodayAllowed(minDate, maxDate)]]" on-tap="_onTodayTap">
         [[i18n.today]]
       </vaadin-button>
-      <vaadin-button id="cancelButton" on-tap="_cancel">
+      <vaadin-button id="cancelButton" part="cancel-button" on-tap="_cancel">
         [[i18n.cancel]]
       </vaadin-button>
     </div>
@@ -331,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     {
-      class DatePickerOverlayElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      class DatePickerOverlayElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
 
         static get is() {
           return 'vaadin-date-picker-overlay';
@@ -481,16 +379,26 @@ This program is available under Apache License Version 2.0, available at https:/
           this.revealDate(focusedDate);
         }
 
+        _isCurrentYear(yearsFromNow) {
+          return yearsFromNow === 0;
+        }
+
+        _isSelectedYear(yearsFromNow, selectedDate) {
+          if (selectedDate) {
+            return selectedDate.getFullYear() === this._originDate.getFullYear() + yearsFromNow;
+          }
+        }
+
         /**
          * Scrolls the month and year scrollers enough to reveal the given date.
          */
         revealDate(date) {
           if (date) {
             var diff = this._differenceInMonths(date, this._originDate);
-            var scrolledAboveViewport = this.$.scroller.position > diff;
+            var scrolledAboveViewport = this.$.monthScroller.position > diff;
 
-            var visibleItems = this.$.scroller.clientHeight / this.$.scroller.itemHeight;
-            var scrolledBelowViewport = this.$.scroller.position + visibleItems - 1 < diff;
+            var visibleItems = this.$.monthScroller.clientHeight / this.$.monthScroller.itemHeight;
+            var scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
 
             if (scrolledAboveViewport) {
               this._scrollToPosition(diff, true);
@@ -513,13 +421,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _repositionYearScroller() {
-          this._visibleMonthIndex = Math.floor(this.$.scroller.position);
-          this.$.yearScroller.position = (this.$.scroller.position + this._originDate.getMonth()) / 12;
+          this._visibleMonthIndex = Math.floor(this.$.monthScroller.position);
+          this.$.yearScroller.position = (this.$.monthScroller.position + this._originDate.getMonth()) / 12;
         }
 
         _repositionMonthScroller() {
-          this.$.scroller.position = this.$.yearScroller.position * 12 - this._originDate.getMonth();
-          this._visibleMonthIndex = Math.floor(this.$.scroller.position);
+          this.$.monthScroller.position = this.$.yearScroller.position * 12 - this._originDate.getMonth();
+          this._visibleMonthIndex = Math.floor(this.$.monthScroller.position);
         }
 
         _onMonthScroll() {
@@ -549,15 +457,17 @@ This program is available under Apache License Version 2.0, available at https:/
             Polymer.Async.timeOut.after(300), () => this._ignoreTaps = false);
         }
 
-        _formatDisplayed(date, formatDate) {
+        _formatDisplayed(date, formatDate, label) {
           if (date) {
             return formatDate(date);
+          } else {
+            return label;
           }
         }
 
         _onTodayTap() {
           var today = new Date();
-          if (this.$.scroller.position === this._differenceInMonths(today, this._originDate)) {
+          if (this.$.monthScroller.position === this._differenceInMonths(today, this._originDate)) {
             // Select today only if the month scroller is positioned exactly
             // at the beginning of the current month
             this.selectedDate = today;
@@ -583,7 +493,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this._ignoreTaps && !this._notTapping) {
             var scrollDelta = e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
             var yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
-            this._scrollToPosition(this.$.scroller.position + yearDelta * 12, true);
+            this._scrollToPosition(this.$.monthScroller.position + yearDelta * 12, true);
           }
         }
 
@@ -594,7 +504,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (!animate) {
-            this.$.scroller.position = targetPosition;
+            this.$.monthScroller.position = targetPosition;
             this._targetPosition = undefined;
             this._repositionYearScroller();
             return;
@@ -614,7 +524,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           var duration = animate ? 300 : 0;
           var start = 0;
-          var initialPosition = this.$.scroller.position;
+          var initialPosition = this.$.monthScroller.position;
 
           var smoothScroll = timestamp => {
             start = start || timestamp;
@@ -622,7 +532,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             if (currentTime < duration) {
               var currentPos = easingFunction(currentTime, initialPosition, this._targetPosition - initialPosition, duration);
-              this.$.scroller.position = currentPos;
+              this.$.monthScroller.position = currentPos;
               window.requestAnimationFrame(smoothScroll);
             } else {
               this.dispatchEvent(new CustomEvent('scroll-animation-finished', {
@@ -634,7 +544,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
               }));
 
-              this.$.scroller.position = this._targetPosition;
+              this.$.monthScroller.position = this._targetPosition;
               this._targetPosition = undefined;
             }
 
@@ -708,9 +618,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openYearScroller() {
           this._translateX = 0;
+          this.setAttribute('years-visible', '');
         }
 
         _closeYearScroller() {
+          this.removeAttribute('years-visible');
           this._translateX = this._yearScrollerWidth;
         }
 
@@ -720,9 +632,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _translateXChanged(x) {
           if (!this._desktopMode) {
-            this.$.scroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
+            this.$.monthScroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
             this.$.yearScroller.style.transform = 'translateX(' + x + 'px)';
-            this.$.fade.style.transform = 'translateX(' + -x + 'px)';
           }
         }
 
