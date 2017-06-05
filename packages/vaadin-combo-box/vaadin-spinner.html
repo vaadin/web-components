@@ -34,15 +34,32 @@
     </style>
   </template>
   <script>
-    Polymer({
-      is: 'vaadin-spinner',
+    {
+      /**
+       * @memberof Vaadin
+       */
+      class SpinnerElement extends Polymer.Element {
+        static get is() {
+          return 'vaadin-spinner';
+        }
 
-      properties: {
-        active: {
-          type: Boolean,
-          reflectToAttribute: true
+        static get properties() {
+          return {
+            active: {
+              type: Boolean,
+              reflectToAttribute: true
+            }
+          };
         }
       }
-    });
+
+      customElements.define(SpinnerElement.is, SpinnerElement);
+
+      /**
+      * @namespace Vaadin
+      */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.SpinnerElement = SpinnerElement;
+    }
   </script>
 </dom-module>
