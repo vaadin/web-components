@@ -196,7 +196,7 @@
 
           it('should prevent default on overlay mousedown', function() {
             var preventDefaultSpy = sinon.spy();
-            combobox.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
+            combobox.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
 
             expect(preventDefaultSpy).to.have.been.called;
           });
@@ -204,7 +204,7 @@
           it('should prevent default on overlay mousedown (vaadin-combo-box-light)', function() {
             var preventDefaultSpy = sinon.spy();
             comboboxLight.open();
-            comboboxLight.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
+            comboboxLight.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
 
             expect(preventDefaultSpy).to.have.been.called;
           });

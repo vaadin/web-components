@@ -63,7 +63,7 @@
       it('should prevent default on overlay down', function() {
         var e = new CustomEvent('mousedown', {bubbles: true});
         var spy = sinon.spy(e, 'preventDefault');
-        comboBox.$.overlay.dispatchEvent(e);
+        comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
         expect(spy.called).to.be.true;
       });
 

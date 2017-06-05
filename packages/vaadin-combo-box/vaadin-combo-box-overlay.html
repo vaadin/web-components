@@ -177,6 +177,9 @@
       if (/Trident/.test(navigator.userAgent)) {
         this._scroller.setAttribute('unselectable', 'on');
       }
+
+      // Prevent blurring the input when clicking inside the overlay.
+      this.$.dropdown.$.overlay.addEventListener('mousedown', e => e.preventDefault());
     },
 
     observers: ['_selectorChanged(selector)', '_loadingChanged(loading)'],
