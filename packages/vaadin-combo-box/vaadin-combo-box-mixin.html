@@ -308,7 +308,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // Reset the input value asyncronously to prevent partial value changes
         // announce. Makes OSX VoiceOver to announce the complete value instead.
         this._inputElementValue = '';
-        this.async(function() {
+        this.async(() => {
           this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
           this._setSelectionRange();
         }, 1); // 1ms delay needed for OSX VoiceOver to realise input value was reset
@@ -429,7 +429,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         // make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
-      } else if (this._inputElementValue === '') {
+      } else if (this._inputElementValue === '' || this._inputElementValue === undefined) {
         this._clear();
       } else {
         if (this.allowCustomValue) {
@@ -613,7 +613,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // async needed to reposition correctly after filtering
         // (especially when aligned on top of input)
-        this.async(function() {
+        this.async(() => {
           this.$.overlay.$.dropdown.notifyResize();
         }, 1);
       }
@@ -788,6 +788,5 @@ This program is available under Apache License Version 2.0, available at https:/
      * To comply with https://developer.mozilla.org/en-US/docs/Web/Events/change
      * @event change
      */
-
-  }
+  };
 </script>

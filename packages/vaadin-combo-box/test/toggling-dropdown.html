@@ -225,14 +225,13 @@
           expect(combobox.opened).to.be.false;
         });
       } else {
-        // FIXME: does not work with the comboBoxMixin ES6
-        // it('should close popup when clicking outside overlay', function() {
-        //   combobox.open();
+        it('should close popup when clicking outside overlay', function() {
+          combobox.open();
 
-        //   document.body.click();
+          document.body.click();
 
-        //   expect(combobox.opened).to.be.false;
-        // });
+          expect(combobox.opened).to.be.false;
+        });
       }
 
       it('should not close when tapping on the overlay', function() {
