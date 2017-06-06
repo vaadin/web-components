@@ -20,16 +20,16 @@
 
 
   <script>
-    describe('scrolling', function() {
+    describe('scrolling', () => {
 
       var combobox;
 
-      beforeEach(function() {
+      beforeEach(() => {
         combobox = fixture('combobox');
       });
 
-      describeIf(touchDevice, 'touch devices', function() {
-        it('should blur input on scroll', function() {
+      describeIf(touchDevice, 'touch devices', () => {
+        it('should blur input on scroll', () => {
           combobox.open();
 
           fire('down', combobox.$.overlay);
@@ -39,8 +39,8 @@
         });
       });
 
-      describeIf(ios, 'iOS', function() {
-        it('should have momentum scrolling enabled', function() {
+      describeIf(ios, 'iOS', () => {
+        it('should have momentum scrolling enabled', () => {
           combobox.open();
 
           var scroller = combobox.$.overlay._scroller;
@@ -48,15 +48,15 @@
         });
       });
 
-      describeIf(/Trident/.test(navigator.userAgent), 'IE11', function() {
-        it('should have unselectable="on" for the scroller', function() {
+      describeIf(/Trident/.test(navigator.userAgent), 'IE11', () => {
+        it('should have unselectable="on" for the scroller', () => {
           var scroller = combobox.$.overlay._scroller;
           expect(scroller.getAttribute('unselectable')).to.equal('on');
         });
       });
 
-      describe('scrolling position', function() {
-        beforeEach(function() {
+      describe('scrolling position', () => {
+        beforeEach(() => {
           var items = [];
 
           for (var i = 0; i < 100; i++) {
@@ -66,13 +66,13 @@
           combobox.items = items;
         });
 
-        it('should be zero when no items are selected', function() {
+        it('should be zero when no items are selected', () => {
           combobox.open();
 
           expect(combobox.$.overlay._scroller.scrollTop).to.equal(0);
         });
 
-        it('should be zero when the first item is selected', function() {
+        it('should be zero when the first item is selected', () => {
           combobox.value = combobox.items[0];
           combobox.open();
 
@@ -91,7 +91,7 @@
           expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
         }
 
-        it('should make selected item visible after open', function(done) {
+        it('should make selected item visible after open', done => {
           combobox.value = combobox.items[50];
           combobox.open();
 
@@ -101,7 +101,7 @@
           }, 1);
         });
 
-        it('should make selected item visible after reopen', function(done) {
+        it('should make selected item visible after reopen', done => {
           combobox.open();
 
           combobox.value = combobox.items[50];

@@ -16,7 +16,7 @@
   <dom-module id="value-null">
     <script>
       // IE11 needs to wait for Polymer being loaded.
-      window.addEventListener('WebComponentsReady', function() {
+      window.addEventListener('WebComponentsReady', () => {
         Polymer({
           is: 'value-null',
           properties: {
@@ -44,15 +44,15 @@
   </test-fixture>
 
   <script>
-  describe('data binding', function() {
+  describe('data binding', () => {
 
     // Chrome demonstrates a loop when setting value to null/undefined and value is
     // bound in other components firing change events like in iron-input#bindValue.
     // In other browsers these tests do not work, and the browser could freeze.
-    describeIf(chrome, 'Chrome loops', function() {
+    describeIf(chrome, 'Chrome loops', () => {
       var valueNull, comboBox;
 
-      beforeEach(function() {
+      beforeEach(() => {
         var root = fixture('fixturenull');
         valueNull = root.$.valuenull;
         comboBox = root.$.combobox;
@@ -60,12 +60,12 @@
 
       // Setting value to null/undefined makes the component enter in a loop,
       // for instance iron-localstorage sets it to null when the key does not exist.
-      [null, undefined].forEach(function(value) {
-        it('should not enter in a loop when setting value to ' + value, function(done) {
+      [null, undefined].forEach(value => {
+        it('should not enter in a loop when setting value to ' + value, done => {
 
           // Not using sinon.spy, so we can break the loop before overflowing the stack.
           var i = 0;
-          comboBox.addEventListener('value-changed', function() {
+          comboBox.addEventListener('value-changed', () => {
             expect(i++).to.be.below(30);
           });
 

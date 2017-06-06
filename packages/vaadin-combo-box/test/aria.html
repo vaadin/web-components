@@ -20,7 +20,7 @@
 
 <script>
 
-  describe('Accessible Rich Internet Applications (ARIA)', function() {
+  describe('Accessible Rich Internet Applications (ARIA)', () => {
     var comboBox;
 
     function getInput() {
@@ -43,17 +43,17 @@
       MockInteractions.keyDownOn(getInput(), 27);
     }
 
-    beforeEach(function() {
+    beforeEach(() => {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
-    afterEach(function() {
+    afterEach(() => {
       comboBox.opened = false;
     });
 
-    describe('when combo-box is attached', function() {
-      it('should contain appropriate aria attributes', function() {
+    describe('when combo-box is attached', () => {
+      it('should contain appropriate aria attributes', () => {
         expect(getInput().getAttribute('role')).to.equal('combobox');
         expect(getInput().getAttribute('aria-label')).to.equal('my label');
         expect(getInput().getAttribute('aria-autocomplete')).to.equal('list');
@@ -64,21 +64,21 @@
       });
     });
 
-    describe('when overlay opens or close', function() {
-      beforeEach(function() {
+    describe('when overlay opens or close', () => {
+      beforeEach(() => {
         arrowDown();
       });
 
-      it('iron-list should have role listbox', function() {
+      it('iron-list should have role listbox', () => {
         expect(comboBox.$.overlay._selector.getAttribute('role')).to.equal('listbox');
       });
 
-      it('should set aria-expanded attribute when opened', function() {
+      it('should set aria-expanded attribute when opened', () => {
         expect(getInput().getAttribute('aria-expanded')).to.equal('true');
         expect(getToggleIcon().getAttribute('aria-expanded')).to.equal('true');
       });
 
-      it('should unset aria-expanded attribute when closed', function() {
+      it('should unset aria-expanded attribute when closed', () => {
         esc();
 
         expect(getInput().getAttribute('aria-expanded')).to.equal('false');
@@ -86,12 +86,12 @@
       });
     });
 
-    describe('navigating the items', function() {
-      beforeEach(function() {
+    describe('navigating the items', () => {
+      beforeEach(() => {
         arrowDown();
       });
 
-      afterEach(function(done) {
+      afterEach(done => {
         // IE11 randomly breaks during the teardown process when
         // fixture.restore() is called, most likely because the arrowDown()
         // functions are still partly running.
@@ -99,7 +99,7 @@
         Polymer.Async.microTask.run(done);
       });
 
-      it('should set selection aria attributes when focusing an item', function() {
+      it('should set selection aria attributes when focusing an item', () => {
         comboBox.value = 'foo';
         arrowDown(); // 'focus moves to 2nd item'
 

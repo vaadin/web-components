@@ -18,7 +18,7 @@
 </test-fixture>
 
 <script>
-  describe('filtering items', function() {
+  describe('filtering items', () => {
     var comboBox;
 
     function getFilteredItems() {
@@ -34,7 +34,7 @@
       return comboBox.inputElement.value;
     }
 
-    beforeEach(function() {
+    beforeEach(() => {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
 
@@ -44,8 +44,8 @@
       }
     });
 
-    describe('setting the input field value', function() {
-      it('should open the popup if closed', function() {
+    describe('setting the input field value', () => {
+      it('should open the popup if closed', () => {
         comboBox.close();
 
         setInputValue('foo');
@@ -53,7 +53,7 @@
         expect(comboBox.opened).to.equal(true);
       });
 
-      it('should open the popup when input field is cleared', function() {
+      it('should open the popup when input field is cleared', () => {
         comboBox.value = 'foo';
         comboBox.close();
         expect(comboBox.opened).to.equal(false);
@@ -63,13 +63,13 @@
         expect(comboBox.opened).to.equal(true);
       });
 
-      it('should not change the value of the combobox', function() {
+      it('should not change the value of the combobox', () => {
         comboBox.value = 'foo';
         setInputValue('bar');
         expect(comboBox.value).to.equal('foo');
       });
 
-      it('should set the combobox value when closing', function() {
+      it('should set the combobox value when closing', () => {
         comboBox.value = 'foo';
         setInputValue('bar');
 
@@ -78,7 +78,7 @@
         expect(comboBox.value).to.equal('bar');
       });
 
-      it('should set the combobox value when closing case insensitively', function() {
+      it('should set the combobox value when closing case insensitively', () => {
         comboBox.value = 'foo';
         setInputValue('BAR');
 
@@ -87,7 +87,7 @@
         expect(comboBox.value).to.equal('bar');
       });
 
-      it('should be reverted to the combobox value when cancelled', function() {
+      it('should be reverted to the combobox value when cancelled', () => {
         comboBox.value = 'foo';
 
         setInputValue('b');
@@ -96,7 +96,7 @@
         expect(getInputValue()).to.equal('foo');
       });
 
-      it('should be revert to the combobox value when selecting the same value', function() {
+      it('should be revert to the combobox value when selecting the same value', () => {
         comboBox.value = 'foo';
 
         setInputValue('FOO');
@@ -106,14 +106,14 @@
       });
     });
 
-    describe('focusing items while filtering', function() {
-      it('should focus on an exact match', function() {
+    describe('focusing items while filtering', () => {
+      it('should focus on an exact match', () => {
         setInputValue('bar');
 
         expect(comboBox._focusedIndex).to.eql(0);
       });
 
-      it('should not scroll to selected value when filtering', function(done) {
+      it('should not scroll to selected value when filtering', done => {
         comboBox.value = 'baz';
 
         var spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
@@ -129,20 +129,20 @@
       });
     });
 
-    describe('filtering items', function() {
-      it('should filter items using contains', function() {
+    describe('filtering items', () => {
+      it('should filter items using contains', () => {
         setInputValue('a');
 
         expect(getFilteredItems()).to.eql(['bar', 'baz']);
       });
 
-      it('should filter out all items with a invalid filter', function() {
+      it('should filter out all items with a invalid filter', () => {
         setInputValue('qux');
 
         expect(getFilteredItems()).to.be.empty;
       });
 
-      it('should be reset after closing the dropdown', function() {
+      it('should be reset after closing the dropdown', () => {
         setInputValue('foo');
 
         comboBox.close();
@@ -150,7 +150,7 @@
         expect(comboBox.filter).to.be.empty;
       });
 
-      it('should filter boolean', function() {
+      it('should filter boolean', () => {
         comboBox.items = [true, false];
 
         setInputValue('t');
@@ -158,27 +158,27 @@
         expect(getFilteredItems()).to.eql([true]);
       });
 
-      it('should show initial selection', function() {
+      it('should show initial selection', () => {
         comboBox.value = 'foo';
         comboBox.open();
 
         expect(comboBox.$.overlay._selectedItem).to.eql('foo');
       });
 
-      it('should not lose the selected value', function() {
+      it('should not lose the selected value', () => {
         comboBox.value = 'foo';
         setInputValue('bar');
 
         expect(comboBox.$.overlay._selectedItem).to.eql('foo');
       });
 
-      it('should ignore case', function() {
+      it('should ignore case', () => {
         setInputValue('FOO');
 
         expect(getFilteredItems()).to.eql(['foo']);
       });
 
-      it('should focus filtered items on match case insensitively', function() {
+      it('should focus filtered items on match case insensitively', () => {
         setInputValue('BA');
 
         expect(comboBox._focusedIndex).to.equal(-1);
@@ -188,20 +188,20 @@
         expect(comboBox._focusedIndex).to.equal(0);
       });
 
-      it('should reset focus when filter changes', function() {
+      it('should reset focus when filter changes', () => {
         setInputValue('BAR');
         setInputValue('BA');
 
         expect(comboBox._focusedIndex).to.equal(-1);
       });
 
-      it('should not filter with a null filter', function() {
+      it('should not filter with a null filter', () => {
         setInputValue(null);
 
         expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
       });
 
-      it('should not throw an error when items arent set', function() {
+      it('should not throw an error when items arent set', () => {
         comboBox.items = null;
 
         setInputValue('foo');
@@ -209,32 +209,32 @@
         expect(getFilteredItems()).to.be.null;
       });
 
-      it('should hide overlay when filtered items length is 0', function() {
+      it('should hide overlay when filtered items length is 0', () => {
         setInputValue('THIS IS NOT FOUND');
 
         expect(comboBox.opened && comboBox.$.overlay.hidden).to.be.true;
       });
     });
 
-    describe('external filtering', function(done) {
-      beforeEach(function() {
+    describe('external filtering', done => {
+      beforeEach(() => {
         comboBox.items = undefined;
         comboBox.filteredItems = ['foo', 'bar', 'baz'];
       });
 
-      it('should set items to filteredItems', function() {
+      it('should set items to filteredItems', () => {
         comboBox.items = ['foo'];
 
         expect(comboBox.filteredItems).to.eql(['foo']);
       });
 
-      it('should not filter items', function() {
+      it('should not filter items', () => {
         setInputValue('foo');
 
         expect(getFilteredItems()).to.eql(['foo', 'bar', 'baz']);
       });
 
-      it('should remove focus while loading', function() {
+      it('should remove focus while loading', () => {
         setInputValue('foo');
         comboBox.filteredItems = ['foo'];
         expect(comboBox._focusedIndex).to.eql(0);
@@ -244,7 +244,7 @@
         expect(comboBox._focusedIndex).to.eql(-1);
       });
 
-      it('should focus on filtered value', function() {
+      it('should focus on filtered value', () => {
         setInputValue('bar');
         expect(comboBox._focusedIndex).to.eql(-1);
 
@@ -253,7 +253,7 @@
         expect(comboBox._focusedIndex).to.eql(1);
       });
 
-      it('should focus on value when filter is empty', function() {
+      it('should focus on value when filter is empty', () => {
         comboBox.value = 'bar';
 
         comboBox.filteredItems = ['foo', 'bar', 'baz'];
@@ -261,7 +261,7 @@
         expect(comboBox._focusedIndex).to.eql(1);
       });
 
-      it('should not hide the overlay while loading', function() {
+      it('should not hide the overlay while loading', () => {
         setInputValue('foo');
 
         comboBox.loading = true;
@@ -270,7 +270,7 @@
         expect(comboBox.$.overlay.hidden).to.be.false;
       });
 
-      it('should not show the overlay while closed and loading', function() {
+      it('should not show the overlay while closed and loading', () => {
         comboBox.opened = false;
 
         comboBox.loading = true;
@@ -278,7 +278,7 @@
         expect(window.getComputedStyle(comboBox.$.overlay).display).to.eql('none');
       });
 
-      it('should hide the scroller while loading', function() {
+      it('should hide the scroller while loading', () => {
         setInputValue('foo');
 
         comboBox.loading = true;
@@ -287,7 +287,7 @@
         expect(comboBox.$.overlay._scroller.hidden).to.be.true;
       });
 
-      it('should refresh items after reassignment', function() {
+      it('should refresh items after reassignment', () => {
         comboBox.filteredItems = ['foo'];
 
         expect(getFilteredItems()).to.eql(['foo']);

@@ -22,25 +22,25 @@
   </test-fixture>
 
   <script>
-    describe('vaadin-overlay', function() {
+    describe('vaadin-overlay', () => {
       var parent, overlay;
 
-      beforeEach(function() {
+      beforeEach(() => {
         parent = fixture('default');
         overlay = parent.children[0];
       });
 
-      afterEach(function() {
+      afterEach(() => {
         overlay.opened = false;
       });
 
-      it('should move to body when opened', function() {
+      it('should move to body when opened', () => {
         overlay.opened = true;
 
         expect(overlay.parentElement).to.eql(document.body);
       });
 
-      it('should leave a placeholder after moving to body', function() {
+      it('should leave a placeholder after moving to body', () => {
         var overlayIndex = Array.prototype.indexOf.call(parent.childNodes, overlay);
 
         overlay.opened = true;
@@ -48,7 +48,7 @@
         expect(parent.childNodes[overlayIndex]).to.eql(overlay._placeholder);
       });
 
-      it('should return to original place when closed', function() {
+      it('should return to original place when closed', () => {
         overlay.opened = true;
 
         overlay.opened = false;

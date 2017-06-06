@@ -36,7 +36,7 @@
     </div>
   </template>
   <script>
-    window.addEventListener('WebComponentsReady', function() {
+    window.addEventListener('WebComponentsReady', () => {
       Polymer({
         is: 'x-fixed'
       });
@@ -98,8 +98,8 @@
     return comboBox.$.inputContainer.getBoundingClientRect();
   }
 
-  describe('overlay', function() {
-    beforeEach(function(done) {
+  describe('overlay', () => {
+    beforeEach(done => {
       comboBox = fixture('combobox');
       var comboBoxRect = comboBox.getBoundingClientRect();
       comboBox.items = getItemArray(20);
@@ -119,27 +119,27 @@
       Polymer.Async.microTask.run(done);
     });
 
-    afterEach(function() {
+    afterEach(() => {
       // clean out <vaadin-overlay> elements from body.
       comboBox.close();
     });
 
-    describe('overlay position', function() {
-      it('should match the input container width', function() {
+    describe('overlay position', () => {
+      it('should match the input container width', () => {
         comboBox.open();
 
         expect(dropContentRect().width).to.be.closeTo(inputContentRect().width, 1);
       });
 
-      it('should be below the input box', function() {
+      it('should be below the input box', () => {
         comboBox.open();
 
         expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
 
-      it('should position correctly if items are populated after opening', function(done) {
+      it('should position correctly if items are populated after opening', done => {
         comboBox.items = [];
-        comboBox.addEventListener('vaadin-dropdown-opened', function() {
+        comboBox.addEventListener('vaadin-dropdown-opened', () => {
           comboBox.items = [1, 2, 3];
           setTimeout(() => {
             expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
@@ -149,14 +149,14 @@
         comboBox.open();
       });
 
-      it('should notify resize on items change', function() {
+      it('should notify resize on items change', () => {
         var spy = sinon.spy();
         comboBox.$.overlay.$.dropdown.notifyResize = spy;
         comboBox.items = [1, 2, 3];
         expect(spy.called).to.be.true;
       });
 
-      it('should reposition on scroll', function() {
+      it('should reposition on scroll', () => {
         comboBox.opened = true;
         comboBox.$.overlay.updateViewportBoundaries = sinon.spy();
 
@@ -165,13 +165,13 @@
         expect(comboBox.$.overlay.updateViewportBoundaries.callCount).to.eql(1);
       }),
 
-      it('should be aligned with input container', function() {
+      it('should be aligned with input container', () => {
         comboBox.open();
 
         expect(dropContentRect().left).to.equal(inputContentRect().left);
       });
 
-      it('when the input position moves in the view port the overlay position should change', function() {
+      it('when the input position moves in the view port the overlay position should change', () => {
         moveComboBox(horiCenter, vertTop, 100);
 
         comboBox.open();
@@ -181,7 +181,7 @@
         expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
 
-      it('when the input position width changes overlay width should change', function() {
+      it('when the input position width changes overlay width should change', () => {
         moveComboBox(horiCenter, vertBottom, 150);
 
         comboBox.open();
@@ -189,7 +189,7 @@
         expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
 
-      it('should not translate in sub-pixels', function() {
+      it('should not translate in sub-pixels', () => {
         comboBox.style.paddingTop = '0.75px';
         comboBox.open();
 
@@ -199,14 +199,14 @@
       });
     });
 
-    describeSkipIf(ios, 'overlay alignment', function() {
-      beforeEach(function() {
+    describeSkipIf(ios, 'overlay alignment', () => {
+      beforeEach(() => {
         // These tests randomly fails in Edge when they are run from travis
         // unless we reset borders.
         comboBox.$.overlay._selector.$.items.style.border = 'none';
       });
 
-      it('should be above input', function(done) {
+      it('should be above input', done => {
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.open();
@@ -218,7 +218,7 @@
         }, 1);
       });
 
-      it('should reposition after filtering', function(done) {
+      it('should reposition after filtering', done => {
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.inputElement.value = 'item 1';
@@ -231,11 +231,11 @@
       });
     });
 
-    describe('overlay resizing', function() {
+    describe('overlay resizing', () => {
       var minHeight = 116;
       var inputUnderline = 2;
 
-      it('should resize to bottom of the screen', function() {
+      it('should resize to bottom of the screen', () => {
         comboBox.open();
 
         moveComboBox(horiCenter, vertBottom - minHeight - inputContentRect().height - inputUnderline, 300);
@@ -243,7 +243,7 @@
         expect(dropContentRect().bottom).to.be.at.most(window.innerHeight);
       });
 
-      it('should resize to top of the screen', function() {
+      it('should resize to top of the screen', () => {
         moveComboBox(horiCenter, vertBottom, 300);
         comboBox.open();
 
@@ -254,12 +254,12 @@
     });
   });
 
-  describe('overlay with fixed position target', function() {
+  describe('overlay with fixed position target', () => {
     function position(node) {
       return window.getComputedStyle(node).position;
     }
 
-    it('should same position when parent has fixed', function(done) {
+    it('should same position when parent has fixed', done => {
       var combobox = fixture('fixed').querySelector('vaadin-combo-box');
 
       combobox.open();
@@ -270,7 +270,7 @@
       }, 1);
     });
 
-    it('should same position when parent component has fixed', function(done) {
+    it('should same position when parent component has fixed', done => {
       var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
 
       combobox.open();
@@ -281,7 +281,7 @@
       }, 1);
     });
 
-    it('should have position absolute', function(done) {
+    it('should have position absolute', done => {
       var combobox = fixture('combobox');
 
       combobox.open();

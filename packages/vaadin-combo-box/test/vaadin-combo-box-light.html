@@ -35,21 +35,21 @@
   </demo-snippet>
 
   <script>
-    describe('vaadin-combo-box-light', function() {
+    describe('vaadin-combo-box-light', () => {
       var comboBox, ironInput;
 
-      beforeEach(function() {
+      beforeEach(() => {
         comboBox = fixture('combobox-light');
         comboBox.items = ['foo', 'bar', 'baz'];
         ironInput = comboBox.querySelector('iron-input');
       });
 
-      describe('using iron-input', function() {
-        it('should find the input element correctly', function() {
+      describe('using iron-input', () => {
+        it('should find the input element correctly', () => {
           expect(comboBox.inputElement).to.eql(ironInput);
         });
 
-        it('should bind the input value correctly', function() {
+        it('should bind the input value correctly', () => {
           // Empty string by default.
           expect(comboBox._inputElementValue).to.eql('');
           expect(ironInput.value).to.eql('');
@@ -60,14 +60,14 @@
         });
       });
 
-      it('should prevent default on overlay down', function() {
+      it('should prevent default on overlay down', () => {
         var e = new CustomEvent('mousedown', {bubbles: true});
         var spy = sinon.spy(e, 'preventDefault');
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
         expect(spy.called).to.be.true;
       });
 
-      it('should not prevent default on input down', function() {
+      it('should not prevent default on input down', () => {
         var e = new CustomEvent('mousedown', {bubbles: true});
         var spy = sinon.spy(e, 'preventDefault');
         ironInput.dispatchEvent(e);
@@ -75,15 +75,15 @@
       });
     });
 
-    describe('vaadin-combo-box-light-paper-input', function() {
+    describe('vaadin-combo-box-light-paper-input', () => {
       var comboBox, paperInput;
 
-      beforeEach(function() {
+      beforeEach(() => {
         comboBox = fixture('combobox-light-paper-input');
         comboBox.items = ['foo', 'bar', 'baz'];
       });
 
-      it('should toggle overlay by tapping toggle element', function() {
+      it('should toggle overlay by tapping toggle element', () => {
         comboBox._toggleElement.dispatchEvent(new CustomEvent('up', {bubbles: true}));
         expect(comboBox.opened).to.be.true;
 
@@ -91,7 +91,7 @@
         expect(comboBox.opened).to.be.false;
       });
 
-      it('should prevent default on toggle element down', function() {
+      it('should prevent default on toggle element down', () => {
         var e = new CustomEvent('down', {bubbles: true});
         var spy = sinon.spy(e, 'preventDefault');
         comboBox._toggleElement.dispatchEvent(e);

@@ -30,7 +30,7 @@
 
 
 <script>
-  describe('toggling the dropdown', function() {
+  describe('toggling the dropdown', () => {
     var combobox;
     var comboboxLight;
 
@@ -54,13 +54,13 @@
       return combobox.$.overlay.$.dropdown.$.overlay;
     }
 
-    beforeEach(function() {
+    beforeEach(() => {
       combobox = fixture('combobox');
       comboboxLight = fixture('combobox-light');
     });
 
-    describe('opening', function() {
-      it('should open asynchronously by tapping label', function(done) {
+    describe('opening', () => {
+      it('should open asynchronously by tapping label', done => {
         expect(combobox.opened).to.be.false;
         tapLabel();
 
@@ -70,7 +70,7 @@
         }, 1);
       });
 
-      it('should open asynchronously by clicking input', function(done) {
+      it('should open asynchronously by clicking input', done => {
         tapInput();
 
         expect(combobox.opened).to.be.false;
@@ -80,19 +80,19 @@
         }, 1);
       });
 
-      it('should open by clicking icon', function() {
+      it('should open by clicking icon', () => {
         tapToggleIcon();
 
         expect(combobox.opened).to.be.true;
       });
 
-      it('should open on function call', function() {
+      it('should open on function call', () => {
         combobox.open();
 
         expect(combobox.opened).to.be.true;
       });
 
-      it('should set body `pointer-events: none` on open and restore initial value on close', function() {
+      it('should set body `pointer-events: none` on open and restore initial value on close', () => {
         document.body.style.pointerEvents = 'painted';
         combobox.open();
         expect(getComputedStyle(document.body).pointerEvents).to.be.equal('none');
@@ -102,7 +102,7 @@
         expect(getComputedStyle(document.body).pointerEvents).to.be.equal('painted');
       });
 
-      it('should not close an open popup', function() {
+      it('should not close an open popup', () => {
         combobox.open();
 
         combobox.open();
@@ -110,7 +110,7 @@
         expect(combobox.opened).to.be.true;
       });
 
-      it('should be hidden with null items', function() {
+      it('should be hidden with null items', () => {
         combobox.items = null;
 
         combobox.open();
@@ -119,7 +119,7 @@
         expect(combobox.$.overlay.hidden).to.be.true;
       });
 
-      it('should be hidden with no items', function() {
+      it('should be hidden with no items', () => {
         combobox.items = [];
 
         combobox.open();
@@ -132,7 +132,7 @@
       // not get removed from the overlay after it's moved to the body. The
       // following test ensures that the overlay doesn't keep the style scope
       // of the combobox when moved during open.
-      it('should not leak combobox style scope to the overlay', function() {
+      it('should not leak combobox style scope to the overlay', () => {
         // Test only when style scope classes are used
         if (overlay().classList.contains('style-scope') &&
             overlay().classList.contains('vaadin-combo-box')) {
@@ -144,8 +144,8 @@
         }
       });
 
-      describe('after opening', function() {
-        beforeEach(function() {
+      describe('after opening', () => {
+        beforeEach(() => {
           combobox.open();
         });
 
@@ -159,12 +159,12 @@
         }
 
         if (touchDevice) {
-          it('should not focus input on dropdown open', function() {
+          it('should not focus input on dropdown open', () => {
             var focusedInput = combobox.root.querySelector('input:focus');
             expect(focusedInput).to.be.null;
           });
 
-          it('should not refocus the input field when closed from icon', function() {
+          it('should not refocus the input field when closed from icon', () => {
             tapToggleIcon();
 
             var focusedInput = combobox.root.querySelector('input:focus');
@@ -172,14 +172,14 @@
             expect(focusedInput).to.be.null;
           });
         } else {
-          it('should focus input on dropdown open', function() {
+          it('should focus input on dropdown open', () => {
             var focusedInput = combobox.root.querySelector('input');
             var activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.equal(combobox.inputElement);
           });
 
-          it('should refocus the input field when closed from icon', function() {
+          it('should refocus the input field when closed from icon', () => {
             tapToggleIcon();
 
             var focusedInput = combobox.root.querySelector('input');
@@ -191,14 +191,14 @@
 
         if (!touchDevice) {
 
-          it('should prevent default on overlay mousedown', function() {
+          it('should prevent default on overlay mousedown', () => {
             var preventDefaultSpy = sinon.spy();
             combobox.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
 
             expect(preventDefaultSpy).to.have.been.called;
           });
 
-          it('should prevent default on overlay mousedown (vaadin-combo-box-light)', function() {
+          it('should prevent default on overlay mousedown (vaadin-combo-box-light)', () => {
             var preventDefaultSpy = sinon.spy();
             comboboxLight.open();
             comboboxLight.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
@@ -209,9 +209,9 @@
       });
     });
 
-    describe('closing', function() {
+    describe('closing', () => {
       if (touchDevice) {
-        it('should close popup when tapping outside overlay', function() {
+        it('should close popup when tapping outside overlay', () => {
           combobox.open();
 
           fire('tap', document.body);
@@ -219,7 +219,7 @@
           expect(combobox.opened).to.be.false;
         });
       } else {
-        it('should close popup when clicking outside overlay', function() {
+        it('should close popup when clicking outside overlay', () => {
           combobox.open();
 
           document.body.click();
@@ -228,7 +228,7 @@
         });
       }
 
-      it('should not close when tapping on the overlay', function() {
+      it('should not close when tapping on the overlay', () => {
         combobox.open();
 
         fire('tap', combobox.$.overlay.$.dropdown.$.overlay);
@@ -236,7 +236,7 @@
         expect(combobox.opened).to.be.true;
       });
 
-      it('should not close popup when clicking on any overlay children', function() {
+      it('should not close popup when clicking on any overlay children', () => {
         combobox.open();
 
         combobox.$.overlay._scroller.click();
@@ -244,7 +244,7 @@
         expect(combobox.opened).to.be.true;
       });
 
-      it('should close on clicking icon', function() {
+      it('should close on clicking icon', () => {
         combobox.open();
 
         tapToggleIcon();
@@ -252,7 +252,7 @@
         expect(combobox.opened).to.be.false;
       });
 
-      it('should close the overlay when focus is lost', function() {
+      it('should close the overlay when focus is lost', () => {
         combobox.open();
 
         fire('blur', combobox.inputElement);
@@ -264,7 +264,7 @@
       // not get added to the overlay after it's moved back to the combobox.
       // The following test ensures that the overlay doesn't keep the style
       // scope of the combobox when moved during close.
-      it('should add combobox style scope to the overlay', function() {
+      it('should add combobox style scope to the overlay', () => {
         // Test only when style scope classes are used
         if (combobox.$.overlay.classList.contains('style-scope') &&
             combobox.$.overlay.classList.contains('vaadin-combo-box')) {
@@ -280,41 +280,41 @@
 
     });
 
-    describe('disabled', function() {
+    describe('disabled', () => {
 
-      beforeEach(function() {
+      beforeEach(() => {
         combobox.disabled = true;
       });
 
-      it('toggleIcon should be hidden when disabled', function() {
+      it('toggleIcon should be hidden when disabled', () => {
         expect(getComputedStyle(combobox.$.toggleIcon).display).to.equal('none');
       });
 
-      it('clearIcon should be hidden when disabled', function() {
+      it('clearIcon should be hidden when disabled', () => {
         expect(getComputedStyle(combobox.$.clearIcon).display).to.equal('none');
       });
 
-      it('dropdown should not be shown when disabled', function() {
+      it('dropdown should not be shown when disabled', () => {
         combobox.inputElement.dispatchEvent(new CustomEvent('tap'));
         expect(combobox.opened).to.be.false;
       });
     });
 
-    describe('read-only', function() {
+    describe('read-only', () => {
 
-      beforeEach(function() {
+      beforeEach(() => {
         combobox.readonly = true;
       });
 
-      it('toggleIcon should be hidden when read-only', function() {
+      it('toggleIcon should be hidden when read-only', () => {
         expect(getComputedStyle(combobox.$.toggleIcon).display).to.equal('none');
       });
 
-      it('clearIcon should be hidden when read-only', function() {
+      it('clearIcon should be hidden when read-only', () => {
         expect(getComputedStyle(combobox.$.clearIcon).display).to.equal('none');
       });
 
-      it('dropdown should not be shown when read-only', function() {
+      it('dropdown should not be shown when read-only', () => {
         combobox.inputElement.dispatchEvent(new CustomEvent('tap'));
         expect(combobox.opened).to.be.false;
       });

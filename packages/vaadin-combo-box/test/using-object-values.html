@@ -19,14 +19,14 @@
 
 
   <script>
-    describe('using object values', function() {
+    describe('using object values', () => {
       var combobox;
 
       function inputValue() {
         return combobox._bindableInput.bindValue;
       }
 
-      beforeEach(function() {
+      beforeEach(() => {
         combobox = fixture('combobox');
 
         combobox.items = [{
@@ -71,17 +71,17 @@
         combobox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: combobox.items[index]}}));
       }
 
-      beforeEach(function() {
+      beforeEach(() => {
         combobox.open();
       });
 
-      it('should use the default label property on input field', function() {
+      it('should use the default label property on input field', () => {
         selectItem(0);
 
         expect(inputValue()).to.eql('foo');
       });
 
-      it('should use the default label property in overlay items', function(done) {
+      it('should use the default label property in overlay items', done => {
         setTimeout(() => {
           var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           expect(firstItem.root.textContent).to.contain('foo');
@@ -89,7 +89,7 @@
         }, 1);
       });
 
-      it('should use the provided label property', function() {
+      it('should use the provided label property', () => {
         combobox.itemLabelPath = 'custom';
 
         combobox.value = 'bar';
@@ -97,14 +97,14 @@
         expect(inputValue()).to.eql('bazs');
       });
 
-      it('should use the default value property', function() {
+      it('should use the default value property', () => {
         selectItem(0);
 
         expect(combobox.value).to.eql('bar');
 
       });
 
-      it('should use the provided value property', function() {
+      it('should use the provided value property', () => {
         combobox.itemValuePath = 'custom';
 
         selectItem(1);
@@ -112,10 +112,10 @@
         expect(combobox.value).to.eql('bashcsdfsa');
       });
 
-      it('should use toString if provided label and value paths are not found', function() {
+      it('should use toString if provided label and value paths are not found', () => {
         combobox.itemValuePath = 'not.found';
         combobox.itemLabelPath = 'not.found';
-        combobox.items[0].toString = function() {
+        combobox.items[0].toString = () => {
           return 'default';
         };
 
@@ -125,9 +125,9 @@
         expect(combobox.value).to.eql('default');
       });
 
-      it('should use toString if default label and value paths are not found', function() {
+      it('should use toString if default label and value paths are not found', () => {
         combobox.items = [{}, {}];
-        combobox.items[0].toString = function() {
+        combobox.items[0].toString = () => {
           return 'default';
         };
 
@@ -137,14 +137,14 @@
         expect(combobox.value).to.eql('default');
       });
 
-      it('should set the selected item when open', function() {
+      it('should set the selected item when open', () => {
         combobox.value = 'bar';
 
         expect(combobox.selectedItem).to.eql(combobox.items[0]);
         expect(combobox._bindableInput.bindValue).to.eql('foo');
       });
 
-      it('should set the selected item when closed', function() {
+      it('should set the selected item when closed', () => {
         combobox.opened = false;
 
         combobox.value = 'bar';
@@ -153,28 +153,28 @@
         expect(combobox._bindableInput.bindValue).to.eql('foo');
       });
 
-      it('should set the value', function() {
+      it('should set the value', () => {
         selectItem(0);
 
         expect(combobox._bindableInput.bindValue).to.eql('foo');
         expect(combobox.value).to.eql('bar');
       });
 
-      it('should set the value even if the value is zero (number)', function() {
+      it('should set the value even if the value is zero (number)', () => {
         selectItem(2);
 
         expect(combobox._bindableInput.bindValue).to.eql('zero');
         expect(combobox.value).to.eql(0);
       });
 
-      it('should set the value even if the value is false (boolean)', function() {
+      it('should set the value even if the value is false (boolean)', () => {
         selectItem(3);
 
         expect(combobox._bindableInput.bindValue).to.eql('false');
         expect(combobox.value).to.eql(false);
       });
 
-      it('should set the value even if the value is an empty string', function() {
+      it('should set the value even if the value is an empty string', () => {
         selectItem(4);
 
         expect(combobox._bindableInput.bindValue).to.eql('empty string');
@@ -182,7 +182,7 @@
         expect(combobox.hasValue).to.eql(true);
       });
 
-      it('should distinguish between 0 (number) and "0" (string) values', function() {
+      it('should distinguish between 0 (number) and "0" (string) values', () => {
         selectItem(2);
         expect(combobox._bindableInput.bindValue).to.eql('zero');
         expect(combobox.value).to.eql(0);
@@ -192,19 +192,19 @@
         expect(combobox.value).to.eql('0');
       });
 
-      it('should set the input value from item label if item is found', function() {
+      it('should set the input value from item label if item is found', () => {
         combobox.value = 'bar';
 
         expect(combobox._bindableInput.bindValue).to.eql('foo');
       });
 
-      it('should select first of duplicate values', function() {
+      it('should select first of duplicate values', () => {
         combobox.value = 'duplicate';
 
         expect(combobox.selectedItem).to.eql(combobox.items[6]);
       });
 
-      it('should select correct duplicate value', function() {
+      it('should select correct duplicate value', () => {
         var spy = sinon.spy();
         combobox.addEventListener('selected-item-changed', spy);
 
@@ -216,7 +216,7 @@
         expect(spy.callCount).to.eql(1);
       });
 
-      it('should select correct with missing value', function() {
+      it('should select correct with missing value', () => {
         var spy = sinon.spy();
         combobox.addEventListener('selected-item-changed', spy);
 
@@ -228,12 +228,12 @@
         expect(spy.callCount).to.eql(1);
       });
 
-      describe('when custom values are not allowed', function() {
-        beforeEach(function() {
+      describe('when custom values are not allowed', () => {
+        beforeEach(() => {
           combobox.allowCustomValue = false;
         });
 
-        it('should clear the input value if item is not found', function() {
+        it('should clear the input value if item is not found', () => {
           combobox.value = 'bar';
 
           combobox.value = 'not found';
@@ -242,12 +242,12 @@
         });
       });
 
-      describe('when custom values are allowed', function() {
-        beforeEach(function() {
+      describe('when custom values are allowed', () => {
+        beforeEach(() => {
           combobox.allowCustomValue = true;
         });
 
-        it('should set the value as bind value if item is not found', function() {
+        it('should set the value as bind value if item is not found', () => {
           combobox.value = 'not found';
 
           expect(combobox._bindableInput.bindValue).to.eql('not found');
