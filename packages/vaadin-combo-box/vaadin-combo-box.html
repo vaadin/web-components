@@ -284,7 +284,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ComboBoxMixin
        * @demo demo/index.html
        */
-      class ComboBoxElement extends Vaadin.ComboBoxMixin(Polymer.mixinBehaviors([], Polymer.Element)) {
+      class ComboBoxElement extends Vaadin.ComboBoxMixin(Polymer.Element) {
 
         static get is() {
           return 'vaadin-combo-box';
@@ -420,16 +420,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this._bindableInput = this.$.ironinput;
         }
 
-        attached() {
-          super.attached();
+        connectedCallback() {
+          super.connectedCallback();
           // Use the default toggle/clear or one replaced in light DOM.
           this._toggleElement = this.querySelector('[slot=toggle-button]') || this.$.toggleIcon;
           this._clearElement = this.querySelector('[slot=clear-button]') || this.$.clearIcon;
           this._preventInputBlur();
         }
 
-        detached() {
-          super.detached();
+        disconnectedCallback() {
+          super.disconnectedCallback();
           this._restoreInputBlur();
         }
 

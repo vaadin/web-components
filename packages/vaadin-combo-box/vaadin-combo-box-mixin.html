@@ -741,19 +741,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _preventInputBlur() {
       if (this._toggleElement) {
-        this.listen(this._toggleElement, 'down', '_preventDefault');
+        this._addEventListenerToNode(this._toggleElement, 'down', this._preventDefault);
       }
       if (this._clearElement) {
-        this.listen(this._clearElement, 'down', '_preventDefault');
+        this._addEventListenerToNode(this._clearElement, 'down', this._preventDefault);
       }
     }
 
     _restoreInputBlur() {
       if (this._toggleElement) {
-        this.unlisten(this._toggleElement, 'down', '_preventDefault');
+        this._removeEventListenerFromNode(this._toggleElement, 'down', this._preventDefault);
       }
       if (this._clearElement) {
-        this.unlisten(this._clearElement, 'down', '_preventDefault');
+        this._removeEventListenerFromNode(this._clearElement, 'down', this._preventDefault);
       }
     }
 

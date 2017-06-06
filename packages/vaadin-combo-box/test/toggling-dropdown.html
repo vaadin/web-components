@@ -47,7 +47,7 @@
     function tapToggleIcon() {
       // This listener should listen for "tap" again once composedPath() issues with touch devices
       // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      fire('up', combobox.$$('paper-input-container #toggleIcon'));
+      fire('up', combobox.root.querySelector('paper-input-container #toggleIcon'));
     }
 
     function overlay() {
