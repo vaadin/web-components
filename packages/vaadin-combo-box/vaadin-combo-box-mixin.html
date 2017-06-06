@@ -16,6 +16,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
   /**
    * @polymerMixin
+   * @memberof Vaadin
+   * @mixes Vaadin.ComboBoxDropdownMixin
    */
   Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends
   Polymer.GestureEventListeners(Vaadin.ComboBoxDropdownMixin(subclass)) {

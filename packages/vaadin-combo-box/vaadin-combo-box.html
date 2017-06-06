@@ -223,7 +223,7 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    {
+    (function() {
       /**
        * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
        * input field for filtering the list of items. If you want to replace the default
@@ -280,7 +280,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * ----------------|-------------|-------------
        * `--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`
        *
-       * @element vaadin-combo-box
+       * @memberof Vaadin
+       * @mixes Vaadin.ComboBoxMixin
        * @demo demo/index.html
        */
       class ComboBoxElement extends Vaadin.ComboBoxMixin(Polymer.mixinBehaviors([], Polymer.Element)) {
@@ -470,7 +471,7 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.ComboBoxElement = ComboBoxElement;
-    }
+    })();
   </script>
 </dom-module>
 
