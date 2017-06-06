@@ -122,7 +122,7 @@
         setInputValue('b');
 
         // first scroll after open is async
-        comboBox.async(function() {
+        Polymer.Async.microTask.run(() => {
           expect(spy.callCount).to.eql(1); // scrolls once on open
           done();
         });

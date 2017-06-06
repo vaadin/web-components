@@ -95,7 +95,7 @@
           combobox.value = combobox.items[50];
           combobox.open();
 
-          combobox.async(function() {
+          setTimeout(() => {
             expectSelectedItemPositionToBeVisible();
             done();
           }, 1);
@@ -108,7 +108,7 @@
           combobox.close();
           combobox.open();
 
-          combobox.async(function() {
+          setTimeout(() => {
             expectSelectedItemPositionToBeVisible();
             done();
           }, 1);

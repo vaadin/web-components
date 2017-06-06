@@ -84,7 +84,7 @@
 
       MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
-      combobox.async(function() {
+      setTimeout(() => {
         var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
@@ -98,7 +98,7 @@
 
       MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
-      combobox.async(function() {
+      setTimeout(() => {
         var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
@@ -121,7 +121,7 @@
         // be called multiple times, which produces error for the test.
         combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
-        combobox.async(function() {
+        setTimeout(() => {
           var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
@@ -148,7 +148,7 @@
         // be called multiple times, which produces error for the test.
         combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
-        combobox.async(function() {
+        setTimeout(() => {
           var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
@@ -360,7 +360,7 @@
       combobox.items = ['foo', 'bar', 'barbar'];
 
       combobox.open();
-      combobox.async(done);
+      Polymer.Async.microTask.run(done);
     });
 
     it('should select a value when closing when having a single exact match', function() {

@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/async.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
@@ -295,10 +296,11 @@ This program is available under Apache License Version 2.0, available at https:/
         // Reset the input value asyncronously to prevent partial value changes
         // announce. Makes OSX VoiceOver to announce the complete value instead.
         this._inputElementValue = '';
-        this.async(() => {
+        // 1ms delay needed for OSX VoiceOver to realise input value was reset
+        Polymer.Async.timeOut.after(1).run(() => {
           this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
           this._setSelectionRange();
-        }, 1); // 1ms delay needed for OSX VoiceOver to realise input value was reset
+        });
       }
     }
 
@@ -340,7 +342,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _openAsync() {
       // Needed for MS Edge. Otherwise, it does not pop the virtual keyboard up
       // when tapping the combobox that has non-empty value.
-      this.async(this.open);
+      Polymer.Async.microTask.run(() => this.open());
     }
 
     /**
@@ -601,9 +603,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // async needed to reposition correctly after filtering
         // (especially when aligned on top of input)
-        this.async(() => {
+        Polymer.Async.timeOut.after(1).run(() => {
           this.$.overlay.$.dropdown.notifyResize();
-        }, 1);
+        });
       }
     }
 

@@ -72,7 +72,7 @@
         could be called after the test is already done, and the test
         fixture is destroyed, causing errors.
       */
-      Polymer.Base.async(done, 1);
+      setTimeout(done, 1);
     });
 
     describe('opening the overlay', function() {
@@ -101,7 +101,7 @@
 
     describe('navigating the items after overlay opened', function() {
       beforeEach(function(done) {
-        comboBox.async(function() {
+        Polymer.Async.microTask.run(() => {
           arrowDown();
           done();
         });
@@ -162,7 +162,7 @@
 
     describe('selecting items', function() {
       beforeEach(function(done) {
-        comboBox.async(function() {
+        Polymer.Async.microTask.run(() => {
           comboBox.value = 'bar';
           arrowDown();
           done();
@@ -279,7 +279,7 @@
       it('should prefill the input field when navigating down', function(done) {
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('baz');
           done();
         }, 1);
@@ -288,7 +288,7 @@
       it('should select the input field text when navigating down', function(done) {
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().selectionStart).to.eql(0);
           expect(getInput().selectionEnd).to.eql(3);
           done();
@@ -298,7 +298,7 @@
       it('should prefill the input field when navigating up', function(done) {
         arrowUp();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('foo');
           done();
         }, 1);
@@ -309,7 +309,7 @@
 
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('invalid filter');
           done();
         }, 1);
@@ -318,7 +318,7 @@
       it('should select the input field text when navigating up', function(done) {
         arrowUp();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().selectionStart).to.eql(0);
           expect(getInput().selectionEnd).to.eql(3);
           done();
@@ -330,7 +330,7 @@
 
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('bar');
 
           esc();
@@ -338,7 +338,6 @@
           expect(getInput().value).to.eql('b');
           done();
         }, 1);
-
       });
 
       it('should remove selection from the input value when reverting', function() {
@@ -361,7 +360,7 @@
         arrowDown();
 
 
-        comboBox.async(function() {
+        setTimeout(() => {
           // selection range is only cleared when the input is focused, which is not the case
           // in all environments running the tests, especially on safari. So we need to use the next best thing.
           comboBox._clearSelectionRange = sinon.spy();
@@ -382,7 +381,7 @@
         comboBox.items = ['foo', 'bar', 'baz', 'qux'];
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
           expect(comboBox.$.overlay._selector.lastVisibleIndex).to.eql(3);
           done();
@@ -399,7 +398,7 @@
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay._selector.lastVisibleIndex + 1);
           done();
         }, 1);
@@ -420,7 +419,7 @@
         comboBox.open();
         selector = comboBox.$.overlay._selector;
 
-        Polymer.Base.async(done, 1);
+        setTimeout(done, 1);
       });
 
       it('should scroll down after reaching the last visible item', function() {
@@ -486,7 +485,7 @@
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        Polymer.Async.microTask.run(() => {
           expect(selector.firstVisibleIndex).to.eql(0);
           done();
         });
@@ -499,7 +498,7 @@
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        Polymer.Async.microTask.run(() => {
           expect(selector.firstVisibleIndex).to.be.within(50 - comboBox.$.overlay._visibleItemsCount(), 50);
           done();
         });

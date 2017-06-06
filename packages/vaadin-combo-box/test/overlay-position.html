@@ -116,7 +116,7 @@
 
       // <paper-input-container> adds floated-label-placeholder div asynchronously,
       // we want to wait that out so that the dropdown clientHeight is calculated correctly.
-      return Polymer.Base.async(done);
+      Polymer.Async.microTask.run(done);
     });
 
     afterEach(function() {
@@ -141,7 +141,7 @@
         comboBox.items = [];
         comboBox.addEventListener('vaadin-dropdown-opened', function() {
           comboBox.items = [1, 2, 3];
-          comboBox.async(function() {
+          setTimeout(() => {
             expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
             done();
           }, 1);
@@ -211,7 +211,7 @@
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(comboBox.$.overlay.$.dropdown.alignedAbove).to.be.true;
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
@@ -224,7 +224,7 @@
         comboBox.inputElement.value = 'item 1';
         comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
@@ -264,7 +264,7 @@
 
       combobox.open();
 
-      Polymer.Base.async(function() {
+      setTimeout(() => {
         expect(position(combobox.$.overlay.$.dropdown.$.overlay)).to.eql('fixed');
         done();
       }, 1);
@@ -275,7 +275,7 @@
 
       combobox.open();
 
-      Polymer.Base.async(function() {
+      setTimeout(() => {
         expect(position(combobox.$.overlay.$.dropdown.$.overlay)).to.eql('fixed');
         done();
       }, 1);
@@ -286,7 +286,7 @@
 
       combobox.open();
 
-      Polymer.Base.async(function() {
+      setTimeout(() => {
         expect(position(combobox.$.overlay.$.dropdown.$.overlay)).to.eql('absolute');
         done();
       }, 1);

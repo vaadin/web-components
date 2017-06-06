@@ -69,7 +69,7 @@
             expect(i++).to.be.below(30);
           });
 
-          Polymer.Base.async(function() {
+          setTimeout(() => {
             expect(i).to.be.at.most(2);
             done();
           }, 1);
