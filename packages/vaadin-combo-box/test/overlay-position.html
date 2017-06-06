@@ -119,10 +119,8 @@
       Polymer.Async.microTask.run(done);
     });
 
-    afterEach(() => {
-      // clean out <vaadin-overlay> elements from body.
-      comboBox.close();
-    });
+    // clean out <vaadin-overlay> elements from body.
+    afterEach(() => comboBox.close());
 
     describe('overlay position', () => {
       it('should match the input container width', () => {

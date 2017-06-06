@@ -21,9 +21,7 @@
     describe('Late upgrade', () => {
       var combobox;
 
-      beforeEach(() => {
-        combobox = fixture('combobox');
-      });
+      beforeEach(() => combobox = fixture('combobox'));
 
       it('should have preset value from property', done => {
         // Set the value before the element is upgraded.

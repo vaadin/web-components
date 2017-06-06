@@ -63,17 +63,15 @@
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
-    afterEach(done => {
-      /*
-        The following prevents test errors in MSIE 11.
+    /*
+      The following prevents test errors in MSIE 11.
 
-        The input element is asynchronously prefilled with item label
-        when navigating with keyboard. In IE11, the async callbacks
-        could be called after the test is already done, and the test
-        fixture is destroyed, causing errors.
-      */
-      setTimeout(done, 1);
-    });
+      The input element is asynchronously prefilled with item label
+      when navigating with keyboard. In IE11, the async callbacks
+      could be called after the test is already done, and the test
+      fixture is destroyed, causing errors.
+    */
+    afterEach(done => setTimeout(done, 1));
 
     describe('opening the overlay', () => {
       it('should open the overlay with arrow down and not focus any item', () => {
@@ -100,12 +98,10 @@
     });
 
     describe('navigating the items after overlay opened', () => {
-      beforeEach(done => {
-        Polymer.Async.microTask.run(() => {
-          arrowDown();
-          done();
-        });
-      });
+      beforeEach(done => Polymer.Async.microTask.run(() => {
+        arrowDown();
+        done();
+      }));
 
       it('should focus on the first item with arrow down', () => {
         arrowDown();
@@ -161,13 +157,11 @@
     });
 
     describe('selecting items', () => {
-      beforeEach(done => {
-        Polymer.Async.microTask.run(() => {
-          comboBox.value = 'bar';
-          arrowDown();
-          done();
-        });
-      });
+      beforeEach(done => Polymer.Async.microTask.run(() => {
+        comboBox.value = 'bar';
+        arrowDown();
+        done();
+      }));
 
       it('should select focused item with enter', () => {
         arrowDown();

@@ -24,9 +24,7 @@
 
       var combobox;
 
-      beforeEach(() => {
-        combobox = fixture('combobox');
-      });
+      beforeEach(() => combobox = fixture('combobox'));
 
       describeIf(touchDevice, 'touch devices', () => {
         it('should blur input on scroll', () => {

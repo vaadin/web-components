@@ -2,7 +2,7 @@ var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 var chrome = /Chrome/i.test(navigator.userAgent);
 var edge = /Edge/i.test(navigator.userAgent);
 
-var touchDevice = (function() {
+var touchDevice = (() => {
   try {
     document.createEvent('TouchEvent');
     return true;
@@ -18,7 +18,7 @@ var fire = (type, node, detail) => {
   return evt;
 };
 
-var describeSkipIf = function(bool, title, callback) {
+var describeSkipIf = (bool, title, callback) => {
   bool = typeof bool == 'function' ? bool() : bool;
   if (bool) {
     describe.skip(title, callback);
@@ -27,14 +27,12 @@ var describeSkipIf = function(bool, title, callback) {
   }
 };
 
-var describeIf = function(bool, title, callback) {
+var describeIf = (bool, title, callback) => {
   bool = typeof bool == 'function' ? bool() : bool;
   describeSkipIf(!bool, title, callback);
 };
 
-var getItemArray = function(length) {
+var getItemArray = length => {
   return new Array(length).join().split(',')
-    .map(function(item, index) {
-      return 'item ' + index;
-    });
+    .map((item, index) => 'item ' + index);
 };

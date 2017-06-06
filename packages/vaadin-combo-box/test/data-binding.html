@@ -65,9 +65,7 @@
 
           // Not using sinon.spy, so we can break the loop before overflowing the stack.
           var i = 0;
-          comboBox.addEventListener('value-changed', () => {
-            expect(i++).to.be.below(30);
-          });
+          comboBox.addEventListener('value-changed', expect(i++).to.be.below(30));
 
           setTimeout(() => {
             expect(i).to.be.at.most(2);

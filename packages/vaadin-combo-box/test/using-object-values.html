@@ -101,7 +101,6 @@
         selectItem(0);
 
         expect(combobox.value).to.eql('bar');
-
       });
 
       it('should use the provided value property', () => {
@@ -127,9 +126,7 @@
 
       it('should use toString if default label and value paths are not found', () => {
         combobox.items = [{}, {}];
-        combobox.items[0].toString = () => {
-          return 'default';
-        };
+        combobox.items[0].toString = () => 'default';
 
         selectItem(0);
 
@@ -229,9 +226,8 @@
       });
 
       describe('when custom values are not allowed', () => {
-        beforeEach(() => {
-          combobox.allowCustomValue = false;
-        });
+
+        beforeEach(() => combobox.allowCustomValue = false);
 
         it('should clear the input value if item is not found', () => {
           combobox.value = 'bar';
@@ -243,9 +239,8 @@
       });
 
       describe('when custom values are allowed', () => {
-        beforeEach(() => {
-          combobox.allowCustomValue = true;
-        });
+
+        beforeEach(() => combobox.allowCustomValue = true);
 
         it('should set the value as bind value if item is not found', () => {
           combobox.value = 'not found';

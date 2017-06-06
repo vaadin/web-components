@@ -30,9 +30,7 @@
         overlay = parent.children[0];
       });
 
-      afterEach(() => {
-        overlay.opened = false;
-      });
+      afterEach(() => overlay.opened = false);
 
       it('should move to body when opened', () => {
         overlay.opened = true;

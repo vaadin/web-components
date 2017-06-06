@@ -48,9 +48,7 @@
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
-    afterEach(() => {
-      comboBox.opened = false;
-    });
+    afterEach(() => comboBox.opened = false);
 
     describe('when combo-box is attached', () => {
       it('should contain appropriate aria attributes', () => {
@@ -65,9 +63,8 @@
     });
 
     describe('when overlay opens or close', () => {
-      beforeEach(() => {
-        arrowDown();
-      });
+
+      beforeEach(arrowDown);
 
       it('iron-list should have role listbox', () => {
         expect(comboBox.$.overlay._selector.getAttribute('role')).to.equal('listbox');
@@ -87,17 +84,14 @@
     });
 
     describe('navigating the items', () => {
-      beforeEach(() => {
-        arrowDown();
-      });
 
-      afterEach(done => {
-        // IE11 randomly breaks during the teardown process when
-        // fixture.restore() is called, most likely because the arrowDown()
-        // functions are still partly running.
-        // Delaying the teardown by a micro task seems to help.
-        Polymer.Async.microTask.run(done);
-      });
+      beforeEach(arrowDown);
+
+      // IE11 randomly breaks during the teardown process when
+      // fixture.restore() is called, most likely because the arrowDown()
+      // functions are still partly running.
+      // Delaying the teardown by a micro task seems to help.
+      afterEach(done => Polymer.Async.microTask.run(done));
 
       it('should set selection aria attributes when focusing an item', () => {
         comboBox.value = 'foo';

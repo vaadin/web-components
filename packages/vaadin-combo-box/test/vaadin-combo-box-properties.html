@@ -174,9 +174,8 @@
       });
 
       describe('selectedItem property', () => {
-        beforeEach(() => {
-          comboBox.items = ['foo'];
-        });
+
+        beforeEach(() => comboBox.items = ['foo']);
 
         it('should have undefined by default', () => {
           expect(comboBox.selectedItem).to.be.undefined;
