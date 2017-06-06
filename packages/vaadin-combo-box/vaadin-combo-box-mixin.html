@@ -62,7 +62,8 @@ This program is available under Apache License Version 2.0, available at https:/
         value: {
           type: String,
           observer: '_valueChanged',
-          notify: true
+          notify: true,
+          value: ''
         },
 
         /**
@@ -148,6 +149,22 @@ This program is available under Apache License Version 2.0, available at https:/
           type: HTMLElement,
           readOnly: true
         },
+
+        /**
+         * Set to true to mark the input as required.
+         */
+        required: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The name of this element.
+         */
+        name: {
+          type: String
+        },
+
         _toggleElement: Object,
         _clearElement: Object,
 
@@ -172,11 +189,6 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
 
-      // The value property is also defined in IronFormElementBehavior, which
-      // will mix up the default value if set in the property.
-      if (this.value === undefined) {
-        this.value = '';
-      }
       this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
 
