@@ -631,13 +631,11 @@ This program is available under Apache License Version 2.0, available at https:/
         return arr;
       }
 
-      return arr.filter((function(item) {
+      return arr.filter(item => {
         filter = filter ? filter.toString().toLowerCase() : '';
-
         // Check if item contains input value.
-        return this._getItemLabel(item).toString().toLowerCase()
-          .indexOf(filter) > -1;
-      }).bind(this));
+        return this._getItemLabel(item).toString().toLowerCase().indexOf(filter) > -1;
+      });
     }
 
     _setOverlayItems(items) {
