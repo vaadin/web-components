@@ -433,7 +433,8 @@ This program is available under Apache License Version 2.0, available at https:/
         this._clear();
       } else {
         if (this.allowCustomValue) {
-          var e = this.fire('custom-value-set', this._inputElementValue, {cancelable: true});
+          var e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
+          this.dispatchEvent(e);
           if (!e.defaultPrevented) {
             var customValue = this._inputElementValue;
             this.selectedItem = null;
@@ -578,7 +579,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _detectAndDispatchChange() {
       if (this.value !== this._lastCommittedValue) {
-        this.fire('change', undefined, {bubbles: true});
+        this.dispatchEvent(new CustomEvent('change', {composed: true, bubbles: true}));
         this._lastCommittedValue = this.value;
       }
     }

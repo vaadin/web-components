@@ -32,7 +32,7 @@
         it('should blur input on scroll', function() {
           combobox.open();
 
-          combobox.$.overlay.fire('down');
+          fireEvent('down', combobox.$.overlay);
           var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
 
           expect(focusedInput).not.to.equal(combobox.inputElement);

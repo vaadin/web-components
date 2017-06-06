@@ -315,10 +315,7 @@
       it('should clear the selection when tapping on the icon', function() {
         combobox.open();
 
-        Polymer.Base.fire('tap', {}, {
-          bubbles: true,
-          node: clearIcon
-        });
+        fireEvent('tap', clearIcon);
 
         expect(combobox.value).to.eql('');
         expect(combobox.$.overlay._selectedItem).to.be.null;
@@ -328,10 +325,7 @@
       it('should close the dropdown after clearing a selection', function() {
         combobox.open();
 
-        Polymer.Base.fire('tap', {}, {
-          bubbles: true,
-          node: clearIcon
-        });
+        fireEvent('tap', clearIcon);
 
         expect(combobox.opened).to.eql(false);
       });
@@ -339,11 +333,7 @@
       it('should cancel down event to avoid input blur', function() {
         combobox.open();
 
-        var event = Polymer.Base.fire('down', {}, {
-          bubbles: true,
-          node: clearIcon,
-          cancelable: true
-        });
+        var event = fireEvent('down', clearIcon);
 
         expect(event.defaultPrevented).to.eql(true);
       });

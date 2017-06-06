@@ -34,23 +34,16 @@
     var combobox;
     var comboboxLight;
 
-    function fire(elm, type) {
-      Polymer.Base.fire(type, {}, {
-        bubbles: true,
-        node: elm
-      });
-    }
-
     function tapLabel() {
-      fire(combobox.$.label, 'tap');
+      fireEvent('tap', combobox.$.label);
     }
 
     function tapInput() {
-      fire(combobox.inputElement, 'tap');
+      fireEvent('tap', combobox.inputElement);
     }
 
     function tapToggleIcon() {
-      fire(combobox.$$('paper-input-container #toggleIcon'), 'tap');
+      fireEvent('tap', combobox.$$('paper-input-container #toggleIcon'));
     }
 
     function overlay() {
@@ -217,10 +210,7 @@
         it('should close popup when tapping outside overlay', function() {
           combobox.open();
 
-          Polymer.Base.fire('tap', {}, {
-            bubbles: true,
-            node: document.body
-          });
+          fireEvent('tap', document.body);
 
           expect(combobox.opened).to.be.false;
         });
@@ -237,7 +227,7 @@
       it('should not close when tapping on the overlay', function() {
         combobox.open();
 
-        fire(combobox.$.overlay.$.dropdown.$.overlay, 'tap');
+        fireEvent('tap', combobox.$.overlay.$.dropdown.$.overlay);
 
         expect(combobox.opened).to.be.true;
       });
@@ -261,7 +251,7 @@
       it('should close the overlay when focus is lost', function() {
         combobox.open();
 
-        fire(combobox.inputElement, 'blur');
+        fireEvent('blur', combobox.inputElement);
 
         expect(combobox.opened).to.equal(false);
       });

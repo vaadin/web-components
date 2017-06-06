@@ -159,7 +159,6 @@
             comboBox.inputElement.value = 'foo';
             comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
             comboBox.close();
-
             expect(comboBox.value).to.be.empty;
           });
         });

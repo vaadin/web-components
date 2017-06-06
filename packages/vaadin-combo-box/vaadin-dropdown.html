@@ -136,11 +136,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
           window.addEventListener('scroll', this._boundSetPosition, true);
           this._addOutsideClickListener();
-          this.fire('vaadin-dropdown-opened');
+          this.dispatchEvent(new CustomEvent('vaadin-dropdown-opened', {bubbles: true, composed: true}));
         } else {
           window.removeEventListener('scroll', this._boundSetPosition, true);
           this._removeOutsideClickListener();
-          this.fire('vaadin-dropdown-closed');
+          this.dispatchEvent(new CustomEvent('vaadin-dropdown-closed', {bubbles: true, composed: true}));
         }
       }
 
@@ -189,7 +189,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return element.offsetParent;
         }
 
-        var parent = Polymer.dom(element).parentNode;
+        var parent = element.parentNode;
 
         if (parent && parent.nodeType === 11 && parent.host) {
           return parent.host; // parent is #shadowRoot

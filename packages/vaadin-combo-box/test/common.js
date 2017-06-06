@@ -11,6 +11,14 @@ var touchDevice = (function() {
   }
 })();
 
+// naming this fireEvent instead of fire to distinguish it from Polymer.Base.fire
+var fireEvent = (type, node, detail) => {
+  var evt = new CustomEvent(type, {detail: detail, bubbles: true, cancelable: true, composed: true});
+  node.dispatchEvent(evt);
+
+  return evt;
+};
+
 var describeSkipIf = function(bool, title, callback) {
   bool = typeof bool == 'function' ? bool() : bool;
   if (bool) {
