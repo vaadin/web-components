@@ -72,10 +72,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _assignTemplate() {
-        var template = this.$.slot.assignedNodes({
+        var templates = this.$.slot.assignedNodes({
           flatten: true
-        }).find(node => node.localName && node.localName === 'template');
-        this.template = template || undefined;
+        }).filter(node => node.localName && node.localName === 'template');
+        this.template = templates[0] || undefined;
       }
 
       _openedChanged(opened) {
