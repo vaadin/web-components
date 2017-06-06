@@ -682,12 +682,22 @@ This program is available under Apache License Version 2.0, available at https:/
       e.stopPropagation();
     }
 
+
     /**
-     * Validates the input element and sets an error style if needed.
+     * Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.
      *
-     * @return {boolean}
+     * @return {boolean} True if the value is valid and sets the `invalid` flag appropriatelly
      */
-    _getValidity() {
+    validate(value) {
+      return !(this.invalid = !this.checkValidity(value));
+    }
+
+    /**
+     * Returns true if the current input value satisfies all constraints (if any)
+     *
+     * You can override the `checkValidity` method for custom validations.
+     */
+    checkValidity(value) {
       if (this._bindableInput.validate) {
         return this._bindableInput.validate();
       }
