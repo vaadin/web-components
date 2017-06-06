@@ -18,6 +18,7 @@
     "expect": false,
     "it": false,
     "fixture": false,
+    "fire": false,
     "System": false,
     "HTMLImports": false,
     "MockInteractions": false,
