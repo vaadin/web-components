@@ -84,7 +84,7 @@
       it('should use the default label property in overlay items', function(done) {
         combobox.async(function() {
           var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-          expect(Polymer.dom(firstItem.root).textContent).to.contain('foo');
+          expect(firstItem.root.textContent).to.contain('foo');
           done();
         }, 1);
       });

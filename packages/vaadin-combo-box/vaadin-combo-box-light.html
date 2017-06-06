@@ -118,9 +118,9 @@ This program is available under Apache License Version 2.0, available at https:/
       attached() {
         super.attached();
         var cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
-        this._setInputElement(Polymer.dom(this).querySelector(cssSelector));
-        this._toggleElement = Polymer.dom(this).querySelector('.toggle-button');
-        this._clearElement = Polymer.dom(this).querySelector('.clear-button');
+        this._setInputElement(this.querySelector(cssSelector));
+        this._toggleElement = this.querySelector('.toggle-button');
+        this._clearElement = this.querySelector('.clear-button');
 
         this._revertInputValue();
         this.listen(this.inputElement, 'input', '_inputValueChanged');

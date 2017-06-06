@@ -32,8 +32,8 @@
         it('should blur input on scroll', function() {
           combobox.open();
 
-          fireEvent('down', combobox.$.overlay);
-          var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+          fire('down', combobox.$.overlay);
+          var focusedInput = combobox.root.querySelector('input:focus');
 
           expect(focusedInput).not.to.equal(combobox.inputElement);
         });
@@ -80,7 +80,7 @@
         });
 
         function expectSelectedItemPositionToBeVisible() {
-          var selectedItem = Polymer.dom(combobox.$.overlay._selector).querySelector('[selected]');
+          var selectedItem = combobox.$.overlay._selector.querySelector('[selected]');
           expect(selectedItem).to.be.ok;
 
           var selectedItemRect = selectedItem.getBoundingClientRect();

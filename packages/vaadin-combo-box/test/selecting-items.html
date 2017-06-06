@@ -69,9 +69,9 @@
 
     it('should fire `selection-changed` when tapped on an item', function() {
       combobox.opened = true;
-      Polymer.dom.flush();
+      Polymer.flush();
 
-      Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
+      combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
         bubbles: true
       }));
 
@@ -85,7 +85,7 @@
       MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
       combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
+        var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -99,7 +99,7 @@
       MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
       combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
+        var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -122,7 +122,7 @@
         combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
         combobox.async(function() {
-          var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
+          var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -149,7 +149,7 @@
         combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
         combobox.async(function() {
-          var firstItem = Polymer.dom(combobox.$.overlay._selector).querySelector('vaadin-combo-box-item');
+          var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -175,7 +175,7 @@
 
     it('should close the dropdown on selection', function() {
       combobox.open();
-      Polymer.dom.flush();
+      Polymer.flush();
 
       combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
 
@@ -315,7 +315,7 @@
       it('should clear the selection when tapping on the icon', function() {
         combobox.open();
 
-        fireEvent('tap', clearIcon);
+        fire('tap', clearIcon);
 
         expect(combobox.value).to.eql('');
         expect(combobox.$.overlay._selectedItem).to.be.null;
@@ -325,7 +325,7 @@
       it('should close the dropdown after clearing a selection', function() {
         combobox.open();
 
-        fireEvent('tap', clearIcon);
+        fire('tap', clearIcon);
 
         expect(combobox.opened).to.eql(false);
       });
@@ -333,7 +333,7 @@
       it('should cancel down event to avoid input blur', function() {
         combobox.open();
 
-        var event = fireEvent('down', clearIcon);
+        var event = fire('down', clearIcon);
 
         expect(event.defaultPrevented).to.eql(true);
       });

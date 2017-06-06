@@ -222,7 +222,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _onTap(e) {
       this._closeOnBlurIsPrevented = true;
 
-      var path = Polymer.dom(e).path;
+      var path = e.composedPath();
       if (path.indexOf(this._clearElement) !== -1) {
         this._clear();
       } else if (path.indexOf(this._toggleElement) !== -1) {
@@ -459,7 +459,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     _inputValueChanged(e) {
       // Handle only input events from our inputElement.
-      if (Polymer.dom(e).path.indexOf(this.inputElement) !== -1) {
+      if (e.composedPath().indexOf(this.inputElement) !== -1) {
         this._inputElementValue = this.inputElement.value;
         this._filterFromInput();
       }
@@ -706,7 +706,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _ensureTemplatized() {
       if (!this._templatized) {
         this._templatized = true;
-        this._itemTemplate = Polymer.dom(this).querySelector('template');
+        this._itemTemplate = this.querySelector('template');
         if (this._itemTemplate) {
           this.templatize(this._itemTemplate);
         }

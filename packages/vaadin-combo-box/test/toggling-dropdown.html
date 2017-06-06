@@ -35,15 +35,16 @@
     var comboboxLight;
 
     function tapLabel() {
-      fireEvent('tap', combobox.$.label);
+      debugger;
+      fire('tap', combobox.$.label);
     }
 
     function tapInput() {
-      fireEvent('tap', combobox.inputElement);
+      fire('tap', combobox.inputElement);
     }
 
     function tapToggleIcon() {
-      fireEvent('tap', combobox.$$('paper-input-container #toggleIcon'));
+      fire('tap', combobox.$$('paper-input-container #toggleIcon'));
     }
 
     function overlay() {
@@ -52,6 +53,7 @@
 
     beforeEach(function() {
       combobox = fixture('combobox');
+      debugger;
       comboboxLight = fixture('combobox-light');
     });
 
@@ -133,7 +135,7 @@
         if (overlay().classList.contains('style-scope') &&
             overlay().classList.contains('vaadin-combo-box')) {
           combobox.open();
-          Polymer.dom.flush();
+          Polymer.flush();
 
           expect(overlay().classList.contains('style-scope')).to.be.false;
           expect(overlay().classList.contains('vaadin-combo-box')).to.be.false;
@@ -156,20 +158,20 @@
 
         if (touchDevice) {
           it('should not focus input on dropdown open', function() {
-            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            var focusedInput = combobox.root.querySelector('input:focus');
             expect(focusedInput).to.be.null;
           });
 
           it('should not refocus the input field when closed from icon', function() {
             tapToggleIcon();
 
-            var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+            var focusedInput = combobox.root.querySelector('input:focus');
 
             expect(focusedInput).to.be.null;
           });
         } else {
           it('should focus input on dropdown open', function() {
-            var focusedInput = Polymer.dom(combobox.root).querySelector('input');
+            var focusedInput = combobox.root.querySelector('input');
             var activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.equal(combobox.inputElement);
@@ -178,7 +180,7 @@
           it('should refocus the input field when closed from icon', function() {
             tapToggleIcon();
 
-            var focusedInput = Polymer.dom(combobox.root).querySelector('input');
+            var focusedInput = combobox.root.querySelector('input');
             var activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.equal(combobox.inputElement);
@@ -210,7 +212,7 @@
         it('should close popup when tapping outside overlay', function() {
           combobox.open();
 
-          fireEvent('tap', document.body);
+          fire('tap', document.body);
 
           expect(combobox.opened).to.be.false;
         });
@@ -227,7 +229,7 @@
       it('should not close when tapping on the overlay', function() {
         combobox.open();
 
-        fireEvent('tap', combobox.$.overlay.$.dropdown.$.overlay);
+        fire('tap', combobox.$.overlay.$.dropdown.$.overlay);
 
         expect(combobox.opened).to.be.true;
       });
@@ -251,7 +253,7 @@
       it('should close the overlay when focus is lost', function() {
         combobox.open();
 
-        fireEvent('blur', combobox.inputElement);
+        fire('blur', combobox.inputElement);
 
         expect(combobox.opened).to.equal(false);
       });
@@ -268,7 +270,7 @@
 
           combobox.close();
 
-          Polymer.dom.flush();
+          Polymer.flush();
           expect(combobox.$.overlay.classList.contains('style-scope')).to.be.true;
           expect(combobox.$.overlay.classList.contains('vaadin-combo-box')).to.be.true;
         }

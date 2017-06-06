@@ -436,8 +436,8 @@ This program is available under Apache License Version 2.0, available at https:/
         attached() {
           super.attached();
           // Use the default toggle/clear or one replaced in light DOM.
-          this._toggleElement = Polymer.dom(this).querySelector('[slot=toggle-button]') || this.$.toggleIcon;
-          this._clearElement = Polymer.dom(this).querySelector('[slot=clear-button]') || this.$.clearIcon;
+          this._toggleElement = this.querySelector('[slot=toggle-button]') || this.$.toggleIcon;
+          this._clearElement = this.querySelector('[slot=clear-button]') || this.$.clearIcon;
           this._preventInputBlur();
         }
 

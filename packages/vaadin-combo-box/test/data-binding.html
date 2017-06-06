@@ -54,13 +54,8 @@
 
       beforeEach(function() {
         var root = fixture('fixturenull');
-        if (Polymer.Element) {
-          valueNull = root.$.valuenull;
-          comboBox = root.$.combobox;
-        } else {
-          valueNull = Polymer.dom(root.root).querySelector('value-null');
-          comboBox = Polymer.dom(root.root).querySelector('vaadin-combo-box');
-        }
+        valueNull = root.$.valuenull;
+        comboBox = root.$.combobox;
       });
 
       // Setting value to null/undefined makes the component enter in a loop,

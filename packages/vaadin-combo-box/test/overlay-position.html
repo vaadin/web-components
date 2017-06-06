@@ -160,7 +160,7 @@
         comboBox.opened = true;
         comboBox.$.overlay.updateViewportBoundaries = sinon.spy();
 
-        fireEvent('scroll', document);
+        fire('scroll', document);
 
         expect(comboBox.$.overlay.updateViewportBoundaries.callCount).to.eql(1);
       }),
