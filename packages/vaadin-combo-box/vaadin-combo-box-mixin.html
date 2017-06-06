@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @polymerMixin
    */
   Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends Polymer.GestureEventListeners(Polymer.mixinBehaviors(
-  [Polymer.IronFormElementBehavior, Polymer.Templatizer], Vaadin.ComboBoxDropdownMixin(subclass)
+  [Polymer.IronFormElementBehavior], Vaadin.ComboBoxDropdownMixin(subclass)
   )) {
 
     static get properties() {
@@ -156,9 +156,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _closeOnBlurIsPrevented: Boolean,
 
-        _templatized: Boolean,
-        _itemTemplate: Boolean,
-
         _previousDocumentPointerEvents: String
       };
     }
@@ -171,13 +168,6 @@ This program is available under Apache License Version 2.0, available at https:/
         '_loadingChanged(loading)',
         '_selectedItemChanged(selectedItem)'
       ];
-    }
-
-    created() {
-      super.created();
-
-      // needed for V2 to enable event.model on declarative event listeners.
-      this._parentModel = true;
     }
 
     ready() {
@@ -701,36 +691,23 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _ensureTemplatized() {
-      if (!this._templatized) {
-        this._templatized = true;
-        this._itemTemplate = this.querySelector('template');
-        if (this._itemTemplate) {
-          this.templatize(this._itemTemplate);
+      if (!this._TemplateClass) {
+        var tpl = this.querySelector('template');
+        if (tpl) {
+          this._TemplateClass = Polymer.Templatize.templatize(tpl, this, {
+            instanceProps: this._instanceProps,
+            forwardHostProp: function (prop, value) {
+              var items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
+              Array.prototype.forEach.call(items, item => {
+                if (item._itemTemplateInstance) {
+                  item._itemTemplateInstance.set(prop, value);
+                  item._itemTemplateInstance.notifyPath(prop, value, true);
+                }
+              });
+            }
+          });
         }
       }
-    }
-
-    _forwardHostPropV2(prop, value) {
-      this._forwardParentProp(prop, value);
-      this._forwardParentPath(prop, value);
-    }
-
-    _forwardParentProp(prop, value) {
-      var items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
-      Array.prototype.forEach.call(items, function(item) {
-        if (item._itemTemplateInstance) {
-          item._itemTemplateInstance.set(prop, value);
-        }
-      });
-    }
-
-    _forwardParentPath(path, value) {
-      var items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
-      Array.prototype.forEach.call(items, function(item) {
-        if (item._itemTemplateInstance) {
-          item._itemTemplateInstance.notifyPath(path, value, true);
-        }
-      });
     }
 
     _preventInputBlur() {

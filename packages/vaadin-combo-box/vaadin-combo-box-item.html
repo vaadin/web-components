@@ -93,8 +93,8 @@ This program is available under Apache License Version 2.0, available at https:/
           const comboBoxOverlay = dropdown.getRootNode().host;
           const comboBox = comboBoxOverlay.getRootNode().host;
           comboBox._ensureTemplatized();
-          if (comboBox._itemTemplate) {
-            this._itemTemplateInstance = comboBox.stamp({});
+          if (comboBox._TemplateClass) {
+            this._itemTemplateInstance = new comboBox._TemplateClass({});
             this.root.textContent = '';
             this.root.appendChild(this._itemTemplateInstance.root);
           }
