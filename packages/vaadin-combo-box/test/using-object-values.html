@@ -20,7 +20,7 @@
 
   <script>
     describe('using object values', () => {
-      var combobox;
+      let combobox;
 
       function inputValue() {
         return combobox._bindableInput.bindValue;
@@ -83,7 +83,7 @@
 
       it('should use the default label property in overlay items', done => {
         setTimeout(() => {
-          var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+          const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           expect(firstItem.root.textContent).to.contain('foo');
           done();
         }, 1);
@@ -202,7 +202,7 @@
       });
 
       it('should select correct duplicate value', () => {
-        var spy = sinon.spy();
+        const spy = sinon.spy();
         combobox.addEventListener('selected-item-changed', spy);
 
         selectItem(7);
@@ -214,7 +214,7 @@
       });
 
       it('should select correct with missing value', () => {
-        var spy = sinon.spy();
+        const spy = sinon.spy();
         combobox.addEventListener('selected-item-changed', spy);
 
         selectItem(9);

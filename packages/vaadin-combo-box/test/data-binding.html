@@ -50,10 +50,10 @@
     // bound in other components firing change events like in iron-input#bindValue.
     // In other browsers these tests do not work, and the browser could freeze.
     describeIf(chrome, 'Chrome loops', () => {
-      var valueNull, comboBox;
+      let valueNull, comboBox;
 
       beforeEach(() => {
-        var root = fixture('fixturenull');
+        const root = fixture('fixturenull');
         valueNull = root.$.valuenull;
         comboBox = root.$.combobox;
       });
@@ -64,7 +64,7 @@
         it('should not enter in a loop when setting value to ' + value, done => {
 
           // Not using sinon.spy, so we can break the loop before overflowing the stack.
-          var i = 0;
+          let i = 0;
           comboBox.addEventListener('value-changed', expect(i++).to.be.below(30));
 
           setTimeout(() => {

@@ -31,8 +31,8 @@
 
 <script>
   describe('toggling the dropdown', () => {
-    var combobox;
-    var comboboxLight;
+    let combobox;
+    let comboboxLight;
 
     function tapLabel() {
       fire('tap', combobox.$.label);
@@ -150,7 +150,7 @@
         });
 
         function createMouseDown(preventDefaultSpy) {
-          var mouseDownEvent = new CustomEvent('mousedown', {
+          const mouseDownEvent = new CustomEvent('mousedown', {
             bubbles: true,
             cancelable: true
           });
@@ -160,21 +160,21 @@
 
         if (touchDevice) {
           it('should not focus input on dropdown open', () => {
-            var focusedInput = combobox.root.querySelector('input:focus');
+            const focusedInput = combobox.root.querySelector('input:focus');
             expect(focusedInput).to.be.null;
           });
 
           it('should not refocus the input field when closed from icon', () => {
             tapToggleIcon();
 
-            var focusedInput = combobox.root.querySelector('input:focus');
+            const focusedInput = combobox.root.querySelector('input:focus');
 
             expect(focusedInput).to.be.null;
           });
         } else {
           it('should focus input on dropdown open', () => {
-            var focusedInput = combobox.root.querySelector('input');
-            var activeElement = combobox.root.activeElement || document.activeElement;
+            const focusedInput = combobox.root.querySelector('input');
+            const activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.equal(combobox.inputElement);
           });
@@ -182,8 +182,8 @@
           it('should refocus the input field when closed from icon', () => {
             tapToggleIcon();
 
-            var focusedInput = combobox.root.querySelector('input');
-            var activeElement = combobox.root.activeElement || document.activeElement;
+            const focusedInput = combobox.root.querySelector('input');
+            const activeElement = combobox.root.activeElement || document.activeElement;
             expect(focusedInput.outerHTML).to.equal(activeElement.outerHTML);
             expect(focusedInput).to.equal(combobox.inputElement);
           });
@@ -192,14 +192,14 @@
         if (!touchDevice) {
 
           it('should prevent default on overlay mousedown', () => {
-            var preventDefaultSpy = sinon.spy();
+            const preventDefaultSpy = sinon.spy();
             combobox.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
 
             expect(preventDefaultSpy).to.have.been.called;
           });
 
           it('should prevent default on overlay mousedown (vaadin-combo-box-light)', () => {
-            var preventDefaultSpy = sinon.spy();
+            const preventDefaultSpy = sinon.spy();
             comboboxLight.open();
             comboboxLight.$.overlay.$.dropdown.$.overlay.dispatchEvent(createMouseDown(preventDefaultSpy));
 

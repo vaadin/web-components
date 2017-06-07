@@ -66,9 +66,9 @@
 </test-fixture>
 
 <script>
-  var comboBox;
+  let comboBox;
 
-  var wh, ww, horiCenter, vertTop, vertBottom;
+  let wh, ww, horiCenter, vertTop, vertBottom;
 
   // The ideal test would be to resize the window, but testing system disallows
   // resizing the iframe, but moving the combo-box using styles and firing
@@ -80,7 +80,7 @@
     comboBox.style.left = left + 'px';
     if (document.createEvent) {
       // using old way because IE11 does not support: new Event('resize')
-      var ev = document.createEvent('Event');
+      const ev = document.createEvent('Event');
       ev.initEvent('resize', true, true);
       window.dispatchEvent(ev);
     }
@@ -101,10 +101,10 @@
   describe('overlay', () => {
     beforeEach(done => {
       comboBox = fixture('combobox');
-      var comboBoxRect = comboBox.getBoundingClientRect();
+      const comboBoxRect = comboBox.getBoundingClientRect();
       comboBox.items = getItemArray(20);
 
-      var win = comboBox.ownerDocument.defaultView;
+      const win = comboBox.ownerDocument.defaultView;
       // Subtract the combo-box size from the coordinates range in order not to
       // move it outside the viewport boundaries when changing top and left.
       // Otherwise it is not nice for debugging.
@@ -148,7 +148,7 @@
       });
 
       it('should notify resize on items change', () => {
-        var spy = sinon.spy();
+        const spy = sinon.spy();
         comboBox.$.overlay.$.dropdown.notifyResize = spy;
         comboBox.items = [1, 2, 3];
         expect(spy.called).to.be.true;
@@ -191,7 +191,7 @@
         comboBox.style.paddingTop = '0.75px';
         comboBox.open();
 
-        var _devicePixelRatio = window.devicePixelRatio || 1;
+        const _devicePixelRatio = window.devicePixelRatio || 1;
         expect(comboBox.$.overlay.$.dropdown._translateY * _devicePixelRatio % 1).to.closeTo(0, 0.1);
         expect(comboBox.$.overlay.$.dropdown._translateX * _devicePixelRatio % 1).to.closeTo(0, 0.1);
       });
@@ -230,8 +230,8 @@
     });
 
     describe('overlay resizing', () => {
-      var minHeight = 116;
-      var inputUnderline = 2;
+      const minHeight = 116;
+      const inputUnderline = 2;
 
       it('should resize to bottom of the screen', () => {
         comboBox.open();
@@ -258,7 +258,7 @@
     }
 
     it('should same position when parent has fixed', done => {
-      var combobox = fixture('fixed').querySelector('vaadin-combo-box');
+      const combobox = fixture('fixed').querySelector('vaadin-combo-box');
 
       combobox.open();
 
@@ -269,7 +269,7 @@
     });
 
     it('should same position when parent component has fixed', done => {
-      var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
+      const combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
 
       combobox.open();
 
@@ -280,7 +280,7 @@
     });
 
     it('should have position absolute', done => {
-      var combobox = fixture('combobox');
+      const combobox = fixture('combobox');
 
       combobox.open();
 

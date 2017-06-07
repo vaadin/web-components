@@ -72,7 +72,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _assignTemplate() {
-        var templates = this.$.slot.assignedNodes({
+        const templates = this.$.slot.assignedNodes({
           flatten: true
         }).filter(node => node.localName && node.localName === 'template');
         this.template = templates[0] || undefined;
@@ -91,7 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _templateChanged(template) {
-        var Templatizer = Polymer.Templatize.templatize(template, this, {
+        const Templatizer = Polymer.Templatize.templatize(template, this, {
           forwardHostProp: function(prop, value) {
             if (this._instance) {
               this._instance.forwardHostProp(prop, value);

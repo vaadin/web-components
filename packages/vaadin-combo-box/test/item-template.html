@@ -47,7 +47,7 @@
 
   <script>
     describe('item template', () => {
-      var scope, combobox, firstItem;
+      let scope, combobox, firstItem;
 
       beforeEach(() => {
         scope = fixture('scope');
@@ -101,7 +101,7 @@
       });
 
       it('should support event handlers in parent scope', () => {
-        var spy = sinon.spy(scope, 'parentEventHandler');
+        const spy = sinon.spy(scope, 'parentEventHandler');
         MockInteractions.tap(firstItem.root.querySelector('button'));
         expect(spy.calledOnce).to.be.true;
       });

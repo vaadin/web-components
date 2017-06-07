@@ -149,7 +149,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // propagating the event to the listener in the button. Otherwise, if the clicked button would call
       // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
       _outsideClickListener(event) {
-        var eventPath = event.composedPath();
+        const eventPath = event.composedPath();
         if (eventPath.indexOf(this.positionTarget) < 0 && eventPath.indexOf(this.$.overlay) < 0) {
           this.opened = false;
         }
@@ -176,7 +176,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _isPositionFixed(element) {
-        var offsetParent = this._getOffsetParent(element);
+        const offsetParent = this._getOffsetParent(element);
 
         return window.getComputedStyle(element).position === 'fixed' ||
           (offsetParent && this._isPositionFixed(offsetParent));
@@ -189,7 +189,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return element.offsetParent;
         }
 
-        var parent = element.parentNode;
+        const parent = element.parentNode;
 
         if (parent && parent.nodeType === 11 && parent.host) {
           return parent.host; // parent is #shadowRoot
@@ -205,7 +205,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _shouldAlignAbove() {
-        var spaceBelow = (
+        const spaceBelow = (
           window.innerHeight -
           this.positionTarget.getBoundingClientRect().bottom -
           Math.min(document.body.scrollTop, 0)
@@ -216,22 +216,22 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _setPosition(e) {
         if (e && e.target) {
-          var target = e.target === document ? document.body : e.target;
-          var parent = this.$.overlay.parentElement;
+          const target = e.target === document ? document.body : e.target;
+          const parent = this.$.overlay.parentElement;
           if (!(target.contains(this.$.overlay) || target.contains(this.positionTarget)) || parent !== document.body) {
             return;
           }
         }
 
-        var targetRect = this.positionTarget.getBoundingClientRect();
+        const targetRect = this.positionTarget.getBoundingClientRect();
         this.alignedAbove = this._shouldAlignAbove();
 
-        var overlayRect = this.$.overlay.getBoundingClientRect();
+        const overlayRect = this.$.overlay.getBoundingClientRect();
         this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);
         this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) +
           this._verticalOffset(overlayRect, targetRect);
 
-        var _devicePixelRatio = window.devicePixelRatio || 1;
+        const _devicePixelRatio = window.devicePixelRatio || 1;
         this._translateX = Math.round(this._translateX * _devicePixelRatio) / _devicePixelRatio;
         this._translateY = Math.round(this._translateY * _devicePixelRatio) / _devicePixelRatio;
         this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;

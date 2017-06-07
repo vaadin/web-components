@@ -226,7 +226,7 @@ This program is available under Apache License Version 2.0, available at https:/
       Polymer.Gestures.prevent('tap');
       this._closeOnBlurIsPrevented = true;
 
-      var path = e.composedPath();
+      const path = e.composedPath();
       if (path.indexOf(this._clearElement) !== -1) {
         this._clear();
       } else if (path.indexOf(this._toggleElement) !== -1) {
@@ -273,7 +273,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItemValue(item) {
-      var value = item ? this.get(this.itemValuePath, item) : undefined;
+      let value = item ? this.get(this.itemValuePath, item) : undefined;
       if (value === undefined) {
         value = item ? item.toString() : '';
       }
@@ -428,7 +428,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onClosed() {
       if (this._focusedIndex > -1) {
-        var focusedItem = this.$.overlay._items[this._focusedIndex];
+        const focusedItem = this.$.overlay._items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
@@ -438,10 +438,10 @@ This program is available under Apache License Version 2.0, available at https:/
         this._clear();
       } else {
         if (this.allowCustomValue) {
-          var e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
+          const e = new CustomEvent('custom-value-set', {detail: this._inputElementValue, composed: true, cancelable: true, bubbles: true});
           this.dispatchEvent(e);
           if (!e.defaultPrevented) {
-            var customValue = this._inputElementValue;
+            const customValue = this._inputElementValue;
             this.selectedItem = null;
             this.value = customValue;
           }
@@ -492,7 +492,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if ((document.activeElement === this.inputElement ||
            document.activeElement === this)
            && this.inputElement.setSelectionRange) {
-        var caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
+        const caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
         this.inputElement.setSelectionRange(caretIndex, caretIndex);
       }
     }
@@ -543,7 +543,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._setHasValue(this.value !== '');
         this._inputElementValue = this.value;
       } else {
-        var value = this._getItemValue(selectedItem);
+        const value = this._getItemValue(selectedItem);
         if (this.value !== value) {
           this.value = value;
         }
@@ -563,11 +563,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _valueChanged(value) {
       if (this._isValidValue(value)) {
+        let item;
         if (this._getItemValue(this.selectedItem) !== value) {
-          var valueIndex = this._indexOfValue(value, this.filteredItems);
+          const valueIndex = this._indexOfValue(value, this.filteredItems);
           this.selectedItem = valueIndex >= 0 ? this.filteredItems[valueIndex] : null;
         } else {
-          var item = this.selectedItem;
+          item = this.selectedItem;
         }
 
         if (!item && this.allowCustomValue) {
@@ -596,10 +597,10 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e.path === 'items' || e.path === 'items.splices') {
         this.filteredItems = this.items ? this.items.slice(0) : this.items;
 
-        var valueIndex = this._indexOfValue(this.value, this.items);
+        const valueIndex = this._indexOfValue(this.value, this.items);
         this._focusedIndex = valueIndex;
 
-        var item = valueIndex > -1 && this.items[valueIndex];
+        const item = valueIndex > -1 && this.items[valueIndex];
         if (item) {
           this.selectedItem = item;
         }
@@ -654,7 +655,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _indexOfValue(value, items) {
       if (items && this._isValidValue(value)) {
-        for (var i = 0; i < items.length; i++) {
+        for (let i = 0; i < items.length; i++) {
           if (this._getItemValue(items[i]) === value) {
             return i;
           }
@@ -718,12 +719,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _ensureTemplatized() {
       if (!this._TemplateClass) {
-        var tpl = this.querySelector('template');
+        const tpl = this.querySelector('template');
         if (tpl) {
           this._TemplateClass = Polymer.Templatize.templatize(tpl, this, {
             instanceProps: this._instanceProps,
             forwardHostProp: function(prop, value) {
-              var items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
+              const items = this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item');
               Array.prototype.forEach.call(items, item => {
                 if (item._itemTemplateInstance) {
                   item._itemTemplateInstance.set(prop, value);

@@ -36,7 +36,7 @@
 
   <script>
     describe('vaadin-combo-box-light', () => {
-      var comboBox, ironInput;
+      let comboBox, ironInput;
 
       beforeEach(() => {
         comboBox = fixture('combobox-light');
@@ -61,22 +61,22 @@
       });
 
       it('should prevent default on overlay down', () => {
-        var e = new CustomEvent('mousedown', {bubbles: true});
-        var spy = sinon.spy(e, 'preventDefault');
+        const e = new CustomEvent('mousedown', {bubbles: true});
+        const spy = sinon.spy(e, 'preventDefault');
         comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(e);
         expect(spy.called).to.be.true;
       });
 
       it('should not prevent default on input down', () => {
-        var e = new CustomEvent('mousedown', {bubbles: true});
-        var spy = sinon.spy(e, 'preventDefault');
+        const e = new CustomEvent('mousedown', {bubbles: true});
+        const spy = sinon.spy(e, 'preventDefault');
         ironInput.dispatchEvent(e);
         expect(spy.called).to.be.false;
       });
     });
 
     describe('vaadin-combo-box-light-paper-input', () => {
-      var comboBox, paperInput;
+      let comboBox, paperInput;
 
       beforeEach(() => {
         comboBox = fixture('combobox-light-paper-input');
@@ -92,8 +92,8 @@
       });
 
       it('should prevent default on toggle element down', () => {
-        var e = new CustomEvent('down', {bubbles: true});
-        var spy = sinon.spy(e, 'preventDefault');
+        const e = new CustomEvent('down', {bubbles: true});
+        const spy = sinon.spy(e, 'preventDefault');
         comboBox._toggleElement.dispatchEvent(e);
         expect(spy.called).to.be.true;
       });

@@ -113,7 +113,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       attached() {
         super.attached();
-        var cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
+        const cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
         this._setInputElement(this.querySelector(cssSelector));
         this._toggleElement = this.querySelector('.toggle-button');
         this._clearElement = this.querySelector('.clear-button');

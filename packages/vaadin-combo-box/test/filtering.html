@@ -19,7 +19,7 @@
 
 <script>
   describe('filtering items', () => {
-    var comboBox;
+    let comboBox;
 
     function getFilteredItems() {
       return comboBox.$.overlay._items;
@@ -116,7 +116,7 @@
       it('should not scroll to selected value when filtering', done => {
         comboBox.value = 'baz';
 
-        var spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
+        const spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
 
         setInputValue('ba');
         setInputValue('b');

@@ -27,7 +27,7 @@
 <script>
 
   describe('keyboard navigation', () => {
-    var comboBox;
+    let comboBox;
 
     function getInput() {
       return comboBox.inputElement;
@@ -383,8 +383,8 @@
       });
 
       it('should calculate items correctly when some items are hidden', done => {
-        var items = [];
-        for (var i = 0; i < 100; i++) {
+        const items = [];
+        for (let i = 0; i < 100; i++) {
           items.push(i.toString());
         }
 
@@ -400,12 +400,12 @@
     });
 
     describe('scrolling items', () => {
-      var selector;
+      let selector;
 
       beforeEach(done => {
-        var items = [];
+        const items = [];
 
-        for (var i = 0; i < 100; i++) {
+        for (let i = 0; i < 100; i++) {
           items.push(i.toString());
         }
 

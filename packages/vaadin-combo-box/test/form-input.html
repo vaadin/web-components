@@ -30,7 +30,7 @@
 
   <script>
     describe('using as a field in html form', () => {
-      var comboBox;
+      let comboBox;
 
       beforeEach(() => {
         comboBox = fixture('combobox');
@@ -94,7 +94,7 @@
     });
 
     describe('using the field in iron-form', () => {
-      var comboBox, ironForm, form;
+      let comboBox, ironForm, form;
 
       beforeEach(() => {
         ironForm = fixture('combobox-in-form');
@@ -109,14 +109,14 @@
         comboBox.value = 'bar';
 
         // IronForm 2.0 returns an array
-        var val = ironForm.serializeForm().foo;
+        const val = ironForm.serializeForm().foo;
         expect(Array.isArray(val) ? val[0] : val).to.equal('bar');
       });
 
       it('should not-submit iron-form with invalid value', done => {
         comboBox.required = true;
 
-        var spy = sinon.spy();
+        const spy = sinon.spy();
 
         setTimeout(() => {
           ironForm.addEventListener('iron-form-submit', spy);
@@ -127,7 +127,7 @@
       });
 
       describe('enter key behavior', () => {
-        var keydownEvent, preventDefault;
+        let keydownEvent, preventDefault;
 
         beforeEach(() => {
           // These tests fake a keydown event for the enter key and

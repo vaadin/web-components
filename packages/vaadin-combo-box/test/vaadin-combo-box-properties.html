@@ -19,7 +19,7 @@
 
   <script>
     describe('properties', () => {
-      var comboBox;
+      let comboBox;
 
       beforeEach(() => {
         comboBox = fixture('combobox');
@@ -79,7 +79,7 @@
         });
 
         it('should be able to be set before object items', () => {
-          var item = {label: 'foo', value: 1};
+          const item = {label: 'foo', value: 1};
           comboBox.value = 1;
 
           comboBox.items = [item];
@@ -125,7 +125,7 @@
 
         describe('`custom-value-set` event', () => {
           it('should be fired when custom value is set', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             comboBox.addEventListener('custom-value-set', spy);
 
             comboBox.open();
@@ -139,7 +139,7 @@
           it('should not be fired when custom values are not allowed', () => {
             comboBox.allowCustomValue = false;
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             comboBox.addEventListener('custom-value-set', spy);
 
             comboBox.open();
@@ -225,7 +225,7 @@
 
         describe('methods', () => {
           // Avoid FF window focus issues by stubing native focus behavior
-          var inputFocusStub, inputBlurStub;
+          let inputFocusStub, inputBlurStub;
 
           beforeEach(() => {
             inputFocusStub = sinon.stub(comboBox.inputElement, 'focus', () => {
@@ -238,7 +238,7 @@
           });
 
           it('should focus the input with focus method', () => {
-            var focusedChangedSpy = sinon.spy();
+            const focusedChangedSpy = sinon.spy();
             comboBox.addEventListener('focused-changed', focusedChangedSpy);
 
             comboBox.focus();
@@ -252,7 +252,7 @@
           it('should blur the input with the blur method', () => {
             comboBox.focus();
 
-            var focusedChangedSpy = sinon.spy();
+            const focusedChangedSpy = sinon.spy();
             comboBox.addEventListener('focused-changed', focusedChangedSpy);
 
             comboBox.blur();

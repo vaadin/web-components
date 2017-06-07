@@ -209,7 +209,7 @@
           return;
         }
 
-        var targetRect = this.positionTarget.getBoundingClientRect();
+        const targetRect = this.positionTarget.getBoundingClientRect();
 
         this._scroller.style.maxHeight = (window.ShadyCSS ?
           window.ShadyCSS.getComputedStyleValue(this, '--vaadin-combo-box-overlay-max-height') :
@@ -225,9 +225,9 @@
       }
 
       _maxOverlayHeight(targetRect) {
-        var margin = 8;
-        var minHeight = 116; // Height of two items in combo-box
-        var bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
+        const margin = 8;
+        const minHeight = 116; // Height of two items in combo-box
+        const bottom = Math.min(window.innerHeight, document.body.scrollHeight - document.body.scrollTop);
 
         if (this.$.dropdown.alignedAbove) {
           return Math.max(targetRect.top - margin + Math.min(document.body.scrollTop, 0), minHeight) + 'px';
@@ -237,7 +237,7 @@
       }
 
       _patchIronListStamping() {
-        var stamp = this._selector.stamp;
+        const stamp = this._selector.stamp;
         this._selector.stamp = value => {
           if (value === null) {
             value = {};
@@ -280,7 +280,7 @@
        */
       indexOfLabel(label) {
         if (this._items && label) {
-          for (var i = 0; i < this._items.length; i++) {
+          for (let i = 0; i < this._items.length; i++) {
             if (this.getItemLabel(this._items[i]).toString().toLowerCase() ===
               label.toString().toLowerCase()) {
               return i;
@@ -296,7 +296,7 @@
        * @return {String}
        */
       getItemLabel(item) {
-        var label = item ? this.get(this._itemLabelPath, item) : undefined;
+        let label = item ? this.get(this._itemLabelPath, item) : undefined;
         if (label === undefined) {
           label = item ? item.toString() : '';
         }
@@ -322,13 +322,13 @@
       }
 
       _scrollIntoView(index) {
-        var visibleItemsCount = this._visibleItemsCount();
+        const visibleItemsCount = this._visibleItemsCount();
         if (visibleItemsCount === undefined) {
           // Scroller is not visible. Moving is unnecessary.
           return;
         }
 
-        var targetIndex = index;
+        let targetIndex = index;
 
         if (index > this._selector.lastVisibleIndex - 1) {
           // Index is below the bottom, scrolling down. Make the item appear at the bottom.
@@ -341,10 +341,10 @@
         this._selector.scrollToIndex(Math.max(0, targetIndex));
 
         // Sometimes the item is partly below the bottom edge, detect and adjust.
-        var pidx = this._selector._getPhysicalIndex(index),
+        const pidx = this._selector._getPhysicalIndex(index),
           physicalItem = this._selector._physicalItems[pidx];
         if (!physicalItem) return;
-        var physicalItemRect = physicalItem.getBoundingClientRect(),
+        const physicalItemRect = physicalItem.getBoundingClientRect(),
           scrollerRect = this._scroller.getBoundingClientRect(),
           scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
         if (scrollTopAdjust > 0) {
@@ -368,11 +368,11 @@
        * scrolling the parent similarily to touch scrolling.
        */
       _patchWheelOverScrolling() {
-        var selector = this._selector;
+        const selector = this._selector;
         selector.addEventListener('wheel', e => {
-          var scroller = selector._scroller || selector.scrollTarget;
-          var scrolledToTop = scroller.scrollTop === 0;
-          var scrolledToBottom = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 1;
+          const scroller = selector._scroller || selector.scrollTarget;
+          const scrolledToTop = scroller.scrollTop === 0;
+          const scrolledToBottom = (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight) <= 1;
 
           if (scrolledToTop && e.deltaY < 0) {
             e.preventDefault();
@@ -389,7 +389,7 @@
 
       get _viewportTotalPaddingBottom() {
         if (this._cachedViewportTotalPaddingBottom === undefined) {
-          var itemsStyle = window.getComputedStyle(this._selector.$.items);
+          const itemsStyle = window.getComputedStyle(this._selector.$.items);
           this._cachedViewportTotalPaddingBottom = [
             itemsStyle.paddingBottom,
             itemsStyle.borderBottomWidth

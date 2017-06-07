@@ -23,7 +23,7 @@
 
   <script>
     describe('vaadin-overlay', () => {
-      var parent, overlay;
+      let parent, overlay;
 
       beforeEach(() => {
         parent = fixture('default');
@@ -39,7 +39,7 @@
       });
 
       it('should leave a placeholder after moving to body', () => {
-        var overlayIndex = Array.prototype.indexOf.call(parent.childNodes, overlay);
+        const overlayIndex = Array.prototype.indexOf.call(parent.childNodes, overlay);
 
         overlay.opened = true;
 

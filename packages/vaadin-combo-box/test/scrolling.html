@@ -22,7 +22,7 @@
   <script>
     describe('scrolling', () => {
 
-      var combobox;
+      let combobox;
 
       beforeEach(() => combobox = fixture('combobox'));
 
@@ -31,7 +31,7 @@
           combobox.open();
 
           fire('down', combobox.$.overlay);
-          var focusedInput = combobox.root.querySelector('input:focus');
+          const focusedInput = combobox.root.querySelector('input:focus');
 
           expect(focusedInput).not.to.equal(combobox.inputElement);
         });
@@ -41,23 +41,23 @@
         it('should have momentum scrolling enabled', () => {
           combobox.open();
 
-          var scroller = combobox.$.overlay._scroller;
+          const scroller = combobox.$.overlay._scroller;
           expect(getComputedStyle(scroller).WebkitOverflowScrolling).to.equal('touch');
         });
       });
 
       describeIf(/Trident/.test(navigator.userAgent), 'IE11', () => {
         it('should have unselectable="on" for the scroller', () => {
-          var scroller = combobox.$.overlay._scroller;
+          const scroller = combobox.$.overlay._scroller;
           expect(scroller.getAttribute('unselectable')).to.equal('on');
         });
       });
 
       describe('scrolling position', () => {
         beforeEach(() => {
-          var items = [];
+          const items = [];
 
-          for (var i = 0; i < 100; i++) {
+          for (let i = 0; i < 100; i++) {
             items.push(i.toString());
           }
 
@@ -78,11 +78,11 @@
         });
 
         function expectSelectedItemPositionToBeVisible() {
-          var selectedItem = combobox.$.overlay._selector.querySelector('[selected]');
+          const selectedItem = combobox.$.overlay._selector.querySelector('[selected]');
           expect(selectedItem).to.be.ok;
 
-          var selectedItemRect = selectedItem.getBoundingClientRect();
-          var overlayRect = combobox.$.overlay.$.dropdown.$.overlay.getBoundingClientRect();
+          const selectedItemRect = selectedItem.getBoundingClientRect();
+          const overlayRect = combobox.$.overlay.$.dropdown.$.overlay.getBoundingClientRect();
           expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
           expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
           expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);

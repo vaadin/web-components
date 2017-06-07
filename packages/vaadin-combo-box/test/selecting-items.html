@@ -29,9 +29,9 @@
 
 <script>
   describe('selecting a value', () => {
-    var combobox;
-    var input;
-    var valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
+    let combobox;
+    let input;
+    let valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
 
     function dispatchTap(elm) {
       elm.dispatchEvent(new CustomEvent('tap', {
@@ -58,7 +58,7 @@
     });
 
     it('should stop tap events from bubbling outside the overlay', () => {
-      var tapSpy = sinon.spy();
+      const tapSpy = sinon.spy();
       document.addEventListener('tap', tapSpy);
       combobox.$.overlay._selector.dispatchEvent(new CustomEvent('tap', {
         bubbles: true
@@ -85,7 +85,7 @@
       MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
       setTimeout(() => {
-        var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -99,7 +99,7 @@
       MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
       setTimeout(() => {
-        var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -109,8 +109,8 @@
 
     it('should not fire `selection-changed` after scrolling for grace period of 300ms', done => {
       // We need more items to increase scroller
-      var items = [];
-      for (var i = 1; i < 50; i++) items.push(i);
+      const items = [];
+      for (let i = 1; i < 50; i++) items.push(i);
       combobox.items = items;
 
       // open the combo box, and move the scroll
@@ -122,7 +122,7 @@
         combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
         setTimeout(() => {
-          var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+          const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -137,8 +137,8 @@
     });
 
     it('should fire `selection-changed` after the scrolling grace period', done => {
-      var items = [];
-      for (var i = 1; i < 50; i++) items.push(i);
+      const items = [];
+      for (let i = 1; i < 50; i++) items.push(i);
       combobox.items = items;
 
       combobox.opened = true;
@@ -149,7 +149,7 @@
         combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
         setTimeout(() => {
-          var firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+          const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -282,8 +282,8 @@
   ['default', 'custom'].forEach(button => {
 
     describe('clearing a selection - ' + button + ' clear icon', () => {
-      var combobox;
-      var clearIcon;
+      let combobox;
+      let clearIcon;
       beforeEach(() => {
         combobox = fixture(button === 'default' ? 'combobox' : 'combobox-custom-clear');
         combobox.items = ['foo', 'bar'];
@@ -333,7 +333,7 @@
       it('should cancel down event to avoid input blur', () => {
         combobox.open();
 
-        var event = fire('down', clearIcon);
+        const event = fire('down', clearIcon);
 
         expect(event.defaultPrevented).to.eql(true);
       });
@@ -343,7 +343,7 @@
   });
 
   describe('selecting a custom value', () => {
-    var combobox;
+    let combobox;
 
     function getInput() {
       return combobox._bindableInput;
