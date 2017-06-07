@@ -47,6 +47,8 @@
         datepicker = fixture('datepicker');
         dropdown = datepicker.$.dropdown;
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
       });
 
       afterEach(done => setTimeout(done, 1));
@@ -158,6 +160,8 @@
       beforeEach(() => {
         datepicker = fixture('datepicker-wrapped').$.datepicker;
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
       });
 
       afterEach(done => {

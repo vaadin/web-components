@@ -58,6 +58,8 @@
 
       beforeEach(done => {
         datepicker = fixture('datepicker');
+        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
         // Needed so as iron-input has time to look for it's inputElement
         setTimeout(done);
       });
@@ -197,6 +199,8 @@
         ironForm = fixture('datepicker-in-form');
         datepicker = ironForm.querySelector('vaadin-date-picker');
         form = ironForm.querySelector('form');
+        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
+        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
         setTimeout(done);
       });
 

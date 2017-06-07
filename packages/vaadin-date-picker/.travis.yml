@@ -18,21 +18,12 @@ install:
 before_script:
   - gulp lint
   - polymer lint --rules polymer-2 --input *.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
 
 script:
-  - run="xvfb-run -s '-screen 0 1024x768x24' polymer test "
-  - eval $run
-      test/basic.html
-  - eval $run
-      test/dropdown.html
-      test/overlay.html
-      test/month-calendar.html
-      test/scroller.html
-  - eval $run
-      test/form-input.html
-      test/custom-input.html
-      test/late-upgrade.html
-      test/wai-aria.html
-  - eval $run
-      test/keyboard-navigation.html
-      test/keyboard-input.html
+  - if [[ "$TRAVIS_EVENT_TYPE" == "push" && "$TRAVIS_BRANCH" != quick/* ]]; then
+      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
+    fi
+  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
+    fi
