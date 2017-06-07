@@ -5,7 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/utils/async.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
@@ -314,10 +313,10 @@ This program is available under Apache License Version 2.0, available at https:/
         // announce. Makes OSX VoiceOver to announce the complete value instead.
         this._inputElementValue = '';
         // 1ms delay needed for OSX VoiceOver to realise input value was reset
-        Polymer.Async.timeOut.after(1).run(() => {
+        setTimeout(() => {
           this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
           this._setSelectionRange();
-        });
+        }, 1);
       }
     }
 
@@ -359,7 +358,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _openAsync() {
       // Needed for MS Edge. Otherwise, it does not pop the virtual keyboard up
       // when tapping the combobox that has non-empty value.
-      Polymer.Async.microTask.run(() => this.open());
+      setTimeout(() => this.open());
     }
 
     /**
@@ -415,8 +414,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // Ensure metrics are up-to-date
       this.$.overlay.updateViewportBoundaries();
-      Polymer.Async.microTask.run(() => this.$.overlay.adjustScrollPosition());
-      Polymer.Async.timeOut.after(1).run(() => this.$.overlay.$.dropdown.notifyResize());
+      setTimeout(() => this.$.overlay.adjustScrollPosition());
+      setTimeout(() => this.$.overlay.$.dropdown.notifyResize(), 1);
 
       // Set body pointer-events to 'none' to disable mouse interactions with
       // other document nodes (combo-box is "modal")

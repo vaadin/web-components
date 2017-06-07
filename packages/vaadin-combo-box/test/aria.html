@@ -91,7 +91,7 @@
       // fixture.restore() is called, most likely because the arrowDown()
       // functions are still partly running.
       // Delaying the teardown by a micro task seems to help.
-      afterEach(done => Polymer.Async.microTask.run(done));
+      afterEach(done => setTimeout(done));
 
       it('should set selection aria attributes when focusing an item', () => {
         comboBox.value = 'foo';

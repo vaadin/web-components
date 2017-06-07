@@ -38,8 +38,7 @@
             --iron-list-items-container: {
               border-top: 8px solid transparent;
               border-bottom: 8px solid transparent;
-            }
-            ;
+            };
           }
 
           #selector vaadin-combo-box-item {
@@ -266,12 +265,12 @@
 
       _onTouchStart() {
         this._notTapping = false;
-        Polymer.Async.timeOut.after(300).run(() => this._notTapping = true);
+        setTimeout(() => this._notTapping = true, 300);
       }
 
       _onScroll() {
         this._ignoreTaps = true;
-        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps,
+        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps, 
           Polymer.Async.timeOut.after(300), () => this._ignoreTaps = false);
       }
 

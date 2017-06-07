@@ -122,7 +122,7 @@
         setInputValue('b');
 
         // first scroll after open is async
-        Polymer.Async.microTask.run(() => {
+        setTimeout(() => {
           expect(spy.callCount).to.eql(1); // scrolls once on open
           done();
         });
@@ -216,7 +216,7 @@
       });
     });
 
-    describe('external filtering', done => {
+    describe('external filtering', () => {
       beforeEach(() => {
         comboBox.items = undefined;
         comboBox.filteredItems = ['foo', 'bar', 'baz'];
