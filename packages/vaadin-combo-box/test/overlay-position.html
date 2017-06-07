@@ -116,7 +116,7 @@
 
       // <paper-input-container> adds floated-label-placeholder div asynchronously,
       // we want to wait that out so that the dropdown clientHeight is calculated correctly.
-      Polymer.Async.microTask.run(done);
+      setTimeout(done);
     });
 
     // clean out <vaadin-overlay> elements from body.

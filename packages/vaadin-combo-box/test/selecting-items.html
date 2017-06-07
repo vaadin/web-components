@@ -360,7 +360,7 @@
       combobox.items = ['foo', 'bar', 'barbar'];
 
       combobox.open();
-      Polymer.Async.microTask.run(done);
+      setTimeout(done);
     });
 
     it('should select a value when closing when having a single exact match', () => {
