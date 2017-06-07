@@ -122,6 +122,16 @@
           expect(addButton.disabled).to.be.true;
         });
 
+        it('should not open upload dialog when max files added', function() {
+          upload.maxFiles = 0;
+
+          var clickSpy = sinon.spy();
+          upload.$.fileInput.addEventListener('click', clickSpy);
+
+          upload.$.addFiles.dispatchEvent(new CustomEvent('tap'));
+          expect(clickSpy).not.to.be.called;
+        });
+
       });
 
       describeIf(!touchDevice, 'Dropping file', function() {

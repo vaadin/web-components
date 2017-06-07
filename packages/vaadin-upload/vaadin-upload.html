@@ -810,6 +810,10 @@ Custom property | Description | Default
     },
 
     _onAddFilesClick: function() {
+      if (this.maxFilesReached) {
+        return;
+      }
+
       if (Polymer.Gestures.resetMouseCanceller) {
         /*
           With Polymer v1.7.1, the ghost-click prevention cancels the synthetic
