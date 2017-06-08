@@ -8,9 +8,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
-<link rel="import" href="../paper-input/paper-input-error.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
@@ -126,57 +125,45 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <paper-input-container
-      id="inputContainer"
-      disabled$="[[disabled]]"
-      no-label-float="[[noLabelFloat]]"
-      always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
-      auto-validate$="[[autoValidate]]"
-      invalid="[[invalid]]">
+    <vaadin-text-field id="input"
+        invalid="{{invalid}}"
 
-      <label id="label" slot="label"
-        on-down="_preventDefault"
-        hidden$="[[!label]]"
-        aria-hidden="true"
-        on-tap="_openAsync"
-        for="input">[[label]]</label>
-
-      <slot name="prefix" slot="prefix"></slot>
-
-      <iron-input slot="input" id="ironinput"
         bind-value="{{_inputElementValue}}"
         allowed-pattern="[[allowedPattern]]"
         prevent-invalid-input="[[preventInvalidInput]]"
-        invalid="{{invalid}}"
+
+        value="{{_inputElementValue}}"
+        autocomplete="off"
+
+        role="combobox"
+        invalid="[[invalid]]"
+        label="[[label]]"
+        name="[[name]]"
+        placeholder="[[placeholder]]"
+        required="[[required]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        error-message="[[errorMessage]]"
+
+        autocapitalize="none"
+        aria-expanded$="[[_getAriaExpanded(opened)]]"
+        aria-autocomplete="list"
+
+        aria-label$="[[label]]"
+        autofocus="[[autofocus]]"
+        inputmode="[[inputmode]]"
+
+        on-blur="_onBlur"
         on-change="_stopPropagation"
-        label="[[label]]">
-        <input id="input"
-          type="text"
-          role="combobox"
-          autocomplete="off"
-          autocapitalize="none"
-          aria-label$="[[label]]"
-          aria-expanded$="[[_getAriaExpanded(opened)]]"
-          aria-autocomplete="list"
-          disabled$="[[disabled]]"
-          pattern$="[[pattern]]"
-          required$="[[required]]"
-          autofocus$="[[autofocus]]"
-          inputmode$="[[inputmode]]"
-          name$="[[name]]"
-          placeholder$="[[placeholder]]"
-          readonly$="[[readonly]]"
-          size$="[[size]]"
-          on-input="_inputValueChanged"
-          on-blur="_onBlur"
-          on-change="_stopPropagation"
-          key-event-target>
-      </iron-input>
+        on-input="_inputValueChanged"
+        on-tap="_openAsync"
+        key-event-target
+      >
+      <slot name="prefix" slot="prefix"></slot>
 
       <slot name="suffix" slot="suffix"></slot>
 
-      <!-- TODO (web-padawan): remove "suffix" attributes for 2.0 -->
-      <div slot="suffix" suffix>
+      <div slot="suffix">
         <span>
           <slot name="clear-button">
             <paper-icon-button id="clearIcon"
@@ -200,10 +187,7 @@ This program is available under Apache License Version 2.0, available at https:/
         </span>
       </div>
 
-      <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error>[[errorMessage]]</paper-input-error>
-      </template>
-    </paper-input-container>
+    </vaadin-text-field>
 
     <vaadin-combo-box-overlay id="overlay"
       opened=[[opened]]
@@ -316,14 +300,6 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Set to true to auto-validate the input value.
-             */
-            autoValidate: {
-              type: Boolean,
-              value: false
-            },
-
-            /**
              * Set to true to disable this input.
              */
             disabled: {
@@ -413,10 +389,11 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           // 2.0 does not support nested syntax for listeners
-          this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
+          this.$.input.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
 
           this._setInputElement(this.$.input);
-          this._bindableInput = this.$.ironinput;
+          this._bindableInput = this.$.input;
+          this._nativeInput = this.$.input.focusElement;
         }
 
         connectedCallback() {
@@ -437,7 +414,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _getPositionTarget() {
-          return this.$.inputContainer;
+          return this.$.input;
         }
 
         _getAriaExpanded(value) {

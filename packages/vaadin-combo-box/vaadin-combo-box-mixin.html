@@ -315,14 +315,19 @@ This program is available under Apache License Version 2.0, available at https:/
         // 1ms delay needed for OSX VoiceOver to realise input value was reset
         setTimeout(() => {
           this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
-          this._setSelectionRange();
+          this._setSelectionRange(0, this._inputElementValue.length);
         }, 1);
       }
     }
 
-    _setSelectionRange() {
-      if (this.inputElement.setSelectionRange) {
-        this.inputElement.setSelectionRange(0, this._inputElementValue.length);
+    _setSelectionRange(start, end) {
+      const input = this._nativeInput ? this._nativeInput : this.inputElement;
+      if (input && input.setSelectionRange) {
+        try {
+          input.setSelectionRange(start, end);
+        } catch (ignore) {
+          // IE11 randomly fails when running tests in Sauce.
+        }
       }
     }
 
@@ -452,7 +457,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._detectAndDispatchChange();
 
-      this._clearSelectionRange();
+      const pos = this._inputElementValue ? this._inputElementValue.length : 0;
+      this._setSelectionRange(pos, pos);
 
       this.filter = '';
 
@@ -486,17 +492,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _clearSelectionRange() {
-      // Setting selection range focuses and/or moves the caret in some browsers,
-      // and there's no need to modify the selection range if the input isn't focused anyway.
-      if ((document.activeElement === this.inputElement ||
-           document.activeElement === this)
-           && this.inputElement.setSelectionRange) {
-        const caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
-        this.inputElement.setSelectionRange(caretIndex, caretIndex);
-      }
-    }
-
     _filterChanged(filter, itemValuePath, itemLabelPath) {
       if (filter === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
         return;
@@ -519,7 +514,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._revertInputValueToValue();
       }
 
-      this._clearSelectionRange();
+      this._setSelectionRange(this._inputElementValue.length, this._inputElementValue.length);
     }
 
     _revertInputValueToValue() {
