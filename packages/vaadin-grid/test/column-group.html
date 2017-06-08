@@ -251,6 +251,30 @@
 
         expect(group.flexGrow).to.eql(2);
       });
+
+      describe('dom observing', () => {
+        it('should pickup header template', () => {
+          var group = document.createElement('vaadin-grid-column-group');
+          var template = document.createElement('template');
+          template.classList.add('header');
+
+          group.appendChild(template);
+          group._templateObserver.flush();
+
+          expect(group.headerTemplate).to.eql(template);
+        });
+
+        it('should pickup footer template', () => {
+          var group = document.createElement('vaadin-grid-column-group');
+          var template = document.createElement('template');
+          template.classList.add('footer');
+
+          group.appendChild(template);
+          group._templateObserver.flush();
+
+          expect(group.footerTemplate).to.eql(template);
+        });
+      })
     });
   </script>
 

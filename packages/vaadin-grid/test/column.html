@@ -169,6 +169,103 @@
           expect(getCellContent(grid.$.header._rows[1].cells[0]).textContent).to.contain('header1');
         });
       });
+
+      describe('dom observing', () => {
+        it('should pickup header template', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          template.classList.add('header');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+
+          expect(column.headerTemplate).to.eql(template);
+        });
+
+        it('should pickup footer template', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          template.classList.add('footer');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+
+          expect(column.footerTemplate).to.eql(template);
+        });
+
+        it('should pickup body template', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+
+          expect(column.template).to.eql(template);
+        });
+
+        it('should re-pickup header template', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          template.classList.add('header');
+          var template2 = document.createElement('template');
+          template2.classList.add('header');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+          column.removeChild(template);
+          column.appendChild(template2);
+          column._templateObserver.flush();
+
+          expect(column.headerTemplate).to.eql(template2);
+        });
+
+        it('should pickup new body template', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          var template2 = document.createElement('template');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+          column.removeChild(template);
+          column.appendChild(template2);
+          column._templateObserver.flush();
+
+          expect(column.template).to.eql(template2);
+        });
+
+        it('should prepare template when added lazily', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+
+          grid.appendChild(column);
+          grid._observer.flush();
+
+          expect(template.templatizer._templatizerTemplate).to.eql(template);
+          expect(column.template).to.eql(template);
+        });
+
+        it('should prepare a new template when added lazily', () => {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          var template2 = document.createElement('template');
+
+          column.appendChild(template);
+          column._templateObserver.flush();
+
+          grid.appendChild(column);
+          grid._observer.flush();
+
+          column.removeChild(template);
+          column.appendChild(template2);
+          column._templateObserver.flush();
+
+          expect(template2.templatizer._templatizerTemplate).to.eql(template2);
+          expect(column.template).to.eql(template2);
+        });
+      });
     });
 
   </script>

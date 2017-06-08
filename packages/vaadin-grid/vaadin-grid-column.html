@@ -44,7 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
       headerTemplate: {
         type: Object,
         value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template.header') || null, {});
+          return this._prepareTemplatizer(this._findTemplate('template.header') || undefined, {});
         }
       },
 
@@ -54,7 +54,7 @@ This program is available under Apache License Version 2.0, available at https:/
       footerTemplate: {
         type: Object,
         value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template.footer') || null, {});
+          return this._prepareTemplatizer(this._findTemplate('template.footer') || undefined, {});
         }
       },
 
@@ -93,8 +93,18 @@ This program is available under Apache License Version 2.0, available at https:/
       '_lastFrozenChanged(_lastFrozen)'
     ],
 
+    created: function() {
+      this._templateObserver = new Polymer.FlattenedNodesObserver(this, (info) => {
+        if (info.addedNodes.length >= 0) {
+          this.headerTemplate = this._prepareTemplatizer(this._findTemplate('template.header') || undefined, {});
+          this.footerTemplate = this._prepareTemplatizer(this._findTemplate('template.footer') || undefined, {});
+          this.template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)' || undefined, {}));
+        }
+      });
+    },
+
     _prepareTemplatizer: function(template, instanceProps) {
-      if (template) {
+      if (template && !template.templatizer) {
         var templatizer = new vaadin.elements.grid.Templatizer();
         templatizer.dataHost = this.dataHost;
         templatizer._instanceProps = instanceProps || templatizer._instanceProps;
