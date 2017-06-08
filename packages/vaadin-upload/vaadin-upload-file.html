@@ -270,18 +270,31 @@ Custom property | Description | Default
       this.$.progress.updateStyles();
     },
 
+    ready: function() {
+      this.addEventListener('animationend', function(e) {
+        // Animation name is scoped to "fade-out-vaadin-upload-file-0" on
+        // Polymer 1 & Shady combination, so check with indexOf
+        if (e.animationName.indexOf('fade-out') > -1) {
+          this._remove();
+        }
+      });
+    },
+
     _fileAborted: function(abort) {
       if (abort) {
         this.toggleClass('fade-out', true);
+
+        // In case the animation doesn't trigger, just remove the file instantly.
         var animationName = window.getComputedStyle(this).animationName;
         if (!animationName || animationName === 'none') {
-          this.fire('file-remove', {file: this.file});
-        } else {
-          this.addEventListener('animationend', function() {
-            this.fire('file-remove', {file: this.file});
-          }.bind(this));
+          this._remove();
         }
       }
+    },
+
+    _remove: function() {
+      this.toggleClass('fade-out', false);
+      this.fire('file-remove', {file: this.file});
     },
 
     _fireFileEvent: function(e) {
