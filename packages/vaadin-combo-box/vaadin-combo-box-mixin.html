@@ -358,7 +358,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _openAsync() {
       // Needed for MS Edge. Otherwise, it does not pop the virtual keyboard up
       // when tapping the combobox that has non-empty value.
-      setTimeout(() => this.open());
+      Polymer.Async.microTask.run(() => this.open());
     }
 
     /**
@@ -414,7 +414,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // Ensure metrics are up-to-date
       this.$.overlay.updateViewportBoundaries();
-      setTimeout(() => this.$.overlay.adjustScrollPosition());
+      Polymer.Async.microTask.run(() => this.$.overlay.adjustScrollPosition());
       setTimeout(() => this.$.overlay.$.dropdown.notifyResize(), 1);
 
       // Set body pointer-events to 'none' to disable mouse interactions with
@@ -620,9 +620,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // async needed to reposition correctly after filtering
         // (especially when aligned on top of input)
-        Polymer.Async.timeOut.after(1).run(() => {
+        setTimeout(() => {
           this.$.overlay.$.dropdown.notifyResize();
-        });
+        }, 1);
       }
     }
 

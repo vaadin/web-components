@@ -479,7 +479,7 @@
 
         comboBox.open();
 
-        Polymer.Async.microTask.run(() => {
+        setTimeout(() => {
           expect(selector.firstVisibleIndex).to.eql(0);
           done();
         });
