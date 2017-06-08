@@ -1484,11 +1484,9 @@
 
         describe('a11y', function() {
           it('should move focus when focused cell is changed', function() {
-            footerTrap.focus.restore();
-            footerTrap.focus.restore = sinon.spy();
-
             var spy = sinon.spy();
             footerTrap._primary.focus = spy;
+            footerTrap._secondary.focus = spy;
 
             footerTrap.activeTarget = 'foobar';
 
@@ -1540,6 +1538,7 @@
             tab();
 
             var id = getCell(0, 0)._cellContent.id;
+            expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
             footerTrap.async(function() {
               expect(footerTrap._primary.getAttribute('aria-labelledby') +
@@ -1553,12 +1552,61 @@
             tab();
 
             var id = getFirstHeaderCell(0)._cellContent.id;
+            expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
             footerTrap.async(function() {
               expect(footerTrap._primary.getAttribute('aria-labelledby') +
                 footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
               done();
             });
+          });
+
+          it('should not refocus the trap while navigating', function() {
+            tabToHeader();
+            tab();
+
+            // Neither of these keystrokes should call trap focus(). Otherwise,
+            // if the trap focus is called, the focus could jump twice between
+            // the baits on a single keystroke, and, as a result of two jumps,
+            // the bait that was focused before the keystroke stays focused
+            // after. No focus move — no cell announce.
+            right();
+            left();
+            down();
+            up();
+            end();
+            home();
+            ctrlEnd();
+            ctrlHome();
+            pageDown();
+            pageUp();
+
+            expect(footerTrap.focus.callCount).to.equal(1);
+          });
+
+          it('should change activeTarget in the trap while navigating', function() {
+            tabToHeader();
+            tab();
+
+            var visitedTargets = [];
+            visitedTargets.push(footerTrap.activeTarget); right();
+            visitedTargets.push(footerTrap.activeTarget); left();
+            visitedTargets.push(footerTrap.activeTarget); down();
+            visitedTargets.push(footerTrap.activeTarget); up();
+            visitedTargets.push(footerTrap.activeTarget); end();
+            visitedTargets.push(footerTrap.activeTarget); home();
+            visitedTargets.push(footerTrap.activeTarget); ctrlEnd();
+            visitedTargets.push(footerTrap.activeTarget); ctrlHome();
+            visitedTargets.push(footerTrap.activeTarget); pageDown();
+            visitedTargets.push(footerTrap.activeTarget); pageUp();
+
+            // Extract unique values
+            visitedTargets = visitedTargets.reduce(function(acc, val) {
+              if (acc.indexOf(val) === -1) acc.push(val);
+              return acc;
+            }, []);
+
+            expect(visitedTargets).to.have.a.lengthOf(5);
           });
 
           if (window.Polymer && Polymer.Settings.useNativeShadow) {

@@ -210,7 +210,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusDown();
 
       this._ensureVirtualFocusInViewport();
@@ -231,7 +231,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       if (this._virtualFocus === this.$.items) {
         var prevLastVisible = this.$.scroller.lastVisibleIndex;
         this._scrollPageDown();
@@ -258,7 +258,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       if (this._virtualFocus === this.$.items) {
         var prevLastVisibleIndex = this.$.scroller.lastVisibleIndex;
         this._scrollPageUp();
@@ -277,7 +277,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusUp();
 
       this._ensureVirtualFocusInViewport();
@@ -290,7 +290,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusRight();
 
       this._ensureVirtualFocusInViewport();
@@ -303,7 +303,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusLeft();
 
       this._ensureVirtualFocusInViewport();
@@ -316,7 +316,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusHome();
 
       this._ensureVirtualFocusInViewport();
@@ -329,7 +329,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusEnd();
 
       this._ensureVirtualFocusInViewport();
@@ -378,7 +378,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusFirst();
 
       this._ensureVirtualFocusInViewport();
@@ -391,7 +391,7 @@
 
       e.preventDefault();
 
-      this._activateNavigation();
+      this.navigating = true;
       this._virtualFocus.focusLast();
 
       this._ensureVirtualFocusInViewport();
