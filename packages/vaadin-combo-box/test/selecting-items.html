@@ -39,6 +39,8 @@
       }));
     }
 
+    afterEach(done => hackIE11Focus(done));
+
     beforeEach(() => {
       combobox = fixture('combobox');
       combobox.items = ['foo', 'bar'];
@@ -350,7 +352,7 @@
     }
 
     function filter(value) {
-      getInput().bindValue = value;
+      getInput().value = value;
       combobox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
@@ -359,8 +361,7 @@
       combobox.allowCustomValue = true;
       combobox.items = ['foo', 'bar', 'barbar'];
 
-      combobox.open();
-      setTimeout(done);
+      open(combobox, done);
     });
 
     it('should select a value when closing when having a single exact match', () => {

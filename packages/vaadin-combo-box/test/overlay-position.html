@@ -95,10 +95,11 @@
   }
 
   function inputContentRect() {
-    return comboBox.$.inputContainer.getBoundingClientRect();
+    return comboBox.$.input.getBoundingClientRect();
   }
 
   describe('overlay', () => {
+
     beforeEach(done => {
       comboBox = fixture('combobox');
       const comboBoxRect = comboBox.getBoundingClientRect();
@@ -137,14 +138,13 @@
 
       it('should position correctly if items are populated after opening', done => {
         comboBox.items = [];
-        comboBox.addEventListener('vaadin-dropdown-opened', () => {
+        open(comboBox, () => {
           comboBox.items = [1, 2, 3];
           setTimeout(() => {
             expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
             done();
           }, 1);
         });
-        comboBox.open();
       });
 
       it('should notify resize on items change', () => {
@@ -207,13 +207,14 @@
       it('should be above input', done => {
         moveComboBox(horiCenter, vertBottom, 300);
 
-        comboBox.open();
-
-        setTimeout(() => {
+        open(comboBox, () => {
           expect(comboBox.$.overlay.$.dropdown.alignedAbove).to.be.true;
-          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
+
+          if (!ie11) { // FIXME: IE11 fails in saucelabs but not in local
+            expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
+          }
           done();
-        }, 1);
+        });
       });
 
       it('should reposition after filtering', done => {
@@ -222,10 +223,10 @@
         comboBox.inputElement.value = 'item 1';
         comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
-        setTimeout(() => {
+        open(comboBox, () => {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
-        }, 1);
+        });
       });
     });
 

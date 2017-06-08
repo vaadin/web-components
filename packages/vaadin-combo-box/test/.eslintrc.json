@@ -6,6 +6,7 @@
     "sinon": false,
     "WCT": false,
     "ios": false,
+    "ie11": false,
     "chrome": false,
     "edge": false,
     "getItemArray": false,
@@ -23,6 +24,7 @@
     "HTMLImports": false,
     "MockInteractions": false,
     "MockTouchInteractions": false,
-    "touchDevice": false
+    "touchDevice": false,
+    "hackIE11Focus": false
   }
 }

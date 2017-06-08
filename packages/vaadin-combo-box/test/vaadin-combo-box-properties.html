@@ -169,7 +169,7 @@
 
         it('should be bound to label element', () => {
           comboBox.label = 'This is LABEL';
-          expect(comboBox.$.inputContainer.querySelector('label').innerHTML).to.eql('This is LABEL');
+          expect(comboBox.$.input.root.querySelector('label').innerHTML).to.eql('This is LABEL');
         });
       });
 

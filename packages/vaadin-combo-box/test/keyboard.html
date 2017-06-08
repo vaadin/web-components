@@ -34,7 +34,7 @@
     }
 
     function filter(value) {
-      comboBox._bindableInput.bindValue = value;
+      comboBox._bindableInput.value = value;
       getInput().dispatchEvent(new CustomEvent('input'));
     }
 
@@ -62,6 +62,8 @@
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
+
+    afterEach(done => hackIE11Focus(done));
 
     /*
       The following prevents test errors in MSIE 11.
@@ -157,11 +159,10 @@
     });
 
     describe('selecting items', () => {
-      beforeEach(done => setTimeout(() => {
+      beforeEach(done => {
         comboBox.value = 'bar';
-        arrowDown();
-        done();
-      }));
+        open(comboBox, done);
+      });
 
       it('should select focused item with enter', () => {
         arrowDown();
@@ -283,8 +284,8 @@
         arrowDown();
 
         setTimeout(() => {
-          expect(getInput().selectionStart).to.eql(0);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox._nativeInput.selectionStart).to.eql(0);
+          expect(comboBox._nativeInput.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -313,8 +314,8 @@
         arrowUp();
 
         setTimeout(() => {
-          expect(getInput().selectionStart).to.eql(0);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox._nativeInput.selectionStart).to.eql(0);
+          expect(comboBox._nativeInput.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -353,15 +354,11 @@
       it('should remove selection from the input value selecting value', done => {
         arrowDown();
 
-
         setTimeout(() => {
-          // selection range is only cleared when the input is focused, which is not the case
-          // in all environments running the tests, especially on safari. So we need to use the next best thing.
-          comboBox._clearSelectionRange = sinon.spy();
-
           enter();
 
-          expect(comboBox._clearSelectionRange.callCount).to.eql(1);
+          expect(comboBox._nativeInput.selectionStart).to.eql(3);
+          expect(comboBox._nativeInput.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -373,9 +370,7 @@
     describe('sanity checks for calculating visible item counts', () => {
       it('should calculate items correctly when all items are visible', done => {
         comboBox.items = ['foo', 'bar', 'baz', 'qux'];
-        comboBox.open();
-
-        setTimeout(() => {
+        open(comboBox, () => {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
           expect(comboBox.$.overlay._selector.lastVisibleIndex).to.eql(3);
           done();
@@ -409,11 +404,10 @@
           items.push(i.toString());
         }
 
-        comboBox.items = items;
-        comboBox.open();
         selector = comboBox.$.overlay._selector;
+        comboBox.items = items;
 
-        setTimeout(done, 1);
+        open(comboBox, done);
       });
 
       it('should scroll down after reaching the last visible item', () => {
