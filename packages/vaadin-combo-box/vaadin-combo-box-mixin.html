@@ -193,6 +193,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
 
+      // In the light component buttons are in lightDom, since in the full component they're in shadow
+      this._toggleElement = this.querySelector('.toggle-button') || this.root.querySelector('.toggle-button');
+      this._clearElement = this.querySelector('.clear-button') || this.root.querySelector('.clear-button');
+
       // 2.0 does not support 'overlay.selection-changed' syntax in listeners
       this.$.overlay.addEventListener('selection-changed', this._overlaySelectedItemChanged.bind(this));
 

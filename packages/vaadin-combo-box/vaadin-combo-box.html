@@ -38,8 +38,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
       }
 
-      #clearIcon,
-      #toggleIcon {
+      :host .clear-button,
+      :host .toggle-button {
         font-family: 'vaadin-combo-box-icons';
         font-size: 19px;
         cursor: pointer;
@@ -52,11 +52,11 @@ This program is available under Apache License Version 2.0, available at https:/
         color: rgba(0, 0, 0, .26);
       }
 
-      #clearIcon::before {
+      :host .clear-button::before {
         content: "\e901";
       }
 
-      #toggleIcon::before {
+      :host .toggle-button::before {
         content: "\e900";
       }
     </style>
@@ -101,14 +101,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       <div slot="suffix">
         <span>
-          <slot name="clear-button">
-            <div id="clearIcon" role="button" aria-label="Clear" class="clear-button small"></div>
-          </slot>
+          <div role="button" aria-label="Clear" class="clear-button small"></div>
         </span>
         <span>
-          <slot name="toggle-button">
-            <div id="toggleIcon" role="button" aria-label="Toggle" aria-expanded$="[[_getAriaExpanded(opened)]]" class="toggle-button rotate-on-open"></div>
-          </slot>
+          <div role="button" aria-label="Toggle" aria-expanded$="[[_getAriaExpanded(opened)]]" class="toggle-button rotate-on-open"></div>
         </span>
       </div>
 
@@ -323,9 +319,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         connectedCallback() {
           super.connectedCallback();
-          // Use the default toggle/clear or one replaced in light DOM.
-          this._toggleElement = this.querySelector('[slot=toggle-button]') || this.$.toggleIcon;
-          this._clearElement = this.querySelector('[slot=clear-button]') || this.$.clearIcon;
           this._preventInputBlur();
         }
 

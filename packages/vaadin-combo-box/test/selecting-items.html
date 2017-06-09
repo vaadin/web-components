@@ -19,14 +19,6 @@
   </template>
 </test-fixture>
 
-<test-fixture id="combobox-custom-clear">
-  <template>
-    <vaadin-combo-box>
-      <div slot="clear-button" class="vaadin-combo-box clear-button">CLEAR</div>
-    </vaadin-combo-box>
-  </template>
-</test-fixture>
-
 <script>
   describe('selecting a value', () => {
     let combobox;
@@ -239,7 +231,7 @@
 
       it('should fire on clear', () => {
         combobox.value = 'foo';
-        fire('up', combobox.$.clearIcon);
+        fire('up', combobox._clearElement);
 
         expect(changeSpy.callCount).to.equal(1);
       });
@@ -281,65 +273,61 @@
     });
   });
 
-  ['default', 'custom'].forEach(button => {
+  describe('clearing a selection - clear icon', () => {
+    let combobox;
+    let clearIcon;
+    beforeEach(() => {
+      combobox = fixture('combobox');
+      combobox.items = ['foo', 'bar'];
 
-    describe('clearing a selection - ' + button + ' clear icon', () => {
-      let combobox;
-      let clearIcon;
-      beforeEach(() => {
-        combobox = fixture(button === 'default' ? 'combobox' : 'combobox-custom-clear');
-        combobox.items = ['foo', 'bar'];
+      combobox.value = 'foo';
 
-        combobox.value = 'foo';
+      clearIcon = combobox._clearElement;
 
-        clearIcon = combobox._clearElement;
+      // needed for Edge <= 14 in Polymer 2
+      combobox.updateStyles();
+    });
 
-        // needed for Edge <= 14 in Polymer 2
-        combobox.updateStyles();
-      });
+    it('should show the clearing icon only when combobox has value', done => {
+      // Edge and IE have an issue where the correct styles are not applied by the browser
+      // on the clear icon before triggering a reflow/re-render. Opening/Closing the combobox
+      // seems to be the most reliable way to fix this.
+      combobox.open();
+      expect(window.getComputedStyle(clearIcon).display).not.to.contain('none');
+      combobox.close();
 
-      it('should show the clearing icon only when combobox has value', done => {
-        // Edge and IE have an issue where the correct styles are not applied by the browser
-        // on the clear icon before triggering a reflow/re-render. Opening/Closing the combobox
-        // seems to be the most reliable way to fix this.
-        combobox.open();
-        expect(window.getComputedStyle(clearIcon).display).to.contain('block');
-        combobox.close();
+      combobox.value = '';
+      combobox.open();
+      setTimeout(() => {
+        expect(window.getComputedStyle(clearIcon).display).to.contain('none');
+        done();
+      }, 1);
+    });
 
-        combobox.value = '';
-        combobox.open();
-        setTimeout(() => {
-          expect(window.getComputedStyle(clearIcon).display).to.contain('none');
-          done();
-        }, 1);
-      });
+    it('should clear the selection when tapping on the icon', () => {
+      combobox.open();
 
-      it('should clear the selection when tapping on the icon', () => {
-        combobox.open();
+      fire('up', clearIcon);
 
-        fire('up', clearIcon);
+      expect(combobox.value).to.eql('');
+      expect(combobox.$.overlay._selectedItem).to.be.null;
+      expect(combobox.selectedItem).to.be.null;
+    });
 
-        expect(combobox.value).to.eql('');
-        expect(combobox.$.overlay._selectedItem).to.be.null;
-        expect(combobox.selectedItem).to.be.null;
-      });
+    it('should close the dropdown after clearing a selection', () => {
+      combobox.open();
 
-      it('should close the dropdown after clearing a selection', () => {
-        combobox.open();
+      fire('up', clearIcon);
 
-        fire('up', clearIcon);
+      expect(combobox.opened).to.eql(false);
+    });
 
-        expect(combobox.opened).to.eql(false);
-      });
+    it('should cancel down event to avoid input blur', () => {
+      combobox.open();
 
-      it('should cancel down event to avoid input blur', () => {
-        combobox.open();
+      const event = fire('down', clearIcon);
 
-        const event = fire('down', clearIcon);
-
-        expect(event.defaultPrevented).to.eql(true);
-      });
-
+      expect(event.defaultPrevented).to.eql(true);
     });
 
   });

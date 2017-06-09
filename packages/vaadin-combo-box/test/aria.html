@@ -27,10 +27,10 @@
       return comboBox.$.input;
     }
     function getToggleIcon() {
-      return comboBox.$.toggleIcon;
+      return comboBox._toggleElement;
     }
     function getClearIcon() {
-      return comboBox.$.clearIcon;
+      return comboBox._clearElement;
     }
     function getItemElement(i) {
       return comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')[i];

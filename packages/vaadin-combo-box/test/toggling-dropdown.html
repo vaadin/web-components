@@ -47,7 +47,7 @@
     function tapToggleIcon() {
       // This listener should listen for "tap" again once composedPath() issues with touch devices
       // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      fire('up', combobox.root.querySelector('vaadin-text-field #toggleIcon'));
+      fire('up', combobox._toggleElement);
     }
 
     function overlay() {
@@ -74,9 +74,10 @@
       });
 
       it('should open asynchronously by clicking input', done => {
-        tapInput();
 
         expect(combobox.opened).to.be.false;
+        tapInput();
+
         setTimeout(() => {
           expect(combobox.opened).to.be.true;
           done();
@@ -289,11 +290,11 @@
       });
 
       it('toggleIcon should be hidden when disabled', () => {
-        expect(getComputedStyle(combobox.$.toggleIcon).display).to.equal('none');
+        expect(getComputedStyle(combobox._toggleElement).display).to.equal('none');
       });
 
       it('clearIcon should be hidden when disabled', () => {
-        expect(getComputedStyle(combobox.$.clearIcon).display).to.equal('none');
+        expect(getComputedStyle(combobox._clearElement).display).to.equal('none');
       });
 
       it('dropdown should not be shown when disabled', () => {
@@ -309,11 +310,11 @@
       });
 
       it('toggleIcon should be hidden when read-only', () => {
-        expect(getComputedStyle(combobox.$.toggleIcon).display).to.equal('none');
+        expect(getComputedStyle(combobox._toggleElement).display).to.equal('none');
       });
 
       it('clearIcon should be hidden when read-only', () => {
-        expect(getComputedStyle(combobox.$.clearIcon).display).to.equal('none');
+        expect(getComputedStyle(combobox._clearElement).display).to.equal('none');
       });
 
       it('dropdown should not be shown when read-only', () => {
