@@ -30,16 +30,16 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 8px 0;
       }
 
-      :host > #overlay {
+      #overlay {
         display: none;
       }
 
-      :host [slot=suffix] {
+      [slot=suffix] {
         display: flex;
       }
 
-      :host .clear-button,
-      :host .toggle-button {
+      .clear-button,
+      .toggle-button {
         font-family: 'vaadin-combo-box-icons';
         font-size: 19px;
         cursor: pointer;
@@ -52,18 +52,16 @@ This program is available under Apache License Version 2.0, available at https:/
         color: rgba(0, 0, 0, .26);
       }
 
-      :host .clear-button::before {
+      .clear-button::before {
         content: "\e901";
       }
 
-      :host .toggle-button::before {
+      .toggle-button::before {
         content: "\e900";
       }
     </style>
 
     <vaadin-text-field id="input"
-        invalid="{{invalid}}"
-
         bind-value="{{_inputElementValue}}"
         allowed-pattern="[[allowedPattern]]"
         prevent-invalid-input="[[preventInvalidInput]]"
@@ -85,7 +83,6 @@ This program is available under Apache License Version 2.0, available at https:/
         aria-expanded$="[[_getAriaExpanded(opened)]]"
         aria-autocomplete="list"
 
-        aria-label$="[[label]]"
         autofocus="[[autofocus]]"
         inputmode="[[inputmode]]"
 
@@ -93,7 +90,6 @@ This program is available under Apache License Version 2.0, available at https:/
         on-change="_stopPropagation"
         on-input="_inputValueChanged"
         on-tap="_openAsync"
-        key-event-target
       >
       <slot name="prefix" slot="prefix"></slot>
 

@@ -6,10 +6,8 @@
     "sinon": false,
     "WCT": false,
     "ios": false,
-    "ie11": false,
-    "linux": false,
-    "chrome": false,
     "edge": false,
+    "linux": false,
     "getItemArray": false,
     "before": false,
     "beforeEach": false,
@@ -26,6 +24,7 @@
     "MockInteractions": false,
     "MockTouchInteractions": false,
     "touchDevice": false,
-    "hackIE11Focus": false
+    "hackIE11Focus": false,
+    "_fixture": false
   }
 }

@@ -4,8 +4,8 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo basic tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
   <script src="common.js"></script>
 </head>
@@ -44,8 +44,6 @@
         comboBox._bindableInput._initSlottedInput();
       }
     });
-
-    afterEach(done => hackIE11Focus(done));
 
     describe('setting the input field value', () => {
       it('should open the popup if closed', () => {
@@ -120,15 +118,13 @@
         comboBox.value = 'baz';
         const spy = sinon.spy(comboBox.$.overlay, '_scrollIntoView');
 
-        open(comboBox, () => {
-          setInputValue('ba');
-          setInputValue('b');
+        setInputValue('ba');
+        setInputValue('b');
 
-          // first scroll after open is async
-          setTimeout(() => {
-            expect(spy.callCount).to.eql(1); // scrolls once on open
-            done();
-          });
+        // first scroll after open is async
+        setTimeout(() => {
+          expect(spy.callCount).to.eql(1); // scrolls once on open
+          done();
         });
       });
     });

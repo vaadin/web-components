@@ -4,10 +4,10 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo basic tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
-  <script src='common.js'></script>
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -53,7 +53,7 @@
     describe('when combo-box is attached', () => {
       it('should contain appropriate aria attributes', () => {
         expect(getInput().getAttribute('role')).to.equal('combobox');
-        expect(getInput().getAttribute('aria-label')).to.equal('my label');
+        expect(comboBox._nativeInput.hasAttribute('aria-labelledby')).to.be.true;
         expect(getInput().getAttribute('aria-autocomplete')).to.equal('list');
         expect(getToggleIcon().getAttribute('role')).to.equal('button');
         expect(getToggleIcon().getAttribute('aria-label')).to.equal('Toggle');

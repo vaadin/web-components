@@ -6,7 +6,6 @@
   <title>vaadin-combo data-binding tests</title>
 
   <script src="../../web-component-tester/browser.js"></script>
-
   <link rel="import" href="common.html">
   <script src="common.js"></script>
 </head>
@@ -49,7 +48,7 @@
     // Chrome demonstrates a loop when setting value to null/undefined and value is
     // bound in other components firing change events like in iron-input#bindValue.
     // In other browsers these tests do not work, and the browser could freeze.
-    describeIf(chrome, 'Chrome loops', () => {
+    describeIf(window.chrome, 'Chrome loops', () => {
       let valueNull, comboBox;
 
       beforeEach(() => {

@@ -319,13 +319,13 @@ This program is available under Apache License Version 2.0, available at https:/
         // 1ms delay needed for OSX VoiceOver to realise input value was reset
         setTimeout(() => {
           this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
-          this._setSelectionRange(0, this._inputElementValue.length);
+          this._markAllSelectionRange();
         }, 1);
       }
     }
 
     _setSelectionRange(start, end) {
-      const input = this._nativeInput ? this._nativeInput : this.inputElement;
+      const input = this._nativeInput || this.inputElement;
       if (input && input.setSelectionRange) {
         try {
           input.setSelectionRange(start, end);
@@ -333,6 +333,15 @@ This program is available under Apache License Version 2.0, available at https:/
           // IE11 randomly fails when running tests in Sauce.
         }
       }
+    }
+
+    _markAllSelectionRange() {
+      this._setSelectionRange(0, this._inputElementValue.length);
+    }
+
+    _clearSelectionRange() {
+      const pos = this._inputElementValue ? this._inputElementValue.length : 0;
+      this._setSelectionRange(pos, pos);
     }
 
     _onEnter(e) {
@@ -461,8 +470,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._detectAndDispatchChange();
 
-      const pos = this._inputElementValue ? this._inputElementValue.length : 0;
-      this._setSelectionRange(pos, pos);
+      this._clearSelectionRange();
 
       this.filter = '';
 
@@ -517,8 +525,7 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this._revertInputValueToValue();
       }
-
-      this._setSelectionRange(this._inputElementValue.length, this._inputElementValue.length);
+      this._clearSelectionRange();
     }
 
     _revertInputValueToValue() {

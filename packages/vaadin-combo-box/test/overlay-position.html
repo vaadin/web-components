@@ -4,11 +4,10 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo-box resizing tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
   <script src="common.js"></script>
-
 </head>
 
 <body>
@@ -138,13 +137,15 @@
 
       it('should position correctly if items are populated after opening', done => {
         comboBox.items = [];
-        open(comboBox, () => {
+        comboBox.open();
+
+        setTimeout(() => {
           comboBox.items = [1, 2, 3];
           setTimeout(() => {
             expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
             done();
           }, 1);
-        });
+        }, 1);
       });
 
       it('should notify resize on items change', () => {
@@ -207,14 +208,12 @@
       it('should be above input', done => {
         moveComboBox(horiCenter, vertBottom, 300);
 
-        open(comboBox, () => {
+        comboBox.open();
+        setTimeout(() => {
           expect(comboBox.$.overlay.$.dropdown.alignedAbove).to.be.true;
-
-          if (!ie11) { // FIXME: IE11 fails in saucelabs but not in local
-            expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
-          }
+          expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
-        });
+        }, 1);
       });
 
       it('should reposition after filtering', done => {
@@ -223,7 +222,8 @@
         comboBox.inputElement.value = 'item 1';
         comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
-        open(comboBox, () => {
+        comboBox.open();
+        setTimeout(() => {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         });

@@ -1,10 +1,7 @@
-
-var ua = navigator.userAgent;
-var ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-var chrome = /Chrome/i.test(ua);
-var edge = /Edge/i.test(ua);
-var ie11 = /Trident/i.test(ua);
-var linux = /Linux/i.test(ua);
+const ua = navigator.userAgent;
+const ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+const edge = /Edge/i.test(ua);
+const linux = /Linux/i.test(ua);
 
 const touchDevice = (() => {
   try {
@@ -41,31 +38,18 @@ const getItemArray = length => {
     .map((item, index) => 'item ' + index);
 };
 
-// IE11 causes an 'Error thrown outside of test function: Unspecified error' after running
-// tests that open the overlay. The problem seems related with some code that vaadin-text-field
-// moves the focus async in the input field (vaadin-text-field).
-function hackIE11Focus(cb) {
-  if (ie11) {
-    setTimeout(() => {
-      document.body.focus();
-      cb();
-    });
-  } else {
-    cb();
+// IE11 throws errors when the fixture is removed from the DOM and the focus remains in the native input.
+// Also, FF and Chrome are unable to focus the input when tests are run in the headless window manager used in Travis
+function monkeyPatchTextFieldFocus() {
+  if (window.Vaadin) {
+    Vaadin.TextFieldElement.prototype.focus = function() {
+      this._setFocused(true);
+    };
   }
 }
 
-function open(comboBox, cb) {
-  function doOpen() {
-    comboBox.open();
-    setTimeout(cb);
-  }
-
-  if (ie11) {
-    comboBox.focus();
-    setTimeout(doOpen);
-  } else {
-    doOpen();
-  }
+if (window.Polymer) { // Chrome
+  setTimeout(monkeyPatchTextFieldFocus, 1);
+} else { // Polyfill
+  window.addEventListener('WebComponentsReady', monkeyPatchTextFieldFocus);
 }
-

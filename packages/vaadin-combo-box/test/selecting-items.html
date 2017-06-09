@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>vaadin-combo basic tests</title>
+
   <script src="../../web-component-tester/browser.js"></script>
-
-
   <link rel="import" href="common.html">
   <script src="common.js"></script>
 </head>
@@ -30,8 +29,6 @@
         bubbles: true
       }));
     }
-
-    afterEach(done => hackIE11Focus(done));
 
     beforeEach(() => {
       combobox = fixture('combobox');
@@ -349,7 +346,8 @@
       combobox.allowCustomValue = true;
       combobox.items = ['foo', 'bar', 'barbar'];
 
-      open(combobox, done);
+      combobox.open();
+      setTimeout(done);
     });
 
     it('should select a value when closing when having a single exact match', () => {

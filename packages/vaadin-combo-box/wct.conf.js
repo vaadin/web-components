@@ -24,8 +24,6 @@ module.exports = {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
-    } else if (argv.env == 'saucelabs-all') {
-      context.options.plugins.sauce.browsers = saucelabsPlatforms.concat(cronPlatforms);
     }
   }
 };

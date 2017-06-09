@@ -4,9 +4,10 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo basic tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
+  <script src="common.js"></script>
   <link rel='import' href='../../iron-form/iron-form.html'>
 </head>
 
@@ -40,10 +41,6 @@
         if(comboBox._bindableInput._initSlottedInput) {
           comboBox._bindableInput._initSlottedInput();
         }
-      });
-
-      it('Name should not propagate to the input', () => {
-        expect(comboBox.$.input.name).to.be.undefined;
       });
 
       it('should be required', () => {

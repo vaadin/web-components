@@ -6,7 +6,7 @@
   /**
    * @polymerMixin
    */
-  Vaadin.ComboBoxDropdownMixin = subclass => class VaadinComboBoDropdownMixinElement extends subclass {   
+  Vaadin.ComboBoxDropdownMixin = subclass => class VaadinComboBoDropdownMixinElement extends subclass {
 
     static get properties() {
       return {
@@ -69,8 +69,8 @@
         // is explicitly focused by the user.
         if (!this.$.overlay.touchDevice) {
           // Check to see if there is a focused property and if it's already true.
-          if (!this.inputElement.focused) {
-            this.inputElement.focus();
+          if (!this.focused) {
+            this.focus();
           }
         }
       }
