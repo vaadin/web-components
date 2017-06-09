@@ -38,10 +38,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       .buffer {
         position: absolute;
-        width: 100%;
+        width: var(--vaadin-infinite-scroller-buffer-width, 100%);
         box-sizing: border-box;
         padding-right: 40px;
-        top: var(--vaadin-inifnite-scroller-buffer-offset, 0);
+        top: var(--vaadin-infinite-scroller-buffer-offset, 0);
         animation: fadein 0.2s;
       }
 
