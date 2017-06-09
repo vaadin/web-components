@@ -4,6 +4,7 @@ var ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
 var chrome = /Chrome/i.test(ua);
 var edge = /Edge/i.test(ua);
 var ie11 = /Trident/i.test(ua);
+var linux = /Linux/i.test(ua);
 
 const touchDevice = (() => {
   try {
