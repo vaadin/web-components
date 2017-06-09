@@ -38,16 +38,6 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: rotate(180deg);
       }
 
-      paper-icon-button.small,
-      :host ::slotted(paper-icon-button.small) {
-        padding: 6px !important;
-      }
-
-      /* P2 Shady */
-      :host ::slotted(vaadin-text-input) paper-icon-button.small {
-        padding: 6px !important;
-      }
-
       :host(:not([has-value])) ::slotted([slot="clear-button"]),
       :host([readonly]) ::slotted([slot="clear-button"]),
       :host([disabled]) ::slotted([slot="clear-button"]),
@@ -69,6 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([disabled]) ::slotted(vaadin-text-input) [slot="toggle-button"] {
         display: none;
       }
+
     </style>
   </template>
 </dom-module>

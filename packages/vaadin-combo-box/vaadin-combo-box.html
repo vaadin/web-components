@@ -8,12 +8,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
-<link rel="import" href="vaadin-combo-box-icons.html">
+
+<style>
+  @font-face {
+    font-family: 'vaadin-combo-box-icons';
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAYoAAsAAAAABdwAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIFqWNtYXAAAAFoAAAAVAAAAFQXVtKKZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAUAAAAFAAtWm1WhlYWQAAAMEAAAANgAAADYNRs5taGhlYQAAAzwAAAAkAAAAJAdCA8lobXR4AAADYAAAACAAAAAgFW4CxGxvY2EAAAOAAAAAEgAAABIBEgDCbWF4cAAAA5QAAAAgAAAAIAAMACNuYW1lAAADtAAAAlIAAAJSbLEfa3Bvc3QAAAYIAAAAIAAAACAAAwAAAAMDfAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QMDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkD//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQFvAKsCqwKrAAUAAAEHFwcXAQGrPMPDPAEAAqs8xMQ8AQAAAQDVAIADKwLVAAsAAAEnBycHFwcXNxc3JwMrPO/vPO/vPO/vPO8CmTzu7jzu7zzv7zzvAAMAgAArA4ADgAADABwAIAAAASMVMwMVITUjFSMiBhURFBYzITI2NRE0JisBNSMTIREhAtXV1Sr+qlUrIzIyIwJWIzIyIytVgP2qAlYBq9YCq1VVVTIk/asjMjIjAlUkMlX9AAHVAAAAAQAAAAADbgNuABMAAAEUDgIjIi4CNTQ+AjMyHgIDbkV3oFtboHdFRXegW1ugd0UBt1ugd0VFd6BbW6B3RUV3oAAAAAABAAAAAQAAvCcusV8PPPUACwQAAAAAANVURPgAAAAA1VRE+AAAAAADgAOAAAAACAACAAAAAAAAAAEAAAPA/8AAAAQAAAAAAAOAAAEAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAAAAAAAAAgAAAAQAAW8EAADVBAAAgANuAAAAAAAAAAoAFAAeADAASgB+AKAAAAABAAAACAAhAAMAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEAGAAAAAEAAAAAAAIABwD5AAEAAAAAAAMAGABpAAEAAAAAAAQAGAEOAAEAAAAAAAUACwBIAAEAAAAAAAYAGACxAAEAAAAAAAoAGgFWAAMAAQQJAAEAMAAYAAMAAQQJAAIADgEAAAMAAQQJAAMAMACBAAMAAQQJAAQAMAEmAAMAAQQJAAUAFgBTAAMAAQQJAAYAMADJAAMAAQQJAAoANAFwdmFhZGluLWRhdGUtcGlja2VyLWljb25zAHYAYQBhAGQAaQBuAC0AZABhAHQAZQAtAHAAaQBjAGsAZQByAC0AaQBjAG8AbgBzVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwdmFhZGluLWRhdGUtcGlja2VyLWljb25zAHYAYQBhAGQAaQBuAC0AZABhAHQAZQAtAHAAaQBjAGsAZQByAC0AaQBjAG8AbgBzdmFhZGluLWRhdGUtcGlja2VyLWljb25zAHYAYQBhAGQAaQBuAC0AZABhAHQAZQAtAHAAaQBjAGsAZQByAC0AaQBjAG8AbgBzUmVndWxhcgBSAGUAZwB1AGwAYQBydmFhZGluLWRhdGUtcGlja2VyLWljb25zAHYAYQBhAGQAaQBuAC0AZABhAHQAZQAtAHAAaQBjAGsAZQByAC0AaQBjAG8AbgBzRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
 
 <dom-module id="vaadin-combo-box">
   <template>
@@ -27,24 +34,29 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      paper-icon-button.clear-button,
-      paper-icon-button.toggle-button,
-      :host ::slotted(paper-icon-button[slot="toggle-button"]),
-      :host ::slotted(paper-icon-button[slot="clear-button"]) {
-        line-height: 18px !important;
-        width: 32px;
-        height: 32px;
-        padding: 4px;
-        text-align: center;
-
-        color: rgba(0, 0, 0, .38);
-        cursor: pointer;
-        margin-top: -1px;
-        --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
-      }
-
       :host [slot=suffix] {
         display: flex;
+      }
+
+      #clearIcon,
+      #toggleIcon {
+        font-family: 'vaadin-combo-box-icons';
+        font-size: 19px;
+        cursor: pointer;
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
+        justify-content: center;
+        align-items: center;
+        color: rgba(0, 0, 0, .26);
+      }
+
+      #clearIcon::before {
+        content: "\e901";
+      }
+
+      #toggleIcon::before {
+        content: "\e902";
       }
     </style>
 
@@ -89,23 +101,12 @@ This program is available under Apache License Version 2.0, available at https:/
       <div slot="suffix">
         <span>
           <slot name="clear-button">
-            <paper-icon-button id="clearIcon"
-              tabindex="-1"
-              aria-label="Clear"
-              icon="vaadin-combo-box:clear"
-              class="clear-button small">
-            </paper-icon-button>
+            <div id="clearIcon" role="button" aria-label="Clear" class="clear-button small"></div>
           </slot>
         </span>
         <span>
           <slot name="toggle-button">
-            <paper-icon-button id="toggleIcon"
-              tabindex="-1"
-              icon="vaadin-combo-box:arrow-drop-down"
-              aria-label="Toggle"
-              aria-expanded$="[[_getAriaExpanded(opened)]]"
-              class="toggle-button rotate-on-open">
-            </paper-icon-button>
+            <div id="toggleIcon" role="button" aria-label="Toggle" aria-expanded$="[[_getAriaExpanded(opened)]]" class="toggle-button rotate-on-open"></div>
           </slot>
         </span>
       </div>
