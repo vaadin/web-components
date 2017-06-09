@@ -68,10 +68,7 @@
         // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
         // is explicitly focused by the user.
         if (!this.$.overlay.touchDevice) {
-          // If the inputElement is a paper-input, it would trigger an
-          // unnecessary blur event on focus. Check to see if there is a
-          // focused property and if it's already true.
-          // See also https://github.com/PolymerElements/paper-input/issues/341
+          // Check to see if there is a focused property and if it's already true.
           if (!this.inputElement.focused) {
             this.inputElement.focus();
           }

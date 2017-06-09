@@ -27,11 +27,6 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      paper-input-container {
-        position: relative;
-        padding: 0;
-      }
-
       paper-icon-button.clear-button,
       paper-icon-button.toggle-button,
       :host ::slotted(paper-icon-button[slot="toggle-button"]),
@@ -48,80 +43,8 @@ This program is available under Apache License Version 2.0, available at https:/
         --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
       }
 
-      /*
-       * Hacky selector to apply when using P2 Shady.
-       * Invalid when using P2 Shadow so need to be kept in a separate block.
-       */
-      :host ::slotted(paper-input-container) paper-icon-button[slot="toggle-button"],
-      :host ::slotted(paper-input-container) paper-icon-button[slot="clear-button"] {
-        line-height: 18px !important;
-        width: 32px;
-        height: 32px;
-        padding: 4px;
-        text-align: center;
-
-        color: rgba(0, 0, 0, .38);
-        cursor: pointer;
-        margin-top: -1px;
-        --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
-      }
-
-      paper-input-container paper-icon-button:hover,
-      paper-input-container ::slotted(paper-icon-button:hover),
-      :host([opened]) paper-input-container paper-icon-button,
-      :host([opened]) paper-input-container ::slotted(paper-icon-button) {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      /* P2 Shady */
-      :host ::slotted(paper-input-container) paper-icon-button:hover,
-      :host([opened]) ::slotted(paper-input-container) paper-icon-button {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) paper-input-container ::slotted(paper-icon-button:hover),
-      :host([opened]) paper-input-container paper-icon-button:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      /* P2 Shady */
-      :host([opened]) ::slotted(paper-input-container) paper-icon-button:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      :host([opened]) paper-input-container {
-        /* Keep the paper-input-container above the dropdown. */
-        z-index: 20;
-      }
-
       :host [slot=suffix] {
         display: flex;
-      }
-
-      input::-ms-clear {
-        display: none;
-      }
-
-      /* The same code than paper-input */
-      input {
-        position: relative; /* to make a stacking context */
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--paper-input-container-input-color, var(--primary-text-color));
-        -webkit-appearance: none;
-        text-align: inherit;
-        vertical-align: bottom;
-
-        /* Firefox sets a min-width on the input, which can cause layout issues */
-        min-width: 0;
-
-        @apply --paper-font-subhead;
-        @apply --paper-input-container-input;
       }
     </style>
 
