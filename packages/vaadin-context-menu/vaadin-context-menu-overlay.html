@@ -1,10 +1,10 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-overlay-behavior/iron-overlay-behavior.html">
 <link rel="import" href="vaadin-device-detector.html">
 
@@ -23,9 +23,9 @@ This program is available under Apache License Version 2.0, available at https:/
         top: 0;
         left: 0;
         box-shadow:
-                    0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
+          0 6px 10px 0 rgba(0, 0, 0, 0.14),
+          0 1px 18px 0 rgba(0, 0, 0, 0.12),
+          0 3px 5px -1px rgba(0, 0, 0, 0.4);
       }
 
       :host([phone]) {
@@ -46,66 +46,87 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-device-detector phone="{{phone}}"></vaadin-device-detector>
   </template>
   <script>
-    Polymer({
-      is: 'vaadin-context-menu-overlay',
+    (function() {
+      /**
+       * TODO: Add docs
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
+      class ContextMenuOverlayElement extends Polymer.mixinBehaviors(
+          [Polymer.IronOverlayBehavior], Polymer.Element)
+        {
 
-      observers: [
-        '_positionChanged(x, y)', '_phoneChanged(phone)'
-      ],
-
-      properties: {
-        /**
-         * Position of the overlay on horizontal axis.
-         */
-        x: {
-          type: Number,
-          value: 0
-        },
-
-        /**
-         * Position of the overlay on vertical axis.
-         */
-        y: {
-          type: Number,
-          value: 0
-        },
-
-        /**
-         * When `true` overlay is optimized for a small touch screen.
-         * When `false`, overlay position and size is optimized for a desktop/tablet screen.
-         */
-        phone: {
-          type: Boolean,
-          reflectToAttribute: true
+        static get is() {
+          return 'vaadin-context-menu-overlay';
         }
-      },
 
-      _phoneChanged: function(phone) {
-        if (!phone) {
-          this.backdropElement.style.opacity = 0;
+        static get observers() {
+          return [
+            '_positionChanged(x, y)', '_phoneChanged(phone)'
+          ];
         }
-      },
 
-      // monkey patching iron-overlay-behavior to cancel overriding transform styles.
-      _preparePositioning: function() {
-        this.style.display = '';
-      },
+        static get properties() {
+          return {
+            /**
+             * Position of the overlay on horizontal axis.
+             */
+            x: {
+              type: Number,
+              value: 0
+            },
 
-      // monkey patching iron-overlay-behavior to cancel overriding transform styles.
-      _finishPositioning: function() {
-        this.style.display = '';
-      },
+            /**
+             * Position of the overlay on vertical axis.
+             */
+            y: {
+              type: Number,
+              value: 0
+            },
 
-      _positionChanged: function(x, y) {
-        if (x === undefined || y === undefined) {
-          return;
+            /**
+             * When `true` overlay is optimized for a small touch screen.
+             * When `false`, overlay position and size is optimized for a desktop/tablet screen.
+             */
+            phone: {
+              type: Boolean,
+              reflectToAttribute: true
+            }
+          };
         }
-        this.translate3d(x + 'px', y + 'px', 0);
-      },
 
-      behaviors: [
-        Polymer.IronOverlayBehavior
-      ]
-    });
+        _phoneChanged(phone) {
+          if (!phone) {
+            this.backdropElement.style.opacity = 0;
+          }
+        }
+
+        // monkey patching iron-overlay-behavior to cancel overriding transform styles.
+        _preparePositioning() {
+          this.style.display = '';
+        }
+
+        // monkey patching iron-overlay-behavior to cancel overriding transform styles.
+        _finishPositioning() {
+          this.style.display = '';
+        }
+
+        _positionChanged(x, y) {
+          if (x === undefined || y === undefined) {
+            return;
+          }
+          this.translate3d(x + 'px', y + 'px', 0);
+        }
+
+      }
+
+      customElements.define(ContextMenuOverlayElement.is, ContextMenuOverlayElement);
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ContextMenuOverlayElement = ContextMenuOverlayElement;
+    })();
   </script>
 </dom-module>
