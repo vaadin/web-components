@@ -36,16 +36,5 @@
     "test-fixture": "^3.0.0",
     "vaadin-grid": "#2.1-polymer-2-rebased",
     "web-component-tester": "^6.0.0"
-  },
-  "variants": {
-    "1.x": {
-      "dependencies": {
-        "polymer": "^1.7.0"
-      },
-      "resolutions": {
-        "polymer": "^1.7.0",
-        "webcomponentsjs": "^0.7.24"
-      }
-    }
   }
 }
