@@ -117,11 +117,11 @@
         it('should not open on normal tap', function(done) {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-          menu.async(function() {
+          setTimeout(function() {
             makeSoloTouchEvent('tap', null, menu.listenOn);
           }, 100);
 
-          menu.async(function() {
+          setTimeout(function() {
             expect(menu.opened).to.eql(false);
             done();
           }, 1000);
@@ -130,13 +130,8 @@
         it('should not stop `tap` bubbling in the middle of a long touch', function(done) {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-          menu.async(function() {
-            var evt = menu.fire('tap', null, {
-              node: menu.listenOn,
-              cancelable: true,
-              bubbles: true
-            });
-
+          setTimeout(function() {
+            var evt = fire(menu, 'tap');
             expect(evt.defaultPrevented).to.eql(false);
 
             done();
@@ -146,13 +141,8 @@
         it('should not stop `tap` bubbling after a long touch', function(done) {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-          menu.async(function() {
-            var evt = menu.fire('tap', null, {
-              node: menu.listenOn,
-              cancelable: true,
-              bubbles: true
-            });
-
+          setTimeout(function() {
+            var evt = fire(menu, 'tap');
             expect(evt.defaultPrevented).to.eql(false);
 
             done();
@@ -178,12 +168,12 @@
           var xy = middleOfNode(menu.listenOn);
           makeSoloTouchEvent('touchstart', xy, menu.listenOn);
 
-          menu.async(function() {
+          setTimeout(function() {
             xy.x += 16; // threshold is 15px from start
             makeSoloTouchEvent('touchmove', xy, menu.listenOn);
           }, 100);
 
-          menu.async(function() {
+          setTimeout(function() {
             expect(menu.opened).to.eql(false);
             done();
           }, 1000);

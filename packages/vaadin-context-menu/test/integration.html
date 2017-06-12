@@ -51,7 +51,7 @@
 
         it('should place the backdrop above all other document elements', function(done) {
           MockInteractions.tap(button);
-          menu.async(function() {
+          setTimeout(function() {
             var buttonRect = button.getBoundingClientRect();
             MockInteractions.tap(
               // this should be backdrop, as it placed above the button

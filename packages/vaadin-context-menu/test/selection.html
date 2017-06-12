@@ -56,7 +56,7 @@
 
           it('should close on keyboard selection', function(done) {
             listenOnce(menu, 'iron-overlay-opened', function() {
-              menu.async(function() {
+              setTimeout(function() {
                 MockInteractions.pressEnter(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               }, 10);
             });
@@ -69,13 +69,7 @@
 
           it('should focus the child element', function(done) {
             listenOnce(menu, 'iron-overlay-opened', function() {
-              // P-1.x document.activeElement doesn't penerate shadow root in.
-              // P-2.0 shadow and shadydom always fucuses the host
-              if (Polymer.Element || Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
-              } else {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(Polymer.dom(menu.$.overlay).querySelector('#menu')));
-              }
+              expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
               done();
             });
 
@@ -84,18 +78,11 @@
 
           it('should focus the child element on `contextmenu` event', function(done) {
             listenOnce(menu, 'iron-overlay-opened', function() {
-              // document.activeElement doesn't penerate shadow root.
-              if (Polymer.Element || Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
-              } else {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(Polymer.dom(menu.$.overlay).querySelector('#menu')));
-              }
+              expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
               done();
             });
 
-            menu.fire('contextmenu', {}, {
-              node: menu.target
-            });
+            fire(menu, 'contextmenu');
           });
         });
       });

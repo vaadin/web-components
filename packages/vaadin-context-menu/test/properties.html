@@ -8,6 +8,7 @@
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="common.js"></script>
   </head>
   <body>
     <test-fixture id="default">
@@ -40,7 +41,7 @@
           });
 
           it('should use event target as context target', function() {
-            menu.fire('contextmenu', {}, {node: target});
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target);
           });
@@ -48,7 +49,7 @@
           it('should use context-selector scope to target', function() {
             menu.selector = 'section';
 
-            menu.fire('contextmenu', {}, {node: target});
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target.parentElement);
           });
@@ -71,30 +72,17 @@
           it('should not open on `contextmenu`', function() {
             menu.openOn = 'click';
 
-            menu.fire('contextmenu', {}, {node: menu});
+            fire(menu, 'contextmenu');
 
             expect(menu.opened).to.eql(false);
           });
 
           describe('event listener', function() {
-            beforeEach(function() {
-              menu.listen = sinon.spy();
-              menu.unlisten = sinon.spy();
-            });
-
-            it('should update listeners when set', function() {
-              menu.openOn = 'foobar';
-
-              expect(menu.unlisten.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, 'foobar').callCount).to.eql(1);
-            });
 
             it('should not add listener when set to empty', function() {
+              expect(menu._oldOpenOn).to.be.ok;
               menu.openOn = '';
-
-              expect(menu.unlisten.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, '').callCount).to.eql(0);
-              expect(menu.listen.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(0);
+              expect(menu._oldOpenOn).not.to.be.ok;
             });
           });
         });
@@ -138,7 +126,7 @@
           it('should close on custom event', function() {
             menu.closeOn = 'foobar';
 
-            menu.fire('foobar', {}, {node: menu.$.overlay});
+            fire(menu.$.overlay, 'foobar');
 
             expect(menu.opened).to.eql(false);
           });
@@ -154,17 +142,13 @@
           });
 
           it('should open on external target', function() {
-            menu.fire('contextmenu', {}, {
-              node: target
-            });
+            fire(target, 'contextmenu');
 
             expect(menu.opened).to.eql(true);
           });
 
           it('should select context target on external target', function() {
-            menu.fire('contextmenu', {}, {
-              node: target
-            });
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target);
           });
@@ -172,35 +156,17 @@
           it('should use context selector on external target', function() {
             menu.selector = 'section'; // parent of #target
             menu.listenOn = menu.parentElement;
-            menu.fire('contextmenu', {}, {
-              node: target
-            });
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target.parentElement);
           });
 
           describe('event listeners', function() {
-            beforeEach(function() {
-              menu.listen = sinon.spy();
-              menu.unlisten = sinon.spy();
-            });
-
-            it('should update target listeners when set', function() {
-              var oldTarget = menu.listenOn;
-
-              menu.listenOn = document.body;
-
-              expect(menu.unlisten.withArgs(oldTarget, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(document.body, 'vaadin-contextmenu').callCount).to.eql(1);
-            });
 
             it('should not target listeners when set to null', function() {
-              var oldTarget = menu.listenOn;
-
+              expect(menu._oldOpenOn).to.be.ok;
               menu.listenOn = null;
-
-              expect(menu.unlisten.withArgs(oldTarget, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(0);
+              expect(menu._oldOpenOn).not.to.be.ok;
             });
           });
         });

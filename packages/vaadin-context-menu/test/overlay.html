@@ -105,9 +105,7 @@
 
             menu.openOn = 'foobar';
 
-            menu.fire('foobar', {sourceEvent: {clientX: 10, clientY: 20}}, {
-              node: menu.listenOn
-            });
+            fire(menu.listenOn, 'foobar', {sourceEvent: {clientX: 10, clientY: 20}});
           });
 
           it('should be positioned by gesture event', function(done) {
@@ -119,9 +117,7 @@
 
             menu.openOn = 'foobar';
 
-            menu.fire('foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}}, {
-              node: menu.listenOn
-            });
+            fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
           });
 
           it('should be positioned by detailed gesture event', function(done) {
@@ -133,9 +129,7 @@
 
             menu.openOn = 'foobar';
 
-            menu.fire('foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}}, {
-              node: menu.listenOn
-            });
+            fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
           });
 
           it('should be positioned by touch event', function(done) {
@@ -162,9 +156,7 @@
 
             menu.openOn = 'foobar';
 
-            menu.fire('foobar', {sourceEvent: {changedTouches: [{clientX: 10, clientY: 20}]}}, {
-              node: menu.listenOn
-            });
+            fire(menu.listenOn, 'foobar', {sourceEvent: {changedTouches: [{clientX: 10, clientY: 20}]}});
           });
 
           describe('with shift key', function() {
