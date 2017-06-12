@@ -374,20 +374,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _contentTemplateChanged(template) {
           Polymer.dom(this.$.overlay).innerHTML = '';
           if (template) {
-            this._templateClass = Polymer.Templatize.templatize(template, this, {
-              // TODO: Forwarding
-              _forwardParentProp: function(prop, value) {
-                // set initial value to instance.
-                this._instance.notifyPath(prop, value);
-
-                this.dataHost.notifyPath(prop, value);
-              },
-
-              _forwardParentPath: function(path, value) {
-                this.dataHost.notifyPath(path, value);
-              }
-            });
-
+            this._templateClass = Polymer.Templatize.templatize(template, this, {});
             this._instance = new this._templateClass({});
 
             Polymer.dom(this.$.overlay).appendChild(this._instance.root);
