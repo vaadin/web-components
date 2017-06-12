@@ -1,9 +1,10 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 
 <dom-module id="vaadin-device-detector">
@@ -11,48 +12,68 @@ This program is available under Apache License Version 2.0, available at https:/
     <iron-media-query query="min-device-width: 750px" query-matches="{{wide}}"></iron-media-query>
   </template>
   <script>
-    Polymer({
-      is: 'vaadin-device-detector',
+    (function() {
+      /**
+       * TODO: Add docs
+       *
+       * @memberof Vaadin
+       */
+      class DeviceDetector extends Polymer.Element {
 
-      properties: {
-        /*
-         * `true`, when running in a phone.
-         */
-        phone: {
-          type: Boolean,
-          computed: '_phone(wide, touch)',
-          notify: true
-        },
-
-        /*
-         * `true`, when running in a touch device.
-         * @default false
-         */
-        touch: {
-          type: Boolean,
-          notify: true,
-          value: function() {
-            try {
-              document.createEvent('TouchEvent');
-              return true;
-            } catch (err) {
-              return false;
-            }
-          }
-        },
-
-        /*
-         * `true`, when running in a tablet/desktop device.
-         */
-        wide: {
-          type: Boolean,
-          notify: true
+        static get is() {
+          return 'vaadin-device-detector';
         }
-      },
 
-      _phone: function(wide, touch) {
-        return !wide && touch;
+        static get properties() {
+          return {
+            /*
+             * `true`, when running in a phone.
+             */
+            phone: {
+              type: Boolean,
+              computed: '_phone(wide, touch)',
+              notify: true
+            },
+
+            /*
+             * `true`, when running in a touch device.
+             * @default false
+             */
+            touch: {
+              type: Boolean,
+              notify: true,
+              value: function() {
+                try {
+                  document.createEvent('TouchEvent');
+                  return true;
+                } catch (err) {
+                  return false;
+                }
+              }
+            },
+
+            /*
+             * `true`, when running in a tablet/desktop device.
+             */
+            wide: {
+              type: Boolean,
+              notify: true
+            }
+          };
+        }
+
+        _phone(wide, touch) {
+          return !wide && touch;
+        }
+
       }
-    });
+
+      customElements.define(DeviceDetector.is, DeviceDetector);
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.DeviceDetector = DeviceDetector;
+    })();
   </script>
 </dom-module>
