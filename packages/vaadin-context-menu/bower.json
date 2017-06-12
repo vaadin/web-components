@@ -34,7 +34,7 @@
     "paper-listbox": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-grid": "#2.1-polymer-2-rebased",
+    "vaadin-grid": "^3.0.0",
     "web-component-tester": "^6.0.0"
   }
 }
