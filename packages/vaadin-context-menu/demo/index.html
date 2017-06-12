@@ -114,28 +114,35 @@
           </template>
 
           <script>
-            Polymer({
-              is: 'my-list-view',
+            class MyListView extends Polymer.Element {
 
-              properties: {
-                items: {
-                  type: Array,
-                  value: function() {
-                    return ['Foo', 'Bar', 'Baz'];
+              static get is() {
+                return 'my-list-view';
+              }
+
+              static get properties() {
+                return {
+                  items: {
+                    type: Array,
+                    value: function() {
+                      return ['Foo', 'Bar', 'Baz'];
+                    }
                   }
-                }
-              },
+                };
+              }
 
-              _appendItem: function() {
+              _appendItem() {
                 this.push('items', 'New item');
-              },
+              }
 
-              _removeItem: function(e) {
+              _removeItem(e) {
                 var menuItem = e.target; // `<paper-item>`
                 var listItem = menuItem.listItem; // `<li>`
                 this.splice('items', listItem.index, 1);
               }
-            });
+            }
+
+            customElements.define(MyListView.is, MyListView);
           </script>
         </dom-module>
 

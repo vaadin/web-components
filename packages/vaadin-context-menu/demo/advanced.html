@@ -38,7 +38,7 @@
       <template>
         <dom-module id="my-grid-view">
           <template>
-            
+
             <vaadin-context-menu>
               <template>
                 <paper-listbox>
@@ -78,32 +78,39 @@
           </template>
 
           <script>
+
             document.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'my-grid-view',
+              class MyGridView extends Polymer.Element {
+                static get is() {
+                  return 'my-grid-view';
+                }
 
-                properties: {
-                  items: {
-                    type: Array,
-                    value: function() {
-                      return getItems();
+                static get properties() {
+                  return {
+                    items: {
+                      type: Array,
+                      value: function() {
+                        return getItems();
+                      }
                     }
-                  }
-                },
+                  };
+                }
 
-                _isGridBody: function(target) {
+                _isGridBody(target) {
                   return target.classList.contains('body-content');
-                },
+                }
 
-                _add: function() {
+                _add() {
                   this.unshift('items', getNewItem());
-                },
+                }
 
-                _remove: function(e) {
+                _remove(e) {
                   var index = parseInt(e.target.content.getAttribute('data-index'));
                   this.splice('items', index, 1);
                 }
-              });
+              }
+
+              customElements.define(MyGridView.is, MyGridView);
             });
           </script>
         </dom-module>
