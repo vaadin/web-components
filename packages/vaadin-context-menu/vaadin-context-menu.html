@@ -1,10 +1,11 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
 <link rel="import" href="vaadin-contextmenu-event.html">
 
@@ -67,7 +68,7 @@ In case if you do not want to wrap the page content, you can listen for events o
 <div id="menuListener">The element that listens for the context menu.</div>
 
 <script>
-  var contextMenu = document.querySelector('vaadin-context-menu#customListener');
+  const contextMenu = document.querySelector('vaadin-context-menu#customListener');
   contextMenu.listenOn = document.querySelector('#menuListener');
 </script>
 ```
@@ -148,229 +149,278 @@ Custom property | Description | Default
 
   </template>
   <script>
-    Polymer({
-      is: 'vaadin-context-menu',
-
-      behaviors: [Polymer.Templatizer],
-
-      properties: {
-
-        /**
-         * CSS selector that can be used to target any child element
-         * of the context menu to listen for `openOn` events.
-         */
-        selector: {
-          type: String
-        },
-
-        /**
-         * True if the overlay is currently displayed.
-         */
-        opened: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          readOnly: true
-        },
-
-        /**
-         * Event name to listen for opening the context menu.
-         */
-        openOn: {
-          type: String,
-          value: 'vaadin-contextmenu'
-        },
-
-        /**
-         * The target element that's listened to for context menu opening events.
-         * By default the vaadin-context-menu listens to the target's `vaadin-contextmenu`
-         * events.
-         * @type {HTMLElement}
-         * @default self
-         */
-        listenOn: {
-          type: Object,
-          value: function() {
-            return this;
-          }
-        },
-
-        /**
-         * Event name to listen for closing the context menu.
-         */
-        closeOn: {
-          type: String,
-          value: 'click',
-          observer: '_closeOnChanged'
-        },
-
-        _context: Object,
-
-        _contentTemplate: Object,
-
-        _instanceProps: {
-          value: function() {
-            return {
-              detail: true,
-              target: true
-            };
-          }
-        }
-      },
-
-      observers: [
-        '_contentTemplateChanged(_contentTemplate)',
-        '_openedChanged(opened)',
-        '_contextChanged(_context, _instance)',
-        '_targetOrOpenOnChanged(listenOn, openOn, isAttached)'
-      ],
-
-      _onOverlayOpened: function() {
-        var child = Polymer.dom(this.$.overlay).querySelector(':not(style)');
-        if (child) {
-          child.focus();
-        }
-
-        // Close context menu on backdrop right-click
-        this.$.overlay.backdropElement.addEventListener('contextmenu', function(e) {
-          this.close();
-          e.preventDefault();
-        }.bind(this), false);
-      },
-
-      _onOverlayClosed: function() {
-        this._setOpened(false);
-      },
-
-      _targetOrOpenOnChanged: function(listenOn, openOn, isAttached) {
-        if (this._oldListenOn && this._oldOpenOn) {
-          this.unlisten(this._oldListenOn, this._oldOpenOn, 'open');
-
-          this._oldListenOn.style.webkitTouchCallout = '';
-          this._oldListenOn.style.webkitUserSelect = '';
-
-          this._oldListenOn = null;
-          this._oldOpenOn = null;
-        }
-
-        if (listenOn && openOn && isAttached) {
-          this.listen(listenOn, openOn, 'open');
-
-          // note: these styles don't seem to work in Firefox on iOS.
-          listenOn.style.webkitTouchCallout = 'none';
-          listenOn.style.webkitUserSelect = 'none';
-
-          this._oldListenOn = listenOn;
-          this._oldOpenOn = openOn;
-        }
-      },
-
-      _closeOnChanged: function(closeOn, oldCloseOn) {
-        if (oldCloseOn) {
-          this.unlisten(this.$.overlay, oldCloseOn, 'close');
-        }
-        if (closeOn) {
-          this.listen(this.$.overlay, closeOn, 'close');
-        }
-      },
-
-      _openedChanged: function(opened) {
-        if (opened) {
-          this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, function(el) {
-            return el.localName === 'template';
-          })[0];
-        }
-      },
-
-      _contextChanged: function(context, instance) {
-        if (context === undefined || instance === undefined) {
-          return;
-        }
-        instance.detail = context.detail;
-        instance.target = context.target;
-      },
-
+    (function() {
       /**
-       * Closes the overlay.
+       * TODO: Add docs
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
        */
-      close: function() {
-        this._setOpened(false);
-      },
+      class ContextMenuElement extends Polymer.GestureEventListeners(Polymer.Element) {
 
-      _contextTarget: function(e) {
-        if (this.selector) {
-          var targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
-
-          return Array.prototype.filter.call(targets, function(el) {
-            return Polymer.dom(e).path.indexOf(el) > -1;
-          })[0];
-        } else {
-          return Polymer.dom(e).localTarget;
+        static get is() {
+          return 'vaadin-context-menu';
         }
-      },
 
-      /**
-       * Opens the overlay.
-       * @param {Event} e used as the context for the menu. Overlay coordinates are taken from this event.
-       */
-      open: function(e) {
-        if (e) {
-          this._context = {
-            detail: e.detail,
-            target: this._contextTarget(e)
+        static get properties() {
+          return {
+
+            /**
+             * CSS selector that can be used to target any child element
+             * of the context menu to listen for `openOn` events.
+             */
+            selector: {
+              type: String
+            },
+
+            /**
+             * True if the overlay is currently displayed.
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              readOnly: true
+            },
+
+            /**
+             * Event name to listen for opening the context menu.
+             */
+            openOn: {
+              type: String,
+              value: 'vaadin-contextmenu'
+            },
+
+            /**
+             * The target element that's listened to for context menu opening events.
+             * By default the vaadin-context-menu listens to the target's `vaadin-contextmenu`
+             * events.
+             * @type {HTMLElement}
+             * @default self
+             */
+            listenOn: {
+              type: Object,
+              value: function() {
+                return this;
+              }
+            },
+
+            /**
+             * Event name to listen for closing the context menu.
+             */
+            closeOn: {
+              type: String,
+              value: 'click',
+              observer: '_closeOnChanged'
+            },
+
+            _context: Object,
+
+            _contentTemplate: Object,
+
+            _instanceProps: {
+              value: function() {
+                return {
+                  detail: true,
+                  target: true
+                };
+              }
+            },
+
+            _boundClose: Object,
+
+            _boundOpen: Object,
+
+            _templateClass: Object
           };
+        }
 
-          if (this._context.target) {
+        static get observers() {
+          return [
+            '_contentTemplateChanged(_contentTemplate)',
+            '_openedChanged(opened)',
+            '_contextChanged(_context, _instance)',
+            '_targetOrOpenOnChanged(listenOn, openOn)'
+          ];
+        }
+
+        constructor() {
+          super();
+          this._boundOpen = this.open.bind(this);
+          this._boundClose = this.close.bind(this);
+        }
+
+        _onOverlayOpened() {
+          const child = Polymer.dom(this.$.overlay).querySelector(':not(style)');
+          if (child) {
+            child.focus();
+          }
+
+          // Close context menu on backdrop right-click
+          this.$.overlay.backdropElement.addEventListener('contextmenu', function(e) {
+            this.close();
             e.preventDefault();
-            e.stopPropagation();
+          }.bind(this), false);
+        }
 
-            this.$.overlay.resetFit();
+        _onOverlayClosed() {
+          this._setOpened(false);
+        }
 
-            this.$.overlay.x = this._getEventCoordinate(e, 'x');
-            this.$.overlay.y = this._getEventCoordinate(e, 'y');
+        _targetOrOpenOnChanged(listenOn, openOn) {
+          if (this._oldListenOn && this._oldOpenOn) {
+            this._unlisten(this._oldListenOn, this._oldOpenOn, this._boundOpen);
 
-            this._setOpened(true);
+            this._oldListenOn.style.webkitTouchCallout = '';
+            this._oldListenOn.style.webkitUserSelect = '';
+
+            this._oldListenOn = null;
+            this._oldOpenOn = null;
+          }
+
+          if (listenOn && openOn) {
+            this._listen(listenOn, openOn, this._boundOpen);
+
+            // note: these styles don't seem to work in Firefox on iOS.
+            listenOn.style.webkitTouchCallout = 'none';
+            listenOn.style.webkitUserSelect = 'none';
+
+            this._oldListenOn = listenOn;
+            this._oldOpenOn = openOn;
           }
         }
-      },
 
-      _getEventCoordinate: function(event, coord) {
-        if (event.detail instanceof Object) {
-          if (event.detail[coord]) {
-            // Polymer gesture events, get coordinate from detail
-            return event.detail[coord];
-          } else if (event.detail.sourceEvent) {
-            // Unwrap detailed event
-            return this._getEventCoordinate(event.detail.sourceEvent, coord);
+        _closeOnChanged(closeOn, oldCloseOn) {
+          if (oldCloseOn) {
+            this._unlisten(this.$.overlay, oldCloseOn, this._boundClose);
           }
-        } else {
-          // Native mouse or touch event
-          var prop = 'client' + coord.toUpperCase();
-          return event.changedTouches ? event.changedTouches[0][prop] : event[prop];
+          if (closeOn) {
+            this._listen(this.$.overlay, closeOn, this._boundClose);
+          }
         }
-      },
 
-      _forwardParentProp: function(prop, value) {
-        // set initial value to instance.
-        this._instance.notifyPath(prop, value);
+        _openedChanged(opened) {
+          if (opened) {
+            this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, function(el) {
+              return el.localName === 'template';
+            })[0];
+          }
+        }
 
-        this.dataHost.notifyPath(prop, value);
-      },
+        _contextChanged(context, instance) {
+          if (context === undefined || instance === undefined) {
+            return;
+          }
+          instance.detail = context.detail;
+          instance.target = context.target;
+        }
 
-      _forwardParentPath: function(path, value) {
-        this.dataHost.notifyPath(path, value);
-      },
+        /**
+         * Closes the overlay.
+         */
+        close() {
+          this._setOpened(false);
+        }
 
-      _contentTemplateChanged: function(template) {
-        Polymer.dom(this.$.overlay).innerHTML = '';
-        if (template) {
-          this.templatize(template);
+        _contextTarget(e) {
+          if (this.selector) {
+            const targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
 
-          this._instance = this.stamp({});
+            return Array.prototype.filter.call(targets, function(el) {
+              return Polymer.dom(e).path.indexOf(el) > -1;
+            })[0];
+          } else {
+            return Polymer.dom(e).localTarget;
+          }
+        }
 
-          Polymer.dom(this.$.overlay).appendChild(this._instance.root);
+        /**
+         * Opens the overlay.
+         * @param {Event} e used as the context for the menu. Overlay coordinates are taken from this event.
+         */
+        open(e) {
+          if (e && !this.opened) {
+            this._context = {
+              detail: e.detail,
+              target: this._contextTarget(e)
+            };
+
+            if (this._context.target) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              this.$.overlay.resetFit();
+
+              this.$.overlay.x = this._getEventCoordinate(e, 'x');
+              this.$.overlay.y = this._getEventCoordinate(e, 'y');
+
+              this._setOpened(true);
+            }
+          }
+        }
+
+        _getEventCoordinate(event, coord) {
+          if (event.detail instanceof Object) {
+            if (event.detail[coord]) {
+              // Polymer gesture events, get coordinate from detail
+              return event.detail[coord];
+            } else if (event.detail.sourceEvent) {
+              // Unwrap detailed event
+              return this._getEventCoordinate(event.detail.sourceEvent, coord);
+            }
+          } else {
+            // Native mouse or touch event
+            const prop = 'client' + coord.toUpperCase();
+            return event.changedTouches ? event.changedTouches[0][prop] : event[prop];
+          }
+        }
+
+        _contentTemplateChanged(template) {
+          Polymer.dom(this.$.overlay).innerHTML = '';
+          if (template) {
+            this._templateClass = Polymer.Templatize.templatize(template, this, {
+              // TODO: Forwarding
+              _forwardParentProp: function(prop, value) {
+                // set initial value to instance.
+                this._instance.notifyPath(prop, value);
+
+                this.dataHost.notifyPath(prop, value);
+              },
+
+              _forwardParentPath: function(path, value) {
+                this.dataHost.notifyPath(path, value);
+              }
+            });
+
+            this._instance = new this._templateClass({});
+
+            Polymer.dom(this.$.overlay).appendChild(this._instance.root);
+          }
+        }
+
+        _listen(node, evType, handler) {
+          if (Polymer.Gestures.gestures[evType]) {
+            Polymer.Gestures.addListener(node, evType, handler);
+          } else {
+            node.addEventListener(evType, handler);
+          }
+        }
+
+        _unlisten(node, evType, handler) {
+          if (Polymer.Gestures.gestures[evType]) {
+            Polymer.Gestures.removeListener(node, evType, handler);
+          } else {
+            node.removeEventListener(evType, handler);
+          }
         }
       }
-    });
+
+      customElements.define(ContextMenuElement.is, ContextMenuElement);
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ContextMenuElement = ContextMenuElement;
+    })();
   </script>
 </dom-module>
