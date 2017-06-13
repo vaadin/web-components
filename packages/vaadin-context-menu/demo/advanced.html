@@ -79,7 +79,7 @@
 
           <script>
 
-            document.addEventListener('WebComponentsReady', function() {
+            document.addEventListener('WebComponentsReady', () => {
               class MyGridView extends Polymer.Element {
                 static get is() {
                   return 'my-grid-view';
@@ -89,7 +89,7 @@
                   return {
                     items: {
                       type: Array,
-                      value: function() {
+                      value: () => {
                         return getItems();
                       }
                     }
@@ -179,7 +179,7 @@
           </template>
         </dom-bind>
         <script>
-          document.addEventListener('WebComponentsReady', function() {
+          document.addEventListener('WebComponentsReady', () => {
             document.querySelector('#app').menuItems = new Array(30);
           });
         </script>

@@ -45,7 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
           y: e.changedTouches[0].clientY
         };
 
-        this._timerId = setTimeout(function() {
+        this._timerId = setTimeout(() => {
           // Original target may or may not be inside a shadow root.
           // For code readability, findOriginalTarget() should be
           // changed to use composedPath() directly after native Shadow becomes the norm.
@@ -60,7 +60,7 @@ This program is available under Apache License Version 2.0, available at https:/
             // which could potentially cancel/close the overlay.
             Polymer.Gestures.prevent('tap');
           }
-        }.bind(this), 500); // default setting for Android and iOS.
+        }, 500); // default setting for Android and iOS.
       },
 
       touchmove: function(e) {

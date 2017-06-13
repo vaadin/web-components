@@ -20,7 +20,7 @@
         </div>
       </template>
       <script>
-        document.addEventListener('WebComponentsReady', function() {
+        document.addEventListener('WebComponentsReady', () => {
           class Xfoo extends Polymer.Element {
             static get is() {
               return 'x-foo';
@@ -50,17 +50,17 @@
     </test-fixture>
 
     <script>
-      describe('context', function() {
+      describe('context', () => {
         var menu, foo, target, another;
 
-        beforeEach(function() {
+        beforeEach(() => {
           menu = fixture('default');
           foo = document.querySelector('x-foo');
           target = document.querySelector('#target');
           another = document.querySelector('#another');
         });
 
-        it('should use target as default context', function() {
+        it('should use target as default context', () => {
           fire(target, 'vaadin-contextmenu');
 
           expect(menu._context.target).to.eql(target);
@@ -73,48 +73,48 @@
           expect(Polymer.dom(menu.$.overlay).textContent).to.contain(another.textContent);
         });
 
-        it('should use details as context details', function() {
+        it('should use details as context details', () => {
           var detail = {};
           fire(menu, 'vaadin-contextmenu', detail);
 
           expect(menu._context.detail).to.eql(detail);
         });
 
-        it('should use local target when targeting inside shadow root', function() {
+        it('should use local target when targeting inside shadow root', () => {
           fire(foo.$.content, 'contextmenu');
 
           expect(menu._context.target).to.eql(foo);
         });
 
-        it('should not penerate shadow root to change context', function() {
+        it('should not penerate shadow root to change context', () => {
           menu.selector = '#content';
           fire(foo.$.content, 'contextmenu');
 
           expect(menu._context.target).to.be.undefined;
         });
 
-        it('should use selector outside shadow root to change context', function() {
+        it('should use selector outside shadow root to change context', () => {
           menu.selector = '#target';
           fire(foo, 'contextmenu');
 
           expect(menu._context.target).to.eql(target);
         });
 
-        it('should not open if no context available', function() {
+        it('should not open if no context available', () => {
           menu.selector = 'foobar';
           fire(foo.$.content, 'contextmenu');
 
           expect(menu.opened).to.eql(false);
         });
 
-        it('should not prevent default if no context available', function() {
+        it('should not prevent default if no context available', () => {
           menu.selector = 'foobar';
           const evt = fire(foo.$.content, 'contextmenu');
 
           expect(evt.defaultPrevented).to.eql(false);
         });
 
-        it('should target multiple elements', function() {
+        it('should target multiple elements', () => {
           menu.selector = 'div';
 
           fire(another, 'contextmenu');

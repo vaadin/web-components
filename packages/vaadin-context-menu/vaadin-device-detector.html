@@ -37,7 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
             touch: {
               type: Boolean,
               notify: true,
-              value: function() {
+              value: () => {
                 try {
                   document.createEvent('TouchEvent');
                   return true;

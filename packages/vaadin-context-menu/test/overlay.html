@@ -22,14 +22,13 @@
 
     <script>
 
-      describe('overlay', function() {
+      describe('overlay', () => {
 
         var menu;
 
-        beforeEach(function() {
+        beforeEach(() => {
           menu = fixture('default');
         });
-
 
         function contextmenu(x, y, shiftKey) {
           shiftKey = shiftKey || false;
@@ -64,12 +63,12 @@
           return e;
         }
 
-        describe('opening', function() {
+        describe('opening', () => {
 
-          it('should be visible when open', function(done) {
+          it('should be visible when open', done => {
             expect(window.getComputedStyle(menu.$.overlay).display).to.eql('none');
 
-            listenOnce(menu, 'iron-overlay-opened', function() {
+            listenOnce(menu, 'iron-overlay-opened', () => {
               expect(window.getComputedStyle(menu.$.overlay).display).to.not.eql('none');
               done();
             });
@@ -77,8 +76,8 @@
             menu._setOpened(true);
           });
 
-          it('should open on `contextmenu` event', function(done) {
-            listenOnce(menu, 'iron-overlay-opened', function() {
+          it('should open on `contextmenu` event', done => {
+            listenOnce(menu, 'iron-overlay-opened', () => {
               expect(menu.opened).to.eql(true);
               done();
             });
@@ -86,8 +85,8 @@
             contextmenu();
           });
 
-          it('should be positioned on click target', function(done) {
-            listenOnce(menu.listenOn, 'contextmenu', function() {
+          it('should be positioned on click target', done => {
+            listenOnce(menu.listenOn, 'contextmenu', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(10);
               done();
@@ -96,8 +95,8 @@
             contextmenu(10, 10);
           });
 
-          it('should be positioned on detailed mouse event', function(done) {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
+          it('should be positioned on detailed mouse event', done => {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -108,8 +107,8 @@
             fire(menu.listenOn, 'foobar', {sourceEvent: {clientX: 10, clientY: 20}});
           });
 
-          it('should be positioned by gesture event', function(done) {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
+          it('should be positioned by gesture event', done => {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
               expect(menu.$.overlay.x).to.eql(5);
               expect(menu.$.overlay.y).to.eql(5);
               done();
@@ -120,8 +119,8 @@
             fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
           });
 
-          it('should be positioned by detailed gesture event', function(done) {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
+          it('should be positioned by detailed gesture event', done => {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
               expect(menu.$.overlay.x).to.eql(5);
               expect(menu.$.overlay.y).to.eql(5);
               done();
@@ -132,8 +131,8 @@
             fire(menu.listenOn, 'foobar', {x: 5, y: 5, sourceEvent: {clientX: 10, clientY: 20}});
           });
 
-          it('should be positioned by touch event', function(done) {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
+          it('should be positioned by touch event', done => {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -147,8 +146,8 @@
             menu.children[0].dispatchEvent(event);
           });
 
-          it('should be positioned by detailed touch event', function(done) {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', function() {
+          it('should be positioned by detailed touch event', done => {
+            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -159,30 +158,30 @@
             fire(menu.listenOn, 'foobar', {sourceEvent: {changedTouches: [{clientX: 10, clientY: 20}]}});
           });
 
-          describe('with shift key', function() {
-            it('should not open on `contextmenu` event', function() {
+          describe('with shift key', () => {
+            it('should not open on `contextmenu` event', () => {
               contextmenu(0, 0, true);
               expect(menu.opened).to.eql(false);
             });
 
-            it('should not prevent default of `contextmenu` event', function() {
+            it('should not prevent default of `contextmenu` event', () => {
               var event = contextmenu(0, 0, true);
               expect(event.defaultPrevented).to.not.eql(true);
             });
           });
         });
 
-        describe('closing', function() {
-          beforeEach(function(done) {
-            listenOnce(menu, 'iron-overlay-opened', function() {
+        describe('closing', () => {
+          beforeEach(done => {
+            listenOnce(menu, 'iron-overlay-opened', () => {
               done();
             });
 
             menu._setOpened(true);
           });
 
-          it('should close on outside tap', function(done) {
-            listenOnce(menu, 'iron-overlay-closed', function() {
+          it('should close on outside tap', done => {
+            listenOnce(menu, 'iron-overlay-closed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -193,8 +192,8 @@
             });
           });
 
-          it('should close on backdrop contextmenu', function(done) {
-            listenOnce(menu, 'iron-overlay-closed', function() {
+          it('should close on backdrop contextmenu', done => {
+            listenOnce(menu, 'iron-overlay-closed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -207,13 +206,13 @@
             expect(e.defaultPrevented).to.be.true;
           });
 
-          it('should close on `click`', function() {
+          it('should close on `click`', () => {
             menu.$.overlay.click();
 
             expect(menu.opened).to.eql(false);
           });
 
-          it('should close on custom event', function() {
+          it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
             menu.$.overlay.fire('foobar');
@@ -221,7 +220,7 @@
             expect(menu.opened).to.eql(false);
           });
 
-          it('should disable close on empty `closeOn`', function() {
+          it('should disable close on empty `closeOn`', () => {
             menu.closeOn = '';
 
             menu.$.overlay.click();

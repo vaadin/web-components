@@ -124,7 +124,7 @@
                 return {
                   items: {
                     type: Array,
-                    value: function() {
+                    value: () => {
                       return ['Foo', 'Bar', 'Baz'];
                     }
                   }
@@ -165,7 +165,7 @@
         <button id="menuOpener">Toggle Context Menu</button>
 
         <script>
-          document.querySelector('#menuOpener').addEventListener('click', function(event) {
+          document.querySelector('#menuOpener').addEventListener('click', event => {
             var menu = document.querySelector('#buttonMenu');
             if (!menu.opened) {
               menu.open(event);

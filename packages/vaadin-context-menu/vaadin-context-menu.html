@@ -215,7 +215,7 @@ This program is available under Apache License Version 2.0, available at https:/
             _contentTemplate: Object,
 
             _instanceProps: {
-              value: function() {
+              value: () => {
                 return {
                   detail: true,
                   target: true
@@ -253,10 +253,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           // Close context menu on backdrop right-click
-          this.$.overlay.backdropElement.addEventListener('contextmenu', function(e) {
+          this.$.overlay.backdropElement.addEventListener('contextmenu', e => {
             this.close();
             e.preventDefault();
-          }.bind(this), false);
+          }, false);
         }
 
         _onOverlayClosed() {
@@ -297,7 +297,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened) {
           if (opened) {
-            this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, function(el) {
+            this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, el => {
               return el.localName === 'template';
             })[0];
           }
@@ -322,7 +322,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.selector) {
             const targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
 
-            return Array.prototype.filter.call(targets, function(el) {
+            return Array.prototype.filter.call(targets, el => {
               return Polymer.dom(e).path.indexOf(el) > -1;
             })[0];
           } else {

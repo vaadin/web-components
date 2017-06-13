@@ -1,7 +1,7 @@
 var argv = require('yargs').argv;
 
 module.exports = {
-  registerHooks: function(context) {
+  registerHooks: context => {
     var saucelabsPlatforms = [
       'OS X 10.11/iphone@10.0',
       'OS X 10.11/ipad@10.0',

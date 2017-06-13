@@ -28,11 +28,11 @@
   </test-fixture>
 
   <script>
-    describe('mobile support', function() {
+    describe('mobile support', () => {
       var menu, target;
       var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-      beforeEach(function() {
+      beforeEach(() => {
         menu = fixture('default');
         target = Polymer.dom(menu).querySelector('#target');
         menu.$.overlay.phone = true;
@@ -71,7 +71,7 @@
       function makeTouches(xyList, node) {
         var id = 0;
 
-        return xyList.map(function(xy) {
+        return xyList.map(xy => {
           return {
             identifier: id++,
             target: node,
@@ -81,14 +81,14 @@
         });
       }
 
-      it('should have a backdrop', function() {
+      it('should have a backdrop', () => {
         expect(menu.$.overlay.withBackdrop).to.eql(true);
       });
 
-      it('should align to bottom of the viewport', function(done) {
+      it('should align to bottom of the viewport', done => {
         menu._setOpened(true);
 
-        listenOnce(menu, 'iron-overlay-opened', function() {
+        listenOnce(menu, 'iron-overlay-opened', () => {
           var styles = window.getComputedStyle(menu.$.overlay);
           expect(styles.bottom).to.eql('0px');
           expect(styles.transform).not.to.contain('translate');
@@ -103,34 +103,34 @@
       });
 
       if (ios) {
-        it('should open on long-touch on ios', function(done) {
+        it('should open on long-touch on ios', done => {
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          listenOnce(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', () => {
             expect(menu.opened).to.eql(true);
             expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
             done();
           });
         });
 
-        it('should not open on normal tap', function(done) {
+        it('should not open on normal tap', done => {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-          setTimeout(function() {
+          setTimeout(() => {
             makeSoloTouchEvent('tap', null, menu.listenOn);
           }, 100);
 
-          setTimeout(function() {
+          setTimeout(() => {
             expect(menu.opened).to.eql(false);
             done();
           }, 1000);
         });
 
-        it('should not stop `tap` bubbling in the middle of a long touch', function(done) {
+        it('should not stop `tap` bubbling in the middle of a long touch', done => {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-          setTimeout(function() {
+          setTimeout(() => {
             var evt = fire(menu, 'tap');
             expect(evt.defaultPrevented).to.eql(false);
 
@@ -138,10 +138,10 @@
           }, 100);
         });
 
-        it('should not stop `tap` bubbling after a long touch', function(done) {
+        it('should not stop `tap` bubbling after a long touch', done => {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
-          setTimeout(function() {
+          setTimeout(() => {
             var evt = fire(menu, 'tap');
             expect(evt.defaultPrevented).to.eql(false);
 
@@ -149,31 +149,31 @@
           }, 1000);
         });
 
-        it('should stop `touchend` from creating a tap event which cancels the overlay', function(done) {
+        it('should stop `touchend` from creating a tap event which cancels the overlay', done => {
           var xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          listenOnce(menu, 'iron-overlay-opened', function() {
-            listenOnce(target, 'tap', function() {
+          listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(target, 'tap', () => {
               throw new Error('tap fired!');
             });
-            setTimeout(function() {
+            setTimeout(() => {
               done();
             }, 1);
             makeSoloTouchEvent('touchend', xy, target);
           });
         });
 
-        it('should not open when touch moving', function(done) {
+        it('should not open when touch moving', done => {
           var xy = middleOfNode(menu.listenOn);
           makeSoloTouchEvent('touchstart', xy, menu.listenOn);
 
-          setTimeout(function() {
+          setTimeout(() => {
             xy.x += 16; // threshold is 15px from start
             makeSoloTouchEvent('touchmove', xy, menu.listenOn);
           }, 100);
 
-          setTimeout(function() {
+          setTimeout(() => {
             expect(menu.opened).to.eql(false);
             done();
           }, 1000);

@@ -31,22 +31,22 @@
     </test-fixture>
 
     <script>
-      describe('properties', function() {
-        describe('context', function() {
+      describe('properties', () => {
+        describe('context', () => {
           var menu, target;
 
-          beforeEach(function() {
+          beforeEach(() => {
             menu = fixture('default');
             target = menu.querySelector('#target');
           });
 
-          it('should use event target as context target', function() {
+          it('should use event target as context target', () => {
             fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target);
           });
 
-          it('should use context-selector scope to target', function() {
+          it('should use context-selector scope to target', () => {
             menu.selector = 'section';
 
             fire(target, 'contextmenu');
@@ -55,13 +55,13 @@
           });
         });
 
-        describe('openOn', function() {
+        describe('openOn', () => {
           var menu;
-          beforeEach(function() {
+          beforeEach(() => {
             menu = fixture('external')[0];
           });
 
-          it('should open on custom event', function() {
+          it('should open on custom event', () => {
             menu.openOn = 'click';
 
             menu.click();
@@ -69,7 +69,7 @@
             expect(menu.opened).to.eql(true);
           });
 
-          it('should not open on `contextmenu`', function() {
+          it('should not open on `contextmenu`', () => {
             menu.openOn = 'click';
 
             fire(menu, 'contextmenu');
@@ -77,9 +77,9 @@
             expect(menu.opened).to.eql(false);
           });
 
-          describe('event listener', function() {
+          describe('event listener', () => {
 
-            it('should not add listener when set to empty', function() {
+            it('should not add listener when set to empty', () => {
               expect(menu._oldOpenOn).to.be.ok;
               menu.openOn = '';
               expect(menu._oldOpenOn).not.to.be.ok;
@@ -87,20 +87,20 @@
           });
         });
 
-        describe('opened', function() {
+        describe('opened', () => {
           var menu;
-          beforeEach(function() {
+          beforeEach(() => {
             menu = fixture('external')[0];
           });
 
-          it('should be read-only', function() {
+          it('should be read-only', () => {
             expect(menu.opened).to.eql(false);
 
             menu.opened = true;
             expect(menu.opened).to.eql(false);
           });
 
-          it('should be set using the private setter', function() {
+          it('should be set using the private setter', () => {
             expect(menu.opened).to.eql(false);
 
             menu._setOpened(true);
@@ -108,14 +108,14 @@
           });
         });
 
-        describe('closeOn', function() {
+        describe('closeOn', () => {
           var menu;
-          beforeEach(function() {
+          beforeEach(() => {
             menu = fixture('external')[0];
             menu._setOpened(true);
           });
 
-          it('should not close on `click`', function() {
+          it('should not close on `click`', () => {
             menu.closeOn = '';
 
             menu.$.overlay.click();
@@ -123,7 +123,7 @@
             expect(menu.opened).to.eql(true);
           });
 
-          it('should close on custom event', function() {
+          it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
             fire(menu.$.overlay, 'foobar');
@@ -132,28 +132,28 @@
           });
         });
 
-        describe('external target', function() {
+        describe('external target', () => {
           var menu, target;
-          beforeEach(function() {
+          beforeEach(() => {
             menu = fixture('external')[0];
             target = document.body.querySelector('#target');
 
             menu.listenOn = target;
           });
 
-          it('should open on external target', function() {
+          it('should open on external target', () => {
             fire(target, 'contextmenu');
 
             expect(menu.opened).to.eql(true);
           });
 
-          it('should select context target on external target', function() {
+          it('should select context target on external target', () => {
             fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target);
           });
 
-          it('should use context selector on external target', function() {
+          it('should use context selector on external target', () => {
             menu.selector = 'section'; // parent of #target
             menu.listenOn = menu.parentElement;
             fire(target, 'contextmenu');
@@ -161,9 +161,9 @@
             expect(menu._context.target).to.eql(target.parentElement);
           });
 
-          describe('event listeners', function() {
+          describe('event listeners', () => {
 
-            it('should not target listeners when set to null', function() {
+            it('should not target listeners when set to null', () => {
               expect(menu._oldOpenOn).to.be.ok;
               menu.listenOn = null;
               expect(menu._oldOpenOn).not.to.be.ok;
