@@ -20,95 +20,93 @@
 
 
   <script>
-    describe('scrolling', function() {
+    describe('scrolling', () => {
 
-      var combobox;
+      let combobox;
 
-      beforeEach(function() {
-        combobox = fixture('combobox');
-      });
+      beforeEach(() => combobox = fixture('combobox'));
 
-      describeIf(touchDevice, 'touch devices', function() {
-        it('should blur input on scroll', function() {
+      describeIf(touchDevice, 'touch devices', () => {
+        it('should blur input on scroll', () => {
           combobox.open();
 
-          combobox.$.overlay.fire('down');
-          var focusedInput = Polymer.dom(combobox.root).querySelector('input:focus');
+          fire('down', combobox.$.overlay);
+          const focusedInput = combobox.root.querySelector('input:focus');
 
           expect(focusedInput).not.to.equal(combobox.inputElement);
         });
       });
 
-      describeIf(ios, 'iOS', function() {
-        it('should have momentum scrolling enabled', function() {
+      describeIf(ios, 'iOS', () => {
+        it('should have momentum scrolling enabled', () => {
           combobox.open();
 
-          var scroller = combobox.$.overlay._unwrapIfNeeded(combobox.$.overlay.$.scroller);
+          const scroller = combobox.$.overlay._scroller;
           expect(getComputedStyle(scroller).WebkitOverflowScrolling).to.equal('touch');
         });
       });
 
-      describeIf(/Trident/.test(navigator.userAgent), 'IE11', function() {
-        it('should have unselectable="on" for the scroller', function() {
-          var scroller = combobox.$.overlay.$.scroller;
+      describeIf(/Trident/.test(navigator.userAgent), 'IE11', () => {
+        it('should have unselectable="on" for the scroller', () => {
+          const scroller = combobox.$.overlay._scroller;
           expect(scroller.getAttribute('unselectable')).to.equal('on');
         });
       });
 
-      describe('scrolling position', function() {
-        beforeEach(function() {
-          var items = [];
+      describe('scrolling position', () => {
+        beforeEach(() => {
+          const items = [];
 
-          for (var i = 0; i < 100; i++) {
+          for (let i = 0; i < 100; i++) {
             items.push(i.toString());
           }
 
           combobox.items = items;
         });
 
-        it('should be zero when no items are selected', function() {
+        it('should be zero when no items are selected', () => {
           combobox.open();
 
-          expect(combobox.$.overlay.$.scroller.scrollTop).to.equal(0);
+          expect(combobox.$.overlay._scroller.scrollTop).to.equal(0);
         });
 
-        it('should be zero when the first item is selected', function() {
+        it('should be zero when the first item is selected', () => {
           combobox.value = combobox.items[0];
           combobox.open();
 
-          expect(combobox.$.overlay.$.scroller.scrollTop).to.equal(0);
+          expect(combobox.$.overlay._scroller.scrollTop).to.equal(0);
         });
 
         function expectSelectedItemPositionToBeVisible() {
-          var selectedItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('[selected]');
+          const selectedItem = combobox.$.overlay._selector.querySelector('[selected]');
           expect(selectedItem).to.be.ok;
 
-          var selectedItemRect = selectedItem.getBoundingClientRect();
-          var overlayRect = combobox.$.overlay.getBoundingClientRect();
+          const selectedItemRect = selectedItem.getBoundingClientRect();
+          const overlayRect = combobox.$.overlay.$.dropdown.$.overlay.getBoundingClientRect();
           expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
           expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
           expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);
           expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
         }
 
-        it('should make selected item visible after open', function(done) {
+        it('should make selected item visible after open', done => {
           combobox.value = combobox.items[50];
           combobox.open();
 
-          combobox.async(function() {
+          setTimeout(() => {
             expectSelectedItemPositionToBeVisible();
             done();
           }, 1);
         });
 
-        it('should make selected item visible after reopen', function(done) {
+        it('should make selected item visible after reopen', done => {
           combobox.open();
 
           combobox.value = combobox.items[50];
           combobox.close();
           combobox.open();
 
-          combobox.async(function() {
+          setTimeout(() => {
             expectSelectedItemPositionToBeVisible();
             done();
           }, 1);

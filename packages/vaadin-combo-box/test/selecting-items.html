@@ -28,10 +28,10 @@
 </test-fixture>
 
 <script>
-  describe('selecting a value', function() {
-    var combobox;
-    var input;
-    var valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
+  describe('selecting a value', () => {
+    let combobox;
+    let input;
+    let valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
 
     function dispatchTap(elm) {
       elm.dispatchEvent(new CustomEvent('tap', {
@@ -39,10 +39,10 @@
       }));
     }
 
-    beforeEach(function() {
+    beforeEach(() => {
       combobox = fixture('combobox');
       combobox.items = ['foo', 'bar'];
-      input = combobox.$$('input');
+      input = combobox.root.querySelector('input');
 
       valueChangedSpy = sinon.spy();
       combobox.addEventListener('value-changed', valueChangedSpy);
@@ -57,21 +57,21 @@
       combobox.addEventListener('change', changeSpy);
     });
 
-    it('should stop tap events from bubbling outside the overlay', function() {
-      var tapSpy = sinon.spy();
+    it('should stop tap events from bubbling outside the overlay', () => {
+      const tapSpy = sinon.spy();
       document.addEventListener('tap', tapSpy);
-      combobox.$.overlay.$.selector.dispatchEvent(new CustomEvent('tap', {
+      combobox.$.overlay._selector.dispatchEvent(new CustomEvent('tap', {
         bubbles: true
       }));
       document.removeEventListener('tap', tapSpy);
       expect(tapSpy.calledOnce).not.to.be.true;
     });
 
-    it('should fire `selection-changed` when tapped on an item', function() {
+    it('should fire `selection-changed` when tapped on an item', () => {
       combobox.opened = true;
-      Polymer.dom.flush();
+      Polymer.flush();
 
-      Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
+      combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
         bubbles: true
       }));
 
@@ -79,13 +79,13 @@
       expect(selectionChangedSpy.args[0][0].detail.item).to.eql(combobox.items[0]);
     });
 
-    it('should fire `selection-changed` in short touch gestures', function(done) {
+    it('should fire `selection-changed` in short touch gestures', done => {
       combobox.opened = true;
 
-      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
+      MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
-      combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+      setTimeout(() => {
+        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -93,13 +93,13 @@
       }, 200);
     });
 
-    it('should not fire `selection-changed` in long touch gestures', function(done) {
+    it('should not fire `selection-changed` in long touch gestures', done => {
       combobox.opened = true;
 
-      MockTouchInteractions.touchstart(combobox.$.overlay.$.scroller);
+      MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
 
-      combobox.async(function() {
-        var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+      setTimeout(() => {
+        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         dispatchTap(firstItem);
 
         expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -107,10 +107,10 @@
       }, 350);
     });
 
-    it('should not fire `selection-changed` after scrolling for grace period of 300ms', function(done) {
+    it('should not fire `selection-changed` after scrolling for grace period of 300ms', done => {
       // We need more items to increase scroller
-      var items = [];
-      for (var i = 1; i < 50; i++) items.push(i);
+      const items = [];
+      for (let i = 1; i < 50; i++) items.push(i);
       combobox.items = items;
 
       // open the combo box, and move the scroll
@@ -119,10 +119,10 @@
       function listener() {
         // Ensure the listener is invoked only once. Otherwise, `done()` might
         // be called multiple times, which produces error for the test.
-        combobox.$.overlay.$.scroller.removeEventListener('scroll', listener);
+        combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
-        combobox.async(function() {
-          var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+        setTimeout(() => {
+          const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.false;
@@ -131,14 +131,14 @@
       }
 
       // Scroll start could delay, for example, with full SD polyfill
-      combobox.$.overlay.$.scroller.addEventListener('scroll', listener);
+      combobox.$.overlay._scroller.addEventListener('scroll', listener);
 
-      combobox.$.overlay.$.selector.scrollToIndex(20);
+      combobox.$.overlay._selector.scrollToIndex(20);
     });
 
-    it('should fire `selection-changed` after the scrolling grace period', function(done) {
-      var items = [];
-      for (var i = 1; i < 50; i++) items.push(i);
+    it('should fire `selection-changed` after the scrolling grace period', done => {
+      const items = [];
+      for (let i = 1; i < 50; i++) items.push(i);
       combobox.items = items;
 
       combobox.opened = true;
@@ -146,10 +146,10 @@
       function listener() {
         // Ensure the listener is invoked only once. Otherwise, `done()` might
         // be called multiple times, which produces error for the test.
-        combobox.$.overlay.$.scroller.removeEventListener('scroll', listener);
+        combobox.$.overlay._scroller.removeEventListener('scroll', listener);
 
-        combobox.async(function() {
-          var firstItem = Polymer.dom(combobox.$.overlay.$.selector).querySelector('vaadin-combo-box-item');
+        setTimeout(() => {
+          const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
           dispatchTap(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.true;
@@ -158,12 +158,12 @@
       }
 
       // Scroll start could delay, for example, with full SD polyfill
-      combobox.$.overlay.$.scroller.addEventListener('scroll', listener);
+      combobox.$.overlay._scroller.addEventListener('scroll', listener);
 
-      combobox.$.overlay.$.selector.scrollToIndex(20);
+      combobox.$.overlay._selector.scrollToIndex(20);
     });
 
-    it('should select by using JS api', function() {
+    it('should select by using JS api', () => {
       combobox.value = 'foo';
 
       combobox.open();
@@ -173,44 +173,44 @@
       expect(combobox._bindableInput.bindValue).to.equal('foo');
     });
 
-    it('should close the dropdown on selection', function() {
+    it('should close the dropdown on selection', () => {
       combobox.open();
-      Polymer.dom.flush();
+      Polymer.flush();
 
-      combobox.$.overlay.$.selector.querySelector('vaadin-combo-box-item').click();
+      combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').click();
 
       expect(combobox.opened).to.equal(false);
     });
 
-    it('should fire exactly one `value-changed` event', function() {
+    it('should fire exactly one `value-changed` event', () => {
       combobox.value = 'foo';
       expect(valueChangedSpy.callCount).to.equal(1);
     });
 
-    it('should close the dropdown when reselecting the current value', function() {
+    it('should close the dropdown when reselecting the current value', () => {
       combobox.value = 'foo';
       combobox.open();
-      combobox.$.overlay.fire('selection-changed', {item: combobox.items[0]});
+      combobox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: combobox.items[0]}}));
       expect(combobox.opened).to.be.false;
     });
 
-    it('should not fire an event when reselecting the current value', function() {
+    it('should not fire an event when reselecting the current value', () => {
       combobox.value = 'foo';
       valueChangedSpy.reset();
-      combobox.$.overlay.fire('selection-changed', {item: combobox.items[0]});
+      combobox.$.overlay.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: combobox.items[0]}}));
       expect(valueChangedSpy.callCount).to.equal(0);
     });
 
-    it('should not throw an error if value was undefined', function() {
+    it('should not throw an error if value was undefined', () => {
       combobox.allowCustomValue = true;
       combobox.value = undefined;
       combobox.open();
       combobox.close();
     });
 
-    describe('`change` event', function() {
-      it('should fire `value-changed` and `selected-item-changed` before `changed`', function(done) {
-        combobox.addEventListener('change', function() {
+    describe('`change` event', () => {
+      it('should fire `value-changed` and `selected-item-changed` before `changed`', done => {
+        combobox.addEventListener('change', () => {
           expect(valueChangedSpy.called).to.be.true;
           expect(selectedItemChangedSpy.called).to.be.true;
           done();
@@ -221,7 +221,7 @@
         combobox.close();
       });
 
-      it('should fire exactly one `change` event', function() {
+      it('should fire exactly one `change` event', () => {
         combobox.open();
         combobox.value = 'foo';
         combobox.close();
@@ -229,20 +229,20 @@
         expect(changeSpy.callCount).to.equal(1);
       });
 
-      it('should not fire `change` event when not commiting a value by closing', function() {
+      it('should not fire `change` event when not commiting a value by closing', () => {
         combobox.value = 'foo';
 
         expect(changeSpy.callCount).to.equal(0);
       });
 
-      it('should fire on clear', function() {
+      it('should fire on clear', () => {
         combobox.value = 'foo';
-        combobox.$.clearIcon.click();
+        fire('up', combobox.$.clearIcon);
 
         expect(changeSpy.callCount).to.equal(1);
       });
 
-      it('should not fire until close', function() {
+      it('should not fire until close', () => {
         combobox.value = 'foo';
         combobox.open();
         combobox.value = 'bar';
@@ -250,7 +250,7 @@
         expect(changeSpy.callCount).to.equal(0);
       });
 
-      it('should not fire on cancel', function() {
+      it('should not fire on cancel', () => {
         combobox.open();
         combobox.value = 'foo';
         combobox.cancel();
@@ -258,12 +258,12 @@
         expect(changeSpy.callCount).to.equal(0);
       });
 
-      it('should not fire for changes when closed', function() {
+      it('should not fire for changes when closed', () => {
         combobox.value = 'foo';
 
         combobox.open();
         combobox.close();
-        it('should fire exactly one `change` event', function() {
+        it('should fire exactly one `change` event', () => {
           combobox.value = 'foo';
           expect(changeSpy.callCount).to.equal(1);
         });
@@ -271,7 +271,7 @@
         expect(changeSpy.callCount).to.equal(0);
       });
 
-      it('should stop input `change` event from bubbling', function() {
+      it('should stop input `change` event from bubbling', () => {
         combobox.inputElement.dispatchEvent(new CustomEvent('change'));
 
         expect(changeSpy.callCount).to.equal(0);
@@ -279,12 +279,12 @@
     });
   });
 
-  ['default', 'custom'].forEach(function(button) {
+  ['default', 'custom'].forEach(button => {
 
-    describe('clearing a selection - ' + button + ' clear icon', function() {
-      var combobox;
-      var clearIcon;
-      beforeEach(function() {
+    describe('clearing a selection - ' + button + ' clear icon', () => {
+      let combobox;
+      let clearIcon;
+      beforeEach(() => {
         combobox = fixture(button === 'default' ? 'combobox' : 'combobox-custom-clear');
         combobox.items = ['foo', 'bar'];
 
@@ -296,7 +296,7 @@
         combobox.updateStyles();
       });
 
-      it('should show the clearing icon only when combobox has value', function(done) {
+      it('should show the clearing icon only when combobox has value', done => {
         // Edge and IE have an issue where the correct styles are not applied by the browser
         // on the clear icon before triggering a reflow/re-render. Opening/Closing the combobox
         // seems to be the most reliable way to fix this.
@@ -306,44 +306,34 @@
 
         combobox.value = '';
         combobox.open();
-        setTimeout(function() {
+        setTimeout(() => {
           expect(window.getComputedStyle(clearIcon).display).to.contain('none');
           done();
         }, 1);
       });
 
-      it('should clear the selection when tapping on the icon', function() {
+      it('should clear the selection when tapping on the icon', () => {
         combobox.open();
 
-        Polymer.Base.fire('tap', {}, {
-          bubbles: true,
-          node: clearIcon
-        });
+        fire('up', clearIcon);
 
         expect(combobox.value).to.eql('');
         expect(combobox.$.overlay._selectedItem).to.be.null;
         expect(combobox.selectedItem).to.be.null;
       });
 
-      it('should close the dropdown after clearing a selection', function() {
+      it('should close the dropdown after clearing a selection', () => {
         combobox.open();
 
-        Polymer.Base.fire('tap', {}, {
-          bubbles: true,
-          node: clearIcon
-        });
+        fire('up', clearIcon);
 
         expect(combobox.opened).to.eql(false);
       });
 
-      it('should cancel down event to avoid input blur', function() {
+      it('should cancel down event to avoid input blur', () => {
         combobox.open();
 
-        var event = Polymer.Base.fire('down', {}, {
-          bubbles: true,
-          node: clearIcon,
-          cancelable: true
-        });
+        const event = fire('down', clearIcon);
 
         expect(event.defaultPrevented).to.eql(true);
       });
@@ -352,8 +342,8 @@
 
   });
 
-  describe('selecting a custom value', function() {
-    var combobox;
+  describe('selecting a custom value', () => {
+    let combobox;
 
     function getInput() {
       return combobox._bindableInput;
@@ -364,16 +354,16 @@
       combobox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
-    beforeEach(function(done) {
+    beforeEach(done => {
       combobox = fixture('combobox');
       combobox.allowCustomValue = true;
       combobox.items = ['foo', 'bar', 'barbar'];
 
       combobox.open();
-      combobox.async(done);
+      Polymer.Async.microTask.run(done);
     });
 
-    it('should select a value when closing when having a single exact match', function() {
+    it('should select a value when closing when having a single exact match', () => {
       filter('barbar');
 
       combobox.close();
@@ -381,7 +371,7 @@
       expect(combobox.value).to.eql('barbar');
     });
 
-    it('should select a value when closing when having multiple matches', function() {
+    it('should select a value when closing when having multiple matches', () => {
       filter('BAR');
 
       combobox.close();
@@ -389,7 +379,7 @@
       expect(combobox.value).to.eql('bar');
     });
 
-    it('should clear the selection when closing the overlay and input is cleared', function() {
+    it('should clear the selection when closing the overlay and input is cleared', () => {
       combobox.value = 'foo';
 
       filter('');
@@ -401,7 +391,7 @@
       expect(combobox.hasValue).to.be.false;
     });
 
-    it('should select a custom value', function() {
+    it('should select a custom value', () => {
       combobox.value = 'foobar';
 
       combobox.close();
@@ -412,7 +402,7 @@
       expect(combobox.hasValue).to.be.true;
     });
 
-    it('should clear the custom value on clear', function() {
+    it('should clear the custom value on clear', () => {
       combobox.value = 'foobar';
 
       filter('');
@@ -423,7 +413,7 @@
       expect(combobox.selectedItem).to.be.null;
     });
 
-    it('should allow changing value to existing item when custom value is set', function() {
+    it('should allow changing value to existing item when custom value is set', () => {
       combobox.value = 'foobar';
 
       combobox.close();

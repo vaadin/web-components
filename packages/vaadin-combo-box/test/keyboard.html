@@ -26,8 +26,8 @@
 
 <script>
 
-  describe('keyboard navigation', function() {
-    var comboBox;
+  describe('keyboard navigation', () => {
+    let comboBox;
 
     function getInput() {
       return comboBox.inputElement;
@@ -58,39 +58,37 @@
       MockInteractions.keyDownOn(getInput(), 27);
     }
 
-    beforeEach(function() {
+    beforeEach(() => {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
-    afterEach(function(done) {
-      /*
-        The following prevents test errors in MSIE 11.
+    /*
+      The following prevents test errors in MSIE 11.
 
-        The input element is asynchronously prefilled with item label
-        when navigating with keyboard. In IE11, the async callbacks
-        could be called after the test is already done, and the test
-        fixture is destroyed, causing errors.
-      */
-      Polymer.Base.async(done, 1);
-    });
+      The input element is asynchronously prefilled with item label
+      when navigating with keyboard. In IE11, the async callbacks
+      could be called after the test is already done, and the test
+      fixture is destroyed, causing errors.
+    */
+    afterEach(done => setTimeout(done, 1));
 
-    describe('opening the overlay', function() {
-      it('should open the overlay with arrow down and not focus any item', function() {
+    describe('opening the overlay', () => {
+      it('should open the overlay with arrow down and not focus any item', () => {
         arrowDown();
 
         expect(comboBox.opened).to.equal(true);
         expect(getFocusedIndex()).to.equal(-1);
       });
 
-      it('should open the overlay with arrow up and not focus any item', function() {
+      it('should open the overlay with arrow up and not focus any item', () => {
         arrowUp();
 
         expect(comboBox.opened).to.equal(true);
         expect(getFocusedIndex()).to.equal(-1);
       });
 
-      it('should have focus on the selected item after opened', function() {
+      it('should have focus on the selected item after opened', () => {
         comboBox.value = 'foo';
 
         arrowDown();
@@ -99,27 +97,25 @@
       });
     });
 
-    describe('navigating the items after overlay opened', function() {
-      beforeEach(function(done) {
-        comboBox.async(function() {
-          arrowDown();
-          done();
-        });
-      });
+    describe('navigating the items after overlay opened', () => {
+      beforeEach(done => Polymer.Async.microTask.run(() => {
+        arrowDown();
+        done();
+      }));
 
-      it('should focus on the first item with arrow down', function() {
+      it('should focus on the first item with arrow down', () => {
         arrowDown();
 
         expect(getFocusedIndex()).to.equal(0);
       });
 
-      it('should focus on the last item with up arrow', function() {
+      it('should focus on the last item with up arrow', () => {
         arrowUp();
 
         expect(getFocusedIndex()).to.equal(2);
       });
 
-      it('should focus on the previous item with arrow up', function() {
+      it('should focus on the previous item with arrow up', () => {
         arrowDown();
         arrowDown();
 
@@ -128,7 +124,7 @@
         expect(getFocusedIndex()).to.equal(0);
       });
 
-      it('should not go below the last item', function() {
+      it('should not go below the last item', () => {
         arrowDown();
         arrowDown();
         arrowDown();
@@ -140,7 +136,7 @@
         expect(getFocusedIndex()).to.equal(2);
       });
 
-      it('should not remove focus', function() {
+      it('should not remove focus', () => {
         arrowDown();
 
         arrowUp();
@@ -148,7 +144,7 @@
         expect(getFocusedIndex()).to.equal(0);
       });
 
-      it('should focus only on filtered items', function() {
+      it('should focus only on filtered items', () => {
         filter('foo');
         arrowDown();
 
@@ -160,16 +156,14 @@
       });
     });
 
-    describe('selecting items', function() {
-      beforeEach(function(done) {
-        comboBox.async(function() {
-          comboBox.value = 'bar';
-          arrowDown();
-          done();
-        });
-      });
+    describe('selecting items', () => {
+      beforeEach(done => Polymer.Async.microTask.run(() => {
+        comboBox.value = 'bar';
+        arrowDown();
+        done();
+      }));
 
-      it('should select focused item with enter', function() {
+      it('should select focused item with enter', () => {
         arrowDown();
 
         enter();
@@ -177,14 +171,14 @@
         expect(comboBox.value).to.equal('baz');
       });
 
-      it('should clear the selection with enter when input is cleared', function() {
+      it('should clear the selection with enter when input is cleared', () => {
         filter('');
         enter();
 
         expect(comboBox.value).to.eql('');
       });
 
-      it('should close the overlay with enter when custom values are allowed', function() {
+      it('should close the overlay with enter when custom values are allowed', () => {
         comboBox.allowCustomValue = true;
         filter('foobar');
 
@@ -194,7 +188,7 @@
         expect(comboBox.opened).to.equal(false);
       });
 
-      it('should not close the overlay with enter when custom values are not allowed', function() {
+      it('should not close the overlay with enter when custom values are not allowed', () => {
         filter('foobar');
 
         enter();
@@ -203,7 +197,7 @@
         expect(comboBox.opened).to.equal(true);
       });
 
-      it('should revert to the custom value after filtering', function() {
+      it('should revert to the custom value after filtering', () => {
         comboBox.allowCustomValue = true;
         comboBox.value = 'foobar';
         filter('bar');
@@ -213,7 +207,7 @@
         expect(getInput().value).to.equal('foobar');
       });
 
-      it('should revert a non-listed value to the custom value after filtering', function() {
+      it('should revert a non-listed value to the custom value after filtering', () => {
         comboBox.allowCustomValue = true;
         comboBox.value = 'foobar';
         filter('barbaz');
@@ -221,7 +215,7 @@
         expect(getInput().value).to.equal('foobar');
       });
 
-      it('should revert to the custom value after keyboar navigation', function() {
+      it('should revert to the custom value after keyboar navigation', () => {
         comboBox.allowCustomValue = true;
         comboBox.value = 'foobar';
         arrowDown();
@@ -231,13 +225,13 @@
         expect(getInput().value).to.equal('foobar');
       });
 
-      it('should close the overlay with enter', function() {
+      it('should close the overlay with enter', () => {
         enter();
 
         expect(comboBox.opened).to.equal(false);
       });
 
-      it('should remove focus with espace', function() {
+      it('should remove focus with espace', () => {
         comboBox._focusedIndex = 0;
 
         esc();
@@ -246,7 +240,7 @@
         expect(comboBox._focusedIndex).to.eql(-1);
       });
 
-      it('should close the overlay with escape if there is no focus', function() {
+      it('should close the overlay with escape if there is no focus', () => {
         comboBox._focusedIndex = -1;
 
         esc();
@@ -254,7 +248,7 @@
         expect(comboBox.opened).to.equal(false);
       });
 
-      it('should cancel typing with escape', function() {
+      it('should cancel typing with escape', () => {
         filter('baz');
 
         esc();
@@ -262,7 +256,7 @@
         expect(comboBox.value).to.equal('bar');
       });
 
-      it('should select typed item', function() {
+      it('should select typed item', () => {
         filter('baz');
 
         enter();
@@ -270,67 +264,67 @@
         expect(comboBox.value).to.equal('baz');
       });
 
-      it('should reset the input value synchronously when keyboard navigating', function() {
+      it('should reset the input value synchronously when keyboard navigating', () => {
         arrowDown();
 
         expect(getInput().value).to.eql('');
       });
 
-      it('should prefill the input field when navigating down', function(done) {
+      it('should prefill the input field when navigating down', done => {
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('baz');
           done();
         }, 1);
       });
 
-      it('should select the input field text when navigating down', function(done) {
+      it('should select the input field text when navigating down', done => {
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().selectionStart).to.eql(0);
           expect(getInput().selectionEnd).to.eql(3);
           done();
         }, 1);
       });
 
-      it('should prefill the input field when navigating up', function(done) {
+      it('should prefill the input field when navigating up', done => {
         arrowUp();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('foo');
           done();
         }, 1);
       });
 
-      it('should not prefill the input when there are no items to navigate', function(done) {
+      it('should not prefill the input when there are no items to navigate', done => {
         filter('invalid filter');
 
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('invalid filter');
           done();
         }, 1);
       });
 
-      it('should select the input field text when navigating up', function(done) {
+      it('should select the input field text when navigating up', done => {
         arrowUp();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().selectionStart).to.eql(0);
           expect(getInput().selectionEnd).to.eql(3);
           done();
         }, 1);
       });
 
-      it('should revert back to filter with espace', function(done) {
+      it('should revert back to filter with espace', done => {
         filter('b');
 
         arrowDown();
 
-        comboBox.async(function() {
+        setTimeout(() => {
           expect(getInput().value).to.eql('bar');
 
           esc();
@@ -338,10 +332,9 @@
           expect(getInput().value).to.eql('b');
           done();
         }, 1);
-
       });
 
-      it('should remove selection from the input value when reverting', function() {
+      it('should remove selection from the input value when reverting', () => {
         filter('b');
         arrowDown();
         esc();
@@ -349,7 +342,7 @@
         expect(getInput().selectionStart).to.eql(getInput().selectionEnd);
       });
 
-      it('should revert back to value if there is no filter', function() {
+      it('should revert back to value if there is no filter', () => {
         arrowDown();
 
         esc();
@@ -357,11 +350,11 @@
         expect(getInput().value).to.eql('bar');
       });
 
-      it('should remove selection from the input value selecting value', function(done) {
+      it('should remove selection from the input value selecting value', done => {
         arrowDown();
 
 
-        comboBox.async(function() {
+        setTimeout(() => {
           // selection range is only cleared when the input is focused, which is not the case
           // in all environments running the tests, especially on safari. So we need to use the next best thing.
           comboBox._clearSelectionRange = sinon.spy();
@@ -377,21 +370,21 @@
     // TODO: these tests are here to prevent possible regressions with using
     // the internal properties of iron-list. These can be removed after this
     // logic no longer is implemented in vaadin-combo-box.
-    describe('sanity checks for calculating visible item counts', function() {
-      it('should calculate items correctly when all items are visible', function(done) {
+    describe('sanity checks for calculating visible item counts', () => {
+      it('should calculate items correctly when all items are visible', done => {
         comboBox.items = ['foo', 'bar', 'baz', 'qux'];
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
-          expect(comboBox.$.overlay.$.selector.lastVisibleIndex).to.eql(3);
+          expect(comboBox.$.overlay._selector.lastVisibleIndex).to.eql(3);
           done();
         }, 1);
       });
 
-      it('should calculate items correctly when some items are hidden', function(done) {
-        var items = [];
-        for (var i = 0; i < 100; i++) {
+      it('should calculate items correctly when some items are hidden', done => {
+        const items = [];
+        for (let i = 0; i < 100; i++) {
           items.push(i.toString());
         }
 
@@ -399,31 +392,31 @@
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
-          expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay.$.selector.lastVisibleIndex + 1);
+        setTimeout(() => {
+          expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay._selector.lastVisibleIndex + 1);
           done();
         }, 1);
       });
     });
 
-    describe('scrolling items', function() {
-      var selector;
+    describe('scrolling items', () => {
+      let selector;
 
-      beforeEach(function(done) {
-        var items = [];
+      beforeEach(done => {
+        const items = [];
 
-        for (var i = 0; i < 100; i++) {
+        for (let i = 0; i < 100; i++) {
           items.push(i.toString());
         }
 
         comboBox.items = items;
         comboBox.open();
-        selector = comboBox.$.overlay.$.selector;
+        selector = comboBox.$.overlay._selector;
 
-        Polymer.Base.async(done, 1);
+        setTimeout(done, 1);
       });
 
-      it('should scroll down after reaching the last visible item', function() {
+      it('should scroll down after reaching the last visible item', () => {
         comboBox._focusedIndex = comboBox.$.overlay._visibleItemsCount() - 1;
         expect(selector.firstVisibleIndex).to.eql(0);
 
@@ -432,7 +425,7 @@
         expect(selector.firstVisibleIndex).to.eql(1);
       });
 
-      it('should scroll up after reaching the first visible item', function() {
+      it('should scroll up after reaching the first visible item', () => {
         comboBox._focusedIndex = 1;
         selector.scrollToIndex(1);
         expect(selector.firstVisibleIndex).to.eql(1);
@@ -442,7 +435,7 @@
         expect(selector.firstVisibleIndex).to.eql(0);
       });
 
-      it('should scroll to first visible when navigating down above viewport', function() {
+      it('should scroll to first visible when navigating down above viewport', () => {
         comboBox._focusedIndex = 5;
         selector.scrollToIndex(50);
 
@@ -451,7 +444,7 @@
         expect(selector.firstVisibleIndex).to.eql(6);
       });
 
-      it('should scroll to first visible when navigating up above viewport', function() {
+      it('should scroll to first visible when navigating up above viewport', () => {
         comboBox._focusedIndex = 5;
         selector.scrollToIndex(50);
 
@@ -460,7 +453,7 @@
         expect(selector.firstVisibleIndex).to.eql(4);
       });
 
-      it('should scroll to last visible when navigating up below viewport', function() {
+      it('should scroll to last visible when navigating up below viewport', () => {
         comboBox._focusedIndex = 50;
         selector.scrollToIndex(0);
         expect(selector.firstVisibleIndex).to.eql(0);
@@ -470,7 +463,7 @@
         expect(selector.firstVisibleIndex).to.eql(49 - comboBox.$.overlay._visibleItemsCount() + 1);
       });
 
-      it('should scroll to last visible when navigating down below viewport', function() {
+      it('should scroll to last visible when navigating down below viewport', () => {
         comboBox._focusedIndex = 50;
         selector.scrollToIndex(0);
         expect(selector.firstVisibleIndex).to.eql(0);
@@ -480,26 +473,26 @@
         expect(selector.firstVisibleIndex).to.eql(51 - comboBox.$.overlay._visibleItemsCount() + 1);
       });
 
-      it('should scroll to start if no items focused when opening overlay', function(done) {
+      it('should scroll to start if no items focused when opening overlay', done => {
         selector.scrollToIndex(50);
         comboBox.close();
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(selector.firstVisibleIndex).to.eql(0);
           done();
         });
       });
 
-      it('should scroll to focused item when opening overlay', function(done) {
+      it('should scroll to focused item when opening overlay', done => {
         selector.scrollToIndex(0);
         comboBox.close();
         comboBox.value = '50';
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(selector.firstVisibleIndex).to.be.within(50 - comboBox.$.overlay._visibleItemsCount(), 50);
           done();
         });

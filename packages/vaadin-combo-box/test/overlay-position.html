@@ -36,7 +36,7 @@
     </div>
   </template>
   <script>
-    window.addEventListener('WebComponentsReady', function() {
+    window.addEventListener('WebComponentsReady', () => {
       Polymer({
         is: 'x-fixed'
       });
@@ -66,9 +66,9 @@
 </test-fixture>
 
 <script>
-  var comboBox;
+  let comboBox;
 
-  var wh, ww, horiCenter, vertTop, vertBottom;
+  let wh, ww, horiCenter, vertTop, vertBottom;
 
   // The ideal test would be to resize the window, but testing system disallows
   // resizing the iframe, but moving the combo-box using styles and firing
@@ -80,29 +80,31 @@
     comboBox.style.left = left + 'px';
     if (document.createEvent) {
       // using old way because IE11 does not support: new Event('resize')
-      var ev = document.createEvent('Event');
+      const ev = document.createEvent('Event');
       ev.initEvent('resize', true, true);
       window.dispatchEvent(ev);
     }
   }
 
   function dropContent() {
-    return comboBox.$.overlay;
+    return comboBox.$.overlay.$.dropdown.$.overlay;
   }
+
   function dropContentRect() {
     return dropContent().getBoundingClientRect();
   }
+
   function inputContentRect() {
     return comboBox.$.inputContainer.getBoundingClientRect();
   }
 
-  describe('overlay', function() {
-    beforeEach(function(done) {
+  describe('overlay', () => {
+    beforeEach(done => {
       comboBox = fixture('combobox');
-      var comboBoxRect = comboBox.getBoundingClientRect();
+      const comboBoxRect = comboBox.getBoundingClientRect();
       comboBox.items = getItemArray(20);
 
-      var win = comboBox.ownerDocument.defaultView;
+      const win = comboBox.ownerDocument.defaultView;
       // Subtract the combo-box size from the coordinates range in order not to
       // move it outside the viewport boundaries when changing top and left.
       // Otherwise it is not nice for debugging.
@@ -114,32 +116,30 @@
 
       // <paper-input-container> adds floated-label-placeholder div asynchronously,
       // we want to wait that out so that the dropdown clientHeight is calculated correctly.
-      return Polymer.Base.async(done);
+      Polymer.Async.microTask.run(done);
     });
 
-    afterEach(function() {
-      // clean out <vaadin-overlay> elements from body.
-      comboBox.close();
-    });
+    // clean out <vaadin-overlay> elements from body.
+    afterEach(() => comboBox.close());
 
-    describe('overlay position', function() {
-      it('should match the input container width', function() {
+    describe('overlay position', () => {
+      it('should match the input container width', () => {
         comboBox.open();
 
         expect(dropContentRect().width).to.be.closeTo(inputContentRect().width, 1);
       });
 
-      it('should be below the input box', function() {
+      it('should be below the input box', () => {
         comboBox.open();
 
         expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
 
-      it('should position correctly if items are populated after opening', function(done) {
+      it('should position correctly if items are populated after opening', done => {
         comboBox.items = [];
-        comboBox.addEventListener('vaadin-dropdown-opened', function() {
+        comboBox.addEventListener('vaadin-dropdown-opened', () => {
           comboBox.items = [1, 2, 3];
-          comboBox.async(function() {
+          setTimeout(() => {
             expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
             done();
           }, 1);
@@ -147,29 +147,29 @@
         comboBox.open();
       });
 
-      it('should notify resize on items change', function() {
-        var spy = sinon.spy();
-        comboBox.$.overlay.addEventListener('iron-resize', spy);
+      it('should notify resize on items change', () => {
+        const spy = sinon.spy();
+        comboBox.$.overlay.$.dropdown.notifyResize = spy;
         comboBox.items = [1, 2, 3];
         expect(spy.called).to.be.true;
       });
 
-      it('should reposition on scroll', function() {
+      it('should reposition on scroll', () => {
         comboBox.opened = true;
         comboBox.$.overlay.updateViewportBoundaries = sinon.spy();
 
-        comboBox.fire('scroll', {}, {node: document});
+        fire('scroll', document);
 
         expect(comboBox.$.overlay.updateViewportBoundaries.callCount).to.eql(1);
       }),
 
-      it('should be aligned with input container', function() {
+      it('should be aligned with input container', () => {
         comboBox.open();
 
         expect(dropContentRect().left).to.equal(inputContentRect().left);
       });
 
-      it('when the input position moves in the view port the overlay position should change', function() {
+      it('when the input position moves in the view port the overlay position should change', () => {
         moveComboBox(horiCenter, vertTop, 100);
 
         comboBox.open();
@@ -179,7 +179,7 @@
         expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
 
-      it('when the input position width changes overlay width should change', function() {
+      it('when the input position width changes overlay width should change', () => {
         moveComboBox(horiCenter, vertBottom, 150);
 
         comboBox.open();
@@ -187,53 +187,53 @@
         expect(dropContentRect().width).to.equal(inputContentRect().width);
       });
 
-      it('should not translate in sub-pixels', function() {
+      it('should not translate in sub-pixels', () => {
         comboBox.style.paddingTop = '0.75px';
         comboBox.open();
 
-        var _devicePixelRatio = window.devicePixelRatio || 1;
-        expect(comboBox.$.overlay._translateY * _devicePixelRatio % 1).to.closeTo(0, 0.1);
-        expect(comboBox.$.overlay._translateX * _devicePixelRatio % 1).to.closeTo(0, 0.1);
+        const _devicePixelRatio = window.devicePixelRatio || 1;
+        expect(comboBox.$.overlay.$.dropdown._translateY * _devicePixelRatio % 1).to.closeTo(0, 0.1);
+        expect(comboBox.$.overlay.$.dropdown._translateX * _devicePixelRatio % 1).to.closeTo(0, 0.1);
       });
     });
 
-    describeSkipIf(ios, 'overlay alignment', function() {
-      beforeEach(function() {
+    describeSkipIf(ios, 'overlay alignment', () => {
+      beforeEach(() => {
         // These tests randomly fails in Edge when they are run from travis
         // unless we reset borders.
-        comboBox.$.overlay.$.selector.$.items.style.border = 'none';
+        comboBox.$.overlay._selector.$.items.style.border = 'none';
       });
 
-      it('should be above input', function(done) {
+      it('should be above input', done => {
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.open();
 
-        Polymer.Base.async(function() {
-          expect(dropContent()._alignedAbove).to.be.true;
+        setTimeout(() => {
+          expect(comboBox.$.overlay.$.dropdown.alignedAbove).to.be.true;
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
       });
 
-      it('should reposition after filtering', function(done) {
+      it('should reposition after filtering', done => {
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.inputElement.value = 'item 1';
         comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
-        Polymer.Base.async(function() {
+        setTimeout(() => {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
         }, 1);
       });
     });
 
-    describe('overlay resizing', function() {
-      var minHeight = 116;
-      var inputUnderline = 2;
+    describe('overlay resizing', () => {
+      const minHeight = 116;
+      const inputUnderline = 2;
 
-      it('should resize to bottom of the screen', function() {
+      it('should resize to bottom of the screen', () => {
         comboBox.open();
 
         moveComboBox(horiCenter, vertBottom - minHeight - inputContentRect().height - inputUnderline, 300);
@@ -241,7 +241,7 @@
         expect(dropContentRect().bottom).to.be.at.most(window.innerHeight);
       });
 
-      it('should resize to top of the screen', function() {
+      it('should resize to top of the screen', () => {
         moveComboBox(horiCenter, vertBottom, 300);
         comboBox.open();
 
@@ -250,65 +250,42 @@
         expect(dropContentRect().top).to.be.at.least(0);
       });
     });
-
-    describe('overlay attached/detached callbacks', function() {
-      it('should be called after open and close', function() {
-        var overlay = comboBox.$.overlay;
-        overlay.detached = sinon.spy();
-        overlay.attached = sinon.spy();
-
-        comboBox.open();
-
-        sinon.assert.calledOnce(overlay.detached);
-        sinon.assert.calledOnce(overlay.attached);
-        sinon.assert.callOrder(overlay.detached, overlay.attached);
-
-        overlay.detached.reset();
-        overlay.attached.reset();
-
-        comboBox.close();
-
-        sinon.assert.calledOnce(overlay.detached);
-        sinon.assert.calledOnce(overlay.attached);
-        sinon.assert.callOrder(overlay.detached, overlay.attached);
-      });
-    });
   });
 
-  describe('overlay with fixed position target', function() {
+  describe('overlay with fixed position target', () => {
     function position(node) {
       return window.getComputedStyle(node).position;
     }
 
-    it('should same position when parent has fixed', function(done) {
-      var combobox = fixture('fixed').querySelector('vaadin-combo-box');
+    it('should same position when parent has fixed', done => {
+      const combobox = fixture('fixed').querySelector('vaadin-combo-box');
 
       combobox.open();
 
-      Polymer.Base.async(function() {
-        expect(position(combobox.$.overlay)).to.eql('fixed');
+      setTimeout(() => {
+        expect(position(combobox.$.overlay.$.dropdown.$.overlay)).to.eql('fixed');
         done();
       }, 1);
     });
 
-    it('should same position when parent component has fixed', function(done) {
-      var combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
+    it('should same position when parent component has fixed', done => {
+      const combobox = fixture('fixed-component').querySelector('vaadin-combo-box');
 
       combobox.open();
 
-      Polymer.Base.async(function() {
-        expect(position(combobox.$.overlay)).to.eql('fixed');
+      setTimeout(() => {
+        expect(position(combobox.$.overlay.$.dropdown.$.overlay)).to.eql('fixed');
         done();
       }, 1);
     });
 
-    it('should have position absolute', function(done) {
-      var combobox = fixture('combobox');
+    it('should have position absolute', done => {
+      const combobox = fixture('combobox');
 
       combobox.open();
 
-      Polymer.Base.async(function() {
-        expect(position(combobox.$.overlay)).to.eql('absolute');
+      setTimeout(() => {
+        expect(position(combobox.$.overlay.$.dropdown.$.overlay)).to.eql('absolute');
         done();
       }, 1);
     });

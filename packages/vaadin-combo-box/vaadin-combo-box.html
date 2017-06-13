@@ -1,78 +1,17 @@
 <!--
 @license
-Copyright (c) 2015 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-`<vaadin-combo-box>` is a combo box element combining a dropdown list with an
-input field for filtering the list of items. If you want to replace the default
-input field with a custom implementation, you should use the
-[`<vaadin-combo-box-light>`](#vaadin-combo-box-light) element.
+<link rel="import" href="../polymer/polymer-element.html">
 
-Items in the dropdown list must be provided as a list of `String` values.
-Defining the items is done using the `items` property, which can be assigned
-with data-binding, using an attribute or directly with the JavaScript property.
-
-```html
-<vaadin-combo-box
-    label="Fruit"
-    items="[[data]]">
-</vaadin-combo-box>
-```
-
-```js
-combobox.items = ['apple', 'orange', 'banana'];
-```
-
-When the selected `value` is changed, a `value-changed` event is triggered.
-
-This element is also extended with the `IronFormElementBehavior` to
-enable usage within an `iron-form`.
-
-### Item Template
-
-`<vaadin-combo-box>` supports using custom item template provided in the light
-DOM:
-
-```html
-<vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
-  <template>
-    [[index]]: [[item.label]] <b>[[item.value]</b>
-  </template>
-</vaadin-combo-box>
-```
-
-The following properties are available for item template bindings:
-
-Property name | Type | Description
---------------|------|------------
-`index`| Number | Index of the item in the `items` array
-`item` | String or Object | The item reference
-`selected` | Boolean | True when item is selected
-`focused` | Boolean | True when item is focused
-
-See the [Item Template Live Demos](demo/item-template.html) for more examples.
-
-### Styling
-There are custom properties and mixins you can use to style the component:
-
-Custom property | Description | Default
-----------------|-------------|-------------
-`--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`
-
-@element vaadin-combo-box
-@demo demo/index.html
--->
-
-<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-input/iron-input.html">
-<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../paper-input/paper-input-container.html">
 <link rel="import" href="../paper-input/paper-input-error.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="vaadin-combo-box-behavior.html">
+<link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
 <link rel="import" href="vaadin-combo-box-icons.html">
@@ -267,206 +206,272 @@ Custom property | Description | Default
     </paper-input-container>
 
     <vaadin-combo-box-overlay id="overlay"
-      opened$=[[opened]]
+      opened=[[opened]]
       position-target="[[_getPositionTarget()]]"
       _focused-index="[[_focusedIndex]]"
       _item-label-path="[[itemLabelPath]]"
       on-down="_onOverlayDown"
       loading="[[loading]]"
-      on-mousedown="_preventDefault"
       vertical-offset="2">
     </vaadin-combo-box-overlay>
   </template>
 </dom-module>
 
-<script>
-  Polymer({
-    is: 'vaadin-combo-box',
-
-    behaviors: [
-      Polymer.IronValidatableBehavior,
-      vaadin.elements.combobox.ComboBoxBehavior
-    ],
-
-    properties: {
-      /**
-       * The label for this element.
-       */
-      label: {
-        type: String,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Set to true to disable the floating label.
-       */
-      noLabelFloat: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to always float the label.
-       */
-      alwaysFloatLabel: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to auto-validate the input value.
-       */
-      autoValidate: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to disable this input.
-       */
-      disabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * Set to true to prevent the user from entering invalid input.
-       */
-      preventInvalidInput: {
-        type: Boolean
-      },
-
-      /**
-       * Set this to specify the pattern allowed by `preventInvalidInput`.
-       */
-      allowedPattern: {
-        type: String
-      },
-
-      /**
-       * A pattern to validate the `input` with.
-       */
-      pattern: {
-        type: String
-      },
-
-      /**
-       * Set to true to mark the input as required.
-       */
-      required: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * The error message to display when the input is invalid.
-       */
-      errorMessage: {
-        type: String
-      },
-
-      autofocus: {
-        type: Boolean
-      },
-
-      inputmode: {
-        type: String
-      },
-
-      name: {
-        type: String
-      },
-
-      /**
-       * A placeholder string in addition to the label. If this is set, the label will always float.
-       */
-      placeholder: {
-        type: String,
-        // need to set a default so _computeAlwaysFloatLabel is run
-        value: ''
-      },
-
-      readonly: {
-        type: Boolean,
-        value: false
-      },
-
-      size: {
-        type: Number
-      },
-
-      /**
-       * True when the input field has focus.
-       */
-      focused: {
-        type: Boolean,
-        value: false,
-        readOnly: true,
-        reflectToAttribute: true,
-        notify: true
-      }
-    },
-
-    attributeChanged: function(name, type) {
-      // Safari has an issue with repainting shadow root element styles when a host attribute changes.
-      // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      if (isSafari && this.root) {
-        Array.prototype.forEach.call(this.root.querySelectorAll('*'), function(el) {
-          el.style['-webkit-backface-visibility'] = 'visible';
-          el.style['-webkit-backface-visibility'] = '';
-        });
-      }
-    },
-
-    ready: function() {
-      // 2.0 does not support nested syntax for listeners
-      this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
-
-      this._setInputElement(this.$.input);
-      this._bindableInput = this.$.ironinput;
-    },
-
-    attached: function() {
-      // Use the default toggle/clear or one replaced in light DOM.
-      this._toggleElement = Polymer.dom(this).querySelector('[slot=toggle-button]') || this.$.toggleIcon;
-      this._clearElement = Polymer.dom(this).querySelector('[slot=clear-button]') || this.$.clearIcon;
-      this._preventInputBlur();
-    },
-
-    detached: function() {
-      this._restoreInputBlur();
-    },
-
-    _computeAlwaysFloatLabel: function(alwaysFloatLabel, placeholder) {
-      return placeholder || alwaysFloatLabel;
-    },
-
-    _getPositionTarget: function() {
-      return this.$.inputContainer;
-    },
-
-    _getAriaExpanded: function(value) {
-      return value.toString();
-    },
-
-    /**
-     * Sets focus on the input field.
-     */
-    focus: function() {
-      this.inputElement.focus();
-    },
-
-    /**
-     * Removes focus from the input field.
-     */
-    blur: function() {
-      this.inputElement.blur();
-    },
-
-    _onInputContainerFocusedChanged: function(e) {
-      this._setFocused(e.detail.value);
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
-  });
 
-</script>
+    {
+      /**
+       * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
+       * input field for filtering the list of items. If you want to replace the default
+       * input field with a custom implementation, you should use the
+       * [`<vaadin-combo-box-light>`](#vaadin-combo-box-light) element.
+       *
+       * Items in the dropdown list must be provided as a list of `String` values.
+       * Defining the items is done using the `items` property, which can be assigned
+       * with data-binding, using an attribute or directly with the JavaScript property.
+       *
+       * ```html
+       * <vaadin-combo-box
+       *     label="Fruit"
+       *     items="[[data]]">
+       * </vaadin-combo-box>
+       * ```
+       *
+       * ```js
+       * combobox.items = ['apple', 'orange', 'banana'];
+       * ```
+       *
+       * When the selected `value` is changed, a `value-changed` event is triggered.
+       *
+       * This element can be used within an `iron-form`.
+       *
+       * ### Item Template
+       *
+       * `<vaadin-combo-box>` supports using custom item template provided in the light
+       * DOM:
+       *
+       * ```html
+       * <vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
+       *   <template>
+       *     [[index]]: [[item.label]] <b>[[item.value]</b>
+       *   </template>
+       * </vaadin-combo-box>
+       * ```
+       *
+       * The following properties are available for item template bindings:
+       *
+       * Property name | Type | Description
+       * --------------|------|------------
+       * `index`| Number | Index of the item in the `items` array
+       * `item` | String or Object | The item reference
+       * `selected` | Boolean | True when item is selected
+       * `focused` | Boolean | True when item is focused
+       *
+       * See the [Item Template Live Demos](demo/item-template.html) for more examples.
+       *
+       * ### Styling
+       * There are custom properties and mixins you can use to style the component:
+       *
+       * Custom property | Description | Default
+       * ----------------|-------------|-------------
+       * `--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ComboBoxMixin
+       * @demo demo/index.html
+       */
+      class ComboBoxElement extends Vaadin.ComboBoxMixin(Polymer.Element) {
+
+        static get is() {
+          return 'vaadin-combo-box';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * The label for this element.
+             */
+            label: {
+              type: String,
+              reflectToAttribute: true
+            },
+
+            /**
+             * Set to true to disable the floating label.
+             */
+            noLabelFloat: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to always float the label.
+             */
+            alwaysFloatLabel: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to auto-validate the input value.
+             */
+            autoValidate: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to disable this input.
+             */
+            disabled: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to prevent the user from entering invalid input.
+             */
+            preventInvalidInput: {
+              type: Boolean
+            },
+
+            /**
+             * Set this to specify the pattern allowed by `preventInvalidInput`.
+             */
+            allowedPattern: {
+              type: String
+            },
+
+            /**
+             * A pattern to validate the `input` with.
+             */
+            pattern: {
+              type: String
+            },
+
+            /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: {
+              type: String
+            },
+
+            autofocus: {
+              type: Boolean
+            },
+
+            inputmode: {
+              type: String
+            },
+
+            /**
+             * A placeholder string in addition to the label. If this is set, the label will always float.
+             */
+            placeholder: {
+              type: String,
+              // need to set a default so _computeAlwaysFloatLabel is run
+              value: ''
+            },
+
+            readonly: {
+              type: Boolean,
+              value: false
+            },
+
+            size: {
+              type: Number
+            },
+
+            /**
+             * True when the input field has focus.
+             */
+            focused: {
+              type: Boolean,
+              value: false,
+              readOnly: true,
+              reflectToAttribute: true,
+              notify: true
+            }
+          };
+        }
+
+        attributeChanged(name, type) {
+          // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+          // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          if (isSafari && this.root) {
+            Array.prototype.forEach.call(this.root.querySelectorAll('*'), el => {
+              el.style['-webkit-backface-visibility'] = 'visible';
+              el.style['-webkit-backface-visibility'] = '';
+            });
+          }
+        }
+
+        ready() {
+          super.ready();
+          // 2.0 does not support nested syntax for listeners
+          this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
+
+          this._setInputElement(this.$.input);
+          this._bindableInput = this.$.ironinput;
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // Use the default toggle/clear or one replaced in light DOM.
+          this._toggleElement = this.querySelector('[slot=toggle-button]') || this.$.toggleIcon;
+          this._clearElement = this.querySelector('[slot=clear-button]') || this.$.clearIcon;
+          this._preventInputBlur();
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          this._restoreInputBlur();
+        }
+
+        _computeAlwaysFloatLabel(alwaysFloatLabel, placeholder) {
+          return placeholder || alwaysFloatLabel;
+        }
+
+        _getPositionTarget() {
+          return this.$.inputContainer;
+        }
+
+        _getAriaExpanded(value) {
+          return value.toString();
+        }
+
+        /**
+         * Sets focus on the input field.
+         */
+        focus() {
+          this.inputElement.focus();
+        }
+
+        /**
+         * Removes focus from the input field.
+         */
+        blur() {
+          this.inputElement.blur();
+        }
+
+        _onInputContainerFocusedChanged(e) {
+          this._setFocused(e.detail.value);
+        }
+      }
+
+      customElements.define(ComboBoxElement.is, ComboBoxElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ComboBoxElement = ComboBoxElement;
+    }
+  </script>
+</dom-module>
+
+

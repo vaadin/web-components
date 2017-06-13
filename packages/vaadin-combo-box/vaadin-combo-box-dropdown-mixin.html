@@ -1,0 +1,82 @@
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  // TODO: this behavior can be inlined to the base class of vaadin-combo-box
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.ComboBoxDropdownMixin = subclass => class VaadinComboBoDropdownMixinElement extends subclass {   
+
+    static get properties() {
+      return {
+        /**
+         * True if the dropdown is open, false otherwise.
+         */
+        opened: {
+          type: Boolean,
+          notify: true,
+          value: false,
+          reflectToAttribute: true,
+          observer: '_openedChanged'
+        },
+
+        /**
+         * Set to true to disable this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        /**
+         * When present, it specifies that the element field is read-only.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        }
+      };
+    }
+
+    /**
+     * Opens the dropdown list.
+     */
+    open() {
+      // Prevent _open() being called when input is disabled or read-only
+      if (!this.disabled && !this.readonly) {
+        this.opened = true;
+      }
+    }
+
+    /**
+     * Closes the dropdown list.
+     */
+    close() {
+      this.opened = false;
+    }
+
+    _openedChanged(value, old) {
+      // Prevent _close() being called when opened is set to its default value (false).
+      if (old === undefined) {
+        return;
+      }
+
+      if (this.opened) {
+        // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
+        // is explicitly focused by the user.
+        if (!this.$.overlay.touchDevice) {
+          // If the inputElement is a paper-input, it would trigger an
+          // unnecessary blur event on focus. Check to see if there is a
+          // focused property and if it's already true.
+          // See also https://github.com/PolymerElements/paper-input/issues/341
+          if (!this.inputElement.focused) {
+            this.inputElement.focus();
+          }
+        }
+      }
+    }
+  };
+</script>

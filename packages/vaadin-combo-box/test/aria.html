@@ -20,8 +20,8 @@
 
 <script>
 
-  describe('Accessible Rich Internet Applications (ARIA)', function() {
-    var comboBox;
+  describe('Accessible Rich Internet Applications (ARIA)', () => {
+    let comboBox;
 
     function getInput() {
       return comboBox.inputElement;
@@ -33,7 +33,7 @@
       return comboBox.$.clearIcon;
     }
     function getItemElement(i) {
-      return comboBox.$.overlay.$.selector.querySelectorAll('vaadin-combo-box-item')[i];
+      return comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')[i];
     }
 
     function arrowDown() {
@@ -43,17 +43,15 @@
       MockInteractions.keyDownOn(getInput(), 27);
     }
 
-    beforeEach(function() {
+    beforeEach(() => {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
-    afterEach(function() {
-      comboBox.opened = false;
-    });
+    afterEach(() => comboBox.opened = false);
 
-    describe('when combo-box is attached', function() {
-      it('should contain appropriate aria attributes', function() {
+    describe('when combo-box is attached', () => {
+      it('should contain appropriate aria attributes', () => {
         expect(getInput().getAttribute('role')).to.equal('combobox');
         expect(getInput().getAttribute('aria-label')).to.equal('my label');
         expect(getInput().getAttribute('aria-autocomplete')).to.equal('list');
@@ -64,21 +62,20 @@
       });
     });
 
-    describe('when overlay opens or close', function() {
-      beforeEach(function() {
-        arrowDown();
+    describe('when overlay opens or close', () => {
+
+      beforeEach(arrowDown);
+
+      it('iron-list should have role listbox', () => {
+        expect(comboBox.$.overlay._selector.getAttribute('role')).to.equal('listbox');
       });
 
-      it('iron-list should have role listbox', function() {
-        expect(comboBox.$.overlay.$.selector.getAttribute('role')).to.equal('listbox');
-      });
-
-      it('should set aria-expanded attribute when opened', function() {
+      it('should set aria-expanded attribute when opened', () => {
         expect(getInput().getAttribute('aria-expanded')).to.equal('true');
         expect(getToggleIcon().getAttribute('aria-expanded')).to.equal('true');
       });
 
-      it('should unset aria-expanded attribute when closed', function() {
+      it('should unset aria-expanded attribute when closed', () => {
         esc();
 
         expect(getInput().getAttribute('aria-expanded')).to.equal('false');
@@ -86,20 +83,17 @@
       });
     });
 
-    describe('navigating the items', function() {
-      beforeEach(function() {
-        arrowDown();
-      });
+    describe('navigating the items', () => {
 
-      afterEach(function(done) {
-        // IE11 randomly breaks during the teardown process when
-        // fixture.restore() is called, most likely because the arrowDown()
-        // functions are still partly running.
-        // Delaying the teardown by a micro task seems to help.
-        comboBox.async(done);
-      });
+      beforeEach(arrowDown);
 
-      it('should set selection aria attributes when focusing an item', function() {
+      // IE11 randomly breaks during the teardown process when
+      // fixture.restore() is called, most likely because the arrowDown()
+      // functions are still partly running.
+      // Delaying the teardown by a micro task seems to help.
+      afterEach(done => Polymer.Async.microTask.run(done));
+
+      it('should set selection aria attributes when focusing an item', () => {
         comboBox.value = 'foo';
         arrowDown(); // 'focus moves to 2nd item'
 
