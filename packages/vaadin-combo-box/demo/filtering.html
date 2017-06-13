@@ -75,41 +75,43 @@
 
   </template>
   <script>
-    Polymer({
-      is: 'iron-ajax',
+    window.addEventListener('WebComponentsReady', function() {
+      Polymer({
+        is: 'iron-ajax',
 
-      properties: {
-        url: {
-          type: String,
-          observer: '_urlChanged'
+        properties: {
+          url: {
+            type: String,
+            observer: '_urlChanged'
+          },
+
+          lastResponse: {
+            type: Object,
+            notify: true
+          },
+
+          loading: {
+            type: Boolean,
+            notify: true
+          },
+
+          debounceDuration: Number
         },
 
-        lastResponse: {
-          type: Object,
-          notify: true
-        },
+        _urlChanged: function(url) {
+          var urlParts = url.split('?filter=');
+          var filter = urlParts[1];
 
-        loading: {
-          type: Boolean,
-          notify: true
-        },
+          this.loading = true;
 
-        debounceDuration: Number
-      },
-
-      _urlChanged: function(url) {
-        var urlParts = url.split('?filter=');
-        var filter = urlParts[1];
-
-        this.loading = true;
-
-        var urlJob = Polymer.Debouncer.debounce(urlJob, Polymer.Async.timeOut.after(this.debounceDuration), () => {
-          this.loading = false;
-          this.lastResponse = elements.filter(function(el) {
-            return el.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+          var urlJob = Polymer.Debouncer.debounce(urlJob, Polymer.Async.timeOut.after(this.debounceDuration), () => {
+            this.loading = false;
+            this.lastResponse = elements.filter(function(el) {
+              return el.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+            });
           });
-        });
-      }
+        }
+      });
     });
   </script>
 </dom-module>
