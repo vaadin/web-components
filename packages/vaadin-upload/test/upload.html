@@ -406,6 +406,22 @@
           });
           upload._addFiles(files);
         });
+
+        it('should remove all files', function(done) {
+          var removeFirst = function() {
+            if (upload.files.length === 0) {
+              done();
+            } else {
+              setTimeout(upload._abortFileUpload.bind(upload, upload.files[0]), 1);
+            }
+          };
+
+          upload.noAuto = true;
+          upload._addFiles(files);
+          upload.addEventListener('file-remove', removeFirst);
+          removeFirst();
+        });
+
       });
 
       describe('maxFiles change', function() {
