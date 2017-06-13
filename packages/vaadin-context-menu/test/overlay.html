@@ -24,7 +24,7 @@
 
       describe('overlay', () => {
 
-        var menu;
+        let menu;
 
         beforeEach(() => {
           menu = fixture('default');
@@ -32,7 +32,7 @@
 
         function contextmenu(x, y, shiftKey) {
           shiftKey = shiftKey || false;
-          var e;
+          let e;
           try {
             e = new MouseEvent('contextmenu', {
               bubbles: true,
@@ -140,7 +140,7 @@
 
             menu.openOn = 'touchstart';
 
-            var event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
+            const event = new CustomEvent('touchstart', {bubbles: true, cancelable: true});
             event.touches = event.changedTouches = event.targetTouches = [{clientX: 10, clientY: 20}];
 
             menu.children[0].dispatchEvent(event);
@@ -165,7 +165,7 @@
             });
 
             it('should not prevent default of `contextmenu` event', () => {
-              var event = contextmenu(0, 0, true);
+              const event = contextmenu(0, 0, true);
               expect(event.defaultPrevented).to.not.eql(true);
             });
           });
@@ -198,7 +198,7 @@
               done();
             });
 
-            var e = new CustomEvent('contextmenu', {
+            const e = new CustomEvent('contextmenu', {
               cancelable: true,
               bubbles: true
             });

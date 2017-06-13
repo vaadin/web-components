@@ -1,9 +1,9 @@
 'use strict';
 
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var htmlExtract = require('gulp-html-extract');
-var stylelint = require('gulp-stylelint');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
+const htmlExtract = require('gulp-html-extract');
+const stylelint = require('gulp-stylelint');
 
 gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 

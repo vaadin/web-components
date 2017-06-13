@@ -105,7 +105,7 @@
                 }
 
                 _remove(e) {
-                  var index = parseInt(e.target.content.getAttribute('data-index'));
+                  const index = parseInt(e.target.content.getAttribute('data-index'));
                   this.splice('items', index, 1);
                 }
               }

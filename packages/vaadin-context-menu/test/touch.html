@@ -29,8 +29,8 @@
 
   <script>
     describe('mobile support', () => {
-      var menu, target;
-      var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      let menu, target;
+      const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       beforeEach(() => {
         menu = fixture('default');
@@ -40,19 +40,19 @@
 
       function makeSoloTouchEvent(type, xy, node) {
         xy = xy || middleOfNode(node);
-        var touches = makeTouches([xy], node);
-        var touchEventInit = {
+        const touches = makeTouches([xy], node);
+        const touchEventInit = {
           touches: touches,
           targetTouches: touches,
           changedTouches: touches
         };
-        var event = new CustomEvent(type, {
+        const event = new CustomEvent(type, {
           bubbles: true,
           cancelable: true,
           composed: true
         });
 
-        for (var property in touchEventInit) {
+        for (let property in touchEventInit) {
           event[property] = touchEventInit[property];
         }
 
@@ -61,7 +61,7 @@
       }
 
       function middleOfNode(node) {
-        var bcr = node.getBoundingClientRect();
+        const bcr = node.getBoundingClientRect();
         return {
           y: bcr.top + (bcr.height / 2),
           x: bcr.left + (bcr.width / 2)
@@ -69,7 +69,7 @@
       }
 
       function makeTouches(xyList, node) {
-        var id = 0;
+        let id = 0;
 
         return xyList.map(xy => {
           return {
@@ -89,7 +89,7 @@
         menu._setOpened(true);
 
         listenOnce(menu, 'iron-overlay-opened', () => {
-          var styles = window.getComputedStyle(menu.$.overlay);
+          const styles = window.getComputedStyle(menu.$.overlay);
           expect(styles.bottom).to.eql('0px');
           expect(styles.transform).not.to.contain('translate');
           done();
@@ -104,7 +104,7 @@
 
       if (ios) {
         it('should open on long-touch on ios', done => {
-          var xy = middleOfNode(target);
+          const xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
           listenOnce(menu, 'iron-overlay-opened', () => {
@@ -131,7 +131,7 @@
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
           setTimeout(() => {
-            var evt = fire(menu, 'tap');
+            const evt = fire(menu, 'tap');
             expect(evt.defaultPrevented).to.eql(false);
 
             done();
@@ -142,7 +142,7 @@
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
           setTimeout(() => {
-            var evt = fire(menu, 'tap');
+            const evt = fire(menu, 'tap');
             expect(evt.defaultPrevented).to.eql(false);
 
             done();
@@ -150,7 +150,7 @@
         });
 
         it('should stop `touchend` from creating a tap event which cancels the overlay', done => {
-          var xy = middleOfNode(target);
+          const xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
           listenOnce(menu, 'iron-overlay-opened', () => {
@@ -165,7 +165,7 @@
         });
 
         it('should not open when touch moving', done => {
-          var xy = middleOfNode(menu.listenOn);
+          const xy = middleOfNode(menu.listenOn);
           makeSoloTouchEvent('touchstart', xy, menu.listenOn);
 
           setTimeout(() => {

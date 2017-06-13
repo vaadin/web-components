@@ -51,7 +51,7 @@
 
     <script>
       describe('context', () => {
-        var menu, foo, target, another;
+        let menu, foo, target, another;
 
         beforeEach(() => {
           menu = fixture('default');
@@ -74,7 +74,7 @@
         });
 
         it('should use details as context details', () => {
-          var detail = {};
+          const detail = {};
           fire(menu, 'vaadin-contextmenu', detail);
 
           expect(menu._context.detail).to.eql(detail);

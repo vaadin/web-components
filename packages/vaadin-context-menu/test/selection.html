@@ -31,14 +31,14 @@
     <script>
       describe('overlay', () => {
 
-        var menu;
+        let menu;
 
         beforeEach(() => {
           menu = fixture('default');
         });
 
         function unwrapIfNeeded(element) {
-          var isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
+          const isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
           return isWrapped ? window.unwrap(element) : element;
         }
 

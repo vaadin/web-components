@@ -49,8 +49,8 @@ This program is available under Apache License Version 2.0, available at https:/
           // Original target may or may not be inside a shadow root.
           // For code readability, findOriginalTarget() should be
           // changed to use composedPath() directly after native Shadow becomes the norm.
-          var t = Polymer.Gestures.findOriginalTarget(e) || e.target;
-          var ct = e.changedTouches[0];
+          const t = Polymer.Gestures.findOriginalTarget(e) || e.target;
+          const ct = e.changedTouches[0];
           if (!e.shiftKey) {
             if (this.info._ios) {
               this.fire(t, ct.clientX, ct.clientY);
@@ -64,8 +64,8 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       touchmove: function(e) {
-        var moveThreshold = 15;
-        var touchStartCoords = this.info.touchStartCoords;
+        const moveThreshold = 15;
+        const touchStartCoords = this.info.touchStartCoords;
         if (Math.abs(touchStartCoords.x - e.changedTouches[0].clientX) > moveThreshold ||
             Math.abs(touchStartCoords.y - e.changedTouches[0].clientY) > moveThreshold) {
           this._cancelTimer();

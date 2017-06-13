@@ -1,8 +1,8 @@
-var argv = require('yargs').argv;
+const argv = require('yargs').argv;
 
 module.exports = {
   registerHooks: context => {
-    var saucelabsPlatforms = [
+    const saucelabsPlatforms = [
       'OS X 10.11/iphone@10.0',
       'OS X 10.11/ipad@10.0',
       'Windows 10/microsoftedge@14',
@@ -10,7 +10,7 @@ module.exports = {
       'OS X 10.11/safari@10.0'
     ];
 
-    var cronPlatforms = [
+    const cronPlatforms = [
       'Windows 10/chrome@58',
       'Windows 10/firefox@53'
     ];

@@ -42,7 +42,7 @@
 
     <script>
       describe('integration', () => {
-        var contextMenuButton, menu, button;
+        let contextMenuButton, menu, button;
 
         beforeEach(() => {
           contextMenuButton = fixture('default');
@@ -58,7 +58,7 @@
         it('should place the backdrop above all other document elements', done => {
           MockInteractions.tap(button);
           setTimeout(() => {
-            var buttonRect = button.getBoundingClientRect();
+            const buttonRect = button.getBoundingClientRect();
             MockInteractions.tap(
               // this should be backdrop, as it placed above the button
               document.elementFromPoint(buttonRect.left, buttonRect.top)
