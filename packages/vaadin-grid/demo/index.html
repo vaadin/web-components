@@ -48,8 +48,16 @@
               </vaadin-grid-column>
 
               <vaadin-grid-column>
-                <template class="header">First Name</template>
-                <template>[[item.firstName]]</template>
+                <template class="header">
+                  <span draggable="true">
+                    First Name
+                  </span>
+                </template>
+                <template>
+                  <span draggable="true">
+                    [[item.firstName]]
+                  </span>
+                </template>
                 <template class="footer">First Name</template>
               </vaadin-grid-column>
 

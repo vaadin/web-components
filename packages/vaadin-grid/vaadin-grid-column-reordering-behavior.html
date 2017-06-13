@@ -90,6 +90,12 @@
     },
 
     _onDragStart: function(e) {
+      // We allow “dragstart” to start reordering only directly on
+      // <vaadin-grid-cell-content> elements. Otherwise, any cell content with
+      // `draggable="true"` attribute can start column reordering, issue #895.
+      if (e.target.localName !== 'vaadin-grid-cell-content') {
+        return;
+      }
 
       var cell = this._getCellByCellContent(e.target);
       if (cell) {
@@ -117,8 +123,23 @@
     },
 
     _onDragOver: function(e) {
+      if (!this._draggedColumn) {
+        // Reordering didn’t start. Skip this event.
+        return;
+      }
+
+      // “dragover” can happen both on and inside <vaadin-grid-cell-content>,
+      // so we look through the event path.
+      var path = Polymer.Element ? e.composedPath() : Polymer.dom(e).path;
+      var cellContent = path.filter(function(el) {
+        return el.localName === 'vaadin-grid-cell-content';
+      })[0];
+      if (!cellContent) {
+        return;
+      }
+
       e.preventDefault();
-      var targetCell = this._getCellByCellContent(e.target);
+      var targetCell = this._getCellByCellContent(cellContent);
       var targetColumn = this._getTargetColumn(targetCell, this._draggedColumn);
 
       if (targetColumn &&
@@ -149,6 +170,11 @@
     },
 
     _onDragEnd: function(e) {
+      if (!this._draggedColumn) {
+        // Reordering didn’t start. Skip this event.
+        return;
+      }
+
       this.toggleAttribute('reordering', false);
       this._draggedColumn._reorderStatus = '';
       this._setSiblingsReorderStatus(this._draggedColumn, '');
@@ -179,33 +205,11 @@
     },
 
     _getCellByCellContent: function(cellContent) {
-      if (cellContent) {
-        var contentId, injectionPoint;
-        if (Polymer.Element) {
-          contentId = null;
-          while (contentId === null && cellContent !== this.target && cellContent) {
-            contentId = cellContent.getAttribute('slot');
-            cellContent = cellContent.parentElement;
-          }
-
-          if (contentId !== null) {
-            injectionPoint = Polymer.dom(this.domHost.root).querySelector('slot[name=' + contentId + ']');
-            return Polymer.dom(injectionPoint).parentNode;
-          }
-        } else {
-          contentId = null;
-          while (contentId === null && cellContent !== this.target && cellContent) {
-            if (cellContent.localName === 'vaadin-grid-cell-content') {
-              contentId = cellContent.id;
-            }
-            cellContent = cellContent.parentElement;
-          }
-
-          if (contentId !== null) {
-            injectionPoint = Polymer.dom(this).querySelector('content[select="#' + contentId + '"]');
-            return Polymer.dom(injectionPoint).parentNode;
-          }
-        }
+      if (Polymer.Element) {
+        return cellContent.assignedSlot.parentNode;
+      } else {
+        var insertionPoint = Polymer.dom(cellContent).getDestinationInsertionPoints()[0];
+        return Polymer.dom(insertionPoint).parentNode;
       }
     },
 

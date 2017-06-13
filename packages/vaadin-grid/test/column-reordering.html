@@ -119,6 +119,28 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="draggableCellContent">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <dom-repeat items="[1, 2]" as="col">
+          <template is="dom-repeat" items="[1, 2]" as="col">
+            <vaadin-grid-column resizable>
+              <template class="header">
+                <div draggable="true">[[col]]</div>
+              </template>
+              <template>
+                <div draggable="true">[[col]]</div>
+              </template>
+              <template class="footer">
+                <div draggable="true">[[col]]</div>
+              </template>
+            </vaadin-grid-column>
+          </template>
+        </dom-repeat>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     function getVisualCellContent(section, row, col) {
       var cell = Array.prototype.slice.call(Polymer.dom(section).querySelectorAll('.vaadin-grid-cell')).pop();
@@ -515,6 +537,48 @@
 
       it('should support over 10 child-columns in a group', function() {
         expectVisualOrder(grid, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+      });
+
+    });
+
+    describe('reordering with draggable contents', function() {
+
+      var grid, visualColumnCellContents;
+
+      beforeEach(function(done) {
+        // The before each block times out in CI with Firefox on Polymer 2
+        this.timeout(30000);
+
+        grid = fixture('draggableCellContent');
+        grid.dataProvider = infiniteDataProvider;
+        flush(function() {
+          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
+          visualColumnCellContents = [];
+          for (var i = 0; i < colCount; i++) {
+            visualColumnCellContents.push(getVisualColumnCellContents(grid, i));
+          }
+          done();
+        });
+      });
+
+      it('should start reordering on header cell content', function() {
+        visualColumnCellContents[0][1].parentNode.dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
+        expect(grid.$.scroller.hasAttribute('reordering')).to.be.true;
+      });
+
+      it('should not start reordering inside body cell content', function() {
+        visualColumnCellContents[0][0].dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
+        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+      });
+
+      it('should not start reordering inside draggable header cell content', function() {
+        visualColumnCellContents[0][1].dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
+        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+      });
+
+      it('should not start reordering inside draggable footer cell content', function() {
+        visualColumnCellContents[0][2].dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
+        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
 
     });
