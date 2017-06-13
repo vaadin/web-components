@@ -80,12 +80,12 @@ The `class` attribute is used to differentiate header and footer templates.
       observers: [
         '_updateVisibleChildColumns(_childColumns)',
         '_childColumnsChanged(_childColumns)',
-        '_flexGrowChanged(flexGrow)',
-        '_widthChanged(width, _headerCell, _cells.*)',
+        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
+        '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(_childColumns, frozen, _headerCell)',
         '_hiddenChanged(hidden)',
         '_visibleChildColumnsChanged(_visibleChildColumns)',
-        '_colSpanChanged(colSpan)',
+        '_colSpanChanged(colSpan, _headerCell, _footerCell)',
         '_orderChanged(_order, _rootColumns)',
         '_reorderStatusChanged(_reorderStatus, _rootColumns)',
         '_resizableChanged(resizable, _rootColumns)'
@@ -219,7 +219,7 @@ The `class` attribute is used to differentiate header and footer templates.
         if (childColumns === undefined || frozen === undefined) {
           return;
         }
-        
+
         if (headerCell) {
           this._toggleAttribute('frozen', frozen, headerCell);
         }
@@ -264,7 +264,13 @@ The `class` attribute is used to differentiate header and footer templates.
         }
       },
 
-      _colSpanChanged: function(colSpan) {
+      _colSpanChanged: function(colSpan, headerCell, footerCell) {
+        if (headerCell) {
+          headerCell.colSpan = colSpan;
+        }
+        if (footerCell) {
+          footerCell.colSpan = colSpan;
+        }
         // this.fire('property-changed', {path: 'colSpan', value: colSpan});
       },
 

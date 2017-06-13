@@ -91,6 +91,9 @@
         } else if (templateName === 'headerTemplate') {
           column._headerCell = cell;
         }
+        else if (templateName === 'footerTemplate') {
+         column._footerCell = cell;
+       }
       });
 
 
@@ -119,18 +122,23 @@
     _columnTreeChanged(columnTree, splices) {
       Array.from(this.$.items.children).forEach(this._updateRow.bind(this, columnTree[columnTree.length - 1]));
 
+      // TODO: DRY
       while (this.$.header.children.length < columnTree.length) {
         this.$.header.appendChild(document.createElement('tr'));
+        this.$.footer.appendChild(document.createElement('tr'));
       }
       while (this.$.header.children.length > columnTree.length) {
         this.$.header.removeChild(this.$.header.firstElementChild);
+        this.$.footer.removeChild(this.$.header.firstElementChild);
       }
 
       Array.from(this.$.header.children).forEach((headerRow, index) => {
         this._updateRow(headerRow, columnTree[index], 'headerTemplate');
       });
 
-
+      Array.from(this.$.footer.children).forEach((footerRow, index) => {
+        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footerTemplate');
+      });
 
     }
 

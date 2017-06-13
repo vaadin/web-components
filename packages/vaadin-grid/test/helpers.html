@@ -229,7 +229,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getRows(container) {
-    return Array.prototype.slice.call(Polymer.dom(container).querySelectorAll('.vaadin-grid-row'));
+    return container.querySelectorAll('tr');
   }
 
   function getRowCells(row) {
@@ -251,9 +251,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getContainerCellContent(container, row, col) {
+    return getCellContent(getContainerCell(container, row, col));
+  }
+
+  function getContainerCell(container, row, col) {
     var rows = getRows(container);
     var cells = getRowCells(rows[row]);
-    return getCellContent(cells[col]);
+    return cells[col];
   }
 
   function dragStart(source) {
