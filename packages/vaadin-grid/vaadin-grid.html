@@ -1,514 +1,26 @@
-<!--
-@license
-Copyright (c) 2017 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
--->
-
-<!--
-
-`vaadin-grid` is a free, high quality data grid / data table Polymer element, part of the Vaadin Core Elements.
-
-### Quick Start
-
- - Use the <a href="#vaadin-grid-column">`<vaadin-grid-column>`</a> element to configure the grid columns.
-
- - Then assign an array to the <a href="#vaadin-grid:property-items">`items`</a> property to visualize your data.
-
- - In addition, there's helper elements such as
-<a href="#vaadin-grid-column-group">`<vaadin-grid-column-group>`</a>,
-<a href="#vaadin-grid-filter">`<vaadin-grid-filter>`</a>,
-<a href="#vaadin-grid-sorter">`<vaadin-grid-sorter>`</a> and
-<a href="#vaadin-grid-selection-column">`<vaadin-grid-selection-column>`</a>
-that can be used to customize the grid.
-__Note that the helper elements must be explicitly imported.__
-If you want to import everything at once you can use the `all-imports.html` bundle.
-
- - A column template can be decorated with one the following class names to specify its purpose
-  - "header": Marks a header template
-  - "footer": Marks a footer template
-  - "row-details": Marks a row details template
-
- - The following built-in template variables can be bound to inside the column templates
-  - "index": Number representing the row index
-  - "item" and it's sub-properties: Data object (provided by a data provider / items array)
-  - "selected": True if the item is selected (can be two-way bound)
-  - "expanded": True if the item is expanded for row details (can be two-way bound)
-
-#### Example:
-
-    <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"}, {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
-      <vaadin-grid-column>
-        <template class="header">Name</template>
-        <template>[[item.name]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template class="header">Surname</template>
-        <template>[[item.surname]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template class="header">Role</template>
-        <template>[[item.role]]</template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-
-### Lazy Loading with Function Data Provider
-
-In addition to assigning an array to the items property, you can alternatively
-provide the vaadin-grid data through the `dataProvider` function property.
-The vaadin-grid element calls this function lazily, only when it needs more data
-to be displayed.
-
-See the <a href="#vaadin-grid:property-dataProvider">`dataProvider`</a> in
-the API reference below for the detailed data provider arguments description,
-and the “Assigning Data” page in the demos</a>.
-
-__Note that when using function data providers, `size` always needs to be
-set manually.__
-
-    grid.size = 200; // The total number of items
-    grid.dataProvider = function(params, callback) {
-      var url = 'https://api.example/data' +
-          '?page=' + params.page +        // the requested page index
-          '&per_page=' + params.pageSize; // number of items on the page
-
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        var response = JSON.parse(xhr.responseText);
-        callback(response.employees);
-      };
-      xhr.open('GET', url, true);
-      xhr.send();
-    };
-
-### Styling
-
-The following custom properties and mixins are available for styling:
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--vaadin-grid-cell` | Mixin applied to all cells | `{}`
-`--vaadin-grid-header-cell` | Mixin applied to header cells | `{}`
-`--vaadin-grid-footer-cell` | Mixin applied to footer cells | `{}`
-`--vaadin-grid-body-cell` | Mixin applied to body cells | `{}`
-`--vaadin-grid-body-row-odd-cell` | Mixin applied to body cells on odd rows | `{}`
-`--vaadin-grid-cell-last-frozen` | Mixin applied to the last frozen column cells | `{}`
-`--vaadin-grid-body-row-hover-cell` | Mixin applied to body cells on hovered row | `{}`
-`--vaadin-grid-body-row-selected-cell` | Mixin applied to body cells on selected rows | `{}`
-`--vaadin-grid-body-row-active-cell` | Mixin applied to body cells on active row | `{}`
-`--vaadin-grid-body-row-details-cell` | Mixin applied to cells on details rows | `{}`
-`--vaadin-grid-focused-cell` | Mixin applied to cells with keyboard focus | `{}`
-`--vaadin-grid-loading-spinner` | Mixin applied to the loading spinner | `{}`
-`--vaadin-grid-column-resize-handle` | Mixin applied to the column resize handle | `{}`
-
-__Note:__ you can also style cell template contents by targeting them with
-standard CSS. For example, using classes to apply custom background on a frozen
-column and aling numeric contents to the right:
-
-    <style is="custom-style">
-      vaadin-grid {
-        --vaadin-grid-cell: {
-          padding: 0;
-        };
-      }
-
-      .cell {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 8px;
-      }
-
-      .frozen {
-        background: lightgray;
-      }
-
-      .numeric {
-        text-align: right;
-      }
-    </style>
-
-    <vaadin-grid>
-
-      <vaadin-grid-column width="100px" frozen>
-        <template class="header">
-          <div class="cell frozen">User Name</div>
-        </template>
-        <template>
-          <div class="cell frozen">[[item.username]]</div>
-        </template>
-      </vaadin-grid-column>
-
-        ...
-
-      <vaadin-grid-column>
-        <template class="header">
-          <div class="cell numeric">Age</div>
-        </template>
-        <template>
-          <div class="cell numeric">[[item.age]]</div>
-        </template>
-      </vaadin-grid-column>
-
-    </vaadin-grid>
-
-See also the “Styling” demos.
-
-### Keyboard Navigation
-
-#### In navigation mode
-
-Key | Action
-----|--------
-<kbd>Tab</kbd> | Moves the keyboard focus from header -> body -> footer
-<kbd>Shift</kbd>+<kbd>Tab</kbd> | Moves the keyboard focus from header <- body <- footer
-<kbd>Down</kbd> | Moves the keyboard focus to the cell on the next row
-<kbd>Up</kbd> | Moves the keyboard focus to the cell on the previous row
-<kbd>Right</kbd> | Moves the keyboard focus to the next cell
-<kbd>Left</kbd> | Moves the keyboard focus to the previous cell
-<kbd>PgDn</kbd> | Moves the keyboard focus one page down
-<kbd>PgUp</kbd> | Moves the keyboard focus one page up
-<kbd>Home</kbd> | Moves the keyboard focus to the first cell of the focused row
-<kbd>End</kbd> | Moves the keyboard focus to the last cell of the focused row
-<kbd>Ctrl</kbd>+<kbd>Home</kbd> | Moves the keyboard focus to the first cell of the first row
-<kbd>Ctrl</kbd>+<kbd>End</kbd> | Moves the keyboard focus to the last cell of the last row
-<kbd>Space</kbd> | Activates the item on the focused body cell
-<kbd>Enter</kbd> or <kbd>F2</kbd> | Activates the interactive mode for the focused cell
-
-<b>Note</b>: If the focused cell has child elements, the <kbd>Space</kbd> key
-clicks the first child element of the focused cell. See an example on the
-“Selection” demo page for more information.
-
-#### In interactive mode
-
-Key | Action
-----|--------
-<kbd>F2</kbd> or <kbd>ESC</kbd> | Deactivates the interactive mode
-
-<b>Note</b>: When entering interactive mode with <kbd>Enter</kbd> or <kbd>F2</kbd>, the
-first element in the cell will be focused. You can override the behavior by applying a
-`focus-target` attribute on the child element your want to be focused first.
-
-@element vaadin-grid
-@demo demo/index.html
--->
-
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="vaadin-grid-column.html">
-<link rel="import" href="vaadin-grid-active-item-behavior.html">
-<link rel="import" href="vaadin-grid-row-details-behavior.html">
-<link rel="import" href="vaadin-grid-data-provider-behavior.html">
-<link rel="import" href="vaadin-grid-array-data-provider-behavior.html">
+<link rel="import" href="vaadin-scroller.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
-<link rel="import" href="vaadin-grid-selection-behavior.html">
-<link rel="import" href="vaadin-grid-sort-behavior.html">
-<link rel="import" href="vaadin-grid-filter-behavior.html">
-<link rel="import" href="vaadin-grid-column-reordering-behavior.html">
-<link rel="import" href="vaadin-grid-scroller.html">
+<link rel="import" href="vaadin-grid-data-provider-behavior.html">
 <link rel="import" href="vaadin-grid-table-scroll-behavior.html">
-<link rel="import" href="vaadin-grid-table-row.html">
-<link rel="import" href="vaadin-grid-table-header-footer.html">
-<link rel="import" href="vaadin-grid-table-outer-scroller.html">
-<link rel="import" href="vaadin-grid-sizer.html">
+<link rel="import" href="vaadin-grid-column.html">
 
-<dom-module id="vaadin-grid-table-themability-styles">
-  <template>
-    <style>
-
-      /* Default borders */
-      vaadin-grid-table-header .vaadin-grid-row:last-child .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-      }
-
-      vaadin-grid-table-footer .vaadin-grid-row:first-child .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-        border-top: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-      }
-
-      vaadin-grid-table-body .vaadin-grid-row:not([lastrow]) .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-        border-bottom: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-      }
-
-      [last-frozen] ::slotted(vaadin-grid-cell-content) {
-        border-right: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-      }
-
-      /* Column resize handle */
-
-      .vaadin-grid-column-resize-handle {
-        border-right: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-        @apply(--vaadin-grid-column-resize-handle);
-      }
-
-      /* Cells */
-      .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        background: #fff;
-        text-align: left;
-        padding: 8px;
-        box-sizing: border-box;
-        @apply(--vaadin-grid-cell);
-      }
-
-      vaadin-grid-table-header .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        font-weight: 500;
-        @apply(--vaadin-grid-header-cell);
-      }
-
-      vaadin-grid-table-footer .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        font-weight: 500;
-        @apply(--vaadin-grid-footer-cell);
-      }
-
-      vaadin-grid-table-body .vaadin-grid-row .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        @apply(--vaadin-grid-body-cell);
-      }
-
-      vaadin-grid-table-body [odd] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        @apply(--vaadin-grid-body-row-odd-cell);
-      }
-
-      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell:not([detailscell])[last-frozen] ::slotted(vaadin-grid-cell-content) {
-        @apply(--vaadin-grid-cell-last-frozen);
-      }
-
-      vaadin-grid-table:not([scrolling]) vaadin-grid-table-body .vaadin-grid-row:hover .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-        @apply(--vaadin-grid-body-row-hover-cell);
-      }
-
-      vaadin-grid-table .vaadin-grid-row .vaadin-grid-cell.vaadin-grid-cell[lastcolumn] ::slotted(vaadin-grid-cell-content) {
-        border-right: none;
-      }
-
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-table-table-styles">
-  <template>
-    <style>
-      :host([ios][column-resizing]) #outerscroller {
-        overflow: hidden;
-      }
-
-      #fixedsizer,
-      #outersizer {
-        border-top: 0 solid transparent;
-        border-bottom: 0 solid transparent;
-      }
-
-      #table {
-        height: 100%;
-        width: 100%;
-        display: block;
-        overflow: auto;
-        box-sizing: border-box;
-      }
-
-      #table[overflow-hidden],
-      #outerscroller[overflow-hidden] {
-        overflow: hidden;
-      }
-
-      vaadin-grid-sizer {
-        position: relative;
-        width: 100%;
-      }
-
-      #sizerwrapper {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        z-index: -100;
-      }
-
-      #reorderghost {
-        visibility: hidden;
-        position: fixed;
-        opacity: 0.5;
-        pointer-events: none;
-      }
-
-      ::slotted(vaadin-grid-column),
-      ::slotted(vaadin-grid-selection-column),
-      ::slotted(vaadin-grid-column-group) {
-        display: none;
-      }
-
-    </style>
-  </template>
-</dom-module>
+<link rel="import" href="vaadin-grid-styles.html">
 
 <dom-module id="vaadin-grid">
   <template>
-    <style>
-      :host {
-        display: block;
-        height: 400px;
-        background: var(--primary-background-color, #fff);
-        box-sizing: border-box;
-        border: 1px solid var(--divider-color, rgba(0, 0, 0, 0.08));
-      }
+    <style include="vaadin-grid-styles"></style>
 
-      @keyframes appear {
-        to {
-          opacity: 1;
-        }
-      }
-
-      vaadin-grid-scroller {
-        display: block;
-        height: 100%;
-        position: relative;
-        animation: 1ms appear;
-        z-index: 1;
-      }
-
-      #items {
-        border-top: 0 solid transparent;
-        border-bottom: 0 solid transparent;
-      }
-
-      /*
-      #items > .vaadin-grid-row {
-        box-sizing: border-box;
-        margin: 0;
-        position: absolute;
-      }*/
-
-      /*vaadin-grid-table-body {
-        display: block;
-      }*/
-
-      /*vaadin-grid-table-header .vaadin-grid-cell,
-      vaadin-grid-table-footer .vaadin-grid-cell {
-        top: 0;
-      }*/
-
-      .vaadin-grid-cell {
-        /*padding: 0;*/
-        flex-shrink: 0;
-        flex-grow: 1;
-        /*box-sizing: border-box;*/
-        display: flex;
-      }
-
-      .vaadin-grid-cell:not([detailscell]) {
-        position: relative;
-      }
-
-      .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-         width: 100%;
-         display: inline-flex;
-         justify-content: center;
-         flex-direction: column;
-         white-space: nowrap;
-         overflow: hidden;
-      }
-
-      .vaadin-grid-column-resize-handle {
-        position: absolute;
-        right: 0;
-        height: 100%;
-        cursor: col-resize;
-        z-index: 1;
-      }
-
-      .vaadin-grid-column-resize-handle::before {
-        position: absolute;
-        content: "";
-        height: 100%;
-        width: 35px;
-        transform: translateX(-50%);
-      }
-
-      [lastcolumn] .vaadin-grid-column-resize-handle::before,
-      [last-frozen] .vaadin-grid-column-resize-handle::before {
-        width: 18px;
-        transform: translateX(-100%);
-      }
-
-      vaadin-grid-table[column-reordering-allowed] #header,
-      vaadin-grid-table[column-resizing] {
-        -ms-user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-
-      vaadin-grid-table[column-resizing] {
-        cursor: col-resize;
-      }
-
-      vaadin-grid-table-row {
-        position: absolute;
-        will-change: transform;
-      }
-
-      vaadin-grid-table-body {
-        position: relative;
-        display: block;
-      }
-
-      .vaadin-grid-row {
-        display: flex;
-        width: 100%;
-      }
-
-      [frozen] {
-        z-index: 2;
-      }
-
-      [hidden] {
-        display: none !important;
-      }
-
-      vaadin-grid-table[no-content-pointer-events] .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-        pointer-events: none;
-      }
-
-
-      #scrollers {
-        height: 100%;
-        position: relative;
-      }
-
-      /* FOR DEBUGGING */
-      /*:host ::slotted(vaadin-grid-cell-content) {
-        pointer-events: none;
-      }*/
-    </style>
-
-    <style include="vaadin-grid-table-scroll-styles"></style>
-    <style include="vaadin-grid-row-details-styles"></style>
-    <style include="vaadin-grid-table-styles"></style>
-    <style include="vaadin-grid-table-table-styles"></style>
-
-    <style include="vaadin-grid-table-themability-styles"></style>
-    <style include="vaadin-grid-selection-themability-styles"></style>
-    <style include="vaadin-grid-navigation-themability-styles"></style>
-    <style include="vaadin-grid-active-item-themability-styles"></style>
-    <style include="vaadin-grid-row-details-themability-styles"></style>
-    <style include="vaadin-grid-column-reordering-themability-styles"></style>
-
-    <div id="scrollers">
-      <vaadin-grid-scroller size="[[size]]" id="scroller" bind-data="[[_bindData]]" on-vaadin-grid-scroll="_scrollHandler" target="[[_this]]" _est-scroll-height="{{_estScrollHeight}}" on-vaadin-grid-row-count-change="_rowCountChanged">
-        <div id="sizerwrapper" slot="sizer">
-          <vaadin-grid-sizer id="fixedsizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
-        </div>
-        <vaadin-grid-table-header id="header" slot="header" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-header>
-        <vaadin-grid-table-body id="items" slot="items">
-          <template id="bodytemplate">
-            <vaadin-grid-table-row columns="[[_getBodyColumns(_columnTree.*)]]" target="[[_this]]"></vaadin-grid-table-row>
-          </template>
-        </vaadin-grid-table-body>
-        <vaadin-grid-table-footer id="footer" slot="footer" target="[[_this]]" column-tree="[[_columnTree]]"></vaadin-grid-table-footer>
-      </vaadin-grid-scroller>
-
-      <vaadin-grid-table-outer-scroller id="outerscroller" scroll-target="[[scrollTarget]]" overflow-hidden$="[[_hideOuterScroller(scrollbarWidth, safari)]]"
-        ios$="[[ios]]" scrolling$="[[scrolling]]">
-        <vaadin-grid-sizer id="outersizer" top="[[_estScrollHeight]]" column-tree="[[_columnTree]]"></vaadin-grid-sizer>
-      </vaadin-grid-table-outer-scroller>
+    <div id="scroller">
+      <table id="table">
+        <thead id="header"></thead>
+        <tbody id="items"></tbody>
+        <tfoot id="footer"></tfoot>
+      </table>
     </div>
+
+    <!-- The template needs at least one slot or else shady doesn't distribute -->
+    <slot name="nodristribute"></slot>
+
   </template>
 </dom-module>
 
@@ -517,135 +29,124 @@ first element in the cell will be focused. You can override the behavior by appl
     [
       vaadin.elements.grid.DynamicColumnsBehavior,
       vaadin.elements.grid.DataProviderBehavior,
-      vaadin.elements.grid.ArrayDataProviderBehavior,
-      vaadin.elements.grid.SortBehavior,
-      vaadin.elements.grid.FilterBehavior,
-      vaadin.elements.grid.SelectionBehavior,
-      vaadin.elements.grid.RowDetailsBehavior,
       vaadin.elements.grid.TableScrollBehavior
     ],
-    Polymer.Element
-  ) {
+    VaadinScroller) {
 
     static get is() {
       return 'vaadin-grid';
     }
 
-    static get properties() {
-      return {
-        items: Array,
+    static get observers() {
+      return [
+        '_columnTreeChanged(_columnTree, _columnTree.*)',
+      ]
+    }
 
-        _columnTree: Array,
+    _createScrollerRow() {
+      const row = document.createElement('tr');
+      this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+      return row;
+    }
 
-        _this: {
-          value: function() {
-            return this;
+    _getRowTarget() {
+      return this.$.items;
+    }
+
+    _updateRow(row, columns, templateName) {
+      templateName = templateName || 'template';
+      // Create the row cells programmatically to avoid a <template> tag
+      const cellsFragment = document.createDocumentFragment();
+      const contentsFragment = document.createDocumentFragment();
+
+      row.innerHTML = '';
+      columns.forEach((column, index) => {
+        // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
+        // {
+          const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
+          const id = 'vaadin-grid-cell-content-' + contentId;
+
+
+          const cellContent = document.createElement('vaadin-grid-cell-content');
+          cellContent.setAttribute('slot' , id);
+          contentsFragment.appendChild(cellContent);
+        // }
+
+        const cell = document.createElement('td');
+        cell.classList.add('vaadin-grid-cell');
+        cell._content = cellContent;
+
+        const slot = document.createElement('slot');
+        slot.setAttribute('name', id);
+        cell.appendChild(slot);
+        // cellsFragment.appendChild(cell)
+        row.appendChild(cell);
+
+        if (templateName === 'template') {
+          column._cells = column._cells || [];
+          column._cells.push(cell);
+          if (column.notifyPath) {
+            column.notifyPath('_cells.*', column._cells); // TODO: This is really heavy, batch/debounce it
           }
-        },
-
-        _bindData: {
-          type: Object,
-          value: function() {
-            return this._getItem.bind(this);
-          }
-        },
-
-        size: Number
-      }
-    }
-
-    _getBodyColumns(splices) {
-      return this._columnTree[this._columnTree.length - 1];
-    }
-
-    _getHeaderColumns(splices, index) {
-      return this._columnTree[index];
-    }
-
-    _updateItem(row, item) {
-      row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
-      row.item = item;
-      row.selected = this._isSelected(item);
-      row.expanded = this._isExpanded(item);
-      row.active = item !== null && item == this.activeItem;
-      // row.focused = row.index === this.$.items._focusedRowIndex;
-    }
-
-    ready() {
-      super.ready();
-      this.$.scroller.addEventListener('animationend', e => {
-        if (/appear/.test(e.animationName)) {
-          // this.$.scroller.update();
-          this._updateHeaderFooterMetrics();
-          e.stopPropagation();
+        } else if (templateName === 'headerTemplate') {
+          column._headerCell = cell;
         }
       });
 
-      this.addEventListener('property-changed', this._columnPropChanged.bind(this));
-    }
 
-    // TODO: Move to a mixin:
+      // row.appendChild(cellsFragment);
 
-    _updateHeaderFooterMetrics() {
-      if (this._physicalSizes) {
-        Polymer.dom.flush();
-      }
-      this._updateHeaderFooterMetricsSync();
+      // Might be empty if only cache was used
+      this.appendChild(contentsFragment);
 
-      Polymer.RenderStatus.afterNextRender(this.$.header, function() {
-        this._updateHeaderFooterMetricsSync();
-        if (this._pendingScrollToScaledIndex) {
-          this.scrollToScaledIndex(this._pendingScrollToScaledIndex);
-        }
-      }.bind(this));
-    }
-
-    _updateHeaderFooterMetricsSync() {
-      var headerHeight = this.$.header.clientHeight + 'px';
-      var footerHeight = this.$.footer.clientHeight + 'px';
-
-      [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
-        element.style.borderTopWidth = headerHeight;
-        element.style.borderBottomWidth = footerHeight;
-      });
-    }
-
-    _columnPropChanged(e) {
-      if (e.detail.path === 'headerTemplate') {
-        this.toggleAttribute('has-templates', true, this.$.header);
-      }
-
-      if (e.detail.path === 'footerTemplate') {
-        this.toggleAttribute('has-templates', true, this.$.footer);
-      }
-
-      if (/frozen|hidden/.test(e.detail.path)) {
-        this._frozenCellsChanged();
-      }
-
-      if (e.detail.path === 'hidden') {
-        this._gridResizeHandler();
-      }
-    }
-
-    _gridResizeHandler() {
-      this._updateHeaderFooterMetrics();
-
-      if (this._physicalSizes) {
-        // this._physicalItems.forEach(function(row) {
-        //   row.updateRowDetailsCellMetrics();
-        // });
-        // this.debounce('vaadin-grid-resizing', function() {
-        //   this._update();
-        // }.bind(this), 1);
-      }
-    }
-
-    _rowCountChanged() {
       this._frozenCellsChanged();
     }
 
+    _updateScrollerItem(row, index) {
+      const columns = this._columnTree[this._columnTree.length - 1];
+      // Polymer.Templatizer.modelForElement(row)
+      columns.forEach((column, columnIndex) => {
+        const cell = row.children[columnIndex];
+        const slot = cell.firstElementChild;
 
+        if (cell._instance) {
+          cell._instance.index = index;
+        }
+      });
+      this._getItem(index, row);
+    }
+
+    _columnTreeChanged(columnTree, splices) {
+      Array.from(this.$.items.children).forEach(this._updateRow.bind(this, columnTree[columnTree.length - 1]));
+
+      while (this.$.header.children.length < columnTree.length) {
+        this.$.header.appendChild(document.createElement('tr'));
+      }
+      while (this.$.header.children.length > columnTree.length) {
+        this.$.header.removeChild(this.$.header.firstElementChild);
+      }
+
+      Array.from(this.$.header.children).forEach((headerRow, index) => {
+        this._updateRow(headerRow, columnTree[index], 'headerTemplate');
+      });
+
+
+
+    }
+
+    _updateItem(row, item) {
+      // row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
+      row._item = item;
+      Array.from(row.children).forEach((cell) => {
+        if (cell._instance) {
+          cell._instance.item = item;
+        }
+      });
+      // row.selected = this._isSelected(item);
+      // row.expanded = this._isExpanded(item);
+      // row.active = item !== null && item == this.activeItem;
+      // row.focused = row.index === this.$.items._focusedRowIndex;
+    }
   }
 
   customElements.define(VaadinGrid.is, VaadinGrid);
