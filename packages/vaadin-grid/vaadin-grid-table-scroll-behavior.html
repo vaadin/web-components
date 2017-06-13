@@ -174,8 +174,8 @@
 
     // correct order needed for preserving correct tab order between cell contents.
     _reorderRows: function() {
-      var body = this.root;
-      var items = body.querySelectorAll('vaadin-grid-table-row');
+      var body = this.$.items;
+      var items = body.querySelectorAll('tr');
       if (!items.length) {
         return;
       }

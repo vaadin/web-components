@@ -25,135 +25,130 @@
 
   <script>
     describe('basic features', function() {
-      var scroller, grid;
+      var grid;
 
-      beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
+      beforeEach(function() {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
-
-        scroller = grid.$.scroller;
-        Polymer.Base.async(done, 1);
+        flushGrid(grid);
       });
 
       it('check physical item heights', function() {
-        var rowHeight = scroller._physicalItems[0].offsetHeight;
+        var rowHeight = grid._physicalItems[0].offsetHeight;
 
-        scroller._physicalItems.forEach(function(item) {
+        grid._physicalItems.forEach(function(item) {
           expect(item.offsetHeight).to.equal(rowHeight);
         });
       });
 
       it('check visible item count', function() {
-        scroller.size = 10;
-        Polymer.dom.flush();
-        expect(Polymer.dom(grid.root).querySelectorAll('vaadin-grid-table-body .vaadin-grid-row:not([hidden])').length).to.eql(10);
+        grid.size = 10;
+        flushGrid(grid);
+        expect(Polymer.dom(grid.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
       });
 
       it('first visible index', function() {
-        expect(scroller.firstVisibleIndex).to.equal(0);
-        scroller.scroll(0, scroller._physicalAverage * 50);
-        scroller._scrollHandler();
-        expect(scroller.firstVisibleIndex).to.equal(50);
-        scroller.scrollToIndex(0);
-        scroller._scrollHandler();
-        expect(scroller.firstVisibleIndex).to.equal(0);
+        expect(grid.firstVisibleIndex).to.equal(0);
+        grid.scroll(0, grid._physicalAverage * 50);
+        grid._scrollHandler();
+        expect(grid.firstVisibleIndex).to.equal(50);
+        grid.scrollToIndex(0);
+        grid._scrollHandler();
+        expect(grid.firstVisibleIndex).to.equal(0);
       });
 
       it('last visible index', function() {
-        var actualHeight = scroller._physicalAverage;
-        scroller.scrollToIndex(2);
-        expect(scroller.lastVisibleIndex, Math.ceil(((scroller._scrollTop + grid.offsetHeight) / actualHeight) - 1));
+        var actualHeight = grid._physicalAverage;
+        grid.scrollToIndex(2);
+        expect(grid.lastVisibleIndex, Math.ceil(((grid._scrollTop + grid.offsetHeight) / actualHeight) - 1));
       });
 
       it('scroll to index', function() {
-        scroller.size = 100;
+        grid.size = 100;
 
-        scroller.scrollToIndex(30);
-        expect(scroller.firstVisibleIndex).to.equal(30);
+        grid.scrollToIndex(30);
+        expect(grid.firstVisibleIndex).to.equal(30);
 
-        scroller.scrollToIndex(0);
-        expect(scroller.firstVisibleIndex).to.equal(0);
+        grid.scrollToIndex(0);
+        expect(grid.firstVisibleIndex).to.equal(0);
 
-        scroller.scrollToIndex(99);
+        grid.scrollToIndex(99);
 
-        var rowHeight = getFirstVisibleItem(scroller).offsetHeight;
-        var viewportHeight = scroller.offsetHeight;
+        var rowHeight = getFirstVisibleItem(grid).offsetHeight;
+        var viewportHeight = grid.offsetHeight;
         var itemsPerViewport = viewportHeight / rowHeight;
 
-        expect(scroller.firstVisibleIndex, Math.floor(scroller.size - itemsPerViewport));
-        scroller.scrollToIndex(0);
+        expect(grid.firstVisibleIndex, Math.floor(grid.size - itemsPerViewport));
+        grid.scrollToIndex(0);
         // make the height of the viewport same as the height of the row
         // and scroll to the last item
-        grid.style.height = scroller._physicalItems[0].offsetHeight + 'px';
-        scroller.notifyResize();
-        scroller.scrollToIndex(99);
-        expect(scroller.firstVisibleIndex).to.equal(99);
+        grid.style.height = grid._physicalItems[0].offsetHeight + 'px';
+        grid.notifyResize();
+        grid.scrollToIndex(99);
+        expect(grid.firstVisibleIndex).to.equal(99);
       });
 
       it('scroll to top', function() {
-        scroller.scrollToIndex(99);
-        scroller.scroll(0, 0);
-        expect(scroller._scrollTop).to.equal(0);
+        grid.scrollToIndex(99);
+        grid.scroll(0, 0);
+        expect(grid._scrollTop).to.equal(0);
       });
 
       it('scroll to a given scrollTop', function() {
-        scroller.scrollToIndex(99);
-        scroller.scroll(0, 500);
-        expect(scroller.scrollTop).to.equal(500);
+        grid.scrollToIndex(99);
+        grid.scroll(0, 500);
+        expect(grid.$.table.scrollTop).to.equal(500);
       });
 
       it('should not scroll when size changes', function() {
-        scroller.scrollToIndex(99);
-        var top = scroller.scrollTop;
+        grid.scrollToIndex(99);
+        var top = grid.$.table.scrollTop;
 
-        scroller.size += 1;
+        grid.size += 1;
 
-        expect(scroller.scrollTop).to.eql(top);
+        expect(grid.$.table.scrollTop).to.eql(top);
         expect(top).to.be.greaterThan(0);
       });
 
       it('reset items', function() {
-        scroller.size = 100;
+        grid.size = 100;
 
-        Polymer.dom.flush();
-        expect(getCellContent(getFirstVisibleItem(scroller)).textContent).to.equal('0');
+        expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('0');
 
-        scroller.size = 0;
-        Polymer.dom.flush();
-        expect(getFirstVisibleItem(scroller), null);
+        grid.size = 0;
+        expect(getFirstVisibleItem(grid), null);
 
-        scroller.size = 100;
-        Polymer.dom.flush();
-        expect(getCellContent(getFirstVisibleItem(scroller)).textContent).to.equal('0');
+        grid.size = 100;
+        expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('0');
       });
 
       it('reorder rows', function() {
-        scroller.size = 100000;
+        grid.size = 100000;
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
-          scroller.$.table.scrollTop = 5000 + scroller._physicalAverage * steps;
-          scroller._scrollHandler();
-          scroller.flushDebouncer('_debounceTemplate');
-          scroller.flushDebouncer('vaadin-grid-scrolling');
+          grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
+          grid._scrollHandler();
+          grid.flushDebouncer('_debounceTemplate');
+          grid.flushDebouncer('vaadin-grid-scrolling');
           // Expect the physical rows to be in order after scrolling
-          var rows = Polymer.dom(grid.$.items).querySelectorAll('.vaadin-grid-row');
-          for (var i = 1; i < rows.length; i++) {
-            expect(rows[i].index).to.equal(rows[i - 1].index + 1);
-          }
+          var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+
+          rows.forEach((row, index) => {
+            if (index > 0) {
+              expect(row.index).to.equal(rows[index - 1].index + 1);
+            }
+          });
         });
       });
 
       it('reorder should not affect light dom', function() {
-        scroller.size = 100000;
+        grid.size = 100000;
         var wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
 
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
-          scroller.$.table.scrollTop = 5000 + scroller._physicalAverage * steps;
-          scroller._scrollHandler();
-          scroller.flushDebouncer('_debounceTemplate');
-          scroller.flushDebouncer('vaadin-grid-scrolling');
+          grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
+          grid._scrollHandler();
+          grid.flushDebouncer('_debounceTemplate');
+          grid.flushDebouncer('vaadin-grid-scrolling');
 
           var newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
           // Expect the light dom order unchanged

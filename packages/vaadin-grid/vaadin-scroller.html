@@ -42,6 +42,7 @@
     _createScrollerRow() {}
 
     _sizeChanged(size) {
+      this.items = {length: size};
       if (!this._physicalItems) {
         this._virtualStart = 0;
         this._physicalTop = 0;
@@ -115,6 +116,10 @@
     }
 
     clearSelection() {
+      // Ignore
+    }
+
+    _itemsChanged() {
       // Ignore
     }
 

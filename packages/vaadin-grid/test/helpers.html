@@ -12,6 +12,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
   var defaultCellWidth = 100;
 
+  function flushGrid(grid) {
+    // To a common helper
+    grid._observer.flush();
+    Polymer.flush();
+  }
+
   function getCell(grid, index) {
     return grid.$.items.querySelectorAll('.vaadin-grid-cell')[index];
   }
@@ -128,26 +134,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return Math.floor(index / grid._itemsPerRow);
   }
 
-  function getFirstVisibleItem(list) {
-    var visibleRows = getVisibleItems(list);
+  function getFirstVisibleItem(grid) {
+    var visibleRows = getVisibleItems(grid);
     if (visibleRows.length) {
       return visibleRows[0];
     }
     return null;
   }
 
-  function getLastVisibleItem(list) {
-    var visibleRows = getVisibleItems(list);
+  function getLastVisibleItem(grid) {
+    var visibleRows = getVisibleItems(grid);
     if (visibleRows.length) {
       return visibleRows.pop();
     }
     return null;
   }
 
-  function getVisibleItems(list) {
-    // make sure rows are ordered in the visible order
-    list.flushDebouncer('vaadin-grid-scrolling');
-    var rows = getRows(list.querySelector('#items'));
+  function getVisibleItems(grid) {
+    // TODO: make sure rows are ordered in the visible order
+    grid.flushDebouncer('vaadin-grid-scrolling');
+    var rows = grid.$.items.children;
     var visibleRows = [];
     for (var i = 0; i < rows.length; i++) {
       if (isVisible(rows[i])) {
@@ -231,7 +237,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getCellContent(cell) {
-    return cell ? cell.getContentChildren(Polymer.Element ? 'slot' : 'content')[0] : null;
+    return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
   }
 
   function getHeaderCellContent(grid, row, col) {
