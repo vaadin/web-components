@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-context-menu.html",
         "start": {
-          "line": 405,
+          "line": 396,
           "column": 6
         },
         "end": {
-          "line": 405,
+          "line": 396,
           "column": 42
         }
       },
@@ -1079,11 +1079,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 103,
+                  "line": 80,
                   "column": 4
                 },
                 "end": {
-                  "line": 115,
+                  "line": 92,
                   "column": 5
                 }
               },
@@ -1098,11 +1098,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 121,
+                  "line": 98,
                   "column": 4
                 },
                 "end": {
-                  "line": 123,
+                  "line": 100,
                   "column": 5
                 }
               },
@@ -1121,11 +1121,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 129,
+                  "line": 106,
                   "column": 4
                 },
                 "end": {
-                  "line": 136,
+                  "line": 113,
                   "column": 5
                 }
               },
@@ -1144,11 +1144,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 147,
+                  "line": 124,
                   "column": 4
                 },
                 "end": {
-                  "line": 147,
+                  "line": 124,
                   "column": 59
                 }
               },
@@ -1173,11 +1173,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 149,
+                  "line": 126,
                   "column": 4
                 },
                 "end": {
-                  "line": 161,
+                  "line": 138,
                   "column": 5
                 }
               },
@@ -1196,11 +1196,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 163,
+                  "line": 140,
                   "column": 4
                 },
                 "end": {
-                  "line": 168,
+                  "line": 145,
                   "column": 5
                 }
               },
@@ -1215,11 +1215,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 170,
+                  "line": 147,
                   "column": 4
                 },
                 "end": {
-                  "line": 185,
+                  "line": 162,
                   "column": 5
                 }
               },
@@ -1238,11 +1238,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 187,
+                  "line": 164,
                   "column": 4
                 },
                 "end": {
-                  "line": 191,
+                  "line": 168,
                   "column": 5
                 }
               },
@@ -1261,11 +1261,11 @@
               "sourceRange": {
                 "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
                 "start": {
-                  "line": 193,
+                  "line": 170,
                   "column": 4
                 },
                 "end": {
-                  "line": 204,
+                  "line": 181,
                   "column": 5
                 }
               },
@@ -1275,6 +1275,25 @@
                   "name": "descendant"
                 }
               ],
+              "inheritedFrom": "Polymer.IronResizableBehavior"
+            },
+            {
+              "name": "_requestResizeNotifications",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
+                "start": {
+                  "line": 183,
+                  "column": 4
+                },
+                "end": {
+                  "line": 211,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
               "inheritedFrom": "Polymer.IronResizableBehavior"
             },
             {
@@ -2410,7 +2429,7 @@
           ]
         },
         {
-          "description": "```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n```\n\n### “vaadin-contextmenu” Gesture Event\n\n`vaadin-contextmenu` is a gesture event (a custom event fired by Polymer), which is dispatched after either `contextmenu` and long touch events. This enables support for both mouse and touch environments in a uniform way.\n\n`<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu` event by default.\n\n### Menu Listener\n\nBy default, the `<vaadin-context-menu>` element listens for the menu opening event on itself. In order to have a context menu on your content, wrap your content with the `<vaadin-context-menu>` element, and add a template element with a menu. Example:\n\n```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n\n  <p>This paragraph has the context menu provided in the above template.</p>\n  <p>Another paragraph with the context menu.</p>\n</vaadin-context-menu>\n```\n\nIn case if you do not want to wrap the page content, you can listen for events on an element outside the `<vaadin-context-menu>` by setting the `listenOn` property:\n\n```html\n<vaadin-context-menu id=\"customListener\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n\n<div id=\"menuListener\">The element that listens for the context menu.</div>\n\n&lt;script&gt;\n  const contextMenu = document.querySelector('vaadin-context-menu#customListener');\n  contextMenu.listenOn = document.querySelector('#menuListener');\n&lt;/script&gt;\n```\n\n### Filtering Menu Targets\n\nBy default, the listener element and all its descendants open the context menu. You can filter the menu targets to a smaller set of elements inside the listener element by setting the `selector` property.\n\nIn the following example, only the elements matching `.has-menu` will open the context menu:\n\n```html\n<vaadin-context-menu selector=\".has-menu\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n\n  <p class=\"has-menu\">This paragraph opens the context menu</p>\n  <p>This paragraph does not open the context menu</p>\n</vaadin-context-menu>\n```\n\n### Menu Context\n\nYou can bind to the following properties in the menu template:\n\n- `target` is the menu opening event target, which is the element that the user has called the context menu for\n- `detail` is the menu opening event detail\n\nIn the following example, the menu item text is composed with the contents of the element that opened the menu:\n\n```html\n<vaadin-context-menu selector=\"li\">\n  <template>\n    <paper-listbox>\n      <paper-item>The menu target: [[target.textContent]]</paper-item>\n    </paper-listbox>\n  </template>\n\n  <ul>\n    <li>Foo</li>\n    <li>Bar</li>\n    <li>Baz</li>\n  </ul>\n</vaadin-context-menu>\n```\n\n### Styling\n\nThe following custom CSS mixins are available for styling the overlay:\n\nCustom property | Description | Default\n----------------|-------------|----------\n`--vaadin-context-menu-overlay`     | Mixin applied to the overlay                                     | `{}`",
+          "description": "```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n```\n\n### “vaadin-contextmenu” Gesture Event\n\n`vaadin-contextmenu` is a gesture event (a custom event fired by Polymer),\nwhich is dispatched after either `contextmenu` and long touch events.\nThis enables support for both mouse and touch environments in a uniform way.\n\n`<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`\nevent by default.\n\n### Menu Listener\n\nBy default, the `<vaadin-context-menu>` element listens for the menu opening\nevent on itself. In order to have a context menu on your content, wrap\nyour content with the `<vaadin-context-menu>` element, and add a template\nelement with a menu. Example:\n\n```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n\n  <p>This paragraph has the context menu provided in the above template.</p>\n  <p>Another paragraph with the context menu.</p>\n</vaadin-context-menu>\n```\n\nIn case if you do not want to wrap the page content, you can listen for\nevents on an element outside the `<vaadin-context-menu>` by setting the\n`listenOn` property:\n\n```html\n<vaadin-context-menu id=\"customListener\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n\n<div id=\"menuListener\">The element that listens for the context menu.</div>\n\n&lt;script&gt;\n  const contextMenu = document.querySelector('vaadin-context-menu#customListener');\n  contextMenu.listenOn = document.querySelector('#menuListener');\n&lt;/script&gt;\n```\n\n### Filtering Menu Targets\n\nBy default, the listener element and all its descendants open the context\nmenu. You can filter the menu targets to a smaller set of elements inside\nthe listener element by setting the `selector` property.\n\nIn the following example, only the elements matching `.has-menu` will open the context menu:\n\n```html\n<vaadin-context-menu selector=\".has-menu\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n\n  <p class=\"has-menu\">This paragraph opens the context menu</p>\n  <p>This paragraph does not open the context menu</p>\n</vaadin-context-menu>\n```\n\n### Menu Context\n\nYou can bind to the following properties in the menu template:\n\n- `target` is the menu opening event target, which is the element that\nthe user has called the context menu for\n- `detail` is the menu opening event detail\n\nIn the following example, the menu item text is composed with the contents\nof the element that opened the menu:\n\n```html\n<vaadin-context-menu selector=\"li\">\n  <template>\n    <paper-listbox>\n      <paper-item>The menu target: [[target.textContent]]</paper-item>\n    </paper-listbox>\n  </template>\n\n  <ul>\n    <li>Foo</li>\n    <li>Bar</li>\n    <li>Baz</li>\n  </ul>\n</vaadin-context-menu>\n```",
           "summary": "",
           "path": "vaadin-context-menu.html",
           "properties": [
@@ -2421,11 +2440,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 159,
                   "column": 12
                 },
                 "end": {
-                  "line": 157,
+                  "line": 161,
                   "column": 13
                 }
               },
@@ -2440,11 +2459,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 166,
                   "column": 12
                 },
                 "end": {
-                  "line": 167,
+                  "line": 171,
                   "column": 13
                 }
               },
@@ -2463,11 +2482,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 176,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -2483,11 +2502,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 188,
                   "column": 12
                 },
                 "end": {
-                  "line": 189,
+                  "line": 193,
                   "column": 13
                 }
               },
@@ -2502,11 +2521,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 198,
                   "column": 12
                 },
                 "end": {
-                  "line": 198,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -2524,11 +2543,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 204,
                   "column": 12
                 },
                 "end": {
-                  "line": 200,
+                  "line": 204,
                   "column": 28
                 }
               },
@@ -2543,11 +2562,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 202,
+                  "line": 206,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 206,
                   "column": 36
                 }
               },
@@ -2562,11 +2581,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 208,
                   "column": 12
                 },
                 "end": {
-                  "line": 211,
+                  "line": 215,
                   "column": 13
                 }
               },
@@ -2581,11 +2600,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 213,
+                  "line": 217,
                   "column": 12
                 },
                 "end": {
-                  "line": 213,
+                  "line": 217,
                   "column": 31
                 }
               },
@@ -2600,11 +2619,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 215,
+                  "line": 219,
                   "column": 12
                 },
                 "end": {
-                  "line": 215,
+                  "line": 219,
                   "column": 30
                 }
               },
@@ -2619,11 +2638,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 221,
                   "column": 12
                 },
                 "end": {
-                  "line": 217,
+                  "line": 221,
                   "column": 34
                 }
               },
@@ -2639,11 +2658,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 247,
+                  "line": 251,
                   "column": 9
                 }
               },
@@ -2656,11 +2675,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 249,
+                  "line": 253,
                   "column": 8
                 },
                 "end": {
-                  "line": 251,
+                  "line": 255,
                   "column": 9
                 }
               },
@@ -2673,11 +2692,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 253,
+                  "line": 257,
                   "column": 8
                 },
                 "end": {
-                  "line": 274,
+                  "line": 278,
                   "column": 9
                 }
               },
@@ -2697,11 +2716,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 276,
+                  "line": 280,
                   "column": 8
                 },
                 "end": {
-                  "line": 283,
+                  "line": 287,
                   "column": 9
                 }
               },
@@ -2721,11 +2740,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 285,
+                  "line": 289,
                   "column": 8
                 },
                 "end": {
-                  "line": 291,
+                  "line": 295,
                   "column": 9
                 }
               },
@@ -2742,11 +2761,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 293,
+                  "line": 297,
                   "column": 8
                 },
                 "end": {
-                  "line": 299,
+                  "line": 303,
                   "column": 9
                 }
               },
@@ -2766,11 +2785,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 304,
+                  "line": 308,
                   "column": 8
                 },
                 "end": {
-                  "line": 306,
+                  "line": 310,
                   "column": 9
                 }
               },
@@ -2783,11 +2802,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 312,
                   "column": 8
                 },
                 "end": {
-                  "line": 318,
+                  "line": 322,
                   "column": 9
                 }
               },
@@ -2804,11 +2823,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 324,
+                  "line": 328,
                   "column": 8
                 },
                 "end": {
-                  "line": 343,
+                  "line": 347,
                   "column": 9
                 }
               },
@@ -2827,11 +2846,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 345,
+                  "line": 349,
                   "column": 8
                 },
                 "end": {
-                  "line": 359,
+                  "line": 363,
                   "column": 9
                 }
               },
@@ -2851,11 +2870,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 361,
+                  "line": 365,
                   "column": 8
                 },
                 "end": {
-                  "line": 382,
+                  "line": 373,
                   "column": 9
                 }
               },
@@ -2872,11 +2891,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 384,
+                  "line": 375,
                   "column": 8
                 },
                 "end": {
-                  "line": 390,
+                  "line": 381,
                   "column": 9
                 }
               },
@@ -2899,11 +2918,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 392,
+                  "line": 383,
                   "column": 8
                 },
                 "end": {
-                  "line": 398,
+                  "line": 389,
                   "column": 9
                 }
               },
@@ -2931,11 +2950,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 142,
+              "line": 146,
               "column": 6
             },
             "end": {
-              "line": 399,
+              "line": 390,
               "column": 7
             }
           },
@@ -2948,11 +2967,11 @@
               "description": "CSS selector that can be used to target any child element\nof the context menu to listen for `openOn` events.",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 159,
                   "column": 12
                 },
                 "end": {
-                  "line": 157,
+                  "line": 161,
                   "column": 13
                 }
               },
@@ -2964,11 +2983,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 166,
                   "column": 12
                 },
                 "end": {
-                  "line": 167,
+                  "line": 171,
                   "column": 13
                 }
               },
@@ -2980,11 +2999,11 @@
               "description": "Event name to listen for opening the context menu.",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 176,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -2996,11 +3015,11 @@
               "description": "The target element that's listened to for context menu opening events.\nBy default the vaadin-context-menu listens to the target's `vaadin-contextmenu`\nevents.",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 188,
                   "column": 12
                 },
                 "end": {
-                  "line": 189,
+                  "line": 193,
                   "column": 13
                 }
               },
@@ -3012,11 +3031,11 @@
               "description": "Event name to listen for closing the context menu.",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 198,
                   "column": 12
                 },
                 "end": {
-                  "line": 198,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -3043,11 +3062,11 @@
               "range": {
                 "file": "vaadin-context-menu.html",
                 "start": {
-                  "line": 23,
+                  "line": 19,
                   "column": 4
                 },
                 "end": {
-                  "line": 23,
+                  "line": 19,
                   "column": 17
                 }
               }
