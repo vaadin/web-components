@@ -12,12 +12,12 @@ install:
   - polymer install --variants
 
 script:
-  # test against Polymer 2
-  - gemini test test/visual
-  - gemini test test/visual -c .gemini-ie.yml
+  - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+      gemini test test/visual;
+      gemini test test/visual -c .gemini-ie.yml;
 
-  # test against Polymer 1
-  - rm -rf bower_components
-  - mv bower_components-1.x bower_components
-  - gemini test test/visual
-  - gemini test test/visual -c .gemini-ie.yml
+      rm -rf bower_components;
+      mv bower_components-1.x bower_components;
+      gemini test test/visual;
+      gemini test test/visual -c .gemini-ie.yml;
+    fi
