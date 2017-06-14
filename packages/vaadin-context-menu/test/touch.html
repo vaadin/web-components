@@ -96,6 +96,12 @@
         });
       });
 
+      it('should prevent tap', function() {
+        expect(Polymer.Gestures.gestures.tap.info.prevent).to.be.false;
+        target.dispatchEvent(new CustomEvent('contextmenu', {bubbles: true}));
+        expect(Polymer.Gestures.gestures.tap.info.prevent).to.be.true;
+      });
+
       if (ios) {
         it('should open on long-touch on ios', function(done) {
           var xy = middleOfNode(target);
