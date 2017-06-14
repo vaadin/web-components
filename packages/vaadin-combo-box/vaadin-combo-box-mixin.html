@@ -449,6 +449,12 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onClosed() {
+
+      // Happens when the overlay is closed by clicking outside
+      if (this.opened) {
+        this.close();
+      }
+
       if (this._focusedIndex > -1) {
         const focusedItem = this.$.overlay._items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
