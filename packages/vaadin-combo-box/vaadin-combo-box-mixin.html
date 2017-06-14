@@ -336,12 +336,16 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _markAllSelectionRange() {
-      this._setSelectionRange(0, this._inputElementValue.length);
+      if (this._inputElementValue !== undefined) {
+        this._setSelectionRange(0, this._inputElementValue.length);
+      }
     }
 
     _clearSelectionRange() {
-      const pos = this._inputElementValue ? this._inputElementValue.length : 0;
-      this._setSelectionRange(pos, pos);
+      if (this._inputElementValue !== undefined) {
+        const pos = this._inputElementValue ? this._inputElementValue.length : 0;
+        this._setSelectionRange(pos, pos);
+      }
     }
 
     _onEnter(e) {
