@@ -114,35 +114,37 @@
           </template>
 
           <script>
-            class MyListView extends Polymer.Element {
+            document.addEventListener('WebComponentsReady', () => {
+              class MyListView extends Polymer.Element {
 
-              static get is() {
-                return 'my-list-view';
-              }
+                static get is() {
+                  return 'my-list-view';
+                }
 
-              static get properties() {
-                return {
-                  items: {
-                    type: Array,
-                    value: () => {
-                      return ['Foo', 'Bar', 'Baz'];
+                static get properties() {
+                  return {
+                    items: {
+                      type: Array,
+                      value: () => {
+                        return ['Foo', 'Bar', 'Baz'];
+                      }
                     }
-                  }
-                };
+                  };
+                }
+
+                _appendItem() {
+                  this.push('items', 'New item');
+                }
+
+                _removeItem(e) {
+                  const menuItem = e.target; // `<paper-item>`
+                  const listItem = menuItem.listItem; // `<li>`
+                  this.splice('items', listItem.index, 1);
+                }
               }
 
-              _appendItem() {
-                this.push('items', 'New item');
-              }
-
-              _removeItem(e) {
-                const menuItem = e.target; // `<paper-item>`
-                const listItem = menuItem.listItem; // `<li>`
-                this.splice('items', listItem.index, 1);
-              }
-            }
-
-            customElements.define(MyListView.is, MyListView);
+              customElements.define(MyListView.is, MyListView);
+            });
           </script>
         </dom-module>
 
