@@ -20,12 +20,8 @@
   "dependencies": {
     "iron-a11y-keys-behavior": "^2.0.0",
     "iron-a11y-announcer": "^2.0.0",
-    "iron-flex-layout": "^2.0.0",
     "iron-list": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
-    "paper-button": "^2.0.0",
-    "paper-icon-button": "^2.0.0",
-    "paper-styles": "^2.0.0",
     "polymer": "^2.0.0",
     "vaadin-text-field": "^1.0.0"
   },
@@ -38,8 +34,10 @@
     "iron-icons": "^2.0.0",
     "iron-input": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
+    "paper-button": "^2.0.0",
     "paper-item": "^2.0.0",
     "paper-input": "^2.0.0",
+    "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
     "web-component-tester": "^6.0.0"
   }
