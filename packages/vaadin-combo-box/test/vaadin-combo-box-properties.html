@@ -215,6 +215,7 @@
       describe('focus API', () => {
         it('should have readOnly focused property', () => {
           comboBox.focused = true;
+
           expect(comboBox.focused).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
         });
@@ -225,43 +226,19 @@
         });
 
         describe('methods', () => {
-          // Avoid FF window focus issues by stubing native focus behavior
-          let inputFocusStub, inputBlurStub;
-
-          beforeEach(() => {
-            inputFocusStub = sinon.stub(comboBox.inputElement, 'focus', () => {
-              comboBox.inputElement.dispatchEvent(new CustomEvent('focus'));
-            });
-
-            inputBlurStub = sinon.stub(comboBox.inputElement, 'blur', () => {
-              comboBox.inputElement.dispatchEvent(new CustomEvent('blur'));
-            });
-          });
-
           it('should focus the input with focus method', () => {
-            const focusedChangedSpy = sinon.spy();
-            comboBox.addEventListener('focused-changed', focusedChangedSpy);
-
             comboBox.focus();
 
-            expect(inputFocusStub.called).to.be.true;
             expect(comboBox.focused).to.be.true;
             expect(comboBox.hasAttribute('focused')).to.be.true;
-            expect(focusedChangedSpy.called).to.be.true;
           });
 
           it('should blur the input with the blur method', () => {
             comboBox.focus();
-
-            const focusedChangedSpy = sinon.spy();
-            comboBox.addEventListener('focused-changed', focusedChangedSpy);
-
             comboBox.blur();
 
-            expect(inputBlurStub.called).to.be.true;
             expect(comboBox.focused).to.be.false;
             expect(comboBox.hasAttribute('focused')).to.be.false;
-            expect(focusedChangedSpy.called).to.be.true;
           });
         });
       });

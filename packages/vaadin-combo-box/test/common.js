@@ -45,6 +45,9 @@ function monkeyPatchTextFieldFocus() {
     Vaadin.TextFieldElement.prototype.focus = function() {
       this._setFocused(true);
     };
+    Vaadin.TextFieldElement.prototype.blur = function() {
+      this._setFocused(false);
+    };
   }
 }
 
