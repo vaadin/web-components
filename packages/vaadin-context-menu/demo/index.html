@@ -22,7 +22,7 @@
     <demo-snippet>
       <template>
         <vaadin-context-menu>
-          <template>
+          <template slot="template">
             <paper-listbox>
               <paper-item>First menu item</paper-item>
               <paper-item>Second menu item</paper-item>
@@ -98,7 +98,7 @@
         <dom-module id="my-list-view">
           <template>
             <vaadin-context-menu selector="li">
-              <template>
+              <template slot="template">
                 <paper-listbox>
                   <paper-item on-tap="_appendItem">Append item</paper-item>
                   <paper-item list-item="[[target]]" on-tap="_removeItem">Remove item</paper-item>

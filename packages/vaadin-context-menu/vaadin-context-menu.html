@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
 <link rel="import" href="vaadin-contextmenu-event.html">
+<link rel="import" href="vaadin-overlay.html">
 
 <dom-module id="vaadin-context-menu">
   <template>
@@ -18,10 +19,14 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <slot></slot>
+
     <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
         on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed"
         with-backdrop>
+        <slot name="template"></slot>
     </vaadin-context-menu-overlay>
+
+    <vaadin-overlay>
 
   </template>
   <script>
@@ -226,7 +231,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_contentTemplateChanged(_contentTemplate)',
             '_openedChanged(opened)',
             '_contextChanged(_context, _instance)',
             '_targetOrOpenOnChanged(listenOn, openOn)'
@@ -281,10 +285,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _closeOnChanged(closeOn, oldCloseOn) {
           if (oldCloseOn) {
-            this._unlisten(this.$.overlay, oldCloseOn, this._boundClose);
+            this._unlisten(this.$.overlay.$.overlay, oldCloseOn, this._boundClose);
           }
           if (closeOn) {
-            this._listen(this.$.overlay, closeOn, this._boundClose);
+            this._listen(this.$.overlay.$.overlay, closeOn, this._boundClose);
           }
         }
 
@@ -338,12 +342,12 @@ This program is available under Apache License Version 2.0, available at https:/
               e.preventDefault();
               e.stopPropagation();
 
-              this.$.overlay.resetFit();
-
-              this.$.overlay.x = this._getEventCoordinate(e, 'x');
-              this.$.overlay.y = this._getEventCoordinate(e, 'y');
-
               this._setOpened(true);
+
+              this.$.overlay.y = this.$.overlay.x = 0;
+
+              this.$.overlay.x = -this.$.overlay.$.overlay.getBoundingClientRect().left + this._getEventCoordinate(e, 'x');
+              this.$.overlay.y = -this.$.overlay.$.overlay.getBoundingClientRect().top + this._getEventCoordinate(e, 'y');
             }
           }
         }
@@ -361,16 +365,6 @@ This program is available under Apache License Version 2.0, available at https:/
             // Native mouse or touch event
             const prop = 'client' + coord.toUpperCase();
             return event.changedTouches ? event.changedTouches[0][prop] : event[prop];
-          }
-        }
-
-        _contentTemplateChanged(template) {
-          Polymer.dom(this.$.overlay).innerHTML = '';
-          if (template) {
-            this._templateClass = Polymer.Templatize.templatize(template, this, {});
-            this._instance = new this._templateClass({});
-
-            Polymer.dom(this.$.overlay).appendChild(this._instance.root);
           }
         }
 
