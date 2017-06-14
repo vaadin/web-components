@@ -13,9 +13,8 @@ install:
 
 script:
   # test against Polymer 2
-  # There's currently some weird JS errors with Polymer v2.
-  # TODO @limonte Revisit after Polymer v2 stable release
-  # - gemini test test/visual
+  - gemini test test/visual
+  - gemini test test/visual -c .gemini-ie.yml
 
   # test against Polymer 1
   - rm -rf bower_components
