@@ -50,11 +50,11 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * To create a custom input field, you need to add a child element which has a two-way
      * data-bindable property representing the input value. The property name is expected
-     * to be `bindValue` by default. See the example below for a simplest possible example
+     * to be `value` by default. See the example below for a simplest possible example
      * using an `<input>` element extended with `iron-input`.
      *
      * ```html
-     * <vaadin-combo-box-light>
+     * <vaadin-combo-box-light attr-for-value="bind-value">
      *   <iron-input>
      *     <input>
      *   </iron-input>
@@ -68,7 +68,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * two `<paper-button>`s to act as the clear and toggle controls.
      *
      * ```html
-     * <vaadin-combo-box-light attr-for-value="value">
+     * <vaadin-combo-box-light>
      *   <paper-input label="Elements" class="input">
      *     <iron-icon icon="toll" prefix></iron-icon>
      *     <paper-button suffix class="clear-button">Clear</paper-button>
@@ -93,7 +93,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           attrForValue: {
             type: String,
-            value: 'bind-value'
+            value: 'value'
           },
 
           /**
