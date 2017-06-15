@@ -1,0 +1,43 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-dropdown.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+        <vaadin-dropdown>
+          <template></template>
+        </vaadin-dropdown>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-dropdown', () => {
+      let dropdown, overlay;
+
+      beforeEach(() => {
+        dropdown = fixture('default');
+        overlay = dropdown.$.overlay;
+      });
+
+      it('should not show the overlay when closed', () => {
+        overlay.opened = false;
+
+        expect(window.getComputedStyle(overlay).display).to.eql('none');
+      });    
+
+      it('should show the overlay when opened', () => {
+        overlay.opened = true;
+
+        expect(window.getComputedStyle(overlay).display).not.to.eql('none');
+      });         
+
+    });
+  </script>
+
+</body>
