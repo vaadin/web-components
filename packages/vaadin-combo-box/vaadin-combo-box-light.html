@@ -107,6 +107,12 @@ This program is available under Apache License Version 2.0, available at https:/
         };
       }
 
+      ready() {
+        super.ready();
+        this._toggleElement = this.querySelector('.toggle-button');
+        this._clearElement = this.querySelector('.clear-button');
+      }
+
       connectedCallback() {
         super.connectedCallback();
         const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';

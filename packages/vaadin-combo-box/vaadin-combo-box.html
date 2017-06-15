@@ -88,8 +88,8 @@ This program is available under Apache License Version 2.0, available at https:/
         on-tap="_openAsync"
       >
 
-      <div slot="suffix" role="button" aria-label="Clear" class="clear-button small"></div>
-      <div slot="suffix" role="button" aria-label="Toggle" class="toggle-button rotate-on-open"></div>
+      <div id="clearButton" slot="suffix" role="button" aria-label="Clear" class="clear-button small"></div>
+      <div id="toggleButton" slot="suffix" role="button" aria-label="Toggle" class="toggle-button rotate-on-open"></div>
 
     </vaadin-text-field>
 
@@ -301,6 +301,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this._setInputElement(this.$.input);
           this._bindableInput = this.$.input;
           this._nativeInput = this.$.input.focusElement;
+          this._toggleElement = this.$.toggleButton;
+          this._clearElement = this.$.clearButton;
 
           this._nativeInput.setAttribute('role', 'combobox');
           this._nativeInput.setAttribute('aria-autocomplete', 'list');
