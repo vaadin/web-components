@@ -69,9 +69,11 @@
 
           it('should focus the child element', done => {
             listenOnce(menu, 'opened-changed', () => {
-              var child = menu.$.overlay.root.querySelector('#menu');
-              expect(menu.$.overlay.root.activeElement).to.eql(child);
-              done();
+              Polymer.Async.microTask.run(() => {
+                var child = menu.$.overlay.root.querySelector('#menu');
+                expect(menu.$.overlay.root.activeElement).to.eql(child);
+                done();
+              });
             });
 
             menu._setOpened(true);
@@ -79,9 +81,11 @@
 
           it('should focus the child element on `contextmenu` event', done => {
             listenOnce(menu, 'opened-changed', () => {
-              var child = menu.$.overlay.root.querySelector('#menu');
-              expect(menu.$.overlay.root.activeElement).to.eql(child);
-              done();
+              Polymer.Async.microTask.run(() => {
+                var child = menu.$.overlay.root.querySelector('#menu');
+                expect(menu.$.overlay.root.activeElement).to.eql(child);
+                done();
+              });
             });
 
             fire(menu, 'contextmenu');

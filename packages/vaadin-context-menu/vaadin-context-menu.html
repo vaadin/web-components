@@ -269,17 +269,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onOverlayOpened(e) {
           if (e.detail.value === true) {
-            const child = this.$.overlay.root.querySelector(':not(style):not(slot)');
-            if (child) {
-              child.focus();
-            }
+            // wait for a microtask before focusing the child element
+            // to allow overlay to position itself correctly first.
+            // Otherwise, the browser window will jump scroll.
+            Polymer.Async.microTask.run(() => {
+              const child = this.$.overlay.root.querySelector(':not(style):not(slot)');
+              if (child) {
+                child.focus();
+              }
+            });
 
-            // Close context menu on backdrop right-click
-            // TODO: add backdrop
-            // this.$.overlay.backdropElement.addEventListener('contextmenu', e => {
-            //   this.close();
-            //   e.preventDefault();
-            // }, false);
           } else if (e.detail.value === false) {
             this._setOpened(false);
           }
