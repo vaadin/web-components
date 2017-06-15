@@ -414,7 +414,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _listen(node, evType, handler) {
-          console.log(node, evType, handler);
           if (Polymer.Gestures.gestures[evType]) {
             Polymer.Gestures.addListener(node, evType, handler);
           } else {
