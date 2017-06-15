@@ -325,8 +325,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _setSelectionRange(start, end) {
+      // vaadin-text-field does not implement setSelectionRange, hence we need the native input
       const input = this._nativeInput || this.inputElement;
-      if (input && input.setSelectionRange) {
+
+      // Setting selection range focuses and/or moves the caret in some browsers,
+      // and there's no need to modify the selection range if the input isn't focused anyway.
+      // This affects Safari. When the overlay is open, and then hiting tab, browser should focus
+      // the next focusable element instead of the combo-box itself.
+      // Checking the focused property here is enough instead of checking the activeElement.
+      if (this.focused && input && input.setSelectionRange) {
         try {
           input.setSelectionRange(start, end);
         } catch (ignore) {
