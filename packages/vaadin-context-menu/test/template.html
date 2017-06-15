@@ -31,10 +31,10 @@
         });
 
         it('should stamp template on open', done => {
-          expect(menu.$.overlay.textContent).not.to.contain('FOOBAR');
+          expect(menu.$.overlay.root.textContent).not.to.contain('FOOBAR');
 
-          listenOnce(menu, 'iron-overlay-opened', () => {
-            expect(menu.$.overlay.textContent).to.contain('FOOBAR');
+          listenOnce(menu, 'opened-changed', () => {
+            expect(menu.$.overlay.root.textContent).to.contain('FOOBAR');
             done();
           });
 
@@ -42,8 +42,8 @@
         });
 
         it('should bind target property', done => {
-          listenOnce(menu, 'iron-overlay-opened', () => {
-            expect(menu.$.overlay.textContent).to.contain('target');
+          listenOnce(menu, 'opened-changed', () => {
+            expect(menu.$.overlay.root.textContent).to.contain('target');
             done();
           });
 
@@ -51,8 +51,8 @@
         });
 
         it('should bind detail property', done => {
-          listenOnce(menu, 'iron-overlay-opened', () => {
-            expect(menu.$.overlay.textContent).to.contain('bar');
+          listenOnce(menu, 'opened-changed', () => {
+            expect(menu.$.overlay.root.textContent).to.contain('bar');
             done();
           });
 

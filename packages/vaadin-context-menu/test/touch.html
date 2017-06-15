@@ -81,14 +81,10 @@
         });
       }
 
-      it('should have a backdrop', () => {
-        expect(menu.$.overlay.withBackdrop).to.eql(true);
-      });
-
       it('should align to bottom of the viewport', done => {
         menu._setOpened(true);
 
-        listenOnce(menu, 'iron-overlay-opened', () => {
+        listenOnce(menu, 'opened-changed', () => {
           const styles = window.getComputedStyle(menu.$.overlay);
           expect(styles.bottom).to.eql('0px');
           expect(styles.transform).not.to.contain('translate');
@@ -107,7 +103,7 @@
           const xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          listenOnce(menu, 'iron-overlay-opened', () => {
+          listenOnce(menu, 'opened-changed', () => {
             expect(menu.opened).to.eql(true);
             expect(menu.$.overlay.style.transform).to.eql('translate3d(' + xy.x + 'px, ' + xy.y + 'px, 0px)');
             done();
@@ -153,7 +149,7 @@
           const xy = middleOfNode(target);
           makeSoloTouchEvent('touchstart', xy, target);
 
-          listenOnce(menu, 'iron-overlay-opened', () => {
+          listenOnce(menu, 'opened-changed', () => {
             listenOnce(target, 'tap', () => {
               throw new Error('tap fired!');
             });

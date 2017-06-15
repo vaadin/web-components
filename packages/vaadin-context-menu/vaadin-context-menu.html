@@ -56,10 +56,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-device-detector phone="{{_phone}}"></vaadin-device-detector>
 
-    <vaadin-overlay id="overlay" class="vaadin-context-menu-overlay"
-      opened="[[opened]]"
-      on-opened-changed="_onOverlayOpened"
-      phone$="[[_phone]]">
+    <vaadin-overlay id="overlay"
+        class="vaadin-context-menu-overlay"
+        on-opened-changed="_onOverlayOpened"
+        phone$="[[_phone]]">
     </vaadin-overlay>
   </template>
   <script>
@@ -269,7 +269,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onOverlayOpened(e) {
           if (e.detail.value === true) {
-            const child = this.$.overlay.root.querySelector(':not(style)');
+            const child = this.$.overlay.root.querySelector(':not(style):not(slot)');
             if (child) {
               child.focus();
             }
@@ -338,6 +338,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this._instance = new Templatizer({});
             this.$.overlay.content = this._instance.root;
           }
+
+          // TODO @Sauli: file issue for polymer-effects.html:571
+          // Currently, property notification events don't fire properly
+          // when using bindings.
+          this.$.overlay.opened = opened;
         }
 
         _contextChanged(context, instance) {

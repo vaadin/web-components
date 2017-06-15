@@ -100,7 +100,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // propagating the event to the listener in the button. Otherwise, if the clicked button would call
       // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
       _outsideClickListener(event) {
-        if (this.opened && event.composedPath().indexOf(this.$.overlay) < 0) {
+        if (this.opened && event.composedPath().indexOf(this) < 0) {
           this._cancel(event);
         }
       }

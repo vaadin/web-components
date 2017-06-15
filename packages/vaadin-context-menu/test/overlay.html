@@ -15,6 +15,7 @@
     <test-fixture id="default">
       <template>
         <vaadin-context-menu>
+          <template></template>
           <div id="target">FOOOO</div>
         </vaadin-context-menu>
       </template>
@@ -68,7 +69,7 @@
           it('should be visible when open', done => {
             expect(window.getComputedStyle(menu.$.overlay).display).to.eql('none');
 
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(window.getComputedStyle(menu.$.overlay).display).to.not.eql('none');
               done();
             });
@@ -77,7 +78,7 @@
           });
 
           it('should open on `contextmenu` event', done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(true);
               done();
             });
@@ -96,7 +97,7 @@
           });
 
           it('should be positioned on detailed mouse event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
+            listenOnce(menu.listenOn, 'opened-changed', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -108,7 +109,7 @@
           });
 
           it('should be positioned by gesture event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
+            listenOnce(menu.listenOn, 'opened-changed', () => {
               expect(menu.$.overlay.x).to.eql(5);
               expect(menu.$.overlay.y).to.eql(5);
               done();
@@ -120,7 +121,7 @@
           });
 
           it('should be positioned by detailed gesture event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
+            listenOnce(menu.listenOn, 'opened-changed', () => {
               expect(menu.$.overlay.x).to.eql(5);
               expect(menu.$.overlay.y).to.eql(5);
               done();
@@ -132,7 +133,7 @@
           });
 
           it('should be positioned by touch event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
+            listenOnce(menu.listenOn, 'opened-changed', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -147,7 +148,7 @@
           });
 
           it('should be positioned by detailed touch event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
+            listenOnce(menu.listenOn, 'opened-changed', () => {
               expect(menu.$.overlay.x).to.eql(10);
               expect(menu.$.overlay.y).to.eql(20);
               done();
@@ -173,27 +174,27 @@
 
         describe('closing', () => {
           beforeEach(done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               done();
             });
 
             menu._setOpened(true);
           });
 
-          it('should close on outside tap', done => {
-            listenOnce(menu, 'iron-overlay-closed', () => {
+          it('should close on outside click', done => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });
 
-            Polymer.Base.fire('tap', {}, {
+            Polymer.Base.fire('click', {}, {
               bubbles: true,
               node: document.body
             });
           });
 
           it('should close on backdrop contextmenu', done => {
-            listenOnce(menu, 'iron-overlay-closed', () => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });

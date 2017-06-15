@@ -14,6 +14,7 @@
     <test-fixture id="default">
       <template>
         <vaadin-context-menu>
+          <template></template>
           <section>
             <div id="target"></div>
           </section>
@@ -23,7 +24,9 @@
 
     <test-fixture id="external">
       <template>
-        <vaadin-context-menu></vaadin-context-menu>
+        <vaadin-context-menu>
+          <template></template>
+        </vaadin-context-menu>
         <section>
           <div id="target"></div>
         </section>
@@ -119,7 +122,6 @@
             menu.closeOn = '';
 
             menu.$.overlay.click();
-
             expect(menu.opened).to.eql(true);
           });
 
