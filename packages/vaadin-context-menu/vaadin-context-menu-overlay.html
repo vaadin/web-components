@@ -58,27 +58,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_positionChanged(x, y)', '_phoneChanged(phone)'
+            '_phoneChanged(phone)'
           ];
         }
 
         static get properties() {
           return {
-            /**
-             * Position of the overlay on horizontal axis.
-             */
-            x: {
-              type: Number,
-              value: 0
-            },
-
-            /**
-             * Position of the overlay on vertical axis.
-             */
-            y: {
-              type: Number,
-              value: 0
-            },
 
             /**
              * When `true` overlay is optimized for a small touch screen.
@@ -95,13 +80,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!phone) {
             // this.backdropElement.style.opacity = 0;
           }
-        }
-
-        _positionChanged(x, y) {
-          if (x === undefined || y === undefined) {
-            return;
-          }
-          this.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         }
 
       }
