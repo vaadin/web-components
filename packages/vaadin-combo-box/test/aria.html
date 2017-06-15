@@ -23,8 +23,11 @@
   describe('Accessible Rich Internet Applications (ARIA)', () => {
     let comboBox;
 
+    function getNativeInput() {
+      return comboBox._nativeInput;
+    }
     function getInput() {
-      return comboBox.$.input;
+      return comboBox.inputElement;
     }
     function getToggleIcon() {
       return comboBox._toggleElement;
@@ -52,9 +55,9 @@
 
     describe('when combo-box is attached', () => {
       it('should contain appropriate aria attributes', () => {
-        expect(getInput().getAttribute('role')).to.equal('combobox');
-        expect(comboBox._nativeInput.hasAttribute('aria-labelledby')).to.be.true;
-        expect(getInput().getAttribute('aria-autocomplete')).to.equal('list');
+        expect(getNativeInput().getAttribute('role')).to.equal('combobox');
+        expect(getNativeInput().getAttribute('aria-autocomplete')).to.equal('list');
+        expect(getNativeInput().hasAttribute('aria-labelledby')).to.be.true;
         expect(getToggleIcon().getAttribute('role')).to.equal('button');
         expect(getToggleIcon().getAttribute('aria-label')).to.equal('Toggle');
         expect(getClearIcon().getAttribute('role')).to.equal('button');
@@ -71,14 +74,14 @@
       });
 
       it('should set aria-expanded attribute when opened', () => {
-        expect(getInput().getAttribute('aria-expanded')).to.equal('true');
+        expect(getNativeInput().getAttribute('aria-expanded')).to.equal('true');
         expect(getToggleIcon().getAttribute('aria-expanded')).to.equal('true');
       });
 
       it('should unset aria-expanded attribute when closed', () => {
         esc();
 
-        expect(getInput().getAttribute('aria-expanded')).to.equal('false');
+        expect(getNativeInput().getAttribute('aria-expanded')).to.equal('false');
         expect(getToggleIcon().getAttribute('aria-expanded')).to.equal('false');
       });
     });

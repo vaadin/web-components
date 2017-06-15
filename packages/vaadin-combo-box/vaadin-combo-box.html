@@ -68,7 +68,6 @@ This program is available under Apache License Version 2.0, available at https:/
         value="{{_inputElementValue}}"
         autocomplete="off"
 
-        role="combobox"
         invalid="[[invalid]]"
         label="[[label]]"
         name="[[name]]"
@@ -79,8 +78,6 @@ This program is available under Apache License Version 2.0, available at https:/
         error-message="[[errorMessage]]"
 
         autocapitalize="none"
-        aria-expanded$="[[_getAriaExpanded(opened)]]"
-        aria-autocomplete="list"
 
         autofocus="[[autofocus]]"
         inputmode="[[inputmode]]"
@@ -92,7 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
       >
 
       <div slot="suffix" role="button" aria-label="Clear" class="clear-button small"></div>
-      <div slot="suffix" role="button" aria-label="Toggle" aria-expanded$="[[_getAriaExpanded(opened)]]" class="toggle-button rotate-on-open"></div>
+      <div slot="suffix" role="button" aria-label="Toggle" class="toggle-button rotate-on-open"></div>
 
     </vaadin-text-field>
 
@@ -280,6 +277,10 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        static get observers() {
+          return ['_updateAriaExpanded(opened)'];
+        }
+
         attributeChanged(name, type) {
           // Safari has an issue with repainting shadow root element styles when a host attribute changes.
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
@@ -300,6 +301,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._setInputElement(this.$.input);
           this._bindableInput = this.$.input;
           this._nativeInput = this.$.input.focusElement;
+
+          this._nativeInput.setAttribute('role', 'combobox');
+          this._nativeInput.setAttribute('aria-autocomplete', 'list');
+          this._updateAriaExpanded();
         }
 
         connectedCallback() {
@@ -320,8 +325,11 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.$.input;
         }
 
-        _getAriaExpanded(value) {
-          return value.toString();
+        _updateAriaExpanded() {
+          if (this._nativeInput) {
+            this._nativeInput.setAttribute('aria-expanded', this.opened);
+            this._toggleElement.setAttribute('aria-expanded', this.opened);
+          }
         }
 
         /**
