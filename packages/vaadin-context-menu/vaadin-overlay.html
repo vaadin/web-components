@@ -121,11 +121,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
           document.addEventListener('click', this._boundOutsideClickListener, true);
+
+          // Set body pointer-events to 'none' to disable mouse interactions with
+          // other document nodes (combo-box is "modal")
+          this._previousDocumentPointerEvents = document.body.style.pointerEvents;
+          document.body.style.pointerEvents = 'none';
+
         } else if (this._placeholder) {
           document.removeEventListener('click', this._boundOutsideClickListener, true);
           this._placeholder.parentNode.insertBefore(this, this._placeholder);
           this._processPendingMutationObserversFor(document.body);
           this._placeholder.parentNode.removeChild(this._placeholder);
+
+          document.body.style.pointerEvents = this._previousDocumentPointerEvents;
         }
       }
 
