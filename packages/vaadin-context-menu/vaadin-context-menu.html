@@ -323,13 +323,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _contextTarget(e) {
           if (this.selector) {
-            const targets = Polymer.dom(this.listenOn).querySelectorAll(this.selector);
+            const targets = this.listenOn.querySelectorAll(this.selector);
 
             return Array.prototype.filter.call(targets, el => {
-              return Polymer.dom(e).path.indexOf(el) > -1;
+              return e.composedPath().indexOf(el) > -1;
             })[0];
           } else {
-            return Polymer.dom(e).localTarget;
+            return e.target;
           }
         }
 
