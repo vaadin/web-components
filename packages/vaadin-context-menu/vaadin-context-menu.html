@@ -21,7 +21,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <slot></slot>
 
     <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
-        on-iron-overlay-opened="_onOverlayOpened" on-iron-overlay-closed="_onOverlayClosed"
+        on-opened-changed="_onOverlayOpened"
         with-backdrop>
         <slot name="template"></slot>
     </vaadin-context-menu-overlay>
@@ -243,21 +243,21 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundClose = this.close.bind(this);
         }
 
-        _onOverlayOpened() {
-          const child = Polymer.dom(this.$.overlay).querySelector(':not(style)');
-          if (child) {
-            child.focus();
+        _onOverlayOpened(e) {
+          if (e.detail.value === true) {
+            const child = Polymer.dom(this.$.overlay).querySelector(':not(style)');
+            if (child) {
+              child.focus();
+            }
+
+            // Close context menu on backdrop right-click
+            this.$.overlay.backdropElement.addEventListener('contextmenu', e => {
+              this.close();
+              e.preventDefault();
+            }, false);
+          } else if (e.detail.value === false) {
+            this._setOpened(false);
           }
-
-          // Close context menu on backdrop right-click
-          this.$.overlay.backdropElement.addEventListener('contextmenu', e => {
-            this.close();
-            e.preventDefault();
-          }, false);
-        }
-
-        _onOverlayClosed() {
-          this._setOpened(false);
         }
 
         _targetOrOpenOnChanged(listenOn, openOn) {

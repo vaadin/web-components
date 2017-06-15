@@ -41,7 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: none !important;
       }
     </style>
-    <vaadin-overlay opened="[[opened]]" id="overlay">
+    <vaadin-overlay opened="{{opened}}" id="overlay">
       <slot></slot>
     </vaadin-overlay>
     <vaadin-device-detector phone="{{phone}}"></vaadin-device-detector>
@@ -66,6 +66,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            opened: {
+              type: Boolean,
+              notify: true
+            },
+
             /**
              * Position of the overlay on horizontal axis.
              */
