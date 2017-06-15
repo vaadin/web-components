@@ -18,12 +18,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <slot></slot>
+    <slot id="slot"></slot>
 
     <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
         on-opened-changed="_onOverlayOpened"
         with-backdrop>
-        <slot name="template"></slot>
     </vaadin-context-menu-overlay>
 
     <vaadin-overlay>
@@ -241,6 +240,26 @@ This program is available under Apache License Version 2.0, available at https:/
           super();
           this._boundOpen = this.open.bind(this);
           this._boundClose = this.close.bind(this);
+        }
+
+        ready() {
+          super.ready();
+
+          // TODO: extract all this behind a node observer that observes for child templates.
+          const templates = this.$.slot.assignedNodes({
+            flatten: true
+          }).filter(node => node.localName && node.localName === 'template');
+          var template = templates[0] || undefined;
+
+          const Templatizer = Polymer.Templatize.templatize(template, this, {
+            forwardHostProp: function(prop, value) {
+              if (this.templateInstance) {
+                this.templateInstance.forwardHostProp(prop, value);
+              }
+            }
+          });
+
+          this.templateInstance = this.$.overlay.$.overlay.templateInstance = new Templatizer({});
         }
 
         _onOverlayOpened(e) {
