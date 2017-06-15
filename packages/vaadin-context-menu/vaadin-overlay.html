@@ -88,6 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
       constructor() {
         super();
         this._boundOutsideClickListener = this._outsideClickListener.bind(this);
+        this._boundEscapeListener = this._escapeListener.bind(this);
       }
 
       ready() {
@@ -100,11 +101,21 @@ This program is available under Apache License Version 2.0, available at https:/
       // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
       _outsideClickListener(event) {
         if (this.opened && event.composedPath().indexOf(this.$.overlay) < 0) {
-          var evt = new CustomEvent('vaadin-overlay-cancel', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
-          this.dispatchEvent(evt);
-          if (!evt.defaultPrevented) {
-            this.opened = false;
-          }
+          this._cancel(event);
+        }
+      }
+
+      _escapeListener(event) {
+        if (this.opened && event.keyCode === 27) {
+          this._cancel(event);
+        }
+      }
+
+      _cancel(sourceEvent) {
+        var evt = new CustomEvent('vaadin-overlay-cancel', {bubbles: true, cancelable: true, detail: {sourceEvent: sourceEvent}});
+        this.dispatchEvent(evt);
+        if (!evt.defaultPrevented) {
+          this.opened = false;
         }
       }
 
@@ -120,7 +131,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this._placeholder = document.createComment('vaadin-overlay-placeholder');
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
+
           document.addEventListener('click', this._boundOutsideClickListener, true);
+          document.addEventListener('keydown', this._boundEscapeListener);
 
           // Set body pointer-events to 'none' to disable mouse interactions with
           // other document nodes (combo-box is "modal")
@@ -129,6 +142,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         } else if (this._placeholder) {
           document.removeEventListener('click', this._boundOutsideClickListener, true);
+          document.removeEventListener('keydown', this._boundEspaceListener);
+
           this._placeholder.parentNode.insertBefore(this, this._placeholder);
           this._processPendingMutationObserversFor(document.body);
           this._placeholder.parentNode.removeChild(this._placeholder);
