@@ -28,6 +28,12 @@
 <script>
 
   describe('keyboard navigation', () => {
+
+    // Not need to test in iOS, just speed up build.
+    if (ios) {
+      return;
+    }
+
     let comboBox;
 
     function getInput() {
