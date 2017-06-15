@@ -6,13 +6,9 @@
    */
   Vaadin.ThemableMixin = superClass => class VaadinThemableMixin extends superClass {
 
-    static constructor() {
-      this._memoizedTemplate = undefined;
-    }
-
     static get template() {
-      if (super.template && !this._memoizedTemplate) {
-        this._memoizedTemplate = super.template.cloneNode(true);
+      if (super.template && !this.hasOwnProperty('_memoizedThemableMixinTemplate')) {
+        this._memoizedThemableMixinTemplate = super.template.cloneNode(true);
 
         const modules = Polymer.DomModule.prototype.modules;
         let hasThemes = false;
@@ -37,13 +33,13 @@
           this.includeStyle(defaultModuleName);
         }
       }
-      return this._memoizedTemplate;
+      return this._memoizedThemableMixinTemplate;
     }
 
     static includeStyle(moduleName) {
       const styleEl = document.createElement('style');
       styleEl.setAttribute('include', moduleName);
-      this._memoizedTemplate.content.appendChild(styleEl);
+      this._memoizedThemableMixinTemplate.content.appendChild(styleEl);
     }
 
   };

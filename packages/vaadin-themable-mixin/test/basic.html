@@ -127,6 +127,16 @@
         </style>
       </template>
     </dom-module>
+
+    <dom-module id="baz-styles" theme-for="test-baz">
+      <template>
+        <style>
+          [part="text"] {
+            width: 100px;
+          }
+        </style>
+      </template>
+    </dom-module>
   </div>
 
   <test-fixture id="default">
@@ -176,6 +186,10 @@
 
       it('should fall back to default styles', function() {
         expect(window.getComputedStyle(components[3].$.text).color).to.equal('rgb(255, 0, 0)');
+      });
+
+      it('should work with themable parent', function() {
+        expect(window.getComputedStyle(components[2].$.text).width).to.equal('100px');
       });
 
     });
