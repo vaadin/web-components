@@ -6,15 +6,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/templatize.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+
+<dom-module id="vaadin-overlay-default-theme">
+  <template>
+    <style>
+      :host {
+        background: #fff;
+        border-radius: 0 0 2px 2px;
+      }
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="vaadin-overlay">
   <template>
     <style>
        :host {
         position: absolute;
-        @apply --shadow-elevation-2dp;
-        background: #fff;
-        border-radius: 0 0 2px 2px;
         top: 0;
         left: 0;
         pointer-events: auto;
@@ -25,6 +34,10 @@ This program is available under Apache License Version 2.0, available at https:/
           */
         z-index: 200;
         overflow: hidden;
+      }
+
+      :host(:not([opened])) {
+        display: none;
       }
     </style>
     <slot id="slot" on-slotchange="_assignTemplate"></slot>
@@ -41,7 +54,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `<vaadin-overlay>` is a Polymer element for creating overlays.
      * @memberof Vaadin
      */
-    class OverlayElement extends Polymer.Element {
+    class OverlayElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-overlay';
       }

@@ -20,8 +20,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <slot id="slot"></slot>
 
+    <vaadin-device-detector phone="{{_phone}}"></vaadin-device-detector>
+
     <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
         on-opened-changed="_onOverlayOpened"
+        phone="[[_phone]]"
         with-backdrop>
     </vaadin-context-menu-overlay>
 
@@ -242,38 +245,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundClose = this.close.bind(this);
         }
 
-        ready() {
-          super.ready();
-
-          // TODO: extract all this behind a node observer that observes for child templates.
-          const templates = this.$.slot.assignedNodes({
-            flatten: true
-          }).filter(node => node.localName && node.localName === 'template');
-          var template = templates[0] || undefined;
-
-          const Templatizer = Polymer.Templatize.templatize(template, this, {
-            forwardHostProp: function(prop, value) {
-              if (this.templateInstance) {
-                this.templateInstance.forwardHostProp(prop, value);
-              }
-            }
-          });
-
-          this.templateInstance = this.$.overlay.$.overlay.templateInstance = new Templatizer({});
-        }
-
         _onOverlayOpened(e) {
           if (e.detail.value === true) {
-            const child = Polymer.dom(this.$.overlay).querySelector(':not(style)');
+            const child = this.$.overlay.root.querySelector(':not(style)');
             if (child) {
               child.focus();
             }
 
             // Close context menu on backdrop right-click
-            this.$.overlay.backdropElement.addEventListener('contextmenu', e => {
-              this.close();
-              e.preventDefault();
-            }, false);
+            // TODO: add backdrop
+            // this.$.overlay.backdropElement.addEventListener('contextmenu', e => {
+            //   this.close();
+            //   e.preventDefault();
+            // }, false);
           } else if (e.detail.value === false) {
             this._setOpened(false);
           }
@@ -304,18 +288,28 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _closeOnChanged(closeOn, oldCloseOn) {
           if (oldCloseOn) {
-            this._unlisten(this.$.overlay.$.overlay, oldCloseOn, this._boundClose);
+            this._unlisten(this.$.overlay, oldCloseOn, this._boundClose);
           }
           if (closeOn) {
-            this._listen(this.$.overlay.$.overlay, closeOn, this._boundClose);
+            this._listen(this.$.overlay, closeOn, this._boundClose);
           }
         }
 
         _openedChanged(opened) {
-          if (opened) {
-            this._contentTemplate = Array.prototype.filter.call(Polymer.dom(this).children, el => {
+          if (opened && !this.templateInstance) {
+            this._contentTemplate = Array.prototype.filter.call(this.children, el => {
               return el.localName === 'template';
             })[0];
+
+            const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
+            forwardHostProp: function(prop, value) {
+              if (this.templateInstance) {
+                this.templateInstance.forwardHostProp(prop, value);
+              }
+              }
+            });
+
+            this.templateInstance = this.$.overlay.templateInstance = new Templatizer({});
           }
         }
 
@@ -365,8 +359,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
               this.$.overlay.y = this.$.overlay.x = 0;
 
-              this.$.overlay.x = -this.$.overlay.$.overlay.getBoundingClientRect().left + this._getEventCoordinate(e, 'x');
-              this.$.overlay.y = -this.$.overlay.$.overlay.getBoundingClientRect().top + this._getEventCoordinate(e, 'y');
+              this.$.overlay.x = -this.$.overlay.getBoundingClientRect().left + this._getEventCoordinate(e, 'x');
+              this.$.overlay.y = -this.$.overlay.getBoundingClientRect().top + this._getEventCoordinate(e, 'y');
             }
           }
         }

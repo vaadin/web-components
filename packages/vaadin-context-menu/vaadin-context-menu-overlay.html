@@ -7,8 +7,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/templatize.html">
 <link rel="import" href="vaadin-device-detector.html">
+<link rel="import" href="vaadin-overlay.html">
 
-<dom-module id="vaadin-context-menu-overlay">
+<dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-context-menu-overlay">
   <template>
     <style>
       :host {
@@ -42,9 +43,6 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: none !important;
       }
     </style>
-    <vaadin-overlay opened="{{opened}}" id="overlay">
-    </vaadin-overlay>
-    <vaadin-device-detector phone="{{phone}}"></vaadin-device-detector>
   </template>
   <script>
     (function() {
@@ -53,7 +51,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.IronOverlayBehavior
        * @demo demo/index.html
        */
-      class ContextMenuOverlayElement extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {
+      class ContextMenuOverlayElement extends Vaadin.OverlayElement {
         static get is() {
           return 'vaadin-context-menu-overlay';
         }
@@ -66,11 +64,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-            opened: {
-              type: Boolean,
-              notify: true
-            },
-
             /**
              * Position of the overlay on horizontal axis.
              */
@@ -104,21 +97,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        // monkey patching iron-overlay-behavior to cancel overriding transform styles.
-        _preparePositioning() {
-          this.style.display = '';
-        }
-
-        // monkey patching iron-overlay-behavior to cancel overriding transform styles.
-        _finishPositioning() {
-          this.style.display = '';
-        }
-
         _positionChanged(x, y) {
           if (x === undefined || y === undefined) {
             return;
           }
-          this.$.overlay.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          this.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         }
 
       }
