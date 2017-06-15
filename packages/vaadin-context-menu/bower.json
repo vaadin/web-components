@@ -17,7 +17,10 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test"
+    "test",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
   ],
   "dependencies": {
     "polymer": "^2.0.0",
@@ -28,24 +31,12 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#^2.0.0",
     "iron-component-page": "^2.0.0",
     "iron-demo-helpers": "^2.0.0",
-    "iron-icons": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "paper-item": "^2.0.0",
     "paper-listbox": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-grid": "#2.1-polymer-2-rebased",
+    "vaadin-grid": "^3.0.0",
     "web-component-tester": "^6.0.0"
-  },
-  "variants": {
-    "1.x": {
-      "dependencies": {
-        "polymer": "^1.7.0"
-      },
-      "resolutions": {
-        "polymer": "^1.7.0",
-        "webcomponentsjs": "^0.7.24"
-      }
-    }
   }
 }

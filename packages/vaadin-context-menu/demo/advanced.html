@@ -38,17 +38,6 @@
       <template>
         <dom-module id="my-grid-view">
           <template>
-            <style>
-              vaadin-grid {
-                --vaadin-grid-body-cell: {
-                  padding: 0;
-                };
-              }
-
-              .body-content {
-                padding: 8px;
-              }
-            </style>
 
             <vaadin-context-menu>
               <template>
@@ -89,32 +78,39 @@
           </template>
 
           <script>
-            document.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'my-grid-view',
 
-                properties: {
-                  items: {
-                    type: Array,
-                    value: function() {
-                      return getItems();
+            document.addEventListener('WebComponentsReady', () => {
+              class MyGridView extends Polymer.Element {
+                static get is() {
+                  return 'my-grid-view';
+                }
+
+                static get properties() {
+                  return {
+                    items: {
+                      type: Array,
+                      value: () => {
+                        return getItems();
+                      }
                     }
-                  }
-                },
+                  };
+                }
 
-                _isGridBody: function(target) {
+                _isGridBody(target) {
                   return target.classList.contains('body-content');
-                },
+                }
 
-                _add: function() {
+                _add() {
                   this.unshift('items', getNewItem());
-                },
+                }
 
-                _remove: function(e) {
-                  var index = parseInt(e.target.content.getAttribute('data-index'));
+                _remove(e) {
+                  const index = parseInt(e.target.content.getAttribute('data-index'));
                   this.splice('items', index, 1);
                 }
-              });
+              }
+
+              customElements.define(MyGridView.is, MyGridView);
             });
           </script>
         </dom-module>
@@ -183,7 +179,7 @@
           </template>
         </dom-bind>
         <script>
-          document.addEventListener('WebComponentsReady', function() {
+          document.addEventListener('WebComponentsReady', () => {
             document.querySelector('#app').menuItems = new Array(30);
           });
         </script>

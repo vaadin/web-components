@@ -19,10 +19,10 @@
   </test-fixture>
 
   <script>
-    describe('device detection', function() {
-      var detector, iphone, ipad, android;
+    describe('device detection', () => {
+      let detector, iphone, ipad, android;
 
-      before(function() {
+      before(() => {
         detector = fixture('default');
 
         iphone = !!navigator.userAgent.match(/iPhone/i);
@@ -30,15 +30,15 @@
         android = !!navigator.userAgent.match(/android/i);
       });
 
-      it('should detect wide screen', function() {
+      it('should detect wide screen', () => {
         expect(detector.wide).to.eql(!iphone && !android);
       });
 
-      it('should detect touch support', function() {
+      it('should detect touch support', () => {
         expect(detector.touch).to.eql(iphone || ipad || android);
       });
 
-      it('should detect phone', function() {
+      it('should detect phone', () => {
         expect(detector.phone).to.eql(iphone || android);
       });
     });

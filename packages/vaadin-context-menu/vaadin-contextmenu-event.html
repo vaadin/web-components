@@ -1,10 +1,10 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/lib/utils/gestures.html">
 
 <script>
   (function() {
@@ -45,12 +45,12 @@ This program is available under Apache License Version 2.0, available at https:/
           y: e.changedTouches[0].clientY
         };
 
-        this._timerId = setTimeout(function() {
+        this._timerId = setTimeout(() => {
           // Original target may or may not be inside a shadow root.
           // For code readability, findOriginalTarget() should be
           // changed to use composedPath() directly after native Shadow becomes the norm.
-          var t = Polymer.Gestures.findOriginalTarget(e) || e.target;
-          var ct = e.changedTouches[0];
+          const t = Polymer.Gestures.findOriginalTarget(e) || e.target;
+          const ct = e.changedTouches[0];
           if (!e.shiftKey) {
             if (this.info._ios) {
               this.fire(t, ct.clientX, ct.clientY);
@@ -60,12 +60,12 @@ This program is available under Apache License Version 2.0, available at https:/
             // which could potentially cancel/close the overlay.
             Polymer.Gestures.prevent('tap');
           }
-        }.bind(this), 500); // default setting for Android and iOS.
+        }, 500); // default setting for Android and iOS.
       },
 
       touchmove: function(e) {
-        var moveThreshold = 15;
-        var touchStartCoords = this.info.touchStartCoords;
+        const moveThreshold = 15;
+        const touchStartCoords = this.info.touchStartCoords;
         if (Math.abs(touchStartCoords.x - e.changedTouches[0].clientX) > moveThreshold ||
             Math.abs(touchStartCoords.y - e.changedTouches[0].clientY) > moveThreshold) {
           this._cancelTimer();
@@ -85,8 +85,7 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       fire: function(target, x, y) {
-        // 2.0 has moved _fire method to private API
-        (Polymer.Gestures.fire || Polymer.Gestures._fire)(target, 'vaadin-contextmenu', {
+        Polymer.Gestures._fire(target, 'vaadin-contextmenu', {
           x: x,
           y: y,
           sourceEvent: this.info.sourceEvent

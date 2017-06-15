@@ -22,18 +22,18 @@
     </test-fixture>
 
     <script>
-      describe('template', function() {
-        var menu, target;
+      describe('template', () => {
+        let menu, target;
 
-        beforeEach(function() {
+        beforeEach(() => {
           menu = fixture('default');
           target = document.querySelector('#target');
         });
 
-        it('should stamp template on open', function(done) {
+        it('should stamp template on open', done => {
           expect(menu.$.overlay.textContent).not.to.contain('FOOBAR');
 
-          listenOnce(menu, 'iron-overlay-opened', function() {
+          listenOnce(menu, 'iron-overlay-opened', () => {
             expect(menu.$.overlay.textContent).to.contain('FOOBAR');
             done();
           });
@@ -41,26 +41,22 @@
           menu._setOpened(true);
         });
 
-        it('should bind target property', function(done) {
-          listenOnce(menu, 'iron-overlay-opened', function() {
+        it('should bind target property', done => {
+          listenOnce(menu, 'iron-overlay-opened', () => {
             expect(menu.$.overlay.textContent).to.contain('target');
             done();
           });
 
-          menu.fire('vaadin-contextmenu', {}, {
-            node: target
-          });
+          fire(target, 'vaadin-contextmenu');
         });
 
-        it('should bind detail property', function(done) {
-          listenOnce(menu, 'iron-overlay-opened', function() {
+        it('should bind detail property', done => {
+          listenOnce(menu, 'iron-overlay-opened', () => {
             expect(menu.$.overlay.textContent).to.contain('bar');
             done();
           });
 
-          menu.fire('vaadin-contextmenu', {foo: 'bar'}, {
-            node: target
-          });
+          fire(target, 'vaadin-contextmenu', {foo: 'bar'});
         });
       });
     </script>

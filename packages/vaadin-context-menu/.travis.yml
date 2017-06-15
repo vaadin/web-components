@@ -13,11 +13,11 @@ addons:
 
 install:
   - npm install
-  - polymer install --variants
+  - polymer install
 
 before_script:
   - gulp lint
-  - polymer lint --rules polymer-2-hybrid --input *.html
+  - polymer lint --rules polymer-2 --input *.html
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
 
 script:

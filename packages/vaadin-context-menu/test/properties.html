@@ -8,6 +8,7 @@
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="common.js"></script>
   </head>
   <body>
     <test-fixture id="default">
@@ -30,37 +31,37 @@
     </test-fixture>
 
     <script>
-      describe('properties', function() {
-        describe('context', function() {
-          var menu, target;
+      describe('properties', () => {
+        describe('context', () => {
+          let menu, target;
 
-          beforeEach(function() {
+          beforeEach(() => {
             menu = fixture('default');
             target = menu.querySelector('#target');
           });
 
-          it('should use event target as context target', function() {
-            menu.fire('contextmenu', {}, {node: target});
+          it('should use event target as context target', () => {
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target);
           });
 
-          it('should use context-selector scope to target', function() {
+          it('should use context-selector scope to target', () => {
             menu.selector = 'section';
 
-            menu.fire('contextmenu', {}, {node: target});
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target.parentElement);
           });
         });
 
-        describe('openOn', function() {
-          var menu;
-          beforeEach(function() {
+        describe('openOn', () => {
+          let menu;
+          beforeEach(() => {
             menu = fixture('external')[0];
           });
 
-          it('should open on custom event', function() {
+          it('should open on custom event', () => {
             menu.openOn = 'click';
 
             menu.click();
@@ -68,51 +69,38 @@
             expect(menu.opened).to.eql(true);
           });
 
-          it('should not open on `contextmenu`', function() {
+          it('should not open on `contextmenu`', () => {
             menu.openOn = 'click';
 
-            menu.fire('contextmenu', {}, {node: menu});
+            fire(menu, 'contextmenu');
 
             expect(menu.opened).to.eql(false);
           });
 
-          describe('event listener', function() {
-            beforeEach(function() {
-              menu.listen = sinon.spy();
-              menu.unlisten = sinon.spy();
-            });
+          describe('event listener', () => {
 
-            it('should update listeners when set', function() {
-              menu.openOn = 'foobar';
-
-              expect(menu.unlisten.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, 'foobar').callCount).to.eql(1);
-            });
-
-            it('should not add listener when set to empty', function() {
+            it('should not add listener when set to empty', () => {
+              expect(menu._oldOpenOn).to.be.ok;
               menu.openOn = '';
-
-              expect(menu.unlisten.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, '').callCount).to.eql(0);
-              expect(menu.listen.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(0);
+              expect(menu._oldOpenOn).not.to.be.ok;
             });
           });
         });
 
-        describe('opened', function() {
-          var menu;
-          beforeEach(function() {
+        describe('opened', () => {
+          let menu;
+          beforeEach(() => {
             menu = fixture('external')[0];
           });
 
-          it('should be read-only', function() {
+          it('should be read-only', () => {
             expect(menu.opened).to.eql(false);
 
             menu.opened = true;
             expect(menu.opened).to.eql(false);
           });
 
-          it('should be set using the private setter', function() {
+          it('should be set using the private setter', () => {
             expect(menu.opened).to.eql(false);
 
             menu._setOpened(true);
@@ -120,14 +108,14 @@
           });
         });
 
-        describe('closeOn', function() {
-          var menu;
-          beforeEach(function() {
+        describe('closeOn', () => {
+          let menu;
+          beforeEach(() => {
             menu = fixture('external')[0];
             menu._setOpened(true);
           });
 
-          it('should not close on `click`', function() {
+          it('should not close on `click`', () => {
             menu.closeOn = '';
 
             menu.$.overlay.click();
@@ -135,72 +123,50 @@
             expect(menu.opened).to.eql(true);
           });
 
-          it('should close on custom event', function() {
+          it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
-            menu.fire('foobar', {}, {node: menu.$.overlay});
+            fire(menu.$.overlay, 'foobar');
 
             expect(menu.opened).to.eql(false);
           });
         });
 
-        describe('external target', function() {
-          var menu, target;
-          beforeEach(function() {
+        describe('external target', () => {
+          let menu, target;
+          beforeEach(() => {
             menu = fixture('external')[0];
             target = document.body.querySelector('#target');
 
             menu.listenOn = target;
           });
 
-          it('should open on external target', function() {
-            menu.fire('contextmenu', {}, {
-              node: target
-            });
+          it('should open on external target', () => {
+            fire(target, 'contextmenu');
 
             expect(menu.opened).to.eql(true);
           });
 
-          it('should select context target on external target', function() {
-            menu.fire('contextmenu', {}, {
-              node: target
-            });
+          it('should select context target on external target', () => {
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target);
           });
 
-          it('should use context selector on external target', function() {
+          it('should use context selector on external target', () => {
             menu.selector = 'section'; // parent of #target
             menu.listenOn = menu.parentElement;
-            menu.fire('contextmenu', {}, {
-              node: target
-            });
+            fire(target, 'contextmenu');
 
             expect(menu._context.target).to.eql(target.parentElement);
           });
 
-          describe('event listeners', function() {
-            beforeEach(function() {
-              menu.listen = sinon.spy();
-              menu.unlisten = sinon.spy();
-            });
+          describe('event listeners', () => {
 
-            it('should update target listeners when set', function() {
-              var oldTarget = menu.listenOn;
-
-              menu.listenOn = document.body;
-
-              expect(menu.unlisten.withArgs(oldTarget, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(document.body, 'vaadin-contextmenu').callCount).to.eql(1);
-            });
-
-            it('should not target listeners when set to null', function() {
-              var oldTarget = menu.listenOn;
-
+            it('should not target listeners when set to null', () => {
+              expect(menu._oldOpenOn).to.be.ok;
               menu.listenOn = null;
-
-              expect(menu.unlisten.withArgs(oldTarget, 'vaadin-contextmenu').callCount).to.eql(1);
-              expect(menu.listen.withArgs(menu.listenOn, 'vaadin-contextmenu').callCount).to.eql(0);
+              expect(menu._oldOpenOn).not.to.be.ok;
             });
           });
         });

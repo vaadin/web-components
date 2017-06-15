@@ -9,6 +9,7 @@
     "beforeEach": false,
     "listenOnce": false,
     "fixture": false,
+    "fire": false,
     "MockInteractions": false,
     "MockTouchInteractions": false
   }

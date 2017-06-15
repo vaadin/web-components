@@ -50,7 +50,7 @@
         <div id="menuListener">The element that listens for the context menu.</div>
 
         <script>
-          var contextMenu = document.querySelector('vaadin-context-menu#customListener');
+          const contextMenu = document.querySelector('vaadin-context-menu#customListener');
           contextMenu.listenOn = document.querySelector('#menuListener');
         </script>
       </template>
@@ -114,27 +114,36 @@
           </template>
 
           <script>
-            Polymer({
-              is: 'my-list-view',
+            document.addEventListener('WebComponentsReady', () => {
+              class MyListView extends Polymer.Element {
 
-              properties: {
-                items: {
-                  type: Array,
-                  value: function() {
-                    return ['Foo', 'Bar', 'Baz'];
-                  }
+                static get is() {
+                  return 'my-list-view';
                 }
-              },
 
-              _appendItem: function() {
-                this.push('items', 'New item');
-              },
+                static get properties() {
+                  return {
+                    items: {
+                      type: Array,
+                      value: () => {
+                        return ['Foo', 'Bar', 'Baz'];
+                      }
+                    }
+                  };
+                }
 
-              _removeItem: function(e) {
-                var menuItem = e.target; // `<paper-item>`
-                var listItem = menuItem.listItem; // `<li>`
-                this.splice('items', listItem.index, 1);
+                _appendItem() {
+                  this.push('items', 'New item');
+                }
+
+                _removeItem(e) {
+                  const menuItem = e.target; // `<paper-item>`
+                  const listItem = menuItem.listItem; // `<li>`
+                  this.splice('items', listItem.index, 1);
+                }
               }
+
+              customElements.define(MyListView.is, MyListView);
             });
           </script>
         </dom-module>
@@ -158,8 +167,8 @@
         <button id="menuOpener">Toggle Context Menu</button>
 
         <script>
-          document.querySelector('#menuOpener').addEventListener('click', function(event) {
-            var menu = document.querySelector('#buttonMenu');
+          document.querySelector('#menuOpener').addEventListener('click', event => {
+            const menu = document.querySelector('#buttonMenu');
             if (!menu.opened) {
               menu.open(event);
             } else {

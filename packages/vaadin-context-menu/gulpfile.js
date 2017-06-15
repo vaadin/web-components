@@ -1,13 +1,13 @@
 'use strict';
 
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
-var htmlExtract = require('gulp-html-extract');
-var stylelint = require('gulp-stylelint');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
+const htmlExtract = require('gulp-html-extract');
+const stylelint = require('gulp-stylelint');
 
 gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 
-gulp.task('lint:js', function() {
+gulp.task('lint:js', () => {
   return gulp.src([
     '*.js',
     'test/**/*.js'
@@ -17,7 +17,7 @@ gulp.task('lint:js', function() {
   .pipe(eslint.failAfterError());
 });
 
-gulp.task('lint:html', function() {
+gulp.task('lint:html', () => {
   return gulp.src([
     '*.html',
     'demo/**/*.html',
@@ -32,7 +32,7 @@ gulp.task('lint:html', function() {
   .pipe(eslint.failAfterError());
 });
 
-gulp.task('lint:css', function() {
+gulp.task('lint:css', () => {
   return gulp.src([
     '*.html',
     'demo/**/*.html',

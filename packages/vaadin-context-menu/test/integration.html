@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../polymer/polymer-element.html">
     <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
@@ -17,13 +18,18 @@
         <button on-tap="_showMenu" id="button">Show context menu</button>
       </template>
       <script>
-        document.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'context-menu-button',
-            _showMenu: function(e) {
+        document.addEventListener('WebComponentsReady', () => {
+          class ContextMenuButton extends Polymer.Element {
+            static get is() {
+              return 'context-menu-button';
+            }
+
+            _showMenu(e) {
               this.$.menu.open(e);
             }
-          });
+          }
+
+          customElements.define(ContextMenuButton.is, ContextMenuButton);
         });
       </script>
     </dom-module>
@@ -35,30 +41,30 @@
     </test-fixture>
 
     <script>
-      describe('integration', function() {
-        var contextMenuButton, menu, button;
+      describe('integration', () => {
+        let contextMenuButton, menu, button;
 
-        beforeEach(function() {
+        beforeEach(() => {
           contextMenuButton = fixture('default');
           menu = contextMenuButton.$.menu;
           button = contextMenuButton.$.button;
         });
 
-        it('should open context menu on .open(e)', function() {
+        it('should open context menu on .open(e)', () => {
           MockInteractions.tap(button);
           expect(menu.opened).to.eql(true);
         });
 
-        it('should place the backdrop above all other document elements', function(done) {
+        it('should place the backdrop above all other document elements', done => {
           MockInteractions.tap(button);
-          menu.async(function() {
-            var buttonRect = button.getBoundingClientRect();
+          setTimeout(() => {
+            const buttonRect = button.getBoundingClientRect();
             MockInteractions.tap(
               // this should be backdrop, as it placed above the button
               document.elementFromPoint(buttonRect.left, buttonRect.top)
             );
           }, 200);
-          menu.addEventListener('iron-overlay-closed', function() {
+          menu.addEventListener('iron-overlay-closed', () => {
             expect(menu.opened).to.eql(false);
             done();
           });

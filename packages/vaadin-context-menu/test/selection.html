@@ -29,23 +29,23 @@
     </test-fixture>
 
     <script>
-      describe('overlay', function() {
+      describe('overlay', () => {
 
-        var menu;
+        let menu;
 
-        beforeEach(function() {
+        beforeEach(() => {
           menu = fixture('default');
         });
 
         function unwrapIfNeeded(element) {
-          var isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
+          const isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
           return isWrapped ? window.unwrap(element) : element;
         }
 
-        describe('selection', function() {
+        describe('selection', () => {
 
-          it('should close on item tap', function(done) {
-            listenOnce(menu, 'iron-overlay-opened', function() {
+          it('should close on item tap', done => {
+            listenOnce(menu, 'iron-overlay-opened', () => {
               MockInteractions.tap(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               expect(menu.opened).to.eql(false);
               done();
@@ -54,48 +54,35 @@
             menu._setOpened(true);
           });
 
-          it('should close on keyboard selection', function(done) {
-            listenOnce(menu, 'iron-overlay-opened', function() {
-              menu.async(function() {
+          it('should close on keyboard selection', done => {
+            listenOnce(menu, 'iron-overlay-opened', () => {
+              setTimeout(() => {
                 MockInteractions.pressEnter(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
               }, 10);
             });
-            listenOnce(menu, 'iron-overlay-closed', function() {
+            listenOnce(menu, 'iron-overlay-closed', () => {
               done();
             });
 
             menu._setOpened(true);
           });
 
-          it('should focus the child element', function(done) {
-            listenOnce(menu, 'iron-overlay-opened', function() {
-              // P-1.x document.activeElement doesn't penerate shadow root in.
-              // P-2.0 shadow and shadydom always fucuses the host
-              if (Polymer.Element || Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
-              } else {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(Polymer.dom(menu.$.overlay).querySelector('#menu')));
-              }
+          it('should focus the child element', done => {
+            listenOnce(menu, 'iron-overlay-opened', () => {
+              expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
               done();
             });
 
             menu._setOpened(true);
           });
 
-          it('should focus the child element on `contextmenu` event', function(done) {
-            listenOnce(menu, 'iron-overlay-opened', function() {
-              // document.activeElement doesn't penerate shadow root.
-              if (Polymer.Element || Polymer.Settings.nativeShadow && Polymer.Settings.useShadow) {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
-              } else {
-                expect(document.activeElement).to.eql(unwrapIfNeeded(Polymer.dom(menu.$.overlay).querySelector('#menu')));
-              }
+          it('should focus the child element on `contextmenu` event', done => {
+            listenOnce(menu, 'iron-overlay-opened', () => {
+              expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
               done();
             });
 
-            menu.fire('contextmenu', {}, {
-              node: menu.target
-            });
+            fire(menu, 'contextmenu');
           });
         });
       });

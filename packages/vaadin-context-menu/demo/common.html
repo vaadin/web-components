@@ -11,7 +11,6 @@
 <link rel="import" href="../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../paper-item/paper-item.html">
 <link rel="import" href="../../paper-item/paper-item-body.html">
-<link rel="import" href="../../iron-icons/iron-icons.html">
 
 <!-- Common styles for all examples -->
 <custom-style>
@@ -43,8 +42,8 @@ function getNewItem() {
   function random(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
   }
-  var names = ['Artur', 'Patrik', 'Henrik', 'Teemu'];
-  var surnames = ['Signell', 'Lehtinen', 'Ahlroos', 'Paul'];
+  const names = ['Artur', 'Patrik', 'Henrik', 'Teemu'];
+  const surnames = ['Signell', 'Lehtinen', 'Ahlroos', 'Paul'];
   return {
     name: random(names),
     surname: random(surnames),
@@ -53,8 +52,8 @@ function getNewItem() {
 }
 
 function getItems() {
-  var items = [];
-  for (var i = 0; i < 100; i++) {
+  const items = [];
+  for (let i = 0; i < 100; i++) {
     items.push(getNewItem());
   }
   return items;
