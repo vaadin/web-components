@@ -10,7 +10,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
 <link rel="import" href="vaadin-dropdown.html">
@@ -272,7 +271,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _onScroll() {
         this._ignoreTaps = true;
-        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps, 
+        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps,
           Polymer.Async.timeOut.after(300), () => this._ignoreTaps = false);
       }
 
