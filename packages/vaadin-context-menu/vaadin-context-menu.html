@@ -10,6 +10,40 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-contextmenu-event.html">
 <link rel="import" href="vaadin-overlay.html">
 
+<dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-overlay">
+  <template>
+    <style>
+      :host(.vaadin-context-menu-overlay) {
+        display: block;
+        -webkit-overflow-scrolling: touch;
+        -webkit-user-select: none;
+        overflow: auto;
+      }
+
+      :host(.vaadin-context-menu-overlay:not([phone])) {
+        box-shadow:
+          0 6px 10px 0 rgba(0, 0, 0, 0.14),
+          0 1px 18px 0 rgba(0, 0, 0, 0.12),
+          0 3px 5px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      :host(.vaadin-context-menu-overlay[phone]) {
+        /* width set to make it possible for the user make the contents fit whole screen */
+        width: 100vw;
+        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
+        max-height: 80vh;
+        /* Needed for iOS */
+        top: auto !important;
+        bottom: 0;
+        /* leave a space around the overlay */
+        margin: 24px;
+        /* Override desktop translate */
+        transform: none !important;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-context-menu">
   <template>
     <style>
@@ -22,11 +56,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-device-detector phone="{{_phone}}"></vaadin-device-detector>
 
-    <vaadin-context-menu-overlay id="overlay" opened="[[opened]]"
-        on-opened-changed="_onOverlayOpened"
-        phone="[[_phone]]"
-        with-backdrop>
-    </vaadin-context-menu-overlay>
+    <vaadin-overlay id="overlay" class="vaadin-context-menu-overlay"
+      opened="[[opened]]"
+      on-opened-changed="_onOverlayOpened"
+      phone$="[[_phone]]">
+    </vaadin-overlay>
   </template>
   <script>
     if (!Polymer.Element) {
@@ -375,6 +409,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _listen(node, evType, handler) {
+          console.log(node, evType, handler);
           if (Polymer.Gestures.gestures[evType]) {
             Polymer.Gestures.addListener(node, evType, handler);
           } else {
