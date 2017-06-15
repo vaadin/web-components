@@ -59,12 +59,17 @@ This program is available under Apache License Version 2.0, available at https:/
             notify: true
           },
 
+          templateInstance: {
+            type: Object,
+            notify: true
+          },
+
           _instance: Object
         };
       }
 
       static get observers() {
-        return ['_openedChanged(opened)', '_templateChanged(template)'];
+        return ['_openedChanged(opened)', '_templateChanged(template)', '_templateInstanceChanged(templateInstance)'];
       }
 
       constructor() {
@@ -114,15 +119,17 @@ This program is available under Apache License Version 2.0, available at https:/
       _templateChanged(template) {
         const Templatizer = Polymer.Templatize.templatize(template, this, {
           forwardHostProp: function(prop, value) {
-            if (this._instance) {
-              this._instance.forwardHostProp(prop, value);
+            if (this.templateInstance) {
+              this.templateInstance.forwardHostProp(prop, value);
             }
           }
         });
 
-        this._instance = new Templatizer({});
+        this.templateInstance = new Templatizer({});
+      }
 
-        this.root.appendChild(this._instance.root);
+      _templateInstanceChanged(instance) {
+        this.root.appendChild(instance.root);
       }
 
       _processPendingMutationObserversFor(node) {

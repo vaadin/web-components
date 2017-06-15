@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/templatize.html">
 <link rel="import" href="vaadin-device-detector.html">
 
 <dom-module id="vaadin-context-menu-overlay">
@@ -42,8 +43,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <vaadin-overlay opened="{{opened}}" id="overlay">
-      <slot></slot>
     </vaadin-overlay>
+    <slot id="slot"></slot>
     <vaadin-device-detector phone="{{phone}}"></vaadin-device-detector>
   </template>
   <script>
@@ -96,6 +97,25 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             }
           };
+        }
+
+        ready() {
+          super.ready();
+
+          const templates = this.$.slot.assignedNodes({
+            flatten: true
+          }).filter(node => node.localName && node.localName === 'template');
+          var template = templates[0] || undefined;
+
+          const Templatizer = Polymer.Templatize.templatize(template, this, {
+          forwardHostProp: function(prop, value) {
+            if (this.templateInstance) {
+              this.templateInstance.forwardHostProp(prop, value);
+            }
+          }
+        });
+
+        this.templateInstance = this.$.overlay.templateInstance = new Templatizer({});
         }
 
         _phoneChanged(phone) {
