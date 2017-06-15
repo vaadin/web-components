@@ -7,8 +7,8 @@ window.listenOnce = (elem, type, callback) => {
   elem.addEventListener(type, listener);
 };
 
-window.fire = (node, evType, detail) => {
-  const evt = new CustomEvent(evType, {bubbles: true, composed: true, cancelable: true, detail: detail});
+window.fire = (node, eventType, detail) => {
+  const evt = new CustomEvent(eventType, {bubbles: true, composed: true, cancelable: true, detail: detail});
   node.dispatchEvent(evt);
   return evt;
 };
