@@ -12,14 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-overlay">
   <template>
-    <style>
-      :host(.vaadin-context-menu-overlay) {
-        display: block;
-        -webkit-overflow-scrolling: touch;
-        -webkit-user-select: none;
-        overflow: auto;
-      }
-
+    <style include="vaadin-overlay-default-theme">
       :host(.vaadin-context-menu-overlay:not([phone])) {
         box-shadow:
           0 6px 10px 0 rgba(0, 0, 0, 0.14),
@@ -28,17 +21,32 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host(.vaadin-context-menu-overlay[phone]) {
-        /* width set to make it possible for the user make the contents fit whole screen */
         width: 100vw;
-        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
-        max-height: 80vh;
-        /* Needed for iOS */
+        height: 100vh;
+        padding: 24px;
+        box-sizing: border-box;
+        left: 0 !important;
         top: auto !important;
         bottom: 0;
-        /* leave a space around the overlay */
-        margin: 24px;
-        /* Override desktop translate */
-        transform: none !important;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      :host(.vaadin-context-menu-overlay[phone]) [part="content"] {
+        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
+        max-height: 80vh;
+        width: 100%;
+      }
+
+      :host(.vaadin-context-menu-overlay[phone][opened])::before {
+        z-index: -1;
+        content: "";
+        background: rgba(0, 0, 0, 0.5);
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
       }
     </style>
   </template>
@@ -273,7 +281,7 @@ This program is available under Apache License Version 2.0, available at https:/
             // to allow overlay to position itself correctly first.
             // Otherwise, the browser window will jump scroll.
             Polymer.Async.microTask.run(() => {
-              const child = this.$.overlay.root.querySelector(':not(style):not(slot)');
+              const child = this.$.overlay.root.querySelector('#content :not(style):not(slot)');
               if (child) {
                 child.focus();
               }
@@ -388,10 +396,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
               this.$.overlay.opened = true;
 
-              this.$.overlay.style.transform = `none`;
-              const x = -this.$.overlay.getBoundingClientRect().left + this._getEventCoordinate(e, 'x');
-              const y = -this.$.overlay.getBoundingClientRect().top + this._getEventCoordinate(e, 'y');
-              this.$.overlay.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+              this.$.overlay.style.height = '';
+              this.$.overlay.style.left = this.$.overlay.style.top = 0;
+
+              this.$.overlay.style.left = -this.$.overlay.getBoundingClientRect().left + this._getEventCoordinate(e, 'x') + 'px';
+              this.$.overlay.style.top = -this.$.overlay.getBoundingClientRect().top + this._getEventCoordinate(e, 'y') + 'px';
+
+              // FIXME: Nasty hack
+              requestAnimationFrame(() => {
+                this.$.overlay.style.height = Math.min(this.$.overlay.offsetHeight, window.innerHeight - this.$.overlay.getBoundingClientRect().top) + 'px';
+              });
 
               this._setOpened(true);
             }

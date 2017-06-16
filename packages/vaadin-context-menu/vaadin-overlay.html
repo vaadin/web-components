@@ -11,9 +11,11 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-overlay-default-theme">
   <template>
     <style>
-      :host {
+      [part="content"] {
         background: #fff;
         border-radius: 0 0 2px 2px;
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
       }
     </style>
   </template>
@@ -23,24 +25,25 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        position: absolute;
+        z-index: 200;
+        position: fixed;
         top: 0;
         left: 0;
         pointer-events: auto;
-
-        /**
-          * Keep the vaadin-combo-box-overlay above paper-dialogs.
-          * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
-          */
-        z-index: 200;
         overflow: hidden;
       }
 
       :host(:not([opened])) {
         display: none !important;
       }
+
+      [part="content"] {
+        max-height: 100%;
+      }
     </style>
-    <slot id="slot" on-slotchange="_assignTemplate"></slot>
+    <div part="content" id="content">
+      <slot id="slot" on-slotchange="_assignTemplate"></slot>
+    </div>
   </template>
 </dom-module>
 
@@ -166,7 +169,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _contentChanged(content) {
-        this.root.appendChild(content);
+        this.$.content.appendChild(content);
       }
 
       _processPendingMutationObserversFor(node) {
