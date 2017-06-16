@@ -41,36 +41,14 @@ This program is available under Apache License Version 2.0, available at https:/
               border-bottom: 8px solid transparent;
             };
           }
-
-          #selector vaadin-combo-box-item {
-            cursor: pointer;
-            padding: 13px 16px;
-            color: var(--primary-text-color);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
-          #selector:not([touch-device]) vaadin-combo-box-item:hover,
-          #selector vaadin-combo-box-item[focused] {
-            background: #eee;
-          }
-
-          #selector vaadin-combo-box-item[selected] {
-            color: var(--primary-color);
-          }
-
-          #selector vaadin-combo-box-item[hidden] {
-            display: none;
-          }
         </style>
         <vaadin-spinner active="[[loading]]"></vaadin-spinner>
         <div id="scroller" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
           on-scroll="_onScroll" hidden$="[[loading]]">
-          <iron-list id="selector" touch-device$="[[touchDevice]]" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
+          <iron-list part="selector" id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>
               <vaadin-combo-box-item on-tap="_onTap" index="[[index]]" item="[[item]]" label="[[getItemLabel(item)]]" selected="[[_isItemSelected(item, _selectedItem)]]"
-                role$="[[_getAriaRole(index)]]" aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]" focused="[[_isItemFocused(_focusedIndex,index)]]">
+                role$="[[_getAriaRole(index)]]" aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]" focused="[[_isItemFocused(_focusedIndex,index)]]" touch-device$="[[touchDevice]]">
               </vaadin-combo-box-item>
             </template>
           </iron-list>

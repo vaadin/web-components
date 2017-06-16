@@ -10,6 +10,25 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
+        cursor: pointer;
+        padding: 13px 16px;
+        color: var(--primary-text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      :host([selected]) {
+        color: var(--primary-color);
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+
+      :host(:not([touch-device]):hover),
+      :host([focused]) {
+        background: #eee;
       }
     </style>
     [[label]]
