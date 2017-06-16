@@ -5,9 +5,9 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
@@ -165,9 +165,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ComboBoxMixin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class ComboBoxElement extends Vaadin.ComboBoxMixin(Polymer.Element) {
+      class ComboBoxElement extends Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element)) {
 
         static get is() {
           return 'vaadin-combo-box';

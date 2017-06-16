@@ -6,8 +6,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
@@ -86,8 +86,10 @@ This program is available under Apache License Version 2.0, available at https:/
      * ```
      * @memberof Vaadin
      * @mixes Vaadin.ComboBoxMixin
+     * @mixes Vaadin.ThemableMixin
      */
-    class ComboBoxLightElement extends Vaadin.ComboBoxMixin(Polymer.mixinBehaviors([Polymer.IronA11yKeysBehavior], Polymer.Element)) {
+    class ComboBoxLightElement extends
+    Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.mixinBehaviors([Polymer.IronA11yKeysBehavior], Polymer.Element))) {
 
       static get is() {
         return 'vaadin-combo-box-light';
