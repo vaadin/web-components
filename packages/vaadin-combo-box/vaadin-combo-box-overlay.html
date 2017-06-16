@@ -7,9 +7,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
 <link rel="import" href="vaadin-dropdown.html">
@@ -20,7 +20,7 @@ This program is available under Apache License Version 2.0, available at https:/
       on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
       <template>
         <style>
-           :host([opened][loading]) {
+          :host([opened][loading]) {
             display: block !important;
             height: 58px;
           }
@@ -35,7 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
             -webkit-overflow-scrolling: touch;
           }
 
-          #selector {
+          [part=selector] {
             --iron-list-items-container: {
               border-top: 8px solid transparent;
               border-bottom: 8px solid transparent;
@@ -62,8 +62,9 @@ This program is available under Apache License Version 2.0, available at https:/
   {
     /**
      * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
      */
-    class ComboBoxOverlayElement extends Polymer.GestureEventListeners(Polymer.Element) {
+    class ComboBoxOverlayElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
       static get is() {
         return 'vaadin-combo-box-overlay';
       }
