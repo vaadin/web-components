@@ -25,6 +25,7 @@
     "gulp-html-extract": "^0.2.0",
     "gulp-stylelint": "^3.7.0",
     "polymer-cli": "^1.1.0",
+    "stylelint": "7.10.1",
     "stylelint-config-vaadin": "^0.1.0",
     "web-component-tester": "^5.0.0",
     "yargs": "latest"
