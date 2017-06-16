@@ -65,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         </style>
         <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-        <div id="scroller" scroller="[[_scroller]]" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
+        <div id="scroller" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
           on-scroll="_onScroll" hidden$="[[loading]]">
           <iron-list id="selector" touch-device$="[[touchDevice]]" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>
@@ -167,7 +167,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get observers() {
-        return ['_selectorChanged(selector)', '_loadingChanged(loading)'];
+        return ['_selectorChanged(_selector)', '_loadingChanged(loading)'];
       }
 
       ready() {
@@ -199,10 +199,10 @@ This program is available under Apache License Version 2.0, available at https:/
       _selectorChanged(selector) {
         this._patchWheelOverScrolling();
 
-        // Stamping with an empty object instead of null
-        // will resolve templatizer issues in P2 that previously
-        // required calling _flushProperties/_enableProperties.
-        this._patchIronListStamping();
+        // Iron-list introduces a regression in vaadin-combo-box because they blurs the
+        // activeElement when the iron-list focused element is removed.
+        // https://github.com/PolymerElements/iron-list/pull/447
+        this._patchIronListBlur();
       }
 
       _setOverlayHeight() {
@@ -237,15 +237,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _patchIronListStamping() {
-        const stamp = this._selector.stamp;
-        this._selector.stamp = value => {
-          if (value === null) {
-            value = {};
-          }
-
-          return stamp.call(this, value);
-        };
+      _patchIronListBlur() {
+        this._selector._removeFocusedItem = () => {};
       }
 
       _getFocusedItem(focusedIndex) {
