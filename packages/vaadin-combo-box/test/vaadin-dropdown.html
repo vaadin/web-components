@@ -29,13 +29,13 @@
         overlay.opened = false;
 
         expect(window.getComputedStyle(overlay).display).to.eql('none');
-      });    
+      });
 
       it('should show the overlay when opened', () => {
         overlay.opened = true;
 
         expect(window.getComputedStyle(overlay).display).not.to.eql('none');
-      });         
+      });
 
     });
   </script>
