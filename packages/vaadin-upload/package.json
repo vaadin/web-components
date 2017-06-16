@@ -1,6 +1,6 @@
 {
   "name": "vaadin-upload",
-  "version": "2.0.0-alpha3",
+  "version": "2.0.0-beta1",
   "description": "Polymer Element for uploading files",
   "main": "vaadin-upload.html",
   "repository": "vaadin/vaadin-upload",
