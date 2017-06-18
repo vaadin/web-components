@@ -10,55 +10,47 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
-<link rel="import" href="vaadin-combo-box-shared-styles.html">
-
-<style>
-  @font-face {
-    font-family: 'vaadin-combo-box-icons';
-    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAVQAAsAAAAABQQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIFgGNtYXAAAAFoAAAAVAAAAFQXVtKIZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAIwAAACMKHtqRmhlYWQAAAJQAAAANgAAADYNCaOoaGhlYQAAAogAAAAkAAAAJAbtA8dobXR4AAACrAAAABgAAAAYDgACAGxvY2EAAALEAAAADgAAAA4AbgBAbWF4cAAAAtQAAAAgAAAAIAAIAA5uYW1lAAAC9AAAAjoAAAI6mZTisnBvc3QAAAUwAAAAIAAAACAAAwAAAAMDVQGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QEDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkB//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQErAUAC1QIVAAIAAAEXNwEr1dUCFdXVAAAAAAEA1QCVAysC6wALAAABJwcnBxcHFzcXNycDKzzv7zzv7zzv7zzvAq887+887+887+887wABAAAAAQAAKGR/418PPPUACwQAAAAAANVgL+AAAAAA1WAv4AAAAAADKwLrAAAACAACAAAAAAAAAAEAAAPA/8AAAAQAAAAAAAMrAAEAAAAAAAAAAAAAAAAAAAAGBAAAAAAAAAAAAAAAAgAAAAQAASsEAADVAAAAAAAKABQAHgAsAEYAAAABAAAABgAMAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEAFgAAAAEAAAAAAAIABwDnAAEAAAAAAAMAFgBjAAEAAAAAAAQAFgD8AAEAAAAAAAUACwBCAAEAAAAAAAYAFgClAAEAAAAAAAoAGgE+AAMAAQQJAAEALAAWAAMAAQQJAAIADgDuAAMAAQQJAAMALAB5AAMAAQQJAAQALAESAAMAAQQJAAUAFgBNAAMAAQQJAAYALAC7AAMAAQQJAAoANAFYdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzUmVndWxhcgBSAGUAZwB1AGwAYQBydmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-</style>
+<link rel="import" href="vaadin-combo-box-styles.html">
 
 <dom-module id="vaadin-combo-box">
   <template>
-    <style include="vaadin-combo-box-shared-styles">
+    <style>
       :host {
-        display: block;
+        display: inline-block;
         padding: 8px 0;
       }
 
-      [slot=suffix] {
-        display: flex;
+      :host([opened]) {
+        pointer-events: auto;
       }
 
-      .clear-button,
-      .toggle-button {
+      [part="text-field"] {
+        min-width: 100%;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
         font-family: 'vaadin-combo-box-icons';
-        cursor: pointer;
-        transition: color 0.2s;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: rgba(0, 0, 0, .26);
       }
 
-      .clear-button:hover,
-      .toggle-button:hover {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      .clear-button::before {
+      [part="clear-button"]::before {
         content: "\e901";
       }
 
-      .toggle-button::before {
+      [part="toggle-button"]::before {
         content: "\e900";
+      }
+
+      :host([disabled]) [part="clear-button"],
+      :host([disabled]) [part="toggle-button"],
+      :host([readonly]) [part="clear-button"],
+      :host([readonly]) [part="toggle-button"],
+      :host(:not([has-value])) [part="clear-button"] {
+        display: none;
       }
     </style>
 
-    <vaadin-text-field id="input"
+    <vaadin-text-field part="text-field" id="input"
         allowed-pattern="[[allowedPattern]]"
         prevent-invalid-input="[[preventInvalidInput]]"
 
@@ -85,12 +77,12 @@ This program is available under Apache License Version 2.0, available at https:/
         on-tap="_openAsync"
       >
 
-      <div id="clearButton" slot="suffix" role="button" aria-label="Clear" class="clear-button small"></div>
-      <div id="toggleButton" slot="suffix" role="button" aria-label="Toggle" class="toggle-button rotate-on-open"></div>
+      <div part="clear-button" id="clearButton" slot="suffix" role="button" aria-label="Clear"></div>
+      <div part="toggle-button" id="toggleButton" slot="suffix" role="button" aria-label="Toggle" class="rotate-on-open"></div>
 
     </vaadin-text-field>
 
-    <vaadin-combo-box-overlay id="overlay"
+    <vaadin-combo-box-overlay part="overlay" id="overlay"
       opened=[[opened]]
       position-target="[[_getPositionTarget()]]"
       _focused-index="[[_focusedIndex]]"

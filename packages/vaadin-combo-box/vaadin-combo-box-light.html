@@ -10,20 +10,14 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
-<link rel="import" href="vaadin-combo-box-shared-styles.html">
+<link rel="import" href="vaadin-combo-box-styles.html">
 
 <dom-module id="vaadin-combo-box-light">
   <template>
-    <style include="vaadin-combo-box-shared-styles">
-      :host > #overlay {
-        display: none;
-      }
-    </style>
 
     <slot></slot>
 
-    <vaadin-combo-box-overlay
-        id="overlay"
+    <vaadin-combo-box-overlay part="overlay" id="overlay"
         opened=[[opened]]
         position-target="[[inputElement]]"
         _focused-index="[[_focusedIndex]]"

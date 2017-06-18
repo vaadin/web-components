@@ -25,7 +25,7 @@ This program is available under Apache License Version 2.0, available at https:/
             height: 58px;
           }
 
-          #scroller {
+          [part=scroller] {
             overflow: auto;
 
             /* Fixes item background from getting on top of scrollbars on Safari */
@@ -42,8 +42,8 @@ This program is available under Apache License Version 2.0, available at https:/
             };
           }
         </style>
-        <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-        <div id="scroller" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
+        <vaadin-spinner part="spinner" active="[[loading]]"></vaadin-spinner>
+        <div part="scroller" id="scroller" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
           on-scroll="_onScroll" hidden$="[[loading]]">
           <iron-list part="selector" id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>

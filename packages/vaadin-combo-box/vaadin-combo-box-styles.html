@@ -1,0 +1,123 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+
+<style>
+  @font-face {
+    font-family: 'vaadin-combo-box-icons';
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAVQAAsAAAAABQQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIFgGNtYXAAAAFoAAAAVAAAAFQXVtKIZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAIwAAACMKHtqRmhlYWQAAAJQAAAANgAAADYNCaOoaGhlYQAAAogAAAAkAAAAJAbtA8dobXR4AAACrAAAABgAAAAYDgACAGxvY2EAAALEAAAADgAAAA4AbgBAbWF4cAAAAtQAAAAgAAAAIAAIAA5uYW1lAAAC9AAAAjoAAAI6mZTisnBvc3QAAAUwAAAAIAAAACAAAwAAAAMDVQGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QEDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkB//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQErAUAC1QIVAAIAAAEXNwEr1dUCFdXVAAAAAAEA1QCVAysC6wALAAABJwcnBxcHFzcXNycDKzzv7zzv7zzv7zzvAq887+887+887+887wABAAAAAQAAKGR/418PPPUACwQAAAAAANVgL+AAAAAA1WAv4AAAAAADKwLrAAAACAACAAAAAAAAAAEAAAPA/8AAAAQAAAAAAAMrAAEAAAAAAAAAAAAAAAAAAAAGBAAAAAAAAAAAAAAAAgAAAAQAASsEAADVAAAAAAAKABQAHgAsAEYAAAABAAAABgAMAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEAFgAAAAEAAAAAAAIABwDnAAEAAAAAAAMAFgBjAAEAAAAAAAQAFgD8AAEAAAAAAAUACwBCAAEAAAAAAAYAFgClAAEAAAAAAAoAGgE+AAMAAQQJAAEALAAWAAMAAQQJAAIADgDuAAMAAQQJAAMALAB5AAMAAQQJAAQALAESAAMAAQQJAAUAFgBNAAMAAQQJAAYALAC7AAMAAQQJAAoANAFYdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzUmVndWxhcgBSAGUAZwB1AGwAYQBydmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
+
+<dom-module id="vaadin-combo-box-light-default-theme" theme-for="vaadin-combo-box-light">
+  <template>
+    <style>
+      [part~="overlay"] {
+        box-shadow:
+          0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 1px 5px 0 rgba(0, 0, 0, 0.12),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-combo-box-default-theme" theme-for="vaadin-combo-box vaadin-combo-box-light" >
+  <template>
+    <style>
+      [part~="overlay"] {
+        box-shadow:
+          0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 1px 5px 0 rgba(0, 0, 0, 0.12),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        font-size: 19px;
+        color: rgba(0, 0, 0, .26);
+        cursor: pointer;
+        transition: color 0.2s;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      [part="clear-button"]:hover,
+      [part="toggle-button"]:hover,
+      :host([opened]) [part="clear-button"],
+      :host([opened]) [part="toggle-button"] {
+        color: rgba(0, 0, 0, .54);
+      }
+
+      :host([opened]) [part="clear-button"]:hover,
+      :host([opened]) [part="toggle-button"]:hover {
+        color: rgba(0, 0, 0, .86);
+      }
+
+      [part="toggle-button"] {
+        transition: all 0.2s !important;
+      }
+
+      :host([opened]) [part="toggle-button"] {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-combo-box-item-default-theme" theme-for="vaadin-combo-box-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+        cursor: pointer;
+        padding: 13px 16px;
+        color: #212121;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      :host([selected]) {
+        color: #3f51b5;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+
+      :host(:not([touch-device]):hover),
+      :host([focused]) {
+        background: #eee;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-spinner-default-theme" theme-for="vaadin-spinner">
+  <template>
+    <style>
+      :host {
+        border: 2px solid var(--primary-color, #03A9F4);
+        border-radius: 50%;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        content: "";
+        height: 24px;
+        margin-left: -12px;
+        margin-top: -12px;
+        width: 24px;
+      }
+    </style>
+  </template>
+</dom-module>
