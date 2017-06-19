@@ -1,0 +1,61 @@
+<dom-module id="vaadin-grid-active-item-themability-styles">
+  <template>
+    <style>
+      vaadin-grid-table .vaadin-grid-row[active] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+        @apply(--vaadin-grid-body-row-active-cell);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.Grid.ActiveItemMixin = superClass => class ActiveItemMixin extends superClass {
+
+    static get properties() {
+      return {
+        /*
+         * The item user has last interacted with. Turns to `null` after user deactivates
+         * the item by re-interacting with the currently active item.
+         */
+        activeItem: {
+          type: Object,
+          notify: true,
+          value: null
+        }
+      }
+    }
+
+    static get observers() {
+      return [
+        '_activeItemChanged(activeItem)'
+      ]
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('cell-activate', this._activateItem.bind(this));
+    }
+
+    _activateItem(e) {
+      const clickedItem = e.detail.model.item;
+
+      this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+
+      e.stopImmediatePropagation();
+    }
+
+    _activeItemChanged() {
+      if (this.$.scroller._physicalItems) {
+        this.$.scroller._physicalItems.forEach(row => {
+          this._updateItem(row, row.item);
+        });
+      }
+    }
+  };
+</script>
