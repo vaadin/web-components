@@ -30,7 +30,7 @@
     </test-fixture>
 
     <script>
-      var touchDevice = (function() {
+      var touchDevice = (() => {
         try {
           document.createEvent('TouchEvent');
           return true;
@@ -65,38 +65,36 @@
       var splitLayout, first, second;
       var initialSizes = {width: 128, height: 128};
 
-      describe('container', function() {
+      describe('container', () => {
 
-        beforeEach(function() {
-          splitLayout = fixture('split-layout');
-        });
+        beforeEach(() => splitLayout = fixture('split-layout'));
 
-        it('is flex container', function() {
+        it('is flex container', () => {
           var styleDisplay = getComputedStyle(splitLayout).display;
           expect(styleDisplay).to.be.oneOf(['flex', '-webkit-flex', '-ms-flexbox']);
         });
 
       });
 
-      describe('content elements', function() {
+      describe('content elements', () => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           splitLayout = fixture('split-layout');
-          setTimeout(function() {
-            first = Polymer.dom(splitLayout.$.primary).getDistributedNodes()[0];
-            second = Polymer.dom(splitLayout.$.secondary).getDistributedNodes()[0];
+          setTimeout(() => {
+            first = splitLayout.$.primary.assignedNodes({flatten: true})[0];
+            second = splitLayout.$.secondary.assignedNodes({flatten: true})[0];
             done();
           }, 1);
         });
 
-        it('are distributed', function() {
+        it('are distributed', () => {
           expect(first.id).to.equal('first');
           expect(second.id).to.equal('second');
-          expect(Polymer.dom(first).parentNode).to.equal(splitLayout);
-          expect(Polymer.dom(second).parentNode).to.equal(splitLayout);
+          expect(first.parentNode).to.equal(splitLayout);
+          expect(second.parentNode).to.equal(splitLayout);
         });
 
-        it('are flex auto', function() {
+        it('are flex auto', () => {
           function getComputedFlexStyle(el) {
             var computedStyle = getComputedStyle(el);
             return computedStyle.flex ||
@@ -113,14 +111,14 @@
           expect(getComputedFlexStyle(second)).to.equal('1 1 auto');
         });
 
-        it('have a splitter in between', function() {
+        it('have a splitter in between', () => {
           var previous = splitLayout.$.splitter.previousElementSibling;
           var next = splitLayout.$.splitter.nextElementSibling;
-          expect(Polymer.dom(previous).getDistributedNodes()[0] || previous).to.equal(first);
-          expect(Polymer.dom(next).getDistributedNodes()[0] || next).to.equal(second);
+          expect(previous.assignedNodes({flatten: true})[0] || previous).to.equal(first);
+          expect(next.assignedNodes({flatten: true})[0] || next).to.equal(second);
         });
 
-        it('should set pointer-events: none to panels on start resize and restore after resize finished', function() {
+        it('should set pointer-events: none to panels on start resize and restore after resize finished', () => {
           first.style.pointerEvents = 'visible';
           second.style.pointerEvents = 'visible';
 
@@ -135,29 +133,25 @@
 
       });
 
-      describe('handle', function() {
-        beforeEach(function() {
-          splitLayout = fixture('split-layout-with-custom-handle');
-        });
+      describe('handle', () => {
+        beforeEach(() => splitLayout = fixture('split-layout-with-custom-handle'));
 
-        it('has custom handle element', function(done) {
-          splitLayout.async(function() {
-            var slot = Polymer.dom(splitLayout.$.splitter).firstElementChild;
-            var children = Polymer.dom(slot).getDistributedNodes();
+        it('has custom handle element', done => {
+          splitLayout.async(() => {
+            var slot = splitLayout.$.splitter.firstElementChild;
+            var children = slot.assignedNodes({flatten: true});
             expect(children[0].localName).to.equal('div');
             done();
           }, 1);
         });
       });
 
-      describe('splitter', function() {
+      describe('splitter', () => {
 
-        beforeEach(function() {
-          splitLayout = fixture('split-layout');
-        });
+        beforeEach(() => splitLayout = fixture('split-layout'));
 
-        it('has overflow visible', function(done) {
-          splitLayout.async(function() {
+        it('has overflow visible', done => {
+          splitLayout.async(() => {
             expect(getComputedStyle(splitLayout.$.splitter).overflow).to.equal('visible');
             done();
           }, 1);
@@ -171,28 +165,26 @@
         var crossSize = isVertical ? 'width' : 'height';
         var splitLayoutRect;
 
-        beforeEach(function() {
-          splitLayoutRect = splitLayout.getBoundingClientRect();
-        });
+        beforeEach(() => splitLayoutRect = splitLayout.getBoundingClientRect());
 
-        describe('content elements', function() {
+        describe('content elements', () => {
 
           var firstRect, secondRect;
 
-          beforeEach(function() {
+          beforeEach(() => {
             firstRect = first.getBoundingClientRect();
             secondRect = second.getBoundingClientRect();
           });
 
-          it('have equal initial size', function() {
+          it('have equal initial size', () => {
             expect(Math.abs(firstRect[size] - secondRect[size])).to.be.at.most(1);
           });
 
-          it('have crossSize of container', function() {
+          it('have crossSize of container', () => {
             expect(firstRect[crossSize]).to.equal(splitLayoutRect[crossSize]);
           });
 
-          it('respect initial css size', function() {
+          it('respect initial css size', () => {
             var initialTotalSize = initialSizes[size] - 8;
             var cssPrimarySize = 0.25;
             var cssSecondarySize = 1 - cssPrimarySize;
@@ -205,25 +197,23 @@
 
         });
 
-        describe('splitter', function() {
+        describe('splitter', () => {
 
           var splitterRect;
 
-          beforeEach(function() {
-            splitterRect = splitLayout.$.splitter.getBoundingClientRect();
-          });
+          beforeEach(() => splitterRect = splitLayout.$.splitter.getBoundingClientRect());
 
-          it('has size of 8', function() {
+          it('has size of 8', () => {
             expect(splitterRect[size]).to.be.within(7.5, 8.5);
           });
 
-          it('has crossSize of container', function() {
+          it('has crossSize of container', () => {
             expect(splitterRect[crossSize]).to.equal(splitLayoutRect[crossSize]);
           });
 
         });
 
-        describe('handle drag', function() {
+        describe('handle drag', () => {
           var distance = 30;
           var initialSize = (initialSizes[size] - 8) / 2;
 
@@ -234,14 +224,14 @@
             );
           }
 
-          it('resizes forwards', function() {
+          it('resizes forwards', () => {
             dragHandle(distance);
 
             expect(Math.abs(first.getBoundingClientRect()[size] - (initialSize + distance))).to.be.at.most(1);
             expect(Math.abs(second.getBoundingClientRect()[size] - (initialSize - distance))).to.be.at.most(1);
           });
 
-          it('resizes backwards', function() {
+          it('resizes backwards', () => {
             dragHandle(distance);
             dragHandle(-distance);
 
@@ -249,33 +239,33 @@
             expect(Math.abs(second.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
           });
 
-          it('collapses primary', function() {
+          it('collapses primary', () => {
             dragHandle(-initialSize);
 
             expect(first.getBoundingClientRect()[size]).to.equal(0);
           });
 
-          it('reveals primary', function() {
+          it('reveals primary', () => {
             dragHandle(-initialSize);
             dragHandle(initialSize);
 
             expect(Math.abs(first.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
           });
 
-          it('collapses secondary', function() {
+          it('collapses secondary', () => {
             dragHandle(initialSize);
 
             expect(second.getBoundingClientRect()[size]).to.equal(0);
           });
 
-          it('reveals secondary', function() {
+          it('reveals secondary', () => {
             dragHandle(initialSize);
             dragHandle(-initialSize);
 
             expect(Math.abs(second.getBoundingClientRect()[size] - initialSize)).to.be.at.most(1);
           });
 
-          it('respects the container boundries', function() {
+          it('respects the container boundries', () => {
             dragHandle(-initialSize * 2);
 
             expect(first.getBoundingClientRect()[size]).to.equal(0);
@@ -287,7 +277,7 @@
             expect(second.getBoundingClientRect()[size]).to.equal(0);
           });
 
-          describe('min and max css limits', function() {
+          describe('min and max css limits', () => {
 
             var min = 20;
             var max = 40;
@@ -304,14 +294,14 @@
               expect(Math.abs(element.getBoundingClientRect()[size] - max)).to.be.at.most(0.1);
             }
 
-            it('respected on the first element', function() {
+            it('respected on the first element', () => {
               first.style[minSize] = min + 'px';
               first.style[maxSize] = max + 'px';
 
               testCssLimits(first, -1);
             });
 
-            it('respected on the second element', function() {
+            it('respected on the second element', () => {
               second.style[minSize] = min + 'px';
               second.style[maxSize] = max + 'px';
 
@@ -320,7 +310,7 @@
 
           });
 
-          it('notifies resizables', function() {
+          it('notifies resizables', () => {
             var spy = sinon.spy(splitLayout, 'notifyResize');
             dragHandle(initialSize / 2);
 
@@ -331,15 +321,15 @@
 
       }
 
-      describe('horizontal mode', function() {
+      describe('horizontal mode', () => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           splitLayout = fixture('split-layout');
           splitLayout.style.width = initialSizes.width + 'px';
           splitLayout.style.height = initialSizes.height + 'px';
-          setTimeout(function() {
-            first = Polymer.dom(splitLayout.$.primary).getDistributedNodes()[0];
-            second = Polymer.dom(splitLayout.$.secondary).getDistributedNodes()[0];
+          setTimeout(() => {
+            first = splitLayout.$.primary.assignedNodes({flatten: true})[0];
+            second = splitLayout.$.secondary.assignedNodes({flatten: true})[0];
             done();
           }, 1);
         });
@@ -348,16 +338,16 @@
 
       });
 
-      describe('vertical mode', function() {
+      describe('vertical mode', () => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           splitLayout = fixture('split-layout');
           splitLayout.style.width = initialSizes.width + 'px';
           splitLayout.style.height = initialSizes.height + 'px';
           splitLayout.vertical = true;
-          setTimeout(function() {
-            first = Polymer.dom(splitLayout.$.primary).getDistributedNodes()[0];
-            second = Polymer.dom(splitLayout.$.secondary).getDistributedNodes()[0];
+          setTimeout(() => {
+            first = splitLayout.$.primary.assignedNodes({flatten: true})[0];
+            second = splitLayout.$.secondary.assignedNodes({flatten: true})[0];
             done();
           }, 1);
         });

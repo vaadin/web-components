@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <dom-module id="vaadin-split-layout">
@@ -263,35 +264,30 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
-        connectedCallback() {
-          super.connectedCallback();
-          this._observer = Polymer.dom(this).observeNodes(this._processChildren);
-        }
-
-        disconnectedCallback() {
-          super.disconnectedCallback();
-          Polymer.dom(this).unobserveNodes(this._observer);
+        ready() {
+          super.ready();
+          new Polymer.FlattenedNodesObserver(this, this._processChildren);
         }
 
         _processChildren() {
           var children = this.getEffectiveChildren();
-          children.filter(function (child) {
+          children.filter(child => {
             if (child.classList.contains('splitter-handle')) {
-              Polymer.dom(child).setAttribute('slot', 'handle');
+              child.setAttribute('slot', 'handle');
               return false;
             }
             return true;
-          }).forEach(function (child, i) {
+          }).forEach((child, i) => {
             if (i === 0) {
               this._primaryChild = child;
-              Polymer.dom(child).setAttribute('slot', 'primary');
+              child.setAttribute('slot', 'primary');
             } else if (i == 1) {
               this._secondaryChild = child;
-              Polymer.dom(child).setAttribute('slot', 'secondary');
+              child.setAttribute('slot', 'secondary');
             } else {
-              Polymer.dom(child).removeAttribute('slot');
+              child.removeAttribute('slot');
             }
-          }.bind(this));
+          });
         }
 
         _setFlexBasis(element, flexBasis, containerSize) {
