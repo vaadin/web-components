@@ -1,52 +1,54 @@
 <script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
+  window.Vaadin = window.Vaadin || {};
+  Vaadin.Grid = Vaadin.Grid || {};
 
-  /**
-   * @polymerBehavior vaadin.elements.grid.SelectionBehavior
-   */
-  vaadin.elements.grid.SelectionBehavior = {
+  Vaadin.Grid.SelectionMixin = superClass => class SelectionMixin extends superClass {
 
-    properties: {
-
-      /**
-       * An array that contains the selected items.
-       */
-      selectedItems: {
-        type: Object,
-        notify: true,
-        value: function() {
-          return [];
+    static get properties() {
+      return {
+        /**
+        * An array that contains the selected items.
+        */
+        selectedItems: {
+          type: Object,
+          notify: true,
+          value: () => []
         }
-      }
-    },
+      };
+    }
 
-    observers: [
-      '_selectedItemsChanged(selectedItems.*)'
-    ],
+    static get observers() {
+      return [
+        '_selectedItemsChanged(selectedItems.*)'
+      ];
+    }
 
-    listeners: {
-      'template-instance-changed': '_templateInstanceChangedSelection'
-    },
+    ready() {
+      super.ready();
+      this.addEventListener('template-instance-changed', '_templateInstancesChangedSelection');
+    }
 
-    _templateInstanceChangedSelection: function(e) {
+    _templateInstanceChangedSelection(e) {
       if (e.detail.prop === 'selected') {
         var item = e.detail.inst.item;
-        (this._isSelected(item) ? this.deselectItem : this.selectItem).bind(this)(item);
+        (this._isSelected(item) ? this.deselectItem : this.selectItem).call(this, item);
 
-        this.fire('iron-announce', {
-          text: (this._isSelected(item) ? 'Selected' : 'Deselected') + ' Row ' + (e.detail.inst.index + 1) + ' of ' + this.size
-        });
+        this.dispatchEvent(new CustomEvent('iron-announce', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            text: (this._isSelected(item) ? 'Selected' : 'Deselected') + ' Row ' + (e.detail.inst.index + 1) + ' of ' + this.size
+          }
+        }));
 
         // stop this internal event from propagating outside.
         e.stopPropagation();
       }
-    },
+    }
 
-    _isSelected: function(item) {
+    _isSelected(item) {
       return this.selectedItems && this.selectedItems.indexOf(item) > -1;
-    },
+    }
 
     /**
      * Selects the given item.
@@ -54,12 +56,12 @@
      * @method selectItem
      * @param {number|Object} item The item index or the item object
      */
-    selectItem: function(item) {
+    selectItem(item) {
       item = this._takeItem(item);
       if (!this._isSelected(item)) {
         this.push('selectedItems', item);
       }
-    },
+    }
 
     /**
      * Deselects the given item if it is already selected.
@@ -67,13 +69,13 @@
      * @method deselect
      * @param {number|Object} item The item index or the item object
      */
-    deselectItem: function(item) {
+    deselectItem(item) {
       item = this._takeItem(item);
       var index = this.selectedItems.indexOf(item);
       if (index > -1) {
         this.splice('selectedItems', index, 1);
       }
-    },
+    }
 
     /**
      * Toggles the selected state of the given item.
@@ -81,7 +83,7 @@
      * @method toggle
      * @param {number|Object} item The item index or the item object
      */
-    _toggleItem: function(item) {
+    _toggleItem(item) {
       item = this._takeItem(item);
       var index = this.selectedItems.indexOf(item);
       if (index === -1) {
@@ -89,25 +91,25 @@
       } else {
         this.deselectItem(item);
       }
-    },
+    }
 
     /**
      * Returns item object itself or by the item index.
      *
      * @param {number|Object} item The item index or the item object
      */
-    _takeItem: function(item) {
+    _takeItem(item) {
       if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
         return this.items[item];
       }
       return item;
-    },
+    }
 
-    _selectedItemsChanged: function(e) {
+    _selectedItemsChanged(e) {
       if (this.$.scroller._physicalItems && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
         this.$.scroller._physicalItems.forEach(function(row) {
           row.selected = this._isSelected(row.item);
-        }.bind(this));
+        }, this);
       }
     }
   };
