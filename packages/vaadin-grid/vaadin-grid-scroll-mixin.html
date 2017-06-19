@@ -1,5 +1,3 @@
-<link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
-
 <dom-module id="vaadin-grid-table-table-scroll-styles">
   <template>
     <style>
@@ -46,66 +44,65 @@
 </dom-module>
 
 <script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
+  window.Vaadin = window.Vaadin || {};
+  Vaadin.Grid = Vaadin.Grid || {};
 
-  /**
-   * @polymerBehavior vaadin.elements.grid.TableScrollBehaviorImpl
-   */
-  vaadin.elements.grid.TableScrollBehaviorImpl = {
+  Vaadin.Grid.ScrollMixin = superClass => class ScrollMixin extends superClass {
 
-    properties: {
+    static get properties() {
+      return {
+        _vidxOffset: {
+          type: Number,
+          value: 0
+        },
 
-      _vidxOffset: {
-        type: Number,
-        value: 0
-      },
+        ios: {
+          type: Boolean,
+          value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
+          reflectToAttribute: true
+        },
 
-      ios: {
-        type: Boolean,
-        value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
-        reflectToAttribute: true
-      },
+        fixedSections: {
+          type: Boolean,
+          reflectToAttribute: true,
+          computed: '_hasFixedSections(scrollbarWidth)'
+        },
 
-      fixedSections: {
-        type: Boolean,
-        reflectToAttribute: true,
-        computed: '_hasFixedSections(scrollbarWidth)'
-      },
+        // Cached array of frozen cells
+        _frozenCells: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+        },
 
-      // Cached array of frozen cells
-      _frozenCells: {
-        type: Array,
-        value: function() {
-          return [];
+        scrolling: {
+          type: Boolean,
+          reflectToAttribute: true
         }
-      },
+      };
+    }
 
-      scrolling: {
-        type: Boolean,
-        reflectToAttribute: true
-      }
-    },
-
-    ready: function() {
+    ready() {
+      super.ready();
       this.scrollTarget = this.$.table;
-    },
+    }
 
-    attached: function() {
-      this.listen(this.scrollTarget, 'wheel', '_onWheel');
-    },
+    connectedCallback() {
+      super.connectedCallback();
+      this.scrollTarget.addEventListener('wheel', this._ohWheel);
+    }
 
-    detached: function() {
-      this.unlisten(this.scrollTarget, 'wheel', '_onWheel');
-    },
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.scrollTarget.removeEventListener('wheel', this._ohWheel);
+    }
 
-
-    _hasFixedSections: function(scrollbarWidth) {
+    _hasFixedSections(scrollbarWidth) {
       return navigator.userAgent.match(/Edge/) && scrollbarWidth === 0;
-    },
+    }
 
-    _onWheel: function(e) {
+    _onWheel(e) {
       if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
         return;
       }
@@ -120,45 +117,46 @@
         this._scrollHandler();
         this._hasResidualMomentum = true;
 
-        this._ignoreNewWheel = this.debounce('ignore-new-wheel', function() {
-          this._ignoreNewWheel = null;
-        }, 500);
+        this._ignoreNewWheel = true;
+        this._debouncerIgnoreNewWheel = Polymer.Debouncer.debounce(this._debouncerIgnoreNewWheel,
+            Polymer.Async.timeOut.after(500),
+            () => this._ignoreNewWheel = false);
       } else if (this._hasResidualMomentum && momentum <= this._previousMomentum || this._ignoreNewWheel) {
         e.preventDefault();
       } else if (momentum > this._previousMomentum) {
         this._hasResidualMomentum = false;
       }
       this._previousMomentum = momentum;
-    },
+    }
 
     /**
      * Determines if the element has an ancestor prior to this
      * cell content that handles the scroll delta
      */
-    _hasScrolledAncestor: function(el, deltaX, deltaY) {
+    _hasScrolledAncestor(el, deltaX, deltaY) {
       if (this._canScroll(el, deltaX, deltaY)) {
         return true;
       } else if (el.localName !== 'vaadin-grid-cell-content' && el !== this && el.parentElement) {
         return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
       }
-    },
+    }
 
     /**
      * Determines if the the given scroll deltas can be applied to the element
      * (fully or partially)
      */
-    _canScroll: function(el, deltaX, deltaY) {
+    _canScroll(el, deltaX, deltaY) {
       return (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
       (deltaY < 0 && el.scrollTop > 0) ||
       (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
       (deltaX < 0 && el.scrollLeft > 0);
-    },
+    }
 
     /**
      * Update the models, the position of the
      * items in the viewport and recycle tiles as needed.
      */
-    _afterScroll: function(e) {
+    _afterScroll(e) {
       // this._adjustVirtualIndexOffset(delta);
 
       this._translateStationaryElements();
@@ -166,14 +164,17 @@
       if (!this.hasAttribute('reordering')) {
         this.scrolling = true;
       }
-      this.debounce('vaadin-grid-scrolling', function() {
-        this.scrolling = false;
-        this._reorderRows();
-      }, 100);
-    },
+
+      this._debounceScrolling = Polymer.Debouncer.debounce(this._debounceScrolling,
+          Polymer.Async.timeOut.after(100),
+          () => {
+            this.scrolling = false;
+            this._reorderRows();
+          });
+    }
 
     // correct order needed for preserving correct tab order between cell contents.
-    _reorderRows: function() {
+    _reorderRows() {
       var body = this.$.items;
       var items = body.querySelectorAll('tr');
       if (!items.length) {
@@ -197,20 +198,22 @@
           body.insertBefore(items[j], items[0]);
         }
       }
-    },
+    }
 
-    _frozenCellsChanged: function() {
-      this.debounce('cache-elements', function() {
-        Polymer.dom(this.root).querySelectorAll('.vaadin-grid-cell').forEach(function(cell) {
-          cell.style.transform = '';
-        });
-        this._frozenCells = Array.prototype.slice.call(Polymer.dom(this.root).querySelectorAll('[frozen]'));
-        this._translateStationaryElements();
-      });
+    _frozenCellsChanged() {
+      this._debouncerCacheElements = Polymer.Debouncer.debounce(this._debouncerCacheElements,
+          Polymer.Async.microTask,
+          () => {
+            Array.from(this.root.querySelectorAll('.vaadin-grid-cell')).forEach(function(cell) {
+              cell.style.transform = '';
+            });
+            this._frozenCells = Array.prototype.slice.call(this.root.querySelectorAll('[frozen]'));
+            this._translateStationaryElements();
+          });
       this._updateLastFrozen();
-    },
+    }
 
-    _updateLastFrozen: function() {
+    _updateLastFrozen() {
       if (!this._columnTree) {
         return;
       }
@@ -226,9 +229,9 @@
       if (lastFrozen !== undefined) {
         columnsRow[lastFrozen]._lastFrozen = true;
       }
-    },
+    }
 
-    _translateStationaryElements: function() {
+    _translateStationaryElements() {
       if (this.fixedSections) {
         this.$.items.style.transform =
         this._getTranslate(-this._scrollLeft || 0, -this._scrollTop || 0);
@@ -243,20 +246,11 @@
       for (var i = 0; i < this._frozenCells.length; i++) {
         this._frozenCells[i].style.transform = frozenCellTransform;
       }
-    },
+    }
 
-    _getTranslate: function(x, y) {
+    _getTranslate(x, y) {
       return 'translate(' + x + 'px,' + y + 'px)';
     }
 
   };
-
-  /**
-   * @polymerBehavior vaadin.elements.grid.TableScrollBehavior
-   */
-  vaadin.elements.grid.TableScrollBehavior = [
-    // Polymer.IronScrollTargetBehavior,
-    vaadin.elements.grid.TableScrollBehaviorImpl
-  ];
-
 </script>

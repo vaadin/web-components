@@ -2,7 +2,7 @@
 <link rel="import" href="vaadin-grid-dynamic-columns-mixin.html">
 <link rel="import" href="vaadin-grid-data-provider-mixin.html">
 <link rel="import" href="vaadin-grid-cell-click-mixin.html">
-<link rel="import" href="vaadin-grid-table-scroll-behavior.html">
+<link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <link rel="import" href="vaadin-grid-styles.html">
@@ -30,10 +30,7 @@
     Vaadin.Grid.DataProviderMixin(
     Vaadin.Grid.DynamicColumnsMixin(
     Vaadin.Grid.CellClickMixin(
-    Polymer.mixinBehaviors(
-    [
-      vaadin.elements.grid.TableScrollBehavior
-    ],
+    Vaadin.Grid.ScrollMixin(
     VaadinScroller)))) {
 
     static get is() {
