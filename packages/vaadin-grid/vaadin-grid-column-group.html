@@ -86,7 +86,7 @@ The `class` attribute is used to differentiate header and footer templates.
         '_hiddenChanged(hidden)',
         '_visibleChildColumnsChanged(_visibleChildColumns)',
         '_colSpanChanged(colSpan, _headerCell, _footerCell)',
-        '_orderChanged(_order, _rootColumns)',
+        '_orderChanged(_order, _headerCell, _footerCell, _rootColumns)',
         '_reorderStatusChanged(_reorderStatus, _rootColumns)',
         '_resizableChanged(resizable, _rootColumns)'
       ],
@@ -128,7 +128,7 @@ The `class` attribute is used to differentiate header and footer templates.
         }
       },
 
-      _orderChanged: function(order, rootColumns) {
+      _orderChanged: function(order, headerCell, footerCell, rootColumns) {
         if (order && rootColumns) {
           // The parent column order number cascades downwards to it's children
           // so that the resulting order numbering constructs as follows:
@@ -153,6 +153,12 @@ The `class` attribute is used to differentiate header and footer templates.
             });
           }
 
+          if (headerCell) {
+            headerCell.style.order = order;
+          }
+          if (footerCell) {
+            footerCell.style.order = order;
+          }
           _rootColumns.forEach(function(column, index) {
             column._order = order + ((index + 1) * scope);
           });

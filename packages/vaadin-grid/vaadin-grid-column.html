@@ -276,8 +276,8 @@ This program is available under Apache License Version 2.0, available at https:/
       '_templateChanged(template)',
       '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
       '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
-      '_orderChanged(_order)',
-      '_reorderStatusChanged(_reorderStatus)',
+      '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
+      '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
       '_resizableChanged(resizable)'
     ],
 
@@ -320,11 +320,24 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     },
 
-    _orderChanged: function(order) {
-      // this.fire('property-changed', {path: 'order', value: order});
+    _orderChanged: function(order, headerCell, footerCell, cells) {
+      this._cells && this._cells.forEach(cell => {cell.style.order = order});
+      if (headerCell) {
+        headerCell.style.order = order;
+      }
+      if (footerCell) {
+        footerCell.style.order = order;
+      }
     },
 
-    _reorderStatusChanged: function(reorderStatus) {
+    _reorderStatusChanged: function(reorderStatus, headerCell, footerCell, cells) {
+      this._cells && this._cells.forEach(cell => cell.setAttribute('reorder-status', reorderStatus));
+      if (headerCell) {
+        headerCell.setAttribute('reorder-status', reorderStatus);
+      }
+      if (footerCell) {
+        footerCell.setAttribute('reorder-status', reorderStatus);
+      }
       // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
     },
 

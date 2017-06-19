@@ -31,54 +31,66 @@
 </dom-module>
 
 <script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.ColumnReorderingBehavior
+   * @polymerMixin
    */
-  vaadin.elements.grid.ColumnReorderingBehavior = {
+  Vaadin.Grid.ColumnReorderingMixin = superClass => class ColumnReorderingMixin extends superClass {
 
-    properties: {
+    static get properties() {
+      return {
+        /**
+         * Set to true to allow column reordering.
+         */
+        columnReorderingAllowed: {
+          type: Boolean,
+          value: false
+        },
 
-      /**
-       * Set to true to allow column reordering.
-       */
-      columnReorderingAllowed: {
-        type: Boolean,
-        value: false
-      }
-
+        _orderBaseScope: {
+          type: Number,
+          value: 10000000
+        }
+      };
     }
 
-  };
+    static get observers() {
+      return [
+        '_updateOrders(_columnTree, _columnTree.*)'
+      ];
+    }
 
-  /**
-   * @polymerBehavior vaadin.elements.grid.TableColumnReorderingBehavior
-   */
-  vaadin.elements.grid.TableColumnReorderingBehavior = {
+    ready() {
+      super.ready();
+      this.addEventListener('dragstart', this._onDragStart);
+      this.addEventListener('dragover', this._onDragOver);
+      this.addEventListener('dragend', this._onDragEnd);
+      this.addEventListener('mouseover', this._onMouseOver);
+      this.addEventListener('mouseout', this._onMouseOut);
+    }
 
-    properties: {
-
-      _orderBaseScope: {
-        type: Number,
-        value: 10000000
+    _onMouseOver(e) {
+      const cellContent = this._getCellContentByElement(e.target);
+      if (!cellContent) {
+        return;
       }
+      const cell = this._getCellByCellContent(cellContent);
+      if (this.$.header.contains(cell)) {
+        cellContent.setAttribute('draggable', 'true');
+      }
+    }
 
-    },
+    _onMouseOut(e) {
+      const cellContent = this._getCellContentByElement(e.target);
+      if (!cellContent) {
+        return;
+      }
+      cellContent.removeAttribute('draggable');
+    }
 
-    listeners: {
-      'dragstart': '_onDragStart',
-      'dragover': '_onDragOver',
-      'dragend': '_onDragEnd'
-    },
-
-    observers: [
-      '_updateOrders(columnTree, columnTree.*)',
-    ],
-
-    _updateOrders: function(columnTree, splices) {
+    _updateOrders(columnTree, splices) {
       if (columnTree === undefined || splices === undefined) {
         return;
       }
@@ -87,9 +99,9 @@
       columnTree[0].forEach(function(column, index) {
         column._order = (index + 1) * this._orderBaseScope;
       }, this);
-    },
+    }
 
-    _onDragStart: function(e) {
+    _onDragStart(e) {
       // We allow “dragstart” to start reordering only directly on
       // <vaadin-grid-cell-content> elements. Otherwise, any cell content with
       // `draggable="true"` attribute can start column reordering, issue #895.
@@ -100,7 +112,7 @@
       var cell = this._getCellByCellContent(e.target);
       if (cell) {
         this.toggleAttribute('reordering', true);
-        this._draggedColumn = cell.column;
+        this._draggedColumn = cell._column;
         this._setSiblingsReorderStatus(this._draggedColumn, 'allowed');
         this._draggedColumn._reorderStatus = 'dragging';
 
@@ -112,17 +124,17 @@
 
         this._autoScroller();
       }
-    },
+    }
 
-    _setSiblingsReorderStatus: function(column, status) {
+    _setSiblingsReorderStatus(column, status) {
       Array.prototype.filter.call(Polymer.dom(Polymer.dom(column).parentNode).children, function(child) {
         return /column/.test(child.localName) && this._isSwapAllowed(child, column);
       }, this).forEach(function(sibling) {
         sibling._reorderStatus = status;
       });
-    },
+    }
 
-    _onDragOver: function(e) {
+    _onDragOver(e) {
       if (!this._draggedColumn) {
         // Reordering didn’t start. Skip this event.
         return;
@@ -130,8 +142,7 @@
 
       // “dragover” can happen both on and inside <vaadin-grid-cell-content>,
       // so we look through the event path.
-      var path = Polymer.Element ? e.composedPath() : Polymer.dom(e).path;
-      var cellContent = path.filter(function(el) {
+      var cellContent = e.composedPath().filter(function(el) {
         return el.localName === 'vaadin-grid-cell-content';
       })[0];
       if (!cellContent) {
@@ -149,9 +160,9 @@
       }
 
       this._lastDragClientX = e.clientX;
-    },
+    }
 
-    _autoScroller: function() {
+    _autoScroller() {
       if (this._lastDragClientX) {
         var rightDiff = this._lastDragClientX - this.getBoundingClientRect().right + 50;
         var leftDiff = this.getBoundingClientRect().left - this._lastDragClientX + 50;
@@ -167,9 +178,9 @@
       if (this._draggedColumn) {
         this.async(this._autoScroller, 10);
       }
-    },
+    }
 
-    _onDragEnd: function(e) {
+    _onDragEnd(e) {
       if (!this._draggedColumn) {
         // Reordering didn’t start. Skip this event.
         return;
@@ -180,20 +191,20 @@
       this._setSiblingsReorderStatus(this._draggedColumn, '');
       this._draggedColumn = null;
       this._lastDragClientX = null;
-    },
+    }
 
-    _isSwapAllowed: function(column1, column2) {
+    _isSwapAllowed(column1, column2) {
       if (column1 && column2) {
         var differentColumns = column1 !== column2;
         var sameParent = column1.parentElement === column2.parentElement;
         var sameFrozen = column1.frozen === column2.frozen;
         return differentColumns && sameParent && sameFrozen;
       }
-    },
+    }
 
-    _isSwappableByPosition: function(targetColumn, clientX) {
+    _isSwappableByPosition(targetColumn, clientX) {
       var targetCell = Array.prototype.filter.call(Polymer.dom(this.$.header).querySelectorAll('.vaadin-grid-cell'), function(cell) {
-        return cell.column === targetColumn;
+        return cell._column === targetColumn;
       })[0];
       var sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();
 
@@ -202,35 +213,40 @@
       } else {
         return clientX < targetCell.getBoundingClientRect().left + sourceCellRect.width;
       }
-    },
+    }
 
-    _getCellByCellContent: function(cellContent) {
-      if (Polymer.Element) {
-        return cellContent.assignedSlot.parentNode;
-      } else {
-        var insertionPoint = Polymer.dom(cellContent).getDestinationInsertionPoints()[0];
-        return Polymer.dom(insertionPoint).parentNode;
+    _getCellContentByElement(element) {
+      let cellContent = element;
+      while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
+        cellContent = cellContent.parentElement;
       }
-    },
+      if (cellContent) {
+        return cellContent;
+      }
+    }
 
-    _swapColumnOrders: function(column1, column2) {
+    _getCellByCellContent(cellContent) {
+      return cellContent.assignedSlot.parentElement;
+    }
+
+    _swapColumnOrders(column1, column2) {
       var _order = column1._order;
       column1._order = column2._order;
       column2._order = _order;
       this._updateLastFrozen();
-      this._updateLastColumn();
-    },
+      // this._updateLastColumn();
+    }
 
-    _getTargetColumn: function(targetCell, draggedColumn) {
+    _getTargetColumn(targetCell, draggedColumn) {
       if (targetCell && draggedColumn) {
-        var candidate = targetCell.column;
-        while (candidate.parentElement !== draggedColumn.parentElement && candidate !== this.target) {
+        var candidate = targetCell._column;
+        while (candidate.parentElement !== draggedColumn.parentElement && candidate !== this) {
           candidate = candidate.parentElement;
         }
         if (candidate.parentElement === draggedColumn.parentElement) {
           return candidate;
         } else {
-          return targetCell.column;
+          return targetCell._column;
         }
       }
     }

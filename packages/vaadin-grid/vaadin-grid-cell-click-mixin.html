@@ -29,15 +29,11 @@
     // document.activeElement has not been updated (focus has not been shifted)
     // yet at the point when tap event is being executed.
     _onClick(e) {
-      let contentWrapper = e.target;
-      while (contentWrapper && contentWrapper.localName !== 'vaadin-grid-cell-content') {
-        contentWrapper = contentWrapper.parentElement;
-      }
-      if (!contentWrapper) {
+      const cellContent = this._getCellContentByElement(e.target);
+      if (!cellContent) {
         return;
       }
-      //
-      const cell = contentWrapper.assignedSlot.parentElement;
+      const cell = this._getCellByCellContent(cellContent);
 
       // this event is only supposed to be fired from cells.
       if (e.target !== 'vaadin-grid-sorter') {
@@ -46,7 +42,7 @@
 
       var path = Polymer.dom(e).path;
       var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
-      if (!contentWrapper.contains(this.root.activeElement || document.activeElement) &&
+      if (!cellContent.contains(this.root.activeElement || document.activeElement) &&
           !elementsClicked.some(this._isFocusable) && this._onCellClick) {
         this._onCellClick(e);
       }

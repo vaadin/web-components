@@ -115,7 +115,7 @@
         'vaadin-grid-selection-column'
       ].forEach(elementName => {
         var element = this.querySelector(elementName);
-        if (!(element instanceof Polymer.Element)) {
+        if (element && !(element instanceof Polymer.Element)) {
           console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
         }
       });

@@ -5,6 +5,7 @@
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-selection-mixin.html">
 <link rel="import" href="vaadin-grid-sort-mixin.html">
+<link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <link rel="import" href="vaadin-grid-styles.html">
@@ -35,7 +36,8 @@
     Vaadin.Grid.ScrollMixin(
     Vaadin.Grid.SelectionMixin(
     Vaadin.Grid.SortMixin(
-    VaadinScroller)))))) {
+    Vaadin.Grid.ColumnReorderingMixin(
+    VaadinScroller))))))) {
 
     static get is() {
       return 'vaadin-grid';
@@ -57,7 +59,7 @@
       return this.$.items;
     }
 
-    _updateRow(row, columns, templateName) {
+    _updateRow(row, columns, templateName, isColumnRow) {
       templateName = templateName || 'template';
       // Create the row cells programmatically to avoid a <template> tag
       const cellsFragment = document.createDocumentFragment();
@@ -79,6 +81,7 @@
         const cell = document.createElement('td');
         cell.classList.add('vaadin-grid-cell');
         cell._content = cellContent;
+        cell._column = column;
 
         const slot = document.createElement('slot');
         slot.setAttribute('name', id);
@@ -86,17 +89,28 @@
         // cellsFragment.appendChild(cell)
         row.appendChild(cell);
 
+        column._cells = column._cells || [];
         if (templateName === 'template') {
-          column._cells = column._cells || [];
+
           column._cells.push(cell);
           if (column.notifyPath) {
             column.notifyPath('_cells.*', column._cells); // TODO: This is really heavy, batch/debounce it
           }
         } else if (templateName === 'headerTemplate') {
-          column._headerCell = cell;
+          if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+            column._headerCell = cell;
+          } else {
+            // TODO: This might not work in the long run
+            column._cells.push(cell);
+          }
         }
         else if (templateName === 'footerTemplate') {
-         column._footerCell = cell;
+          if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+            column._footerCell = cell;
+          } else {
+            // TODO: This might not work in the long run
+            column._cells.push(cell);
+          }
        }
       });
 
@@ -137,11 +151,11 @@
       }
 
       Array.from(this.$.header.children).forEach((headerRow, index) => {
-        this._updateRow(headerRow, columnTree[index], 'headerTemplate');
+        this._updateRow(headerRow, columnTree[index], 'headerTemplate', index === columnTree.length - 1);
       });
 
       Array.from(this.$.footer.children).forEach((footerRow, index) => {
-        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footerTemplate');
+        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footerTemplate', index === 0);
       });
 
     }
