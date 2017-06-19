@@ -1,45 +1,46 @@
 <script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.DynamicColumnsBehavior
+   * @polymerMixin
    */
-  vaadin.elements.grid.DynamicColumnsBehavior = {
-    ready: function() {
-      this._addNodeObserver();
-    },
+  Vaadin.Grid.DynamicColumnsMixin = superClass => class DynamicColumnsMixin extends superClass {
 
-    _hasColumnGroups: function(columns) {
-      for (var i = 0; i < columns.length; i++) {
+    ready() {
+      super.ready();
+      this._addNodeObserver();
+    }
+
+    _hasColumnGroups(columns) {
+      for (let i = 0; i < columns.length; i++) {
         if (columns[i].localName === 'vaadin-grid-column-group') {
           return true;
         }
       }
 
       return false;
-    },
+    }
 
-    _getChildColumns: function(el) {
-      return Polymer.dom(el).queryDistributedElements(
+    _getChildColumns(el) {
+      return el.queryDistributedElements(
           'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
       );
-    },
+    }
 
-    _flattenColumnGroups: function(columns) {
-      return columns.map(function(col) {
+    _flattenColumnGroups(columns) {
+      return columns.map(col => {
         if (col.localName === 'vaadin-grid-column-group') {
           return this._getChildColumns(col);
         } else {
           return [col];
         }
-      }, this).reduce(function(prev, curr) {
+      }).reduce((prev, curr) => {
         return prev.concat(curr);
       }, []);
-    },
+    }
 
-    _getColumnTree: function() {
+    _getColumnTree() {
       var rootColumns = this.queryAllEffectiveChildren(
         'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column');
 
@@ -54,18 +55,18 @@
       }
 
       return _columnTree;
-    },
+    }
 
-    _updateColumnTree: function() {
+    _updateColumnTree() {
       var columnTree = this._getColumnTree();
       if (!this._arrayEquals(columnTree, this._columnTree)) {
         this._columnTree = columnTree;
       }
-    },
+    }
 
-    _addNodeObserver: function() {
-      this._observer = Polymer.dom(this).observeNodes(function(info) {
-        var isColumnElement = function(node) {
+    _addNodeObserver() {
+      this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+        var isColumnElement = node => {
           return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
         };
         if (info.addedNodes.filter(isColumnElement).length > 0 ||
@@ -80,11 +81,14 @@
           // Polymer.dom(this).appendChild(this.$.footerFocusTrap);
         }
 
-        this.debounce('check-imports', this._checkImports, 2000);
-      }.bind(this));
-    },
+        this._debouncerCheckImports = Polymer.Debouncer.debounce(
+          this._debouncerCheckImports,
+          Polymer.Async.timeOut.after(2000),
+          this._checkImports.bind(this));
+      });
+    }
 
-    _arrayEquals: function(arr1, arr2) {
+    _arrayEquals(arr1, arr2) {
       if (!arr1 || !arr2 || arr1.length != arr2.length) {
         return false;
       }
@@ -101,20 +105,20 @@
         }
       }
       return true;
-    },
+    }
 
-    _checkImports: function() {
+    _checkImports() {
       [
         'vaadin-grid-column-group',
         'vaadin-grid-sorter',
         'vaadin-grid-filter',
         'vaadin-grid-selection-column'
-      ].forEach(function(elementName) {
-        var element = Polymer.dom(this).querySelector(elementName);
-        if (element && (Polymer.isInstance ? !Polymer.isInstance(element) : !(element instanceof Polymer.Element))) {
+      ].forEach(elementName => {
+        var element = this.querySelector(elementName);
+        if (!(element instanceof Polymer.Element)) {
           console.warn('Make sure you have imported the required module for <' + elementName + '> element.');
         }
-      }, this);
+      });
     }
   };
 </script>
