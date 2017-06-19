@@ -1,0 +1,63 @@
+<script>
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.Grid.CellClickMixin = superClass => class CellClickMixin extends superClass {
+
+    ready() {
+      super.ready();
+      this.addEventListener('click', this._onClick.bind(this));
+      // we need to capture focus events originating from elements inside this cell,
+      // capture mode seems to be required in order it to work.
+      this.addEventListener('focus', this._cellContentFocusHandler.bind(this), true);
+    }
+
+    _cellContentFocusHandler(e) {
+      // IE11 fires `focus` events for the cell content element even when nothing
+      // focusable was clicked.
+      if (e.target !== this._cellContent) {
+        // TODO: Handle target
+        this.fire('cell-content-focus', {cell: this});
+      }
+    }
+
+
+    // we need to listen to click instead of tap because on mobile safari, the
+    // document.activeElement has not been updated (focus has not been shifted)
+    // yet at the point when tap event is being executed.
+    _onClick(e) {
+      let contentWrapper = e.target;
+      while (contentWrapper && contentWrapper.localName !== 'vaadin-grid-cell-content') {
+        contentWrapper = contentWrapper.parentElement;
+      }
+      if (!contentWrapper) {
+        return;
+      }
+      //
+      const cell = contentWrapper.assignedSlot.parentElement;
+
+      // this event is only supposed to be fired from cells.
+      if (e.target !== 'vaadin-grid-sorter') {
+        this.dispatchEvent(new CustomEvent('cell-focus', {cell: cell}));
+      }
+
+      var path = Polymer.dom(e).path;
+      var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
+      if (!contentWrapper.contains(this.root.activeElement || document.activeElement) &&
+          !elementsClicked.some(this._isFocusable)) {
+        // TODO: Call named private functions directly, or fire an event
+        // this._cellClick(cell);
+      }
+    }
+
+    _isFocusable(target) {
+      var parent = Polymer.dom(target).parentNode;
+      var isFocusableElement = Array.prototype.indexOf.call(Polymer.dom(parent)
+      .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'), target) !== -1;
+      return !target.disabled && isFocusableElement;
+    }
+  };
+</script>
