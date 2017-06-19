@@ -4,6 +4,7 @@
 <link rel="import" href="vaadin-grid-cell-click-mixin.html">
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-selection-mixin.html">
+<link rel="import" href="vaadin-grid-sort-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <link rel="import" href="vaadin-grid-styles.html">
@@ -33,7 +34,8 @@
     Vaadin.Grid.CellClickMixin(
     Vaadin.Grid.ScrollMixin(
     Vaadin.Grid.SelectionMixin(
-    VaadinScroller))))) {
+    Vaadin.Grid.SortMixin(
+    VaadinScroller)))))) {
 
     static get is() {
       return 'vaadin-grid';

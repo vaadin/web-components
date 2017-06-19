@@ -241,7 +241,7 @@
           const params = {
             page: page,
             pageSize: this.pageSize,
-            // sortOrders: this._mapSorters(),
+            sortOrders: this._mapSorters(),
             // filters: this._mapFilters()
           };
           this.dataProvider(params, (items) => {
@@ -271,13 +271,13 @@
       this._cache = {};
       this._pendingRequests = {};
       if (this.hasData) {
-        this.update();
+        this._update();
       }
       this._flushItemsDebouncer();
     }
 
     _flushItemsDebouncer() {
-      this.debouncerLoad.flush();
+      this._debouncerLoad.flush();
     }
 
     _pageSizeChanged(pageSize, oldPageSize) {

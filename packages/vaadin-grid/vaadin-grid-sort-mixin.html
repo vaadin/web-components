@@ -1,62 +1,56 @@
 <script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
+  window.Vaadin = window.Vaadin || {};
+  Vaadin.Grid = Vaadin.Grid || {};
 
-  /**
-   * @polymerBehavior vaadin.elements.grid.SortBehavior
-   */
-  vaadin.elements.grid.SortBehavior = {
+  Vaadin.Grid.SortMixin = superClass => class SortMixin extends superClass {
+    static get properties() {
+      return {
+        /*
+        * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
+        */
+        multiSort: {
+          type: Boolean,
+          value: false
+        },
 
-    properties: {
+        _sorters: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
 
-      /*
-       * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
-       */
-      multiSort: {
-        type: Boolean,
-        value: false
-      },
-
-      _sorters: {
-        type: Array,
-        value: function() {
-          return [];
+        _previousSorters: {
+          type: Array,
+          value: function() {
+            return [];
+          }
         }
-      },
+      };
+    }
 
-      _previousSorters: {
-        type: Array,
-        value: function() {
-          return [];
-        }
-      }
+    ready() {
+      super.ready();
+      this.addEventListener('sorter-changed', this._onSorterChanged);
 
-    },
-
-    listeners: {
-      'sorter-changed': '_onSorterChanged'
-    },
-
-    ready: function() {
       // With Polymer 2 & shady the 'sorter-changed' listener isn't guaranteed to be registered
       // before child <vaadin-grid-sorter>'s upgrade and fire the events. The following
       // makes sure that 'sorter-changed' is fired for all <vaadin-grid-sorter> elements
       // after this (<vaadin-grid>) is ready (and the listeners are active).
-      if (Polymer.Element && !Polymer.Settings.useNativeShadow) {
-        this.async(function() {
-          var sorters = Polymer.dom(this).querySelectorAll('vaadin-grid-sorter');
-          Array.prototype.forEach.call(sorters, function(sorter) {
+      if (!Polymer.Settings.useNativeShadow) {
+        Polymer.Async.microTask.run(() => {
+          var sorters = this.querySelectorAll('vaadin-grid-sorter');
+          Array.from(sorters).forEach((sorter) => {
             // Don't try to fire if the sorter hasn't been upgraded yet
-            if (sorter.fire) {
-              sorter.fire('sorter-changed');
+            if (sorter instanceof Polymer.Element) {
+              sorter.dispatchEvent(new CustomEvent('sorter-changed', {bubbles: true, composed: true}));
             }
           });
         });
       }
-    },
+    }
 
-    _onSorterChanged: function(e) {
+    _onSorterChanged(e) {
       var sorter = e.target;
 
       this._removeArrayItem(this._sorters, sorter);
@@ -90,23 +84,22 @@
       }
 
       this._previousSorters = this._mapSorters();
-    },
+    }
 
-    _mapSorters: function() {
+    _mapSorters() {
       return this._sorters.map(function(sorter) {
         return {
           path: sorter.path,
           direction: sorter.direction
         };
       });
-    },
+    }
 
-    _removeArrayItem: function(array, item) {
+    _removeArrayItem(array, item) {
       var index = array.indexOf(item);
       if (index > -1) {
         array.splice(index, 1);
       }
-    },
-
+    }
   };
 </script>

@@ -47,9 +47,8 @@
       var path = Polymer.dom(e).path;
       var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
       if (!contentWrapper.contains(this.root.activeElement || document.activeElement) &&
-          !elementsClicked.some(this._isFocusable)) {
-        // TODO: Call named private functions directly, or fire an event
-        // this._cellClick(cell);
+          !elementsClicked.some(this._isFocusable) && this._onCellClick) {
+        this._onCellClick(e);
       }
     }
 
