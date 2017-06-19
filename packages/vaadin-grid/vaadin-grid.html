@@ -1,6 +1,6 @@
 <link rel="import" href="vaadin-scroller.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-behavior.html">
-<link rel="import" href="vaadin-grid-data-provider-behavior.html">
+<link rel="import" href="vaadin-grid-data-provider-mixin.html">
 <link rel="import" href="vaadin-grid-table-scroll-behavior.html">
 <link rel="import" href="vaadin-grid-column.html">
 
@@ -25,13 +25,12 @@
 </dom-module>
 
 <script>
-  class VaadinGrid extends Polymer.mixinBehaviors(
+  class VaadinGrid extends Vaadin.Grid.DataProviderMixin(Polymer.mixinBehaviors(
     [
       vaadin.elements.grid.DynamicColumnsBehavior,
-      vaadin.elements.grid.DataProviderBehavior,
       vaadin.elements.grid.TableScrollBehavior
     ],
-    VaadinScroller) {
+    VaadinScroller)) {
 
     static get is() {
       return 'vaadin-grid';
