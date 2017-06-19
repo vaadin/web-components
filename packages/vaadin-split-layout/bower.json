@@ -31,18 +31,5 @@
     "paper-button": "^2.0.0",
     "web-component-tester": "^6.0.0",
     "webcomponentsjs": "^v1.0.0-rc.11"
-  },
-  "variants": {
-    "1.x": {
-      "dependencies": {
-        "polymer": "^1.7.0"
-      },
-      "devDependencies": {
-        "webcomponentsjs": "^0.7.24"
-      },
-      "resolutions": {
-        "webcomponentsjs": "^0.7.24"
-      }
-    }
   }
 }
