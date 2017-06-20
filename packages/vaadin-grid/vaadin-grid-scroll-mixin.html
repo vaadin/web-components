@@ -89,16 +89,7 @@
     ready() {
       super.ready();
       this.scrollTarget = this.$.table;
-    }
-
-    connectedCallback() {
-      super.connectedCallback();
-      this.scrollTarget.addEventListener('wheel', this._ohWheel);
-    }
-
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      this.scrollTarget.removeEventListener('wheel', this._ohWheel);
+      this.scrollTarget.addEventListener('wheel', this._onWheel.bind(this));
     }
 
     _hasFixedSections(scrollbarWidth) {
