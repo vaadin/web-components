@@ -104,16 +104,16 @@
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             column._headerCell = cell;
           } else {
-            // TODO: This might not work in the long run
-            column._cells.push(cell);
+            column._emptyCells = column._emptyCells || [];
+            column._emptyCells.push(cell);
           }
         }
         else if (templateName === 'footerTemplate') {
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             column._footerCell = cell;
           } else {
-            // TODO: This might not work in the long run
-            column._cells.push(cell);
+            column._emptyCells = column._emptyCells || [];
+            column._emptyCells.push(cell);
           }
        }
       });

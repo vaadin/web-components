@@ -78,6 +78,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _cells: Array,
 
+        _emptyCells: Array,
+
         _headerCell: Object
       };
     }
@@ -89,7 +91,8 @@ This program is available under Apache License Version 2.0, available at https:/
        '_lastFrozenChanged(_lastFrozen)',
        '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
        '_stampHeaderTemplate(headerTemplate, _headerCell)',
-       '_stampFooterTemplate(footerTemplate, _footerCell)'
+       '_stampFooterTemplate(footerTemplate, _footerCell)',
+       '_emptyCellsChanged(_emptyCells, _emptyCells.*)'
       ]
     }
 
@@ -157,6 +160,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       return template;
+    }
+
+    _emptyCellsChanged(emptyCells, splices) {
+      // TODO: Needs empty content?
     }
 
     _stampBodyTemplate(template, cells) {
@@ -229,7 +236,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.parentElement._columnPropChanged({detail: {path: 'flexGrow'}});
       }
 
-      this._cells && this._cells.concat([headerCell, footerCell]).forEach(cell => {
+      this._allCells.forEach(cell => {
         if (cell) {
           cell.style.flexGrow = flexGrow;
         }
@@ -241,7 +248,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
       }
 
-      this._cells && this._cells.concat([headerCell, footerCell]).forEach(cell => {
+      this._allCells.forEach(cell => {
         if (cell) {
           cell.style.width = width;
         }
@@ -333,7 +340,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentElement._columnPropChanged({detail: {path: 'frozen', value: frozen}}); // TODO: Decent APIs
         }
 
-        this._cells && this._cells.concat([headerCell, footerCell]).forEach((cell) => {
+        this._allCells.forEach((cell) => {
           if (cell) {
             this._toggleAttribute('frozen', frozen, cell);
           }
@@ -356,7 +363,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentElement._columnPropChanged({detail: {path: 'hidden', value: hidden}}); // TODO: Decent APIs
         }
 
-        this._cells && this._cells.concat([headerCell, footerCell]).forEach((cell) => {
+        this._allCells.forEach((cell) => {
           if (cell) {
             this._toggleAttribute('hidden', hidden, cell);
           }
@@ -364,7 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _orderChanged(order, headerCell, footerCell, cells) {
-        this._cells && this._cells.concat([headerCell, footerCell]).forEach((cell) => {
+        this._allCells.forEach((cell) => {
           if (cell) {
             cell.style.order = order;
           }
@@ -372,7 +379,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
-        this._cells && this._cells.concat([headerCell, footerCell]).forEach((cell) => {
+        this._allCells.forEach((cell) => {
           if (cell) {
             cell.setAttribute('reorder-status', reorderStatus);
           }
