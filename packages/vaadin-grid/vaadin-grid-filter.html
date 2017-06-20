@@ -31,46 +31,73 @@ and handlers for filtering the grid data.
 
   </template>
   <script>
-    Polymer({
-      is: 'vaadin-grid-filter',
+    {
+      class GridFilterElement extends Polymer.Element {
 
-      properties: {
-
-        /**
-         * JS Path of the property in the item used for filtering the data.
-         */
-        path: String,
-
-        /**
-         * Current filter value.
-         */
-        value: {
-          type: String,
-          notify: true
+        static get is() {
+          return 'vaadin-grid-filter';
         }
-      },
 
-      observers: ['_filterChanged(path, value, isAttached)'],
+        static get properties() {
+          return {
 
-      ready: function() {
-        var child = Polymer.dom(this).firstElementChild;
-        if (child && child.getAttribute('slot') !== 'filter') {
-          console.warn('Make sure you have assigned slot="filter" to the child elements of <vaadin-grid-filter>');
-          child.setAttribute('slot', 'filter');
-        }
-      },
+            /**
+             * JS Path of the property in the item used for filtering the data.
+             */
+            path: String,
 
-      _filterChanged: function(path, value, isAttached) {
-        if (path === undefined || value === undefined || isAttached === undefined) {
-          return;
+            /**
+             * Current filter value.
+             */
+            value: {
+              type: String,
+              notify: true
+            },
+
+            _connected: Boolean
+          };
         }
-        
-        if (isAttached) {
-          this.debounce('filter-changed', function() {
-            this.fire('filter-changed');
-          }, 200);
+
+        connectedCallback() {
+          this._connected = true;
         }
+
+        static get observers() {
+          return ['_filterChanged(path, value, _connected)'];
+        }
+
+        ready() {
+          super.ready();
+
+          const child = Polymer.dom(this).firstElementChild;
+          if (child && child.getAttribute('slot') !== 'filter') {
+            console.warn('Make sure you have assigned slot="filter" to the child elements of <vaadin-grid-filter>');
+            child.setAttribute('slot', 'filter');
+          }
+        }
+
+        _filterChanged(path, value, connected) {
+          if (path === undefined || value === undefined || !connected) {
+            return;
+          }
+
+          this._debouncerFilterChanged = Polymer.Debouncer.debounce(
+            this._debouncerFilterChanged,
+            Polymer.Async.timeOut.after(200),
+            () => {
+              this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true}));
+            });
+        }
+
       }
-    });
+
+      customElements.define(GridFilterElement.is, GridFilterElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.GridFilterElement = GridFilterElement;
+    }
   </script>
 </dom-module>
