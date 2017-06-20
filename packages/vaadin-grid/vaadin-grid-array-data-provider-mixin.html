@@ -26,7 +26,7 @@
     }
 
     _itemsChanged(items, splices) {
-      if (items === undefined || splices === undefined) {
+      if (!Array.isArray(items)) {
         return;
       }
 
@@ -36,7 +36,7 @@
     }
 
     _arrayDataProvider(opts, cb) {
-      const items = (this.items || []).slice(0);
+      let items = (this.items || []).slice(0);
 
       if (this._filters && this._checkPaths(this._filters, 'filtering', items)) {
         items = this._filter(items);

@@ -77,7 +77,7 @@
         return;
       }
       const cell = this._getCellByCellContent(cellContent);
-      if (this.$.header.contains(cell)) {
+      if (this.columnReorderingAllowed && this.$.header.contains(cell)) {
         cellContent.setAttribute('draggable', 'true');
       }
     }
