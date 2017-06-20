@@ -3,8 +3,7 @@
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
-
+  vaadin.elements.grid = vaadin.elements.grid || {}; 
   vaadin.elements.grid.Templatizer = Polymer({
     is: 'vaadin-grid-templatizer',
 
@@ -25,7 +24,9 @@
         value: function() {
           return {};
         }
-      }
+      },
+
+      _grid: Object
     },
 
     observers: [
@@ -46,7 +47,14 @@
 
     createInstance: function() {
       this._ensureTemplatized();
-      var instance = this.stamp({});
+      // It makes sense to list the known default values here. It allows
+      // skip notify effects for defaults.
+      var instance = this.stamp({
+        expanded: false,
+        index: undefined,
+        item: undefined,
+        selected: false
+      });
       this.addInstance(instance);
 
       return instance;
@@ -85,6 +93,7 @@
       }
     },
 
+    // TODO: V1 only
     _forwardInstanceProp: function(inst, prop, value) {
       // fire notification event only when a prop is changed through a user-action.
       // e.g. 'expanded' is different from the originally bound '__expanded__' value.
@@ -98,6 +107,7 @@
       }
     },
 
+    // TODO: V1 only
     _forwardInstancePath: function(inst, path, value) {
       // TODO: assuming we're currently just listening to [[item.xxxx]] properties
       // which affect only cells on the current row.
@@ -112,8 +122,26 @@
     },
 
     _notifyInstancePropV2: function(inst, prop, value) {
-      this._forwardInstanceProp(inst, prop, value);
-      this._forwardInstancePath(inst, prop, value);
+      if (prop === 'index' || prop === 'item') {
+        // We don’t need a change notification for these.
+        return;
+      }
+
+      // Notify for only user-action changes, not for scrolling updates. E. g.,
+      // if `expanded` is different from `__expanded__`, which was set during render.
+      var originalProp = `__${prop}__`;
+      if (inst[originalProp] === undefined || inst[originalProp] === value) {
+        return;
+      }
+
+      var gridCallback = `_${prop}InstanceChangedCallback`;
+      if (this._grid && this._grid[gridCallback]) {
+        this._grid[gridCallback](inst, value);
+      }
+
+      // TODO: V1 only
+      // this._forwardInstanceProp(inst, prop, value);
+      // this._forwardInstancePath(inst, prop, value);
     },
 
     _forwardParentProp: function(prop, value) {

@@ -134,20 +134,12 @@ When the grid is configured with an array of items as the data provider, it prov
       },
 
       attached: function() {
-        this._grid = this._findGrid(this);
         if (this._grid) {
           this.listen(this._grid, 'active-item-changed', '_onActiveItemChanged');
           this.listen(this._grid, 'data-provider-changed', '_onDataProviderChanged');
           this.listen(this._grid, 'filter-changed', '_onSelectedItemsChanged');
           this.listen(this._grid, 'selected-items-changed', '_onSelectedItemsChanged');
         }
-      },
-
-      _findGrid: function(elm) {
-        while (elm && elm.localName != 'vaadin-grid') {
-          elm = Polymer.dom(elm).parentNode;
-        }
-        return elm || undefined;
       },
 
       _onSelectAllChanged: function(selectAll, grid) {

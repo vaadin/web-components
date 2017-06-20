@@ -80,19 +80,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _emptyCells: Array,
 
-        _headerCell: Object
+        _headerCell: Object,
+
+        _grid: Object
       };
     }
 
     static get observers() {
       return [
-       '_footerTemplateChanged(footerTemplate)',
-       '_headerTemplateChanged(headerTemplate)',
-       '_lastFrozenChanged(_lastFrozen)',
-       '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
-       '_stampHeaderTemplate(headerTemplate, _headerCell)',
-       '_stampFooterTemplate(footerTemplate, _footerCell)',
-       '_emptyCellsChanged(_emptyCells, _emptyCells.*)'
+        '_footerTemplateChanged(footerTemplate)',
+        '_headerTemplateChanged(headerTemplate)',
+        '_lastFrozenChanged(_lastFrozen)',
+        '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
+        '_stampHeaderTemplate(headerTemplate, _headerCell)',
+        '_stampFooterTemplate(footerTemplate, _footerCell)',
+        '_emptyCellsChanged(_emptyCells, _emptyCells.*)'
       ]
     }
 

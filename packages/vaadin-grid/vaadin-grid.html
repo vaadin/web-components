@@ -6,6 +6,7 @@
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-selection-mixin.html">
 <link rel="import" href="vaadin-grid-sort-mixin.html">
+<link rel="import" href="vaadin-grid-row-details-mixin.html">
 <link rel="import" href="vaadin-grid-filter-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column-resizing-mixin.html">
@@ -40,10 +41,11 @@
     Vaadin.Grid.ScrollMixin(
     Vaadin.Grid.SelectionMixin(
     Vaadin.Grid.SortMixin(
+    Vaadin.Grid.RowDetailsMixin(
     Vaadin.Grid.FilterMixin(
     Vaadin.Grid.ColumnReorderingMixin(
     Vaadin.Grid.ColumnResizingMixin(
-    VaadinScroller)))))))))) {
+    VaadinScroller))))))))))) {
 
     static get is() {
       return 'vaadin-grid';
@@ -178,6 +180,9 @@
       Array.from(row.children).forEach((cell) => {
         if (cell._instance) {
           cell._instance.item = item;
+          cell._instance.__expanded__ = this._isExpanded(item);
+          cell._instance.expanded = this._isExpanded(item);
+          // TODO: selected
         }
       });
       // row.selected = this._isSelected(item);

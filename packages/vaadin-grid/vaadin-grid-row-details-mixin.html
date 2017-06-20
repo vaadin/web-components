@@ -25,51 +25,60 @@
 
 
 <script>
-  window.vaadin = window.vaadin || {};
-  vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {};
+  window.Vaadin = window.Vaadin || {};
+  Vaadin.Grid = Vaadin.Grid || {};
 
   /**
-   * @polymerBehavior vaadin.elements.grid.RowDetailsBehavior
+   * @polymerMixin
    */
-  vaadin.elements.grid.RowDetailsBehavior = {
-
-    properties: {
-
-      /**
-       * An array containing references to expanded items.
-       */
-      expandedItems: {
-        type: Array,
-        value: function() {
-          return [];
+  Vaadin.Grid.RowDetailsMixin = superClass => class RowDetailsMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+        * An array containing references to expanded items.
+        */
+        expandedItems: {
+          type: Array,
+          value: function() {
+            return [];
+          }
         }
+      };
+    }
+
+    static get observers() {
+      return [
+        '_expandedItemsChanged(expandedItems.*, dataProvider)',
+        '_rowDetailsTemplateChanged(_rowDetailsTemplate)'
+      ];
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('template-instance-changed', this._templateInstanceChangedExpanded);
+    }
+
+    _expandedItemsChanged(changeRecord, dataProvider) {
+      if (changeRecord === undefined || dataProvider === undefined) {
+        return;
       }
-    },
 
-    listeners: {
-      'template-instance-changed': '_templateInstanceChangedExpanded'
-    },
-
-    observers: [
-      '_expandedItemsChanged(expandedItems.*, dataProvider)',
-      '_rowDetailsTemplateChanged(_rowDetailsTemplate)'
-    ],
-
-    _expandedItemsChanged: function(expandedItems, dataProvider) {
-      if (expandedItems === undefined || dataProvider === undefined) {
+      if (changeRecord.path === 'expandedItems.length') {
+        // Let’s avoid duplicate work of both “.splices” and “.length” updates.
         return;
       }
 
       this._flushItemsDebouncer();
-      if (this.$.scroller._physicalItems) {
-        this.$.scroller._physicalItems.forEach(function(row) {
-          row.expanded = this._isExpanded(row.item);
-        }.bind(this));
-      }
-    },
 
-    _rowDetailsTemplateChanged: function(rowDetailsTemplate) {
+      // TODO: Make this work again and render the details row somehow.
+      // if (this._physicalItems) {
+      //   this._physicalItems.forEach(function(row) {
+      //     row.expanded = this._isExpanded(row.item);
+      //   }, this);
+      // }
+    }
+
+    _rowDetailsTemplateChanged(rowDetailsTemplate) {
       var templatizer = new vaadin.elements.grid.Templatizer();
       templatizer.dataHost = this.dataHost;
       templatizer._instanceProps = {
@@ -81,35 +90,46 @@
 
       // row details templatizer needs to be attached so that `item-changed` and
       // `template-instance-changed` events propagate to grid.
-      Polymer.dom(this.root).appendChild(templatizer);
+      this.root.appendChild(templatizer);
 
       templatizer.template = rowDetailsTemplate;
       rowDetailsTemplate.templatizer = templatizer;
-    },
+    }
 
-    _isExpanded: function(item) {
+    _isExpanded(item) {
       return this.expandedItems && this.expandedItems.indexOf(item) !== -1;
-    },
+    }
 
     /**
      * Expand the details row of a given item.
      */
-    expandItem: function(item) {
+    expandItem(item) {
       if (!this._isExpanded(item)) {
         this.push('expandedItems', item);
       }
-    },
+    }
 
     /**
      * Collapse the details row of a given item.
      */
-    collapseItem: function(item) {
+    collapseItem(item) {
       if (this._isExpanded(item)) {
         this.splice('expandedItems', this.expandedItems.indexOf(item), 1);
       }
-    },
+    }
 
-    _templateInstanceChangedExpanded: function(e) {
+    _expandedInstanceChangedCallback(instance, value) {
+      if (super._expandedInstanceChangedCallback) {
+        super._expandedInstanceChangedCallback(instance, value)
+      }
+      if (value) {
+        this.expandItem(instance.item);
+      } else {
+        this.collapseItem(instance.item);
+      }
+    }
+
+    _templateInstanceChangedExpanded(e) {
       if (e.detail.prop === 'expanded') {
         if (e.detail.value) {
           this.expandItem(e.detail.inst.item);
