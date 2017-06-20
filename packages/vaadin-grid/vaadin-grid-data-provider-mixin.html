@@ -164,7 +164,11 @@
         this._debouncerLoad = Polymer.Debouncer.debounce(
           this._debouncerLoad,
           Polymer.Async.timeOut.after(100),
-          () => uncachedPages.forEach(this._loadPage.bind(this)));
+          () => {
+            uncachedPages.forEach(i => {
+              this._loadPage(i);
+            });
+          });
       }
     }
 
@@ -242,7 +246,7 @@
             page: page,
             pageSize: this.pageSize,
             sortOrders: this._mapSorters(),
-            // filters: this._mapFilters()
+            filters: this._mapFilters()
           };
           this.dataProvider(params, (items) => {
             this._cache[page] = items;
