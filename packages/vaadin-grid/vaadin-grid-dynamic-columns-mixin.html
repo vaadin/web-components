@@ -23,7 +23,8 @@
     }
 
     _getChildColumns(el) {
-      return el.queryDistributedElements(
+      // TODO: Drop legacy api
+      return Polymer.dom(el).queryDistributedElements(
           'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
       );
     }

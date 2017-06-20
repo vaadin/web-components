@@ -36,270 +36,291 @@ The `class` attribute is used to differentiate header and footer templates.
 
 <dom-module id="vaadin-grid-column-group">
   <script>
-    Polymer({
-      is: 'vaadin-grid-column-group',
+    {
+      class GridColumnGroupElement extends Vaadin.Grid.ColumnBaseMixin(Polymer.Element) {
 
-      behaviors: [vaadin.elements.grid.ColumnBaseBehavior],
+        static get is() {
+          return 'vaadin-grid-column-group';
+        }
 
-      properties: {
-        _childColumns: {
-          value: function() {
-            return this._getChildColumns(this);
+        static get properties() {
+          const ownProperties = {
+            _childColumns: {
+              value: function() {
+                return this._getChildColumns(this);
+              }
+            },
+
+            /**
+             * Flex grow ratio for the column group as the sum of the ratios of its child columns.
+             */
+            flexGrow: {
+              type: Number,
+              readOnly: true
+            },
+
+            /**
+             * Width of the column group as the sum of the widths of its child columns.
+             */
+            width: {
+              type: String,
+              readOnly: true
+            },
+
+            _visibleChildColumns: Array,
+
+            /**
+             * Represents the number of child columns of this group.
+             */
+            colSpan: {
+              type: Number,
+              readOnly: true
+            },
+
+            _rootColumns: Array
           }
-        },
 
-        /**
-         * Flex grow ratio for the column group as the sum of the ratios of its child columns.
-         */
-        flexGrow: {
-          type: Number,
-          readOnly: true
-        },
-
-        /**
-         * Width of the column group as the sum of the widths of its child columns.
-         */
-        width: {
-          type: String,
-          readOnly: true
-        },
-
-        _visibleChildColumns: Array,
-
-        /**
-         * Represents the number of child columns of this group.
-         */
-        colSpan: {
-          type: Number,
-          readOnly: true
-        },
-
-        _rootColumns: Array
-      },
-
-      observers: [
-        '_updateVisibleChildColumns(_childColumns)',
-        '_childColumnsChanged(_childColumns)',
-        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-        '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
-        '_frozenChanged(_childColumns, frozen, _headerCell)',
-        '_hiddenChanged(hidden)',
-        '_visibleChildColumnsChanged(_visibleChildColumns)',
-        '_colSpanChanged(colSpan, _headerCell, _footerCell)',
-        '_orderChanged(_order, _headerCell, _footerCell, _rootColumns)',
-        '_reorderStatusChanged(_reorderStatus, _rootColumns)',
-        '_resizableChanged(resizable, _rootColumns)'
-      ],
-
-      // listeners: {
-      //   'property-changed': '_columnPropChanged'
-      // },
-
-      attached: function() {
-        this._updateFlexAndWidth(this._visibleChildColumns);
-        this._addNodeObserver();
-      },
-
-      detached: function() {
-        if (this._observer) {
-          Polymer.dom(this).unobserveNodes(this._observer);
-        }
-      },
-
-      _columnPropChanged: function(e) {
-        if (e.detail.path === 'hidden') {
-          this._preventHiddenCascade = true;
-          this._updateVisibleChildColumns(this._childColumns);
-          this._preventHiddenCascade = false;
+          return Object.assign(ownProperties, super.properties);
         }
 
-        if (/flexGrow|width|hidden|_childColumns/.test(e.detail.path)) {
+        static get observers() {
+          return [
+            '_updateVisibleChildColumns(_childColumns)',
+            '_childColumnsChanged(_childColumns)',
+            '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
+            '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
+            '_frozenChanged(_childColumns, frozen, _headerCell)',
+            '_hiddenChanged(hidden)',
+            '_visibleChildColumnsChanged(_visibleChildColumns)',
+            '_colSpanChanged(colSpan, _headerCell, _footerCell)',
+            '_orderChanged(_order, _headerCell, _footerCell, _rootColumns)',
+            '_reorderStatusChanged(_reorderStatus, _rootColumns)',
+            '_resizableChanged(resizable, _rootColumns)'
+          ];
+        }
+
+        // listeners: {
+        //   'property-changed': '_columnPropChanged'
+        // },
+
+        connectedCallback() {
           this._updateFlexAndWidth(this._visibleChildColumns);
+          this._addNodeObserver();
         }
 
-        if (e.detail.path === 'frozen') {
-          // Don’t unfreeze the frozen group because of a non-frozen child
-          this.frozen = this.frozen || e.detail.value;
+        detached() {
+          if (this._observer) {
+            Polymer.dom(this).unobserveNodes(this._observer);
+          }
         }
 
-        if (e.detail.path === 'lastFrozen') {
-          // Don’t unfreeze the frozen group because of a non-frozen child
-          this._lastFrozen = this._lastFrozen || e.detail.value;
+        _columnPropChanged(e) {
+          if (e.detail.path === 'hidden') {
+            this._preventHiddenCascade = true;
+            this._updateVisibleChildColumns(this._childColumns);
+            this._preventHiddenCascade = false;
+          }
+
+          if (/flexGrow|width|hidden|_childColumns/.test(e.detail.path)) {
+            this._updateFlexAndWidth(this._visibleChildColumns);
+          }
+
+          if (e.detail.path === 'frozen') {
+            // Don’t unfreeze the frozen group because of a non-frozen child
+            this.frozen = this.frozen || e.detail.value;
+          }
+
+          if (e.detail.path === 'lastFrozen') {
+            // Don’t unfreeze the frozen group because of a non-frozen child
+            this._lastFrozen = this._lastFrozen || e.detail.value;
+          }
         }
-      },
 
-      _orderChanged: function(order, headerCell, footerCell, rootColumns) {
-        if (order && rootColumns) {
-          // The parent column order number cascades downwards to it's children
-          // so that the resulting order numbering constructs as follows:
-          // [             1000              ]
-          // [     1100    ] | [     1200    ]
-          // [1110] | [1120] | [1210] | [1220]
+        _orderChanged(order, headerCell, footerCell, rootColumns) {
+          if (order && rootColumns) {
+            // The parent column order number cascades downwards to it's children
+            // so that the resulting order numbering constructs as follows:
+            // [             1000              ]
+            // [     1100    ] | [     1200    ]
+            // [1110] | [1120] | [1210] | [1220]
 
-          // Trailing zeros are counted so we know the level on which we're working on.
-          var trailingZeros = /(0+)$/.exec(order).pop().length;
+            // Trailing zeros are counted so we know the level on which we're working on.
+            const trailingZeros = /(0+)$/.exec(order).pop().length;
 
-          // In an unlikely situation where a group has more than 9 child columns,
-          // the child scope must have 1 digit less...
-          var childCountDigits = ~~(Math.log(rootColumns.length) / Math.log(Math.LN10)) + 1;
+            // In an unlikely situation where a group has more than 9 child columns,
+            // the child scope must have 1 digit less...
+            const childCountDigits = ~~(Math.log(rootColumns.length) / Math.log(Math.LN10)) + 1;
 
-          // Final scope for the child columns needs to mind both factors.
-          var scope = Math.pow(10, trailingZeros - childCountDigits);
+            // Final scope for the child columns needs to mind both factors.
+            const scope = Math.pow(10, trailingZeros - childCountDigits);
 
-          var _rootColumns = rootColumns.slice(0);
-          if (_rootColumns[0] && _rootColumns[0]._order) {
-            _rootColumns.sort(function(a, b) {
-              return a._order - b._order;
+            const _rootColumns = rootColumns.slice(0);
+            if (_rootColumns[0] && _rootColumns[0]._order) {
+              _rootColumns.sort((a, b) => {
+                return a._order - b._order;
+              });
+            }
+
+            [headerCell, footerCell].forEach(cell => {
+              if (cell) {
+                cell.style.order = order;
+              }
             });
+
+            _rootColumns.forEach((column, index) => {
+              column._order = order + ((index + 1) * scope);
+            });
+
+            // this.fire('property-changed', {path: 'order', value: order});
+          }
+        }
+
+        _reorderStatusChanged(reorderStatus, rootColumns) {
+          if (reorderStatus === undefined || rootColumns === undefined) {
+            return;
+          }
+
+          rootColumns.forEach(column => {
+            column._reorderStatus = reorderStatus;
+          });
+
+          // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
+        }
+
+        _resizableChanged(resizable, rootColumns) {
+          if (resizable === undefined || rootColumns === undefined) {
+            return;
+          }
+
+          rootColumns.forEach(column => {
+            column.resizable = resizable;
+          });
+
+          // this.fire('property-changed', {path: 'resizable', value: resizable});
+        }
+
+        _updateVisibleChildColumns(childColumns) {
+          this._visibleChildColumns = Array.prototype.filter.call(childColumns, col => {
+            return !col.hidden;
+          });
+        }
+
+        _childColumnsChanged(childColumns) {
+          if (!this._autoHidden && this.hidden) {
+            Array.prototype.forEach.call(childColumns, column => {
+              column.hidden = true;
+            });
+            this._updateVisibleChildColumns(childColumns);
+          }
+          // this.fire('property-changed', {path: '_childColumns', value: childColumns});
+        }
+
+        _updateFlexAndWidth(visibleChildColumns) {
+          if (!visibleChildColumns) {
+            return;
+          }
+
+          if (visibleChildColumns.length) {
+            this._setWidth('calc(' + Array.prototype.reduce.call(visibleChildColumns, (prev, curr) => {
+              return prev += ' + ' + (curr.width || '0px').replace('calc', '');
+            }, '').substring(3) + ')');
+          } else {
+            this._setWidth('0px');
+          }
+
+          this._setFlexGrow(Array.prototype.reduce.call(visibleChildColumns, (prev, curr) => {
+            return prev + curr.flexGrow;
+          }, 0));
+        }
+
+        _frozenChanged(childColumns, frozen, headerCell) {
+          if (childColumns === undefined || frozen === undefined) {
+            return;
           }
 
           if (headerCell) {
-            headerCell.style.order = order;
+            this._toggleAttribute('frozen', frozen, headerCell);
+          }
+
+          // Don’t propagate the default `false` value.
+          // if (frozen !== false) {
+            Array.prototype.forEach.call(childColumns, col => {
+              // Don’t unfreeze the nested frozen groups
+              // if (col.localName === 'vaadin-grid-column-group') {
+              //   col.frozen = col.frozen || frozen;
+              // } else {
+                col.frozen = frozen;
+              // }
+            });
+
+            // this.fire('property-changed', {path: 'frozen', value: frozen});
+          // }
+
+        }
+
+        _hiddenChanged(hidden) {
+          if (this._rootColumns && !this._preventHiddenCascade) {
+            this._ignoreVisibleChildColumns = true;
+            this._rootColumns.forEach(column => {
+              column.hidden = hidden;
+            });
+            this._ignoreVisibleChildColumns = false;
+          }
+
+          // this.fire('property-changed', {path: 'hidden', value: hidden});
+        }
+
+        _visibleChildColumnsChanged(visibleChildColumns) {
+          this._setColSpan(visibleChildColumns.length);
+
+          if (!this._ignoreVisibleChildColumns) {
+            if (visibleChildColumns.length === 0) {
+              this._autoHidden = this.hidden = true;
+            } else if (this.hidden && this._autoHidden) {
+              this._autoHidden = this.hidden = false;
+            }
+          }
+        }
+
+        _colSpanChanged(colSpan, headerCell, footerCell) {
+          if (headerCell) {
+            headerCell.colSpan = colSpan;
           }
           if (footerCell) {
-            footerCell.style.order = order;
+            footerCell.colSpan = colSpan;
           }
-          _rootColumns.forEach(function(column, index) {
-            column._order = order + ((index + 1) * scope);
+          // this.fire('property-changed', {path: 'colSpan', value: colSpan});
+        }
+
+
+        // TODO: Refactor the duplicate methods with DynamicColumnsBehavior.
+        _getChildColumns(el) {
+          return Polymer.dom(el).queryDistributedElements(
+              'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
+          );
+        }
+
+        _addNodeObserver() {
+          this._observer = Polymer.dom(this).observeNodes(info => {
+            const isColumnElement = node => {
+              return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
+            };
+            if (info.addedNodes.filter(isColumnElement).length > 0 ||
+              info.removedNodes.filter(isColumnElement).length > 0) {
+              this._rootColumns = this._getChildColumns(this);
+              this._childColumns = this._rootColumns;
+            }
           });
-
-          // this.fire('property-changed', {path: 'order', value: order});
         }
-      },
-
-      _reorderStatusChanged: function(reorderStatus, rootColumns) {
-        if (reorderStatus === undefined || rootColumns === undefined) {
-          return;
-        }
-
-        rootColumns.forEach(function(column) {
-          column._reorderStatus = reorderStatus;
-        });
-
-        // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
-      },
-
-      _resizableChanged: function(resizable, rootColumns) {
-        if (resizable === undefined || rootColumns === undefined) {
-          return;
-        }
-
-        rootColumns.forEach(function(column) {
-          column.resizable = resizable;
-        });
-
-        // this.fire('property-changed', {path: 'resizable', value: resizable});
-      },
-
-      _updateVisibleChildColumns: function(childColumns) {
-        this._visibleChildColumns = Array.prototype.filter.call(childColumns, function(col) {
-          return !col.hidden;
-        });
-      },
-
-      _childColumnsChanged: function(childColumns) {
-        if (!this._autoHidden && this.hidden) {
-          Array.prototype.forEach.call(childColumns, function(column) {
-            column.hidden = true;
-          });
-          this._updateVisibleChildColumns(childColumns);
-        }
-        // this.fire('property-changed', {path: '_childColumns', value: childColumns});
-      },
-
-      _updateFlexAndWidth: function(visibleChildColumns) {
-        if (visibleChildColumns.length) {
-          this._setWidth('calc(' + Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
-            return prev += ' + ' + (curr.width || '0px').replace('calc', '');
-          }, '').substring(3) + ')');
-        } else {
-          this._setWidth('0px');
-        }
-
-        this._setFlexGrow(Array.prototype.reduce.call(visibleChildColumns, function(prev, curr) {
-          return prev + curr.flexGrow;
-        }, 0));
-      },
-
-      _frozenChanged: function(childColumns, frozen, headerCell) {
-        if (childColumns === undefined || frozen === undefined) {
-          return;
-        }
-
-        if (headerCell) {
-          this._toggleAttribute('frozen', frozen, headerCell);
-        }
-
-        // Don’t propagate the default `false` value.
-        // if (frozen !== false) {
-          Array.prototype.forEach.call(childColumns, function(col) {
-            // Don’t unfreeze the nested frozen groups
-            // if (col.localName === 'vaadin-grid-column-group') {
-            //   col.frozen = col.frozen || frozen;
-            // } else {
-              col.frozen = frozen;
-            // }
-          });
-
-          // this.fire('property-changed', {path: 'frozen', value: frozen});
-        // }
-
-      },
-
-      _hiddenChanged: function(hidden) {
-        if (this._rootColumns && !this._preventHiddenCascade) {
-          this._ignoreVisibleChildColumns = true;
-          this._rootColumns.forEach(function(column) {
-            column.hidden = hidden;
-          });
-          this._ignoreVisibleChildColumns = false;
-        }
-
-        // this.fire('property-changed', {path: 'hidden', value: hidden});
-      },
-
-      _visibleChildColumnsChanged: function(visibleChildColumns) {
-        this._setColSpan(visibleChildColumns.length);
-
-        if (!this._ignoreVisibleChildColumns) {
-          if (visibleChildColumns.length === 0) {
-            this._autoHidden = this.hidden = true;
-          } else if (this.hidden && this._autoHidden) {
-            this._autoHidden = this.hidden = false;
-          }
-        }
-      },
-
-      _colSpanChanged: function(colSpan, headerCell, footerCell) {
-        if (headerCell) {
-          headerCell.colSpan = colSpan;
-        }
-        if (footerCell) {
-          footerCell.colSpan = colSpan;
-        }
-        // this.fire('property-changed', {path: 'colSpan', value: colSpan});
-      },
-
-
-      // TODO: Refactor the duplicate methods with DynamicColumnsBehavior.
-      _getChildColumns: function(el) {
-        return Polymer.dom(el).queryDistributedElements(
-            'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
-        );
-      },
-
-      _addNodeObserver: function() {
-        this._observer = Polymer.dom(this).observeNodes(function(info) {
-          var isColumnElement = function(node) {
-            return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
-          };
-          if (info.addedNodes.filter(isColumnElement).length > 0 ||
-            info.removedNodes.filter(isColumnElement).length > 0) {
-            this._rootColumns = this._getChildColumns(this);
-            this._childColumns = this._rootColumns;
-          }
-        }.bind(this));
       }
-    });
+
+      customElements.define(GridColumnGroupElement.is, GridColumnGroupElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.GridColumnGroupElement = GridColumnGroupElement;
+    }
   </script>
 </dom-module>
