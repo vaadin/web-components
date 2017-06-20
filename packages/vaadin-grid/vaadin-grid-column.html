@@ -236,11 +236,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.parentElement._columnPropChanged({detail: {path: 'flexGrow'}});
       }
 
-      this._allCells.forEach(cell => {
-        if (cell) {
-          cell.style.flexGrow = flexGrow;
-        }
-      });
+      this._allCells.forEach(cell => cell.style.flexGrow = flexGrow);
     }
 
     _widthChanged(width, headerCell, footerCell, cells) {
@@ -248,11 +244,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
       }
 
-      this._allCells.forEach(cell => {
-        if (cell) {
-          cell.style.width = width;
-        }
-      });
+      this._allCells.forEach(cell => cell.style.width = width);
     }
 
     _lastFrozenChanged(lastFrozen) {
@@ -340,11 +332,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentElement._columnPropChanged({detail: {path: 'frozen', value: frozen}}); // TODO: Decent APIs
         }
 
-        this._allCells.forEach((cell) => {
-          if (cell) {
-            this._toggleAttribute('frozen', frozen, cell);
-          }
-        });
+        this._allCells.forEach(cell => this._toggleAttribute('frozen', frozen, cell));
       }
 
       _templateChanged(template) {
@@ -363,28 +351,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentElement._columnPropChanged({detail: {path: 'hidden', value: hidden}}); // TODO: Decent APIs
         }
 
-        this._allCells.forEach((cell) => {
-          if (cell) {
-            this._toggleAttribute('hidden', hidden, cell);
-          }
-        });
+        this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
       }
 
       _orderChanged(order, headerCell, footerCell, cells) {
-        this._allCells.forEach((cell) => {
-          if (cell) {
-            cell.style.order = order;
-          }
-        });
+        this._allCells.forEach(cell => cell.style.order = order);
       }
 
       _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
-        this._allCells.forEach((cell) => {
-          if (cell) {
-            cell.setAttribute('reorder-status', reorderStatus);
-          }
-        });
-        // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
+        this._allCells.forEach(cell => cell.setAttribute('reorder-status', reorderStatus));
       }
 
       _resizableChanged(resizable) {
