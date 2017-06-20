@@ -4,24 +4,27 @@
   <meta charset="UTF-8">
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link href="../../vaadin-split-layout.html" rel="import">
-
-  <custom-style>
-    <style is="custom-style">
-      vaadin-split-layout {
-        height: 100px;
-        width: 200px;
-
-        --vaadin-split-layout-splitter: {
-          background: #000;
-          fill: #ff0;
-        };
-      }
-    </style>
-  </custom-style>
-
 </head>
 
 <body>
+  <dom-module id="vaadin-split-layout-style" theme-for="vaadin-split-layout">
+    <template>
+      <style>
+        :host {
+          height: 100px;
+          width: 200px;
+        }
+
+        [part=handle] {
+          color: #ff0;
+        }
+
+        [part=splitter] {
+          background: #000;
+        }
+      </style>
+    </template>
+  </dom-module>
 
   <vaadin-split-layout id="customized">
     <div style="width: 25%"></div>
@@ -30,5 +33,4 @@
       <div></div>
     </vaadin-split-layout>
   </vaadin-split-layout>
-
 </body>
