@@ -1,6 +1,7 @@
 <link rel="import" href="vaadin-scroller.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-mixin.html">
 <link rel="import" href="vaadin-grid-data-provider-mixin.html">
+<link rel="import" href="vaadin-grid-array-data-provider-mixin.html">
 <link rel="import" href="vaadin-grid-cell-click-mixin.html">
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-selection-mixin.html">
@@ -31,13 +32,14 @@
 <script>
   class VaadinGrid extends
     Vaadin.Grid.DataProviderMixin(
+    Vaadin.Grid.ArrayDataProviderMixin(
     Vaadin.Grid.DynamicColumnsMixin(
     Vaadin.Grid.CellClickMixin(
     Vaadin.Grid.ScrollMixin(
     Vaadin.Grid.SelectionMixin(
     Vaadin.Grid.SortMixin(
     Vaadin.Grid.ColumnReorderingMixin(
-    VaadinScroller))))))) {
+    VaadinScroller)))))))) {
 
     static get is() {
       return 'vaadin-grid';

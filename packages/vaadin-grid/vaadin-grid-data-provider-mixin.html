@@ -277,7 +277,9 @@
     }
 
     _flushItemsDebouncer() {
-      this._debouncerLoad.flush();
+      if (this._debouncerLoad) {
+        this._debouncerLoad.flush();
+      }
     }
 
     _pageSizeChanged(pageSize, oldPageSize) {
