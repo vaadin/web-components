@@ -2,6 +2,9 @@
   window.Vaadin = window.Vaadin || {};
   Vaadin.Grid = Vaadin.Grid || {};
 
+  /**
+   * @polymerMixin
+   */
   Vaadin.Grid.SortMixin = superClass => class SortMixin extends superClass {
     static get properties() {
       return {
