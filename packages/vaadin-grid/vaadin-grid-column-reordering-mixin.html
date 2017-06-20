@@ -215,20 +215,6 @@
       }
     }
 
-    _getCellContentByElement(element) {
-      let cellContent = element;
-      while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
-        cellContent = cellContent.parentElement;
-      }
-      if (cellContent) {
-        return cellContent;
-      }
-    }
-
-    _getCellByCellContent(cellContent) {
-      return cellContent.assignedSlot.parentElement;
-    }
-
     _swapColumnOrders(column1, column2) {
       var _order = column1._order;
       column1._order = column2._order;

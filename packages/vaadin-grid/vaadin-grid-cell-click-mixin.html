@@ -24,6 +24,19 @@
       }
     }
 
+    _getCellContentByElement(element) {
+      let cellContent = element;
+      while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
+        cellContent = cellContent.parentElement;
+      }
+      if (cellContent) {
+        return cellContent;
+      }
+    }
+
+    _getCellByCellContent(cellContent) {
+      return cellContent.assignedSlot.parentElement;
+    }
 
     // we need to listen to click instead of tap because on mobile safari, the
     // document.activeElement has not been updated (focus has not been shifted)
