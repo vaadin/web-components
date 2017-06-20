@@ -96,9 +96,9 @@
       }
 
       // Set order numbers to top-level columns
-      columnTree[0].forEach(function(column, index) {
+      columnTree[0].forEach((column, index) => {
         column._order = (index + 1) * this._orderBaseScope;
-      }, this);
+      });
     }
 
     _onDragStart(e) {
@@ -109,7 +109,7 @@
         return;
       }
 
-      var cell = this._getCellByCellContent(e.target);
+      const cell = this._getCellByCellContent(e.target);
       if (cell) {
         this.toggleAttribute('reordering', true);
         this._draggedColumn = cell._column;
@@ -127,9 +127,9 @@
     }
 
     _setSiblingsReorderStatus(column, status) {
-      Array.prototype.filter.call(Polymer.dom(Polymer.dom(column).parentNode).children, function(child) {
+      Array.prototype.filter.call(column.parentNode.children, child => {
         return /column/.test(child.localName) && this._isSwapAllowed(child, column);
-      }, this).forEach(function(sibling) {
+      }).forEach(sibling => {
         sibling._reorderStatus = status;
       });
     }
@@ -142,7 +142,7 @@
 
       // “dragover” can happen both on and inside <vaadin-grid-cell-content>,
       // so we look through the event path.
-      var cellContent = e.composedPath().filter(function(el) {
+      const cellContent = e.composedPath().filter(el => {
         return el.localName === 'vaadin-grid-cell-content';
       })[0];
       if (!cellContent) {
@@ -150,8 +150,8 @@
       }
 
       e.preventDefault();
-      var targetCell = this._getCellByCellContent(cellContent);
-      var targetColumn = this._getTargetColumn(targetCell, this._draggedColumn);
+      const targetCell = this._getCellByCellContent(cellContent);
+      const targetColumn = this._getTargetColumn(targetCell, this._draggedColumn);
 
       if (targetColumn &&
         this._isSwapAllowed(this._draggedColumn, targetColumn) &&
@@ -164,8 +164,8 @@
 
     _autoScroller() {
       if (this._lastDragClientX) {
-        var rightDiff = this._lastDragClientX - this.getBoundingClientRect().right + 50;
-        var leftDiff = this.getBoundingClientRect().left - this._lastDragClientX + 50;
+        const rightDiff = this._lastDragClientX - this.getBoundingClientRect().right + 50;
+        const leftDiff = this.getBoundingClientRect().left - this._lastDragClientX + 50;
 
         if (rightDiff > 0) {
           this.$.table.scrollLeft += rightDiff / 10;
@@ -195,18 +195,18 @@
 
     _isSwapAllowed(column1, column2) {
       if (column1 && column2) {
-        var differentColumns = column1 !== column2;
-        var sameParent = column1.parentElement === column2.parentElement;
-        var sameFrozen = column1.frozen === column2.frozen;
+        const differentColumns = column1 !== column2;
+        const sameParent = column1.parentElement === column2.parentElement;
+        const sameFrozen = column1.frozen === column2.frozen;
         return differentColumns && sameParent && sameFrozen;
       }
     }
 
     _isSwappableByPosition(targetColumn, clientX) {
-      var targetCell = Array.prototype.filter.call(Polymer.dom(this.$.header).querySelectorAll('.vaadin-grid-cell'), function(cell) {
+      const targetCell = Array.prototype.filter.call(this.$.header.querySelectorAll('.vaadin-grid-cell'), cell => {
         return cell._column === targetColumn;
       })[0];
-      var sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();
+      const sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();
 
       if (targetCell.getBoundingClientRect().left > sourceCellRect.left) {
         return clientX > targetCell.getBoundingClientRect().right - sourceCellRect.width;
@@ -216,7 +216,7 @@
     }
 
     _swapColumnOrders(column1, column2) {
-      var _order = column1._order;
+      const _order = column1._order;
       column1._order = column2._order;
       column2._order = _order;
       this._updateLastFrozen();
@@ -225,7 +225,7 @@
 
     _getTargetColumn(targetCell, draggedColumn) {
       if (targetCell && draggedColumn) {
-        var candidate = targetCell._column;
+        let candidate = targetCell._column;
         while (candidate.parentElement !== draggedColumn.parentElement && candidate !== this) {
           candidate = candidate.parentElement;
         }
