@@ -8,6 +8,7 @@
 <link rel="import" href="vaadin-grid-sort-mixin.html">
 <link rel="import" href="vaadin-grid-filter-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
+<link rel="import" href="vaadin-grid-column-resizing-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <link rel="import" href="vaadin-grid-styles.html">
@@ -41,7 +42,8 @@
     Vaadin.Grid.SortMixin(
     Vaadin.Grid.FilterMixin(
     Vaadin.Grid.ColumnReorderingMixin(
-    VaadinScroller))))))))) {
+    Vaadin.Grid.ColumnResizingMixin(
+    VaadinScroller)))))))))) {
 
     static get is() {
       return 'vaadin-grid';
@@ -55,6 +57,7 @@
 
     _createScrollerRow() {
       const row = document.createElement('tr');
+      row.classList.add('vaadin-grid-row');
       this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
       return row;
     }
@@ -146,8 +149,13 @@
 
       // TODO: DRY
       while (this.$.header.children.length < columnTree.length) {
-        this.$.header.appendChild(document.createElement('tr'));
-        this.$.footer.appendChild(document.createElement('tr'));
+        const headerRow = document.createElement('tr');
+        headerRow.classList.add('vaadin-grid-row');
+        this.$.header.appendChild(headerRow);
+
+        const footerRow = document.createElement('tr');
+        footerRow.classList.add('vaadin-grid-row');
+        this.$.footer.appendChild(footerRow);
       }
       while (this.$.header.children.length > columnTree.length) {
         this.$.header.removeChild(this.$.header.firstElementChild);

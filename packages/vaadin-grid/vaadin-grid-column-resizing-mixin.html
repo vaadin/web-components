@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="vaadin-grid-column-resizing-styles">
+  <template>
+    <style>
+      .vaadin-grid-column-resize-handle {
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
+        position: absolute;
+        right: 0;
+        height: 100%;
+        cursor: col-resize;
+        z-index: 1;
+      }
+
+      .vaadin-grid-column-resize-handle::before {
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 35px;
+        transform: translateX(-50%);
+      }
+
+      [lastcolumn] .vaadin-grid-column-resize-handle::before,
+      [last-frozen] .vaadin-grid-column-resize-handle::before {
+        width: 18px;
+        transform: translateX(-100%);
+      }
+
+      #scroller[column-resizing] {
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+  window.Vaadin.Grid = window.Vaadin.Grid || {};
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.Grid.ColumnResizingMixin = superClass => class ColumnResizingMixin extends Polymer.GestureEventListeners(superClass) {
+
+    ready() {
+      super.ready();
+      Polymer.Gestures.addListener(this.$.header, 'track', this._onHeaderTrack.bind(this));
+    }
+
+    _onHeaderTrack(e) {
+      const handle = e.target;
+      if (handle.classList.contains('vaadin-grid-column-resize-handle')) {
+        const cell = handle.parentElement;
+        let column = cell._column;
+
+        this.$.scroller.setAttribute('column-resizing', '');
+
+        // Get the target column to resize
+        if (column.localName === 'vaadin-grid-column-group') {
+          column = Array.prototype.slice.call(column._childColumns, 0)
+          .sort(function(a, b) {
+            return a._order - b._order;
+          })
+          .filter(function(column) {
+            return !column.hidden;
+          }).pop();
+        }
+
+        const columnRowCells = Array.from(this.$.header.querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'));
+        var targetCell = columnRowCells.filter(cell => cell._column === column)[0];
+        // Resize the target column
+        if (targetCell.offsetWidth) {
+          var style = window.getComputedStyle(targetCell._content);
+          var minWidth = 10 + parseInt(style.paddingLeft) + parseInt(style.paddingRight);
+          column.width = Math.max(minWidth, targetCell.offsetWidth + e.detail.x - targetCell.getBoundingClientRect().right) + 'px';
+          column.flexGrow = 0;
+        }
+        // Fix width and flex-grow for all preceding columns
+        columnRowCells
+          .sort(
+            function(a, b) {
+              return a._column._order - b._column._order;
+            })
+          .forEach(function(cell, index, array) {
+            if (index < array.indexOf(targetCell)) {
+              cell._column.width = cell.offsetWidth + 'px';
+              cell._column.flexGrow = 0;
+            }
+          });
+
+        if (e.detail.state === 'end') {
+          this.$.scroller.removeAttribute('column-resizing');
+        }
+      }
+    }
+
+  };
+</script>

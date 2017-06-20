@@ -95,7 +95,7 @@ The `class` attribute is used to differentiate header and footer templates.
             '_colSpanChanged(colSpan, _headerCell, _footerCell)',
             '_orderChanged(_order, _headerCell, _footerCell, _rootColumns)',
             '_reorderStatusChanged(_reorderStatus, _rootColumns)',
-            '_resizableChanged(resizable, _rootColumns)'
+            '_resizableChanged(resizable, _headerCell, _rootColumns)'
           ];
         }
 
@@ -187,7 +187,9 @@ The `class` attribute is used to differentiate header and footer templates.
           // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
         }
 
-        _resizableChanged(resizable, rootColumns) {
+        _resizableChanged(resizable, headerCell, rootColumns) {
+          super._resizableChanged(resizable, headerCell);
+          
           if (resizable === undefined || rootColumns === undefined) {
             return;
           }

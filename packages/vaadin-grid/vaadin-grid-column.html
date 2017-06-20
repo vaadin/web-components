@@ -259,7 +259,23 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-  }
+    _resizableChanged(resizable, headerCell) {
+      if (headerCell) {
+        [headerCell].concat(this._emptyCells).forEach(cell => {
+          if (cell) {
+            if (resizable) {
+              const handle = document.createElement('div');
+              handle.classList.add('vaadin-grid-column-resize-handle');
+              cell.appendChild(handle);
+            } else if (this._resizeHandle) {
+              cell.removeChild(headerCell.querySelector('.vaadin-grid-column-resize-handle'));
+            }
+          }
+        });
+      }
+    }
+
+  };
 </script>
 
 <dom-module id="vaadin-grid-column">
@@ -323,7 +339,7 @@ This program is available under Apache License Version 2.0, available at https:/
           '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
           '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
           '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-          '_resizableChanged(resizable)'
+          '_resizableChanged(resizable, _headerCell)'
         ];
       }
 
@@ -361,11 +377,6 @@ This program is available under Apache License Version 2.0, available at https:/
       _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
         this._allCells.forEach(cell => cell.setAttribute('reorder-status', reorderStatus));
       }
-
-      _resizableChanged(resizable) {
-        // this.fire('property-changed', {path: 'resizable', value: resizable});
-      }
-
 
     }
 
