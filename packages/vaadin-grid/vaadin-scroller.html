@@ -43,26 +43,9 @@
 
     _sizeChanged(size) {
       this.items = this.items || {length: size};
-      if (!this._physicalItems) {
-        this._virtualStart = 0;
-        this._physicalTop = 0;
-        this._physicalIndexForKey = {};
-        this._firstVisibleIndexVal = null;
-        this._lastVisibleIndexVal = null;
-        this._physicalCount = this._physicalCount || 0;
-        this._physicalItems = this._physicalItems || [];
-        this._physicalSizes = this._physicalSizes || [];
-        this._physicalStart = 0;
-        if (this._scrollTop > this._scrollOffset) {
-          this._resetScrollPosition(0);
-        }
-      }
-      this._virtualCount = size ? size : 0;
+      super._itemsChanged({path:"items"});
 
-      // The following if so that scroll position would get updated
-      // after size is reduced (if necessary)
-      this._update();
-      setTimeout(this._update.bind(this), 10);
+      // TODO: Handle dynamic size decrease
     }
 
 
@@ -83,6 +66,7 @@
       content.setAttribute('slot', 'foo-bar');
       content.setAttribute('slot', slot);
 
+      Polymer.RenderStatus.afterNextRender(this, () => this.notifyResize());
       return physicalItems;
     }
 
@@ -121,23 +105,6 @@
 
     _itemsChanged() {
       // Ignore
-    }
-
-
-    // update() {
-    //   this._update();
-    // }
-
-    ready() {
-      super.ready();
-
-      // TODO: This is pretty awkward
-      // this._increasePoolIfNeeded(25);
-      // this._render();
-      requestAnimationFrame(() => {
-        this.updateViewportBoundaries();
-        requestAnimationFrame(this._render.bind(this));
-      });
     }
 
   }

@@ -28,7 +28,7 @@
 
     ready() {
       super.ready();
-      this.addEventListener('template-instance-changed', '_templateInstancesChangedSelection');
+      this.addEventListener('template-instance-changed', this._templateInstanceChangedSelection.bind(this));
     }
 
     _templateInstanceChangedSelection(e) {

@@ -237,7 +237,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _flexGrowChanged(flexGrow, headerCell, footerCell, cells) {
-      if (this.parentElement._columnPropChanged) {
+      if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged({detail: {path: 'flexGrow'}});
       }
 
@@ -249,7 +249,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _widthChanged(width, headerCell, footerCell, cells) {
-      if (this.parentElement._columnPropChanged) {
+      if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
       }
 
@@ -359,7 +359,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _frozenChanged(frozen, headerCell, footerCell, cells) {
-        if (this.parentElement._columnPropChanged) {
+        if (this.parentElement && this.parentElement._columnPropChanged) {
           this.parentElement._columnPropChanged({detail: {path: 'frozen', value: frozen}}); // TODO: Decent APIs
         }
 
