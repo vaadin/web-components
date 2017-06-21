@@ -137,7 +137,7 @@
         beforeEach(() => splitLayout = fixture('split-layout-with-custom-handle'));
 
         it('has custom handle element', done => {
-          splitLayout.async(() => {
+          Polymer.Async.microTask.run(() => {
             var slot = splitLayout.$.splitter.firstElementChild;
             var children = slot.assignedNodes({flatten: true});
             expect(children[0].localName).to.equal('div');
@@ -151,7 +151,7 @@
         beforeEach(() => splitLayout = fixture('split-layout'));
 
         it('has overflow visible', done => {
-          splitLayout.async(() => {
+          Polymer.Async.microTask.run(() => {
             expect(getComputedStyle(splitLayout.$.splitter).overflow).to.equal('visible');
             done();
           }, 1);
