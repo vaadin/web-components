@@ -36,7 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: auto;
       }
 
-      [part=splitter] {
+      [part="splitter"] {
         flex: none;
         position: relative;
         z-index: 1;
@@ -46,33 +46,33 @@ This program is available under Apache License Version 2.0, available at https:/
         background: #ccc;
       }
 
-      :host(:not([vertical])) > [part=splitter] {
+      :host(:not([vertical])) > [part="splitter"] {
         cursor: ew-resize;
       }
 
-      :host([vertical]) > [part=splitter] {
+      :host([vertical]) > [part="splitter"] {
         cursor: ns-resize;
       }
 
-      [part=handle],
-      [part=splitter] ::slotted([slot=handle]) {
+      [part="handle"],
+      [part="splitter"] ::slotted([slot="handle"]) {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
 
-      [part=handle] {
+      [part="handle"] {
         font-family: 'vaadin-split-layout-icons';
         font-size: 40px;
         color: white;
       }
 
-      [part=handle]::after {
+      [part="handle"]::after {
         content: "\e900";
       }
 
-      :host([vertical]) [part=handle]::after {
+      :host([vertical]) [part="handle"]::after {
         content: "\e901";
       }
     </style>

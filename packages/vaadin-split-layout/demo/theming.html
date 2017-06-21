@@ -23,22 +23,22 @@
         <dom-module id="vaadin-split-layout-styles" theme-for="vaadin-split-layout">
           <template>
             <style>
-              :host(:not([vertical])) [part=handle]::after {
+              :host(:not([vertical])) [part="handle"]::after {
                 content: "\e902";
                 color: #222;
                 text-shadow: 1px 1px #fff;
               }
 
-              :host([vertical]) [part=handle]::after {
+              :host([vertical]) [part="handle"]::after {
                 content: "\e903";
               }
 
-              :host(:not([vertical])) [part=splitter] {
+              :host(:not([vertical])) [part="splitter"] {
                 background: #535353;
                 width: 18px;
               }
 
-              :host(:not([vertical])) ::slotted([slot=primary]) {
+              :host(:not([vertical])) ::slotted([slot="primary"]) {
                 background: #838383;
                 color: #fff;
               }
