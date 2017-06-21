@@ -84,19 +84,19 @@ The `class` attribute is used to differentiate header and footer templates.
         }
 
         static get observers() {
-          return [
+          const ownObservers = [
             '_updateVisibleChildColumns(_childColumns)',
             '_childColumnsChanged(_childColumns)',
-            '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-            '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
-            '_frozenChanged(_childColumns, frozen, _headerCell)',
-            '_hiddenChanged(hidden)',
+            '_groupFrozenChanged(frozen, _rootColumns)',
+            '_groupHiddenChanged(hidden, _rootColumns)',
             '_visibleChildColumnsChanged(_visibleChildColumns)',
             '_colSpanChanged(colSpan, _headerCell, _footerCell)',
-            '_orderChanged(_order, _headerCell, _footerCell, _rootColumns)',
-            '_reorderStatusChanged(_reorderStatus, _rootColumns)',
-            '_resizableChanged(resizable, _headerCell, _rootColumns)'
+            '_groupOrderChanged(_order, _rootColumns)',
+            '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
+            '_groupResizableChanged(resizable, _rootColumns)'
           ];
+
+          return super.observers.concat(ownObservers);
         }
 
         // listeners: {
@@ -136,7 +136,7 @@ The `class` attribute is used to differentiate header and footer templates.
           }
         }
 
-        _orderChanged(order, headerCell, footerCell, rootColumns) {
+        _groupOrderChanged(order, rootColumns) {
           if (order && rootColumns) {
             // The parent column order number cascades downwards to it's children
             // so that the resulting order numbering constructs as follows:
@@ -161,12 +161,6 @@ The `class` attribute is used to differentiate header and footer templates.
               });
             }
 
-            [headerCell, footerCell].forEach(cell => {
-              if (cell) {
-                cell.style.order = order;
-              }
-            });
-
             _rootColumns.forEach((column, index) => {
               column._order = order + ((index + 1) * scope);
             });
@@ -175,7 +169,7 @@ The `class` attribute is used to differentiate header and footer templates.
           }
         }
 
-        _reorderStatusChanged(reorderStatus, rootColumns) {
+        _groupReorderStatusChanged(reorderStatus, rootColumns) {
           if (reorderStatus === undefined || rootColumns === undefined) {
             return;
           }
@@ -187,10 +181,8 @@ The `class` attribute is used to differentiate header and footer templates.
           // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
         }
 
-        _resizableChanged(resizable, headerCell, rootColumns) {
-          super._resizableChanged(resizable, headerCell);
-          
-          if (resizable === undefined || rootColumns === undefined) {
+        _groupResizableChanged(resizable, rootColumns) {
+          if (rootColumns === undefined) {
             return;
           }
 
@@ -235,18 +227,15 @@ The `class` attribute is used to differentiate header and footer templates.
           }, 0));
         }
 
-        _frozenChanged(childColumns, frozen, headerCell) {
-          if (childColumns === undefined || frozen === undefined) {
+        _groupFrozenChanged(frozen, rootColumns) {
+          if (rootColumns === undefined || frozen === undefined) {
             return;
           }
 
-          if (headerCell) {
-            this._toggleAttribute('frozen', frozen, headerCell);
-          }
 
           // Don’t propagate the default `false` value.
           // if (frozen !== false) {
-            Array.prototype.forEach.call(childColumns, col => {
+            Array.prototype.forEach.call(rootColumns, col => {
               // Don’t unfreeze the nested frozen groups
               // if (col.localName === 'vaadin-grid-column-group') {
               //   col.frozen = col.frozen || frozen;
@@ -260,10 +249,10 @@ The `class` attribute is used to differentiate header and footer templates.
 
         }
 
-        _hiddenChanged(hidden) {
-          if (this._rootColumns && !this._preventHiddenCascade) {
+        _groupHiddenChanged(hidden, rootColumns) {
+          if (rootColumns && !this._preventHiddenCascade) {
             this._ignoreVisibleChildColumns = true;
-            this._rootColumns.forEach(column => {
+            rootColumns.forEach(column => {
               column.hidden = hidden;
             });
             this._ignoreVisibleChildColumns = false;

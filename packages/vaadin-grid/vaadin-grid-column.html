@@ -76,11 +76,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _reorderStatus: Boolean,
 
-        _cells: Array,
-
         _emptyCells: Array,
 
         _headerCell: Object,
+
+        _footerCell: Object,
 
         _grid: Object
       };
@@ -90,11 +90,14 @@ This program is available under Apache License Version 2.0, available at https:/
       return [
         '_footerTemplateChanged(footerTemplate)',
         '_headerTemplateChanged(headerTemplate)',
+        '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
+        '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
         '_stampHeaderTemplate(headerTemplate, _headerCell)',
         '_stampFooterTemplate(footerTemplate, _footerCell)',
-        '_emptyCellsChanged(_emptyCells, _emptyCells.*)'
+        '_emptyCellsChanged(_emptyCells, _emptyCells.*)',
+        '_resizableChanged(resizable, _headerCell)'
       ]
     }
 
@@ -241,6 +244,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._allCells.forEach(cell => cell.style.flexGrow = flexGrow);
     }
 
+    _orderChanged(order, headerCell, footerCell, cells) {
+      this._allCells.forEach(cell => cell.style.order = order);
+    }
+
     _widthChanged(width, headerCell, footerCell, cells) {
       if (this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
@@ -335,6 +342,8 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Object
           },
 
+          _cells: Array
+
         };
         return Object.assign(ownProperties, super.properties);
       }
@@ -342,13 +351,10 @@ This program is available under Apache License Version 2.0, available at https:/
       static get observers() {
         return [
           '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-          '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
           '_templateChanged(template)',
           '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
           '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
-          '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
-          '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-          '_resizableChanged(resizable, _headerCell)'
+          '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)'
         ];
       }
 
@@ -377,10 +383,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
-      }
-
-      _orderChanged(order, headerCell, footerCell, cells) {
-        this._allCells.forEach(cell => cell.style.order = order);
       }
 
       _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
