@@ -1,0 +1,40 @@
+{
+  "name": "vaadin-overlay",
+  "version": "0.1.0",
+  "description": "vaadin-overlay",
+  "main": "vaadin-overlay.html",
+  "repository": "vaadin/vaadin-overlay",
+  "keywords": [
+    "Vaadin",
+    "vaadin-overlay",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-overlay/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "eslint": "^3.11.1",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^2.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^3.0.1",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-stylelint": "^3.7.0",
+    "lighthouse": "~1.6.5",
+    "polymer-cli": "^0.18.0",
+    "polyserve": "^0.18.0",
+    "stylelint": "7.10.1",
+    "stylelint-config-vaadin": "latest",
+    "web-component-tester": "^6.0.0",
+    "yargs": "latest"
+  }
+}
