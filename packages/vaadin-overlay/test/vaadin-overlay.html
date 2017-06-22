@@ -4,28 +4,76 @@
   <meta charset="UTF-8">
   <title>vaadin-overlay tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-overlay.html">
 </head>
 
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-overlay></vaadin-overlay>
+      <div>
+        <div id="parent">
+          <vaadin-overlay>
+            <template>content</template>
+          </vaadin-overlay>
+        </div>
+      </div>
     </template>
   </test-fixture>
 
   <script>
-    describe('sample test', function() {
-      var element;
+    describe('overlay', function() {
+      var overlay, parent;
 
       beforeEach(function() {
-        element = fixture('default');
+        parent = fixture('default').children[0];
+        overlay = parent.children[0];
+        overlay._observer.flush();
+        overlay.opened = true;
       });
 
-      it('should pass', function() {
-        expect(element.localName).to.be.equal('vaadin-overlay');
+      it('should move under body when open', () => {
+        expect(overlay.parentElement).to.eql(document.body);
       });
 
+      it('should prevent clicking elements outside overlay', () => {
+        expect(document.body.style.pointerEvents).to.eql('none');
+      });
+
+      it('should move back to original place after closing', () => {
+        overlay.opened = false;
+
+        expect(overlay.parentElement).to.eql(parent);
+      });
+
+      it('should stamp contents inside shadow root', () => {
+        expect(overlay.root.textContent).to.contain('content');
+      });
+
+      it('should close on esc', () => {
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should close on outside click', () => {
+        parent.click();
+
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should prevent closing the overlay when preventing vaadin-overlay-cancel', done => {
+        overlay.addEventListener('vaadin-overlay-cancel', e =>  {
+          e.preventDefault();
+
+          setTimeout(() => {
+            expect(overlay.opened).to.be.true;
+            done();
+          }, 1);
+        });
+
+        parent.click();
+      });
     });
   </script>
 </body>

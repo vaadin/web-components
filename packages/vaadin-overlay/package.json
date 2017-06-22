@@ -36,5 +36,10 @@
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.0.0",
     "yargs": "latest"
+  },
+  "dependencies": {
+    "gemini": "^4.19.3",
+    "gemini-polyserve": "^1.0.0",
+    "gemini-sauce": "^1.0.1"
   }
 }
