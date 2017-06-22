@@ -37,11 +37,6 @@
           menu = fixture('default');
         });
 
-        function unwrapIfNeeded(element) {
-          const isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
-          return isWrapped ? window.unwrap(element) : element;
-        }
-
         describe('selection', () => {
 
           it('should close on item tap', done => {

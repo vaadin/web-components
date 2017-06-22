@@ -393,7 +393,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
               // FIXME: Nasty hack
               requestAnimationFrame(() => {
-                this.$.overlay.style.height = Math.min(this.$.overlay.offsetHeight, window.innerHeight - this.$.overlay.getBoundingClientRect().top) + 'px';
+                this.$.overlay.style.height =
+                  Math.min(this.$.overlay.offsetHeight, window.innerHeight - this.$.overlay.getBoundingClientRect().top) + 'px';
               });
 
               this._setOpened(true);
