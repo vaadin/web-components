@@ -105,6 +105,11 @@
         z-index: 2;
       }
 
+      #outerscroller {
+        /* Needed for Android Chrome */
+        z-index: 0;
+      }
+
       [no-scrollbars]:not([safari]) #outerscroller,
       [no-scrollbars][safari] #table {
         overflow: hidden;
