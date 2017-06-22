@@ -203,21 +203,6 @@
             });
           });
 
-          // TODO: Fix here or add to overlay tests
-          // it('should close on backdrop contextmenu', done => {
-          //   listenOnce(menu, 'opened-changed', () => {
-          //     expect(menu.opened).to.eql(false);
-          //     done();
-          //   });
-          //
-          //   const e = new CustomEvent('contextmenu', {
-          //     cancelable: true,
-          //     bubbles: true
-          //   });
-          //   menu.$.overlay.backdropElement.dispatchEvent(e);
-          //   expect(e.defaultPrevented).to.be.true;
-          // });
-
           it('should close on `click`', () => {
             menu.$.overlay.click();
 

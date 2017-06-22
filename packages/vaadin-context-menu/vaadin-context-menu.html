@@ -6,21 +6,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
 <link rel="import" href="vaadin-contextmenu-event.html">
-<link rel="import" href="vaadin-overlay.html">
 <link rel="import" href="vaadin-device-detector.html">
 
 <dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-overlay">
   <template>
     <style include="vaadin-overlay-default-theme">
-      :host(.vaadin-context-menu-overlay:not([phone])) {
+      :host(.vaadin-context-menu-overlay:not([with-backdrop])) {
         box-shadow:
           0 6px 10px 0 rgba(0, 0, 0, 0.14),
           0 1px 18px 0 rgba(0, 0, 0, 0.12),
           0 3px 5px -1px rgba(0, 0, 0, 0.4);
       }
 
-      :host(.vaadin-context-menu-overlay[phone]) {
+      :host(.vaadin-context-menu-overlay[with-backdrop]) {
         width: 100vw;
         height: 100vh;
         padding: 24px;
@@ -32,21 +32,10 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: flex-end;
       }
 
-      :host(.vaadin-context-menu-overlay[phone]) [part="content"] {
+      :host(.vaadin-context-menu-overlay[with-backdrop]) [part="content"] {
         /* Ideally should be 100vh but iOS phone addr-bar covers view port */
         max-height: 80vh;
         width: 100%;
-      }
-
-      :host(.vaadin-context-menu-overlay[phone][opened])::before {
-        z-index: -1;
-        content: "";
-        background: rgba(0, 0, 0, 0.5);
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
       }
     </style>
   </template>
@@ -67,7 +56,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-overlay id="overlay"
         class="vaadin-context-menu-overlay"
         on-opened-changed="_onOverlayOpened"
-        phone$="[[_phone]]">
+        with-backdrop$="[[_phone]]">
     </vaadin-overlay>
   </template>
   <script>
