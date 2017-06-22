@@ -4,9 +4,11 @@
 
 A Web Component for high quality charts.
 
-## Demo
+## Relevant links
 
-https://vaadin.com/charts-for-polymer
+- **Product page** https://vaadin.com/charts
+- **Demo** https://demo.vaadin.com/vaadin-charts
+- **Trial license** https://vaadin.com/pro/licenses
 
 ## Overview of the repository
 
