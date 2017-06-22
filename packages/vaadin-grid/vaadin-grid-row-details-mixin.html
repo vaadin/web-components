@@ -50,7 +50,7 @@
 
     static get observers() {
       return [
-        '_expandedItemsChanged(expandedItems.*, dataProvider)'
+        '_expandedItemsChanged(expandedItems.*, dataProvider, _rowDetailsTemplate)'
       ];
     }
 
@@ -65,8 +65,8 @@
       }
     }
 
-    _expandedItemsChanged(changeRecord, dataProvider) {
-      if (changeRecord === undefined || dataProvider === undefined) {
+    _expandedItemsChanged(changeRecord, dataProvider, rowDetailsTemplate) {
+      if (dataProvider === undefined || !rowDetailsTemplate) {
         return;
       }
 
@@ -77,11 +77,12 @@
 
       this._flushItemsDebouncer();
 
-      if (this._physicalItems) {
+      if (this._lastExpandedItems && this._physicalItems) {
         this._physicalItems.forEach(this._toggleDetailsCell, this);
+        this._render();
       }
 
-      this._render();
+      this._lastExpandedItems = this.expandedItems;
     }
 
     _configureDetailsCell(cell) {
