@@ -74,34 +74,52 @@
       const cellsFragment = document.createDocumentFragment();
       const contentsFragment = document.createDocumentFragment();
 
-      row.innerHTML = '';
-      columns.forEach((column, index) => {
+      function allocateCellContent() {
         // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
         // {
           const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
-          const id = 'vaadin-grid-cell-content-' + contentId;
+          const slotName = 'vaadin-grid-cell-content-' + contentId;
 
 
           const cellContent = document.createElement('vaadin-grid-cell-content');
-          cellContent.setAttribute('slot' , id);
+          cellContent.setAttribute('slot' , slotName);
           contentsFragment.appendChild(cellContent);
+          return {cellContent, slotName};
         // }
+      }
 
+      function createCellWithSlot(slotName) {
         const cell = document.createElement('td');
         cell.classList.add('vaadin-grid-cell');
-        cell._content = cellContent;
-        cell._column = column;
 
         const slot = document.createElement('slot');
-        slot.setAttribute('name', id);
+        slot.setAttribute('name', slotName);
         cell.appendChild(slot);
-        // cellsFragment.appendChild(cell)
+
+        return cell;
+      }
+
+      row.innerHTML = '';
+      columns.forEach((column, index) => {
+        let {cellContent, slotName} = allocateCellContent();
+        const cell = createCellWithSlot(slotName);
+        cell._content = cellContent;
+        cell._column = column;
         row.appendChild(cell);
 
         column._cells = column._cells || [];
         if (templateName === 'template') {
-
           column._cells.push(cell);
+
+          if (index === columns.length - 1 && this._rowDetailsTemplate) {
+            // Add details cell as last cell to body rows
+            let {cellContent, slotName} = allocateCellContent();
+            const detailsCell = createCellWithSlot(slotName);
+            detailsCell._content = cellContent;
+            this._configureDetailsCell(detailsCell);
+            row.appendChild(detailsCell);
+          }
+
           if (column.notifyPath) {
             column.notifyPath('_cells.*', column._cells); // TODO: This is really heavy, batch/debounce it
           }
@@ -120,9 +138,8 @@
             column._emptyCells = column._emptyCells || [];
             column._emptyCells.push(cell);
           }
-       }
+        }
       });
-
 
       // row.appendChild(cellsFragment);
 
@@ -185,6 +202,9 @@
           // TODO: selected
         }
       });
+      if (this._rowDetailsTemplate) {
+        this._toggleDetailsCell(row, item);
+      }
       // row.selected = this._isSelected(item);
       // row.expanded = this._isExpanded(item);
       // row.active = item !== null && item == this.activeItem;

@@ -74,8 +74,13 @@
         width: 100%;
       }
 
-      .vaadin-grid-cell:not([detailscell]) {
+      .vaadin-grid-cell:not(.vaadin-grid-details-cell) {
         position: relative;
+      }
+
+      .vaadin-grid-details-cell {
+        position: absolute;
+        bottom: 0;
       }
 
       .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {

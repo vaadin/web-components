@@ -42,20 +42,27 @@
           value: function() {
             return [];
           }
-        }
+        },
+
+        _rowDetailsTemplate: Object
       };
     }
 
     static get observers() {
       return [
-        '_expandedItemsChanged(expandedItems.*, dataProvider)',
-        '_rowDetailsTemplateChanged(_rowDetailsTemplate)'
+        '_expandedItemsChanged(expandedItems.*, dataProvider)'
       ];
     }
 
     ready() {
       super.ready();
-      this.addEventListener('template-instance-changed', this._templateInstanceChangedExpanded);
+      this._rowDetailsTemplate = this.querySelector('template.row-details');
+      if (this._rowDetailsTemplate) {
+        var templatizer = new vaadin.elements.grid.Templatizer();
+        templatizer.dataHost = this.dataHost;
+        templatizer.template = this._rowDetailsTemplate;
+        this._rowDetailsTemplate.templatizer = templatizer;
+      }
     }
 
     _expandedItemsChanged(changeRecord, dataProvider) {
@@ -70,30 +77,37 @@
 
       this._flushItemsDebouncer();
 
-      // TODO: Make this work again and render the details row somehow.
-      // if (this._physicalItems) {
-      //   this._physicalItems.forEach(function(row) {
-      //     row.expanded = this._isExpanded(row.item);
-      //   }, this);
-      // }
+      if (this._physicalItems) {
+        this._physicalItems.forEach(this._toggleDetailsCell, this);
+      }
+
+      this._render();
     }
 
-    _rowDetailsTemplateChanged(rowDetailsTemplate) {
-      var templatizer = new vaadin.elements.grid.Templatizer();
-      templatizer.dataHost = this.dataHost;
-      templatizer._instanceProps = {
-        expanded: true,
-        index: true,
-        item: true,
-        selected: true
-      };
+    _configureDetailsCell(cell) {
+      cell.classList.add('vaadin-grid-details-cell');
+      // Freeze the details cell, so that it does not scroll horizontally
+      // with the normal cells. This way it looks less weird.
+      cell.setAttribute('frozen', '');
+      // Stamp the template
+      cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
+      cell._content.appendChild(cell._instance.root);
+    }
 
-      // row details templatizer needs to be attached so that `item-changed` and
-      // `template-instance-changed` events propagate to grid.
-      this.root.appendChild(templatizer);
-
-      templatizer.template = rowDetailsTemplate;
-      rowDetailsTemplate.templatizer = templatizer;
+    _toggleDetailsCell(row, item) {
+      Array.from(row.children).forEach((cell) => {
+        if (cell.matches('.vaadin-grid-details-cell')) {
+          const detailsHidden = !this._isExpanded(item);
+          if (cell.hidden !== detailsHidden) {
+            cell.hidden = detailsHidden;
+            if (detailsHidden) {
+              row.style.removeProperty('padding-bottom');
+            } else {
+              row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+            }
+          }
+        }
+      });
     }
 
     _isExpanded(item) {
@@ -126,19 +140,6 @@
         this.expandItem(instance.item);
       } else {
         this.collapseItem(instance.item);
-      }
-    }
-
-    _templateInstanceChangedExpanded(e) {
-      if (e.detail.prop === 'expanded') {
-        if (e.detail.value) {
-          this.expandItem(e.detail.inst.item);
-        } else {
-          this.collapseItem(e.detail.inst.item);
-        }
-
-        // stop this internal event from propagating outside.
-        e.stopPropagation();
       }
     }
   };
