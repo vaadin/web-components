@@ -82,7 +82,27 @@
         scrolling: {
           type: Boolean,
           reflectToAttribute: true
+        },
+
+        _noScrollbars: {
+          type: Boolean,
+          value: function() {
+            // Create the measurement node
+            var scrollDiv = document.createElement('div');
+            scrollDiv.style.width = '100px';
+            scrollDiv.style.height = '100px';
+            scrollDiv.style.overflow = 'scroll';
+            scrollDiv.style.position = 'absolute';
+            scrollDiv.style.top = '-9999px';
+            document.body.appendChild(scrollDiv);
+            // Get the scrollbar width
+            var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+            // Delete the DIV
+            document.body.removeChild(scrollDiv);
+            return scrollbarWidth === 0;
+          }
         }
+
       };
     }
 
@@ -165,6 +185,8 @@
             this.scrolling = false;
             this._reorderRows();
           });
+
+      this.$.outerscroller.syncOuterScroller();
     }
 
     // correct order needed for preserving correct tab order between cell contents.

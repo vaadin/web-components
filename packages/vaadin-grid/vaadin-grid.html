@@ -11,19 +11,27 @@
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column-resizing-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
-
+<link rel="import" href="vaadin-grid-outer-scroller.html">
 <link rel="import" href="vaadin-grid-styles.html">
 
 <dom-module id="vaadin-grid">
   <template>
     <style include="vaadin-grid-styles"></style>
 
-    <div id="scroller">
+    <div id="scroller" no-scrollbars$="[[_noScrollbars]]" safari$="[[_safari]]">
       <table id="table">
         <thead id="header"></thead>
         <tbody id="items"></tbody>
         <tfoot id="footer"></tfoot>
       </table>
+
+      <vaadin-grid-outer-scroller id="outerscroller"
+          scroll-target="[[scrollTarget]]"
+          scroll-handler="[[_this]]"
+          ios$="[[_ios]]"
+          scrolling$="[[scrolling]]">
+        <div id="outersizer" style$="top: [[_estScrollHeight]]px"></div>
+      </vaadin-grid-outer-scroller>
     </div>
 
     <!-- The template needs at least one slot or else shady doesn't distribute -->
@@ -55,6 +63,23 @@
       return [
         '_columnTreeChanged(_columnTree, _columnTree.*)',
       ]
+    }
+
+    static get properties() {
+      return {
+
+        _safari: {
+          type: Boolean,
+          value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        },
+
+        _this: {
+          value: function() {
+            return this;
+          }
+        }
+
+      }
     }
 
     _createScrollerRow() {
@@ -188,6 +213,9 @@
       Array.from(this.$.footer.children).forEach((footerRow, index) => {
         this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footerTemplate', index === 0);
       });
+
+      // Sizer row
+      this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1]);
 
     }
 

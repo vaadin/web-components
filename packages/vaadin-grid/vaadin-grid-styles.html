@@ -104,6 +104,40 @@
       [frozen] {
         z-index: 2;
       }
+
+      [no-scrollbars]:not([safari]) #outerscroller,
+      [no-scrollbars][safari] #table {
+        overflow: hidden;
+      }
+
+      /* TODO: Sizer styles, relocate */
+      #outersizer {
+        display: flex;
+        position: relative;
+        width: 100%;
+        visibility: hidden;
+      }
+
+      #outersizer .vaadin-grid-details-cell {
+        display: none;
+      }
+
+      #outersizer .vaadin-grid-cell {
+        display: block;
+        flex-shrink: 0;
+        line-height: 0;
+        font-size: 1px;
+        margin-top: -1em;
+      }
+
+      #outersizer .vaadin-grid-cell * {
+        display: none;
+      }
+
+      #outersizer .vaadin-grid-cell::before {
+        content: "";
+      }
+
     </style>
   </template>
 </dom-module>

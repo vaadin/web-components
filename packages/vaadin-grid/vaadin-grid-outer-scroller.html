@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="vaadin-grid-outer-scroller">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        box-sizing: border-box;
+        overflow: auto;
+      }
+
+      :host([passthrough]) {
+        pointer-events: none;
+      }
+
+      :host([ios]) {
+        pointer-events: all;
+        z-index: -3;
+      }
+
+      :host([ios][scrolling]) {
+        z-index: 0;
+      }
+    </style>
+
+    <slot></slot>
+
+  </template>
+</dom-module>
+
+<script>
+  {
+    class GridOuterScrollerElement extends Polymer.Element {
+
+      static get is() {
+        return 'vaadin-grid-outer-scroller';
+      }
+
+      static get properties() {
+        return {
+
+          scrollTarget: {
+            type: Object
+          },
+
+          scrollHandler: {
+            type: Object
+          },
+
+          passthrough: {
+            type: Boolean,
+            reflectToAttribute: true,
+            value: true
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        this.addEventListener('scroll', () => this._syncScrollTarget());
+        this.addEventListener('mousemove', this._onMouseMove.bind(this));
+
+        // for some reason scroll bars are hidden in iOS if this style is
+        // added in stylesheets or before attaching.
+        this.style.webkitOverflowScrolling = 'touch';
+      }
+
+      _onMouseMove(e) {
+        this.passthrough = e.offsetY <= this.clientHeight && e.offsetX <= this.clientWidth;
+      }
+
+      syncOuterScroller() {
+        if (!this._syncingScrollTarget) {
+          this._syncingOuterScroller = true;
+          this.scrollTop = this.scrollTarget.scrollTop;
+          this.scrollLeft = this.scrollTarget.scrollLeft;
+        }
+        this._syncingScrollTarget = false;
+      }
+
+      _syncScrollTarget() {
+        if (!this._syncingOuterScroller) {
+          this._syncingScrollTarget = true;
+          this.scrollTarget.scrollTop = this.scrollTop;
+          this.scrollTarget.scrollLeft = this.scrollLeft;
+          this.scrollHandler._scrollHandler();
+        }
+        this._syncingOuterScroller = false;
+      }
+
+    }
+
+    customElements.define(GridOuterScrollerElement.is, GridOuterScrollerElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.GridOuterScrollerElement = GridOuterScrollerElement;
+  }
+</script>
