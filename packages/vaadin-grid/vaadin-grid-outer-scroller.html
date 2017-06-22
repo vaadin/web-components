@@ -16,15 +16,6 @@
       :host([passthrough]) {
         pointer-events: none;
       }
-
-      :host([ios]) {
-        pointer-events: all;
-        z-index: -3;
-      }
-
-      :host([ios][scrolling]) {
-        z-index: 0;
-      }
     </style>
 
     <slot></slot>

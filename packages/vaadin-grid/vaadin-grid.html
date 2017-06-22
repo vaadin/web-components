@@ -18,7 +18,7 @@
   <template>
     <style include="vaadin-grid-styles"></style>
 
-    <div id="scroller" no-scrollbars$="[[_noScrollbars]]" safari$="[[_safari]]">
+    <div id="scroller" no-scrollbars$="[[_noScrollbars]]" safari$="[[_safari]]" ios$="[[_ios]]" scrolling$="[[scrolling]]">
       <table id="table">
         <thead id="header"></thead>
         <tbody id="items"></tbody>
@@ -27,9 +27,7 @@
 
       <vaadin-grid-outer-scroller id="outerscroller"
           scroll-target="[[scrollTarget]]"
-          scroll-handler="[[_this]]"
-          ios$="[[_ios]]"
-          scrolling$="[[scrolling]]">
+          scroll-handler="[[_this]]">
         <div id="outersizer" style$="top: [[_estScrollHeight]]px"></div>
       </vaadin-grid-outer-scroller>
     </div>
@@ -74,8 +72,16 @@
         },
 
         _this: {
+          type: Object,
           value: function() {
             return this;
+          }
+        },
+
+        _ios: {
+          type: Boolean,
+          value: function() {
+            return navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
           }
         }
 

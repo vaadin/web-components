@@ -110,6 +110,15 @@
         overflow: hidden;
       }
 
+      [ios] #outerscroller {
+        pointer-events: auto;
+        z-index: -3;
+      }
+
+      [ios][scrolling] #outerscroller {
+        z-index: 0;
+      }
+
       /* TODO: Sizer styles, relocate */
       #outersizer {
         display: flex;
