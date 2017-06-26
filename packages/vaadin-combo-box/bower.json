@@ -20,7 +20,7 @@
   "dependencies": {
     "iron-a11y-keys-behavior": "^2.0.0",
     "iron-a11y-announcer": "^2.0.0",
-    "iron-list": "^2.0.0",
+    "iron-list": "^2.0.2",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
     "vaadin-text-field": "^1.0.0"

@@ -198,11 +198,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _selectorChanged(selector) {
         this._patchWheelOverScrolling();
-
-        // Iron-list introduces a regression in vaadin-combo-box because they blurs the
-        // activeElement when the iron-list focused element is removed.
-        // https://github.com/PolymerElements/iron-list/pull/447
-        this._patchIronListBlur();
       }
 
       _setOverlayHeight() {
@@ -235,10 +230,6 @@ This program is available under Apache License Version 2.0, available at https:/
         } else {
           return Math.max(bottom - targetRect.bottom - margin, minHeight) + 'px';
         }
-      }
-
-      _patchIronListBlur() {
-        this._selector._removeFocusedItem = () => {};
       }
 
       _getFocusedItem(focusedIndex) {
