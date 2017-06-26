@@ -11,7 +11,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * A private mixin to avoid problems with dynamic properties and Polymer Analyzer.
    * No need to expose these properties in the API docs.
    */
-  Vaadin.TabIndexMixin = subclass => class VaadinTabIndexMixin extends subclass {
+  Vaadin.TabIndexMixin = superClass => class VaadinTabIndexMixin extends superClass {
     static get properties() {
       var properties = {
         /**
@@ -42,7 +42,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * implementation fails in the shadow dom, so we have this for vaadin elements.
    * @polymerMixin
    */
-  Vaadin.ControlStateMixin = subclass => class VaadinControlStateMixin extends Vaadin.TabIndexMixin(subclass) {
+  Vaadin.ControlStateMixin = superClass => class VaadinControlStateMixin extends Vaadin.TabIndexMixin(superClass) {
     static get properties() {
       return {
         /**
