@@ -52,11 +52,12 @@
           it('should close on keyboard selection', done => {
             listenOnce(menu, 'opened-changed', () => {
               setTimeout(() => {
+                listenOnce(menu, 'opened-changed', () => {
+                  done();
+                });
+
                 MockInteractions.pressEnter(menu.$.overlay.root.querySelector('#menu paper-item'));
               }, 10);
-            });
-            listenOnce(menu, 'opened-changed', () => {
-              done();
             });
 
             menu._setOpened(true);

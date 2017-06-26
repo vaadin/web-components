@@ -204,7 +204,7 @@
           });
 
           it('should close on `click`', () => {
-            menu.$.overlay.click();
+            menu.$.overlay.root.children[0].click();
 
             expect(menu.opened).to.eql(false);
           });
@@ -212,7 +212,7 @@
           it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
-            menu.$.overlay.dispatchEvent(new CustomEvent('foobar'));
+            menu.$.overlay.root.children[0].dispatchEvent(new CustomEvent('foobar', {bubbles: true}));
 
             expect(menu.opened).to.eql(false);
           });
