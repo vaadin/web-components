@@ -93,8 +93,8 @@
           it('should be positioned on click target', function(done) {
             listenOnce(menu, 'opened-changed', () => {
               const rect = menu.$.overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(10);
-              expect(rect.top).to.eql(10);
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 10);
               done();
             });
 
@@ -104,8 +104,8 @@
           it('should be positioned on detailed mouse event', done => {
             listenOnce(menu.listenOn, 'opened-changed', () => {
               const rect = menu.$.overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(10);
-              expect(rect.top).to.eql(20);
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
             });
 
@@ -117,8 +117,8 @@
           it('should be positioned by gesture event', done => {
             listenOnce(menu.listenOn, 'opened-changed', () => {
               const rect = menu.$.overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(5);
-              expect(rect.top).to.eql(5);
+              expect(rect.left).to.eql(menu._phone ? 0 : 5);
+              expect(rect.top).to.eql(menu._phone ? 0 : 5);
               done();
             });
 
@@ -130,8 +130,8 @@
           it('should be positioned by detailed gesture event', done => {
             listenOnce(menu.listenOn, 'opened-changed', () => {
               const rect = menu.$.overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(5);
-              expect(rect.top).to.eql(5);
+              expect(rect.left).to.eql(menu._phone ? 0 : 5);
+              expect(rect.top).to.eql(menu._phone ? 0 : 5);
               done();
             });
 
@@ -143,8 +143,8 @@
           it('should be positioned by touch event', done => {
             listenOnce(menu.listenOn, 'opened-changed', () => {
               const rect = menu.$.overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(10);
-              expect(rect.top).to.eql(20);
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
             });
 
@@ -159,8 +159,8 @@
           it('should be positioned by detailed touch event', done => {
             listenOnce(menu.listenOn, 'opened-changed', () => {
               const rect = menu.$.overlay.getBoundingClientRect();
-              expect(rect.left).to.eql(10);
-              expect(rect.top).to.eql(20);
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
             });
 
