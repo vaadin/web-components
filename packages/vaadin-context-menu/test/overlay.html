@@ -203,6 +203,20 @@
             });
           });
 
+          it('should close on backdrop contextmenu', done => {
+            listenOnce(menu, 'opened-changed', () => {
+              expect(menu.opened).to.eql(false);
+              done();
+            });
+
+            const e = new CustomEvent('contextmenu', {
+              cancelable: true,
+              bubbles: true
+            });
+            menu.$.overlay.dispatchEvent(e);
+            expect(e.defaultPrevented).to.be.true;
+          });
+
           it('should close on `click`', () => {
             menu.$.overlay.root.children[0].click();
 

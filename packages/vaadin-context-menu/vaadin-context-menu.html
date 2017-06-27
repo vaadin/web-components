@@ -13,14 +13,19 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-overlay">
   <template>
     <style include="vaadin-overlay-default-theme">
-      :host(.vaadin-context-menu-overlay:not([with-backdrop])) {
+      :host(.vaadin-context-menu-overlay:not([phone])) {
         box-shadow:
           0 6px 10px 0 rgba(0, 0, 0, 0.14),
           0 1px 18px 0 rgba(0, 0, 0, 0.12),
           0 3px 5px -1px rgba(0, 0, 0, 0.4);
       }
 
-      :host(.vaadin-context-menu-overlay[with-backdrop]) {
+      /* TODO: replace with [part="backdrop"] https://github.com/vaadin/vaadin-overlay/issues/1 */
+      :host(.vaadin-context-menu-overlay:not([phone]))::before {
+        background: transparent;
+      }
+
+      :host(.vaadin-context-menu-overlay[phone]) {
         width: 100vw;
         height: 100vh;
         padding: 24px;
@@ -32,7 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: flex-end;
       }
 
-      :host(.vaadin-context-menu-overlay[with-backdrop]) [part="content"] {
+      :host(.vaadin-context-menu-overlay[phone]) [part="content"] {
         /* Ideally should be 100vh but iOS phone addr-bar covers view port */
         max-height: 80vh;
         width: 100%;
@@ -56,7 +61,8 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-overlay id="overlay"
         class="vaadin-context-menu-overlay"
         on-opened-changed="_onOverlayOpened"
-        with-backdrop$="[[_phone]]">
+        with-backdrop
+        phone$="[[_phone]]">
     </vaadin-overlay>
   </template>
   <script>
@@ -262,6 +268,15 @@ This program is available under Apache License Version 2.0, available at https:/
           super();
           this._boundOpen = this.open.bind(this);
           this._boundClose = this.close.bind(this);
+        }
+
+        ready() {
+          super.ready();
+
+          this.$.overlay.addEventListener('contextmenu', e => {
+            this.close();
+            e.preventDefault();
+          });
         }
 
         _onOverlayOpened(e) {
