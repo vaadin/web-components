@@ -35,8 +35,5 @@
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^1.0.1"
-  },
-  "resolutions": {
-    "iron-ajax": "^2.0.0"
   }
 }

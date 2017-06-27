@@ -38,4 +38,11 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
       .capture('default');
   });
 
+  gemini.suite('password', function(suite) {
+    suite
+      .setUrl('password.html')
+      .setCaptureElements('#password')
+      .capture('password');
+  });
+
 });
