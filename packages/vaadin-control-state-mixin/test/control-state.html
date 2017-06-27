@@ -88,33 +88,13 @@
         });
       });
 
-      if (!window.ShadyDOM) {
-        describe('focus', () => {
-          it('should focus the internal input on focus', () => {
-            focusElement.focus();
-            expect(customElement.focused).to.be.true;
-          });
-
-          it('should blur the internal input on blur', () => {
-            customElement.focus();
-            focusElement.blur();
-            expect(customElement.focused).to.be.false;
-          });
-
-          it('should focus the internal input on host click', () => {
-            customElement.click();
-            expect(customElement.focused).to.be.true;
-          });
-        });
-      }
-
       describe('_tabPressed and focus-ring', () => {
         var focus = () => {
-          focusElement.dispatchEvent(new CustomEvent('focus'));
+          customElement.dispatchEvent(new CustomEvent('focus'));
         };
 
         var blur = () => {
-          focusElement.dispatchEvent(new CustomEvent('blur'));
+          customElement.dispatchEvent(new CustomEvent('blur'));
         };
 
         it('should set and unset _tabPressed when press TAB', () => {
@@ -180,7 +160,12 @@
         });
       });
 
-      describe('autofocus', () => {
+      describe('focus and autofocus', () => {
+        it('should set focused attribute on host click', () => {
+          customElement.click();
+          expect(customElement.focused).to.be.true;
+        });
+
         it('should have focused set', done => {
           customElement = fixture('autofocus');
 
