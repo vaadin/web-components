@@ -121,7 +121,8 @@
           it('should not close on `click`', () => {
             menu.closeOn = '';
 
-            menu.$.overlay.click();
+            menu.$.overlay.dispatchEvent(new CustomEvent('click'));
+
             expect(menu.opened).to.eql(true);
           });
 

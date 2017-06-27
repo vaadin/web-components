@@ -218,7 +218,7 @@
           });
 
           it('should close on `click`', () => {
-            menu.$.overlay.root.children[0].click();
+            menu.$.overlay.click();
 
             expect(menu.opened).to.eql(false);
           });
@@ -226,7 +226,7 @@
           it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
-            menu.$.overlay.root.children[0].dispatchEvent(new CustomEvent('foobar', {bubbles: true}));
+            menu.$.overlay.dispatchEvent(new CustomEvent('foobar', {bubbles: true}));
 
             expect(menu.opened).to.eql(false);
           });
@@ -234,7 +234,7 @@
           it('should disable close on empty `closeOn`', () => {
             menu.closeOn = '';
 
-            menu.$.overlay.click();
+            menu.$.overlay.dispatchEvent(new CustomEvent('click'));
 
             expect(menu.opened).to.eql(true);
           });
