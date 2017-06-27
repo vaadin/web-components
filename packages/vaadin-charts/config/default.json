@@ -3,6 +3,9 @@
   "temp": "target/tmp",
   "files": {
     "src": [
+      "base-chart.html",
+      "configuration-reader-mixin.html",
+      "data-series.html",
       "vaadin-area-chart.html",
       "vaadin-arearange-chart.html",
       "vaadin-areaspline-chart.html",
@@ -11,6 +14,7 @@
       "vaadin-boxplot-chart.html",
       "vaadin-bubble-chart.html",
       "vaadin-candlestick-chart.html",
+      "vaadin-charts.html",
       "vaadin-column-chart.html",
       "vaadin-columnrange-chart.html",
       "vaadin-errorbar-chart.html",
@@ -25,14 +29,10 @@
       "vaadin-pyramid-chart.html",
       "vaadin-scatter-chart.html",
       "vaadin-solidgauge-chart.html",
+      "vaadin-sparkline.html",
       "vaadin-spline-chart.html",
       "vaadin-treemap-chart.html",
-      "vaadin-waterfall-chart.html",
-      "vaadin-sparkline.html",
-      "vaadin-charts.html",
-      "data-series.html",
-      "chart-behavior.html",
-      "configuration-reader.html"
+      "vaadin-waterfall-chart.html"
     ],
     "doc": "*.md",
     "demo": "demo/**/*",
