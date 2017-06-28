@@ -77,6 +77,15 @@
           grid = fixture('default')[0];
           grid.items = ['foo', 'bar'];
           Polymer.dom.flush();
+
+          if (Polymer.Element) {
+            Array.prototype
+              .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
+              function(col) {
+                  col._templateObserver.flush();
+              });
+          }
+
           scroller = grid.$.scroller;
           header = grid.$.header;
           body = grid.$.items;

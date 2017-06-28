@@ -42,20 +42,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * @protected
        */
       headerTemplate: {
-        type: Object,
-        value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template.header') || undefined, {});
-        }
+        type: Object
       },
 
       /**
        * @protected
        */
       footerTemplate: {
-        type: Object,
-        value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template.footer') || undefined, {});
-        }
+        type: Object
       },
 
       /**
@@ -96,11 +90,23 @@ This program is available under Apache License Version 2.0, available at https:/
     created: function() {
       this._templateObserver = new Polymer.FlattenedNodesObserver(this, (info) => {
         if (info.addedNodes.length >= 0) {
-          this.headerTemplate = this._prepareTemplatizer(this._findTemplate('template.header') || undefined, {});
-          this.footerTemplate = this._prepareTemplatizer(this._findTemplate('template.footer') || undefined, {});
-          this.template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)' || undefined, {}));
+          this.headerTemplate = this._prepareHeaderTemplate();
+          this.footerTemplate = this._prepareFooterTemplate();
+          this.template = this._prepareBodyTemplate();
         }
       });
+    },
+
+    _prepareHeaderTemplate: function() {
+      return this._prepareTemplatizer(this._findTemplate('template.header') || null, {});
+    },
+
+    _prepareFooterTemplate: function() {
+      return this._prepareTemplatizer(this._findTemplate('template.footer') || null, {});
+    },
+
+    _prepareBodyTemplate: function() {
+      return this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)' || null, {}));
     },
 
     _prepareTemplatizer: function(template, instanceProps) {
@@ -178,10 +184,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @protected
        */
       template: {
-        type: Object,
-        value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)'));
-        }
+        type: Object
       },
 
     },

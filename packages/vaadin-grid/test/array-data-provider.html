@@ -152,6 +152,15 @@
         this.timeout(30000);
 
         grid = fixture('invalid-path');
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
+            function(col) {
+                col._templateObserver.flush();
+            });
+        }
+
         grid.items = [{
           name: {
             first: 'foo',

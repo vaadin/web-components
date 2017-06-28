@@ -67,6 +67,15 @@
         this.timeout(30000);
 
         grid = fixture('default');
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
+            function(col) {
+                col._templateObserver.flush();
+            });
+        }
+
         grid.dataProvider = infiniteDataProvider;
         cachedItems = grid._cache[0];
         grid.selectedItems = [cachedItems[0]];
@@ -140,6 +149,15 @@
         this.timeout(30000);
 
         grid = fixture('multiselect');
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-selection-column'),
+            function(col) {
+                col._templateObserver.flush();
+            });
+        }
+
         grid.items = ['foo', 'bar', 'baz'];
 
         Polymer.dom.flush();

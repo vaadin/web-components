@@ -83,6 +83,15 @@
         this.timeout(30000);
 
         grid = fixture('default');
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'), 
+            function(col) {
+                col._templateObserver.flush();
+            });
+        }
+
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         outerScroller = scroller.$.outerscroller;
@@ -288,6 +297,15 @@
         this.timeout(30000);
 
         grid = fixture('scrollable-content');
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
+            function(col) {
+                col._templateObserver.flush();
+            });
+        }
+
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
         if (grid._observer.flush) {

@@ -81,6 +81,14 @@
       function init(fixtureName, cb) {
         grid = fixture(fixtureName);
 
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
+            function(col) {
+                col._templateObserver.flush();
+            });
+        }
+
         listenOnce(grid, 'items-assigned', function() {
           Polymer.dom.flush();
 
