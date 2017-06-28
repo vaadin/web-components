@@ -133,6 +133,10 @@
         expect(tableWheel).to.not.throw(Error);
       });
 
+      it('should have proper height', function() {
+        expect(grid.scrollHeight - grid.clientHeight).to.equal(0);
+      });
+
     });
   </script>
 
