@@ -23,14 +23,20 @@
         <dom-module id="vaadin-split-layout-styles" theme-for="vaadin-split-layout">
           <template>
             <style>
-              :host(:not([vertical])) [part="handle"]::after {
-                content: "\e902";
+              [part="handle"]::after {
+                font-size: 35px;
                 color: #222;
                 text-shadow: 1px 1px #fff;
+                border: none;
+                transform: none;
+              }
+
+              :host(:not([vertical])) [part="handle"]::after {
+                content: "\22EE";
               }
 
               :host([vertical]) [part="handle"]::after {
-                content: "\e903";
+                content: "\22EF";
               }
 
               :host(:not([vertical])) [part="splitter"] {
