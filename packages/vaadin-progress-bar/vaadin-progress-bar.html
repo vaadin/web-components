@@ -5,20 +5,21 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <!--
-`<vaadin-progress>` is a Polymer 2 progress bar.
+`<vaadin-progress-bar>` is a Polymer 2 progress bar.
 
 ```html
-<vaadin-progress>
-</vaadin-progress>
+<vaadin-progress-bar>
+</vaadin-progress-bar>
 ```
 
-@progress vaadin-progress
+@progress vaadin-progress-bar
 @demo demo/index.html
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="vaadin-progress-base.html">
 
-<dom-module id="vaadin-progress">
+<dom-module id="vaadin-progress-bar">
   <template>
     <style>
       :host {
@@ -49,7 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
       }
 
-      :host(:not([circle]):not([value])) .foreground {
+      :host(:not([value])) .foreground {
         animation: indeterminate-progress-bar 1s infinite;
       }
 
@@ -74,22 +75,12 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    class VaadinProgress extends Polymer.Element {
+    class VaadinProgressBar extends VaadinProgressBase(Polymer.Element) {
       static get is() {
-        return 'vaadin-progress';
-      }
-
-      static get properties() {
-        return {
-          value: {
-            type: Number,
-            value: undefined,
-            reflectToAttribute: true
-          }
-        };
+        return 'vaadin-progress-bar';
       }
     }
 
-    customElements.define(VaadinProgress.is, VaadinProgress);
+    customElements.define(VaadinProgressBar.is, VaadinProgressBar);
   </script>
 </dom-module>

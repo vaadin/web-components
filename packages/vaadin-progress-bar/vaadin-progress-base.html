@@ -1,0 +1,31 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+  VaadinProgressBase is a mixin, that implements common functionality for all progresses.
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+
+<script>
+  if (!Polymer.Element) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+  }
+
+  VaadinProgressBase = function(superClass) {
+    return class extends superClass {
+      static get properties() {
+        return {
+          value: {
+            type: Number,
+            value: undefined,
+            reflectToAttribute: true
+          }
+        };
+      }
+    }
+  }
+</script>
