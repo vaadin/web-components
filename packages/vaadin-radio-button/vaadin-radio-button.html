@@ -87,7 +87,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
-          
           checked: {
             type: Boolean,
             value: false,
@@ -108,22 +107,28 @@ This program is available under Apache License Version 2.0, available at https:/
           value: {
             type: String,
             reflectToAttribute: true
-          },
-
+          }
         };
       }
+
       ready() {
         super.ready();
+
         this.setAttribute('role', 'radio');
+
         this._addActiveListeners();
+
         if (!this.value) {
           this.value = this.innerText;
         }
       }
+
       _checkedChanged(checked) {
         this.setAttribute('aria-checked', checked);
+
         this.dispatchEvent(new CustomEvent('radio-changed', {bubbles: true}));
       }
+
       _addActiveListeners() {
         // DOWN
         this._addEventListenerToNode(this, 'down', (e) => {
@@ -132,8 +137,10 @@ This program is available under Apache License Version 2.0, available at https:/
             this.setAttribute('active', '');
           }
         });
+
         // UP
         this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+
         // KEYDOWN
         this.addEventListener('keydown', e => {
           if (!this.disabled && e.keyCode === 32) {
@@ -141,6 +148,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.setAttribute('active', '');
           }
         });
+
         // KEYUP
         this.addEventListener('keyup', e => {
           if (!this.disabled && e.keyCode === 32) {
@@ -150,6 +158,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
       }
+
       get focusElement() {
         return this.$.label;
       }

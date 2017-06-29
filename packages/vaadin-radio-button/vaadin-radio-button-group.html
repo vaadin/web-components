@@ -61,30 +61,36 @@ This program is available under Apache License Version 2.0, available at https:/
             type: String,
             reflectToAttribute: true
           },
+
           value: {
             type: String,
             notify: true,
             observer: '_valueChanged',
             reflectToAttribute: true
           },
+
           required: {
             type: Boolean,
             reflectToAttribute: true
           },
+
           disabled: {
             type: Boolean,
             reflectToAttribute: true,
             observer: '_disabledChanged'
           }
-
         };
       }
+
       get radio() {
         return 'vaadin-radio-button';
       }
+
       ready() {
         super.ready();
+
         this._addActiveListeners();
+
         this.addEventListener('radio-changed', e => {
           if (e.target.checked) {
             this.querySelectorAll(`${this.radio}`).forEach((item) => item.checked = (e.target === item) ? true : false);
@@ -92,12 +98,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
       }
+
       _disabledChanged(value) {
         if (value) {
           this.removeAttribute('invalid');
         }
+
         this.querySelectorAll(`${this.radio}`).forEach((item) => item.disabled = value);
       }
+
       _addActiveListeners() {
         this.addEventListener('keydown', e => {
           if (!this.disabled && (e.keyCode === 37 || e.keyCode === 38)) {
@@ -126,17 +135,20 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
       }
+
       _valueChanged(set) {
         if (set) {
           this.removeAttribute('invalid');
         }
+
         this.querySelectorAll(`${this.radio}`).forEach((item) => item.checked = false);
+
         if (this.querySelector(`${this.radio}[value="${set}"]`)) {
           this.querySelector(`${this.radio}[value="${set}"]`).checked = true;
         }
       }
-      validate() {
 
+      validate() {
         if (!this.value && this.required && !this.disabled) {
           this.setAttribute('invalid', '');
           return false;
@@ -144,8 +156,8 @@ This program is available under Apache License Version 2.0, available at https:/
           return true;
         }
       }
-
     }
+
     customElements.define(GroupRadioElement.is, GroupRadioElement);
   </script>
 </dom-module>
