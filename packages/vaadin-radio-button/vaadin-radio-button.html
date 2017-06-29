@@ -17,15 +17,62 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 
-<dom-module id="vaadin-radio-button">
+<dom-module id="vaadin-radio-default-theme" theme-for="vaadin-radio-button">
   <template>
     <style>
       :host {
         display: inline-block;
+        outline: none;
+      }
+
+      [part="wrapper"] {
+        display: inline-flex;
+        align-items: center;
+        outline: none;
+      }
+
+      :host([focus-ring]) {
+        box-shadow: 0 0 2px 2px Highlight;
+      }
+
+      [part="native-radio"] {
+        margin: 3px 0 3px 3px;
+      }
+
+      [part="label"] {
+        padding: 0 5px;
+        outline: none;
+      }
+
+      :host([disabled]) [part="label"] {
+        opacity: 0.5;
       }
     </style>
-    <slot></slot>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-radio-button">
+  <template>
+    <label part="wrapper" id="label">
+      <input
+        id="nativeRadio"
+        type="radio"
+        part="native-radio"
+        checked="{{checked::change}}"
+        disabled$="[[disabled]]"
+        role="presentation"
+        tabindex="-1">
+
+      <span part="radio"></span>
+
+      <span part="label">
+        <slot></slot>
+      </span>
+    </label>
   </template>
 
   <script>
@@ -33,17 +80,81 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    class VaadinRadioButton extends Polymer.Element {
+    class RadioElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
       static get is() {
         return 'vaadin-radio-button';
       }
 
       static get properties() {
         return {
+          
+          checked: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            observer: '_checkedChanged',
+            reflectToAttribute: true
+          },
+
+          disabled: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+
+          name: {
+            type: String
+          },
+
+          value: {
+            type: String,
+            reflectToAttribute: true
+          },
+
         };
+      }
+      ready() {
+        super.ready();
+        this.setAttribute('role', 'radio');
+        this._addActiveListeners();
+        if (!this.value) {
+          this.value = this.innerText;
+        }
+      }
+      _checkedChanged(checked) {
+        this.setAttribute('aria-checked', checked);
+        this.dispatchEvent(new CustomEvent('radio-changed', {bubbles: true}));
+      }
+      _addActiveListeners() {
+        // DOWN
+        this._addEventListenerToNode(this, 'down', (e) => {
+          e.preventDefault();
+          if (!this.disabled) {
+            this.setAttribute('active', '');
+          }
+        });
+        // UP
+        this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+        // KEYDOWN
+        this.addEventListener('keydown', e => {
+          if (!this.disabled && e.keyCode === 32) {
+            e.preventDefault();
+            this.setAttribute('active', '');
+          }
+        });
+        // KEYUP
+        this.addEventListener('keyup', e => {
+          if (!this.disabled && e.keyCode === 32) {
+            e.preventDefault();
+            this.setAttribute('checked', '');
+            this.removeAttribute('active');
+          }
+        });
+      }
+      get focusElement() {
+        return this.$.label;
       }
     }
 
-    customElements.define(VaadinRadioButton.is, VaadinRadioButton);
+    customElements.define(RadioElement.is, RadioElement);
   </script>
 </dom-module>

@@ -25,12 +25,16 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "polymer": "^2.0.0"
+    "polymer": "^2.0.0",
+    "vaadin-control-state-mixin": "^1.0.0",
+    "vaadin-themable-mixin": "^1.1.0"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.0",
     "iron-component-page": "^2.0.0",
     "iron-demo-helpers": "^2.0.0",
+    "iron-form": "^2.0.0",
+    "vaadin-button": "^1.0.0-beta3",    
     "web-component-tester": "^6.0.0"
   }
 }
