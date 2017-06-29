@@ -94,17 +94,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _templateChanged(template) {
-        const Templatizer = Polymer.Templatize.templatize(template, this, {
-          forwardHostProp: function(prop, value) {
-            if (this._instance) {
-              this._instance.forwardHostProp(prop, value);
+        if (template && template != this._template) {
+          const Templatizer = Polymer.Templatize.templatize(template, this, {
+            forwardHostProp: function(prop, value) {
+              if (this._instance) {
+                this._instance.forwardHostProp(prop, value);
+              }
             }
-          }
-        });
-
-        this._instance = new Templatizer({});
-
-        this.root.appendChild(this._instance.root);
+          });
+          this._instance = new Templatizer({});
+          this._template = template;
+          this.root.appendChild(this._instance.root);
+        }
       }
 
       _processPendingMutationObserversFor(node) {
