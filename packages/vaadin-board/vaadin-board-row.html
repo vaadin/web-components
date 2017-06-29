@@ -4,14 +4,14 @@
 <dom-module id="vaadin-board-row">
   <template>
     <style>
-      :host {
+       :host {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         align-items: stretch;
       }
 
-      :host ::slotted(*) {
+       :host ::slotted(*) {
         box-sizing: border-box;
         flex-grow: 1;
         overflow: hidden;
@@ -21,173 +21,176 @@
   </template>
 
   <script>
-
-    class VaadinBoardRow extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
-      static get is() {
-        return "vaadin-board-row";
-      }
-      constructor() {
-        super();
-        this._onIronResize = this._onIronResize.bind(this);
-        this._ONE_COLUMN_MAX_WIDTH = 600;
-        this._TWO_COLUMNS_MAX_WIDTH = 960;
-
-        this._SMALL_VIEWPORT_CLASSNAME = "small";
-        this._MEDIUM_VIEWPORT_CLASSNAME = "medium";
-        this._LARGE_VIEWPORT_CLASSNAME = "large";
-
-        this._oldWidth = 0;
-        this._oldFlexBasis = [];
-      }
-      ready() {
-        super.ready();
-        this.addEventListener('iron-resize', this._onIronResize, true);
-        this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
-        Polymer.RenderStatus.afterNextRender(this, function() {
-          //force this as an interested resizable of parent
-          this.dispatchEvent(new CustomEvent('iron-request-resize-notifications', {
-            node: this,
-            bubbles: true,
-            cancelable: true,
-            composed:true,
-            detail:{}
-          }));
-        });
-      }
-      connectedCallback() {
-        super.connectedCallback();
-        Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
-      }
-
-      /**
-       * Adds styles for board row based on width
-       */
-      _addStyleNames(width) {
-        if (width < this._ONE_COLUMN_MAX_WIDTH) {
-          this.classList.add(this._SMALL_VIEWPORT_CLASSNAME);
-          this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
-          this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
-        } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
-          this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
-          this.classList.add(this._MEDIUM_VIEWPORT_CLASSNAME);
-          this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
-        } else {
-          this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
-          this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
-          this.classList.add(this._LARGE_VIEWPORT_CLASSNAME);
+    (function () {
+      class BoardRowElement extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+        static get is() {
+          return "vaadin-board-row";
         }
-      }
-      /**
-       * Calculates flex basis based on colSpan and width
-       * @param{Number} colspan value of the row
-       * @param{Number} width of the row in px
-       * @param{Number} amount of columns in the row
-       */
-      _calculateFlexBasis(colSpan, width, colsInRow) {
-        if (width < this._ONE_COLUMN_MAX_WIDTH) {
-          colsInRow = 1;
-        } else if (width < this._TWO_COLUMNS_MAX_WIDTH && colsInRow == 4) {
-          colsInRow = 2;
+        constructor() {
+          super();
+          this._onIronResize = this._onIronResize.bind(this);
+          this._ONE_COLUMN_MAX_WIDTH = 600;
+          this._TWO_COLUMNS_MAX_WIDTH = 960;
+
+          this._SMALL_VIEWPORT_CLASSNAME = "small";
+          this._MEDIUM_VIEWPORT_CLASSNAME = "medium";
+          this._LARGE_VIEWPORT_CLASSNAME = "large";
+
+          this._oldWidth = 0;
+          this._oldFlexBasis = [];
         }
-        let flexBasis = colSpan / colsInRow * 100;
-        flexBasis = flexBasis > 100 ? 100 : flexBasis;
-        return flexBasis + '%';
-      }
+        ready() {
+          super.ready();
+          this.addEventListener('iron-resize', this._onIronResize, true);
+          this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
+          Polymer.RenderStatus.afterNextRender(this, function () {
+            //force this as an interested resizable of parent
+            this.dispatchEvent(new CustomEvent('iron-request-resize-notifications', {
+              node: this,
+              bubbles: true,
+              cancelable: true,
+              composed: true,
+              detail: {}
+            }));
+          });
+        }
+        connectedCallback() {
+          super.connectedCallback();
+          Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
+        }
 
-      _reportError() {
-        const errorMessage ="The column configuration is not valid; column count should add up to 3 or 4.";
-        console.warn(errorMessage, "check: \r\n"+this.outerHTML);
-      }
+        /**
+         * Adds styles for board row based on width
+         */
+        _addStyleNames(width) {
+          if (width < this._ONE_COLUMN_MAX_WIDTH) {
+            this.classList.add(this._SMALL_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
+          } else if (width < this._TWO_COLUMNS_MAX_WIDTH) {
+            this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
+            this.classList.add(this._MEDIUM_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._LARGE_VIEWPORT_CLASSNAME);
+          } else {
+            this.classList.remove(this._SMALL_VIEWPORT_CLASSNAME);
+            this.classList.remove(this._MEDIUM_VIEWPORT_CLASSNAME);
+            this.classList.add(this._LARGE_VIEWPORT_CLASSNAME);
+          }
+        }
+        /**
+         * Calculates flex basis based on colSpan and width
+         * @param{Number} colspan value of the row
+         * @param{Number} width of the row in px
+         * @param{Number} amount of columns in the row
+         */
+        _calculateFlexBasis(colSpan, width, colsInRow) {
+          if (width < this._ONE_COLUMN_MAX_WIDTH) {
+            colsInRow = 1;
+          } else if (width < this._TWO_COLUMNS_MAX_WIDTH && colsInRow == 4) {
+            colsInRow = 2;
+          }
+          let flexBasis = colSpan / colsInRow * 100;
+          flexBasis = flexBasis > 100 ? 100 : flexBasis;
+          return flexBasis + '%';
+        }
 
-      /**
-       * Parses board-cols from DOM.
-       * If there is not enough space in the row drop board cols.
-       * @param{Array} array of nodes
-       *
-       * @return{Array} array of boardCols
-       */
-      _parseBoardCols(nodes) {
-        const boardCols = nodes.map(node => {
-                    if(node.getAttribute("board-cols")) {
-                      return parseInt(node.getAttribute("board-cols"));
-                    }
-                    return 1;
-        });
+        _reportError() {
+          const errorMessage = "The column configuration is not valid; column count should add up to 3 or 4.";
+          console.warn(errorMessage, "check: \r\n" + this.outerHTML);
+        }
 
-        let spaceLeft=4;
-        let returnBoardCols=[];
-        nodes.forEach((node,i) => {
-          spaceLeft = spaceLeft - boardCols[i];
-        });
+        /**
+         * Parses board-cols from DOM.
+         * If there is not enough space in the row drop board cols.
+         * @param{Array} array of nodes
+         *
+         * @return{Array} array of boardCols
+         */
+        _parseBoardCols(nodes) {
+          const boardCols = nodes.map(node => {
+            if (node.getAttribute("board-cols")) {
+              return parseInt(node.getAttribute("board-cols"));
+            }
+            return 1;
+          });
 
-        if(spaceLeft < 0) {
+          let spaceLeft = 4;
+          let returnBoardCols = [];
+          nodes.forEach((node, i) => {
+            spaceLeft = spaceLeft - boardCols[i];
+          });
+
+          if (spaceLeft < 0) {
             this._reportError();
-            boardCols.forEach((node,i) =>{
+            boardCols.forEach((node, i) => {
               returnBoardCols[i] = 1;
             });
-        }
-        else {
-          returnBoardCols = boardCols.slice(0);
-        }
-
-        return returnBoardCols;
-      }
-      /**
-       * If there is not enough space in the row.
-       * Extra items are dropped from DOM.
-       * @param{Array} array of board-cols for every node
-       * @param{Array} array of nodes
-       *
-       * @return{Array} filtered array of nodes
-       */
-      _removeExtraNodesFromDOM(boardCols, nodes) {
-        let isErrorReported=false;
-        let spaceLeft=4;
-        let returnNodes=[];
-        nodes.forEach((node,i) => {
-          spaceLeft = spaceLeft - boardCols[i];
-          if(spaceLeft < 0) {
-            if(!isErrorReported) {
-              isErrorReported = true;
-              this._reportError();
-            }
-            this.removeChild(node);
           }
           else {
-            returnNodes[i] = node;
+            returnBoardCols = boardCols.slice(0);
           }
-        });
-        return returnNodes;
-      }
 
-      redraw() {
-        this._recalculateFlexBasis(true);
-      }
-
-      _onIronResize() {
-        this._recalculateFlexBasis(false);
-      }
-
-      _recalculateFlexBasis(forceResize) {
-        const width = this.getBoundingClientRect().width;
-        if (forceResize || width != this._oldWidth) {
-          const nodes = this.$.insertionPoint.assignedNodes({flatten: true});
-
-          const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
-          this._addStyleNames(width);
-          const boardCols = this._parseBoardCols(filteredNodes);
-          const colsInRow = boardCols.reduce((a, b) => a + b, 0);
-          this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e,i) => {
-              let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow);
-              if(forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
-                  this._oldFlexBasis[i] = newFlexBasis
-                  e.style.flexBasis = newFlexBasis;
+          return returnBoardCols;
+        }
+        /**
+         * If there is not enough space in the row.
+         * Extra items are dropped from DOM.
+         * @param{Array} array of board-cols for every node
+         * @param{Array} array of nodes
+         *
+         * @return{Array} filtered array of nodes
+         */
+        _removeExtraNodesFromDOM(boardCols, nodes) {
+          let isErrorReported = false;
+          let spaceLeft = 4;
+          let returnNodes = [];
+          nodes.forEach((node, i) => {
+            spaceLeft = spaceLeft - boardCols[i];
+            if (spaceLeft < 0) {
+              if (!isErrorReported) {
+                isErrorReported = true;
+                this._reportError();
               }
+              this.removeChild(node);
+            }
+            else {
+              returnNodes[i] = node;
+            }
           });
-          this._oldWidth = width;
+          return returnNodes;
+        }
+
+        redraw() {
+          this._recalculateFlexBasis(true);
+        }
+
+        _onIronResize() {
+          this._recalculateFlexBasis(false);
+        }
+
+        _recalculateFlexBasis(forceResize) {
+          const width = this.getBoundingClientRect().width;
+          if (forceResize || width != this._oldWidth) {
+            const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
+
+            const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
+            this._addStyleNames(width);
+            const boardCols = this._parseBoardCols(filteredNodes);
+            const colsInRow = boardCols.reduce((a, b) => a + b, 0);
+            this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e, i) => {
+              let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow);
+              if (forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
+                this._oldFlexBasis[i] = newFlexBasis
+                e.style.flexBasis = newFlexBasis;
+              }
+            });
+            this._oldWidth = width;
+          }
         }
       }
-    }
-    customElements.define(VaadinBoardRow.is, VaadinBoardRow);
+      customElements.define(BoardRowElement.is, BoardRowElement);
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.BoardRowElement = BoardRowElement;
+    })();
   </script>
 </dom-module>

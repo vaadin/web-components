@@ -12,7 +12,7 @@ Responsive layout, with several features.
 <dom-module id="vaadin-board">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
       }
     </style>
@@ -20,44 +20,48 @@ Responsive layout, with several features.
   </template>
 
   <script>
-    class VaadinBoard extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
-      static get is() {
-        return 'vaadin-board';
-      }
+    (function () {
+      class BoardElement extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+        static get is() {
+          return 'vaadin-board';
+        }
 
-      static get config() {
-        return {
-          properties: {
-            prop1: {
-              value: 'Vaadin Board',
-              type: String
+        static get config() {
+          return {
+            properties: {
+              prop1: {
+                value: 'Vaadin Board',
+                type: String
+              }
             }
           }
         }
-      }
 
-      constructor() {
-        super();
-      }
+        constructor() {
+          super();
+        }
 
-      ready() {
-        super.ready();
-        var licenseChecker = document.createElement('vaadin-license-checker');
-        licenseChecker.productName = "vaadin-board";
-        licenseChecker.productVersion = "1";
-        licenseChecker.productCaption = "Vaadin Board";
-        this.shadowRoot.appendChild(licenseChecker);
-      }
+        ready() {
+          super.ready();
+          var licenseChecker = document.createElement('vaadin-license-checker');
+          licenseChecker.productName = "vaadin-board";
+          licenseChecker.productVersion = "1";
+          licenseChecker.productCaption = "Vaadin Board";
+          this.shadowRoot.appendChild(licenseChecker);
+        }
 
-      connectedCallback() {
-        super.connectedCallback();
-      }
+        connectedCallback() {
+          super.connectedCallback();
+        }
 
-      redraw() {
-        this.notifyResize();
-      }
+        redraw() {
+          this.notifyResize();
+        }
 
-    }
-    customElements.define(VaadinBoard.is, VaadinBoard);
+      }
+      customElements.define(BoardElement.is, BoardElement);
+      window.Vaadin = window.Vaadin || {};
+      window.Vaadin.BoardElement = BoardElement;
+    })();
   </script>
 </dom-module>
