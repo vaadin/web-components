@@ -8,6 +8,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-item">
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+    </style>
     [[label]]
   </template>
 </dom-module>

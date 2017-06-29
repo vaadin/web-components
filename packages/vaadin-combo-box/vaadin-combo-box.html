@@ -17,7 +17,10 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
-        padding: 8px 0;
+      }
+
+      :host([hidden]) {
+        display: none;
       }
 
       :host([opened]) {

@@ -7,11 +7,11 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-spinner">
+<dom-module id="vaadin-combo-box-spinner">
   <template>
     <style>
       /* Anim */
-      @keyframes vaadin-spin-360 {
+      @keyframes vaadin-combo-box-spinner-spin {
         100% {
           transform: rotate(1turn);
         }
@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([active]) {
         opacity: 1;
-        animation: vaadin-spin-360 400ms linear infinite;
+        animation: vaadin-combo-box-spinner-spin 400ms linear infinite;
       }
     </style>
   </template>
@@ -39,9 +39,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
        */
-      class SpinnerElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class ComboBoxSpinnerElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-spinner';
+          return 'vaadin-combo-box-spinner';
         }
 
         static get properties() {
@@ -54,13 +54,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(SpinnerElement.is, SpinnerElement);
+      customElements.define(ComboBoxSpinnerElement.is, ComboBoxSpinnerElement);
 
       /**
       * @namespace Vaadin
       */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.SpinnerElement = SpinnerElement;
+      Vaadin.ComboBoxSpinnerElement = ComboBoxSpinnerElement;
     }
   </script>
 </dom-module>

@@ -31,6 +31,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-combo-box-default-theme" theme-for="vaadin-combo-box vaadin-combo-box-light" >
   <template>
     <style>
+      :host {
+        padding: 8px 0;
+      }
+
       [part~="overlay"] {
         box-shadow:
           0 2px 2px 0 rgba(0, 0, 0, 0.14),
@@ -79,7 +83,6 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: block;
         cursor: pointer;
         padding: 13px 16px;
         color: #212121;
@@ -92,10 +95,6 @@ This program is available under Apache License Version 2.0, available at https:/
         color: #3f51b5;
       }
 
-      :host([hidden]) {
-        display: none;
-      }
-
       :host(:not([touch-device]):hover),
       :host([focused]) {
         background: #eee;
@@ -104,7 +103,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
-<dom-module id="vaadin-spinner-default-theme" theme-for="vaadin-spinner">
+<dom-module id="vaadin-combo-box-spinner-default-theme" theme-for="vaadin-combo-box-spinner">
   <template>
     <style>
       :host {
