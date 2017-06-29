@@ -46,16 +46,7 @@
 <test-fixture id="fixed-component">
   <template>
     <x-fixed>
-      <!--
-          In this particular fixture, there is a really strange race condition when running Chrome with P2 Shady
-          which causes attached callback to be called before the ready is called in the <paper-input-container>
-          inside <vaadin-combo-box>.
-          The current implementation of attached expects _addons to have an empty array (it's being assigned in ready).
-
-          Instead of spending time in trying to reproduce the issue in an isolated case and filing an issue to paper-input
-          or the Shady polyfill, I found this nice workaround. Enjoy!
-       -->
-      <paper-input-container _addons='[]'>
+      <paper-input-container>
         <input>
       </paper-input-container>
 
@@ -114,8 +105,6 @@
       vertTop = 0;
       vertBottom = wh;
 
-      // <paper-input-container> adds floated-label-placeholder div asynchronously,
-      // we want to wait that out so that the dropdown clientHeight is calculated correctly.
       setTimeout(done);
     });
 
