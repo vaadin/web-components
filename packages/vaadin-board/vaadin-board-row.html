@@ -171,7 +171,7 @@
       _recalculateFlexBasis(forceResize) {
         const width = this.getBoundingClientRect().width;
         if (forceResize || width != this._oldWidth) {
-          const nodes = this.$.insertionPoint.assignedNodes();
+          const nodes = this.$.insertionPoint.assignedNodes({flatten: true});
 
           const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
           this._addStyleNames(width);
