@@ -54,15 +54,11 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: ns-resize;
       }
 
-      [part="handle"],
-      [part="splitter"] ::slotted([slot="handle"]) {
+      [part="handle"] {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-      }
-
-      [part="handle"] {
         font-family: 'vaadin-split-layout-icons';
         font-size: 40px;
         color: white;
@@ -78,9 +74,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <slot id="primary" name="primary"></slot>
     <div part="splitter" id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
-      <slot name="handle">
-        <div part="handle"></div>
-      </slot>
+      <div part="handle"></div>
     </div>
     <slot id="secondary" name="secondary"></slot>
   </template>

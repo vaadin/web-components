@@ -19,16 +19,6 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="split-layout-with-custom-handle">
-      <template>
-        <vaadin-split-layout>
-          <div id="first">some content</div>
-          <div id="second">some content</div>
-          <div id="handle" slot="handle">handle</div>
-        </vaadin-split-layout>
-      </template>
-    </test-fixture>
-
     <script>
       var touchDevice = (() => {
         try {
@@ -131,19 +121,6 @@
           expect(getComputedStyle(second).pointerEvents).to.equal('visible');
         });
 
-      });
-
-      describe('handle', () => {
-        beforeEach(() => splitLayout = fixture('split-layout-with-custom-handle'));
-
-        it('has custom handle element', done => {
-          Polymer.Async.microTask.run(() => {
-            var slot = splitLayout.$.splitter.firstElementChild;
-            var children = slot.assignedNodes({flatten: true});
-            expect(children[0].localName).to.equal('div');
-            done();
-          }, 1);
-        });
       });
 
       describe('splitter', () => {
