@@ -31,6 +31,20 @@
       </template>
     </demo-snippet>
 
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-progress-circle.thick {
+              --vaadin-progress-line-width: 6px;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-progress-circle class="thick"></vaadin-progress-circle>
+      </template>
+    </demo-snippet>
+
     <h3>Size</h3>
     <demo-snippet>
       <template>
@@ -43,6 +57,20 @@
         </custom-style>
 
         <vaadin-progress-bar class="narrow"></vaadin-progress-bar>
+      </template>
+    </demo-snippet>
+
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-progress-circle.large {
+              --vaadin-progress-circle-size: 60px;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-progress-circle class="large"></vaadin-progress-circle>
       </template>
     </demo-snippet>
 
@@ -59,6 +87,21 @@
         </custom-style>
 
         <vaadin-progress-bar class="custom-colors"></vaadin-progress-bar>
+      </template>
+    </demo-snippet>
+
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-progress-circle.custom-colors {
+              --vaadin-progress-background-color: transparent;
+              --vaadin-progress-foreground-color: magenta;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-progress-circle class="custom-colors"></vaadin-progress-circle>
       </template>
     </demo-snippet>
   </div>
