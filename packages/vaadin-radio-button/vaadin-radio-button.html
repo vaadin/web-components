@@ -80,90 +80,131 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    class RadioElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
-      static get is() {
-        return 'vaadin-radio-button';
-      }
+    (function() {
+      /**
+       * `<vaadin-radio-button>` is a Polymer element for radio buttons.
+       *
+       * ```html
+       * <vaadin-radio-button>1</vaadin-radio-button>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are exposed for styling:
+       *
+       * Part name         | Description
+       * ------------------|----------------
+       * `wrapper`         | The `<label>` element which wrapps the checkbox and [part="label"]
+       * `native-radio`    | The `<input type="radio">` element
+       * `radio`           | The `<span>` element for a custom graphical radio button
+       * `label`           | The `<span>` element for slotted text/HTML label
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute    | Description
+       * -------------|------------
+       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.
+       * `disabled`   | Set when the checkbox is disabled.
+       * `focus-ring` | Set when the checkbox is focused using the keyboard.
+       * `focused`    | Set when the checkbox is focused.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class RadioButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-radio-button';
+        }
 
-      static get properties() {
-        return {
-          checked: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            observer: '_checkedChanged',
-            reflectToAttribute: true
-          },
+        static get properties() {
+          return {
+            checked: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              observer: '_checkedChanged',
+              reflectToAttribute: true
+            },
 
-          disabled: {
-            type: Boolean,
-            reflectToAttribute: true
-          },
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
 
-          name: {
-            type: String
-          },
+            name: {
+              type: String
+            },
 
-          value: {
-            type: String,
-            reflectToAttribute: true
+            value: {
+              type: String,
+              reflectToAttribute: true
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'radio');
+
+          this._addActiveListeners();
+
+          if (!this.value) {
+            this.value = this.innerText;
           }
-        };
-      }
+        }
 
-      ready() {
-        super.ready();
+        _checkedChanged(checked) {
+          this.setAttribute('aria-checked', checked);
 
-        this.setAttribute('role', 'radio');
+          this.dispatchEvent(new CustomEvent('radio-changed', {bubbles: true}));
+        }
 
-        this._addActiveListeners();
+        _addActiveListeners() {
+          // DOWN
+          this._addEventListenerToNode(this, 'down', (e) => {
+            e.preventDefault();
+            if (!this.disabled) {
+              this.setAttribute('active', '');
+            }
+          });
 
-        if (!this.value) {
-          this.value = this.innerText;
+          // UP
+          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+
+          // KEYDOWN
+          this.addEventListener('keydown', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('active', '');
+            }
+          });
+
+          // KEYUP
+          this.addEventListener('keyup', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('checked', '');
+              this.removeAttribute('active');
+            }
+          });
+        }
+
+        get focusElement() {
+          return this.$.label;
         }
       }
 
-      _checkedChanged(checked) {
-        this.setAttribute('aria-checked', checked);
+      customElements.define(RadioButtonElement.is, RadioButtonElement);
 
-        this.dispatchEvent(new CustomEvent('radio-changed', {bubbles: true}));
-      }
 
-      _addActiveListeners() {
-        // DOWN
-        this._addEventListenerToNode(this, 'down', (e) => {
-          e.preventDefault();
-          if (!this.disabled) {
-            this.setAttribute('active', '');
-          }
-        });
-
-        // UP
-        this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
-
-        // KEYDOWN
-        this.addEventListener('keydown', e => {
-          if (!this.disabled && e.keyCode === 32) {
-            e.preventDefault();
-            this.setAttribute('active', '');
-          }
-        });
-
-        // KEYUP
-        this.addEventListener('keyup', e => {
-          if (!this.disabled && e.keyCode === 32) {
-            e.preventDefault();
-            this.setAttribute('checked', '');
-            this.removeAttribute('active');
-          }
-        });
-      }
-
-      get focusElement() {
-        return this.$.label;
-      }
-    }
-
-    customElements.define(RadioElement.is, RadioElement);
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.RadioButtonElement = RadioButtonElement;
+    })();
   </script>
 </dom-module>
