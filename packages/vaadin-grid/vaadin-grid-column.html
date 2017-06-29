@@ -88,13 +88,16 @@ This program is available under Apache License Version 2.0, available at https:/
     ],
 
     created: function() {
-      this._templateObserver = new Polymer.FlattenedNodesObserver(this, (info) => {
+      var handler = function(info) {
         if (info.addedNodes.length >= 0) {
           this.headerTemplate = this._prepareHeaderTemplate();
           this.footerTemplate = this._prepareFooterTemplate();
           this.template = this._prepareBodyTemplate();
         }
-      });
+      };
+
+      this._templateObserver = Polymer.Element ?
+        new Polymer.FlattenedNodesObserver(this, handler) : Polymer.dom(this).observeNodes(handler);
     },
 
     _prepareHeaderTemplate: function() {

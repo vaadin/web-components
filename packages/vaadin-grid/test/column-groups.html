@@ -213,9 +213,9 @@
 
         if (Polymer.Element) {
           Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'), 
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
             function(col) {
-                col._templateObserver.flush();
+              col._templateObserver.flush();
             });
         }
       }
