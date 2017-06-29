@@ -26,23 +26,23 @@
     <h3>Radio Group</h3>
     <demo-snippet>
       <template>
-        <vaadin-radio-group name="radio-group" value="fourth">
+        <vaadin-radio-button-group name="radio-group" value="fourth">
           <vaadin-radio-button>1</vaadin-radio-button>
           <vaadin-radio-button value="second">2</vaadin-radio-button>
           <vaadin-radio-button>3</vaadin-radio-button>
           <vaadin-radio-button value="fourth">4</vaadin-radio-button>
-        </vaadin-radio-group>
+        </vaadin-radio-button-group>
       </template>
     </demo-snippet>
 
     <h3>Radio with Custom Tabindex</h3>
     <demo-snippet>
       <template>
-        <vaadin-radio-group name="radio-group" value="1">
+        <vaadin-radio-button-group name="radio-group" value="1">
           <vaadin-radio-button tabindex="1">1</vaadin-radio-button>
           <vaadin-radio-button tabindex="3">2</vaadin-radio-button>
           <vaadin-radio-button tabindex="2">3</vaadin-radio-button>
-        </vaadin-radio-group>
+        </vaadin-radio-button-group>
       </template>
     </demo-snippet>
 
@@ -58,12 +58,12 @@
       <template>
         <iron-form id="test_form">
           <form action="/test" method="get">
-            <vaadin-radio-group name="radio-group" required>
+            <vaadin-radio-button-group name="radio-group" required>
               <vaadin-radio-button><b>1</b></vaadin-radio-button>
               <vaadin-radio-button value="">2</vaadin-radio-button>
               <vaadin-radio-button>3</vaadin-radio-button>
               <vaadin-radio-button value="fourth">4</vaadin-radio-button>
-            </vaadin-radio-group>
+            </vaadin-radio-button-group>
             <br><br>
             <vaadin-button onclick="test_form.submit()">Submit</vaadin-button>
           </form>

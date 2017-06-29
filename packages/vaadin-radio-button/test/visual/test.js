@@ -1,4 +1,4 @@
-gemini.suite('vaadin-element', function(rootSuite) {
+gemini.suite('vaadin-radio-button', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -18,7 +18,10 @@ gemini.suite('vaadin-element', function(rootSuite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .capture('default')
+      .capture('focus-tabindex', function(actions) {
+        actions.sendKeys(gemini.TAB);
+      });
   });
 
 });
