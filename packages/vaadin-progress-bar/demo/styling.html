@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-progress Styling Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+
+    <demo-navigation></demo-navigation>
+
+    <h3>Line width</h3>
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-progress.thick {
+              --vaadin-progress-line-width: 6px;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-progress class="thick"></vaadin-progress>
+      </template>
+    </demo-snippet>
+
+    <h3>Size</h3>
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-progress.narrow {
+              width: 50%;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-progress class="narrow"></vaadin-progress>
+      </template>
+    </demo-snippet>
+
+    <h3>Colors</h3>
+    <demo-snippet>
+      <template>
+        <custom-style>
+          <style>
+            vaadin-progress.custom-colors {
+              --vaadin-progress-background-color: transparent;
+              --vaadin-progress-foreground-color: green;
+            }
+          </style>
+        </custom-style>
+
+        <vaadin-progress class="custom-colors"></vaadin-progress>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+</html>

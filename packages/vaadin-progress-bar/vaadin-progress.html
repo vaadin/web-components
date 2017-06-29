@@ -22,10 +22,51 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: inline-block;
+        --vaadin-progress-background-color: rgba(0,0,0,0.1);
+        --vaadin-progress-foreground-color: var(--primary-color, rgba(0,0,0,0.5));
+        --vaadin-progress-line-width: 3px;
+
+        display: block;
+        height: var(--vaadin-progress-line-width);
+        margin: 8px 0;
+        overflow: hidden;
+        position: relative;
       }
+
+      .background {
+        background: var(--vaadin-progress-background-color);
+        height: 100%;
+        position: absolute;
+        width: 100%;
+      }
+
+      .foreground {
+        background: var(--vaadin-progress-foreground-color);
+        height: 100%;
+        position: absolute;
+        transform-origin: 0 50%;
+        transition: transform 150ms;
+        width: 100%;
+      }
+
+      :host(:not([circle]):not([value])) .foreground {
+        animation: indeterminate-progress-bar 1s infinite;
+      }
+
+      @keyframes indeterminate-progress-bar {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
     </style>
-    <slot></slot>
+
+    <div class="background"></div>
+    <div class="foreground" style$="transform: scaleX([[value]])"></div>
+
   </template>
 
   <script>
@@ -40,6 +81,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
+          value: {
+            type: Number,
+            value: undefined,
+            reflectToAttribute: true
+          }
         };
       }
     }
