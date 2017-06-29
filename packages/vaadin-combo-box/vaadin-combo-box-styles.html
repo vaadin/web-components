@@ -19,10 +19,7 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       [part~="overlay"] {
-        box-shadow:
-          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12),
-          0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
       }
     </style>
   </template>
@@ -36,37 +33,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part~="overlay"] {
-        box-shadow:
-          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12),
-          0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
       }
 
       [part="clear-button"],
       [part="toggle-button"] {
-        font-size: 16px;
-        color: rgba(0, 0, 0, .26);
         cursor: pointer;
-        transition: color 0.2s;
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-
-      [part="clear-button"]:hover,
-      [part="toggle-button"]:hover,
-      :host([opened]) [part="clear-button"],
-      :host([opened]) [part="toggle-button"] {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) [part="clear-button"]:hover,
-      :host([opened]) [part="toggle-button"]:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      [part="toggle-button"] {
-        transition: all 0.2s !important;
       }
 
       :host([opened]) [part="toggle-button"] {
@@ -83,14 +58,9 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         cursor: pointer;
         padding: 13px 16px;
-        color: #212121;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-
-      :host([selected]) {
-        color: #3f51b5;
       }
 
       :host(:not([touch-device]):hover),
@@ -105,7 +75,7 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        border: 2px solid var(--primary-color, #03A9F4);
+        border: 2px solid #eee;
         border-radius: 50%;
         border-right-color: transparent;
         border-top-color: transparent;
