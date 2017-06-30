@@ -4,19 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-`<vaadin-radio-button-group>` is a Polymer 2 element.
-```html
-<vaadin-radio-button-group>
-  <vaadin-radio-button>1</vaadin-radio-button>
-  <vaadin-radio-button>2</vaadin-radio-button>
-  <vaadin-radio-button>3</vaadin-radio-button>
-</vaadin-radio-button-group>
-```
-@element vaadin-radio-button-group
-@demo demo/index.html
--->
-
 <link rel="import" href="vaadin-radio-button.html">
 
 <dom-module id="vaadin-radio-button-group-default-theme" theme-for="vaadin-radio-button-group">
@@ -78,6 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
+       * @element vaadin-radio-button-group
        * @demo demo/index.html
        */
       class RadioButtonGroupElement extends Vaadin.ThemableMixin(Polymer.Element) {
@@ -112,10 +100,6 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
-        get radio() {
-          return 'vaadin-radio-button';
-        }
-
         ready() {
           super.ready();
 
@@ -123,54 +107,62 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.addEventListener('radio-changed', e => {
             if (e.target.checked) {
-              this.querySelectorAll(`${this.radio}`).forEach((item) => item.checked = (e.target === item) ? true : false);
               this.value = e.target.value;
             }
           });
         }
 
-        _disabledChanged(value) {
-          if (value) {
+        _disabledChanged(disabled) {
+          if (disabled) {
             this.removeAttribute('invalid');
           }
 
-          this.querySelectorAll(`${this.radio}`).forEach((item) => item.disabled = value);
+          this._forEachButton(button => button.disabled = disabled);
         }
 
         _addActiveListeners() {
           this.addEventListener('keydown', e => {
-            if (!this.disabled) {
+            if (this.disabled) {
               return;
             }
 
             // LEFT, UP - select previous radio button
             if (e.keyCode === 37 || e.keyCode === 38) {
               e.preventDefault();
-              if (e.target.previousElementSibling) {
-                e.target.previousElementSibling.checked = true;
-                e.target.previousElementSibling.focus();
-                this.value = e.target.previousElementSibling.value;
-              } else {
-                this.lastElementChild.checked = true;
-                this.lastElementChild.focus();
-                this.value = this.lastElementChild.value;
-              }
+              this._selectPreviousButton(e.target);
             }
 
             // RIGHT, DOWN - select next radio button
             if (e.keyCode === 39 || e.keyCode === 40) {
               e.preventDefault();
-              if (e.target.nextElementSibling) {
-                e.target.nextElementSibling.checked = true;
-                e.target.nextElementSibling.focus();
-                this.value = e.target.nextElementSibling.value;
-              } else {
-                this.firstElementChild.checked = true;
-                this.firstElementChild.focus();
-                this.value = this.firstElementChild.value;
-              }
+              this._selectNextButton(e.target);
             }
           });
+        }
+
+        _selectButton(element) {
+          element.focus();
+          this.value = element.value;
+        }
+
+        _selectNextButton(element) {
+          if (element.nextElementSibling) {
+            this._selectButton(element.nextElementSibling);
+          } else {
+            this._selectButton(this.firstElementChild);
+          }
+        }
+
+        _selectPreviousButton(element) {
+          if (element.previousElementSibling) {
+            this._selectButton(element.previousElementSibling);
+          } else {
+            this._selectButton(this.lastElementChild);
+          }
+        }
+
+        _forEachButton(fn) {
+          Array.prototype.forEach.call(this.querySelectorAll('vaadin-radio-button'), fn);
         }
 
         _valueChanged(value) {
@@ -178,11 +170,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.removeAttribute('invalid');
           }
 
-          this.querySelectorAll(`${this.radio}`).forEach((item) => item.checked = false);
-
-          if (this.querySelector(`${this.radio}[value="${value}"]`)) {
-            this.querySelector(`${this.radio}[value="${value}"]`).checked = true;
-          }
+          this._forEachButton(button => button.checked = button.value === value);
         }
 
         validate() {
