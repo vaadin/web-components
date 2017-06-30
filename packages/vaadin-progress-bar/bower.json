@@ -1,14 +1,15 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-progress",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
+  "description": "vaadin-progress",
+  "main": "vaadin-progress-bar.html",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-progress",
+    "vaadin-progress-bar",
     "web-components",
     "web-component",
     "polymer"
