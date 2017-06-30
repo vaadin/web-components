@@ -22,6 +22,16 @@
 
   <script>
     (function () {
+      /**
+       * `<vaadin-board-row>` is a Polymer element that together with `vaadin-board` element allows to create 
+       * flexible responsive layouts and build nice looking dashboard.
+       * Each Row consists of four columns, and can contain up to four components
+       * taking one column each, or fewer components with multiple columns each as
+       * long as sum of columns stays less than or equal to four.
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
       class BoardRowElement extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
         static get is() {
           return "vaadin-board-row";
@@ -193,6 +203,10 @@
         }
       }
       customElements.define(BoardRowElement.is, BoardRowElement);
+
+      /**
+       * @namespace Vaadin
+       */
       window.Vaadin = window.Vaadin || {};
       window.Vaadin.BoardRowElement = BoardRowElement;
     })();
