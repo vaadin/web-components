@@ -172,8 +172,12 @@
           const width = this.getBoundingClientRect().width;
           if (forceResize || width != this._oldWidth) {
             const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
-
-            const filteredNodes = nodes.filter(node => node.nodeType !== node.TEXT_NODE);
+            const isElementNode = function (node) {
+              return !((node.nodeType === node.TEXT_NODE)
+                || (node instanceof Polymer.DomRepeat)
+                || (node instanceof Polymer.DomIf));
+            }
+            const filteredNodes = nodes.filter(isElementNode);
             this._addStyleNames(width);
             const boardCols = this._parseBoardCols(filteredNodes);
             const colsInRow = boardCols.reduce((a, b) => a + b, 0);
