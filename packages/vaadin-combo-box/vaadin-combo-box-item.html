@@ -12,12 +12,8 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: block;
       }
-
-      :host([hidden]) {
-        display: none;
-      }
     </style>
-    [[label]]
+    <span id="content">[[label]]</span>
   </template>
 </dom-module>
 
@@ -98,7 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
           comboBox._ensureTemplatized();
           if (comboBox._TemplateClass) {
             this._itemTemplateInstance = new comboBox._TemplateClass({});
-            this.root.textContent = '';
+            this.root.removeChild(this.$.content);
             this.root.appendChild(this._itemTemplateInstance.root);
           }
         }
