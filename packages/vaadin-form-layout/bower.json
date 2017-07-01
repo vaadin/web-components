@@ -24,8 +24,9 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "iron-demo-helpers": "^2.0.0",
     "elements-demo-resources": "^2.0.0",
+    "iron-component-page": "^3.0.0",
+    "iron-demo-helpers": "^2.0.0",
     "paper-input": "^2.0.0",
     "test-fixture": "^2.0.0",
     "vaadin-text-field": "",
