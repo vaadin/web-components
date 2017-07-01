@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-button.html",
         "start": {
-          "line": 99,
+          "line": 105,
           "column": 6
         },
         "end": {
-          "line": 99,
+          "line": 105,
           "column": 42
         }
       },
@@ -99,11 +99,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 69,
+                  "line": 75,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 86,
                   "column": 9
                 }
               },
@@ -307,16 +307,60 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 82,
+                  "line": 88,
                   "column": 8
                 },
                 "end": {
-                  "line": 87,
+                  "line": 93,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": []
+            }
+          ],
+          "staticMethods": [
+            {
+              "name": "constructor",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 8,
+                  "column": 4
+                },
+                "end": {
+                  "line": 10,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "includeStyle",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 42,
+                  "column": 4
+                },
+                "end": {
+                  "line": 46,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
           "demos": [
@@ -328,15 +372,16 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 64,
+              "line": 70,
               "column": 6
             },
             "end": {
-              "line": 92,
+              "line": 98,
               "column": 7
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.ButtonElement",
           "attributes": [
             {
@@ -406,11 +451,11 @@
               "range": {
                 "file": "vaadin-button.html",
                 "start": {
-                  "line": 29,
+                  "line": 31,
                   "column": 6
                 },
                 "end": {
-                  "line": 29,
+                  "line": 31,
                   "column": 19
                 }
               }
@@ -420,8 +465,7 @@
           "mixins": [
             "Vaadin.ControlStateMixin",
             "Vaadin.ThemableMixin"
-          ],
-          "superclass": "HTMLElement"
+          ]
         }
       ]
     }
