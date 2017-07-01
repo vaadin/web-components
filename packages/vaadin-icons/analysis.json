@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": " `vaadin-icons` is a set of 600+ icons which can be used together with Polymer's [`iron-icon`](https://elements.polymer-project.org/elements/iron-icon) component.\n\n To use the `vaadin-icons` iconset, import the specific `vaadin-icons.html`, and\n specify the icon as `vaadin:<icon>`. For example, to use a cart icon, you would\n use:\n ```html\n<link rel=\"import\" href=\"/components/vaadin-icons/vaadin-icons.html\">\n<iron-icon icon=\"vaadin:cart\"></iron-icon>\n ```\n\n For the complete list of available icons, see https://vaadin.com/icons\n ",
+      "summary": "",
+      "path": "vaadin-icons.html",
+      "properties": [],
+      "methods": [],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 9,
+          "column": 1
+        },
+        "end": {
+          "line": 23,
+          "column": 4
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "vaadin-icons"
+    }
+  ]
+}

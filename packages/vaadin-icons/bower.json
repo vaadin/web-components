@@ -29,7 +29,7 @@
     "iron-iconset-svg": "^2.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "^2.0.0",
+    "iron-component-page": "^3.0.0",
     "iron-meta": "^2.0.0",
     "elements-demo-resources": "^2.0.0"
   },
