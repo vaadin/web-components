@@ -15,25 +15,11 @@ This program is available under Apache License Version 2.0, available at https:/
   }
 </style>
 
-<dom-module id="vaadin-combo-box-light-default-theme" theme-for="vaadin-combo-box-light">
-  <template>
-    <style>
-      [part~="overlay"] {
-        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-      }
-    </style>
-  </template>
-</dom-module>
-
 <dom-module id="vaadin-combo-box-default-theme" theme-for="vaadin-combo-box vaadin-combo-box-light" >
   <template>
     <style>
       :host {
         padding: 8px 0;
-      }
-
-      [part~="overlay"] {
-        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
       }
 
       [part="clear-button"],
@@ -47,6 +33,16 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([opened]) [part="toggle-button"] {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-overlay-default-theme" theme-for="vaadin-overlay">
+  <template>
+    <style>
+      :host {
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
       }
     </style>
   </template>

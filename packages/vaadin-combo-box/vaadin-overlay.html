@@ -6,24 +6,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/templatize.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
+<!-- TODO: remove this element from combo-box and use shared vaadin-overlay insttead -->
 <dom-module id="vaadin-overlay">
   <template>
     <style>
        :host {
         position: absolute;
-        box-shadow:
-                    0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
         background: #fff;
-        border-radius: 0 0 2px 2px;
         top: 0;
         left: 0;
         pointer-events: auto;
-
         /**
-          * Keep the vaadin-combo-box-overlay above paper-dialogs.
+          * Keep the vaadin-overlay above paper-dialogs.
           * iron-overlay-manager.html: Polymer.IronOverlayManagerClass.prototype._applyOverlayZ
           */
         z-index: 200;
@@ -43,8 +39,9 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * `<vaadin-overlay>` is a Polymer element for creating overlays.
      * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
      */
-    class OverlayElement extends Polymer.Element {
+    class OverlayElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-overlay';
       }
