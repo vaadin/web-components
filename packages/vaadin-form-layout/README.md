@@ -7,7 +7,7 @@
 
 [Live Demo ↗](https://cdn-origin.vaadin.com/vaadin-form-layout/1.0.0-alpha2/demo/)
 
-[&lt;vaadin-form-layout&gt;](https://vaadin.com/elements/-/element/vaadin-form-layout) is a [Polymer](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-form-layout&gt;](https://vaadin.com/elements/-/element/vaadin-form-layout) is a [Polymer 2](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
