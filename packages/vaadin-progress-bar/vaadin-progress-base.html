@@ -23,8 +23,59 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Number,
             value: undefined,
             reflectToAttribute: true
+          },
+          min: {
+            type: Number,
+            value: 0,
+            reflectToAttribute: true,
+            observer: '_minChanged'
+          },
+          max: {
+            type: Number,
+            value: 1,
+            reflectToAttribute: true,
+            observer: '_maxChanged'
+          },
+          normalizedValue: {
+            type: Number,
+            computed: '_normalizeValue(value, min, max)'
           }
         };
+      }
+
+      static get observers() {
+        return ['_valueChanged(value)'];
+      }
+
+      _valueChanged(value, value2) {
+        if (value < this.min)
+          this.value = this.min;
+        else if (value > this.max)
+          this.value = this.max;
+      }
+
+      _minChanged(newV, oldV) {
+        if (newV >= this.max) {
+          try {
+            throw new Error('min should be less then max');
+          } finally {
+            this.min = oldV;
+          }
+        }
+      }
+
+      _maxChanged(newV, oldV) {
+        if (newV <= this.min) {
+          try {
+            throw new Error('min should be less then max');
+          } finally {
+            this.max = oldV;
+          }
+        }
+      }
+
+      _normalizeValue(value, min, max) {
+        return value ? (value - min) / (max - min) : undefined;
       }
     }
   }
