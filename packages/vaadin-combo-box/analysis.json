@@ -2047,6 +2047,702 @@
               ]
             }
           ],
+          "staticMethods": [
+            {
+              "name": "_parseTemplate",
+              "description": "Scans a template to produce template metadata.\n\nTemplate-specific metadata are stored in the object returned, and node-\nspecific metadata are stored in objects in its flattened `nodeInfoList`\narray.  Only nodes in the template that were parsed as nodes of\ninterest contain an object in `nodeInfoList`.  Each `nodeInfo` object\ncontains an `index` (`childNodes` index in parent) and optionally\n`parent`, which points to node info of its parent (including its index).\n\nThe template metadata object returned from this method has the following\nstructure (many fields optional):\n\n```js\n  {\n    // Flattened list of node metadata (for nodes that generated metadata)\n    nodeInfoList: [\n      {\n        // `id` attribute for any nodes with id's for generating `$` map\n        id: {string},\n        // `on-event=\"handler\"` metadata\n        events: [\n          {\n            name: {string},   // event name\n            value: {string},  // handler method name\n          }, ...\n        ],\n        // Notes when the template contained a `<slot>` for shady DOM\n        // optimization purposes\n        hasInsertionPoint: {boolean},\n        // For nested `<template>`` nodes, nested template metadata\n        templateInfo: {object}, // nested template metadata\n        // Metadata to allow efficient retrieval of instanced node\n        // corresponding to this metadata\n        parentInfo: {number},   // reference to parent nodeInfo>\n        parentIndex: {number},  // index in parent's `childNodes` collection\n        infoIndex: {number},    // index of this `nodeInfo` in `templateInfo.nodeInfoList`\n      },\n      ...\n    ],\n    // When true, the template had the `strip-whitespace` attribute\n    // or was nested in a template with that setting\n    stripWhitespace: {boolean},\n    // For nested templates, nested template content is moved into\n    // a document fragment stored here; this is an optimization to\n    // avoid the cost of nested template cloning\n    content: {DocumentFragment}\n  }\n```\n\nThis method kicks off a recursive treewalk as follows:\n\n```\n   _parseTemplate <---------------------+\n     _parseTemplateContent              |\n       _parseTemplateNode  <------------|--+\n         _parseTemplateNestedTemplate --+  |\n         _parseTemplateChildNodes ---------+\n         _parseTemplateNodeAttributes\n           _parseTemplateNodeAttribute\n\n```\n\nThese methods may be overridden to add custom metadata about templates\nto either `templateInfo` or `nodeInfo`.\n\nNote that this method may be destructive to the template, in that\ne.g. event annotations may be removed after being noted in the\ntemplate metadata.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 195,
+                  "column": 6
+                },
+                "end": {
+                  "line": 206,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template",
+                  "type": "HTMLTemplateElement",
+                  "description": "Template to parse"
+                },
+                {
+                  "name": "outerTemplateInfo",
+                  "type": "Object=",
+                  "description": "Template metadata from the outer\n  template, for parsing nested templates"
+                }
+              ],
+              "return": {
+                "type": "Object",
+                "desc": "Parsed template metadata"
+              },
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "_parseTemplateContent",
+              "description": "Overrides `PropertyAccessors` to add map of dynamic functions on\ntemplate info, for consumption by `PropertyEffects` template binding\ncode. This map determines which method templates should have accessors\ncreated for them.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 774,
+                  "column": 6
+                },
+                "end": {
+                  "line": 777,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                },
+                {
+                  "name": "templateInfo"
+                },
+                {
+                  "name": "nodeInfo"
+                }
+              ],
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "_parseTemplateNode",
+              "description": "Overrides default `TemplateStamp` implementation to add support for\nparsing bindings from `TextNode`'s' `textContent`.  A `bindings`\narray is added to `nodeInfo` and populated with binding metadata\nwith information capturing the binding target, and a `parts` array\nwith one or more metadata objects capturing the source(s) of the\nbinding.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2309,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2323,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template node"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_parseTemplateChildNodes",
+              "description": "Parses template child nodes for the given root node.\n\nThis method also wraps whitelisted legacy template extensions\n(`is=\"dom-if\"` and `is=\"dom-repeat\"`) with their equivalent element\nwrappers, collapses text nodes, and strips whitespace from the template\nif the `templateInfo.stripWhitespace` setting was provided.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 254,
+                  "column": 6
+                },
+                "end": {
+                  "line": 288,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "root",
+                  "type": "Node",
+                  "description": "Root node whose `childNodes` will be parsed"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template."
+                }
+              ],
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "_parseTemplateNestedTemplate",
+              "description": "Overrides default `TemplateStamp` implementation to add support for\nbinding the properties that a nested template depends on to the template\nas `_host_<property>`.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2392,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2402,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template node"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_parseTemplateNodeAttributes",
+              "description": "Parses template node attributes and adds node metadata to `nodeInfo`\nfor nodes of interest.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 326,
+                  "column": 6
+                },
+                "end": {
+                  "line": 335,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template."
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "_parseTemplateNodeAttribute",
+              "description": "Overrides default `TemplateStamp` implementation to add support for\nparsing bindings from attributes.  A `bindings`\narray is added to `nodeInfo` and populated with binding metadata\nwith information capturing the binding target, and a `parts` array\nwith one or more metadata objects capturing the source(s) of the\nbinding.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2341,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2377,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template node"
+                },
+                {
+                  "name": "name"
+                },
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_contentForTemplate",
+              "description": "Returns the `content` document fragment for a given template.\n\nFor nested templates, Polymer performs an optimization to cache nested\ntemplate content to avoid the cost of cloning deeply nested templates.\nThis method retrieves the cached content for a given template.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 380,
+                  "column": 6
+                },
+                "end": {
+                  "line": 383,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template",
+                  "type": "HTMLTemplateElement",
+                  "description": "Template to retrieve `content` for"
+                }
+              ],
+              "return": {
+                "type": "DocumentFragment",
+                "desc": "Content fragment"
+              },
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "createPropertiesForAttributes",
+              "description": "Generates property accessors for all attributes in the standard\nstatic `observedAttributes` array.\n\nAttribute names are mapped to property names using the `dash-case` to\n`camelCase` convention",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-accessors.html",
+                "start": {
+                  "line": 110,
+                  "column": 6
+                },
+                "end": {
+                  "line": 115,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Polymer.PropertyAccessors"
+            },
+            {
+              "name": "addPropertyEffect",
+              "description": "Ensures an accessor exists for the specified property, and adds\nto a list of \"property effects\" that will run when the accessor for\nthe specified property is set.  Effects are grouped by \"type\", which\nroughly corresponds to a phase in effect processing.  The effect\nmetadata should be in the following form:\n\n  {\n    fn: effectFunction, // Reference to function to call to perform effect\n    info: { ... }       // Effect metadata passed to function\n    trigger: {          // Optional triggering metadata; if not provided\n      name: string      // the property is treated as a wildcard\n      structured: boolean\n      wildcard: boolean\n    }\n  }\n\nEffects are called from `_propertiesChanged` in the following order by\ntype:\n\n1. COMPUTE\n2. PROPAGATE\n3. REFLECT\n4. OBSERVE\n5. NOTIFY\n\nEffect functions are called with the following signature:\n\n  effectFunction(inst, path, props, oldProps, info, hasPaths)",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2040,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2042,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property that should trigger the effect"
+                },
+                {
+                  "name": "type",
+                  "type": "string",
+                  "description": "Effect type, from this.PROPERTY_EFFECT_TYPES"
+                },
+                {
+                  "name": "effect",
+                  "type": "Object=",
+                  "description": "Effect metadata object"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createPropertyObserver",
+              "description": "Creates a single-property observer for the given property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2053,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2055,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                },
+                {
+                  "name": "methodName",
+                  "type": "string",
+                  "description": "Name of observer method to call"
+                },
+                {
+                  "name": "dynamicFn",
+                  "type": "boolean=",
+                  "description": "Whether the method name should be included as\n  a dependency to the effect."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createMethodObserver",
+              "description": "Creates a multi-property \"method observer\" based on the provided\nexpression, which should be a string in the form of a normal Javascript\nfunction signature: `'methodName(arg1, [..., argn])'`.  Each argument\nshould correspond to a property or path in the context of this\nprototype (or instance), or may be a literal string or number.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2069,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2071,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "expression",
+                  "type": "string",
+                  "description": "Method expression"
+                },
+                {
+                  "name": "dynamicFn",
+                  "type": "(boolean|Object)=",
+                  "description": "Boolean or object map indicating\n  whether method names should be included as a dependency to the effect."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createNotifyingProperty",
+              "description": "Causes the setter for the given property to dispatch `<property>-changed`\nevents to notify of changes to the property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2080,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2082,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createReadOnlyProperty",
+              "description": "Creates a read-only accessor for the given property.\n\nTo set the property, use the protected `_setProperty` API.\nTo create a custom protected setter (e.g. `_setMyProp()` for\nproperty `myProp`), pass `true` for `protectedSetter`.\n\nNote, if the property will have other property effects, this method\nshould be called first, before adding other effects.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2099,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2101,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                },
+                {
+                  "name": "protectedSetter",
+                  "type": "boolean=",
+                  "description": "Creates a custom protected setter\n  when `true`."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createReflectedProperty",
+              "description": "Causes the setter for the given property to reflect the property value\nto a (dash-cased) attribute of the same name.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2110,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2112,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createComputedProperty",
+              "description": "Creates a computed property whose value is set to the result of the\nmethod described by the given `expression` each time one or more\narguments to the method changes.  The expression should be a string\nin the form of a normal Javascript function signature:\n`'methodName(arg1, [..., argn])'`",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2127,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2129,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Name of computed property to set"
+                },
+                {
+                  "name": "expression",
+                  "type": "string",
+                  "description": "Method expression"
+                },
+                {
+                  "name": "dynamicFn",
+                  "type": "(boolean|Object)=",
+                  "description": "Boolean or object map indicating whether\n  method names should be included as a dependency to the effect."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "bindTemplate",
+              "description": "Parses the provided template to ensure binding effects are created\nfor them, and then ensures property accessors are created for any\ndependent properties in the template.  Binding effects for bound\ntemplates are stored in a linked list on the instance so that\ntemplates can be efficiently stamped and unstamped.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2143,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2145,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template",
+                  "type": "HTMLTemplateElement",
+                  "description": "Template containing binding\n  bindings"
+                }
+              ],
+              "return": {
+                "type": "Object",
+                "desc": "Template metadata object"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_addTemplatePropertyEffect",
+              "description": "Adds a property effect to the given template metadata, which is run\nat the \"propagate\" stage of `_propertiesChanged` when the template\nhas been bound to the element via `_bindTemplate`.\n\nThe `effect` object should match the format in `_addPropertyEffect`.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2208,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2214,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata to add effect to"
+                },
+                {
+                  "name": "prop",
+                  "type": "string",
+                  "description": "Property that should trigger the effect"
+                },
+                {
+                  "name": "effect",
+                  "type": "Object=",
+                  "description": "Effect metadata object"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_parseBindings",
+              "description": "Called to parse text in a template (either attribute values or\ntextContent) into binding metadata.\n\nAny overrides of this method should return an array of binding part\nmetadata  representing one or more bindings found in the provided text\nand any \"literal\" text in between.  Any non-literal parts will be passed\nto `_evaluateBinding` when any dependencies change.  The only required\nfields of each \"part\" in the returned array are as follows:\n\n- `dependencies` - Array containing trigger metadata for each property\n  that should trigger the binding to update\n- `literal` - String containing text if the part represents a literal;\n  in this case no `dependencies` are needed\n\nAdditional metadata for use by `_evaluateBinding` may be provided in\neach part object as needed.\n\nThe default implementation handles the following types of bindings\n(one or more may be intermixed with literal strings):\n- Property binding: `[[prop]]`\n- Path binding: `[[object.prop]]`\n- Negated property or path bindings: `[[!prop]]` or `[[!object.prop]]`\n- Two-way property or path bindings (supports negation):\n  `{{prop}}`, `{{object.prop}}`, `{{!prop}}` or `{{!object.prop}}`\n- Inline computed method (supports negation):\n  `[[compute(a, 'literal', b)]]`, `[[!compute(a, 'literal', b)]]`",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2437,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2500,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "text",
+                  "type": "string",
+                  "description": "Text to parse from attribute or textContent"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Current template metadata"
+                }
+              ],
+              "return": {
+                "type": "Array.<Object>",
+                "desc": "Array of binding part metadata"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_evaluateBinding",
+              "description": "Called to evaluate a previously parsed binding part based on a set of\none or more changed dependencies.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2516,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2533,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "inst",
+                  "type": "HTMLElement",
+                  "description": "Element that should be used as scope for\n  binding dependencies"
+                },
+                {
+                  "name": "part",
+                  "type": "Object",
+                  "description": "Binding part metadata"
+                },
+                {
+                  "name": "path",
+                  "type": "string",
+                  "description": "Property/path that triggered this effect"
+                },
+                {
+                  "name": "props",
+                  "type": "Object",
+                  "description": "Bag of current property changes"
+                },
+                {
+                  "name": "oldProps",
+                  "type": "Object",
+                  "description": "Bag of previous values for changed properties"
+                },
+                {
+                  "name": "hasPaths",
+                  "type": "boolean",
+                  "description": "True with `props` contains one or more paths"
+                }
+              ],
+              "return": {
+                "type": "*",
+                "desc": "Value the binding part evaluated to"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "finalize",
+              "description": "Called automatically when the first element instance is created to\nensure that class finalization work has been completed.\nMay be called by users to eagerly perform class finalization work\nprior to the creation of the first element instance.\n\nClass finalization work generally includes meta-programming such as\ncreating property accessors and any property effect metadata needed for\nthe features used.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 492,
+                  "column": 6
+                },
+                "end": {
+                  "line": 496,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Polymer.ElementMixin"
+            }
+          ],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -2060,6 +2756,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.ComboBoxItemElement",
           "attributes": [
             {
@@ -2149,8 +2846,7 @@
             "selectors": []
           },
           "slots": [],
-          "tagname": "vaadin-combo-box-item",
-          "superclass": "HTMLElement"
+          "tagname": "vaadin-combo-box-item"
         },
         {
           "description": "",
@@ -2178,6 +2874,7 @@
             }
           ],
           "methods": [],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -2191,6 +2888,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.SpinnerElement",
           "attributes": [
             {
@@ -2216,8 +2914,7 @@
             "selectors": []
           },
           "slots": [],
-          "tagname": "vaadin-spinner",
-          "superclass": "HTMLElement"
+          "tagname": "vaadin-spinner"
         },
         {
           "description": "`<vaadin-overlay>` is a Polymer element for creating overlays.",
@@ -4245,6 +4942,702 @@
               ]
             }
           ],
+          "staticMethods": [
+            {
+              "name": "_parseTemplate",
+              "description": "Scans a template to produce template metadata.\n\nTemplate-specific metadata are stored in the object returned, and node-\nspecific metadata are stored in objects in its flattened `nodeInfoList`\narray.  Only nodes in the template that were parsed as nodes of\ninterest contain an object in `nodeInfoList`.  Each `nodeInfo` object\ncontains an `index` (`childNodes` index in parent) and optionally\n`parent`, which points to node info of its parent (including its index).\n\nThe template metadata object returned from this method has the following\nstructure (many fields optional):\n\n```js\n  {\n    // Flattened list of node metadata (for nodes that generated metadata)\n    nodeInfoList: [\n      {\n        // `id` attribute for any nodes with id's for generating `$` map\n        id: {string},\n        // `on-event=\"handler\"` metadata\n        events: [\n          {\n            name: {string},   // event name\n            value: {string},  // handler method name\n          }, ...\n        ],\n        // Notes when the template contained a `<slot>` for shady DOM\n        // optimization purposes\n        hasInsertionPoint: {boolean},\n        // For nested `<template>`` nodes, nested template metadata\n        templateInfo: {object}, // nested template metadata\n        // Metadata to allow efficient retrieval of instanced node\n        // corresponding to this metadata\n        parentInfo: {number},   // reference to parent nodeInfo>\n        parentIndex: {number},  // index in parent's `childNodes` collection\n        infoIndex: {number},    // index of this `nodeInfo` in `templateInfo.nodeInfoList`\n      },\n      ...\n    ],\n    // When true, the template had the `strip-whitespace` attribute\n    // or was nested in a template with that setting\n    stripWhitespace: {boolean},\n    // For nested templates, nested template content is moved into\n    // a document fragment stored here; this is an optimization to\n    // avoid the cost of nested template cloning\n    content: {DocumentFragment}\n  }\n```\n\nThis method kicks off a recursive treewalk as follows:\n\n```\n   _parseTemplate <---------------------+\n     _parseTemplateContent              |\n       _parseTemplateNode  <------------|--+\n         _parseTemplateNestedTemplate --+  |\n         _parseTemplateChildNodes ---------+\n         _parseTemplateNodeAttributes\n           _parseTemplateNodeAttribute\n\n```\n\nThese methods may be overridden to add custom metadata about templates\nto either `templateInfo` or `nodeInfo`.\n\nNote that this method may be destructive to the template, in that\ne.g. event annotations may be removed after being noted in the\ntemplate metadata.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 195,
+                  "column": 6
+                },
+                "end": {
+                  "line": 206,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template",
+                  "type": "HTMLTemplateElement",
+                  "description": "Template to parse"
+                },
+                {
+                  "name": "outerTemplateInfo",
+                  "type": "Object=",
+                  "description": "Template metadata from the outer\n  template, for parsing nested templates"
+                }
+              ],
+              "return": {
+                "type": "Object",
+                "desc": "Parsed template metadata"
+              },
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "_parseTemplateContent",
+              "description": "Overrides `PropertyAccessors` to add map of dynamic functions on\ntemplate info, for consumption by `PropertyEffects` template binding\ncode. This map determines which method templates should have accessors\ncreated for them.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 774,
+                  "column": 6
+                },
+                "end": {
+                  "line": 777,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                },
+                {
+                  "name": "templateInfo"
+                },
+                {
+                  "name": "nodeInfo"
+                }
+              ],
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "_parseTemplateNode",
+              "description": "Overrides default `TemplateStamp` implementation to add support for\nparsing bindings from `TextNode`'s' `textContent`.  A `bindings`\narray is added to `nodeInfo` and populated with binding metadata\nwith information capturing the binding target, and a `parts` array\nwith one or more metadata objects capturing the source(s) of the\nbinding.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2309,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2323,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template node"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_parseTemplateChildNodes",
+              "description": "Parses template child nodes for the given root node.\n\nThis method also wraps whitelisted legacy template extensions\n(`is=\"dom-if\"` and `is=\"dom-repeat\"`) with their equivalent element\nwrappers, collapses text nodes, and strips whitespace from the template\nif the `templateInfo.stripWhitespace` setting was provided.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 254,
+                  "column": 6
+                },
+                "end": {
+                  "line": 288,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "root",
+                  "type": "Node",
+                  "description": "Root node whose `childNodes` will be parsed"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template."
+                }
+              ],
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "_parseTemplateNestedTemplate",
+              "description": "Overrides default `TemplateStamp` implementation to add support for\nbinding the properties that a nested template depends on to the template\nas `_host_<property>`.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2392,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2402,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template node"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_parseTemplateNodeAttributes",
+              "description": "Parses template node attributes and adds node metadata to `nodeInfo`\nfor nodes of interest.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 326,
+                  "column": 6
+                },
+                "end": {
+                  "line": 335,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template."
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "_parseTemplateNodeAttribute",
+              "description": "Overrides default `TemplateStamp` implementation to add support for\nparsing bindings from attributes.  A `bindings`\narray is added to `nodeInfo` and populated with binding metadata\nwith information capturing the binding target, and a `parts` array\nwith one or more metadata objects capturing the source(s) of the\nbinding.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2341,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2377,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node",
+                  "description": "Node to parse"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata for current template"
+                },
+                {
+                  "name": "nodeInfo",
+                  "type": "Object",
+                  "description": "Node metadata for current template node"
+                },
+                {
+                  "name": "name"
+                },
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "`true` if the visited node added node-specific\n  metadata to `nodeInfo`"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_contentForTemplate",
+              "description": "Returns the `content` document fragment for a given template.\n\nFor nested templates, Polymer performs an optimization to cache nested\ntemplate content to avoid the cost of cloning deeply nested templates.\nThis method retrieves the cached content for a given template.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/template-stamp.html",
+                "start": {
+                  "line": 380,
+                  "column": 6
+                },
+                "end": {
+                  "line": 383,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template",
+                  "type": "HTMLTemplateElement",
+                  "description": "Template to retrieve `content` for"
+                }
+              ],
+              "return": {
+                "type": "DocumentFragment",
+                "desc": "Content fragment"
+              },
+              "inheritedFrom": "Polymer.TemplateStamp"
+            },
+            {
+              "name": "createPropertiesForAttributes",
+              "description": "Generates property accessors for all attributes in the standard\nstatic `observedAttributes` array.\n\nAttribute names are mapped to property names using the `dash-case` to\n`camelCase` convention",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-accessors.html",
+                "start": {
+                  "line": 110,
+                  "column": 6
+                },
+                "end": {
+                  "line": 115,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Polymer.PropertyAccessors"
+            },
+            {
+              "name": "addPropertyEffect",
+              "description": "Ensures an accessor exists for the specified property, and adds\nto a list of \"property effects\" that will run when the accessor for\nthe specified property is set.  Effects are grouped by \"type\", which\nroughly corresponds to a phase in effect processing.  The effect\nmetadata should be in the following form:\n\n  {\n    fn: effectFunction, // Reference to function to call to perform effect\n    info: { ... }       // Effect metadata passed to function\n    trigger: {          // Optional triggering metadata; if not provided\n      name: string      // the property is treated as a wildcard\n      structured: boolean\n      wildcard: boolean\n    }\n  }\n\nEffects are called from `_propertiesChanged` in the following order by\ntype:\n\n1. COMPUTE\n2. PROPAGATE\n3. REFLECT\n4. OBSERVE\n5. NOTIFY\n\nEffect functions are called with the following signature:\n\n  effectFunction(inst, path, props, oldProps, info, hasPaths)",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2040,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2042,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property that should trigger the effect"
+                },
+                {
+                  "name": "type",
+                  "type": "string",
+                  "description": "Effect type, from this.PROPERTY_EFFECT_TYPES"
+                },
+                {
+                  "name": "effect",
+                  "type": "Object=",
+                  "description": "Effect metadata object"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createPropertyObserver",
+              "description": "Creates a single-property observer for the given property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2053,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2055,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                },
+                {
+                  "name": "methodName",
+                  "type": "string",
+                  "description": "Name of observer method to call"
+                },
+                {
+                  "name": "dynamicFn",
+                  "type": "boolean=",
+                  "description": "Whether the method name should be included as\n  a dependency to the effect."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createMethodObserver",
+              "description": "Creates a multi-property \"method observer\" based on the provided\nexpression, which should be a string in the form of a normal Javascript\nfunction signature: `'methodName(arg1, [..., argn])'`.  Each argument\nshould correspond to a property or path in the context of this\nprototype (or instance), or may be a literal string or number.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2069,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2071,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "expression",
+                  "type": "string",
+                  "description": "Method expression"
+                },
+                {
+                  "name": "dynamicFn",
+                  "type": "(boolean|Object)=",
+                  "description": "Boolean or object map indicating\n  whether method names should be included as a dependency to the effect."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createNotifyingProperty",
+              "description": "Causes the setter for the given property to dispatch `<property>-changed`\nevents to notify of changes to the property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2080,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2082,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createReadOnlyProperty",
+              "description": "Creates a read-only accessor for the given property.\n\nTo set the property, use the protected `_setProperty` API.\nTo create a custom protected setter (e.g. `_setMyProp()` for\nproperty `myProp`), pass `true` for `protectedSetter`.\n\nNote, if the property will have other property effects, this method\nshould be called first, before adding other effects.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2099,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2101,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                },
+                {
+                  "name": "protectedSetter",
+                  "type": "boolean=",
+                  "description": "Creates a custom protected setter\n  when `true`."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createReflectedProperty",
+              "description": "Causes the setter for the given property to reflect the property value\nto a (dash-cased) attribute of the same name.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2110,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2112,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Property name"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "createComputedProperty",
+              "description": "Creates a computed property whose value is set to the result of the\nmethod described by the given `expression` each time one or more\narguments to the method changes.  The expression should be a string\nin the form of a normal Javascript function signature:\n`'methodName(arg1, [..., argn])'`",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2127,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2129,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property",
+                  "type": "string",
+                  "description": "Name of computed property to set"
+                },
+                {
+                  "name": "expression",
+                  "type": "string",
+                  "description": "Method expression"
+                },
+                {
+                  "name": "dynamicFn",
+                  "type": "(boolean|Object)=",
+                  "description": "Boolean or object map indicating whether\n  method names should be included as a dependency to the effect."
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "bindTemplate",
+              "description": "Parses the provided template to ensure binding effects are created\nfor them, and then ensures property accessors are created for any\ndependent properties in the template.  Binding effects for bound\ntemplates are stored in a linked list on the instance so that\ntemplates can be efficiently stamped and unstamped.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2143,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2145,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template",
+                  "type": "HTMLTemplateElement",
+                  "description": "Template containing binding\n  bindings"
+                }
+              ],
+              "return": {
+                "type": "Object",
+                "desc": "Template metadata object"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_addTemplatePropertyEffect",
+              "description": "Adds a property effect to the given template metadata, which is run\nat the \"propagate\" stage of `_propertiesChanged` when the template\nhas been bound to the element via `_bindTemplate`.\n\nThe `effect` object should match the format in `_addPropertyEffect`.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2208,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2214,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Template metadata to add effect to"
+                },
+                {
+                  "name": "prop",
+                  "type": "string",
+                  "description": "Property that should trigger the effect"
+                },
+                {
+                  "name": "effect",
+                  "type": "Object=",
+                  "description": "Effect metadata object"
+                }
+              ],
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_parseBindings",
+              "description": "Called to parse text in a template (either attribute values or\ntextContent) into binding metadata.\n\nAny overrides of this method should return an array of binding part\nmetadata  representing one or more bindings found in the provided text\nand any \"literal\" text in between.  Any non-literal parts will be passed\nto `_evaluateBinding` when any dependencies change.  The only required\nfields of each \"part\" in the returned array are as follows:\n\n- `dependencies` - Array containing trigger metadata for each property\n  that should trigger the binding to update\n- `literal` - String containing text if the part represents a literal;\n  in this case no `dependencies` are needed\n\nAdditional metadata for use by `_evaluateBinding` may be provided in\neach part object as needed.\n\nThe default implementation handles the following types of bindings\n(one or more may be intermixed with literal strings):\n- Property binding: `[[prop]]`\n- Path binding: `[[object.prop]]`\n- Negated property or path bindings: `[[!prop]]` or `[[!object.prop]]`\n- Two-way property or path bindings (supports negation):\n  `{{prop}}`, `{{object.prop}}`, `{{!prop}}` or `{{!object.prop}}`\n- Inline computed method (supports negation):\n  `[[compute(a, 'literal', b)]]`, `[[!compute(a, 'literal', b)]]`",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2437,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2500,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "text",
+                  "type": "string",
+                  "description": "Text to parse from attribute or textContent"
+                },
+                {
+                  "name": "templateInfo",
+                  "type": "Object",
+                  "description": "Current template metadata"
+                }
+              ],
+              "return": {
+                "type": "Array.<Object>",
+                "desc": "Array of binding part metadata"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "_evaluateBinding",
+              "description": "Called to evaluate a previously parsed binding part based on a set of\none or more changed dependencies.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/property-effects.html",
+                "start": {
+                  "line": 2516,
+                  "column": 6
+                },
+                "end": {
+                  "line": 2533,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "inst",
+                  "type": "HTMLElement",
+                  "description": "Element that should be used as scope for\n  binding dependencies"
+                },
+                {
+                  "name": "part",
+                  "type": "Object",
+                  "description": "Binding part metadata"
+                },
+                {
+                  "name": "path",
+                  "type": "string",
+                  "description": "Property/path that triggered this effect"
+                },
+                {
+                  "name": "props",
+                  "type": "Object",
+                  "description": "Bag of current property changes"
+                },
+                {
+                  "name": "oldProps",
+                  "type": "Object",
+                  "description": "Bag of previous values for changed properties"
+                },
+                {
+                  "name": "hasPaths",
+                  "type": "boolean",
+                  "description": "True with `props` contains one or more paths"
+                }
+              ],
+              "return": {
+                "type": "*",
+                "desc": "Value the binding part evaluated to"
+              },
+              "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "finalize",
+              "description": "Called automatically when the first element instance is created to\nensure that class finalization work has been completed.\nMay be called by users to eagerly perform class finalization work\nprior to the creation of the first element instance.\n\nClass finalization work generally includes meta-programming such as\ncreating property accessors and any property effect metadata needed for\nthe features used.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 492,
+                  "column": 6
+                },
+                "end": {
+                  "line": 496,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Polymer.ElementMixin"
+            }
+          ],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -4258,6 +5651,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.OverlayElement",
           "attributes": [
             {
@@ -4322,8 +5716,7 @@
               }
             }
           ],
-          "tagname": "vaadin-overlay",
-          "superclass": "HTMLElement"
+          "tagname": "vaadin-overlay"
         },
         {
           "description": "`<vaadin-dropdown>` is a Polymer element for creating dropdowns.",
@@ -4701,6 +6094,7 @@
               ]
             }
           ],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -4714,6 +6108,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.DropdownElement",
           "attributes": [
             {
@@ -4860,8 +6255,7 @@
               }
             }
           ],
-          "tagname": "vaadin-dropdown",
-          "superclass": "HTMLElement"
+          "tagname": "vaadin-dropdown"
         },
         {
           "description": "@element vaadin-combo-box-overlay",
@@ -5672,6 +7066,7 @@
               ]
             }
           ],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -5685,6 +7080,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.ComboBoxOverlayElement",
           "attributes": [
             {
@@ -5758,8 +7154,7 @@
             "selectors": []
           },
           "slots": [],
-          "tagname": "vaadin-combo-box-overlay",
-          "superclass": "HTMLElement"
+          "tagname": "vaadin-combo-box-overlay"
         },
         {
           "description": "`<vaadin-combo-box>` is a combo box element combining a dropdown list with an\ninput field for filtering the list of items. If you want to replace the default\ninput field with a custom implementation, you should use the\n[`<vaadin-combo-box-light>`](#vaadin-combo-box-light) element.\n\nItems in the dropdown list must be provided as a list of `String` values.\nDefining the items is done using the `items` property, which can be assigned\nwith data-binding, using an attribute or directly with the JavaScript property.\n\n```html\n<vaadin-combo-box\n    label=\"Fruit\"\n    items=\"[[data]]\">\n</vaadin-combo-box>\n```\n\n```js\ncombobox.items = ['apple', 'orange', 'banana'];\n```\n\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\nThis element can be used within an `iron-form`.\n\n### Item Template\n\n`<vaadin-combo-box>` supports using custom item template provided in the light\nDOM:\n\n```html\n<vaadin-combo-box items='[{\"label\": \"Hydrogen\", \"value\": \"H\"}]'>\n  <template>\n    [[index]]: [[item.label]] <b>[[item.value]</b>\n  </template>\n</vaadin-combo-box>\n```\n\nThe following properties are available for item template bindings:\n\nProperty name | Type | Description\n--------------|------|------------\n`index`| Number | Index of the item in the `items` array\n`item` | String or Object | The item reference\n`selected` | Boolean | True when item is selected\n`focused` | Boolean | True when item is focused\n\nSee the [Item Template Live Demos](demo/item-template.html) for more examples.\n\n### Styling\nThere are custom properties and mixins you can use to style the component:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`",
@@ -7755,6 +9150,7 @@
               ]
             }
           ],
+          "staticMethods": [],
           "demos": [
             {
               "url": "demo/index.html",
@@ -7773,6 +9169,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.ComboBoxElement",
           "attributes": [
             {
@@ -8373,8 +9770,7 @@
           "tagname": "vaadin-combo-box",
           "mixins": [
             "Vaadin.ComboBoxMixin"
-          ],
-          "superclass": "HTMLElement"
+          ]
         },
         {
           "description": "`<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing\nonly the dropdown functionality and leaving the input field definition to the user.\n\nThis element is using the same [`ComboBoxBehavior`](#vaadin.elements.combobox.ComboBoxBehavior) as\n[`<vaadin-combo-box>`](#vaadin-combo-box), so the API remains the same.\n\nTo create a custom input field, you need to add a child element which has a two-way\ndata-bindable property representing the input value. The property name is expected\nto be `bindValue` by default. See the example below for a simplest possible example\nusing an `<input>` element extended with `iron-input`.\n\n```html\n<vaadin-combo-box-light>\n  <iron-input>\n    <input>\n  </iron-input>\n</vaadin-combo-box-light>\n```\n\nIf you are using other custom input fields like `<paper-input>`, you\nneed to define the name of value property with `attrForValue` property.\nSee the example below on how to create a custom input field based\non a `<paper-input>` decorated with a custom `<iron-icon>` and\ntwo `<paper-button>`s to act as the clear and toggle controls.\n\n```html\n<vaadin-combo-box-light attr-for-value=\"value\">\n  <paper-input label=\"Elements\" class=\"input\">\n    <iron-icon icon=\"toll\" prefix></iron-icon>\n    <paper-button suffix class=\"clear-button\">Clear</paper-button>\n    <paper-button suffix class=\"toggle-button\">Toggle</paper-button>\n  </paper-input>\n</vaadin-combo-box-light>\n```",
@@ -10018,6 +11414,7 @@
               "params": []
             }
           ],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -10031,6 +11428,7 @@
             }
           },
           "privacy": "public",
+          "superclass": "HTMLElement",
           "name": "Vaadin.ComboBoxLightElement",
           "attributes": [
             {
@@ -10408,8 +11806,7 @@
           "tagname": "vaadin-combo-box-light",
           "mixins": [
             "Vaadin.ComboBoxMixin"
-          ],
-          "superclass": "HTMLElement"
+          ]
         }
       ],
       "mixins": [
@@ -10542,6 +11939,7 @@
               ]
             }
           ],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {
@@ -12053,6 +13451,7 @@
               ]
             }
           ],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {

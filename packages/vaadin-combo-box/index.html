@@ -7,27 +7,9 @@
 
     <script src="../elements-demo-resources/ga.js"></script>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../elements-demo-resources/api-doc-viewer.html">
+    <link rel="import" href="../iron-component-page/iron-component-page.html">
   </head>
   <body>
-    <form>
-      <select name="element-class-name" onchange="this.form.submit()">
-        <option>Vaadin.ComboBoxElement</option>
-        <option>Vaadin.ComboBoxLightElement</option>
-      </select>
-    </form>
-    <api-doc-viewer url="documentation.json" element-class-name="Vaadin.ComboBoxElement"></api-doc-viewer>
-    <script>
-      // TODO: Proper API docs navigation
-      addEventListener('WebComponentsReady', function() {
-        var matches = /element-class-name=([^&]+)/.exec(location.search);
-        var elementClassName = matches && matches[1];
-        var viewer = document.querySelector('api-doc-viewer');
-        if (elementClassName) {
-          document.querySelector('select[name="element-class-name"]').value = elementClassName;
-          viewer.elementClassName = elementClassName;
-        }
-      });
-    </script>
+    <iron-component-page src="vaadin-combo-box.html"></iron-component-page>
   </body>
 </html>
