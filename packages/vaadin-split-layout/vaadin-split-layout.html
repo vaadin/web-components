@@ -231,17 +231,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * `splitter` | Split element | vaadin-split-layout
        * `handle` | The handle of the splitter | vaadin-split-layout
        *
-       * You can replace the default splitter handle with a custom handle element
-       * by using the `handle` slot.
-       *
-       * ```html
-       * <vaadin-split-layout>
-       *   <div slot="handle">&middot;</div>
-       *   <div>First content element</div>
-       *   <div>Second content element</div>
-       * </vaadin-split-layout>
-       * ```
-       *
        * @memberof Vaadin
        * @demo demo/index.html
        */
@@ -273,10 +262,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _processChildren() {
-          var children = this.getEffectiveChildren();
-          children
-          .filter(child => child.getAttribute('slot') != 'handle')
-          .forEach((child, i) => {
+          this.getEffectiveChildren().forEach((child, i) => {
             if (i === 0) {
               this._primaryChild = child;
               child.setAttribute('slot', 'primary');
