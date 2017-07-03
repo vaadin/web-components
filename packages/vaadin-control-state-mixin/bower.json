@@ -24,8 +24,8 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "iron-test-helpers": "2.0-preview",
-    "web-component-tester": "^6.0.0-prerelease.7"
+    "iron-test-helpers": "^2.0.0",
+    "web-component-tester": "^6.0.0"
   },
   "dependencies": {
     "polymer": "^2.0.0"
