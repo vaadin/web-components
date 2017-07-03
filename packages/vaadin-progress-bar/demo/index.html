@@ -19,15 +19,36 @@
     <h3>Progress bar</h3>
     <demo-snippet>
       <template>
-        <vaadin-progress-bar value="0.3"></vaadin-progress-bar>
+        <vaadin-progress-bar id="simple-progress-bar" value="0.3"></vaadin-progress-bar>
         <button id="update-bar">Update value</button>
 
         <script>
           document.querySelector("#update-bar").addEventListener("click", function() {
-            var progress = document.querySelector("vaadin-progress-bar");
+            var progress = document.querySelector("#simple-progress-bar");
             progress.value += 0.1;
-            if (progress.value >= 1) {
-              progress.value = 0;
+            if (progress.value >= progress.max) {
+              progress.value = progress.min;
+            }
+          });
+        </script>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Progress bar with custom bounds</h3>
+    <p>By default value is clamped between 0 and 1. You can customize this bounds using min and max attributes.</p>
+    <p><strong>Warning! Min attribute must be less then max.</strong></p>
+    <demo-snippet>
+      <template>
+        <vaadin-progress-bar id="progress-bar-custom-bounds" value="20" min="10" max="110"></vaadin-progress-bar>
+        <button id="update-bar-with-bounds">Update value</button>
+
+        <script>
+          document.querySelector("#update-bar-with-bounds").addEventListener("click", function() {
+            var progress = document.querySelector("#progress-bar-custom-bounds");
+            progress.value += 10;
+            if (progress.value >= progress.max) {
+              progress.value = progress.min;
             }
           });
         </script>
@@ -46,15 +67,36 @@
     <h3>Progress circle</h3>
     <demo-snippet>
       <template>
-        <vaadin-progress-circle value="0.3"></vaadin-progress-circle>
+        <vaadin-progress-circle id="simple-progress-circle" value="0.3"></vaadin-progress-circle>
         <button id="update-circle">Update value</button>
 
         <script>
           document.querySelector("#update-circle").addEventListener("click", function() {
-            var progress = document.querySelector("vaadin-progress-circle");
+            var progress = document.querySelector("#simple-progress-circle");
             progress.value += 0.1;
-            if (progress.value >= 1) {
-              progress.value = 0;
+            if (progress.value >= progress.max) {
+              progress.value = progress.min;
+            }
+          });
+        </script>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Progress circle with custom bounds</h3>
+    <p>By default value is clamped between 0 and 1. You can customize this bounds using min and max attributes.</p>
+    <p><strong>Warning! Min attribute must be less then max.</strong></p>
+    <demo-snippet>
+      <template>
+        <vaadin-progress-circle id="progress-circle-custom-bounds" value="20" min="10" max="110"></vaadin-progress-circle>
+        <button id="update-circle-with-bounds">Update value</button>
+
+        <script>
+          document.querySelector("#update-circle-with-bounds").addEventListener("click", function() {
+            var progress = document.querySelector("#progress-circle-custom-bounds");
+            progress.value += 10;
+            if (progress.value >= progress.max) {
+              progress.value = progress.min;
             }
           });
         </script>
