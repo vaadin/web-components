@@ -106,8 +106,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._addActiveListeners();
 
           this.addEventListener('radio-changed', e => {
-            if (e.target.checked) {
-              this.value = e.target.value;
+            var radioButton = e.target;
+
+            if (radioButton.checked) {
+              this.value = radioButton.value;
             }
           });
         }
@@ -120,6 +122,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _addActiveListeners() {
           this.addEventListener('keydown', e => {
+            // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
+            var checkedRadioButton = (e.target == this) ? e.target.querySelector(`[value='${e.target.value}']`) : e.target;
             if (this.disabled) {
               return;
             }
@@ -127,13 +131,13 @@ This program is available under Apache License Version 2.0, available at https:/
             // LEFT, UP - select previous radio button
             if (e.keyCode === 37 || e.keyCode === 38) {
               e.preventDefault();
-              this._selectPreviousButton(e.target);
+              this._selectPreviousButton(checkedRadioButton);
             }
 
             // RIGHT, DOWN - select next radio button
             if (e.keyCode === 39 || e.keyCode === 40) {
               e.preventDefault();
-              this._selectNextButton(e.target);
+              this._selectNextButton(checkedRadioButton);
             }
           });
         }
