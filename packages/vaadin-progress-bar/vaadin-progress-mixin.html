@@ -19,23 +19,35 @@ This program is available under Apache License Version 2.0, available at https:/
     class VaadinProgressMixin extends superClass {
       static get properties() {
         return {
+          /*
+          * Displays current progress
+          */
           value: {
             type: Number,
             reflectToAttribute: true,
             observer: '_valueChanged'
           },
+          /*
+          * Minimum bound of the progress bar. Can't be greater then max.
+          */
           min: {
             type: Number,
             value: 0,
             reflectToAttribute: true,
             observer: '_minChanged'
           },
+          /*
+          * Maximum bound of the progress bar. Can't be less then min.
+          */
           max: {
             type: Number,
             value: 1,
             reflectToAttribute: true,
             observer: '_maxChanged'
           },
+          /*
+          * Percent of current progress relative to whole progress bar (max - min)
+          */
           normalizedValue: {
             type: Number,
             computed: '_normalizeValue(value, min, max)'
