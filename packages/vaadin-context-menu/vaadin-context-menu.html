@@ -404,17 +404,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
               this.$.overlay.opened = true;
 
-              this.$.overlay.style.height = '';
-              this.$.overlay.style.left = this.$.overlay.style.top = 0;
+              // FIXME: Move to the overlay styles
+              this.$.overlay.style.overflow = 'auto';
 
-              this.$.overlay.style.left = -this.$.overlay.getBoundingClientRect().left + this._getEventCoordinate(e, 'x') + 'px';
-              this.$.overlay.style.top = -this.$.overlay.getBoundingClientRect().top + this._getEventCoordinate(e, 'y') + 'px';
+              this.$.overlay.style.left = this._getEventCoordinate(e, 'x') + 'px';
+              const top = this._getEventCoordinate(e, 'y');
+              this.$.overlay.style.top = top + 'px';
 
-              // FIXME: Nasty hack
-              requestAnimationFrame(() => {
-                this.$.overlay.style.height =
-                  Math.min(this.$.overlay.offsetHeight, window.innerHeight - this.$.overlay.getBoundingClientRect().top) + 'px';
-              });
+              // FIXME: Viewport fit, should be done in the overlay
+              this.$.overlay.style.maxHeight = (document.documentElement.clientHeight - top - 8) + 'px';
 
               this._setOpened(true);
             }
