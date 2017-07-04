@@ -113,9 +113,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _disabledChanged(disabled) {
-          if (disabled) {
-            this.removeAttribute('invalid');
-          }
+          this.validate();
 
           this._forEachButton(button => button.disabled = disabled);
         }
@@ -166,9 +164,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _valueChanged(value) {
-          if (value) {
-            this.removeAttribute('invalid');
-          }
+          this.validate();
 
           this._forEachButton(button => button.checked = button.value === value);
         }
@@ -178,6 +174,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.setAttribute('invalid', '');
             return false;
           } else {
+            this.removeAttribute('invalid');
             return true;
           }
         }

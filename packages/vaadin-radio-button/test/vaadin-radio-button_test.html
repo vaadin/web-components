@@ -1,0 +1,91 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-radio-button tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../vaadin-radio-button.html">
+  <link rel="import" href="../vaadin-radio-button-group.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-radio-button-group>
+        <vaadin-radio-button>Button <b>1</b></vaadin-radio-button>
+        <vaadin-radio-button>Button <b>2</b></vaadin-radio-button>
+        <vaadin-radio-button>Button <b>3</b></vaadin-radio-button>
+      </vaadin-radio-button-group>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-radio-button-group', () => {
+      var vaadinRadioButtonGroup, vaadinRadioButtonList, nativeRadio, label;
+
+      beforeEach(() => {
+        vaadinRadioButtonGroup = fixture('default');
+        vaadinRadioButtonList = vaadinRadioButtonGroup.querySelectorAll('vaadin-radio-button');
+        nativeRadio = Polymer.dom(vaadinRadioButtonList[0].root).querySelector('[part="native-radio"]');
+        label = Polymer.dom(vaadinRadioButtonList[0].root).querySelector('[part="label"]');
+      });
+
+      it('should define radio button label using light DOM', () => {
+        var children = Polymer.dom(label).getEffectiveChildNodes();
+        expect(children[1].textContent).to.be.equal('Button ');
+        expect(children[2].outerHTML).to.be.equal('<b>1</b>');
+      });
+
+      it('can be disabled imperatively', () => {
+        vaadinRadioButtonGroup.disabled = true;
+        expect(vaadinRadioButtonGroup.hasAttribute('disabled')).to.be.eql(true);
+        expect(vaadinRadioButtonList[0].hasAttribute('disabled')).to.be.eql(true);
+      });
+
+      it('should bind checked to the native radio and vice versa', () => {
+        vaadinRadioButtonList[0].checked = true;
+        expect(nativeRadio.checked).to.be.eql(true);
+        nativeRadio.checked = false;
+        nativeRadio.dispatchEvent(new CustomEvent('change'));
+        expect(vaadinRadioButtonList[0].checked).to.be.eql(false);
+      });
+
+      it('should have invalid state on submition if has required attribute, but does not have a value', () => {
+        vaadinRadioButtonGroup.required = true;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
+      });
+
+      it('should not have invalid state when is not required', () => {
+        vaadinRadioButtonGroup.required = false;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+      });
+
+      it('should not have invalid state when disabled', () => {
+        vaadinRadioButtonGroup.disabled = true;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+      });
+
+      it('should lose invalid state when a value assigned or become disabled', () => {
+        vaadinRadioButtonGroup.required = true;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
+
+        vaadinRadioButtonGroup.disabled = true;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+
+        vaadinRadioButtonGroup.disabled = false;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
+
+        vaadinRadioButtonList[0].checked = true;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+      });
+    });
+  </script>
+</body>
