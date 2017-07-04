@@ -14,6 +14,7 @@
 <custom-element-demo>
   <template>
     <link rel="import" href="vaadin-form-layout.html">
+    <link rel="import" href="vaadin-text-field.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
