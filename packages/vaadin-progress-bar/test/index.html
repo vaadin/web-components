@@ -16,7 +16,9 @@
       'vaadin-progress-bar.html',
       'vaadin-progress-circle.html',
       'styling.html'
-    ]);
+    ].reduce(function(suites, suite) {
+      return suites.concat([suite, `${suite}?wc-shadydom=true`])
+    }, []));
   </script>
 </body>
 

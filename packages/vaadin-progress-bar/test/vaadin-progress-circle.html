@@ -15,20 +15,18 @@
   </test-fixture>
 
   <script>
-    describe('vaadin progress circle', function() {
+    describe('vaadin progress circle', () => {
       var progress;
 
-      beforeEach(function() {
-        progress = fixture('progressCircle');
-      });
+      beforeEach(() => progress = fixture('progressCircle'));
 
-      it('should have proper dash offset', function () {
+      it('should have proper dash offset', () => {
         progress.value = 0.3;
 
         expect(progress.$.foreground.getAttribute('stroke-dashoffset')).to.be.equal("219.912%");
       });
 
-      it('should have proper dash offset with custom bounds', function () {
+      it('should have proper dash offset with custom bounds', () => {
         progress.max = 20;
         progress.min = 10;
 

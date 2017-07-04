@@ -38,41 +38,37 @@
   </test-fixture>
 
   <script>
-    describe('vaadin progress bar styling', function() {
+    describe('vaadin progress bar styling', () => {
       var progress;
 
-      beforeEach(function() {
-        progress = fixture('progressBar')[1];
-      });
+      beforeEach(() => progress = fixture('progressBar')[1]);
 
-      it('should have proper colors', function() {
+      it('should have proper colors', () => {
         expect(window.getComputedStyle(progress.$.foreground)['background-color']).to.be.equal('rgb(0, 0, 255)');
         expect(window.getComputedStyle(progress.$.background)['background-color']).to.be.equal('rgb(0, 0, 0)');
       });
 
-      it('should have proper height', function() {
+      it('should have proper height', () => {
         expect(window.getComputedStyle(progress)['height']).to.be.equal('5px');
       });
     });
 
-    describe('vaadin progress circle styling', function() {
+    describe('vaadin progress circle styling', () => {
       var progress;
 
-      beforeEach(function() {
-        progress = fixture('progressCircle')[1];
-      });
+      beforeEach(() => progress = fixture('progressCircle')[1]);
 
-      it('should have proper colors', function() {
+      it('should have proper colors', () => {
         expect(window.getComputedStyle(progress.$.foreground)['stroke']).to.be.equal('rgb(0, 0, 255)');
         expect(window.getComputedStyle(progress.$.background)['stroke']).to.be.equal('rgb(0, 0, 0)');
       });
 
-      it('should have proper line width', function() {
+      it('should have proper line width', () => {
         expect(window.getComputedStyle(progress.$.foreground)['stroke-width']).to.be.equal('5px');
         expect(window.getComputedStyle(progress.$.background)['stroke-width']).to.be.equal('5px');
       });
 
-      it('should have proper width and height', function() {
+      it('should have proper width and height', () => {
         expect(window.getComputedStyle(progress)['width']).to.be.equal('50px');
         expect(window.getComputedStyle(progress)['height']).to.be.equal('50px');
       });
