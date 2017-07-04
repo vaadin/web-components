@@ -29,7 +29,6 @@
     "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.3.0",
     "gulp-stylelint": "^3.7.0",
-    "lighthouse": "~1.6.5",
     "polymer-cli": "^0.18.0",
     "polyserve": "^0.18.0",
     "stylelint": "7.10.1",

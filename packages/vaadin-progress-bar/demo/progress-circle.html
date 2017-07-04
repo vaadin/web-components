@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>vaadin-progress-bar Basic Examples</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="common.html">
+</head>
+
+<body unresolved>
+  <div class="vertical-section-container centered">
+
+    <demo-navigation></demo-navigation>
+
+    <h3>Progress circle</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-progress-circle id="simple-progress-circle" value="0.3"></vaadin-progress-circle>
+      </template>
+    </demo-snippet>
+
+    <h3>Progress circle with custom bounds</h3>
+    <p>By default value is clamped between 0 and 1. You can customize this bounds using min and max attributes.</p>
+    <p><strong>Warning! Min attribute must be less then max.</strong></p>
+    <demo-snippet>
+      <template>
+        <vaadin-progress-circle id="progress-circle-custom-bounds" value="20" min="10" max="110"></vaadin-progress-circle>
+        <button id="update-circle-with-bounds">Update value</button>
+
+        <script>
+          document.querySelector("#update-circle-with-bounds").addEventListener("click", function() {
+            var progress = document.querySelector("#progress-circle-custom-bounds");
+            progress.value += 10;
+            if (progress.value >= progress.max) {
+              progress.value = progress.min;
+            }
+          });
+        </script>
+
+      </template>
+    </demo-snippet>
+
+    <h3>Indeterminate Progress Circle</h3>
+    <p>When the value is <code>undefined</code> the progress circle will animate indefinitely to show that progress is ongoing.</p>
+    <demo-snippet>
+      <template>
+        <vaadin-progress-circle></vaadin-progress-circle>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+</html>
