@@ -1,0 +1,44 @@
+{
+  "name": "vaadin-dialog",
+  "version": "0.1.0",
+  "description": "vaadin-dialog",
+  "main": "vaadin-dialog.html",
+  "repository": "vaadin/vaadin-dialog",
+  "keywords": [
+    "Vaadin",
+    "vaadin-dialog",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-dialog/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "eslint": "^4.0.0",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^3.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^4.0.0",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-stylelint": "^3.7.0",
+    "lighthouse": "~1.6.5",
+    "polymer-cli": "^1.2.0",
+    "stylelint": "^7.12.0",
+    "stylelint-config-vaadin": "latest",
+    "web-component-tester": "^6.0.0",
+    "yargs": "latest"
+  },
+  "greenkeeper": {
+    "ignore": [
+      "lighthouse"
+    ]
+  }
+}
