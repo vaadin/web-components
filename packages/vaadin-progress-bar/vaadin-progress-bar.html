@@ -13,11 +13,11 @@ This program is available under Apache License Version 2.0, available at https:/
 ```
 
 @progress vaadin-progress-bar
-@demo demo/index.html
+@demo demo/progress-bar.html
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="vaadin-progress-base.html">
+<link rel="import" href="vaadin-progress-mixin.html">
 
 <dom-module id="vaadin-progress-bar">
   <template>
@@ -75,12 +75,21 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    class VaadinProgressBar extends VaadinProgressBase(Polymer.Element) {
-      static get is() {
-        return 'vaadin-progress-bar';
+    (function() {
+      class ProgressBarElement extends Vaadin.ProgressMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-progress-bar';
+        }
       }
-    }
 
-    customElements.define(VaadinProgressBar.is, VaadinProgressBar);
+      customElements.define(ProgressBarElement.is, ProgressBarElement);
+
+      /**
+       * @namespace Vaadin
+       */
+
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ProgressBarElement = ProgressBarElement;
+    })();
   </script>
 </dom-module>
