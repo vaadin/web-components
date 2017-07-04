@@ -5,7 +5,7 @@
 
 # &lt;vaadin-form-layout&gt;
 
-[Live Demo ↗](https://cdn-origin.vaadin.com/vaadin-form-layout/1.0.0-alpha2/demo/)
+[Live Demo ↗](https://cdn-origin.vaadin.com/vaadin-form-layout/1.0.0/demo/)
 
 [&lt;vaadin-form-layout&gt;](https://vaadin.com/elements/-/element/vaadin-form-layout) is a [Polymer 2](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
@@ -27,35 +27,28 @@
 </vaadin-form-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/elements/-/element/vaadin-form-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="930" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/elements/-/element/vaadin-form-layout)
 
 
-## Contributing
+## Running demos and tests in browser
 
 1. Fork the `vaadin-form-layout` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-form-layout` directory, run `npm install` to install dependencies.
+1. When in the `vaadin-form-layout` directory, run `npm install` and then `bower install` to install dependencies.
 
-
-## Running demos and tests in browser
-
-1. Install [polyserve](https://www.npmjs.com/package/polyserve): `npm install -g polyserve`
-
-1. When in the `vaadin-form-layout` directory, run `polyserve --open`, browser will automatically open the component API documentation.
+1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-date-picker/demo
-  - http://127.0.0.1:8080/components/vaadin-date-picker/test
+  - http://127.0.0.1:8080/components/vaadin-form-layout/demo
+  - http://127.0.0.1:8080/components/vaadin-form-layout/test
 
 
 ## Running tests from the command line
 
-1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
-
-1. When in the `vaadin-form-layout` directory, run `wct` or `npm test`
+1. When in the `vaadin-form-layout` directory, run `polymer test`
 
 
 ## Following the coding style
@@ -63,7 +56,7 @@
 We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
 
 
-## Creating a pull request
+## Contributing
 
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `npm test`
