@@ -24,8 +24,7 @@ This program is available under Apache License Version 2.0, available at https:/
           */
           value: {
             type: Number,
-            reflectToAttribute: true,
-            observer: '_valueChanged'
+            reflectToAttribute: true
           },
           /*
           * Minimum bound of the progress bar. Can't be greater then max.
@@ -53,13 +52,6 @@ This program is available under Apache License Version 2.0, available at https:/
             computed: '_normalizeValue(value, min, max)'
           }
         };
-      }
-
-      _valueChanged(newV, oldV) {
-        if (newV < this.min)
-          this.value = this.min;
-        else if (newV > this.max)
-          this.value = this.max;
       }
 
       _minChanged(newV, oldV) {
