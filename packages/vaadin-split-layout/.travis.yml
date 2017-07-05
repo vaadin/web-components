@@ -22,4 +22,4 @@ before_script:
 
 script:
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
-  - gemini test test/visual
+  - travis_retry gemini test test/visual
