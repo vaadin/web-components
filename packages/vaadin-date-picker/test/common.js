@@ -81,28 +81,21 @@ function describeSkipIf(bool, title, callback) {
   }
 }
 
-function waitUntil(check, callback) {
-  var id = setInterval(function() {
-    if (check()) {
-      clearInterval(id);
-      callback();
-    }
-  }, 10);
-}
-
 function waitUntilScrolledTo(overlay, date, callback) {
-  waitUntil(() => {
-    if (overlay.$.monthScroller.position) {
-      overlay._onMonthScroll();
-    }
-    var monthIndex = overlay._differenceInMonths(date, new Date());
-    return overlay.$.monthScroller.position === monthIndex;
-  }, () => Polymer.RenderStatus.afterNextRender(overlay, callback));
+  if (overlay.$.monthScroller.position) {
+    overlay._onMonthScroll();
+  }
+  var monthIndex = overlay._differenceInMonths(date, new Date());
+  if (overlay.$.monthScroller.position === monthIndex) {
+    Polymer.RenderStatus.afterNextRender(overlay, callback);
+  } else {
+    setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
+  }
 }
 
-// IE11 throws errors when the fixture is removed from the DOM and the focus remains in the native input.
-// Also, FF and Chrome are unable to focus the input when tests are run in the headless window manager used in Travis
-function monkeyPatchTextFieldFocus() {
+// IE11 throws errors when the fixture is removed from the DOM and the focus remains in the native control.
+// Also, FF and Chrome are unable to focus input/button when tests are run in the headless window manager used in Travis
+function monkeyPatchNativeFocus() {
   if (window.Vaadin && Vaadin.TextFieldElement) {
     Vaadin.TextFieldElement.prototype.focus = function() {
       this._setFocused(true);
@@ -122,7 +115,7 @@ function monkeyPatchTextFieldFocus() {
 }
 
 if (window.Polymer) { // Chrome
-  setTimeout(monkeyPatchTextFieldFocus, 1);
+  setTimeout(monkeyPatchNativeFocus, 1);
 } else { // Polyfill
-  window.addEventListener('WebComponentsReady', monkeyPatchTextFieldFocus);
+  window.addEventListener('WebComponentsReady', monkeyPatchNativeFocus);
 }
