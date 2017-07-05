@@ -16,7 +16,19 @@
         }
 
         [part="handle"] {
-          color: #ff0;
+          height: 32px;
+        }
+
+        [part="handle"]::after {
+          content: "";
+          position: absolute;
+          height: 100%;
+          border-left: 2px solid yellow;
+          transform: translate(-50%);
+        }
+
+        :host([vertical]) [part="handle"]::after {
+          transform: rotate(90deg);
         }
 
         [part="splitter"] {
