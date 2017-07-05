@@ -60,5 +60,36 @@
         "webcomponentsjs": "^0.7.24"
       }
     }
+  },
+  "resolutions": {
+    "iron-flex-layout": "1 - 2",
+    "iron-meta": "1 - 2",
+    "paper-behaviors": "1 - 2",
+    "iron-behaviors": "1 - 2",
+    "iron-a11y-keys-behavior": "1 - 2",
+    "iron-checked-element-behavior": "1 - 2",
+    "iron-validatable-behavior": "1 - 2",
+    "iron-form-element-behavior": "1 - 2",
+    "paper-ripple": "1 - 2",
+    "paper-styles": "1 - 2",
+    "iron-icon": "1 - 2",
+    "iron-range-behavior": "1 - 2",
+    "iron-demo-helpers": "^2.0.0",
+    "iron-location": "1 - 2",
+    "iron-doc-viewer": "^2.0.0",
+    "paper-button": "1 - 2",
+    "iron-ajax": "^2.0.0",
+    "marked-element": "1 - 2",
+    "prism-element": "1 - 2",
+    "app-layout": "1 - 2",
+    "iron-media-query": "1 - 2",
+    "iron-resizable-behavior": "1 - 2",
+    "iron-scroll-target-behavior": "1 - 2",
+    "iron-icons": "1 - 2",
+    "iron-iconset-svg": "1 - 2",
+    "iron-selector": "1 - 2",
+    "iron-a11y-announcer": "1 - 2",
+    "iron-overlay-behavior": "1 - 2",
+    "iron-fit-behavior": "1 - 2"
   }
 }
