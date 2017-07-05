@@ -33,10 +33,6 @@
         var datepicker;
 
         function inputChar(char) {
-
-          // Avoid focus issues when running tests in IE11
-          hackFocusIE11(datepicker);
-
           target.value += char;
           MockInteractions.keyDownOn(target, char.charCodeAt(0));
           target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));

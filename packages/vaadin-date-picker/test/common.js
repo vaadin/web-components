@@ -35,24 +35,8 @@ function listenForEvent(elem, type, callback) {
   elem.addEventListener(type, listener);
 }
 
-function hackFocusIE11(datepicker) {
-  // IE11 causes an 'Error thrown outside of test function: Unspecified error' after running
-  // tests that open the overlay, and just when the polyfill executes the `disconnectedCallback`
-  // phase when the fixture is removed.
-  // The problem seems to be in the `this._nativeInput.focus()` call in the mixin, changing
-  // the `focus()` call to the custom element `this._inputElement.focus()`, or sending a 'focus'
-  // event to the input to move the focus, do not fix the problem.
-  if (ie11) {
-    datepicker._focus = () => {};
-  }
-}
-
 function open(datepicker, callback) {
   listenForEvent(datepicker, 'iron-overlay-opened', callback);
-
-  // Avoid focus issues when running tests in IE11
-  hackFocusIE11(datepicker);
-
   datepicker.open();
 }
 
@@ -114,4 +98,31 @@ function waitUntilScrolledTo(overlay, date, callback) {
     var monthIndex = overlay._differenceInMonths(date, new Date());
     return overlay.$.monthScroller.position === monthIndex;
   }, () => Polymer.RenderStatus.afterNextRender(overlay, callback));
+}
+
+// IE11 throws errors when the fixture is removed from the DOM and the focus remains in the native input.
+// Also, FF and Chrome are unable to focus the input when tests are run in the headless window manager used in Travis
+function monkeyPatchTextFieldFocus() {
+  if (window.Vaadin && Vaadin.TextFieldElement) {
+    Vaadin.TextFieldElement.prototype.focus = function() {
+      this._setFocused(true);
+    };
+    Vaadin.TextFieldElement.prototype.blur = function() {
+      this._setFocused(false);
+    };
+  }
+  if (window.Vaadin && Vaadin.ButtonElement) {
+    Vaadin.ButtonElement.prototype.focus = function() {
+      this._setFocused(true);
+    };
+    Vaadin.DatePickerElement.prototype.blur = function() {
+      this._inputElement._setFocused(false);
+    };
+  }
+}
+
+if (window.Polymer) { // Chrome
+  setTimeout(monkeyPatchTextFieldFocus, 1);
+} else { // Polyfill
+  window.addEventListener('WebComponentsReady', monkeyPatchTextFieldFocus);
 }
