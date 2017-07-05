@@ -18,7 +18,7 @@ gemini.suite('vaadin-progress-bar', function(rootSuite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .capture('vaadin-progress-bar');
   });
 
 });
