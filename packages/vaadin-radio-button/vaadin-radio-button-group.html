@@ -14,13 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
         outline: none;
       }
 
-      [part="wrapper"] {
-        display: inline-flex;
-        align-items: center;
-        outline: none;
-      }
-
-      :host([invalid]) [part="wrapper"] {
+      :host([invalid]) {
         box-shadow: 0 0 1px red;
       }
     </style>
@@ -29,9 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-radio-button-group">
   <template>
-    <div part="wrapper" id="wrapper">
-      <slot></slot>
-    </div>
+    <slot></slot>
   </template>
 
   <script>
@@ -57,10 +49,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Attribute    | Description
        * -------------|------------
-       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.
-       * `disabled`   | Set when the checkbox is disabled.
-       * `focus-ring` | Set when the checkbox is focused using the keyboard.
-       * `focused`    | Set when the checkbox is focused.
+       * `disabled`   | Set when the radio button group and its children are disabled.
+       * `invalid`    | Set when the radio button group is required and submitted, but does not have value.
+       * `required`   | Set when the radio group is required for submission of the form and must have value.
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
@@ -75,11 +66,34 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The current disabled state of the radio button group. True if group and all internal radio buttons are disabled.
+             */
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_disabledChanged'
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
             name: {
               type: String,
               reflectToAttribute: true
             },
 
+            /**
+             * The current required state of the radio button group. True if required.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The value given to the data submitted with the radio button group's name to the server when the control is inside a form.
+             */
             value: {
               type: String,
               notify: true,
@@ -87,15 +101,9 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
-            required: {
-              type: Boolean,
-              reflectToAttribute: true
-            },
-
-            disabled: {
-              type: Boolean,
-              reflectToAttribute: true,
-              observer: '_disabledChanged'
+            _checkedButton: {
+              type: Object,
+              observer: '_checkedButtonChanged'
             }
           };
         }
@@ -105,13 +113,23 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._addActiveListeners();
 
-          this.addEventListener('radio-changed', e => {
+          this._checkForInitialValue();
+
+          this.addEventListener('change', e => {
             var radioButton = e.target;
 
             if (radioButton.checked) {
-              this.value = radioButton.value;
+              this._setValueFromButton(radioButton);
             }
           });
+        }
+
+        _checkForInitialValue() {
+          var checkedButton = this.querySelector('[checked]');
+
+          if (checkedButton) {
+            this._setValueFromButton(checkedButton);
+          }
         }
 
         _disabledChanged(disabled) {
@@ -123,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _addActiveListeners() {
           this.addEventListener('keydown', e => {
             // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
-            var checkedRadioButton = (e.target == this) ? e.target.querySelector(`[value='${e.target.value}']`) : e.target;
+            var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
             if (this.disabled) {
               return;
             }
@@ -144,7 +162,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _selectButton(element) {
           element.focus();
-          this.value = element.value;
+
+          this._setValueFromButton(element);
         }
 
         _selectNextButton(element) {
@@ -164,17 +183,36 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _forEachButton(fn) {
-          Array.prototype.forEach.call(this.querySelectorAll('vaadin-radio-button'), fn);
+          Array.from(this.children).filter(child => child.localName === 'vaadin-radio-button').forEach(fn);
+        }
+
+        _setValueFromButton(button) {
+          this._checkedButton = button;
+
+          this.value = button.value;
+        }
+
+        _checkedButtonChanged(checkedButton) {
+          this.validate();
+
+          this._forEachButton(button => button.checked = button === checkedButton);
         }
 
         _valueChanged(value) {
           this.validate();
 
-          this._forEachButton(button => button.checked = button.value === value);
+          var buttonWithValue = this.querySelector(`[value='${value}']`);
+          if (!buttonWithValue) {
+            return;
+          }
+
+          if (!this._checkedButton || this._checkedButton.value !== value) {
+            buttonWithValue.setAttribute('checked', '');
+          }
         }
 
         validate() {
-          if (!this.value && this.required && !this.disabled) {
+          if (!this._checkedButton && this.required && !this.disabled) {
             this.setAttribute('invalid', '');
             return false;
           } else {

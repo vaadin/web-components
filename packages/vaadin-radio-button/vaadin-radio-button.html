@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="wrapper"] {
-        display: inline-flex;
+        display: inline-block;
         align-items: center;
         outline: none;
       }
@@ -33,7 +33,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="label"] {
         padding: 0 5px;
-        outline: none;
       }
 
       :host([disabled]) [part="label"] {
@@ -82,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name         | Description
        * ------------------|----------------
-       * `wrapper`         | The `<label>` element which wrapps the checkbox and [part="label"]
+       * `wrapper`         | The `<label>` element which wrapps the radio button and [part="label"]
        * `native-radio`    | The `<input type="radio">` element
        * `radio`           | The `<span>` element for a custom graphical radio button
        * `label`           | The `<span>` element for slotted text/HTML label
@@ -91,10 +90,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Attribute    | Description
        * -------------|------------
-       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.
-       * `disabled`   | Set when the checkbox is disabled.
-       * `focus-ring` | Set when the checkbox is focused using the keyboard.
-       * `focused`    | Set when the checkbox is focused.
+       * `disabled`   | Set when the radio button is disabled.
+       * `focus-ring` | Set when the radio button is focused using the keyboard.
+       * `focused`    | Set when the radio button is focused.
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
@@ -109,6 +107,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * True if the radio button is checked.
+             */
             checked: {
               type: Boolean,
               value: false,
@@ -117,15 +118,24 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
+            /**
+             * The current disabled state of the radio button. True if disabled.
+             */
             disabled: {
               type: Boolean,
               reflectToAttribute: true
             },
 
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
             name: {
               type: String
             },
 
+            /**
+             * The value passed to `<vaadin-radio-group>` and submitted as form data.
+             */
             value: {
               type: String,
               reflectToAttribute: true
@@ -139,16 +149,18 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('role', 'radio');
 
           this._addActiveListeners();
-
-          if (!this.value) {
-            this.value = this.innerText;
-          }
         }
 
         _checkedChanged(checked) {
           this.setAttribute('aria-checked', checked);
 
-          this.dispatchEvent(new CustomEvent('radio-changed', {bubbles: true}));
+          if (checked && !this.value) {
+            this.value = 'on';
+          } else if (!checked && this.value == 'on') {
+            this.value = undefined;
+          }
+
+          this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
         _addActiveListeners() {

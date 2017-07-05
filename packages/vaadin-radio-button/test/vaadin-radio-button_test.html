@@ -13,11 +13,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-radio-button-group>
-        <vaadin-radio-button>Button <b>1</b></vaadin-radio-button>
-        <vaadin-radio-button value='2'>Button <b>2</b></vaadin-radio-button>
-        <vaadin-radio-button>Button <b>3</b></vaadin-radio-button>
-      </vaadin-radio-button-group>
+      <vaadin-radio-button>Radio <b>Button</b></vaadin-radio-button>
     </template>
   </test-fixture>
 
@@ -30,13 +26,12 @@
         node.dispatchEvent(new CustomEvent('up'));
       };
 
-      var vaadinRadioButtonGroup, vaadinRadioButton, nativeRadio, label;
+      var vaadinRadioButton, nativeRadio, label;
 
       beforeEach(() => {
-        vaadinRadioButtonGroup = fixture('default');
-        vaadinRadioButton = vaadinRadioButtonGroup.querySelector('vaadin-radio-button');
-        nativeRadio = Polymer.dom(vaadinRadioButton.root).querySelector('[part="native-radio"]');
-        label = Polymer.dom(vaadinRadioButton.root).querySelector('[part="label"]');
+        vaadinRadioButton = fixture('default');
+        nativeRadio = vaadinRadioButton.shadowRoot.querySelector('[part="native-radio"]');
+        label = vaadinRadioButton.shadowRoot.querySelector('[part="label"]');
       });
 
       it('can be disabled imperatively', () => {
@@ -45,9 +40,9 @@
       });
 
       it('should define radio button label using light DOM', () => {
-        var children = Polymer.dom(label).getEffectiveChildNodes();
-        expect(children[1].textContent).to.be.equal('Button ');
-        expect(children[2].outerHTML).to.be.equal('<b>1</b>');
+        var children = label.firstElementChild.assignedNodes();
+        expect(children[0].textContent).to.be.equal('Radio ');
+        expect(children[1].outerHTML).to.be.equal('<b>Button</b>');
       });
 
       it('should bind checked to the native radio and vice versa', () => {
@@ -78,89 +73,6 @@
         MockInteractions.keyDownOn(vaadinRadioButton, 32);
         MockInteractions.keyUpOn(vaadinRadioButton, 32);
         expect(vaadinRadioButton.hasAttribute('active')).to.be.false;
-      });
-    });
-
-    describe('vaadin-radio-button-group', () => {
-      var vaadinRadioButtonGroup, vaadinRadioButtonList;
-
-      beforeEach(() => {
-        vaadinRadioButtonGroup = fixture('default');
-        vaadinRadioButtonList = vaadinRadioButtonGroup.querySelectorAll('vaadin-radio-button');
-      });
-
-      it('should bind checked to the vaadin radio button and vice versa with value', () => {
-        vaadinRadioButtonList[0].checked = true;
-        expect(vaadinRadioButtonGroup.value).to.be.eql(vaadinRadioButtonList[0].value);
-        vaadinRadioButtonGroup.value = '2';
-        expect(vaadinRadioButtonGroup.value).to.be.eql(vaadinRadioButtonList[1].value);
-      });
-
-      it('can be disabled imperatively', () => {
-        vaadinRadioButtonGroup.disabled = true;
-        expect(vaadinRadioButtonGroup.hasAttribute('disabled')).to.be.eql(true);
-        expect(vaadinRadioButtonList[0].hasAttribute('disabled')).to.be.eql(true);
-      });
-
-      it('should have invalid state on submition if has required attribute, but does not have a value', () => {
-        vaadinRadioButtonGroup.required = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
-      });
-
-      it('should not have invalid state when is not required', () => {
-        vaadinRadioButtonGroup.required = false;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
-      });
-
-      it('should not have invalid state when disabled', () => {
-        vaadinRadioButtonGroup.disabled = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
-      });
-
-      it('should lose invalid state when a value assigned or group becomes disabled', () => {
-        vaadinRadioButtonGroup.required = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
-
-        vaadinRadioButtonGroup.disabled = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
-
-        vaadinRadioButtonGroup.disabled = false;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
-
-        vaadinRadioButtonList[0].checked = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
-      });
-
-      it('next/first radio button should be focused and checked after right/down ', () => {
-        vaadinRadioButtonList[1].checked = true;
-
-        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
-        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 39);
-
-        expect(vaadinRadioButtonGroup.value).to.be.eql(vaadinRadioButtonList[2].value);
-
-        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 40);
-        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 40);
-        expect(vaadinRadioButtonGroup.value).to.be.eql(vaadinRadioButtonList[0].value);
-      });
-
-      it('previous/last radio button should be focused and checked after left/up ', () => {
-        vaadinRadioButtonList[1].checked = true;
-
-        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
-        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 37);
-        expect(vaadinRadioButtonGroup.value).to.be.eql(vaadinRadioButtonList[0].value);
-
-        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 38);
-        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 38);
-        expect(vaadinRadioButtonGroup.value).to.be.eql(vaadinRadioButtonList[2].value);
       });
     });
   </script>
