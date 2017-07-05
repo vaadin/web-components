@@ -34,22 +34,6 @@
         expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.equal(.5);
       });
 
-      it('should set value to min', () => {
-        progress.max = 15;
-        progress.min = 12;
-        progress.value = 11;
-
-        expect(progress.value).to.be.equal(12);
-      });
-
-      it('should set value to max', () => {
-        progress.max = 15;
-        progress.min = 12;
-        progress.value = 16;
-
-        expect(progress.value).to.be.equal(15);
-      });
-
       it('should throw an exception in case of wrong bounds', () => {
         var threw = false;
         var message = '';
