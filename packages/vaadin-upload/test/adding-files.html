@@ -225,6 +225,7 @@
 
         files.forEach(upload._addFile.bind(upload));
         uploadStartSpy.should.have.been.calledTwice;
+        expect(upload.files[0].held).to.be.false;
       });
       it('should not automatically start upload when noAuto flag is set', function() {
         var uploadStartSpy = sinon.spy();
@@ -233,6 +234,7 @@
 
         files.forEach(upload._addFile.bind(upload));
         uploadStartSpy.should.not.have.been.called;
+        expect(upload.files[0].held).to.be.true;
       });
 
       describe('validate files', function() {

@@ -337,6 +337,7 @@
           upload._addFile(file);
           flush(function() {
             expect(file.uploaded).not.to.be.ok;
+            expect(file.held).to.equal.true;
             expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
             done();
           });
@@ -384,6 +385,25 @@
             done();
           });
           upload.uploadFiles([upload.files[2]]);
+        });
+
+        it('should start a file upload from the file-start event', function(done) {
+          upload._addFile(file);
+          flush(function() {
+            expect(file.uploaded).not.to.be.ok;
+            expect(file.held).to.equal.true;
+            expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
+
+            upload.addEventListener('upload-start', function(e) {
+              expect(e.detail.xhr).to.be.ok;
+              expect(e.detail.file).to.be.ok;
+              expect(e.detail.file.uploading).to.be.ok;
+
+              done();
+            });
+
+            upload.fire('file-start', {file: file});
+          });
         });
       });
 
