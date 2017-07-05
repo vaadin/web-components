@@ -1,0 +1,234 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="vaadin-radio-button.html">
+
+<dom-module id="vaadin-radio-button-group-default-theme" theme-for="vaadin-radio-button-group">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        outline: none;
+      }
+
+      :host([invalid]) {
+        box-shadow: 0 0 1px red;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-radio-button-group">
+  <template>
+    <slot></slot>
+  </template>
+
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    (function() {
+      /**
+       * `<vaadin-radio-button-group>` is a Polymer element for grouping vaadin-radio-buttons.
+       *
+       * ```html
+       * <vaadin-radio-button-group>
+       *   <vaadin-radio-button>1</vaadin-radio-button>
+       *   <vaadin-radio-button>2</vaadin-radio-button>
+       *   <vaadin-radio-button>3</vaadin-radio-button>
+       * </vaadin-radio-button-group>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute    | Description
+       * -------------|------------
+       * `disabled`   | Set when the radio button group and its children are disabled.
+       * `invalid`    | Set when the radio button group is required and submitted, but does not have value.
+       * `required`   | Set when the radio group is required for submission of the form and must have value.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @element vaadin-radio-button-group
+       * @demo demo/index.html
+       */
+      class RadioButtonGroupElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-radio-button-group';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * The current disabled state of the radio button group. True if group and all internal radio buttons are disabled.
+             */
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_disabledChanged'
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: {
+              type: String,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The current required state of the radio button group. True if required.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The value given to the data submitted with the radio button group's name to the server when the control is inside a form.
+             */
+            value: {
+              type: String,
+              notify: true,
+              observer: '_valueChanged',
+              reflectToAttribute: true
+            },
+
+            _checkedButton: {
+              type: Object,
+              observer: '_checkedButtonChanged'
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          this._addActiveListeners();
+
+          this._checkForInitialValue();
+
+          this.addEventListener('change', e => {
+            var radioButton = e.target;
+
+            if (radioButton.checked) {
+              this._setValueFromButton(radioButton);
+            }
+          });
+        }
+
+        _checkForInitialValue() {
+          var checkedButton = this.querySelector('[checked]');
+
+          if (checkedButton) {
+            this._setValueFromButton(checkedButton);
+          }
+        }
+
+        _disabledChanged(disabled) {
+          this.validate();
+
+          this._forEachButton(button => button.disabled = disabled);
+        }
+
+        _addActiveListeners() {
+          this.addEventListener('keydown', e => {
+            // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
+            var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
+            if (this.disabled) {
+              return;
+            }
+
+            // LEFT, UP - select previous radio button
+            if (e.keyCode === 37 || e.keyCode === 38) {
+              e.preventDefault();
+              this._selectPreviousButton(checkedRadioButton);
+            }
+
+            // RIGHT, DOWN - select next radio button
+            if (e.keyCode === 39 || e.keyCode === 40) {
+              e.preventDefault();
+              this._selectNextButton(checkedRadioButton);
+            }
+          });
+        }
+
+        _selectButton(element) {
+          element.focus();
+
+          this._setValueFromButton(element);
+        }
+
+        _selectNextButton(element) {
+          if (element.nextElementSibling) {
+            this._selectButton(element.nextElementSibling);
+          } else {
+            this._selectButton(this.firstElementChild);
+          }
+        }
+
+        _selectPreviousButton(element) {
+          if (element.previousElementSibling) {
+            this._selectButton(element.previousElementSibling);
+          } else {
+            this._selectButton(this.lastElementChild);
+          }
+        }
+
+        _forEachButton(fn) {
+          Array.from(this.children).filter(child => child.localName === 'vaadin-radio-button').forEach(fn);
+        }
+
+        _setValueFromButton(button) {
+          this._checkedButton = button;
+
+          this.value = button.value;
+        }
+
+        _checkedButtonChanged(checkedButton) {
+          this.validate();
+
+          this._forEachButton(button => button.checked = button === checkedButton);
+        }
+
+        _valueChanged(value) {
+          this.validate();
+
+          var buttonWithValue = this.querySelector(`[value='${value}']`);
+          if (!buttonWithValue) {
+            return;
+          }
+
+          if (!this._checkedButton || this._checkedButton.value !== value) {
+            buttonWithValue.setAttribute('checked', '');
+          }
+        }
+
+        validate() {
+          if (!this._checkedButton && this.required && !this.disabled) {
+            this.setAttribute('invalid', '');
+            return false;
+          } else {
+            this.removeAttribute('invalid');
+            return true;
+          }
+        }
+      }
+
+      customElements.define(RadioButtonGroupElement.is, RadioButtonGroupElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.RadioButtonGroupElement = RadioButtonGroupElement;
+    })();
+  </script>
+</dom-module>

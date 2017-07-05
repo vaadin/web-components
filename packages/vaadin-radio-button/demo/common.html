@@ -5,22 +5,24 @@
 <link rel="import" href="../../paper-styles/default-theme.html">
 
 <link rel="import" href="../../elements-demo-resources/common.html">
+<link rel="import" href="../../iron-form/iron-form.html">
+<link rel="import" href="../../vaadin-button/vaadin-button.html">
 
 <!-- The component to demo -->
 <link rel="import" href="../vaadin-radio-button.html">
+<link rel="import" href="../vaadin-radio-button-group.html">
 
 <!-- Common JS code for all examples -->
 <script>
-  // Menu configuration
-  window.demos = [
-     {name: 'index', title: 'Basic Examples'},
-     {name: 'advanced', title: 'Advanced Usage'}
-  ];
+window.demos = [
+  {name: 'index', title: 'Basic Examples'},
+  {name: 'group', title: 'Radio Button Group'}
+];
 </script>
 <link rel="import" href="../../elements-demo-resources/demo-navigation.html">
 
 <script>
-   window.addEventListener('WebComponentsReady', () => {
-     document.body.removeAttribute('unresolved');
-   });
+window.addEventListener('WebComponentsReady', () => {
+  document.body.removeAttribute('unresolved');
+});
 </script>

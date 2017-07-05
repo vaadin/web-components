@@ -16,12 +16,29 @@
 
     <demo-navigation></demo-navigation>
 
-    <h3>Sample example</h3>
+    <h3>Default Radio</h3>
     <demo-snippet>
       <template>
-        <vaadin-radio-button>Foobar</vaadin-radio-button>
+        <vaadin-radio-button>Radio button</vaadin-radio-button>
       </template>
     </demo-snippet>
+
+    <h3>Radio with Custom Tabindex</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-radio-button tabindex="1">1</vaadin-radio-button>
+        <vaadin-radio-button tabindex="3">2</vaadin-radio-button>
+        <vaadin-radio-button tabindex="2">3</vaadin-radio-button>
+      </template>
+    </demo-snippet>
+
+    <h3>Disabled radio</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-radio-button disabled>Disabled radio</vaadin-radio-button>
+      </template>
+    </demo-snippet>
+
   </div>
 </body>
 </html>

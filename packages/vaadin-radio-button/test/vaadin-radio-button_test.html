@@ -1,0 +1,79 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-radio-button tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../vaadin-radio-button.html">
+  <link rel="import" href="../vaadin-radio-button-group.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-radio-button>Radio <b>Button</b></vaadin-radio-button>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-radio-button', () => {
+      var down = node => {
+        node.dispatchEvent(new CustomEvent('down'));
+      };
+      var up = node => {
+        node.dispatchEvent(new CustomEvent('up'));
+      };
+
+      var vaadinRadioButton, nativeRadio, label;
+
+      beforeEach(() => {
+        vaadinRadioButton = fixture('default');
+        nativeRadio = vaadinRadioButton.shadowRoot.querySelector('[part="native-radio"]');
+        label = vaadinRadioButton.shadowRoot.querySelector('[part="label"]');
+      });
+
+      it('can be disabled imperatively', () => {
+        vaadinRadioButton.disabled = true;
+        expect(vaadinRadioButton.hasAttribute('disabled')).to.be.eql(true);
+      });
+
+      it('should define radio button label using light DOM', () => {
+        var children = label.firstElementChild.assignedNodes();
+        expect(children[0].textContent).to.be.equal('Radio ');
+        expect(children[1].outerHTML).to.be.equal('<b>Button</b>');
+      });
+
+      it('should bind checked to the native radio and vice versa', () => {
+        vaadinRadioButton.checked = true;
+        expect(nativeRadio.checked).to.be.eql(true);
+        nativeRadio.checked = false;
+        nativeRadio.dispatchEvent(new CustomEvent('change'));
+        expect(vaadinRadioButton.checked).to.be.eql(false);
+      });
+
+      it('should have active attribute on down', () => {
+        down(vaadinRadioButton);
+        expect(vaadinRadioButton.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute after up', () => {
+        down(vaadinRadioButton);
+        up(vaadinRadioButton);
+        expect(vaadinRadioButton.hasAttribute('active')).to.be.false;
+      });
+
+      it('should have active attribute on space', () => {
+        MockInteractions.keyDownOn(vaadinRadioButton, 32);
+        expect(vaadinRadioButton.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not have active attribute after space', () => {
+        MockInteractions.keyDownOn(vaadinRadioButton, 32);
+        MockInteractions.keyUpOn(vaadinRadioButton, 32);
+        expect(vaadinRadioButton.hasAttribute('active')).to.be.false;
+      });
+    });
+  </script>
+</body>

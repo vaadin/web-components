@@ -4,28 +4,62 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-`<vaadin-radio-button>` is a Polymer 2 element.
-
-```html
-<vaadin-radio-button>
-</vaadin-radio-button>
-```
-
-@element vaadin-radio-button
-@demo demo/index.html
--->
-
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 
-<dom-module id="vaadin-radio-button">
+<dom-module id="vaadin-radio-default-theme" theme-for="vaadin-radio-button">
   <template>
     <style>
       :host {
         display: inline-block;
+        outline: none;
+      }
+
+      [part="wrapper"] {
+        display: inline-block;
+        align-items: center;
+        outline: none;
+      }
+
+      :host([focus-ring]) {
+        box-shadow: 0 0 2px 2px Highlight;
+      }
+
+      [part="native-radio"] {
+        margin: 3px 0 3px 3px;
+      }
+
+      [part="label"] {
+        padding: 0 5px;
+      }
+
+      :host([disabled]) [part="label"] {
+        opacity: 0.5;
       }
     </style>
-    <slot></slot>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-radio-button">
+  <template>
+    <label part="wrapper" id="label">
+      <input
+        id="nativeRadio"
+        type="radio"
+        part="native-radio"
+        checked="{{checked::change}}"
+        disabled$="[[disabled]]"
+        role="presentation"
+        tabindex="-1">
+
+      <span part="radio"></span>
+
+      <span part="label">
+        <slot></slot>
+      </span>
+    </label>
   </template>
 
   <script>
@@ -33,17 +67,145 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    class VaadinRadioButton extends Polymer.Element {
-      static get is() {
-        return 'vaadin-radio-button';
+    (function() {
+      /**
+       * `<vaadin-radio-button>` is a Polymer element for radio buttons.
+       *
+       * ```html
+       * <vaadin-radio-button>1</vaadin-radio-button>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are exposed for styling:
+       *
+       * Part name         | Description
+       * ------------------|----------------
+       * `wrapper`         | The `<label>` element which wrapps the radio button and [part="label"]
+       * `native-radio`    | The `<input type="radio">` element
+       * `radio`           | The `<span>` element for a custom graphical radio button
+       * `label`           | The `<span>` element for slotted text/HTML label
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute    | Description
+       * -------------|------------
+       * `disabled`   | Set when the radio button is disabled.
+       * `focus-ring` | Set when the radio button is focused using the keyboard.
+       * `focused`    | Set when the radio button is focused.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @element vaadin-radio-button
+       * @demo demo/index.html
+       */
+      class RadioButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-radio-button';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * True if the radio button is checked.
+             */
+            checked: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              observer: '_checkedChanged',
+              reflectToAttribute: true
+            },
+
+            /**
+             * The current disabled state of the radio button. True if disabled.
+             */
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The name of the control, which is submitted with the form data.
+             */
+            name: {
+              type: String
+            },
+
+            /**
+             * The value passed to `<vaadin-radio-group>` and submitted as form data.
+             */
+            value: {
+              type: String,
+              reflectToAttribute: true
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'radio');
+
+          this._addActiveListeners();
+        }
+
+        _checkedChanged(checked) {
+          this.setAttribute('aria-checked', checked);
+
+          if (checked && !this.value) {
+            this.value = 'on';
+          } else if (!checked && this.value == 'on') {
+            this.value = undefined;
+          }
+
+          this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+        }
+
+        _addActiveListeners() {
+          // DOWN
+          this._addEventListenerToNode(this, 'down', (e) => {
+            e.preventDefault();
+            if (!this.disabled) {
+              this.setAttribute('active', '');
+            }
+          });
+
+          // UP
+          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+
+          // KEYDOWN
+          this.addEventListener('keydown', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('active', '');
+            }
+          });
+
+          // KEYUP
+          this.addEventListener('keyup', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('checked', '');
+              this.removeAttribute('active');
+            }
+          });
+        }
+
+        get focusElement() {
+          return this.$.label;
+        }
       }
 
-      static get properties() {
-        return {
-        };
-      }
-    }
+      customElements.define(RadioButtonElement.is, RadioButtonElement);
 
-    customElements.define(VaadinRadioButton.is, VaadinRadioButton);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.RadioButtonElement = RadioButtonElement;
+    })();
   </script>
 </dom-module>
