@@ -11,8 +11,8 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        --vaadin-progress-background-color: rgba(0,0,0,0.1);
-        --vaadin-progress-foreground-color: var(--primary-color, rgba(0,0,0,0.5));
+        --vaadin-progress-background-color: rgba(0, 0, 0, 0.1);
+        --vaadin-progress-foreground-color: var(--primary-color, rgba(0, 0, 0, 0.5));
         --vaadin-progress-line-width: 2px;
         --vaadin-progress-circle-size: 24px;
 
@@ -58,17 +58,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /* TODO WebKit doesn't handle negative dashoffset the same as others, so the animation looks broken */
+
       @keyframes indeterminate-progress-circle {
         0% {
           stroke-dashoffset: 235%;
           transform: rotate(-90deg);
         }
+
         100% {
           stroke-dashoffset: -235%;
           transform: rotate(360deg);
         }
       }
-
     </style>
 
     <svg id="circle" width="100%" height="100%">

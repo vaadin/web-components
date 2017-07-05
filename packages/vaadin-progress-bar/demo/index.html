@@ -32,8 +32,8 @@
         <button id="update-bar-with-bounds">Update value</button>
 
         <script>
-          document.querySelector("#update-bar-with-bounds").addEventListener("click", function() {
-            var progress = document.querySelector("#progress-bar-custom-bounds");
+          document.querySelector('#update-bar-with-bounds').addEventListener('click', function() {
+            var progress = document.querySelector('#progress-bar-custom-bounds');
             progress.value += 10;
             if (progress.value >= progress.max) {
               progress.value = progress.min;
