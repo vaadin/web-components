@@ -5,48 +5,45 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <!--
-  Vaadin.ProgressMixin is a mixin, that implements common functionality for all progresses.
 -->
 
 <script>
   window.Vaadin = window.Vaadin || {};
- 
   /**
    * @polymerMixin
    */
-
   Vaadin.ProgressMixin = superClass =>
     class VaadinProgressMixin extends superClass {
       static get properties() {
         return {
-          /*
-          * Displays current progress
-          */
+          /**
+           * Displays current progress
+           */
           value: {
             type: Number,
             reflectToAttribute: true
           },
-          /*
-          * Minimum bound of the progress bar. Can't be greater then max.
-          */
+          /**
+           * Minimum bound of the progress bar. Cannot be greater than max.
+           */
           min: {
             type: Number,
             value: 0,
             reflectToAttribute: true,
             observer: '_minChanged'
           },
-          /*
-          * Maximum bound of the progress bar. Can't be less then min.
-          */
+          /**
+           * Maximum bound of the progress bar. Cannot be less than min.
+           */
           max: {
             type: Number,
             value: 1,
             reflectToAttribute: true,
             observer: '_maxChanged'
           },
-          /*
-          * Percent of current progress relative to whole progress bar (max - min)
-          */
+          /**
+           * Percent of current progress relative to whole progress bar (max - min)
+           */
           normalizedValue: {
             type: Number,
             computed: '_normalizeValue(value, min, max)'

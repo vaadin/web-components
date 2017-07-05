@@ -24,8 +24,8 @@
     </demo-snippet>
 
     <h3>Progress bar with custom bounds</h3>
-    <p>By default value is clamped between 0 and 1. You can customize this bounds using min and max attributes.</p>
-    <p><strong>Warning! Min attribute must be less then max.</strong></p>
+    <p>By default the <code>value</code> is clamped between 0 and 1. You can customize the bounds using the <code>min</code> and the <code>max</code> properties.</p>
+    <p><strong>Note: <code>min</code> must be less then <code>max</code>.</strong></p>
     <demo-snippet>
       <template>
         <vaadin-progress-bar id="progress-bar-custom-bounds" value="20" min="10" max="110"></vaadin-progress-bar>
@@ -45,13 +45,12 @@
     </demo-snippet>
 
     <h3>Indeterminate Progress Bar</h3>
-    <p>When the value is <code>undefined</code> the progress bar will animate indefinitely to show that progress is ongoing.</p>
+    <p>When the value is <code>undefined</code> the progress bar will animate indefinitely.</p>
     <demo-snippet>
       <template>
         <vaadin-progress-bar></vaadin-progress-bar>
       </template>
     </demo-snippet>
-
   </div>
 </body>
 </html>

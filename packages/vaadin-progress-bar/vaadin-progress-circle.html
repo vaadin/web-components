@@ -83,19 +83,19 @@ This program is available under Apache License Version 2.0, available at https:/
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    (function() {
+    {
       /**
-      * `<vaadin-progress-circle>` is a Polymer 2 progress circle.
-      *
-      * ```html
-      * <vaadin-progress-circle>
-      * </vaadin-progress-bar>
-      * ```
-      *
-      * @memberof Vaadin
-      * @mixes Vaadin.ProgressMixin
-      * @demo demo/progress-circle.html
-      **/
+       * `<vaadin-progress-circle>` is a Polymer 2 progress circle.
+       *
+       * ```html
+       * <vaadin-progress-circle>
+       * </vaadin-progress-circle>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ProgressMixin
+       * @demo demo/progress-circle.html
+       */
       class ProgressCircleElement extends Vaadin.ProgressMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-progress-circle';
@@ -114,9 +114,8 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-
       window.Vaadin = window.Vaadin || {};
       Vaadin.ProgressCircleElement = ProgressCircleElement;
-    })();
+    }
   </script>
 </dom-module>
