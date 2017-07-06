@@ -40,13 +40,6 @@ This program is available under Apache License Version 2.0, available at https:/
             value: 1,
             reflectToAttribute: true,
             observer: '_maxChanged'
-          },
-          /**
-           * Percent of current progress relative to whole progress bar (max - min)
-           */
-          normalizedValue: {
-            type: Number,
-            computed: '_normalizeValue(value, min, max)'
           }
         };
       }
@@ -71,6 +64,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * Percent of current progress relative to whole progress bar (max - min)
+       */
       _normalizeValue(value, min, max) {
         if (!value && value != 0) return;
 

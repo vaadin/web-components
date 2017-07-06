@@ -74,7 +74,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <svg id="circle" width="100%" height="100%">
       <circle id="background" r="50%" cx="50%" cy="50%"/>
-      <circle id="foreground" r="50%" cx="50%" cy="50%" stroke-dashoffset$="[[_computeDashoffset(normalizedValue)]]"/>
+      <circle id="foreground" r="50%" cx="50%" cy="50%" stroke-dashoffset$="[[_computeDashoffset(value, min, max)]]"/>
     </svg>
 
   </template>
@@ -102,10 +102,10 @@ This program is available under Apache License Version 2.0, available at https:/
           return 'vaadin-progress-circle';
         }
 
-        _computeDashoffset(value) {
+        _computeDashoffset(value, min, max) {
           // We could compute this with CSS calc, but Firefox doesn’t like that
           // 314.16 is size of dash array, which equals 2*PI*R, where R = 50%
-          return 314.16 * (1 - value) + '%';
+          return 314.16 * (1 - this._normalizeValue(value, min, max)) + '%';
         }
 
       }
