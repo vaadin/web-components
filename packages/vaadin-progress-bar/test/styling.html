@@ -11,27 +11,12 @@
 <body>
   <test-fixture id="progressBar">
     <template>
-      <style>
-        vaadin-progress-bar.custom-colors {
-          --vaadin-progress-background-color: black;
-          --vaadin-progress-foreground-color: blue;
-          --vaadin-progress-line-width: 5px;
-        }
-      </style>
       <vaadin-progress-bar class="custom-colors"></vaadin-progress-bar>
     </template>
   </test-fixture>
 
   <test-fixture id="progressCircle">
     <template>
-      <style>
-        vaadin-progress-circle.custom-colors {
-          --vaadin-progress-background-color: black;
-          --vaadin-progress-foreground-color: blue;
-          --vaadin-progress-line-width: 5px;
-          --vaadin-progress-circle-size: 45px;
-        }
-      </style>
       <vaadin-progress-circle class="custom-colors"></vaadin-progress-circle>
     </template>
   </test-fixture>
@@ -40,7 +25,14 @@
     describe('vaadin progress bar styling', () => {
       var progress;
 
-      beforeEach(() => progress = fixture('progressBar')[1]);
+      beforeEach(() => {
+        progress = fixture('progressBar');
+        progress.updateStyles({
+          '--vaadin-progress-background-color': 'rgb(0, 0, 0)',
+          '--vaadin-progress-foreground-color': 'rgb(0, 0, 255)',
+          '--vaadin-progress-line-width': '5px'
+        });
+      });
 
       it('should have proper colors', () => {
         expect(window.getComputedStyle(progress.$.foreground)['background-color']).to.be.equal('rgb(0, 0, 255)');
@@ -55,7 +47,15 @@
     describe('vaadin progress circle styling', () => {
       var progress;
 
-      beforeEach(() => progress = fixture('progressCircle')[1]);
+      beforeEach(() => {
+        progress = fixture('progressCircle');
+        progress.updateStyles({
+          '--vaadin-progress-background-color': 'rgb(0, 0, 0)',
+          '--vaadin-progress-foreground-color': 'rgb(0, 0, 255)',
+          '--vaadin-progress-line-width': '5px',
+          '--vaadin-progress-circle-size': '45px'
+        });
+      });
 
       it('should have proper colors', () => {
         expect(window.getComputedStyle(progress.$.foreground)['stroke']).to.be.equal('rgb(0, 0, 255)');
@@ -68,8 +68,8 @@
       });
 
       it('should have proper width and height', () => {
-        expect(window.getComputedStyle(progress)['width']).to.be.equal('50px');
-        expect(window.getComputedStyle(progress)['height']).to.be.equal('50px');
+        expect(progress.offsetWidth).to.be.equal(50);
+        expect(progress.offsetHeight).to.be.equal(50);
       });
     });
   </script>
