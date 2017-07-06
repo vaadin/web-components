@@ -11,9 +11,9 @@ gulp.task('lint:js', function() {
     '*.js',
     'test/**/*.js'
   ])
-  .pipe(eslint())
-  .pipe(eslint.format())
-  .pipe(eslint.failAfterError('fail'));
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError('fail'));
 });
 
 gulp.task('lint:html', function() {
@@ -22,12 +22,13 @@ gulp.task('lint:html', function() {
     'demo/**/*.html',
     'test/**/*.html'
   ])
-  .pipe(htmlExtract({
-    sel: 'script, code-example code'
-  }))
-  .pipe(eslint())
-  .pipe(eslint.format())
-  .pipe(eslint.failAfterError('fail'));
+    .pipe(htmlExtract({
+      sel: 'script, code-example code',
+      strip: true
+    }))
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError('fail'));
 });
 
 gulp.task('lint:css', function() {
@@ -36,12 +37,12 @@ gulp.task('lint:css', function() {
     'demo/**/*.html',
     'test/**/*.html'
   ])
-  .pipe(htmlExtract({
-    sel: 'style'
-  }))
-  .pipe(stylelint({
-    reporters: [
-      {formatter: 'string', console: true}
-    ]
-  }));
+    .pipe(htmlExtract({
+      sel: 'style'
+    }))
+    .pipe(stylelint({
+      reporters: [
+        {formatter: 'string', console: true}
+      ]
+    }));
 });

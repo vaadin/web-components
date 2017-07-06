@@ -349,7 +349,7 @@
           upload.files = files;
           upload.files[1].complete = true;
 
-          for(var i = 0; i < upload.files.length; i++) {
+          for (var i = 0; i < upload.files.length; i++) {
             expect(upload.files[i].uploading).not.to.be.ok;
           }
           upload.addEventListener('upload-start', function(e) {
@@ -370,7 +370,7 @@
           upload.files = files;
           upload.files[2].name = tempFileName;
 
-          for(var i = 0; i < upload.files.length; i++) {
+          for (var i = 0; i < upload.files.length; i++) {
             expect(upload.files[i].uploading).not.to.be.ok;
           }
           upload.addEventListener('upload-start', function(e) {
@@ -379,7 +379,7 @@
             expect(e.detail.file.name).to.equal(tempFileName);
             expect(e.detail.file.uploading).to.be.ok;
 
-            for(var i = 0; i < upload.files.length - 1; i++) {
+            for (var i = 0; i < upload.files.length - 1; i++) {
               expect(upload.files[i].uploading).not.to.be.ok;
             }
             done();

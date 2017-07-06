@@ -495,20 +495,20 @@ Custom property | Description | Default
       }
 
       return split
-          .reverse()
-          .map(function(number) {
-            return (number < 10 ? '0' : '') + number;
-          })
-          .join(':');
+        .reverse()
+        .map(function(number) {
+          return (number < 10 ? '0' : '') + number;
+        })
+        .join(':');
     },
 
     _formatFileProgress: function(file) {
       return file.totalStr + ': ' +
           file.progress + '% (' +
           (file.loaded > 0 ?
-              this.i18n.uploading.remainingTime.prefix + file.remainingStr :
-              this.i18n.uploading.remainingTime.unknown) +
-          ')';
+            this.i18n.uploading.remainingTime.prefix + file.remainingStr :
+            this.i18n.uploading.remainingTime.unknown) +
+        ')';
     },
 
     _maxFilesAdded: function(maxFiles, numFiles) {

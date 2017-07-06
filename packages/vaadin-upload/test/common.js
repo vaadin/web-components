@@ -36,7 +36,7 @@ function createFile(fileSize, contentType) {
     array.push('A');
   }
   var file = new Blob([new Uint8Array(array)],
-     {type: contentType || 'application/x-octet-stream'});
+    {type: contentType || 'application/x-octet-stream'});
   file.name = 'file-' + fileCounter++;
   return file;
 }
