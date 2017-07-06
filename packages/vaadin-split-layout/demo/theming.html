@@ -23,34 +23,29 @@
         <dom-module id="vaadin-split-layout-styles" theme-for="vaadin-split-layout">
           <template>
             <style>
-              [part="handle"]::after {
-                font-size: 35px;
-                color: #222;
-                text-shadow: 1px 1px #fff;
-                border: none;
-                transform: none;
+              [part~="splitter"] {
+                min-width: 4px;
+                min-height: 4px;
+                background: #ddd;
               }
 
-              :host(:not([vertical])) [part="handle"]::after {
+              [part~="handle"]::after {
                 content: "\22EE";
+                display: block;
+                font-size: 16px;
+                line-height: 40px;
+                text-align: center;
+                color: #999;
+                text-shadow: 1px 1px #fff;
               }
 
-              :host([vertical]) [part="handle"]::after {
+              :host([vertical]) [part~="handle"]::after {
                 content: "\22EF";
-              }
-
-              :host(:not([vertical])) [part="splitter"] {
-                background: #535353;
-                width: 18px;
-              }
-
-              :host(:not([vertical])) ::slotted([slot="primary"]) {
-                background: #838383;
-                color: #fff;
               }
             </style>
           </template>
         </dom-module>
+
         <vaadin-split-layout>
           <div>First</div>
           <vaadin-split-layout vertical>
@@ -58,7 +53,6 @@
             <div>Third</div>
           </vaadin-split-layout>
         </vaadin-split-layout>
-        <br>
       </template>
     </demo-snippet>
 

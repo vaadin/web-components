@@ -7,42 +7,37 @@
 </head>
 
 <body>
-  <dom-module id="vaadin-split-layout-style" theme-for="vaadin-split-layout">
+  <dom-module id="vaadin-split-layout-styles" theme-for="vaadin-split-layout">
     <template>
       <style>
-        :host {
-          height: 100px;
-          width: 200px;
+        [part~="splitter"] {
+          min-width: 4px;
+          min-height: 4px;
+          background: #ddd;
         }
 
-        [part="handle"] {
-          height: 32px;
+        [part~="handle"]::after {
+          content: "\22EE";
+          display: block;
+          font-size: 16px;
+          line-height: 40px;
+          text-align: center;
+          color: #999;
+          text-shadow: 1px 1px #fff;
         }
 
-        [part="handle"]::after {
-          content: "";
-          position: absolute;
-          height: 100%;
-          border-left: 2px solid yellow;
-          transform: translate(-50%);
-        }
-
-        :host([vertical]) [part="handle"]::after {
-          transform: rotate(90deg);
-        }
-
-        [part="splitter"] {
-          background: #000;
+        :host([vertical]) [part~="handle"]::after {
+          content: "\22EF";
         }
       </style>
     </template>
   </dom-module>
 
-  <vaadin-split-layout id="customized">
-    <div style="width: 25%"></div>
-    <vaadin-split-layout vertical style="width: 75%">
-      <div></div>
-      <div></div>
+  <vaadin-split-layout id="customized" style="height: 100px; width: 200px;">
+    <div>First</div>
+    <vaadin-split-layout vertical>
+      <div>Second</div>
+      <div>Third</div>
     </vaadin-split-layout>
   </vaadin-split-layout>
 </body>
