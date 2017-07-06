@@ -1,219 +1,762 @@
 {
   "schema_version": "1.0.0",
-  "elements": [
+  "namespaces": [
     {
-      "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar>\n</vaadin-progress-bar>\n```",
-      "summary": "",
-      "path": "vaadin-progress-bar.html",
-      "properties": [],
-      "methods": [],
-      "demos": [
-        {
-          "url": "demo/index.html",
-          "description": ""
-        }
-      ],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 77,
-          "column": 4
-        },
-        "end": {
-          "line": 81,
-          "column": 5
-        }
-      },
-      "privacy": "public",
-      "name": "VaadinProgressBar",
-      "attributes": [],
-      "events": [],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "vaadin-progress-bar",
-      "superclass": "HTMLElement"
-    },
-    {
-      "description": "`<vaadin-progress-circle>` is a Polymer 2 progress circle.\n\n```html\n<vaadin-progress-circle>\n</vaadin-progress-circle>\n```",
-      "summary": "",
-      "path": "vaadin-progress-circle.html",
-      "properties": [],
-      "methods": [
-        {
-          "name": "_computeDashoffset",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 102,
-              "column": 6
-            },
-            "end": {
-              "line": 105,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            }
-          ]
-        }
-      ],
-      "demos": [
-        {
-          "url": "demo/index.html",
-          "description": ""
-        }
-      ],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 97,
-          "column": 4
-        },
-        "end": {
-          "line": 107,
-          "column": 5
-        }
-      },
-      "privacy": "public",
-      "name": "VaadinProgressCircle",
-      "attributes": [],
-      "events": [],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "vaadin-progress-circle",
-      "superclass": "HTMLElement"
-    }
-  ],
-  "classes": [
-    {
+      "name": "Vaadin",
       "description": "",
       "summary": "",
-      "path": "vaadin-progress-base.html",
-      "properties": [],
-      "methods": [
+      "sourceRange": {
+        "file": "vaadin-progress-circle.html",
+        "start": {
+          "line": 117,
+          "column": 6
+        },
+        "end": {
+          "line": 117,
+          "column": 42
+        }
+      },
+      "elements": [
         {
-          "name": "_valueChanged",
-          "description": "",
-          "privacy": "protected",
+          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar>\n</vaadin-progress-bar>\n```",
+          "summary": "",
+          "path": "vaadin-progress-bar.html",
+          "properties": [
+            {
+              "name": "value",
+              "type": "number",
+              "description": "Displays current progress",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 21,
+                  "column": 10
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "min",
+              "type": "number",
+              "description": "Minimum bound of the progress bar. Cannot be greater than max.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 28,
+                  "column": 10
+                },
+                "end": {
+                  "line": 33,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_minChanged\""
+                }
+              },
+              "defaultValue": "0",
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "max",
+              "type": "number",
+              "description": "Maximum bound of the progress bar. Cannot be less than min.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 37,
+                  "column": 10
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_maxChanged\""
+                }
+              },
+              "defaultValue": "1",
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            }
+          ],
+          "methods": [
+            {
+              "name": "_minChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 6
+                },
+                "end": {
+                  "line": 54,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "_maxChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 56,
+                  "column": 6
+                },
+                "end": {
+                  "line": 64,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "_normalizeValue",
+              "description": "Percent of current progress relative to whole progress bar (max - min)",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 69,
+                  "column": 6
+                },
+                "end": {
+                  "line": 78,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            }
+          ],
+          "staticMethods": [],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 49,
+              "line": 80,
               "column": 6
             },
             "end": {
-              "line": 54,
+              "line": 84,
               "column": 7
             }
           },
-          "metadata": {},
-          "params": [
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.ProgressBarElement",
+          "attributes": [
             {
-              "name": "value"
+              "name": "value",
+              "description": "Displays current progress",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 21,
+                  "column": 10
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
-              "name": "value2"
+              "name": "min",
+              "description": "Minimum bound of the progress bar. Cannot be greater than max.",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 28,
+                  "column": 10
+                },
+                "end": {
+                  "line": 33,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "max",
+              "description": "Maximum bound of the progress bar. Cannot be less than min.",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 37,
+                  "column": 10
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
             }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [],
+          "tagname": "vaadin-progress-bar",
+          "mixins": [
+            "Vaadin.ProgressMixin"
           ]
         },
         {
-          "name": "_minChanged",
-          "description": "",
-          "privacy": "protected",
+          "description": "`<vaadin-progress-circle>` is a Polymer 2 progress circle.\n\n```html\n<vaadin-progress-circle>\n</vaadin-progress-circle>\n```",
+          "summary": "",
+          "path": "vaadin-progress-circle.html",
+          "properties": [
+            {
+              "name": "value",
+              "type": "number",
+              "description": "Displays current progress",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 21,
+                  "column": 10
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "min",
+              "type": "number",
+              "description": "Minimum bound of the progress bar. Cannot be greater than max.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 28,
+                  "column": 10
+                },
+                "end": {
+                  "line": 33,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_minChanged\""
+                }
+              },
+              "defaultValue": "0",
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "max",
+              "type": "number",
+              "description": "Maximum bound of the progress bar. Cannot be less than min.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 37,
+                  "column": 10
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_maxChanged\""
+                }
+              },
+              "defaultValue": "1",
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            }
+          ],
+          "methods": [
+            {
+              "name": "_minChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 6
+                },
+                "end": {
+                  "line": 54,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "_maxChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 56,
+                  "column": 6
+                },
+                "end": {
+                  "line": 64,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "_normalizeValue",
+              "description": "Percent of current progress relative to whole progress bar (max - min)",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 69,
+                  "column": 6
+                },
+                "end": {
+                  "line": 78,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "_computeDashoffset",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 104,
+                  "column": 8
+                },
+                "end": {
+                  "line": 108,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [],
+          "demos": [
+            {
+              "url": "demo/progress-circle.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 56,
+              "line": 99,
               "column": 6
             },
             "end": {
-              "line": 64,
+              "line": 110,
               "column": 7
             }
           },
-          "metadata": {},
-          "params": [
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.ProgressCircleElement",
+          "attributes": [
             {
-              "name": "newV"
+              "name": "value",
+              "description": "Displays current progress",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 21,
+                  "column": 10
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
-              "name": "oldV"
-            }
-          ]
-        },
-        {
-          "name": "_maxChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 66,
-              "column": 6
+              "name": "min",
+              "description": "Minimum bound of the progress bar. Cannot be greater than max.",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 28,
+                  "column": 10
+                },
+                "end": {
+                  "line": 33,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
             },
-            "end": {
-              "line": 74,
-              "column": 7
+            {
+              "name": "max",
+              "description": "Maximum bound of the progress bar. Cannot be less than min.",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 37,
+                  "column": 10
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
             }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
           },
-          "metadata": {},
-          "params": [
-            {
-              "name": "newV"
-            },
-            {
-              "name": "oldV"
-            }
-          ]
-        },
-        {
-          "name": "_normalizeValue",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 76,
-              "column": 6
-            },
-            "end": {
-              "line": 78,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            },
-            {
-              "name": "min"
-            },
-            {
-              "name": "max"
-            }
+          "slots": [],
+          "tagname": "vaadin-progress-circle",
+          "mixins": [
+            "Vaadin.ProgressMixin"
           ]
         }
       ],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 18,
-          "column": 11
-        },
-        "end": {
-          "line": 79,
-          "column": 5
+      "mixins": [
+        {
+          "description": "",
+          "summary": "",
+          "path": "vaadin-progress-mixin.html",
+          "properties": [
+            {
+              "name": "value",
+              "type": "number",
+              "description": "Displays current progress",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 21,
+                  "column": 10
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "min",
+              "type": "number",
+              "description": "Minimum bound of the progress bar. Cannot be greater than max.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 28,
+                  "column": 10
+                },
+                "end": {
+                  "line": 33,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_minChanged\""
+                }
+              },
+              "defaultValue": "0"
+            },
+            {
+              "name": "max",
+              "type": "number",
+              "description": "Maximum bound of the progress bar. Cannot be less than min.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 37,
+                  "column": 10
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_maxChanged\""
+                }
+              },
+              "defaultValue": "1"
+            }
+          ],
+          "methods": [
+            {
+              "name": "_minChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 46,
+                  "column": 6
+                },
+                "end": {
+                  "line": 54,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ]
+            },
+            {
+              "name": "_maxChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 56,
+                  "column": 6
+                },
+                "end": {
+                  "line": 64,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ]
+            },
+            {
+              "name": "_normalizeValue",
+              "description": "Percent of current progress relative to whole progress bar (max - min)",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 69,
+                  "column": 6
+                },
+                "end": {
+                  "line": 78,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 14,
+              "column": 2
+            },
+            "end": {
+              "line": 79,
+              "column": 5
+            }
+          },
+          "privacy": "public",
+          "name": "Vaadin.ProgressMixin",
+          "attributes": [
+            {
+              "name": "value",
+              "description": "Displays current progress",
+              "sourceRange": {
+                "start": {
+                  "line": 21,
+                  "column": 10
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number"
+            },
+            {
+              "name": "min",
+              "description": "Minimum bound of the progress bar. Cannot be greater than max.",
+              "sourceRange": {
+                "start": {
+                  "line": 28,
+                  "column": 10
+                },
+                "end": {
+                  "line": 33,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number"
+            },
+            {
+              "name": "max",
+              "description": "Maximum bound of the progress bar. Cannot be less than min.",
+              "sourceRange": {
+                "start": {
+                  "line": 37,
+                  "column": 10
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": []
         }
-      },
-      "privacy": "public"
+      ]
     }
   ]
 }
