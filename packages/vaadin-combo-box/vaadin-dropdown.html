@@ -12,8 +12,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-dropdown">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
+      }
+
+      :host > #overlay {
+        display: none;
       }
     </style>
     <vaadin-overlay id="overlay" opened="[[opened]]" template="{{template}}">

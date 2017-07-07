@@ -2,9 +2,10 @@
 
 <head>
   <meta charset="UTF-8">
+
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="common.js"></script>
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
   <link rel="import" href="../vaadin-combo-box-light.html">
   <link rel="import" href="../../iron-input/iron-input.html">
   <link rel="import" href="../../paper-input/paper-input.html">
@@ -14,7 +15,7 @@
 
   <test-fixture id="combobox-light">
     <template>
-      <vaadin-combo-box-light>
+      <vaadin-combo-box-light attr-for-value="bind-value">
         <iron-input>
           <input>
         </iron-input>

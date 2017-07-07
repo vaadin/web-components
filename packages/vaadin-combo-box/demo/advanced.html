@@ -59,10 +59,20 @@
     <h3>Configuring Icons</h3>
     <demo-snippet>
       <template>
-        <vaadin-combo-box id="demo2" label="Custom Icons">
-          <paper-icon-button icon="remove-circle" slot="clear-button"></paper-icon-button>
-          <paper-icon-button icon="search" slot="toggle-button"></paper-icon-button>
-        </vaadin-combo-box>
+        <style>
+          paper-icon-button {
+            opacity: 0.4;
+            width: 24px;
+            height: 24px;
+            padding: 2px;
+          }
+        </style>
+        <vaadin-combo-box-light id="demo2" label="Custom Icons">
+          <vaadin-text-field>
+            <paper-icon-button slot="suffix" icon="remove-circle" class="clear-button"></paper-icon-button>
+            <paper-icon-button slot="suffix" icon="search" class="toggle-button"></paper-icon-button>
+          </vaadin-text-field>
+        </vaadin-combo-box-light>
         <script>
           window.addEventListener('WebComponentsReady', function() {
             var combobox = document.querySelector('#demo2');
@@ -76,7 +86,7 @@
     <h3>Replacing the Input with an &lt;iron-input></h3>
     <demo-snippet>
       <template>
-        <vaadin-combo-box-light id="demo3">
+        <vaadin-combo-box-light id="demo3" attr-for-value="bind-value">
           <iron-input>
             <input>
           </iron-input>
@@ -94,7 +104,7 @@
     <h3>Replacing the Input with a &lt;paper-input></h3>
     <demo-snippet>
       <template>
-        <vaadin-combo-box-light id="demo4" attr-for-value="value">
+        <vaadin-combo-box-light id="demo4">
           <paper-input label="Elements" class="input">
             <iron-icon icon="toll" slot="prefix" prefix></iron-icon>
             <paper-button slot="suffix" suffix class="clear-button">Clear</paper-button>

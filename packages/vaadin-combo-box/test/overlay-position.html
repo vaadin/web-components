@@ -4,11 +4,10 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo-box resizing tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
   <script src="common.js"></script>
-
 </head>
 
 <body>
@@ -47,16 +46,7 @@
 <test-fixture id="fixed-component">
   <template>
     <x-fixed>
-      <!--
-          In this particular fixture, there is a really strange race condition when running Chrome with P2 Shady
-          which causes attached callback to be called before the ready is called in the <paper-input-container>
-          inside <vaadin-combo-box>.
-          The current implementation of attached expects _addons to have an empty array (it's being assigned in ready).
-
-          Instead of spending time in trying to reproduce the issue in an isolated case and filing an issue to paper-input
-          or the Shady polyfill, I found this nice workaround. Enjoy!
-       -->
-      <paper-input-container _addons='[]'>
+      <paper-input-container>
         <input>
       </paper-input-container>
 
@@ -95,10 +85,11 @@
   }
 
   function inputContentRect() {
-    return comboBox.$.inputContainer.getBoundingClientRect();
+    return comboBox.$.input.getBoundingClientRect();
   }
 
   describe('overlay', () => {
+
     beforeEach(done => {
       comboBox = fixture('combobox');
       const comboBoxRect = comboBox.getBoundingClientRect();
@@ -114,9 +105,7 @@
       vertTop = 0;
       vertBottom = wh;
 
-      // <paper-input-container> adds floated-label-placeholder div asynchronously,
-      // we want to wait that out so that the dropdown clientHeight is calculated correctly.
-      Polymer.Async.microTask.run(done);
+      setTimeout(done);
     });
 
     // clean out <vaadin-overlay> elements from body.
@@ -137,14 +126,15 @@
 
       it('should position correctly if items are populated after opening', done => {
         comboBox.items = [];
-        comboBox.addEventListener('vaadin-dropdown-opened', () => {
+        comboBox.open();
+
+        setTimeout(() => {
           comboBox.items = [1, 2, 3];
           setTimeout(() => {
             expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
             done();
           }, 1);
-        });
-        comboBox.open();
+        }, 1);
       });
 
       it('should notify resize on items change', () => {
@@ -208,7 +198,6 @@
         moveComboBox(horiCenter, vertBottom, 300);
 
         comboBox.open();
-
         setTimeout(() => {
           expect(comboBox.$.overlay.$.dropdown.alignedAbove).to.be.true;
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
@@ -222,10 +211,11 @@
         comboBox.inputElement.value = 'item 1';
         comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
 
+        comboBox.open();
         setTimeout(() => {
           expect(dropContentRect().bottom).to.closeTo(inputContentRect().top, 1);
           done();
-        }, 1);
+        });
       });
     });
 

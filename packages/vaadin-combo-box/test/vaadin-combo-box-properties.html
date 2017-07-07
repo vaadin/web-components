@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>vaadin-combo basic tests</title>
-  <script src="../../web-component-tester/browser.js"></script>
 
+  <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="common.html">
+  <script src="common.js"></script>
 </head>
 
 <body>
@@ -75,7 +76,7 @@
           comboBox.items = ['foo', 'bar'];
 
           expect(comboBox.selectedItem).to.eql('foo');
-          expect(comboBox._bindableInput.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.value).to.eql('foo');
         });
 
         it('should be able to be set before object items', () => {
@@ -85,7 +86,7 @@
           comboBox.items = [item];
 
           expect(comboBox.selectedItem).to.eql(item);
-          expect(comboBox._bindableInput.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.value).to.eql('foo');
         });
       });
 
@@ -111,7 +112,7 @@
         it('should set bind value after setting value property', () => {
           comboBox.value = 'foo';
 
-          expect(comboBox._bindableInput.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.value).to.eql('foo');
         });
 
         it('should set value after setting a custom input value', () => {
@@ -169,7 +170,7 @@
 
         it('should be bound to label element', () => {
           comboBox.label = 'This is LABEL';
-          expect(comboBox.$.inputContainer.querySelector('label').innerHTML).to.eql('This is LABEL');
+          expect(comboBox.$.input.root.querySelector('label').innerHTML).to.eql('This is LABEL');
         });
       });
 
@@ -185,7 +186,7 @@
           comboBox.selectedItem = 'foo';
 
           expect(comboBox.value).to.eql('foo');
-          expect(comboBox._bindableInput.bindValue).to.eql('foo');
+          expect(comboBox._bindableInput.value).to.eql('foo');
         });
 
         it('should default back to null when value set to undefined', () => {
@@ -214,6 +215,7 @@
       describe('focus API', () => {
         it('should have readOnly focused property', () => {
           comboBox.focused = true;
+
           expect(comboBox.focused).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
         });
@@ -224,43 +226,19 @@
         });
 
         describe('methods', () => {
-          // Avoid FF window focus issues by stubing native focus behavior
-          let inputFocusStub, inputBlurStub;
-
-          beforeEach(() => {
-            inputFocusStub = sinon.stub(comboBox.inputElement, 'focus', () => {
-              comboBox.inputElement.dispatchEvent(new CustomEvent('focus'));
-            });
-
-            inputBlurStub = sinon.stub(comboBox.inputElement, 'blur', () => {
-              comboBox.inputElement.dispatchEvent(new CustomEvent('blur'));
-            });
-          });
-
           it('should focus the input with focus method', () => {
-            const focusedChangedSpy = sinon.spy();
-            comboBox.addEventListener('focused-changed', focusedChangedSpy);
-
             comboBox.focus();
 
-            expect(inputFocusStub.called).to.be.true;
             expect(comboBox.focused).to.be.true;
             expect(comboBox.hasAttribute('focused')).to.be.true;
-            expect(focusedChangedSpy.called).to.be.true;
           });
 
           it('should blur the input with the blur method', () => {
             comboBox.focus();
-
-            const focusedChangedSpy = sinon.spy();
-            comboBox.addEventListener('focused-changed', focusedChangedSpy);
-
             comboBox.blur();
 
-            expect(inputBlurStub.called).to.be.true;
             expect(comboBox.focused).to.be.false;
             expect(comboBox.hasAttribute('focused')).to.be.false;
-            expect(focusedChangedSpy.called).to.be.true;
           });
         });
       });

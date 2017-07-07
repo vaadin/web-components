@@ -1,5 +1,7 @@
 <!--
-@element vaadin-combo-box-overlay
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
@@ -8,7 +10,6 @@
 
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../paper-styles/shadow.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-spinner.html">
 <link rel="import" href="vaadin-dropdown.html">
@@ -64,7 +65,7 @@
           }
         </style>
         <vaadin-spinner active="[[loading]]"></vaadin-spinner>
-        <div id="scroller" scroller="[[_scroller]]" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
+        <div id="scroller" on-tap="_stopPropagation" on-touchstart="_onTouchStart" on-touchend="_preventDefault"
           on-scroll="_onScroll" hidden$="[[loading]]">
           <iron-list id="selector" touch-device$="[[touchDevice]]" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>
@@ -166,7 +167,7 @@
       }
 
       static get observers() {
-        return ['_selectorChanged(selector)', '_loadingChanged(loading)'];
+        return ['_selectorChanged(_selector)', '_loadingChanged(loading)'];
       }
 
       ready() {
@@ -197,11 +198,6 @@
 
       _selectorChanged(selector) {
         this._patchWheelOverScrolling();
-
-        // Stamping with an empty object instead of null
-        // will resolve templatizer issues in P2 that previously
-        // required calling _flushProperties/_enableProperties.
-        this._patchIronListStamping();
       }
 
       _setOverlayHeight() {
@@ -236,17 +232,6 @@
         }
       }
 
-      _patchIronListStamping() {
-        const stamp = this._selector.stamp;
-        this._selector.stamp = value => {
-          if (value === null) {
-            value = {};
-          }
-
-          return stamp.call(this, value);
-        };
-      }
-
       _getFocusedItem(focusedIndex) {
         if (focusedIndex >= 0) {
           return this._items[focusedIndex];
@@ -270,7 +255,7 @@
 
       _onScroll() {
         this._ignoreTaps = true;
-        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps, 
+        this._restoreTaps = Polymer.Debouncer.debounce(this._restoreTaps,
           Polymer.Async.timeOut.after(300), () => this._ignoreTaps = false);
       }
 

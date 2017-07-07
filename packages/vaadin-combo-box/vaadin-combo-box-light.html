@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
@@ -50,29 +50,37 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * To create a custom input field, you need to add a child element which has a two-way
      * data-bindable property representing the input value. The property name is expected
-     * to be `bindValue` by default. See the example below for a simplest possible example
-     * using an `<input>` element extended with `iron-input`.
+     * to be `value` by default. See the example below for a simplest possible example
+     * using a `<vaadin-text-field>` element.
      *
      * ```html
      * <vaadin-combo-box-light>
+     *   <vaadin-text-field>
+     *   </vaadin-text-field>
+     * </vaadin-combo-box-light>
+     * ```
+     *
+     * If you are using other custom input fields like `<iron-input>`, you
+     * need to define the name of the bindable property with the `attrForValue` attribute.
+     *
+     * ```html
+     * <vaadin-combo-box-light attr-for-value="bind-value">
      *   <iron-input>
      *     <input>
      *   </iron-input>
      * </vaadin-combo-box-light>
      * ```
      *
-     * If you are using other custom input fields like `<paper-input>`, you
-     * need to define the name of value property with `attrForValue` property.
-     * See the example below on how to create a custom input field based
+     * In the next example you can see how to create a custom input field based
      * on a `<paper-input>` decorated with a custom `<iron-icon>` and
      * two `<paper-button>`s to act as the clear and toggle controls.
      *
      * ```html
-     * <vaadin-combo-box-light attr-for-value="value">
+     * <vaadin-combo-box-light>
      *   <paper-input label="Elements" class="input">
      *     <iron-icon icon="toll" prefix></iron-icon>
-     *     <paper-button suffix class="clear-button">Clear</paper-button>
-     *     <paper-button suffix class="toggle-button">Toggle</paper-button>
+     *     <paper-button slot="suffix" class="clear-button">Clear</paper-button>
+     *     <paper-button slot="suffix" class="toggle-button">Toggle</paper-button>
      *   </paper-input>
      * </vaadin-combo-box-light>
      * ```
@@ -93,7 +101,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           attrForValue: {
             type: String,
-            value: 'bind-value'
+            value: 'value'
           },
 
           /**
@@ -109,23 +117,22 @@ This program is available under Apache License Version 2.0, available at https:/
 
       ready() {
         super.ready();
-      }
-
-      attached() {
-        super.attached();
-        const cssSelector = 'iron-input,paper-input,.paper-input-input,.input';
-        this._setInputElement(this.querySelector(cssSelector));
         this._toggleElement = this.querySelector('.toggle-button');
         this._clearElement = this.querySelector('.clear-button');
+      }
 
+      connectedCallback() {
+        super.connectedCallback();
+        const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
+        this._setInputElement(this.querySelector(cssSelector));
         this._revertInputValue();
         this.listen(this.inputElement, 'input', '_inputValueChanged');
         this.listen(this.inputElement, 'blur', '_onBlur');
         this._preventInputBlur();
       }
 
-      detached() {
-        super.detached();
+      disconnectedCallback() {
+        super.disconnectedCallback();
         this.unlisten(this.inputElement, 'input', '_inputValueChanged');
         this.unlisten(this.inputElement, 'blur', '_onBlur');
         this._restoreInputBlur();

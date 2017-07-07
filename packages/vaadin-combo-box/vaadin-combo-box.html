@@ -6,15 +6,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 
-<link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
-<link rel="import" href="../paper-input/paper-input-container.html">
-<link rel="import" href="../paper-input/paper-input-error.html">
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-overlay.html">
 <link rel="import" href="vaadin-combo-box-shared-styles.html">
-<link rel="import" href="vaadin-combo-box-icons.html">
+
+<style>
+  @font-face {
+    font-family: 'vaadin-combo-box-icons';
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAVQAAsAAAAABQQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIFgGNtYXAAAAFoAAAAVAAAAFQXVtKIZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAIwAAACMKHtqRmhlYWQAAAJQAAAANgAAADYNCaOoaGhlYQAAAogAAAAkAAAAJAbtA8dobXR4AAACrAAAABgAAAAYDgACAGxvY2EAAALEAAAADgAAAA4AbgBAbWF4cAAAAtQAAAAgAAAAIAAIAA5uYW1lAAAC9AAAAjoAAAI6mZTisnBvc3QAAAUwAAAAIAAAACAAAwAAAAMDVQGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QEDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkB//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQErAUAC1QIVAAIAAAEXNwEr1dUCFdXVAAAAAAEA1QCVAysC6wALAAABJwcnBxcHFzcXNycDKzzv7zzv7zzv7zzvAq887+887+887+887wABAAAAAQAAKGR/418PPPUACwQAAAAAANVgL+AAAAAA1WAv4AAAAAADKwLrAAAACAACAAAAAAAAAAEAAAPA/8AAAAQAAAAAAAMrAAEAAAAAAAAAAAAAAAAAAAAGBAAAAAAAAAAAAAAAAgAAAAQAASsEAADVAAAAAAAKABQAHgAsAEYAAAABAAAABgAMAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEAFgAAAAEAAAAAAAIABwDnAAEAAAAAAAMAFgBjAAEAAAAAAAQAFgD8AAEAAAAAAAUACwBCAAEAAAAAAAYAFgClAAEAAAAAAAoAGgE+AAMAAQQJAAEALAAWAAMAAQQJAAIADgDuAAMAAQQJAAMALAB5AAMAAQQJAAQALAESAAMAAQQJAAUAFgBNAAMAAQQJAAYALAC7AAMAAQQJAAoANAFYdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzUmVndWxhcgBSAGUAZwB1AGwAYQBydmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
 
 <dom-module id="vaadin-combo-box">
   <template>
@@ -24,186 +29,66 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 8px 0;
       }
 
-      :host > #overlay {
-        display: none;
-      }
-
-      paper-input-container {
-        position: relative;
-        padding: 0;
-      }
-
-      paper-icon-button.clear-button,
-      paper-icon-button.toggle-button,
-      :host ::slotted(paper-icon-button[slot="toggle-button"]),
-      :host ::slotted(paper-icon-button[slot="clear-button"]) {
-        line-height: 18px !important;
-        width: 32px;
-        height: 32px;
-        padding: 4px;
-        text-align: center;
-
-        color: rgba(0, 0, 0, .38);
-        cursor: pointer;
-        margin-top: -1px;
-        --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
-      }
-
-      /*
-       * Hacky selector to apply when using P2 Shady.
-       * Invalid when using P2 Shadow so need to be kept in a separate block.
-       */
-      :host ::slotted(paper-input-container) paper-icon-button[slot="toggle-button"],
-      :host ::slotted(paper-input-container) paper-icon-button[slot="clear-button"] {
-        line-height: 18px !important;
-        width: 32px;
-        height: 32px;
-        padding: 4px;
-        text-align: center;
-
-        color: rgba(0, 0, 0, .38);
-        cursor: pointer;
-        margin-top: -1px;
-        --paper-icon-button-ink-color: rgba(0, 0, 0, .54);
-      }
-
-      paper-input-container paper-icon-button:hover,
-      paper-input-container ::slotted(paper-icon-button:hover),
-      :host([opened]) paper-input-container paper-icon-button,
-      :host([opened]) paper-input-container ::slotted(paper-icon-button) {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      /* P2 Shady */
-      :host ::slotted(paper-input-container) paper-icon-button:hover,
-      :host([opened]) ::slotted(paper-input-container) paper-icon-button {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) paper-input-container ::slotted(paper-icon-button:hover),
-      :host([opened]) paper-input-container paper-icon-button:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      /* P2 Shady */
-      :host([opened]) ::slotted(paper-input-container) paper-icon-button:hover {
-        color: rgba(0, 0, 0, .86);
-      }
-
-      :host([opened]) paper-input-container {
-        /* Keep the paper-input-container above the dropdown. */
-        z-index: 20;
-      }
-
-      :host [slot=suffix] {
+      [slot=suffix] {
         display: flex;
       }
 
-      input::-ms-clear {
-        display: none;
+      .clear-button,
+      .toggle-button {
+        font-family: 'vaadin-combo-box-icons';
+        cursor: pointer;
+        transition: color 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgba(0, 0, 0, .26);
       }
 
-      /* The same code than paper-input */
-      input {
-        position: relative; /* to make a stacking context */
-        outline: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--paper-input-container-input-color, var(--primary-text-color));
-        -webkit-appearance: none;
-        text-align: inherit;
-        vertical-align: bottom;
+      .clear-button:hover,
+      .toggle-button:hover {
+        color: rgba(0, 0, 0, .54);
+      }
 
-        /* Firefox sets a min-width on the input, which can cause layout issues */
-        min-width: 0;
+      .clear-button::before {
+        content: "\e901";
+      }
 
-        @apply --paper-font-subhead;
-        @apply --paper-input-container-input;
+      .toggle-button::before {
+        content: "\e900";
       }
     </style>
 
-    <paper-input-container
-      id="inputContainer"
-      disabled$="[[disabled]]"
-      no-label-float="[[noLabelFloat]]"
-      always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
-      auto-validate$="[[autoValidate]]"
-      invalid="[[invalid]]">
-
-      <label id="label" slot="label"
-        on-down="_preventDefault"
-        hidden$="[[!label]]"
-        aria-hidden="true"
-        on-tap="_openAsync"
-        for="input">[[label]]</label>
-
-      <slot name="prefix" slot="prefix"></slot>
-
-      <iron-input slot="input" id="ironinput"
-        bind-value="{{_inputElementValue}}"
+    <vaadin-text-field id="input"
         allowed-pattern="[[allowedPattern]]"
         prevent-invalid-input="[[preventInvalidInput]]"
-        invalid="{{invalid}}"
+
+        value="{{_inputElementValue}}"
+        autocomplete="off"
+
+        invalid="[[invalid]]"
+        label="[[label]]"
+        name="[[name]]"
+        placeholder="[[placeholder]]"
+        required="[[required]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        error-message="[[errorMessage]]"
+
+        autocapitalize="none"
+
+        autofocus="[[autofocus]]"
+        inputmode="[[inputmode]]"
+
+        on-blur="_onBlur"
         on-change="_stopPropagation"
-        label="[[label]]">
-        <input id="input"
-          type="text"
-          role="combobox"
-          autocomplete="off"
-          autocapitalize="none"
-          aria-label$="[[label]]"
-          aria-expanded$="[[_getAriaExpanded(opened)]]"
-          aria-autocomplete="list"
-          disabled$="[[disabled]]"
-          pattern$="[[pattern]]"
-          required$="[[required]]"
-          autofocus$="[[autofocus]]"
-          inputmode$="[[inputmode]]"
-          name$="[[name]]"
-          placeholder$="[[placeholder]]"
-          readonly$="[[readonly]]"
-          size$="[[size]]"
-          on-input="_inputValueChanged"
-          on-blur="_onBlur"
-          on-change="_stopPropagation"
-          key-event-target>
-      </iron-input>
+        on-input="_inputValueChanged"
+        on-tap="_openAsync"
+      >
 
-      <slot name="suffix" slot="suffix"></slot>
+      <div id="clearButton" slot="suffix" role="button" aria-label="Clear" class="clear-button small"></div>
+      <div id="toggleButton" slot="suffix" role="button" aria-label="Toggle" class="toggle-button rotate-on-open"></div>
 
-      <!-- TODO (web-padawan): remove "suffix" attributes for 2.0 -->
-      <div slot="suffix" suffix>
-        <span>
-          <slot name="clear-button">
-            <paper-icon-button id="clearIcon"
-              tabindex="-1"
-              aria-label="Clear"
-              icon="vaadin-combo-box:clear"
-              class="clear-button small">
-            </paper-icon-button>
-          </slot>
-        </span>
-        <span>
-          <slot name="toggle-button">
-            <paper-icon-button id="toggleIcon"
-              tabindex="-1"
-              icon="vaadin-combo-box:arrow-drop-down"
-              aria-label="Toggle"
-              aria-expanded$="[[_getAriaExpanded(opened)]]"
-              class="toggle-button rotate-on-open">
-            </paper-icon-button>
-          </slot>
-        </span>
-      </div>
-
-      <template is="dom-if" if="[[errorMessage]]">
-        <paper-input-error>[[errorMessage]]</paper-input-error>
-      </template>
-    </paper-input-container>
+    </vaadin-text-field>
 
     <vaadin-combo-box-overlay id="overlay"
       opened=[[opened]]
@@ -211,8 +96,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _focused-index="[[_focusedIndex]]"
       _item-label-path="[[itemLabelPath]]"
       on-down="_onOverlayDown"
-      loading="[[loading]]"
-      vertical-offset="2">
+      loading="[[loading]]">
     </vaadin-combo-box-overlay>
   </template>
 </dom-module>
@@ -316,14 +200,6 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Set to true to auto-validate the input value.
-             */
-            autoValidate: {
-              type: Boolean,
-              value: false
-            },
-
-            /**
              * Set to true to disable this input.
              */
             disabled: {
@@ -398,6 +274,10 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        static get observers() {
+          return ['_updateAriaExpanded(opened)'];
+        }
+
         attributeChanged(name, type) {
           // Safari has an issue with repainting shadow root element styles when a host attribute changes.
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
@@ -413,17 +293,21 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           // 2.0 does not support nested syntax for listeners
-          this.$.inputContainer.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
+          this.$.input.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
 
           this._setInputElement(this.$.input);
-          this._bindableInput = this.$.ironinput;
+          this._bindableInput = this.$.input;
+          this._nativeInput = this.$.input.focusElement;
+          this._toggleElement = this.$.toggleButton;
+          this._clearElement = this.$.clearButton;
+
+          this._nativeInput.setAttribute('role', 'combobox');
+          this._nativeInput.setAttribute('aria-autocomplete', 'list');
+          this._updateAriaExpanded();
         }
 
         connectedCallback() {
           super.connectedCallback();
-          // Use the default toggle/clear or one replaced in light DOM.
-          this._toggleElement = this.querySelector('[slot=toggle-button]') || this.$.toggleIcon;
-          this._clearElement = this.querySelector('[slot=clear-button]') || this.$.clearIcon;
           this._preventInputBlur();
         }
 
@@ -437,11 +321,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _getPositionTarget() {
-          return this.$.inputContainer;
+          return this.$.input;
         }
 
-        _getAriaExpanded(value) {
-          return value.toString();
+        _updateAriaExpanded() {
+          if (this._nativeInput) {
+            this._nativeInput.setAttribute('aria-expanded', this.opened);
+            this._toggleElement.setAttribute('aria-expanded', this.opened);
+          }
         }
 
         /**
@@ -473,5 +360,3 @@ This program is available under Apache License Version 2.0, available at https:/
     }
   </script>
 </dom-module>
-
-

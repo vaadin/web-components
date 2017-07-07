@@ -4,10 +4,11 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo basic tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
-  <script src='common.js'></script>
+  <script src="common.js"></script>
+
   <style>
     body {
       /* Prevent unequal item font sizes in iOS Safari */
@@ -27,6 +28,12 @@
 <script>
 
   describe('keyboard navigation', () => {
+
+    // Not need to test in iOS, just speed up build.
+    if (ios) {
+      return;
+    }
+
     let comboBox;
 
     function getInput() {
@@ -34,7 +41,7 @@
     }
 
     function filter(value) {
-      comboBox._bindableInput.bindValue = value;
+      comboBox._bindableInput.value = value;
       getInput().dispatchEvent(new CustomEvent('input'));
     }
 
@@ -42,36 +49,33 @@
       return comboBox._focusedIndex;
     }
 
-    function arrowDown() {
-      MockInteractions.keyDownOn(getInput(), 40);
+    function pushKey(key, cb) {
+      MockInteractions.pressAndReleaseKeyOn(getInput(), key);
+      if (cb) {
+        setTimeout(cb, 1);
+      }
     }
 
-    function arrowUp() {
-      MockInteractions.keyDownOn(getInput(), 38);
+    function arrowDown(cb) {
+      pushKey(40, cb);
     }
 
-    function enter() {
-      MockInteractions.pressEnter(getInput());
+    function arrowUp(cb) {
+      pushKey(38, cb);
     }
 
-    function esc() {
-      MockInteractions.keyDownOn(getInput(), 27);
+    function enter(cb) {
+      pushKey(13, cb);
+    }
+
+    function esc(cb) {
+      pushKey(27, cb);
     }
 
     beforeEach(() => {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
     });
-
-    /*
-      The following prevents test errors in MSIE 11.
-
-      The input element is asynchronously prefilled with item label
-      when navigating with keyboard. In IE11, the async callbacks
-      could be called after the test is already done, and the test
-      fixture is destroyed, causing errors.
-    */
-    afterEach(done => setTimeout(done, 1));
 
     describe('opening the overlay', () => {
       it('should open the overlay with arrow down and not focus any item', () => {
@@ -98,7 +102,7 @@
     });
 
     describe('navigating the items after overlay opened', () => {
-      beforeEach(done => Polymer.Async.microTask.run(() => {
+      beforeEach(done => setTimeout(() => {
         arrowDown();
         done();
       }));
@@ -157,18 +161,20 @@
     });
 
     describe('selecting items', () => {
-      beforeEach(done => Polymer.Async.microTask.run(() => {
+      beforeEach(done => {
         comboBox.value = 'bar';
-        arrowDown();
-        done();
-      }));
 
-      it('should select focused item with enter', () => {
-        arrowDown();
+        comboBox.open();
+        setTimeout(done, 1);
+      });
 
-        enter();
-
-        expect(comboBox.value).to.equal('baz');
+      it('should select focused item with enter', done => {
+        arrowDown(() => {
+          enter(() => {
+            expect(comboBox.value).to.equal('baz');
+            done();
+          });
+        });
       });
 
       it('should clear the selection with enter when input is cleared', () => {
@@ -266,25 +272,22 @@
 
       it('should reset the input value synchronously when keyboard navigating', () => {
         arrowDown();
-
         expect(getInput().value).to.eql('');
       });
 
       it('should prefill the input field when navigating down', done => {
-        arrowDown();
-
-        setTimeout(() => {
+        arrowDown(() => {
           expect(getInput().value).to.eql('baz');
           done();
-        }, 1);
+        });
       });
 
       it('should select the input field text when navigating down', done => {
         arrowDown();
 
         setTimeout(() => {
-          expect(getInput().selectionStart).to.eql(0);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox._nativeInput.selectionStart).to.eql(0);
+          expect(comboBox._nativeInput.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -313,8 +316,8 @@
         arrowUp();
 
         setTimeout(() => {
-          expect(getInput().selectionStart).to.eql(0);
-          expect(getInput().selectionEnd).to.eql(3);
+          expect(comboBox._nativeInput.selectionStart).to.eql(0);
+          expect(comboBox._nativeInput.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -353,15 +356,11 @@
       it('should remove selection from the input value selecting value', done => {
         arrowDown();
 
-
         setTimeout(() => {
-          // selection range is only cleared when the input is focused, which is not the case
-          // in all environments running the tests, especially on safari. So we need to use the next best thing.
-          comboBox._clearSelectionRange = sinon.spy();
-
           enter();
 
-          expect(comboBox._clearSelectionRange.callCount).to.eql(1);
+          expect(comboBox._nativeInput.selectionStart).to.eql(3);
+          expect(comboBox._nativeInput.selectionEnd).to.eql(3);
           done();
         }, 1);
       });
@@ -379,7 +378,7 @@
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(4);
           expect(comboBox.$.overlay._selector.lastVisibleIndex).to.eql(3);
           done();
-        }, 1);
+        });
       });
 
       it('should calculate items correctly when some items are hidden', done => {
@@ -389,13 +388,12 @@
         }
 
         comboBox.items = items;
-
         comboBox.open();
 
         setTimeout(() => {
           expect(comboBox.$.overlay._visibleItemsCount()).to.eql(comboBox.$.overlay._selector.lastVisibleIndex + 1);
           done();
-        }, 1);
+        });
       });
     });
 
@@ -409,10 +407,10 @@
           items.push(i.toString());
         }
 
-        comboBox.items = items;
-        comboBox.open();
         selector = comboBox.$.overlay._selector;
+        comboBox.items = items;
 
+        comboBox.open();
         setTimeout(done, 1);
       });
 

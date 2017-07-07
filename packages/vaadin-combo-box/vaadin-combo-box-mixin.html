@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2016 Vaadin Ltd.
+Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
@@ -315,14 +315,39 @@ This program is available under Apache License Version 2.0, available at https:/
         // 1ms delay needed for OSX VoiceOver to realise input value was reset
         setTimeout(() => {
           this._inputElementValue = this._getItemLabel(this.$.overlay._focusedItem);
-          this._setSelectionRange();
+          this._markAllSelectionRange();
         }, 1);
       }
     }
 
-    _setSelectionRange() {
-      if (this.inputElement.setSelectionRange) {
-        this.inputElement.setSelectionRange(0, this._inputElementValue.length);
+    _setSelectionRange(start, end) {
+      // vaadin-text-field does not implement setSelectionRange, hence we need the native input
+      const input = this._nativeInput || this.inputElement;
+
+      // Setting selection range focuses and/or moves the caret in some browsers,
+      // and there's no need to modify the selection range if the input isn't focused anyway.
+      // This affects Safari. When the overlay is open, and then hiting tab, browser should focus
+      // the next focusable element instead of the combo-box itself.
+      // Checking the focused property here is enough instead of checking the activeElement.
+      if (this.focused && input && input.setSelectionRange) {
+        try {
+          input.setSelectionRange(start, end);
+        } catch (ignore) {
+          // IE11 randomly fails when running tests in Sauce.
+        }
+      }
+    }
+
+    _markAllSelectionRange() {
+      if (this._inputElementValue !== undefined) {
+        this._setSelectionRange(0, this._inputElementValue.length);
+      }
+    }
+
+    _clearSelectionRange() {
+      if (this._inputElementValue !== undefined) {
+        const pos = this._inputElementValue ? this._inputElementValue.length : 0;
+        this._setSelectionRange(pos, pos);
       }
     }
 
@@ -427,7 +452,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onClosed() {
-      if (this._focusedIndex > -1) {
+
+      // Happens when the overlay is closed by clicking outside
+      if (this.opened) {
+        this.close();
+      }
+
+      if (this.$.overlay._items && this._focusedIndex > -1) {
         const focusedItem = this.$.overlay._items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
@@ -486,17 +517,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _clearSelectionRange() {
-      // Setting selection range focuses and/or moves the caret in some browsers,
-      // and there's no need to modify the selection range if the input isn't focused anyway.
-      if ((document.activeElement === this.inputElement ||
-           document.activeElement === this)
-           && this.inputElement.setSelectionRange) {
-        const caretIndex = this._inputElementValue ? this._inputElementValue.length : 0;
-        this.inputElement.setSelectionRange(caretIndex, caretIndex);
-      }
-    }
-
     _filterChanged(filter, itemValuePath, itemLabelPath) {
       if (filter === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
         return;
@@ -518,7 +538,6 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this._revertInputValueToValue();
       }
-
       this._clearSelectionRange();
     }
 

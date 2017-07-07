@@ -16,13 +16,12 @@ module.exports = {
     ];
 
     var cronPlatforms = [
-      'Windows 10/chrome@55',
-      'Windows 10/firefox@50'
+      'Windows 10/chrome@58',
+      'Windows 10/firefox@53'
     ];
 
     if (argv.env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
-
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
     }

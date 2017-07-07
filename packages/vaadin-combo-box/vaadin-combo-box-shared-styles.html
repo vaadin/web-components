@@ -1,4 +1,10 @@
-<link rel="import" href="../polymer/polymer.html">
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
 
 <dom-module id="vaadin-combo-box-shared-styles">
   <template>
@@ -16,7 +22,7 @@
        * Hacky selector to apply when using P2 Shady.
        * Invalid when using P2 Shadow so need to be kept in a separate block.
        */
-      :host ::slotted(paper-input-container) .rotate-on-open {
+      :host ::slotted(vaadin-text-input) .rotate-on-open {
         transition: all 0.2s !important;
       }
 
@@ -27,19 +33,9 @@
       }
 
       /* P2 Shady */
-      :host([opened]) ::slotted(paper-input-container) .rotate-on-open {
+      :host([opened]) ::slotted(vaadin-text-input) .rotate-on-open {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
-      }
-
-      paper-icon-button.small,
-      :host ::slotted(paper-icon-button.small) {
-        padding: 6px !important;
-      }
-
-      /* P2 Shady */
-      :host ::slotted(paper-input-container) paper-icon-button.small {
-        padding: 6px !important;
       }
 
       :host(:not([has-value])) ::slotted([slot="clear-button"]),
@@ -56,11 +52,11 @@
       }
 
       /* P2 Shady */
-      :host(:not([has-value])) ::slotted(paper-input-container) [slot="clear-button"],
-      :host([readonly]) ::slotted(paper-input-container) [slot="clear-button"],
-      :host([readonly]) ::slotted(paper-input-container) [slot="toggle-button"],
-      :host([disabled]) ::slotted(paper-input-container) [slot="clear-button"],
-      :host([disabled]) ::slotted(paper-input-container) [slot="toggle-button"] {
+      :host(:not([has-value])) ::slotted(vaadin-text-input) [slot="clear-button"],
+      :host([readonly]) ::slotted(vaadin-text-input) [slot="clear-button"],
+      :host([readonly]) ::slotted(vaadin-text-input) [slot="toggle-button"],
+      :host([disabled]) ::slotted(vaadin-text-input) [slot="clear-button"],
+      :host([disabled]) ::slotted(vaadin-text-input) [slot="toggle-button"] {
         display: none;
       }
     </style>

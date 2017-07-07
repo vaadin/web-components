@@ -4,9 +4,10 @@
 <head>
   <meta charset='UTF-8'>
   <title>vaadin-combo basic tests</title>
-  <script src='../../web-component-tester/browser.js'></script>
 
+  <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
+  <script src="common.js"></script>
   <link rel='import' href='../../iron-form/iron-form.html'>
 </head>
 
@@ -42,37 +43,23 @@
         }
       });
 
-      it('should have the given name', () => {
-        comboBox.name = 'foo';
-        expect(comboBox.root.querySelector('input').getAttribute('name')).to.equal('foo');
-      });
-
-      it('should have no name', () => {
-        expect(comboBox.root.querySelector('input').getAttribute('name')).to.equal(null);
-      });
-
       it('should be required', () => {
         comboBox.required = true;
-        expect(comboBox.root.querySelector('input').getAttribute('required')).to.equal('');
+        expect(comboBox.$.input.required).to.equal(true);
       });
 
       it('should not be required', () => {
-        expect(comboBox.root.querySelector('input').getAttribute('required')).to.equal(null);
+        expect(comboBox.$.input.required).to.equal(false);
       });
 
       it('should be disabled', () => {
         comboBox.disabled = true;
-        expect(comboBox.root.querySelector('input').getAttribute('disabled')).to.equal('');
-      });
-
-      it('should have disabled paper-input-container', () => {
-        comboBox.disabled = true;
-        expect(comboBox.root.querySelector('paper-input-container').getAttribute('disabled')).to.equal('');
+        expect(comboBox.$.input.hasAttribute('disabled')).to.be.true;
       });
 
       it('should be read-only', () => {
         comboBox.readonly = true;
-        expect(comboBox.root.querySelector('input').getAttribute('readonly')).to.equal('');
+        expect(comboBox.$.input.readonly).to.be.true;
       });
 
       it('should validate correctly when input value is invalid', () => {
