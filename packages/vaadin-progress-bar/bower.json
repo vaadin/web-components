@@ -1,10 +1,10 @@
 {
-  "name": "vaadin-progress",
+  "name": "vaadin-progress-bar",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-progress",
+  "description": "vaadin-progress-bar",
   "main": "vaadin-progress-bar.html",
   "keywords": [
     "Vaadin",

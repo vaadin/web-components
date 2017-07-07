@@ -1,9 +1,9 @@
 {
-  "name": "vaadin-progress",
+  "name": "vaadin-progress-bar",
   "version": "0.1.0",
-  "description": "vaadin-progress",
+  "description": "vaadin-progress-bar",
   "main": "vaadin-progress-bar.html",
-  "repository": "vaadin/vaadin-progress",
+  "repository": "vaadin/vaadin-progress-bar",
   "keywords": [
     "Vaadin",
     "vaadin-progress",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-progress/issues" },
+    "url": "https://github.com/vaadin/vaadin-progress-bar/issues" },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
     "test": "wct"
