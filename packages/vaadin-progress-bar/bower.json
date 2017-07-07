@@ -1,14 +1,15 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-progress-bar",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
+  "description": "vaadin-progress-bar",
+  "main": "vaadin-progress-bar.html",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-progress",
+    "vaadin-progress-bar",
     "web-components",
     "web-component",
     "polymer"
@@ -28,7 +29,7 @@
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.0",
-    "iron-component-page": "^2.0.0",
+    "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "web-component-tester": "^6.0.0"
   }

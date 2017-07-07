@@ -1,4 +1,4 @@
-rootUrl: http://127.0.0.1:8080/components/vaadin-element/test/visual/
+rootUrl: http://127.0.0.1:8080/components/vaadin-progress-bar/test/visual/
 gridUrl: http://127.0.0.1:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 
@@ -12,7 +12,7 @@ browsers:
   chrome:
     desiredCapabilities:
       browserName: "chrome"
-      version: "58.0"
+      version: "59.0"
       platform: "Windows 10"
 
   firefox:
@@ -21,11 +21,11 @@ browsers:
       version: "47.0"
       platform: "Windows 10"
 
-  ie:
-    desiredCapabilities:
-      browserName: "internet explorer"
-      version: "11.0"
-      platform: "Windows 10"
+  # ie:
+  #   desiredCapabilities:
+  #     browserName: "internet explorer"
+  #     version: "11.0"
+  #     platform: "Windows 10"
 
   edge:
     desiredCapabilities:
@@ -33,10 +33,12 @@ browsers:
       version: "14"
       platform: "Windows 10"
 
-  android:
-    desiredCapabilities:
-      browserName: "chrome"
-      platform: "Android"
+  # android:
+  #   desiredCapabilities:
+  #     platform: "Android"
+  #     platformVersion: "6.0"
+  #     deviceName: "Android Emulator"
+  #     browserName: "chrome"
 
   # The following setups don't currently work due to Selenium SafariDriver issue
   # https://github.com/vaadin/vaadin-element-skeleton/issues/19

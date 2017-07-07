@@ -1,0 +1,122 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="vaadin-progress-mixin.html">
+
+<dom-module id="vaadin-progress-circle">
+  <template>
+    <style>
+      :host {
+        --vaadin-progress-background-color: rgba(0, 0, 0, 0.1);
+        --vaadin-progress-foreground-color: var(--primary-color, rgba(0, 0, 0, 0.5));
+        --vaadin-progress-line-width: 2px;
+        --vaadin-progress-circle-size: 24px;
+
+        display: block;
+        width: calc(var(--vaadin-progress-circle-size) + var(--vaadin-progress-line-width));
+        height: calc(var(--vaadin-progress-circle-size) + var(--vaadin-progress-line-width));
+        position: relative;
+        padding: var(--vaadin-progress-line-width);
+        box-sizing: border-box;
+        margin: 8px;
+      }
+
+      svg {
+        overflow: visible;
+      }
+
+      svg circle {
+        fill: transparent;
+        stroke-width: var(--vaadin-progress-line-width);
+      }
+
+      #background {
+        stroke: var(--vaadin-progress-background-color);
+      }
+
+      #foreground {
+        transition: stroke-dashoffset 150ms;
+        stroke: var(--vaadin-progress-foreground-color);
+        stroke-linecap: butt;
+        /* 2 * radius(50%) * PI */
+        stroke-dasharray: 314.16%;
+        /* Start the progress from 12 o'clock */
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+      }
+
+      /* Indeterminate circle */
+
+      :host(:not([value])) #foreground {
+        animation: indeterminate-progress-circle 1.2s infinite linear;
+        transform: none;
+        transition: none;
+      }
+
+      /* TODO WebKit doesn't handle negative dashoffset the same as others, so the animation looks broken */
+
+      @keyframes indeterminate-progress-circle {
+        0% {
+          stroke-dashoffset: 235%;
+          transform: rotate(-90deg);
+        }
+
+        100% {
+          stroke-dashoffset: -235%;
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+    <svg id="circle" width="100%" height="100%">
+      <circle id="background" r="50%" cx="50%" cy="50%"/>
+      <circle id="foreground" r="50%" cx="50%" cy="50%" stroke-dashoffset$="[[_computeDashoffset(value, min, max)]]"/>
+    </svg>
+
+  </template>
+
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    {
+      /**
+       * `<vaadin-progress-circle>` is a Polymer 2 progress circle.
+       *
+       * ```html
+       * <vaadin-progress-circle>
+       * </vaadin-progress-circle>
+       * ```
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ProgressMixin
+       * @demo demo/progress-circle.html
+       */
+      class ProgressCircleElement extends Vaadin.ProgressMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-progress-circle';
+        }
+
+        _computeDashoffset(value, min, max) {
+          // We could compute this with CSS calc, but Firefox doesn’t like that
+          // 314.16 is size of dash array, which equals 2*PI*R, where R = 50%
+          return 314.16 * (1 - this._normalizeValue(value, min, max)) + '%';
+        }
+
+      }
+
+      customElements.define(ProgressCircleElement.is, ProgressCircleElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ProgressCircleElement = ProgressCircleElement;
+    }
+  </script>
+</dom-module>

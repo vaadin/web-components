@@ -1,0 +1,55 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-progress-bar tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-progress-bar.html">
+</head>
+
+<body>
+  <test-fixture id="progressBar">
+    <template>
+      <vaadin-progress-bar></vaadin-progress-bar>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin progress bar', () => {
+      var progress;
+
+      beforeEach(() => progress = fixture('progressBar'));
+
+      it('should have proper scale', () => {
+        progress.value = 0.1;
+
+        expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
+      });
+
+      it('should have proper scale with custom min and max', () => {
+        progress.max = 20;
+        progress.min = 10;
+        progress.value = 15;
+
+        expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
+      });
+
+      it('should throw an exception in case of wrong bounds', () => {
+        var threw = false;
+        var message = '';
+
+        try {
+          progress.max = 12;
+          progress.min = 13;
+        } catch (exception) {
+          threw = true;
+          message = exception.message;
+        }
+
+        expect(threw).to.be.true;
+        expect(message).to.be.equal('min should be less then max');
+      });
+
+    });
+  </script>
+</body>

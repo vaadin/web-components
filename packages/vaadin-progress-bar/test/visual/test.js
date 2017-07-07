@@ -1,4 +1,4 @@
-gemini.suite('vaadin-progress', function(rootSuite) {
+gemini.suite('vaadin-progress-bar', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -18,7 +18,7 @@ gemini.suite('vaadin-progress', function(rootSuite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .capture('vaadin-progress-bar');
   });
 
 });
