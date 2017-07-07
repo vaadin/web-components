@@ -18,6 +18,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="datepicker-prefix">
+    <template>
+      <vaadin-date-picker><div slot="prefix">foo</div></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
   <test-fixture id="datepicker-wrapped">
     <template>
       <div style="height: 100px; overflow: scroll;">
@@ -534,6 +540,18 @@
         });
       });
 
+      describe('Slots', () => {
+        let textfield;
+        beforeEach(() => {
+          const datepicker = fixture('datepicker-prefix');
+          textfield = datepicker._inputElement;
+        });
+
+        it('should expose the text-field prefix slot', () => {
+          const slot = textfield.querySelector('slot[name=prefix]');
+          expect(slot.assignedNodes()[0].textContent).to.eql('foo');
+        });
+      });
     });
   </script>
 
