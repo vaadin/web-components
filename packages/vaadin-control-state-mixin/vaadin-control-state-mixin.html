@@ -144,6 +144,14 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     /**
+     * Moving the focus from the host element causes firing of the blur event what leads to problems in IE.
+     * @private
+     */
+    focus() {
+      this.focusElement.focus();
+    }
+
+    /**
      * Native bluring in the host element does nothing because it does not have the focus.
      * In chrome it works, but not in FF.
      * @private
