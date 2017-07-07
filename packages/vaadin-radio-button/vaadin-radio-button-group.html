@@ -88,7 +88,8 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             required: {
               type: Boolean,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_requiredChanged'
             },
 
             /**
@@ -122,6 +123,8 @@ This program is available under Apache License Version 2.0, available at https:/
               this._setValueFromButton(radioButton);
             }
           });
+
+          this.setAttribute('role', 'radiogroup');
         }
 
         _checkForInitialValue() {
@@ -132,8 +135,14 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _requiredChanged(required) {
+          this.setAttribute('aria-required', required);
+        }
+
         _disabledChanged(disabled) {
           this.validate();
+
+          this.setAttribute('aria-disabled', disabled);
 
           this._forEachButton(button => button.disabled = disabled);
         }

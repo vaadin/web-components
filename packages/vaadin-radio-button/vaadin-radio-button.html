@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="wrapper"] {
-        display: inline-block;
+        display: inline-flex;
         align-items: center;
         outline: none;
       }
@@ -44,7 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-radio-button">
   <template>
-    <label part="wrapper" id="label">
+    <label part="wrapper" id="label" on-click="_preventDefault">
       <input
         id="nativeRadio"
         type="radio"
@@ -123,7 +123,8 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             disabled: {
               type: Boolean,
-              reflectToAttribute: true
+              reflectToAttribute: true,
+              observer: '_disabledChanged'
             },
 
             /**
@@ -163,17 +164,30 @@ This program is available under Apache License Version 2.0, available at https:/
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
 
+        _disabledChanged(disabled) {
+          if (disabled) {
+            this.setAttribute('aria-disabled', 'true');
+          } else {
+            this.removeAttribute('aria-disabled');
+          }
+        }
+
         _addActiveListeners() {
           // DOWN
           this._addEventListenerToNode(this, 'down', (e) => {
-            e.preventDefault();
             if (!this.disabled) {
               this.setAttribute('active', '');
             }
           });
 
           // UP
-          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+          this._addEventListenerToNode(this, 'up', (e) => {
+            this.removeAttribute('active');
+
+            if (!this.checked && !this.disabled) {
+              this.checked = true;
+            }
+          });
 
           // KEYDOWN
           this.addEventListener('keydown', e => {
@@ -195,6 +209,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         get focusElement() {
           return this.$.label;
+        }
+
+        _preventDefault(e) {
+          e.preventDefault();
         }
       }
 
