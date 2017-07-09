@@ -259,7 +259,7 @@
           if (e.keyCode == 27) {
             throw new Error('Escape key was propagated to body');
           }
-        })
+        });
 
         esc();
 
@@ -269,7 +269,7 @@
       it('click event should not be propagated', () => {
         const listener = document.body.addEventListener('click', () => {
           throw new Error('Click event was propagated to body');
-        })
+        });
 
         comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
           .dispatchEvent(new CustomEvent('click', {composed: true, bubbles: true}));
@@ -280,7 +280,7 @@
       it('tap event should not be propagated', () => {
         const listener = document.body.addEventListener('tap', () => {
           throw new Error('Tap event was propagated to body');
-        })
+        });
 
         comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
           .dispatchEvent(new CustomEvent('tap', {composed: true, bubbles: true}));
