@@ -18,8 +18,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="combobox-prefix">
+    <template>
+      <vaadin-combo-box>
+        <div slot="prefix">foo</div>
+      </vaadin-combo-box>
+    </template>
+  </test-fixture>
+
   <script>
-    describe('properties', () => {
+    describe('Properties', () => {
       let comboBox;
 
       beforeEach(() => {
@@ -240,6 +248,20 @@
             expect(comboBox.focused).to.be.false;
             expect(comboBox.hasAttribute('focused')).to.be.false;
           });
+        });
+      });
+
+      describe('Slots', () => {
+        let textfield;
+
+        beforeEach(() => {
+          const comboBox = fixture('combobox-prefix');
+          textfield = comboBox.inputElement;
+        });
+
+        it('should expose the text-field prefix slot', () => {
+          const slot = textfield.querySelector('slot[name=prefix]');
+          expect(slot.assignedNodes()[0].textContent).to.eql('foo');
         });
       });
     });

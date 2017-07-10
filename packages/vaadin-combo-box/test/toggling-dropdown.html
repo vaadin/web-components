@@ -281,8 +281,8 @@
         combobox.disabled = true;
       });
 
-      it('toggleIcon should be hidden when disabled', () => {
-        expect(getComputedStyle(combobox._toggleElement).display).to.equal('none');
+      it('toggleIcon should not be hidden when disabled', () => {
+        expect(getComputedStyle(combobox._toggleElement).display).not.to.equal('none');
       });
 
       it('clearIcon should be hidden when disabled', () => {
@@ -301,8 +301,8 @@
         combobox.readonly = true;
       });
 
-      it('toggleIcon should be hidden when read-only', () => {
-        expect(getComputedStyle(combobox._toggleElement).display).to.equal('none');
+      it('toggleIcon should not be hidden when read-only', () => {
+        expect(getComputedStyle(combobox._toggleElement).display).not.to.equal('none');
       });
 
       it('clearIcon should be hidden when read-only', () => {

@@ -1,0 +1,80 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+
+<style>
+  @font-face {
+    font-family: 'vaadin-combo-box-icons';
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAVQAAsAAAAABQQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIFgGNtYXAAAAFoAAAAVAAAAFQXVtKIZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAIwAAACMKHtqRmhlYWQAAAJQAAAANgAAADYNCaOoaGhlYQAAAogAAAAkAAAAJAbtA8dobXR4AAACrAAAABgAAAAYDgACAGxvY2EAAALEAAAADgAAAA4AbgBAbWF4cAAAAtQAAAAgAAAAIAAIAA5uYW1lAAAC9AAAAjoAAAI6mZTisnBvc3QAAAUwAAAAIAAAACAAAwAAAAMDVQGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QEDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkB//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQErAUAC1QIVAAIAAAEXNwEr1dUCFdXVAAAAAAEA1QCVAysC6wALAAABJwcnBxcHFzcXNycDKzzv7zzv7zzv7zzvAq887+887+887+887wABAAAAAQAAKGR/418PPPUACwQAAAAAANVgL+AAAAAA1WAv4AAAAAADKwLrAAAACAACAAAAAAAAAAEAAAPA/8AAAAQAAAAAAAMrAAEAAAAAAAAAAAAAAAAAAAAGBAAAAAAAAAAAAAAAAgAAAAQAASsEAADVAAAAAAAKABQAHgAsAEYAAAABAAAABgAMAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEAFgAAAAEAAAAAAAIABwDnAAEAAAAAAAMAFgBjAAEAAAAAAAQAFgD8AAEAAAAAAAUACwBCAAEAAAAAAAYAFgClAAEAAAAAAAoAGgE+AAMAAQQJAAEALAAWAAMAAQQJAAIADgDuAAMAAQQJAAMALAB5AAMAAQQJAAQALAESAAMAAQQJAAUAFgBNAAMAAQQJAAYALAC7AAMAAQQJAAoANAFYdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzdmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzUmVndWxhcgBSAGUAZwB1AGwAYQBydmFhZGluLWNvbWJvLWJveC1pY29ucwB2AGEAYQBkAGkAbgAtAGMAbwBtAGIAbwAtAGIAbwB4AC0AaQBjAG8AbgBzRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
+
+<dom-module id="vaadin-combo-box-default-theme" theme-for="vaadin-combo-box vaadin-combo-box-light" >
+  <template>
+    <style>
+      :host {
+        padding: 8px 0;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-overlay-default-theme" theme-for="vaadin-overlay">
+  <template>
+    <style>
+      :host {
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-combo-box-item-default-theme" theme-for="vaadin-combo-box-item">
+  <template>
+    <style>
+      :host {
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding: 5px 10px;
+      }
+
+      :host(:not([touch-device]):hover),
+      :host([focused]) {
+        background: #eee;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-combo-box-spinner-default-theme" theme-for="vaadin-combo-box-spinner">
+  <template>
+    <style>
+      :host {
+        border: 2px solid #eee;
+        border-radius: 50%;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        content: "";
+        height: 24px;
+        margin-left: -12px;
+        margin-top: -12px;
+        width: 24px;
+      }
+    </style>
+  </template>
+</dom-module>

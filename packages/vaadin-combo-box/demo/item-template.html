@@ -12,6 +12,12 @@
 
   <link rel="import" href="common.html">
   <link rel="import" href="../../paper-item/all-imports.html">
+
+  <style>
+    vaadin-combo-box {
+      min-width: 300px;
+    }
+  </style>
 </head>
 
 <body unresolved>
@@ -124,14 +130,14 @@
       </template>
     </demo-snippet>
 
-    <h3>Item Template with Material Design</h3>
+    <h3>Item Template with Paper Item Elements</h3>
 
     <demo-snippet>
       <template>
         <vaadin-combo-box id="elements-paper-item" item-value-path="email" item-label-path="email">
           <template>
-            <paper-icon-item style="padding: 0">
-              <img src="[[item.picture.thumbnail]]" style="border-radius: 50%; width: 48px; height: 48px;" item-icon>
+            <paper-icon-item>
+              <img src="[[item.picture.thumbnail]]" style="border-radius: 50%; width: 48px; height: 48px;" slot="item-icon">
               <paper-item-body two-line style="min-height: 0">
                 <div style="text-transform: capitalize">[[item.name.first]] [[item.name.last]]</div>
                 <div secondary>[[item.email]]</div>

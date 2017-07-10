@@ -4,6 +4,7 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-combo-box-item">
   <template>
@@ -12,16 +13,19 @@ This program is available under Apache License Version 2.0, available at https:/
         display: block;
       }
     </style>
-    [[label]]
+    <span id="content">[[label]]</span>
   </template>
 </dom-module>
 
 <script>
   {
     /**
+     * The default element used for items in the vaadin-combobox.
+     *
      * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
      */
-    class ComboBoxItemElement extends Polymer.Element {
+    class ComboBoxItemElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-combo-box-item';
       }
@@ -90,7 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
           comboBox._ensureTemplatized();
           if (comboBox._TemplateClass) {
             this._itemTemplateInstance = new comboBox._TemplateClass({});
-            this.root.textContent = '';
+            this.root.removeChild(this.$.content);
             this.root.appendChild(this._itemTemplateInstance.root);
           }
         }
