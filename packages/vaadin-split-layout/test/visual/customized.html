@@ -4,31 +4,40 @@
   <meta charset="UTF-8">
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link href="../../vaadin-split-layout.html" rel="import">
-
-  <custom-style>
-    <style is="custom-style">
-      vaadin-split-layout {
-        height: 100px;
-        width: 200px;
-
-        --vaadin-split-layout-splitter: {
-          background: #000;
-          fill: #ff0;
-        };
-      }
-    </style>
-  </custom-style>
-
 </head>
 
 <body>
+  <dom-module id="vaadin-split-layout-styles" theme-for="vaadin-split-layout">
+    <template>
+      <style>
+        [part~="splitter"] {
+          min-width: 4px;
+          min-height: 4px;
+          background: #ddd;
+        }
 
-  <vaadin-split-layout id="customized">
-    <div style="width: 25%"></div>
-    <vaadin-split-layout vertical style="width: 75%">
-      <div></div>
-      <div></div>
+        [part~="handle"]::after {
+          content: "\22EE";
+          display: block;
+          font-size: 16px;
+          line-height: 40px;
+          text-align: center;
+          color: #999;
+          text-shadow: 1px 1px #fff;
+        }
+
+        :host([vertical]) [part~="handle"]::after {
+          content: "\22EF";
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <vaadin-split-layout id="customized" style="height: 100px; width: 200px;">
+    <div>First</div>
+    <vaadin-split-layout vertical>
+      <div>Second</div>
+      <div>Third</div>
     </vaadin-split-layout>
   </vaadin-split-layout>
-
 </body>

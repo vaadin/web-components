@@ -20,11 +20,12 @@
   },
   "dependencies": {
     "polymer": "^2.0.0",
-    "iron-resizable-behavior": "^2.0.0"
+    "iron-resizable-behavior": "^2.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
   },
   "devDependencies": {
     "elements-demo-resources": "vaadin/elements-demo-resources#^2.0.0",
-    "iron-component-page": "^2.0.0",
+    "iron-component-page": "^3.0.0",
     "iron-icon": "^2.0.0",
     "iron-icons": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
