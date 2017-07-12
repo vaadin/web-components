@@ -70,7 +70,9 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean,
           observer: '_disabledChanged',
           reflectToAttribute: true
-        }
+        },
+
+        _isShiftTabbing: Boolean,
       };
     }
 
@@ -85,7 +87,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
-          this.focus();
+          // Flag is checked in _focus event handler.
+          this._isShiftTabbing = true;
+          HTMLElement.prototype.focus.apply(this);
+          // Event handling in IE is asynchronous and the flag is removed asynchronously as well
+          setTimeout(() => this._isShiftTabbing = false, 0);
         }
       });
 
@@ -139,6 +145,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _focus(e) {
+      if (this._isShiftTabbing) {
+        return;
+      }
+
       this._setFocused(!this.disabled);
       this.focusElement.focus();
     }
