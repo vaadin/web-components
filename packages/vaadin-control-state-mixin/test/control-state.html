@@ -134,13 +134,17 @@
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
-        it('should refocus the field', () => {
+        it('should refocus the field', (done) => {
           customElement.dispatchEvent(new CustomEvent('focus'));
           MockInteractions.keyDownOn(customElement, 9, 'shift');
 
-          var spy = sinon.spy(focusElement, 'focus');
-          customElement.dispatchEvent(new CustomEvent('focus'));
-          expect(spy.called).to.be.true;
+          // Shift + Tab disables refocusing temporarily, normal behaviour is restored asynchronously.
+          setTimeout(() => {
+            var spy = sinon.spy(focusElement, 'focus');
+            customElement.dispatchEvent(new CustomEvent('focus'));
+            expect(spy.called).to.be.true;
+            done();
+          }, 0);
         });
       });
 
