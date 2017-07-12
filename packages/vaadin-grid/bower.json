@@ -24,7 +24,7 @@
     "**/java",
     "**/tasks",
     "gulpfile.js",
-    "package.json",
+    "package-lock.json",
     "wct.conf.js"
   ],
   "devDependencies": {
