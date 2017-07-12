@@ -1,6 +1,6 @@
 {
   "name": "vaadin-radio-button",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha1",
   "description": "vaadin-radio-button",
   "main": "vaadin-radio-button.html",
   "repository": "vaadin/vaadin-radio-button",
