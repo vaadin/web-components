@@ -221,6 +221,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _onTap(e) {
         if (!this._notTapping && !this._ignoreTaps) {
+          if (e.detail && e.detail.sourceEvent && e.detail.sourceEvent.stopPropagation) {
+            this._stopPropagation(e.detail.sourceEvent);
+          }
+
           this.dispatchEvent(new CustomEvent('selection-changed', {detail: {item: e.model.item}}));
         }
       }
@@ -305,7 +309,9 @@ This program is available under Apache License Version 2.0, available at https:/
         // Sometimes the item is partly below the bottom edge, detect and adjust.
         const pidx = this._selector._getPhysicalIndex(index),
           physicalItem = this._selector._physicalItems[pidx];
-        if (!physicalItem) return;
+        if (!physicalItem) {
+          return;
+        }
         const physicalItemRect = physicalItem.getBoundingClientRect(),
           scrollerRect = this._scroller.getBoundingClientRect(),
           scrollTopAdjust = physicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
