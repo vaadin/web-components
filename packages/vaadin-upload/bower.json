@@ -24,7 +24,7 @@
     "test",
     "tasks",
     "gulpfile.js",
-    "package.json",
+    "package-lock.json",
     "wct.conf.js"
   ],
   "dependencies": {
