@@ -89,7 +89,11 @@ Example:
         }
 
         _arrayFromData(data) {
-          return JSON.parse('[' + data + ']');
+          if (typeof data !== 'undefined') {
+            return JSON.parse('[' + data + ']');
+          } else {
+            return [];
+          }
         }
       }
 
