@@ -52,8 +52,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.IronOverlayBehavior
        * @demo demo/index.html
        */
-      class ContextMenuOverlayElement extends Polymer.mixinBehaviors(
-          [Polymer.IronOverlayBehavior], Polymer.Element) {
+      class ContextMenuOverlayElement extends Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element) {
 
         static get is() {
           return 'vaadin-context-menu-overlay';
