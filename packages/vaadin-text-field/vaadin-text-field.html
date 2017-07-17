@@ -51,6 +51,10 @@ This program is available under Apache License Version 2.0, available at https:/
         margin-top: 0.25em;
         color: red;
       }
+
+      [part="error-message"][hidden] {
+         margin: 0 !important;
+      }
     </style>
   </template>
 </dom-module>
@@ -379,8 +383,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           var uniqueId = TextFieldElement._uniqueId = 1 + TextFieldElement._uniqueId || 0;
-          this._errorId = `${this.is}-error-${uniqueId}`;
-          this._labelId = `${this.is}-label-${uniqueId}`;
+          this._errorId = `${this.constructor.is}-error-${uniqueId}`;
+          this._labelId = `${this.constructor.is}-label-${uniqueId}`;
         }
 
         attributeChangedCallback(prop, oldVal, newVal) {
