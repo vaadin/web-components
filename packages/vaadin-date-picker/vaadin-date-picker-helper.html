@@ -75,19 +75,19 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     static _getClosestDate(date, dates) {
       return dates.filter(date => date !== undefined)
-       .reduce((closestDate, candidate) => {
-         if (!candidate) {
-           return closestDate;
-         }
+        .reduce((closestDate, candidate) => {
+          if (!candidate) {
+            return closestDate;
+          }
 
-         if (!closestDate) {
-           return candidate;
-         }
+          if (!closestDate) {
+            return candidate;
+          }
 
-         var candidateDiff = Math.abs(date.getTime() - candidate.getTime());
-         var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
-         return candidateDiff < closestDateDiff ? candidate : closestDate;
-       });
+          var candidateDiff = Math.abs(date.getTime() - candidate.getTime());
+          var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
+          return candidateDiff < closestDateDiff ? candidate : closestDate;
+        });
     }
   };
 </script>

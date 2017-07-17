@@ -301,8 +301,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _getWeekNumbers(dates) {
-          return dates.map(date => this._getWeekNumber(date, dates))
-                      .filter((week, index, arr) => arr.indexOf(week) === index);
+          return dates
+            .map(date => this._getWeekNumber(date, dates))
+            .filter((week, index, arr) => arr.indexOf(week) === index);
         }
 
         _handleTap(e) {

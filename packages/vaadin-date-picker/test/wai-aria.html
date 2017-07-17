@@ -210,7 +210,7 @@
           it('should have hidden state for dots', () => {
             // Do not speak dots between years.
             var dots = Array.prototype.slice.call(yearScrollerContents)
-                            .map(el => el.nextElementSibling);
+              .map(el => el.nextElementSibling);
 
             expect(dots).to.not.be.empty;
             dots.forEach(dot => {
@@ -450,7 +450,7 @@
         describe('i18n', () => {
           beforeEach(() => {
             datepicker.set('i18n.monthNames',
-                'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'));
+              'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split('_'));
             datepicker.set('i18n.weekdays', 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'));
             datepicker.set('i18n.week', 'viikko');
             datepicker.set('i18n.today', 'Tänään');
