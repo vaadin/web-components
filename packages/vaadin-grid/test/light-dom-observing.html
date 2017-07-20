@@ -47,6 +47,26 @@
     </script>
   </dom-module>
 
+  <dom-module id="x-boolean-toggle">
+    <template>[[value]]</template>
+    <script>
+      HTMLImports.whenReady(function() {
+        class XBooleanToggle extends Polymer.Element {
+          static get is() {
+            return 'x-boolean-toggle';
+          }
+
+          static get properties() {
+            return {
+              value: {type: Boolean, notify: true}
+            };
+          }
+        }
+        customElements.define(XBooleanToggle.is, XBooleanToggle);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="column">
     <template>
       <vaadin-grid-column>
@@ -245,6 +265,26 @@
             </template>
           </dom-repeat>
         </vaadin-grid-column-group>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="dom-repeat-columns-expandable">
+    <template>
+      <vaadin-grid id="grid" size="10">
+        <template class="row-details"><div class="details">grid repeats column with detail detail [[item.value]]</div></template>
+        <vaadin-grid-column frozen width="20px">
+          <template><x-boolean-toggle value={{expanded}}></x-boolean-toggle></template>
+          <template class="header">expander</template>
+        </vaadin-grid-column>
+        <dom-repeat as="column">
+          <template is="dom-repeat" as="column">
+            <vaadin-grid-column>
+              <template class="header">grid repeats column with detail [[column]] header</template>
+              <template>grid repeats column with detail [[column]] body [[item.value]]</template>
+            </vaadin-grid-column>
+          </template>
+        </dom-repeat>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -649,6 +689,27 @@
           });
 
           shouldSupportDomRepeat('group repeats group', 2);
+        });
+
+        describe('with row detail', function() {
+          beforeEach(function() {
+            init('dom-repeat-columns-expandable', {columns: columns});
+          });
+
+          it('should obey the "expanded" template property', function(done) {
+            repeater.render();
+            flush(function() {
+              var row = getRows(grid.$.items)[0];
+              var cell = getRowCells(row)[0];
+              var toggle = getCellContent(cell).children[0];
+              // expand row details
+              toggle.value = true;
+
+              expect(grid.expandedItems).to.contain(row._item);
+              done();
+            });
+
+          });
         });
       });
 
