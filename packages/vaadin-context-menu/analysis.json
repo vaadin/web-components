@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-context-menu.html",
         "start": {
-          "line": 396,
+          "line": 397,
           "column": 6
         },
         "end": {
-          "line": 396,
+          "line": 397,
           "column": 42
         }
       },
@@ -557,11 +557,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 72,
+                  "line": 71,
                   "column": 12
                 },
                 "end": {
-                  "line": 75,
+                  "line": 74,
                   "column": 13
                 }
               },
@@ -577,11 +577,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 79,
                   "column": 12
                 },
                 "end": {
-                  "line": 83,
+                  "line": 82,
                   "column": 13
                 }
               },
@@ -597,11 +597,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 12
                 },
                 "end": {
-                  "line": 92,
+                  "line": 91,
                   "column": 13
                 }
               },
@@ -1655,11 +1655,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 103,
+                  "line": 102,
                   "column": 8
                 },
                 "end": {
-                  "line": 105,
+                  "line": 104,
                   "column": 9
                 }
               },
@@ -1672,11 +1672,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 107,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 109,
                   "column": 9
                 }
               },
@@ -1905,11 +1905,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 96,
+                  "line": 95,
                   "column": 8
                 },
                 "end": {
-                  "line": 100,
+                  "line": 99,
                   "column": 9
                 }
               },
@@ -1926,11 +1926,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 112,
+                  "line": 111,
                   "column": 8
                 },
                 "end": {
-                  "line": 117,
+                  "line": 116,
                   "column": 9
                 }
               },
@@ -1959,7 +1959,7 @@
               "column": 6
             },
             "end": {
-              "line": 119,
+              "line": 118,
               "column": 7
             }
           },
@@ -2314,11 +2314,11 @@
               "description": "Position of the overlay on horizontal axis.",
               "sourceRange": {
                 "start": {
-                  "line": 72,
+                  "line": 71,
                   "column": 12
                 },
                 "end": {
-                  "line": 75,
+                  "line": 74,
                   "column": 13
                 }
               },
@@ -2330,11 +2330,11 @@
               "description": "Position of the overlay on vertical axis.",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 79,
                   "column": 12
                 },
                 "end": {
-                  "line": 83,
+                  "line": 82,
                   "column": 13
                 }
               },
@@ -2346,11 +2346,11 @@
               "description": "When `true` overlay is optimized for a small touch screen.\nWhen `false`, overlay position and size is optimized for a desktop/tablet screen.",
               "sourceRange": {
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 12
                 },
                 "end": {
-                  "line": 92,
+                  "line": 91,
                   "column": 13
                 }
               },
@@ -2440,11 +2440,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 159,
+                  "line": 160,
                   "column": 12
                 },
                 "end": {
-                  "line": 161,
+                  "line": 162,
                   "column": 13
                 }
               },
@@ -2459,11 +2459,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 167,
                   "column": 12
                 },
                 "end": {
-                  "line": 171,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -2482,11 +2482,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 179,
+                  "line": 180,
                   "column": 13
                 }
               },
@@ -2502,11 +2502,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 188,
+                  "line": 189,
                   "column": 12
                 },
                 "end": {
-                  "line": 193,
+                  "line": 194,
                   "column": 13
                 }
               },
@@ -2521,11 +2521,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 199,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -2543,11 +2543,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 205,
                   "column": 12
                 },
                 "end": {
-                  "line": 204,
+                  "line": 205,
                   "column": 28
                 }
               },
@@ -2562,11 +2562,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 206,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 206,
+                  "line": 207,
                   "column": 36
                 }
               },
@@ -2581,11 +2581,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 208,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 215,
+                  "line": 216,
                   "column": 13
                 }
               },
@@ -2600,11 +2600,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 218,
                   "column": 12
                 },
                 "end": {
-                  "line": 217,
+                  "line": 218,
                   "column": 31
                 }
               },
@@ -2619,11 +2619,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 219,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 219,
+                  "line": 220,
                   "column": 30
                 }
               },
@@ -2638,11 +2638,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 221,
+                  "line": 222,
                   "column": 12
                 },
                 "end": {
-                  "line": 221,
+                  "line": 222,
                   "column": 34
                 }
               },
@@ -2653,16 +2653,74 @@
           ],
           "methods": [
             {
+              "name": "_addEventListenerToNode",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/gesture-event-listeners.html",
+                "start": {
+                  "line": 41,
+                  "column": 6
+                },
+                "end": {
+                  "line": 45,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node"
+                },
+                {
+                  "name": "eventName"
+                },
+                {
+                  "name": "handler"
+                }
+              ],
+              "inheritedFrom": "Polymer.GestureEventListeners"
+            },
+            {
+              "name": "_removeEventListenerFromNode",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/gesture-event-listeners.html",
+                "start": {
+                  "line": 47,
+                  "column": 6
+                },
+                "end": {
+                  "line": 51,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node"
+                },
+                {
+                  "name": "eventName"
+                },
+                {
+                  "name": "handler"
+                }
+              ],
+              "inheritedFrom": "Polymer.GestureEventListeners"
+            },
+            {
               "name": "_onOverlayOpened",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 241,
                   "column": 8
                 },
                 "end": {
-                  "line": 251,
+                  "line": 252,
                   "column": 9
                 }
               },
@@ -2675,11 +2733,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 253,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 255,
+                  "line": 256,
                   "column": 9
                 }
               },
@@ -2692,11 +2750,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 257,
+                  "line": 258,
                   "column": 8
                 },
                 "end": {
-                  "line": 278,
+                  "line": 279,
                   "column": 9
                 }
               },
@@ -2716,11 +2774,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 280,
+                  "line": 281,
                   "column": 8
                 },
                 "end": {
-                  "line": 287,
+                  "line": 288,
                   "column": 9
                 }
               },
@@ -2740,11 +2798,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 289,
+                  "line": 290,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 296,
                   "column": 9
                 }
               },
@@ -2761,11 +2819,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 297,
+                  "line": 298,
                   "column": 8
                 },
                 "end": {
-                  "line": 303,
+                  "line": 304,
                   "column": 9
                 }
               },
@@ -2785,11 +2843,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 309,
                   "column": 8
                 },
                 "end": {
-                  "line": 310,
+                  "line": 311,
                   "column": 9
                 }
               },
@@ -2802,11 +2860,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 312,
+                  "line": 313,
                   "column": 8
                 },
                 "end": {
-                  "line": 322,
+                  "line": 323,
                   "column": 9
                 }
               },
@@ -2823,11 +2881,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 328,
+                  "line": 329,
                   "column": 8
                 },
                 "end": {
-                  "line": 347,
+                  "line": 348,
                   "column": 9
                 }
               },
@@ -2846,11 +2904,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 349,
+                  "line": 350,
                   "column": 8
                 },
                 "end": {
-                  "line": 363,
+                  "line": 364,
                   "column": 9
                 }
               },
@@ -2870,11 +2928,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 365,
+                  "line": 366,
                   "column": 8
                 },
                 "end": {
-                  "line": 373,
+                  "line": 374,
                   "column": 9
                 }
               },
@@ -2891,11 +2949,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 375,
+                  "line": 376,
                   "column": 8
                 },
                 "end": {
-                  "line": 381,
+                  "line": 382,
                   "column": 9
                 }
               },
@@ -2918,11 +2976,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 383,
+                  "line": 384,
                   "column": 8
                 },
                 "end": {
-                  "line": 389,
+                  "line": 390,
                   "column": 9
                 }
               },
@@ -2950,11 +3008,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 146,
+              "line": 147,
               "column": 6
             },
             "end": {
-              "line": 390,
+              "line": 391,
               "column": 7
             }
           },
@@ -2967,11 +3025,11 @@
               "description": "CSS selector that can be used to target any child element\nof the context menu to listen for `openOn` events.",
               "sourceRange": {
                 "start": {
-                  "line": 159,
+                  "line": 160,
                   "column": 12
                 },
                 "end": {
-                  "line": 161,
+                  "line": 162,
                   "column": 13
                 }
               },
@@ -2983,11 +3041,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 167,
                   "column": 12
                 },
                 "end": {
-                  "line": 171,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -2999,11 +3057,11 @@
               "description": "Event name to listen for opening the context menu.",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 179,
+                  "line": 180,
                   "column": 13
                 }
               },
@@ -3015,11 +3073,11 @@
               "description": "The target element that's listened to for context menu opening events.\nBy default the vaadin-context-menu listens to the target's `vaadin-contextmenu`\nevents.",
               "sourceRange": {
                 "start": {
-                  "line": 188,
+                  "line": 189,
                   "column": 12
                 },
                 "end": {
-                  "line": 193,
+                  "line": 194,
                   "column": 13
                 }
               },
@@ -3031,11 +3089,11 @@
               "description": "Event name to listen for closing the context menu.",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 199,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -3072,7 +3130,10 @@
               }
             }
           ],
-          "tagname": "vaadin-context-menu"
+          "tagname": "vaadin-context-menu",
+          "mixins": [
+            "Polymer.GestureEventListeners"
+          ]
         }
       ]
     }
