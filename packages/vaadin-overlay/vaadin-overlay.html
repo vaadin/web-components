@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/templatize.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
@@ -42,7 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
         max-height: 100%;
       }
 
-      :host([with-backdrop][opened])::before {
+      [part="backdrop"] {
         z-index: -1;
         content: "";
         background: rgba(0, 0, 0, 0.5);
@@ -53,6 +54,10 @@ This program is available under Apache License Version 2.0, available at https:/
         right: 0;
       }
     </style>
+
+    <div id="backdrop" part="backdrop" on-tap="close" hidden$="{{!withBackdrop}}">
+
+    </div>
     <div part="content" id="content">
       <slot id="slot"></slot>
     </div>
@@ -66,10 +71,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
   {
     /**
-     * `<vaadin-overlay>` is a Polymer element for creating overlays.
+     * `<vaadin-overlay>` is a Polymer 2 element for creating overlays.
      * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
+     * @mixes Polymer.GestureEventListeners
+     * @demo demo/index.html
      */
-    class OverlayElement extends Vaadin.ThemableMixin(Polymer.Element) {
+    class OverlayElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
       static get is() {
         return 'vaadin-overlay';
       }
@@ -92,6 +100,12 @@ This program is available under Apache License Version 2.0, available at https:/
             notify: true
           },
 
+          withBackdrop: {
+            type: Boolean,
+            value: true,
+            reflectToAttribute: true
+          },
+
           _instance: Object
         };
       }
@@ -111,26 +125,31 @@ This program is available under Apache License Version 2.0, available at https:/
         });
       }
 
-      // We need to listen on 'click' / 'tap' event and capture it and close the overlay before
-      // propagating the event to the listener in the button. Otherwise, if the clicked button would call
-      // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+      /**
+       * Close the overlay and fire `vaadin-overlay-close` event
+       */
+      close(sourceEvent) {
+        var evt = new CustomEvent('vaadin-overlay-close', {bubbles: true, cancelable: true, detail: {sourceEvent: sourceEvent}});
+        this.dispatchEvent(evt);
+        if (!evt.defaultPrevented) {
+          this.opened = false;
+        }
+      }
+
+      /**
+       * We need to listen on 'click' / 'tap' event and capture it and close the overlay before
+       * propagating the event to the listener in the button. Otherwise, if the clicked button would call
+       * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+       */
       _outsideClickListener(event) {
         if (this.opened && event.composedPath().indexOf(this) < 0) {
-          this._cancel(event);
+          this.close(event);
         }
       }
 
       _escapeListener(event) {
         if (this.opened && event.keyCode === 27) {
-          this._cancel(event);
-        }
-      }
-
-      _cancel(sourceEvent) {
-        var evt = new CustomEvent('vaadin-overlay-cancel', {bubbles: true, cancelable: true, detail: {sourceEvent: sourceEvent}});
-        this.dispatchEvent(evt);
-        if (!evt.defaultPrevented) {
-          this.opened = false;
+          this.close(event);
         }
       }
 
