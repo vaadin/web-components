@@ -14,18 +14,20 @@
 <custom-element-demo>
   <template>
     <link rel="import" href="vaadin-progress-bar.html">
+    <link rel="import" href="vaadin-progress-circle.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
+
 ```html
-<vaadin-progress-bar>
-  ...
-</vaadin-progress-bar>
+<vaadin-progress-bar></vaadin-progress-bar>
+<vaadin-progress-bar value="0.3"></vaadin-progress-bar>
+<vaadin-progress-circle></vaadin-progress-circle>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.png" width="200" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="200" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
 
 
 ## Running demos and tests in browser
