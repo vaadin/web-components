@@ -27,7 +27,7 @@
 <vaadin-progress-circle></vaadin-progress-circle>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="200" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="780" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
 
 
 ## Running demos and tests in browser
