@@ -15,7 +15,8 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-progress-bar/issues" },
+    "url": "https://github.com/vaadin/vaadin-progress-bar/issues"
+  },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
     "test": "wct"
@@ -24,14 +25,13 @@
     "bower": "latest",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
-    "eslint-plugin-html": "^2.0.0",
+    "eslint-plugin-html": "^3.0.0",
     "gulp": "latest",
-    "gulp-eslint": "^3.0.1",
+    "gulp-eslint": "^4.0.0",
     "gulp-html-extract": "^0.3.0",
-    "gulp-stylelint": "^3.7.0",
-    "polymer-cli": "^0.18.0",
-    "polyserve": "^0.18.0",
-    "stylelint": "7.10.1",
+    "gulp-stylelint": "^4.0.0",
+    "polymer-cli": "^1.2.0",
+    "stylelint": "^8.0.0",
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.0.0",
     "yargs": "latest"
