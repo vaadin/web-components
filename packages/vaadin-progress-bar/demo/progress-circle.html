@@ -29,14 +29,14 @@
     <demo-snippet>
       <template>
         <vaadin-progress-circle id="progress-circle-custom-bounds" value="20" min="10" max="110"></vaadin-progress-circle>
-        <button id="update-circle-with-bounds">Update value</button>
+        <vaadin-button id="update-circle-with-bounds">Update value</vaadin-button>
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
             document.querySelector('#update-circle-with-bounds').addEventListener('click', function() {
               var progress = document.querySelector('#progress-circle-custom-bounds');
               progress.value += 10;
-              if (progress.value >= progress.max) {
+              if (progress.value > progress.max) {
                 progress.value = progress.min;
               }
             });

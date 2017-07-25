@@ -29,14 +29,14 @@
     <demo-snippet>
       <template>
         <vaadin-progress-bar id="progress-bar-custom-bounds" value="20" min="10" max="110"></vaadin-progress-bar>
-        <button id="update-bar-with-bounds">Update value</button>
+        <vaadin-button id="update-bar-with-bounds">Update value</vaadin-button>
 
         <script>
           window.addEventListener('WebComponentsReady', function() {
             document.querySelector('#update-bar-with-bounds').addEventListener('click', function() {
               var progress = document.querySelector('#progress-bar-custom-bounds');
               progress.value += 10;
-              if (progress.value >= progress.max) {
+              if (progress.value > progress.max) {
                 progress.value = progress.min;
               }
             });
