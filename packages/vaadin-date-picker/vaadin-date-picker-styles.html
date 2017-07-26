@@ -10,36 +10,12 @@
 <dom-module id="vaadin-date-picker-default-theme" theme-for="vaadin-date-picker vaadin-date-picker-light">
   <template>
     <style>
-      [part~="overlay"] {
-        box-shadow:
-          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-          0 1px 5px 0 rgba(0, 0, 0, 0.12),
-          0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
-
       [part="clear-button"],
       [part="toggle-button"] {
-        font-size: 19px;
-        color: rgba(0, 0, 0, .26);
         cursor: pointer;
-        transition: color 0.2s;
-        height: 20px;
-        width: 20px;
         display: flex;
-        justify-content: center;
         align-items: center;
-      }
-
-      [part="clear-button"]:hover,
-      [part="toggle-button"]:hover,
-      :host([opened]) [part="clear-button"],
-      :host([opened]) [part="toggle-button"] {
-        color: rgba(0, 0, 0, .54);
-      }
-
-      :host([opened]) [part="clear-button"]:hover,
-      :host([opened]) [part="toggle-button"]:hover {
-        color: rgba(0, 0, 0, .86);
+        justify-content: center;
       }
     </style>
   </template>
@@ -49,56 +25,54 @@
   <template>
     <style>
       :host {
-        background: #fff;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
       }
 
       [part="overlay-header"] {
         background: #eee;
-        padding: 16px;
+        padding: 1em;
         position: relative;
       }
 
-      [part~="clear-button"],
-      [part~="toggle-button"] {
-        font-size: 24px;
+      [part="clear-button"],
+      [part="toggle-button"] {
+        height: 1.4em;
+        width: 1.4em;
+        font-size: 1.4em;
+        margin-left: 0.6em;
         cursor: pointer;
-        transition: color 0.2s;
-        height: 20px;
-        width: 20px;
         display: flex;
-        justify-content: center;
         align-items: center;
-        margin-left: 10px;
+        justify-content: center;
       }
 
-      [part~="years-toggle-button"] {
+      [part="years-toggle-button"] {
         background: #eee;
         align-items: center;
       }
 
-      [part~="years-toggle-button"]::before {
-        font-size: 24px;
+      [part="years-toggle-button"]::before {
+        font-size: 1.4em;
         line-height: 1em;
       }
 
-      [part~="years"] {
+      [part="years"] {
         background: #ddd;
         cursor: pointer;
-        --vaadin-infinite-scroller-buffer-width: 90px;
       }
 
-      [part~="years"]::before {
+      [part="years"]::before {
         border-left-color: #fff;
         z-index: 1;
       }
 
-      [part~="toolbar"] {
-        padding: 16px;
+      [part="toolbar"] {
+        padding: 1em;
         background: #eee;
       }
 
-      [part~="year-number"],
-      [part~="year-separator"] {
+      [part="year-number"],
+      [part="year-separator"] {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -106,7 +80,7 @@
         transform: translateY(-50%);
       }
 
-      [part~="year-separator"]::after {
+      [part="year-separator"]::after {
         font-family: 'vaadin-date-picker-icons';
         content: "\e903";
         font-size: 4px;
@@ -125,62 +99,54 @@
         user-select: none;
       }
 
-      [part~="month-header"] {
-        font-size: 20px;
+      [part="weekday"]:empty,
+      [part="week-numbers"] {
+        width: 2em;
+      }
+
+      [part="month-header"],
+      [part="weekday"],
+      [part="week-number"],
+      [part="date"] {
         text-align: center;
-        padding: 6px 0;
         cursor: default;
-      }
-
-      [part~="weekday"] {
-        font-weight: 100;
-        text-transform: uppercase;
-        padding: 8px 0;
-        cursor: default;
-      }
-
-      [part~="date"] {
         box-sizing: border-box;
-        border-radius: 2px;
+        padding: 0.5em 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
-      [part~="date"][focused] {
-        background: #eee;
-      }
-
-      :host([focused]) [part~="date"][focused] {
-        background: #ddd;
-      }
-
-      [part~="date"][selected] {
+      [part="month-header"],
+      [part="date"][selected] {
         font-weight: 600;
       }
 
-      [part~="date"][disabled] {
-        opacity: 0.3;
-        cursor: default;
+      [part="weekday"],
+      [part="week-number"] {
+        opacity: 0.5;
       }
 
-      [part~="week-number"] {
-        font-weight: 100;
-        color: rgba(0, 0, 0, 0.4);
-        cursor: default;
+      [part="week-number"],
+      [part="date"] {
+        height: 2.5em;
       }
 
-      [part~="date"]:not(:empty):not([disabled]) {
+      [part="date"]:not(:empty) {
         cursor: pointer;
       }
 
-      [part~="weekday"],
-      [part~="date"],
-      [part~="week-number"] {
-        text-align: center;
-        box-sizing: border-box;
-        padding: 6px 0;
+      [part="date"][focused] {
+        background: #eee;
       }
 
-      [part~="weekday"]:not(:empty):not([disabled]):active {
-        border-radius: 2px;
+      :host([focused]) [part="date"][focused] {
+        background: #ddd;
+      }
+
+      [part="date"][disabled] {
+        opacity: 0.3;
+        cursor: default;
       }
     </style>
   </template>
