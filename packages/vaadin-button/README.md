@@ -29,25 +29,20 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" width="200" alt="Screenshot of vaadin-button">](https://vaadin.com/elements/-/element/vaadin-button)
 -->
 
-## Contributing
+## Running demos and tests in browser
 
 1. Fork the `vaadin-button` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-button` directory, run `npm install` to install dependencies.
+1. When in the `vaadin-button` directory, run `npm install` and then `bower install` to install dependencies.
 
+1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
-## Running demos and tests in browser
+1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
-
-1. When in the `vaadin-button` directory, run `polymer serve --open`, browser will automatically open the component API documentation.
-
-1. You can also open demo or in-browser tests by adding **demo/** or **test/** to the URL, for example:
-
-  - http://127.0.0.1:8081/components/vaadin-button/demo/
-  - http://127.0.0.1:8081/components/vaadin-button/test/
+  - http://127.0.0.1:8080/components/vaadin-button/demo
+  - http://127.0.0.1:8080/components/vaadin-button/test
 
 
 ## Running tests from the command line
