@@ -44,20 +44,15 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/docs/img/vaadin-context-menu-on-content.png" width="355" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/-/element/vaadin-context-menu)
 
 
-## Contributing
+## Running demos and tests in browser
 
 1. Fork the `vaadin-context-menu` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-context-menu` directory, run `npm install` to install dependencies.
+1. When in the `vaadin-context-menu` directory, run `npm install` and then `bower install` to install dependencies.
 
-
-## Running demos and tests in browser
-
-1. Install [polyserve](https://www.npmjs.com/package/polyserve): `npm install -g polyserve`
-
-1. When in the `vaadin-context-menu` directory, run `polyserve --open`, browser will automatically open the component API documentation.
+1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
@@ -67,9 +62,7 @@
 
 ## Running tests from the command line
 
-1. Install [web-component-tester](https://www.npmjs.com/package/web-component-tester): `npm install -g web-component-tester`
-
-1. When in the `vaadin-context-menu` directory, run `wct` or `npm test`
+1. When in the `vaadin-context-menu` directory, run `polymer test`
 
 
 ## Following the coding style
@@ -80,7 +73,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## Creating a pull request
 
   - Make sure your code is compliant with our code linters: `gulp lint`
-  - Check that tests are passing: `npm test`
+  - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
   - Wait for response from one of Vaadin Elements team members
 
