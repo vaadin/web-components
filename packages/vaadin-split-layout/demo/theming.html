@@ -10,6 +10,11 @@
   <link rel="import" href="../../iron-icons/iron-icons.html">
   <link rel="import" href="../../paper-button/paper-button.html">
 
+  <style>
+    [hidden] {
+      display: none;
+    }
+  </style>
 </head>
 
 <body unresolved>
@@ -42,17 +47,28 @@
               :host([vertical]) [part~="handle"]::after {
                 content: "\22EF";
               }
+
+              :host([hide-splitter]) [part~="splitter"] {
+                display: none;
+              }
             </style>
           </template>
         </dom-module>
 
-        <vaadin-split-layout>
-          <div>First</div>
-          <vaadin-split-layout vertical>
-            <div>Second</div>
-            <div>Third</div>
-          </vaadin-split-layout>
-        </vaadin-split-layout>
+        <dom-bind>
+          <template is="dom-bind">
+            <label><input aria-label="Select Row" type="checkbox" checked="{{_hideLeft::change}}">Hide Left Section</label>
+
+            <vaadin-split-layout hide-splitter$="[[_hideLeft]]">
+              <div hidden$="[[_hideLeft]]">Left</div>
+              <vaadin-split-layout vertical>
+                <div>Top</div>
+                <div>Bottom</div>
+              </vaadin-split-layout>
+            </vaadin-split-layout>
+          </template>
+      </dom-bind>
+
       </template>
     </demo-snippet>
 
