@@ -49,20 +49,13 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/elements/-/element/vaadin-split-layout)
 
 
-## Contributing
+## Running demos and tests in browser
 
 1. Fork the `vaadin-split-layout` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-split-layout` directory, run `npm install` to install dependencies.
-
-
-## Running demos and tests in browser
-
-1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
-
-1. When in the `vaadin-split-layout` directory, run `polymer install --variants` to install Bower dependencies
+1. When in the `vaadin-split-layout` directory, run `npm install` and then `polymer install --variants` to install dependencies.
 
 1. Run `polymer serve`, after that you will be able to access:
 
