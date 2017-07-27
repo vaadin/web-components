@@ -79,6 +79,34 @@
       </template>
     </demo-snippet>
 
+    <h3>Using as a Form Field</h3>
+    <demo-snippet>
+      <template>
+        <iron-form>
+          <form method="post">
+            <vaadin-date-picker name="date" required error-message="This field is required"></vaadin-date-picker>
+            <vaadin-button>Submit</vaadin-button>
+          </form>
+        </iron-form>
+
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            var form = document.querySelector('iron-form');
+
+            form.addEventListener('iron-form-submit', function() {
+              alert('Form submitted with date: ' + form.serializeForm().date);
+              return false;
+            });
+
+            var button = document.querySelector('vaadin-button');
+            button.addEventListener('click', function() {
+              form.submit();
+            });
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
     <h3>Date picker with week numbers</h3>
     <demo-snippet>
       <template>
