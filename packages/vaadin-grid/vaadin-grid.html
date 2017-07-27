@@ -99,41 +99,34 @@
       return this.$.items;
     }
 
+    _createCell() {
+      const contentId = this._contentIndex = this._contentIndex + 1 || 0;
+      const slotName = 'vaadin-grid-cell-content-' + contentId;
+
+      const cellContent = document.createElement('vaadin-grid-cell-content');
+      cellContent.setAttribute('slot' , slotName);
+
+      const cell = document.createElement('td');
+      cell.classList.add('vaadin-grid-cell');
+
+      const slot = document.createElement('slot');
+      slot.setAttribute('name', slotName);
+      cell.appendChild(slot);
+
+      return {cellContent, cell};
+    }
+
     _updateRow(row, columns, templateName, isColumnRow) {
       templateName = templateName || 'template';
-      // Create the row cells programmatically to avoid a <template> tag
+
       const cellsFragment = document.createDocumentFragment();
       const contentsFragment = document.createDocumentFragment();
 
-      function allocateCellContent() {
-        // TODO: USE CACHE FOR THESE (RE-USE FREE ID (ALREADY HAS A CONTENT IN DOM, JUST USE THE ID ON SLOT))
-        // {
-          const contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
-          const slotName = 'vaadin-grid-cell-content-' + contentId;
-
-
-          const cellContent = document.createElement('vaadin-grid-cell-content');
-          cellContent.setAttribute('slot' , slotName);
-          contentsFragment.appendChild(cellContent);
-          return {cellContent, slotName};
-        // }
-      }
-
-      function createCellWithSlot(slotName) {
-        const cell = document.createElement('td');
-        cell.classList.add('vaadin-grid-cell');
-
-        const slot = document.createElement('slot');
-        slot.setAttribute('name', slotName);
-        cell.appendChild(slot);
-
-        return cell;
-      }
-
       row.innerHTML = '';
       columns.forEach((column, index) => {
-        let {cellContent, slotName} = allocateCellContent();
-        const cell = createCellWithSlot(slotName);
+        const {cellContent, cell} = this._createCell();
+        contentsFragment.appendChild(cellContent);
+
         cell._content = cellContent;
         cell._column = column;
         row.appendChild(cell);
@@ -144,11 +137,11 @@
 
           if (index === columns.length - 1 && this._rowDetailsTemplate) {
             // Add details cell as last cell to body rows
-            let {cellContent, slotName} = allocateCellContent();
-            const detailsCell = createCellWithSlot(slotName);
-            detailsCell._content = cellContent;
-            this._configureDetailsCell(detailsCell);
-            row.appendChild(detailsCell);
+            const {cellContent, cell} = this._createCell();
+            contentsFragment.appendChild(cellContent);
+            cell._content = cellContent;
+            this._configureDetailsCell(cell);
+            row.appendChild(cell);
           }
 
           if (column.notifyPath) {
