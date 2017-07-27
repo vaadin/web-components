@@ -41,6 +41,7 @@
     "paper-input": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
+    "vaadin-button": "^1.0.0",
     "web-component-tester": "^6.0.0"
   }
 }

@@ -73,9 +73,9 @@
     <demo-snippet>
       <template>
         <iron-form>
-          <form method="post" demo>
-            <vaadin-combo-box name="name" required label="Element"></vaadin-combo-box>
-            <button>Submit</button>
+          <form method="post">
+            <vaadin-combo-box name="name" required error-message="This field is required"></vaadin-combo-box>
+            <vaadin-button>Submit</vaadin-button>
           </form>
         </iron-form>
 
@@ -88,6 +88,11 @@
             form.addEventListener('iron-form-submit', function() {
               alert('Form submitted with name: ' + form.serializeForm().name);
               return false;
+            });
+
+            var button = document.querySelector('vaadin-button');
+            button.addEventListener('click', function() {
+              form.submit();
             });
           });
         </script>
