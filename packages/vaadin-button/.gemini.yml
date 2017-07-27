@@ -12,7 +12,7 @@ browsers:
   chrome:
     desiredCapabilities:
       browserName: "chrome"
-      version: "55.0"
+      version: "59.0"
       platform: "Windows 10"
 
   firefox:
@@ -24,7 +24,7 @@ browsers:
   edge:
     desiredCapabilities:
       browserName: "microsoftedge"
-      version: "14"
+      version: "15"
       platform: "Windows 10"
 
   # The following setups don't currently work due to Selenium SafariDriver issue
