@@ -88,11 +88,17 @@
       }
     }
 
-    _createScrollerRow() {
-      const row = document.createElement('tr');
-      row.classList.add('vaadin-grid-row');
-      this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
-      return row;
+    _createScrollerRows(count) {
+      const rows = [];
+      for (var i = 0; i < count; i++) {
+        const row = document.createElement('tr');
+        row.classList.add('vaadin-grid-row');
+        this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'template', false, true);
+        rows.push(row);
+      }
+
+      this._columnTree[this._columnTree.length - 1].forEach(c => c.notifyPath('_cells.*', c._cells));
+      return rows;
     }
 
     _getRowTarget() {
@@ -116,7 +122,7 @@
       return {cellContent, cell};
     }
 
-    _updateRow(row, columns, templateName, isColumnRow) {
+    _updateRow(row, columns, templateName, isColumnRow, noNotify) {
       templateName = templateName || 'template';
 
       const cellsFragment = document.createDocumentFragment();
@@ -144,8 +150,8 @@
             row.appendChild(cell);
           }
 
-          if (column.notifyPath) {
-            column.notifyPath('_cells.*', column._cells); // TODO: This is really heavy, batch/debounce it
+          if (column.notifyPath && !noNotify) {
+            column.notifyPath('_cells.*', column._cells);
           }
         } else if (templateName === 'headerTemplate') {
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {

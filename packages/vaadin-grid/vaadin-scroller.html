@@ -39,7 +39,7 @@
     /**
     * @protected
     */
-    _createScrollerRow() {}
+    _createScrollerRows() {}
 
     _sizeChanged(size) {
       this.items = this.items || {length: size};
@@ -51,13 +51,12 @@
 
     _createPool(size) {
       var i, inst;
-      var physicalItems = new Array(size);
       const fragment = document.createDocumentFragment();
-      for (i = 0; i < size; i++) {
-        inst = this._createScrollerRow();
-        physicalItems[i] = inst;
+      const physicalItems = this._createScrollerRows(size);
+
+      physicalItems.forEach(inst => {
         fragment.appendChild(inst);
-      }
+      });
       this._getRowTarget().appendChild(fragment);
 
       // Weird hack needed to get Safari to actually distribute slots
