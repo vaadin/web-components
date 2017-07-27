@@ -55,28 +55,20 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/docs/img/vaadin-combo-box-item-template-material.png" width="311" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/-/element/vaadin-combo-box)
 
 
-## Contributing
+## Running demos and tests in browser
 
 1. Fork the `vaadin-combo-box` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-combo-box` directory, run `npm install` to install dependencies.
+1. When in the `vaadin-combo-box` directory, run `npm install` and then `bower install` to install dependencies.
 
+1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
-## Running demos and tests in browser
+1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
-
-1. When in the `vaadin-combo-box` directory, run `polymer install --variants` to install Bower dependencies
-
-1. Run `polymer serve -o`, that will open 3 tabs in your default browser: one pointing the Polymer1 API index of the component,
-the second one pointing to the Polymer2 API, and the third one to the main page indicating the variants of the project.
-Hence, you can visit demos and tests by changing the URL path in the first two tabs.
-
-    - API documentation: http://localhost:port_number/components/vaadin-combo-box/index.html
-    - Examples: http://localhost:port_number/components/vaadin-combo-box/demo/index.html
-    - Tests: http://localhost:port_number/components/vaadin-combo-box/test/index.html
+  - http://127.0.0.1:8080/components/vaadin-combo-box/demo
+  - http://127.0.0.1:8080/components/vaadin-combo-box/test
 
 
 ## Running tests from the command line
@@ -92,7 +84,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## Creating a pull request
 
   - Make sure your code is compliant with our code linters: `gulp lint`
-  - Check that tests are passing: `npm test`
+  - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
   - Wait for response from one of Vaadin Elements team members
 
