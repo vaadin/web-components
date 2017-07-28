@@ -3,7 +3,7 @@
 <script>
   window.vaadin = window.vaadin || {};
   vaadin.elements = vaadin.elements || {};
-  vaadin.elements.grid = vaadin.elements.grid || {}; 
+  vaadin.elements.grid = vaadin.elements.grid || {};
   vaadin.elements.grid.Templatizer = Polymer({
     is: 'vaadin-grid-templatizer',
 
@@ -47,14 +47,7 @@
 
     createInstance: function() {
       this._ensureTemplatized();
-      // It makes sense to list the known default values here. It allows
-      // skip notify effects for defaults.
-      var instance = this.stamp({
-        expanded: false,
-        index: undefined,
-        item: undefined,
-        selected: false
-      });
+      var instance = this.stamp({});
       this.addInstance(instance);
 
       return instance;
@@ -62,7 +55,8 @@
 
     addInstance: function(instance) {
       if (this._templateInstances.indexOf(instance) === -1) {
-        this.push('_templateInstances', instance);
+        this._templateInstances.push(instance);
+        requestAnimationFrame(() => this.notifyPath('_templateInstances.*', this._templateInstances));
       }
     },
 
