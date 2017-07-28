@@ -48,6 +48,13 @@
       // TODO: Handle dynamic size decrease
     }
 
+    _increasePoolIfNeeded(count) {
+      if (this._physicalCount === 0) {
+        super._increasePoolIfNeeded(25);
+      } else {
+        super._increasePoolIfNeeded(count);
+      }
+    }
 
     _createPool(size) {
       var i, inst;
