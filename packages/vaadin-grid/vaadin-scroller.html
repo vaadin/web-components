@@ -43,7 +43,9 @@
 
     _sizeChanged(size) {
       this.items = this.items || {length: size};
+
       super._itemsChanged({path:"items"});
+      this._virtualCount = size || 0;
 
       // TODO: Handle dynamic size decrease
     }
