@@ -7,7 +7,7 @@
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-text-field/1.0.0-alpha5/demo/)
 
-[&lt;vaadin-text-field&gt;](https://vaadin.com/elements/-/element/vaadin-text-field) is a [Polymer 2](http://polymer-project.org) element providing an input control in forms., part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-text-field&gt;](https://vaadin.com/elements/-/element/vaadin-text-field) is a themable [Polymer 2](http://polymer-project.org) element providing input controls in forms, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
