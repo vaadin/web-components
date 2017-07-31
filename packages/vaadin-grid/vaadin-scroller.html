@@ -44,10 +44,11 @@
     _sizeChanged(size) {
       this.items = this.items || {length: size};
 
+      // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
+      this.scrollOffset = this._scrollTop;
       super._itemsChanged({path:"items"});
-      this._virtualCount = size || 0;
 
-      // TODO: Handle dynamic size decrease
+      this._virtualCount = size || 0;
     }
 
     _increasePoolIfNeeded(count) {

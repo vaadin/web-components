@@ -123,12 +123,11 @@
       });
 
       it('reorder rows', function() {
-        grid.size = 100000;
+        grid.size = 1000;
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
-          grid.flushDebouncer('_debounceTemplate');
-          grid.flushDebouncer('vaadin-grid-scrolling');
+          grid._debounceScrolling.flush();
           // Expect the physical rows to be in order after scrolling
           var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
 
@@ -141,14 +140,13 @@
       });
 
       it('reorder should not affect light dom', function() {
-        grid.size = 100000;
+        grid.size = 1000;
         var wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
 
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
-          grid.flushDebouncer('_debounceTemplate');
-          grid.flushDebouncer('vaadin-grid-scrolling');
+          grid._debounceScrolling.flush();
 
           var newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
           // Expect the light dom order unchanged
@@ -163,7 +161,7 @@
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
 
-        grid.flushDebouncer('check-imports');
+        grid._debouncerCheckImports.flush();
         console.warn = _warn;
 
         expect(spy.callCount).to.equal(1);
@@ -180,7 +178,7 @@
           grid._observer.flush();
         }
 
-        grid.flushDebouncer('check-imports');
+        grid._debouncerCheckImports.flush();
         console.warn = _warn;
 
         expect(spy.called).to.be.true;
@@ -197,7 +195,7 @@
             grid._observer.flush();
           }
 
-          grid.flushDebouncer('check-imports');
+          grid._debouncerCheckImports.flush();
           console.warn = _warn;
 
           expect(spy.called).to.be.false;
