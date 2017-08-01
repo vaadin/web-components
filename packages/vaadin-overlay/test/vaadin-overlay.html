@@ -62,6 +62,15 @@
         expect(overlay.opened).to.be.false;
       });
 
+      it('should not close if outside-click event was canceled', () => {
+        overlay.click();
+        overlay.addEventListener('outside-click', e => {
+          e.preventDefault();
+        });
+
+        expect(overlay.opened).to.be.true;
+      });
+
       it('should close on the backdrop click', () => {
         overlay.withBackdrop = true;
 
