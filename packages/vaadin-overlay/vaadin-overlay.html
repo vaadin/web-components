@@ -102,7 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           withBackdrop: {
             type: Boolean,
-            value: true,
+            value: false,
             reflectToAttribute: true
           },
 
@@ -141,8 +141,17 @@ This program is available under Apache License Version 2.0, available at https:/
        * propagating the event to the listener in the button. Otherwise, if the clicked button would call
        * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
        */
+      /**
+        * Fired before the `vaadin-overlay` will be closed.
+        * If canceled the closing of the overlay is canceled as well.
+        *
+        * @event outside-close
+        */
       _outsideClickListener(event) {
-        if (this.opened && event.composedPath().indexOf(this) < 0) {
+        var evt = new CustomEvent('outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
+        this.dispatchEvent(evt);
+
+        if (this.opened && event.composedPath().indexOf(this) < 0 && !evt.defaultPrevented) {
           this.close(event);
         }
       }
