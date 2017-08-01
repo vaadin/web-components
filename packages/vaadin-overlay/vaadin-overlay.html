@@ -120,9 +120,19 @@ This program is available under Apache License Version 2.0, available at https:/
         this._boundEscapeListener = this._escapeListener.bind(this);
 
         this._observer = new Polymer.FlattenedNodesObserver(this, info => {
-          this.template = info.addedNodes.filter(n => n.nodeType === 1 && n.nodeName === 'TEMPLATE')[
-            0] || this.template;
+          this._setTemplateFromNodes(info.addedNodes);
         });
+      }
+
+      ready() {
+        super.ready();
+
+        this._observer.flush();
+      }
+
+      _setTemplateFromNodes(nodes) {
+        this.template = nodes.filter(node => node.localName && node.localName === 'template')[
+          0] || this.template;
       }
 
       /**
@@ -142,11 +152,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
        */
       /**
-        * Fired before the `vaadin-overlay` will be closed.
-        * If canceled the closing of the overlay is canceled as well.
-        *
-        * @event outside-close
-        */
+       * @event outside-close
+       * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
+       */
       _outsideClickListener(event) {
         var evt = new CustomEvent('outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
         this.dispatchEvent(evt);
