@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-overlay.html",
         "start": {
-          "line": 227,
+          "line": 226,
           "column": 4
         },
         "end": {
-          "line": 227,
+          "line": 226,
           "column": 40
         }
       },
@@ -211,7 +211,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 135,
+                  "line": 134,
                   "column": 7
                 }
               },
@@ -228,11 +228,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 139,
                   "column": 6
                 },
                 "end": {
-                  "line": 146,
+                  "line": 145,
                   "column": 7
                 }
               },
@@ -249,11 +249,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 157,
+                  "line": 156,
                   "column": 6
                 },
                 "end": {
-                  "line": 164,
+                  "line": 163,
                   "column": 7
                 }
               },
@@ -270,11 +270,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 165,
                   "column": 6
                 },
                 "end": {
-                  "line": 170,
+                  "line": 169,
                   "column": 7
                 }
               },
@@ -291,11 +291,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 171,
                   "column": 6
                 },
                 "end": {
-                  "line": 196,
+                  "line": 195,
                   "column": 7
                 }
               },
@@ -312,11 +312,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 197,
                   "column": 6
                 },
                 "end": {
-                  "line": 209,
+                  "line": 208,
                   "column": 7
                 }
               },
@@ -333,11 +333,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 211,
+                  "line": 210,
                   "column": 6
                 },
                 "end": {
-                  "line": 213,
+                  "line": 212,
                   "column": 7
                 }
               },
@@ -354,11 +354,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 215,
+                  "line": 214,
                   "column": 6
                 },
                 "end": {
-                  "line": 219,
+                  "line": 218,
                   "column": 7
                 }
               },
@@ -378,11 +378,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 38,
+                  "line": 37,
                   "column": 4
                 },
                 "end": {
-                  "line": 42,
+                  "line": 41,
                   "column": 5
                 }
               },
@@ -408,7 +408,7 @@
               "column": 4
             },
             "end": {
-              "line": 220,
+              "line": 219,
               "column": 5
             }
           },
