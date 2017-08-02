@@ -152,8 +152,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
        */
       /**
-       * @event outside-close
-       * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
+       * @event outside-click
+       * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
         var evt = new CustomEvent('outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});

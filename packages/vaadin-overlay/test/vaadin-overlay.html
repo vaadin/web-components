@@ -63,10 +63,10 @@
       });
 
       it('should not close if outside-click event was canceled', () => {
-        overlay.click();
         overlay.addEventListener('outside-click', e => {
           e.preventDefault();
         });
+        parent.click();
 
         expect(overlay.opened).to.be.true;
       });

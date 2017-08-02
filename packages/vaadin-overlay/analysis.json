@@ -378,11 +378,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 37,
+                  "line": 38,
                   "column": 4
                 },
                 "end": {
-                  "line": 41,
+                  "line": 42,
                   "column": 5
                 }
               },
@@ -484,8 +484,8 @@
           "events": [
             {
               "type": "CustomEvent",
-              "name": "outside-close",
-              "description": "outside-close\nfired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.",
+              "name": "outside-click",
+              "description": "outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
               "metadata": {}
             },
             {
