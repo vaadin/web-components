@@ -37,14 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
             touch: {
               type: Boolean,
               notify: true,
-              value: () => {
-                try {
-                  document.createEvent('TouchEvent');
-                  return true;
-                } catch (err) {
-                  return false;
-                }
-              }
+              value: () => this._touch()
             },
 
             /*
@@ -57,10 +50,18 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        static _touch() {
+          try {
+            document.createEvent('TouchEvent');
+            return true;
+          } catch (err) {
+            return false;
+          }
+        }
+
         _phone(wide, touch) {
           return !wide && touch;
         }
-
       }
 
       customElements.define(DeviceDetector.is, DeviceDetector);
