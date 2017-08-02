@@ -24,16 +24,11 @@
     <script>
 
       describe('overlay', () => {
-
         let menu;
 
-        beforeEach(() => {
-          menu = fixture('default');
-        });
+        beforeEach(() => menu = fixture('default'));
 
-        afterEach(() => {
-          menu.$.overlay.opened = false;
-        });
+        afterEach(() => menu.$.overlay.opened = false);
 
         function contextmenu(x, y, shiftKey) {
           shiftKey = shiftKey || false;

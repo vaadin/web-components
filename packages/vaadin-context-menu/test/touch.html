@@ -151,9 +151,7 @@
             listenOnce(target, 'tap', () => {
               throw new Error('tap fired!');
             });
-            setTimeout(() => {
-              done();
-            }, 1);
+            setTimeout(done, 1);
             makeSoloTouchEvent('touchend', xy, target);
           });
         });
