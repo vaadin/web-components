@@ -484,14 +484,14 @@
           "events": [
             {
               "type": "CustomEvent",
-              "name": "escape-close",
-              "description": "escape-close\nfired before the `vaadin-overlay` will be closed on ESC button pressed. If canceled the closing of the overlay is canceled as well.",
+              "name": "vaadin-overlay-escape-press",
+              "description": "vaadin-overlay-escape-press\nfired before the `vaadin-overlay` will be closed on ESC button pressed. If canceled the closing of the overlay is canceled as well.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
-              "name": "outside-click",
-              "description": "outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
+              "name": "vaadin-overlay-outside-click",
+              "description": "vaadin-overlay-outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
               "metadata": {}
             },
             {
