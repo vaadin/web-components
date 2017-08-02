@@ -30,10 +30,23 @@
       </template>
     </demo-snippet>
 
+    <h3>Show and Hide Overlay with backdrop</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay with-backdrop id="overlay2">
+          Overlay Content with backdrop
+        </vaadin-overlay>
+
+        <vaadin-button onclick="document.querySelector('#overlay2').opened = true">
+          Show overlay with backdrop
+        </vaadin-button>
+      </template>
+    </demo-snippet>
+
     <h3>Change Overlay's Content</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay id="overlay2">
+        <vaadin-overlay with-backdrop id="overlay3">
         </vaadin-overlay>
 
         <vaadin-button id="button">
@@ -42,7 +55,7 @@
 
         <script>
           document.querySelector('#button').addEventListener('click', event => {
-            var overlay = document.querySelector('#overlay2');
+            var overlay = document.querySelector('#overlay3');
             overlay.innerText = '';
             overlay.opened = true;
 
