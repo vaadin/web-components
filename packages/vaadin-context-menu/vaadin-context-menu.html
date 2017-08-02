@@ -13,19 +13,14 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-overlay">
   <template>
     <style include="vaadin-overlay-default-theme">
-      :host(.vaadin-context-menu-overlay:not([phone])) {
+      :host(:not([phone])) {
         box-shadow:
           0 6px 10px 0 rgba(0, 0, 0, 0.14),
           0 1px 18px 0 rgba(0, 0, 0, 0.12),
           0 3px 5px -1px rgba(0, 0, 0, 0.4);
       }
 
-      /* TODO: replace with [part="backdrop"] https://github.com/vaadin/vaadin-overlay/issues/1 */
-      :host(.vaadin-context-menu-overlay:not([phone]))::before {
-        background: transparent;
-      }
-
-      :host(.vaadin-context-menu-overlay[phone]) {
+      :host([phone]) {
         width: 100vw;
         height: 100vh;
         padding: 24px;
@@ -37,10 +32,14 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: flex-end;
       }
 
-      :host(.vaadin-context-menu-overlay[phone]) [part="content"] {
+      :host([phone]) [part="content"] {
         /* Ideally should be 100vh but iOS phone addr-bar covers view port */
         max-height: 80vh;
         width: 100%;
+      }
+
+      :host(:not([phone])) [part="backdrop"] {
+        background: transparent;
       }
     </style>
   </template>
@@ -59,7 +58,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-device-detector phone="{{_phone}}"></vaadin-device-detector>
 
     <vaadin-overlay id="overlay"
-        class="vaadin-context-menu-overlay"
+        theme="vaadin-context-menu-overlay"
         on-opened-changed="_onOverlayOpened"
         with-backdrop
         phone$="[[_phone]]">
@@ -320,7 +319,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _closeOnChanged(closeOn, oldCloseOn) {
-           // Listen on this.$.overlay.root to workaround issue on
+          // Listen on this.$.overlay.root to workaround issue on
           //  ShadyDOM polyfill: https://github.com/webcomponents/shadydom/issues/159
           if (oldCloseOn) {
             this._unlisten(this.$.overlay, oldCloseOn, this._boundClose);
@@ -404,15 +403,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
               this.$.overlay.opened = true;
 
-              // FIXME: Move to the overlay styles
-              this.$.overlay.style.overflow = 'auto';
-
               this.$.overlay.style.left = this._getEventCoordinate(e, 'x') + 'px';
               const top = this._getEventCoordinate(e, 'y');
               this.$.overlay.style.top = top + 'px';
-
-              // FIXME: Viewport fit, should be done in the overlay
-              this.$.overlay.style.maxHeight = (document.documentElement.clientHeight - top - 8) + 'px';
 
               this._setOpened(true);
             }
