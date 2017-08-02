@@ -163,8 +163,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * @event escape-close
+       * fired before the `vaadin-overlay` will be closed on ESC button pressed. If canceled the closing of the overlay is canceled as well.
+       */
       _escapeListener(event) {
-        if (this.opened && event.keyCode === 27) {
+        var evt = new CustomEvent('escape-close', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
+        this.dispatchEvent(evt);
+
+        if (this.opened && event.keyCode === 27 && !evt.defaultPrevented) {
           this.close(event);
         }
       }
