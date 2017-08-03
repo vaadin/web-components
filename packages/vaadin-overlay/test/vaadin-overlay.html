@@ -23,11 +23,12 @@
 
   <script>
     describe('overlay', function() {
-      var overlay, parent, backdrop;
+      var overlay, parent, content, backdrop;
 
       beforeEach(function() {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
+        content = overlay.$.content;
         backdrop = overlay.$.backdrop;
         overlay._observer.flush();
         overlay.opened = true;
@@ -75,17 +76,32 @@
         expect(overlay.opened).to.be.true;
       });
 
+      it('should not close on inside click', () => {
+        content.click();
+
+        expect(overlay.opened).to.be.true;
+      });
+
       it('should close on outside click', () => {
         parent.click();
 
         expect(overlay.opened).to.be.false;
       });
 
-      it('should not close if vaadin-overlay-outside-click event was canceled', () => {
+      it('should not close on outside click if vaadin-overlay-outside-click event was canceled', () => {
         overlay.addEventListener('vaadin-overlay-outside-click', e => {
           e.preventDefault();
         });
         parent.click();
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close on backdrop click if vaadin-overlay-outside-click event was canceled', () => {
+        overlay.addEventListener('vaadin-overlay-outside-click', e => {
+          e.preventDefault();
+        });
+        backdrop.click();
 
         expect(overlay.opened).to.be.true;
       });

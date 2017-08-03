@@ -55,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="backdrop" part="backdrop" on-tap="close" hidden$="{{!withBackdrop}}">
+    <div id="backdrop" part="backdrop" on-tap="_outsideClickListener" hidden$="{{!withBackdrop}}">
 
     </div>
     <div part="content" id="content">
@@ -149,8 +149,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * We need to listen on 'click' / 'tap' event and capture it and close the overlay before
        * propagating the event to the listener in the button. Otherwise, if the clicked button would call
        * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
-       */
-      /**
+       *
        * @event vaadin-overlay-outside-click
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
@@ -158,7 +157,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const evt = new CustomEvent('vaadin-overlay-outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
         this.dispatchEvent(evt);
 
-        if (this.opened && event.composedPath().indexOf(this) < 0 && !evt.defaultPrevented) {
+        if (this.opened && event.composedPath().indexOf(this.$.content) < 0 && !evt.defaultPrevented) {
           this.close(event);
         }
       }
