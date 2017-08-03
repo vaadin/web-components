@@ -91,6 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_footerTemplateChanged(footerTemplate)',
         '_headerTemplateChanged(headerTemplate)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
+        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
@@ -350,7 +351,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
           '_templateChanged(template)',
           '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
           '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
