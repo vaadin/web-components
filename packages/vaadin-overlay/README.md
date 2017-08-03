@@ -1,6 +1,9 @@
 # &lt;vaadin-overlay&gt;
 
-[&lt;vaadin-overlay&gt;](https://vaadin.com/elements/-/element/vaadin-overlay) is a [Polymer 2](http://polymer-project.org) element meant for internal use in vaadin elements. Its API might be changed without any notice.
+&lt;vaadin-overlay&gt; is a [Polymer 2](http://polymer-project.org) element meant for internal use in Vaadin Core Elements. Its a base for:
+
+- [vaadin-combo-box](https://github.com/vaadin/vaadin-combo-box)
+
 
 ## License
 
