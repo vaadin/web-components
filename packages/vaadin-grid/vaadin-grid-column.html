@@ -239,7 +239,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _flexGrowChanged(flexGrow, headerCell, footerCell, cells) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged({detail: {path: 'flexGrow'}});
+        this.parentElement._columnPropChanged('flexGrow');
       }
 
       this._allCells.forEach(cell => cell.style.flexGrow = flexGrow);
@@ -251,7 +251,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _widthChanged(width, headerCell, footerCell, cells) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged({detail: {path: 'width'}}); // TODO: Decent APIs
+        this.parentElement._columnPropChanged('width');
       }
 
       this._allCells.forEach(cell => cell.style.width = width);
@@ -360,7 +360,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _frozenChanged(frozen, headerCell, footerCell, cells) {
         if (this.parentElement && this.parentElement._columnPropChanged) {
-          this.parentElement._columnPropChanged({detail: {path: 'frozen', value: frozen}}); // TODO: Decent APIs
+          this.parentElement._columnPropChanged('frozen', frozen);
         }
 
         this._allCells.forEach(cell => this._toggleAttribute('frozen', frozen, cell));
@@ -378,8 +378,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _hiddenChanged(hidden, headerCell, footerCell, cells) {
-        if (this.parentElement._columnPropChanged) {
-          this.parentElement._columnPropChanged({detail: {path: 'hidden', value: hidden}}); // TODO: Decent APIs
+        if (this.parentElement && this.parentElement._columnPropChanged) {
+          this.parentElement._columnPropChanged('hidden', hidden);
         }
 
         this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));

@@ -104,8 +104,9 @@ The `class` attribute is used to differentiate header and footer templates.
         // },
 
         connectedCallback() {
-          this._updateFlexAndWidth(this._visibleChildColumns);
+          super.connectedCallback();
           this._addNodeObserver();
+          this._updateFlexAndWidth();
         }
 
         detached() {
@@ -114,25 +115,25 @@ The `class` attribute is used to differentiate header and footer templates.
           }
         }
 
-        _columnPropChanged(e) {
-          if (e.detail.path === 'hidden') {
+        _columnPropChanged(path, value) {
+          if (path === 'hidden') {
             this._preventHiddenCascade = true;
             this._updateVisibleChildColumns(this._childColumns);
             this._preventHiddenCascade = false;
           }
 
-          if (/flexGrow|width|hidden|_childColumns/.test(e.detail.path)) {
-            this._updateFlexAndWidth(this._visibleChildColumns);
+          if (/flexGrow|width|hidden|_childColumns/.test(path)) {
+            this._updateFlexAndWidth();
           }
 
-          if (e.detail.path === 'frozen') {
+          if (path === 'frozen') {
             // Don’t unfreeze the frozen group because of a non-frozen child
-            this.frozen = this.frozen || e.detail.value;
+            this.frozen = this.frozen || value;
           }
 
-          if (e.detail.path === 'lastFrozen') {
+          if (path === 'lastFrozen') {
             // Don’t unfreeze the frozen group because of a non-frozen child
-            this._lastFrozen = this._lastFrozen || e.detail.value;
+            this._lastFrozen = this._lastFrozen || value;
           }
         }
 
@@ -209,20 +210,20 @@ The `class` attribute is used to differentiate header and footer templates.
           // this.fire('property-changed', {path: '_childColumns', value: childColumns});
         }
 
-        _updateFlexAndWidth(visibleChildColumns) {
-          if (!visibleChildColumns) {
+        _updateFlexAndWidth() {
+          if (!this._visibleChildColumns) {
             return;
           }
 
-          if (visibleChildColumns.length) {
-            this._setWidth('calc(' + Array.prototype.reduce.call(visibleChildColumns, (prev, curr) => {
+          if (this._visibleChildColumns.length) {
+            this._setWidth('calc(' + Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => {
               return prev += ' + ' + (curr.width || '0px').replace('calc', '');
             }, '').substring(3) + ')');
           } else {
             this._setWidth('0px');
           }
 
-          this._setFlexGrow(Array.prototype.reduce.call(visibleChildColumns, (prev, curr) => {
+          this._setFlexGrow(Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => {
             return prev + curr.flexGrow;
           }, 0));
         }
@@ -258,7 +259,7 @@ The `class` attribute is used to differentiate header and footer templates.
             this._ignoreVisibleChildColumns = false;
           }
 
-          // this.fire('property-changed', {path: 'hidden', value: hidden});
+          this._columnPropChanged('hidden');
         }
 
         _visibleChildColumnsChanged(visibleChildColumns) {
@@ -296,12 +297,17 @@ The `class` attribute is used to differentiate header and footer templates.
             const isColumnElement = node => {
               return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
             };
+
             if (info.addedNodes.filter(isColumnElement).length > 0 ||
               info.removedNodes.filter(isColumnElement).length > 0) {
+
+              this._preventHiddenCascade = true;
               this._rootColumns = this._getChildColumns(this);
               this._childColumns = this._rootColumns;
+              this._preventHiddenCascade = false;
             }
           });
+          this._observer.flush();
         }
       }
 

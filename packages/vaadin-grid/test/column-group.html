@@ -73,7 +73,7 @@
         group = fixture('group');
         columns = group.querySelectorAll('vaadin-grid-column');
 
-        group.async(done, 100);
+        done();
       });
 
       it('should sum child column flex-grow', function() {
@@ -190,54 +190,27 @@
       });
 
       it('should unhide the group', function() {
-        Polymer.dom(group).removeChild(columns[0]);
-        Polymer.dom(group).removeChild(columns[1]);
-        Polymer.dom.flush();
+        group.removeChild(columns[0]);
+        group.removeChild(columns[1]);
+        group._observer.flush();
 
-        if (Polymer.Element) {
-          group._observer.flush();
-        }
 
-        Polymer.dom(group).appendChild(columns[0]);
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          group._observer.flush();
-        }
+        group.appendChild(columns[0]);
+        group._observer.flush();
 
         expect(group.hidden).to.be.false;
       });
 
       it('should not unhide the group', function() {
-        Polymer.dom(group).removeChild(columns[0]);
-        Polymer.dom(group).removeChild(columns[1]);
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          group._observer.flush();
-        }
+        group.removeChild(columns[0]);
+        group.removeChild(columns[1]);
+        group._observer.flush();
 
         columns[0].hidden = true;
-        Polymer.dom(group).appendChild(columns[0]);
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          group._observer.flush();
-        }
+        group.appendChild(columns[0]);
+        group._observer.flush();
 
         expect(group.hidden).to.be.true;
-      });
-
-      it('should notify header cell for hidden', function(done) {
-
-        group.addEventListener('property-changed', function(e) {
-          if (e.detail.path === 'hidden' && e.target === columns[0]) {
-            expect(e.detail.value).to.be.true;
-            done();
-          }
-        });
-
-        columns[0].hidden = true;
       });
 
       it('should calculate column group width after hiding a column', function() {
