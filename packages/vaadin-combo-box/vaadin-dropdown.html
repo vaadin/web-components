@@ -108,7 +108,9 @@ This program is available under Apache License Version 2.0, available at https:/
         super.ready();
 
         // Preventing the default modal behaviour of the overlay on input clicking
-        this.$.overlay.addEventListener('outside-click', e => e.preventDefault());
+        this.$.overlay.addEventListener('vaadin-overlay-outside-click', e => {
+          e.preventDefault();
+        });
       }
 
       disconnectedCallback() {

@@ -23,7 +23,7 @@
     "iron-list": "^2.0.2",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
-    "vaadin-overlay": "^1.0.0",
+    "vaadin-overlay": "^1.1.0",
     "vaadin-text-field": "^1.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
   },
