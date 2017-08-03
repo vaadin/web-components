@@ -200,7 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('vaadin-dropdown-opened', this._onOpened.bind(this));
       this.addEventListener('keydown', this._onKeyDown.bind(this));
 
-      // This listener should listen for "tap" again once composedPath() issues with touch devices
+     // This listener should listen for "tap" again once composedPath() issues with touch devices
       // have been fixed. See https://github.com/Polymer/polymer/issues/4670
       this._addEventListenerToNode(this, 'up', this._onTap.bind(this));
     }
@@ -444,10 +444,6 @@ This program is available under Apache License Version 2.0, available at https:/
       Polymer.Async.microTask.run(() => this.$.overlay.adjustScrollPosition());
       setTimeout(() => this.$.overlay.$.dropdown.notifyResize(), 1);
 
-      // Set body pointer-events to 'none' to disable mouse interactions with
-      // other document nodes (combo-box is "modal")
-      this._previousDocumentPointerEvents = document.body.style.pointerEvents;
-      document.body.style.pointerEvents = 'none';
 
       // _detectAndDispatchChange() should not consider value changes done before opening
       this._lastCommittedValue = this.value;
@@ -488,8 +484,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._clearSelectionRange();
 
       this.filter = '';
-
-      document.body.style.pointerEvents = this._previousDocumentPointerEvents;
     }
 
     /**
