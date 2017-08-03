@@ -151,11 +151,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
        */
       /**
-       * @event outside-click
+       * @event vaadin-overlay-outside-click
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
-        var evt = new CustomEvent('outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
+        const evt = new CustomEvent('vaadin-overlay-outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
         this.dispatchEvent(evt);
 
         if (this.opened && event.composedPath().indexOf(this) < 0 && !evt.defaultPrevented) {
@@ -163,8 +163,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * @event vaadin-overlay-escape-press
+       * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
+       */
       _escapeListener(event) {
-        if (this.opened && event.keyCode === 27) {
+        const evt = new CustomEvent('vaadin-overlay-escape-press', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
+        this.dispatchEvent(evt);
+
+        if (this.opened && event.keyCode === 27 && !evt.defaultPrevented) {
           this.close(event);
         }
       }

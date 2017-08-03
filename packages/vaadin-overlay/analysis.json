@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-overlay.html",
         "start": {
-          "line": 226,
+          "line": 233,
           "column": 4
         },
         "end": {
-          "line": 226,
+          "line": 233,
           "column": 40
         }
       },
@@ -270,11 +270,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 165,
+                  "line": 169,
                   "column": 6
                 },
                 "end": {
-                  "line": 169,
+                  "line": 176,
                   "column": 7
                 }
               },
@@ -291,11 +291,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 171,
+                  "line": 178,
                   "column": 6
                 },
                 "end": {
-                  "line": 195,
+                  "line": 202,
                   "column": 7
                 }
               },
@@ -312,11 +312,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 197,
+                  "line": 204,
                   "column": 6
                 },
                 "end": {
-                  "line": 208,
+                  "line": 215,
                   "column": 7
                 }
               },
@@ -333,11 +333,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 210,
+                  "line": 217,
                   "column": 6
                 },
                 "end": {
-                  "line": 212,
+                  "line": 219,
                   "column": 7
                 }
               },
@@ -354,11 +354,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 214,
+                  "line": 221,
                   "column": 6
                 },
                 "end": {
-                  "line": 218,
+                  "line": 225,
                   "column": 7
                 }
               },
@@ -408,7 +408,7 @@
               "column": 4
             },
             "end": {
-              "line": 219,
+              "line": 226,
               "column": 5
             }
           },
@@ -484,8 +484,14 @@
           "events": [
             {
               "type": "CustomEvent",
-              "name": "outside-click",
-              "description": "outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
+              "name": "vaadin-overlay-escape-press",
+              "description": "vaadin-overlay-escape-press\nfired before the `vaadin-overlay` will be closed on ESC button pressed. If canceled the closing of the overlay is canceled as well.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "vaadin-overlay-outside-click",
+              "description": "vaadin-overlay-outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
               "metadata": {}
             },
             {
