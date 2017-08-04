@@ -66,6 +66,17 @@
         expect(backdrop.hidden).to.be.false;
       });
 
+      it('should fire the vaadin-overlay-escape-press event only when ESC pressed', function(done) {
+        var doneHandler = () => done();
+
+        overlay.addEventListener('vaadin-overlay-escape-press', doneHandler, false);
+
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+        MockInteractions.pressAndReleaseKeyOn(document.body, 13);
+
+        overlay.removeEventListener('vaadin-overlay-escape-press', doneHandler, false);
+      });
+
       it('should not close on esc if vaadin-overlay-escape-press event was canceled', () => {
         overlay.addEventListener('vaadin-overlay-escape-press', e => {
           e.preventDefault();
