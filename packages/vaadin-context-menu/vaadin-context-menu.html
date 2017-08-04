@@ -274,7 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.$.overlay.addEventListener('contextmenu', e => {
             this.close();
-            e.preventDefault();
+            this._preventDefault(e);
           });
         }
 
@@ -321,6 +321,10 @@ This program is available under Apache License Version 2.0, available at https:/
         _closeOnChanged(closeOn, oldCloseOn) {
           // Listen on this.$.overlay.root to workaround issue on
           //  ShadyDOM polyfill: https://github.com/webcomponents/shadydom/issues/159
+
+          // Outside click event from overlay
+          const evtOverlay = 'vaadin-overlay-outside-click';
+
           if (oldCloseOn) {
             this._unlisten(this.$.overlay, oldCloseOn, this._boundClose);
             this._unlisten(this.$.overlay.root, oldCloseOn, this._boundClose);
@@ -328,7 +332,14 @@ This program is available under Apache License Version 2.0, available at https:/
           if (closeOn) {
             this._listen(this.$.overlay, closeOn, this._boundClose);
             this._listen(this.$.overlay.root, closeOn, this._boundClose);
+            this._unlisten(this.$.overlay, evtOverlay, this._preventDefault);
+          } else {
+            this._listen(this.$.overlay, evtOverlay, this._preventDefault);
           }
+        }
+
+        _preventDefault(e) {
+          e.preventDefault();
         }
 
         _openedChanged(opened) {
@@ -353,9 +364,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.overlay.content = this._instance.root;
           }
 
-          // TODO @Sauli: file issue for polymer-effects.html:571
-          // Currently, property notification events don't fire properly
-          // when using bindings.
           this.$.overlay.opened = opened;
         }
 
@@ -398,7 +406,7 @@ This program is available under Apache License Version 2.0, available at https:/
             };
 
             if (this._context.target) {
-              e.preventDefault();
+              this._preventDefault(e);
               e.stopPropagation();
 
               this.$.overlay.opened = true;
