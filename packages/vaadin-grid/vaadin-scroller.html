@@ -41,6 +41,12 @@
     */
     _createScrollerRows() {}
 
+    scrollToScaledIndex(index) {
+      // TODO: Implement
+      super.scrollToIndex(index);
+      this._scrollHandler();
+    }
+
     _sizeChanged(size) {
       this.items = this.items || {length: size};
 

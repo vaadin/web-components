@@ -86,10 +86,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function scrollToEnd(grid, callback) {
-    grid.$.scroller.scrollToScaledIndex(grid.size - 1);
+    grid.scrollToScaledIndex(grid.size - 1);
 
     // Ensure rows are in order
-    grid.$.scroller.flushDebouncer('vaadin-grid-scrolling');
+    grid._debounceScrolling.flush();
+    flushGrid(grid);
     if (callback) {
       callback();
     }
