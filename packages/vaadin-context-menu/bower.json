@@ -25,7 +25,9 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-overlay-behavior": "^2.0.0",
-    "iron-media-query": "^2.0.0"
+    "iron-media-query": "^2.0.0",
+    "vaadin-themable-mixin": "^1.1.0",
+    "vaadin-overlay": "^1.1.0"
   },
   "devDependencies": {
     "elements-demo-resources": "vaadin/elements-demo-resources#^2.0.0",

@@ -15,6 +15,7 @@
     <test-fixture id="default">
       <template>
         <vaadin-context-menu>
+          <template>OVERLAY CONTENT</template>
           <div id="target">FOOOO</div>
         </vaadin-context-menu>
       </template>
@@ -23,12 +24,11 @@
     <script>
 
       describe('overlay', () => {
-
         let menu;
 
-        beforeEach(() => {
-          menu = fixture('default');
-        });
+        beforeEach(() => menu = fixture('default'));
+
+        afterEach(() => menu.$.overlay.opened = false);
 
         function contextmenu(x, y, shiftKey) {
           shiftKey = shiftKey || false;
@@ -68,7 +68,7 @@
           it('should be visible when open', done => {
             expect(window.getComputedStyle(menu.$.overlay).display).to.eql('none');
 
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(window.getComputedStyle(menu.$.overlay).display).to.not.eql('none');
               done();
             });
@@ -77,7 +77,7 @@
           });
 
           it('should open on `contextmenu` event', done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(true);
               done();
             });
@@ -85,10 +85,11 @@
             contextmenu();
           });
 
-          it('should be positioned on click target', done => {
-            listenOnce(menu.listenOn, 'contextmenu', () => {
-              expect(menu.$.overlay.x).to.eql(10);
-              expect(menu.$.overlay.y).to.eql(10);
+          it('should be positioned on click target', function(done) {
+            listenOnce(menu, 'opened-changed', () => {
+              const rect = menu.$.overlay.getBoundingClientRect();
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 10);
               done();
             });
 
@@ -96,9 +97,10 @@
           });
 
           it('should be positioned on detailed mouse event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
-              expect(menu.$.overlay.x).to.eql(10);
-              expect(menu.$.overlay.y).to.eql(20);
+            listenOnce(menu.listenOn, 'opened-changed', () => {
+              const rect = menu.$.overlay.getBoundingClientRect();
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
             });
 
@@ -108,9 +110,10 @@
           });
 
           it('should be positioned by gesture event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
-              expect(menu.$.overlay.x).to.eql(5);
-              expect(menu.$.overlay.y).to.eql(5);
+            listenOnce(menu.listenOn, 'opened-changed', () => {
+              const rect = menu.$.overlay.getBoundingClientRect();
+              expect(rect.left).to.eql(menu._phone ? 0 : 5);
+              expect(rect.top).to.eql(menu._phone ? 0 : 5);
               done();
             });
 
@@ -120,9 +123,10 @@
           });
 
           it('should be positioned by detailed gesture event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
-              expect(menu.$.overlay.x).to.eql(5);
-              expect(menu.$.overlay.y).to.eql(5);
+            listenOnce(menu.listenOn, 'opened-changed', () => {
+              const rect = menu.$.overlay.getBoundingClientRect();
+              expect(rect.left).to.eql(menu._phone ? 0 : 5);
+              expect(rect.top).to.eql(menu._phone ? 0 : 5);
               done();
             });
 
@@ -132,9 +136,10 @@
           });
 
           it('should be positioned by touch event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
-              expect(menu.$.overlay.x).to.eql(10);
-              expect(menu.$.overlay.y).to.eql(20);
+            listenOnce(menu.listenOn, 'opened-changed', () => {
+              const rect = menu.$.overlay.getBoundingClientRect();
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
             });
 
@@ -147,9 +152,10 @@
           });
 
           it('should be positioned by detailed touch event', done => {
-            listenOnce(menu.listenOn, 'iron-overlay-opened', () => {
-              expect(menu.$.overlay.x).to.eql(10);
-              expect(menu.$.overlay.y).to.eql(20);
+            listenOnce(menu.listenOn, 'opened-changed', () => {
+              const rect = menu.$.overlay.getBoundingClientRect();
+              expect(rect.left).to.eql(menu._phone ? 0 : 10);
+              expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
             });
 
@@ -173,27 +179,27 @@
 
         describe('closing', () => {
           beforeEach(done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               done();
             });
 
             menu._setOpened(true);
           });
 
-          it('should close on outside tap', done => {
-            listenOnce(menu, 'iron-overlay-closed', () => {
+          it('should close on outside click', done => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });
 
-            Polymer.Base.fire('tap', {}, {
+            Polymer.Base.fire('click', {}, {
               bubbles: true,
               node: document.body
             });
           });
 
           it('should close on backdrop contextmenu', done => {
-            listenOnce(menu, 'iron-overlay-closed', () => {
+            listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -202,7 +208,7 @@
               cancelable: true,
               bubbles: true
             });
-            menu.$.overlay.backdropElement.dispatchEvent(e);
+            menu.$.overlay.dispatchEvent(e);
             expect(e.defaultPrevented).to.be.true;
           });
 
@@ -215,7 +221,7 @@
           it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
-            menu.$.overlay.fire('foobar');
+            menu.$.overlay.dispatchEvent(new CustomEvent('foobar', {bubbles: true}));
 
             expect(menu.opened).to.eql(false);
           });
@@ -223,7 +229,7 @@
           it('should disable close on empty `closeOn`', () => {
             menu.closeOn = '';
 
-            menu.$.overlay.click();
+            menu.$.overlay.dispatchEvent(new CustomEvent('click'));
 
             expect(menu.opened).to.eql(true);
           });

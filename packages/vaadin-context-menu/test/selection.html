@@ -37,16 +37,11 @@
           menu = fixture('default');
         });
 
-        function unwrapIfNeeded(element) {
-          const isWrapped = Polymer.Settings.hasShadow && !Polymer.Settings.nativeShadow;
-          return isWrapped ? window.unwrap(element) : element;
-        }
-
         describe('selection', () => {
 
           it('should close on item tap', done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
-              MockInteractions.tap(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
+            listenOnce(menu, 'opened-changed', () => {
+              MockInteractions.tap(menu.$.overlay.root.querySelector('#menu paper-item'));
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -55,31 +50,38 @@
           });
 
           it('should close on keyboard selection', done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
+            listenOnce(menu, 'opened-changed', () => {
               setTimeout(() => {
-                MockInteractions.pressEnter(Polymer.dom(menu.$.overlay).querySelector('#menu paper-item'));
+                listenOnce(menu, 'opened-changed', () => {
+                  done();
+                });
+
+                MockInteractions.pressEnter(menu.$.overlay.root.querySelector('#menu paper-item'));
               }, 10);
-            });
-            listenOnce(menu, 'iron-overlay-closed', () => {
-              done();
             });
 
             menu._setOpened(true);
           });
 
           it('should focus the child element', done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
-              expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
-              done();
+            listenOnce(menu, 'opened-changed', () => {
+              Polymer.Async.microTask.run(() => {
+                var child = menu.$.overlay.root.querySelector('#menu');
+                expect(menu.$.overlay.root.activeElement).to.eql(child);
+                done();
+              });
             });
 
             menu._setOpened(true);
           });
 
           it('should focus the child element on `contextmenu` event', done => {
-            listenOnce(menu, 'iron-overlay-opened', () => {
-              expect(document.activeElement).to.eql(unwrapIfNeeded(menu));
-              done();
+            listenOnce(menu, 'opened-changed', () => {
+              Polymer.Async.microTask.run(() => {
+                var child = menu.$.overlay.root.querySelector('#menu');
+                expect(menu.$.overlay.root.activeElement).to.eql(child);
+                done();
+              });
             });
 
             fire(menu, 'contextmenu');

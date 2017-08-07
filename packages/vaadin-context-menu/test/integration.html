@@ -14,8 +14,10 @@
   <body>
     <dom-module id="context-menu-button">
       <template>
-        <vaadin-context-menu id="menu"></vaadin-context-menu>
-        <button on-tap="_showMenu" id="button">Show context menu</button>
+        <vaadin-context-menu id="menu">
+          <template>foo</template>
+        </vaadin-context-menu>
+        <button on-click="_showMenu" id="button">Show context menu</button>
       </template>
       <script>
         document.addEventListener('WebComponentsReady', () => {
@@ -53,21 +55,6 @@
         it('should open context menu on .open(e)', () => {
           MockInteractions.tap(button);
           expect(menu.opened).to.eql(true);
-        });
-
-        it('should place the backdrop above all other document elements', done => {
-          MockInteractions.tap(button);
-          setTimeout(() => {
-            const buttonRect = button.getBoundingClientRect();
-            MockInteractions.tap(
-              // this should be backdrop, as it placed above the button
-              document.elementFromPoint(buttonRect.left, buttonRect.top)
-            );
-          }, 200);
-          menu.addEventListener('iron-overlay-closed', () => {
-            expect(menu.opened).to.eql(false);
-            done();
-          });
         });
       });
     </script>
