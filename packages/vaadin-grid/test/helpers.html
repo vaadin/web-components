@@ -309,7 +309,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function click(element) {
-    Polymer.Base.fire('click', {}, {
+    fire('click', {}, {
       node: element,
       bubbles: true
     });
@@ -321,6 +321,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       function(col) {
         col._templateObserver.flush();
       });
+  }
+
+  function fire(type, detail, options) {
+    options = options || {};
+    detail = (detail === null || detail === undefined) ? {} : detail;
+    const event = new Event(type, {
+      bubbles: options.bubbles === undefined ? true : options.bubbles,
+      cancelable: Boolean(options.cancelable),
+      composed: options.composed === undefined ? true : options.composed
+    });
+    event.detail = detail;
+    const node = options.node || this;
+    node.dispatchEvent(event);
+    return event;
   }
 
 </script>
