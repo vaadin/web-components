@@ -8,6 +8,7 @@
 <link rel="import" href="vaadin-grid-selection-mixin.html">
 <link rel="import" href="vaadin-grid-sort-mixin.html">
 <link rel="import" href="vaadin-grid-row-details-mixin.html">
+<link rel="import" href="vaadin-grid-keyboard-navigation-mixin.html">
 <link rel="import" href="vaadin-grid-filter-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column-resizing-mixin.html">
@@ -20,14 +21,14 @@
     <style include="vaadin-grid-styles"></style>
 
     <div id="scroller" no-scrollbars$="[[!_scrollbarWidth]]" safari$="[[_safari]]" ios$="[[_ios]]" scrolling$="[[scrolling]]" loading$=[[_loading]]>
-      <table id="table">
+      <table id="table" role="application grid">
         <caption>
           <!-- TODO: Implement -->
           <div id="fixedsizer"></div>
         </caption>
-        <thead id="header"></thead>
-        <tbody id="items"></tbody>
-        <tfoot id="footer"></tfoot>
+        <thead id="header" role="rowgroup"></thead>
+        <tbody id="items" role="rowgroup"></tbody>
+        <tfoot id="footer" role="rowgroup"></tfoot>
       </table>
 
       <div id="reorderghost"></div>
@@ -73,10 +74,11 @@
     Vaadin.Grid.SelectionMixin(
     Vaadin.Grid.SortMixin(
     Vaadin.Grid.RowDetailsMixin(
+    Vaadin.Grid.KeyboardNavigationMixin(
     Vaadin.Grid.FilterMixin(
     Vaadin.Grid.ColumnReorderingMixin(
     Vaadin.Grid.ColumnResizingMixin(
-    VaadinGridScroller)))))))))))) {
+    VaadinGridScroller))))))))))))) {
 
     static get is() {
       return 'vaadin-grid';
@@ -123,7 +125,7 @@
       for (var i = 0; i < count; i++) {
         const row = document.createElement('tr');
         row.setAttribute('part', 'row');
-
+        row.setAttribute('role', 'row');
         if (this._columnTree) {
           this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
@@ -133,6 +135,8 @@
       if (this._columnTree) {
         this._columnTree[this._columnTree.length - 1].forEach(c => c.notifyPath('_cells.*', c._cells));
       }
+
+      Polymer.RenderStatus.beforeNextRender(this, this._resetKeyboardNavigation);
       return rows;
     }
 
@@ -148,6 +152,9 @@
       cellContent.setAttribute('slot' , slotName);
 
       const cell = document.createElement(tagName);
+      cell.id = slotName.replace('-content-', '-');
+      cell.setAttribute('tabindex', '-1');
+      cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader gridcell');
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
@@ -169,7 +176,7 @@
         cell._vacant = true;
       });
       row.innerHTML = '';
-
+      row.hidden = true;
       columns.forEach((column, index) => {
         let cell;
 
@@ -201,6 +208,11 @@
 
           if (column.notifyPath && !noNotify) {
             column.notifyPath('_cells.*', column._cells);
+          }
+
+          const descriptionCell = column._headerCell || column._footerCell;
+          if (descriptionCell) {
+            cell.setAttribute('aria-labelledby', `${descriptionCell.id} ${cell.id}`);
           }
         } else {
           // Header & footer
@@ -261,10 +273,12 @@
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
         headerRow.setAttribute('part', 'row');
+        headerRow.setAttribute('role', 'row');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
         footerRow.setAttribute('part', 'row');
+        footerRow.setAttribute('role', 'row');
         this.$.footer.appendChild(footerRow);
       }
       while (this.$.header.children.length > columnTree.length) {
@@ -280,12 +294,17 @@
         this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
       });
 
+      Array.from(this.$.items.children).forEach((row, index) => {
+        this._updateRow(row, columnTree[columnTree.length - 1]);
+      });
+
       // Sizer row
       this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1]);
 
       this._resizeHandler();
       this._frozenCellsChanged();
       this._updateLastColumn();
+      this._resetKeyboardNavigation();
     }
 
     _updateItem(row, item) {

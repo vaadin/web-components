@@ -1,0 +1,273 @@
+<script>
+  window.Vaadin = window.Vaadin || {};
+  Vaadin.Grid = Vaadin.Grid || {};
+
+  /**
+   * @polymerMixin
+   */
+  Vaadin.Grid.KeyboardNavigationMixin = superClass => class KeyboardNavigationMixin extends superClass {
+    static get properties() {
+      return {
+        _headerFocusable: {
+          type: Object,
+          observer: '_focusableChanged'
+        },
+        _itemsFocusable: {
+          type: Object,
+          observer: '_focusableChanged'
+        },
+        _footerFocusable: {
+          type: Object,
+          observer: '_focusableChanged'
+        },
+        interacting: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        navigating: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        }
+      }
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('keydown', this._onKeyDown);
+      this.addEventListener('focusin', () => this.navigating = true);
+      this.addEventListener('focusout', () => this.navigating = false);
+      this.addEventListener('cell-focus', e => {
+        this._focusCell(e.detail.cell);
+        this.navigating = false;
+      });
+    }
+
+    _focusableChanged(focusable, oldFocusable) {
+      if (oldFocusable) {
+        oldFocusable.setAttribute('tabindex', '-1');
+      }
+      if (focusable) {
+        focusable.setAttribute('tabindex', '0');
+      }
+    }
+
+    _onKeyDown(e) {
+      // Disable <iron-list> keydown handler
+      e.stopImmediatePropagation();
+
+      // Ensure standard key value, unified across browsers
+      let key = e.key;
+      if (key === 'Up' || key === 'Down' || key === 'Left' || key === 'Right') {
+        // MSIE & Edge
+        key = 'Arrow' + key;
+      }
+      if (key === 'Esc') {
+        // MSIE & Edge
+        key = 'Escape';
+      }
+      if (key === 'Spacebar') {
+        // MSIE
+        key = ' ';
+      }
+
+      let keyGroup;
+      switch (key) {
+        case 'ArrowUp':
+        case 'ArrowDown':
+        case 'ArrowLeft':
+        case 'ArrowRight':
+        case 'PageUp':
+        case 'PageDown':
+        case 'Home':
+        case 'End':
+          keyGroup = 'Navigation';
+          break;
+        case 'Enter':
+        case 'Escape':
+        case 'F2':
+          keyGroup = 'Interaction';
+          break;
+        case 'Tab':
+          keyGroup = 'Tab';
+          break;
+        case ' ':
+          keyGroup = 'Space';
+          break;
+      }
+
+      if (this.interacting && keyGroup !== 'Interaction') {
+        // When in the interacting mode, only the “Interaction” keys are handled.
+        keyGroup = undefined;
+      }
+
+      if (keyGroup) {
+        this[`_on${keyGroup}KeyDown`](e, key);
+      }
+    }
+
+    _onNavigationKeyDown(e, key) {
+      e.preventDefault();
+
+      this.navigating = true;
+
+      function indexOfChildElement(el) {
+        return Array.prototype.indexOf.call(el.parentNode.children, el);
+      }
+
+      const visibleItemsCount = this.lastVisibleIndex - this.firstVisibleIndex - 1;
+
+      let dx = 0, dy = 0;
+      switch (key) {
+        case 'ArrowRight':
+          dx = 1;
+          break;
+        case 'ArrowLeft':
+          dx = -1;
+          break;
+        case 'Home':
+          dx = -Infinity;
+          if (e.ctrlKey) dy = -Infinity;
+          break;
+        case 'End':
+          dx = Infinity;
+          if (e.ctrlKey) dy = Infinity;
+          break;
+        case 'ArrowDown':
+          dy = 1;
+          break;
+        case 'ArrowUp':
+          dy = -1;
+          break;
+        case 'PageDown':
+          dy = visibleItemsCount;
+          break;
+        case 'PageUp':
+          dy = -visibleItemsCount;
+          break;
+      }
+
+      const activeCell = e.composedPath()[0];
+      const columnIndex = indexOfChildElement(activeCell);
+
+      const activeRow = activeCell.parentNode;
+      // Body rows have index property, otherwise DOM child index of the row is used
+      const rowIndex = activeRow.index || indexOfChildElement(activeRow);
+
+      const activeRowGroup = activeRow.parentNode;
+      const maxRowIndex = (activeRowGroup === this.$.items ? this.size : activeRowGroup.children.length) - 1;
+
+      // Columns might have ordering different from DOM, thus columnIndex cannot
+      // be directly used in navigation. Instead, we find orderedColumnIndex
+      // using the columnTree.
+      let columnTreeLevel = this._columnTree.length - 1;
+      if (activeRowGroup === this.$.header) {
+        columnTreeLevel = rowIndex;
+      } else if (activeRowGroup === this.$.header) {
+        columnTreeLevel = this._columnTree.length - 1 - rowIndex;
+      }
+      const columns = this._columnTree[columnTreeLevel];
+      const columnOrders = columns.filter(c => !c.hidden).map(c => c._order).sort();
+      const orderedColumnIndex = columnOrders.indexOf(columns[columnIndex]._order);
+      const maxOrderedColumnIndex = columnOrders.length - 1;
+
+      // Process navigation key, calculate destination indexes
+      const dstOrderedColumnIndex = Math.max(0, Math.min(orderedColumnIndex + dx, maxOrderedColumnIndex));
+      const dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
+
+      if (dstOrderedColumnIndex === orderedColumnIndex &&
+          dstRowIndex === rowIndex) {
+        // Navigation resulted in the same place, no action.
+        return;
+      }
+
+      // Ensure correct scroll position, destination row is visible
+      if (activeRowGroup === this.$.items) {
+        if (dstRowIndex <= this.firstVisibleIndex) {
+          // Scroll up
+          this.scrollToIndex(dstRowIndex);
+          Polymer.flush();
+        } else if (dstRowIndex >= this.lastVisibleIndex - 1) {
+          // Scroll down
+          this.scrollToIndex(dstRowIndex - visibleItemsCount);
+          Polymer.flush();
+        }
+      }
+
+      const columnIndexByOrder = columns.reduce((acc, col, i) => (acc[col._order] = i, acc), {});
+      const dstColumnIndex = columnIndexByOrder[columnOrders[dstOrderedColumnIndex]];
+
+      // For body rows, use index property to find destination row, otherwise use DOM child index
+      const dstRow = activeRowGroup === this.$.items ?
+        Array.from(activeRowGroup.children).filter(el => el.index === dstRowIndex)[0] :
+        activeRowGroup.children[dstRowIndex];
+
+      // Here we go!
+      const dstCell = dstRow.children[dstColumnIndex];
+      this._focusCell(dstCell, activeRowGroup);
+    }
+
+    _onInteractionKeyDown(e, key) {
+      console.log('interaction', key);
+
+      if (!this.interacting) {
+        e.preventDefault();
+      }
+
+      let wantInteracting;
+      switch (key) {
+        case 'Enter':
+          wantInteracting = true;
+          break;
+        case 'Escape':
+          wantInteracting = false;
+          break;
+        case 'F2':
+          wantInteracting = !wantInteracting;
+          break;
+      }
+
+      console.log(this.interacting, wantInteracting);
+      this.interacting = wantInteracting;
+    }
+
+    _onTabKeyDown(e) {
+      this.navigating = true;
+    }
+
+    _onSpaceKeyDown(e) {
+      console.log('space');
+    }
+
+    _resetKeyboardNavigation() {
+      if (this.$.header.firstElementChild) {
+        this._headerFocusable = this.$.header.firstElementChild.firstElementChild;
+      }
+
+      if (this.$.items.firstElementChild) {
+        const firstVisibleIndexRow = Array.from(this.$.items.children)
+          .filter(row => row.index === this.firstVisibleIndex)[0];
+        if (firstVisibleIndexRow) {
+          this._itemsFocusable = firstVisibleIndexRow.firstElementChild;
+        }
+      }
+
+      if (this.$.footer.firstElementChild) {
+        this._footerFocusable = this.$.footer.firstElementChild.firstElementChild;
+      }
+    }
+
+    _focusCell(cell, rowGroup) {
+      rowGroup = rowGroup || cell.parentNode.parentNode;
+      if (rowGroup === this.$.header) {
+        this._headerFocusable = cell;
+      } else if (rowGroup === this.$.items) {
+        this._itemsFocusable = cell;
+      } else if (rowGroup === this.$.footer) {
+        this._footerFocusable = cell;
+      }
+      cell.focus();
+    }
+  };
+</script>

@@ -50,7 +50,7 @@
 
       // this event is only supposed to be fired from cells.
       if (e.target !== 'vaadin-grid-sorter') {
-        this.dispatchEvent(new CustomEvent('cell-focus', {cell: cell}));
+        this.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: cell}}));
       }
 
       var path = Polymer.dom(e).path;
