@@ -205,7 +205,7 @@
         body = grid.$.items;
         footer = grid.$.footer;
         grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
+        flushGrid(grid);
 
         headerRows = getRows(header);
         footerRows = getRows(footer);
@@ -232,7 +232,7 @@
           var cells = Polymer.dom(header).querySelectorAll('.vaadin-grid-cell');
           expect(cells).not.to.be.empty;
           cells.forEach(function(cell) {
-            expect(cell._isEmpty).to.be.true;
+            expect(cell._instance).to.be.not.ok;
           });
         });
 
@@ -241,11 +241,13 @@
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(cell) {
-            expect(cell._isEmpty).to.be.true;
+            expect(cell._instance).to.be.not.ok;
           });
         });
 
         it('should have no visible header rows', function() {
+          expect(headerRows).not.to.be.empty;
+
           headerRows.forEach(function(row) {
             expect(row.hidden).to.be.true;
           });

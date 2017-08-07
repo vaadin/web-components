@@ -49,6 +49,7 @@
     "dragOver": false,
     "dragAndDropOver": false,
     "makeSoloTouchEvent": false,
-    "flushColumns": false
+    "flushColumns": false,
+    "flushGrid": false
   }
 }

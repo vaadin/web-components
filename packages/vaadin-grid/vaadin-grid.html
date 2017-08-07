@@ -93,11 +93,15 @@
       for (var i = 0; i < count; i++) {
         const row = document.createElement('tr');
         row.classList.add('vaadin-grid-row');
-        this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'template', false, true);
+        if (this._columnTree) {
+          this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'template', false, true);
+        }
         rows.push(row);
       }
 
-      this._columnTree[this._columnTree.length - 1].forEach(c => c.notifyPath('_cells.*', c._cells));
+      if (this._columnTree) {
+        this._columnTree[this._columnTree.length - 1].forEach(c => c.notifyPath('_cells.*', c._cells));
+      }
       return rows;
     }
 
@@ -129,6 +133,7 @@
       const contentsFragment = document.createDocumentFragment();
 
       row.innerHTML = '';
+      row.hidden = true;
       columns.forEach((column, index) => {
         const {cellContent, cell} = this._createCell();
         contentsFragment.appendChild(cellContent);
@@ -180,6 +185,10 @@
     }
 
     _updateScrollerItem(row, index) {
+      if (!this._columnTree) {
+        return;
+      }
+
       const columns = this._columnTree[this._columnTree.length - 1];
       // Polymer.Templatizer.modelForElement(row)
       columns.forEach((column, columnIndex) => {
@@ -194,7 +203,9 @@
     }
 
     _columnTreeChanged(columnTree, splices) {
-      Array.from(this.$.items.children).forEach(this._updateRow.bind(this, columnTree[columnTree.length - 1]));
+      Array.from(this.$.items.children).forEach(row => {
+        this._updateRow(row, columnTree[columnTree.length - 1]);
+      });
 
       // TODO: DRY
       while (this.$.header.children.length < columnTree.length) {

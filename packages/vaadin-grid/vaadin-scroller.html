@@ -71,9 +71,11 @@
 
       // Weird hack needed to get Safari to actually distribute slots
       const content = this.querySelector('[slot]');
-      const slot = content.getAttribute('slot');
-      content.setAttribute('slot', 'foo-bar');
-      content.setAttribute('slot', slot);
+      if (content) {
+        const slot = content.getAttribute('slot');
+        content.setAttribute('slot', 'foo-bar');
+        content.setAttribute('slot', slot);
+      }
 
       Polymer.RenderStatus.afterNextRender(this, () => this.notifyResize());
       return physicalItems;

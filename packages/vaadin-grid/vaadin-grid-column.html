@@ -200,6 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const inst = headerTemplate.templatizer.createInstance();
       headerCell._content.appendChild(inst.root);
       headerCell._instance = inst;
+      headerCell.parentElement.hidden = false;
     }
 
     _stampFooterTemplate(footerTemplate, footerCell) {
@@ -210,6 +211,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const inst = footerTemplate.templatizer.createInstance();
       footerCell._content.appendChild(inst.root);
       footerCell._instance = inst;
+      footerCell.parentElement.hidden = false;
     }
 
     _selectFirstTemplate(selector) {
