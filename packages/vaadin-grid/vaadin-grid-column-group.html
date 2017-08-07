@@ -233,21 +233,12 @@ The `class` attribute is used to differentiate header and footer templates.
             return;
           }
 
-
           // Don’t propagate the default `false` value.
-          // if (frozen !== false) {
-            Array.prototype.forEach.call(rootColumns, col => {
-              // Don’t unfreeze the nested frozen groups
-              // if (col.localName === 'vaadin-grid-column-group') {
-              //   col.frozen = col.frozen || frozen;
-              // } else {
-                col.frozen = frozen;
-              // }
+          if (frozen !== false) {
+            Array.from(rootColumns).forEach(col => {
+              col.frozen = frozen;
             });
-
-            // this.fire('property-changed', {path: 'frozen', value: frozen});
-          // }
-
+          }
         }
 
         _groupHiddenChanged(hidden, rootColumns) {
