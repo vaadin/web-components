@@ -91,6 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_footerTemplateChanged(footerTemplate)',
         '_headerTemplateChanged(headerTemplate)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
+        '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
@@ -259,6 +260,14 @@ This program is available under Apache License Version 2.0, available at https:/
       this._allCells.forEach(cell => cell.style.width = width);
     }
 
+    _frozenChanged(frozen, headerCell, footerCell, cells) {
+      if (this.parentElement && this.parentElement._columnPropChanged) {
+        this.parentElement._columnPropChanged('frozen', frozen);
+      }
+
+      this._allCells.forEach(cell => this._toggleAttribute('frozen', frozen, cell));
+    }
+
     _lastFrozenChanged(lastFrozen) {
       // this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
     }
@@ -354,19 +363,12 @@ This program is available under Apache License Version 2.0, available at https:/
       static get observers() {
         return [
           '_templateChanged(template)',
-          '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
           '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
           '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)'
         ];
       }
 
-      _frozenChanged(frozen, headerCell, footerCell, cells) {
-        if (this.parentElement && this.parentElement._columnPropChanged) {
-          this.parentElement._columnPropChanged('frozen', frozen);
-        }
 
-        this._allCells.forEach(cell => this._toggleAttribute('frozen', frozen, cell));
-      }
 
       _templateChanged(template) {
         // body cell templatizer needs to be attached so that `item-changed` and

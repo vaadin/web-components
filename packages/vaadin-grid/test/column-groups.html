@@ -273,14 +273,13 @@
           }
         });
 
-        it('the group header cell should ignore changes from child columns', function() {
+        it('the group header cell should adapt to changes of child columns', function() {
           var cellGroup0 = getHeaderCell(0, 1);
           var cellHeader1 = getHeaderCell(1, 1);
 
-          cellGroup0._flexGrowChanged = sinon.spy();
-          cellHeader1.column.flexGrow = 3;
-
-          expect(cellGroup0._flexGrowChanged.callCount).to.eql(1);
+          expect(cellGroup0.style.flexGrow).to.equal('2');
+          cellHeader1._column.flexGrow = 3;
+          expect(cellGroup0.style.flexGrow).to.equal('4');
         });
 
         it('should set colSpan to spanned header cells', function() {
