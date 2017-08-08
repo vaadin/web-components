@@ -40,26 +40,6 @@
   <test-fixture id="groups">
     <template>
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <template is="dom-repeat" items="[1, 2]" as="colgroup">
-          <vaadin-grid-column-group>
-            <template class="header">[[colgroup]]</template>
-            <template class="footer">[[colgroup]]</template>
-            <template is="dom-repeat" items="[1, 2]" as="col">
-              <vaadin-grid-column>
-                <template class="header">[[colgroup]][[col]]</template>
-                <template>[[colgroup]][[col]]</template>
-                <template class="footer">[[colgroup]][[col]]</template>
-              </vaadin-grid-column>
-            </template>
-          </vaadin-grid-column-group>
-        </template>
-      </vaadin-grid>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="groups-p2">
-    <template>
-      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <dom-repeat is="dom-repeat" items="[1, 2]" as="colgroup">
           <template>
             <vaadin-grid-column-group>
@@ -144,7 +124,7 @@
   <script>
     function getVisualCellContent(section, row, col) {
       var cell = Array.from(section.querySelectorAll('.vaadin-grid-cell:not(.vaadin-grid-details-cell)')).pop();
-      if (section.tagName === 'VAADIN-GRID-TABLE-FOOTER') {
+      if (section.id === 'footer') {
         cell = Polymer.dom(section).querySelector('.vaadin-grid-cell');
       }
       var sectionRect = section.getBoundingClientRect();
@@ -179,7 +159,7 @@
     }
 
     function getCellByCellContent(grid, cellContent) {
-      return grid.$.scroller._getCellByCellContent(cellContent);
+      return grid._getCellByCellContent(cellContent);
     }
 
     describe('reordering simple grid', function() {
@@ -198,6 +178,7 @@
           for (var i = 0; i < colCount; i++) {
             headerContent.push(getVisualHeaderCellContent(grid, 0, i));
           }
+          flushGrid(grid);
           done();
         });
       });
@@ -207,12 +188,13 @@
       });
 
       it('should be draggable if and only if grid is reorderable', function() {
-        var event = new CustomEvent('mousemove', {bubbles: true});
+        var event = new CustomEvent('mouseover', {bubbles: true});
         headerContent[0].dispatchEvent(event);
-        expect(headerContent[0].getAttribute('draggable')).to.equal('true');
+        expect(headerContent[0].hasAttribute('draggable')).to.be.true;
+        headerContent[0].removeAttribute('draggable');
         grid.columnReorderingAllowed = false;
         headerContent[0].dispatchEvent(event);
-        expect(headerContent[0].getAttribute('draggable')).to.equal('false');
+        expect(headerContent[0].hasAttribute('draggable')).to.be.false;
       });
 
       it('should indicate dragged cells', function() {
@@ -230,47 +212,45 @@
 
       it('should have a reorder ghost', function() {
         dragStart(headerContent[0]);
-        Polymer.dom.flush();
-        expect(grid.$.scroller.$.reorderghost.style.visibility).to.equal('visible');
+        expect(grid.$.reorderghost.style.visibility).to.equal('visible');
       });
 
       it('should have header cell content', function() {
         dragStart(headerContent[0]);
-        Polymer.dom.flush();
-        var ghost = grid.$.scroller.$.reorderghost;
+        var ghost = grid.$.reorderghost;
         expect(ghost.innerHTML).to.equal('1');
       });
 
       it('should not be accessible', function() {
         dragStart(headerContent[0]);
-        Polymer.dom.flush();
-        var ghost = grid.$.scroller.$.reorderghost;
+
+        var ghost = grid.$.reorderghost;
         expect(window.getComputedStyle(ghost).pointerEvents).to.equal('none');
       });
 
       it('should position ghost', function() {
         makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
         Polymer.dom.flush();
-        var ghost = grid.$.scroller.$.reorderghost;
+        var ghost = grid.$.reorderghost;
 
         makeSoloTouchEvent('touchmove', {x: 100, y: 100}, headerContent[0]);
         var ghostRect = ghost.getBoundingClientRect();
-        expect(ghostRect.left).to.equal(9);
-        expect(ghostRect.top).to.equal(207);
+        expect(ghostRect.left).to.be.closeTo(9, 1);
+        expect(ghostRect.top).to.be.closeTo(207, 1);
       });
 
       it('should have the ghost visible again', function() {
         dragAndDropOver(headerContent[0], headerContent[1]);
         dragStart(headerContent[0]);
         Polymer.dom.flush();
-        expect(grid.$.scroller.$.reorderghost.style.visibility).to.equal('visible');
+        expect(grid.$.reorderghost.style.visibility).to.equal('visible');
       });
 
       it('should not adjust outer-scroller z while reordering', function() {
-        var zIndex = window.getComputedStyle(grid.$.scroller.$.outerscroller).zIndex;
+        var zIndex = window.getComputedStyle(grid.$.outerscroller).zIndex;
         dragStart(headerContent[0]);
-        grid.$.scroller._scrollHandler();
-        expect(window.getComputedStyle(grid.$.scroller.$.outerscroller).zIndex).to.equal(zIndex);
+        grid._scrollHandler();
+        expect(window.getComputedStyle(grid.$.outerscroller).zIndex).to.equal(zIndex);
       });
 
       it('should prevent contextmenu while reordering', function() {
@@ -297,9 +277,9 @@
         }, 500);
       });
 
-      it('should start reordering on resize handle move', function() {
+      it('should not start reordering on resize handle move', function() {
         makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0])._resizeHandle);
+          getCellByCellContent(grid, headerContent[0]).querySelector('.vaadin-grid-column-resize-handle'));
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
 
@@ -322,7 +302,7 @@
 
       it('should not cancel touchmove on resizer', function() {
         var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0])._resizeHandle);
+          getCellByCellContent(grid, headerContent[0]).querySelector('.vaadin-grid-column-resize-handle'));
         expect(e.defaultPrevented).to.be.false;
       });
 
@@ -349,7 +329,7 @@
         it('should reorder multiple columns while dragging', function() {
           dragOver(headerContent[0], headerContent[1]);
           dragOver(headerContent[0], headerContent[3]);
-          grid.$.scroller.flushDebouncer('vaadin-grid-scrolling');
+          flushGrid(grid);
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 
@@ -422,10 +402,7 @@
       var grid;
 
       beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
-        grid = Polymer.Element ? fixture('groups-p2') : fixture('groups');
+        grid = fixture('groups');
         grid.dataProvider = infiniteDataProvider;
         animationFrameFlush(done);
       });

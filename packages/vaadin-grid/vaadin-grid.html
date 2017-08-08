@@ -224,7 +224,7 @@
       }
       while (this.$.header.children.length > columnTree.length) {
         this.$.header.removeChild(this.$.header.firstElementChild);
-        this.$.footer.removeChild(this.$.header.firstElementChild);
+        this.$.footer.removeChild(this.$.footer.firstElementChild);
       }
 
       Array.from(this.$.header.children).forEach((headerRow, index) => {

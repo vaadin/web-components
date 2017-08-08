@@ -14,6 +14,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function flushGrid(grid) {
     grid._observer.flush();
+    if (grid._debounceScrolling) {
+      grid._debounceScrolling.flush();
+    }
     Polymer.flush();
   }
 
@@ -264,13 +267,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var e = makeSoloTouchEvent('touchstart', {x: 0, y: 0}, source);
     var cell = source;
     if (cell.localName !== 'vaadin-grid-header-cell') {
-      var grid = Polymer.dom(cell).parentNode;
-      cell = grid.$.scroller._getCellByCellContent(source);
+      var grid = cell.parentNode;
+      cell = grid._getCellByCellContent(source);
     }
 
-    if (cell._startReorderTimeout) {
-      cell._startReorder(e);
-      clearTimeout(cell._startReorderTimeout);
+    if (grid._startTouchReorderTimeout) {
+      grid._startTouchReorder(e, cell._content);
+      clearTimeout(grid._startTouchReorderTimeout);
     }
   }
 
@@ -278,7 +281,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     dragStart(source);
     var targetRect = target.getBoundingClientRect();
     makeSoloTouchEvent('touchmove', {
-      x: clientX || targetRect.left + targetRect.width / 2,
+      x: clientX || targetRect.left + targetRect.width / 2 + 1,
       y: targetRect.top},
       source);
   }
