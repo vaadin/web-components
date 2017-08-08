@@ -1,4 +1,4 @@
-<dom-module id="vaadin-grid-column-reordering-themability-styles">
+<dom-module id="vaadin-grid-column-reordering-styles">
   <template>
     <style>
       vaadin-grid-table[reordering] .vaadin-grid-cell {
@@ -25,6 +25,17 @@
 
       #scroller .vaadin-grid-cell[reorder-status="dragging"] ::slotted(vaadin-grid-cell-content) {
         opacity: 0.95;
+      }
+
+      #scroller[no-content-pointer-events] .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+        pointer-events: none;
+      }
+
+      #reorderghost {
+        visibility: hidden;
+        position: fixed;
+        opacity: 0.5;
+        pointer-events: none;
       }
     </style>
   </template>
@@ -69,6 +80,105 @@
       this.addEventListener('dragend', this._onDragEnd);
       this.addEventListener('mouseover', this._onMouseOver);
       this.addEventListener('mouseout', this._onMouseOut);
+
+      this.addEventListener('touchstart', this._onTouchStart);
+      this.addEventListener('touchmove', this._onTouchMove);
+      this.addEventListener('touchend', this._onTouchEnd);
+      this.addEventListener('contextmenu', this._onContextMenu);
+    }
+
+    _onContextMenu(e) {
+      if (this.hasAttribute('reordering')) {
+        e.preventDefault();
+      }
+    }
+
+    _onTouchStart(e) {
+      const cellContent = this._getCellContentByElement(e.target);
+      if (!cellContent) {
+        return;
+      }
+      const cell = this._getCellByCellContent(cellContent);
+      if (this.columnReorderingAllowed && this.$.header.contains(cell)) {
+        this._startTouchReorderTimeout = setTimeout(this._startTouchReorder.bind(this, e, cellContent), 100);
+      }
+    }
+
+    _startTouchReorder(e, cellContent) {
+      this._updateGhost(cellContent);
+      this.$.reorderghost.style.visibility = 'visible';
+      var dragStart = new CustomEvent('dragstart', {bubbles: true});
+      cellContent.dispatchEvent(dragStart);
+      this._reorderXY = {
+        x: e.touches[0].clientX - cellContent.getBoundingClientRect().left,
+        y: e.touches[0].clientY - cellContent.getBoundingClientRect().top
+      };
+      this._updateGhostPosition(e.touches[0].clientX, e.touches[0].clientY);
+    }
+
+    _onTouchMove(e) {
+      if (this.hasAttribute('reordering')) {
+        e.preventDefault();
+        var dragOver = new CustomEvent('dragover', {bubbles: true});
+        dragOver.clientX = e.touches[0].clientX;
+        dragOver.clientY = e.touches[0].clientY;
+        var target = this._contentFromPoint(dragOver.clientX, dragOver.clientY);
+        if (target) {
+          target.dispatchEvent(dragOver);
+        }
+        this._updateGhostPosition(e.touches[0].clientX, e.touches[0].clientY);
+      } else {
+        clearTimeout(this._startTouchReorderTimeout);
+      }
+    }
+
+    _contentFromPoint(x, y) {
+      if (Polymer.Settings.useShadow) {
+        var scroller = this.$.scroller;
+        scroller.setAttribute('no-content-pointer-events', '');
+        var cell = this.shadowRoot.elementFromPoint(x, y);
+        scroller.removeAttribute('no-content-pointer-events');
+        if (cell) {
+          const slot = cell.querySelector('slot');
+          return Polymer.dom(slot).getDistributedNodes()[0];
+        }
+      } else {
+        return document.elementFromPoint(x, y);
+      }
+    }
+
+    _updateGhostPosition(eventClientX, eventClientY) {
+      // // This is where we want to position the ghost
+      var targetLeft = eventClientX - this._reorderXY.x;
+      var targetTop = eventClientY - this._reorderXY.y - 50;
+      // Current position
+      var _left = parseInt(this.$.reorderghost.style.left || 0);
+      var _top = parseInt(this.$.reorderghost.style.top || 0);
+      // Reposition the ghost
+      var ghostRect = this.$.reorderghost.getBoundingClientRect();
+      this.$.reorderghost.style.left = _left - (ghostRect.left - targetLeft) + 'px';
+      this.$.reorderghost.style.top = _top - (ghostRect.top - targetTop) + 'px';
+    }
+
+    _onTouchEnd(e) {
+      clearTimeout(this._startTouchReorderTimeout);
+      if (this.hasAttribute('reordering')) {
+        e.preventDefault();
+        var event = new CustomEvent('dragend', {bubbles: true});
+        this.dispatchEvent(event);
+        this.$.reorderghost.style.visibility = 'hidden';
+      }
+    }
+
+    _updateGhost(cellContent) {
+      var ghost = this.$.reorderghost;
+      ghost.innerText = cellContent.innerText;
+      var style = window.getComputedStyle(cellContent);
+      ['boxSizing', 'display', 'width', 'height', 'background', 'alignItems', 'padding', 'border', 'flex-direction', 'overflow']
+      .forEach(function(propertyName) {
+        ghost.style[propertyName] = style[propertyName];
+      }, this);
+      return ghost;
     }
 
     _onMouseOver(e) {
