@@ -67,10 +67,10 @@
   <script>
     function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.scroller.$.table;
+      var table = grid.$.table;
 
       var handler = function() {
-        if (grid.$.scroller.$.table.scrollTop > 0) {
+        if (grid.$.table.scrollTop > 0) {
           table.scrollTop -= 2500;
         } else {
           table.removeEventListener('scroll', handler);
@@ -84,7 +84,7 @@
 
     function simulateScrollToEnd(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.scroller.$.table;
+      var table = grid.$.table;
 
       var handler = function() {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
@@ -103,7 +103,7 @@
       var container, grid;
       var loadDebounceTime = 100;
 
-      beforeEach(function(done) {
+      beforeEach(function() {
         // The before each block times out in CI with Firefox on Polymer 2
         this.timeout(30000);
 
@@ -111,7 +111,7 @@
         grid = container.$.grid;
 
         container.dataProvider = sinon.spy(infiniteDataProvider);
-        grid.async(done, 1);
+        flushGrid(grid);
       });
 
       it('should call dataprovider for first page', function(done) {
@@ -221,12 +221,12 @@
 
       it('should scroll to last index if size decreased beyond current viewport', function() {
         grid.size = 5000000;
-        Polymer.dom.flush();
+        flushGrid(grid);
         scrollToEnd(grid);
         expect(grid.$.scroller.lastVisibleIndex + grid.$.scroller._vidxOffset).to.equal(grid.size - 1);
 
         grid.size = 50;
-        Polymer.dom.flush();
+        flushGrid(grid);
         expect(grid.$.scroller.lastVisibleIndex + grid.$.scroller._vidxOffset).to.equal(grid.size - 1);
 
         // Test actual last visible item
@@ -246,7 +246,7 @@
         this.timeout(30000);
 
         grid = fixture('grid');
-        Polymer.dom.flush();
+        flushGrid(grid);
       });
 
       it('should warn about missing size', function() {
@@ -254,7 +254,7 @@
         var spy = console.warn = sinon.spy();
 
         grid.dataProvider = infiniteDataProvider;
-        grid.flushDebouncer('check-size');
+        grid._debouncerCheckSize.flush();
         console.warn = _warn;
 
         expect(spy.called).to.be.true;
@@ -266,7 +266,7 @@
 
         grid.dataProvider = infiniteDataProvider;
         grid.size = 1;
-        grid.flushDebouncer('check-size');
+        grid._debouncerCheckSize.flush();
         console.warn = _warn;
 
         expect(spy.called).to.be.false;
@@ -275,6 +275,7 @@
       it('should work with data provider set before size', function() {
         grid.dataProvider = infiniteDataProvider;
         grid.size = 3;
+        flushGrid(grid);
         expect(getRows(grid.$.items)).to.have.length(3);
       });
 
@@ -292,7 +293,7 @@
 
       it('should not request negative pages', function() {
         this.timeout(30000);
-        
+
         grid.dataProvider = sinon.spy(infiniteDataProvider);
         grid.size = 10;
 
