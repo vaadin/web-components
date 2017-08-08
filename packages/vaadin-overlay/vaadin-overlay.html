@@ -153,10 +153,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
+        if (event.composedPath().indexOf(this.$.content) >= 0) {
+          return;
+        }
+
         const evt = new CustomEvent('vaadin-overlay-outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
         this.dispatchEvent(evt);
 
-        if (this.opened && event.composedPath().indexOf(this.$.content) < 0 && !evt.defaultPrevented) {
+        if (this.opened && !evt.defaultPrevented) {
           this.close(event);
         }
       }
