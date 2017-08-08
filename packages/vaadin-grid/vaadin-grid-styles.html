@@ -54,6 +54,13 @@
         z-index: -1;
       }
 
+      #items,
+      #outersizer,
+      #fixedsizer {
+        border-top: 0 solid transparent;
+        border-bottom: 0 solid transparent;
+      }
+
       tr {
         display: flex;
         width: 100%;
@@ -154,6 +161,11 @@
 
       #outersizer .vaadin-grid-cell::before {
         content: "";
+      }
+
+      #fixedsizer {
+        /* TODO: fix*/
+        display: none;
       }
 
     </style>

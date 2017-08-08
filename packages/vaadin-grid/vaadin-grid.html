@@ -20,6 +20,10 @@
 
     <div id="scroller" no-scrollbars$="[[_noScrollbars]]" safari$="[[_safari]]" ios$="[[_ios]]" scrolling$="[[scrolling]]" loading$=[[_loading]]>
       <table id="table">
+        <caption>
+          <!-- TODO: Implement -->
+          <div id="fixedsizer"></div>
+        </caption>
         <thead id="header"></thead>
         <tbody id="items"></tbody>
         <tfoot id="footer"></tfoot>
@@ -254,6 +258,21 @@
       // row.active = item !== null && item == this.activeItem;
       // row.focused = row.index === this.$.items._focusedRowIndex;
     }
+
+    _resizeHandler() {
+      super._resizeHandler();
+      this._updateHeaderFooterMetrics();
+    }
+
+    _updateHeaderFooterMetrics() {
+      var headerHeight = this.$.header.clientHeight + 'px';
+      var footerHeight = this.$.footer.clientHeight + 'px';
+      [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
+        element.style.borderTopWidth = headerHeight;
+        element.style.borderBottomWidth = footerHeight;
+      });
+    }
+
   }
 
   customElements.define(VaadinGrid.is, VaadinGrid);
