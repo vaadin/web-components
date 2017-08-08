@@ -143,7 +143,7 @@
 
   <script>
     function getVisualCellContent(section, row, col) {
-      var cell = Array.prototype.slice.call(Polymer.dom(section).querySelectorAll('.vaadin-grid-cell')).pop();
+      var cell = Array.from(section.querySelectorAll('.vaadin-grid-cell:not(.vaadin-grid-details-cell)')).pop();
       if (section.tagName === 'VAADIN-GRID-TABLE-FOOTER') {
         cell = Polymer.dom(section).querySelector('.vaadin-grid-cell');
       }
@@ -164,7 +164,7 @@
       var scroller = grid.$.scroller;
       var headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
       var footerContent = getVisualCellContent(grid.$.footer, 0, col);
-      var bodyContent = Array.prototype.map.call(Polymer.dom(grid.$.items).children, function(row, rowIndex) {
+      var bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) => {
         return getVisualCellContent(grid.$.items, rowIndex, col);
       });
       return bodyContent.concat(headerContent).concat(footerContent);
