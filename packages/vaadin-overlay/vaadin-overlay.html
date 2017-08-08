@@ -132,7 +132,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
-       * Close the overlay and fire `vaadin-overlay-close` event
+       * @event vaadin-overlay-close
+       * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
        */
       close(sourceEvent) {
         var evt = new CustomEvent('vaadin-overlay-close', {bubbles: true, cancelable: true, detail: {sourceEvent: sourceEvent}});

@@ -105,7 +105,6 @@
         var outsideClickHandler = () => done();
 
         overlay.withBackdrop = true;
-
         overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
         backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
         overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
