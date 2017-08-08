@@ -1,4 +1,12 @@
-<dom-module id="vaadin-grid-styles">
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid" >
   <template>
     <style include="vaadin-grid-column-resizing-styles"></style>
     <style include="vaadin-grid-column-reordering-styles"></style>
@@ -15,7 +23,7 @@
         height: 400px;
       }
 
-      #scroller {
+      [part~="scroller"] {
         display: block;
         position: relative;
         animation: 1ms appear-vaadin-grid-table-0;
@@ -24,30 +32,31 @@
         transform: translateZ(0);
       }
 
-      #table {
+      [part~="table"] {
         display: block;
         width: 100%;
         height: 100%;
+        border: 1px solid #dbdbdb;
         overflow: auto;
         z-index: -2;
         position: relative;
       }
 
-      #header {
+      [part~="header"] {
         display: block;
         position: absolute;
         top: 0;
         width: 100%;
       }
 
-      #footer {
+      [part~="footer"] {
         display: block;
         position: absolute;
         bottom: 0;
         width: 100%;
       }
 
-      #items {
+      [part~="body"] {
         display: block;
         width: 100%;
         height: 100%;
@@ -62,22 +71,31 @@
         border-bottom: 0 solid transparent;
       }
 
-      tr {
+      [part~="row"] {
         display: flex;
         width: 100%;
         box-sizing: border-box;
         margin: 0;
       }
 
-      #items > tr {
+      [part~="body"] [part~="row"] {
         position: absolute;
       }
 
-      #items tr:empty {
+      [part~="body"] [part~="row"]:empty {
         height: 1em;
       }
 
-      .vaadin-grid-cell {
+      [part~="header"] [part~="row"]:last-child [part~="cell"],
+      [part~="body"] [part~="cell"] {
+        border-bottom: 1px solid #dbdbdb;
+      }
+
+      [part~="footer"] [part~="cell"] {
+        border-top: 1px solid #dbdbdb;
+      }
+
+      [part~="cell"] {
         padding: 0;
         flex-shrink: 0;
         flex-grow: 1;
@@ -86,7 +104,8 @@
         width: 100%;
       }
 
-      .vaadin-grid-cell:not(.vaadin-grid-details-cell) {
+      /* TODO: Use other selector */
+      [part~="cell"]:not(.vaadin-grid-details-cell) {
         position: relative;
       }
 
@@ -95,18 +114,32 @@
         bottom: 0;
       }
 
-      .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-         width: 100%;
-         display: inline-flex;
-         justify-content: center;
-         flex-direction: column;
-         white-space: nowrap;
-         overflow: hidden;
-         background: #fff;
+      [part~="header"] [part~="cell"] {
+        background: #fff;
+        font-weight: bold;
+        padding: 8px 16px;
       }
 
-      .vaadin-grid-cell ::slotted(vaadin-grid-cell-content:empty) { /* Bad selector */
-        /*min-height: 100px;*/
+      [part~="footer"] [part~="cell"] {
+        background: #fff;
+        font-weight: bold;
+      }
+
+      [part~="cell"]:first-child {
+        padding: 0 8px;
+      }
+
+      [part~="body"] [part~="cell"] {
+        height: 56px;
+      }
+
+      [part~="cell-content"] {
+        width: 100%;
+        display: inline-flex;
+        justify-content: center;
+        flex-direction: column;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       [hidden] {
@@ -117,38 +150,39 @@
         z-index: 2;
       }
 
-      #outerscroller {
+      [part~="outerscroller"] {
         /* Needed for Android Chrome */
         z-index: 0;
       }
 
-      [no-scrollbars]:not([safari]) #outerscroller,
-      [no-scrollbars][safari] #table {
+      [no-scrollbars]:not([safari]) [part~="outerscroller"],
+      [no-scrollbars][safari] [part~="table"] {
         overflow: hidden;
       }
 
-      [ios] #outerscroller {
+      [ios] [part~="outerscroller"] {
         pointer-events: auto;
         z-index: -3;
       }
 
-      [ios][scrolling] #outerscroller {
+      [ios][scrolling] [part~="outerscroller"] {
         z-index: 0;
       }
 
       /* TODO: Sizer styles, relocate */
-      #outersizer {
+      [part~="outersizer"] {
         display: flex;
         position: relative;
         width: 100%;
         visibility: hidden;
       }
 
-      #outersizer .vaadin-grid-details-cell {
+      /* TODO: Use part instead of class */
+      [part~="outersizer"] .vaadin-grid-details-cell {
         display: none;
       }
 
-      #outersizer .vaadin-grid-cell {
+      [part~="outersizer"] [part~="vaadin-grid-cell"] {
         display: block;
         flex-shrink: 0;
         line-height: 0;
@@ -156,11 +190,11 @@
         margin-top: -1em;
       }
 
-      #outersizer .vaadin-grid-cell * {
+      [part~="outersizer"] [part~="vaadin-grid-cell"] * {
         display: none;
       }
 
-      #outersizer .vaadin-grid-cell::before {
+      [part~="outersizer"] [part~="vaadin-grid-cell"]::before {
         content: "";
       }
 

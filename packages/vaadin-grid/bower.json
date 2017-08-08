@@ -51,6 +51,7 @@
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^v2.0.0",
     "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^v2.0.0",
     "iron-a11y-keys-behavior": "^v2.0.0",
-    "iron-a11y-announcer": "^v2.0.0"
+    "iron-a11y-announcer": "^v2.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.2"
   }
 }

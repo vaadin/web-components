@@ -303,6 +303,7 @@ This program is available under Apache License Version 2.0, available at https:/
             if (resizable) {
               const handle = document.createElement('div');
               handle.classList.add('vaadin-grid-column-resize-handle');
+              handle.setAttribute('part', 'resize-handle');
               cell.appendChild(handle);
             }
           }
