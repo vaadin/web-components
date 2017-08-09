@@ -114,6 +114,8 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this.template) this.template.templatizer._grid = this._grid;
       if (this.headerTemplate) this.headerTemplate.templatizer._grid = this._grid;
       if (this.footerTemplate) this.footerTemplate.templatizer._grid = this._grid;
+
+      this._templateObserver.flush();
     }
 
     disconnectedCallback() {
@@ -133,16 +135,13 @@ This program is available under Apache License Version 2.0, available at https:/
     constructor() {
       super();
 
-      var handler = function(info) {
+      this._templateObserver = new Polymer.FlattenedNodesObserver(this, info => {
         if (info.addedNodes.length >= 0) {
           this.headerTemplate = this._prepareHeaderTemplate();
           this.footerTemplate = this._prepareFooterTemplate();
           this.template = this._prepareBodyTemplate();
         }
-      };
-
-      this._templateObserver = Polymer.Element ?
-        new Polymer.FlattenedNodesObserver(this, handler) : Polymer.dom(this).observeNodes(handler);
+      });
     }
 
     _prepareHeaderTemplate() {
