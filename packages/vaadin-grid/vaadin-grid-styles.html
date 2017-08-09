@@ -6,7 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 
-<dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid" >
+<dom-module id="vaadin-grid-styles">
   <template>
     <style include="vaadin-grid-column-resizing-styles"></style>
     <style include="vaadin-grid-column-reordering-styles"></style>
@@ -23,40 +23,38 @@ This program is available under Apache License Version 2.0, available at https:/
         height: 400px;
       }
 
-      [part~="scroller"] {
+      #scroller {
         display: block;
         position: relative;
-        animation: 1ms appear-vaadin-grid-table-0;
         height: 100%;
         width: 100%;
         transform: translateZ(0);
       }
 
-      [part~="table"] {
+      #table {
         display: block;
         width: 100%;
         height: 100%;
-        border: 1px solid #dbdbdb;
         overflow: auto;
         z-index: -2;
         position: relative;
       }
 
-      [part~="header"] {
+      #header {
         display: block;
         position: absolute;
         top: 0;
         width: 100%;
       }
 
-      [part~="footer"] {
+      #footer {
         display: block;
         position: absolute;
         bottom: 0;
         width: 100%;
       }
 
-      [part~="body"] {
+      #items {
         display: block;
         width: 100%;
         height: 100%;
@@ -78,21 +76,12 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0;
       }
 
-      [part~="body"] [part~="row"] {
+      #items [part~="row"] {
         position: absolute;
       }
 
-      [part~="body"] [part~="row"]:empty {
+      #items [part~="row"]:empty {
         height: 1em;
-      }
-
-      [part~="header"] [part~="row"]:last-child [part~="cell"],
-      [part~="body"] [part~="cell"] {
-        border-bottom: 1px solid #dbdbdb;
-      }
-
-      [part~="footer"] [part~="cell"] {
-        border-top: 1px solid #dbdbdb;
       }
 
       [part~="cell"] {
@@ -104,7 +93,6 @@ This program is available under Apache License Version 2.0, available at https:/
         width: 100%;
       }
 
-      /* TODO: Use other selector */
       [part~="cell"]:not(.vaadin-grid-details-cell) {
         position: relative;
       }
@@ -114,26 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 0;
       }
 
-      [part~="header"] [part~="cell"] {
-        background: #fff;
-        font-weight: bold;
-        padding: 8px 16px;
-      }
-
-      [part~="footer"] [part~="cell"] {
-        background: #fff;
-        font-weight: bold;
-      }
-
-      [part~="cell"]:first-child {
-        padding: 0 8px;
-      }
-
-      [part~="body"] [part~="cell"] {
-        height: 56px;
-      }
-
-      [part~="cell-content"] {
+      [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         width: 100%;
         display: inline-flex;
         justify-content: center;
@@ -150,22 +119,22 @@ This program is available under Apache License Version 2.0, available at https:/
         z-index: 2;
       }
 
-      [part~="outerscroller"] {
+      #outerscroller {
         /* Needed for Android Chrome */
         z-index: 0;
       }
 
-      [no-scrollbars]:not([safari]) [part~="outerscroller"],
-      [no-scrollbars][safari] [part~="table"] {
+      [no-scrollbars]:not([safari]) #outerscroller,
+      [no-scrollbars][safari] #table {
         overflow: hidden;
       }
 
-      [ios] [part~="outerscroller"] {
+      [ios] #outerscroller {
         pointer-events: auto;
         z-index: -3;
       }
 
-      [ios][scrolling] [part~="outerscroller"] {
+      [ios][scrolling] #outerscroller {
         z-index: 0;
       }
 
@@ -177,12 +146,11 @@ This program is available under Apache License Version 2.0, available at https:/
         visibility: hidden;
       }
 
-      /* TODO: Use part instead of class */
-      [part~="outersizer"] .vaadin-grid-details-cell {
+      #outersizer .vaadin-grid-details-cell {
         display: none;
       }
 
-      [part~="outersizer"] [part~="vaadin-grid-cell"] {
+      #outersizer [part~="cell"] {
         display: block;
         flex-shrink: 0;
         line-height: 0;
@@ -190,11 +158,11 @@ This program is available under Apache License Version 2.0, available at https:/
         margin-top: -1em;
       }
 
-      [part~="outersizer"] [part~="vaadin-grid-cell"] * {
+      #outersizer [part~="cell"] * {
         display: none;
       }
 
-      [part~="outersizer"] [part~="vaadin-grid-cell"]::before {
+      #outersizer [part~="cell"]::before {
         content: "";
       }
 
@@ -203,6 +171,49 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid2">
+  <template>
+    <style>
+      #table {
+        border: 1px solid #dbdbdb;
+      }
+
+      #scroller {
+        animation: 1ms appear-vaadin-grid-table-0;
+      }
+
+      #header [part~="row"]:last-child [part~="cell"],
+      #items [part~="cell"] {
+        border-bottom: 1px solid #dbdbdb;
+      }
+
+      #footer [part~="cell"] {
+        border-top: 1px solid #dbdbdb;
+      }
+
+      #header [part~="cell"],
+      #footer [part~="cell"]:not(empty) {
+        background: #fff;
+        font-weight: bold;
+        padding: 8px 16px;
+      }
+
+      #items [part~="cell"]:not(.vaadin-grid-details-cell) {
+         padding: 24px 8px;
+      }
+
+      #footer [part~="cell"] {
+        background: #fff;
+        font-weight: bold;
+      }
+
+      [part~="cell"]:first-child {
+        padding: 0 8px;
+      }
     </style>
   </template>
 </dom-module>

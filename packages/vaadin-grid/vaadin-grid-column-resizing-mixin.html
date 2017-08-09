@@ -26,7 +26,7 @@
         transform: translateX(-100%);
       }
 
-      [part~="scroller"][column-resizing] {
+      #scroller[column-resizing] {
         -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -52,7 +52,7 @@
 
     _onHeaderTrack(e) {
       const handle = e.target;
-      if (handle.classList.contains('vaadin-grid-column-resize-handle')) {
+      if (handle.getAttribute('part') === 'resize-handle') {
         const cell = handle.parentElement;
         let column = cell._column;
 
@@ -69,7 +69,7 @@
           }).pop();
         }
 
-        const columnRowCells = Array.from(this.$.header.querySelectorAll('.vaadin-grid-row:last-child .vaadin-grid-cell'));
+        const columnRowCells = Array.from(this.$.header.querySelectorAll('[part~="row"]:last-child [part~="cell"]'));
         var targetCell = columnRowCells.filter(cell => cell._column === column)[0];
         // Resize the target column
         if (targetCell.offsetWidth) {

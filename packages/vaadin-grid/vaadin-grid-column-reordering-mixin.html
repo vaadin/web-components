@@ -1,29 +1,29 @@
 <dom-module id="vaadin-grid-column-reordering-styles">
   <template>
     <style>
-      vaadin-grid-table[reordering] .vaadin-grid-cell {
+      :host([reordering]) [part~="cell"] {
         background: #000;
       }
 
-      :host([reordering]) .vaadin-grid-cell[reorder-status="dragging"] {
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
         background: var(--primary-color, #000);
       }
 
-      vaadin-grid-table[reordering] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+      :host([reordering]) [part~="cell"]:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
         transition: opacity 300ms;
         transform: translateZ(0);
         opacity: 0.8;
       }
 
-      #scroller .vaadin-grid-cell[reorder-status="allowed"] ::slotted(vaadin-grid-cell-content) {
+      #scroller [part~="cell"][reorder-status="allowed"] ::slotted(vaadin-grid-cell-content) {
         opacity: 1;
       }
 
-      #scroller .vaadin-grid-cell[reorder-status="dragging"] {
+      #scroller [part~="cell"][reorder-status="dragging"] {
         background: var(--primary-color, #000);
       }
 
-      #scroller .vaadin-grid-cell[reorder-status="dragging"] ::slotted(vaadin-grid-cell-content) {
+      #scroller [part~="cell"][reorder-status="dragging"] ::slotted(vaadin-grid-cell-content) {
         opacity: 0.95;
       }
 
@@ -313,7 +313,7 @@
     }
 
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.prototype.filter.call(this.$.header.querySelectorAll('.vaadin-grid-cell'), cell => {
+      const targetCell = Array.prototype.filter.call(this.$.header.querySelectorAll('[part~="cell"]'), cell => {
         return cell._column === targetColumn;
       })[0];
       const sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();

@@ -19,23 +19,22 @@
   <template>
     <style include="vaadin-grid-styles"></style>
 
-    <div id="scroller" part="scroller" no-scrollbars$="[[_noScrollbars]]" safari$="[[_safari]]" ios$="[[_ios]]" scrolling$="[[scrolling]]" loading$=[[_loading]]>
-      <table id="table" part="table">
+    <div id="scroller" no-scrollbars$="[[_noScrollbars]]" safari$="[[_safari]]" ios$="[[_ios]]" scrolling$="[[scrolling]]" loading$=[[_loading]]>
+      <table id="table">
         <caption>
           <!-- TODO: Implement -->
           <div id="fixedsizer"></div>
         </caption>
-        <thead part="header" id="header"></thead>
-        <tbody part="body" id="items"></tbody>
-        <tfoot part="footer" id="footer"></tfoot>
+        <thead id="header"></thead>
+        <tbody id="items"></tbody>
+        <tfoot id="footer"></tfoot>
       </table>
 
       <div id="reorderghost"></div>
       <vaadin-grid-outer-scroller id="outerscroller"
-          part="outerscroller"
           scroll-target="[[scrollTarget]]"
           scroll-handler="[[_this]]">
-        <div id="outersizer" part="outersizer" style$="top: [[_estScrollHeight]]px"></div>
+        <div id="outersizer" part='row' class='vaadin-grid-row vaadin-grid-body-row' style$="top: [[_estScrollHeight]]px"></div>
       </vaadin-grid-outer-scroller>
     </div>
 
@@ -47,6 +46,16 @@
 
 <script>
   /**
+   * ### Styling
+   *
+   * The following shadow DOM parts are exposed for styling:
+   *
+   * Part name | Description
+   * ----------------|----------------
+   * `row` | The internal row in the grid
+   * `cell` | The internal cell in the grid
+   * `resize-handle` | The internal handler for resizing of the columns
+   *
    * @memberof Vaadin
    * @mixes Vaadin.ThemableMixin
    */
@@ -105,6 +114,7 @@
       for (var i = 0; i < count; i++) {
         const row = document.createElement('tr');
         row.classList.add('vaadin-grid-row');
+        row.classList.add('vaadin-grid-body-row');
         row.setAttribute('part', 'row');
 
         if (this._columnTree) {
@@ -229,11 +239,13 @@
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
         headerRow.classList.add('vaadin-grid-row');
+        headerRow.classList.add('vaadin-grid-header-row');
         headerRow.setAttribute('part', 'row');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
         footerRow.classList.add('vaadin-grid-row');
+        footerRow.classList.add('vaadin-grid-footer-row');
         footerRow.setAttribute('part', 'row');
         this.$.footer.appendChild(footerRow);
       }
