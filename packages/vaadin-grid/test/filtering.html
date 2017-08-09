@@ -88,7 +88,7 @@
 
       it('should fire `filter-changed` on path change', function(done) {
         filter.value = 'foo';
-        filter.flushDebouncer('filter-changed');
+        filter._debouncerFilterChanged.flush();
 
         filter.addEventListener('filter-changed', function(e) {
           done();
@@ -111,7 +111,7 @@
 
     function flushFilters(grid) {
       Polymer.dom(grid).querySelectorAll('vaadin-grid-filter').forEach(function(filter) {
-        filter.flushDebouncer('filter-changed');
+        filter._debouncerFilterChanged.flush();
       });
     }
 
@@ -123,16 +123,7 @@
         this.timeout(30000);
 
         grid = fixture('grid');
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
-            function(col) {
-              col._templateObserver.flush();
-            });
-        }
-
+        flushGrid(grid);
         flushFilters(grid);
         if (grid._observer.flush) {
           grid._observer.flush();
@@ -182,11 +173,7 @@
         this.timeout(30000);
 
         grid = fixture('grid');
-        Polymer.dom.flush();
-
-        if (Polymer.Element) {
-          flushColumns(grid);
-        }
+        flushGrid(grid)
 
         flushFilters(grid);
         grid._filters[0].value = '';
@@ -203,9 +190,7 @@
           last: 'bar'
         }];
 
-        if (grid._observer.flush) {
-          grid._observer.flush();
-        }
+        flushGrid(grid);
       });
 
       it('should filter automatically', function() {

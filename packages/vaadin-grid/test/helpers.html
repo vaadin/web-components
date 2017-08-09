@@ -18,6 +18,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       grid._debounceScrolling.flush();
     }
     Polymer.flush();
+    if (grid._debouncerLoad) {
+      grid._debouncerLoad.flush();
+    }
   }
 
   function getCell(grid, index) {
@@ -320,7 +323,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function flushColumns(grid) {
     Array.prototype
-      .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
+      .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
       function(col) {
         col._templateObserver.flush();
       });
