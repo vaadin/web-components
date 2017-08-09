@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
-<dom-module id="vaadin-dropdown">
+<dom-module id="vaadin-combo-box-dropdown">
   <template>
     <style>
       :host {
@@ -29,12 +29,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   {
     /**
-     * `<vaadin-dropdown>` is a Polymer element for creating dropdowns.
+     * `<vaadin-combo-box-dropdown>` is a Polymer element for creating dropdowns.
      * @memberof Vaadin
      */
     class DropdownElement extends Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element) {
       static get is() {
-        return 'vaadin-dropdown';
+        return 'vaadin-combo-box-dropdown';
       }
 
       static get properties() {
@@ -128,14 +128,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
-       * Fired after the `vaadin-dropdown` opens.
+       * Fired after the `vaadin-combo-box-dropdown` opens.
        *
-       * @event vaadin-dropdown-opened
+       * @event vaadin-combo-box-dropdown-opened
        */
       /**
-       * Fired after the `vaadin-dropdown` closes.
+       * Fired after the `vaadin-combo-box-dropdown` closes.
        *
-       * @event vaadin-dropdown-closed
+       * @event vaadin-combo-box-dropdown-closed
        */
 
       _openedChanged(opened) {
@@ -145,11 +145,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
           window.addEventListener('scroll', this._boundSetPosition, true);
           this._addOutsideClickListener();
-          this.dispatchEvent(new CustomEvent('vaadin-dropdown-opened', {bubbles: true, composed: true}));
+          this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', {bubbles: true, composed: true}));
         } else {
           window.removeEventListener('scroll', this._boundSetPosition, true);
           this._removeOutsideClickListener();
-          this.dispatchEvent(new CustomEvent('vaadin-dropdown-closed', {bubbles: true, composed: true}));
+          this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', {bubbles: true, composed: true}));
         }
       }
 
