@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getCell(grid, index) {
-    return grid.$.items.querySelectorAll('.vaadin-grid-cell')[index];
+    return grid.$.items.querySelectorAll('[part~="cell"]')[index];
   }
 
   function getFirstCell(grid) {
@@ -239,7 +239,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getRowCells(row) {
-    return Array.prototype.slice.call(Polymer.dom(row).querySelectorAll('.vaadin-grid-cell'));
+    return Array.prototype.slice.call(Polymer.dom(row).querySelectorAll('[part~="cell"]'));
   }
 
   function getCellContent(cell) {

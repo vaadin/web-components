@@ -175,7 +175,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
-<dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid2">
+<dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid">
   <template>
     <style>
       #table {
@@ -186,29 +186,24 @@ This program is available under Apache License Version 2.0, available at https:/
         animation: 1ms appear-vaadin-grid-table-0;
       }
 
-      #header [part~="row"]:last-child [part~="cell"],
-      #items [part~="cell"] {
+      [part~="row"]:last-child [part~="header-cell"],
+      [part~="body-cell"] {
         border-bottom: 1px solid #dbdbdb;
       }
 
-      #footer [part~="cell"] {
+      [part~="footer-cell"] {
         border-top: 1px solid #dbdbdb;
       }
 
-      #header [part~="cell"],
-      #footer [part~="cell"]:not(empty) {
+      [part~="header-cell"],
+      [part~="footer-cell"]:not(empty) {
         background: #fff;
         font-weight: bold;
         padding: 8px 16px;
       }
 
-      #items [part~="cell"]:not(.vaadin-grid-details-cell) {
+      [part~="body-cell"]:not(.vaadin-grid-details-cell) {
          padding: 24px 8px;
-      }
-
-      #footer [part~="cell"] {
-        background: #fff;
-        font-weight: bold;
       }
 
       [part~="cell"]:first-child {

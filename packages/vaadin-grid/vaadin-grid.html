@@ -34,7 +34,7 @@
       <vaadin-grid-outer-scroller id="outerscroller"
           scroll-target="[[scrollTarget]]"
           scroll-handler="[[_this]]">
-        <div id="outersizer" part='row' class='vaadin-grid-row vaadin-grid-body-row' style$="top: [[_estScrollHeight]]px"></div>
+        <div id="outersizer" part='row' style$="top: [[_estScrollHeight]]px"></div>
       </vaadin-grid-outer-scroller>
     </div>
 
@@ -113,8 +113,6 @@
       const rows = [];
       for (var i = 0; i < count; i++) {
         const row = document.createElement('tr');
-        row.classList.add('vaadin-grid-row');
-        row.classList.add('vaadin-grid-body-row');
         row.setAttribute('part', 'row');
 
         if (this._columnTree) {
@@ -141,8 +139,6 @@
       cellContent.setAttribute('slot' , slotName);
 
       const cell = document.createElement('td');
-      cell.classList.add('vaadin-grid-cell');
-      cell.setAttribute('part', 'cell');
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
@@ -171,6 +167,7 @@
 
         column._cells = column._cells || [];
         if (templateName === 'template') {
+          cell.setAttribute('part', 'cell body-cell');
           column._cells.push(cell);
 
           if (index === columns.length - 1 && this._rowDetailsTemplate) {
@@ -186,6 +183,7 @@
             column.notifyPath('_cells.*', column._cells);
           }
         } else if (templateName === 'headerTemplate') {
+          cell.setAttribute('part', 'cell header-cell');
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             column._headerCell = cell;
           } else {
@@ -194,6 +192,7 @@
           }
         }
         else if (templateName === 'footerTemplate') {
+          cell.setAttribute('part', 'cell footer-cell');
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             column._footerCell = cell;
           } else {
@@ -238,14 +237,10 @@
       // TODO: DRY
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
-        headerRow.classList.add('vaadin-grid-row');
-        headerRow.classList.add('vaadin-grid-header-row');
         headerRow.setAttribute('part', 'row');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
-        footerRow.classList.add('vaadin-grid-row');
-        footerRow.classList.add('vaadin-grid-footer-row');
         footerRow.setAttribute('part', 'row');
         this.$.footer.appendChild(footerRow);
       }

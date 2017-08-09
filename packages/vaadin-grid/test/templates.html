@@ -96,7 +96,7 @@
 
   <script>
     function getHeaderCell(grid, index) {
-      return grid.$.header.querySelectorAll('.vaadin-grid-cell')[index];
+      return grid.$.header.querySelectorAll('[part~="cell"]')[index];
     }
 
     function getFirstHeaderCell(grid) {

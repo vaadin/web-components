@@ -125,7 +125,7 @@
     function getVisualCellContent(section, row, col) {
       var cell = Array.from(section.querySelectorAll('.vaadin-grid-cell:not(.vaadin-grid-details-cell)')).pop();
       if (section.id === 'footer') {
-        cell = Polymer.dom(section).querySelector('.vaadin-grid-cell');
+        cell = Polymer.dom(section).querySelector('[part~="cell"]');
       }
       var sectionRect = section.getBoundingClientRect();
       var sectionBorder = parseInt(section.style.borderTopWidth || 0);

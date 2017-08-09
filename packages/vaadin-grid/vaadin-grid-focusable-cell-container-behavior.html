@@ -41,7 +41,7 @@
 
       if (this.is === 'vaadin-grid-table-body' && !cell.hasAttribute('detailscell')) {
         // note: having `cell.column.name` property for announcing would maybe be a good option here?
-        var index = Array.prototype.indexOf.call(Polymer.dom(cell.parentElement).querySelectorAll('.vaadin-grid-cell'), cell);
+        var index = Array.prototype.indexOf.call(Polymer.dom(cell.parentElement).querySelectorAll('[part~="cell"]'), cell);
         var lastHeaderRow = this.domHost.$.header.lastElementChild;
         var headerCell = lastHeaderRow.children[index];
         activeTarget = headerCell._cellContent.id + ' ' + activeTarget;
