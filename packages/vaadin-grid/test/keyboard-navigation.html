@@ -75,8 +75,14 @@
           this.timeout(30000);
 
           grid = fixture('default')[0];
+
+          if (Polymer.Element) {
+            flushColumns(grid);
+          }
+
           grid.items = ['foo', 'bar'];
           Polymer.dom.flush();
+
           scroller = grid.$.scroller;
           header = grid.$.header;
           body = grid.$.items;
@@ -183,10 +189,7 @@
         }
 
         function f2() {
-          // keycode is 113, but needs to be increment by one until
-          // https://github.com/PolymerElements/iron-a11y-keys-behavior/pull/64
-          // is merged.
-          MockInteractions.keyDownOn(grid, 113 + 1);
+          MockInteractions.keyDownOn(grid, 113);
         }
 
         function getFirstHeaderCell() {
@@ -1270,7 +1273,6 @@
             right(); // focus the cell with input.
 
             f2();
-
             expect(input.focus.callCount).to.eql(1);
           });
 

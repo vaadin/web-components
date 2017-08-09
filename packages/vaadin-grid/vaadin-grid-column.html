@@ -42,20 +42,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * @protected
        */
       headerTemplate: {
-        type: Object,
-        value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template.header') || null, {});
-        }
+        type: Object
       },
 
       /**
        * @protected
        */
       footerTemplate: {
-        type: Object,
-        value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template.footer') || null, {});
-        }
+        type: Object
       },
 
       /**
@@ -93,8 +87,33 @@ This program is available under Apache License Version 2.0, available at https:/
       '_lastFrozenChanged(_lastFrozen)'
     ],
 
+    created: function() {
+      var handler = function(info) {
+        if (info.addedNodes.length >= 0) {
+          this.headerTemplate = this._prepareHeaderTemplate();
+          this.footerTemplate = this._prepareFooterTemplate();
+          this.template = this._prepareBodyTemplate();
+        }
+      };
+
+      this._templateObserver = Polymer.Element ?
+        new Polymer.FlattenedNodesObserver(this, handler) : Polymer.dom(this).observeNodes(handler);
+    },
+
+    _prepareHeaderTemplate: function() {
+      return this._prepareTemplatizer(this._findTemplate('template.header') || null, {});
+    },
+
+    _prepareFooterTemplate: function() {
+      return this._prepareTemplatizer(this._findTemplate('template.footer') || null, {});
+    },
+
+    _prepareBodyTemplate: function() {
+      return this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)' || null, {}));
+    },
+
     _prepareTemplatizer: function(template, instanceProps) {
-      if (template) {
+      if (template && !template.templatizer) {
         var templatizer = new vaadin.elements.grid.Templatizer();
         templatizer.dataHost = this.dataHost;
         templatizer._instanceProps = instanceProps || templatizer._instanceProps;
@@ -168,10 +187,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @protected
        */
       template: {
-        type: Object,
-        value: function() {
-          return this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)'));
-        }
+        type: Object
       },
 
     },

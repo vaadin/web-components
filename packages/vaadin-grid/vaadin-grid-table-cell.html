@@ -222,11 +222,12 @@
 
         this.style.height = '';
 
-        this._cellContent = document.createElement('vaadin-grid-cell-content');
+        this._cellContent = this._cellContent || document.createElement('vaadin-grid-cell-content');
 
         var contentId = vaadin.elements.grid._contentIndex = vaadin.elements.grid._contentIndex + 1 || 0;
         var id = 'vaadin-grid-cell-content-' + contentId;
 
+        this._cellContent.innerHTML = '';
         Polymer.dom(this._cellContent).appendChild(this.instance.root);
 
         // `aria-labelledby` a11y attribute in the focus trap needs cell IDs
@@ -237,10 +238,10 @@
         if (Polymer.Element) {
           this._cellContent.setAttribute('slot', id);
 
-          this._insertionPoint = document.createElement('slot');
+          this._insertionPoint = this._insertionPoint || document.createElement('slot');
           this._insertionPoint.setAttribute('name', id);
         } else {
-          this._insertionPoint = document.createElement('content');
+          this._insertionPoint = this._insertionPoint || document.createElement('content');
           this._insertionPoint.setAttribute('select', '#' + id);
         }
       },
@@ -285,7 +286,8 @@
       ],
 
       observers: [
-        '_headerTemplateChanged(headerTemplate, isAttached)',
+        '_headerTemplateChanged(headerTemplate)',
+        '_isEmptyChanged(_isEmpty, isAttached)',
         '_resizableChanged(resizable)'
       ],
 
@@ -477,20 +479,22 @@
         })[0];
       },
 
-      _headerTemplateChanged: function(headerTemplate, isAttached) {
-        if (headerTemplate === undefined || isAttached === undefined) {
+      _headerTemplateChanged: function(headerTemplate) {
+        if (headerTemplate === undefined) {
           return;
         }
 
         if (headerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
-          this._isEmpty = false;
-          this.instance = this.instance || headerTemplate.templatizer.createInstance();
+          this.instance = headerTemplate.templatizer.createInstance();
           this._templatizer = headerTemplate.templatizer;
+          this._isEmpty = false;
         } else {
+          this.instance = {root: document.createElement('div')};
           this._isEmpty = true;
-          this.instance = this.instance || {root: document.createElement('div')};
         }
+      },
 
+      _isEmptyChanged: function(isEmpty, isAttached) {
         // Safari 9 doesn't bubble events while not attached to the DOM. #552
         if (isAttached) {
           this.fire('cell-empty-changed');
@@ -510,22 +514,24 @@
         vaadin.elements.grid.CellClickBehavior
       ],
 
-      observers: ['_footerTemplateChanged(footerTemplate, isAttached)'],
+      observers: ['_footerTemplateChanged(footerTemplate)', '_isEmptyChanged(_isEmpty, isAttached)'],
 
-      _footerTemplateChanged: function(footerTemplate, isAttached) {
-        if (footerTemplate === undefined || isAttached === undefined) {
+      _footerTemplateChanged: function(footerTemplate) {
+        if (footerTemplate === undefined) {
           return;
         }
 
         if (footerTemplate !== null && (this._isColumnRow || this.column.localName === 'vaadin-grid-column-group')) {
-          this._isEmpty = false;
-          this.instance = this.instance || footerTemplate.templatizer.createInstance();
+          this.instance = footerTemplate.templatizer.createInstance();
           this._templatizer = footerTemplate.templatizer;
+          this._isEmpty = false;
         } else {
+          this.instance = {root: document.createElement('div')};
           this._isEmpty = true;
-          this.instance = this.instance || {root: document.createElement('div')};
         }
+      },
 
+      _isEmptyChanged: function(isEmpty, isAttached) {
         // Safari 9 doesn't bubble events while not attached to the DOM. #552
         if (isAttached) {
           this.fire('cell-empty-changed');

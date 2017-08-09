@@ -48,6 +48,7 @@
     "dragStart": false,
     "dragOver": false,
     "dragAndDropOver": false,
-    "makeSoloTouchEvent": false
+    "makeSoloTouchEvent": false,
+    "flushColumns": false
   }
 }

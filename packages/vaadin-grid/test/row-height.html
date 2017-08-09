@@ -81,6 +81,10 @@
       function init(fixtureName, cb) {
         grid = fixture(fixtureName);
 
+        if (Polymer.Element) {
+          flushColumns(grid);
+        }
+
         listenOnce(grid, 'items-assigned', function() {
           Polymer.dom.flush();
 

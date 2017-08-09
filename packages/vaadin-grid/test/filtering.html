@@ -124,6 +124,15 @@
 
         grid = fixture('grid');
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
+            function(col) {
+              col._templateObserver.flush();
+            });
+        }
+
         flushFilters(grid);
         if (grid._observer.flush) {
           grid._observer.flush();
@@ -174,6 +183,11 @@
 
         grid = fixture('grid');
         Polymer.dom.flush();
+
+        if (Polymer.Element) {
+          flushColumns(grid);
+        }
+
         flushFilters(grid);
         grid._filters[0].value = '';
         grid._filters[1].value = '';

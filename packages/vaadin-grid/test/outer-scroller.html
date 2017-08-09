@@ -83,6 +83,11 @@
         this.timeout(30000);
 
         grid = fixture('default');
+
+        if (Polymer.Element) {
+          flushColumns(grid);
+        }
+
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         outerScroller = scroller.$.outerscroller;
@@ -288,6 +293,11 @@
         this.timeout(30000);
 
         grid = fixture('scrollable-content');
+
+        if (Polymer.Element) {
+          flushColumns(grid);
+        }
+
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();
         if (grid._observer.flush) {

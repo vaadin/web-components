@@ -102,17 +102,22 @@
         var component;
         var wrapper;
         var content;
-        var sliderInput;
+        var slider;
 
         beforeEach(function(done) {
           // The before each block times out in CI with Firefox on Polymer 2
           this.timeout(30000);
 
           component = fixture('default');
+
+          if (Polymer.Element) {
+            flushColumns(component.$.grid);
+          }
+
           wrapper = Polymer.dom(component.$.grid).querySelector('vaadin-grid-cell-content');
           content = Polymer.dom(component.$.grid).querySelector('.my-content');
 
-          sliderInput = component.$$('paper-slider').$$('paper-input');
+          slider = component.$$('paper-slider');
           Polymer.Base.async(done, 1);
         });
 
@@ -125,7 +130,7 @@
         });
 
         it('should polyfill style mixins to child web-components', function() {
-          expect(window.getComputedStyle(sliderInput).color).to.equal('rgb(0, 255, 0)');
+          expect(window.getComputedStyle(slider.$$('paper-input')).color).to.equal('rgb(0, 255, 0)');
         });
 
         it('should not have vaadin-grid-table scope', function() {

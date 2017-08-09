@@ -210,6 +210,14 @@
         headerRows = getRows(header);
         footerRows = getRows(footer);
         bodyRows = getRows(body);
+
+        if (Polymer.Element) {
+          Array.prototype
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
+            function(col) {
+              col._templateObserver.flush();
+            });
+        }
       }
 
       describe('No templates', function() {
@@ -223,7 +231,6 @@
         it('should have empty header', function() {
           var cells = Polymer.dom(header).querySelectorAll('.vaadin-grid-cell');
           expect(cells).not.to.be.empty;
-
           cells.forEach(function(cell) {
             expect(cell._isEmpty).to.be.true;
           });
@@ -336,6 +343,7 @@
           Polymer.dom.flush();
 
           if (Polymer.Element) {
+            extraColumn._templateObserver.flush();
             grid._observer.flush();
           }
 

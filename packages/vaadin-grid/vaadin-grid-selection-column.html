@@ -93,16 +93,20 @@ When the grid is configured with an array of items as the data provider, it prov
         '_onSelectAllChanged(selectAll, _grid)'
       ],
 
-      ready: function() {
+      _prepareHeaderTemplate: function() {
         var headerTemplate = this._prepareTemplatizer(this._findTemplate('template.header') || this.$.defaultHeaderTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
-        this.headerTemplate = headerTemplate;
 
+        return headerTemplate;
+      },
+
+      _prepareBodyTemplate: function() {
         var template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)') || this.$.defaultBodyTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
-        this.template = template;
+
+        return template;
       },
 
       detached: function() {

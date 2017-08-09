@@ -169,6 +169,106 @@
           expect(getCellContent(grid.$.header._rows[1].cells[0]).textContent).to.contain('header1');
         });
       });
+
+      describe('dom observing', function() {
+        function flush(observer) {
+          Polymer.Element ? observer.flush() : Polymer.dom.flush();
+        }
+
+        it('should pickup header template', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          template.classList.add('header');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+
+          expect(column.headerTemplate).to.eql(template);
+        });
+
+        it('should pickup footer template', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          template.classList.add('footer');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+
+          expect(column.footerTemplate).to.eql(template);
+        });
+
+        it('should pickup body template', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+
+          expect(column.template).to.eql(template);
+        });
+
+        it('should re-pickup header template', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          template.classList.add('header');
+          var template2 = document.createElement('template');
+          template2.classList.add('header');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+          Polymer.dom(column).removeChild(template);
+          Polymer.dom(column).appendChild(template2);
+          flush(column._templateObserver);
+          expect(column.headerTemplate).to.eql(template2);
+        });
+
+        it('should pickup new body template', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          var template2 = document.createElement('template');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+          Polymer.dom(column).removeChild(template);
+          Polymer.dom(column).appendChild(template2);
+          flush(column._templateObserver);
+
+          expect(column.template).to.eql(template2);
+        });
+
+        it('should prepare template when added lazily', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+
+          Polymer.dom(grid).appendChild(column);
+          flush(grid._observer);
+
+          expect(Polymer.Element ? template.templatizer._templatizerTemplate : template.templatizer._templatized).to.eql(template);
+          expect(column.template).to.eql(template);
+        });
+
+        it('should prepare a new template when added lazily', function() {
+          var column = document.createElement('vaadin-grid-column');
+          var template = document.createElement('template');
+          var template2 = document.createElement('template');
+
+          Polymer.dom(column).appendChild(template);
+          flush(column._templateObserver);
+
+          Polymer.dom(grid).appendChild(column);
+          flush(grid._observer);
+
+          Polymer.dom(column).removeChild(template);
+          Polymer.dom(column).appendChild(template2);
+          flush(column._templateObserver);
+
+          expect(Polymer.Element ? template2.templatizer._templatizerTemplate : template2.templatizer._templatized).to.eql(template2);
+          expect(column.template).to.eql(template2);
+        });
+      });
     });
 
   </script>
