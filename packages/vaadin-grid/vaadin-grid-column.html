@@ -173,13 +173,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _stampBodyTemplate(template, cells) {
-      // console.log(template, this._cells);
       if (!template || !this._cells) {
         return;
       }
 
-      this._cells.forEach((cell) => {
-        if (!cell._instance) {
+      this._cells.forEach(cell => {
+        if (cell._template !== template) {
+          cell._template = template;
+
+          cell._content.innerHTML = '';
           const inst = template.templatizer.createInstance();
           cell._content.appendChild(inst.root);
           cell._instance = inst;
@@ -188,7 +190,6 @@ This program is available under Apache License Version 2.0, available at https:/
           inst.item = cell.parentElement._item;
         }
       });
-      // cell._instance = inst;
     }
 
     // TODO: DRY

@@ -166,9 +166,6 @@
       });
 
       describe('dom observing', function() {
-        function flush(observer) {
-          Polymer.Element ? observer.flush() : Polymer.dom.flush();
-        }
 
         it('should pickup header template', function() {
           var column = document.createElement('vaadin-grid-column');
@@ -176,7 +173,7 @@
           template.classList.add('header');
 
           Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
 
           expect(column.headerTemplate).to.eql(template);
         });
@@ -187,7 +184,7 @@
           template.classList.add('footer');
 
           Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
 
           expect(column.footerTemplate).to.eql(template);
         });
@@ -197,7 +194,7 @@
           var template = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
 
           expect(column.template).to.eql(template);
         });
@@ -210,10 +207,10 @@
           template2.classList.add('header');
 
           Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
           Polymer.dom(column).removeChild(template);
           Polymer.dom(column).appendChild(template2);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
           expect(column.headerTemplate).to.eql(template2);
         });
 
@@ -223,10 +220,10 @@
           var template2 = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
           Polymer.dom(column).removeChild(template);
           Polymer.dom(column).appendChild(template2);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
 
           expect(column.template).to.eql(template2);
         });
@@ -236,12 +233,12 @@
           var template = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column._templateObserver.flush();
 
           Polymer.dom(grid).appendChild(column);
-          flush(grid._observer);
+          grid._observer.flush();
 
-          expect(Polymer.Element ? template.templatizer._templatizerTemplate : template.templatizer._templatized).to.eql(template);
+          expect(template.templatizer._templatizerTemplate).to.eql(template);
           expect(column.template).to.eql(template);
         });
 
@@ -250,17 +247,17 @@
           var template = document.createElement('template');
           var template2 = document.createElement('template');
 
-          Polymer.dom(column).appendChild(template);
-          flush(column._templateObserver);
+          column.appendChild(template);
+          column._templateObserver.flush();
 
-          Polymer.dom(grid).appendChild(column);
-          flush(grid._observer);
+          grid.appendChild(column);
+          grid._observer.flush();
 
-          Polymer.dom(column).removeChild(template);
-          Polymer.dom(column).appendChild(template2);
-          flush(column._templateObserver);
+          column.removeChild(template);
+          column.appendChild(template2);
+          column._templateObserver.flush();
 
-          expect(Polymer.Element ? template2.templatizer._templatizerTemplate : template2.templatizer._templatized).to.eql(template2);
+          expect(template2.templatizer._templatizerTemplate).to.eql(template2);
           expect(column.template).to.eql(template2);
         });
       });
