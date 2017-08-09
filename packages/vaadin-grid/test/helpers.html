@@ -305,4 +305,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
   }
 
+  function flushColumns(grid) {
+    Array.prototype
+      .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
+      function(col) {
+        col._templateObserver.flush();
+      });
+  }
+
 </script>

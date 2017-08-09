@@ -85,11 +85,7 @@
         grid = fixture('default');
 
         if (Polymer.Element) {
-          Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
-            function(col) {
-              col._templateObserver.flush();
-            });
+          flushColumns(grid);
         }
 
         grid.dataProvider = infiniteDataProvider;
@@ -299,11 +295,7 @@
         grid = fixture('scrollable-content');
 
         if (Polymer.Element) {
-          Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
-            function(col) {
-              col._templateObserver.flush();
-            });
+          flushColumns(grid);
         }
 
         grid.dataProvider = infiniteDataProvider;

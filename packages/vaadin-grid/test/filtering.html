@@ -127,7 +127,7 @@
 
         if (Polymer.Element) {
           Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'), 
+            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
             function(col) {
               col._templateObserver.flush();
             });
@@ -185,11 +185,7 @@
         Polymer.dom.flush();
 
         if (Polymer.Element) {
-          Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
-            function(col) {
-              col._templateObserver.flush();
-            });
+          flushColumns(grid);
         }
 
         flushFilters(grid);

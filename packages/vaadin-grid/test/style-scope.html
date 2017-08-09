@@ -111,11 +111,7 @@
           component = fixture('default');
 
           if (Polymer.Element) {
-            Array.prototype
-              .forEach.call(component.$.grid.querySelectorAll('vaadin-grid-column'),
-              function(col) {
-                col._templateObserver.flush();
-              });
+            flushColumns(component.$.grid);
           }
 
           wrapper = Polymer.dom(component.$.grid).querySelector('vaadin-grid-cell-content');
