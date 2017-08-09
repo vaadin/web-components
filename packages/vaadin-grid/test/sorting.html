@@ -67,24 +67,30 @@
           this.timeout(30000);
 
           sorter = fixture('sorter');
-          title = Polymer.dom(sorter).querySelector('.title');
-          button = Polymer.dom(sorter).querySelector('button');
-          indicators = Polymer.dom(sorter.root).querySelector('#indicators');
-          directionIndicator = Polymer.dom(sorter.root).querySelector('#direction');
-          orderIndicator = Polymer.dom(sorter.root).querySelector('#order');
-          announcer = Polymer.dom(sorter.root).querySelector('#announcer');
+          title = sorter.querySelector('.title');
+          button = sorter.querySelector('button');
+          indicators = sorter.shadowRoot.querySelector('#indicators');
+          directionIndicator = sorter.shadowRoot.querySelector('#direction');
+          orderIndicator = sorter.shadowRoot.querySelector('#order');
+          announcer = sorter.shadowRoot.querySelector('#announcer');
         });
+
+        function clickSorter(sorter) {
+          var clickEvent = new CustomEvent('click', {cancelable: true});
+          sorter._onCellClick(clickEvent);
+          return clickEvent;
+        }
 
         it('should have default direction', function() {
           expect(sorter.direction).to.equal(null);
         });
 
         it('should toggle direction', function() {
-          click(title);
+          clickSorter(sorter);
           expect(sorter.direction).to.equal('asc');
-          click(title);
+          clickSorter(sorter);
           expect(sorter.direction).to.equal('desc');
-          click(title);
+          clickSorter(sorter);
           expect(sorter.direction).to.equal(null);
         });
 
@@ -118,6 +124,12 @@
 
         it('should have aria-hidden for indicator', function() {
           expect(indicators.getAttribute('aria-hidden')).to.equal('true');
+        });
+
+        it('should prevent default on click', function() {
+          const clickEvent = clickSorter(sorter);
+
+          expect(clickEvent.defaultPrevented).to.be.true;
         });
 
         describe('announcer', function() {
@@ -156,7 +168,7 @@
 
             sorter.direction = 'asc';
 
-            sorter.flushDebouncer('direction-announce');
+            sorter._debouncerDirectionAnnounce.flush();
 
             expect(spy.callCount).to.eql(1);
           });
@@ -167,7 +179,7 @@
 
             sorter._order = 0;
 
-            sorter.flushDebouncer('direction-announce');
+            sorter._debouncerDirectionAnnounce.flush();
 
             expect(spy.callCount).to.eql(1);
           });
@@ -179,19 +191,11 @@
             sorter.direction = 'asc';
             sorter._order = 0;
 
-            sorter.flushDebouncer('direction-announce');
+            sorter._debouncerDirectionAnnounce.flush();
 
             expect(spy.callCount).to.eql(1);
             expect(spy.args[0][0].detail.text).to.eql('Sorted ascending, Order 1.');
           });
-        });
-
-        it('should prevent default on click', function() {
-          var clickEvent = new CustomEvent('click', {cancelable: true});
-
-          sorter.dispatchEvent(clickEvent);
-
-          expect(clickEvent.defaultPrevented).to.be.true;
         });
       });
 
@@ -203,8 +207,8 @@
           this.timeout(30000);
 
           cellContent = fixture('sorter-in-cell-content');
-          sorter = Polymer.dom(cellContent).querySelector('vaadin-grid-sorter');
-          announcer = Polymer.dom(sorter.root).querySelector('#announcer');
+          sorter = cellContent.querySelector('vaadin-grid-sorter');
+          announcer = sorter.shadowRoot.querySelector('#announcer');
         });
 
         it('should have aria-hidden state on announcer by default', function() {
@@ -221,7 +225,7 @@
           cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
           cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
 
-          sorter.async(function() {
+          setTimeout(() => {
             expect(announcer.getAttribute('aria-hidden')).to.equal('true');
             done();
           }, 1);
@@ -250,7 +254,9 @@
               first: 'bar',
               last: 'bar'
             }];
-            animationFrameFlush(done);
+
+            flushGrid(grid);
+            done();
           });
         });
 
@@ -316,13 +322,13 @@
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
           });
 
-          it('should not sort the items if sorters is empty', function() {
+          it('should not sort the items if sorter directions are not defined', function() {
             sorterFirst.direction = null;
             sorterLast.direction = null;
-            grid.items = buildDataSet(1000);
+            grid.items = buildDataSet(100);
             var bodyRows = getRows(grid.$.items);
             var cells = getRowCells(bodyRows[0]);
-            expect(cells[0].item).to.equal(grid.items[0]);
+            expect(cells[0]._instance.item).to.equal(grid.items[0]);
           });
 
           it('should sort empty values', function() {
