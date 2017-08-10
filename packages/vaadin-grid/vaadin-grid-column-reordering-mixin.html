@@ -1,22 +1,6 @@
 <dom-module id="vaadin-grid-column-reordering-styles">
   <template>
     <style>
-      #scroller[reordering] [part~="cell"] {
-        background: #f0f0f0;
-      }
-
-      #scroller[reordering] [part~="cell"][reorder-status="allowed"] {
-        background: #ffffff;
-      }
-
-      #scroller[reordering] [part~="cell"][reorder-status="dragging"] {
-        background: #ece9ec;
-      }
-
-      #scroller [part~="cell"][reorder-status="dragging"] {
-        background: var(--primary-color, #000);
-      }
-
       #scroller[no-content-pointer-events] [part~="cell"] {
         pointer-events: none;
       }
@@ -78,7 +62,7 @@
     }
 
     _onContextMenu(e) {
-      if (this.$.scroller.hasAttribute('reordering')) {
+      if (this.hasAttribute('reordering')) {
         e.preventDefault();
       }
     }
@@ -107,7 +91,7 @@
     }
 
     _onTouchMove(e) {
-      if (this.$.scroller.hasAttribute('reordering')) {
+      if (this.hasAttribute('reordering')) {
         e.preventDefault();
         var dragOver = new CustomEvent('dragover', {bubbles: true});
         dragOver.clientX = e.touches[0].clientX;
@@ -152,7 +136,7 @@
 
     _onTouchEnd(e) {
       clearTimeout(this._startTouchReorderTimeout);
-      if (this.$.scroller.hasAttribute('reordering')) {
+      if (this.hasAttribute('reordering')) {
         e.preventDefault();
         var event = new CustomEvent('dragend', {bubbles: true});
         this.dispatchEvent(event);
@@ -211,7 +195,7 @@
 
       const cell = this._getCellByCellContent(e.target);
       if (cell) {
-        this.$.scroller.setAttribute('reordering', '');
+        this.setAttribute('reordering', '');
         this._draggedColumn = cell._column;
         this._setSiblingsReorderStatus(this._draggedColumn, 'allowed');
         this._draggedColumn._reorderStatus = 'dragging';
@@ -286,7 +270,7 @@
         return;
       }
 
-      this.$.scroller.removeAttribute('reordering');
+      this.removeAttribute('reordering');
       this._draggedColumn._reorderStatus = '';
       this._setSiblingsReorderStatus(this._draggedColumn, '');
       this._draggedColumn = null;

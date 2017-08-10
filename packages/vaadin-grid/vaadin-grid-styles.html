@@ -210,6 +210,22 @@ This program is available under Apache License Version 2.0, available at https:/
       [part~="cell"][last-frozen]:not([part~="header-cell"]) {
         border-right: 1px solid #dbdbdb;
       }
+
+      :host([reordering]) [part~="cell"] {
+        background: #f0f0f0;
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="allowed"] {
+        background: #ffffff;
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
+        background: #ece9ec;
+      }
+
+      [part~="cell"][reorder-status="dragging"] {
+        background: var(--primary-color, #000);
+      }
     </style>
   </template>
 </dom-module>
