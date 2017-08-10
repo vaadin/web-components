@@ -123,7 +123,7 @@
 
   <script>
     function getVisualCellContent(section, row, col) {
-      var cell = Array.from(section.querySelectorAll('.vaadin-grid-cell:not(.vaadin-grid-details-cell)')).pop();
+      var cell = Array.from(section.querySelectorAll('[part~="cell"]:not(.vaadin-grid-details-cell)')).pop();
       if (section.id === 'footer') {
         cell = Polymer.dom(section).querySelector('[part~="cell"]');
       }
@@ -279,7 +279,7 @@
 
       it('should not start reordering on resize handle move', function() {
         makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0]).querySelector('.vaadin-grid-column-resize-handle'));
+          getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
 
@@ -302,7 +302,7 @@
 
       it('should not cancel touchmove on resizer', function() {
         var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0]).querySelector('.vaadin-grid-column-resize-handle'));
+          getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
         expect(e.defaultPrevented).to.be.false;
       });
 
