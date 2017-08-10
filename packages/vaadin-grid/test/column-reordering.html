@@ -333,21 +333,21 @@
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 
-        it('should update lastcolumn attribute', function() {
+        it('should update last-column attribute', function() {
           var cell = getCellByCellContent(grid, headerContent[3]);
-          expect(cell.hasAttribute('lastcolumn')).to.be.true;
+          expect(cell.hasAttribute('last-column')).to.be.true;
 
           dragOver(headerContent[2], headerContent[3]);
           cell = getCellByCellContent(grid, headerContent[2]);
-          expect(cell.hasAttribute('lastcolumn')).to.be.true;
+          expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
-        it('should update lastcolumn attribute (details open)', function() {
+        it('should update last-column attribute (details open)', function() {
           grid.expandItem(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
           var cell = getCellByCellContent(grid, headerContent[2]);
           cell = getCellByCellContent(grid, headerContent[2]);
-          expect(cell.hasAttribute('lastcolumn')).to.be.true;
+          expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
         it('should set order to new column', function(done) {

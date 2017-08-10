@@ -187,6 +187,7 @@
       this.appendChild(contentsFragment);
 
       this._frozenCellsChanged();
+      this._updateLastColumn();
     }
 
     _updateScrollerItem(row, index) {
@@ -240,6 +241,7 @@
 
       this._resizeHandler();
       this._frozenCellsChanged();
+      this._updateLastColumn();
     }
 
     _updateItem(row, item) {
@@ -274,6 +276,14 @@
         element.style.borderTopWidth = headerHeight;
         element.style.borderBottomWidth = footerHeight;
       });
+    }
+
+    _toggleAttribute(name, bool, node) {
+      if (bool) {
+        node.setAttribute(name, '');
+      } else {
+        node.removeAttribute(name);
+      }
     }
 
   }

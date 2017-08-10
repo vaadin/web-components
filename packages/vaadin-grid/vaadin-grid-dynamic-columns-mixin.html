@@ -121,5 +121,16 @@
         }
       });
     }
+
+    _updateLastColumn() {
+      Array.from(this.shadowRoot.querySelectorAll('tr')).forEach(row => {
+        Array.from(row.querySelectorAll('td:not(.vaadin-grid-details-cell), th:not(.vaadin-grid-details-cell)'))
+          .sort((a, b) => {
+            return a._column._order - b._column._order;
+          }).forEach((cell, cellIndex, children) => {
+            this._toggleAttribute('last-column', cellIndex === children.length - 1, cell);
+          });
+      });
+    }
   };
 </script>
