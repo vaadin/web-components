@@ -84,7 +84,7 @@
             last: 'qux'
           }
         }];
-        Polymer.dom.flush();
+        flushGrid(grid);
         body = grid.$.items;
         animationFrameFlush(done);
       });
@@ -148,18 +148,7 @@
       var grid;
 
       beforeEach(function() {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
         grid = fixture('invalid-path');
-
-        if (Polymer.Element) {
-          Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column'),
-            function(col) {
-              col._templateObserver.flush();
-            });
-        }
 
         grid.items = [{
           name: {
@@ -167,7 +156,7 @@
             last: 'bar'
           }
         }];
-        Polymer.dom.flush();
+        flushGrid(grid);
       });
 
       describe('invalid sorters paths', function() {

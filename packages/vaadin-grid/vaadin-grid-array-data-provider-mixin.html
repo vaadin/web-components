@@ -27,10 +27,13 @@
 
     _itemsChanged(items, splices) {
       if (!Array.isArray(items)) {
+        if (items === null) {
+          this.size = 0;
+        }
         return;
       }
 
-      this.size = (items || []).length;
+      this.size = items.length;
       this.dataProvider = this.dataProvider || this._arrayDataProvider;
       this.clearCache();
     }
