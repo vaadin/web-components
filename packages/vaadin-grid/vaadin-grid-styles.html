@@ -29,6 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
         height: 100%;
         width: 100%;
         transform: translateZ(0);
+        animation: 1ms appear-vaadin-grid-table-0;
       }
 
       #table {
@@ -38,6 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: auto;
         z-index: -2;
         position: relative;
+        border: 1px solid #dbdbdb;
       }
 
       #header {
@@ -178,14 +180,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid">
   <template>
     <style>
-      #table {
-        border: 1px solid #dbdbdb;
-      }
-
-      #scroller {
-        animation: 1ms appear-vaadin-grid-table-0;
-      }
-
       [part~="row"]:last-child [part~="header-cell"],
       [part~="body-cell"] {
         border-bottom: 1px solid #dbdbdb;
@@ -199,7 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
       [part~="footer-cell"]:not(empty) {
         background: #fff;
         font-weight: bold;
-        padding: 8px 16px;
+        padding: 8px;
       }
 
       [part~="body-cell"]:not(.vaadin-grid-details-cell) {

@@ -226,6 +226,11 @@
           cell._instance.index = index;
         }
       });
+      if (index % 2 === 1) {
+        row.setAttribute('odd', '');
+      } else {
+        row.removeAttribute('odd', '');
+      }
       this._getItem(index, row);
     }
 
