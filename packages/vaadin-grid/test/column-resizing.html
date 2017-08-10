@@ -169,7 +169,7 @@
       });
 
       it('should notify resize on column resize', function() {
-        var spy = sinon.spy(grid, '_gridResizeHandler');
+        var spy = sinon.spy(grid, '_resizeHandler');
         var options = {node: handle};
         var rect = headerCells[0].getBoundingClientRect();
 

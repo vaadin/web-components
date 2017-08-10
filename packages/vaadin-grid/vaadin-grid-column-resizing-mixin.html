@@ -95,6 +95,9 @@
           this.$.scroller.removeAttribute('column-resizing');
         }
       }
+
+      // Notify resize
+      this._resizeHandler();
     }
 
   };
