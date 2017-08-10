@@ -252,9 +252,11 @@
           cell._instance.item = item;
           cell._instance.__expanded__ = this._isExpanded(item);
           cell._instance.expanded = this._isExpanded(item);
-          // TODO: selected
+          cell._instance.__selected__ = this._isSelected(item);
+          cell._instance.selected = this._isSelected(item);
         }
       });
+      this._toggleAttribute('selected', this._isSelected(item), row);
       if (this._rowDetailsTemplate) {
         this._toggleDetailsCell(row, item);
       }

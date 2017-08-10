@@ -159,6 +159,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _prepareTemplatizer(template, instanceProps) {
       if (template && !template.templatizer) {
         const templatizer = new vaadin.elements.grid.Templatizer();
+        templatizer._grid = this._grid;
         templatizer.dataHost = this.dataHost;
         templatizer._instanceProps = instanceProps || templatizer._instanceProps;
         templatizer.template = template;

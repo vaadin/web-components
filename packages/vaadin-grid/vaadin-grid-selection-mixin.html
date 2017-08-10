@@ -109,10 +109,21 @@
     }
 
     _selectedItemsChanged(e) {
-      if (this.$.scroller._physicalItems && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
-        this.$.scroller._physicalItems.forEach(function(row) {
-          row.selected = this._isSelected(row.item);
-        }, this);
+      if (this.$.items.children.length && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
+        Array.from(this.$.items.children).forEach(row => {
+          this._toggleAttribute('selected', this._isSelected(row._item), row);
+        });
+      }
+    }
+
+    _selectedInstanceChangedCallback(instance, value) {
+      if (super._selectedInstanceChangedCallback) {
+        super._selectedInstanceChangedCallback(instance, value)
+      }
+      if (value) {
+        this.selectItem(instance.item);
+      } else {
+        this.deselectItem(instance.item);
       }
     }
   };
