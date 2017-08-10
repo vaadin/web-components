@@ -1,33 +1,23 @@
 <dom-module id="vaadin-grid-column-reordering-styles">
   <template>
     <style>
-      :host([reordering]) [part~="cell"] {
-        background: #000;
+      #scroller[reordering] [part~="cell"] {
+        background: #f0f0f0;
       }
 
-      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
-        background: var(--primary-color, #000);
+      #scroller[reordering] [part~="cell"][reorder-status="allowed"] {
+        background: #ffffff;
       }
 
-      :host([reordering]) [part~="cell"]:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        transition: opacity 300ms;
-        transform: translateZ(0);
-        opacity: 0.8;
-      }
-
-      #scroller [part~="cell"][reorder-status="allowed"] ::slotted(vaadin-grid-cell-content) {
-        opacity: 1;
+      #scroller[reordering] [part~="cell"][reorder-status="dragging"] {
+        background: #ece9ec;
       }
 
       #scroller [part~="cell"][reorder-status="dragging"] {
         background: var(--primary-color, #000);
       }
 
-      #scroller [part~="cell"][reorder-status="dragging"] ::slotted(vaadin-grid-cell-content) {
-        opacity: 0.95;
-      }
-
-      #scroller[no-content-pointer-events] .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+      #scroller[no-content-pointer-events] [part~="cell"] {
         pointer-events: none;
       }
 

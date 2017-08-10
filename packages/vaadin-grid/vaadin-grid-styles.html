@@ -185,23 +185,30 @@ This program is available under Apache License Version 2.0, available at https:/
         border-bottom: 1px solid #dbdbdb;
       }
 
-      [part~="footer-cell"] {
+      [part~="row"]:first-child [part~="footer-cell"] {
         border-top: 1px solid #dbdbdb;
       }
 
       [part~="header-cell"],
       [part~="footer-cell"]:not(empty) {
         background: #fff;
-        font-weight: bold;
         padding: 8px;
       }
 
       [part~="body-cell"]:not(.vaadin-grid-details-cell) {
-         padding: 24px 8px;
+         padding: 8px;
       }
 
       [part~="cell"]:first-child {
         padding: 0 8px;
+      }
+
+      [part~="cell"][frozen] {
+        background: #fff;
+      }
+
+      [part~="cell"][last-frozen]:not([part~="header-cell"]) {
+        border-right: 1px solid #dbdbdb;
       }
     </style>
   </template>
