@@ -6,7 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/templatize.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
@@ -54,7 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="backdrop" part="backdrop" on-tap="_outsideClickListener" hidden$="{{!withBackdrop}}">
+    <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}">
 
     </div>
     <div part="content" id="content">
@@ -73,10 +72,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * `<vaadin-overlay>` is a Polymer 2 element for creating overlays.
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
-     * @mixes Polymer.GestureEventListeners
      * @demo demo/index.html
      */
-    class OverlayElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+    class OverlayElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
         return 'vaadin-overlay';
       }
@@ -134,7 +132,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
-       * Close the overlay and fire `vaadin-overlay-close` event
+       * @event vaadin-overlay-close
+       * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
        */
       close(sourceEvent) {
         var evt = new CustomEvent('vaadin-overlay-close', {bubbles: true, cancelable: true, detail: {sourceEvent: sourceEvent}});

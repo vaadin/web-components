@@ -93,6 +93,23 @@
         expect(overlay.opened).to.be.true;
       });
 
+      it('should fire the vaadin-overlay-outside-click event on outside click', function(done) {
+        var outsideClickHandler = () => done();
+
+        overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
+        parent.click();
+        overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
+      });
+
+      it('should fire the vaadin-overlay-outside-click event on backdrop click', function(done) {
+        var outsideClickHandler = () => done();
+
+        overlay.withBackdrop = true;
+        overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
+        backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+        overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
+      });
+
       it('should not fire the vaadin-overlay-outside-click event on inside click', () => {
         var outsideClickHandler = () => {
           throw new Error('Should not come here!');
@@ -130,7 +147,7 @@
       it('should close on the backdrop click', () => {
         overlay.withBackdrop = true;
 
-        backdrop.click();
+        backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
 
         expect(overlay.opened).to.be.false;
       });
