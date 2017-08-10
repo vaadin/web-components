@@ -49,18 +49,16 @@
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
+        flushGrid(grid);
       });
 
-      it('increase pool size', function(done) {
-        animationFrameFlush(function() {
-          var lastItem = scroller._physicalItems[scroller.lastVisibleIndex];
-          var lastItemHeight = lastItem.offsetHeight;
-          var expectedFinalItem = Math.ceil(grid.offsetHeight / scroller._physicalAverage) - 1;
+      it('increase pool size', function() {
+        var lastItem = grid._physicalItems[grid.lastVisibleIndex];
+        var lastItemHeight = lastItem.offsetHeight;
+        var expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
 
-          expect(scroller.offsetHeight).to.equal(grid.offsetHeight);
-          expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
-          done();
-        });
+        expect(scroller.offsetHeight).to.equal(grid.offsetHeight);
+        expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
       });
 
       it('increase pool size after resizing the scroller', function(done) {
@@ -68,17 +66,18 @@
         Polymer.updateStyles();
         grid.style.display = 'none';
 
-        expect(scroller._physicalItems.length).to.eql(25);
+        expect(grid._physicalItems.length).to.eql(25);
 
         grid.style.display = '';
-        scroller._update();
-        Polymer.dom.flush();
+        grid._update();
+        grid._resizeHandler();
+        flushGrid(grid);
 
-        requestAnimationFrame(function() {
-          scroller.flushDebouncer('_debounceTemplate');
-          expect(scroller._physicalItems.length).to.be.greaterThan(25);
+        setTimeout(function() {
+          flushGrid(grid);
+          expect(grid._physicalItems.length).to.be.above(25);
           done();
-        });
+        }, 1000);
       });
 
       it('pool should not increase if the scroller has no size', function() {
@@ -87,33 +86,33 @@
 
         grid.classList.add('small');
         Polymer.updateStyles();
-        Polymer.dom.flush();
+        grid._resizeHandler();
+        flushGrid(grid);
 
-        scroller._update();
-        scroller._increasePoolIfNeeded();
+        grid._update();
+        grid._increasePoolIfNeeded();
 
-        expect(scroller._physicalCount).to.equal(25);
+        expect(grid._physicalCount).to.equal(25);
       });
 
-      it('should minimize increase pool iterations', function(done) {
-        var spy = sinon.spy(grid.$.scroller, '_increasePoolIfNeeded');
+      it('should minimize increase pool iterations', function() {
+        var spy = sinon.spy(grid, '_increasePoolIfNeeded');
         grid.style.height = '1000px';
+        grid._resizeHandler();
+        flushGrid(grid);
 
-        requestAnimationFrame(function() {
-          expect(spy.callCount).to.be.below(8);
-          done();
-        });
+        expect(spy.callCount).to.be.above(2);
+        expect(spy.callCount).to.be.below(8);
       });
 
-      it('should minimize physical count', function(done) {
-        expect(grid.$.scroller._physicalCount).to.be.below(26);
+      it('should minimize physical count', function() {
+        expect(grid._physicalCount).to.be.below(26);
         grid.style.height = '1000px';
+        grid._resizeHandler();
+        flushGrid(grid);
 
-        requestAnimationFrame(function() {
-          expect(grid.$.scroller._physicalCount).to.be.above(26);
-          expect(grid.$.scroller._physicalCount).to.be.below(87);
-          done();
-        });
+        expect(grid._physicalCount).to.be.above(26);
+        expect(grid._physicalCount).to.be.below(87);
       });
 
 
