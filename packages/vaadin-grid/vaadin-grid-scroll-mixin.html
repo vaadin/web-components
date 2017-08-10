@@ -234,11 +234,11 @@
         return;
       }
 
-      var columnsRow = this._columnTree[this._columnTree.length - 1].slice(0);
-      columnsRow.sort(function(a, b) {
+      const columnsRow = this._columnTree[this._columnTree.length - 1].slice(0);
+      columnsRow.sort((a, b) => {
         return a._order - b._order;
       });
-      var lastFrozen = columnsRow.reduce(function(prev, col, index) {
+      const lastFrozen = columnsRow.reduce((prev, col, index) => {
         col._lastFrozen = false;
         return col.frozen && !col.hidden ? index : prev;
       }, undefined);

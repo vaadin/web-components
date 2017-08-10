@@ -271,7 +271,11 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _lastFrozenChanged(lastFrozen) {
-      // this.fire('property-changed', {path: 'lastFrozen', value: lastFrozen});
+      this._allCells.forEach(cell => this._toggleAttribute('last-frozen', lastFrozen, cell));
+
+      if (this.parentElement && this.parentElement._columnPropChanged) {
+        this.parentElement._lastFrozen = lastFrozen;
+      }
     }
 
     _toggleAttribute(name, on, element) {
