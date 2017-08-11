@@ -116,7 +116,7 @@
         row.setAttribute('part', 'row');
 
         if (this._columnTree) {
-          this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'template', false, true);
+          this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
         rows.push(row);
       }
@@ -151,8 +151,8 @@
       return cell;
     }
 
-    _updateRow(row, columns, templateName, isColumnRow, noNotify) {
-      templateName = templateName || 'template';
+    _updateRow(row, columns, section, isColumnRow, noNotify) {
+      section = section || 'body';
 
       const cellsFragment = document.createDocumentFragment();
       const contentsFragment = document.createDocumentFragment();
@@ -161,67 +161,64 @@
         cell._vacant = true;
       });
       row.innerHTML = '';
-      row.hidden = true;
+
       columns.forEach((column, index) => {
         let cell;
-        if (templateName === 'template') {
-          cell = column._cells ? column._cells.find(cell => cell._vacant) : undefined;
-        }
-        if (templateName === 'headerTemplate') {
-          cell = (column._headerCell && column._headerCell._vacant) ? column._headerCell : undefined;
-        }
-        if (templateName === 'footerTemplate') {
-          cell = (column._footerCell && column._footerCell._vacant) ? column._footerCell : undefined;
-        }
 
-        cell = cell || this._createCell(templateName === 'headerTemplate' ? 'th' : 'td');
-        cell._vacant = false;
-
-        contentsFragment.appendChild(cell._content);
-
-
-        row.appendChild(cell);
-
-        if (!cell._column) {
-          cell._column = column;
+        if (section === 'body') {
+          // Body
           column._cells = column._cells || [];
-          if (templateName === 'template') {
-            cell.setAttribute('part', 'cell body-cell');
+          cell = column._cells.find(cell => cell._vacant);
+          if (!cell) {
+            cell = this._createCell('td');
             column._cells.push(cell);
+          }
+          cell.setAttribute('part', 'cell body-cell');
+          row.appendChild(cell);
 
-            if (index === columns.length - 1 && this._rowDetailsTemplate) {
-              // Add details cell as last cell to body rows
-              const cell = this._createCell();
-              contentsFragment.appendChild(cell._content);
-              this._configureDetailsCell(cell);
-              row.appendChild(cell);
+          if (index === columns.length - 1 && this._rowDetailsTemplate) {
+            // Add details cell as last cell to body rows
+            this._detailsCells = this._detailsCells || [];
+            const detailsCell = this._detailsCells.find(cell => cell._vacant) || this._createCell('td');
+            if (this._detailsCells.indexOf(detailsCell) === -1) {
+              this._detailsCells.push(detailsCell);
             }
+            if (!detailsCell._content.parentElement) {
+              contentsFragment.appendChild(detailsCell._content);
+            }
+            this._configureDetailsCell(detailsCell);
+            row.appendChild(detailsCell);
+            detailsCell._vacant = false;
+          }
 
-            if (column.notifyPath && !noNotify) {
-              column.notifyPath('_cells.*', column._cells);
-            }
-          } else if (templateName === 'headerTemplate') {
-            cell.setAttribute('part', 'cell header-cell');
-            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-              column._headerCell = cell;
-            } else {
-              column._emptyCells = column._emptyCells || [];
+          if (column.notifyPath && !noNotify) {
+            column.notifyPath('_cells.*', column._cells);
+          }
+        } else {
+          // Header & footer
+          row.hidden = !column[`${section}Template`];
+          const tagName = section === 'header' ? 'th' : 'td';
+          if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+            cell = column[`_${section}Cell`] || this._createCell(tagName);
+            row.appendChild(cell);
+            column[`_${section}Cell`] = cell;
+          } else {
+            column._emptyCells = column._emptyCells || [];
+            cell = column._emptyCells.find(cell => cell._vacant) || this._createCell(tagName);
+            row.appendChild(cell);
+            if (column._emptyCells.indexOf(cell) === -1) {
               column._emptyCells.push(cell);
             }
           }
-          else if (templateName === 'footerTemplate') {
-            cell.setAttribute('part', 'cell footer-cell');
-            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-              column._footerCell = cell;
-            } else {
-              column._emptyCells = column._emptyCells || [];
-              column._emptyCells.push(cell);
-            }
-          }
+          cell.setAttribute('part', `cell ${section}-cell`);
         }
-      });
 
-      // row.appendChild(cellsFragment);
+        if (!cell._content.parentElement) {
+          contentsFragment.appendChild(cell._content);
+        }
+        cell._vacant = false;
+        cell._column = column;
+      });
 
       // Might be empty if only cache was used
       this.appendChild(contentsFragment);
@@ -270,11 +267,11 @@
       }
 
       Array.from(this.$.header.children).forEach((headerRow, index) => {
-        this._updateRow(headerRow, columnTree[index], 'headerTemplate', index === columnTree.length - 1);
+        this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
       });
 
       Array.from(this.$.footer.children).forEach((footerRow, index) => {
-        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footerTemplate', index === 0);
+        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
       });
 
       // Sizer row
@@ -301,10 +298,6 @@
       if (this._rowDetailsTemplate) {
         this._toggleDetailsCell(row, item);
       }
-      // row.selected = this._isSelected(item);
-      // row.expanded = this._isExpanded(item);
-      // row.active = item !== null && item == this.activeItem;
-      // row.focused = row.index === this.$.items._focusedRowIndex;
     }
 
     _resizeHandler() {
