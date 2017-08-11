@@ -131,14 +131,14 @@
       return this.$.items;
     }
 
-    _createCell() {
+    _createCell(tagName) {
       const contentId = this._contentIndex = this._contentIndex + 1 || 0;
       const slotName = 'vaadin-grid-cell-content-' + contentId;
 
       const cellContent = document.createElement('vaadin-grid-cell-content');
       cellContent.setAttribute('slot' , slotName);
 
-      const cell = document.createElement('td');
+      const cell = document.createElement(tagName);
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
@@ -158,7 +158,7 @@
       row.innerHTML = '';
       row.hidden = true;
       columns.forEach((column, index) => {
-        const {cellContent, cell} = this._createCell();
+        const {cellContent, cell} = (templateName === 'headerTemplate') ? this._createCell('th') : this._createCell('td');
         contentsFragment.appendChild(cellContent);
 
         cell._content = cellContent;
