@@ -174,46 +174,49 @@
           cell = (column._footerCell && column._footerCell._vacant) ? column._footerCell : undefined;
         }
 
-        cell = cell || (templateName === 'headerTemplate') ? this._createCell('th') : this._createCell('td');
+        cell = cell || this._createCell(templateName === 'headerTemplate' ? 'th' : 'td');
         cell._vacant = false;
 
         contentsFragment.appendChild(cell._content);
 
-        cell._column = column;
+
         row.appendChild(cell);
 
-        column._cells = column._cells || [];
-        if (templateName === 'template') {
-          cell.setAttribute('part', 'cell body-cell');
-          column._cells.push(cell);
+        if (!cell._column) {
+          cell._column = column;
+          column._cells = column._cells || [];
+          if (templateName === 'template') {
+            cell.setAttribute('part', 'cell body-cell');
+            column._cells.push(cell);
 
-          if (index === columns.length - 1 && this._rowDetailsTemplate) {
-            // Add details cell as last cell to body rows
-            const cell = this._createCell();
-            contentsFragment.appendChild(cell._content);
-            this._configureDetailsCell(cell);
-            row.appendChild(cell);
-          }
+            if (index === columns.length - 1 && this._rowDetailsTemplate) {
+              // Add details cell as last cell to body rows
+              const cell = this._createCell();
+              contentsFragment.appendChild(cell._content);
+              this._configureDetailsCell(cell);
+              row.appendChild(cell);
+            }
 
-          if (column.notifyPath && !noNotify) {
-            column.notifyPath('_cells.*', column._cells);
+            if (column.notifyPath && !noNotify) {
+              column.notifyPath('_cells.*', column._cells);
+            }
+          } else if (templateName === 'headerTemplate') {
+            cell.setAttribute('part', 'cell header-cell');
+            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+              column._headerCell = cell;
+            } else {
+              column._emptyCells = column._emptyCells || [];
+              column._emptyCells.push(cell);
+            }
           }
-        } else if (templateName === 'headerTemplate') {
-          cell.setAttribute('part', 'cell header-cell');
-          if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-            column._headerCell = cell;
-          } else {
-            column._emptyCells = column._emptyCells || [];
-            column._emptyCells.push(cell);
-          }
-        }
-        else if (templateName === 'footerTemplate') {
-          cell.setAttribute('part', 'cell footer-cell');
-          if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-            column._footerCell = cell;
-          } else {
-            column._emptyCells = column._emptyCells || [];
-            column._emptyCells.push(cell);
+          else if (templateName === 'footerTemplate') {
+            cell.setAttribute('part', 'cell footer-cell');
+            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+              column._footerCell = cell;
+            } else {
+              column._emptyCells = column._emptyCells || [];
+              column._emptyCells.push(cell);
+            }
           }
         }
       });
