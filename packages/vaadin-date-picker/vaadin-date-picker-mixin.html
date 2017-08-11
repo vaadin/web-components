@@ -319,8 +319,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_validateInput(_selectedDate, _minDate, _maxDate)',
+        '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
       ];
