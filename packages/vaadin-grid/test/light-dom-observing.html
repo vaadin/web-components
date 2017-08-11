@@ -316,15 +316,15 @@
         // <template is="dom-template"> does not work in Polymer 2, while
         // <test-fixture> does not support <dom-template>.  We have to set
         // the fixture data manually.
-        repeater = Polymer.dom(grid).querySelector(Polymer.Element ? 'dom-repeat' : 'template[is="dom-repeat"]');
+        repeater = grid.querySelector('dom-repeat');
         if (repeater) {
           repeater.items = options.columns;
         }
 
         // Assign the slot to the <grid-wrapper> children.
         if (wrapper) {
-          Array.prototype.forEach.call(Polymer.dom(wrapper).children, function(wrapperChild) {
-            Polymer.dom(wrapperChild).setAttribute('slot', options && options.inGroup ? 'group' : 'grid');
+          Array.from(wrapper.children).forEach(wrapperChild => {
+            wrapperChild.setAttribute('slot', options && options.inGroup ? 'group' : 'grid');
           });
         }
 
@@ -334,7 +334,7 @@
         footer = grid.$.footer;
 
         grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
+        flushGrid(grid);
       }
 
       function expectFirstColumnHeader(columnName, level) {
@@ -379,6 +379,7 @@
             this.timeout(30000);
 
             init('columns');
+            flushGrid(grid);
             flush(done);
           });
 
@@ -457,25 +458,19 @@
             });
           });
 
-          // TODO: Enable this test when the header cell cache is enabled back
-          // it('should reuse column cells', function() {
-          //   Polymer.dom.flush();
-          //   var content = getHeaderCellContent(grid, 0, 0);
-          //   Polymer.dom(grid).appendChild(grid._columnTree[0][0]);
-          //   Polymer.dom.flush();
-          //   if (grid._observer.flush) {
-          //     grid._observer.flush();
-          //   }
-          //   expect(getHeaderCellContent(grid, 0, 1)).to.equal(content);
-          // });
+          it('should reuse column cells', function() {
+            var content = getHeaderCellContent(grid, 0, 0);
+            grid.appendChild(grid._columnTree[0][0]);
+            flushGrid(grid);
+            expect(getHeaderCellContent(grid, 0, 1)).to.equal(content);
+          });
 
           it('should not create new cells', function() {
             var row = getRows(grid.$.items)[0];
-            var spy = sinon.spy(row, '_createCell');
-            Polymer.dom.flush();
+            var spy = sinon.spy(grid, '_createCell');
             var content = getHeaderCellContent(grid, 0, 0);
-            Polymer.dom(grid).appendChild(grid._columnTree[0][0]);
-            Polymer.dom.flush();
+            grid.appendChild(grid._columnTree[0][0]);
+            flushGrid(grid);
             expect(spy.called).to.be.false;
           });
 

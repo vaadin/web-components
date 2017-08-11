@@ -146,7 +146,9 @@
 
       cell.appendChild(slot);
 
-      return {cellContent, cell};
+      cell._content = cellContent;
+
+      return cell;
     }
 
     _updateRow(row, columns, templateName, isColumnRow, noNotify) {
@@ -155,13 +157,28 @@
       const cellsFragment = document.createDocumentFragment();
       const contentsFragment = document.createDocumentFragment();
 
+      Array.from(row.children).forEach(cell => {
+        cell._vacant = true;
+      });
       row.innerHTML = '';
       row.hidden = true;
       columns.forEach((column, index) => {
-        const {cellContent, cell} = (templateName === 'headerTemplate') ? this._createCell('th') : this._createCell('td');
-        contentsFragment.appendChild(cellContent);
+        let cell;
+        if (templateName === 'template') {
+          cell = column._cells ? column._cells.find(cell => cell._vacant) : undefined;
+        }
+        if (templateName === 'headerTemplate') {
+          cell = (column._headerCell && column._headerCell._vacant) ? column._headerCell : undefined;
+        }
+        if (templateName === 'footerTemplate') {
+          cell = (column._footerCell && column._footerCell._vacant) ? column._footerCell : undefined;
+        }
 
-        cell._content = cellContent;
+        cell = cell || (templateName === 'headerTemplate') ? this._createCell('th') : this._createCell('td');
+        cell._vacant = false;
+
+        contentsFragment.appendChild(cell._content);
+
         cell._column = column;
         row.appendChild(cell);
 
@@ -172,9 +189,8 @@
 
           if (index === columns.length - 1 && this._rowDetailsTemplate) {
             // Add details cell as last cell to body rows
-            const {cellContent, cell} = this._createCell();
-            contentsFragment.appendChild(cellContent);
-            cell._content = cellContent;
+            const cell = this._createCell();
+            contentsFragment.appendChild(cell._content);
             this._configureDetailsCell(cell);
             row.appendChild(cell);
           }

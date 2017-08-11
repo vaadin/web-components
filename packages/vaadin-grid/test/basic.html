@@ -33,6 +33,20 @@
         flushGrid(grid);
       });
 
+      it('should reflect correct invalid value on value-changed eventListener', done => {
+        datepicker.value = '2016-01-01'; // valid
+
+        datepicker.addEventListener('value-changed', () => {
+          expect(datepicker.invalid).to.be.equal(true);
+          done();
+        });
+
+        datepicker.open();
+        datepicker.$.overlay.selectedDate = new Date('2017-01-01'); // invalid
+      });
+
+
+
       it('check physical item heights', function() {
         var rowHeight = grid._physicalItems[0].offsetHeight;
 

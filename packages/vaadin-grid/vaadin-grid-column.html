@@ -110,7 +110,7 @@ This program is available under Apache License Version 2.0, available at https:/
       while (el && el.localName !== 'vaadin-grid') {
         el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
-      this._grid = el;
+      this._grid = el || undefined;
       if (this.template) this.template.templatizer._grid = this._grid;
       if (this.headerTemplate) this.headerTemplate.templatizer._grid = this._grid;
       if (this.footerTemplate) this.footerTemplate.templatizer._grid = this._grid;
