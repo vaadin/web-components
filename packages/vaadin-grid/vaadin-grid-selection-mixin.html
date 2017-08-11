@@ -132,9 +132,8 @@
 <dom-module id="vaadin-grid-selection-themability-styles">
   <template>
     <style>
-      [part~="row"][selected] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
+      [part~="row"][selected] [part~="body-cell"]:not([detailscell]) {
         background-color: var(--paper-grey-100, rgb(243, 243, 243));
-        @apply(--vaadin-grid-body-row-selected-cell);
       }
     </style>
   </template>
