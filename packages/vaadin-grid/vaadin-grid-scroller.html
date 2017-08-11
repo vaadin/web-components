@@ -41,10 +41,22 @@
     */
     _createScrollerRows() {}
 
-    scrollToScaledIndex(index) {
+    /**
+    * @private
+    */
+    scrollToIndex(index) {
       // TODO: Implement
       super.scrollToIndex(index);
+
       this._scrollHandler();
+
+      // TODO: This is a hack to get around offset issues when scrolling to bottom.
+      // Revisit iron-list-behavior for cleaner fix.
+      // if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
+      if (this.lastVisibleIndex === this.size - 1) {
+        this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
+        this._scrollHandler();
+      }
     }
 
     _sizeChanged(size) {

@@ -196,11 +196,14 @@
           }
         } else {
           // Header & footer
-          row.hidden = !column[`${section}Template`];
+          row.hidden = true;
           const tagName = section === 'header' ? 'th' : 'td';
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             cell = column[`_${section}Cell`] || this._createCell(tagName);
             row.appendChild(cell);
+            if (cell._instance) {
+              row.hidden = false;
+            }
             column[`_${section}Cell`] = cell;
           } else {
             column._emptyCells = column._emptyCells || [];

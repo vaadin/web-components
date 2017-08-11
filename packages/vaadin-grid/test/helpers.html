@@ -92,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function scrollToEnd(grid, callback) {
-    grid.scrollToScaledIndex(grid.size - 1);
+    grid.scrollToIndex(grid.size - 1);
 
     // Ensure rows are in order
     grid._debounceScrolling.flush();

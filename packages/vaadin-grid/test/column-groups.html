@@ -211,13 +211,7 @@
         footerRows = getRows(footer);
         bodyRows = getRows(body);
 
-        if (Polymer.Element) {
-          Array.prototype
-            .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
-            function(col) {
-              col._templateObserver.flush();
-            });
-        }
+        flushGrid(grid);
       }
 
       describe('No templates', function() {
@@ -341,15 +335,11 @@
 
         it('should have visible footer rows after adding extra column', function() {
           Polymer.dom(grid).appendChild(extraColumn);
-          Polymer.dom.flush();
-
-          if (Polymer.Element) {
-            extraColumn._templateObserver.flush();
-            grid._observer.flush();
-          }
+          flushGrid(grid);
 
           expect(getRows(footer)[0].hidden).to.be.false;
           expect(getRows(footer)[1].hidden).to.be.true;
+          this.timeout(100000000);
         });
 
         it('should not have visible footer rows after removing extra column', function() {
@@ -379,15 +369,15 @@
         });
 
         it('should have a border below the header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
-          var cellOnLastRow = getCellContent(cells[cells.length - 1]);
+          var cells = header.querySelectorAll('[part~="cell"]');
+          var cellOnLastRow = cells[cells.length - 1];
 
           expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
         });
 
         it('should have a border above the footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
-          var cellOnFirstRow = getCellContent(cells[0]);
+          var cells = footer.querySelectorAll('[part~="cell"]');
+          var cellOnFirstRow = cells[0];
 
           expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
         });
@@ -447,15 +437,13 @@
         });
 
         it('should have last row fully visible when scrolled to end', function(done) {
-          this.timeout(30000);
-
           scrollToEnd(grid);
 
           animationFrameFlush(function() {
             bodyRows = getRows(body);
             var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
             var footerTop = footer.getBoundingClientRect().top;
-            expect(lastRowBottom).to.be.closeTo(footerTop, 1);
+            expect(lastRowBottom).to.be.closeTo(footerTop, 2);
             done();
           });
         });
