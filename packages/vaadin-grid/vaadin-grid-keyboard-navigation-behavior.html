@@ -434,7 +434,7 @@
       container._focusedCellIndex = Array.prototype.indexOf.call(Polymer.dom(row).children, cell);
       this._virtualFocus = container;
 
-      if (cell.hasAttribute('detailscell')) {
+      if (cell.getAttribute('part').indexOf('details-cell') !== -1) {
         container._focusedCellIndex = 0;
         container._moveFocusToDetailsCell();
       }
@@ -472,7 +472,7 @@
 
       // skip horizontal scrolling when focusing on row details cell to avoid
       // unintentional scrolling.
-      if (element.hasAttribute('detailscell')) {
+      if (element.getAttribute('part').indexOf('details-cell') !== -1) {
         return;
       }
 

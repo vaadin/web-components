@@ -39,7 +39,7 @@
       // note: VoiceOver doesn't work with dynamic IDs.
       var activeTarget = Polymer.Element ? cell._cellContent.getAttribute('slot') : cell._cellContent.id;
 
-      if (this.is === 'vaadin-grid-table-body' && !cell.hasAttribute('detailscell')) {
+      if (this.is === 'vaadin-grid-table-body' && !cell.getAttribute('part').indexOf('details-cell') !== -1) {
         // note: having `cell.column.name` property for announcing would maybe be a good option here?
         var index = Array.prototype.indexOf.call(Polymer.dom(cell.parentElement).querySelectorAll('[part~="cell"]'), cell);
         var lastHeaderRow = this.domHost.$.header.lastElementChild;
@@ -89,7 +89,7 @@
     },
 
     focusLeft: function() {
-      if (this._focusedCell.hasAttribute('detailscell')) {
+      if (this._focusedCell.getAttribute('part').indexOf('details-cell') !== -1) {
         return;
       }
 
@@ -131,7 +131,7 @@
     },
 
     focusRight: function() {
-      if (this._focusedCell.hasAttribute('detailscell')) {
+      if (this._focusedCell.getAttribute('part').indexOf('details-cell') !== -1) {
         return;
       }
 
@@ -147,7 +147,7 @@
     },
 
     focusHome: function() {
-      if (this._focusedCell.hasAttribute('detailscell')) {
+      if (this._focusedCell.getAttribute('part').indexOf('details-cell') !== -1) {
         return;
       }
 
@@ -158,7 +158,7 @@
     },
 
     focusEnd: function() {
-      if (this._focusedCell.hasAttribute('detailscell')) {
+      if (this._focusedCell.getAttribute('part').indexOf('details-cell') !== -1) {
         return;
       }
 

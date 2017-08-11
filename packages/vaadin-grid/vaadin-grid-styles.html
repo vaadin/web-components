@@ -4,8 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer-element.html">
-
 <dom-module id="vaadin-grid-styles">
   <template>
     <style include="vaadin-grid-column-resizing-styles"></style>
@@ -141,7 +139,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /* TODO: Sizer styles, relocate */
-      [part~="outersizer"] {
+      #outersizer {
         display: flex;
         position: relative;
         width: 100%;
@@ -221,10 +219,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       :host([reordering]) [part~="cell"][reorder-status="dragging"] {
         background: #ece9ec;
-      }
-
-      [part~="cell"][reorder-status="dragging"] {
-        background: var(--primary-color, #000);
       }
     </style>
   </template>

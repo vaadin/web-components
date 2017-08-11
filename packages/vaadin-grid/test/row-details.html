@@ -99,7 +99,7 @@
           expect(getRowCells(bodyRows[1])).to.have.length(1);
           expandRow(1);
           var cells = getRowCells(bodyRows[1]);
-          expect(cells[1].hasAttribute('detailscell')).to.be.true;
+          expect(cells[1].getAttribute('part').indexOf('details-cell') !== -1).to.be.true;
           done();
         });
 
