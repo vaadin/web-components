@@ -224,6 +224,10 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([reordering]) [part~="cell"][reorder-status="dragging"] {
         background: #ece9ec;
       }
+
+      [part~="row"][selected] [part~="body-cell"]:not([part~="details-cell"]) {
+        background-color: #f5f5f5;
+      }
     </style>
   </template>
 </dom-module>
