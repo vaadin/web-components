@@ -14,7 +14,6 @@
   <link rel="import" href="../../iron-image/iron-image.html">
   <link rel="import" href="../../iron-media-query/iron-media-query.html">
   <link rel="import" href="../vaadin-grid-column-group.html">
-  <link rel="import" href="../vaadin-grid-sorter.html">
 
   <link rel="import" href="common.html">
 
@@ -249,11 +248,7 @@
                 <template class="header">Name</template>
           
                 <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">
-                    <vaadin-grid-sorter path="name.first">
-                      First
-                    </vaadin-grid-sorter>
-                  </template>
+                  <template class="header">First</template>
                   <template>[[item.name.first]]</template>
                 </vaadin-grid-column>
           
