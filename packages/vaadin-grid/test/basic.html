@@ -82,7 +82,7 @@
         grid.scrollToIndex(0);
         // make the height of the viewport same as the height of the row
         // and scroll to the last item
-        grid.style.height = grid._physicalItems[0].offsetHeight + 'px';
+        grid.style.height = (grid._physicalItems[0].offsetHeight - 2) + 'px';
         grid.notifyResize();
         grid.scrollToIndex(99);
         expect(grid.firstVisibleIndex).to.equal(99);
