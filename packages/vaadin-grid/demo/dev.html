@@ -9,14 +9,10 @@
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../vaadin-grid.html">
+    <link rel="import" href="../all-imports.html">
     <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
     <link rel="import" href="../../paper-input/paper-input.html">
-    <link rel="import" href="../vaadin-grid-filter.html">
-    <link rel="import" href="../vaadin-grid-sorter.html">
-    <link rel="import" href="../vaadin-grid-column-group.html">
     <link rel="import" href="x-data-provider.html">
-
 
     <style>
       body,
@@ -55,6 +51,9 @@
             <button>Howdy</button>
             <paper-input value="{{item.name.last}}"></paper-input>
           </template>
+
+          <vaadin-grid-selection-column auto-select frozen>
+          </vaadin-grid-selection-column>
 
           <vaadin-grid-column width="145px" flex-grow="0" frozen resizable>
             <template>

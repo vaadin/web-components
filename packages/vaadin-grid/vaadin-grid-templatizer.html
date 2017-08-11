@@ -74,44 +74,6 @@
 
         // TODO: hack to avoid: https://github.com/Polymer/polymer/issues/3307
         this._parentProps = this._parentProps || {};
-
-        // TODO: V1 only. For some reason, parent properties are not forwarded
-        // initially, they need manual forwarding.
-        if (!Polymer.Element) {
-          Object.keys(this._parentProps).forEach(function(prop) {
-            if (this._parentProps[prop]) {
-              // this._forwardParentProp(prop, this.dataHost[prop]);
-            }
-          }, this);
-        }
-      }
-    },
-
-    // TODO: V1 only
-    _forwardInstanceProp: function(inst, prop, value) {
-      // fire notification event only when a prop is changed through a user-action.
-      // e.g. 'expanded' is different from the originally bound '__expanded__' value.
-      if (inst['__' + prop + '__'] !== undefined &&
-        inst['__' + prop + '__'] !== value) {
-        this.fire('template-instance-changed', {
-          prop: prop,
-          value: value,
-          inst: inst
-        });
-      }
-    },
-
-    // TODO: V1 only
-    _forwardInstancePath: function(inst, path, value) {
-      // TODO: assuming we're currently just listening to [[item.xxxx]] properties
-      // which affect only cells on the current row.
-      if (path.indexOf('item.') === 0 && !this._suppressItemChangeEvent) {
-        this.fire('item-changed', {
-          item: inst.item,
-          // stripping 'item.' from path.
-          path: path.substring(5),
-          value: value
-        });
       }
     },
 
@@ -120,7 +82,7 @@
         // We don’t need a change notification for these.
         return;
       }
-
+      
       // Notify for only user-action changes, not for scrolling updates. E. g.,
       // if `expanded` is different from `__expanded__`, which was set during render.
       var originalProp = `__${prop}__`;
@@ -131,6 +93,7 @@
       var gridCallback = `_${prop}InstanceChangedCallback`;
       if (this._grid && this._grid[gridCallback]) {
         this._grid[gridCallback](inst, value);
+        inst[originalProp] = value;
       }
 
       // TODO: V1 only

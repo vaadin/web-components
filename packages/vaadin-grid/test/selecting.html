@@ -404,7 +404,7 @@
         filter.value = 'foo';
         Polymer.Base.fire('input', {}, {node: filter});
 
-        filter.parentElement.flushDebouncer('filter-changed');
+        filter.parentElement._debouncerFilterChanged.flush();
         expect(selectionColumn.selectAll).to.be.true;
       });
 

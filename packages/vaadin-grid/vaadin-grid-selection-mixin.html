@@ -111,7 +111,11 @@
     _selectedItemsChanged(e) {
       if (this.$.items.children.length && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
         Array.from(this.$.items.children).forEach(row => {
-          this._toggleAttribute('selected', this._isSelected(row._item), row);
+          const selected = this._isSelected(row._item);
+          this._toggleAttribute('selected', selected, row);
+          Array.from(row.children).forEach(cell => {
+            cell._instance.selected = selected;
+          });
         });
       }
     }
