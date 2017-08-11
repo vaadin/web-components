@@ -220,7 +220,7 @@
       this._debouncerCacheElements = Polymer.Debouncer.debounce(this._debouncerCacheElements,
           Polymer.Async.microTask,
           () => {
-            Array.from(this.root.querySelectorAll('.vaadin-grid-cell')).forEach(function(cell) {
+            Array.from(this.root.querySelectorAll('[part~="cell"]')).forEach(function(cell) {
               cell.style.transform = '';
             });
             this._frozenCells = Array.prototype.slice.call(this.root.querySelectorAll('[frozen]'));

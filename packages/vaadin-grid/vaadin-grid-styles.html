@@ -1,3 +1,9 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
 <dom-module id="vaadin-grid-styles">
   <template>
     <style include="vaadin-grid-column-resizing-styles"></style>
@@ -18,10 +24,10 @@
       #scroller {
         display: block;
         position: relative;
-        animation: 1ms appear-vaadin-grid-table-0;
         height: 100%;
         width: 100%;
         transform: translateZ(0);
+        animation: 1ms appear-vaadin-grid-table-0;
       }
 
       #table {
@@ -31,6 +37,7 @@
         overflow: auto;
         z-index: -2;
         position: relative;
+        border: 1px solid #dbdbdb;
       }
 
       #header {
@@ -62,22 +69,22 @@
         border-bottom: 0 solid transparent;
       }
 
-      tr {
+      [part~="row"] {
         display: flex;
         width: 100%;
         box-sizing: border-box;
         margin: 0;
       }
 
-      #items > tr {
+      #items [part~="row"] {
         position: absolute;
       }
 
-      #items tr:empty {
+      #items [part~="row"]:empty {
         height: 1em;
       }
 
-      .vaadin-grid-cell {
+      [part~="cell"] {
         padding: 0;
         flex-shrink: 0;
         flex-grow: 1;
@@ -86,7 +93,7 @@
         width: 100%;
       }
 
-      .vaadin-grid-cell:not(.vaadin-grid-details-cell) {
+      [part~="cell"]:not(.vaadin-grid-details-cell) {
         position: relative;
       }
 
@@ -95,18 +102,13 @@
         bottom: 0;
       }
 
-      .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
-         width: 100%;
-         display: inline-flex;
-         justify-content: center;
-         flex-direction: column;
-         white-space: nowrap;
-         overflow: hidden;
-         background: #fff;
-      }
-
-      .vaadin-grid-cell ::slotted(vaadin-grid-cell-content:empty) { /* Bad selector */
-        /*min-height: 100px;*/
+      [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        width: 100%;
+        display: inline-flex;
+        justify-content: center;
+        flex-direction: column;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       [hidden] {
@@ -148,7 +150,7 @@
         display: none;
       }
 
-      #outersizer .vaadin-grid-cell {
+      #outersizer [part~="cell"] {
         display: block;
         flex-shrink: 0;
         line-height: 0;
@@ -156,11 +158,11 @@
         margin-top: -1em;
       }
 
-      #outersizer .vaadin-grid-cell * {
+      #outersizer [part~="cell"] * {
         display: none;
       }
 
-      #outersizer .vaadin-grid-cell::before {
+      #outersizer [part~="cell"]::before {
         content: "";
       }
 
@@ -169,6 +171,55 @@
         display: none;
       }
 
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-default-theme" theme-for="vaadin-grid">
+  <template>
+    <style>
+      [part~="row"]:last-child [part~="header-cell"],
+      [part~="body-cell"] {
+        border-bottom: 1px solid #dbdbdb;
+      }
+
+      [part~="row"]:first-child [part~="footer-cell"] {
+        border-top: 1px solid #dbdbdb;
+      }
+
+      [part~="header-cell"],
+      [part~="footer-cell"]:not(empty) {
+        background: #fff;
+        padding: 8px;
+      }
+
+      [part~="body-cell"]:not(.vaadin-grid-details-cell) {
+         padding: 8px;
+      }
+
+      [part~="cell"]:first-child {
+        padding: 0 8px;
+      }
+
+      [part~="cell"][frozen] {
+        background: #fff;
+      }
+
+      [part~="cell"][last-frozen]:not([part~="header-cell"]) {
+        border-right: 1px solid #dbdbdb;
+      }
+
+      :host([reordering]) [part~="cell"] {
+        background: #f0f0f0;
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="allowed"] {
+        background: #ffffff;
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
+        background: #ece9ec;
+      }
     </style>
   </template>
 </dom-module>

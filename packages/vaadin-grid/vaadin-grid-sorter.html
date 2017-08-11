@@ -9,14 +9,14 @@ This program is available under Apache License Version 2.0, available at https:/
 `vaadin-grid-sorter` is a helper element for the `vaadin-grid` that provides out-of-the-box UI controls,
 visual feedback, and handlers for sorting the grid data.
 
-
 ### Styling
-The following custom properties and mixins are available for styling:
 
-Custom property | Description | Default
-----------------|-------------|----------
-`--vaadin-grid-sorter-arrow` | Mixin applied to the arrow | `{}`
-`--vaadin-grid-sorter-order` | Mixin applied to the order | `{}`
+The following shadow DOM parts are exposed for styling:
+
+Part name | Description
+----------------|----------------
+`sorter-indicators` | The internal sorter indicators. With ::before selector it is possible to customize the arrow
+`sorter-order` | The internal sorter order
 
 -->
 
@@ -52,14 +52,12 @@ Custom property | Description | Default
         right: 0;
         top: 0;
         transform: translateY(-6px) scale(0.7);
-        @apply(--vaadin-grid-sorter-order);
       }
 
       #indicators::before {
         font-family: 'vaadin-grid-sorter-icons';
         display: block;
         padding: 0 10px;
-        @apply(--vaadin-grid-sorter-arrow);
       }
 
       :host(:not([direction])) #indicators::before {
@@ -96,8 +94,8 @@ Custom property | Description | Default
     <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
     </div>
-    <div id="indicators" aria-hidden="true" on-focus="_onContentFocus">
-      <div id="order">[[_getDisplayOrder(_order)]]</div>
+    <div id="indicators" part="sorter-indicators" aria-hidden="true" on-focus="_onContentFocus">
+      <div part="sorter-order" id="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 
   </template>

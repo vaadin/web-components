@@ -295,14 +295,14 @@ This program is available under Apache License Version 2.0, available at https:/
       if (headerCell) {
         [headerCell].concat(this._emptyCells).forEach(cell => {
           if (cell) {
-            const existingHandle = cell.querySelector('.vaadin-grid-column-resize-handle');
+            const existingHandle = cell.querySelector('[part~="resize-handle"]');
             if (existingHandle) {
               cell.removeChild(existingHandle);
             }
 
             if (resizable) {
               const handle = document.createElement('div');
-              handle.classList.add('vaadin-grid-column-resize-handle');
+              handle.setAttribute('part', 'resize-handle');
               cell.appendChild(handle);
             }
           }

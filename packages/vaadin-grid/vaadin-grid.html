@@ -1,3 +1,4 @@
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-scroller.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-mixin.html">
 <link rel="import" href="vaadin-grid-data-provider-mixin.html">
@@ -33,7 +34,7 @@
       <vaadin-grid-outer-scroller id="outerscroller"
           scroll-target="[[scrollTarget]]"
           scroll-handler="[[_this]]">
-        <div id="outersizer" style$="top: [[_estScrollHeight]]px"></div>
+        <div id="outersizer" part='row' style$="top: [[_estScrollHeight]]px"></div>
       </vaadin-grid-outer-scroller>
     </div>
 
@@ -44,7 +45,22 @@
 </dom-module>
 
 <script>
+  /**
+   * ### Styling
+   *
+   * The following shadow DOM parts are exposed for styling:
+   *
+   * Part name | Description
+   * ----------------|----------------
+   * `row` | The internal row in the grid
+   * `cell` | The internal cell in the grid
+   * `resize-handle` | The internal handler for resizing of the columns
+   *
+   * @memberof Vaadin
+   * @mixes Vaadin.ThemableMixin
+   */
   class VaadinGrid extends
+    Vaadin.ThemableMixin(
     Vaadin.Grid.DataProviderMixin(
     Vaadin.Grid.ArrayDataProviderMixin(
     Vaadin.Grid.DynamicColumnsMixin(
@@ -56,7 +72,7 @@
     Vaadin.Grid.FilterMixin(
     Vaadin.Grid.ColumnReorderingMixin(
     Vaadin.Grid.ColumnResizingMixin(
-    VaadinScroller))))))))))) {
+    VaadinScroller)))))))))))) {
 
     static get is() {
       return 'vaadin-grid';
@@ -97,7 +113,8 @@
       const rows = [];
       for (var i = 0; i < count; i++) {
         const row = document.createElement('tr');
-        row.classList.add('vaadin-grid-row');
+        row.setAttribute('part', 'row');
+
         if (this._columnTree) {
           this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'template', false, true);
         }
@@ -122,10 +139,11 @@
       cellContent.setAttribute('slot' , slotName);
 
       const cell = document.createElement('td');
-      cell.classList.add('vaadin-grid-cell');
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
+      slot.setAttribute('part', 'cell-content');
+
       cell.appendChild(slot);
 
       return {cellContent, cell};
@@ -149,6 +167,7 @@
 
         column._cells = column._cells || [];
         if (templateName === 'template') {
+          cell.setAttribute('part', 'cell body-cell');
           column._cells.push(cell);
 
           if (index === columns.length - 1 && this._rowDetailsTemplate) {
@@ -164,6 +183,7 @@
             column.notifyPath('_cells.*', column._cells);
           }
         } else if (templateName === 'headerTemplate') {
+          cell.setAttribute('part', 'cell header-cell');
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             column._headerCell = cell;
           } else {
@@ -172,6 +192,7 @@
           }
         }
         else if (templateName === 'footerTemplate') {
+          cell.setAttribute('part', 'cell footer-cell');
           if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
             column._footerCell = cell;
           } else {
@@ -205,6 +226,7 @@
           cell._instance.index = index;
         }
       });
+      this._toggleAttribute('odd', index % 2, row);
       this._getItem(index, row);
     }
 
@@ -216,11 +238,11 @@
       // TODO: DRY
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
-        headerRow.classList.add('vaadin-grid-row');
+        headerRow.setAttribute('part', 'row');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
-        footerRow.classList.add('vaadin-grid-row');
+        footerRow.setAttribute('part', 'row');
         this.$.footer.appendChild(footerRow);
       }
       while (this.$.header.children.length > columnTree.length) {

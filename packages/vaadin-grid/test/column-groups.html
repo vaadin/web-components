@@ -229,7 +229,7 @@
         });
 
         it('should have empty header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('.vaadin-grid-cell');
+          var cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
           cells.forEach(function(cell) {
             expect(cell._instance).to.be.not.ok;
@@ -237,7 +237,7 @@
         });
 
         it('should have empty footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('.vaadin-grid-cell');
+          var cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
 
           cells.forEach(function(cell) {
@@ -379,14 +379,14 @@
         });
 
         it('should have a border below the header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('.vaadin-grid-cell');
+          var cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
           var cellOnLastRow = getCellContent(cells[cells.length - 1]);
 
           expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
         });
 
         it('should have a border above the footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('.vaadin-grid-cell');
+          var cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
           var cellOnFirstRow = getCellContent(cells[0]);
 
           expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
@@ -413,14 +413,14 @@
         });
 
         it('should have cell content wrappers in all header cells', function() {
-          Polymer.dom(header).querySelectorAll('.vaadin-grid-cell').forEach(function(a) {
+          Polymer.dom(header).querySelectorAll('[part~="cell"]').forEach(function(a) {
             var content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 
         it('should have cell content wrappers in all footer cells', function() {
-          Polymer.dom(footer).querySelectorAll('.vaadin-grid-cell').forEach(function(a) {
+          Polymer.dom(footer).querySelectorAll('[part~="cell"]').forEach(function(a) {
             var content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });

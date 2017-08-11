@@ -1,23 +1,14 @@
 <link rel="import" href="vaadin-grid-templatizer.html">
 
-<dom-module id="vaadin-grid-row-details-styles">
+<dom-module id="vaadin-grid-row-details-themability-styles">
   <template>
     <style>
-      [detailscell] {
+      [part~="details-cell"] {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
-      }
-    </style>
-  </template>
-</dom-module>
-<dom-module id="vaadin-grid-row-details-themability-styles">
-  <template>
-    <style>
-      .vaadin-grid-cell[detailscell] ::slotted(vaadin-grid-cell-content) {
         background: #fff;
-        @apply(--vaadin-grid-body-row-details-cell);
       }
     </style>
   </template>

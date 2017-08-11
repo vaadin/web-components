@@ -181,21 +181,22 @@
     </p>
     <demo-snippet>
       <template>
+        <dom-module id="vaadin-grid-inverted-styles" theme-for="vaadin-grid">
+          <template>
+            <style include="vaadin-grid-default-theme">
+              :host(#grid[inverted]) [part~="body-cell"] {
+                background-color: var(--paper-grey-100);
+              }
+
+              :host(#grid[inverted]) [part~="row"][selected] [part~="body-cell"]:not([part~="details-cell"]) {
+                background-color: var(--primary-background-color);
+              }
+            </style>
+          </template>
+        </dom-module>
         <dataprovider-select-all></dataprovider-select-all>
         <dom-module id="dataprovider-select-all">
           <template>
-            <custom-style>
-              <style is="custom-style">
-                #grid[inverted] {
-                  --vaadin-grid-body-cell: {
-                    background-color: var(--paper-grey-100);
-                  };
-                  --vaadin-grid-body-row-selected-cell: {
-                    background-color: var(--primary-background-color);
-                  };
-                }
-              </style>
-            </custom-style>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
             <vaadin-grid  aria-label="Select All with Data Example" id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
@@ -241,7 +242,6 @@
 
               _resetSelection: function(inverted) {
                 this.$.grid.selectedItems = [];
-                this.updateStyles();
                 this.indeterminate = false;
               },
 

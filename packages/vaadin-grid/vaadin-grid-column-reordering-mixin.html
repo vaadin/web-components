@@ -1,33 +1,7 @@
 <dom-module id="vaadin-grid-column-reordering-styles">
   <template>
     <style>
-      vaadin-grid-table[reordering] .vaadin-grid-cell {
-        background: #000;
-      }
-
-      :host([reordering]) .vaadin-grid-cell[reorder-status="dragging"] {
-        background: var(--primary-color, #000);
-      }
-
-      vaadin-grid-table[reordering] .vaadin-grid-cell:not([detailscell]) ::slotted(vaadin-grid-cell-content) {
-        transition: opacity 300ms;
-        transform: translateZ(0);
-        opacity: 0.8;
-      }
-
-      #scroller .vaadin-grid-cell[reorder-status="allowed"] ::slotted(vaadin-grid-cell-content) {
-        opacity: 1;
-      }
-
-      #scroller .vaadin-grid-cell[reorder-status="dragging"] {
-        background: var(--primary-color, #000);
-      }
-
-      #scroller .vaadin-grid-cell[reorder-status="dragging"] ::slotted(vaadin-grid-cell-content) {
-        opacity: 0.95;
-      }
-
-      #scroller[no-content-pointer-events] .vaadin-grid-cell ::slotted(vaadin-grid-cell-content) {
+      #scroller[no-content-pointer-events] [part~="cell"] {
         pointer-events: none;
       }
 
@@ -88,7 +62,7 @@
     }
 
     _onContextMenu(e) {
-      if (this.$.scroller.hasAttribute('reordering')) {
+      if (this.hasAttribute('reordering')) {
         e.preventDefault();
       }
     }
@@ -117,7 +91,7 @@
     }
 
     _onTouchMove(e) {
-      if (this.$.scroller.hasAttribute('reordering')) {
+      if (this.hasAttribute('reordering')) {
         e.preventDefault();
         var dragOver = new CustomEvent('dragover', {bubbles: true});
         dragOver.clientX = e.touches[0].clientX;
@@ -162,7 +136,7 @@
 
     _onTouchEnd(e) {
       clearTimeout(this._startTouchReorderTimeout);
-      if (this.$.scroller.hasAttribute('reordering')) {
+      if (this.hasAttribute('reordering')) {
         e.preventDefault();
         var event = new CustomEvent('dragend', {bubbles: true});
         this.dispatchEvent(event);
@@ -221,7 +195,7 @@
 
       const cell = this._getCellByCellContent(e.target);
       if (cell) {
-        this.$.scroller.setAttribute('reordering', '');
+        this.setAttribute('reordering', '');
         this._draggedColumn = cell._column;
         this._setSiblingsReorderStatus(this._draggedColumn, 'allowed');
         this._draggedColumn._reorderStatus = 'dragging';
@@ -296,7 +270,7 @@
         return;
       }
 
-      this.$.scroller.removeAttribute('reordering');
+      this.removeAttribute('reordering');
       this._draggedColumn._reorderStatus = '';
       this._setSiblingsReorderStatus(this._draggedColumn, '');
       this._draggedColumn = null;
@@ -313,7 +287,7 @@
     }
 
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.prototype.filter.call(this.$.header.querySelectorAll('.vaadin-grid-cell'), cell => {
+      const targetCell = Array.prototype.filter.call(this.$.header.querySelectorAll('[part~="cell"]'), cell => {
         return cell._column === targetColumn;
       })[0];
       const sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();

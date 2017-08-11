@@ -127,7 +127,7 @@
           var listener = function() {
             scroller.flushDebouncer('vaadin-grid-scrolling');
             // Check that the rows are in order
-            var rows = Polymer.dom(grid.$.items).querySelectorAll('.vaadin-grid-row');
+            var rows = Polymer.dom(grid.$.items).querySelectorAll('[part~="row"]');
             for (var i = 1; i < rows.length; i++) {
               expect(rows[i].index).to.equal(rows[i - 1].index + 1);
             }

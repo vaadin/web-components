@@ -67,7 +67,7 @@
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
         headerCells = getRowCells(getRows(grid.$.header)[0]);
-        handle = headerCells[0].querySelector('.vaadin-grid-column-resize-handle');
+        handle = headerCells[0].querySelector('[part~="resize-handle"]');
         animationFrameFlush(done);
       });
 
@@ -80,11 +80,11 @@
       }
 
       it('should be resizable', function() {
-        expect(headerCells[0].querySelector('.vaadin-grid-column-resize-handle')).to.be.ok;
+        expect(headerCells[0].querySelector('[part~="resize-handle"]')).to.be.ok;
       });
 
       it('should not be resizable', function() {
-        expect(headerCells[1].querySelector('.vaadin-grid-column-resize-handle')).to.be.not.ok;
+        expect(headerCells[1].querySelector('[part~="resize-handle"]')).to.be.not.ok;
       });
 
       it('should display resize handle as top-most element', function() {
@@ -123,7 +123,7 @@
           var rect = secondCell.getBoundingClientRect();
           var x = rect.right - 10;
           var y = rect.top + rect.height / 2;
-          expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell.querySelector('.vaadin-grid-column-resize-handle'));
+          expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell.querySelector('[part~="resize-handle"]'));
           done();
         });
 
@@ -154,7 +154,7 @@
 
         grid._columnTree[0][0].width = '50%';
         grid._columnTree[0][0].flexGrow = 1;
-        fire('track', {state: 'start'}, {node: headerCells[1].querySelector('.vaadin-grid-column-resize-handle')});
+        fire('track', {state: 'start'}, {node: headerCells[1].querySelector('[part~="resize-handle"]')});
         expect(grid._columnTree[0][0].width.indexOf('px')).not.to.equal(-1);
         expect(grid._columnTree[0][0].flexGrow).to.equal(0);
       });
@@ -232,7 +232,7 @@
 
       it('should resize the child column', function() {
         var headerRows = getRows(grid.$.header);
-        var handle = getRowCells(headerRows[0])[0].querySelector('.vaadin-grid-column-resize-handle');
+        var handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
         var cell = getRowCells(headerRows[1])[1];
         var rect = cell.getBoundingClientRect();
@@ -246,7 +246,7 @@
       it('should resize the last non-hidden child column', function() {
         grid._columnTree[1][1].hidden = true;
         var headerRows = getRows(grid.$.header);
-        var handle = getRowCells(headerRows[0])[0].querySelector('.vaadin-grid-column-resize-handle');
+        var handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
         var cell = getRowCells(headerRows[1])[0];
         var rect = cell.getBoundingClientRect();
