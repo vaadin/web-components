@@ -133,7 +133,8 @@
       var cellHeight = cell.offsetHeight;
       var x = sectionRect.left + (col * cellWidth) + cellWidth / 2;
       var y = sectionRect.top + sectionBorder + (row * cellHeight) + cellHeight / 2;
-      return document.elementFromPoint(x, y);
+      const grid = section.parentNode.parentNode.parentNode.host;
+      return grid._cellFromPoint(x, y)._content;
     }
 
     function getVisualHeaderCellContent(grid, row, col) {
@@ -187,16 +188,6 @@
         expectVisualOrder(grid, [1, 2, 3, 4]);
       });
 
-      it('should be draggable if and only if grid is reorderable', function() {
-        var event = new CustomEvent('mouseover', {bubbles: true});
-        headerContent[0].dispatchEvent(event);
-        expect(headerContent[0].hasAttribute('draggable')).to.be.true;
-        headerContent[0].removeAttribute('draggable');
-        grid.columnReorderingAllowed = false;
-        headerContent[0].dispatchEvent(event);
-        expect(headerContent[0].hasAttribute('draggable')).to.be.false;
-      });
-
       it('should indicate dragged cells', function() {
         dragStart(headerContent[0]);
         var cell = getCellByCellContent(grid, headerContent[0]);
@@ -229,14 +220,12 @@
       });
 
       it('should position ghost', function() {
-        makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
-        Polymer.dom.flush();
         var ghost = grid.$.reorderghost;
+        dragOver(headerContent[0], headerContent[1]);
 
-        makeSoloTouchEvent('touchmove', {x: 100, y: 100}, headerContent[0]);
         var ghostRect = ghost.getBoundingClientRect();
-        expect(ghostRect.left).to.be.closeTo(9, 1);
-        expect(ghostRect.top).to.be.closeTo(207, 1);
+        expect(ghostRect.left).to.be.closeTo(110, 1);
+        expect(ghostRect.top).to.be.closeTo(0, 1);
       });
 
       it('should have the ghost visible again', function() {
@@ -261,25 +250,27 @@
       });
 
       it('should start reordering after 300ms after touchstart', function(done) {
-        makeSoloTouchEvent('touchstart', {x: 0, y: 0}, headerContent[0]);
+        const rect = headerContent[0].getBoundingClientRect();
+        makeSoloTouchEvent('touchstart', {x: rect.left, y: rect.top}, headerContent[0]);
         setTimeout(function() {
-          expect(grid.$.scroller.hasAttribute('reordering')).to.be.true;
+          expect(grid.hasAttribute('reordering')).to.be.true;
           done();
         }, 500);
       });
 
       it('should not start reordering after 300ms after touchstart', function(done) {
-        makeSoloTouchEvent('touchstart', {x: 0, y: 0}, headerContent[0]);
+        const rect = headerContent[0].getBoundingClientRect();
+        makeSoloTouchEvent('touchstart', {x: rect.left, y: rect.top}, headerContent[0]);
         makeSoloTouchEvent('touchend', {x: 0, y: 0}, headerContent[0]);
         setTimeout(function() {
-          expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+          expect(grid.hasAttribute('reordering')).to.be.false;
           done();
         }, 500);
       });
 
       it('should not start reordering on resize handle move', function() {
-        makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
+        const handle = grid._getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+        dragStart(handle);
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
 
@@ -472,14 +463,11 @@
       var grid, headerContent0, headerContent1, content0rect, content1rect;
 
       beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
         grid = fixture('differentWidths');
         grid.dataProvider = infiniteDataProvider;
         animationFrameFlush(function() {
-          headerContent0 = getHeaderCellContent(grid, 0, 0);
-          headerContent1 = getHeaderCellContent(grid, 0, 1);
+          headerContent0 = getContainerCell(grid.$.header, 0, 0);
+          headerContent1 = getContainerCell(grid.$.header, 0, 1);
           content0rect = headerContent0.getBoundingClientRect();
           content1rect = headerContent1.getBoundingClientRect();
           done();
@@ -528,6 +516,7 @@
 
         grid = fixture('draggableCellContent');
         grid.dataProvider = infiniteDataProvider;
+
         flush(function() {
           var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           visualColumnCellContents = [];
@@ -539,23 +528,23 @@
       });
 
       it('should start reordering on header cell content', function() {
-        visualColumnCellContents[0][1].parentNode.dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
-        expect(grid.$.scroller.hasAttribute('reordering')).to.be.true;
+        dragStart(visualColumnCellContents[0][1]);
+        expect(grid.hasAttribute('reordering')).to.be.true;
       });
 
       it('should not start reordering inside body cell content', function() {
-        visualColumnCellContents[0][0].dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
-        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+        dragStart(visualColumnCellContents[0][0].children[0]);
+        expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
       it('should not start reordering inside draggable header cell content', function() {
-        visualColumnCellContents[0][1].dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
-        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+        dragStart(visualColumnCellContents[0][1].children[0]);
+        expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
       it('should not start reordering inside draggable footer cell content', function() {
-        visualColumnCellContents[0][2].dispatchEvent(new CustomEvent('dragstart', {bubbles: true, composed: true}));
-        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+        dragStart(visualColumnCellContents[0][2].children[0]);
+        expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
     });

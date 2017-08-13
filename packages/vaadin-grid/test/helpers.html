@@ -267,31 +267,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function dragStart(source) {
-    var e = makeSoloTouchEvent('touchstart', {x: 0, y: 0}, source);
-    var cell = source;
-    if (cell.localName !== 'vaadin-grid-header-cell') {
-      var grid = cell.parentNode;
-      cell = grid._getCellByCellContent(source);
-    }
-
-    if (grid._startTouchReorderTimeout) {
-      grid._startTouchReorder(e, cell._content);
-      clearTimeout(grid._startTouchReorderTimeout);
-    }
+    source.parentElement._touchDevice = false;
+    var sourceRect = source.getBoundingClientRect();
+    fire('track', {
+      x: sourceRect.left + sourceRect.width / 2 + 1,
+      y: sourceRect.top,
+      state: 'start'
+    }, {
+      node: source,
+      bubbles: true
+    });
   }
 
   function dragOver(source, target, clientX) {
     dragStart(source);
     var targetRect = target.getBoundingClientRect();
-    makeSoloTouchEvent('touchmove', {
+    fire('track', {
       x: clientX || targetRect.left + targetRect.width / 2 + 1,
-      y: targetRect.top},
-      source);
+      y: targetRect.top,
+      state: 'track'
+    }, {
+      node: source,
+      bubbles: true
+    });
   }
 
   function dragAndDropOver(source, target) {
     dragOver(source, target);
-    makeSoloTouchEvent('touchend', {x: 0, y: 0}, source);
+    fire('track', {
+      x: 0,
+      y: 0,
+      state: 'end'
+    }, {
+      node: source,
+      bubbles: true
+    });
   }
 
   function makeSoloTouchEvent(type, xy, node) {
