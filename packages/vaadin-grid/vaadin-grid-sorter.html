@@ -21,7 +21,6 @@ Part name | Description
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="vaadin-grid-cell-click-mixin.html">
 
 <style>
   @font-face {
@@ -101,7 +100,7 @@ Part name | Description
   </template>
   <script>
     {
-      class GridSorterElement extends Vaadin.Grid.CellClickMixin(Polymer.Element) {
+      class GridSorterElement extends Polymer.Element {
         static get is() {
           return 'vaadin-grid-sorter';
         }
@@ -164,6 +163,11 @@ Part name | Description
           ];
         }
 
+        ready() {
+          super.ready();
+          this.addEventListener('click', this._onClick.bind(this));
+        }
+
         connectedCallback() {
           super.connectedCallback();
           this._isConnected = true;
@@ -191,14 +195,9 @@ Part name | Description
             grid = grid.parentNode;
           }
 
+          grid.interacting = false;
           var thisCell = grid.$.scroller._getCellByCellContent(this);
-          if (thisCell.localName === 'vaadin-grid-table-footer-cell') {
-            grid.$.scroller._virtualFocus = grid.$.scroller.$.footer;
-          } else {
-            grid.$.scroller._virtualFocus = grid.$.scroller.$.header;
-          }
-          grid.$.scroller.interacting = false;
-          grid.focus();
+          thisCell.focus();
         }
 
         _getClosestCellContent() {
@@ -237,7 +236,7 @@ Part name | Description
           return order === null ? '' : order + 1;
         }
 
-        _onCellClick(e) {
+        _onClick(e) {
           e.preventDefault();
           if (this.direction === 'asc') {
             this.direction = 'desc';

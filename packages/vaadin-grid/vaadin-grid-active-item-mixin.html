@@ -33,7 +33,8 @@
     }
 
     _activateItem(e) {
-      const clickedItem = e.detail.model.item;
+      const model = e.detail.model;
+      const clickedItem = model ? model.item : null;
 
       this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
 

@@ -29,19 +29,18 @@
           type: Boolean,
           value: false,
           reflectToAttribute: true
-        }
+        },
+        _focusedColumnOrder: Number
       }
     }
 
     ready() {
       super.ready();
+
       this.addEventListener('keydown', this._onKeyDown);
-      this.addEventListener('focusin', () => this.navigating = true);
-      this.addEventListener('focusout', () => this.navigating = false);
-      this.addEventListener('cell-focus', e => {
-        this._focusCell(e.detail.cell);
-        this.navigating = false;
-      });
+      this.addEventListener('focusin', this._onFocusIn);
+      this.addEventListener('focusout', this._onFocusOut);
+      this.addEventListener('cell-focus', this._onCellFocus);
     }
 
     _focusableChanged(focusable, oldFocusable) {
@@ -97,6 +96,7 @@
           break;
       }
 
+      this._detectInteracting(e);
       if (this.interacting && keyGroup !== 'Interaction') {
         // When in the interacting mode, only the “Interaction” keys are handled.
         keyGroup = undefined;
@@ -150,6 +150,7 @@
 
       const activeCell = e.composedPath()[0];
       const columnIndex = indexOfChildElement(activeCell);
+      const isRowDetails = activeCell.matches('.vaadin-grid-details-cell');
 
       const activeRow = activeCell.parentNode;
       // Body rows have index property, otherwise DOM child index of the row is used
@@ -158,28 +159,62 @@
       const activeRowGroup = activeRow.parentNode;
       const maxRowIndex = (activeRowGroup === this.$.items ? this.size : activeRowGroup.children.length) - 1;
 
-      // Columns might have ordering different from DOM, thus columnIndex cannot
-      // be directly used in navigation. Instead, we find orderedColumnIndex
-      // using the columnTree.
-      let columnTreeLevel = this._columnTree.length - 1;
-      if (activeRowGroup === this.$.header) {
-        columnTreeLevel = rowIndex;
-      } else if (activeRowGroup === this.$.header) {
-        columnTreeLevel = this._columnTree.length - 1 - rowIndex;
-      }
-      const columns = this._columnTree[columnTreeLevel];
-      const columnOrders = columns.filter(c => !c.hidden).map(c => c._order).sort();
-      const orderedColumnIndex = columnOrders.indexOf(columns[columnIndex]._order);
-      const maxOrderedColumnIndex = columnOrders.length - 1;
+      // Index of the destination row
+      let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
 
-      // Process navigation key, calculate destination indexes
-      const dstOrderedColumnIndex = Math.max(0, Math.min(orderedColumnIndex + dx, maxOrderedColumnIndex));
-      const dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
+      // Row details navigation logic
+      let dstIsRowDetails = false;
+      if (activeRowGroup === this.$.items) {
+        const item = activeRow._item;
+        const dstItem = this._getCachedItem(dstRowIndex);
+        // Should we navigate to row details?
+        if (isRowDetails) {
+          dstIsRowDetails = dy === 0;
+        } else {
+          dstIsRowDetails = dy === 1 && this._isExpanded(item) ||
+            dy === -1 && dstRowIndex !== rowIndex && this._isExpanded(dstItem);
+        }
+        // Should we navigate between details and regular cells of the same row?
+        if (dstIsRowDetails !== isRowDetails &&
+            (dy === 1 && dstIsRowDetails || dy === -1 && !dstIsRowDetails)) {
+          dstRowIndex = rowIndex;
+        }
+      }
+
+      // _focusedColumnOrder is memoized — this is to ensure predictable
+      // navigation when entering and leaving detail and column group cells.
+      if (this._focusedColumnOrder === undefined) {
+        if (isRowDetails) {
+          this._focusedColumnOrder = 0;
+        } else {
+          this._focusedColumnOrder = this._getColumns(activeRowGroup, rowIndex)[columnIndex]._order;
+        }
+      }
+
+      // Find orderedColumnIndex — the index of order closest matching the
+      // original _focusedColumnOrder in the sorted array of orders
+      // of the visible columns on the destination row.
+      const dstColumns = this._getColumns(activeRowGroup, dstRowIndex);
+      const dstSortedColumnOrders = dstColumns.filter(c => !c.hidden).map(c => c._order).sort();
+      const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
+      const orderedColumnIndex = dstSortedColumnOrders.indexOf(
+        dstSortedColumnOrders.slice(0).sort((b, a) =>
+          Math.abs(b - this._focusedColumnOrder) - Math.abs(a - this._focusedColumnOrder)
+        )[0]
+      );
+
+      // Index of the destination column order
+      const dstOrderedColumnIndex = (dy === 0 && isRowDetails) ? orderedColumnIndex :
+        Math.max(0, Math.min(orderedColumnIndex + dx, maxOrderedColumnIndex));
 
       if (dstOrderedColumnIndex === orderedColumnIndex &&
-          dstRowIndex === rowIndex) {
+          dstRowIndex === rowIndex &&
+          dstIsRowDetails === isRowDetails) {
         // Navigation resulted in the same place, no action.
         return;
+      } else if (dstOrderedColumnIndex !== orderedColumnIndex) {
+        // Horizontal movement invalidates stored _focusedColumnOrder
+        this._focusedColumnOrder = undefined;
       }
 
       // Ensure correct scroll position, destination row is visible
@@ -195,8 +230,8 @@
         }
       }
 
-      const columnIndexByOrder = columns.reduce((acc, col, i) => (acc[col._order] = i, acc), {});
-      const dstColumnIndex = columnIndexByOrder[columnOrders[dstOrderedColumnIndex]];
+      const columnIndexByOrder = dstColumns.reduce((acc, col, i) => (acc[col._order] = i, acc), {});
+      const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
 
       // For body rows, use index property to find destination row, otherwise use DOM child index
       const dstRow = activeRowGroup === this.$.items ?
@@ -204,16 +239,15 @@
         activeRowGroup.children[dstRowIndex];
 
       // Here we go!
-      const dstCell = dstRow.children[dstColumnIndex];
+      const dstCell = dstIsRowDetails ?
+        Array.from(dstRow.children)
+          .filter(el => el.matches('.vaadin-grid-details-cell'))[0] :
+        dstRow.children[dstColumnIndex];
       this._focusCell(dstCell, activeRowGroup);
     }
 
     _onInteractionKeyDown(e, key) {
-      console.log('interaction', key);
-
-      if (!this.interacting) {
-        e.preventDefault();
-      }
+      this._detectInteracting(e);
 
       let wantInteracting;
       switch (key) {
@@ -228,8 +262,26 @@
           break;
       }
 
-      console.log(this.interacting, wantInteracting);
-      this.interacting = wantInteracting;
+      const tableIndex = e.composedPath().indexOf(this.$.table);
+      const rowGroup = e.composedPath()[tableIndex - 1];
+      const cell = e.composedPath()[tableIndex - 3];
+
+      if (this.interacting !== wantInteracting) {
+        if (wantInteracting) {
+          const focusTarget = cell._content.querySelector('[focus-target]') ||
+            cell._content.firstElementChild;
+          if (focusTarget) {
+            e.preventDefault();
+            this.interacting = true;
+            focusTarget.focus();
+          }
+        } else {
+          e.preventDefault();
+          this.interacting = false;
+          this._focusedColumnOrder = undefined;
+          this._focusCell(cell, rowGroup);
+        }
+      }
     }
 
     _onTabKeyDown(e) {
@@ -237,7 +289,50 @@
     }
 
     _onSpaceKeyDown(e) {
-      console.log('space');
+      e.preventDefault();
+
+      const cell = e.composedPath()[0];
+      if (cell._content && cell._content.firstElementChild) {
+        cell._content.firstElementChild.click();
+      } else {
+        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._instance}}));
+      }
+    }
+
+    _onFocusIn(e) {
+      this._detectInteracting(e);
+      this.navigating = true;
+    }
+
+    _onFocusOut(e) {
+      this.navigating = false;
+      this.interacting = false;
+    }
+
+    _onCellFocus(e) {
+      this.navigating = false;
+      this._focusedColumnOrder = undefined;
+      const cell = e.detail.cell;
+      if (!cell._content.contains(this.getRootNode().activeElement)) {
+        this.interacting = false;
+        this._focusCell(e.detail.cell);
+      } else {
+        this.interacting = true;
+      }
+    }
+
+    _detectInteracting(e) {
+      this.interacting = e.composedPath().some(el => el.localName === 'vaadin-grid-cell-content');
+    }
+
+    _getColumns(rowGroup, rowIndex) {
+      let columnTreeLevel = this._columnTree.length - 1;
+      if (rowGroup === this.$.header) {
+        columnTreeLevel = rowIndex;
+      } else if (rowGroup === this.$.header) {
+        columnTreeLevel = this._columnTree.length - 1 - rowIndex;
+      }
+      return this._columnTree[columnTreeLevel];
     }
 
     _resetKeyboardNavigation() {
@@ -258,7 +353,7 @@
       }
     }
 
-    _focusCell(cell, rowGroup) {
+    _focusCell(cell, rowGroup, ignoreFocusInCellContent) {
       rowGroup = rowGroup || cell.parentNode.parentNode;
       if (rowGroup === this.$.header) {
         this._headerFocusable = cell;

@@ -1083,8 +1083,7 @@
 
           describe('space click shortcut', function() {
             beforeEach(function() {
-              // navigate to first column
-              header.children[0].children[1].click();
+              header.children[0].children[1].focus();
               right();
             });
 
@@ -1107,14 +1106,11 @@
             });
 
             it('should prevent default keydown action when clicking on space', function() {
-              var eventDefaultPrevented;
-              grid.addEventListener('keydown', function(e) {
-                eventDefaultPrevented = e.defaultPrevented;
-              });
+              var event = MockInteractions.keyboardEventFor('keydown', 32, [], ' ');
 
-              space();
+              grid.dispatchEvent(event);
 
-              expect(eventDefaultPrevented).to.be.true;
+              expect(event.defaultPrevented).to.be.true;
             });
 
             it('should not activate if synthetic click has default prevented', function() {
@@ -1126,9 +1122,8 @@
                 e.preventDefault();
               });
 
-              tabToHeader();
               // Navigate to body, row 1, column 3
-              tab();
+              tabToBody();
               right();
               right();
 

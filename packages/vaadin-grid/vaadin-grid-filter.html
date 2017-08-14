@@ -89,6 +89,10 @@ and handlers for filtering the grid data.
             });
         }
 
+        focus() {
+          this.$.filter.focus();
+        }
+
       }
 
       customElements.define(GridFilterElement.is, GridFilterElement);

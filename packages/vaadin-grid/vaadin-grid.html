@@ -4,6 +4,7 @@
 <link rel="import" href="vaadin-grid-data-provider-mixin.html">
 <link rel="import" href="vaadin-grid-array-data-provider-mixin.html">
 <link rel="import" href="vaadin-grid-cell-click-mixin.html">
+<link rel="import" href="vaadin-grid-active-item-mixin.html">
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
 <link rel="import" href="vaadin-grid-selection-mixin.html">
 <link rel="import" href="vaadin-grid-sort-mixin.html">
@@ -70,6 +71,7 @@
     Vaadin.Grid.ArrayDataProviderMixin(
     Vaadin.Grid.DynamicColumnsMixin(
     Vaadin.Grid.CellClickMixin(
+    Vaadin.Grid.ActiveItemMixin(
     Vaadin.Grid.ScrollMixin(
     Vaadin.Grid.SelectionMixin(
     Vaadin.Grid.SortMixin(
@@ -78,7 +80,7 @@
     Vaadin.Grid.FilterMixin(
     Vaadin.Grid.ColumnReorderingMixin(
     Vaadin.Grid.ColumnResizingMixin(
-    VaadinGridScroller))))))))))))) {
+    VaadinGridScroller)))))))))))))) {
 
     static get is() {
       return 'vaadin-grid';

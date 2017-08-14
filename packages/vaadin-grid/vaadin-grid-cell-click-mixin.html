@@ -53,11 +53,12 @@
         this.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: cell}}));
       }
 
+      // TODO: _onCellClick is not in the grid, the following seems useless.
       var path = Polymer.dom(e).path;
       var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
-      if (!cellContent.contains(this.root.activeElement || document.activeElement) &&
-          !elementsClicked.some(this._isFocusable) && this._onCellClick) {
-        this._onCellClick(e);
+      if (!cellContent.contains(this.getRootNode().activeElement) &&
+          !elementsClicked.some(this._isFocusable) && !e.defaultPrevented) {
+        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._instance}}));
       }
     }
 
