@@ -48,7 +48,7 @@
         oldFocusable.setAttribute('tabindex', '-1');
       }
       if (focusable) {
-        focusable.setAttribute('tabindex', '0');
+        focusable.setAttribute('tabindex', '1');
       }
     }
 
@@ -284,7 +284,33 @@
       }
     }
 
+    _predictFocusStepTarget(srcElement, step) {
+      const tabOrder = [
+        this._headerFocusable,
+        this._itemsFocusable,
+        this._footerFocusable,
+        this.$.focusexit
+      ];
+
+      let index = tabOrder.indexOf(srcElement);
+
+      index += step;
+      while (index >= 0 && index <= tabOrder.length - 1 &&
+          (!tabOrder[index] || tabOrder[index].parentNode.hidden)) {
+        index += step;
+      }
+
+      return tabOrder[index];
+    }
+
     _onTabKeyDown(e) {
+      const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
+      if (focusTarget === this.$.focusexit) {
+        // The focus is about to exit the grid. We move the focus to the exit
+        // to make it happen.
+        this.$.focusexit.focus();
+      }
+
       this.navigating = true;
     }
 
@@ -300,8 +326,15 @@
     }
 
     _onFocusIn(e) {
-      this._detectInteracting(e);
       this.navigating = true;
+      if (e.composedPath()[0] === this.$.focusexit) {
+        // The focus enters the bottom of the grid, meaning that user has
+        // shift-tabbed into the grid. Move the focus to the last focusable.
+        this._predictFocusStepTarget(e.composedPath()[0], -1).focus();
+        this.interacting = false;
+      } else {
+        this._detectInteracting(e);
+      }
     }
 
     _onFocusOut(e) {
