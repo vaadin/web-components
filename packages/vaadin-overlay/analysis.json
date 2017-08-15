@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-overlay.html",
         "start": {
-          "line": 236,
+          "line": 320,
           "column": 4
         },
         "end": {
-          "line": 236,
+          "line": 320,
           "column": 40
         }
       },
@@ -106,18 +106,57 @@
               "defaultValue": "false"
             },
             {
-              "name": "_instance",
-              "type": "Object",
+              "name": "focusTrap",
+              "type": "boolean",
               "description": "",
-              "privacy": "protected",
+              "privacy": "public",
               "sourceRange": {
                 "start": {
                   "line": 105,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
-                  "column": 27
+                  "line": 108,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "_focusedElement",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 110,
+                  "column": 10
+                },
+                "end": {
+                  "line": 112,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_instance",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 114,
+                  "column": 10
+                },
+                "end": {
+                  "line": 116,
+                  "column": 11
                 }
               },
               "metadata": {
@@ -132,11 +171,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 123,
+                  "line": 134,
                   "column": 6
                 },
                 "end": {
-                  "line": 127,
+                  "line": 138,
                   "column": 7
                 }
               },
@@ -149,11 +188,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 140,
                   "column": 6
                 },
                 "end": {
-                  "line": 131,
+                  "line": 142,
                   "column": 7
                 }
               },
@@ -170,11 +209,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 148,
                   "column": 6
                 },
                 "end": {
-                  "line": 143,
+                  "line": 154,
                   "column": 7
                 }
               },
@@ -191,11 +230,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 164,
                   "column": 6
                 },
                 "end": {
-                  "line": 164,
+                  "line": 175,
                   "column": 7
                 }
               },
@@ -207,16 +246,16 @@
               ]
             },
             {
-              "name": "_escapeListener",
+              "name": "_keydownListener",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 170,
+                  "line": 181,
                   "column": 6
                 },
                 "end": {
-                  "line": 179,
+                  "line": 207,
                   "column": 7
                 }
               },
@@ -233,11 +272,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 181,
+                  "line": 213,
                   "column": 6
                 },
                 "end": {
-                  "line": 205,
+                  "line": 247,
                   "column": 7
                 }
               },
@@ -254,11 +293,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 249,
                   "column": 6
                 },
                 "end": {
-                  "line": 218,
+                  "line": 260,
                   "column": 7
                 }
               },
@@ -275,11 +314,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 262,
                   "column": 6
                 },
                 "end": {
-                  "line": 222,
+                  "line": 264,
                   "column": 7
                 }
               },
@@ -291,16 +330,78 @@
               ]
             },
             {
+              "name": "_setFocus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 266,
+                  "column": 6
+                },
+                "end": {
+                  "line": 293,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "index"
+                },
+                {
+                  "name": "increment"
+                }
+              ]
+            },
+            {
+              "name": "_isVisible",
+              "description": "borrowed from jqeury $(elem).is(':visible') implementation",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 296,
+                  "column": 6
+                },
+                "end": {
+                  "line": 298,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "elem"
+                }
+              ]
+            },
+            {
+              "name": "_getFocusableElements",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 300,
+                  "column": 6
+                },
+                "end": {
+                  "line": 306,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
               "name": "_processPendingMutationObserversFor",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 224,
+                  "line": 308,
                   "column": 6
                 },
                 "end": {
-                  "line": 228,
+                  "line": 312,
                   "column": 7
                 }
               },
@@ -350,7 +451,7 @@
               "column": 4
             },
             "end": {
-              "line": 229,
+              "line": 313,
               "column": 5
             }
           },
@@ -421,6 +522,22 @@
               },
               "metadata": {},
               "type": "boolean"
+            },
+            {
+              "name": "focus-trap",
+              "description": "",
+              "sourceRange": {
+                "start": {
+                  "line": 105,
+                  "column": 10
+                },
+                "end": {
+                  "line": 108,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
             }
           ],
           "events": [
@@ -434,6 +551,12 @@
               "type": "CustomEvent",
               "name": "vaadin-overlay-escape-press",
               "description": "vaadin-overlay-escape-press\nfired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "vaadin-overlay-open",
+              "description": "vaadin-overlay-open\nfired after the `vaadin-overlay` is opened.",
               "metadata": {}
             },
             {

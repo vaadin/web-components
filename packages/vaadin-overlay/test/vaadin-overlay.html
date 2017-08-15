@@ -5,6 +5,7 @@
   <title>vaadin-overlay tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../../vaadin-button/vaadin-button.html">
   <link rel="import" href="../vaadin-overlay.html">
 </head>
 
@@ -14,7 +15,13 @@
       <div>
         <div id="parent">
           <vaadin-overlay>
-            <template>content</template>
+            <template>
+              content
+              <button>native button</button>
+              <button tabindex="-1">button with tabindex="-1"</button>
+              <input type="text">
+              <vaadin-button>vaadin-button</vaadin-button>
+            </template>
           </vaadin-overlay>
         </div>
       </div>
@@ -23,12 +30,13 @@
 
   <script>
     describe('overlay', function() {
-      var overlay, parent, content, backdrop;
+      var overlay, parent, content, backdrop, focusableElements;
 
       beforeEach(function() {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
         content = overlay.$.content;
+        focusableElements = overlay._getFocusableElements();
         backdrop = overlay.$.backdrop;
         overlay._observer.flush();
         overlay.opened = true;
@@ -50,6 +58,49 @@
 
       it('should stamp contents inside shadow root', () => {
         expect(overlay.root.textContent).to.contain('content');
+      });
+
+      describe('focus trap', function() {
+        beforeEach(function() {
+          window.focus();
+        });
+
+        it('should focus the content when focusTrap = false', (done) => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(overlay._focusedElement).to.eql(content);
+            done();
+          });
+        });
+
+        it('should properly detect focusable elements inside the content', () => {
+          expect(focusableElements.length).to.eql(3);
+          expect(focusableElements[0]).to.eql(overlay.$.content.querySelector('button'));
+          expect(focusableElements[1]).to.eql(overlay.$.content.querySelector('input'));
+          expect(focusableElements[2]).to.eql(overlay.$.content.querySelector('vaadin-button'));
+        });
+
+        it('should focus focusable elements inside the content when focusTrap = true', (done) => {
+          overlay.focusTrap = true;
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            // TAB
+            expect(overlay._focusedElement).to.eql(focusableElements[0]);
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9);
+            expect(overlay._focusedElement).to.eql(focusableElements[1]);
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9);
+            expect(overlay._focusedElement).to.eql(focusableElements[2]);
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9);
+            expect(overlay._focusedElement).to.eql(focusableElements[0]);
+
+            // SHIFT+TAB
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift');
+            expect(overlay._focusedElement).to.eql(focusableElements[2]);
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift');
+            expect(overlay._focusedElement).to.eql(focusableElements[1]);
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift');
+            expect(overlay._focusedElement).to.eql(focusableElements[0]);
+            done();
+          });
+        });
       });
 
       it('should close on esc', () => {

@@ -103,7 +103,18 @@ This program is available under Apache License Version 2.0, available at https:/
             reflectToAttribute: true
           },
 
-          _instance: Object
+          focusTrap: {
+            type: Boolean,
+            value: false
+          },
+
+          _focusedElement: {
+            type: Object
+          },
+
+          _instance: {
+            type: Object
+          }
         };
       }
 
@@ -114,7 +125,7 @@ This program is available under Apache License Version 2.0, available at https:/
       constructor() {
         super();
         this._boundOutsideClickListener = this._outsideClickListener.bind(this);
-        this._boundEscapeListener = this._escapeListener.bind(this);
+        this._boundKeydownListener = this._keydownListener.bind(this);
 
         this._observer = new Polymer.FlattenedNodesObserver(this, info => {
           this._setTemplateFromNodes(info.addedNodes);
@@ -168,8 +179,25 @@ This program is available under Apache License Version 2.0, available at https:/
        * @event vaadin-overlay-escape-press
        * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
        */
-      _escapeListener(event) {
-        if (event.keyCode === 27) {
+      _keydownListener(event) {
+        // TAB
+        if (event.keyCode === 9 && this.focusTrap) {
+          const focusableElements = this._getFocusableElements();
+          const focusedElementIndex = focusableElements.indexOf(this._focusedElement);
+
+          // Cycle to the next button
+          if (!event.shiftKey) {
+            this._setFocus(focusedElementIndex, 1);
+
+          // Cycle to the prev button
+          } else {
+            this._setFocus(focusedElementIndex, -1);
+          }
+
+          event.preventDefault();
+
+        // ESC
+        } else if (event.keyCode === 27) {
           const evt = new CustomEvent('vaadin-overlay-escape-press', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
           this.dispatchEvent(evt);
 
@@ -179,6 +207,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * @event vaadin-overlay-open
+       * fired after the `vaadin-overlay` is opened.
+       */
       _openedChanged(opened) {
         if (opened) {
           this._placeholder = document.createComment('vaadin-overlay-placeholder');
@@ -186,16 +218,26 @@ This program is available under Apache License Version 2.0, available at https:/
           document.body.appendChild(this);
 
           document.addEventListener('click', this._boundOutsideClickListener, true);
-          document.addEventListener('keydown', this._boundEscapeListener);
+          document.addEventListener('keydown', this._boundKeydownListener);
 
           // Set body pointer-events to 'none' to disable mouse interactions with
           // other document nodes (combo-box is "modal")
           this._previousDocumentPointerEvents = document.body.style.pointerEvents;
           document.body.style.pointerEvents = 'none';
 
+          Polymer.Async.animationFrame.run(() => {
+            // Focus
+            //  - the overlay content by default
+            //  - or the first focusable element if focusTrap is true
+            this._setFocus(-1, 1);
+
+            const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
+            this.dispatchEvent(evt);
+          });
+
         } else if (this._placeholder) {
           document.removeEventListener('click', this._boundOutsideClickListener, true);
-          document.removeEventListener('keydown', this._boundEspaceListener);
+          document.removeEventListener('keydown', this._boundKeydownListener);
 
           this._placeholder.parentNode.insertBefore(this, this._placeholder);
           this._processPendingMutationObserversFor(document.body);
@@ -220,6 +262,50 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _contentChanged(content) {
         this.$.content.appendChild(content);
+      }
+
+      _setFocus(index, increment) {
+        if (!this.focusTrap) {
+          this._focusedElement = this.$.content;
+          return this.$.content.focus();
+        }
+
+        const focusableElements = this._getFocusableElements();
+        // search for visible elements and select the next possible match
+        for (let i = 0; i < focusableElements.length; i++) {
+          index = index + increment;
+
+          // rollover to first item
+          if (index === focusableElements.length) {
+            index = 0;
+
+          // go to last item
+          } else if (index === -1) {
+            index = focusableElements.length - 1;
+          }
+
+          // determine if element is visible
+          const el = focusableElements[index];
+          if (this._isVisible(el)) {
+            this._focusedElement = el;
+            return el.focus();
+          }
+        }
+      }
+
+      // borrowed from jqeury $(elem).is(':visible') implementation
+      _isVisible(elem) {
+        return elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length;
+      }
+
+      _getFocusableElements() {
+        const focusableElements = Array.from(this.$.content.querySelectorAll(
+          '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'
+        ));
+
+        return focusableElements.filter((el) => {
+          return el.getAttribute('tabindex') !== '-1';
+        });
       }
 
       _processPendingMutationObserversFor(node) {
