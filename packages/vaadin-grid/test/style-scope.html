@@ -104,21 +104,15 @@
         var content;
         var slider;
 
-        beforeEach(function(done) {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
-
+        beforeEach(function() {
           component = fixture('default');
 
-          if (Polymer.Element) {
-            flushColumns(component.$.grid);
-          }
+          flushGrid(component.$.grid);
 
-          wrapper = Polymer.dom(component.$.grid).querySelector('vaadin-grid-cell-content');
-          content = Polymer.dom(component.$.grid).querySelector('.my-content');
+          wrapper = component.$.grid.querySelector('vaadin-grid-cell-content');
+          content = component.$.grid.querySelector('.my-content');
 
           slider = component.$$('paper-slider');
-          Polymer.Base.async(done, 1);
         });
 
         it('should target cell content', function() {
@@ -154,27 +148,24 @@
 
           beforeEach(function() {
             scroller = grid.$.scroller;
-            table = scroller.$.table;
+            table = grid.$.table;
             body = grid.$.items;
             grid.dataProvider = infiniteDataProvider;
-            Polymer.dom.flush();
+            flushGrid(grid);
           });
 
           it('should not lose scope on reorder', function(done) {
             var row = body.children[0];
 
-            var cell = row.querySelector('vaadin-grid-table-cell');
-            var content = getCellContent(cell).querySelector('.my-content');
+            var cell = row.querySelector('[part~="cell"]');
+            var content = cell._content.querySelector('.my-content');
 
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
 
             table.addEventListener('scroll', function() {
-              scroller.flushDebouncer('vaadin-grid-scrolling');
-              // it takes a microtask before the cell contents are reattached.
-              scroller.async(function() {
-                expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
-                done();
-              });
+              flushGrid(grid);
+              expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
+              done();
             });
 
             // Deliberately mess the row order...
@@ -185,9 +176,9 @@
           });
 
           it('should not have vaadin-grid-table scope', function() {
-            var row = body.children[25];
-            var cell = row.querySelector('vaadin-grid-table-cell');
-            var content = getCellContent(cell).querySelector('.my-content');
+            var row = body.children[24];
+            var cell = row.querySelector('[part~="cell"]');
+            var content = cell._content.querySelector('.my-content');
             expect(content.classList.contains('vaadin-grid-table')).to.be.false;
           });
         }
