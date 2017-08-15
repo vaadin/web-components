@@ -22,7 +22,7 @@
   <script>
     describe('missing doctype', function() {
 
-      it('should call dataprovider for first page', function() {
+      it('should warn about doctype', function() {
         var _warn = console.warn;
         var spy = console.warn = sinon.spy();
         fixture('default');

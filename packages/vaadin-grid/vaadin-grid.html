@@ -341,6 +341,16 @@
       }
     }
 
+    ready() {
+      super.ready();
+
+      if (document.doctype === null) {
+        console.warn(
+          '<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
+        );
+      }
+    }
+
   }
 
   customElements.define(VaadinGrid.is, VaadinGrid);
