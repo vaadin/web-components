@@ -11,21 +11,19 @@
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 
-  <custom-style>
-    <style is="custom-style">
-      vaadin-grid {
-        --vaadin-grid-cell: {
+  <dom-module id="dynamic-item-size-grid-styles" theme-for="vaadin-grid">
+    <template>
+      <style incluce="vaadin-grid-default-theme">
+        [part~="cell"] {
           line-height: 18px;
         }
-      }
 
-      vaadin-grid.high {
-        --vaadin-grid-cell: {
+        :host(.high) [part~="cell"] {
           line-height: 100px;
         }
-      }
-    </style>
-  </custom-style>
+      </style>
+    </template>
+  </dom-module>
 </head>
 <body>
 
@@ -44,36 +42,24 @@
     describe('Dynamic item size', function() {
       var scroller, grid;
 
-      beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
+      beforeEach(function() {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
-        setTimeout(done, 1);
+        flushGrid(grid);
       });
 
       it('update size using item index', function() {
-        var firstItem = getFirstVisibleItem(scroller);
+        var firstItem = getFirstVisibleItem(grid);
 
-        expect(firstItem.offsetHeight).to.equal(35);
+        expect(firstItem.offsetHeight).to.equal(18);
 
         grid.classList.add('high');
-        Polymer.updateStyles();
+        flushGrid(grid);
 
-        scroller.updateSizeForItem(0);
-        expect(firstItem.offsetHeight).to.eql(117);
+        expect(firstItem.offsetHeight).to.eql(100);
       });
 
-      it('ignore items that are not rendered', function(done) {
-        scroller.size = 100;
-
-        flush(function() {
-          scroller.updateSizeForItem(100);
-          done();
-        });
-      });
     });
 
   </script>
