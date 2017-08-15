@@ -164,12 +164,27 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      connectedCallback() {
+        super.connectedCallback();
+
+        if (this.parentNode === document.body) {
+          window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+        }
+      }
+
       disconnectedCallback() {
         super.disconnectedCallback();
 
         // Removing the event listener in case `iron-overlay-canceled` was not fired.
-        if (!this.parentNode) {
-          window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+        // In Shady DOM the overlay can be reattached asynchronously so we need to check that the overlay is not currently attached to body.
+        if (window.ShadyDOM && window.ShadyDOM.inUse) {
+          if (this.parentNode !== document.body) {
+            window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+          }
+        } else {
+          if (!this.parentNode) {
+            window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+          }
         }
       }
 
@@ -232,7 +247,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       _openedChanged(opened) {
         if (opened) {
-          window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
           this._placeholder = document.createComment('vaadin-overlay-placeholder');
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
