@@ -243,6 +243,9 @@
       // Polymer.Templatizer.modelForElement(row)
       columns.forEach((column, columnIndex) => {
         const cell = row.children[columnIndex];
+        if (!cell) {
+          return;
+        }
         const slot = cell.firstElementChild;
 
         if (cell._instance) {

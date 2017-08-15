@@ -284,6 +284,7 @@ The `class` attribute is used to differentiate header and footer templates.
         }
 
         _addNodeObserver() {
+          // TODO: Drop legacy api
           this._observer = Polymer.dom(this).observeNodes(info => {
             const isColumnElement = node => {
               return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
@@ -296,6 +297,8 @@ The `class` attribute is used to differentiate header and footer templates.
               this._rootColumns = this._getChildColumns(this);
               this._childColumns = this._rootColumns;
               this._preventHiddenCascade = false;
+
+              this._grid && this._grid._updateColumnTree && this._grid._updateColumnTree();
             }
           });
           this._observer.flush();

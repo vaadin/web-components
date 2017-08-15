@@ -105,22 +105,52 @@ This program is available under Apache License Version 2.0, available at https:/
 
     connectedCallback() {
       super.connectedCallback();
-      // Find <vaadin-grid>
-      var el = this;
-      while (el && el.localName !== 'vaadin-grid') {
-        el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
-      }
-      this._grid = el || undefined;
+
       if (this.template) this.template.templatizer._grid = this._grid;
       if (this.headerTemplate) this.headerTemplate.templatizer._grid = this._grid;
       if (this.footerTemplate) this.footerTemplate.templatizer._grid = this._grid;
 
       this._templateObserver.flush();
+
+      requestAnimationFrame(() => {
+        this._allCells.forEach(cell => {
+          if (!cell._content.parentNode) {
+            this._grid && this._grid.appendChild(cell._content);
+          }
+        });
+      });
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
-      this._grid = undefined;
+
+      requestAnimationFrame(() => {
+        this._allCells.forEach(cell => {
+          if (cell._content.parentNode) {
+            cell._content.parentNode.removeChild(cell._content);
+          }
+        });
+      });
+
+      this._gridValue = undefined;
+    }
+
+    get _grid() {
+      if (!this._gridValue) {
+
+        // Find <vaadin-grid>
+        var el = this;
+        // TODO: Cleanup
+        try {
+          while (el && el.localName !== 'vaadin-grid') {
+            el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
+          }
+        } catch (e) {
+          return undefined;
+        }
+        this._gridValue = el || undefined;
+      }
+      return this._gridValue;
     }
 
     get _allCells() {
@@ -268,7 +298,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._allCells.forEach(cell => this._toggleAttribute('frozen', frozen, cell));
 
-      this._grid && this._grid._frozenCellsChanged();
+      this._grid && this._grid._frozenCellsChanged && this._grid._frozenCellsChanged();
     }
 
     _lastFrozenChanged(lastFrozen) {
@@ -396,8 +426,8 @@ This program is available under Apache License Version 2.0, available at https:/
         this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
 
         if (hidden !== undefined && this._grid) {
-          this._grid._updateLastFrozen();
-          this._grid._update();
+          this._grid._updateLastFrozen && this._grid._updateLastFrozen();
+          this._grid.notifyResize && this._grid.notifyResize();
         }
       }
 
