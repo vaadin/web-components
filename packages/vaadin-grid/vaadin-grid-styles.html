@@ -234,6 +234,14 @@ This program is available under Apache License Version 2.0, available at https:/
         border-right: 1px solid #dbdbdb;
         right: -1px;
       }
+
+      [part~="cell"]:focus {
+        outline: none;
+      }
+
+      :host([navigating]) [part~="cell"]:focus {
+        box-shadow: inset 0 0 0 3px rgba(0,0,0,.25);
+      }
     </style>
   </template>
 </dom-module>
