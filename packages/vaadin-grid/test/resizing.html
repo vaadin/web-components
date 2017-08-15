@@ -66,15 +66,10 @@
         var grid, scroller;
 
         beforeEach(function(done) {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
-
           grid = fixture('default').$.grid;
           grid.dataProvider = infiniteDataProvider;
-          scroller = grid.$.scroller;
-          Polymer.dom.flush();
-          listenOnce(scroller, 'animationend', function() {
-            scroller.flushDebouncer('vaadin-grid-resizing');
+          listenOnce(grid, 'animationend', function() {
+            flushGrid(grid);
             done();
           });
         });
@@ -115,11 +110,11 @@
 
           grid.style.fontSize = '40px';
           grid.notifyResize();
-          scroller.flushDebouncer('vaadin-grid-resizing');
+          flushGrid(grid);
 
           expect(detailsCell.getBoundingClientRect().height).to.be.above(_height);
           expect(detailsCell.getBoundingClientRect().bottom)
-            .to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 1);
+            .to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 2);
         });
 
         it('should align height with number of rows', function(done) {

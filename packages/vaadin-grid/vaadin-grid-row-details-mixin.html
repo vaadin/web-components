@@ -106,6 +106,12 @@
       });
     }
 
+    _updateDetailsCellHeights() {
+      Array.from(this.$.items.querySelectorAll('.vaadin-grid-details-cell:not([hidden])')).forEach(cell => {
+        cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+      });
+    }
+
     _isExpanded(item) {
       return this.expandedItems && this.expandedItems.indexOf(item) !== -1;
     }
