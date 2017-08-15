@@ -60,13 +60,22 @@
     }
 
     _sizeChanged(size) {
-      this.items = this.items || {length: size};
+      const fvi = this.firstVisibleIndex;
+      if (this.items && size < this.items.length) {
+        // Size was reduced, scroll to 0 first
+        this._scrollTop = 0;
+      }
+      this.items = Array.isArray(this.items) ? this.items : {length: size};
 
       // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
       this.scrollOffset = this._scrollTop;
       super._itemsChanged({path:"items"});
 
       this._virtualCount = size || 0;
+
+      if (this._scrollTop === 0) {
+        this.scrollToIndex(Math.min(size - 1, fvi));
+      }
     }
 
     _increasePoolIfNeeded(count) {

@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   function infiniteDataProvider(params, callback) {
     callback(Array.apply(null, Array(params.pageSize)).map(function(item, index) {
       return {
-        value: 'foo' + index
+        value: 'foo' + (params.page * params.pageSize + index)
       };
     }));
   }

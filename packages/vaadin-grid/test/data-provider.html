@@ -220,14 +220,14 @@
       });
 
       it('should scroll to last index if size decreased beyond current viewport', function() {
-        grid.size = 5000000;
+        grid.size = 5000;
         flushGrid(grid);
         scrollToEnd(grid);
-        expect(grid.$.scroller.lastVisibleIndex + grid.$.scroller._vidxOffset).to.equal(grid.size - 1);
+        expect(grid.lastVisibleIndex + grid._vidxOffset).to.equal(grid.size - 1);
 
         grid.size = 50;
         flushGrid(grid);
-        expect(grid.$.scroller.lastVisibleIndex + grid.$.scroller._vidxOffset).to.equal(grid.size - 1);
+        expect(grid.lastVisibleIndex + grid._vidxOffset).to.equal(grid.size - 1);
 
         // Test actual last visible item
         var rect = grid.getBoundingClientRect();
