@@ -109,6 +109,11 @@
       }
     }
 
+    constructor() {
+      super();
+      this.addEventListener('animationend', this._onAnimationEnd);
+    }
+
     _createScrollerRows(count) {
       const rows = [];
       for (var i = 0; i < count; i++) {
@@ -314,6 +319,14 @@
         element.style.borderTopWidth = headerHeight;
         element.style.borderBottomWidth = footerHeight;
       });
+    }
+
+    _onAnimationEnd(e) {
+      if (e.animationName === 'vaadin-grid-appear') {
+        this._render();
+        this._updateHeaderFooterMetrics();
+        e.stopPropagation();
+      }
     }
 
     _toggleAttribute(name, bool, node) {
