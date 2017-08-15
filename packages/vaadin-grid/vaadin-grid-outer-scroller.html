@@ -53,7 +53,7 @@
       ready() {
         super.ready();
         this.addEventListener('scroll', () => this._syncScrollTarget());
-        this.addEventListener('mousemove', this._onMouseMove.bind(this));
+        this.parentElement.addEventListener('mousemove', this._onMouseMove.bind(this));
 
         // for some reason scroll bars are hidden in iOS if this style is
         // added in stylesheets or before attaching.

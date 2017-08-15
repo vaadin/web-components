@@ -84,16 +84,15 @@
 
         grid = fixture('default');
 
-        if (Polymer.Element) {
-          flushColumns(grid);
-        }
-
+        flushColumns(grid);
         grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
         scroller = grid.$.scroller;
-        outerScroller = scroller.$.outerscroller;
+        outerScroller = grid.$.outerscroller;
         outerScroller.hidden = false;
         target = outerScroller.scrollTarget;
-        tableRect = scroller.$.table.getBoundingClientRect();
+        tableRect = grid.$.table.getBoundingClientRect();
+
         animationFrameFlush(function() {
           outerScroller._syncingScrollTarget = false;
           outerScroller._syncingOuterScroller = false;
@@ -112,13 +111,13 @@
       });
 
       it('should invoke onScroll synchronously', function() {
-        var spy = sinon.spy(scroller, '_translateStationaryElements');
+        var spy = sinon.spy(grid, '_translateStationaryElements');
         outerScroller._syncScrollTarget();
         expect(spy.called).to.be.true;
       });
 
       it('should invoke frozen element translate handler', function(done) {
-        var spy = sinon.spy(scroller, '_translateStationaryElements');
+        var spy = sinon.spy(grid, '_translateStationaryElements');
         outerScroller.scrollLeft = 1;
         setTimeout(function() {
           expect(spy.called).to.be.true;
@@ -142,7 +141,7 @@
       it('should have correct scrollWidth with hidden columns', function() {
         grid.querySelector('vaadin-grid-column').hidden = true;
         // Hide the table's sizer and rely on the cells to size properly
-        scroller.$.fixedsizer.hidden = true;
+        grid.$.fixedsizer.hidden = true;
         expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
       });
 
@@ -265,16 +264,13 @@
       var scroller;
       var outerScroller;
 
-      beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
+      beforeEach(function() {
         grid = fixture('content-only');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
-        outerScroller = scroller.$.outerscroller;
+        outerScroller = grid.$.outerscroller;
         outerScroller.hidden = false;
-        Polymer.Base.async(done, 1);
+        flushGrid(grid);
       });
 
       it('should have the correct scrollHeight', function() {
@@ -327,10 +323,10 @@
       });
 
       it('should scroll the grid (scrolled to end)', function() {
-        var scrollTop = grid.$.scroller._scrollTop;
+        var scrollTop = grid._scrollTop;
         scrollable.scrollTop = scrollable.scrollHeight;
         var e = wheel(scrollable, 0, 100);
-        expect(grid.$.scroller._scrollTop).to.equal(scrollTop + 100);
+        expect(grid._scrollTop).to.equal(scrollTop + 100);
       });
 
     });

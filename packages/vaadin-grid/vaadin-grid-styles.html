@@ -141,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
         z-index: 0;
       }
 
-      /* TODO: Sizer styles, relocate */
+      /* Sizer styles */
       #outersizer {
         display: flex;
         position: relative;
@@ -161,12 +161,21 @@ This program is available under Apache License Version 2.0, available at https:/
         margin-top: -1em;
       }
 
-      #outersizer [part~="cell"] * {
+      #outersizer [part~="cell"][hidden] {
         display: none;
       }
 
+      #outersizer [part~="cell"] {
+        height: 0px !important;
+        padding: 0px !important;
+      }
+
       #outersizer [part~="cell"]::before {
-        content: "";
+        content: "-";
+      }
+
+      #outersizer [part~="cell"] ::slotted(*) {
+        display: none;
       }
 
       #fixedsizer {

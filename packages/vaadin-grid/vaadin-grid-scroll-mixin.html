@@ -68,7 +68,7 @@
         fixedSections: {
           type: Boolean,
           reflectToAttribute: true,
-          computed: '_hasFixedSections(scrollbarWidth)'
+          computed: '_hasFixedSections(_scrollbarWidth)'
         },
 
         // Cached array of frozen cells
@@ -84,8 +84,8 @@
           reflectToAttribute: true
         },
 
-        _noScrollbars: {
-          type: Boolean,
+        _scrollbarWidth: {
+          type: Number,
           value: function() {
             // Create the measurement node
             var scrollDiv = document.createElement('div');
@@ -99,7 +99,7 @@
             var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
             // Delete the DIV
             document.body.removeChild(scrollDiv);
-            return scrollbarWidth === 0;
+            return scrollbarWidth;
           }
         }
 
