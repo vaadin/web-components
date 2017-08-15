@@ -222,11 +222,9 @@
         if (dstRowIndex <= this.firstVisibleIndex) {
           // Scroll up
           this.scrollToIndex(dstRowIndex);
-          Polymer.flush();
         } else if (dstRowIndex >= this.lastVisibleIndex - 1) {
           // Scroll down
           this.scrollToIndex(dstRowIndex - visibleItemsCount);
-          Polymer.flush();
         }
       }
 
@@ -237,6 +235,7 @@
       const dstRow = activeRowGroup === this.$.items ?
         Array.from(activeRowGroup.children).filter(el => el.index === dstRowIndex)[0] :
         activeRowGroup.children[dstRowIndex];
+      if (!dstRow) return;
 
       // Here we go!
       const dstCell = dstIsRowDetails ?
@@ -272,14 +271,14 @@
             cell._content.firstElementChild;
           if (focusTarget) {
             e.preventDefault();
-            this.interacting = true;
             focusTarget.focus();
+            this.interacting = true;
           }
         } else {
           e.preventDefault();
-          this.interacting = false;
           this._focusedColumnOrder = undefined;
           this._focusCell(cell, rowGroup);
+          this.interacting = false;
         }
       }
     }
@@ -319,7 +318,9 @@
 
       const cell = e.composedPath()[0];
       if (cell._content && cell._content.firstElementChild) {
+        const wasNavigating = this.navigating;
         cell._content.firstElementChild.click();
+        this.navigating = wasNavigating;
       } else {
         this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._instance}}));
       }
@@ -339,19 +340,24 @@
 
     _onFocusOut(e) {
       this.navigating = false;
-      this.interacting = false;
+      this._detectInteracting(e);
     }
 
+    /**
+     * Mouse click focuses the cell
+     */
     _onCellFocus(e) {
-      this.navigating = false;
       this._focusedColumnOrder = undefined;
       const cell = e.detail.cell;
-      if (!cell._content.contains(this.getRootNode().activeElement)) {
+      if (cell._content.contains(this.getRootNode().activeElement)) {
+        // Some cell content is focused
+        this.interacting = true;
+      } else {
+        // No focused cell content, focus the cell itself
         this.interacting = false;
         this._focusCell(e.detail.cell);
-      } else {
-        this.interacting = true;
       }
+      this.navigating = false;
     }
 
     _detectInteracting(e) {

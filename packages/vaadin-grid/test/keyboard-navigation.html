@@ -98,6 +98,8 @@
             grid._observer.flush();
           }
 
+          flushGrid(grid);
+
           flush(done);
         });
 
@@ -666,7 +668,7 @@
             });
 
             function findRowDetailsCell(scope) {
-              return scope.querySelector('.vaadin-grid-row-details');
+              return scope.querySelector('.vaadin-grid-details-cell');
             }
 
             it('should not navigate to row details with right arrow', function() {
@@ -780,7 +782,7 @@
 
             it('should set focused cell when tapping on details cell', function() {
               var rowDetailsCell = findRowDetailsCell(body.children[0]);
-              rowDetailsCell.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: rowDetailsCell}}));
+              grid.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: rowDetailsCell}}));
 
               expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.equal(grid.root.activeElement);
             });
@@ -789,7 +791,7 @@
               down();
 
               animationFrameFlush(function() {
-                var input = getCellContent(body._focusedCell).children[0];
+                var input = getCellContent(grid.root.activeElement).children[0];
                 input.focus = sinon.spy();
 
                 enter();
@@ -837,15 +839,16 @@
             expect(getFocusedRowIndex()).to.equal(1);
           });
 
-          // it('should focus to last row element after scrolling to end', function() {
-          //   grid.size = 1000;
-          //   grid.dataProvider = infiniteDataProvider;
-          //   clickItem(0);
-          //
-          //   ctrlEnd();
-          //
-          //   expect(grid.root.activeElement.parentNode.index).to.equal(grid.items.length - 1);
-          // });
+          it('should focus to last row element after scrolling to end', function() {
+            grid.size = 1000;
+            grid.dataProvider = infiniteDataProvider;
+
+            clickItem(0);
+
+            ctrlEnd();
+
+            expect(grid.root.activeElement.parentNode.index).to.equal(grid.items.length - 1);
+          });
 
           describe('horizontal scrolling', function() {
             beforeEach(function() {
@@ -947,13 +950,13 @@
             beforeEach(function(done) {
               grid.size = 200;
               grid.dataProvider = infiniteDataProvider;
-              Polymer.dom.flush();
+              flushGrid(grid);
               animationFrameFlush(done);
             });
 
             it('should scroll rows visible with up arrow', function() {
               clickItem(0);
-              grid.scrollToScaledIndex(100);
+              grid.scrollToIndex(100);
 
               up();
 
