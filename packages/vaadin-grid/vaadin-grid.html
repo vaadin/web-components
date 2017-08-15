@@ -52,9 +52,13 @@
    *
    * Part name | Description
    * ----------------|----------------
-   * `row` | The internal row in the grid
-   * `cell` | The internal cell in the grid
-   * `resize-handle` | The internal handler for resizing of the columns
+   * `row` | Row in the internal table
+   * `cell` | Cell in the internal table
+   * `header-cell` | Header cell in the internal table
+   * `body-cell` | Body cell in the internal table
+   * `footer-cell` | Footer cell in the internal table
+   * `details-cell` | Row details cell in the internal table
+   * `resize-handle` | Handle for resizing the columns
    *
    * @memberof Vaadin
    * @mixes Vaadin.ThemableMixin
@@ -239,15 +243,7 @@
         return;
       }
 
-      const columns = this._columnTree[this._columnTree.length - 1];
-      // Polymer.Templatizer.modelForElement(row)
-      columns.forEach((column, columnIndex) => {
-        const cell = row.children[columnIndex];
-        if (!cell) {
-          return;
-        }
-        const slot = cell.firstElementChild;
-
+      Array.from(row.children).forEach(cell => {
         if (cell._instance) {
           cell._instance.index = index;
         }

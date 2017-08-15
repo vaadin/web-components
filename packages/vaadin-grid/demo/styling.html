@@ -33,6 +33,10 @@
         <dom-module id="vaadin-grid-gold-styles" theme-for="vaadin-grid">
           <template>
             <style>
+              :host {
+                border: 1px solid #dbdbdb;
+              }
+
               [part~="row"][odd] [part~="cell"] {
                 background: #f4f4f4;
               }
@@ -68,14 +72,8 @@
                 min-height: 35px;
               }
 
-              [part~="body-cell"]:not(.vaadin-grid-details-cell) {
+              [part~="body-cell"]:not([part~="details-cell"]) {
                 height: 65px;
-              }
-
-              [part~="body-cell"].vaadin-grid-details-cell {
-                text-align: center;
-                background: #fff;
-                width: 100%;
               }
 
               [part~="cell"]:first-child {

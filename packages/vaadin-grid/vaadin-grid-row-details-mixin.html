@@ -81,7 +81,7 @@
     }
 
     _configureDetailsCell(cell) {
-      cell.classList.add('vaadin-grid-details-cell');
+      cell.setAttribute('part', 'cell details-cell');
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
       cell.setAttribute('frozen', '');
@@ -91,23 +91,20 @@
     }
 
     _toggleDetailsCell(row, item) {
-      Array.from(row.children).forEach((cell) => {
-        if (cell.matches('.vaadin-grid-details-cell')) {
-          const detailsHidden = !this._isExpanded(item);
-          if (cell.hidden !== detailsHidden) {
-            cell.hidden = detailsHidden;
-            if (detailsHidden) {
-              row.style.removeProperty('padding-bottom');
-            } else {
-              row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
-            }
-          }
+      const cell = row.querySelector('[part~="details-cell"]');
+      const detailsHidden = !this._isExpanded(item);
+      if (cell && cell.hidden !== detailsHidden) {
+        cell.hidden = detailsHidden;
+        if (detailsHidden) {
+          row.style.removeProperty('padding-bottom');
+        } else {
+          row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
         }
-      });
+      }
     }
 
     _updateDetailsCellHeights() {
-      Array.from(this.$.items.querySelectorAll('.vaadin-grid-details-cell:not([hidden])')).forEach(cell => {
+      Array.from(this.$.items.querySelectorAll('[part~="details-cell"]:not([hidden])')).forEach(cell => {
         cell.parentElement.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
       });
     }

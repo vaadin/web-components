@@ -95,18 +95,17 @@
           grid.collapseItem(grid._cache[0][index]);
         }
 
-        it('should expand a row', function(done) {
-          expect(getRowCells(bodyRows[1])).to.have.length(1);
-          expandRow(1);
+        it('should expand a row', function() {
           var cells = getRowCells(bodyRows[1]);
-          expect(cells[1].getAttribute('part').indexOf('details-cell') !== -1).to.be.true;
-          done();
+          expect(cells[1].hidden).to.be.true;
+          expandRow(1);
+          expect(cells[1].hidden).to.be.false;
         });
 
         it('should collapse a row', function() {
           expandRow(1);
           collapseRow(1);
-          expect(getRowCells(bodyRows[1])).to.have.length(1);
+          expect(getRowCells(bodyRows[1])[1].hidden).to.be.true;
         });
 
         it('should stamp the details template', function() {
@@ -126,80 +125,30 @@
           expect(bounds.height).to.be.above(10);
         });
 
-        it('should remove the details cell', function() {
+        it('should hide the details cell', function() {
           expandRow(1);
           var row = bodyRows[1];
-          grid.$.scroller.scrollToIndex(100);
-          grid._flushItemsDebouncer();
-          expect(getRowCells(row)).to.have.length(1);
+          scrollToEnd(grid);
+          expect(getRowCells(row)[1].hidden).to.be.true;
         });
 
         it('should add details to fixed cells cache', function() {
           expandRow(1);
 
-          grid.$.scroller.flushDebouncer('cache-elements');
+          flushGrid(grid);
           bodyRows = getRows(grid.$.items);
 
-          expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
-        });
-
-        it('should add details from fixed cells cache on scroll', function() {
-          expandRow(1);
-
-          grid.$.scroller.scrollToIndex(100);
-          grid.$.scroller.flushDebouncer('cache-elements');
-
-          // TODO: Saulis: scrolling directly from index 100 to 0 will
-          // take 2-3s longer in this test for some reason. Gave up after trying to figure it out for 60mins.
-          grid.$.scroller.scrollToIndex(10);
-          grid.$.scroller.scrollToIndex(0);
-          grid.$.scroller.flushDebouncer('cache-elements');
-
-          bodyRows = getRows(grid.$.items);
-          expect(grid.$.scroller._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
-        });
-
-        it('should remove details from fixed cells cache', function() {
-          expandRow(1);
-          grid.$.scroller.flushDebouncer('cache-elements');
-
-          collapseRow(1);
-          grid.$.scroller.flushDebouncer('cache-elements');
-          bodyRows = getRows(grid.$.items);
-
-          expect(grid.$.scroller._frozenCells).to.be.empty;
-        });
-
-        it('should remove details from fixed cells cache on scroll', function() {
-          expandRow(1);
-
-          grid.$.scroller.scrollToIndex(100);
-
-          grid.$.scroller.flushDebouncer('cache-elements');
-          expect(grid.$.scroller._frozenCells).to.be.empty;
-        });
-
-        it('should remove unused nodes from the light DOM', function(done) {
-          expandRow(1);
-          var childCount = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content').length;
-          collapseRow(1);
-          Polymer.Base.async(function() {
-            expect(Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content').length).to.equal(childCount - 1);
-            done();
-          }, 1);
+          expect(grid._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
         });
       });
 
       describe('inside a parent scope', function() {
 
         beforeEach(function() {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
-
           grid = fixture('with-scope').$.grid;
           grid.items = ['foo', 'bar', 'baz'];
-          bodyRows = getRows(grid.$.scroller.$.items);
-          Polymer.dom.flush();
+          flushGrid(grid)
+          bodyRows = getRows(grid.$.items);
         });
 
         it('should have the correct index on details template', function() {
@@ -224,27 +173,22 @@
         }
 
         beforeEach(function() {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
-
           grid = fixture('repeat');
         });
 
         it('should have correct height', function(done) {
           grid.expandItem(items[0]);
 
-          listenOnce(grid, 'items-assigned', function() {
+          grid.dataProvider = function(params, callback) {
+            callback(items);
+          };
+          flushGrid(grid);
+
+          animationFrameFlush(() => {
             var row = getRows(grid.$.items)[0];
             expect(row.offsetHeight).to.be.above(70);
             done();
           });
-
-          grid.dataProvider = function(params, callback) {
-            callback(items);
-            Polymer.dom.flush();
-
-            grid.fire('items-assigned');
-          };
         });
       });
     });

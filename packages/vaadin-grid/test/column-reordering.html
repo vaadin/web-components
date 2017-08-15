@@ -123,7 +123,7 @@
 
   <script>
     function getVisualCellContent(section, row, col) {
-      var cell = Array.from(section.querySelectorAll('[part~="cell"]:not(.vaadin-grid-details-cell)')).pop();
+      var cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
       if (section.id === 'footer') {
         cell = Polymer.dom(section).querySelector('[part~="cell"]');
       }
