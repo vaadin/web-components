@@ -140,13 +140,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Find <vaadin-grid>
         var el = this;
-        // TODO: Cleanup
-        try {
-          while (el && el.localName !== 'vaadin-grid') {
-            el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
-          }
-        } catch (e) {
-          return undefined;
+        while (el && el.localName !== 'vaadin-grid') {
+          el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
         }
         this._gridValue = el || undefined;
       }

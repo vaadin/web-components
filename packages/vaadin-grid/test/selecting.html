@@ -149,9 +149,7 @@
         rows = getRows(grid.$.items);
         headerRows = getRows(grid.$.header);
 
-        if (grid._observer.flush) {
-          grid._observer.flush();
-        }
+        flushGrid(grid);
 
         firstHeaderCellContent = getCellContent(getRowCells(headerRows[1])[0]);
         firstBodyCellContent = getCellContent(getRowCells(rows[0])[0]);
@@ -166,10 +164,7 @@
       });
 
       it('should select item when checkbox is checked', function() {
-        var selectCheckbox = firstBodyCheckbox;
-
-        selectCheckbox.click();
-
+        firstBodyCheckbox.click();
         expect(grid._isSelected(cachedItems[0])).to.be.true;
       });
 
