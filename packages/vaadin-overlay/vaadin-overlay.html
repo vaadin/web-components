@@ -114,6 +114,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _instance: {
             type: Object
+          },
+
+          _boundIronOverlayCanceledListener: {
+            type: Object
           }
         };
       }
@@ -130,6 +134,12 @@ This program is available under Apache License Version 2.0, available at https:/
         this._observer = new Polymer.FlattenedNodesObserver(this, info => {
           this._setTemplateFromNodes(info.addedNodes);
         });
+
+        // Listener for preventing closing of the paper-dialog and all components extending `iron-overlay-behavior`.
+        this._boundIronOverlayCanceledListener = e => {
+          e.preventDefault();
+          window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+        };
       }
 
       ready() {
@@ -151,6 +161,15 @@ This program is available under Apache License Version 2.0, available at https:/
         this.dispatchEvent(evt);
         if (!evt.defaultPrevented) {
           this.opened = false;
+        }
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        // Removing the event listener in case `iron-overlay-canceled` was not fired.
+        if (!this.parentNode) {
+          window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
         }
       }
 
@@ -213,6 +232,7 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       _openedChanged(opened) {
         if (opened) {
+          window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
           this._placeholder = document.createComment('vaadin-overlay-placeholder');
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
