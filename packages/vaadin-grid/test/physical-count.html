@@ -17,15 +17,19 @@
       vaadin-grid {
         border: none;
       }
+    </style>
+  </custom-style>
 
-      vaadin-grid.small {
-        --vaadin-grid-cell: {
+  <dom-module id="physical-count-styles" theme-for="vaadin-grid">
+    <template>
+      <style include="vaadin-grid-default-theme">
+        :host(.small) [part~="cell"] {
           line-height: 10px;
           padding: 0;
         }
-      }
-    </style>
-  </custom-style>
+      </style>
+    </template>
+  </dom-module>
 
 </head>
 
@@ -61,23 +65,17 @@
         expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
       });
 
-      it('increase pool size after resizing the scroller', function(done) {
+      it('increase pool size after resizing the scroller', function() {
         grid.classList.add('small');
-        Polymer.updateStyles();
         grid.style.display = 'none';
 
         expect(grid._physicalItems.length).to.eql(25);
 
         grid.style.display = '';
-        grid._update();
         grid._resizeHandler();
         flushGrid(grid);
 
-        setTimeout(function() {
-          flushGrid(grid);
-          expect(grid._physicalItems.length).to.be.above(25);
-          done();
-        }, 1000);
+        expect(grid._physicalItems.length).to.be.above(25);
       });
 
       it('pool should not increase if the scroller has no size', function() {
