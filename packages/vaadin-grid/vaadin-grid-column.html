@@ -395,7 +395,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
 
-        this._grid && this._grid._updateLastFrozen();
+        if (hidden !== undefined && this._grid) {
+          this._grid._updateLastFrozen();
+          this._grid._update();
+        }
       }
 
       _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {

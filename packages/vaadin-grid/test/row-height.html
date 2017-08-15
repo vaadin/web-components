@@ -10,21 +10,21 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
 
+  <dom-module id="row-height-grid-styles" theme-for="vaadin-grid">
+    <template>
+      <style>
+        [part~="cell"] {
+          border: none !important;
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 </head>
 
 <body>
-
-  <custom-style>
-    <style is="custom-style">
-      vaadin-grid {
-        --vaadin-grid-cell: {
-          border: none !important;
-        }
-      }
-    </style>
-  </custom-style>
 
   <test-fixture id="two-columns">
     <template>
@@ -75,25 +75,15 @@
   <script>
     describe('rows', function() {
 
-      var grid, scroller, header, rows, defaultHeight, wrappers;
-      var dataProviderDelay = 200;
+      var grid, header, rows, defaultHeight, wrappers;
 
       function init(fixtureName, cb) {
         grid = fixture(fixtureName);
-
-        if (Polymer.Element) {
-          flushColumns(grid);
-        }
-
-        listenOnce(grid, 'items-assigned', function() {
-          Polymer.dom.flush();
+        listenOnce(grid, 'animationend', function() {
+          flushGrid(grid);
 
           rows = getRows(grid.$.items);
           defaultHeight = getRows(header)[0].clientHeight;
-
-          if (grid._observer.flush) {
-            grid._observer.flush();
-          }
 
           wrappers = getRowCells(rows[0]).map(function(cell) {
             return getCellContent(cell);
@@ -102,20 +92,9 @@
           cb();
         });
 
-        scroller = grid.$.scroller;
+        flushGrid(grid);
         header = grid.$.header;
-
-        grid.dataProvider = function(info, callback) {
-          var startIndex = info.pageSize * info.page;
-          callback(buildDataSet(startIndex + info.pageSize).splice(startIndex));
-
-          grid.fire('items-assigned');
-        };
       }
-
-      beforeEach(function() {
-        this.currentTest.timeout(30000);
-      });
 
       it('should have higher wrappers on each row cell', function(done) {
         init('two-columns', function() {
@@ -135,13 +114,13 @@
           var e = new CustomEvent('wheel', {bubbles: true});
           e.deltaY = -100;
           e.deltaX = 0;
-          scroller.$.table.dispatchEvent(e);
+          grid.$.table.dispatchEvent(e);
 
           // Simulate a (window) resize
           grid.style.width = '200px';
-          scroller._resizeHandler();
+          grid._resizeHandler();
 
-          expect(header.getBoundingClientRect().top).to.be.closeTo(scroller.getBoundingClientRect().top, 1);
+          expect(header.getBoundingClientRect().top).to.be.closeTo(grid.getBoundingClientRect().top, 1);
           done();
         });
       });
@@ -151,7 +130,7 @@
           grid.querySelectorAll('vaadin-grid-column')[0].hidden = true;
 
           // Flush row height and position calculations
-          grid.$.scroller.flushDebouncer('vaadin-grid-resizing');
+          flushGrid(grid);
 
           expect(rows[0].getBoundingClientRect().bottom).to.eql(rows[1].getBoundingClientRect().top);
           done();
