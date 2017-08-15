@@ -47,28 +47,23 @@
           expect(input[prop]).to.be.equal(value);
         }
 
-        ['pattern',
-          'placeholder',
-          'value',
-          'title'].forEach(function(prop) {
-            it('should set string property ' + prop, function() {
-              assertPropCanBeSet(prop, 'foo');
-            });
+        ['pattern', 'placeholder', 'value', 'title'].forEach(function(prop) {
+          it('should set string property ' + prop, function() {
+            assertPropCanBeSet(prop, 'foo');
           });
+        });
 
-        ['autofocus',
-          'disabled'].forEach(function(prop) {
-            it('should set boolean property ' + prop, function() {
-              assertPropCanBeSet(prop, true);
-            });
+        ['autofocus', 'disabled'].forEach(function(prop) {
+          it('should set boolean property ' + prop, function() {
+            assertPropCanBeSet(prop, true);
           });
+        });
 
-        ['maxlength',
-          'minlength'].forEach(function(prop) {
-            it('should set numeric attribute ' + prop, function() {
-              assertAttrCanBeSet(prop, 2);
-            });
+        ['maxlength', 'minlength'].forEach(function(prop) {
+          it('should set numeric attribute ' + prop, function() {
+            assertAttrCanBeSet(prop, 2);
           });
+        });
 
         ['autocomplete'].forEach(function(prop) {
           it('should set boolean attribute ' + prop, function() {
@@ -76,15 +71,12 @@
           });
         });
 
-        ['autocomplete',
-          'autocorrect',
-          'readonly',
-          'required'].forEach(function(prop) {
-            it('should set boolean attribute ' + prop, function() {
-              assertAttrCanBeSet(prop, true);
-              assertAttrCanBeSet(prop, false);
-            });
+        ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach(function(prop) {
+          it('should set boolean attribute ' + prop, function() {
+            assertAttrCanBeSet(prop, true);
+            assertAttrCanBeSet(prop, false);
           });
+        });
       });
 
       describe('binding', function() {
