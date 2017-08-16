@@ -30,11 +30,17 @@
       </template>
     </demo-snippet>
 
-    <h3>Show and Hide Overlay with backdrop</h3>
+    <h3>Show and Hide Overlay with backdrop and focus trap</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay with-backdrop id="overlay2">
-          Overlay Content with backdrop
+        <vaadin-overlay with-backdrop focus-trap id="overlay2">
+          <template>
+            Focus is trapped inside the content block
+            <button>native button</button>
+            <button tabindex="-1">button with tabindex="-1"</button>
+            <input type="text">
+            <vaadin-button>vaadin-button</vaadin-button>
+          </template>
         </vaadin-overlay>
 
         <vaadin-button onclick="document.querySelector('#overlay2').opened = true">
