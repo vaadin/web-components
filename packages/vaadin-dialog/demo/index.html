@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
@@ -16,12 +17,85 @@
 
     <demo-navigation></demo-navigation>
 
-    <h3>Sample example</h3>
+    <h3>Simple dialog</h3>
     <demo-snippet>
       <template>
-        <vaadin-dialog>Foobar</vaadin-dialog>
+        <dom-bind id="simple-dialog-example">
+          <template>
+            <vaadin-dialog id="simpledialog">
+              <template>
+                <div>This simple dialog will close by pressing the Esc key</div>
+              </template>
+            </vaadin-dialog>
+            <vaadin-button on-click="showSimpleDialog">Show dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            var simpleDialogExample = document.querySelector('#simple-dialog-example');
+            simpleDialogExample.showSimpleDialog = function() {
+              simpleDialogExample.$.simpledialog.opened = true;
+            };
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Another simple dialog</h3>
+    <demo-snippet>
+      <template>
+        <dom-bind id="another-simple-dialog-example">
+          <template>
+            <vaadin-dialog id="anotherdialog" close-on-outside-click>
+              <template>
+                <div>This simple dialog will close by pressing the Esc key,</div>
+                <div> or by a mouse click anywhere outside the dialog area</div>
+              </template>
+            </vaadin-dialog>
+            <vaadin-button on-click="showAnotherSimpleDialog">Show dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            var anotherSimpleDialogExample = document.querySelector('#another-simple-dialog-example');
+            anotherSimpleDialogExample.showAnotherSimpleDialog = function() {
+              anotherSimpleDialogExample.$.anotherdialog.opened = true;
+            };
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <h3>Close dialog with button</h3>
+    <demo-snippet>
+      <template>
+        <dom-bind id="dialog-example">
+          <template>
+            <vaadin-dialog id="dialog">
+              <template>
+                <div>Press any button to close</div>
+                <br>
+                <vaadin-button on-click="closeDialog">Ok</vaadin-button>
+                <vaadin-button on-click="closeDialog">Cancel</vaadin-button>
+              </template>
+            </vaadin-dialog>
+            <vaadin-button on-click="openDialog">Show dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addEventListener('WebComponentsReady', function() {
+            var dialogExample = document.querySelector('#dialog-example');
+            dialogExample.openDialog = function() {
+              dialogExample.$.dialog.opened = true;
+            };
+            dialogExample.closeDialog = function() {
+              dialogExample.$.dialog.opened = false;
+            };
+          });
+        </script>
       </template>
     </demo-snippet>
   </div>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-rootUrl: http://127.0.0.1:8080/components/vaadin-element/test/visual/
+rootUrl: http://127.0.0.1:8080/components/vaadin-dialog/test/visual/
 gridUrl: http://127.0.0.1:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 
@@ -9,22 +9,24 @@ system:
     sauce: true
 
 browsers:
-  chrome:
-    desiredCapabilities:
-      browserName: "chrome"
-      version: "58.0"
-      platform: "Windows 10"
+  # TODO @limonte revisit, weird blinking polyfill issue here
+  # https://i.imgur.com/pWZUYrL.png
+  # chrome:
+  #   desiredCapabilities:
+  #     browserName: "chrome"
+  #     version: "60"
+  #     platform: "Windows 10"
 
   firefox:
     desiredCapabilities:
       browserName: "firefox"
-      version: "47.0"
+      version: "47"
       platform: "Windows 10"
 
   ie:
     desiredCapabilities:
       browserName: "internet explorer"
-      version: "11.0"
+      version: "11"
       platform: "Windows 10"
 
   edge:

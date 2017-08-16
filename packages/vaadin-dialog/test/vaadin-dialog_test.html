@@ -1,0 +1,59 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-dialog tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-dialog.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-dialog opened>
+        <template>
+          <div>Simple dialog</div>
+        </template>
+      </vaadin-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-dialog', function() {
+      var dialog, backdrop, overlay;
+
+      beforeEach(function() {
+        dialog = fixture('default');
+        overlay = dialog.$.overlay;
+        backdrop = overlay.$.backdrop;
+      });
+
+      it('overlay should have the `dialog` role', () => {
+        expect(overlay.getAttribute('role')).to.be.eql('dialog');
+      });
+
+      it('should close itself on ESC press', function() {
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+        expect(dialog.opened).to.eql(false);
+      });
+
+      it('should not close itself on ESC press when close-on-esc is false', function() {
+        dialog.closeOnEsc = false;
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+        expect(dialog.opened).to.eql(true);
+      });
+
+      it('should not close itself on outside click', function() {
+        backdrop.click();
+        expect(dialog.opened).to.eql(true);
+      });
+
+      it('should close itself on outside click when close-on-outside-click is true', function() {
+        dialog.closeOnOutsideClick = true;
+        backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+        expect(dialog.opened).to.eql(false);
+      });
+    });
+  </script>
+</body>

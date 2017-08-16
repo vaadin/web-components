@@ -4,15 +4,18 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-element.html" rel="import">
+  <link href="../../vaadin-dialog.html" rel="import">
 </head>
 
-<body>
+<body style="height: 600px;">
 
-  <span id="default-tests">
-    <vaadin-element>
-      <button>Go Vaadin!</button>
-    </vaadin-element>
-  </span>
+  <div id="default-tests">
+    <vaadin-dialog opened>
+      <template>
+        <div>A very simple dialog with button</div>
+        <button>OK</button>
+      </template>
+    </vaadin-dialog>
+  </div>
 
 </body>

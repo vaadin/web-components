@@ -5,42 +5,153 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+
+<dom-module id="vaadin-dialog-styles" theme-for="vaadin-overlay">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      [part="content"] {
+        background: white;
+        padding: 5px;
+      }
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="vaadin-dialog">
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
       }
     </style>
-    <slot></slot>
-  </template>
 
+    <vaadin-overlay id="overlay"
+      on-opened-changed="_onOverlayOpened"
+      with-backdrop
+      focus-trap>
+    </vaadin-overlay>
+  </template>
   <script>
     if (!Polymer.Element) {
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    (function() {
+    {
       /**
-       * `<vaadin-dialog>` is a Polymer 2 element.
+       * `<vaadin-dialog>` is a Polymer 2 element for customised modal dialogs.
        *
        * ```html
-       * <vaadin-dialog>
+       * <vaadin-dialog opened>
+       *   <template>
+       *     Sample dialog
+       *   </template>
        * </vaadin-dialog>
        * ```
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinDialog extends Polymer.Element {
+      class VaadinDialog extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-dialog';
         }
 
         static get properties() {
           return {
+            /**
+             * True if the overlay is currently displayed.
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              notify: true
+            },
+
+            /**
+             * Set to true to enable closing dialog on outside click
+             */
+            closeOnOutsideClick: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to false to disable closing dialog on Escape press
+             */
+            closeOnEsc: {
+              type: Boolean,
+              value: true
+            },
+
+            _contentTemplate: Object
           };
+        }
+
+        static get observers() {
+          return ['_openedChanged(opened)'];
+        }
+
+        ready() {
+          super.ready();
+          this.$.overlay.setAttribute('role', 'dialog');
+          this.$.overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
+          this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
+        }
+
+        _openedChanged(opened) {
+          if (opened && !this._instance) {
+            this._contentTemplate = this.querySelector('template');
+            const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
+              instanceProps: {
+                detail: true,
+                target: true
+              },
+              forwardHostProp: function(prop, value) {
+                if (this._instance) {
+                  this._instance.forwardHostProp(prop, value);
+                }
+              }
+            });
+            this._instance = new Templatizer({});
+            this.$.overlay.content = this._instance.root;
+          }
+          this.$.overlay.opened = opened;
+        }
+
+        _onOverlayOpened(e) {
+          if (e.detail.value === false) {
+            this.opened = false;
+          }
+        }
+
+        /**
+         * Handle outside click and close the dialog if `closeOnOutsideClick` is true
+         */
+        _handleOutsideClick(e) {
+          if (!this.closeOnOutsideClick) {
+            e.preventDefault();
+          }
+        }
+
+        /**
+         * Handle ESC press and close the dialog if `closeOnEsc` is true
+         */
+        _handleEscPress(e) {
+          if (!this.closeOnEsc) {
+            e.preventDefault();
+          }
         }
       }
 
@@ -50,6 +161,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.VaadinDialog = VaadinDialog;
-    })();
+    }
   </script>
 </dom-module>
