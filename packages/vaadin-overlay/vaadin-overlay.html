@@ -225,7 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._previousDocumentPointerEvents = document.body.style.pointerEvents;
           document.body.style.pointerEvents = 'none';
 
-          Polymer.Async.animationFrame.run(() => {
+          Polymer.Async.idlePeriod.run(() => {
             // Focus
             //  - the overlay content by default
             //  - or the first focusable element if focusTrap is true
@@ -299,12 +299,28 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _getFocusableElements() {
+        // collect all focusable elements
         const focusableElements = Array.from(this.$.content.querySelectorAll(
           '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'
-        ));
-
-        return focusableElements.filter((el) => {
+        )).filter((el) => {
           return el.getAttribute('tabindex') !== '-1';
+        });
+
+        // sort focusable elements according to tabindex
+        return focusableElements.sort((a, b) => {
+          a = parseInt(a.getAttribute('tabindex')) || 0;
+          b = parseInt(b.getAttribute('tabindex')) || 0;
+          if (a === b) {
+            return 0;
+          } else if (a === 0) {
+            return 1;
+          } else if (b === 0) {
+            return -1;
+          } else if (a < b) {
+            return -1;
+          } else if (a > b) {
+            return 1;
+          }
         });
       }
 
