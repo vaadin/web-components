@@ -28,16 +28,15 @@
 
       beforeEach(function(done) {
         iform = fixture('default');
-        window.setTimeout(function() {
-          tf = iform.querySelector('vaadin-text-field');
-          done();
-        }, 1);
+        tf = iform.querySelector('vaadin-text-field');
+        animationFrameFlush(() => {
+          HTMLImports.whenReady(done);
+        });
       });
 
-      it('should call validate', function() {
-        const inputFocusSpy = window.sinon.spy(tf, 'validate');
+      it('should call validate', function(done) {
+        sinon.stub(tf, 'validate', done);
         iform.submit();
-        expect(inputFocusSpy.called).to.be.true;
       });
 
       it('should serialize correctly', function() {
