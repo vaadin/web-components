@@ -9,14 +9,6 @@ system:
     sauce: true
 
 browsers:
-  # TODO @limonte revisit, weird blinking polyfill issue here
-  # https://i.imgur.com/pWZUYrL.png
-  # chrome:
-  #   desiredCapabilities:
-  #     browserName: "chrome"
-  #     version: "60"
-  #     platform: "Windows 10"
-
   firefox:
     desiredCapabilities:
       browserName: "firefox"
