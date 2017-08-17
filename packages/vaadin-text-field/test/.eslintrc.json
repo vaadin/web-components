@@ -10,6 +10,7 @@
     "gemini": false,
     "sinon": false,
     "HTMLImports": false,
-    "MockInteractions": false
+    "MockInteractions": false,
+    "animationFrameFlush": false
   }
 }
