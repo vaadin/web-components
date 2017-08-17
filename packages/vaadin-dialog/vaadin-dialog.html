@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-dialog-styles" theme-for="vaadin-overlay">
+<dom-module id="vaadin-dialog-styles" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
       :host {
@@ -36,11 +36,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-overlay id="overlay"
+    <vaadin-dialog-overlay id="overlay"
       on-opened-changed="_onOverlayOpened"
       with-backdrop
       focus-trap>
-    </vaadin-overlay>
+    </vaadin-dialog-overlay>
   </template>
   <script>
     if (!Polymer.Element) {
@@ -48,6 +48,16 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     {
+
+      class VaadinDialogOverlay extends Vaadin.OverlayElement {
+        static get is() {
+          return 'vaadin-dialog-overlay';
+        }
+      }
+
+      customElements.define(VaadinDialogOverlay.is, VaadinDialogOverlay);
+
+
       /**
        * `<vaadin-dialog>` is a Polymer 2 element for customised modal dialogs.
        *
@@ -58,6 +68,11 @@ This program is available under Apache License Version 2.0, available at https:/
        *   </template>
        * </vaadin-dialog>
        * ```
+       *
+       * ### Styling
+       *
+       * See <vaadin-overlay>'s styling documentation for themable parts but use
+       * theme-for="vaadin-dialog-overlay" to target <vaadin-dialog>'s overlay
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
