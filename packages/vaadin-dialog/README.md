@@ -7,15 +7,16 @@
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dialog/demo/)
 
-[&lt;vaadin-dialog&gt;](https://vaadin.com/elements/-/element/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-dialog&gt;](https://vaadin.com/elements/-/element/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
 
 <!--
 ```
 <custom-element-demo>
-  <template>
-    <link rel="import" href="vaadin-dialog.html">
-    <next-code-block></next-code-block>
-  </template>
+  <vaadin-dialog opened>
+    <template>
+      Sample dialog
+    </template>
+  </vaadin-dialog>
 </custom-element-demo>
 ```
 -->
