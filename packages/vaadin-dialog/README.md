@@ -5,24 +5,23 @@
 
 # &lt;vaadin-dialog&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dialog/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha1/demo/)
 
 [&lt;vaadin-dialog&gt;](https://vaadin.com/elements/-/element/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
 
 <!--
 ```
 <custom-element-demo>
-  <vaadin-dialog opened>
-    <template>
-      Sample dialog
-    </template>
-  </vaadin-dialog>
+  <link rel="import" href="vaadin-dialog.html">
+  <next-code-block></next-code-block>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-dialog>
-  ...
+<vaadin-dialog opened>
+  <template>
+    Sample dialog
+  </template>
 </vaadin-dialog>
 ```
 
