@@ -1,6 +1,6 @@
 {
   "name": "vaadin-dialog",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha1",
   "description": "vaadin-dialog",
   "main": "vaadin-dialog.html",
   "repository": "vaadin/vaadin-dialog",
