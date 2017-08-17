@@ -203,6 +203,18 @@
         expect(overlay.opened).to.be.false;
       });
 
+      it('should prevent `iron-overlay-canceled` when is opened', () => {
+        const evtOnOpened = new CustomEvent('iron-overlay-canceled', {bubbles: true, cancelable: true});
+        parent.dispatchEvent(evtOnOpened);
+        expect(evtOnOpened.defaultPrevented).to.be.true;
+
+        parent.click();
+
+        const evtOnClosed = new CustomEvent('iron-overlay-canceled', {bubbles: true, cancelable: true});
+        parent.dispatchEvent(evtOnClosed);
+        expect(evtOnClosed.defaultPrevented).to.be.false;
+      });
+
       it('should prevent closing the overlay when preventing vaadin-overlay-cancel', done => {
         overlay.addEventListener('vaadin-overlay-close', e => {
           e.preventDefault();
