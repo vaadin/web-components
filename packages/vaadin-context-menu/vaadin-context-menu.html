@@ -344,9 +344,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened) {
           if (opened && !this._instance) {
-            this._contentTemplate = Array.prototype.filter.call(this.children, el => {
-              return el.localName === 'template';
-            })[0];
+            this._contentTemplate = this.querySelector('template');
 
             const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
               instanceProps: {
