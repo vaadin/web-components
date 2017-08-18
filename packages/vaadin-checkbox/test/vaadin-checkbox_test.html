@@ -124,6 +124,30 @@
 
         expect(vaadinCheckbox.hasAttribute('active')).to.be.false;
       });
+
+      it('should be checked after space when initially checked is false and indeterminate is true', () => {
+        vaadinCheckbox.checked = false;
+        vaadinCheckbox.indeterminate = true;
+
+        MockInteractions.keyDownOn(vaadinCheckbox, 32);
+        MockInteractions.keyUpOn(vaadinCheckbox, 32);
+
+        expect(vaadinCheckbox.checked).to.be.true;
+        expect(vaadinCheckbox.indeterminate).to.be.false;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
+      });
+
+      it('should not be checked after space when initially checked is true and indeterminate is true', () => {
+        vaadinCheckbox.checked = true;
+        vaadinCheckbox.indeterminate = true;
+
+        MockInteractions.keyDownOn(vaadinCheckbox, 32);
+        MockInteractions.keyUpOn(vaadinCheckbox, 32);
+
+        expect(vaadinCheckbox.checked).to.be.false;
+        expect(vaadinCheckbox.indeterminate).to.be.false;
+        expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
+      });
     });
   </script>
 </body>
