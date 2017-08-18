@@ -161,7 +161,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _checkedChanged(checked) {
-          this.setAttribute('aria-checked', checked);
+          if (this.indeterminate) {
+            this.setAttribute('aria-checked', 'mixed');
+          } else {
+            this.setAttribute('aria-checked', checked);
+          }
         }
 
         _indeterminateChanged(indeterminate) {
