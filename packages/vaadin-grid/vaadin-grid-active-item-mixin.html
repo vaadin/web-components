@@ -37,8 +37,6 @@
       const clickedItem = model ? model.item : null;
 
       this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
-
-      e.stopImmediatePropagation();
     }
 
     _activeItemChanged() {

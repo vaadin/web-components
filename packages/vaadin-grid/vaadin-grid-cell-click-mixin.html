@@ -9,7 +9,7 @@
 
     ready() {
       super.ready();
-      this.addEventListener('click', this._onClick.bind(this));
+      this.$.scroller.addEventListener('click', this._onClick.bind(this));
       // we need to capture focus events originating from elements inside this cell,
       // capture mode seems to be required in order it to work.
       this.addEventListener('focus', this._cellContentFocusHandler.bind(this), true);
@@ -25,6 +25,9 @@
     }
 
     _getCellContentByElement(element) {
+      if (element.getAttribute('part') === 'cell body-cell') {
+        element = element._content;
+      }
       let cellContent = element;
       while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
         cellContent = cellContent.parentElement;
@@ -54,8 +57,8 @@
       }
 
       // TODO: _onCellClick is not in the grid, the following seems useless.
-      var path = Polymer.dom(e).path;
-      var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
+      const path = Polymer.dom(e).path;
+      const elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
       if (!cellContent.contains(this.getRootNode().activeElement) &&
           !elementsClicked.some(this._isFocusable) && !e.defaultPrevented) {
         this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._instance}}));
@@ -63,9 +66,11 @@
     }
 
     _isFocusable(target) {
-      var parent = Polymer.dom(target).parentNode;
-      var isFocusableElement = Array.prototype.indexOf.call(Polymer.dom(parent)
-      .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'), target) !== -1;
+      const focusables = Array.from(target.parentNode
+       .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'))
+       .filter(element => element.getAttribute('part') !== 'cell body-cell');
+
+      const isFocusableElement = focusables.indexOf(target) !== -1;
       return !target.disabled && isFocusableElement;
     }
   };

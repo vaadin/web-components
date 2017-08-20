@@ -82,23 +82,28 @@
         // We don’t need a change notification for these.
         return;
       }
-      
+
+      var originalProp = `__${prop}__`;
+
       // Notify for only user-action changes, not for scrolling updates. E. g.,
       // if `expanded` is different from `__expanded__`, which was set during render.
-      var originalProp = `__${prop}__`;
-      if (inst[originalProp] === undefined || inst[originalProp] === value) {
+      if (inst[originalProp] === value) {
         return;
+      }
+      inst[originalProp] = value;
+
+      const row = Array.from(this._grid.$.items.children).filter(row => row._item === inst.item)[0];
+      if (row) {
+        Array.from(row.children).forEach(cell => {
+          cell._instance[originalProp] = value;
+          cell._instance.notifyPath(prop, value);
+        });
       }
 
       var gridCallback = `_${prop}InstanceChangedCallback`;
       if (this._grid && this._grid[gridCallback]) {
         this._grid[gridCallback](inst, value);
-        inst[originalProp] = value;
       }
-
-      // TODO: V1 only
-      // this._forwardInstanceProp(inst, prop, value);
-      // this._forwardInstancePath(inst, prop, value);
     },
 
     _forwardParentProp: function(prop, value) {

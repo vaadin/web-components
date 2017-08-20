@@ -106,28 +106,23 @@
     describe('templating', function() {
       var container, grid;
 
-      beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
+      beforeEach(function() {
         container = fixture('formatting');
         grid = container.$.grid;
-        grid._flushItemsDebouncer();
-
-        flush(done);
+        flushGrid(grid);
       });
 
       it('should fire an event when a non-focusable element is clicked', function(done) {
-        grid.$.scroller.addEventListener('cell-activate', function(e) {
+        grid.addEventListener('cell-activate', function(e) {
           expect(e.detail.model.index).to.eql(0);
           done();
         });
 
-        getCell(grid, 0).click();
+        getCell(grid, 0)._content.click();
       });
 
       it('should not fire an event when a focusable element is clicked', function(done) {
-        grid.$.scroller.addEventListener('cell-activate', function(e) {
+        grid.addEventListener('cell-activate', function(e) {
           done('Should not come here!');
         });
 
@@ -143,7 +138,7 @@
         parent.removeChild(grid);
 
         parent.appendChild(grid);
-        Polymer.dom.flush();
+        flushGrid(grid);
 
         expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
         expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
@@ -154,7 +149,7 @@
         parent.removeChild(grid);
 
         parent.appendChild(grid);
-        Polymer.dom.flush();
+        flushGrid(grid);
 
         expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
         expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
@@ -264,36 +259,13 @@
         it('should two-way bind instance path inside cell templates', function() {
           input.value = 'bar0';
 
-          expect(getCell(grid, 3).instance.item.value).to.eql('bar0');
+          expect(getCell(grid, 3)._instance.item.value).to.eql('bar0');
         });
 
         it('should notify other cell templates for instance path changes', function() {
           input.value = 'bar0';
 
           expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
-        });
-
-        it('should fire an event when item path changes', function(done) {
-          var item = getCell(grid, 0).instance.item;
-          grid.addEventListener('item-changed', function(e) {
-            expect(e.detail.item).to.eql(item);
-            expect(e.detail.path).to.eql('value');
-            expect(e.detail.value).to.eql('bar0');
-
-            done();
-          });
-
-          input.value = 'bar0';
-        });
-
-        it('should fire exactly one event when item path changes', function() {
-          var item = getCell(grid, 0).instance.item;
-          var spy = sinon.spy();
-          grid.addEventListener('item-changed', spy);
-
-          input.value = 'bar0';
-
-          expect(spy.callCount).to.eql(1);
         });
       });
     });
