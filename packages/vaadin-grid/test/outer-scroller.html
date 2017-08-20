@@ -117,12 +117,8 @@
       });
 
       it('should invoke frozen element translate handler', function(done) {
-        var spy = sinon.spy(grid, '_translateStationaryElements');
+        var spy = sinon.stub(grid, '_translateStationaryElements', done);
         outerScroller.scrollLeft = 1;
-        setTimeout(function() {
-          expect(spy.called).to.be.true;
-          done();
-        }, 200);
       });
 
       it('should have the same size as the scroller', function() {

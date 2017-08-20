@@ -179,7 +179,9 @@
         cell._vacant = true;
       });
       row.innerHTML = '';
-      row.hidden = true;
+      if (row.id !== 'outersizer') {
+        row.hidden = true;
+      }
       columns.forEach((column, index) => {
         let cell;
 
