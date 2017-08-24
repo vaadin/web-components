@@ -88,6 +88,7 @@
       cell.setAttribute('frozen', '');
       // Stamp the template
       cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
+      cell._content.innerHTML = '';
       cell._content.appendChild(cell._instance.root);
     }
 

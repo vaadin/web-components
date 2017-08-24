@@ -299,10 +299,6 @@
         this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
       });
 
-      Array.from(this.$.items.children).forEach((row, index) => {
-        this._updateRow(row, columnTree[columnTree.length - 1]);
-      });
-
       // Sizer row
       this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1]);
 
