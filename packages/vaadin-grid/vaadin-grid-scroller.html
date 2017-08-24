@@ -80,6 +80,7 @@
 
     _increasePoolIfNeeded(count) {
       if (this._physicalCount === 0) {
+        this._updateMetrics();
         super._increasePoolIfNeeded(25);
       } else {
         super._increasePoolIfNeeded(count);
