@@ -45,15 +45,22 @@
     * @private
     */
     scrollToIndex(index) {
-      // TODO: Implement
-      super.scrollToIndex(index);
-
+      // this._pendingScrollToScaledIndex = null;
+      // if (!this.$.items.style.borderTopWidth) {
+      //   // Schedule another scroll to be invoked once init is complete
+      //   this._pendingScrollToScaledIndex = idx;
+      // }
+      index = Math.min(Math.max(index, 0), this.size - 1);
+      this.$.table.scrollTop = index / this.size * this.$.table.scrollHeight;
+      this._scrollHandler();
+      super.scrollToIndex(index - this._vidxOffset);
+      // _scrollTop is not up-to-date at this point, update and run scrollhandler
+      super._resetScrollPosition(this._scrollPosition);
       this._scrollHandler();
 
       // TODO: This is a hack to get around offset issues when scrolling to bottom.
       // Revisit iron-list-behavior for cleaner fix.
-      // if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
-      if (this.lastVisibleIndex === this.size - 1) {
+      if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
         this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
         this._scrollHandler();
       }
@@ -65,13 +72,13 @@
         // Size was reduced, scroll to 0 first
         this._scrollTop = 0;
       }
-      this.items = Array.isArray(this.items) ? this.items : {length: size};
+      this.items = Array.isArray(this.items) ? this.items : {length: Math.min(size, 100000)};
 
       // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
       this.scrollOffset = this._scrollTop;
       super._itemsChanged({path:"items"});
 
-      this._virtualCount = size || 0;
+      this._virtualCount = this.items.length || 0;
 
       if (this._scrollTop === 0) {
         this.scrollToIndex(Math.min(size - 1, fvi));
@@ -126,7 +133,15 @@
     }
 
     _scrollHandler() {
+      var delta = this.$.table.scrollTop - this._scrollPosition;
       super._scrollHandler();
+      const oldOffset = this._vidxOffset;
+      if (this._maxScrollTop && this._virtualCount < this.size) {
+        this._adjustVirtualIndexOffset(delta);
+      }
+      if (this._vidxOffset !== oldOffset) {
+        this._update();
+      }
       this._afterScroll();
     }
 
@@ -144,6 +159,47 @@
 
     _itemsChanged() {
       // Ignore
+    }
+
+    _adjustVirtualIndexOffset(delta) {
+      if (Math.abs(delta) > 10000) {
+        if (this._noScale) {
+          this._noScale = false;
+          return;
+        }
+        var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
+        var offset = scale * this.size;
+        this._vidxOffset = Math.round(offset - scale * this._virtualCount);
+      } else {
+        // Make sure user can always swipe/wheel scroll to the start and end
+        // TODO: causes a small jump in the scroll handle
+        var oldOffset = this._vidxOffset || 0;
+        var threshold = 1000;
+        var maxShift = 100;
+        // At start
+        if (this._scrollTop === 0) {
+          this._vidxOffset = 0;
+          if (oldOffset !== this._vidxOffset) {
+            super.scrollToIndex(0);
+          }
+        } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
+          this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
+          super.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
+          this._noScale = true;
+        }
+        // At end
+        var maxOffset = this.size - this._virtualCount;
+        if (this._scrollTop >= this._maxScrollTop) {
+          this._vidxOffset = maxOffset;
+          if (oldOffset !== this._vidxOffset) {
+            super.scrollToIndex(this._virtualCount);
+          }
+        } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
+          this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
+          super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+          this._noScale = true;
+        }
+      }
     }
 
   }
