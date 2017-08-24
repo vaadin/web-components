@@ -28,22 +28,14 @@
 
   <script>
     describe('scrolling mode', function() {
-      var scroller;
       var fixedContainers;
       var grid;
 
-      beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
+      beforeEach(function() {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
-        scroller = grid.$.scroller;
-        fixedContainers = !!navigator.userAgent.match(/Edge/) && grid.$.scroller.scrollbarWidth === 0;
-        Polymer.dom.flush();
-        animationFrameFlush(function() {
-          done();
-        });
+        fixedContainers = !!navigator.userAgent.match(/Edge/) && grid._scrollbarWidth === 0;
+        flushGrid(grid);
       });
 
       function isFixed(element) {
@@ -60,8 +52,8 @@
 
       it('should have the right amount of scrollbars/scrollers', function() {
         var scrollbars = 0;
-        scrollbars += window.getComputedStyle(scroller.$.table).overflow === 'hidden' ? 0 : 1;
-        scrollbars += window.getComputedStyle(scroller.$.outerscroller).overflow === 'hidden' ? 0 : 1;
+        scrollbars += window.getComputedStyle(grid.$.table).overflow === 'hidden' ? 0 : 1;
+        scrollbars += window.getComputedStyle(grid.$.outerscroller).overflow === 'hidden' ? 0 : 1;
         expect(scrollbars).to.equal(getScrollbarWidth() > 0 ? 2 : 1);
       });
 
@@ -71,16 +63,16 @@
       });
 
       it('should have correct scroll bounds on all scroll modes', function() {
-        expect(scroller.$.outerscroller.scrollHeight).to.be.above(scroller.clientHeight);
-        expect(scroller.$.table.scrollHeight).to.equal(scroller.$.outerscroller.scrollHeight);
-        expect(scroller.$.table.scrollWidth).to.equal(scroller.$.outerscroller.scrollWidth);
+        expect(grid.$.outerscroller.scrollHeight).to.be.above(grid.clientHeight);
+        expect(grid.$.table.scrollHeight).to.equal(grid.$.outerscroller.scrollHeight);
+        expect(grid.$.table.scrollWidth).to.equal(grid.$.outerscroller.scrollWidth);
       });
 
       it('should not have the table transformed with fixed containers', function() {
         // This is to ensure that a fixed body/header/footer are not positioned
         // in relation to the table element but it's parent
         if (fixedContainers) {
-          expect(window.getComputedStyle(scroller.$.table).transform).to.equal('none');
+          expect(window.getComputedStyle(grid.$.table).transform).to.equal('none');
         }
       });
 
@@ -88,10 +80,10 @@
         expect(wheel(0, -1).defaultPrevented).to.be.false;
         expect(wheel(0, 1).defaultPrevented).to.be.true;
 
-        scroller._previousMomentum = 0;
+        grid._previousMomentum = 0;
         scrollToEnd(grid);
 
-        grid.$.scroller.flushDebouncer('ignore-new-wheel');
+        grid._debouncerIgnoreNewWheel.flush();
 
         expect(wheel(0, 1).defaultPrevented).to.be.false;
         expect(wheel(0, -1).defaultPrevented).to.be.true;
@@ -101,10 +93,10 @@
         expect(wheel(-1, 0).defaultPrevented).to.be.false;
         expect(wheel(1, 0).defaultPrevented).to.be.true;
 
-        var table = scroller.$.table;
+        var table = grid.$.table;
         table.scrollLeft = table.scrollWidth - table.offsetWidth;
-        scroller._previousMomentum = 0;
-        grid.$.scroller.flushDebouncer('ignore-new-wheel');
+        grid._previousMomentum = 0;
+        grid._debouncerIgnoreNewWheel.flush();
 
         expect(wheel(1, 0).defaultPrevented).to.be.false;
         expect(wheel(-1, 0).defaultPrevented).to.be.true;
@@ -112,7 +104,7 @@
 
       it('should not prevent wheel events when scrolled to max', function() {
         scrollToEnd(grid);
-        grid.$.scroller.flushDebouncer('ignore-new-wheel');
+        flushGrid(grid);
         expect(wheel(0, 1).defaultPrevented).to.be.false;
         expect(wheel(0, 1).defaultPrevented).to.be.false;
       });
