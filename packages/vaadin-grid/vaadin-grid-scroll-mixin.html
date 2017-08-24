@@ -109,7 +109,7 @@
     ready() {
       super.ready();
       this.scrollTarget = this.$.table;
-      this.scrollTarget.addEventListener('wheel', this._onWheel.bind(this));
+      this.addEventListener('wheel', this._onWheel.bind(this));
     }
 
     _hasFixedSections(scrollbarWidth) {
