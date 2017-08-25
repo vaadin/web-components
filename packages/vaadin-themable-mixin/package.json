@@ -20,17 +20,19 @@
     "test": "wct"
   },
   "devDependencies": {
-    "eslint": "^3.11.1",
-    "eslint-config-vaadin": "^0.2.0",
-    "eslint-plugin-html": "^2.0.0",
+    "bower": "latest",
+    "eslint": "^4.0.0",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^3.0.0",
     "gulp": "latest",
-    "gulp-eslint": "^3.0.1",
+    "gulp-eslint": "^4.0.0",
     "gulp-html-extract": "^0.3.0",
-    "gulp-stylelint": "^3.7.0",
-    "polymer-cli": "^0.18.0",
-    "polyserve": "^0.18.0",
-    "stylelint": "^7.7.0",
-    "stylelint-config-vaadin": "^0.1.0",
-    "web-component-tester": "^6.0.0-prerelease.7"
+    "gulp-stylelint": "^4.0.0",
+    "lighthouse": "~1.6.5",
+    "polymer-cli": "^1.2.0",
+    "stylelint": "^8.0.0",
+    "stylelint-config-vaadin": "latest",
+    "web-component-tester": "^6.0.0",
+    "yargs": "latest"
   }
 }
