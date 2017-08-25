@@ -339,6 +339,12 @@
         element.style.borderTopWidth = headerHeight;
         element.style.borderBottomWidth = footerHeight;
       });
+
+      Polymer.RenderStatus.afterNextRender(this.$.header, () => {
+        if (this._pendingScrollToIndex) {
+          this.scrollToIndex(this._pendingScrollToIndex);
+        }
+      });
     }
 
     _onAnimationEnd(e) {
