@@ -41,7 +41,7 @@
     "paper-button": "^v2.0.0",
     "iron-icon": "PolymerElements/iron-icon#^v2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^v2.0.0",
-    "iron-component-page": "^v2.0.0",
+    "iron-component-page": "^3.0.0",
     "elements-demo-resources": "v2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^v2.0.0",
     "app-localize-behavior": "^v2.0.0",
@@ -54,5 +54,8 @@
     "iron-a11y-keys-behavior": "^v2.0.0",
     "iron-a11y-announcer": "^v2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.2"
+  },
+  "resolutions": {
+    "iron-doc-viewer": "^3.0.0"
   }
 }
