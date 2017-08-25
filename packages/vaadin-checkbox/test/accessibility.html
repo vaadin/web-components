@@ -1,0 +1,81 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-checkbox tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../vaadin-checkbox.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-checkbox>Vaadin <i>Checkbox</i></vaadin-checkbox>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('accessibility', function() {
+      describe('aria-checked attribute', () => {
+
+        let vaadinCheckbox;
+
+        beforeEach(() => {
+          vaadinCheckbox = fixture('default');
+        });
+
+        it('should set aria-checked to "false" when indereminate is first set to false, then checked is set to false', () => {
+          vaadinCheckbox.indeterminate = false;
+          vaadinCheckbox.checked = false;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
+        });
+
+        it('should set aria-checked to "false" when checked is first set to false, then indereminate is set to false', () => {
+          vaadinCheckbox.checked = false;
+          vaadinCheckbox.indeterminate = false;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
+        });
+
+        it('should set aria-checked to "true" when indereminate is first set to false, then checked is set to true', () => {
+          vaadinCheckbox.indeterminate = false;
+          vaadinCheckbox.checked = true;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
+        });
+
+        it('should set aria-checked to "true" when checked is first set to true, then indereminate is set to false', () => {
+          vaadinCheckbox.checked = true;
+          vaadinCheckbox.indeterminate = false;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('true');
+        });
+
+        it('should set aria-checked to "mixed" when indereminate is first set to true, then checked is set to false', () => {
+          vaadinCheckbox.indeterminate = true;
+          vaadinCheckbox.checked = false;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
+        });
+
+        it('should set aria-checked to "mixed" when checked is first set to false, then indereminate is set to true', () => {
+          vaadinCheckbox.checked = false;
+          vaadinCheckbox.indeterminate = true;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
+        });
+
+        it('should set aria-checked to "mixed" when indereminate is first set to true, then checked is set to true', () => {
+          vaadinCheckbox.indeterminate = true;
+          vaadinCheckbox.checked = true;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
+        });
+
+        it('should set aria-checked to "mixed" when checked is first set to true, then indeterminate is set to true', () => {
+          vaadinCheckbox.checked = true;
+          vaadinCheckbox.indeterminate = true;
+          expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
+        });
+
+      });
+
+    });
+  </script>
+</body>

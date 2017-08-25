@@ -13,7 +13,9 @@
 
     WCT.loadSuites([
       'vaadin-checkbox_test.html',
-      'vaadin-checkbox_test.html?wc-shadydom=true'
-    ]);
+      'accessibility.html'
+    ].reduce(function(suites, suite) {
+      return suites.concat([suite, suite + '?wc-shadydom=true']);
+    }, []));
   </script>
 </body>
