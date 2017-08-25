@@ -1,214 +1,235 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="iron-list.html">
 
 <!-- TODO: Default template needed! -->
 <script>
-  class VaadinGridScroller extends PolymerIronList {
-
-    static get is() {
-      return 'vaadin-grid-scroller';
-    }
-
-    static get properties() {
-      return {
-        size: Number,
-
-        _vidxOffset: {
-          value: 0
-        }
-      }
-    }
-
-    static get observers() {
-      return [
-        '_sizeChanged(size)'
-      ]
-    }
-
-    /**
-    * @protected
-    */
-    _updateScrollerItem(item, index) {}
-    /**
-    * @protected
-    */
-    _afterScroll() {}
-    /**
-    * @protected
-    */
-    _getRowTarget() {}
-    /**
-    * @protected
-    */
-    _createScrollerRows() {}
-
-    /**
-    * @private
-    */
-    scrollToIndex(index) {
-      this._pendingScrollToIndex = null;
-      if (!this.$.items.style.borderTopWidth) {
-        // Schedule another scroll to be invoked once init is complete
-        this._pendingScrollToIndex = index;
-      }
-
-      this._scrollingToIndex = true;
-      index = Math.min(Math.max(index, 0), this.size - 1);
-      this.$.table.scrollTop = index / this.size * this.$.table.scrollHeight;
-      this._scrollHandler();
-      super.scrollToIndex(index - this._vidxOffset);
-      // _scrollTop is not up-to-date at this point, update and run scrollhandler
-      super._resetScrollPosition(this._scrollPosition);
-      this._scrollHandler();
-
-      // This is a hack to get around offset issues when scrolling to bottom.
-      if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
-        this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
-        this._scrollHandler();
-      }
-      this._scrollingToIndex = false;
-    }
-
-    _sizeChanged(size) {
-      const fvi = this.firstVisibleIndex;
-      if (this.items && size < this.items.length) {
-        // Size was reduced, scroll to 0 first
-        this._scrollTop = 0;
-      }
-      this.items = Array.isArray(this.items) ? this.items : {length: Math.min(size, 100000)};
-
-      // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
-      this.scrollOffset = this._scrollTop;
-      super._itemsChanged({path:"items"});
-
-      this._virtualCount = this.items.length || 0;
-
-      if (this._scrollTop === 0) {
-        this.scrollToIndex(Math.min(size - 1, fvi));
-      }
-    }
-
-    _increasePoolIfNeeded(count) {
-      if (count === 0 && this._scrollingToIndex) {
-        return;
-      }
-
-      if (this._physicalCount === 0) {
-        this._updateMetrics();
-        super._increasePoolIfNeeded(25);
-      } else {
-        super._increasePoolIfNeeded(count);
-      }
-    }
-
-    _createPool(size) {
-      var i, inst;
-      const fragment = document.createDocumentFragment();
-      const physicalItems = this._createScrollerRows(size);
-
-      physicalItems.forEach(inst => {
-        fragment.appendChild(inst);
-      });
-      this._getRowTarget().appendChild(fragment);
-
-      // Weird hack needed to get Safari to actually distribute slots
-      const content = this.querySelector('[slot]');
-      if (content) {
-        const slot = content.getAttribute('slot');
-        content.setAttribute('slot', 'foo-bar');
-        content.setAttribute('slot', slot);
-      }
-
-      Polymer.RenderStatus.afterNextRender(this, () => this.notifyResize());
-      return physicalItems;
-    }
-
-    /**
-     * Assigns the data models to a given set of items.
-     * @param {!Array<number>=} itemSet
-     */
-    _assignModels(itemSet) {
-      this._iterateItems(function(pidx, vidx) {
-        var el = this._physicalItems[pidx];
-        if (vidx < this.size) {
-          el.removeAttribute('hidden');
-        } else {
-          el.setAttribute('hidden', '');
-        }
-        this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
-      }, itemSet);
-    }
-
-    _scrollHandler() {
-      var delta = this.$.table.scrollTop - this._scrollPosition;
-      super._scrollHandler();
-      const oldOffset = this._vidxOffset;
-      if (this._maxScrollTop && this._virtualCount < this.size) {
-        this._adjustVirtualIndexOffset(delta);
-      }
-      if (this._vidxOffset !== oldOffset) {
-        this._update();
-      }
-      this._afterScroll();
-    }
-
-    _createFocusBackfillItem() {
-      // Ignore
-    }
-
-    _multiSelectionChanged() {
-      // Ignore
-    }
-
-    clearSelection() {
-      // Ignore
-    }
-
-    _itemsChanged() {
-      // Ignore
-    }
-
-    _adjustVirtualIndexOffset(delta) {
-      if (Math.abs(delta) > 10000) {
-        if (this._noScale) {
-          this._noScale = false;
-          return;
-        }
-        var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
-        var offset = scale * this.size;
-        this._vidxOffset = Math.round(offset - scale * this._virtualCount);
-      } else {
-        // Make sure user can always swipe/wheel scroll to the start and end
-        // TODO: causes a small jump in the scroll handle
-        var oldOffset = this._vidxOffset || 0;
-        var threshold = 1000;
-        var maxShift = 100;
-        // At start
-        if (this._scrollTop === 0) {
-          this._vidxOffset = 0;
-          if (oldOffset !== this._vidxOffset) {
-            super.scrollToIndex(0);
-          }
-        } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
-          this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
-          super.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
-          this._noScale = true;
-        }
-        // At end
-        var maxOffset = this.size - this._virtualCount;
-        if (this._scrollTop >= this._maxScrollTop) {
-          this._vidxOffset = maxOffset;
-          if (oldOffset !== this._vidxOffset) {
-            super.scrollToIndex(this._virtualCount);
-          }
-        } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
-          this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
-          super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
-          this._noScale = true;
-        }
-      }
-    }
-
+  if (!Polymer.Element) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
   }
 
-  customElements.define(VaadinGridScroller.is, VaadinGridScroller);
+  {
+    /**
+     *  @memberof Vaadin
+     */
+    class GridScrollerElement extends PolymerIronList {
+
+      static get is() {
+        return 'vaadin-grid-scroller';
+      }
+
+      static get properties() {
+        return {
+          size: Number,
+
+          _vidxOffset: {
+            value: 0
+          }
+        }
+      }
+
+      static get observers() {
+        return [
+          '_sizeChanged(size)'
+        ]
+      }
+
+      /**
+      * @protected
+      */
+      _updateScrollerItem(item, index) {}
+      /**
+      * @protected
+      */
+      _afterScroll() {}
+      /**
+      * @protected
+      */
+      _getRowTarget() {}
+      /**
+      * @protected
+      */
+      _createScrollerRows() {}
+
+      /**
+      * @private
+      */
+      scrollToIndex(index) {
+        this._pendingScrollToIndex = null;
+        if (!this.$.items.style.borderTopWidth) {
+          // Schedule another scroll to be invoked once init is complete
+          this._pendingScrollToIndex = index;
+        }
+
+        this._scrollingToIndex = true;
+        index = Math.min(Math.max(index, 0), this.size - 1);
+        this.$.table.scrollTop = index / this.size * this.$.table.scrollHeight;
+        this._scrollHandler();
+        super.scrollToIndex(index - this._vidxOffset);
+        // _scrollTop is not up-to-date at this point, update and run scrollhandler
+        super._resetScrollPosition(this._scrollPosition);
+        this._scrollHandler();
+
+        // This is a hack to get around offset issues when scrolling to bottom.
+        if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
+          this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
+          this._scrollHandler();
+        }
+        this._scrollingToIndex = false;
+      }
+
+      _sizeChanged(size) {
+        const fvi = this.firstVisibleIndex;
+        if (this.items && size < this.items.length) {
+          // Size was reduced, scroll to 0 first
+          this._scrollTop = 0;
+        }
+        this.items = Array.isArray(this.items) ? this.items : {length: Math.min(size, 100000)};
+
+        // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
+        this.scrollOffset = this._scrollTop;
+        super._itemsChanged({path:"items"});
+
+        this._virtualCount = this.items.length || 0;
+
+        if (this._scrollTop === 0) {
+          this.scrollToIndex(Math.min(size - 1, fvi));
+        }
+      }
+
+      _increasePoolIfNeeded(count) {
+        if (count === 0 && this._scrollingToIndex) {
+          return;
+        }
+
+        if (this._physicalCount === 0) {
+          this._updateMetrics();
+          super._increasePoolIfNeeded(25);
+        } else {
+          super._increasePoolIfNeeded(count);
+        }
+      }
+
+      _createPool(size) {
+        var i, inst;
+        const fragment = document.createDocumentFragment();
+        const physicalItems = this._createScrollerRows(size);
+
+        physicalItems.forEach(inst => {
+          fragment.appendChild(inst);
+        });
+        this._getRowTarget().appendChild(fragment);
+
+        // Weird hack needed to get Safari to actually distribute slots
+        const content = this.querySelector('[slot]');
+        if (content) {
+          const slot = content.getAttribute('slot');
+          content.setAttribute('slot', 'foo-bar');
+          content.setAttribute('slot', slot);
+        }
+
+        Polymer.RenderStatus.afterNextRender(this, () => this.notifyResize());
+        return physicalItems;
+      }
+
+      /**
+       * Assigns the data models to a given set of items.
+       * @param {!Array<number>=} itemSet
+       */
+      _assignModels(itemSet) {
+        this._iterateItems(function(pidx, vidx) {
+          var el = this._physicalItems[pidx];
+          if (vidx < this.size) {
+            el.removeAttribute('hidden');
+          } else {
+            el.setAttribute('hidden', '');
+          }
+          this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
+        }, itemSet);
+      }
+
+      _scrollHandler() {
+        var delta = this.$.table.scrollTop - this._scrollPosition;
+        super._scrollHandler();
+        const oldOffset = this._vidxOffset;
+        if (this._maxScrollTop && this._virtualCount < this.size) {
+          this._adjustVirtualIndexOffset(delta);
+        }
+        if (this._vidxOffset !== oldOffset) {
+          this._update();
+        }
+        this._afterScroll();
+      }
+
+      _createFocusBackfillItem() {
+        // Ignore
+      }
+
+      _multiSelectionChanged() {
+        // Ignore
+      }
+
+      clearSelection() {
+        // Ignore
+      }
+
+      _itemsChanged() {
+        // Ignore
+      }
+
+      _adjustVirtualIndexOffset(delta) {
+        if (Math.abs(delta) > 10000) {
+          if (this._noScale) {
+            this._noScale = false;
+            return;
+          }
+          var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
+          var offset = scale * this.size;
+          this._vidxOffset = Math.round(offset - scale * this._virtualCount);
+        } else {
+          // Make sure user can always swipe/wheel scroll to the start and end
+          // TODO: causes a small jump in the scroll handle
+          var oldOffset = this._vidxOffset || 0;
+          var threshold = 1000;
+          var maxShift = 100;
+          // At start
+          if (this._scrollTop === 0) {
+            this._vidxOffset = 0;
+            if (oldOffset !== this._vidxOffset) {
+              super.scrollToIndex(0);
+            }
+          } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
+            this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
+            super.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
+            this._noScale = true;
+          }
+          // At end
+          var maxOffset = this.size - this._virtualCount;
+          if (this._scrollTop >= this._maxScrollTop) {
+            this._vidxOffset = maxOffset;
+            if (oldOffset !== this._vidxOffset) {
+              super.scrollToIndex(this._virtualCount);
+            }
+          } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
+            this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
+            super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+            this._noScale = true;
+          }
+        }
+      }
+
+    }
+
+    customElements.define(GridScrollerElement.is, GridScrollerElement);
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.GridScrollerElement = GridScrollerElement;
+  }
 </script>

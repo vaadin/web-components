@@ -13,6 +13,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
   /**
    * @polymerMixin
+   * @memberof Vaadin.Grid
    */
   Vaadin.Grid.ColumnBaseMixin = superClass => class ColumnBaseMixin extends superClass {
     static get properties() {
@@ -340,6 +341,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-grid-column">
   <script>
+  if (!Polymer.Element) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+  }
+
   {
     /**
      * A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
@@ -355,6 +360,8 @@ This program is available under Apache License Version 2.0, available at https:/
      *       <template class="footer">I'm in the footer</template>
      *     </vaadin-grid-column>
      *
+     * @memberof Vaadin
+     * @mixes Vaadin.Grid.ColumnBaseMixin
      */
     class GridColumnElement extends Vaadin.Grid.ColumnBaseMixin(Polymer.Element) {
       static get is() {
@@ -433,11 +440,11 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     customElements.define(GridColumnElement.is, GridColumnElement);
-
     /**
      * @namespace Vaadin
      */
-    Vaadin.GridColumnElement = GridColumnElement;
-  }
+     window.Vaadin = window.Vaadin || {};
+     Vaadin.GridColumnElement = GridColumnElement;
+   }
   </script>
 </dom-module>

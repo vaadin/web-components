@@ -1,3 +1,9 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
 <link rel="import" href="../polymer/polymer-element.html">
 
 <dom-module id="vaadin-grid-outer-scroller">
@@ -24,7 +30,14 @@
 </dom-module>
 
 <script>
+  if (!Polymer.Element) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+  }
+
   {
+    /**
+     * @memberof Vaadin
+     */
     class GridOuterScrollerElement extends Polymer.Element {
 
       static get is() {
