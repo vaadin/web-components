@@ -95,6 +95,11 @@
           expect(textField.hasValue).to.be.true;
         });
 
+        it('setting value to undefine should not update has-value attribute', function() {
+          textField.value = undefined;
+          expect(textField.hasValue).to.be.false;
+        });
+
         it('setting empty value does not update has-value property', function() {
           textField.value = '';
           expect(textField.hasValue).to.be.false;
