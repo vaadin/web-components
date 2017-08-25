@@ -64,6 +64,13 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
+         * Stores the previous value of tabindex attribute of the disabled element
+         */
+        _previousTabIndex: {
+          type: Number
+        },
+
+        /**
          * If true, the user cannot interact with this element.
          */
         disabled: {
@@ -175,9 +182,12 @@ This program is available under Apache License Version 2.0, available at https:/
       if (disabled) {
         this._setFocused(false);
         this.blur();
-        this.tabindex = undefined;
+        this._previousTabIndex = this.getAttribute('tabindex');
+        this.tabindex = -1;
+        this.setAttribute('aria-disabled', 'true');
       } else {
-        this.tabindex = this.focusElement.tabIndex;
+        this.tabindex = this._previousTabIndex;
+        this.removeAttribute('aria-disabled');
       }
     }
 
@@ -187,6 +197,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (this.disabled && this.tabindex) {
+        // If tabindex attribute was changed while checkbox was disabled
+        if (this.tabindex !== -1) {
+          this._previousTabIndex = this.tabindex;
+        }
         this.tabindex = tabindex = undefined;
       }
 

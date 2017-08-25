@@ -82,6 +82,25 @@
           expect(customElement.getAttribute('tabindex')).to.not.be.ok;
         });
 
+        it('setting disabled to true and then back to false should restore the previous value of tabindex', () => {
+          customElement.tabIndex = 2;
+          customElement.disabled = true;
+          expect(customElement.getAttribute('tabindex')).to.not.be.ok;
+
+          customElement.disabled = false;
+          expect(customElement.getAttribute('tabindex')).to.be.equal('2');
+        });
+
+        it('new tabindex value that was set while element is disabled should be applied once it becomes enabled', () => {
+          customElement.tabIndex = 2;
+          customElement.disabled = true;
+          customElement.tabIndex = 3;
+          expect(customElement.getAttribute('tabindex')).to.not.be.ok;
+
+          customElement.disabled = false;
+          expect(customElement.getAttribute('tabindex')).to.be.equal('3');
+        });
+
         it('should synchronize tabindex with tabIndex', () => {
           customElement.tabindex = 1;
           expect(customElement.tabIndex).to.eql(1);
@@ -161,6 +180,17 @@
           customElement.tabIndex = 4;
           expect(customElement.getAttribute('tabindex')).to.be.null;
           expect(focusElement.getAttribute('tabindex')).to.be.equal('4');
+        });
+
+        it('should have aria-disabled attribute set to true when disabled', () => {
+          customElement.disabled = true;
+          expect(customElement.getAttribute('aria-disabled')).to.be.equal('true');
+        });
+
+        it('should not have aria-disabled attribute when is not disabled', () => {
+          customElement.disabled = true;
+          customElement.disabled = false;
+          expect(customElement.getAttribute('aria-disabled')).to.not.be.ok;
         });
       });
 
