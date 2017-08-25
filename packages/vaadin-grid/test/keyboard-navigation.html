@@ -668,7 +668,7 @@
             });
 
             function findRowDetailsCell(scope) {
-              return scope.querySelector('.vaadin-grid-details-cell');
+              return scope.querySelector('[part~="details-cell"]');
             }
 
             it('should not navigate to row details with right arrow', function() {

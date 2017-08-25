@@ -150,7 +150,7 @@
 
       const activeCell = e.composedPath()[0];
       const columnIndex = indexOfChildElement(activeCell);
-      const isRowDetails = activeCell.matches('.vaadin-grid-details-cell');
+      const isRowDetails = activeCell.matches('[part~="details-cell"]');
 
       const activeRow = activeCell.parentNode;
       // Body rows have index property, otherwise DOM child index of the row is used
@@ -240,7 +240,7 @@
       // Here we go!
       const dstCell = dstIsRowDetails ?
         Array.from(dstRow.children)
-          .filter(el => el.matches('.vaadin-grid-details-cell'))[0] :
+          .filter(el => el.matches('[part~="details-cell"]'))[0] :
         dstRow.children[dstColumnIndex];
       this._focusCell(dstCell, activeRowGroup);
     }
