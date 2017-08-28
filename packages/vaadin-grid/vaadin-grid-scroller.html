@@ -7,11 +7,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="iron-list.html">
 
-<!-- TODO: Default template needed! -->
 <script>
   {
     /**
-     *  @memberof Vaadin
+     * This Element is used internally by vaadin-grid.
+     *
+     * @protected
      */
     class GridScrollerElement extends PolymerIronList {
 
@@ -222,10 +223,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     customElements.define(GridScrollerElement.is, GridScrollerElement);
-    /**
-     * @namespace Vaadin
-     */
+
     window.Vaadin = window.Vaadin || {};
-    Vaadin.GridScrollerElement = GridScrollerElement;
+    window.Vaadin.Grid = window.Vaadin.Grid || {};
+    Vaadin.Grid.ScrollerElement = GridScrollerElement;
   }
 </script>
