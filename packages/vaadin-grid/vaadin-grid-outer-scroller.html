@@ -32,7 +32,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   {
     /**
-     * @memberof Vaadin
+     * This Element is used internally by vaadin-grid.
+     *
+     * @protected
      */
     class GridOuterScrollerElement extends Polymer.Element {
 
@@ -95,11 +97,5 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     customElements.define(GridOuterScrollerElement.is, GridOuterScrollerElement);
-
-    /**
-     * @namespace Vaadin
-     */
-    window.Vaadin = window.Vaadin || {};
-    Vaadin.GridOuterScrollerElement = GridOuterScrollerElement;
   }
 </script>
