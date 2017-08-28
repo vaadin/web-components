@@ -948,6 +948,7 @@
 
           describe('vertical scrolling', function() {
             beforeEach(function(done) {
+              grid.items = undefined;
               grid.size = 200;
               grid.dataProvider = infiniteDataProvider;
               flushGrid(grid);
