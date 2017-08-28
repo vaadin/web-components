@@ -99,11 +99,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get observers() {
-        const ownObservers = [
+        return [
           '_onSelectAllChanged(selectAll)'
         ];
-
-        return super.observers.concat(ownObservers);
       }
 
       _prepareHeaderTemplate() {
