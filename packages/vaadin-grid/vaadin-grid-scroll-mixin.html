@@ -81,11 +81,6 @@ This program is available under Apache License Version 2.0, available at https:/
           },
         },
 
-        scrolling: {
-          type: Boolean,
-          reflectToAttribute: true
-        },
-
         _scrollbarWidth: {
           type: Number,
           value: function() {
@@ -178,13 +173,13 @@ This program is available under Apache License Version 2.0, available at https:/
       this._translateStationaryElements();
 
       if (!this.hasAttribute('reordering')) {
-        this.scrolling = true;
+        this._toggleAttribute('scrolling', true, this.$.scroller);
       }
 
       this._debounceScrolling = Polymer.Debouncer.debounce(this._debounceScrolling,
           Polymer.Async.timeOut.after(100),
           () => {
-            this.scrolling = false;
+            this._toggleAttribute('scrolling', false, this.$.scroller);
             this._reorderRows();
           });
 
