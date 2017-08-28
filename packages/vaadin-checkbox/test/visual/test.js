@@ -1,4 +1,4 @@
-gemini.suite('vaadin-button', function(rootSuite) {
+gemini.suite('vaadin-checkbox', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
