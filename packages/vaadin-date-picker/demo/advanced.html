@@ -66,31 +66,6 @@
       </template>
     </demo-snippet>
 
-    <h3>Two date pickers side-by-side</h3>
-    <demo-snippet>
-      <template>
-        <div class="layout horizontal around-justified">
-          <vaadin-date-picker id="start" label="Start"></vaadin-date-picker>
-          <vaadin-date-picker id="end" label="End"></vaadin-date-picker>
-        </div>
-        <script>
-          var start = document.querySelector('#start');
-          var end = document.querySelector('#end');
-          start.addEventListener('value-changed', function() {
-            if (start.value) {
-              // Open the end date picker with a delay to
-              // make it less confusing.
-              window.setTimeout(function() {
-                end.value = start.value;
-                start.close();
-                end.open();
-              }, 500);
-            }
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
     <h3>Custom Validator</h3>
     <p>Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
        then override the <code>checkValidity(value)</code> method to validate the input.
