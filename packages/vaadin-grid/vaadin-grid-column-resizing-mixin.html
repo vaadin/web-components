@@ -79,8 +79,8 @@ This program is available under Apache License Version 2.0, available at https:/
         var targetCell = columnRowCells.filter(cell => cell._column === column)[0];
         // Resize the target column
         if (targetCell.offsetWidth) {
-          var style = window.getComputedStyle(targetCell._content);
-          var minWidth = 10 + parseInt(style.paddingLeft) + parseInt(style.paddingRight);
+          var style = window.getComputedStyle(targetCell);
+          var minWidth = 10 + parseInt(style.paddingLeft) + parseInt(style.paddingRight) + parseInt(style.borderLeft) + parseInt(style.borderRight) + parseInt(style.marginLeft) + parseInt(style.marginRight);
           column.width = Math.max(minWidth, targetCell.offsetWidth + e.detail.x - targetCell.getBoundingClientRect().right) + 'px';
           column.flexGrow = 0;
         }
