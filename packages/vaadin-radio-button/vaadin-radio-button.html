@@ -118,14 +118,6 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
-            /**
-             * The current disabled state of the radio button. True if disabled.
-             */
-            disabled: {
-              type: Boolean,
-              reflectToAttribute: true,
-              observer: '_disabledChanged'
-            },
 
             /**
              * The name of the control, which is submitted with the form data.
@@ -162,14 +154,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
-        }
-
-        _disabledChanged(disabled) {
-          if (disabled) {
-            this.setAttribute('aria-disabled', 'true');
-          } else {
-            this.removeAttribute('aria-disabled');
-          }
         }
 
         _addActiveListeners() {
