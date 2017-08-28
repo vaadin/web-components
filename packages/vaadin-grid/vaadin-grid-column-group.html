@@ -4,39 +4,16 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-
-A `vaadin-grid-column-group` is used to wrap many columns under a common header. It supports nested groups.
-
-The `class` attribute is used to differentiate header and footer templates.
-
-#### Example:
-
-    <vaadin-grid>
-      <vaadin-grid-column-group>
-        <template class="header">I'm in the group header</template>
-        <template class="footer">I'm in the group footer</template>
-        <vaadin-grid-column>
-          <template class="header">I'm in the first header</template>
-          <template>I'm in the first body cell</template>
-          <template class="footer">I'm in the first footer</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">I'm in the second header</template>
-          <template>I'm in the second body cell</template>
-          <template class="footer">I'm in the second footer</template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-    </vaadin-grid>
-
--->
-
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <dom-module id="vaadin-grid-column-group">
   <script>
     {
+      /**
+       * @memberof Vaadin
+       * @mixes Vaadin.Grid.ColumnBaseMixin
+       */
       class GridColumnGroupElement extends Vaadin.Grid.ColumnBaseMixin(Polymer.Element) {
 
         static get is() {
@@ -84,7 +61,7 @@ The `class` attribute is used to differentiate header and footer templates.
         }
 
         static get observers() {
-          const ownObservers = [
+          return [
             '_updateVisibleChildColumns(_childColumns)',
             '_childColumnsChanged(_childColumns)',
             '_groupFrozenChanged(frozen, _rootColumns)',
@@ -95,14 +72,13 @@ The `class` attribute is used to differentiate header and footer templates.
             '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
             '_groupResizableChanged(resizable, _rootColumns)'
           ];
-
-          return super.observers.concat(ownObservers);
         }
 
         // listeners: {
         //   'property-changed': '_columnPropChanged'
         // },
 
+        /** @private */
         connectedCallback() {
           super.connectedCallback();
           this._addNodeObserver();
@@ -306,7 +282,6 @@ The `class` attribute is used to differentiate header and footer templates.
       }
 
       customElements.define(GridColumnGroupElement.is, GridColumnGroupElement);
-
       /**
        * @namespace Vaadin
        */

@@ -4,13 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<!--
-
-`vaadin-grid-filter` is a helper element for the `vaadin-grid` that provides out-of-the-box UI controls,
-and handlers for filtering the grid data.
-
--->
-
 <link rel="import" href="../polymer/polymer.html">
 
 <dom-module id="vaadin-grid-filter">
@@ -32,6 +25,10 @@ and handlers for filtering the grid data.
   </template>
   <script>
     {
+      /**
+       * `vaadin-grid-filter` is a helper element for the `vaadin-grid` that provides out-of-the-box UI controls,
+       * and handlers for filtering the grid data.
+       */
       class GridFilterElement extends Polymer.Element {
 
         static get is() {
@@ -58,6 +55,7 @@ and handlers for filtering the grid data.
           };
         }
 
+        /** @private */
         connectedCallback() {
           this._connected = true;
         }

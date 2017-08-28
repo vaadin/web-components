@@ -255,6 +255,17 @@
 
           expect(group.footerTemplate).to.eql(template);
         });
+
+      });
+
+      describe('inheritance', function() {
+        it('both, class and super observers, should be called', function() {
+          var superSpy = sinon.spy(group, '_resizableChanged');
+          var thisSpy = sinon.spy(group, '_groupResizableChanged');
+          group.resizable = true;
+          expect(superSpy.called).to.be.true;
+          expect(thisSpy.called).to.be.true;
+        });
       });
     });
   </script>
