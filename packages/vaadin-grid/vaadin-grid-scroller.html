@@ -86,7 +86,9 @@ This program is available under Apache License Version 2.0, available at https:/
           // Size was reduced, scroll to 0 first
           this._scrollTop = 0;
         }
-        this.items = Array.isArray(this.items) ? this.items : {length: Math.min(size, 100000)};
+        if (!Array.isArray(this.items)) {
+          this.items = {length: Math.min(size, 100000)};
+        }
 
         // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
         this.scrollOffset = this._scrollTop;

@@ -33,8 +33,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _itemsChanged(items, splices) {
       if (!Array.isArray(items)) {
-        if (items === null) {
+        if (items === undefined || items === null) {
           this.size = 0;
+        }
+        if (this.dataProvider === this._arrayDataProvider) {
+          this.dataProvider = undefined;
         }
         return;
       }
@@ -45,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _arrayDataProvider(opts, cb) {
-      let items = (this.items || []).slice(0);
+      let items = (Array.isArray(this.items) ? this.items : []).slice(0);
 
       if (this._filters && this._checkPaths(this._filters, 'filtering', items)) {
         items = this._filter(items);
