@@ -11,6 +11,28 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     {
       /**
+       * A `vaadin-grid-column-group` is used to make groups of colums in `vaadin-grid` and
+       * to configure aditional headers and footers.
+       *
+       * Groups can be nested to create complex header and footer configurations.
+       *
+       * The `class` attribute is used to differentiate header and footer templates.
+       *
+       * #### Example:
+       *
+       *     <vaadin-grid-column-group resizable>
+       *      <template class="header">Name</template>
+       *
+       *      <vaadin-grid-column>
+       *        <template class="header">First</template>
+       *        <template>[[item.name.first]]</template>
+       *      </vaadin-grid-column>
+       *      <vaadin-grid-column>
+       *        <template class="header">Last</template>
+       *        <template>[[item.name.last]]</template>
+       *      </vaadin-grid-column>
+       *     </vaadin-grid-column-group>
+       *
        * @memberof Vaadin
        * @mixes Vaadin.Grid.ColumnBaseMixin
        */
