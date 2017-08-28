@@ -182,11 +182,13 @@ This program is available under Apache License Version 2.0, available at https:/
       if (disabled) {
         this._setFocused(false);
         this.blur();
-        this._previousTabIndex = this.getAttribute('tabindex');
+        this._previousTabIndex = this.tabindex;
         this.tabindex = -1;
         this.setAttribute('aria-disabled', 'true');
       } else {
-        this.tabindex = this._previousTabIndex;
+        if (typeof this._previousTabIndex !== 'undefined') {
+          this.tabindex = this._previousTabIndex;
+        }
         this.removeAttribute('aria-disabled');
       }
     }
