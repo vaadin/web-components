@@ -36,6 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
           value: false,
           reflectToAttribute: true
         },
+        _focusedItemIndex: Number,
         _focusedColumnOrder: Number
       }
     }
@@ -48,10 +49,32 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('focusout', this._onFocusOut);
       this.addEventListener('cell-focus', this._onCellFocus);
 
-      // Ensure horizontal scrolling when cell is focused, e.g., on tab key
+      // When cell is focused, e.g., on tab key
       this.$.table.addEventListener('focusin', (e) => {
+        if (this._cellFocusIsInvoked) {
+          return;
+        }
+
         if (e.composedPath().indexOf(this.$.table) === 3) {
-          this._scrollHorizontallyToCell(e.composedPath()[0]);
+          const cell = e.composedPath()[0];
+
+          // Ensure correct vertical scrolling position
+          const row = cell.parentNode, rowGroup = row.parentNode;
+          if (rowGroup === this.$.items &&
+              (this._focusedItemIndex <= this.firstVisibleIndex ||
+               this._focusedItemIndex >= this.lastVisibleIndex)) {
+            // Scroll and restore focus after scrolling
+            const columnIndex = Array.from(row.children).indexOf(cell);
+            this.scrollToIndex(this._focusedItemIndex);
+            this._focusCell(
+                Array.from(rowGroup.children)
+                  .filter(el => el.index === this._focusedItemIndex)[0]
+                  .children[columnIndex]
+            );
+          }
+
+          // Ensure correct horizontal scrolling position
+          this._scrollHorizontallyToCell(cell);
         }
       });
     }
@@ -166,11 +189,14 @@ This program is available under Apache License Version 2.0, available at https:/
       const isRowDetails = activeCell.matches('[part~="details-cell"]');
 
       const activeRow = activeCell.parentNode;
-      // Body rows have index property, otherwise DOM child index of the row is used
-      const rowIndex = activeRow.index || indexOfChildElement(activeRow);
 
       const activeRowGroup = activeRow.parentNode;
       const maxRowIndex = (activeRowGroup === this.$.items ? this.size : activeRowGroup.children.length) - 1;
+
+      // Body rows have index property, otherwise DOM child index of the row is used.
+      const rowIndex = (activeRowGroup === this.$.items) ?
+        (this._focusedItemIndex !== undefined ? this._focusedItemIndex : activeRow.index) :
+        indexOfChildElement(activeRow);
 
       // Index of the destination row
       let dstRowIndex = Math.max(0, Math.min(rowIndex + dy, maxRowIndex));
@@ -220,13 +246,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const dstOrderedColumnIndex = (dy === 0 && isRowDetails) ? orderedColumnIndex :
         Math.max(0, Math.min(orderedColumnIndex + dx, maxOrderedColumnIndex));
 
-      if (dstOrderedColumnIndex === orderedColumnIndex &&
-          dstRowIndex === rowIndex &&
-          dstIsRowDetails === isRowDetails) {
-        // Navigation resulted in the same place, no action.
-        this._scrollHorizontallyToCell(activeCell);
-        return;
-      } else if (dstOrderedColumnIndex !== orderedColumnIndex) {
+      if (dstOrderedColumnIndex !== orderedColumnIndex) {
         // Horizontal movement invalidates stored _focusedColumnOrder
         this._focusedColumnOrder = undefined;
       }
@@ -408,15 +428,19 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _focusCell(cell, rowGroup, ignoreFocusInCellContent) {
-      rowGroup = rowGroup || cell.parentNode.parentNode;
+      const row = cell.parentNode;
+      rowGroup = rowGroup || row.parentNode;
       if (rowGroup === this.$.header) {
         this._headerFocusable = cell;
       } else if (rowGroup === this.$.items) {
         this._itemsFocusable = cell;
+        this._focusedItemIndex = row.index;
       } else if (rowGroup === this.$.footer) {
         this._footerFocusable = cell;
       }
+      this._cellFocusIsInvoked = true;
       cell.focus();
+      this._cellFocusIsInvoked = false;
     }
 
     _scrollHorizontallyToCell(dstCell) {
