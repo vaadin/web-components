@@ -200,11 +200,12 @@
           expect(customElement.focused).to.be.true;
         });
 
-        it('should have focused set', done => {
+        it('should have focused and focus-ring set', done => {
           customElement = fixture('autofocus');
 
           Polymer.Async.animationFrame.run(() => {
             expect(customElement.focused).to.be.true;
+            expect(customElement.hasAttribute('focus-ring')).to.be.true;
             done();
           });
         });

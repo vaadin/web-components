@@ -103,7 +103,10 @@ This program is available under Apache License Version 2.0, available at https:/
       });
 
       if (this.autofocus && !this.focused) {
-        window.requestAnimationFrame(() => this._focus());
+        window.requestAnimationFrame(() => {
+          this._focus();
+          this.setAttribute('focus-ring', '');
+        });
       }
 
       this._boundKeydownListener = this._bodyKeydownListener.bind(this);
