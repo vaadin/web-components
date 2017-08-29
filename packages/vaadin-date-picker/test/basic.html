@@ -320,6 +320,20 @@
           datepicker.close();
         });
 
+        // This doesn't pass in Travis Chrome & Firefox addons.
+        // Passes locally though.
+        const firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        const chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (!firefox && !chrome) {
+          it('should match the parent width', () => {
+            var container = fixture('datepicker-wrapped');
+            var datepickerWrapped = container.querySelector('vaadin-date-picker');
+            container.style.width = '120px';
+            datepickerWrapped.style.width = '100%';
+            expect(datepickerWrapped.$.input.clientWidth).to.equal(120);
+          });
+        }
+
       });
 
       describe('value property formats', () => {
