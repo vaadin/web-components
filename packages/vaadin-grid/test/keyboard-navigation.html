@@ -1506,21 +1506,22 @@
           });
         });
 
-        describe('a11y', function() {
-          // it('should move focus when focused cell is changed', function() {
-          //   var spy = sinon.spy();
-          //   footerTrap._primary.focus = spy;
-          //   footerTrap._secondary.focus = spy;
-          //
-          //   footerTrap.activeTarget = 'foobar';
-          //
-          //   expect(spy.callCount).to.equal(1);
-          // });
+        // TODO(platosha): reimplement these a11y features with native ARIA attributes
+        describe.skip('a11y', function() {
+          it('should move focus when focused cell is changed', function() {
+            var spy = sinon.spy();
+            footerTrap._primary.focus = spy;
+            footerTrap._secondary.focus = spy;
+
+            footerTrap.activeTarget = 'foobar';
+
+            expect(spy.callCount).to.equal(1);
+          });
 
           it('should set announce target when virtual focus changes', function() {
             tabToHeader();
 
-            // expect(footerTrap.activeTarget).not.to.be.empty;
+            expect(footerTrap.activeTarget).not.to.be.empty;
           });
 
           it('should announce row number on body when navigating with keys', function() {
@@ -1564,11 +1565,11 @@
             var id = getCell(0, 0)._cellContent.id;
             expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
-            // footerTrap.async(function() {
-            //   expect(footerTrap._primary.getAttribute('aria-labelledby') +
-            //     footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
-            //   done();
-            // });
+            footerTrap.async(function() {
+              expect(footerTrap._primary.getAttribute('aria-labelledby') +
+                footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
+              done();
+            });
           });
 
           it('should announce header cell when body cell is focused', function(done) {
@@ -1578,67 +1579,67 @@
             var id = getFirstHeaderCell(0)._cellContent.id;
             expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
-            // footerTrap.async(function() {
-            //   expect(footerTrap._primary.getAttribute('aria-labelledby') +
-            //     footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
-            //   done();
-            // });
+            footerTrap.async(function() {
+              expect(footerTrap._primary.getAttribute('aria-labelledby') +
+                footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
+              done();
+            });
           });
 
-          // it('should not refocus the trap while navigating', function() {
-          //   tabToHeader();
-          //   tab();
-          //
-          //   // Neither of these keystrokes should call trap focus(). Otherwise,
-          //   // if the trap focus is called, the focus could jump twice between
-          //   // the baits on a single keystroke, and, as a result of two jumps,
-          //   // the bait that was focused before the keystroke stays focused
-          //   // after. No focus move — no cell announce.
-          //   right();
-          //   left();
-          //   down();
-          //   up();
-          //   end();
-          //   home();
-          //   ctrlEnd();
-          //   ctrlHome();
-          //   pageDown();
-          //   pageUp();
-          //
-          //   expect(footerTrap.focus.callCount).to.equal(1);
-          // });
+          it('should not refocus the trap while navigating', function() {
+            tabToHeader();
+            tab();
 
-          // it('should change activeTarget in the trap while navigating', function() {
-          //   tabToHeader();
-          //   tab();
-          //
-          //   var visitedTargets = [];
-          //   visitedTargets.push(footerTrap.activeTarget); right();
-          //   visitedTargets.push(footerTrap.activeTarget); left();
-          //   visitedTargets.push(footerTrap.activeTarget); down();
-          //   visitedTargets.push(footerTrap.activeTarget); up();
-          //   visitedTargets.push(footerTrap.activeTarget); end();
-          //   visitedTargets.push(footerTrap.activeTarget); home();
-          //   visitedTargets.push(footerTrap.activeTarget); ctrlEnd();
-          //   visitedTargets.push(footerTrap.activeTarget); ctrlHome();
-          //   visitedTargets.push(footerTrap.activeTarget); pageDown();
-          //   visitedTargets.push(footerTrap.activeTarget); pageUp();
-          //
-          //   // Extract unique values
-          //   visitedTargets = visitedTargets.reduce(function(acc, val) {
-          //     if (acc.indexOf(val) === -1) acc.push(val);
-          //     return acc;
-          //   }, []);
-          //
-          //   expect(visitedTargets).to.have.a.lengthOf(5);
-          // });
+            // Neither of these keystrokes should call trap focus(). Otherwise,
+            // if the trap focus is called, the focus could jump twice between
+            // the baits on a single keystroke, and, as a result of two jumps,
+            // the bait that was focused before the keystroke stays focused
+            // after. No focus move — no cell announce.
+            right();
+            left();
+            down();
+            up();
+            end();
+            home();
+            ctrlEnd();
+            ctrlHome();
+            pageDown();
+            pageUp();
 
-          // if (window.Polymer && Polymer.Settings.useNativeShadow) {
-          //   it('should have tabbable elements in the light DOM', function() {
-          //     expect(footerTrap.querySelector('.primary')).not.to.be.null;
-          //     expect(footerTrap.querySelector('.secondary')).not.to.be.null;
-          //   });
-          // }
+            expect(footerTrap.focus.callCount).to.equal(1);
+          });
+
+          it('should change activeTarget in the trap while navigating', function() {
+            tabToHeader();
+            tab();
+
+            var visitedTargets = [];
+            visitedTargets.push(footerTrap.activeTarget); right();
+            visitedTargets.push(footerTrap.activeTarget); left();
+            visitedTargets.push(footerTrap.activeTarget); down();
+            visitedTargets.push(footerTrap.activeTarget); up();
+            visitedTargets.push(footerTrap.activeTarget); end();
+            visitedTargets.push(footerTrap.activeTarget); home();
+            visitedTargets.push(footerTrap.activeTarget); ctrlEnd();
+            visitedTargets.push(footerTrap.activeTarget); ctrlHome();
+            visitedTargets.push(footerTrap.activeTarget); pageDown();
+            visitedTargets.push(footerTrap.activeTarget); pageUp();
+
+            // Extract unique values
+            visitedTargets = visitedTargets.reduce(function(acc, val) {
+              if (acc.indexOf(val) === -1) acc.push(val);
+              return acc;
+            }, []);
+
+            expect(visitedTargets).to.have.a.lengthOf(5);
+          });
+
+          if (window.Polymer && Polymer.Settings.useNativeShadow) {
+            it('should have tabbable elements in the light DOM', function() {
+              expect(footerTrap.querySelector('.primary')).not.to.be.null;
+              expect(footerTrap.querySelector('.secondary')).not.to.be.null;
+            });
+          }
         });
 
         describe('focus events on cell content', function() {
