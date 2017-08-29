@@ -845,7 +845,8 @@
           });
 
           it('should focus to last row element after scrolling to end', function() {
-            grid.size = 1000;
+            grid.items = undefined;
+            grid.size = 200;
             grid.dataProvider = infiniteDataProvider;
 
             clickItem(0);
