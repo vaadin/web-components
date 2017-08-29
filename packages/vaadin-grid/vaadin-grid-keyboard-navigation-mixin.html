@@ -49,36 +49,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('focusout', this._onFocusOut);
       this.addEventListener('cell-focus', this._onCellFocus);
 
-      // When cell is focused, e.g., on tab key
-      this.$.table.addEventListener('focusin', (e) => {
-        if (this._cellFocusIsInvoked) {
-          return;
-        }
-
-        this._detectInteracting(e);
-
-        if (e.composedPath().indexOf(this.$.table) === 3) {
-          const cell = e.composedPath()[0];
-
-          // Ensure correct vertical scrolling position
-          const row = cell.parentNode, rowGroup = row.parentNode;
-          if (rowGroup === this.$.items &&
-              (this._focusedItemIndex <= this.firstVisibleIndex ||
-               this._focusedItemIndex >= this.lastVisibleIndex)) {
-            // Scroll and restore focus after scrolling
-            const columnIndex = Array.from(row.children).indexOf(cell);
-            this.scrollToIndex(this._focusedItemIndex);
-            this._focusCell(
-                Array.from(rowGroup.children)
-                  .filter(el => el.index === this._focusedItemIndex)[0]
-                  .children[columnIndex]
-            );
-          }
-
-          // Ensure correct horizontal scrolling position
-          this._scrollHorizontallyToCell(cell);
-        }
-      });
+      // When focus goes from cell to another cell, focusin/focusout events do
+      // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
+      this.$.table.addEventListener('focusin', this._onCellFocusIn.bind(this));
+      this.$.table.addEventListener('focusout', this._onCellFocusOut.bind(this));
     }
 
     _focusableChanged(focusable, oldFocusable) {
@@ -383,6 +357,45 @@ This program is available under Apache License Version 2.0, available at https:/
     _onFocusOut(e) {
       this.navigating = false;
       this._detectInteracting(e);
+    }
+
+    _onCellFocusIn(e) {
+      this._detectInteracting(e);
+
+      if (e.composedPath().indexOf(this.$.table) === 3) {
+        let cell = e.composedPath()[0];
+
+        // Prevent recursion from calling `this._focusCell`
+        if (!this._cellFocusIsInvoked) {
+          // Ensure correct vertical scrolling position
+          const row = cell.parentNode, rowGroup = row.parentNode;
+          if (rowGroup === this.$.items &&
+              (this._focusedItemIndex <= this.firstVisibleIndex ||
+                this._focusedItemIndex >= this.lastVisibleIndex)) {
+            // Scroll and restore focus after scrolling
+            const columnIndex = Array.from(row.children).indexOf(cell);
+            this.scrollToIndex(this._focusedItemIndex);
+            cell = Array.from(rowGroup.children)
+              .filter(el => el.index === this._focusedItemIndex)[0]
+              .children[columnIndex];
+            this._focusCell(cell);
+          }
+
+          // Ensure correct horizontal scrolling position
+          this._scrollHorizontallyToCell(cell);
+        }
+
+        // Inform cell content of the focus (used in <vaadin-grid-sorter>)
+        cell._content.dispatchEvent(new CustomEvent('cell-focusin', {bubbles: false}));
+      }
+    }
+
+    _onCellFocusOut(e) {
+      if (e.composedPath().indexOf(this.$.table) === 3) {
+        const cell = e.composedPath()[0];
+        // Inform cell content of the focus (used in <vaadin-grid-sorter>)
+        cell._content.dispatchEvent(new CustomEvent('cell-focusout', {bubbles: false}));
+      }
     }
 
     /**

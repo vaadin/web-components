@@ -1643,41 +1643,38 @@
         });
 
         describe('focus events on cell content', function() {
-          var cellContent;
+          var cell;
 
           beforeEach(function() {
-            cellContent = getCell(0, 0)._cellContent;
+            cell = getCell(0, 0);
           });
 
-          it('should dispatch cell-focusin after trap focus', function() {
+          it('should dispatch cell-focusin after cell focus', function() {
             var spy = sinon.spy();
-            cellContent.addEventListener('cell-focusin', spy);
+            cell._content.addEventListener('cell-focusin', spy);
 
-            tabToHeader();
-            tab();
+            tabToBody();
 
             expect(spy.callCount).to.equal(1);
           });
 
-          it('should dispatch cell-focusout after trap blur', function() {
-            tabToHeader();
-            tab();
+          it('should dispatch cell-focusout after cell blur', function() {
+            tabToBody();
 
             var spy = sinon.spy();
-            cellContent.addEventListener('cell-focusout', spy);
+            cell._content.addEventListener('cell-focusout', spy);
 
-            tab();
+            right();
 
             expect(spy.callCount).to.equal(1);
           });
 
           it('should dispatch cell-focusin on keyboard navigation', function() {
-            tabToHeader();
-            tab();
-            getCell(0, 1).click();
+            tabToBody();
+            right();
 
             var spy = sinon.spy();
-            cellContent.addEventListener('cell-focusin', spy);
+            cell._content.addEventListener('cell-focusin', spy);
 
             left();
 
@@ -1685,12 +1682,10 @@
           });
 
           it('should dispatch cell-focusout on keyboard navigation', function() {
-            tabToHeader();
-            tab();
-            getCell(0, 0).click();
+            tabToBody();
 
             var spy = sinon.spy();
-            cellContent.addEventListener('cell-focusout', spy);
+            cell._content.addEventListener('cell-focusout', spy);
 
             right();
 
