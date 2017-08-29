@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype htmlgrid
 
 <html>
 
@@ -130,67 +130,67 @@
         }
 
         function tab() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 9, [], 'Tab');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 9, [], 'Tab');
         }
 
         function shiftTab() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 9, 'shift', 'Tab');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 9, 'shift', 'Tab');
         }
 
         function left() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 37, [], 'ArrowLeft');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 37, [], 'ArrowLeft');
         }
 
         function up() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 38, [], 'ArrowUp');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 38, [], 'ArrowUp');
         }
 
         function right() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 39, [], 'ArrowRight');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 39, [], 'ArrowRight');
         }
 
         function down() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 40, [], 'ArrowDown');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 40, [], 'ArrowDown');
         }
 
         function space() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 32, [], ' ');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 32, [], ' ');
         }
 
         function pageUp() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 33, [], 'PageUp');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 33, [], 'PageUp');
         }
 
         function pageDown() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 34, [], 'PageDown');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 34, [], 'PageDown');
         }
 
         function end() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 35, [], 'End');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 35, [], 'End');
         }
 
         function ctrlEnd() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 35, 'ctrl', 'End');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 35, 'ctrl', 'End');
         }
 
         function home() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 36, [], 'Home');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 36, [], 'Home');
         }
 
         function ctrlHome() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 36, 'ctrl', 'Home');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 36, 'ctrl', 'Home');
         }
 
         function enter(target) {
-          MockInteractions.keyDownOn(target || grid.root.activeElement, 13, [], 'Enter');
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 13, [], 'Enter');
         }
 
         function escape() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 27, [], 'Escape');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 27, [], 'Escape');
         }
 
         function f2() {
-          MockInteractions.keyDownOn(grid.root.activeElement, 113, [], 'F2');
+          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 113, [], 'F2');
         }
 
         function getFirstHeaderCell() {
@@ -243,12 +243,12 @@
         }
 
         function getFocusedCellIndex() {
-          const focusedCell = grid.root.activeElement;
+          const focusedCell = grid.shadowRoot.activeElement;
           return Array.from(focusedCell.parentNode.children).indexOf(focusedCell);
         }
 
         function getFocusedRowIndex() {
-          const focusedRow = grid.root.activeElement.parentNode;
+          const focusedRow = grid.shadowRoot.activeElement.parentNode;
           return Array.from(focusedRow.parentNode.children).indexOf(focusedRow);
         }
 
@@ -401,19 +401,19 @@
           it('should set virtual focus to header on header cell click', function() {
             clickFirstHeaderCell();
 
-            expect(grid.root.activeElement).to.equal(grid._headerFocusable);
+            expect(grid.shadowRoot.activeElement).to.equal(grid._headerFocusable);
           });
 
           it('should set virtual focus to body on body cell click', function() {
             clickItem(0);
 
-            expect(grid.root.activeElement).to.equal(grid._itemsFocusable);
+            expect(grid.shadowRoot.activeElement).to.equal(grid._itemsFocusable);
           });
 
           it('should set virtual focus to footer on footer cell click', function() {
             clickFirstFooterCell();
 
-            expect(grid.root.activeElement).to.equal(grid._footerFocusable);
+            expect(grid.shadowRoot.activeElement).to.equal(grid._footerFocusable);
           });
 
           // it('should move virtual focus from header to body on tab', function() {
@@ -678,20 +678,20 @@
               right();
 
               expect(getFocusedCellIndex()).to.equal(2);
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.not.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(grid.shadowRoot.activeElement);
             });
 
             it('should not navigate to row details with end', function() {
               end();
 
               expect(getFocusedCellIndex()).to.equal(2);
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.not.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(grid.shadowRoot.activeElement);
             });
 
             it('should navigate to row details with down arrow', function() {
               down();
 
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
               expect(getFocusedRowIndex()).to.equal(0);
             });
 
@@ -700,7 +700,7 @@
 
               down();
 
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.not.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(grid.shadowRoot.activeElement);
               expect(getFocusedRowIndex()).to.equal(1);
               expect(getFocusedCellIndex()).to.equal(0);
             });
@@ -763,7 +763,7 @@
 
               up();
 
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
               expect(getFocusedRowIndex()).to.equal(0);
               expect(getFocusedCellIndex()).to.not.equal(0);
             });
@@ -775,7 +775,7 @@
 
               up();
 
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.not.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(grid.shadowRoot.activeElement);
               expect(getFocusedRowIndex()).to.equal(0);
               expect(getFocusedCellIndex()).to.equal(0);
             });
@@ -784,14 +784,14 @@
               var rowDetailsCell = findRowDetailsCell(body.children[0]);
               grid.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: rowDetailsCell}}));
 
-              expect(findRowDetailsCell(grid.root.activeElement.parentNode)).to.equal(grid.root.activeElement);
+              expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
             });
 
             it('should focus on the first element inside details with enter', function(done) {
               down();
 
               animationFrameFlush(function() {
-                var input = getCellContent(grid.root.activeElement).children[0];
+                var input = getCellContent(grid.shadowRoot.activeElement).children[0];
                 input.focus = sinon.spy();
 
                 enter();
@@ -847,7 +847,7 @@
 
             ctrlEnd();
 
-            expect(grid.root.activeElement.parentNode.index).to.equal(grid.items.length - 1);
+            expect(grid.shadowRoot.activeElement.parentNode.index).to.equal(grid.items.length - 1);
           });
 
           describe('horizontal scrolling', function() {
