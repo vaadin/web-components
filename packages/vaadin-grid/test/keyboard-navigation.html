@@ -1000,8 +1000,8 @@
 
               pageDown();
 
-              // 9 items per page.
-              expect(getFocusedRowIndex()).to.equal(0 + 9);
+              expect(grid.lastVisibleIndex).to.be.gt(1); // sanity check
+              expect(getFocusedRowIndex()).to.equal(grid.lastVisibleIndex - 1);
             });
 
             it('should scroll up one page with page up', function(done) {
