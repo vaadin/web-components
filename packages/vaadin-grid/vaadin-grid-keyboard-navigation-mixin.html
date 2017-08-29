@@ -55,6 +55,8 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
 
+        this._detectInteracting(e);
+
         if (e.composedPath().indexOf(this.$.table) === 3) {
           const cell = e.composedPath()[0];
 
@@ -281,20 +283,23 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onInteractionKeyDown(e, key) {
-      this._detectInteracting(e);
+      const localTarget = e.composedPath()[0];
+      const localTargetIsTextInput = localTarget.localName === 'input' && 
+        !/^(button|checkbox|color|file|image|radio|range|reset|submit)$/i.test(localTarget.type);
 
       let wantInteracting;
       switch (key) {
         case 'Enter':
-          wantInteracting = true;
+          wantInteracting = this.interacting ? !localTargetIsTextInput : true;
           break;
         case 'Escape':
           wantInteracting = false;
           break;
         case 'F2':
-          wantInteracting = !wantInteracting;
+          wantInteracting = !this.interacting;
           break;
       }
+
 
       const tableIndex = e.composedPath().indexOf(this.$.table);
       const rowGroup = e.composedPath()[tableIndex - 1];
@@ -308,12 +313,14 @@ This program is available under Apache License Version 2.0, available at https:/
             e.preventDefault();
             focusTarget.focus();
             this.interacting = true;
+            this.navigating = false;
           }
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
           this._focusCell(cell, rowGroup);
           this.interacting = false;
+          this.navigating = true;
         }
       }
     }

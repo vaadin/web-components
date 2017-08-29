@@ -120,77 +120,77 @@
         }
 
         function clickFirstBodyInput(rowIndex) {
-          var cell = getCell(0, 1);
+          var cell = getCell(rowIndex || 0, 1);
 
-          getCellContent(cell).children[0].click();
-
-          Polymer.Base.fire('focus', {}, {
-            node: getCellContent(cell).children[0]
-          });
+          var input = getCellContent(cell).children[0];
+          input.click();
+          input.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
+          input.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
+          return input;
         }
 
-        function tab() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 9, [], 'Tab');
+        function tab(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 9, [], 'Tab');
         }
 
-        function shiftTab() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 9, 'shift', 'Tab');
+        function shiftTab(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 9, 'shift', 'Tab');
         }
 
-        function left() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 37, [], 'ArrowLeft');
+        function left(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 37, [], 'ArrowLeft');
         }
 
-        function up() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 38, [], 'ArrowUp');
+        function up(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 38, [], 'ArrowUp');
         }
 
-        function right() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 39, [], 'ArrowRight');
+        function right(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 39, [], 'ArrowRight');
         }
 
-        function down() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 40, [], 'ArrowDown');
+        function down(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 40, [], 'ArrowDown');
         }
 
-        function space() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 32, [], ' ');
+        function space(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 32, [], ' ');
         }
 
-        function pageUp() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 33, [], 'PageUp');
+        function pageUp(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 33, [], 'PageUp');
         }
 
-        function pageDown() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 34, [], 'PageDown');
+        function pageDown(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 34, [], 'PageDown');
         }
 
-        function end() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 35, [], 'End');
+        function end(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 35, [], 'End');
         }
 
-        function ctrlEnd() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 35, 'ctrl', 'End');
+        function ctrlEnd(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 35, 'ctrl', 'End');
         }
 
-        function home() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 36, [], 'Home');
+        function home(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 36, [], 'Home');
         }
 
-        function ctrlHome() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 36, 'ctrl', 'Home');
+        function ctrlHome(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 36, 'ctrl', 'Home');
         }
 
         function enter(target) {
           MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 13, [], 'Enter');
         }
 
-        function escape() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 27, [], 'Escape');
+        function escape(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 27, [], 'Escape');
         }
 
-        function f2() {
-          MockInteractions.keyDownOn(grid.shadowRoot.activeElement, 113, [], 'F2');
+        function f2(target) {
+          MockInteractions.keyDownOn(target || grid.shadowRoot.activeElement, 113, [], 'F2');
         }
 
         function getFirstHeaderCell() {
@@ -247,6 +247,14 @@
         function getFocusedRowIndex() {
           const focusedRow = grid.shadowRoot.activeElement.parentNode;
           return Array.from(focusedRow.parentNode.children).indexOf(focusedRow);
+        }
+
+        function getFocusableCellIndex() {
+          return Array.from(grid._itemsFocusable.parentNode.children).indexOf(grid._itemsFocusable);
+        }
+
+        function getFocusableRowIndex() {
+          return grid._itemsFocusable.parentNode.index;
         }
 
         describe('navigation mode', function() {
@@ -1285,9 +1293,8 @@
 
             tab();
 
-            // expecting virtual focus to remain in place, instead actual focus
-            // moves.
-            expect(grid._virtualFocus).to.equal(body);
+            // expecting focusable item cell to remain in place, instead actual focus moves.
+            expect(grid._itemsFocusable).to.equal(getCell(0, 1));
           });
 
           it('should focus the element with `focus-target` when entering interaction mode', function() {
@@ -1305,48 +1312,52 @@
           });
 
           it('should not navigate with arrow up when in interaction mode', function() {
-            clickItem(1);
-            grid.interacting = true;
+            var input = clickFirstBodyInput(1);
 
-            up();
+            up(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(1);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with arrow down when in interaction mode', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            down();
+            down(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with arrow left when in interaction mode', function() {
             right();
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            left();
+            left(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with arrow right when in interaction mode', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            right();
+            right(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with home when in interaction mode', function() {
             right();
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            home();
+            home(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
             expect(getFocusedCellIndex()).to.equal(1);
@@ -1354,56 +1365,60 @@
 
           it('should not navigate with ctrl+home when in interaction mode', function() {
             right();
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            ctrlHome();
+            ctrlHome(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with end when in interaction mode', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            end();
+            end(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with ctrl+end when in interaction mode', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            ctrlEnd();
+            ctrlEnd(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with page down when in interaction mode', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            pageDown();
+            pageDown(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(0);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not navigate with page up when in interaction mode', function() {
-            clickItem(1);
-            grid.interacting = true;
+            var input = clickFirstBodyInput(1);
 
-            pageUp();
+            pageUp(input);
+            escape(input);
 
             expect(getFocusedRowIndex()).to.equal(1);
-            expect(getFocusedCellIndex()).to.equal(0);
+            expect(getFocusedCellIndex()).to.equal(1);
           });
 
           it('should not activate on space when in interaction mode', function() {
             grid.activeItem = null;
-            clickFirstBodyInput(0);
+            var input = clickFirstBodyInput(0);
 
-            space();
+            space(input);
 
             expect(grid.activeItem).to.be.null;
           });
@@ -1417,23 +1432,25 @@
           });
 
           it('should exit interaction mode with F2', function() {
+            var input = getCellContent(getCell(0, 1)).children[0];
+
             right();
             f2();
 
-            f2();
+            f2(input);
 
             expect(grid.interacting).to.be.false;
           });
 
           it('should remove focus from cell when exiting interaction mode with F2', function() {
+            var input = getCellContent(getCell(0, 1)).children[0];
+
             right();
             enter();
-            grid.navigating = false;
-            // footerTrap.focus.reset();
 
-            f2();
+            f2(input);
 
-            // expect(footerTrap.focus.callCount).to.equal(1);
+            expect(document.activeElement).to.not.equal(input);
           });
 
           it('should exit interaction mode with escape', function() {
@@ -1445,27 +1462,28 @@
           });
 
           it('should remove focus from cell with escape', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            escape(); // revert to navigation first
-            // expect(footerTrap.focus.callCount).to.equal(1);
+            escape(input); // revert to navigation first
 
-            escape();
+            escape(); // unfortunately this does not trigger native blur
+            focusable.focus(); // simulate native blur on escape
+
             expect(grid.navigating).to.be.false;
           });
 
           it('should revert to navigation from interaction mode with escape', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            escape();
+            escape(input);
 
             expect(grid.navigating).to.be.true;
           });
 
           it('should revert to navigation from interaction mode with F2', function() {
-            grid.interacting = true;
+            var input = clickFirstBodyInput(0);
 
-            f2();
+            f2(input);
 
             expect(grid.interacting).to.be.false;
             expect(grid.navigating).to.be.true;
@@ -1476,6 +1494,7 @@
             grid.interacting = false;
 
             escape();
+            focusable.focus(); // simulate native blur on escape
 
             expect(grid.navigating).to.be.false;
           });
