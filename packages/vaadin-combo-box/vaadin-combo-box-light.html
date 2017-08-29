@@ -82,8 +82,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.ComboBoxMixin
      * @mixes Vaadin.ThemableMixin
      */
-    class ComboBoxLightElement extends
-    Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.mixinBehaviors([Polymer.IronA11yKeysBehavior], Polymer.Element))) {
+    class ComboBoxLightElement extends Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.mixinBehaviors(
+      [Polymer.IronA11yKeysBehavior], Polymer.Element
+    ))) {
 
       static get is() {
         return 'vaadin-combo-box-light';

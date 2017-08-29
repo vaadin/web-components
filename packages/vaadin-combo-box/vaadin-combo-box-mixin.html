@@ -625,8 +625,8 @@ This program is available under Apache License Version 2.0, available at https:/
         this._setOverlayItems(this.filteredItems);
 
         this._focusedIndex = (this.opened || this._userDefinedFilter) ?
-            this.$.overlay.indexOfLabel(this.filter) :
-            this._indexOfValue(this.value, this.filteredItems);
+          this.$.overlay.indexOfLabel(this.filter) :
+          this._indexOfValue(this.value, this.filteredItems);
 
         // async needed to reposition correctly after filtering
         // (especially when aligned on top of input)
