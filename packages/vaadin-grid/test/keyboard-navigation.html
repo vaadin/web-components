@@ -228,7 +228,6 @@
         }
 
         function tabToHeader() {
-          // footerTrap.focus();
           grid._headerFocusable.focus();
         }
 
@@ -237,8 +236,6 @@
         }
 
         function shiftTabToFooter() {
-          // grid._shiftTabbed = true;
-          // footerTrap.focus();
           grid._footerFocusable.focus();
         }
 
@@ -1141,40 +1138,27 @@
 
         describe('keyboard focus', function() {
           it('should have focused first cell in header by default', function() {
-            expect(header.hasAttribute('focused')).to.be.false;
+            expect(grid.shadowRoot.activeElement).to.be.null;
 
             tabToHeader();
 
-            var firstRow = header.children[0];
-            expect(firstRow.hasAttribute('focused')).to.be.true;
-
-            var firstCell = firstRow.children[0];
-            expect(firstCell.hasAttribute('focused')).to.be.true;
+            expect(grid.shadowRoot.activeElement).to.equal(header.children[0].children[0]);
           });
 
           it('should have focused first cell in body by default', function() {
-            expect(body.hasAttribute('focused')).to.be.false;
+            expect(grid.shadowRoot.activeElement).to.be.null;
 
-            tabToHeader();
-            tab();
+            tabToBody();
 
-            var firstRow = body.children[0];
-            expect(firstRow.hasAttribute('focused')).to.be.true;
-
-            var firstCell = firstRow.children[0];
-            expect(firstCell.hasAttribute('focused')).to.be.true;
+            expect(grid.shadowRoot.activeElement).to.equal(body.children[0].children[0]);
           });
 
           it('should have focused first cell in footer by default', function() {
-            expect(footer.hasAttribute('focused')).to.be.false;
+            expect(grid.shadowRoot.activeElement).to.be.null;
 
             shiftTabToFooter();
 
-            var firstRow = footer.children[0];
-            expect(firstRow.hasAttribute('focused')).to.be.true;
-
-            var firstCell = firstRow.children[0];
-            expect(firstCell.hasAttribute('focused')).to.be.true;
+            expect(grid.shadowRoot.activeElement).to.equal(footer.children[0].children[0]);
           });
 
           it('should focus on click', function() {
