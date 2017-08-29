@@ -93,7 +93,7 @@
       });
 
       it('should prevent default on toggle element down', () => {
-        const e = new CustomEvent('down', {bubbles: true});
+        const e = new CustomEvent('click', {bubbles: true});
         const spy = sinon.spy(e, 'preventDefault');
         comboBox._toggleElement.dispatchEvent(e);
         expect(spy.called).to.be.true;

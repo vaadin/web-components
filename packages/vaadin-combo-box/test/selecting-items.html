@@ -326,7 +326,7 @@
     it('should cancel down event to avoid input blur', () => {
       combobox.open();
 
-      const event = fire('down', clearIcon);
+      const event = fire('click', clearIcon);
 
       expect(event.defaultPrevented).to.eql(true);
     });
