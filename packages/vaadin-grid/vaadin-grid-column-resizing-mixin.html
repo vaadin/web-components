@@ -53,7 +53,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      Polymer.Gestures.addListener(this.$.header, 'track', this._onHeaderTrack.bind(this));
+      Polymer.Gestures.addListener(this.$.scroller, 'track', this._onHeaderTrack.bind(this));
+      this.$.scroller.addEventListener('touchmove', e => {
+        if (this.$.scroller.hasAttribute('column-resizing')) {
+          e.preventDefault();
+        }
+      });
     }
 
     _onHeaderTrack(e) {
