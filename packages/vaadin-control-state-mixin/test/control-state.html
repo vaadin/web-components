@@ -208,6 +208,13 @@
             done();
           });
         });
+
+        it('should focus an element only once on click', () => {
+          customElement._focus = sinon.spy();
+          customElement.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+          customElement.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
+          expect(customElement._focus.callCount).to.eql(1);
+        });
       });
     });
   </script>
