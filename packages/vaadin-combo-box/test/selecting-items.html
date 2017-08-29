@@ -232,7 +232,7 @@
 
       it('should fire on clear', () => {
         combobox.value = 'foo';
-        fire('up', combobox._clearElement);
+        fire('click', combobox._clearElement);
 
         expect(changeSpy.callCount).to.equal(1);
       });
@@ -308,7 +308,7 @@
     it('should clear the selection when tapping on the icon', () => {
       combobox.open();
 
-      fire('up', clearIcon);
+      fire('click', clearIcon);
 
       expect(combobox.value).to.eql('');
       expect(combobox.$.overlay._selectedItem).to.be.null;
@@ -318,7 +318,7 @@
     it('should close the dropdown after clearing a selection', () => {
       combobox.open();
 
-      fire('up', clearIcon);
+      fire('click', clearIcon);
 
       expect(combobox.opened).to.eql(false);
     });

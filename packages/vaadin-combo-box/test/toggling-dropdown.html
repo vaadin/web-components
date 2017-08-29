@@ -34,19 +34,15 @@
     let comboboxLight;
 
     function tapLabel() {
-      fire('up', combobox.inputElement.root.querySelector('label'));
+      fire('click', combobox.inputElement.root.querySelector('label'));
     }
 
     function tapInput() {
-      // This listener should listen for "tap" again once composedPath() issues with touch devices
-      // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      fire('up', combobox.inputElement);
+      fire('click', combobox.inputElement);
     }
 
     function tapToggleIcon() {
-      // This listener should listen for "tap" again once composedPath() issues with touch devices
-      // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      fire('up', combobox._toggleElement);
+      fire('click', combobox._toggleElement);
     }
 
     function overlay() {

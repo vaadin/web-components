@@ -85,10 +85,10 @@
       });
 
       it('should toggle overlay by tapping toggle element', () => {
-        comboBox._toggleElement.dispatchEvent(new CustomEvent('up', {bubbles: true}));
+        comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
         expect(comboBox.opened).to.be.true;
 
-        comboBox._toggleElement.dispatchEvent(new CustomEvent('up', {bubbles: true}));
+        comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
         expect(comboBox.opened).to.be.false;
       });
 

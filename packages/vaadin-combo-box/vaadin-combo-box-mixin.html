@@ -199,10 +199,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('vaadin-combo-box-dropdown-closed', this._onClosed.bind(this));
       this.addEventListener('vaadin-combo-box-dropdown-opened', this._onOpened.bind(this));
       this.addEventListener('keydown', this._onKeyDown.bind(this));
-
-     // This listener should listen for "tap" again once composedPath() issues with touch devices
-      // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      this._addEventListenerToNode(this, 'up', this._onTap.bind(this));
+      this.addEventListener('click', this._onClick.bind(this));
     }
 
     _onBlur() {
@@ -221,9 +218,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _onTap(e) {
-      // prevent 'tap' from getting generated and closing the overlay etc.
-      Polymer.Gestures.prevent('tap');
+    _onClick(e) {
       this._closeOnBlurIsPrevented = true;
 
       const path = e.composedPath();
