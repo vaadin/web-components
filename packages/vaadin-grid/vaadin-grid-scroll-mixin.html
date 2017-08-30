@@ -14,7 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
         z-index: -2;
       }
 
-      vaadin-grid-table[ios] #table {
+      #scroller[ios] #table {
         transform: none;
       }
 
@@ -60,12 +60,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get properties() {
       return {
-
-        ios: {
-          type: Boolean,
-          value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/),
-          reflectToAttribute: true
-        },
 
         fixedSections: {
           type: Boolean,
