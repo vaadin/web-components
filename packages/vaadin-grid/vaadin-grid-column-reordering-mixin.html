@@ -85,13 +85,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('touchstart', this._onTouchStart.bind(this));
       this.addEventListener('touchmove', this._onTouchMove.bind(this));
       this.addEventListener('touchend', this._onTouchEnd.bind(this));
-      this.addEventListener('contextmenu', this._onContextMenu.bind(this));
-    }
-
-    _onContextMenu(e) {
-      if (this.hasAttribute('reordering')) {
-        e.preventDefault();
-      }
     }
 
     _onTouchStart(e) {

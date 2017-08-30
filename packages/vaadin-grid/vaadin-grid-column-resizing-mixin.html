@@ -53,12 +53,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      Polymer.Gestures.addListener(this.$.scroller, 'track', this._onHeaderTrack.bind(this));
-      this.$.scroller.addEventListener('touchmove', e => {
-        if (this.$.scroller.hasAttribute('column-resizing')) {
-          e.preventDefault();
-        }
-      });
+      const el = this.$.scroller;
+      Polymer.Gestures.addListener(el, 'track', this._onHeaderTrack.bind(this));
+
+      // Allow scrolling in headers if not resizing.
+      el.addEventListener('touchmove', e => el.hasAttribute('column-resizing') && e.preventDefault());
+
+      // Disable contextmenu if header has reordering enabled or when on resize separator
+      el.addEventListener('contextmenu',
+        e => (this.columnReorderingAllowed || e.currentTarget.getAttribute('part') != 'resize-handle') && e.preventDefault());
     }
 
     _onHeaderTrack(e) {
