@@ -100,7 +100,8 @@ This program is available under Apache License Version 2.0, available at https:/
         '_stampHeaderTemplate(headerTemplate, _headerCell)',
         '_stampFooterTemplate(footerTemplate, _footerCell)',
         '_emptyCellsChanged(_emptyCells, _emptyCells.*)',
-        '_resizableChanged(resizable, _headerCell)'
+        '_resizableChanged(resizable, _headerCell)',
+        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)'
       ]
     }
 
@@ -315,6 +316,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
+      this._allCells.forEach(cell => cell.setAttribute('reorder-status', reorderStatus));
+    }
+
     _resizableChanged(resizable, headerCell) {
       if (resizable === undefined || headerCell === undefined) {
         return;
@@ -400,8 +405,7 @@ This program is available under Apache License Version 2.0, available at https:/
       static get observers() {
         return [
           '_templateChanged(template)',
-          '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
-          '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)'
+          '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
         ];
       }
 
@@ -429,10 +433,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this._grid._updateLastFrozen && this._grid._updateLastFrozen();
           this._grid.notifyResize && this._grid.notifyResize();
         }
-      }
-
-      _reorderStatusChanged(reorderStatus, headerCell, footerCell, cells) {
-        this._allCells.forEach(cell => cell.setAttribute('reorder-status', reorderStatus));
       }
 
     }
