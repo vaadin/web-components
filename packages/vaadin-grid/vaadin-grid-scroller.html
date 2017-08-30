@@ -181,6 +181,12 @@ This program is available under Apache License Version 2.0, available at https:/
         // Ignore
       }
 
+      // Need to override to use 2d translates to avoid Sarafi rendering issues
+      translate3d(x, y, z, node) {
+        node = node || this;
+        node.style.transform = 'translate(' + x + ',' + y + ')';
+      }
+
       _adjustVirtualIndexOffset(delta) {
         if (Math.abs(delta) > 10000) {
           if (this._noScale) {
