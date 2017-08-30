@@ -45,6 +45,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-checkbox">
   <template>
+    <style>
+      :host([disabled]) {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
 
     <label part="wrapper" id="label" on-click="_handleClick">
       <input
