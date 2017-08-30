@@ -96,19 +96,19 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Set to true to enable closing dialog on outside click
+             * Set to true to disable closing dialog on outside click
              */
-            closeOnOutsideClick: {
+            noCloseOnOutsideClick: {
               type: Boolean,
               value: false
             },
 
             /**
-             * Set to false to disable closing dialog on Escape press
+             * Set to true to disable closing dialog on Escape press
              */
-            closeOnEsc: {
+            noCloseOnEsc: {
               type: Boolean,
-              value: true
+              value: false
             },
 
             _contentTemplate: Object
@@ -153,19 +153,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         /**
-         * Handle outside click and close the dialog if `closeOnOutsideClick` is true
+         * Close the dialog if `noCloseOnOutsideClick` isn't set to true
          */
         _handleOutsideClick(e) {
-          if (!this.closeOnOutsideClick) {
+          if (this.noCloseOnOutsideClick) {
             e.preventDefault();
           }
         }
 
         /**
-         * Handle ESC press and close the dialog if `closeOnEsc` is true
+         * Close the dialog if `noCloseOnEsc` isn't set to true
          */
         _handleEscPress(e) {
-          if (!this.closeOnEsc) {
+          if (this.noCloseOnEsc) {
             e.preventDefault();
           }
         }

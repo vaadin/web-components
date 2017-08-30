@@ -20,10 +20,10 @@
   </test-fixture>
 
   <script>
-    describe('vaadin-dialog', function() {
+    describe('vaadin-dialog', () => {
       var dialog, backdrop, overlay;
 
-      beforeEach(function() {
+      beforeEach(() => {
         dialog = fixture('default');
         overlay = dialog.$.overlay;
         backdrop = overlay.$.backdrop;
@@ -33,26 +33,30 @@
         expect(overlay.getAttribute('role')).to.be.eql('dialog');
       });
 
-      it('should close itself on ESC press', function() {
-        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
-        expect(dialog.opened).to.eql(false);
+      describe('no-close-on-esc', () => {
+        it('should close itself on ESC press by default', () => {
+          MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+          expect(dialog.opened).to.eql(false);
+        });
+
+        it('should not close itself on ESC press when no-close-on-esc is true', () => {
+          dialog.noCloseOnEsc = true;
+          MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+          expect(dialog.opened).to.eql(true);
+        });
       });
 
-      it('should not close itself on ESC press when close-on-esc is false', function() {
-        dialog.closeOnEsc = false;
-        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
-        expect(dialog.opened).to.eql(true);
-      });
+      describe('no-close-on-outside-click', () => {
+        it('should close itself on outside click by default', () => {
+          backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+          expect(dialog.opened).to.eql(false);
+        });
 
-      it('should not close itself on outside click', function() {
-        backdrop.click();
-        expect(dialog.opened).to.eql(true);
-      });
-
-      it('should close itself on outside click when close-on-outside-click is true', function() {
-        dialog.closeOnOutsideClick = true;
-        backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
-        expect(dialog.opened).to.eql(false);
+        it('should not close itself on outside click when no-close-on-outside-click is true', () => {
+          dialog.noCloseOnOutsideClick = true;
+          backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+          expect(dialog.opened).to.eql(true);
+        });
       });
     });
   </script>

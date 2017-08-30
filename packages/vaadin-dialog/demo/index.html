@@ -24,7 +24,8 @@
           <template>
             <vaadin-dialog id="simpledialog">
               <template>
-                <div>This simple dialog will close by pressing the Esc key</div>
+                <div>This simple dialog will close by pressing the Esc key,</div>
+                <div> or by a mouse click anywhere outside the dialog area</div>
               </template>
             </vaadin-dialog>
             <vaadin-button on-click="showSimpleDialog">Show dialog</vaadin-button>
@@ -35,31 +36,6 @@
             var simpleDialogExample = document.querySelector('#simple-dialog-example');
             simpleDialogExample.showSimpleDialog = function() {
               simpleDialogExample.$.simpledialog.opened = true;
-            };
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h3>Another simple dialog</h3>
-    <demo-snippet>
-      <template>
-        <dom-bind id="another-simple-dialog-example">
-          <template>
-            <vaadin-dialog id="anotherdialog" close-on-outside-click>
-              <template>
-                <div>This simple dialog will close by pressing the Esc key,</div>
-                <div> or by a mouse click anywhere outside the dialog area</div>
-              </template>
-            </vaadin-dialog>
-            <vaadin-button on-click="showAnotherSimpleDialog">Show dialog</vaadin-button>
-          </template>
-        </dom-bind>
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var anotherSimpleDialogExample = document.querySelector('#another-simple-dialog-example');
-            anotherSimpleDialogExample.showAnotherSimpleDialog = function() {
-              anotherSimpleDialogExample.$.anotherdialog.opened = true;
             };
           });
         </script>
