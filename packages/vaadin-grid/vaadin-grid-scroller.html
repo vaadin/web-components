@@ -52,6 +52,10 @@ This program is available under Apache License Version 2.0, available at https:/
       * @protected
       */
       _createScrollerRows() {}
+      /**
+      * @protected
+      */
+      _canPopulate() {}
 
       /**
       * @private
@@ -101,8 +105,28 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      _positionItems() {
+        this._adjustScrollPosition();
+
+        let rePosition;
+        if (isNaN(this._physicalTop)) {
+          rePosition = true;
+          this._physicalTop = 0;
+        }
+
+        var y = this._physicalTop;
+        this._iterateItems(function(pidx, vidx) {
+          this._physicalItems[pidx].style.transform = `translateY(${y}px)`;
+          y += this._physicalSizes[pidx];
+        });
+
+        if (rePosition) {
+          this.scrollToIndex(0);
+        }
+      }
+
       _increasePoolIfNeeded(count) {
-        if (count === 0 && this._scrollingToIndex) {
+        if ((count === 0 && this._scrollingToIndex) || !this._canPopulate()) {
           return;
         }
 
@@ -179,12 +203,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _itemsChanged() {
         // Ignore
-      }
-
-      // Need to override to use 2d translates to avoid Sarafi rendering issues
-      translate3d(x, y, z, node) {
-        node = node || this;
-        node.style.transform = 'translate(' + x + ',' + y + ')';
       }
 
       _adjustVirtualIndexOffset(delta) {

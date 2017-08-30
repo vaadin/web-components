@@ -241,6 +241,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _canPopulate() {
+      return this._hasData;
+    }
+
     _loadPage(page, cb) {
       cb = cb || this._updateItems.bind(this);
       if (!this._cache[page]) {
@@ -279,7 +283,7 @@ This program is available under Apache License Version 2.0, available at https:/
     clearCache() {
       this._cache = {};
       this._pendingRequests = {};
-      if (this.hasData) {
+      if (this._hasData) {
         this._update();
       }
       this._flushItemsDebouncer();
@@ -313,12 +317,16 @@ This program is available under Apache License Version 2.0, available at https:/
         this.scrollToIndex(this.firstVisibleIndex);
       }
 
-      if (!this.hasData) {
+      if (!this._hasData) {
         // load data before adding rows to make sure they have content when
         // rendered for the first time.
         this._loading = true;
         this._loadPage(0, () => {
-          this.hasData = true;
+          const hadData = this._hasData;
+          this._hasData = true;
+          if (!hadData) {
+            this.notifyResize();
+          }
         });
       }
     }
