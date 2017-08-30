@@ -61,8 +61,10 @@ This program is available under Apache License Version 2.0, available at https:/
       * @private
       */
       scrollToIndex(index) {
-        this._pendingScrollToIndex = null;
-        if (!this.$.items.style.borderTopWidth) {
+        if (index > 0) {
+          this._pendingScrollToIndex = null;
+        }
+        if (!this.$.items.style.borderTopWidth && index > 0) {
           // Schedule another scroll to be invoked once init is complete
           this._pendingScrollToIndex = index;
         }
@@ -233,7 +235,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           // At end
           var maxOffset = this.size - this._virtualCount;
-          if (this._scrollTop >= this._maxScrollTop) {
+          if (this._scrollTop >= this._maxScrollTop && this._maxScrollTop > 0) {
             this._vidxOffset = maxOffset;
             if (oldOffset !== this._vidxOffset) {
               super.scrollToIndex(this._virtualCount);

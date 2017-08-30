@@ -249,6 +249,23 @@
         expect(e.defaultPrevented).to.be.true;
       });
 
+      it('should cancel touchmove', function() {
+        dragStart(headerContent[0]);
+        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
+        expect(e.defaultPrevented).to.be.true;
+      });
+
+      it('should not cancel touchmove', function() {
+        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
+        expect(e.defaultPrevented).to.be.false;
+      });
+
+      it('should not cancel touchmove on resizer', function() {
+        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
+          getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
+        expect(e.defaultPrevented).to.be.false;
+      });
+
       it('should start reordering after 300ms after touchstart', function(done) {
         const rect = headerContent[0].getBoundingClientRect();
         makeSoloTouchEvent('touchstart', {x: rect.left, y: rect.top}, headerContent[0]);
@@ -278,23 +295,6 @@
         grid.columnReorderingAllowed = false;
         dragStart(headerContent[0]);
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
-      });
-
-      it('should cancel touchmove', function() {
-        dragStart(headerContent[0]);
-        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
-        expect(e.defaultPrevented).to.be.true;
-      });
-
-      it('should not cancel touchmove', function() {
-        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
-        expect(e.defaultPrevented).to.be.false;
-      });
-
-      it('should not cancel touchmove on resizer', function() {
-        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
-        expect(e.defaultPrevented).to.be.false;
       });
 
       describe('basic reordering', function() {

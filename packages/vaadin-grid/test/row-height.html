@@ -79,6 +79,7 @@
 
       function init(fixtureName, cb) {
         grid = fixture(fixtureName);
+        grid.dataProvider = infiniteDataProvider;
         listenOnce(grid, 'animationend', function() {
           flushGrid(grid);
 

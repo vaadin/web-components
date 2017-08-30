@@ -171,7 +171,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
 
-        this._grid.selectedItems = selectAll && this._grid.items ? this._grid._filter(this._grid.items) : [];
+        this._grid.selectedItems = selectAll && Array.isArray(this._grid.items) ? this._grid._filter(this._grid.items) : [];
       }
 
       // Return true if array `a` contains all the items in `b`
@@ -219,7 +219,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _onDataProviderChanged(e) {
-        this._selectAllHidden = !this._grid.items;
+        this._selectAllHidden = !Array.isArray(this._grid.items);
       }
     }
 

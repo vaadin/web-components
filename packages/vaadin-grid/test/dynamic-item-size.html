@@ -52,12 +52,12 @@
       it('update size using item index', function() {
         var firstItem = getFirstVisibleItem(grid);
 
-        expect(firstItem.offsetHeight).to.equal(18);
+        expect(firstItem.offsetHeight).to.equal(20);
 
         grid.classList.add('high');
         flushGrid(grid);
 
-        expect(firstItem.offsetHeight).to.eql(100);
+        expect(firstItem.offsetHeight).to.eql(102);
       });
 
     });
