@@ -31,6 +31,12 @@
   </test-fixture>
 
   <script>
+    const click = (el) => {
+      el.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+      el.dispatchEvent(new CustomEvent('mouseup', {bubbles: true, composed: true}));
+      el.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+    };
+
     describe('overlay', function() {
       var overlay, parent, content, backdrop, focusableElements;
 
@@ -141,7 +147,7 @@
       });
 
       it('should not close on inside click', () => {
-        content.click();
+        click(content);
 
         expect(overlay.opened).to.be.true;
       });
@@ -150,7 +156,7 @@
         var outsideClickHandler = () => done();
 
         overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
-        parent.click();
+        click(parent);
         overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
       });
 
@@ -159,7 +165,7 @@
 
         overlay.withBackdrop = true;
         overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
-        backdrop.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+        click(backdrop);
         overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
       });
 
@@ -169,12 +175,12 @@
         };
 
         overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
-        content.click();
+        click(content);
         overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
       });
 
       it('should close on outside click', () => {
-        parent.click();
+        click(parent);
 
         expect(overlay.opened).to.be.false;
       });
@@ -183,7 +189,7 @@
         overlay.addEventListener('vaadin-overlay-outside-click', e => {
           e.preventDefault();
         });
-        parent.click();
+        click(parent);
 
         expect(overlay.opened).to.be.true;
       });
@@ -192,7 +198,7 @@
         overlay.addEventListener('vaadin-overlay-outside-click', e => {
           e.preventDefault();
         });
-        backdrop.click();
+        click(backdrop);
 
         expect(overlay.opened).to.be.true;
       });
@@ -210,7 +216,7 @@
         parent.dispatchEvent(evtOnOpened);
         expect(evtOnOpened.defaultPrevented).to.be.true;
 
-        parent.click();
+        click(parent);
 
         const evtOnClosed = new CustomEvent('iron-overlay-canceled', {bubbles: true, cancelable: true});
         parent.dispatchEvent(evtOnClosed);
@@ -226,8 +232,7 @@
             done();
           }, 1);
         });
-
-        parent.click();
+        click(parent);
       });
     });
   </script>
