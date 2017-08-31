@@ -16,13 +16,13 @@ install:
   - polymer install --variants
 
 before_script:
-  - gulp lint
-  - polymer lint --rules polymer-2-hybrid --input *.html
-  # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
+  # - gulp lint
+  # - polymer lint --rules polymer-2-hybrid --input *.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - echo skip xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/basic.html
     test/app-localize-behavior.html
     test/column.html
@@ -33,7 +33,7 @@ script:
     test/data-provider.html
     test/filtering.html
     --env saucelabs
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - echo skip xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/keyboard-navigation.html
     test/physical-count.html
     test/hidden-grid.html
@@ -45,7 +45,7 @@ script:
     test/scrolling-mode.html
     test/row-height.html
     --env saucelabs
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - echo skip xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/row-details.html
     test/selecting.html
     test/style-scope.html
@@ -58,13 +58,13 @@ script:
     test/doctype.html
     test/lazy-import.html
     --env saucelabs
-  - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
-      gemini test test/visual;
-    fi
+  #- if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+  #    npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
+  #    gemini test test/visual;
+  #  fi
   # - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
   #     xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
   #   fi
 
 after_success:
-  - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
+  # - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
