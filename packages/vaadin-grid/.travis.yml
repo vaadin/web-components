@@ -22,42 +22,44 @@ before_script:
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/basic.html
     test/app-localize-behavior.html
     test/column.html
     test/column-group.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/column-groups.html
     test/column-resizing.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/column-reordering.html
     test/data-provider.html
     test/filtering.html
-    --env saucelabs
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/keyboard-navigation.html
     test/physical-count.html
     test/hidden-grid.html
     test/million-dollar-scrolling.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/dynamic-item-size.html
     test/frozen-columns.html
     test/outer-scroller.html
     test/templates.html
     test/scrolling-mode.html
     test/row-height.html
-    --env saucelabs
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/row-details.html
     test/selecting.html
     test/style-scope.html
     test/array-data-provider.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/sorting.html
     test/themability.html
     test/scroll-to-index.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
     test/resizing.html
     test/light-dom-observing.html
     test/doctype.html
     test/lazy-import.html
-    --env saucelabs
   #- if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
   #    npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
   #    gemini test test/visual;
