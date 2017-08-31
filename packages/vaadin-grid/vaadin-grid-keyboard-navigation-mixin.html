@@ -36,6 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
           value: false,
           reflectToAttribute: true
         },
+        _navigatingIsHidden: Boolean,
         _focusedItemIndex: {
           type: Number,
           value: 0
@@ -261,6 +262,15 @@ This program is available under Apache License Version 2.0, available at https:/
       this._focusCell(dstCell, activeRowGroup);
     }
 
+    _parseEventPath(path) {
+      const tableIndex = path.indexOf(this.$.table);
+      return {
+        rowGroup: path[tableIndex - 1],
+        row: path[tableIndex - 2],
+        cell: path[tableIndex - 3]
+      };
+    }
+
     _onInteractionKeyDown(e, key) {
       const localTarget = e.composedPath()[0];
       const localTargetIsTextInput = localTarget.localName === 'input' && 
@@ -279,10 +289,7 @@ This program is available under Apache License Version 2.0, available at https:/
           break;
       }
 
-
-      const tableIndex = e.composedPath().indexOf(this.$.table);
-      const rowGroup = e.composedPath()[tableIndex - 1];
-      const cell = e.composedPath()[tableIndex - 3];
+      const {rowGroup, cell} = this._parseEventPath(e.composedPath());
 
       if (this.interacting !== wantInteracting) {
         if (wantInteracting) {
@@ -388,10 +395,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Ensure correct horizontal scrolling position
           this._scrollHorizontallyToCell(cell);
+        } else {
+          this._detectFocusedItemIndex(e);
         }
 
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
         cell._content.dispatchEvent(new CustomEvent('cell-focusin', {bubbles: false}));
+      } else {
+        this._detectFocusedItemIndex(e);
       }
     }
 
@@ -422,6 +433,26 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _detectInteracting(e) {
       this.interacting = e.composedPath().some(el => el.localName === 'vaadin-grid-cell-content');
+    }
+
+    _detectFocusedItemIndex(e) {
+      const {rowGroup, row} = this._parseEventPath(e.composedPath());
+      if (rowGroup === this.$.items) {
+        this._focusedItemIndex = row.index;
+      }
+    }
+
+    _preventScrollerRotatingCellFocus(item, index) {
+      if (item.index === this._focusedItemIndex && this.navigating) {
+        // Focused item has went, hide navigation mode
+        this._navigatingIsHidden = true;
+        this.navigating = false;
+      }
+      if (index === this._focusedItemIndex && this._navigatingIsHidden) {
+        // Focused item is back, restore navigation mode
+        this._navigatingIsHidden = false;
+        this.navigating = true;
+      }
     }
 
     _getColumns(rowGroup, rowIndex) {
@@ -459,7 +490,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this._headerFocusable = cell;
       } else if (rowGroup === this.$.items) {
         this._itemsFocusable = cell;
-        this._focusedItemIndex = row.index;
       } else if (rowGroup === this.$.footer) {
         this._footerFocusable = cell;
       }

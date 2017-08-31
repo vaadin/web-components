@@ -1027,6 +1027,29 @@
                 done();
               });
             });
+
+            describe('rotating focus indicator prevention', function() {
+              it('should hide navigation mode when a focused row goes off screen', function() {
+                clickItem(0);
+                right();
+
+                expect(grid.navigating).to.be.true;
+
+                grid.scrollToIndex(100);
+
+                expect(grid.navigating).to.be.false;
+              });
+
+              it('should reveal navigation mode when a focused row is back on screen', function() {
+                clickItem(0);
+                right();
+                grid.scrollToIndex(100);
+
+                grid.scrollToIndex(0);
+
+                expect(grid.navigating).to.be.true;
+              });
+            });
           });
         });
 
