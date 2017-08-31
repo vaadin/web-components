@@ -18,11 +18,11 @@ install:
 before_script:
   # - gulp lint
   # - polymer lint --rules polymer-2-hybrid --input *.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
+  # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
 script:
-  - echo skip xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/basic.html
     test/app-localize-behavior.html
     test/column.html
@@ -33,8 +33,9 @@ script:
     test/data-provider.html
     test/filtering.html
     --env saucelabs
-  - echo skip xvfb-run -s '-screen 0 1024x768x24' polymer test
-    test/keyboard-navigation.html
+  # - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  #   test/keyboard-navigation.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/physical-count.html
     test/hidden-grid.html
     test/million-dollar-scrolling.html
@@ -45,7 +46,7 @@ script:
     test/scrolling-mode.html
     test/row-height.html
     --env saucelabs
-  - echo skip xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
     test/row-details.html
     test/selecting.html
     test/style-scope.html
