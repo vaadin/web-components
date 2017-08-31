@@ -22,44 +22,43 @@ before_script:
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/basic.html
-    test/app-localize-behavior.html
-    test/column.html
-    test/column-group.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/column-groups.html
-    test/column-resizing.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/column-reordering.html
-    test/data-provider.html
-    test/filtering.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/keyboard-navigation.html
-    test/physical-count.html
-    test/hidden-grid.html
-    test/million-dollar-scrolling.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/dynamic-item-size.html
-    test/frozen-columns.html
-    test/outer-scroller.html
-    test/templates.html
-    test/scrolling-mode.html
-    test/row-height.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/row-details.html
-    test/selecting.html
-    test/style-scope.html
-    test/array-data-provider.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/sorting.html
-    test/themability.html
-    test/scroll-to-index.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
-    test/resizing.html
-    test/light-dom-observing.html
-    test/doctype.html
-    test/lazy-import.html
+   - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
+#  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
+#    test/app-localize-behavior.html
+#    test/array-data-provider.html
+#    test/basic.html
+#    test/column-group.html
+#    test/column-groups.html
+#    test/column-reordering.html
+#  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
+#    test/column-resizing.html
+#    test/column.html
+#    test/data-provider.html
+#    test/different-heights.html
+#    test/doctype.html
+#    test/dynamic-item-size.html
+#    test/filtering.html
+#    test/frozen-columns.html
+#    test/hidden-grid.html
+#    test/iron-list.html
+#  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
+#    test/keyboard-navigation.html
+#  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs
+#    test/lazy-import.html
+#    test/light-dom-observing.html
+#    test/million-dollar-scrolling.html
+#    test/outer-scroller.html
+#    test/physical-count.html
+#    test/resizing.html
+#    test/row-details.html
+#    test/row-height.html
+#    test/scroll-to-index.html
+#    test/scrolling-mode.html
+#    test/selecting.html
+#    test/sorting.html
+#    test/style-scope.html
+#    test/templates.html
+
   #- if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
   #    npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
   #    gemini test test/visual;
