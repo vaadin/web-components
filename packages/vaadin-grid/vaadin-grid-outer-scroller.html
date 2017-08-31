@@ -57,6 +57,20 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Boolean,
             reflectToAttribute: true,
             value: true
+          },
+
+          outerScrolling: Boolean,
+
+          _touchDevice: {
+            type: Boolean,
+            value: function() {
+              try {
+                document.createEvent('TouchEvent');
+                return true;
+              } catch (e) {
+                return false;
+              }
+            }
           }
         };
       }
@@ -69,10 +83,19 @@ This program is available under Apache License Version 2.0, available at https:/
         // for some reason scroll bars are hidden in iOS if this style is
         // added in stylesheets or before attaching.
         this.style.webkitOverflowScrolling = 'touch';
+
+        this.addEventListener('mousedown', _ => this.outerScrolling = true);
+        this.addEventListener('mouseup', _ => {
+          this.outerScrolling = false;
+          this.scrollHandler._scrollHandler();
+        });
       }
 
       _onMouseMove(e) {
-        this.passthrough = e.offsetY <= this.clientHeight && e.offsetX <= this.clientWidth;
+        // Ignore mousemove events on touch devices
+        if (!this._touchDevice) {
+          this.passthrough = e.offsetY <= this.clientHeight && e.offsetX <= this.clientWidth;
+        }
       }
 
       syncOuterScroller() {

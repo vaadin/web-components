@@ -174,7 +174,9 @@ This program is available under Apache License Version 2.0, available at https:/
           Polymer.Async.timeOut.after(100),
           () => {
             this._toggleAttribute('scrolling', false, this.$.scroller);
-            this._reorderRows();
+            if (!this.$.outerscroller.outerScrolling) {
+              this._reorderRows();
+            }
           });
 
       this.$.outerscroller.syncOuterScroller();
