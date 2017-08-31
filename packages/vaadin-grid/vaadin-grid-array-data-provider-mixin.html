@@ -22,13 +22,13 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         items: Array
 
-      }
+      };
     }
 
     static get observers() {
       return [
         '_itemsChanged(items, items.*)'
-      ]
+      ];
     }
 
     _itemsChanged(items, splices) {
@@ -79,7 +79,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       let result = true;
 
-      for (let i in arrayToCheck) {
+      for (var i in arrayToCheck) {
         const path = arrayToCheck[i].path;
 
         // skip simple paths

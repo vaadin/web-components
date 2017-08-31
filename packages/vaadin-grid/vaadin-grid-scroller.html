@@ -14,7 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * @protected
      */
-    class GridScrollerElement extends PolymerIronList {
+    class GridScrollerElement extends window.PolymerIronList {
 
       static get is() {
         return 'vaadin-grid-scroller';
@@ -27,13 +27,13 @@ This program is available under Apache License Version 2.0, available at https:/
           _vidxOffset: {
             value: 0
           }
-        }
+        };
       }
 
       static get observers() {
         return [
           '_sizeChanged(size)'
-        ]
+        ];
       }
 
       /**
@@ -98,7 +98,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
         this.scrollOffset = this._scrollTop;
-        super._itemsChanged({path:"items"});
+        super._itemsChanged({path: 'items'});
 
         this._virtualCount = this.items.length || 0;
 
@@ -117,7 +117,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         var y = this._physicalTop;
-        this._iterateItems(function(pidx, vidx) {
+        this._iterateItems((pidx, vidx) => {
           this._physicalItems[pidx].style.transform = `translateY(${y}px)`;
           y += this._physicalSizes[pidx];
         });
@@ -141,7 +141,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _createPool(size) {
-        var i, inst;
         const fragment = document.createDocumentFragment();
         const physicalItems = this._createScrollerRows(size);
 
@@ -167,7 +166,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @param {!Array<number>=} itemSet
        */
       _assignModels(itemSet) {
-        this._iterateItems(function(pidx, vidx) {
+        this._iterateItems((pidx, vidx) => {
           var el = this._physicalItems[pidx];
           if (vidx < this.size) {
             el.removeAttribute('hidden');

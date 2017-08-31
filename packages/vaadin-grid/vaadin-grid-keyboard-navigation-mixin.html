@@ -41,7 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
           value: 0
         },
         _focusedColumnOrder: Number
-      }
+      };
     }
 
     ready() {
@@ -143,11 +143,11 @@ This program is available under Apache License Version 2.0, available at https:/
           break;
         case 'Home':
           dx = -Infinity;
-          if (e.ctrlKey) dy = -Infinity;
+          e.ctrlKey && (dy = -Infinity);
           break;
         case 'End':
           dx = Infinity;
-          if (e.ctrlKey) dy = Infinity;
+          e.ctrlKey && (dy = Infinity);
           break;
         case 'ArrowDown':
           dy = 1;
@@ -248,7 +248,9 @@ This program is available under Apache License Version 2.0, available at https:/
       const dstRow = activeRowGroup === this.$.items ?
         Array.from(activeRowGroup.children).filter(el => el.index === dstRowIndex)[0] :
         activeRowGroup.children[dstRowIndex];
-      if (!dstRow) return;
+      if (!dstRow) {
+        return;
+      }
 
       // Here we go!
       const dstCell = dstIsRowDetails ?
@@ -476,8 +478,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const dstRow = dstCell.parentNode;
       const dstCellIndex = Array.from(dstRow.children).indexOf(dstCell);
       const tableRect = this.$.table.getBoundingClientRect();
-      let leftBoundary = tableRect.left,
-          rightBoundary = tableRect.right;
+      let leftBoundary = tableRect.left, rightBoundary = tableRect.right;
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') ||

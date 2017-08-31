@@ -116,7 +116,7 @@ This program is available under Apache License Version 2.0, available at https:/
       static get observers() {
         return [
           '_columnTreeChanged(_columnTree, _columnTree.*)',
-        ]
+        ];
       }
 
       static get properties() {
@@ -140,8 +140,7 @@ This program is available under Apache License Version 2.0, available at https:/
               return navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
             }
           }
-
-        }
+        };
       }
 
       constructor() {
@@ -178,7 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const slotName = 'vaadin-grid-cell-content-' + contentId;
 
         const cellContent = document.createElement('vaadin-grid-cell-content');
-        cellContent.setAttribute('slot' , slotName);
+        cellContent.setAttribute('slot', slotName);
 
         const cell = document.createElement(tagName);
         cell.id = slotName.replace('-content-', '-');
@@ -198,7 +197,6 @@ This program is available under Apache License Version 2.0, available at https:/
       _updateRow(row, columns, section, isColumnRow, noNotify) {
         section = section || 'body';
 
-        const cellsFragment = document.createDocumentFragment();
         const contentsFragment = document.createDocumentFragment();
 
         Array.from(row.children).forEach(cell => {

@@ -110,7 +110,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return {};
           }
         },
-      }
+      };
     }
 
     ready() {
@@ -232,11 +232,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateItem(row, items[i]);
 
           this._debouncerUpdateHeights = Polymer.Debouncer.debounce(this._debouncerUpdateHeights,
-            Polymer.Async.timeOut.after(1), () => {
-            this._updateMetrics();
-            this._positionItems();
-            this._updateScrollerSize();
-          });
+            Polymer.Async.timeOut.after(1), () => this._updateMetrics(), this._positionItems(), this._updateScrollerSize());
         }
       }
     }

@@ -1627,7 +1627,9 @@
 
             // Extract unique values
             visitedTargets = visitedTargets.reduce(function(acc, val) {
-              if (acc.indexOf(val) === -1) acc.push(val);
+              if (acc.indexOf(val) === -1) {
+                acc.push(val);
+              }
               return acc;
             }, []);
 

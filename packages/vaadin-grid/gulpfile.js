@@ -22,7 +22,8 @@ gulp.task('lint:html', function() {
     '*.html',
     'demo/**/*.html',
     'test/**/*.html',
-    '!demo/x-data-provider.html'
+    '!demo/x-data-provider.html',
+    '!iron-list.html'
   ])
   .pipe(htmlExtract({
     sel: 'script, code-example code'

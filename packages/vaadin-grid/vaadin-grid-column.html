@@ -102,16 +102,16 @@ This program is available under Apache License Version 2.0, available at https:/
         '_emptyCellsChanged(_emptyCells, _emptyCells.*)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)'
-      ]
+      ];
     }
 
     /** @private */
     connectedCallback() {
       super.connectedCallback();
 
-      if (this.template) this.template.templatizer._grid = this._grid;
-      if (this.headerTemplate) this.headerTemplate.templatizer._grid = this._grid;
-      if (this.footerTemplate) this.footerTemplate.templatizer._grid = this._grid;
+      this.template && (this.template.templatizer._grid = this._grid);
+      this.headerTemplate && (this.headerTemplate.templatizer._grid = this._grid);
+      this.footerTemplate && (this.footerTemplate.templatizer._grid = this._grid);
 
       this._templateObserver.flush();
 
@@ -409,8 +409,6 @@ This program is available under Apache License Version 2.0, available at https:/
         ];
       }
 
-
-
       _templateChanged(template) {
         // body cell templatizer needs to be attached so that `item-changed` and
         // `template-instance-changed` events propagate to grid.
@@ -441,8 +439,8 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * @namespace Vaadin
      */
-     window.Vaadin = window.Vaadin || {};
-     Vaadin.GridColumnElement = GridColumnElement;
-   }
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.GridColumnElement = GridColumnElement;
+  }
   </script>
 </dom-module>

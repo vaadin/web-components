@@ -13,8 +13,8 @@ install:
   - polymer install
 
 before_script:
-  # - gulp lint
-  # - polymer lint --rules polymer-2-hybrid --input *.html
+  - gulp lint
+  #- polymer lint --rules polymer-2 --input *.html
   - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 

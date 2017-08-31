@@ -165,8 +165,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #outersizer [part~="cell"] {
-        height: 0px !important;
-        padding: 0px !important;
+        height: 0 !important;
+        padding: 0 !important;
       }
 
       #outersizer [part~="cell"]::before {
@@ -178,7 +178,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #fixedsizer {
-        /* TODO: fix*/
+        /* TODO: fix */
         display: none;
       }
     </style>
@@ -219,7 +219,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host([reordering]) [part~="cell"][reorder-status="allowed"] {
-        background: #ffffff;
+        background: #fff;
       }
 
       :host([reordering]) [part~="cell"][reorder-status="dragging"] {
@@ -240,7 +240,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host([navigating]) [part~="cell"]:focus {
-        box-shadow: inset 0 0 0 3px rgba(0,0,0,.25);
+        box-shadow: inset 0 0 0 3px rgba(0, 0, 0, .25);
       }
     </style>
   </template>

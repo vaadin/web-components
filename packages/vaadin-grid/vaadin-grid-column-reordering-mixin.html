@@ -62,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _touchDevice: {
           value: () => {
             try {
-              document.createEvent("TouchEvent");
+              document.createEvent('TouchEvent');
               return true;
             } catch (e) {
               return false;
@@ -142,7 +142,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const headerCell = this._cellFromPoint(e.detail.x, e.detail.y)
+      const headerCell = this._cellFromPoint(e.detail.x, e.detail.y);
       if (!headerCell || headerCell.getAttribute('part').indexOf('header-cell') === -1) {
         return;
       }
@@ -164,7 +164,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      const targetCell = this._cellFromPoint(e.detail.x, e.detail.y)
+      const targetCell = this._cellFromPoint(e.detail.x, e.detail.y);
       if (!targetCell) {
         return;
       }

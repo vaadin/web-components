@@ -51,6 +51,8 @@
     "makeSoloTouchEvent": false,
     "flushColumns": false,
     "flushGrid": false,
-    "fire": false
+    "fire": false,
+    "getContainerCell": false,
+    "footerTrap": false
   }
 }
