@@ -85,7 +85,7 @@
           expect(sorter.direction).to.equal(null);
         });
 
-        it('should toggle direction', function() {
+        it.skip('should toggle direction', function() {
           clickSorter(sorter);
           expect(sorter.direction).to.equal('asc');
           clickSorter(sorter);
@@ -94,7 +94,7 @@
           expect(sorter.direction).to.equal(null);
         });
 
-        it('should not toggle on focusable click', function() {
+        it.skip('should not toggle on focusable click', function() {
           click(button);
           expect(sorter.direction).to.equal(null);
         });
@@ -126,7 +126,7 @@
           expect(indicators.getAttribute('aria-hidden')).to.equal('true');
         });
 
-        it('should prevent default on click', function() {
+        it.skip('should prevent default on click', function() {
           const clickEvent = clickSorter(sorter);
 
           expect(clickEvent.defaultPrevented).to.be.true;
