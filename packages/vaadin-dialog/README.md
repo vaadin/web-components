@@ -5,7 +5,7 @@
 
 # &lt;vaadin-dialog&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha1/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha2/demo/)
 
 [&lt;vaadin-dialog&gt;](https://vaadin.com/elements/-/element/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
 
