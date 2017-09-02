@@ -66,6 +66,52 @@
   </test-fixture>
 
   <script>
+    window.top.focus && window.top.focus();
+    window.focus();
+
+    if (window.chrome && !window.document.hasFocus()) {
+      // Oh no! Focus kinda works, but no native events are dispatched. Let’s fake them.
+      const nativeFocus = HTMLElement.prototype.focus;
+      let fakeFocusCurrentTarget;
+      HTMLElement.prototype.focus = function() {
+        const dispatchMockFocusEvent = function(type, bubbles, target, relatedTarget) {
+          if (!target) {
+            return;
+          }
+          const e = new CustomEvent(type, {bubbles, composed: true});
+          e.relatedTarget = relatedTarget;
+          target.dispatchEvent(e);
+        };
+
+        let activeElement;
+        if (fakeFocusCurrentTarget) {
+          // When focus is called from a focusin/focusout listener (e. g.,
+          // recursive .focus()), activeElement might not be shifted yet.
+          // The true activeElement is a target of the previous .focus call.
+          activeElement = fakeFocusCurrentTarget;
+        } else {
+          activeElement = document.activeElement;
+          if (activeElement) {
+            while (activeElement.shadowRoot && activeElement.shadowRoot.activeElement)
+              activeElement = activeElement.shadowRoot.activeElement;
+          }
+        }
+
+        if (activeElement === this) {
+          // Prevent duplicate events when focus stays on the same element
+          nativeFocus.apply(this, arguments);
+        } else {
+          fakeFocusCurrentTarget = this;
+          dispatchMockFocusEvent('focusout', true, activeElement, this);
+          dispatchMockFocusEvent('focusin', true, this, activeElement);
+          nativeFocus.apply(this, arguments);
+          dispatchMockFocusEvent('blur', false, activeElement, this);
+          dispatchMockFocusEvent('focus', false, this, activeElement);
+          fakeFocusCurrentTarget = undefined;
+        }
+      };
+    }
+
     var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (!ios) {
       describe('keyboard navigation', function() {
@@ -85,15 +131,6 @@
           body = grid.$.items;
           footer = grid.$.footer;
 
-          // // stubbing out focusing to make sure it works even if the browser
-          // // window doesn't have focus.
-          // footerTrap = grid.$.footerFocusTrap;
-          // sinon.stub(footerTrap, 'focus', function(e) {
-          //   Polymer.Base.fire('focus-gained', {}, {
-          //     node: footerTrap
-          //   });
-          // });
-
           if (Polymer.Element) {
             grid._observer.flush();
           }
@@ -102,10 +139,6 @@
 
           flush(done);
         });
-
-        // afterEach(function() {
-        //   footerTrap.focus.restore();
-        // });
 
         function clickItem(rowIndex) {
           return getCellContent(getFirstCell(rowIndex)).click();
@@ -268,7 +301,7 @@
             expect(grid.navigating).to.be.false;
           });
 
-          it.skip('FIXME focus: should disable navigation mode when blurred', function() {
+          it('should disable navigation mode when blurred', function() {
             clickFirstHeaderCell();
             grid.navigating = true;
 
@@ -277,14 +310,14 @@
             expect(grid.navigating).to.be.false;
           });
 
-          it.skip('FIXME focus: should enable navigation mode when tabbed into header', function() {
+          it('should enable navigation mode when tabbed into header', function() {
             // simulating tabbing into header
             tabToHeader();
 
             expect(grid.navigating).to.be.true;
           });
 
-          it.skip('FIXME focus: should enable navigation mode when tabbed inside header', function() {
+          it('should enable navigation mode when tabbed inside header', function() {
             clickFirstHeaderCell();
 
             tab();
@@ -292,7 +325,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it.skip('FIXME foxus: should enable navigation mode when tabbed into footer', function() {
+          it('should enable navigation mode when tabbed into footer', function() {
             // simulating tabbing into header
             shiftTabToFooter();
 
@@ -1016,7 +1049,7 @@
               });
             });
 
-            it.skip('FIXME foxus: should scroll the focused item visible when focus is set to body', function(done) {
+            it('should scroll the focused item visible when focus is set to body', function(done) {
               scrollToEnd(grid);
 
               animationFrameFlush(function() {
@@ -1025,6 +1058,29 @@
                 expect(grid.$.table.scrollTop).to.equal(0);
 
                 done();
+              });
+            });
+
+            describe('rotating focus indicator prevention', function() {
+              it('should hide navigation mode when a focused row goes off screen', function() {
+                clickItem(0);
+                right();
+
+                expect(grid.navigating).to.be.true;
+
+                grid.scrollToIndex(100);
+
+                expect(grid.navigating).to.be.false;
+              });
+
+              it('should reveal navigation mode when a focused row is back on screen', function() {
+                clickItem(0);
+                right();
+                grid.scrollToIndex(100);
+
+                grid.scrollToIndex(0);
+
+                expect(grid.navigating).to.be.true;
               });
             });
           });
@@ -1214,7 +1270,7 @@
             expect(grid.interacting).to.be.true;
           });
 
-          it.skip('FIXME foxus: should exit interaction mode when blurred', function() {
+          it('should exit interaction mode when blurred', function() {
             grid.interacting = true;
 
             focusable.focus();
@@ -1222,7 +1278,7 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it.skip('FIXME foxus: should exit interaction mode when tabbed into', function() {
+          it('should exit interaction mode when tabbed into', function() {
             grid.interacting = true;
 
             tabToHeader();
@@ -1230,7 +1286,7 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it.skip('FIXME foxus: should exit interaction mode when shift-tabbed into', function() {
+          it('should exit interaction mode when shift-tabbed into', function() {
             grid.interacting = true;
 
             shiftTabToFooter();
@@ -1453,7 +1509,7 @@
             expect(document.activeElement).to.not.equal(input);
           });
 
-          it.skip('FIXME foxus: should exit interaction mode with escape', function() {
+          it('should exit interaction mode with escape', function() {
             grid.interacting = true;
 
             escape();
@@ -1461,7 +1517,7 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it.skip('FIXME foxus: should remove focus from cell with escape', function() {
+          it('should remove focus from cell with escape', function() {
             var input = clickFirstBodyInput(0);
 
             escape(input); // revert to navigation first
@@ -1489,7 +1545,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it.skip('FIXME focus: should cancel navigation mode with escape', function() {
+          it('should cancel navigation mode with escape', function() {
             grid.navigating = true;
             grid.interacting = false;
 
@@ -1651,7 +1707,7 @@
             cell = getCell(0, 0);
           });
 
-          it.skip('FIXME foxus: should dispatch cell-focusin after cell focus', function() {
+          it('should dispatch cell-focusin after cell focus', function() {
             var spy = sinon.spy();
             cell._content.addEventListener('cell-focusin', spy);
 
@@ -1660,7 +1716,7 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it.skip('FIXME foxus: should dispatch cell-focusout after cell blur', function() {
+          it('should dispatch cell-focusout after cell blur', function() {
             tabToBody();
 
             var spy = sinon.spy();
@@ -1671,7 +1727,7 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it.skip('FIXME foxus: should dispatch cell-focusin on keyboard navigation', function() {
+          it('should dispatch cell-focusin on keyboard navigation', function() {
             tabToBody();
             right();
 
@@ -1683,7 +1739,7 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it.skip('FIXME foxus: should dispatch cell-focusout on keyboard navigation', function() {
+          it('should dispatch cell-focusout on keyboard navigation', function() {
             tabToBody();
 
             var spy = sinon.spy();

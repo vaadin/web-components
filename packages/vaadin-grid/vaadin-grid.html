@@ -280,6 +280,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _updateScrollerItem(row, index) {
+        this._preventScrollerRotatingCellFocus(row, index);
+
         if (!this._columnTree) {
           return;
         }
