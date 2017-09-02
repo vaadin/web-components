@@ -136,7 +136,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateMetrics();
           super._increasePoolIfNeeded(25);
         } else {
-          super._increasePoolIfNeeded(count);
+          const viewportCovered = this._physicalCount * this._physicalAverage >= this._viewportHeight * 3;
+          // Don't increase the pool if there's enough rows. This is to avoid an eternal loop.
+          if (!viewportCovered) {
+            super._increasePoolIfNeeded(count);
+          }
         }
       }
 
