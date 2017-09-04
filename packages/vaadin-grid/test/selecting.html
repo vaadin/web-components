@@ -159,12 +159,11 @@
       });
 
       it('should have a checkbox in the body cell', function() {
-        expect(firstBodyCheckbox.localName).to.eql('input');
-        expect(firstBodyCheckbox.type).to.eql('checkbox');
+        expect(firstBodyCheckbox.localName).to.eql('vaadin-checkbox');
       });
 
       it('should select item when checkbox is checked', function() {
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
         expect(grid._isSelected(cachedItems[0])).to.be.true;
       });
 
@@ -199,13 +198,11 @@
       });
 
       it('should have a select all checkbox in the header', function() {
-        expect(selectAllCheckbox.localName).to.eql('input');
-        expect(selectAllCheckbox.type).to.eql('checkbox');
+        expect(selectAllCheckbox.localName).to.eql('vaadin-checkbox');
       });
 
       it('should set selectAll when header checkbox is clicked', function() {
         selectAllCheckbox.click();
-
         expect(selectionColumn.selectAll).to.be.true;
       });
 
@@ -279,12 +276,12 @@
       });
 
       it('should be unchecked when nothing is selected', function() {
-        expect(selectAllCheckbox.indeterminate).to.be.false;
+        expect(selectAllCheckbox.indeterminate).not.to.be.ok;
         expect(selectAllCheckbox.checked).to.be.false;
       });
 
       it('should have indeterminate when an item is selected', function() {
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
 
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
@@ -292,9 +289,9 @@
       // iOS needs both to show the indeterminate status
       it('should have indeterminate and select-all when an item is selected', function() {
         expect(selectAllCheckbox.checked).to.be.false;
-        expect(selectAllCheckbox.indeterminate).to.be.false;
+        expect(selectAllCheckbox.indeterminate).not.to.be.ok;
 
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
         expect(selectAllCheckbox.checked).to.be.true;
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
@@ -303,7 +300,7 @@
         selectAllCheckbox.click();
         expect(selectAllCheckbox.indeterminate).to.be.false;
 
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = false;
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
@@ -325,7 +322,7 @@
       });
 
       it('should not have selectAll after selecting a single item', function() {
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
 
         expect(selectionColumn.selectAll).to.be.false;
       });
@@ -333,16 +330,16 @@
       it('should not have selectAll after deselecting a single item', function() {
         selectAllCheckbox.click();
 
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = false;
 
         expect(selectionColumn.selectAll).to.be.false;
       });
 
       it('should have selectAll after selecting all manually', function() {
         selectAllCheckbox.click();
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
 
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
 
         expect(selectionColumn.selectAll).to.be.true;
         expect(selectAllCheckbox.indeterminate).to.be.false;
@@ -350,7 +347,7 @@
 
       it('should not reassign selectedItems array when selecting all manually', function() {
         selectAllCheckbox.click();
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = false;
 
         var details = [];
         var spy = sinon.spy(function(e) {
@@ -359,7 +356,7 @@
         });
         grid.addEventListener('selected-items-changed', spy);
 
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
 
         expect(details.length).to.eql(2); // should have 3rd event with path 'selectedItems'
         expect(details[0].path).to.eql('selectedItems.splices');
@@ -370,7 +367,7 @@
         rows.forEach(function(row) {
           var cellContent = getCellContent(getRowCells(row)[0]);
           var checkbox = cellContent.children[0];
-          checkbox.click();
+          checkbox.checked = true;
         });
 
         expect(selectionColumn.selectAll).to.be.true;
@@ -383,7 +380,7 @@
         rows.forEach(function(row) {
           var cellContent = getCellContent(getRowCells(row)[0]);
           var checkbox = cellContent.children[0];
-          checkbox.click();
+          checkbox.checked = false;
         });
 
         expect(selectionColumn.selectAll).to.be.false;
@@ -393,7 +390,7 @@
       it('should update select all when filters change', function() {
         grid.items = [{value: 'foo'}, {value: 'bar'}];
 
-        firstBodyCheckbox.click();
+        firstBodyCheckbox.checked = true;
 
         var filter = grid.querySelector('#filter');
         filter.value = 'foo';
