@@ -227,7 +227,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _updateItems(page, items) {
       for (let i = 0; i < this.pageSize; i++) {
         const index = page * this.pageSize + i;
-        const row = this._virtualIndexToItem[index];
+        const row = this._virtualIndexToItem && this._virtualIndexToItem[index];
         if (row) {
           this._updateItem(row, items[i]);
 
@@ -280,7 +280,14 @@ This program is available under Apache License Version 2.0, available at https:/
       this._cache = {};
       this._pendingRequests = {};
       if (this._hasData) {
-        this._update();
+        this._loading = true;
+        const firstVisiblePage = this._getPageForIndex(this.firstVisibleIndex + this._vidxOffset);
+        this._loadPage(firstVisiblePage, (page, items) => {
+          // Update items for the first visible page
+          this._updateItems(page, items);
+          // Request items for rest of the pages to be updated
+          this._eagerlyLoadPages();
+        });
       }
       this._flushItemsDebouncer();
     }
