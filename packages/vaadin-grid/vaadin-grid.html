@@ -245,7 +245,6 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           } else {
             // Header & footer
-            row.hidden = true;
             const tagName = section === 'header' ? 'th' : 'td';
             if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
               cell = column[`_${section}Cell`] || this._createCell(tagName);
