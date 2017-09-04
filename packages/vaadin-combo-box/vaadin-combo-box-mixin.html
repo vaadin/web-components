@@ -181,7 +181,8 @@ This program is available under Apache License Version 2.0, available at https:/
         '_itemsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
         '_loadingChanged(loading)',
-        '_selectedItemChanged(selectedItem)'
+        '_selectedItemChanged(selectedItem)',
+        '_toggleElementChanged(_toggleElement)'
       ];
     }
 
@@ -222,8 +223,6 @@ This program is available under Apache License Version 2.0, available at https:/
       const path = e.composedPath();
       if (path.indexOf(this._clearElement) !== -1) {
         this._clear();
-      } else if (path.indexOf(this._toggleElement) !== -1) {
-        this._toggle();
       } else if (path.indexOf(this.inputElement) !== -1) {
         this._openAsync();
       }
@@ -390,6 +389,13 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this.open();
       }
+    }
+
+    _toggleElementChanged(toggleElement) {
+      toggleElement && toggleElement.addEventListener('click', (e) => {
+        this._toggle();
+        e.stopPropagation();
+      });
     }
 
     /**
