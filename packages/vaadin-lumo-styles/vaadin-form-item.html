@@ -1,0 +1,28 @@
+<link rel="import" href="color.html">
+<link rel="import" href="sizing-and-spacing.html">
+<link rel="import" href="typography.html">
+<link rel="import" href="style.html">
+
+
+<dom-module id="valo-form-item" theme-for="vaadin-form-item">
+  <template>
+    <style>
+      :host {
+        --vaadin-form-item-row-gap: 0;
+      }
+
+      /* font-weight, margin-bottom, transition and line-height same values as for part label in text-field */
+      [part="label"] {
+        color: var(--valo-contrast-60pct);
+        font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size-s);
+        font-weight: 500;
+        margin-top: var(--valo-space-m);
+        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        margin-bottom: var(--valo-space-xs);
+        transition: color 0.4s;
+        line-height: 1.333;
+      }
+    </style>
+  </template>
+</dom-module>

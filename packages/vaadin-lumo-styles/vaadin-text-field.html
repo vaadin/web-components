@@ -1,0 +1,240 @@
+<link rel="import" href="color.html">
+<link rel="import" href="sizing-and-spacing.html">
+<link rel="import" href="style.html">
+<link rel="import" href="typography.html">
+
+<dom-module id="valo-text-field" theme-for="vaadin-text-field">
+  <template>
+    <style>
+      :host {
+        color: var(--valo-body-text-color);
+        font-size: var(--valo-font-size, var(--valo-font-size-m));
+        font-family: var(--valo-font-family);
+        width: var(--valo-text-field-default-width, calc(var(--valo-size-m) * 5));
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+        /* TODO why is this needed? Needs to be named different at least and added to the documentation */
+        --vaadin-text-field-vertical-align: bottom;
+      }
+
+      [part="label"] {
+        color: var(--valo-contrast-60pct);
+        font-weight: 500;
+        font-size: var(--valo-font-size-s);
+        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        margin-bottom: var(--valo-space-xs);
+        transition: color 0.4s;
+        line-height: 1.333;
+      }
+
+      :host([label]) {
+        margin-top: var(--valo-space-m);
+        vertical-align: var(--vaadin-text-field-vertical-align);
+      }
+
+      :host([focused]:not([readonly])) [part="label"] {
+        color: var(--valo-primary-text-color);
+      }
+
+      :host([theme~="center"]) [part="value"] {
+        text-align: center;
+      }
+
+      /* Used for required and invalid indicators */
+      [part="label"]::after {
+        content: var(--valo-required-field-indicator, "•");
+        transition: all 0.2s;
+        margin-left: 0.2em;
+        opacity: 0;
+        color: var(--valo-primary-text-color);
+      }
+
+      [part="value"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        outline: none;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 9 + var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        width: 100%;
+        height: 100%;
+        font-family: inherit;
+        font-size: 1em;
+        font-weight: 500;
+        color: inherit;
+        background-color: transparent;
+        align-self: baseline;
+
+        /* Disable default invalid style in Firefox */
+        box-shadow: none;
+      }
+
+      [part="value"]::-webkit-input-placeholder {
+        color: var(--valo-tertiary-text-color);
+        transition: opacity 0.175s 0.05s;
+        opacity: 1;
+      }
+
+      [part="value"]:-ms-input-placeholder {
+        color: var(--valo-tertiary-text-color);
+      }
+
+      [part="value"]::-moz-placeholder {
+        color: var(--valo-tertiary-text-color);
+        transition: opacity 0.175s 0.05s;
+        opacity: 1;
+      }
+
+      [part="value"]::placeholder {
+        color: var(--valo-tertiary-text-color);
+        transition: opacity 0.175s 0.1s;
+        opacity: 1;
+      }
+
+      [part="input-field"] {
+        margin-top: var(--valo-space-xs);
+        margin-bottom: var(--valo-space-xs);
+        border-radius: var(--valo-text-field-border-radius, var(--valo-border-radius));
+        background-color: var(--valo-contrast-5pct);
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6);
+        transition: all 0.5s;
+        font-weight: 500;
+        position: relative;
+        will-change: transform;
+        height: var(--valo-size, var(--valo-size-m));
+      }
+
+      @media (hover: hover) {
+        :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
+          background-color: var(--valo-contrast-10pct);
+        }
+      }
+
+      :host([focused]:not([readonly])) [part="input-field"] {
+        background-color: var(--valo-base-color);
+        box-shadow: 0 0 0 1px var(--valo-contrast-20pct);
+      }
+
+      :host([focus-ring]) [part="input-field"] {
+        transition-duration: 0.2s;
+      }
+
+      /* Activation effect */
+
+      [part="input-field"]::after {
+        content: "";
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
+        border-radius: inherit;
+        pointer-events: none;
+        background-color: var(--valo-base-color);
+        opacity: 0.5;
+        transform: scaleX(0);
+        transition: transform 0s, opacity 0s;
+        transform-origin: 0 0;
+        will-change: transform;
+      }
+
+      /* Trigger when not focusing using the keyboard */
+      :host([focused]:not([focus-ring]):not([readonly])) [part="input-field"]::after {
+        opacity: 0;
+        transform: scaleX(1);
+        transition: transform 0.2s, opacity 1s;
+      }
+
+      /* Disabled style */
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
+
+      :host([disabled]) [part="value"] {
+        color: var(--valo-disabled-text-color);
+      }
+
+      :host([disabled]) [part="value"]::-webkit-input-placeholder {
+        opacity: 0;
+      }
+
+      :host([disabled]) [part="value"]:-ms-input-placeholder {
+        opacity: 0;
+      }
+
+      :host([disabled]) [part="value"]::-moz-placeholder {
+        opacity: 0;
+      }
+
+      :host([disabled]) [part="value"]::placeholder {
+        opacity: 0;
+      }
+
+      :host([disabled]) [part="input-field"] {
+        background-color: var(--valo-contrast-10pct);
+      }
+
+      /* Required field style */
+
+      :host([required]:not([has-value])) [part="label"]::after {
+        opacity: 1;
+      }
+
+      /* Invalid style */
+
+      :host([invalid]) [part="label"] {
+        color: var(--valo-error-color);
+      }
+
+      :host([invalid]) [part="label"]::after {
+        color: inherit;
+      }
+
+      :host([invalid]) [part="input-field"] {
+        background-color: var(--valo-error-color-10pct);
+        box-shadow: 0 0 0 1px var(--valo-error-color-10pct);
+      }
+
+      /* Error message */
+
+      [part="error-message"] {
+        margin-top: var(--valo-space-xs);
+        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        font-size: var(--valo-font-size-xs);
+        line-height: var(--valo-line-height-xs);
+        color: var(--valo-secondary-text-color);
+        transition: all 0.4s linear;
+        max-height: 5em;
+      }
+
+      [part="error-message"][hidden] {
+        display: block;
+        max-height: 0;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      /* Small theme */
+
+      :host([theme~="small"]) {
+        --valo-font-size: 14px;
+        --valo-size: var(--valo-size-s);
+      }
+
+      /* Slotted buttons */
+
+      [part="input-field"] ::slotted(vaadin-button) {
+        margin: 0;
+      }
+
+      /* Slotted valo icons */
+
+      [part="input-field"] ::slotted(iron-icon[icon^="valo"]) {
+        color: var(--valo-contrast-50pct);
+      }
+    </style>
+  </template>
+</dom-module>

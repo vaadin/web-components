@@ -1,0 +1,519 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Valo Theme Colors</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+
+  <custom-style>
+    <style>
+      nice-demo-snippet span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5em;
+        height: 3.5em;
+        margin: 0.25em;
+        font-size: var(--valo-font-size-s);
+        font-weight: 600;
+        border-radius: 50%;
+      }
+    </style>
+  </custom-style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <valo-config></valo-config>
+
+    <demo-navigation>
+      <span slot="header">Valo</span>
+    </demo-navigation>
+
+    <h1>Colors</h1>
+    <p>The theme defines a set of CSS custom properties you can use to apply a consistent color palette across your application.</p>
+
+    <p>If you are not importing any element themes, and want to use these colors, you need to import them manually.</p>
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <link rel="import" href="path/to/bower_components/valo/color.html">
+      </template>
+    </nice-demo-snippet>
+
+    <h2 demo-section>Light and dark themes</h2>
+    <p>Each color has two variations: the default variation which is used for the light theme, and another variation used for the dark theme.</p>
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <div theme="dark">
+          <!-- Everything inside this div will get use the dark color theme -->
+        </div>
+      </template>
+    </nice-demo-snippet>
+    <div class="note warn">
+      <h6>Browser compatibility</h6>
+      <p>The above example doesn’t work in IE11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors work in all supported browsers.</p>
+    </div>
+    <div class="note">
+      <p>You can toggle the light and dark variants from the theme selector in the menu.</p>
+    </div>
+
+
+    <h2 demo-section>Primary</h2>
+    <p>The most prominent color in the theme. It is used to bring attention to certain elements in the interface. An accompanying contrast color is also defined.</p>
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="primary-10pct">10%</span>
+        <span class="primary-50pct">50%</span>
+        <span class="primary">100%</span>
+
+        <custom-style>
+          <style>
+            .primary-10pct {
+              background-color: var(--valo-primary-color-10pct);
+              color: var(--valo-primary-text-color);
+            }
+
+            .primary-50pct {
+              background-color: var(--valo-primary-color-50pct);
+              color: var(--valo-primary-contrast-color);
+            }
+
+            .primary {
+              background-color: var(--valo-primary-color);
+              color: var(--valo-primary-contrast-color);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Grayscale</h2>
+    <p>These colors form the foundation for your application colors. The grayscale colors consist of 10 different shades of “black” and “white” (they are not necessarily pure grayscale, but tinted slightly with the theme primary color), each with a degree of transparency.</p>
+
+    <h4>Contrast</h4>
+    <p>There are properties to easily specify contrast colors that work automatically for both light and dark variations. For the light theme the contrast colors use “shades” and for the dark theme they use “tints”.</p>
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="contrast-5pct">5%</span>
+        <span class="contrast-10pct">10%</span>
+        <span class="contrast-20pct">20%</span>
+        <span class="contrast-30pct">30%</span>
+        <span class="contrast-40pct">40%</span>
+        <span class="contrast-50pct">50%</span>
+        <span class="contrast-60pct">60%</span>
+        <span class="contrast-70pct">70%</span>
+        <span class="contrast-80pct">80%</span>
+        <span class="contrast-90pct">90%</span>
+        <span class="contrast">100%</span>
+
+        <custom-style>
+          <style>
+            .contrast-5pct {
+              background-color: var(--valo-contrast-5pct);
+            }
+
+            .contrast-10pct {
+              background-color: var(--valo-contrast-10pct);
+            }
+
+            .contrast-20pct {
+              background-color: var(--valo-contrast-20pct);
+            }
+
+            .contrast-30pct {
+              background-color: var(--valo-contrast-30pct);
+            }
+
+            .contrast-40pct {
+              background-color: var(--valo-contrast-40pct);
+            }
+
+            .contrast-50pct {
+              background-color: var(--valo-contrast-50pct);
+            }
+
+            .contrast-60pct {
+              background-color: var(--valo-contrast-60pct);
+              color: var(--valo-base-color);
+            }
+
+            .contrast-70pct {
+              background-color: var(--valo-contrast-70pct);
+              color: var(--valo-base-color);
+            }
+
+            .contrast-80pct {
+              background-color: var(--valo-contrast-80pct);
+              color: var(--valo-base-color);
+            }
+
+            .contrast-90pct {
+              background-color: var(--valo-contrast-90pct);
+              color: var(--valo-base-color);
+            }
+
+            .contrast {
+              background-color: var(--valo-contrast);
+              color: var(--valo-base-color);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+    <h4>Tints</h4>
+    <nice-demo-snippet class="black-5pct">
+      <template slot="source">
+        <span class="white-5pct">5%</span>
+        <span class="white-10pct">10%</span>
+        <span class="white-20pct">20%</span>
+        <span class="white-30pct">30%</span>
+        <span class="white-40pct">40%</span>
+        <span class="white-50pct">50%</span>
+        <span class="white-60pct">60%</span>
+        <span class="white-70pct">70%</span>
+        <span class="white-80pct">80%</span>
+        <span class="white-90pct">90%</span>
+        <span class="white">100%</span>
+
+        <custom-style>
+          <style>
+            .white-5pct {
+              background-color: var(--valo-tint-5pct);
+            }
+
+            .white-10pct {
+              background-color: var(--valo-tint-10pct);
+            }
+
+            .white-20pct {
+              background-color: var(--valo-tint-20pct);
+            }
+
+            .white-30pct {
+              background-color: var(--valo-tint-30pct);
+            }
+
+            .white-40pct {
+              background-color: var(--valo-tint-40pct);
+            }
+
+            .white-50pct {
+              background-color: var(--valo-tint-50pct);
+              color: var(--valo-shade-90pct);
+            }
+
+            .white-60pct {
+              background-color: var(--valo-tint-60pct);
+              color: var(--valo-shade-90pct);
+            }
+
+            .white-70pct {
+              background-color: var(--valo-tint-70pct);
+              color: var(--valo-shade-90pct);
+            }
+
+            .white-80pct {
+              background-color: var(--valo-tint-80pct);
+              color: var(--valo-shade-90pct);
+            }
+
+            .white-90pct {
+              background-color: var(--valo-tint-90pct);
+              color: var(--valo-shade-90pct);
+            }
+
+            .white {
+              background-color: var(--valo-tint);
+              color: var(--valo-shade-90pct);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+    <h4>Shades</h4>
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="black-5pct">5%</span>
+        <span class="black-10pct">10%</span>
+        <span class="black-20pct">20%</span>
+        <span class="black-30pct">30%</span>
+        <span class="black-40pct">40%</span>
+        <span class="black-50pct">50%</span>
+        <span class="black-60pct">60%</span>
+        <span class="black-70pct">70%</span>
+        <span class="black-80pct">80%</span>
+        <span class="black-90pct">90%</span>
+        <span class="black">100%</span>
+
+        <custom-style>
+          <style>
+            .black-5pct {
+              background-color: var(--valo-shade-5pct);
+            }
+
+            .black-10pct {
+              background-color: var(--valo-shade-10pct);
+            }
+
+            .black-20pct {
+              background-color: var(--valo-shade-20pct);
+            }
+
+            .black-30pct {
+              background-color: var(--valo-shade-30pct);
+            }
+
+            .black-40pct {
+              background-color: var(--valo-shade-40pct);
+            }
+
+            .black-50pct {
+              background-color: var(--valo-shade-50pct);
+            }
+
+            .black-60pct {
+              background-color: var(--valo-shade-60pct);
+              color: var(--valo-tint-90pct);
+            }
+
+            .black-70pct {
+              background-color: var(--valo-shade-70pct);
+              color: var(--valo-tint-90pct);
+            }
+
+            .black-80pct {
+              background-color: var(--valo-shade-80pct);
+              color: var(--valo-tint-90pct);
+            }
+
+            .black-90pct {
+              background-color: var(--valo-shade-90pct);
+              color: var(--valo-tint-90pct);
+            }
+
+            .black {
+              background-color: var(--valo-shade);
+              color: var(--valo-tint-90pct);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Error/danger</h2>
+    <p>Usually a red color, used for things like error indicators, error messages and buttons that can cause permanent data loss. An accompanying contrast color is also defined.</p>
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="error-10pct">10%</span>
+        <span class="error-50pct">50%</span>
+        <span class="error">100%</span>
+
+        <custom-style>
+          <style>
+            .error-10pct {
+              background-color: var(--valo-error-color-10pct);
+              color: var(--valo-error-text-color);
+            }
+
+            .error-50pct {
+              background-color: var(--valo-error-color-50pct);
+              color: var(--valo-error-contrast-color);
+            }
+
+            .error {
+              background-color: var(--valo-error-color);
+              color: var(--valo-error-contrast-color);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Success</h2>
+    <p>Usually a green color, used for things success messages and buttons that complete a certain task. An accompanying contrast color is also defined.</p>
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="success-10pct">10%</span>
+        <span class="success-50pct">50%</span>
+        <span class="success">100%</span>
+
+        <custom-style>
+          <style>
+            .success-10pct {
+              background-color: var(--valo-success-color-10pct);
+              color: var(--valo-success-text-color);
+            }
+
+            .success-50pct {
+              background-color: var(--valo-success-color-50pct);
+              color: var(--valo-success-contrast-color);
+            }
+
+            .success {
+              background-color: var(--valo-success-color);
+              color: var(--valo-success-contrast-color);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Text</h2>
+    <p>The <code>--valo-base-color</code> is used as the default background for the app, and it always contrast with the body text color.</p>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div class="base">
+          <div class="body-text">Normal text</div>
+          <div class="secondary-text">Secondary text</div>
+          <div class="tertiary-text">Tertiary text</div>
+          <div class="disabled-text">Disabled text</div>
+          <div class="primary-text">Primary text</div>
+          <div class="error-text">Error text</div>
+          <div class="success-text">Success text</div>
+        </div>
+
+        <custom-style>
+          <style>
+            .base {
+              background-color: var(--valo-base-color);
+            }
+
+            .body-text {
+              color: var(--valo-body-text-color);
+            }
+
+            .secondary-text {
+              color: var(--valo-secondary-text-color);
+            }
+
+            .tertiary-text {
+              color: var(--valo-tertiary-text-color);
+            }
+
+            .disabled-text {
+              color: var(--valo-disabled-text-color);
+            }
+
+            .primary-text {
+              color: var(--valo-primary-text-color);
+            }
+
+            .error-text {
+              color: var(--valo-error-text-color);
+            }
+
+            .success-text {
+              color: var(--valo-success-text-color);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Custom properties</h2>
+
+    <h5>Base color</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-base-color</dt>
+    </dl>
+
+    <h5>Primary</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-primary-color-10pct</dt>
+      <dt>--valo-primary-color-50pct</dt>
+      <dt>--valo-primary-color</dt>
+      <dt>--valo-primary-contrast-color</dt>
+    </dl>
+
+    <h5>Tint</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-tint-5pct</dt>
+      <dt>--valo-tint-20pct</dt>
+      <dt>--valo-tint-30pct</dt>
+      <dt>--valo-tint-40pct</dt>
+      <dt>--valo-tint-50pct</dt>
+      <dt>--valo-tint-60pct</dt>
+      <dt>--valo-tint-70pct</dt>
+      <dt>--valo-tint-80pct</dt>
+      <dt>--valo-tint-90pct</dt>
+      <dt>--valo-tint</dt>
+    </dl>
+
+    <h5>Shade</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-shade-5pct</dt>
+      <dt>--valo-shade-20pct</dt>
+      <dt>--valo-shade-30pct</dt>
+      <dt>--valo-shade-40pct</dt>
+      <dt>--valo-shade-50pct</dt>
+      <dt>--valo-shade-60pct</dt>
+      <dt>--valo-shade-70pct</dt>
+      <dt>--valo-shade-80pct</dt>
+      <dt>--valo-shade-90pct</dt>
+      <dt>--valo-shade</dt>
+    </dl>
+
+    <h5>Contrast</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-contrast-5pct</dt>
+      <dt>--valo-contrast-20pct</dt>
+      <dt>--valo-contrast-30pct</dt>
+      <dt>--valo-contrast-40pct</dt>
+      <dt>--valo-contrast-50pct</dt>
+      <dt>--valo-contrast-60pct</dt>
+      <dt>--valo-contrast-70pct</dt>
+      <dt>--valo-contrast-80pct</dt>
+      <dt>--valo-contrast-90pct</dt>
+      <dt>--valo-contrast</dt>
+    </dl>
+
+    <h5>Error</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-error-color-10pct</dt>
+      <dt>--valo-error-color-50pct</dt>
+      <dt>--valo-error-color</dt>
+      <dt>--valo-error-contrast-color</dt>
+    </dl>
+
+    <h5>Success</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-success-color-10pct</dt>
+      <dt>--valo-success-color-50pct</dt>
+      <dt>--valo-success-color</dt>
+      <dt>--valo-success-contrast-color</dt>
+    </dl>
+
+    <h5>Text</h5>
+    <dl class="custom-properties color">
+      <dt>--valo-body-text-color</dt>
+      <dt>--valo-secondary-text-color</dt>
+      <dt>--valo-tertiary-text-color</dt>
+      <dt>--valo-disabled-text-color</dt>
+      <dt>--valo-primary-text-color</dt>
+      <dt>--valo-error-text-color</dt>
+      <dt>--valo-success-text-color</dt>
+    </dl>
+
+  </div>
+</body>
+</html>

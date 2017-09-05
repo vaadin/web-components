@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Valo Theme Sizing and Spacing</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+
+  <custom-style>
+    <style>
+      nice-demo-snippet span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2em;
+        height: 2em;
+        font-size: var(--valo-font-size-s);
+        background-color: var(--valo-contrast-20pct);
+        background-clip: content-box;
+      }
+
+      nice-demo-snippet span[class^="space"] {
+        outline: 1px dashed var(--valo-contrast-40pct);
+      }
+    </style>
+  </custom-style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Valo</span>
+    </demo-navigation>
+
+    <h1>Sizing and spacing</h1>
+    <p>The theme defines a set of CSS custom properties you can use to apply consistent sizing and spacing across your application.</p>
+
+
+    <h2 demo-section>Sizing</h2>
+    <p>Use these properties to adjust the sizing of regular elements (buttons, text fields, list items). The default sizing is based on <code>--valo-size-m</code>.</p>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="size-xl">XL</span>
+        <span class="size-l">L</span>
+        <span class="size-m">M</span>
+        <span class="size-s">S</span>
+        <span class="size-xs">XS</span>
+
+        <custom-style>
+          <style>
+            .size-xl {
+              width: var(--valo-size-xl);
+              height: var(--valo-size-xl);
+            }
+
+            .size-l {
+              width: var(--valo-size-l);
+              height: var(--valo-size-l);
+            }
+
+            .size-m {
+              width: var(--valo-size-m);
+              height: var(--valo-size-m);
+            }
+
+            .size-s {
+              width: var(--valo-size-s);
+              height: var(--valo-size-s);
+            }
+
+            .size-xs {
+              width: var(--valo-size-xs);
+              height: var(--valo-size-xs);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Spacing</h2>
+    <p>Use these properties to adjust the inter-component spacings, i.e. space outside a regular component (button, text field) or inside a container component (layouts, grid cells)</p>
+
+
+    <h3>Uniform</h3>
+    <p>Use these properties for margin or padding in a single direction or uniformly on all sides.</p>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="space-xl">XL</span>
+        <span class="space-l">L</span>
+        <span class="space-m">M</span>
+        <span class="space-s">S</span>
+        <span class="space-xs">XS</span>
+
+        <custom-style>
+          <style>
+            .space-xl {
+              padding: var(--valo-space-xl);
+            }
+
+            .space-l {
+              padding: var(--valo-space-l);
+            }
+
+            .space-m {
+              padding: var(--valo-space-m);
+            }
+
+            .space-s {
+              padding: var(--valo-space-s);
+            }
+
+            .space-xs {
+              padding: var(--valo-space-xs);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h3>Wide</h3>
+    <p>Use these properties for margin or padding to have a bigger horizontal space then vertical space.</p>
+
+    <nice-demo-snippet class="space">
+      <template slot="source">
+        <span class="space-wide-xl">XL</span>
+        <span class="space-wide-l">L</span>
+        <span class="space-wide-m">M</span>
+        <span class="space-wide-s">S</span>
+        <span class="space-wide-xs">XS</span>
+
+        <custom-style>
+          <style>
+            .space-wide-xl {
+              padding: var(--valo-space-wide-xl);
+            }
+
+            .space-wide-l {
+              padding: var(--valo-space-wide-l);
+            }
+
+            .space-wide-m {
+              padding: var(--valo-space-wide-m);
+            }
+
+            .space-wide-s {
+              padding: var(--valo-space-wide-s);
+            }
+
+            .space-wide-xs {
+              padding: var(--valo-space-wide-xs);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h3>Tall</h3>
+    <p>Use these properties for margin or padding to have a bigger vertical space then horizontal space.</p>
+
+    <nice-demo-snippet class="space">
+      <template slot="source">
+        <span class="space-tall-xl">XL</span>
+        <span class="space-tall-l">L</span>
+        <span class="space-tall-m">M</span>
+        <span class="space-tall-s">S</span>
+        <span class="space-tall-xs">XS</span>
+
+        <custom-style>
+          <style>
+            .space-tall-xl {
+              padding: var(--valo-space-tall-xl);
+            }
+
+            .space-tall-l {
+              padding: var(--valo-space-tall-l);
+            }
+
+            .space-tall-m {
+              padding: var(--valo-space-tall-m);
+            }
+
+            .space-tall-s {
+              padding: var(--valo-space-tall-s);
+            }
+
+            .space-tall-xs {
+              padding: var(--valo-space-tall-xs);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Custom properties</h2>
+
+    <h5>Size</h5>
+    <dl class="custom-properties">
+      <dt>--valo-size-xl</dt>
+      <dt>--valo-size-l</dt>
+      <dt>--valo-size-m</dt>
+      <dt>--valo-size-s</dt>
+      <dt>--valo-size-xs</dt>
+    </dl>
+
+    <h5>Space</h5>
+    <dl class="custom-properties">
+      <dt>--valo-space-xl</dt>
+      <dt>--valo-space-l</dt>
+      <dt>--valo-space-m</dt>
+      <dt>--valo-space-s</dt>
+      <dt>--valo-space-xs</dt>
+    </dl>
+
+    <h5>Space, wide</h5>
+    <dl class="custom-properties">
+      <dt>--valo-space-wide-xl</dt>
+      <dt>--valo-space-wide-l</dt>
+      <dt>--valo-space-wide-m</dt>
+      <dt>--valo-space-wide-s</dt>
+      <dt>--valo-space-wide-xs</dt>
+    </dl>
+
+    <h5>Space, tall</h5>
+    <dl class="custom-properties">
+      <dt>--valo-space-tall-xl</dt>
+      <dt>--valo-space-tall-l</dt>
+      <dt>--valo-space-tall-m</dt>
+      <dt>--valo-space-tall-s</dt>
+      <dt>--valo-space-tall-xs</dt>
+    </dl>
+
+  </div>
+</body>
+</html>

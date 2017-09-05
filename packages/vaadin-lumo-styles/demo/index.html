@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Vaadin Valo Theme Getting Started</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+
+    .install-options {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 0 1em;
+    }
+
+    .next-steps h4 {
+      margin-bottom: 0;
+    }
+
+    .next-steps p {
+      margin-top: 0;
+    }
+
+    .next-steps h4 a {
+      text-decoration: none;
+    }
+
+    .next-steps h4 a::after {
+      content: " ›";
+    }
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Valo</span>
+    </demo-navigation>
+
+    <h1>Getting Started</h1>
+
+    <h2 demo-section>Install</h2>
+    <p>To start using the Valo theme, you need to install at least one Vaadin Core Element (such as <a href="https://github.com/vaadin/vaadin-text-field">vaadin-text-field</a>) and the <a href="https://github.com/vaadin/valo">Valo</a> theme package.</p>
+
+    <div class="install-options">
+      <div>
+        <nice-demo-snippet code-only>
+          <template slot="source">
+            bower install --save vaadin/vaadin-text-field
+            bower install --save vaadin/valo
+          </template>
+        </nice-demo-snippet>
+      </div>
+    </div>
+
+
+    <h2 demo-section>Import a theme</h2>
+
+    <p>After installing, import any element specific theme files you need. Here, we are importing the Valo theme for vaadin-text-field.</p>
+    <div class="note">
+      <p>You need to import the theme for an element before the actual element itself.</p>
+    </div>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <link rel="import" href="path/to/bower_components/valo/vaadin-text-field.html">
+        <!-- Import the actual element after its theme -->
+        <link rel="import" href="path/to/bower_components/vaadin-text-field/vaadin-text-field.html">
+      </template>
+    </nice-demo-snippet>
+
+  </div>
+</body>
+</html>

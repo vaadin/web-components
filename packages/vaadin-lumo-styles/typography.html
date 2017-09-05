@@ -1,0 +1,73 @@
+<custom-style>
+  <style>
+    html {
+      /* Font families */
+      --valo-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Ubuntu, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+      /* Font sizes */
+      --valo-font-size-xxxl: 36px;
+      --valo-font-size-xxl: 28px;
+      --valo-font-size-xl: 22px;
+      --valo-font-size-l: 18px;
+      --valo-font-size-m: 16px;
+      --valo-font-size-s: 14px;
+      --valo-font-size-xs: 13px;
+
+      /* Line heights */
+      --valo-line-height: 1.625;
+      --valo-line-height-s: 1.375;
+      --valo-line-height-xs: 1.25;
+    }
+
+  </style>
+</custom-style>
+
+<dom-module id="valo-typography">
+  <template>
+    <style>
+      body {
+        font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size, var(--valo-font-size-m));
+        line-height: var(--valo-line-height);
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: var(--valo-contrast);
+        font-weight: 600;
+        line-height: var(--valo-line-height-xs);
+      }
+
+      h1 {
+        font-size: var(--valo-font-size-xxxl);
+      }
+
+      h2 {
+        font-size: var(--valo-font-size-xxl);
+      }
+
+      h3 {
+        font-size: var(--valo-font-size-xl);
+      }
+
+      h4 {
+        font-size: var(--valo-font-size-l);
+      }
+
+      h5 {
+        font-size: var(--valo-font-size-m);
+      }
+
+      h6 {
+        font-size: var(--valo-font-size-s);
+      }
+    </style>
+  </template>
+</dom-module>

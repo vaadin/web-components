@@ -1,0 +1,43 @@
+{
+  "name": "valo",
+  "version": "0.2.3",
+  "description": "Valo is a customizable theme for Vaadin Elements",
+  "main": "valo.html",
+  "repository": "vaadin/valo",
+  "keywords": [
+    "vaadin",
+    "valo",
+    "theme",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/valo/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "eslint": "^3.11.1",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^2.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^3.0.1",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-stylelint": "^3.7.0",
+    "polyserve": "^0.19.1",
+    "stylelint": "7.10.1",
+    "stylelint-config-vaadin": "latest",
+    "wdio-mocha-framework": "^0.5.10",
+    "wdio-sauce-service": "^0.4.0",
+    "wdio-static-server-service": "^1.0.1",
+    "wdio-visual-regression-service": "^0.8.0",
+    "web-component-tester": "^6.0.0",
+    "webdriverio": "^4.8.0"
+  }
+}

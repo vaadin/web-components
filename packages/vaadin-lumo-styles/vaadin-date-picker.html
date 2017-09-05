@@ -1,0 +1,250 @@
+<link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
+<link rel="import" href="sizing-and-spacing.html">
+<link rel="import" href="style.html">
+<link rel="import" href="typography.html">
+<link rel="import" href="vaadin-text-field.html">
+<link rel="import" href="vaadin-button.html">
+
+
+<dom-module id="valo-date-picker" theme-for="vaadin-date-picker">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        margin-top: 0;
+        max-width: 100%;
+        width: var(--valo-date-picker-default-width, calc(var(--valo-size-m) * 5));
+      }
+
+      [part~="overlay"] {
+        border-radius: 6px;
+        box-shadow: 0 1px 4px 0 var(--valo-shade-30pct);
+      }
+
+      [part="text-field"] {
+        flex: 1;
+        max-width: 100%;
+      }
+
+      [part*="button"] {
+        cursor: pointer;
+      }
+
+      [part="toggle-button"] {
+        color: var(--valo-body-text-color);
+        opacity: 0.5;
+      }
+
+      [part="toggle-button"]::before {
+        font-family: 'valo-icons';
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-month-calendar" theme-for="vaadin-month-calendar">
+  <template>
+    <style>
+      :host {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        --valo-month-calendar-date-font-size: var(--valo-font-size-m);
+        --valo-month-calendar-date-border-size: 4px;
+      }
+
+      [part~="date"] {
+        border-radius: 2px;
+        box-sizing: border-box;
+        color: var(--valo-body-text-color);
+        font-size: var(--valo-month-calendar-date-font-size);
+        padding: calc(var(--valo-month-calendar-date-font-size) / 2) 0;
+        height: calc(2 * var(--valo-month-calendar-date-font-size) + 2 * var(--valo-month-calendar-date-border-size) + 2px);
+      }
+
+      [part~="date"][today]:not([focused]) {
+        position: relative;
+      }
+
+      [part~="date"][today]:not([focused])::before {
+        background: var(--valo-primary-color);
+        border-radius: 100%;
+        bottom: 0;
+        content: '';
+        height: 26px;
+        left: 0;
+        margin: auto;
+        opacity: .3;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+      }
+
+      [part~="date"][selected] {
+        background: var(--valo-primary-color);
+        border-radius: 6px;
+        border: var(--valo-month-calendar-date-border-size) solid var(--valo-base-color);
+        color: #fff;
+        font-weight: 600;
+        padding-top: calc(var(--valo-month-calendar-date-font-size) / 2 - var(--valo-month-calendar-date-border-size));
+        height: calc(2 * var(--valo-month-calendar-date-font-size) + 2 * var(--valo-month-calendar-date-border-size) + 2px);
+      }
+
+      [part~="date"][disabled] {
+        cursor: default;
+        opacity: 0.9;
+      }
+
+      [part~="date"][today]:not([focused]):hover::before {
+        opacity: 0;
+      }
+
+      [part~="date"]:not(:empty):not([disabled]) {
+        cursor: pointer;
+      }
+
+      [part~="weekday"],
+      [part~="date"],
+      [part~="week-number"] {
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      [part~="date"]:not([disabled]):hover,
+      [part~="date"][focused]:not([disabled]) {
+        background: var(--valo-primary-color);
+        border-radius: 6px;
+        border: var(--valo-month-calendar-date-border-size) solid var(--valo-base-color);
+        color: #fff;
+        padding-top: calc(var(--valo-month-calendar-date-font-size) / 2 - var(--valo-month-calendar-date-border-size));
+        height: calc(2 * var(--valo-month-calendar-date-font-size) + 2 * var(--valo-month-calendar-date-border-size) + 2px);
+      }
+
+      [part~="weekdays"] {
+        border-radius: 6px;
+        font-size: var(--valo-font-size-xs);
+      }
+
+      [part~="weekday"] {
+        color: var(--valo-disabled-text-color);
+        cursor: default;
+        font-weight: 100;
+        padding: 8px 0;
+        text-transform: none;
+      }
+
+      [part~="weekday"]:not(:empty):not([disabled]):active {
+        border-radius: 2px;
+      }
+
+      [part~="week-numbers"] {
+        font-size: var(--valo-font-size-xs);
+        position: relative;
+      }
+
+      [part~="week-number"] {
+        color: var(--valo-disabled-text-color);
+        cursor: default;
+        font-weight: 100;
+        position: relative;
+        transform: translateY(50%);
+      }
+
+      [part~="month-header"] {
+        color: var(--valo-body-text-color);
+        cursor: default;
+        font-size: var(--valo-font-size-l);
+        font-weight: 500;
+        padding: 6px 0;
+        text-align: center;
+      }
+    </style>
+  </template>
+</dom-module>
+<dom-module id="valo-date-picker-overlay" theme-for="vaadin-date-picker-overlay">
+  <template>
+    <style>
+      :host {
+        background-color: var(--valo-date-picker-overlay-background-color, var(--valo-base-color));
+        border-radius: 0 0 6px 6px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      [part~="years"] {
+        --vaadin-infinite-scroller-buffer-width: 90px;
+        background-color: var(--valo-contrast-20pct);
+        border-top-right-radius: 6px;
+        color: var(--valo-contrast-50pct);
+        cursor: pointer;
+      }
+
+      [part~="years"]::before {
+        border-left-color: var(--valo-base-color);
+        z-index: 1;
+      }
+
+      [part~="months"] {
+        --vaadin-infinite-scroller-item-height: 320px;
+      }
+
+      [part~="toolbar"] {
+        background-color: var(--valo-date-picker-overlay-toolbar-background-color, var(--valo-contrast-10pct));
+        border-radius: 0 0 6px 6px;
+        box-shadow: 0 -1px 0 0 var(--valo-shade-10pct);
+        padding: 14px 20px;
+      }
+
+      [part~="overlay-header"] {
+        background: #f7f6f2;
+        padding: 16px;
+        position: relative;
+      }
+
+      [part~="years-toggle-button"] {
+        background: transparent;
+      }
+
+      [part~="year-number"],
+      [part~="year-separator"] {
+        align-items: center;
+        display: flex;
+        height: 50%;
+        justify-content: center;
+        transform: translateY(-50%);
+      }
+
+      [part~="years"] [part~="year-number"][current] {
+        color: var(--valo-primary-color);
+      }
+
+      [part~="years"] [part~="year-separator"]::after {
+        color: var(--valo-contrast-50pct);
+        content: "\e903";
+        font-family: 'vaadin-date-picker-icons';
+        font-size: 4px;
+      }
+
+      [part~="month"][disabled] {
+        opacity: 0.3;
+      }
+
+      [part$="button"] {
+        cursor: pointer;
+      }
+
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-date-picker-buttons" theme-for="vaadin-button">
+  <template>
+    <style>
+      [part="button"] {
+        cursor: inherit;
+      }
+    </style>
+  </template>
+</dom-module>

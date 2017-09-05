@@ -1,0 +1,76 @@
+<link rel="import" href="color.html">
+<link rel="import" href="sizing-and-spacing.html">
+<link rel="import" href="style.html">
+<link rel="import" href="typography.html">
+
+<dom-module id="valo-grid" theme-for="vaadin-grid">
+  <template>
+    <style>
+      :host {
+        border: 1px solid var(--valo-contrast-10pct);
+      }
+
+      [part~="cell"] {
+        min-height: var(--valo-size-l);
+        padding: var(--valo-space-xs) var(--valo-space-m);
+        background: var(--valo-base-color);
+        font-family: var(--valo-font-family);
+        color: var(--valo-body-text-color);
+        font-size: var(--valo-font-size, var(--valo-font-size-m));
+        line-height: var(--valo-line-height);
+      }
+
+      [part~="header-cell"],
+      [part~="footer-cell"] {
+        min-height: var(--valo-size-xl);
+        color: var(--valo-secondary-text-color);
+        font-size: var(--valo-font-size, var(--valo-font-size-xs));
+      }
+
+      [part~="row"]:last-child [part~="header-cell"] {
+        border-bottom: 1px solid var(--valo-contrast-10pct);
+      }
+
+      [part~="body-cell"] {
+        border-bottom: 1px solid var(--valo-contrast-10pct);
+      }
+
+      [part~="row"]:first-child [part~="footer-cell"] {
+        border-top: 1px solid var(--valo-contrast-10pct);
+      }
+
+      [part~="row"][selected] [part~="body-cell"] {
+        background: var(--valo-contrast-10pct);
+      }
+
+      [part~="cell"][last-frozen] {
+        border-right: 1px solid var(--valo-contrast-10pct);
+      }
+
+      :host([reordering]) [part~="cell"] {
+        background: linear-gradient(var(--valo-shade-10pct), var(--valo-shade-10pct)) var(--valo-base-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="allowed"] {
+        background: var(--valo-base-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
+        background: linear-gradient(var(--valo-contrast-20pct), var(--valo-contrast-20pct)) var(--valo-base-color);
+      }
+
+      [part="resize-handle"] {
+        border-right: 1px solid var(--valo-contrast-10pct);
+        right: -1px;
+      }
+
+      [part~="cell"]:focus {
+        outline: none;
+      }
+
+      :host([navigating]) [part~="cell"]:focus {
+        box-shadow: inset 0 0 0 3px var(--valo-shade-70pct);
+      }
+    </style>
+  </template>
+</dom-module>
