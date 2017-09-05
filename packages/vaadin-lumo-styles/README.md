@@ -1,42 +1,31 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-themes.svg)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-themes.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-themes)
+![Bower version](https://img.shields.io/bower/v/valo.svg)
+[![Build Status](https://travis-ci.org/vaadin/valo.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-themes)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# vaadin-themes
+# Valo Theme for Vaadin Elements
 
-`vaadin-themes` is a set of customizable themes for the [Vaadin Core Elements](https://vaadin.com/elements).
-
-<!--
-```
-<custom-element-demo>
-  <template>
-    <link rel="import" href="vaadin-themes.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
+`valo` is customizable theme for the [Vaadin Core Elements](https://vaadin.com/elements).
 
 
 ## Running demos and tests in browser
 
-1. Fork the `vaadin-themes` repository and clone it locally.
+1. Fork the `valo` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-themes` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `valo` directory, run `npm install` and then `bower install` to install dependencies.
 
 1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-themes/demo
-  - http://127.0.0.1:8080/components/vaadin-themes/test
+  - http://127.0.0.1:8080/components/valo/demo
+  - http://127.0.0.1:8080/components/valo/test
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-element` directory, run `polymer test`
+1. When in the `valo` directory, run `polymer test`
 
 
 ## Following the coding style
