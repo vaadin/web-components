@@ -259,6 +259,12 @@ This program is available under Apache License Version 2.0, available at https:/
           .filter(el => el.matches('[part~="details-cell"]'))[0] :
         dstRow.children[dstColumnIndex];
       this._scrollHorizontallyToCell(dstCell);
+      if (activeRowGroup === this.$.items) {
+        // When scrolling with repeated keydown, sometimes FocusEvent listeners
+        // are too late to update _focusedItemIndex. Ensure next keydown
+        // listener invocation gets updated _focusedItemIndex value.
+        this._focusedItemIndex = dstRowIndex;
+      }
       this._focusCell(dstCell, activeRowGroup);
     }
 
