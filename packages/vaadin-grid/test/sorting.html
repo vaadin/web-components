@@ -76,8 +76,8 @@
         });
 
         function clickSorter(sorter) {
-          var clickEvent = new CustomEvent('click', {cancelable: true});
-          sorter._onCellClick(clickEvent);
+          var clickEvent = new CustomEvent('click', {bubbles: true, cancelable: true, composed: true});
+          sorter.dispatchEvent(clickEvent);
           return clickEvent;
         }
 
@@ -85,7 +85,7 @@
           expect(sorter.direction).to.equal(null);
         });
 
-        it.skip('should toggle direction', function() {
+        it('should toggle direction', function() {
           clickSorter(sorter);
           expect(sorter.direction).to.equal('asc');
           clickSorter(sorter);
@@ -94,7 +94,8 @@
           expect(sorter.direction).to.equal(null);
         });
 
-        it.skip('should not toggle on focusable click', function() {
+        it('should not toggle on focusable click', function() {
+          button.focus();
           click(button);
           expect(sorter.direction).to.equal(null);
         });
@@ -126,7 +127,7 @@
           expect(indicators.getAttribute('aria-hidden')).to.equal('true');
         });
 
-        it.skip('should prevent default on click', function() {
+        it('should prevent default on click', function() {
           const clickEvent = clickSorter(sorter);
 
           expect(clickEvent.defaultPrevented).to.be.true;

@@ -108,7 +108,9 @@
                 <paper-input value="{{item.name.last}}"></paper-input>
               </template>
               <template class="header">
-                TC2
+                <vaadin-grid-sorter path="name.last">
+                  <vaadin-grid-filter path="name.last"></vaadin-grid-filter>
+                </vaadin-grid-sorter>
               </template>
               <template class="footer">
                 <vaadin-grid-filter path="name.last"></vaadin-grid-filter>
