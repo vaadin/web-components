@@ -109,12 +109,14 @@ This program is available under Apache License Version 2.0, available at https:/
         <paper-toast id="rejectToast"></paper-toast>
 
         <script>
-          var upload = document.querySelector('vaadin-upload#rejectEventDemo');
-          var toast = document.querySelector('paper-toast#rejectToast');
+          window.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#rejectEventDemo');
+            var toast = document.querySelector('paper-toast#rejectToast');
 
-          upload.addEventListener('file-reject', function(event) {
-            toast.text = event.detail.file.name + ' error: ' + event.detail.error;
-            toast.open();
+            upload.addEventListener('file-reject', function(event) {
+              toast.text = event.detail.file.name + ' error: ' + event.detail.error;
+              toast.open();
+            });
           });
         </script>
       </template>

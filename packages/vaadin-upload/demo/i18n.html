@@ -34,42 +34,44 @@ This program is available under Apache License Version 2.0, available at https:/
       <template>
         <vaadin-upload id="ru"></vaadin-upload>
         <script>
-          var upload = document.querySelector('vaadin-upload#ru');
-          upload.i18n = {
-            dropFiles: {
-              one: 'Перетащите файл сюда...',
-              many: 'Перетащите файлы сюда...'
-            },
-            addFiles: {
-              one: 'Выбрать файл',
-              many: 'Добавить файлы'
-            },
-            cancel: 'Отменить',
-            error: {
-              tooManyFiles: 'Слишком много файлов.',
-              fileIsTooBig: 'Слишком большой файл.',
-              incorrectFileType: 'Некорректный тип файла.'
-            },
-            uploading: {
-              status: {
-                connecting: 'Соединение...',
-                stalled: 'Загрузка застопорилась.',
-                processing: 'Обработка файла...'
+          window.addEventListener('WebComponentsReady', function() {
+            var upload = document.querySelector('vaadin-upload#ru');
+            upload.i18n = {
+              dropFiles: {
+                one: 'Перетащите файл сюда...',
+                many: 'Перетащите файлы сюда...'
               },
-              remainingTime: {
-                prefix: 'оставшееся время: ',
-                unknown: 'оставшееся время неизвестно'
+              addFiles: {
+                one: 'Выбрать файл',
+                many: 'Добавить файлы'
               },
+              cancel: 'Отменить',
               error: {
-                serverUnavailable: 'Сервер недоступен',
-                unexpectedServerError: 'Неожиданная ошибка сервера',
-                forbidden: 'Загрузка запрещена'
+                tooManyFiles: 'Слишком много файлов.',
+                fileIsTooBig: 'Слишком большой файл.',
+                incorrectFileType: 'Некорректный тип файла.'
+              },
+              uploading: {
+                status: {
+                  connecting: 'Соединение...',
+                  stalled: 'Загрузка застопорилась.',
+                  processing: 'Обработка файла...'
+                },
+                remainingTime: {
+                  prefix: 'оставшееся время: ',
+                  unknown: 'оставшееся время неизвестно'
+                },
+                error: {
+                  serverUnavailable: 'Сервер недоступен',
+                  unexpectedServerError: 'Неожиданная ошибка сервера',
+                  forbidden: 'Загрузка запрещена'
+                }
+              },
+              units: {
+                size: ['Б', 'Кбайт', 'Мбайт', 'Гбайт', 'Тбайт', 'Пбайт', 'Эбайт', 'Збайт', 'Ибайт']
               }
-            },
-            units: {
-              size: ['Б', 'Кбайт', 'Мбайт', 'Гбайт', 'Тбайт', 'Пбайт', 'Эбайт', 'Збайт', 'Ибайт']
-            }
-          };
+            };
+          });
         </script>
       </template>
     </demo-snippet>
@@ -79,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <template>
         <vaadin-upload id="shortTime"></vaadin-upload>
         <script>
-          document.addEventListener('WebComponentsReady', function() {
+          window.addEventListener('WebComponentsReady', function() {
             var upload = document.querySelector('vaadin-upload#shortTime');
 
             upload.set('i18n.formatTime', function(seconds, split) {
