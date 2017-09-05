@@ -162,6 +162,8 @@ This program is available under Apache License Version 2.0, available at https:/
           content.setAttribute('slot', slot);
         }
 
+        this._updateHeaderFooterMetrics();
+
         Polymer.RenderStatus.afterNextRender(this, () => this.notifyResize());
         return physicalItems;
       }
