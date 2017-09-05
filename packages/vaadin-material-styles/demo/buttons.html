@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Material Theme Button</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <link rel="import" href="../vaadin-button.html">
+  <link rel="import" href="../../vaadin-button/vaadin-button.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Material</span>
+    </demo-navigation>
+
+    <h1>Buttons</h1>
+
+    <h3 demo-section>Light theme</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <h5>Normal</h5>
+
+        <vaadin-button>Normal</vaadin-button>
+        <vaadin-button theme="primary">Primary</vaadin-button>
+        <vaadin-button disabled>Disabled</vaadin-button>
+
+        <vaadin-button theme="dense">Dense</vaadin-button>
+        <vaadin-button theme="dense primary">Dense Primary</vaadin-button>
+        <vaadin-button theme="dense" disabled>Dense Disabled</vaadin-button>
+
+        <h5>Raised</h5>
+
+        <vaadin-button theme="raised">Normal</vaadin-button>
+        <vaadin-button theme="raised primary">Primary</vaadin-button>
+        <vaadin-button theme="raised" disabled>Disabled</vaadin-button>
+
+        <vaadin-button theme="dense raised">Dense</vaadin-button>
+        <vaadin-button theme="dense raised primary">Dense Primary</vaadin-button>
+        <vaadin-button theme="dense raised" disabled>Dense Disabled</vaadin-button>
+
+        <h5>Icon</h5>
+
+        <vaadin-button theme="icon"><iron-icon icon="vaadin:search"></iron-icon></vaadin-button>
+        <vaadin-button theme="icon primary"><iron-icon icon="vaadin:search"></iron-icon></vaadin-button>
+        <vaadin-button theme="icon" disabled><iron-icon icon="vaadin:search"></iron-icon></vaadin-button>
+
+        <vaadin-button theme="icon raised"><iron-icon icon="vaadin:heart"></iron-icon></vaadin-button>
+        <vaadin-button theme="icon raised primary"><iron-icon icon="vaadin:heart"></iron-icon></vaadin-button>
+        <vaadin-button theme="icon raised" disabled><iron-icon icon="vaadin:heart"></iron-icon></vaadin-button>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h3 demo-section>Dark theme</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <h5>Normal</h5>
+
+          <vaadin-button>Normal</vaadin-button>
+          <vaadin-button theme="primary">Primary</vaadin-button>
+          <vaadin-button disabled>Disabled</vaadin-button>
+
+          <vaadin-button theme="dense">Dense</vaadin-button>
+          <vaadin-button theme="dense primary">Dense Primary</vaadin-button>
+          <vaadin-button theme="dense" disabled>Dense Disabled</vaadin-button>
+
+          <h5>Raised</h5>
+
+          <vaadin-button theme="raised">Normal</vaadin-button>
+          <vaadin-button theme="raised primary">Primary</vaadin-button>
+          <vaadin-button theme="raised" disabled>Disabled</vaadin-button>
+
+          <vaadin-button theme="dense raised">Dense</vaadin-button>
+          <vaadin-button theme="dense raised primary">Dense Primary</vaadin-button>
+          <vaadin-button theme="dense raised" disabled>Dense Disabled</vaadin-button>
+
+          <h5>Icon</h5>
+
+          <vaadin-button theme="icon"><iron-icon icon="vaadin:search"></iron-icon></vaadin-button>
+          <vaadin-button theme="icon primary"><iron-icon icon="vaadin:search"></iron-icon></vaadin-button>
+          <vaadin-button theme="icon" disabled><iron-icon icon="vaadin:search"></iron-icon></vaadin-button>
+
+          <vaadin-button theme="icon raised"><iron-icon icon="vaadin:heart"></iron-icon></vaadin-button>
+          <vaadin-button theme="icon raised primary"><iron-icon icon="vaadin:heart"></iron-icon></vaadin-button>
+          <vaadin-button theme="icon raised" disabled><iron-icon icon="vaadin:heart"></iron-icon></vaadin-button>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+  </div>
+</body>
+</html>

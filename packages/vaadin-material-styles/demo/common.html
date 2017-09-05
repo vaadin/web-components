@@ -1,0 +1,102 @@
+<script>
+  window.demos = [
+    {name: 'index', title: 'Getting started'},
+    {name: 'compatibility', title: 'Browser compatibility'},
+    {name: 'typography', title: 'Typography', group: 'Style guide'},
+    {name: 'colors', title: 'Colors'},
+    {name: 'buttons', title: 'Buttons', group: 'Components'},
+    {name: 'date-pickers', title: 'Date pickers'},
+    {name: 'text-fields', title: 'Text fields'}
+  ];
+</script>
+
+<!-- Common imports for all examples -->
+<link rel="import" href="../../elements-demo-resources/demo-navigation.html">
+<link rel="import" href="../../elements-demo-resources/nice-demo-snippet.html">
+<link rel="import" href="../../elements-demo-resources/common.html">
+
+<!-- Import theme custom properties and common style modules -->
+<link rel="import" href="../color.html">
+<link rel="import" href="../typography.html">
+
+<!-- Import Roboto from Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" crossorigin="anonymous">
+
+<!-- Include theme to global scope -->
+<custom-style>
+  <style include="material-colors material-typography">
+    body {
+      margin: 0;
+      /* Prevent header margin from overflowing */
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+
+    demo-navigation {
+      --demo-navigation-font-size: 1em;
+    }
+
+    demo-navigation [slot="header"] {
+      display: flex;
+      align-items: center;
+    }
+
+    code {
+      background-color: rgba(0, 0, 0, 0.05);
+      font-family: Menlo, Consolas, monospace;
+      font-size: 0.95em;
+      border-radius: 3px;
+      padding: 0 0.2em;
+    }
+
+    dl.custom-properties {
+      font-size: 14px;
+      border-left: 4px solid rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 1em 2em;
+    }
+
+    dl.custom-properties dt {
+      font-weight: 600;
+      font-family: Menlo, Consolas, monospace;
+    }
+
+    dl.custom-properties dd {
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    dl.custom-properties dt code {
+      font-weight: 400;
+    }
+
+    dl.custom-properties dt .color-swatch {
+      display: inline-block;
+      width: 0.75em;
+      height: 0.75em;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+      margin-right: 0.2em;
+    }
+
+    nice-demo-snippet div[theme="dark"] {
+      margin: -1em;
+      padding: 1em;
+    }
+  </style>
+</custom-style>
+
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+    // Insert default custom property values into definition lists
+    Array.prototype.forEach.call(document.querySelectorAll('dl.custom-properties dt'), function(dt) {
+      var value = window.ShadyCSS.getComputedStyleValue(dt, dt.textContent.trim());
+      if (value) {
+        dt.innerHTML += ': ';
+        if (dt.classList.contains('color') || dt.parentNode.classList.contains('color')) {
+          dt.innerHTML += `<span class="color-swatch" style="background-color: ${value}"></span>`;
+        }
+        dt.innerHTML += `<code>${value}</code>`;
+      }
+    });
+  });
+</script>

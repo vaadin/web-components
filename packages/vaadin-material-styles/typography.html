@@ -1,0 +1,84 @@
+<custom-style>
+  <style>
+    html {
+      /* Font familiy */
+      --material-font-family: 'Roboto', 'Noto', sans-serif;
+
+      /* Font sizes */
+      --material-display2-font-size: 45px;
+      --material-display1-font-size: 34px;
+      --material-headline-font-size: 24px;
+      --material-title-font-size: 20px;
+      --material-subhead-font-size: 16px;
+      --material-body-font-size: 14px;
+      --material-small-font-size: 13px;
+      --material-caption-font-size: 12px;
+
+      /* Icon size */
+      --material-icon-font-size: 24px;
+    }
+  </style>
+</custom-style>
+
+<dom-module id="material-typography">
+  <template>
+    <style>
+      body {
+        font-family: var(--material-font-family);
+        font-size: var(--material-body-font-size);
+        line-height: calc(24 / 14);
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: inherit;
+      }
+
+      h1 {
+        font-size: var(--material-display2-font-size);
+        font-weight: 400;
+        letter-spacing: -.018em;
+        line-height: 48px;
+      }
+
+      h2 {
+        font-size: var(--material-display1-font-size);
+        font-weight: 400;
+        letter-spacing: -.01em;
+        line-height: 40px;
+      }
+
+      h3 {
+        font-size: var(--material-headline-font-size);
+        font-weight: 400;
+        letter-spacing: -.012em;
+        line-height: 32px;
+      }
+
+      h4 {
+        font-size: var(--material-title-font-size);
+        font-weight: 500;
+        line-height: 28px;
+      }
+
+      h5 {
+        font-size: var(--material-subhead-font-size);
+        font-weight: 400;
+        line-height: 24px;
+      }
+
+      h6 {
+        font-size: var(--material-body-font-size);
+        font-weight: 500;
+        line-height: 24px;
+      }
+    </style>
+  </template>
+</dom-module>

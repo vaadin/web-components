@@ -1,0 +1,267 @@
+<link rel="import" href="color.html">
+<link rel="import" href="typography.html">
+
+<link rel="import" href="vaadin-button.html">
+<link rel="import" href="vaadin-text-field.html">
+
+<dom-module id="material-date-picker" theme-for="vaadin-date-picker">
+  <template>
+    <style>
+      :host {
+        width: 160px;
+        max-width: 100%;
+        padding-top: 16px;
+        margin-bottom: 8px;
+        /* Align nicely with vaadin-text-field */
+        vertical-align: 3px;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      [part="text-field"] {
+        max-width: 100%;
+        /* Text field margin is moved to the host */
+        padding-top: 0;
+        margin-bottom: 0;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        width: 24px;
+        height: 24px;
+        box-sizing: border-box;
+        margin-left: 4px;
+        margin-bottom: 2px;
+        color: var(--material-disabled-text-color);
+        font-size: var(--material-icon-font-size);
+        line-height: 24px;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      [part="clear-button"]:hover,
+      [part="toggle-button"]:hover {
+        color: inherit;
+      }
+
+      [part="clear-button"] {
+        border-radius: 50%;
+        background-color: var(--material-divider-color);
+        font-size: calc(var(--material-icon-font-size) - 8px);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-date-picker-month-calendar" theme-for="vaadin-month-calendar">
+  <template>
+    <style include="vaadin-month-calendar-default-theme">
+      [part="date"] {
+        position: relative;
+        height: 40px;
+        font-size: var(--material-body-font-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part="date"][today] {
+        color: var(--material-primary-text-color);
+      }
+
+      [part="date"][selected] {
+        font-weight: 500;
+      }
+
+      [part="date"][focused]:not([disabled])::after,
+      [part="date"]:active:not([disabled])::after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        z-index: -1;
+        content: '';
+        height: 38px;
+        width: 38px;
+        border-radius: 100%;
+        opacity: 0.5;
+        background-color: var(--material-primary-color);
+      }
+
+      [part="date"][focused]:not([disabled]),
+      :host([focused]) [part="date"][focused]:not([disabled]) {
+        color: var(--material-primary-contrast-color);
+        background-color: transparent;
+        box-sizing: border-box;
+      }
+
+      :host([focused]) [part="date"][focused]:not([disabled])::after {
+        opacity: 1;
+      }
+
+      /* Hide for touch devices */
+      @media not all and (hover: hover) {
+        [part="date"]:active:not([disabled])::after {
+          opacity: 0;
+        }
+      }
+
+      [part="weekday"] {
+        color: var(--material-disabled-text-color);
+        font-size: var(--material-caption-font-size);
+        padding: 0;
+        opacity: 1;
+      }
+
+      [part="week-number"] {
+        height: 40px;
+        font-size: var(--material-caption-font-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--material-disabled-text-color);
+        opacity: 1;
+      }
+
+      [part="month-header"] {
+        font-size: var(--material-subhead-font-size);
+        font-weight: 500;
+      }
+    </style>
+  </template>
+</dom-module>
+<dom-module id="material-date-picker-overlay" theme-for="vaadin-date-picker-overlay">
+  <template>
+    <style include="vaadin-date-picker-overlay-default-theme">
+      :host {
+        border-radius: 0 0 3px 3px;
+        background: var(---material-date-picker-overlay-background-color, var(--material-background-color));
+      }
+
+      :host(:not([fullscreen])) {
+        box-shadow:
+          0 8px 10px 1px rgba(0, 0, 0, 0.14),
+          0 3px 14px 2px rgba(0, 0, 0, 0.12),
+          0 5px 5px -3px rgba(0, 0, 0, 0.4);
+
+        /* tweak the margin-top set by iron-dropdown. */
+        transform: translateY(-2px);
+      }
+
+      [part="years"] {
+        background: var(---material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        z-index: 1;
+      }
+
+      [part="years"]::before {
+        border: 0;
+        width: 12px;
+        height: 12px;
+        transform: translateX(-50%) rotate(-45deg);
+        background: var(---material-date-picker-overlay-background-color, var(--material-background-color));
+        box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      [part="years"]::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(.25turn, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0) 4px);
+      }
+
+      [part="months"] {
+        --vaadin-infinite-scroller-item-height: 300px;
+      }
+
+      [part="toolbar"] {
+        padding: 8px;
+        color: var(--material-body-text-color);
+        background: var(---material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        border-top: 1px solid var(--material-divider-color);
+      }
+
+      [part="overlay-header"] {
+        color: var(--material-body-text-color);
+        font-size: var(--material-subhead-font-size);
+        background: var(---material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        border-bottom: 2px solid var(--material-primary-color);
+        padding: 8px;
+      }
+
+      [part="overlay-header"]:not([desktop]) {
+        padding-bottom: 8px;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        color: var(--material-disabled-text-color);
+        line-height: 24px;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        margin-left: 16px;
+      }
+
+      [part="clear-button"]:hover,
+      [part="toggle-button"]:hover {
+        color: inherit;
+      }
+
+      [part="clear-button"] {
+        border-radius: 50%;
+        background-color: var(--material-divider-color);
+        font-size: calc(var(--material-icon-font-size) - 8px);
+      }
+
+       :host([years-visible]) [part="years"]::after {
+        top: calc(20px + 16px);
+        height: calc(100% - 20px - 16px);
+      }
+
+      [part="years-toggle-button"]::before {
+        display: inline;
+        vertical-align: middle;
+      }
+
+      [part="years-toggle-button"] {
+        position: absolute;
+        height: 20px;
+        line-height: 20px;
+        font-size: var(--material-body-font-size);
+        width: 60px;
+        z-index: 1;
+        top: calc(100% + 2px);
+        right: 0;
+        padding: 8px;
+        background: var(---material-date-picker-dark-secondary-background-color, var(--material-secondary-background-color));
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
+        border-bottom-left-radius: 3px;
+      }
+
+      [part="year-number"] {
+        font-size: var(--material-small-font-size);
+      }
+
+      [part="year-number"] {
+        color: var(--material-secondary-text-color);
+      }
+
+      [part="year-separator"] {
+        color: var(--material-disabled-text-color);
+      }
+
+      [part="month"][disabled] {
+        opacity: 0.3;
+      }
+
+      [part="today-button"],
+      [part="cancel-button"] {
+        margin: 0;
+      }
+    </style>
+  </template>
+</dom-module>

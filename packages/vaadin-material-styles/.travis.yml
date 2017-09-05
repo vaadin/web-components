@@ -1,0 +1,27 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js: node
+
+cache:
+  directories:
+    - node_modules
+
+addons:
+  firefox: latest
+  google-chrome: latest
+
+install:
+  - npm install
+  - bower install
+
+before_script:
+  - gulp lint
+
+script:
+  # We need some line in the block, otherwise travis executes the `npm test` task by default
+  - echo "Disabled tests until we reach a beta candidate for the themes."
+  # disabled in #24
+  #- if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+  #    wdio wdio.conf.js;
+  #  fi

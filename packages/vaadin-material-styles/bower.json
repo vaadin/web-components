@@ -1,0 +1,36 @@
+{
+  "name": "material",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "Material design theme for Vaadin Elements",
+  "main": "material.html",
+  "keywords": [
+    "vaadin",
+    "material",
+    "theme",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^v2.0.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "^6.0.0",
+    "vaadin-text-field": "vaadin/vaadin-text-field#>=1.1.0-alpha3",
+    "vaadin-button": "vaadin/vaadin-button#>=1.0.0-beta1",
+    "vaadin-date-picker": "vaadin/vaadin-date-picker#>=2.0.0-alpha2",
+    "elements-demo-resources": "vaadin/elements-demo-resources#new-menu-and-styles"
+  }
+}

@@ -1,0 +1,190 @@
+<link rel="import" href="color.html">
+<link rel="import" href="typography.html">
+
+<dom-module id="material-button" theme-for="vaadin-button">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        border-radius: 3px;
+        color: var(--material-body-text-color);
+        font-family: var(--material-font-family);
+        text-transform: uppercase;
+        font-size: var(--material-body-font-size);
+        font-weight: 500;
+        overflow: hidden;
+        transition: background-color 0.3s, box-shadow 0.2s;
+        margin: 4px 8px;
+        min-width: 88px;
+        min-height: 36px;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      [part="button"] {
+        border: 0;
+        margin: 0;
+        padding: 0 8px;
+        background-color: transparent;
+        color: inherit;
+        font: inherit;
+        line-height: normal;
+        text-transform: inherit;
+        outline: none;
+        min-width: inherit;
+        min-height: inherit;
+      }
+
+      [part="button"]::-moz-focus-inner {
+        border: 0;
+      }
+
+      :host::before,
+      :host::after {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        border-radius: inherit;
+        opacity: 0;
+        background-color: currentColor;
+      }
+
+      :host::before {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transition: opacity 0.5s;
+      }
+
+      :host::after {
+        border-radius: 50%;
+        width: 320px;
+        height: 320px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.9s;
+      }
+
+      :host([focus-ring])::before {
+        opacity: 0.08;
+        transition-duration: 0.2s;
+      }
+
+      :host([active])::before {
+        opacity: 0.16;
+        transition: opacity 0.4s;
+      }
+
+      :host([active])::after {
+        transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
+        opacity: 0.1;
+        transition: 0s;
+      }
+
+      :host(:hover:not([active]))::after {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+      }
+
+      :host(:not([disabled])) [part="button"] {
+        cursor: pointer;
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+        color: var(--material-disabled-text-color);
+      }
+
+      /* Raised style */
+
+      :host([theme~="raised"]) [part="button"] {
+        padding: 0 16px;
+      }
+
+      :host([theme~="raised"]:not([disabled])) {
+        background-color: var(---material-button-raised-background-color, var(--material-background-color));
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      }
+
+      :host([theme~="raised"][active]) {
+        box-shadow: 0 3px 16px 1px rgba(0, 0, 0, 0.13), 0 1px 3px 1px rgba(0, 0, 0, 0.08);
+      }
+
+      :host([theme~="raised"][disabled])::before {
+        opacity: 0.3;
+      }
+
+      /* Primary style */
+
+      :host([theme~="primary"]:not([disabled])) {
+        color: var(--material-primary-text-color);
+      }
+
+      :host([theme~="primary"][active])::before,
+      :host([theme~="primary"][active])::after {
+        opacity: 0.2;
+      }
+
+      /* Raised primary style */
+
+      :host([theme~="raised"][theme~="primary"]:not([disabled])) {
+        color: var(--material-primary-contrast-color);
+        background-color: var(--material-primary-color);
+      }
+
+      :host([theme~="primary"][theme~="raised"][focus-ring])::before {
+        opacity: 0.2;
+      }
+
+      /* Dense style */
+
+      :host([theme~="dense"]) {
+        font-size: var(--material-small-font-size);
+        min-width: 64px;
+        min-height: 32px;
+      }
+
+      /* Icon style */
+
+      :host([theme~="icon"]) {
+        margin: 4px;
+        min-width: 0;
+        width: 36px;
+        height: 36px;
+        min-height: 0;
+        border-radius: 50%;
+        padding: 8px;
+        --iron-icon-width: 100%;
+        --iron-icon-height: 100%;
+      }
+
+      :host([theme~="icon"]) ::slotted(iron-icon) {
+        vertical-align: top;
+      }
+
+      :host([theme~="icon"]) [part="button"] {
+        padding: 0;
+      }
+
+      :host([theme~="icon"])::before {
+        transition-delay: 0.3s;
+      }
+
+      :host([theme~="icon"])::after {
+        width: 300%;
+        height: 300%;
+      }
+
+      :host([theme~="icon"][active])::before {
+        transition-delay: 0s;
+      }
+
+    </style>
+  </template>
+</dom-module>
