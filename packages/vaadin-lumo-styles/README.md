@@ -1,5 +1,5 @@
 ![Bower version](https://img.shields.io/bower/v/valo.svg)
-[![Build Status](https://travis-ci.org/vaadin/valo.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-themes)
+[![Build Status](https://travis-ci.org/vaadin/valo.svg?branch=master)](https://travis-ci.org/vaadin/valo)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Valo Theme for Vaadin Elements
