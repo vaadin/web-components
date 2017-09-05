@@ -118,7 +118,7 @@
           expandRow(1);
           var cells = getRowCells(bodyRows[1]);
           var bounds = cells[1].getBoundingClientRect();
-          expect(bounds.top).to.equal(cells[0].getBoundingClientRect().bottom);
+          expect(bounds.top).to.be.closeTo(cells[0].getBoundingClientRect().bottom, 1);
           expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
           expect(bounds.right).to.equal(grid.$.items.getBoundingClientRect().right);
           expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);

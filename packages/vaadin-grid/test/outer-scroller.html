@@ -117,7 +117,10 @@
       });
 
       it('should invoke frozen element translate handler', function(done) {
-        var spy = sinon.stub(grid, '_translateStationaryElements', done);
+        var spy = sinon.stub(grid, '_translateStationaryElements', () => {
+          spy.restore();
+          done();
+        });
         outerScroller.scrollLeft = 1;
       });
 
