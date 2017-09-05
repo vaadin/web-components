@@ -11,6 +11,11 @@ module.exports = {
                     'version': '14.14393'
                 },
                 {
+                    'browserName': 'Internet Explorer',
+                    'platform': 'Windows 7',
+                    'version': '11'
+                },
+                {
                     'browserName': 'Chrome',
                     'platform': 'Windows 10',
                     'version': '56.0'

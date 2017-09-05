@@ -41,7 +41,7 @@
     "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^2.0.0",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
-    "web-component-tester": "^6.0.0",
+    "web-component-tester": "^6.1.5",
     "jquery": "^2.2.2",
     "webcomponentsjs": "^v1.0.0",
     "vaadin-grid": "^3.0.0"
