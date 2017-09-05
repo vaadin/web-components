@@ -62,7 +62,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: cell}}));
       }
 
-      // TODO: _onCellClick is not in the grid, the following seems useless.
       const path = Polymer.dom(e).path;
       const elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(e.target) + 1);
       if (!cellContent.contains(this.getRootNode().activeElement) &&
@@ -72,6 +71,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isFocusable(target) {
+      if (!target.parentNode) {
+        return false;
+      }
       const focusables = Array.from(target.parentNode
        .querySelectorAll('[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'))
        .filter(element => element.getAttribute('part') !== 'cell body-cell');
