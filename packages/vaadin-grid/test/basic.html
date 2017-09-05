@@ -154,6 +154,35 @@
         });
       });
 
+      // The following could not be tested if window is not focused.
+      if (!window.document.hasFocus()) {
+        // Try to get window focus.
+        window.top && window.top.focus();
+        window.focus();
+      }
+      (window.document.hasFocus() ? it : it.skip)('reorder should keep focused row', function() {
+        grid.size = 1000;
+        getCell(grid, 10).focus();
+        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+          const activeElement = grid.shadowRoot.activeElement;
+          grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
+          grid._scrollHandler();
+          grid._debounceScrolling.flush();
+
+          // Expect the physical rows to be in order after scrolling
+          var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+
+          rows.forEach((row, index) => {
+            if (index > 0) {
+              expect(row.index).to.equal(rows[index - 1].index + 1);
+            }
+          });
+
+          expect(document.activeElement).to.equal(grid);
+          expect(grid.shadowRoot.activeElement).to.equal(activeElement);
+        });
+      });
+
       it('should warn about missing imports', function() {
         var _warn = console.warn;
         var spy = console.warn = sinon.spy();

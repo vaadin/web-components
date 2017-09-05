@@ -92,7 +92,9 @@ This program is available under Apache License Version 2.0, available at https:/
             document.body.removeChild(scrollDiv);
             return scrollbarWidth;
           }
-        }
+        },
+
+        _rowWithFocusedElement: Element
 
       };
     }
@@ -101,6 +103,12 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this.scrollTarget = this.$.table;
       this.addEventListener('wheel', this._onWheel.bind(this));
+
+      this.$.items.addEventListener('focusin', (e) => {
+        const itemsIndex = e.composedPath().indexOf(this.$.items);
+        this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
+      });
+      this.$.items.addEventListener('focusout', () => this._rowWithFocusedElement = undefined);
     }
 
     _hasFixedSections(scrollbarWidth) {
@@ -192,19 +200,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
       var _adjustedVirtualStart = this._virtualStart + this._vidxOffset;
 
-      // DOM index of the element with the lowest index
-      var physicalIndexOfFirst = items.length - (items[0].index - _adjustedVirtualStart);
+      // Which row to use as a target?
+      const targetRow = this._rowWithFocusedElement || items[0];
 
-      // Reorder the DOM elements
-      if (physicalIndexOfFirst < items.length / 2) {
-        // Append all the preceding elements after the last element
-        for (var i = 0; i < physicalIndexOfFirst; i++) {
+      // Where the target row should be?
+      const targetPhysicalIndex = targetRow.index - _adjustedVirtualStart;
+
+      // Reodrer the DOM elements to keep the target row at the target physical index
+      const delta = Array.from(items).indexOf(targetRow) - targetPhysicalIndex;
+      if (delta > 0) {
+        for (let i = 0; i < delta; i++) {
           body.appendChild(items[i]);
         }
-      } else {
-        // Prepend all the trailing elements before the first element
-        for (var j = physicalIndexOfFirst; j < items.length; j++) {
-          body.insertBefore(items[j], items[0]);
+      } else if (delta < 0) {
+        for (let i = items.length + delta; i < items.length; i++) {
+          body.insertBefore(items[i], items[0]);
         }
       }
     }
