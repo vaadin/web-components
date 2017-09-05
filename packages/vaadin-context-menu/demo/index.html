@@ -50,8 +50,10 @@
         <div id="menuListener">The element that listens for the context menu.</div>
 
         <script>
-          const contextMenu = document.querySelector('vaadin-context-menu#customListener');
-          contextMenu.listenOn = document.querySelector('#menuListener');
+          window.addEventListener('WebComponentsReady', function() {
+            const contextMenu = document.querySelector('vaadin-context-menu#customListener');
+            contextMenu.listenOn = document.querySelector('#menuListener');
+          });
         </script>
       </template>
     </demo-snippet>
@@ -167,13 +169,15 @@
         <button id="menuOpener">Toggle Context Menu</button>
 
         <script>
-          document.querySelector('#menuOpener').addEventListener('click', event => {
-            const menu = document.querySelector('#buttonMenu');
-            if (!menu.opened) {
-              menu.open(event);
-            } else {
-              menu.close();
-            }
+          window.addEventListener('WebComponentsReady', function() {
+            document.querySelector('#menuOpener').addEventListener('click', event => {
+              const menu = document.querySelector('#buttonMenu');
+              if (!menu.opened) {
+                menu.open(event);
+              } else {
+                menu.close();
+              }
+            });
           });
         </script>
       </template>
