@@ -179,6 +179,18 @@
         expect(spy.called).to.be.true;
       });
 
+      it('should prevent default mousedown action on resize handle', function() {
+        var event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
+        handle.dispatchEvent(event);
+        expect(event.defaultPrevented).to.be.true;
+      });
+
+      it('should allow default mousedown action on cells', function() {
+        var event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
+        headerCells[0].dispatchEvent(event);
+        expect(event.defaultPrevented).to.be.false;
+      });
+
     });
 
     describe('column group resizing', function() {

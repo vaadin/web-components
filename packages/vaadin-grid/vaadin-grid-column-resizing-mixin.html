@@ -61,6 +61,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // Disable contextmenu on any resize separator.
       scroller.addEventListener('contextmenu', e => e.target.getAttribute('part') == 'resize-handle' && e.preventDefault());
+
+      // Disable native cell focus when resizing
+      scroller.addEventListener('mousedown', e => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault());
     }
 
     _onHeaderTrack(e) {
