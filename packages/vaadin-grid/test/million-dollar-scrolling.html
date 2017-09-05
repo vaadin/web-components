@@ -122,8 +122,8 @@
           });
 
           it('should be able to manually scroll to start', function(done) {
-            grid.$.table.scrollTop = 20000;
-            this.timeout(1000000);
+            const index = ~~(20000 / grid.$.table.scrollHeight * grid.size);
+            grid.scrollToIndex(index);
 
             simulateScrollToStart(grid, function() {
               expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.contain('item0');

@@ -49,7 +49,7 @@
         flushGrid(grid);
       });
 
-      it('update size using item index', function() {
+      it('update size using item index', function(done) {
         var firstItem = getFirstVisibleItem(grid);
 
         expect(firstItem.offsetHeight).to.equal(20);
@@ -57,7 +57,14 @@
         grid.classList.add('high');
         flushGrid(grid);
 
-        expect(firstItem.offsetHeight).to.eql(102);
+        // The following is to make Safari react
+        // to host class change and apply new styles
+        grid.style.display = 'none';
+        flush(() => {
+          grid.style.display = 'block';
+          expect(firstItem.offsetHeight).to.eql(102);
+          done();
+        });
       });
 
     });
