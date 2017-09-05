@@ -15,14 +15,6 @@
       opacity: 0;
     }
 
-    .install-options {
-      display: flex;
-      flex-wrap: wrap;
-      background-color: rgba(0, 0, 0, 0.02);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      padding: 0 1em;
-    }
-
     .next-steps h4 {
       margin-bottom: 0;
     }
@@ -54,17 +46,12 @@
     <h2 demo-section>Install</h2>
     <p>To start using the Valo theme, you need to install at least one Vaadin Core Element (such as <a href="https://github.com/vaadin/vaadin-text-field">vaadin-text-field</a>) and the <a href="https://github.com/vaadin/valo">Valo</a> theme package.</p>
 
-    <div class="install-options">
-      <div>
-        <nice-demo-snippet code-only>
-          <template slot="source">
-            bower install --save vaadin/vaadin-text-field
-            bower install --save vaadin/valo
-          </template>
-        </nice-demo-snippet>
-      </div>
-    </div>
-
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        bower install --save vaadin/vaadin-text-field
+        bower install --save vaadin/valo
+      </template>
+    </nice-demo-snippet>
 
     <h2 demo-section>Import a theme</h2>
 
