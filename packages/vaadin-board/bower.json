@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "app-layout": "PolymerElements/app-layout#v2.0.0",
-    "web-component-tester": "^6.0.0",
+    "web-component-tester": "^6.1.5",
     "webcomponentsjs": "^1.0.0",
     "test-fixture": "^3.0.0-rc.1"
   },
