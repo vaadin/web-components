@@ -35,7 +35,7 @@
     "polyserve": "^0.18.0",
     "stylelint": "7.10.1",
     "stylelint-config-vaadin": "latest",
-    "web-component-tester": "^6.0.0",
+    "web-component-tester": "^6.1.5",
     "yargs": "latest"
   }
 }
