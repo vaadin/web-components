@@ -86,7 +86,11 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
 
-      this.addEventListener('focus', e => this._focus(e));
+      this.addEventListener('focus', e => {
+        if (this._tabPressed) {
+          this._focus(e);
+        }
+      });
 
       this.addEventListener('blur', () => this._setFocused(false));
 
