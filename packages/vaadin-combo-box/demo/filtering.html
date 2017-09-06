@@ -22,8 +22,8 @@
       <template>
         <dom-bind>
           <template is="dom-bind">
-            <iron-ajax url="http://example.org/?filter=[[filter]]" handle-as="json" last-response="{{response}}" loading="{{loading}}" debounce-duration="500" auto>
-            </iron-ajax>
+            <my-ajax url="http://example.org/?filter=[[filter]]" handle-as="json" last-response="{{response}}" loading="{{loading}}" debounce-duration="500" auto>
+            </my-ajax>
 
             <vaadin-combo-box filtered-items="[[response]]" filter="{{filter}}" loading="[[loading]]">
             </vaadin-combo-box>
@@ -65,7 +65,7 @@
     </demo-snippet>
   </div>
 </body>
-<dom-module id="iron-ajax">
+<dom-module id="my-ajax">
   <template>
     <style>
        :host {
@@ -77,7 +77,7 @@
   <script>
     window.addEventListener('WebComponentsReady', function() {
       Polymer({
-        is: 'iron-ajax',
+        is: 'my-ajax',
 
         properties: {
           url: {
