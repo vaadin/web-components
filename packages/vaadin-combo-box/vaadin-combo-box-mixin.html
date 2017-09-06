@@ -5,7 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
 <link rel="import" href="../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="vaadin-combo-box-dropdown-mixin.html">
@@ -18,8 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * @memberof Vaadin
    * @mixes Vaadin.ComboBoxDropdownMixin
    */
-  Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends
-  Polymer.GestureEventListeners(Vaadin.ComboBoxDropdownMixin(subclass)) {
+  Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends Vaadin.ComboBoxDropdownMixin(subclass) {
 
     static get properties() {
       return {
@@ -183,7 +181,8 @@ This program is available under Apache License Version 2.0, available at https:/
         '_itemsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
         '_loadingChanged(loading)',
-        '_selectedItemChanged(selectedItem)'
+        '_selectedItemChanged(selectedItem)',
+        '_toggleElementChanged(_toggleElement)'
       ];
     }
 
@@ -199,10 +198,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('vaadin-combo-box-dropdown-closed', this._onClosed.bind(this));
       this.addEventListener('vaadin-combo-box-dropdown-opened', this._onOpened.bind(this));
       this.addEventListener('keydown', this._onKeyDown.bind(this));
-
-     // This listener should listen for "tap" again once composedPath() issues with touch devices
-      // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      this._addEventListenerToNode(this, 'up', this._onTap.bind(this));
+      this.addEventListener('click', this._onClick.bind(this));
     }
 
     _onBlur() {
@@ -211,7 +207,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _onOverlayDown(event) {
+    _onOverlayClick(event) {
       if (this.$.overlay.touchDevice && event.target !== this.$.overlay._scroller) {
         // On touch devices, blur the input on touch start inside the overlay, in order to hide
         // the virtual keyboard. But don't close the overlay on this blur.
@@ -221,16 +217,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _onTap(e) {
-      // prevent 'tap' from getting generated and closing the overlay etc.
-      Polymer.Gestures.prevent('tap');
+    _onClick(e) {
       this._closeOnBlurIsPrevented = true;
 
       const path = e.composedPath();
       if (path.indexOf(this._clearElement) !== -1) {
         this._clear();
-      } else if (path.indexOf(this._toggleElement) !== -1) {
-        this._toggle();
       } else if (path.indexOf(this.inputElement) !== -1) {
         this._openAsync();
       }
@@ -397,6 +389,13 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this.open();
       }
+    }
+
+    _toggleElementChanged(toggleElement) {
+      toggleElement && toggleElement.addEventListener('click', (e) => {
+        this._toggle();
+        e.stopPropagation();
+      });
     }
 
     /**
@@ -630,8 +629,8 @@ This program is available under Apache License Version 2.0, available at https:/
         this._setOverlayItems(this.filteredItems);
 
         this._focusedIndex = (this.opened || this._userDefinedFilter) ?
-            this.$.overlay.indexOfLabel(this.filter) :
-            this._indexOfValue(this.value, this.filteredItems);
+          this.$.overlay.indexOfLabel(this.filter) :
+          this._indexOfValue(this.value, this.filteredItems);
 
         // async needed to reposition correctly after filtering
         // (especially when aligned on top of input)
@@ -754,19 +753,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _preventInputBlur() {
       if (this._toggleElement) {
-        this._addEventListenerToNode(this._toggleElement, 'down', this._preventDefault);
+        this._toggleElement.addEventListener('click', this._preventDefault);
       }
       if (this._clearElement) {
-        this._addEventListenerToNode(this._clearElement, 'down', this._preventDefault);
+        this._clearElement.addEventListener('click', this._preventDefault);
       }
     }
 
     _restoreInputBlur() {
       if (this._toggleElement) {
-        this._removeEventListenerFromNode(this._toggleElement, 'down', this._preventDefault);
+        this._toggleElement.removeEventListener('click', this._preventDefault);
       }
       if (this._clearElement) {
-        this._removeEventListenerFromNode(this._clearElement, 'down', this._preventDefault);
+        this._clearElement.removeEventListener('click', this._preventDefault);
       }
     }
 

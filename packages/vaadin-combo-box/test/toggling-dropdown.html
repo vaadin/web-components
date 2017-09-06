@@ -33,20 +33,16 @@
     let combobox;
     let comboboxLight;
 
-    function tapLabel() {
-      fire('up', combobox.inputElement.root.querySelector('label'));
+    function clickLabel() {
+      fire('click', combobox.inputElement.root.querySelector('label'));
     }
 
-    function tapInput() {
-      // This listener should listen for "tap" again once composedPath() issues with touch devices
-      // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      fire('up', combobox.inputElement);
+    function clickInput() {
+      fire('click', combobox.inputElement);
     }
 
-    function tapToggleIcon() {
-      // This listener should listen for "tap" again once composedPath() issues with touch devices
-      // have been fixed. See https://github.com/Polymer/polymer/issues/4670
-      fire('up', combobox._toggleElement);
+    function clickToggleIcon() {
+      fire('click', combobox._toggleElement);
     }
 
     function overlay() {
@@ -61,7 +57,7 @@
     describe('opening', () => {
       it('should open asynchronously by tapping label', done => {
         expect(combobox.opened).to.be.false;
-        tapLabel();
+        clickLabel();
         expect(combobox.opened).to.be.false;
 
         setTimeout(() => {
@@ -72,7 +68,7 @@
 
       it('should open asynchronously by clicking input', done => {
         expect(combobox.opened).to.be.false;
-        tapInput();
+        clickInput();
         expect(combobox.opened).to.be.false;
 
         setTimeout(() => {
@@ -82,7 +78,7 @@
       });
 
       it('should open by clicking icon', () => {
-        tapToggleIcon();
+        clickToggleIcon();
 
         expect(combobox.opened).to.be.true;
       });
@@ -165,7 +161,7 @@
           });
 
           it('should not refocus the input field when closed from icon', () => {
-            tapToggleIcon();
+            clickToggleIcon();
             expect(combobox.inputElement.focused).to.be.undefined;
           });
         } else {
@@ -177,7 +173,7 @@
           });
 
           it('should refocus the input field when closed from icon', done => {
-            tapToggleIcon();
+            clickToggleIcon();
             setTimeout(() => { // IE11
               expect(combobox.inputElement.focused).to.be.true;
               done();
@@ -242,7 +238,7 @@
       it('should close on clicking icon', () => {
         combobox.open();
 
-        tapToggleIcon();
+        clickToggleIcon();
 
         expect(combobox.opened).to.be.false;
       });
