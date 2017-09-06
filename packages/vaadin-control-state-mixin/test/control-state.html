@@ -195,9 +195,21 @@
       });
 
       describe('focus and autofocus', () => {
-        it('should set focused attribute on host click', () => {
+        it('should not set focused attribute on host click', () => {
           customElement.click();
+          expect(customElement.focused).to.be.false;
+        });
+
+        it('should set focused attribute on host mousedown', () => {
+          customElement.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
           expect(customElement.focused).to.be.true;
+        });
+
+        it('should not set focused attribute on host mousedown with default prevented', () => {
+          const e = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
+          e.preventDefault();
+          customElement.dispatchEvent(e);
+          expect(customElement.focused).to.be.false;
         });
 
         it('should have focused and focus-ring set', done => {
@@ -210,9 +222,9 @@
           });
         });
 
-        it('should focus an element only once on click', () => {
+        it('should focus an element only once on mousedown', () => {
           customElement._focus = sinon.spy();
-          customElement.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
+          customElement.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
           customElement.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
           expect(customElement._focus.callCount).to.eql(1);
         });

@@ -94,7 +94,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this.addEventListener('blur', () => this._setFocused(false));
 
-      this.addEventListener('click', e => this._focus(e));
+      this.addEventListener('mousedown', e => {
+        if (!e.defaultPrevented) {
+          this._focus(e)
+        }
+      });
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
