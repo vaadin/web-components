@@ -14,7 +14,7 @@ module.exports = {
 
     var cronPlatforms = [
       'Windows 10/chrome@55',
-      // 'Windows 10/firefox@50'
+      'Windows 10/firefox@54'
     ];
 
     if (argv.env === 'saucelabs') {

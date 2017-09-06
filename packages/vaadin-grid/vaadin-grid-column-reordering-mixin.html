@@ -194,6 +194,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _cellFromPoint(x, y) {
+      x = x || 0;
+      y = y || 0;
       if (!this._draggedColumn) {
         this.$.scroller.setAttribute('no-content-pointer-events', '');
       }
