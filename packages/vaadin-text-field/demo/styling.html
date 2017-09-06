@@ -35,18 +35,18 @@
         <dom-module id="text-field-styles" theme-for="vaadin-text-field">
           <template>
             <style>
-              :host {
+              :host([theme="my-theme"]) {
                 display: block;
                 margin-bottom: 15px;
                 width: auto;
               }
 
-              [part~="label"] {
+              :host([theme="my-theme"]) [part~="label"] {
                 margin-bottom: 5px;
                 font-weight: 700;
               }
 
-              [part~="value"] {
+              :host([theme="my-theme"]) [part~="value"] {
                 border: none;
                 outline: none;
                 font-size: 14px;
@@ -54,11 +54,11 @@
                 color: #555;
               }
 
-              [part~="value"]:invalid {
+              :host([theme="my-theme"]) [part~="value"]:invalid {
                 box-shadow: none;
               }
 
-              [part~="input-field"] {
+              :host([theme="my-theme"]) [part~="input-field"] {
                 height: 34px;
                 box-sizing: border-box;
                 padding: 6px 12px;
@@ -68,21 +68,21 @@
                 transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
               }
 
-              :host([focused]) [part~="input-field"] {
+              :host([theme="my-theme"][focused]) [part~="input-field"] {
                 border-color: #66afe9;
                 outline: 0;
                 box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
               }
 
-              :host([invalid]) [part~="input-field"] {
+              :host([theme="my-theme"][invalid]) [part~="input-field"] {
                 border-color: #a94442;
               }
 
-              :host([invalid][focused]) [part~="input-field"] {
+              :host([theme="my-theme"][invalid][focused]) [part~="input-field"] {
                 box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
               }
 
-              [part~="error-message"] {
+              :host([theme="my-theme"]) [part~="error-message"] {
                 position: absolute;
                 top: 100%;
                 font-size: 0.8em;
@@ -97,8 +97,8 @@
           </template>
         </dom-module>
 
-        <vaadin-text-field label="Text field"></vaadin-text-field>
-        <vaadin-text-field label="Numbers only" pattern="[0-9]*" error-message="Only numbers allowed for this text field"></vaadin-text-field>
+        <vaadin-text-field theme="my-theme" label="Text field"></vaadin-text-field>
+        <vaadin-text-field theme="my-theme" label="Numbers only" pattern="[0-9]*" error-message="Only numbers allowed for this text field"></vaadin-text-field>
       </template>
     </demo-snippet>
 
