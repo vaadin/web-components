@@ -9,7 +9,7 @@ module.exports = {
       // 'OS X 10.12/ipad@10.2',
       // 'Windows 10/microsoftedge@14',
       // 'Windows 10/internet explorer@11',
-      // 'OS X 10.12/safari@10.0'
+      'OS X 10.12/safari@10.0'
     ];
 
     var cronPlatforms = [

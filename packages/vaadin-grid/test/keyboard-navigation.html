@@ -1,4 +1,4 @@
-<!doctype htmlgrid
+<!doctype html>
 
 <html>
 
@@ -15,17 +15,6 @@
 </head>
 
 <body>
-  <custom-style>
-    <style is="custom-style">
-      vaadin-grid {
-        height: 500px;
-        --vaadin-grid-body-cell: {
-          padding: 0;
-          height: 50px;
-        }
-      }
-    </style>
-  </custom-style>
   <test-fixture id="default">
     <template>
       <vaadin-grid>
@@ -69,7 +58,9 @@
     window.top.focus && window.top.focus();
     window.focus();
 
-    if (!window.document.hasFocus() && !window.top.document.hasFocus()) {
+    if ((window.chrome || window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+      && !window.document.hasFocus()
+      && !window.top.document.hasFocus()) {
       // Oh no! Focus kinda works, but no native events are dispatched. Let’s fake them.
       const nativeFocus = HTMLElement.prototype.focus;
       let fakeFocusCurrentTarget;
