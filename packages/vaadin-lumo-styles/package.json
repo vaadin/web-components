@@ -1,9 +1,9 @@
 {
-  "name": "valo",
-  "version": "0.2.3",
+  "name": "vaadin-valo-theme",
+  "version": "0.2.5",
   "description": "Valo is a customizable theme for Vaadin Elements",
   "main": "valo.html",
-  "repository": "vaadin/valo",
+  "repository": "vaadin/vaadin-valo-theme",
   "keywords": [
     "vaadin",
     "valo",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/valo/issues"
+    "url": "https://github.com/vaadin/vaadin-valo-theme/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
