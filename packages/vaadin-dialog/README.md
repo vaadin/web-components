@@ -6,6 +6,9 @@
 # &lt;vaadin-dialog&gt;
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha2/demo/)
+|
+[API documentation ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha2/#/elements/vaadin-dialog)
+
 
 [&lt;vaadin-dialog&gt;](https://vaadin.com/elements/-/element/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
 
