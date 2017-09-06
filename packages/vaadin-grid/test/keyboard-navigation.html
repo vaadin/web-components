@@ -290,6 +290,10 @@
           return grid._itemsFocusable.parentNode.index;
         }
 
+        function getTabbableElements(root) {
+          return root.querySelectorAll('[tabindex]:not([tabindex="-1"])');
+        }
+
         describe('navigation mode', function() {
           it('should not be in navigation mode by default', function() {
             expect(grid.navigating).to.be.false;
@@ -382,159 +386,144 @@
             }
           });
 
-          // it('should have a focus trap as the very last child', function() {
-          //   // footer focus trap needs to be the last element
-          //   if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
-          //     expect(grid.lastElementChild.children[1].tabIndex).to.equal(0);
-          //   } else {
-          //     expect(grid.$.scroller.lastElementChild.id).to.equal('footerFocusTrap');
-          //   }
-          // });
-          //
-          // it('should be possible to tab through grid', function() {
-          //   // assuming grid has been tabbed into.
-          //   tabToHeader();
-          //   expect(grid._virtualFocus).to.equal(header);
-          //
-          //   tab(); // focus body
-          //   tab(); // focus footer
-          //
-          //   tab(); // focus outside (only virtual focus moves in test)
-          //   expect(grid._virtualFocus).to.be.null;
-          // });
-          //
-          // it('should be possible to shift-tab back from body to header', function() {
-          //   // assuming grid has been tabbed into.
-          //   shiftTabToFooter();
-          //
-          //   shiftTab(); // focus body
-          //   shiftTab(); // focus header
-          //
-          //   expect(grid._virtualFocus).to.equal(header);
-          // });
-          //
-          // it('should be possible to tab back from body to footer', function() {
-          //   // assuming grid has been tabbed into.
-          //   shiftTabToFooter();
-          //
-          //   shiftTab(); // focus body
-          //   tab(); // focus footer
-          //
-          //   expect(grid._virtualFocus).to.equal(footer);
-          // });
-          //
-          // it('should be possible to shift-tab through grid', function() {
-          //   // assuming grid has been tabbed into.
-          //   shiftTabToFooter();
-          //
-          //   expect(grid._virtualFocus).to.equal(footer);
-          //
-          //   shiftTab(); // focus body
-          //   shiftTab(); // focus header
-          //
-          //   shiftTab(); // focus outside (only virtual focus moves in test)
-          //   expect(grid._virtualFocus).to.be.null;
-          // });
+          it('should have single tabbable cell in every section', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
+            expect(tabbableElements.length).to.equal(4);
+            expect(tabbableElements[0].parentNode.parentNode).to.equal(grid.$.header);
+            expect(tabbableElements[1].parentNode.parentNode).to.equal(grid.$.items);
+            expect(tabbableElements[2].parentNode.parentNode).to.equal(grid.$.footer);
+            expect(tabbableElements[3]).to.equal(grid.$.focusexit);
+          });
 
-          it('should set virtual focus to header on header cell click', function() {
+          it('should have tabindex 1 on tabbable cells', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
+            expect(tabbableElements[0].tabIndex).to.equal(1);
+            expect(tabbableElements[1].tabIndex).to.equal(1);
+            expect(tabbableElements[2].tabIndex).to.equal(1);
+          });
+
+          it('should have a focus exit as the very last child', function() {
+            expect(grid.$.focusexit).to.be.ok;
+            expect(grid.$.focusexit.tabIndex).to.equal(0);
+            expect(grid.shadowRoot.lastElementChild).to.equal(grid.$.focusexit);
+          });
+
+          it('should be possible to tab through the grid', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+            let keydownEvent;
+            const listener = (e) => keydownEvent = e;
+            grid.$.scroller.addEventListener('keydown', listener);
+
+            // assuming grid has been tabbed into.
+            tabbableElements[0].focus(); // focus header
+            tab();
+            expect(keydownEvent.defaultPrevented).to.be.false;
+
+            tabbableElements[1].focus(); // focus body
+            tab();
+            expect(keydownEvent.defaultPrevented).to.be.false;
+
+            tabbableElements[2].focus(); // focus footer
+            tab();
+            expect(keydownEvent.defaultPrevented).to.be.false;
+
+            grid.$.scroller.removeEventListener('keydown', listener);
+          });
+
+          it('should be possible to shift-tab through grid', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+            let keydownEvent;
+            const listener = (e) => keydownEvent = e;
+            grid.$.scroller.addEventListener('keydown', listener);
+
+            // assuming grid has been tabbed into.
+            tabbableElements[2].focus(); // focus footer
+            shiftTab();
+            expect(keydownEvent.defaultPrevented).to.be.false;
+
+            tabbableElements[1].focus(); // focus body
+            shiftTab();
+            expect(keydownEvent.defaultPrevented).to.be.false;
+
+            tabbableElements[0].focus(); // focus footer
+            shiftTab();
+            expect(keydownEvent.defaultPrevented).to.be.false;
+
+            grid.$.scroller.removeEventListener('keydown', listener);
+          });
+
+          it('should be possible to exit grid with tab', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
+            tabbableElements[2].focus(); // focus footer cell
+
+            let keydownEvent;
+            listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => keydownEvent = e);
+            tab();
+
+            // Expect programmatic focus on focus exit element
+            expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
+            // Ensure native focus jump is allowed
+            expect(keydownEvent.defaultPrevented).to.be.false;
+          });
+
+          it('should be possible to enter grid with shift+tab', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+            // focusin on focusexit element — same as shift+tab from below the grid
+            const event = new CustomEvent('focusin', {bubbles: true, composed: true});
+            event.relatedTarget = focusable;
+            tabbableElements[3].dispatchEvent(event);
+
+            // Expect programmatic focus on footer cell
+            expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
+          });
+
+          it('should set native focus to header on header cell click', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
             clickFirstHeaderCell();
 
-            expect(grid.shadowRoot.activeElement).to.equal(grid._headerFocusable);
+            expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[0]);
           });
 
-          it('should set virtual focus to body on body cell click', function() {
+          it('should set native focus to body on body cell click', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
             clickItem(0);
 
-            expect(grid.shadowRoot.activeElement).to.equal(grid._itemsFocusable);
+            expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
           });
 
-          it('should set virtual focus to footer on footer cell click', function() {
+          it('should set native focus to footer on footer cell click', function() {
+            const tabbableElements = getTabbableElements(grid.shadowRoot);
             clickFirstFooterCell();
 
-            expect(grid.shadowRoot.activeElement).to.equal(grid._footerFocusable);
+            expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
           });
 
-          // it('should move virtual focus from header to body on tab', function() {
-          //   footerTrap.fire('focus-gained');
-          //
-          //   tab();
-          //
-          //   expect(grid._virtualFocus).to.equal(body);
-          // });
-          //
-          // it('should move virtual focus from body to footer on tab', function() {
-          //   tabToHeader();
-          //
-          //   tab(); // body
-          //   tab(); // footer
-          //
-          //   expect(grid._virtualFocus).to.equal(footer);
-          // });
-          //
-          // it('should move virtual focus from footer to body on shift-tab', function() {
-          //   shiftTabToFooter();
-          //
-          //   shiftTab();
-          //
-          //   expect(grid._virtualFocus).to.equal(body);
-          // });
-          //
-          // it('should move virtual focus from body to header on shift-tab', function() {
-          //   shiftTabToFooter();
-          //
-          //   shiftTab();
-          //   shiftTab();
-          //
-          //   expect(grid._virtualFocus).to.equal(header);
-          // });
-          //
-          // it('should not move virtual focus from body to footer on tab when no footer rows exist', function(done) {
-          //   footer.children[0].hidden = true;
-          //
-          //   tabToHeader();
-          //
-          //   tab(); // body
-          //   tab();
-          //
-          //   // needs to be async thanks to IE11.
-          //   grid.async(function() {
-          //     expect(grid._virtualFocus).to.be.null;
-          //     done();
-          //   }, 1);
-          // });
-          //
-          // it('should move virtual focus to body instead of footer on shift-tab when no footer rows exist', function() {
-          //   footer.children[0].hidden = true;
-          //   shiftTabToFooter();
-          //
-          //   expect(grid._virtualFocus).to.equal(body);
-          // });
-          //
-          // it('should focus on first cell when tabbing to header', function() {
-          //   tabToHeader();
-          //
-          //   expect(header._focusedCellIndex).to.equal(0);
-          //   expect(header._focusedRowIndex).to.equal(0);
-          // });
-          //
-          // it('should focus on first cell when tabbing to body', function() {
-          //   tabToHeader();
-          //
-          //   tab();
-          //
-          //   expect(body._focusedCellIndex).to.equal(0);
-          //   expect(body._focusedRowIndex).to.equal(0);
-          // });
-          //
-          // it('should focus on first cell when tabbing to footer', function() {
-          //   tabToHeader();
-          //
-          //   tab(); // body
-          //   tab(); // footer
-          //
-          //   expect(footer._focusedCellIndex).to.equal(0);
-          //   expect(footer._focusedRowIndex).to.equal(0);
-          // });
+          it('should move header tabbable cell when navigating with keys', function() {
+            tabToHeader();
+
+            right();
+
+            expect(getTabbableElements(header)[0]).to.equal(header.children[0].children[1]);
+          });
+
+          it('should move body tabbable cell when navigating with keys', function() {
+            tabToBody();
+
+            right();
+
+            expect(getTabbableElements(body)[0]).to.equal(body.children[0].children[1]);
+          });
+
+          it('should move footer tabbable cell when navigating with keys', function() {
+            shiftTabToFooter();
+
+            right();
+
+            expect(getTabbableElements(footer)[0]).to.equal(footer.children[0].children[1]);
+          });
         });
 
         describe('navigating with keys', function() {
