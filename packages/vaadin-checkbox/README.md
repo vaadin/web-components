@@ -6,6 +6,8 @@
 # &lt;vaadin-checkbox&gt;
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-checkbox/1.0.0-alpha4/demo/)
+|
+[API documentation ↗](https://cdn.vaadin.com/vaadin-checkbox/1.0.0-alpha4/#/elements/vaadin-checkbox)
 
 [&lt;vaadin-checkbox&gt;](https://vaadin.com/elements/-/element/vaadin-checkbox) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable checkbox, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
