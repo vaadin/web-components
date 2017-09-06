@@ -197,7 +197,7 @@
       describe('focus and autofocus', () => {
         it('should not set focused attribute on host click', () => {
           customElement.click();
-          expect(customElement.focused).to.be.false;
+          expect(customElement.focused).to.be.undefined;
         });
 
         it('should set focused attribute on host mousedown', () => {
@@ -209,7 +209,7 @@
           const e = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
           e.preventDefault();
           customElement.dispatchEvent(e);
-          expect(customElement.focused).to.be.false;
+          expect(customElement.focused).to.be.undefined;
         });
 
         it('should have focused and focus-ring set', done => {
