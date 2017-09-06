@@ -409,7 +409,7 @@
             var spy = sinon.spy(grid._observer, 'callback');
             grid.removeChild(column);
             flushGrid(grid);
-            flush(() => {
+            animationFrameFlush(() => {
               // Once for the column and in effect of that, once for the removed cell content elements
               expect(spy.callCount).to.gte(2);
               done();

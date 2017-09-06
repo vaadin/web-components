@@ -13,6 +13,16 @@
   <link rel="import" href="helpers.html">
 
   <link rel="import" href="../vaadin-grid.html">
+
+  <dom-module id="data-provider-styles" theme-for="vaadin-grid">
+    <template>
+      <style>
+        [part~='cell'] {
+          height: 20px;
+        }
+      </style>
+    </template>
+  </dom-module>
 </head>
 
 <body>
@@ -118,7 +128,7 @@
         container.dataProvider.reset();
         grid.pageSize = 100;
 
-        grid.async(function() {
+        setTimeout(function() {
           expect(container.dataProvider.callCount).to.eql(1);
           expect(container.dataProvider.firstCall.args[0].page).to.eql(0);
           done();
@@ -129,7 +139,7 @@
         container.dataProvider.reset();
         grid.pageSize = 10;
 
-        grid.async(function() {
+        setTimeout(() => {
           // assuming grid has about 30 items
           expect(container.dataProvider.callCount).to.be.above(2);
           for (var i = 0; i < container.dataProvider.callCount; i++) {
@@ -142,10 +152,10 @@
       it('should always load visible items', function(done) {
         grid.pageSize = 10;
 
-        grid.async(function() {
+        setTimeout(function() {
           container.dataProvider.reset();
           simulateScrollToEnd(grid, function() {
-            grid.async(function() {
+            setTimeout(function() {
               // 9 is last page out of 100 items / 10 per page.
               var pages = container.dataProvider.getCalls().map(function(call) {
                 return call.args[0].page;
@@ -160,11 +170,11 @@
       it('should cache fetched pages', function(done) {
         grid.pageSize = 10;
         // wait first to initially load first pages.
-        grid.async(function() {
+        setTimeout(function() {
           simulateScrollToEnd(grid, function() {
             container.dataProvider.reset();
             simulateScrollToStart(grid, function() {
-              grid.async(function() {
+              setTimeout(function() {
                 var pages = container.dataProvider.getCalls().map(function(call) {
                   return call.args[0].page;
                 });
@@ -184,7 +194,7 @@
       it('should clear item cache', function(done) {
         container.dataProvider = sinon.spy(infiniteDataProvider);
 
-        grid.async(function() {
+        setTimeout(function() {
           expect(container.dataProvider.called).to.be.true;
           var oldFirstItem = grid._cache[0];
           expect(oldFirstItem).to.be.ok;
@@ -192,7 +202,7 @@
           container.dataProvider.reset();
           grid.clearCache();
 
-          grid.async(function() {
+          setTimeout(function() {
             expect(container.dataProvider.called).to.be.true;
             expect(grid._cache[0]).to.be.ok;
             expect(grid._cache[0]).not.to.equal(oldFirstItem);
@@ -282,7 +292,7 @@
       it('should work with data provider set after a long delay', function(done) {
         grid.size = 100;
 
-        grid.async(function() {
+        setTimeout(function() {
           grid.dataProvider = sinon.spy(infiniteDataProvider);
 
           expect(grid.dataProvider.callCount).to.eql(1);

@@ -100,7 +100,12 @@
         flushGrid(grid);
 
         expect(spy.callCount).to.be.above(2);
-        expect(spy.callCount).to.be.below(8);
+
+        if(navigator.userAgent.match(/iPhone/i)) {
+          expect(spy.callCount).to.be.below(20);
+        } else {
+          expect(spy.callCount).to.be.below(8);
+        }
       });
 
       it('should minimize physical count', function() {

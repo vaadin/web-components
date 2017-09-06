@@ -173,6 +173,7 @@
 
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
         flush(function() {
           var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           headerContent = [];
@@ -395,6 +396,7 @@
       beforeEach(function(done) {
         grid = fixture('groups');
         grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
         animationFrameFlush(done);
       });
 
@@ -465,6 +467,7 @@
       beforeEach(function(done) {
         grid = fixture('differentWidths');
         grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
         animationFrameFlush(function() {
           headerContent0 = getContainerCell(grid.$.header, 0, 0);
           headerContent1 = getContainerCell(grid.$.header, 0, 1);
@@ -496,7 +499,7 @@
 
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
-        Polymer.dom.flush();
+        flushGrid(grid);
         animationFrameFlush(done);
       });
 
@@ -516,7 +519,7 @@
 
         grid = fixture('draggableCellContent');
         grid.dataProvider = infiniteDataProvider;
-
+        flushGrid(grid);
         flush(function() {
           var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           visualColumnCellContents = [];
