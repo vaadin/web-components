@@ -1,93 +1,32 @@
-<!DOCTYPE html>
-
+<!doctype html>
+<html>
 <head>
   <meta charset="utf-8">
-  <title>vaadin-icons</title>
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <title>vaadin-icons Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../vaadin-icons.html">
-  <link rel="import" href="../../iron-meta/iron-meta.html">
-  <link rel="import" href="../../elements-demo-resources/common.html">
 
-  <custom-style>
-    <style>
-      body, #wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      /* ie11 */
-      dom-repeat {
-        display: block;
-        width: 100%;
-      }
-
-      .icon-container {
-        margin: 24px 8px;
-        text-align: center;
-        width: 130px;
-        display: inline-block;
-        cursor: default;
-        vertical-align: top;
-      }
-
-      .icon-container span {
-        font-family: sans-serif;
-        font-size: 12px;
-        display: block;
-        margin-top: .5em;
-        color: #616161;
-        transition: all 600ms;
-      }
-
-      .icon-container:hover span {
-        color: #00b4f0;
-      }
-
-      .icon-container iron-icon {
-        display: inline-block;
-        fill: #616161;
-        transition: all 200ms;
-      }
-
-      .icon-container:hover iron-icon {
-        fill: #00b4f0;
-      }
-    </style>
-  </custom-style>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 
-<body id="default">
-  <dom-bind>
-    <template is="dom-bind">
-      <dom-repeat>
-        <template is="dom-repeat" items="{{iconsets}}">
-          <dom-repeat id="wrapper">
-            <template is="dom-repeat" items="{{getIconNames(item)}}">
-              <div class="icon-container">
-                <iron-icon icon="[[item]]"></iron-icon>
-                <span>{{item}}</span>
-              </div>
-            </template>
-          </dom-repeat>
-        </template>
-      </dom-repeat>
-    </template>
-  </dom-bind>
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
 
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      var domBind = Polymer.version.match(/^1/) ? document.querySelector('[is=dom-bind]') : document.querySelector('dom-bind');
-      domBind.iconsets = new Polymer.IronMeta({type: 'iconset'}).list;
-      domBind.getIconNames = function(iconset) {
-        return iconset.getIconNames();
-      };
+  <link rel="import" href="icons-demo.html">
 
-      // Checked in gemini before capture callback
-      window.webComponentsAreReady = true;
-    });
-  </script>
+  <link rel="import" href="../vaadin-icons.html">
+  <link rel="import" href="../../iron-meta/iron-meta.html">
 
+  <vaadin-component-demo config-src="demos.json"
+    base-href="/components/vaadin-icons/demo">
+  </vaadin-component-demo>
 </body>
+</html>
