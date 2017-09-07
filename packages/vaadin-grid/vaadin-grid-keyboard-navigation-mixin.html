@@ -166,7 +166,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       const activeCell = e.composedPath()[0];
       const columnIndex = indexOfChildElement(activeCell);
-      const isRowDetails = activeCell.matches('[part~="details-cell"]');
+      const isRowDetails = this._elementMatches(activeCell, '[part~="details-cell"]');
 
       const activeRow = activeCell.parentNode;
 
@@ -256,7 +256,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // Here we go!
       const dstCell = dstIsRowDetails ?
         Array.from(dstRow.children)
-          .filter(el => el.matches('[part~="details-cell"]'))[0] :
+          .filter(el => this._elementMatches(el, '[part~="details-cell"]'))[0] :
         dstRow.children[dstColumnIndex];
       this._scrollHorizontallyToCell(dstCell);
       if (activeRowGroup === this.$.items) {
@@ -279,7 +279,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onInteractionKeyDown(e, key) {
       const localTarget = e.composedPath()[0];
-      const localTargetIsTextInput = localTarget.localName === 'input' && 
+      const localTargetIsTextInput = localTarget.localName === 'input' &&
         !/^(button|checkbox|color|file|image|radio|range|reset|submit)$/i.test(localTarget.type);
 
       let wantInteracting;
@@ -505,7 +505,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _scrollHorizontallyToCell(dstCell) {
-      if (dstCell.hasAttribute('frozen') || dstCell.matches('[part~="details-cell"]')) {
+      if (dstCell.hasAttribute('frozen') || this._elementMatches(dstCell, '[part~="details-cell"]')) {
         // These cells are, by design, always visible, no need to scroll.
         return;
       }
@@ -518,7 +518,7 @@ This program is available under Apache License Version 2.0, available at https:/
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') ||
-            cell.matches('[part~="details-cell"]')) {
+            this._elementMatches(cell, '[part~="details-cell"]')) {
           continue;
         }
         if (cell.hasAttribute('frozen')) {
@@ -529,7 +529,7 @@ This program is available under Apache License Version 2.0, available at https:/
       for (let i = dstCellIndex + 1; i < dstRow.children.length; i++) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') ||
-            cell.matches('[part~="details-cell"]')) {
+            this._elementMatches(cell, '[part~="details-cell"]')) {
           continue;
         }
         if (cell.hasAttribute('frozen')) {
@@ -544,6 +544,12 @@ This program is available under Apache License Version 2.0, available at https:/
       if (dstCellRect.right > rightBoundary) {
         this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
       }
+    }
+
+    _elementMatches(el, query) {
+      return el.matches ? el.matches(query) :
+        Array.from(el.parentNode.querySelectorAll(query))
+        .indexOf(el) !== -1;
     }
   };
 </script>
