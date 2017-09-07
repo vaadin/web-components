@@ -1,0 +1,26 @@
+{
+  "name": "Vaadin Context Menu",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "context-menu-basic-demos",
+    "src": "context-menu-basic-demos.html",
+    "meta": {
+      "title": "vaadin-context-menu Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Advanced Usage",
+    "url": "context-menu-advanced-demos",
+    "src": "context-menu-advanced-demos.html",
+    "meta": {
+      "title": "vaadin-context-menu Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}

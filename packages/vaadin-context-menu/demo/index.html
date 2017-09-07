@@ -1,204 +1,34 @@
 <!doctype html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-context-menu Basic Examples</title>
-
+  <title>vaadin-context-menu Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="common.html">
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 
-<body unresolved>
-  <div class="vertical-section-container centered">
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
 
-    <demo-navigation></demo-navigation>
+  <link rel="import" href="context-menu-demo.html">
 
-    <h3>Basic Usage</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-context-menu>
-          <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
-          </template>
+  <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
+  <link rel="import" href="../../paper-styles/default-theme.html">
+  <link rel="import" href="../vaadin-context-menu.html">
+  <link rel="import" href="../../paper-listbox/paper-listbox.html">
+  <link rel="import" href="../../paper-item/paper-item.html">
+  <link rel="import" href="../../paper-item/paper-item-body.html">
 
-          <p>This paragraph has the context menu provided in the above template.</p>
-          <p>Another paragraph with the context menu that can be opened with <b>right click</b> or with <b>long touch.</b></p>
-        </vaadin-context-menu>
-      </template>
-    </demo-snippet>
-
-    <h3>Custom Listener</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-context-menu id="customListener">
-          <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
-          </template>
-        </vaadin-context-menu>
-
-        <div id="menuListener">The element that listens for the context menu.</div>
-
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            const contextMenu = document.querySelector('vaadin-context-menu#customListener');
-            contextMenu.listenOn = document.querySelector('#menuListener');
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h3>Filtering Menu Targets</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-context-menu selector=".has-menu">
-          <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
-          </template>
-
-          <p class="has-menu">This paragraph opens the context menu.</p>
-          <p>This paragraph does not open the context menu.</p>
-        </vaadin-context-menu>
-      </template>
-    </demo-snippet>
-
-    <h3>Accessing the Menu Target</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-context-menu selector="li">
-          <template>
-            <paper-listbox>
-              <paper-item>The menu target: [[target.textContent]]</paper-item>
-            </paper-listbox>
-          </template>
-
-          <ul>
-            <li>Foo</li>
-            <li>Bar</li>
-            <li>Baz</li>
-          </ul>
-        </vaadin-context-menu>
-      </template>
-    </demo-snippet>
-
-    <h3>Menu Item Events</h3>
-    <demo-snippet>
-      <template>
-        <dom-module id="my-list-view">
-          <template>
-            <vaadin-context-menu selector="li">
-              <template>
-                <paper-listbox>
-                  <paper-item on-tap="_appendItem">Append item</paper-item>
-                  <paper-item list-item="[[target]]" on-tap="_removeItem">Remove item</paper-item>
-                </paper-listbox>
-              </template>
-
-              <ul>
-                <template is="dom-repeat" items="[[items]]">
-                  <li index="[[index]]">[[item]]</li>
-                </template>
-              </ul>
-            </vaadin-context-menu>
-          </template>
-
-          <script>
-            document.addEventListener('WebComponentsReady', () => {
-              class MyListView extends Polymer.Element {
-
-                static get is() {
-                  return 'my-list-view';
-                }
-
-                static get properties() {
-                  return {
-                    items: {
-                      type: Array,
-                      value: () => {
-                        return ['Foo', 'Bar', 'Baz'];
-                      }
-                    }
-                  };
-                }
-
-                _appendItem() {
-                  this.push('items', 'New item');
-                }
-
-                _removeItem(e) {
-                  const menuItem = e.target; // `<paper-item>`
-                  const listItem = menuItem.listItem; // `<li>`
-                  this.splice('items', listItem.index, 1);
-                }
-              }
-
-              customElements.define(MyListView.is, MyListView);
-            });
-          </script>
-        </dom-module>
-
-        <my-list-view></my-list-view>
-      </template>
-    </demo-snippet>
-
-    <h3>JavaScript API</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-context-menu id="buttonMenu">
-          <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
-          </template>
-        </vaadin-context-menu>
-
-        <button id="menuOpener">Toggle Context Menu</button>
-
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            document.querySelector('#menuOpener').addEventListener('click', event => {
-              const menu = document.querySelector('#buttonMenu');
-              if (!menu.opened) {
-                menu.open(event);
-              } else {
-                menu.close();
-              }
-            });
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h3>Selected Item Style</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-context-menu>
-          <template>
-            <paper-listbox selected-class="no-selected-styles-please">
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
-          </template>
-
-          <p>The context menu of this paragraph does not change the items look when opened again.</p>
-        </vaadin-context-menu>
-      </template>
-    </demo-snippet>
-
-  </div>
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>
