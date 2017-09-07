@@ -103,10 +103,7 @@
 
           it('should be able to scroll to half-way', function() {
             grid._scrollHandler();
-            var viewportHeight = grid.$.table.clientHeight - grid.$.header.clientHeight - grid.$.footer.clientHeight;
-            var itemHeight = getFirstCell(grid).clientHeight;
-            grid.$.table.scrollTop =
-              Math.floor(grid.$.table.scrollHeight / 2) + 1.5 * viewportHeight - 0.5 * itemHeight;
+            grid.$.table.scrollTop = (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2;
 
             grid._scrollHandler();
             flushGrid(grid);

@@ -137,7 +137,9 @@
 
       it('should call dataprovider multiple times to load all items', function(done) {
         container.dataProvider.reset();
+        grid.style.fontSize = '12px';
         grid.pageSize = 10;
+        flushGrid(grid);
 
         setTimeout(() => {
           // assuming grid has about 30 items

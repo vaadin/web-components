@@ -101,6 +101,7 @@
       });
 
       it('should cancel wheel event', function() {
+        grid.style.fontSize = '12px';
         var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1);
         expect(e.defaultPrevented).to.be.true;
       });
