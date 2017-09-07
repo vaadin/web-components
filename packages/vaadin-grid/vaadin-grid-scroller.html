@@ -11,6 +11,7 @@ This program is available under Apache License Version 2.0, available at https:/
   {
     /**
      * This Element is used internally by vaadin-grid.
+     * TODO: Re-implement without iron-list
      *
      * @protected
      */
@@ -71,12 +72,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this._scrollingToIndex = true;
         index = Math.min(Math.max(index, 0), this.size - 1);
-        this.$.table.scrollTop = index / this.size * this.$.table.scrollHeight;
+        this.$.table.scrollTop = index / this.size * (this.$.table.scrollHeight - this.$.table.offsetHeight);
         this._scrollHandler();
+
+        if (this._maxScrollTop && this._virtualCount < this.size) {
+          this._adjustVirtualIndexOffset(1000000);
+        }
+
         super.scrollToIndex(index - this._vidxOffset);
-        // _scrollTop is not up-to-date at this point, update and run scrollhandler
-        super._resetScrollPosition(this._scrollPosition);
         this._scrollHandler();
+
+        // Ensure scroll position
+        if (this.firstVisibleIndex !== index - this._vidxOffset) {
+          super.scrollToIndex(index - this._vidxOffset);
+        }
 
         // This is a hack to get around offset issues when scrolling to bottom.
         if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
@@ -93,7 +102,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this._scrollTop = 0;
         }
         if (!Array.isArray(this.items)) {
-          this.items = {length: Math.min(size, 100000)};
+          // Edge seems to have the lowest maximum
+          this.items = {length: Math.min(size, 40000)};
         }
 
         // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
@@ -219,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._noScale = false;
             return;
           }
-          var scale = Math.round(this._scrollPosition / this._scrollHeight * 1000) / 1000;
+          var scale = this.$.table.scrollTop / (this.$.table.scrollHeight - this.$.table.offsetHeight);
           var offset = scale * this.size;
           this._vidxOffset = Math.round(offset - scale * this._virtualCount);
         } else {
@@ -236,7 +246,9 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
             this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
-            super.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset) + 1);
+            if (oldOffset !== this._vidxOffset) {
+              super.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset));
+            }
             this._noScale = true;
           }
           // At end
@@ -248,7 +260,9 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
             this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
-            super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+            if (oldOffset !== this._vidxOffset) {
+              super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
+            }
             this._noScale = true;
           }
         }
