@@ -1,0 +1,26 @@
+{
+  "name": "Vaadin Form Layout",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "form-layout-basic-demos",
+    "src": "form-layout-basic-demos.html",
+    "meta": {
+      "title": "vaadin-form-layout Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Styling",
+    "url": "form-layout-styling-demos",
+    "src": "form-layout-styling-demos.html",
+    "meta": {
+      "title": "vaadin-form-layout Styling Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
