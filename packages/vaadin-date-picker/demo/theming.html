@@ -22,23 +22,23 @@
         <dom-module id="text-field-styles" theme-for="vaadin-text-field">
           <template>
             <style>
-              [part~="input-field"] {
+              :host([theme="my-datepicker"]) [part~="input-field"] {
                 border-radius: 20px;
                 border: 2px solid #bdbdbd;
                 height: 30px;
                 padding: 1px 10px;
               }
 
-              :host([focused]) [part~="input-field"] {
+              :host([theme="my-datepicker"][focused]) [part~="input-field"] {
                 border-color: #f5a623;
                 box-shadow: 0 0 4px 0 rgba(245, 187, 39, 1);
               }
 
-              [part~="value"]:focus {
+              :host([theme="my-datepicker"]) [part~="value"]:focus {
                 outline: none;
               }
 
-              [part~="value"] {
+              :host([theme="my-datepicker"]) [part~="value"] {
                 font-family: inherit;
                 border: none;
                 font-size: medium;
@@ -51,17 +51,17 @@
         <dom-module id="button-styles" theme-for="vaadin-button">
           <template>
             <style>
-              :host([focus-ring]) [part~="button"] {
+              :host([theme="my-datepicker"][focus-ring]) [part~="button"] {
                 color: #f5a623;
               }
 
-              :host([part~="today-button"]) [part~="button"]::before {
+              :host([theme="my-datepicker"][part~="today-button"]) [part~="button"]::before {
                 content: "•";
                 color: #f5a623;
                 font-size: x-large;
               }
 
-              [part~="button"] {
+              :host([theme="my-datepicker"]) [part~="button"] {
                 font-family: inherit;
                 border: none;
                 background: #f7f6f2;
@@ -69,7 +69,7 @@
                 cursor: pointer;
               }
 
-              [part~="button"]:focus {
+              :host([theme="my-datepicker"]) [part~="button"]:focus {
                 outline: none;
               }
             </style>
@@ -78,13 +78,13 @@
         <dom-module id="date-picker-styles" theme-for="vaadin-date-picker">
           <template>
             <style include="vaadin-date-picker-default-theme">
-              :host {
+              :host([theme="my-datepicker"]) {
                 font-family: 'Cabin', sans-serif;
                 width: 250px;
                 max-width: 100%;
               }
 
-              [part="text-field"] {
+              :host([theme="my-datepicker"]) [part="text-field"] {
                 max-width: 100%;
               }
             </style>
@@ -94,16 +94,16 @@
         <dom-module id="month-calendar-styles" theme-for="vaadin-month-calendar">
           <template>
             <style include="vaadin-month-calendar-default-theme">
-              [part~="date"] {
+              :host([theme="my-datepicker"]) [part~="date"] {
                 padding: 12px 0;
                 height: 40px;
               }
 
-              [part~="date"][today]:not([focused]) {
+              :host([theme="my-datepicker"]) [part~="date"][today]:not([focused]) {
                 position: relative;
               }
 
-              [part~="date"][today]:not([focused])::before {
+              :host([theme="my-datepicker"]) [part~="date"][today]:not([focused])::before {
                 content: '';
                 position: absolute;
                 background: #f5a623;
@@ -118,7 +118,7 @@
                 margin: auto;
               }
 
-              [part~="date"][selected] {
+              :host([theme="my-datepicker"]) [part~="date"][selected] {
                 background: #f5a623;
                 color: #fff;
                 border-radius: 6px;
@@ -126,12 +126,12 @@
                 padding-top: 8px;
               }
 
-              :host(:not([focused])) [part~="date"][focused] {
+              :host([theme="my-datepicker"]:not([focused])) [part~="date"][focused] {
                 opacity: 0.7;
               }
 
-              [part~="date"]:not([disabled]):hover,
-              [part~="date"][focused]:not([disabled]) {
+              :host([theme="my-datepicker"]) [part~="date"]:not([disabled]):hover,
+              :host([theme="my-datepicker"]) [part~="date"][focused]:not([disabled]) {
                 background: rgba(245, 187, 39, 1);
                 color: #fff;
                 border-radius: 6px;
@@ -139,11 +139,11 @@
                 padding-top: 8px;
               }
 
-              [part~="date"][selected] {
+              :host([theme="my-datepicker"]) [part~="date"][selected] {
                 font-weight: 600;
               }
 
-              [part~="weekdays"] {
+              :host([theme="my-datepicker"]) [part~="weekdays"] {
                 background: #f7f6f2;
                 transform: translateY(-14px);
                 font-weight: 100;
@@ -151,21 +151,21 @@
                 border-radius: 6px;
               }
 
-              [part~="weekday"] {
+              :host([theme="my-datepicker"]) [part~="weekday"] {
                 text-transform: none;
                 color: #babbb6;
               }
 
-              [part~="week-numbers"] {
+              :host([theme="my-datepicker"]) [part~="week-numbers"] {
                 transform: translateY(-14px);
               }
 
-              [part~="week-number"] {
+              :host([theme="my-datepicker"]) [part~="week-number"] {
                 position: relative;
                 color: rgba(0, 0, 0, 0.1);
               }
 
-              [part~="week-number"]::after {
+              :host([theme="my-datepicker"]) [part~="week-number"]::after {
                 content: '';
                 position: absolute;
                 left: calc(100% - 5px);
@@ -175,7 +175,7 @@
                 background-color: rgba(0, 0, 0, 0.1);
               }
 
-              [part~="month-header"] {
+              :host([theme="my-datepicker"]) [part~="month-header"] {
                 font-size: 24px;
                 font-weight: 100;
                 margin-bottom: 16px;
@@ -186,49 +186,49 @@
         <dom-module id="overlay-styles" theme-for="vaadin-date-picker-overlay">
           <template>
             <style include="vaadin-date-picker-overlay-default-theme">
-              :host {
+              :host([theme="my-datepicker"]) {
                 border-radius: 6px;
                 border: 1px solid rgba(0, 0, 0, 0.1);
                 box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.2);
               }
 
-              [part~="years"] {
+              :host([theme="my-datepicker"]) [part~="years"] {
                 background: #716a60;
                 color: #babbb6;
               }
 
-              [part~="months"] {
+              :host([theme="my-datepicker"]) [part~="months"] {
                 --vaadin-infinite-scroller-item-height: 340px;
               }
 
-              [part~="toolbar"] {
+              :host([theme="my-datepicker"]) [part~="toolbar"] {
                 background: #f7f6f2;
               }
 
-              [part~="overlay-header"] {
+              :host([theme="my-datepicker"]) [part~="overlay-header"] {
                 background: #f7f6f2;
               }
 
-              [part~="years-toggle-button"] {
+              :host([theme="my-datepicker"]) [part~="years-toggle-button"] {
                 background: transparent;
               }
 
-              [part~="years"] [part~="year-number"][current] {
+              :host([theme="my-datepicker"]) [part~="years"] [part~="year-number"][current] {
                 color: rgba(245, 198, 121, 0.6);
               }
 
-              [part~="years"] [part~="year-separator"]::after {
+              :host([theme="my-datepicker"]) [part~="years"] [part~="year-separator"]::after {
                 color: #babbb6;
               }
 
-              [part~="month"][disabled] {
+              :host([theme="my-datepicker"]) [part~="month"][disabled] {
                 opacity: 0.3;
               }
             </style>
           </template>
         </dom-module>
 
-        <vaadin-date-picker id="weeks" show-week-numbers min="2017-05-01" placeholder="YYYY-MM-DD"></vaadin-date-picker>
+        <vaadin-date-picker theme="my-datepicker" id="weeks" show-week-numbers min="2017-05-01" placeholder="YYYY-MM-DD"></vaadin-date-picker>
         <script>
           window.addEventListener('WebComponentsReady', function() {
             // Async call needed here for IE11 compatibility.
