@@ -28,7 +28,7 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "web-component-tester": "^6.0.0",
+    "web-component-tester": "^6.1.5",
     "iron-test-helpers": "^v2.0.0",
     "paper-input": "^v2.0.0",
     "paper-checkbox": "^v2.0.0",
