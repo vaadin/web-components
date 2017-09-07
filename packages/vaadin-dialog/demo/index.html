@@ -17,7 +17,7 @@
 
     <demo-navigation></demo-navigation>
 
-    <h3>Simple dialog</h3>
+    <h3>Simple Dialog</h3>
     <demo-snippet>
       <template>
         <dom-bind id="simple-dialog-example">
@@ -42,12 +42,12 @@
       </template>
     </demo-snippet>
 
-    <h3>Close dialog with button</h3>
+    <h3>A Dialog That Can Only Be Closed with Buttons Inside It</h3>
     <demo-snippet>
       <template>
         <dom-bind id="dialog-example">
           <template>
-            <vaadin-dialog id="dialog">
+            <vaadin-dialog id="dialog" no-close-on-esc no-close-on-outside-click>
               <template>
                 <div>Press any button to close</div>
                 <br>
