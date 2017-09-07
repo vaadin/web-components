@@ -31,6 +31,56 @@
         </dom-bind>
       </template>
     </demo-snippet>
+    <dom-module id="my-ajax">
+      <template>
+        <style>
+           :host {
+            display: block;
+          }
+        </style>
+
+      </template>
+      <script>
+        window.addEventListener('WebComponentsReady', function() {
+          Polymer({
+            is: 'my-ajax',
+
+            properties: {
+              url: {
+                type: String,
+                observer: '_urlChanged'
+              },
+
+              lastResponse: {
+                type: Object,
+                notify: true
+              },
+
+              loading: {
+                type: Boolean,
+                notify: true
+              },
+
+              debounceDuration: Number
+            },
+
+            _urlChanged: function(url) {
+              var urlParts = url.split('?filter=');
+              var filter = urlParts[1];
+
+              this.loading = true;
+
+              var urlJob = Polymer.Debouncer.debounce(urlJob, Polymer.Async.timeOut.after(this.debounceDuration), () => {
+                this.loading = false;
+                this.lastResponse = elements.filter(function(el) {
+                  return el.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                });
+              });
+            }
+          });
+        });
+      </script>
+    </dom-module>
 
     <h3>Custom Filtering</h3>
 
@@ -65,54 +115,4 @@
     </demo-snippet>
   </div>
 </body>
-<dom-module id="my-ajax">
-  <template>
-    <style>
-       :host {
-        display: block;
-      }
-    </style>
-
-  </template>
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      Polymer({
-        is: 'my-ajax',
-
-        properties: {
-          url: {
-            type: String,
-            observer: '_urlChanged'
-          },
-
-          lastResponse: {
-            type: Object,
-            notify: true
-          },
-
-          loading: {
-            type: Boolean,
-            notify: true
-          },
-
-          debounceDuration: Number
-        },
-
-        _urlChanged: function(url) {
-          var urlParts = url.split('?filter=');
-          var filter = urlParts[1];
-
-          this.loading = true;
-
-          var urlJob = Polymer.Debouncer.debounce(urlJob, Polymer.Async.timeOut.after(this.debounceDuration), () => {
-            this.loading = false;
-            this.lastResponse = elements.filter(function(el) {
-              return el.toLowerCase().indexOf(filter.toLowerCase()) > -1;
-            });
-          });
-        }
-      });
-    });
-  </script>
-</dom-module>
 </html>
