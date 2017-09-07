@@ -139,6 +139,13 @@ This program is available under Apache License Version 2.0, available at https:/
             value: function() {
               return navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
             }
+          },
+
+          _edge: {
+            type: Boolean,
+            value: function() {
+              return typeof CSS !== 'undefined' && CSS.supports('(-ms-ime-align:auto)');
+            }
           }
         };
       }
