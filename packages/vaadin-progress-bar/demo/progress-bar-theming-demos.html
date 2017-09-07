@@ -1,24 +1,16 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<dom-module id="progress-bar-theming-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-  <title>vaadin-progress-bar Theming Examples</title>
+    </style>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>Line width</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-theming-demos-line-width'>
+      <template preserve-content>
         <custom-style>
           <style>
             vaadin-progress-bar.thick {
@@ -29,10 +21,10 @@
 
         <vaadin-progress-bar class="thick"></vaadin-progress-bar>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-theming-demos-line-width'>
+      <template preserve-content>
         <custom-style>
           <style>
             vaadin-progress-circle.thick {
@@ -43,11 +35,12 @@
 
         <vaadin-progress-circle class="thick"></vaadin-progress-circle>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Size</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-theming-demos-size'>
+      <template preserve-content>
         <custom-style>
           <style>
             vaadin-progress-bar.narrow {
@@ -58,10 +51,10 @@
 
         <vaadin-progress-bar class="narrow"></vaadin-progress-bar>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-theming-demos-size'>
+      <template preserve-content>
         <custom-style>
           <style>
             vaadin-progress-circle.large {
@@ -72,11 +65,12 @@
 
         <vaadin-progress-circle class="large"></vaadin-progress-circle>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Colors</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-theming-demos-colors'>
+      <template preserve-content>
         <custom-style>
           <style>
             vaadin-progress-bar.custom-colors {
@@ -88,10 +82,10 @@
 
         <vaadin-progress-bar class="custom-colors"></vaadin-progress-bar>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-theming-demos-colors'>
+      <template preserve-content>
         <custom-style>
           <style>
             vaadin-progress-circle.custom-colors {
@@ -103,7 +97,13 @@
 
         <vaadin-progress-circle class="custom-colors"></vaadin-progress-circle>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
-</body>
-</html>
+  </template>
+  <script>
+    class ProgressBarThemingDemos extends DemoReadyEventEmitter(ProgressBarDemo(Polymer.Element)) {
+      static get is() { return 'progress-bar-theming-demos'; }
+    }
+    customElements.define(ProgressBarThemingDemos.is, ProgressBarThemingDemos);
+  </script>
+</dom-module>

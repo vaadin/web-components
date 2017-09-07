@@ -1,0 +1,58 @@
+<dom-module id="progress-bar-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Progress bar</h3>
+    <vaadin-demo-snippet id='progress-bar-basic-demos-progress-bar'>
+      <template preserve-content>
+        <vaadin-progress-bar value="0.3"></vaadin-progress-bar>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Progress bar with custom bounds</h3>
+    <p>By default, the <code>value</code> is clamped between 0 and 1. You can customize the bounds using the <code>min</code> and the <code>max</code> properties.</p>
+    <p><strong>Note: <code>min</code> must be less then <code>max</code>.</strong></p>
+    <vaadin-demo-snippet id='progress-bar-basic-demos-progress-bar-with-custom-bounds'>
+      <template preserve-content>
+        <vaadin-progress-bar id="progress-bar-custom-bounds" value="20" min="10" max="110"></vaadin-progress-bar>
+        <vaadin-button id="update-bar-with-bounds">Update value</vaadin-button>
+
+        <script>
+          window.addDemoReadyListener('#progress-bar-basic-demos-progress-bar-with-custom-bounds', function(document) {
+            document.querySelector('#update-bar-with-bounds').addEventListener('click', function() {
+              var progress = document.querySelector('#progress-bar-custom-bounds');
+              progress.value += 10;
+              if (progress.value > progress.max) {
+                progress.value = progress.min;
+              }
+            });
+          });
+        </script>
+
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Indeterminate Progress Bar</h3>
+    <p>When the value is <code>undefined</code> the progress bar will animate indefinitely.</p>
+    <vaadin-demo-snippet id='progress-bar-basic-demos-indeterminate-progress-bar'>
+      <template preserve-content>
+        <vaadin-progress-bar></vaadin-progress-bar>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class ProgressBarBasicDemos extends DemoReadyEventEmitter(ProgressBarDemo(Polymer.Element)) {
+      static get is() { return 'progress-bar-basic-demos'; }
+    }
+    customElements.define(ProgressBarBasicDemos.is, ProgressBarBasicDemos);
+  </script>
+</dom-module>

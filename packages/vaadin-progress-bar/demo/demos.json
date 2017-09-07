@@ -1,0 +1,37 @@
+{
+  "name": "Vaadin Progress Bar",
+  "pages": [
+  {
+    "name": "Progress Bar",
+    "url": "progress-bar-basic-demos",
+    "src": "progress-bar-basic-demos.html",
+    "meta": {
+      "title": "vaadin-progress-bar Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Progress Circle",
+    "url": "progress-bar-progress-circle-demos",
+    "src": "progress-bar-progress-circle-demos.html",
+    "meta": {
+      "title": "vaadin-progress-bar Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Theming",
+    "url": "progress-bar-theming-demos",
+    "src": "progress-bar-theming-demos.html",
+    "meta": {
+      "title": "vaadin-progress-bar Theming Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}

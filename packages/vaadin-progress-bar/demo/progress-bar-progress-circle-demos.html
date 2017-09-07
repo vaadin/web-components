@@ -1,38 +1,31 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<dom-module id="progress-bar-progress-circle-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-  <title>vaadin-progress-bar Basic Examples</title>
+    </style>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>Progress circle</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-progress-circle-demos-progress-circle'>
+      <template preserve-content>
         <vaadin-progress-circle value="0.3"></vaadin-progress-circle>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Progress circle with custom bounds</h3>
     <p>By default, the <code>value</code> is clamped between 0 and 1. You can customize the bounds using the <code>min</code> and the <code>max</code> properties.</p>
     <p><strong>Note: <code>min</code> must be less then <code>max</code>.</strong></p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-progress-circle-demos-progress-circle-with-custom-bounds'>
+      <template preserve-content>
         <vaadin-progress-circle id="progress-circle-custom-bounds" value="20" min="10" max="110"></vaadin-progress-circle>
         <vaadin-button id="update-circle-with-bounds">Update value</vaadin-button>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#progress-bar-progress-circle-demos-progress-circle-with-custom-bounds', function(document) {
             document.querySelector('#update-circle-with-bounds').addEventListener('click', function() {
               var progress = document.querySelector('#progress-circle-custom-bounds');
               progress.value += 10;
@@ -44,15 +37,22 @@
         </script>
 
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Indeterminate Progress Circle</h3>
     <p>When the value is <code>undefined</code>, the progress circle will animate indefinitely.</p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='progress-bar-progress-circle-demos-indeterminate-progress-circle'>
+      <template preserve-content>
         <vaadin-progress-circle></vaadin-progress-circle>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
-</body>
-</html>
+  </template>
+  <script>
+    class ProgressBarProgressCircleDemos extends DemoReadyEventEmitter(ProgressBarDemo(Polymer.Element)) {
+      static get is() { return 'progress-bar-progress-circle-demos'; }
+    }
+    customElements.define(ProgressBarProgressCircleDemos.is, ProgressBarProgressCircleDemos);
+  </script>
+</dom-module>
