@@ -28,7 +28,7 @@
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
     "vaadin-text-field": "^1.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#propagate-theme"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.1",
@@ -43,7 +43,9 @@
     "sugar": "^2.0.0",
     "vaadin-button": "^1.0.0",
     "vaadin-themes": "vaadin/vaadin-themes",
-    "webcomponentsjs": "^1.0.0",
-    "web-component-tester": "^6.1.5"
+    "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "vaadin-themable-mixin": "propagate-theme"
   }
 }
