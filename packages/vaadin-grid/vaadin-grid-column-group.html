@@ -265,12 +265,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _colSpanChanged(colSpan, headerCell, footerCell) {
           if (headerCell) {
-            headerCell.colSpan = colSpan;
+            headerCell.setAttribute('colspan', colSpan);
           }
           if (footerCell) {
-            footerCell.colSpan = colSpan;
+            footerCell.setAttribute('colspan', colSpan);
           }
-          // this.fire('property-changed', {path: 'colSpan', value: colSpan});
         }
 
 
