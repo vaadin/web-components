@@ -207,9 +207,14 @@
 
         it('should not set focused attribute on host mousedown with default prevented', () => {
           const e = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
-          e.preventDefault();
-          customElement.dispatchEvent(e);
+          const preventDefaultListener = (e) => e.preventDefault();
+          customElement.$.input.addEventListener('mousedown', preventDefaultListener);
+
+          customElement.$.input.dispatchEvent(e);
+
           expect(customElement.focused).to.be.undefined;
+
+          customElement.$.input.removeEventListener('mousedown', preventDefaultListener);
         });
 
         it('should have focused and focus-ring set', done => {
